@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-05 15:05:31 $
+ *  last change: $Author: cl $ $Date: 2001-12-06 17:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1984,7 +1984,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             if( pMap->nWID == SDRATTR_ECKENRADIUS )
             {
                 sal_Int32 nCornerRadius;
-                if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) )
+                if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) || (nCornerRadius > 5000000))
                     throw IllegalArgumentException();
             }
 

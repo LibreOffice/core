@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-05 14:52:31 $
+ *  last change: $Author: cl $ $Date: 2001-12-06 17:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,10 +886,14 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is())
             {
-                uno::Any aAny;
-                aAny <<= mnRadius;
-                xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), aAny);
+                try
+                {
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), uno::makeAny( mnRadius ) );
+                }
+                catch( uno::Exception& )
+                {
+                    DBG_ERROR( "exception during setting of corner radius!");
+                }
             }
         }
         SdXMLShapeContext::StartElement(xAttrList);
@@ -1989,10 +1993,14 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is())
             {
-                uno::Any aAny;
-                aAny <<= mnRadius;
-                xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), aAny);
+                try
+                {
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), uno::makeAny( mnRadius ) );
+                }
+                catch( uno::Exception& )
+                {
+                    DBG_ERROR( "exception during setting of corner radius!");
+                }
             }
         }
 
