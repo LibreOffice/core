@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:40:50 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CATALOG, PROPERTY_USECATALOGINSELECT));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SCHEMA, PROPERTY_USESCHEMAINSELECT));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_INDEXAPPENDIX, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddIndexAppendix"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOSLINEENDS, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferDosLikeLineEnds" ) ) ) );
 
     // special settings for adabas
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
