@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 19:41:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,9 +141,6 @@
                 </prop>
                 <prop oor:name="Size" oor:type="xs:string">
                     <value>579,27</value>
-                </prop>
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Table</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
