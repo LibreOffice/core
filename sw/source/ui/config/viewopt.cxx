@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:19:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,11 @@
 
 #pragma hdrstop
 
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
+#include <svx/htmlcfg.hxx>
+
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
@@ -117,6 +113,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #endif
 
+#include <svx/acorrcfg.hxx>
 
 #ifndef PRODUCT
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
@@ -599,7 +596,7 @@ void SwViewOption::Init( Window *pWin )
 
 BOOL SwViewOption::IsAutoCompleteWords() const
 {
-    const SvxSwAutoFmtFlags& rFlags = OFF_APP()->GetAutoCorrect()->GetSwFlags();
+    const SvxSwAutoFmtFlags& rFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
     return /*rFlags.bAutoCompleteWords &&*/ rFlags.bAutoCmpltCollectWords;
 }
 
@@ -624,7 +621,7 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
     if(!pShell || PTR_CAST(SwWebDocShell, pShell))
     {
         nRet = HTMLMODE_ON;
-        OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+        SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
         switch ( pHtmlOpt->GetExportMode() )
         {
             case HTML_CFG_MSIE_40:
