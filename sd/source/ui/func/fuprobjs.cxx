@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprobjs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:11:12 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,9 @@
 #endif
 #include "glob.hxx"
 #include "prlayout.hxx"
-#include "prltempl.hxx"
+//CHINA001 #include "prltempl.hxx"
 #include "unchss.hxx"
-
+#include "sdabstdlg.hxx" //CHINA001
 namespace sd {
 
 TYPEINIT1( FuPresentationObjects, FuPoor );
@@ -178,9 +178,13 @@ FuPresentationObjects::FuPresentationObjects (
         {
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
-            SdPresLayoutTemplateDlg* pDlg = new SdPresLayoutTemplateDlg( pDocSh, NULL,
+//CHINA001          SdPresLayoutTemplateDlg* pDlg = new SdPresLayoutTemplateDlg( pDocSh, NULL,
+//CHINA001          SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool );
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            SfxAbstractTabDialog* pDlg = pFact->CreateSdPresLayoutTemplateDlg(ResId( TAB_PRES_LAYOUT_TEMPLATE ), pDocSh, NULL,
                                                 SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool );
-
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
