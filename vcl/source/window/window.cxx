@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:52:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4332,12 +4332,12 @@ Window::~Window()
             }
             else if ( ImplIsOverlapWindow() )
                 pParent = mpOverlapWindow;
-            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() && pParent->IsReallyVisible() )
+            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() )
                 pParent->GrabFocus();
-            else if( mpFrameWindow->IsReallyVisible() )
+            else
                 mpFrameWindow->GrabFocus();
-            // Falls der Focus wieder auf uns gesetzt wurde, dann wird er
-            // auf nichts gesetzt
+
+            // If the focus was set back to 'this' set it to nothing
             if ( pSVData->maWinData.mpFocusWin == this )
             {
                 pSVData->maWinData.mpFocusWin = NULL;
