@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:47:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,14 +197,14 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
         aLinkStr.Erase(nLen-1);
 
     String aLine;
-    USHORT nCols = 1;       // Leerstring -> eine leere Zelle
-    USHORT nRows = 1;
+    SCSIZE nCols = 1;       // Leerstring -> eine leere Zelle
+    SCSIZE nRows = 1;
     if (aLinkStr.Len())
     {
-        nRows = (USHORT) aLinkStr.GetTokenCount( '\n' );
+        nRows = static_cast<SCSIZE>(aLinkStr.GetTokenCount( '\n' ));
         aLine = aLinkStr.GetToken( 0, '\n' );
         if (aLine.Len())
-            nCols = (USHORT) aLine.GetTokenCount( '\t' );
+            nCols = static_cast<SCSIZE>(aLine.GetTokenCount( '\t' ));
     }
 
     if (!nRows || !nCols)               // keine Daten
@@ -233,10 +233,10 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
             nStdFormat = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
 
         String aEntry;
-        for (USHORT nR=0; nR<nRows; nR++)
+        for (SCSIZE nR=0; nR<nRows; nR++)
         {
             aLine = aLinkStr.GetToken( (xub_StrLen) nR, '\n' );
-            for (USHORT nC=0; nC<nCols; nC++)
+            for (SCSIZE nC=0; nC<nCols; nC++)
             {
                 aEntry = aLine.GetToken( (xub_StrLen) nC, '\t' );
                 ULONG nIndex = nStdFormat;
@@ -253,7 +253,7 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
 
     if (HasListeners())
     {
-        Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( 0 ), NULL ) );
+        Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
         pDoc->TrackFormulas();      // muss sofort passieren
         pDoc->StartTrackTimer();
 
@@ -271,7 +271,7 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
     }
 }
 
-void ScDdeLink::NewData(USHORT nCols, USHORT nRows)
+void ScDdeLink::NewData(SCSIZE nCols, SCSIZE nRows)
 {
     pResult = new ScMatrix( nCols, nRows );
 }
@@ -284,7 +284,7 @@ void ScDdeLink::ResetValue()
     //  Tracking, FID_DATACHANGED etc. passiert von aussen
 
     if (HasListeners())
-        Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress( 0 ), NULL ) );
+        Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 }
 
 void __EXPORT ScDdeLink::ListenersGone()
