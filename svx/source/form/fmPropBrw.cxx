@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 13:57:42 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 16:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
+#endif
+#ifndef _SVX_FMHELP_HRC
+#include "fmhelp.hrc"
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -254,6 +257,7 @@ FmPropBrw::FmPropBrw(const Reference< XMultiServiceFactory >&   _xORB,
     Size aPropWinSize(STD_WIN_SIZE_X,STD_WIN_SIZE_Y);
     SetMinOutputSizePixel(Size(STD_MIN_SIZE_X,STD_MIN_SIZE_Y));
     SetOutputSizePixel(aPropWinSize);
+    SetUniqueId(UID_FORMPROPBROWSER_FRAME);
 
     try
     {

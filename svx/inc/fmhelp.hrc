@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-10 12:21:06 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 16:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,8 @@
 
 #define UID_SEARCH_RECORDSTATUS                 (HID_FORM_DLG_START +  35)
 #define UID_SQLERROR_BUTTONMORE                 (HID_FORM_DLG_START +  36)
+
+#define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
