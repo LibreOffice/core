@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:08:45 $
+ *  last change: $Author: tbe $ $Date: 2001-10-24 10:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,39 +304,42 @@ void ModulWindow::CheckCompileBasic()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
-    // Zur Laufzeit wird niemals compiliert!
-    BOOL bRunning = StarBASIC::IsRunning();
-    BOOL bModified = ( !xModule->IsCompiled() ||
-        ( GetEditEngine() && GetEditEngine()->IsModified() ) );
-
-    if ( !bRunning && bModified )
+    if ( xModule.Is() )
     {
-        BOOL bDone = FALSE;
-        Application::EnterWait();
+        // Zur Laufzeit wird niemals compiliert!
+        BOOL bRunning = StarBASIC::IsRunning();
+        BOOL bModified = ( !xModule->IsCompiled() ||
+            ( GetEditEngine() && GetEditEngine()->IsModified() ) );
 
-        if( bModified )
+        if ( !bRunning && bModified )
         {
-            AssertValidEditEngine();
-            GetEditorWindow().SetSourceInBasic( FALSE );
+            BOOL bDone = FALSE;
+            Application::EnterWait();
+
+            if( bModified )
+            {
+                AssertValidEditEngine();
+                GetEditorWindow().SetSourceInBasic( FALSE );
+            }
+
+            BOOL bWasModified = GetBasic()->IsModified();
+
+            bDone = GetBasic()->Compile( xModule );
+            if ( !bWasModified )
+                GetBasic()->SetModified( FALSE );
+
+            if ( bDone )
+            {
+                GetBreakPoints().SetBreakPointsInBasic( xModule );
+            }
+
+            Application::LeaveWait();
+
+            //BasicIDE::MarkDocShellModified( GetBasic() );
+
+            aStatus.bError = !bDone;
+            aStatus.bIsRunning = FALSE;
         }
-
-        BOOL bWasModified = GetBasic()->IsModified();
-
-        bDone = GetBasic()->Compile( xModule );
-        if ( !bWasModified )
-            GetBasic()->SetModified( FALSE );
-
-        if ( bDone )
-        {
-            GetBreakPoints().SetBreakPointsInBasic( xModule );
-        }
-
-        Application::LeaveWait();
-
-//      BasicIDE::MarkDocShellModified( GetBasic() );
-
-        aStatus.bError = !bDone;
-        aStatus.bIsRunning = FALSE;
     }
 }
 
@@ -345,7 +348,7 @@ BOOL ModulWindow::BasicExecute()
     DBG_CHKTHIS( ModulWindow, 0 );
     CheckCompileBasic();
 
-    if ( !aStatus.bError && xModule->IsCompiled() )
+    if ( xModule.Is() && xModule->IsCompiled() && !aStatus.bError )
     {
         if ( GetBreakPoints().Count() )
             aStatus.nBasicFlags = aStatus.nBasicFlags | SbDEBUG_BREAK;
@@ -395,7 +398,12 @@ BOOL ModulWindow::CompileBasic()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     CheckCompileBasic();
-    return xModule->IsCompiled();
+
+    BOOL bIsCompiled = FALSE;
+    if ( xModule.Is() )
+        bIsCompiled = xModule->IsCompiled();
+
+    return bIsCompiled;
 }
 
 BOOL ModulWindow::BasicRun()
@@ -561,39 +569,44 @@ BOOL ModulWindow::SaveBasicSource()
 BOOL ModulWindow::ToggleBreakPoint( ULONG nLine )
 {
     DBG_ASSERT( xModule.Is(), "Kein Modul!" );
-    CheckCompileBasic();
-    if ( aStatus.bError )
-    {
-        Sound::Beep();
-        return FALSE;
-    }
 
     BOOL bNewBreakPoint = FALSE;
-    BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nLine );
-    if ( pBrk ) // entfernen
+
+    if ( xModule.Is() )
     {
-        xModule->ClearBP( (USHORT)nLine );
-        delete GetBreakPoints().Remove( pBrk );
-    }
-    else // einen erzeugen
-    {
-        if ( xModule->SetBP( (USHORT)nLine) )
+        CheckCompileBasic();
+        if ( aStatus.bError )
         {
-            GetBreakPoints().InsertSorted( new BreakPoint( nLine ) );
-            bNewBreakPoint = TRUE;
-            if ( StarBASIC::IsRunning() )
-            {
-                for ( USHORT nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
-                {
-                    SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( nMethod );
-                    DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
-                    pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
-                }
-            }
+            Sound::Beep();
+            return FALSE;
         }
 
-        if ( !bNewBreakPoint )
-            Sound::Beep();
+        BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nLine );
+        if ( pBrk ) // entfernen
+        {
+            xModule->ClearBP( (USHORT)nLine );
+            delete GetBreakPoints().Remove( pBrk );
+        }
+        else // einen erzeugen
+        {
+            if ( xModule->SetBP( (USHORT)nLine) )
+            {
+                GetBreakPoints().InsertSorted( new BreakPoint( nLine ) );
+                bNewBreakPoint = TRUE;
+                if ( StarBASIC::IsRunning() )
+                {
+                    for ( USHORT nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
+                    {
+                        SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( nMethod );
+                        DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+                        pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
+                    }
+                }
+            }
+
+            if ( !bNewBreakPoint )
+                Sound::Beep();
+        }
     }
 
     return bNewBreakPoint;
@@ -603,13 +616,15 @@ void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 {
     DBG_ASSERT( xModule.Is(), "Kein Modul!" );
 
-    CheckCompileBasic();
+    if ( xModule.Is() )
+    {
+        CheckCompileBasic();
 
-    rtl::OUString aModName;
-    if ( rBrk.bEnabled )
-        xModule->SetBP( (USHORT)rBrk.nLine );
-    else
-        xModule->ClearBP( (USHORT)rBrk.nLine );
+        if ( rBrk.bEnabled )
+            xModule->SetBP( (USHORT)rBrk.nLine );
+        else
+            xModule->ClearBP( (USHORT)rBrk.nLine );
+    }
 }
 
 
@@ -787,39 +802,43 @@ void ModulWindow::EditMacro( const String& rMacroName )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     DBG_ASSERT( xModule.Is(), "Kein Modul!" );
-    CheckCompileBasic();
 
-    if ( !aStatus.bError )
+    if ( xModule.Is() )
     {
-        USHORT nStart, nEnd;
-        SbMethod* pMethod = (SbMethod*)xModule->Find( rMacroName, SbxCLASS_METHOD );
-        if ( pMethod )
+        CheckCompileBasic();
+
+        if ( !aStatus.bError )
         {
-            pMethod->GetLineRange( nStart, nEnd );
-            if ( nStart )
+            USHORT nStart, nEnd;
+            SbMethod* pMethod = (SbMethod*)xModule->Find( rMacroName, SbxCLASS_METHOD );
+            if ( pMethod )
             {
-                // Basic beginnt bei 1
-                nStart--;
-                nEnd--;
+                pMethod->GetLineRange( nStart, nEnd );
+                if ( nStart )
+                {
+                    // Basic beginnt bei 1
+                    nStart--;
+                    nEnd--;
+                }
+                TextSelection aSel( TextPaM( nStart, 0 ), TextPaM( nStart, 0 ) );
+                AssertValidEditEngine();
+                TextView * pView = GetEditView();
+                // ggf. hinscrollen, so dass erste Zeile oben...
+                long nVisHeight = GetOutputSizePixel().Height();
+                if ( (long)pView->GetTextEngine()->GetTextHeight() > nVisHeight )
+                {
+                    long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
+                    long nOldStartY = pView->GetStartDocPos().Y();
+                    long nNewStartY = nStart * pView->GetTextEngine()->GetCharHeight();
+                    nNewStartY = Min( nNewStartY, nMaxY );
+                    pView->Scroll( 0, -(nNewStartY-nOldStartY) );
+                    pView->ShowCursor( FALSE, TRUE );
+                    GetEditVScrollBar().SetThumbPos( pView->GetStartDocPos().Y() );
+                }
+                pView->SetSelection( aSel );
+                pView->ShowCursor();
+                pView->GetWindow()->GrabFocus();
             }
-            TextSelection aSel( TextPaM( nStart, 0 ), TextPaM( nStart, 0 ) );
-            AssertValidEditEngine();
-            TextView * pView = GetEditView();
-            // ggf. hinscrollen, so dass erste Zeile oben...
-            long nVisHeight = GetOutputSizePixel().Height();
-            if ( (long)pView->GetTextEngine()->GetTextHeight() > nVisHeight )
-            {
-                long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
-                long nOldStartY = pView->GetStartDocPos().Y();
-                long nNewStartY = nStart * pView->GetTextEngine()->GetCharHeight();
-                nNewStartY = Min( nNewStartY, nMaxY );
-                pView->Scroll( 0, -(nNewStartY-nOldStartY) );
-                pView->ShowCursor( FALSE, TRUE );
-                GetEditVScrollBar().SetThumbPos( pView->GetStartDocPos().Y() );
-            }
-            pView->SetSelection( aSel );
-            pView->ShowCursor();
-            pView->GetWindow()->GrabFocus();
         }
     }
 }
@@ -871,15 +890,18 @@ void __EXPORT ModulWindow::UpdateData()
     // geaendert hat.
     // => Keine Unterbrechungen erwuenscht!
 
-    SetModule( ::rtl::OUString( xModule->GetSource() ) );
-
-    if ( GetEditView() )
+    if ( xModule.Is() )
     {
-        TextSelection aSel = GetEditView()->GetSelection();
-        GetEditEngine()->SetText( xModule->GetSource() );
-        GetEditView()->SetSelection( aSel );
-        GetEditEngine()->SetModified( FALSE );
-        BasicIDE::MarkDocShellModified( GetBasic() );
+        SetModule( ::rtl::OUString( xModule->GetSource() ) );
+
+        if ( GetEditView() )
+        {
+            TextSelection aSel = GetEditView()->GetSelection();
+            GetEditEngine()->SetText( xModule->GetSource() );
+            GetEditView()->SetSelection( aSel );
+            GetEditEngine()->SetModified( FALSE );
+            BasicIDE::MarkDocShellModified( GetBasic() );
+        }
     }
 }
 
@@ -1264,15 +1286,18 @@ USHORT __EXPORT ModulWindow::GetSearchOptions()
 
 void __EXPORT ModulWindow::BasicStarted()
 {
-    aStatus.bIsRunning = TRUE;
-    if ( GetBreakPoints().Count() )
+    if ( xModule.Is() )
     {
-        GetBreakPoints().SetBreakPointsInBasic( xModule );
-        for ( USHORT nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
+        aStatus.bIsRunning = TRUE;
+        if ( GetBreakPoints().Count() )
         {
-            SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( nMethod );
-            DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
-            pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
+            GetBreakPoints().SetBreakPointsInBasic( xModule );
+            for ( USHORT nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
+            {
+                SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( nMethod );
+                DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+                pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
+            }
         }
     }
 }
@@ -1287,7 +1312,7 @@ String ModulWindow::CreateSbxDescription()
 {
     String aDescription = IDEBaseWindow::CreateSbxDescription();
     aDescription += ';';
-    aDescription += GetSbModule()->GetName();
+    aDescription += GetName();
     return aDescription;
 }
 

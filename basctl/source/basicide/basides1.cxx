@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:10:50 $
+ *  last change: $Author: tbe $ $Date: 2001-10-24 10:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,7 +1028,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
                 {
                     StarBASIC* pLib = ((ModulWindow*)pCurWin)->GetBasic();
                     LibInfo* pLibInf =  IDE_DLL()->GetExtraData()->GetLibInfos().GetInfo( pLib, TRUE );
-                    pLibInf->aCurrentModule = ((ModulWindow*)pCurWin)->GetSbModule()->GetName();
+                    pLibInf->aCurrentModule = pCurWin->GetName();
                 }
             }
             else
