@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-09-29 10:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,8 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
 
         //! define strings for xlink:show values
         rtl::OUString sShow = ::rtl::OUString::createFromAscii(
-            sDefTarget.compareToAscii( "_self" ) == 0 ? "replace" : "new" );
+            sDefTarget.compareToAscii( "_blank" ) == 0 ? sXML_new
+                                                       : sXML_replace );
 
         sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
                                 ::rtl::OUString::createFromAscii(sXML_show) );
