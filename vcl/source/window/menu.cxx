@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-28 14:03:44 $
+ *  last change: $Author: tbe $ $Date: 2002-07-03 12:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1662,12 +1662,24 @@ void Menu::SelectItem( USHORT nItemId )
         static_cast<PopupMenu*>(this)->SelectEntry( nItemId );
 }
 
-com::sun::star::uno::Reference< drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible( BOOL bCreate ) const
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible()
 {
-    com::sun::star::uno::Reference< drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    // TODO
+
+    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >();
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible( BOOL bCreate ) const
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
     if( pWindow )
         xAcc = pWindow->GetAccessible( bCreate );
     return xAcc;
+}
+
+void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxAccessible )
+{
+    mxAccessible = rxAccessible;
 }
 
 Size Menu::ImplCalcSize( Window* pWin )
