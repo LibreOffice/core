@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:35:33 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ portuguese_brazilian ] = "Wenn Sie eine Option ausw?hlen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
         Text [ japanese ] = "µÌß¼®İ‚ğ‚P‚Â‘I‘ğ‚·‚é‚ÆAµÌß¼®İ¸ŞÙ°Ìß‚É–¾—Ä’l‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ü‚·B";
         Text [ chinese_simplified ] = "Èç¹ûÉè¶¨Ê¹ÓÃÒ»¸öÑ¡Ïî£¬Õâ¸öÑ¡ÏîĞ¡×é¾Í»á»ñµÃÄ³Ò»¸öÊıÖµ¡£";
-        Text [ chinese_traditional ] = "¦pªG¿ï¾Ü¤F¤@­Ó¿ï¶µ¡A¿ï¶µ¸s²Õ´N·|®M¥Î¬Y¤@³]©w¦nªº¼Æ­È¡C";
+        Text [ chinese_traditional ] = "¦pªG¿ï¾Ü¤F¤@­Ó¿ï¶µ¡A¿ï¶µ¸s²Õ´N·|±Ä¥Î¬Y¤@³]©w¦nªº¼Æ­È¡C";
         Text [ arabic ] = "ÚäÏ ÇÎÊíÇÑß áÃÍÏ ÇáÎíÇÑÇÊ¡ Óæİ íÊã ÊÚííä ŞíãÉ ãÚíäÉ áãÌãæÚÉ ÇáÎíÇÑÇÊ.";
         Text [ dutch ] = "Als u een optie kiest wordt er een bepaalde waarde toegewezen aan de optiegroep.";
         Text [ chinese_simplified ] = "Èç¹ûÉè¶¨Ê¹ÓÃÒ»¸öÑ¡Ïî£¬Õâ¸öÑ¡ÏîĞ¡×é¾Í»á»ñµÃÄ³Ò»¸öÊıÖµ¡£";
@@ -376,11 +376,11 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ polish ] = "Jak¹ wartoœæ przypisaæ pojedynczym opcjom?";
         Text [ portuguese_brazilian ] = "Welchen Wert m?hten Sie jeder Option zuweisen ?";
         Text [ japanese ] = "ŠeµÌß¼®İ‚É‚Ç‚Ì’l‚ğŠ„‚è“–‚Ä‚Ü‚·‚©B(~V)";
-        Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
+        Text [ chinese_simplified ] = "ÒªÖ¸¶¨Ñ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
         Text [ chinese_traditional ] = "­n«ü©w¨C­Ó¿ï¶µ¨Ï¥Îªº¼Æ­È(~V)¡H";
         Text [ arabic ] = "ãÇ åí ÇáŞíãÉ ÇáÊí ÊÑíÏ ÊÚííäåÇ áßá ÎíÇÑ¿";
         Text [ dutch ] = "Welke waarden wilt u toewijzen aan de opties ?";
-        Text [ chinese_simplified ] = "ÒªÈÃÑ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
+        Text [ chinese_simplified ] = "ÒªÖ¸¶¨Ñ¡ÏîÊ¹ÓÃµÄÊıÖµÊÇ(~V)£¿";
         Text [ greek ] = "ĞïéÜ ôéìŞ èİëåôå íá áíôéóôïé÷åß óå êÜèå åğéëïãŞ;";
         Text [ korean ] = "¾î¶² °ªÀ» °¢ ¿É¼Ç¿¡ ÇÒ´çÇÏ½Ã°Ú½À´Ï±î(~V)?";
         Text [ turkish ] = "Her bir seçeneğe hangi değeri atamak istiyorsunuz?";
@@ -589,6 +589,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/07/24 20:35:33  kz
+ *  Merge SRC638: 24.07.01 - 22:35:04
+ *
  *  Revision 1.16  2001/07/17 20:35:26  kz
  *  Merge SRC638: 17.07.01 - 22:34:31
  *
@@ -640,6 +643,7 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
 
 
 
