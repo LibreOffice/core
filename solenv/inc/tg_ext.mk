@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:38:45 $
+#   last change: $Author: obo $ $Date: 2004-02-20 09:05:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -313,9 +313,9 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
     @+-$(RM) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
 # hard coded again to get the same directory level as before. quite ugly...
-    +-cd $(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).tmp
+    +-cd $(PRJ)$/$(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).tmp
     @+-mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak >& $(NULLDEV)
-    @+-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(NEW_PATCH_FILE_NAME) >& $(NULLDEV)
+    @+-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME) >& $(NULLDEV)
     @+echo still some problems with win32 generated patches...
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
