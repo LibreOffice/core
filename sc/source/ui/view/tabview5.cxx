@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:15:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,12 @@ void ScTabView::UpdateLayerLocks()
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
         if (pLayer)
             pDrawView->SetLayerLocked( pLayer->GetName(), bProt );
+        pLayer = rAdmin.GetLayerPerID(SC_LAYER_HIDDEN);
+        if (pLayer)
+        {
+            pDrawView->SetLayerLocked( pLayer->GetName(), bProt );
+            pDrawView->SetLayerVisible( pLayer->GetName(), sal_False);
+        }
     }
 }
 
