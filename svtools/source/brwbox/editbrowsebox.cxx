@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 13:25:17 $
+ *  last change: $Author: dr $ $Date: 2002-06-12 13:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,10 +1042,10 @@ namespace svt
                 {
                     AsynchGetFocus();
 
+                    Reference< XAccessible > xOldCell = m_aImpl->m_xActiveCell;
+                    CreateAccessibleCell(nRow,nCol);
                     if ( m_aImpl->m_xActiveCell.is() )
                     {
-                        Reference< XAccessible > xOldCell = m_aImpl->m_xActiveCell;
-                        CreateAccessibleCell(nRow,nCol);
                         commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
                                  com::sun::star::uno::makeAny(xOldCell),
                                  com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
@@ -1502,6 +1502,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2002/05/31 13:25:17  oj
+ *  #99812# accessible adjustments
+ *
  *  Revision 1.8  2002/04/30 15:27:44  fs
  *  #99048# corrected column selection
  *
