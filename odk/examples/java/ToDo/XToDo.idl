@@ -1,0 +1,22 @@
+// Guard against multiple includes
+#ifndef _ORG_OPENOFFICE_IDL_
+#define _ORG_OPENOFFICE_IDL__
+
+/// Template for OpenOffice ToDo add-in component idl file.
+
+
+/** Provides lifetime control by reference counting and the possibility of
+    querying for other interfaces of the same logical object.
+ */
+#include <com/sun/star/uno/XInterface.idl>
+
+module org {
+  module OpenOffice {
+    interface XToDo : com::sun::star::uno::XInterface
+    {
+      void recalc( [in] any aInstance );
+    };
+  };
+};
+
+#endif
