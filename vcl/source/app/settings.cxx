@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:42:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,7 +1311,8 @@ void MiscSettings::SetEnableATToolSupport( BOOL bEnable )
 {
     if ( bEnable != mpData->mnEnableATT )
     {
-        if( bEnable && !ImplInitAccessBridge(false) )
+        BOOL bDummy;
+        if( bEnable && !ImplInitAccessBridge(false, bDummy) )
             return;
 
 #ifdef WNT
