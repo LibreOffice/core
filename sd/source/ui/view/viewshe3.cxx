@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:48:42 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void ViewShell::UpdateSlideChangeWindow()
 |*
 \************************************************************************/
 
-void ViewShell::AssignFromSlideChangeWindow()
+void ViewShell::AssignFromSlideChangeWindow (EditMode eEditMode)
 {
     USHORT nId = SlideChangeChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
@@ -374,8 +374,12 @@ void ViewShell::AssignFromSlideChangeWindow()
         if( pSlideChangeWin )
         {
             SdPage* pPage      = NULL;
-            USHORT  nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
             USHORT  nPage;
+            USHORT  nNoOfPages;
+            if (eEditMode == EM_PAGE)
+                nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
+            else
+                nNoOfPages = GetDoc()->GetMasterSdPageCount(PK_STANDARD);
 
 
             SfxItemSet aSet(GetDoc()->GetPool(), ATTR_DIA_START, ATTR_DIA_END );
@@ -390,7 +394,10 @@ void ViewShell::AssignFromSlideChangeWindow()
 
             for (nPage = 0; nPage < nNoOfPages; nPage++)
             {
-                pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
+                if (eEditMode == EM_PAGE)
+                    pPage = GetDoc()->GetSdPage(nPage, PK_STANDARD);
+                else
+                    pPage = GetDoc()->GetMasterSdPage(nPage, PK_STANDARD);
                 if (pPage->IsSelected())
                 {
                     // alte Attribute fuer UndoAction merken
@@ -1519,7 +1526,7 @@ void ViewShell::CreateOrDuplicatePage (
     if (pTemplatePage == NULL)
         if (pDocument->GetSdPage(0, ePageKind) > 0)
             pTemplatePage = pDocument->GetSdPage(0, ePageKind);
-    if (pTemplatePage != NULL)
+    if (pTemplatePage != NULL && pTemplatePage->TRG_HasMasterPage())
         aVisibleLayers = pTemplatePage->TRG_GetMasterPageVisibleLayers();
     else
         aVisibleLayers.SetAll();
@@ -1669,6 +1676,7 @@ void ViewShell::CreateOrDuplicatePage (
     {
         case SID_INSERTPAGE:
         case SID_INSERTPAGE_QUICK:
+        case SID_INSERT_MASTER_PAGE:
             // There are three cases.  a) pPage is not NULL: we use it as a
             // template and create a new slide behind it. b) pPage is NULL
             // but the document is not empty: we use the first slide/notes
