@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-22 16:13:59 $
+ *  last change: $Author: mtg $ $Date: 2001-02-27 17:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,6 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2
 {
 }
 
-#ifndef DEBUG
-inline
-#endif
 void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
                                       BOOL bMayScript, const String& rCodeBase)
                                       //const String& rAlt )
