@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ class SwNumPositionTabPage : public SfxTabPage
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     void                SetModified(BOOL bRepaint = TRUE);
 #else
     void                SetModified(BOOL bRepaint = TRUE)
