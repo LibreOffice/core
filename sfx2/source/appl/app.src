@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:21:10 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     Message[ portuguese_brazilian ] = "Ocorreu um erro ao iniciar o navegador da web.\nPor favor, verifique as configura��es do %PRODUCTNAME em 'Ferramentas - Op��es - %PRODUCTNAME - Programas externos' o navegador da web.";
     Message[ japanese ] = "webブラウザの起動時にエラーが発生しました。ツール → オプション → %PRODUCTNAME → ヘルププログラムで %PRODUCTNAME の設定とお使いの webブラウザの設定を確認してください。";
     Message[ korean ] = "웹 브라우저를 시작하는 동안 오류가 발생했습니다. %PRODUCTNAME 의 '도구 - 옵션 - %PRODUCTNAME - 보조 프로그램의 설정 및 웹 브라우저 설정을 재검해보십시오.";
-    Message[ chinese_simplified ] = "启动浏览器时发生一个错误。\n请通过菜单\"工具\"-\"选项\"-\"%PRODUCTNAME -辅助程序\"来检查 %PRODUCTNAME 的设定及浏览器的设定。";
+    Message[ chinese_simplified ] = "启动网页浏览器时发生错误。请您检查 '工具 - 选项 - %PRODUCTNAME - 外部程序'下的 %PRODUCTNAME 设置和浏览器的设置。";
     Message[ chinese_traditional ] = "啟動 Web 瀏覽器時發生一個錯誤。\n請透過「工具」-「選項」-「%PRODUCTNAME 輔助程式」來檢查 %PRODUCTNAME 的設定及瀏覽器的設定。";
     Message[ turkish ] = "Web taray�c�s�n� ba�lat�rken bir hata olu�tu.\nL�tfen, %PRODUCTNAME ve web taray�c�n�z�n ayarlar�n� kontrol ediniz.";
     Message[ arabic ] = "An error occurred in starting a webbrowser.\nPlease check the %PRODUCTNAME and webbrowser settings.";
@@ -4752,7 +4752,7 @@ String STR_KEY_USERDICTIONARY_DIR
     Text[ portuguese_brazilian ] = "Dicion�rios do usu�rio";
     Text[ japanese ] = "ユーザー辞書";
     Text[ korean ] = "사용자 정의 사전";
-    Text[ chinese_simplified ] = "使用者字典";
+    Text[ chinese_simplified ] = "用户定义字典";
     Text[ chinese_traditional ] = "自訂字典";
     Text[ arabic ] = "������ ��������";
     Text[ turkish ] = "Kullan�c� tan�ml� s�zl�kler";
@@ -4948,7 +4948,7 @@ String STR_QUICKSTART_FROMTEMPLATE
     Text[ portuguese_brazilian ] = "A partir de modelo...";
     Text[ japanese ] = "テンプレートから...";
     Text[ korean ] = "서식 파일로부터";
-    Text[ chinese_simplified ] = "采用样式";
+    Text[ chinese_simplified ] = "采用文档样式";
     Text[ chinese_traditional ] = "採用樣式";
     Text[ turkish ] = "�ablondan";
     Text[ arabic ] = "From template...";
