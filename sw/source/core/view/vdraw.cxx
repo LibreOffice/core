@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-06-26 09:25:34 $
+ *  last change: $Author: od $ $Date: 2002-09-03 08:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
+#endif
+
+/// OD 29.08.2002 #102450#
+/// include <svx/svdoutl.hxx>
+#ifndef _SVDOUTL_HXX
+#include <svx/svdoutl.hxx>
 #endif
 
 #ifndef PRODUCT
@@ -224,16 +230,19 @@ void SwViewImp::UnlockPaint()
 |*  Letzte Aenderung    AMA 04. Jun. 98
 |*
 |*************************************************************************/
-
-
-void SwViewImp::PaintLayer( const BYTE nLayerID, const SwRect &rRect ) const
+/// OD 29.08.2002 #102450#
+/// add 3rd paramter <const Color* pPageBackgrdColor> for setting this
+/// color as the background color at the outliner of the draw view.
+void SwViewImp::PaintLayer( const BYTE nLayerID, const SwRect &rRect,
+                            const Color* pPageBackgrdColor ) const
 {
     if ( HasDrawView() )
     {
         //change the draw mode in high contrast mode
         OutputDevice* pOutDev = GetShell()->GetOut();
         ULONG nOldDrawMode = pOutDev->GetDrawMode();
-        SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews();
+        /// OD 29.08.2002 - comment unnecessary method call
+        //SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews();
         if( GetShell()->GetWin() &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
             (!GetShell()->IsPreView()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
@@ -242,11 +251,38 @@ void SwViewImp::PaintLayer( const BYTE nLayerID, const SwRect &rRect ) const
                                 DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
         }
 
+        /// OD 29.08.2002 #102450#
+        /// For correct handling of accessibily, high contrast, the page background
+        /// color is set as the background color at the outliner of the draw view.
+        /// Only necessary for the layers hell and heaven
+        Color aOldOutlinerBackgrdColor;
+        if ( (nLayerID == GetShell()->GetDoc()->GetHellId()) ||
+             (nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
+        {
+            ASSERT( pPageBackgrdColor,
+                    "incorrect usage of SwViewImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
+            if ( pPageBackgrdColor )
+            {
+                aOldOutlinerBackgrdColor =
+                        GetDrawView()->GetModel()->GetDrawOutliner().GetBackgroundColor();
+                //const_cast<class SdrOutliner*>(GetDrawView()->GetModell()->GetDrawOutliner())->SetBackgroundColor( *pPageBackgrdColor );
+                GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( *pPageBackgrdColor );
+            }
+        }
+
         Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
         GetPageView()->RedrawOneLayer( nLayerID, rRect.SVRect(),
                         pOutDev,
                         GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0,
                         &aLnk );
+
+        /// OD 29.08.2002 #102450#
+        /// reset background color of the outliner
+        if ( (nLayerID == GetShell()->GetDoc()->GetHellId()) ||
+             (nLayerID == GetShell()->GetDoc()->GetHeavenId()) )
+        {
+                GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
+        }
 
         pOutDev->SetDrawMode( nOldDrawMode );
     }
