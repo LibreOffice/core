@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:41:05 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 15:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,6 @@ namespace dbaccess
         void setParameter(sal_Int32 nPos
                             ,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter
                             ,const connectivity::ORowSetValue& _rValue
-                            ,sal_Bool _bSigned = sal_True
                             ,sal_Int32 _nType = ::com::sun::star::sdbc::DataType::OTHER
                             );
         void fillParameters( const ORowSetRow& _rRow

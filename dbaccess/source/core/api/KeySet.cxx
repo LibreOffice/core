@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:41:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 15:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
+#include "querycomposer.hxx"
 #endif
 
 using namespace dbaccess;
@@ -225,6 +228,17 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
         if(aIter != (*m_pKeyColumnNames).end())
             aFilter += aAnd;
     }
+    // don't simply overwrite an existent filter, this would lead to problems if this existent
+    // filter contains paramters (since we're going to add parameters ourself)
+    // 2003-12-12 - #23418# - fs@openoffice.org
+    ::rtl::OUString sOldFilter = m_xComposer->getFilter();
+    if ( sOldFilter.getLength() )
+    {
+        FilterCreator aCreator;
+        aCreator.append(sOldFilter);
+        aCreator.append(aFilter);
+        aFilter = aCreator.m_sFilter;
+    }
     m_xComposer->setFilter(aFilter);
     m_xStatement = m_xConnection->prepareStatement(m_xComposer->getComposedQuery());
 }
@@ -297,6 +311,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
     ::rtl::OUString aCondition = ::rtl::OUString::createFromAscii("( ");
+
     OColumnNamePos::const_iterator aIter = (*m_pKeyColumnNames).begin();
     for(;aIter != (*m_pKeyColumnNames).end();++aIter)
     {
@@ -330,7 +345,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
         if(m_aKeyIter != m_aKeyMap.end())
         {
             connectivity::ORowVector< ORowSetValue >::iterator aKeyIter = m_aKeyIter->second.first->begin();
-            for(;aKeyIter != m_aKeyIter->second.first->end();++aKeyIter)
+            for(sal_uInt16 j = 0;aKeyIter != m_aKeyIter->second.first->end();++aKeyIter,++j)
             {
                 setParameter(i++,xParameter,*aKeyIter);
             }
@@ -401,10 +416,12 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     ::rtl::OUString aCondition,sKeyCondition,sIndexCondition,sSetValues;
     ::std::vector<sal_Int32> aIndexColumnPositions;
 
+    sal_Int32 i = 1;
     // here we build the condition part for the update statement
     OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
-    for(;aIter != m_pColumnNames->end();++aIter)
+    for(;aIter != m_pColumnNames->end();++aIter,++i)
     {
+        sal_Bool bSigned = m_xSetMetaData->isSigned(i);
         if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
         {
             sKeyCondition += ::dbtools::quoteName( aQuote,aIter->first);
@@ -430,7 +447,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
                         aIndexColumnPositions.push_back(aIter->second.first);
                     }
                     sIndexCondition += aAnd;
-
                     break;
                 }
             }
@@ -479,11 +495,13 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
-    sal_Int32 i = 1;
+    i = 1;
     // first the set values
     aIter = m_pColumnNames->begin();
-    for(;aIter != m_pColumnNames->end();++aIter)
+    sal_uInt16 j = 0;
+    for(;aIter != m_pColumnNames->end();++aIter,++j)
     {
+
         sal_Int32 nPos = aIter->second.first;
         if((*_rInsertRow)[nPos].isModified())
         {
@@ -493,15 +511,18 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     }
     // and then the values of the where condition
     aIter = (*m_pKeyColumnNames).begin();
-    for(;aIter != (*m_pKeyColumnNames).end();++aIter,++i)
+    j = 0;
+    for(;aIter != (*m_pKeyColumnNames).end();++aIter,++i,++j)
     {
         setParameter(i,xParameter,(*_rOrginalRow)[aIter->second.first],aIter->second.second);
     }
 
     // now we have to set the index values
     ::std::vector<sal_Int32>::iterator aIdxColIter = aIndexColumnPositions.begin();
-    for(;aIdxColIter != aIndexColumnPositions.end();++aIdxColIter,++i)
+    j = 0;
+    for(;aIdxColIter != aIndexColumnPositions.end();++aIdxColIter,++i,++j)
     {
+        OSL_ENSURE(j < aIndexSignedValues.size(),"Illegal signed pos!");
         setParameter(i,xParameter,(*_rOrginalRow)[*aIdxColIter],aIter->second.second);
     }
 
@@ -535,7 +556,8 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
 
     OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
-    for(;aIter != m_pColumnNames->end();++aIter)
+    sal_Int32 j = 1;
+    for(;aIter != m_pColumnNames->end();++aIter,++j)
     {
         if((*_rInsertRow)[aIter->second.first].isModified())
         {
@@ -554,6 +576,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
     OColumnNamePos::const_iterator aPosIter = m_pColumnNames->begin();
+    sal_uInt16 k = 0;
     for(sal_Int32 i = 1;aPosIter != m_pColumnNames->end();++aPosIter)
     {
         sal_Int32 nPos = aPosIter->second.first;
@@ -715,7 +738,9 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     ::rtl::OUString aColumnName;
 
     OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
-    for(;aIter != m_pColumnNames->end();++aIter)
+
+    sal_Int32 i = 1;
+    for(i = 1;aIter != m_pColumnNames->end();++aIter,++i)
     {
         if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
         {
@@ -737,7 +762,8 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 
     aIter = (*m_pKeyColumnNames).begin();
-    for(sal_Int32 i = 1;aIter != (*m_pKeyColumnNames).end();++aIter,++i)
+    sal_uInt16 j = 0;
+    for(i = 1;aIter != (*m_pKeyColumnNames).end();++aIter,++i,++j)
     {
         setParameter(i,xParameter,(*_rDeleteRow)[aIter->second.first],aIter->second.second);
     }
@@ -966,6 +992,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     sal_Int32 nPos=1;
     for(;aExternParamIter != m_aParameterRow.end();++aExternParamIter,++nPos)
     {
+
         switch(aExternParamIter->getTypeKind())
         {
         case DataType::CHAR:
@@ -1039,6 +1066,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
             break;
         }
     }
+
     connectivity::ORowVector< ORowSetValue >::const_iterator aIter = m_aKeyIter->second.first->begin();
     OColumnNamePos::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter,++nPos)
