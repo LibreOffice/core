@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-14 11:32:24 $
+#   last change: $Author: vg $ $Date: 2005-02-25 10:07:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=.
 
 PRJNAME=so_icu
@@ -123,7 +122,8 @@ OUT2LIB= \
 
 OUT2BIN= \
     $(BUILD_DIR)$/tools$/genccode$/genccode \
-    $(BUILD_DIR)$/tools$/genbrk$/genbrk
+    $(BUILD_DIR)$/tools$/genbrk$/genbrk \
+    $(BUILD_DIR)$/tools$/gencmn$/gencmn
 
 .ENDIF
 
@@ -190,7 +190,8 @@ OUT2BIN= \
     $(BUILD_DIR)$/..$/bin$/icule26$(ICU_BUILD_LIBPOST).dll \
     $(BUILD_DIR)$/..$/bin$/icutu26$(ICU_BUILD_LIBPOST).dll \
     $(BUILD_DIR)$/..$/bin$/genccode.exe \
-    $(BUILD_DIR)$/..$/bin$/genbrk.exe
+    $(BUILD_DIR)$/..$/bin$/genbrk.exe \
+    $(BUILD_DIR)$/..$/bin$/gencmn.exe
 
 .ENDIF		# "$(GUI)"=="WNT"
 
