@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:38:04 $
+ *  last change: $Author: iha $ $Date: 2002-09-19 11:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ ModalDialog DLG_START_PRESENTATION
     RadioButton RBT_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 12 , 38 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Size = MAP_APPFONT ( 112 , 12 ) ;
         Text = "~Individuelle Bildschirmpräsentation" ;
         Text [ ENGLISH ] = "~CustomShow" ;
         TabStop = TRUE ;
