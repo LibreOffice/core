@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 16:26:54 $
+ *  last change: $Author: cl $ $Date: 2001-08-24 11:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,6 @@
  *
  ************************************************************************/
 
-/*
-#ifndef _COM_SUN_STAR_LOADER_XIMPLEMENTATIONLOADER_HPP_
-#include <com/sun/star/loader/XImplementationLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LOADER_CANNOTACTIVATEFACTORYEXCEPTION_HPP_
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#endif
-*/
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
@@ -273,6 +265,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoColorTable_createInstance(const
 // export this service
 //
 
+#ifndef SVX_LIGHT
+#include "UnoGraphicExporter.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
@@ -292,19 +288,28 @@ void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTyp
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+void SAL_CALL writeInfo( registry::XRegistryKey * pRegistryKey, const OUString& rImplementationName, const uno::Sequence< OUString >& rServices )
+{
+    uno::Reference< registry::XRegistryKey > xNewKey(
+        pRegistryKey->createKey(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
+
+    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
+        xNewKey->createKey( rServices.getConstArray()[i]);
+}
+
 sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
 {
     if( pRegistryKey )
     {
         try
         {
-            uno::Reference< registry::XRegistryKey > xNewKey(
-                reinterpret_cast< registry::XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + SvxUnoColorTable::getImplementationName_Static() + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
+            registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
 
-            uno::Sequence< OUString > aServices = SvxUnoColorTable::getSupportedServiceNames_Static();
-            for( INT32 i = 0; i < aServices.getLength(); i++ )
-                xNewKey->createKey( aServices.getConstArray()[i]);
+            writeInfo( pKey, SvxUnoColorTable::getImplementationName_Static(), SvxUnoColorTable::getSupportedServiceNames_Static() );
+#ifndef SVX_LIGHT
+            writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
+#endif
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -318,13 +323,26 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
-    if( pServiceManager && rtl_str_compare( pImplName, "stardiv.one.drawing.SvxUnoColorTable" ) )
+    if( pServiceManager  )
     {
-        uno::Reference< lang::XSingleServiceFactory > xFactory( createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
-            SvxUnoColorTable::getImplementationName_Static(),
-            SvxUnoColorTable_createInstance,
-            SvxUnoColorTable::getSupportedServiceNames_Static() ) );
+        uno::Reference< lang::XSingleServiceFactory > xFactory;
 
+        if( rtl_str_compare( pImplName, "stardiv.one.drawing.SvxUnoColorTable" ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                SvxUnoColorTable::getImplementationName_Static(),
+                SvxUnoColorTable_createInstance,
+                SvxUnoColorTable::getSupportedServiceNames_Static() );
+        }
+#ifndef SVX_LIGHT
+        else if( svx::GraphicExporter_getImplementationName().equalsAscii( pImplName ) )
+        {
+            xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::GraphicExporter_getImplementationName(),
+                svx::GraphicExporter_createInstance,
+                svx::GraphicExporter_getSupportedServiceNames() );
+        }
+#endif
         if( xFactory.is())
         {
             xFactory->acquire();
