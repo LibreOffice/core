@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-11 08:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,83 +140,67 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
                                 const Sequence< ::rtl::OUString >& _rTableFilter,
                                 const Sequence< ::rtl::OUString >& _rTableTypeFilter)
 {
-    // build sorted versions of the filter sequences, so the visibility decision is faster
-    Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
-    sal_Int32   nTableFilterLen = aTableFilter.getLength();
+    m_xMasterTables = _rxMasterContainer;
 
-    if (nTableFilterLen)
-        qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
+    sal_Int32   nTableFilterLen = _rTableFilter.getLength();
 
     sal_Bool bNoTableFilters = (nTableFilterLen == 0);
+    if(!bNoTableFilters)
+    {
+        Sequence< ::rtl::OUString > aTableFilter        = _rTableFilter;
+        Sequence< ::rtl::OUString > aTableTypeFilter    = _rTableTypeFilter;
+        // build sorted versions of the filter sequences, so the visibility decision is faster
+        qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
+
         // as we want to modify nTableFilterLen, remember this
 
-    // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-    // for them
-    ::rtl::OUString* pTableFilters = aTableFilter.getArray();
-    ::std::vector< WildCard > aWCSearch;
-    sal_Int32 nShiftPos = 0;
-    String sCurrentWCExpression;
-    for (sal_Int32 i=0; i<nTableFilterLen; ++i)
-    {
-        if (pTableFilters->indexOf('%') != -1)
+        // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
+        // for them
+        ::std::vector< WildCard > aWCSearch; // contains the wildcards for the table filter
+        ::rtl::OUString* pTableFilters = aTableFilter.getArray();
+        sal_Int32 nShiftPos = 0;
+        String sCurrentWCExpression;
+        for (sal_Int32 i=0; i<nTableFilterLen; ++i)
         {
-            sCurrentWCExpression = sal_Unicode('*');
-            sCurrentWCExpression += (const sal_Unicode*)pTableFilters[i].replace('%', '*');
-            sCurrentWCExpression += sal_Unicode('*');
-            aWCSearch.push_back(WildCard(sCurrentWCExpression));
-        }
-        else
-        {
-            if (nShiftPos != i)
-                pTableFilters[nShiftPos] = pTableFilters[i];
-            ++nShiftPos;
-        }
-    }
-    // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
-    aTableFilter.realloc(nShiftPos);
-    nTableFilterLen = nShiftPos;
-
-    Sequence< ::rtl::OUString > aNames = _rxMasterContainer->getElementNames();
-    const ::rtl::OUString* pBegin   = aNames.getConstArray();
-    const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-
-    String sWCCompare;
-    sal_Bool bFilterMatch;
-    for(;pBegin != pEnd;++pBegin)
-    {
-        bFilterMatch =  bNoTableFilters
-                ||  ((nTableFilterLen != 0) && (NULL != bsearch(&pBegin, aTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare)));
-        // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-        if (!bFilterMatch && aWCSearch.size())
-        {   // or if one of the wildcrad expression matches
-            sWCCompare += (const sal_Unicode*)*pBegin;
-            for (   ::std::vector< WildCard >::const_iterator aLoop = aWCSearch.begin();
-                    aLoop != aWCSearch.end() && !bFilterMatch;
-                    ++aLoop
-                )
-                bFilterMatch = aLoop->Matches(sWCCompare);
-        }
-
-        if (bFilterMatch)
-        {// the table name is allowed (not filtered out)
-            Reference<XPropertySet> xTable;
-            _rxMasterContainer->getByName(*pBegin) >>= xTable;
-            ::rtl::OUString aTypeName;
-            xTable->getPropertyValue(PROPERTY_TYPE) >>= aTypeName;
-            const ::rtl::OUString* pTypeBegin   = _rTableTypeFilter.getConstArray();
-            const ::rtl::OUString* pTypeEnd     = pTypeBegin + _rTableTypeFilter.getLength();
-            for(;pTypeBegin != pTypeEnd;++pTypeBegin)
+            if (pTableFilters->indexOf('%') != -1)
             {
-                if(*pTypeBegin == aTypeName)
-                    break;
+                sCurrentWCExpression = sal_Unicode('*');
+                sCurrentWCExpression += (const sal_Unicode*)pTableFilters[i].replace('%', '*');
+                sCurrentWCExpression += sal_Unicode('*');
+                aWCSearch.push_back(WildCard(sCurrentWCExpression));
             }
+            else
+            {
+                if (nShiftPos != i)
+                    pTableFilters[nShiftPos] = pTableFilters[i];
+                ++nShiftPos;
+            }
+        }
+        // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
+        aTableFilter.realloc(nShiftPos);
+        nTableFilterLen = nShiftPos;
 
-            if(pTypeEnd != pTypeBegin)
-                m_aTablesIndexed.push_back(m_aTables.insert(Tables::value_type(*pBegin,xTable)).first);
+        Sequence< ::rtl::OUString> aNames = m_xMasterTables->getElementNames();
+        const ::rtl::OUString* pBegin   = aNames.getConstArray();
+        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+        for(;pBegin != pEnd;++pBegin)
+        {
+            if(isNameValid(*pBegin,aTableFilter,aTableTypeFilter,aWCSearch))
+            {
+                m_aTablesIndexed.push_back(m_aTables.insert(Tables::value_type(*pBegin, NULL)).first);
+            }
         }
     }
-
-
+    else
+    {
+        // no filter so insert all names
+        Sequence< ::rtl::OUString> aNames = m_xMasterTables->getElementNames();
+        const ::rtl::OUString* pBegin   = aNames.getConstArray();
+        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+        for(;pBegin != pEnd;++pBegin)
+            m_aTablesIndexed.push_back(m_aTables.insert(Tables::value_type(*pBegin, NULL)).first);
+    }
+    m_bConstructed = sal_True;
 }
 //------------------------------------------------------------------------------
 void OTableContainer::construct(const Reference< XConnection >& _xConnection, const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
@@ -360,6 +344,7 @@ void OTableContainer::dispose()
     m_aTablesIndexed.clear();
         //  !!! do this before clearing the map which the vector elements refer to !!!
     m_aTables.clear();
+    m_xMasterTables = NULL;
 
     m_bConstructed = sal_False;
 }
@@ -374,8 +359,6 @@ Type OTableContainer::getElementType(  ) throw(RuntimeException)
 {
     return::getCppuType(static_cast<Reference<XPropertySet>*>(NULL));
 }
-
-
 //------------------------------------------------------------------------------
 sal_Bool OTableContainer::hasElements(void) throw( RuntimeException )
 {
@@ -404,6 +387,11 @@ Any OTableContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsExcept
         throw IndexOutOfBoundsException();
 
     Reference< XPropertySet > xReturn = m_aTablesIndexed[_nIndex]->second;
+    if(!xReturn.is()) // special case
+    {
+        OSL_ENSHURE(m_xMasterTables.is(),"getByIndex: m_xMasterTables must be set!");
+        return m_xMasterTables->getByName(m_aTablesIndexed[_nIndex]->first);
+    }
     return makeAny(xReturn);
 }
 
@@ -416,6 +404,11 @@ Any OTableContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElement
         throw NoSuchElementException();
 
     Reference< XPropertySet > xReturn = aPos->second;
+    if(!xReturn.is()) // special case
+    {
+        OSL_ENSHURE(m_xMasterTables.is(),"getByIndex: m_xMasterTables must be set!");
+        return m_xMasterTables->getByName(_rName);
+    }
     return makeAny(xReturn);
 }
 
@@ -441,5 +434,47 @@ Sequence< rtl::OUString > OTableContainer::getElementNames(void) throw( RuntimeE
 
     return aReturn;
 }
+// -------------------------------------------------------------------------
+sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
+                                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
+                                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
+                                        const ::std::vector< WildCard >& _rWCSearch) const
+{
+    sal_Int32 nTableFilterLen = _rTableFilter.getLength();
+
+    sal_Bool bFilterMatch = (NULL != bsearch(_rName, _rTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare));
+    // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
+    if (!bFilterMatch && _rWCSearch.size())
+    {   // or if one of the wildcrad expression matches
+        String sWCCompare = (const sal_Unicode*)_rName;
+        for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
+                aLoop != _rWCSearch.end() && !bFilterMatch;
+                ++aLoop
+            )
+            bFilterMatch = aLoop->Matches(sWCCompare);
+    }
+
+    if (bFilterMatch)
+    {// the table name is allowed (not filtered out)
+        // no type filter
+        if(!_rTableTypeFilter.getLength())
+            return sal_True;
+
+        // this is expensive but there is no other way to get the type of the table
+        Reference<XPropertySet> xTable;
+        m_xMasterTables->getByName(_rName) >>= xTable;
+        ::rtl::OUString aTypeName;
+        xTable->getPropertyValue(PROPERTY_TYPE) >>= aTypeName;
+        const ::rtl::OUString* pTypeBegin   = _rTableTypeFilter.getConstArray();
+        const ::rtl::OUString* pTypeEnd     = pTypeBegin + _rTableTypeFilter.getLength();
+        for(;pTypeBegin != pTypeEnd;++pTypeBegin)
+        {
+            if(*pTypeBegin == aTypeName)
+                return sal_True; // same as break and then checking
+        }
+    }
+    return sal_False;
+}
+// -------------------------------------------------------------------------
 
 
