@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:57:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3866,6 +3866,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
         }
 
         Window* pOldFocusWindow = pSVData->maWinData.mpFocusWin;
+
         pSVData->maWinData.mpFocusWin = this;
 
         if ( pOldFocusWindow )
@@ -4364,6 +4365,7 @@ Window::~Window()
             }
             else if ( ImplIsOverlapWindow() )
                 pParent = mpOverlapWindow;
+
             if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() )
                 pParent->GrabFocus();
             else
