@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-05 18:22:41 $
+ *  last change: $Author: sj $ $Date: 2001-02-06 17:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4469,6 +4469,561 @@ static const mso_AutoShape msoFlowChartMultidocument =
     0x80000000, 0x80000000
 };
 
+static const sal_Int32 mso_sptFlowChartTerminatorVert[] =
+{
+    3470, 21600,
+    0, 10800,
+    3470, 0,
+    18130, 0,
+    21600, 10800,
+    18130, 21600,
+};
+static const sal_uInt16 mso_sptFlowChartTerminatorSegm[] =
+{
+    0x4000, 0xa702, 0x0001, 0xa702, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartTerminatorTextRect[] =
+{
+    1, 1060, 3180, 20540, 18420
+};
+static const mso_AutoShape msoFlowChartTerminator =
+{
+    (sal_Int32*)mso_sptFlowChartTerminatorVert, sizeof( mso_sptFlowChartTerminatorVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartTerminatorSegm, sizeof( mso_sptFlowChartTerminatorSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartTerminatorTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartPreparationVert[] =
+{
+    4350, 0,
+    17250, 0,
+    21600, 10800,
+    17250, 21600,
+    4350, 21600,
+    0,  10800
+};
+static const sal_Int32 mso_sptFlowChartPreparationTextRect[] =
+{
+    1, 4350, 0, 17250, 21600
+};
+static const mso_AutoShape msoFlowChartPreparation =
+{
+    (sal_Int32*)mso_sptFlowChartPreparationVert, sizeof( mso_sptFlowChartPreparationVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartPreparationTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartManualInputVert[] =
+{
+    0, 4300,
+    21600, 0,
+    21600, 21600,
+    0, 21600,
+};
+static const sal_Int32 mso_sptFlowChartManualInputTextRect[] =
+{
+    1, 0, 4300, 21600, 21600
+};
+static const mso_AutoShape msoFlowChartManualInput =
+{
+    (sal_Int32*)mso_sptFlowChartManualInputVert, sizeof( mso_sptFlowChartManualInputVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartManualInputTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartManualOperationVert[] =
+{
+    0, 0,
+    21600, 0,
+    17250, 21600,
+    4350, 21600,
+};
+static const sal_Int32 mso_sptFlowChartManualOperationTextRect[] =
+{
+    1, 4350, 0, 17250, 21600
+};
+static const mso_AutoShape msoFlowChartManualOperation =
+{
+    (sal_Int32*)mso_sptFlowChartManualOperationVert, sizeof( mso_sptFlowChartManualOperationVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartManualOperationTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartConnectorVert[] =
+{
+    0, 0,
+    21600, 21600
+};
+static const sal_uInt16 mso_sptFlowChartConnectorSegm[] =
+{
+    0xa302, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartConnectorTextRect[] =
+{
+    1, 3180, 3180, 18420, 18420
+};
+static const mso_AutoShape msoFlowChartConnector =
+{
+    (sal_Int32*)mso_sptFlowChartConnectorVert, sizeof( mso_sptFlowChartConnectorVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartConnectorSegm, sizeof( mso_sptFlowChartConnectorSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartConnectorTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartOffpageConnectorVert[] =
+{
+    0, 0,
+    21600, 0,
+    21600, 17150,
+    10800, 21600,
+    0, 17150
+};
+static const sal_Int32 mso_sptFlowChartOffpageConnectorTextRect[] =
+{
+    1, 0, 0, 21600, 17150
+};
+static const mso_AutoShape msoFlowChartOffpageConnector =
+{
+    (sal_Int32*)mso_sptFlowChartOffpageConnectorVert, sizeof( mso_sptFlowChartOffpageConnectorVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartOffpageConnectorTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartPunchedCardVert[] =
+{
+    4300, 0,
+    21600, 0,
+    21600, 21600,
+    0, 21600,
+    0, 4300
+};
+static const sal_Int32 mso_sptFlowChartPunchedCardTextRect[] =
+{
+    1, 0, 4300, 21600, 21600
+};
+static const mso_AutoShape msoFlowChartPunchedCard =
+{
+    (sal_Int32*)mso_sptFlowChartPunchedCardVert, sizeof( mso_sptFlowChartPunchedCardVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartPunchedCardTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartPunchedTapeVert[] =
+{
+    0, 2230,    // p
+    820, 3990,  // c
+    3410, 3980, // c
+    5370, 4360, // p
+    7430, 4030, // c
+    10110, 3890,// c
+    10690, 2270,// p
+    11440, 300, // c
+    14200, 160, // c
+    16150, 0,   // p
+    18670, 170, // c
+    20690, 390, // c
+    21600, 2230,// p
+    21600, 19420,// p
+    20640, 17510,// c
+    18320, 17490,// c
+    16140, 17240,// p
+    14710, 17370,// c
+    11310, 17510,// c
+    10770, 19430,// p
+    10150, 21150,// c
+    7380, 21290, // c
+    5290, 21600, // p
+    3220, 21250, // c
+    610, 21130,  // c
+    0, 19420     // p
+};
+static const sal_uInt16 mso_sptFlowChartPunchedTapeSegm[] =
+{
+    0x4000, 0x2004, 0x0001, 0x2004, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartPunchedTapeTextRect[] =
+{
+    1, 0, 4360, 21600, 17240
+};
+static const mso_AutoShape msoFlowChartPunchedTape =
+{
+    (sal_Int32*)mso_sptFlowChartPunchedTapeVert, sizeof( mso_sptFlowChartPunchedTapeVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartPunchedTapeSegm, sizeof( mso_sptFlowChartPunchedTapeSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartPunchedTapeTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartSummingJunctionVert[] =
+{
+    0, 0, 21600, 21600,
+
+    3100, 3100,
+    18500, 18500,
+
+    3100, 18500,
+    18500, 3100
+};
+static const sal_uInt16 mso_sptFlowChartSummingJunctionSegm[] =
+{
+    0xa302, 0x6000, 0x8000,
+    0x4000, 0x0001, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartSummingJunctionTextRect[] =
+{
+    1, 3100, 3100, 18500, 18500
+};
+static const mso_AutoShape msoFlowChartSummingJunction =
+{
+    (sal_Int32*)mso_sptFlowChartSummingJunctionVert, sizeof( mso_sptFlowChartSummingJunctionVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartSummingJunctionSegm, sizeof( mso_sptFlowChartSummingJunctionSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartSummingJunctionTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartOrVert[] =
+{
+    0, 0, 21600, 21600,
+
+    0, 10800,
+    21600, 10800,
+
+    10800, 0,
+    10800, 21600
+};
+static const sal_uInt16 mso_sptFlowChartOrSegm[] =
+{
+    0xa302, 0x6000, 0x8000,
+    0x4000, 0x0001, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartOrTextRect[] =
+{
+    1, 3100, 3100, 18500, 18500
+};
+static const mso_AutoShape msoFlowChartOr =
+{
+    (sal_Int32*)mso_sptFlowChartOrVert, sizeof( mso_sptFlowChartOrVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartOrSegm, sizeof( mso_sptFlowChartOrSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartOrTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartCollateVert[] =
+{
+    0, 0,
+    21600, 21600,
+    0, 21600,
+    21600, 0
+};
+static const sal_Int32 mso_sptFlowChartCollateTextRect[] =
+{
+    1, 5400, 5400, 16200, 16200
+};
+static const mso_AutoShape msoFlowChartCollate =
+{
+    (sal_Int32*)mso_sptFlowChartCollateVert, sizeof( mso_sptFlowChartCollateVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartCollateTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartSortVert[] =
+{
+    0, 10800,
+    10800, 0,
+    21600, 10800,
+    10800, 21600,
+
+    0, 10800,
+    21600, 10800
+};
+static const sal_uInt16 mso_sptFlowChartSortSegm[] =
+{
+    0x4000, 0x0003, 0x6000, 0x8000,
+    0x4000, 0x0001, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartSortTextRect[] =
+{
+    1, 5400, 5400, 16200, 16200
+};
+static const mso_AutoShape msoFlowChartSort =
+{
+    (sal_Int32*)mso_sptFlowChartSortVert, sizeof( mso_sptFlowChartSortVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartSortSegm, sizeof( mso_sptFlowChartSortSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartSortTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartExtractVert[] =
+{
+    10800, 0,
+    21600, 21600,
+    0, 21600
+};
+static const sal_Int32 mso_sptFlowChartExtractTextRect[] =
+{
+    1, 5400, 10800, 16200, 21600
+};
+static const mso_AutoShape msoFlowChartExtract =
+{
+    (sal_Int32*)mso_sptFlowChartExtractVert, sizeof( mso_sptFlowChartExtractVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartExtractTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartMergeVert[] =
+{
+    0, 0,
+    21600, 0,
+    10800, 21600
+};
+static const sal_Int32 mso_sptFlowChartMergeTextRect[] =
+{
+    1, 5400, 0, 16200, 10800
+};
+static const mso_AutoShape msoFlowChartMerge =
+{
+    (sal_Int32*)mso_sptFlowChartMergeVert, sizeof( mso_sptFlowChartMergeVert ) >> 3,
+    NULL, 0,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartMergeTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartOnlineStorageVert[] =
+{
+    3600, 21600,
+    0,  10800,
+    3600, 0,
+    21600, 0,
+    18000, 10800,
+    21600, 21600
+};
+static const sal_uInt16 mso_sptFlowChartOnlineStorageSegm[] =
+{
+    0x4000, 0xa702, 0x0001, 0xa702, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartOnlineStorageTextRect[] =
+{
+    1, 3600, 0, 18000, 21600
+};
+static const mso_AutoShape msoFlowChartOnlineStorage =
+{
+    (sal_Int32*)mso_sptFlowChartOnlineStorageVert, sizeof( mso_sptFlowChartOnlineStorageVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartOnlineStorageSegm, sizeof( mso_sptFlowChartOnlineStorageSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartOnlineStorageTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartDelayVert[] =
+{
+    10800, 0,
+    21600, 10800,
+    10800, 21600,
+    0, 21600,
+    0, 0
+};
+static const sal_uInt16 mso_sptFlowChartDelaySegm[] =
+{
+    0x4000, 0xa702, 0x0002, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartDelayTextRect[] =
+{
+    1, 0, 3100, 18500, 18500
+};
+static const mso_AutoShape msoFlowChartDelay =
+{
+    (sal_Int32*)mso_sptFlowChartDelayVert, sizeof( mso_sptFlowChartDelayVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartDelaySegm, sizeof( mso_sptFlowChartDelaySegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartDelayTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartMagneticTapeVert[] =
+{
+    20980, 18150,   // p
+    20980, 21600,   // p
+    10670, 21600,   // p
+    4770, 21540,    // c
+    0, 16720,       // c
+    0, 10800,       // p
+    0, 4840,        // c
+    4840, 0,        // c
+    10800, 0,       // p
+    16740, 0,       // c
+    21600, 4840,    // c
+    21600, 10800,   // p
+    21600, 13520,   // c
+    20550, 16160,   // c
+    18670, 18170    // p
+};
+static const sal_uInt16 mso_sptFlowChartMagneticTapeSegm[] =
+{
+    0x4000, 0x0002, 0x2004, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartMagneticTapeTextRect[] =
+{
+    1, 3100, 3100, 18500, 18500
+};
+static const mso_AutoShape msoFlowChartMagneticTape =
+{
+    (sal_Int32*)mso_sptFlowChartMagneticTapeVert, sizeof( mso_sptFlowChartMagneticTapeVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartMagneticTapeSegm, sizeof( mso_sptFlowChartMagneticTapeSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartMagneticTapeTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartMagneticDiskVert[] =
+{
+    0, 3400,
+    10800, 0,
+    21600, 3400,
+    21600, 18200,
+    10800, 21600,
+    0, 18200,
+
+    0, 3400,
+    10800, 6800,
+    21600, 3400
+};
+static const sal_uInt16 mso_sptFlowChartMagneticDiskSegm[] =
+{
+    0x4000, 0xa802, 0x0001, 0xa802, 0x6000, 0x8000,
+    0x4000, 0xa802, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartMagneticDiskTextRect[] =
+{
+    1, 0, 6800, 21600, 18200
+};
+static const mso_AutoShape msoFlowChartMagneticDisk =
+{
+    (sal_Int32*)mso_sptFlowChartMagneticDiskVert, sizeof( mso_sptFlowChartMagneticDiskVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartMagneticDiskSegm, sizeof( mso_sptFlowChartMagneticDiskSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartMagneticDiskTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartMagneticDrumVert[] =
+{
+    18200, 0,
+    21600, 10800,
+    18200, 21600,
+    3400, 21600,
+    0, 10800,
+    3400, 0,
+
+    18200, 0,
+    14800, 10800,
+    18200, 21600
+};
+static const sal_uInt16 mso_sptFlowChartMagneticDrumSegm[] =
+{
+    0x4000, 0xa702, 0x0001, 0xa702, 0x6000, 0x8000,
+    0x4000, 0xa702, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartMagneticDrumTextRect[] =
+{
+    1, 3400, 0, 14800, 21600
+};
+static const mso_AutoShape msoFlowChartMagneticDrum =
+{
+    (sal_Int32*)mso_sptFlowChartMagneticDrumVert, sizeof( mso_sptFlowChartMagneticDrumVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartMagneticDrumSegm, sizeof( mso_sptFlowChartMagneticDrumSegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartMagneticDrumTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptFlowChartDisplayVert[] =
+{
+    3600, 0,
+    17800, 0,
+    21600, 10800,
+    17800, 21600,
+    3600, 21600,
+    0, 10800
+};
+static const sal_uInt16 mso_sptFlowChartDisplaySegm[] =
+{
+    0x4000, 0x0001, 0xa702, 0x0002, 0x6000, 0x8000
+};
+static const sal_Int32 mso_sptFlowChartDisplayTextRect[] =
+{
+    1, 3600, 0, 17800, 21600
+};
+static const mso_AutoShape msoFlowChartDisplay =
+{
+    (sal_Int32*)mso_sptFlowChartDisplayVert, sizeof( mso_sptFlowChartDisplayVert ) >> 3,
+    (sal_uInt16*)mso_sptFlowChartDisplaySegm, sizeof( mso_sptFlowChartDisplaySegm ) >> 1,
+    NULL, 0,
+    NULL,
+    (sal_Int32*)mso_sptFlowChartDisplayTextRect,
+    NULL,
+    0x80000000, 0x80000000
+};
 
 class SvxMSDffAdjustmentHandle
 {
@@ -4738,6 +5293,26 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptFlowChartInternalStorage :  pDefAutoShape = &msoFlowChartInternalStorage; break;
         case mso_sptFlowChartDocument :         pDefAutoShape = &msoFlowChartDocument; break;
         case mso_sptFlowChartMultidocument :    pDefAutoShape = &msoFlowChartMultidocument; break;
+        case mso_sptFlowChartTerminator :       pDefAutoShape = &msoFlowChartTerminator; break;
+        case mso_sptFlowChartPreparation :      pDefAutoShape = &msoFlowChartPreparation; break;
+        case mso_sptFlowChartManualInput :      pDefAutoShape = &msoFlowChartManualInput; break;
+        case mso_sptFlowChartManualOperation :  pDefAutoShape = &msoFlowChartManualOperation; break;
+        case mso_sptFlowChartConnector :        pDefAutoShape = &msoFlowChartConnector; break;
+        case mso_sptFlowChartOffpageConnector : pDefAutoShape = &msoFlowChartOffpageConnector; break;
+        case mso_sptFlowChartPunchedCard :      pDefAutoShape = &msoFlowChartPunchedCard; break;
+        case mso_sptFlowChartPunchedTape :      pDefAutoShape = &msoFlowChartPunchedTape; break;
+        case mso_sptFlowChartSummingJunction :  pDefAutoShape = &msoFlowChartSummingJunction; break;
+        case mso_sptFlowChartOr :               pDefAutoShape = &msoFlowChartOr; break;
+        case mso_sptFlowChartCollate :          pDefAutoShape = &msoFlowChartCollate; break;
+        case mso_sptFlowChartSort :             pDefAutoShape = &msoFlowChartSort; break;
+        case mso_sptFlowChartExtract :          pDefAutoShape = &msoFlowChartExtract; break;
+        case mso_sptFlowChartMerge :            pDefAutoShape = &msoFlowChartMerge; break;
+        case mso_sptFlowChartOnlineStorage :    pDefAutoShape = &msoFlowChartOnlineStorage; break;
+        case mso_sptFlowChartDelay :            pDefAutoShape = &msoFlowChartDelay; break;
+        case mso_sptFlowChartMagneticTape :     pDefAutoShape = &msoFlowChartMagneticTape; break;
+        case mso_sptFlowChartMagneticDisk :     pDefAutoShape = &msoFlowChartMagneticDisk; break;
+        case mso_sptFlowChartMagneticDrum :     pDefAutoShape = &msoFlowChartMagneticDrum; break;
+        case mso_sptFlowChartDisplay :          pDefAutoShape = &msoFlowChartDisplay; break;
 
 //      case mso_sptWave :                  pDefAutoShape = &msoWave; break;
         break;
@@ -4861,10 +5436,10 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         }
 
         const sal_Int32* pTmp = pDefData;
-        sal_Int32 nDefaults = 0;
+        sal_uInt32 nDefaults = 0;
         if ( pTmp )
             nDefaults = nAdjustmentHandles = *pTmp++;
-        sal_Int32 i = 10;
+        sal_uInt32 i = 10;
         sal_Int32 nProperty = DFF_Prop_adjust10Value;
         do
         {
@@ -4914,12 +5489,12 @@ sal_Int32 SvxMSDffAutoShape::Fix16ToAngle( sal_Int32 nAngle ) const
     return nAngle;
 }
 
-sal_Int32 SvxMSDffAutoShape::GetAdjustValue( sal_Int32 nIndex ) const
+sal_Int32 SvxMSDffAutoShape::GetAdjustValue( sal_uInt32 nIndex ) const
 {
     return ( nIndex < nAdjustmentHandles ) ? pAdjustmentHandles[ nIndex ].GetAdjustValue() : 0;
 }
 
-sal_Int32 SvxMSDffAutoShape::GetAdjustValue( sal_Int32 nIndex, sal_Int32 nDefault ) const
+sal_Int32 SvxMSDffAutoShape::GetAdjustValue( sal_uInt32 nIndex, sal_Int32 nDefault ) const
 {
     if ( ( nIndex >= nAdjustmentHandles ) || pAdjustmentHandles[ nIndex ].IsDefault() )
         return nDefault;
@@ -4997,10 +5572,10 @@ sal_Int32 SvxMSDffAutoShape::GetValue( sal_uInt32 nDat, sal_Bool bScale, sal_Boo
                 fVal = aSnapRect.GetHeight() - fVal;
         }
     }
-    return fVal;
+    return (sal_Int32)fVal;
 }
 
-double SvxMSDffAutoShape::ImplGetValue( sal_Int16 nIndex, sal_uInt32& nGeometryFlags ) const
+double SvxMSDffAutoShape::ImplGetValue( sal_uInt16 nIndex, sal_uInt32& nGeometryFlags ) const
 {
     if ( !pCalculationData )
         return 0;
@@ -5249,7 +5824,7 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
             if ( nH < nW )
                 nW = nH;
             double fAdjust = (double)GetAdjustValue( 0, 3600 ) / 21600.0;
-            nW = (double)nW * fAdjust;
+            nW = (sal_Int32)( (double)nW * fAdjust );
             rSet.Put( SdrEckenradiusItem( nW ) );
             pRet = new SdrRectObj( aSnapRect );
         }
@@ -5339,8 +5914,8 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                     fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
                     fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
 
-                    aSnapRect = Rectangle( Point( aSnapRect.Left() + fXOfs, aSnapRect.Top() + fYOfs ),
-                        Size( aSnapRect.GetWidth() * fXScale, aSnapRect.GetHeight() * fYScale ) );
+                    aSnapRect = Rectangle( Point( aSnapRect.Left() + (sal_Int32)fXOfs, aSnapRect.Top() + (sal_Int32)fYOfs ),
+                        Size( (sal_Int32)( aSnapRect.GetWidth() * fXScale ), (sal_Int32)( aSnapRect.GetHeight() * fYScale ) ) );
 
                 }
                 pRet = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
@@ -5543,17 +6118,17 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
                                         else
                                         {
                                             sal_uInt32 nXor = ( nMod == 5 ) ? 3 : 2;
-                                            for ( sal_uInt32 i = 0; i < ( nPntCount >> 2 ); i++ )
+                                            for ( sal_uInt16 i = 0; i < ( nPntCount >> 2 ); i++ )
                                             {
                                                 PolyStyle ePolyStyle = POLY_ARC;
                                                 Rectangle aRect( aXP[ nSrcPt ], aXP[ nSrcPt + 1 ] );
                                                 Point aCenter( aRect.Center() );
-                                                Point aStart( aXP[ nSrcPt + nXor ] );
-                                                Point aEnd( aXP[ nSrcPt + ( nXor ^ 1 ) ] );
-                                                aStart.X() = ( (double)( aStart.X() - aCenter.X() ) / fXScale ) + aCenter.X();
-                                                aStart.Y() = ( (double)( aStart.Y() - aCenter.Y() ) / fYScale ) + aCenter.Y();
-                                                aEnd.X() = ( (double)( aEnd.X() - aCenter.X() ) / fXScale ) + aCenter.X();
-                                                aEnd.Y() = ( (double)( aEnd.Y() - aCenter.Y() ) / fYScale ) + aCenter.Y();
+                                                Point aStart( aXP[ (sal_uInt16)( nSrcPt + nXor ) ] );
+                                                Point aEnd( aXP[ (sal_uInt16)( nSrcPt + ( nXor ^ 1 ) ) ] );
+                                                aStart.X() = (sal_Int32)( ( (double)( aStart.X() - aCenter.X() ) / fXScale ) ) + aCenter.X();
+                                                aStart.Y() = (sal_Int32)( ( (double)( aStart.Y() - aCenter.Y() ) / fYScale ) ) + aCenter.Y();
+                                                aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) / fXScale ) ) + aCenter.X();
+                                                aEnd.Y() = (sal_Int32)( ( (double)( aEnd.Y() - aCenter.Y() ) / fYScale ) ) + aCenter.Y();
 
                                                 Polygon aTempPoly( aRect, aStart, aEnd, ePolyStyle );
                                                 if ( nMod == 5 )
