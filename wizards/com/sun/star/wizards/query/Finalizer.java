@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Finalizer.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:57:55 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:19:09 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -102,15 +102,15 @@ public class Finalizer {
                                                 new Object[] { new Integer(16), reslblHowGoOn, Boolean.TRUE, new Integer(192), new Integer(27), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(112)});
         this.xRadioDisplayQuery = CurUnoDialog.insertRadioButton("optDisplayQuery",
                                             new String[] { "Height",  "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(9), "HID:" + curHelpIndex++, resoptDisplayQuery, new Integer(196), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(90)});
+                                            new Object[] { new Integer(9), "HID:" + curHelpIndex++, resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(118)});
 
         this.xRadioModifyQuery = CurUnoDialog.insertRadioButton("optModifyQuery",
                                                 new String[] { "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                                new Object[] { new Integer(10), "HID:" + curHelpIndex++, resoptModifyQuery, new Integer(196), new Integer(56), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(90)});
+                                                new Object[] { new Integer(10), "HID:" + curHelpIndex++, resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARYPAGE), new Short(curtabindex++), new Integer(118)});
         CurUnoDialog.insertFixedLine("flnSummary", new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                                new Object[] { new Integer(10), resflnSummary, new Integer(95), new Integer(68), new Integer(8), new Short(curtabindex++), new Integer(201)});
+                                                new Object[] { new Integer(10), resflnSummary, new Integer(95), new Integer(68), new Integer(8), new Short(curtabindex++), new Integer(209)});
         txtSummary = CurUnoDialog.insertTextField("txtSummary", 0, null, new String[] { "Height", "HelpURL", "MultiLine", "PositionX", "PositionY", "ReadOnly", "Step", "VScroll", "Width" },
-                                                new Object[] { new Integer(96), "HID:" + curHelpIndex++, Boolean.TRUE, new Integer(95), new Integer(80), Boolean.TRUE, new Integer(8), Boolean.TRUE, new Integer(201)});
+                                                new Object[] { new Integer(96), "HID:" + curHelpIndex++, Boolean.TRUE, new Integer(95), new Integer(80), Boolean.TRUE, new Integer(8), Boolean.TRUE, new Integer(209)});
     }
 
     /* TODO: The title textbox always has to be updated when
