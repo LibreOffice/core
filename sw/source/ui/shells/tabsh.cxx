@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:01:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,23 @@
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
 #endif
+
+//!!! new: insert table
+/*
+#ifndef _SVX_HTMLMODE_HXX
+#include <svx/htmlmode.hxx>
+#endif
+#ifndef _MODOPT_HXX //autogen
+#include <modcfg.hxx>
+#endif
+#ifndef _TBLAFMT_HXX
+#include <tblafmt.hxx>
+#endif
+#ifndef _INSTABLE_HXX
+#include <instable.hxx>
+#endif
+*/
+//!!!
 
 #ifndef _POPUP_HRC
 #include <popup.hrc>
@@ -775,6 +792,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
         }
         break;
         case FN_INSERT_TABLE:
+            InsertTable( rReq );
+        break;
         case FN_FORMAT_TABLE_DLG:
         {
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
@@ -1126,7 +1145,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if ( nCount>1 )
             {
-                rSh.SplitTab(!bHorizontal, nCount-1, bProportional );
+                rSh.SplitTab(!bHorizontal, static_cast< USHORT >( nCount-1 ), bProportional );
                 bCallDone = TRUE;
             }
             else
@@ -1366,7 +1385,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_INSERT_TABLE:
                 // Irgendeinen Wert "putten", damit Controller enabled bleibt.
                 // Statt "Insert:Table" erscheint dann "Format:Table".
-                rSet.Put(SfxUInt16Item(nSlot, 1));
+//              rSet.Put(SfxUInt16Item(nSlot, 1));
                 break;
 
             case FN_TABLE_OPTIMAL_HEIGHT:
