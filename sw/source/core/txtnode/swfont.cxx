@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:38:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,12 +786,8 @@ USHORT SwSubFont::CalcEscHeight( const USHORT nOldHeight,
 
 short SwSubFont::_CheckKerning( )
 {
-#if OSL_DEBUG_LEVEL > 1
-    static nTst = 6;
-    short nKernx = - short( Font::GetSize().Height() / nTst );
-#else
     short nKernx = - short( Font::GetSize().Height() / 6 );
-#endif
+
     if ( nKernx < GetFixKerning() )
         return GetFixKerning();
     return nKernx;
