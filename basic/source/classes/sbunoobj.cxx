@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:51:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -404,6 +405,31 @@ String implGetWrappedMsg( WrappedTargetException& e )
     }
 
     return aMsg;
+}
+
+void implHandleBasicErrorException( BasicErrorException& e )
+{
+    SbError nError = StarBASIC::GetSfxFromVBError( (USHORT)e.ErrorCode );
+    StarBASIC::Error( nError, e.ErrorMessageArgument );
+}
+
+void implHandleWrappedTargetException( WrappedTargetException& e )
+{
+    SbError nError;
+    String aMessage;
+    Any aWrappedAny = e.TargetException;
+    if ( aWrappedAny.getValueType() == ::getCppuType( (BasicErrorException*)NULL ) )
+    {
+        BasicErrorException& be = *( (BasicErrorException*)aWrappedAny.getValue() );
+        nError = StarBASIC::GetSfxFromVBError( (USHORT)be.ErrorCode );
+        aMessage = be.ErrorMessageArgument;
+    }
+    else
+    {
+        nError = ERRCODE_BASIC_EXCEPTION;
+        aMessage = implGetWrappedMsg( e );
+    }
+    StarBASIC::Error( nError, aMessage );
 }
 
 // Von Uno nach Sbx wandeln
@@ -1696,9 +1722,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // Wert von Uno nach Sbx uebernehmen
                         unoToSbxValue( pVar, aRetAny );
                     }
+                    catch( BasicErrorException& e0 )
+                    {
+                        implHandleBasicErrorException( e0 );
+                    }
                     catch( WrappedTargetException& e1 )
                     {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+                        implHandleWrappedTargetException( e1 );
                     }
                     catch( RuntimeException& e2 )
                     {
@@ -1719,9 +1749,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // Wert von Uno nach Sbx uebernehmen
                         unoToSbxValue( pVar, aRetAny );
                     }
+                    catch( BasicErrorException& e0 )
+                    {
+                        implHandleBasicErrorException( e0 );
+                    }
                     catch( WrappedTargetException& e1 )
                     {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+                        implHandleWrappedTargetException( e1 );
                     }
                     catch( RuntimeException& e2 )
                     {
@@ -1754,9 +1788,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // nicht optimal, aber die Umstellung auf XInvocation steht ja ohnehin an
                         // Ansonsten kann auch FastPropertySet genutzt werden
                     }
+                    catch( BasicErrorException& e0 )
+                    {
+                        implHandleBasicErrorException( e0 );
+                    }
                     catch( WrappedTargetException& e1 )
                     {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+                        implHandleWrappedTargetException( e1 );
                     }
                     catch( IllegalArgumentException& e2 )
                     {
@@ -1781,9 +1819,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // Wert setzen
                         mxInvocation->setValue( pProp->GetName(), aAnyValue );
                     }
+                    catch( BasicErrorException& e0 )
+                    {
+                        implHandleBasicErrorException( e0 );
+                    }
                     catch( WrappedTargetException& e1 )
                     {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+                        implHandleWrappedTargetException( e1 );
                     }
                     catch( RuntimeException& e2 )
                     {
@@ -1977,9 +2019,13 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     if( pParams )
                         pVar->SetParameters( NULL );
                 }
+                catch( BasicErrorException& e0 )
+                {
+                    implHandleBasicErrorException( e0 );
+                }
                 catch( WrappedTargetException& e1 )
                 {
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+                    implHandleWrappedTargetException( e1 );
                 }
                 catch( RuntimeException& e2 )
                 {
@@ -2388,13 +2434,21 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
                         unoToSbxValue( pRes, aAny );
                     }
                 }
+                catch( BasicErrorException& e0 )
+                {
+                    // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
+                    if( !pRes )
+                        pRes = new SbxVariable( SbxVARIANT );
+
+                    implHandleBasicErrorException( e0 );
+                }
                 catch( WrappedTargetException& e1 )
                 {
                     // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
                     if( !pRes )
                         pRes = new SbxVariable( SbxVARIANT );
 
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+                    implHandleWrappedTargetException( e1 );
                 }
                 catch( RuntimeException& e2 )
                 {
@@ -2655,9 +2709,13 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         {
             xInterface = xFactory->createInstance( aServiceName );
         }
+        catch( BasicErrorException& e0 )
+        {
+            implHandleBasicErrorException( e0 );
+        }
         catch( WrappedTargetException& e1 )
         {
-            StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+            implHandleWrappedTargetException( e1 );
         }
         catch( RuntimeException& e2 )
         {
@@ -2888,9 +2946,13 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                     pRes->SetName( rName );
                     unoToSbxValue( pRes, aAny );
                 }
+                catch( BasicErrorException& e0 )
+                {
+                    implHandleBasicErrorException( e0 );
+                }
                 catch( WrappedTargetException& e1 )
                 {
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetWrappedMsg( e1 ) );
+                    implHandleWrappedTargetException( e1 );
                 }
                 catch( RuntimeException& e2 )
                 {
