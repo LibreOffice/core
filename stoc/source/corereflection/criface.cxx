@@ -2,9 +2,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:02:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 
 #include "base.hxx"
 
+#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "cppuhelper/exc_hlp.hxx"
 
 namespace stoc_corefl
 {
@@ -119,6 +122,10 @@ public:
     virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
     // XIdlField2: getType, getAccessMode and get are equal to XIdlField
     virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+
+private:
+    void checkException(
+        uno_Any * exception, Reference< XInterface > const & context);
 };
 
 // XInterface
@@ -237,21 +244,13 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
         (*pUnoI->pDispatcher)( pUnoI, (typelib_TypeDescription *)getTypeDescr(), pReturn, 0, &pExc );
         (*pUnoI->release)( pUnoI );
 
+        checkException(
+            pExc,
+            *static_cast< Reference< XInterface > const * >(rObj.getValue()));
         Any aRet;
-        if (pExc)
-        {
-            // DBO TODO: throw original exception generically
-            uno_any_destruct( pExc, 0 );
-            throw RuntimeException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured during get of attribute!") ),
-                *(const Reference< XInterface > *)rObj.getValue() );
-        }
-        else
-        {
-            uno_any_destruct( &aRet, cpp_release );
-            uno_any_constructAndConvert( &aRet, pReturn, pTD, getReflection()->getUno2Cpp().get() );
-            uno_destructData( pReturn, pTD, 0 );
-        }
+        uno_any_destruct( &aRet, cpp_release );
+        uno_any_constructAndConvert( &aRet, pReturn, pTD, getReflection()->getUno2Cpp().get() );
+        uno_destructData( pReturn, pTD, 0 );
         return aRet;
     }
     throw IllegalArgumentException(
@@ -331,14 +330,10 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
             (*pUnoI->release)( pUnoI );
 
             uno_destructData( pArg, pTD, 0 );
-            if (pExc)
-            {
-                // DBO TODO: throw original exception generically
-                uno_any_destruct( pExc, 0 );
-                throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured during get of attribute!") ),
-                    *(const Reference< XInterface > *)rObj.getValue() );
-            }
+            checkException(
+                pExc,
+                *static_cast< Reference< XInterface > const * >(
+                    rObj.getValue()));
             return;
         }
         (*pUnoI->release)( pUnoI );
@@ -358,6 +353,30 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
     IdlAttributeFieldImpl::set( const_cast< Any & >( rObj ), rValue );
 }
 
+void IdlAttributeFieldImpl::checkException(
+    uno_Any * exception, Reference< XInterface > const & context)
+{
+    if (exception != 0) {
+        Any e;
+        uno_any_destruct(&e, cpp_release);
+        uno_type_any_constructAndConvert(
+            &e, exception->pData, exception->pType,
+            getReflection()->getUno2Cpp().get());
+        uno_any_destruct(exception, 0);
+        if (e.isExtractableTo(
+                getCppuType(static_cast< RuntimeException const * >(0))))
+        {
+            cppu::throwException(e);
+        } else {
+            throw WrappedTargetRuntimeException(
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "non-RuntimeException occured when accessing an"
+                        " interface type attribute")),
+                context, e);
+        }
+    }
+}
 
 //##################################################################################################
 //##################################################################################################
