@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:11:27 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,8 +395,12 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_FRONT - SDRATTR_START ] = new Svx3DCloseFrontItem;
     ppPoolDefaults[ SDRATTR_3DOBJ_CLOSE_BACK - SDRATTR_START ] = new Svx3DCloseBackItem;
 
-    // #107245# Start with SDRATTR_3DOBJ_RESERVED_06 now
-    for( i = SDRATTR_3DOBJ_RESERVED_06; i <= SDRATTR_3DOBJ_RESERVED_20; i++ )
+    // #i28528#
+    // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
+    ppPoolDefaults[ SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY - SDRATTR_START ] = new Svx3DReducedLineGeometryItem;
+
+    // #i28528# Start with SDRATTR_3DOBJ_RESERVED_07 now
+    for( i = SDRATTR_3DOBJ_RESERVED_07; i <= SDRATTR_3DOBJ_RESERVED_20; i++ )
         ppPoolDefaults[ i - SDRATTR_START ] = new SfxVoidItem( i );
 
     // 3D Scene Attr (28092000 AW)
