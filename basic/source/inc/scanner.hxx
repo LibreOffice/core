@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:43:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ public:
     void  EnableErrors()            { bError = FALSE; }
     BOOL  IsHash()                  { return bHash;   }
     BOOL  IsCompatible()            { return bCompatible; }
+    void  SetCompatible( bool b )   { bCompatible = b; }        // #118206
     BOOL  WhiteSpace()              { return bSpaces; }
     short GetErrors()               { return nErrors; }
     short GetLine()                 { return nLine;   }
