@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_droptarget.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
+ *  last change: $Author: pl $ $Date: 2001-02-06 16:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ DropTarget::DropTarget() :
 
 DropTarget::~DropTarget()
 {
-    SelectionManager::get().deregisterDropTarget( this );
+    SelectionManager::get().deregisterDropTarget( m_aTargetWindow );
 }
 
 // --------------------------------------------------------------------------

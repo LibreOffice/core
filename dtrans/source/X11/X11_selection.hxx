@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-06 10:23:58 $
+ *  last change: $Author: pl $ $Date: 2001-02-06 16:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,10 +427,6 @@ namespace x11 {
         // type conversion
         Atom convertTypeToNative( const ::rtl::OUString& rType, Atom selection, int& rFormat );
         ::rtl::OUString convertTypeFromNative( Atom nType, Atom selection );
-
-        Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >
-            registerDropTarget( Window aWindow );
-        void deregisterDropTarget( const Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >& xTarget );
 
         // methods for transferable
         bool getPasteDataTypes( Atom selection, Sequence< ::com::sun::star::datatransfer::DataFlavor >& rTypes );
