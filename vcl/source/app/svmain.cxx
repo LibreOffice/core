@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-25 10:46:59 $
+ *  last change: $Author: obo $ $Date: 2004-02-25 11:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,15 @@
 #endif
 #ifndef _VCL_UNOWRAP_HXX
 #include <unowrap.hxx>
+#endif
+#ifndef _SV_SALSYS_HXX
+#include <salsys.hxx>
+#endif
+#ifndef _SV_SALTIMER_HXX
+#include <saltimer.hxx>
+#endif
+#ifndef _SV_SALIMESTATUS_HXX
+#include <salimestatus.hxx>
 #endif
 
 #include <vos/process.hxx>
