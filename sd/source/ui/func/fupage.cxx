@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:32:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,16 +141,13 @@
 #include "DrawViewShell.hxx"
 #endif
 #include "app.hrc"
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #include "unchss.hxx"
 #include "undoback.hxx"
 #include "sdabstdlg.hxx" //CHINA001
 #include "dlgpage.hrc" //CHINA001
+#include "sdresid.hxx"
+
+
 namespace sd {
 
 class Window;
