@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-21 21:14:11 $
+ *  last change: $Author: kz $ $Date: 2001-09-25 21:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,8 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
     Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
     Text[ japanese ] = "外部ﾃﾞｰﾀｿｰｽへ接続できませんでした。不明なｴﾗｰが発生しました。ﾄﾞﾗｲﾊﾞにﾄﾗﾌﾞﾙがある可能性があります。";
     Text[ korean ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
-    Text[ chinese_simplified ] = "无法与外部数据源建立连接。出现了一个不明的错误。可能是驱动盘已经损坏。";
-    Text[ chinese_traditional ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ chinese_simplified ] = "无法与外部数据源建立连接。出现了一个不明的错误。可能是驱动程序已经损坏。";
+    Text[ chinese_traditional ] = "無法與外部的資料源連線。出現一個不明的錯誤。原因可能是驅動程式已經損壞。";
     Text[ turkish ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
     Text[ arabic ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
     Text[ catalan ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
@@ -210,8 +210,8 @@ String RID_STR_COULDNOTCONNECT_NODRIVER
     Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
     Text[ japanese ] = "外部ﾃﾞｰﾀｿｰｽへ接続できませんでした。指定した URL ｱﾄﾞﾚｽの SDBC ﾄﾞﾗｲﾊﾞは見つかりませんでした。";
     Text[ korean ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
-    Text[ chinese_simplified ] = "无法与外部数据源建立连接。无法在指定的 URL 处找到 SDBC 驱动盘。";
-    Text[ chinese_traditional ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ chinese_simplified ] = "无法与外部数据源建立连接。无法在指定的 URL 处找到 SDBC 驱动程序。";
+    Text[ chinese_traditional ] = "無法與外部的資料源連線。無法在指定的 URL 位置找到 SDBC 驅動程式。";
     Text[ turkish ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
     Text[ arabic ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
     Text[ catalan ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
@@ -236,11 +236,12 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ japanese ] = "外部ﾃﾞｰﾀｿｰｽへ接続できませんでした。SDBC ﾄﾞﾗｲﾊﾞのﾏﾈｰｼﾞｬｰは読み込みできませんでした。";
     Text[ korean ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
-    Text[ chinese_simplified ] = "无法与外部数据源建立连接。无法装入 SDBC 驱动盘管理器。";
-    Text[ chinese_traditional ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ chinese_simplified ] = "无法与外部数据源建立连接。无法装入 SDBC 驱动程序管理器。";
+    Text[ chinese_traditional ] = "無法與外部的資料源連線。無法載入 SDBC 驅動程式管理員。";
     Text[ turkish ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ arabic ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ catalan ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
+
 
 
