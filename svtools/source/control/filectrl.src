@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.src,v $
  *
- *  $Revision: 1.1.1.4 $
+ *  $Revision: 1.1.1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:13:51 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,16 +73,17 @@ String STR_FILECTRL_BUTTONTEXT
     Text [ french ] = "Parcourir..." ;
     Text [ dutch ] = "Bladeren..." ;
     Text [ portuguese ] = "Pesquisar..." ;
-    Text[ chinese_simplified ] = "ä¯ÀÀ...";
+    Text[ chinese_simplified ] = "æµè§ˆ...";
     Text[ russian ] = "Îáçîğ...";
     Text[ polish ] = "Przegl¹daj...";
-    Text[ japanese ] = "ŒŸõ...";
-    Text[ chinese_traditional ] = "ÂsÄı...";
+    Text[ japanese ] = "æ¤œç´¢...";
+    Text[ chinese_traditional ] = "ç€è¦½...";
     Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
     Text[ greek ] = "ÁíáæŞôçóç...";
-    Text[ korean ] = "Ã£¾Æº¸±â...";
+    Text[ korean ] = "ì°¾ì•„ë³´ê¸°...";
     Text[ turkish ] = "Tara...";
     Text[ catalan ] = "Examinar...";
     Text[ finnish ] = "Selaa";
 };
+
 
