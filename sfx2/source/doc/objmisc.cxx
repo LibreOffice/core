@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:07:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,12 +398,8 @@ sal_Bool SfxObjectShell::IsModified()
         {
             try
             {
-                // TODO/LATER: an embedded object in running state can have modified component only in scripting case
-                //             may be this case should be handled in future too
                 sal_Int32 nState = xObj->getCurrentState();
-                if ( nState == embed::EmbedStates::ACTIVE
-                  || nState == embed::EmbedStates::INPLACE_ACTIVE
-                  || nState == embed::EmbedStates::UI_ACTIVE )
+                if ( nState != embed::EmbedStates::LOADED )
                 {
                     uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xModifiable.is() && xModifiable->isModified() )
