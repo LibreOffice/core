@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:50:03 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,23 +461,15 @@ void ScXMLTableExportPropertyMapper::handleSpecialItem(
 }
 
 void ScXMLAutoStylePoolP::exportStyleAttributes(
-#if SUPD < 650
             SvXMLAttributeList& rAttrList,
-#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
-#endif
             ) const
 {
-#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-#else
-    SvXMLAutoStylePoolP::exportStyleAttributes( nFamily, rProperties, rPropExp );
-#endif
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
@@ -535,23 +527,15 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void ScXMLAutoStylePoolP::exportStyleContent(
-#if SUPD < 650
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-#endif
         sal_Int32 nFamily,
         const std::vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
         , const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap
-#endif
         ) const
 {
-#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleContent( rHandler, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
-#else
-    SvXMLAutoStylePoolP::exportStyleContent( nFamily, rProperties, rPropExp );
-#endif
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
         sal_Bool bNotFound = sal_True;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-05 06:43:44 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,29 +226,21 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
     ScXMLExport& rScXMLExport;
 
     virtual void exportStyleAttributes(
-#if SUPD < 650
             SvXMLAttributeList& rAttrList,
-#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
-            const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
-            , const SvXMLUnitConverter& rUnitConverter,
+            const SvXMLExportPropertyMapper& rPropExp,
+            const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
-#endif
             ) const;
 
     virtual void exportStyleContent(
-#if SUPD < 650
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-#endif
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
-#endif
             ) const;
 
 public:
