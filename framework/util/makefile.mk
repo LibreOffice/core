@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-19 08:06:10 $
+#   last change: $Author: kz $ $Date: 2004-06-10 13:25:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -292,7 +292,8 @@ SHL4OBJS=       \
                 $(SLO)$/contenthandler.obj          \
                 $(SLO)$/containerquery.obj          \
                 $(SLO)$/loadenv.obj                 \
-                $(SLO)$/targethelper.obj
+                $(SLO)$/targethelper.obj            \
+                $(SLO)$/license.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
