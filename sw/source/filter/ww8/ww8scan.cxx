@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-01 16:56:06 $
+ *  last change: $Author: jp $ $Date: 2001-08-06 15:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5080,7 +5080,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
 #ifdef __WW8_NEEDS_COPY
                 {
-                    for(UINT16* pTmp = pVer8->szFfn, BYTE nLen=0x28;
+                    BYTE nLen;
+                    for( UINT16* pTmp = pVer8->szFfn, nLen=0x28;
                         nLen < pVer8->cbFfnM1 + 1 ; ++pTmp, nLen+=2 )
                     {
                         *pTmp = SVBT16ToShort( *(SVBT16*)pTmp );
@@ -6461,11 +6462,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.23 2001-08-01 16:56:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.24 2001-08-06 15:41:39 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.23  2001/08/01 16:56:06  cmc
+      #89193# Alternative font support for WW
+
       Revision 1.22  2001/07/30 09:18:10  cmc
       #i1353# Import Vertical Cell Alignment
 
