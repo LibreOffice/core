@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-27 14:54:49 $
+ *  last change: $Author: pb $ $Date: 2000-11-30 15:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@
 #define FT_CHAR_FONTTYPE        132
 
 #define FL_SEPARATE             140
-#define FL_COLOR2               141
+#define FT_COLOR2               141
 #define LB_COLOR2               142
 
 #define STR_CHARNAME_NOSTYLE        150
@@ -231,10 +231,10 @@
 #define CB_TWOLINES             401
 
 #define FL_ENCLOSE              410
-#define FT_BEGINCHAR            411
-#define ED_BEGINCHAR            412
-#define FT_ENDCHAR              413
-#define ED_ENDCHAR              414
+#define FT_STARTBRACKET         411
+#define ED_STARTBRACKET         412
+#define FT_ENDBRACKET           413
+#define ED_ENDBRACKET           414
 
 #define FL_TWOLINES_PREVIEW     420
 #define WIN_TWOLINES_PREVIEW    421
