@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:03:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,9 @@ void OStatement_Base::GetAssignValues()
         {
             const Sequence< ::rtl::OUString>& aNames = m_xColNames->getElementNames();
             const ::rtl::OUString* pBegin = aNames.getConstArray();
-            aColumnNameList.insert(aColumnNameList.begin(),::std::vector<String>::const_iterator(pBegin),::std::vector<String>::const_iterator(pBegin + aNames.getLength()));
+            const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+            for (; pBegin != pEnd; ++pBegin)
+                aColumnNameList.push_back(*pBegin);
         }
         else
         {
