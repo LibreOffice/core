@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-05 16:45:45 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,7 @@ private:
     sal_Bool IsOpaque(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    sal_Bool IsSelected(
-        const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsSelected();
 
     ScDocument* GetDocument(ScTabViewShell* mpViewShell);
 
