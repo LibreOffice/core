@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:30:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 12:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
         rtl_uString_assign(&Module, strModuleName);
 
     hInstance = LoadLibraryW(Module->buffer);
+    if (hInstance == NULL)
+        hInstance = LoadLibraryExW(Module->buffer, NULL,
+                                  LOAD_WITH_ALTERED_SEARCH_PATH);
 
     if (hInstance <= (HINSTANCE)HINSTANCE_ERROR)
         hInstance = 0;
