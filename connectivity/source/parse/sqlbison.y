@@ -1,15 +1,15 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.4 2000-10-24 15:42:07 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.5 2000-10-29 16:58:25 er Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
-// First creation: 
+// First creation:
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2000-10-24 15:42:07 $ $Revision: 1.4 $
+//	$Author: er $ $Date: 2000-10-29 16:58:25 $ $Revision: 1.5 $
 //
 // Description:
 //
@@ -62,11 +62,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_KPARSETYPE_HPP_
-#include <com/sun/star/lang/KParseType.hpp>
+#ifndef _COM_SUN_STAR_I18N_KPARSETYPE_HPP_
+#include <com/sun/star/i18n/KParseType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_KPARSETOKENS_HPP_
-#include <com/sun/star/lang/KParseTokens.hpp>
+#ifndef _COM_SUN_STAR_I18N_KPARSETOKENS_HPP_
+#include <com/sun/star/i18n/KParseTokens.hpp>
 #endif
 #ifndef _CONNECTIVITY_SQLSCAN_HXX
 #include "sqlscan.hxx"
@@ -83,26 +83,26 @@ static ::rtl::OUString aEmptyString;
 static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
 							     const connectivity::SQLNodeType eNodeType,
 								 const sal_uInt16 nNodeID = 0)
-{		
-	
-	return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);	
-}	 
+{
+
+	return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
+}
 
 static connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
 								const sal_uInt16 nNodeID = 0)
-{		
-	
-	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);	
-}	 
+{
+
+	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
+}
 
 static connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
 								const sal_uInt16 nNodeID = 0)
-{		
-	
-	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);	
-}	 
+{
+
+	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
+}
 
 
 // yyi ist die interne Nr. der Regel, die gerade reduziert wird.
@@ -141,12 +141,12 @@ using namespace connectivity;
 
 %left <pParseNode> LESSEQ GREATEQ NOTEQUAL LESS GREAT EQUAL /* '<' '>' = <> < > <= >= != */
 %left <pParseNode> '+' '-'
-%left <pParseNode> '*' '/' 
-%left <pParseNode> SQL_TOKEN_NATURAL SQL_TOKEN_CROSS SQL_TOKEN_FULL SQL_TOKEN_LEFT SQL_TOKEN_RIGHT 
-%left <pParseNode> ')' 
-%right <pParseNode> '='  
+%left <pParseNode> '*' '/'
+%left <pParseNode> SQL_TOKEN_NATURAL SQL_TOKEN_CROSS SQL_TOKEN_FULL SQL_TOKEN_LEFT SQL_TOKEN_RIGHT
+%left <pParseNode> ')'
+%right <pParseNode> '='
 %right <pParseNode> '.'
-%right <pParseNode> '('  
+%right <pParseNode> '('
 
 
 %nonassoc <pParseNode> SQL_TOKEN_UMINUS
@@ -207,7 +207,7 @@ using namespace connectivity;
 %type <pParseNode> search_condition predicate comparison_predicate between_predicate
 %type <pParseNode> like_predicate opt_escape test_for_null in_predicate
 %type <pParseNode> all_or_any_predicate any_all_some existence_test subquery
-%type <pParseNode> scalar_exp_commalist parameter_ref literal 
+%type <pParseNode> scalar_exp_commalist parameter_ref literal
 %type <pParseNode> column_ref data_type column cursor parameter range_variable user /*like_check*/
 /* neue Regeln bei OJ */
 %type <pParseNode> derived_column as_clause table_name num_primary term num_value_exp
@@ -227,13 +227,13 @@ using namespace connectivity;
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source
 %type <pParseNode> all query_primary as not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
-%type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement 
+%type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
 %type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter
 %%
 
 /* Parse Tree an OSQLParser zurueckliefern
  * (der Zugriff ueber yyval nach Aufruf des Parsers scheitert,
- * 
+ *
  */
 sql_single_statement:
 		sql
@@ -650,7 +650,7 @@ manipulative_statement:
 	|       select_statement_into
 /*	|       update_statement_positioned*/
 	|       update_statement_searched
-	|		union_statement	
+	|		union_statement
 	|		'{' odbc_call_spec '}'
 		{
 			$$ = SQL_NEW_RULE;
@@ -743,7 +743,7 @@ row_value_const_list:
 	;
 row_value_constructor:
 			row_value_constructor_elem
-	  |		'(' row_value_const_list ')' 
+	  |		'(' row_value_const_list ')'
 			{
 				$$ = SQL_NEW_RULE;
 				$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
@@ -757,7 +757,7 @@ row_value_constructor:
 			}*/
 	;
 row_value_constructor_elem:
-			value_exp /*[^')']*/ 
+			value_exp /*[^')']*/
 	|       SQL_TOKEN_NULL
 	|		SQL_TOKEN_DEFAULT
 	;
@@ -993,9 +993,9 @@ opt_having_clause:
 
 	/* search conditions */
 truth_value:
-		SQL_TOKEN_TRUE		
-	  | SQL_TOKEN_FALSE		
-	  | SQL_TOKEN_UNKNOWN	
+		SQL_TOKEN_TRUE
+	  | SQL_TOKEN_FALSE
+	  | SQL_TOKEN_UNKNOWN
 	  ;
 boolean_primary:
 		predicate
@@ -1008,14 +1008,14 @@ boolean_primary:
 		}
 	;
 subroutine:
-	{ 
-			if(!xxx_pGLOBAL_SQLPARSER->inPredicateCheck())  
+	{
+			if(!xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 				YYERROR;
 		}
 	;
 boolean_test:
 		boolean_primary
-	|	boolean_primary SQL_TOKEN_IS truth_value 
+	|	boolean_primary SQL_TOKEN_IS truth_value
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1079,7 +1079,7 @@ boolean_term:
 			{
 				OSQLParseNode* pTemp = $$;
 				$$ = pTemp->removeAt((sal_uInt32)0);
-				delete pTemp;				
+				delete pTemp;
 			}
 			else
 			{
@@ -1104,9 +1104,9 @@ boolean_term:
 				else
 					YYABORT;
 			}
-			
+
 		}
-	|	boolean_term SQL_TOKEN_AND SQL_TOKEN_STRING 
+	|	boolean_term SQL_TOKEN_AND SQL_TOKEN_STRING
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1120,12 +1120,12 @@ boolean_term:
 				else
 					YYABORT;
 			}
-			
+
 		}
 	;
 search_condition:
 		boolean_term
-	|	search_condition SQL_TOKEN_OR boolean_term 
+	|	search_condition SQL_TOKEN_OR boolean_term
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1152,7 +1152,7 @@ comparison_predicate:
 			$$->append($2);
 			$$->append($3);
 		}
-	|	comparison row_value_constructor 
+	|	comparison row_value_constructor
 		{
 			$$ = SQL_NEW_RULE;
 			sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$2,$1);
@@ -1233,7 +1233,7 @@ between_predicate:
 	;
 
 like_predicate:
-		row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE string_value_exp opt_escape  
+		row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1242,7 +1242,7 @@ like_predicate:
 			$$->append($4);
 			$$->append($5);
 		}
-	|	row_value_constructor SQL_TOKEN_LIKE string_value_exp opt_escape 
+	|	row_value_constructor SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1250,7 +1250,7 @@ like_predicate:
 			$$->append($3);
 			$$->append($4);
 		}
-	|	row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE value_exp_primary opt_escape 
+	|	row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1259,7 +1259,7 @@ like_predicate:
 			$$->append($4);
 			$$->append($5);
 		}
-	|	row_value_constructor SQL_TOKEN_LIKE value_exp_primary opt_escape 
+	|	row_value_constructor SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1267,9 +1267,9 @@ like_predicate:
 			$$->append($3);
 			$$->append($4);
 		}
-	/*|	SQL_TOKEN_NOT 
-		{ 
-			if(!xxx_pGLOBAL_SQLPARSER->inPredicateCheck())  
+	/*|	SQL_TOKEN_NOT
+		{
+			if(!xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 				YYERROR;
 		} SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
@@ -1314,7 +1314,7 @@ like_predicate:
 			else
 				YYERROR;
 		}
-	|	SQL_TOKEN_LIKE value_exp_primary opt_escape 
+	|	SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
@@ -1335,7 +1335,7 @@ like_predicate:
 			else
 				YYERROR;
 		}
-	|	subroutine SQL_TOKEN_NOT SQL_TOKEN_LIKE value_exp_primary opt_escape 
+	|	subroutine SQL_TOKEN_NOT SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
@@ -1377,7 +1377,7 @@ opt_escape:
 
 test_for_null:
 		row_value_constructor SQL_TOKEN_IS not SQL_TOKEN_NULL
-		{	
+		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -1395,7 +1395,7 @@ test_for_null:
 				$$->append(pColumnRef);
 				$$->append($1);
 				$$->append($2);
-				$$->append($3);				
+				$$->append($3);
 			}
 			else
 				YYERROR;
@@ -1485,7 +1485,7 @@ unique_test:
 			$$->append($2);}
 	;
 subquery:
-		'(' query_exp ')' 
+		'(' query_exp ')'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($2);
@@ -1523,71 +1523,71 @@ parameter_ref:
 
 /*
 op_like:
-		'*'	
+		'*'
 		{
-			$$ = newNode("*", SQL_NODE_PUNCTUATION);						
-		}	
+			$$ = newNode("*", SQL_NODE_PUNCTUATION);
+		}
 	|	'?'
 		{
-			$$ = newNode("?", SQL_NODE_PUNCTUATION);						
+			$$ = newNode("?", SQL_NODE_PUNCTUATION);
 		}
-	|   op_like	'*'	
+	|   op_like	'*'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("*", SQL_NODE_PUNCTUATION));			
+			$$->append($2 = newNode("*", SQL_NODE_PUNCTUATION));
 			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_False);
-		}	
+		}
 	|	op_like '?'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("?", SQL_NODE_PUNCTUATION));			
+			$$->append($2 = newNode("?", SQL_NODE_PUNCTUATION));
 			xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_False);
-		}	
+		}
 	;
 */
 
-literal:		
+literal:
 /*		SQL_TOKEN_STRING
 	|   */SQL_TOKEN_INT
 	|   SQL_TOKEN_REAL_NUM
 	|   SQL_TOKEN_INTNUM
 	|   SQL_TOKEN_APPROXNUM
-	|	SQL_TOKEN_ACCESS_DATE	
-/*	rules for predicate check */	
+	|	SQL_TOKEN_ACCESS_DATE
+/*	rules for predicate check */
 	|	literal SQL_TOKEN_STRING
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{	
-				$$ = SQL_NEW_RULE;				
+			{
+				$$ = SQL_NEW_RULE;
 				$$->append($1);
-				$$->append($2);				
+				$$->append($2);
 				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
 			}
 			else
 				YYERROR;
-		}	   	
+		}
 	|	literal SQL_TOKEN_INT
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{	
-				$$ = SQL_NEW_RULE;				
+			{
+				$$ = SQL_NEW_RULE;
 				$$->append($1);
-				$$->append($2);				
+				$$->append($2);
 				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
 			}
 			else
 				YYERROR;
-		}	   	
+		}
 	|	literal SQL_TOKEN_REAL_NUM
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{	
-				$$ = SQL_NEW_RULE;				
+			{
+				$$ = SQL_NEW_RULE;
 				$$->append($1);
-				$$->append($2);	
-				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);							
+				$$->append($2);
+				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
 			}
 			else
 				YYERROR;
@@ -1595,15 +1595,15 @@ literal:
 	|	literal SQL_TOKEN_APPROXNUM
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{	
-				$$ = SQL_NEW_RULE;				
+			{
+				$$ = SQL_NEW_RULE;
 				$$->append($1);
-				$$->append($2);				
+				$$->append($2);
 				xxx_pGLOBAL_SQLPARSER->reduceLiteral($$, sal_True);
 			}
 			else
 				YYERROR;
-		}	
+		}
 	;
 
 	/* miscellaneous */
@@ -2079,14 +2079,14 @@ factor:
 
 term:
 		factor
-	  | term '*' factor 
+	  | term '*' factor
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode("*", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 		}
-	  | term '/' factor 
+	  | term '/' factor
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2398,11 +2398,11 @@ value_exp_commalist:
 				$$ = $1;
 			}
 			else
-				YYERROR;				
+				YYERROR;
 		}
 	;
 value_exp:
-		num_value_exp /*[^')']*/ 
+		num_value_exp /*[^')']*/
 	  | string_value_exp
 	  | datetime_value_exp
 		{
@@ -2679,7 +2679,7 @@ table_name:
 			$$->append($3);
 			$$->append($4 = newNode(".", SQL_NODE_PUNCTUATION));
 			$$->append($5);}
-	|       SQL_TOKEN_NAME ':' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME 
+	|       SQL_TOKEN_NAME ':' SQL_TOKEN_NAME '.' SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2= newNode(":", SQL_NODE_PUNCTUATION));
@@ -2847,7 +2847,7 @@ parameter:
 		':' SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
 			$$->append($1 = newNode(":", SQL_NODE_PUNCTUATION));
-			$$->append($2);}	
+			$$->append($2);}
 	|	'?'
 			{$$ = SQL_NEW_RULE;
 			$$->append($1 = newNode("?", SQL_NODE_PUNCTUATION));}
@@ -2877,7 +2877,7 @@ sql:
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
-				$$ = $1;				
+				$$ = $1;
 			}
 			else
 				YYERROR;
@@ -2888,6 +2888,7 @@ sql:
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::osl;
@@ -2924,7 +2925,7 @@ IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_INT_COMPARE,	"The field can not be
 
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
-IMPLEMENT_CONSTASCII_STRING(KEY_STR_NULL, "NULL"); 
+IMPLEMENT_CONSTASCII_STRING(KEY_STR_NULL, "NULL");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_TRUE, "sal_True");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_FALSE, "sal_False");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_IS, "IS");
@@ -2937,7 +2938,7 @@ IMPLEMENT_CONSTASCII_STRING(KEY_STR_MAX, "MAX");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_MIN, "MIN");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_SUM, "SUM");
 
-IMPLEMENT_CONSTASCII_STRING(FIELD_STR_LOCALE, "Locale");			
+IMPLEMENT_CONSTASCII_STRING(FIELD_STR_LOCALE, "Locale");
 IMPLEMENT_CONSTASCII_STRING(FIELD_STR_REALNAME, "RealName");
 IMPLEMENT_CONSTASCII_STRING(FIELD_STR_FORMATKEY, "FormatKey");
 IMPLEMENT_CONSTASCII_STRING(FIELD_STR_NAME, "Name");
@@ -2997,11 +2998,11 @@ OParseContext::~OParseContext()
 		case KEY_COUNT:		aKeyword = KEY_STR_COUNT; break;
 		case KEY_MAX:		aKeyword = KEY_STR_MAX; break;
 		case KEY_MIN:		aKeyword = KEY_STR_MIN; break;
-		case KEY_SUM:		aKeyword = KEY_STR_SUM; break;	
+		case KEY_SUM:		aKeyword = KEY_STR_SUM; break;
 	}
 	return aKeyword;
 }
-	
+
 //-----------------------------------------------------------------------------
 OParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::OString& rToken) const
 {
@@ -3012,13 +3013,13 @@ OParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 		KEY_AND, KEY_AVG, KEY_COUNT, KEY_MAX,
 		KEY_MIN, KEY_SUM
 	};
-	
+
 	sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
 	for (sal_uInt32 i = 0; i < nCount; i++)
 	{
 		::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
 		if (rToken.equalsIgnoreCase(aKey))
-			return Intl_TokenID[i];			
+			return Intl_TokenID[i];
 	}
 
 	return KEY_NONE;
@@ -3038,7 +3039,7 @@ const Locale& OParseContext::getDefaultLocale()
 
 		// TODO check the decimal sep and thousand sep
 //		if(!m_xLocaleData.is())
-//			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.localedata")),UNO_QUERY); 
+//			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY); 
 //
 //		m_xLocaleData->getLocaleItem(*m_pLocale).
 //		aIntl.SetNumThousandSep(',');
@@ -3149,7 +3150,7 @@ Any getNumberFormatProperty(const Reference< ::com::sun::star::util::XNumberForm
 }
 
 //==========================================================================
-//= OSQLParser	
+//= OSQLParser
 //==========================================================================
 
 sal_uInt32			OSQLParser::s_nRuleIDs[OSQLParseNode::rule_count + 1];
@@ -3157,7 +3158,7 @@ OParseContext		OSQLParser::s_aDefaultContext;
 
 sal_Int32			OSQLParser::s_nRefCount	= 0;
 ::osl::Mutex		OSQLParser::s_aMutex;
-OSQLScanner*		OSQLParser::s_pScanner = 0;	
+OSQLScanner*		OSQLParser::s_pScanner = 0;
 OSQLParseNodes*		OSQLParser::s_pGarbageCollector = 0;
 
 //-----------------------------------------------------------------------------
@@ -3168,7 +3169,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
 		   ,m_nFormatKey(0)
 		   ,m_xServiceFactory(_xServiceFactory)
 {
-	
+
 
 	xxx_pGLOBAL_SQLPARSER = this;
 
@@ -3182,21 +3183,21 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
 	// do we have to initialize the data
 	if (s_nRefCount == 0)
 	{
-		s_pScanner = new OSQLScanner();	
+		s_pScanner = new OSQLScanner();
 		s_pScanner->setScanner();
 		s_pGarbageCollector = new OSQLParseNodes();
 
 		if(!m_xLocaleData.is())
-			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.localedata")),UNO_QUERY); 
+			m_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
 
 		// auf 0 zuruecksetzen
 		memset(OSQLParser::s_nRuleIDs,0,sizeof(sal_uInt16) * OSQLParseNode::rule_count+1);
 	}
-	++s_nRefCount;		
+	++s_nRefCount;
 
 	if (m_pContext == NULL)
 		// take the default context
-		m_pContext = &s_aDefaultContext;	
+		m_pContext = &s_aDefaultContext;
 }
 
 //-----------------------------------------------------------------------------
@@ -3206,13 +3207,13 @@ OSQLParser::~OSQLParser()
 		::osl::MutexGuard aGuard(s_aMutex);
 		OSL_ENSHURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : have a refcount of 0 !");
 		if (!--s_nRefCount)
-		{			
+		{
 			s_pScanner->setScanner(sal_True);
 			delete s_pScanner;
 			s_pScanner = NULL;
 
 			delete s_pGarbageCollector;
-			s_pGarbageCollector = NULL;			
+			s_pGarbageCollector = NULL;
 		}
 		m_xLocaleData = NULL;
 	}
@@ -3228,7 +3229,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 									 const ::rtl::OUString& rStatement,
 								     sal_Bool bInternational)
 {
-	
+
 
 	// Guard the parsing
 	::osl::MutexGuard aGuard(s_aMutex);
@@ -3286,13 +3287,13 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 //	static sal_Char* __READONLY_DATA PREDICATE_CHECK = "PREDICATE ";
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const ::rtl::OUString& rStatement,
- 										 const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,										     
+ 										 const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
 										 const Reference< XPropertySet > & xField)
 {
-	
+
 
 	// mutex for parsing
-	static ::osl::Mutex aMutex;	
+	static ::osl::Mutex aMutex;
 
 	// Guard the parsing
 	::osl::MutexGuard aGuard(s_aMutex);
@@ -3326,7 +3327,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 			m_xField->getPropertyValue(FIELD_STR_FORMATKEY) >>= m_nFormatKey;
 
 			// get the field type
-			m_xField->getPropertyValue(FIELD_STR_TYPE) >>= nType;			
+			m_xField->getPropertyValue(FIELD_STR_TYPE) >>= nType;
 		}
 		catch ( ... )
 		{
@@ -3364,10 +3365,10 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 
 	}
 	else
-		s_pScanner->SetRule(s_pScanner->GetSQLRule()); 
+		s_pScanner->SetRule(s_pScanner->GetSQLRule());
 
 	s_pScanner->prepareScan(rStatement, m_pContext, sal_True);
-	
+
 	SQLyylval.pParseNode = NULL;
 	//	SQLyypvt = NULL;
 	m_pParseTree = NULL;
@@ -3437,7 +3438,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 {
 	::rtl::OString aName;
 	if (rName.IsAlphaNumericAscii())
-		aName = rName;	
+		aName = rName;
 	else
 	{
 		aName = "'";
@@ -3469,7 +3470,7 @@ sal_uInt32 OSQLParser::StrToRuleID(const ::rtl::OString & rValue)
 	// In yysvar nach dem angegebenen Namen suchen, den ::com::sun::star::sdbcx::Index zurueckliefern
 	// (oder 0, wenn nicht gefunden)
 	static sal_Int32 nLen = sizeof(yytname)/sizeof(yytname[0]);
-	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++) 
+	for (sal_uInt32 i = YYTRANSLATE(SQL_TOKEN_INVALIDSYMBOL); i < (nLen-1); i++)
 	{
 		if (yytname && rValue == yytname[i])
 			return i;
@@ -3647,7 +3648,7 @@ sal_uInt32 OSQLParser::RuleID(OSQLParseNode::Rule eRule)
 {
 	::rtl::OUString aValue;
 	if(!m_xCharClass.is())
-		m_xCharClass  = Reference<XCharacterClassification>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.CharacterClassification")),UNO_QUERY);
+		m_xCharClass  = Reference<XCharacterClassification>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification")),UNO_QUERY);
 	if(m_xCharClass.is() && m_xLocaleData.is())
 	{
 		try
@@ -3792,7 +3793,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
 		Any aValue;
 		{
 			aValue = m_xField->getPropertyValue(FIELD_STR_TYPE);
-			aValue >>= nType;		
+			aValue >>= nType;
 		}
 	}
 	catch ( ... )
@@ -3882,7 +3883,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 	}
 	if(SQL_ISRULE(pLiteral,term) || SQL_ISRULE(pLiteral,value_exp_primary))
 	{
-		m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_COMPARE);		
+		m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_COMPARE);
 		return 0;
 	}
 	return 1;
@@ -3906,7 +3907,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 			Any aValue;
 			{
 				aValue = m_xField->getPropertyValue(FIELD_STR_TYPE);
-				aValue >>= nType;			
+				aValue >>= nType;
 			}
 		}
 		catch ( ... )
@@ -4064,7 +4065,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 							nErg = buildNode_STR_NUM(pAppend,pLiteral,pCompare);
 							break;
 						default:
-							m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_INT_COMPARE);							
+							m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_INT_COMPARE);
 					}
 					break;
 				case SQL_NODE_APPROXNUM:
@@ -4073,7 +4074,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 						case DataType::DECIMAL:
 						case DataType::NUMERIC:
 						case DataType::REAL:
-						case DataType::DOUBLE:						
+						case DataType::DOUBLE:
 							if (inPredicateCheck())
 							{
 								// kill thousand seperators if any
@@ -4095,7 +4096,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 							break;
 						case DataType::INTEGER:
 						default:
-							m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_REAL_COMPARE);							
+							m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_REAL_COMPARE);
 					}
 					break;
 			}
@@ -4135,7 +4136,7 @@ void OSQLParser::error(sal_Char *fmt)
 		m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
 		m_sErrorMessage += ::rtl::OUString::createFromAscii(": ");
 		m_sErrorMessage += m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL_HINT);
-		m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf('#'),1,::rtl::OUString::createFromAscii(fmt));	
+		m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf('#'),1,::rtl::OUString::createFromAscii(fmt));
 	}
 }
 // -------------------------------------------------------------------------
@@ -4148,7 +4149,7 @@ int OSQLParser::SQLlex()
 	$Log: not supported by cvs2svn $
 	Revision 1.1  2000/07/25 10:39:29  oj
 	new revision
-	
+
 	Revision 1.0 21.07.2000 12:27:34  oj
 ------------------------------------------------------------------------*/
 
