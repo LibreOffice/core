@@ -1027,7 +1027,11 @@ void UCBStorage_Impl::ReadContent()
     ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
     try
     {
-        Reference< XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
+        GetContent();
+        if ( !m_pContent )
+            return;
+
+        Reference< XResultSet > xResultSet = m_pContent->createCursor( aProps, eInclude );
         Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
         if ( xResultSet.is() )
