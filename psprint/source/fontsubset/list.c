@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:49:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: list.c,v 1.4 2004-03-17 10:49:49 obo Exp $ */
+/* $Id: list.c,v 1.5 2004-03-30 13:47:35 rt Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -609,7 +609,7 @@ int main()
 
     for(i=0; i<10; i++) {
         ptr = malloc(20);
-        sprintf(ptr, "element # %d", i);
+        snprintf(ptr, 20, "element # %d", i);
         listAppend(l1, ptr);
     }
 
