@@ -814,3 +814,5 @@ DestroyRemoteControl
 ?osl_TestToolDebugPrint@@YAXPBD@Z
 ?GetWindow@CellController@svt@@QBEAAVControl@@XZ
 ??_C@_0DE@HDODGPFC@o?3?2srx645?2src?2automation?2source?2@
+??0StatementSlot@@IAE@XZ
+?AddReferer@StatementSlot@@IAEXXZ
