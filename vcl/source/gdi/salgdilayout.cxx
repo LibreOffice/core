@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-24 15:26:32 $
+ *  last change: $Author: hdu $ $Date: 2002-07-29 12:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,15 +211,13 @@ BOOL    SalGraphicsLayout::UnionClipRegion( long nX, long nY, long nWidth, long 
     return SalGraphics::UnionClipRegion( nX, nY, nWidth, nHeight );
 }
 
-BOOL SalGraphicsLayout::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+BOOL SalGraphicsLayout::GetGlyphBoundRect( long nIndex, bool bIsGI, Rectangle& rRect )
 {
-    // TODO: ???
-    return SalGraphics::GetGlyphBoundRect( nGlyphIndex, rRect );
+    return SalGraphics::GetGlyphBoundRect( nIndex, bIsGI, rRect );
 }
-BOOL SalGraphicsLayout::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly)
+BOOL SalGraphicsLayout::GetGlyphOutline( long nIndex, bool bIsGI, PolyPolygon& rPolyPoly)
 {
-    // TODO: ???
-    return SalGraphics::GetGlyphOutline( nGlyphIndex, rPolyPoly );
+    return SalGraphics::GetGlyphOutline( nIndex, bIsGI, rPolyPoly );
 }
 BOOL SalGraphicsLayout::GetLayoutOutline( const SalLayout& rStr, PolyPolygon& rPolyPoly )
 {
