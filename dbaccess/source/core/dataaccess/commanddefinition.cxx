@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2003-07-10 13:02:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::utl;
 
 //........................................................................
 namespace dbaccess
@@ -112,45 +111,34 @@ DBG_NAME(OCommandDefinition)
 //--------------------------------------------------------------------------
 void OCommandDefinition::registerProperties()
 {
-    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY|PropertyAttribute::CONSTRAINED,
-                    &m_sElementName, ::getCppuType(&m_sElementName));
-
+    OCommandDefinition_Impl* pItem = static_cast<OCommandDefinition_Impl*>(m_pImpl.get());
     registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND,
-                    &m_sCommand, ::getCppuType(&m_sCommand));
+                    &pItem->m_sCommand, ::getCppuType(&pItem->m_sCommand));
 
     registerProperty(PROPERTY_USE_ESCAPE_PROCESSING, PROPERTY_ID_USE_ESCAPE_PROCESSING, PropertyAttribute::BOUND,
-                    &m_bEscapeProcessing, ::getBooleanCppuType());
+                    &pItem->m_bEscapeProcessing, ::getBooleanCppuType());
 
     registerProperty(PROPERTY_UPDATE_TABLENAME, PROPERTY_ID_UPDATE_TABLENAME, PropertyAttribute::BOUND,
-                    &m_sUpdateTableName, ::getCppuType(&m_sUpdateTableName));
+                    &pItem->m_sUpdateTableName, ::getCppuType(&pItem->m_sUpdateTableName));
 
     registerProperty(PROPERTY_UPDATE_SCHEMANAME, PROPERTY_ID_UPDATE_SCHEMANAME, PropertyAttribute::BOUND,
-                    &m_sUpdateSchemaName, ::getCppuType(&m_sUpdateSchemaName));
+                    &pItem->m_sUpdateSchemaName, ::getCppuType(&pItem->m_sUpdateSchemaName));
 
     registerProperty(PROPERTY_UPDATE_CATALOGNAME, PROPERTY_ID_UPDATE_CATALOGNAME, PropertyAttribute::BOUND,
-                    &m_sUpdateCatalogName, ::getCppuType(&m_sUpdateCatalogName));
-    registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, 0,
-                    &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
+                    &pItem->m_sUpdateCatalogName, ::getCppuType(&pItem->m_sUpdateCatalogName));
+    registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, PropertyAttribute::BOUND,
+                    &pItem->m_aLayoutInformation, ::getCppuType(&pItem->m_aLayoutInformation));
 }
 
 //--------------------------------------------------------------------------
-OCommandDefinition::OCommandDefinition()
-    :OPropertyContainer(m_aBHelper)
-    ,OConfigurationFlushable(m_aMutex)
+OCommandDefinition::OCommandDefinition(const Reference< XMultiServiceFactory >& _xORB
+                                       ,const Reference< XInterface >& _rxContainer
+                                       ,const TContentPtr& _pImpl)
+    :OComponentDefinition(_xORB,_rxContainer,_pImpl,sal_False)
 {
     DBG_CTOR(OCommandDefinition, NULL);
     registerProperties();
 }
-
-//--------------------------------------------------------------------------
-OCommandDefinition::OCommandDefinition(OCommandDefinition::AccessControl&)
-    :OPropertyContainer(m_aBHelper)
-    ,OConfigurationFlushable(m_aMutex)
-{
-    DBG_CTOR(OCommandDefinition, NULL);
-    registerProperties();
-}
-
 //--------------------------------------------------------------------------
 OCommandDefinition::~OCommandDefinition()
 {
@@ -158,63 +146,22 @@ OCommandDefinition::~OCommandDefinition()
 }
 
 //--------------------------------------------------------------------------
-OCommandDefinition::OCommandDefinition(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rElementName,
-            const OConfigurationTreeRoot& _rConfigRoot)
-    :OPropertyContainer(m_aBHelper)
-    ,OConfigurationFlushable(m_aMutex)
+OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
+                                       ,const ::rtl::OUString& _rElementName
+                                       ,const Reference< XMultiServiceFactory >& _xORB
+                                       ,const TContentPtr& _pImpl)
+    :OComponentDefinition(_rxContainer,_rElementName,_xORB,_pImpl,sal_False)
 {
     DBG_CTOR(OCommandDefinition, NULL);
 
     registerProperties();
-
-    m_sElementName = _rElementName;
-    m_aConfigurationNode = _rConfigRoot;
-
-    DBG_ASSERT(m_sElementName.getLength() != 0, "OCommandDefinition::OCommandDefinition : invalid name !");
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "OCommandDefinition::OCommandDefinition : invalid configuration node !");
-
-    if (m_aConfigurationNode.isValid())
-        initializeFromConfiguration();
 }
 
 //--------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OCommandDefinition::getTypes() throw (RuntimeException)
-{
-    return concatSequences(
-        OCommandDefinition_Base::getTypes(),
-        OPropertyContainer::getTypes(),
-        OConfigurationFlushable::getTypes()
-    );
-}
-
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL OCommandDefinition::getImplementationId() throw (RuntimeException)
-{
-    static ::cppu::OImplementationId* pId = 0;
-    if ( !pId )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pId )
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-//--------------------------------------------------------------------------
-Any SAL_CALL OCommandDefinition::queryInterface( const Type& _rType ) throw(RuntimeException)
-{
-    Any aReturn = OCommandDefinition_Base::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OPropertyContainer::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OConfigurationFlushable::queryInterface(_rType);
-
-    return aReturn;
-}
-
+IMPLEMENT_IMPLEMENTATION_ID(OCommandDefinition);
+IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinition);
+IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
+IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
 //--------------------------------------------------------------------------
 ::rtl::OUString OCommandDefinition::getImplementationName_Static(  ) throw(RuntimeException)
 {
@@ -230,15 +177,11 @@ Any SAL_CALL OCommandDefinition::queryInterface( const Type& _rType ) throw(Runt
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OCommandDefinition::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aServices(1);
+    Sequence< ::rtl::OUString > aServices(3);
     aServices.getArray()[0] = SERVICE_SDB_QUERYDEFINITION;
+    aServices.getArray()[1] = SERVICE_SDB_COMMAND_DEFINITION;
+    aServices.getArray()[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Content"));
     return aServices;
-}
-
-//--------------------------------------------------------------------------
-sal_Bool SAL_CALL OCommandDefinition::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
-{
-    return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 //--------------------------------------------------------------------------
@@ -250,111 +193,30 @@ Sequence< ::rtl::OUString > SAL_CALL OCommandDefinition::getSupportedServiceName
 //------------------------------------------------------------------------------
 Reference< XInterface > OCommandDefinition::Create(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return *(new OCommandDefinition());
+    return *(new OCommandDefinition(_rxFactory,NULL,TContentPtr(new OCommandDefinition_Impl)));
 }
 
-//--------------------------------------------------------------------------
-sal_Int64 SAL_CALL OCommandDefinition::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rIdentifier ) throw(::com::sun::star::uno::RuntimeException)
-{
-    if (_rIdentifier.getLength() != 16)
-        return 0;
-
-    // the implid of our base class
-    if (0 == rtl_compareMemory(OContainerElement::getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16))
-        return reinterpret_cast<sal_Int64>(static_cast<OContainerElement*>(this));
-
-    return 0;
-}
-
-//------------------------------------------------------------------------------
-void OCommandDefinition::flush_NoBroadcast_NoCommit(  ) throw(RuntimeException)
-{
-    if (!m_aConfigurationNode.isValid())
-        throw DisposedException();
-
-    OCommandBase::storeTo(m_aConfigurationNode);
-}
-
-//--------------------------------------------------------------------------
-Reference< XPropertySetInfo > SAL_CALL OCommandDefinition::getPropertySetInfo(  ) throw(RuntimeException)
-{
-    staruno::Reference<starbeans::XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//--------------------------------------------------------------------------
-IPropertyArrayHelper& OCommandDefinition::getInfoHelper()
-{
-    return *getArrayHelper();
-}
-
-//--------------------------------------------------------------------------
-IPropertyArrayHelper* OCommandDefinition::createArrayHelper( ) const
-{
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new OPropertyArrayHelper(aProps);
-}
-
-//--------------------------------------------------------------------------
-void OCommandDefinition::inserted(const Reference< XInterface >& _rxContainer,
-    const ::rtl::OUString& _rElementName,
-    const OConfigurationTreeRoot& _rConfigRoot)
-{
-    MutexGuard aGuard(m_aMutex);
-
-    DBG_ASSERT(_rxContainer.is(), "OCommandDefinition::inserted : invalid container !");
-    DBG_ASSERT(_rElementName.getLength() != 0, "OCommandDefinition::inserted : invalid name !");
-    DBG_ASSERT(_rConfigRoot.isValid(), "OCommandDefinition::inserted : invalid configuration node !");
-
-    m_sElementName = _rElementName;
-    m_aConfigurationNode = _rConfigRoot;
-
-    if (m_aConfigurationNode.isValid())
-        flush_NoBroadcast_NoCommit();
-}
-
-//--------------------------------------------------------------------------
-void OCommandDefinition::removed()
-{
-    MutexGuard aGuard(m_aMutex);
-
-    m_sElementName = ::rtl::OUString();
-    m_aConfigurationNode.clear();
-}
-
-//--------------------------------------------------------------------------
-void OCommandDefinition::initializeFromConfiguration()
-{
-    if (!m_aConfigurationNode.isValid())
-    {
-        DBG_ERROR("OCommandDefinition::initializeFromConfiguration : no configuration location !");
-        return;
-    }
-
-    OCommandBase::loadFrom( m_aConfigurationNode );
-}
 // -----------------------------------------------------------------------------
 void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     try
     {
         sal_Int32 nHandle = PROPERTY_ID_NAME;
-        Any aOld = makeAny(m_sElementName);
+        osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
+        Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
+        aGuard.clear();
         Any aNew = makeAny(newName);
         fire(&nHandle, &aNew, &aOld, 1, sal_True );
+
+        m_pImpl->m_aProps.aTitle = newName;
         fire(&nHandle, &aNew, &aOld, 1, sal_False );
     }
     catch(const PropertyVetoException&)
     {
         throw ElementExistException(newName,*this);
     }
-
 }
 // -----------------------------------------------------------------------------
-
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
