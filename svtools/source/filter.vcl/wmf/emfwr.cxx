@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-25 13:15:15 $
+ *  last change: $Author: sj $ $Date: 2002-11-01 15:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,7 +811,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
         ImplBeginRecord( WIN_EMR_EXTTEXTOUTW );
 
         ImplWriteRect( Rectangle( rPos, Size( nNormWidth, maVDev.GetTextHeight() ) ) );
-        (*mpStm) << (UINT32) 2; // GM_ADVANCED
+        (*mpStm) << (UINT32)1;
         (*mpStm) << (INT32) 0 << (INT32) 0;
         ImplWritePoint( rPos );
         (*mpStm) << (UINT32) nLen << (UINT32) 76 << (UINT32) 2;
