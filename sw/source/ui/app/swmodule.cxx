@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:44:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,6 @@
 
 #include <app.hrc>
 #include <svx/xmlsecctrl.hxx>
-
 ResMgr *pSwResMgr = 0;
 sal_Bool    bNoInterrupt    = sal_False;
 
