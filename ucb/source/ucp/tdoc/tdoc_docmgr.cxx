@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:31:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,30 +63,21 @@
                                 TODO
  **************************************************************************
 
- - remove faked root storage workaround. Currently there is no way to
-   access the document root storage (only a workaround is available:
-   XDocumentSubstorageSupplier). Final API not yet designed => TODO: MAV
-
  - filter unwanted models notified by global document event broadcaster
    - help documents
    - others, which I don't know yet
 
  *************************************************************************/
 
-#define ROOTSTORAGE_ACCESS_WORKAROUND 1
-
 #include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "cppuhelper/weak.hxx"
 
+#include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/frame/XFramesSupplier.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
-
-#ifdef ROOTSTORAGE_ACCESS_WORKAROUND
-#include "tdoc_provider.hxx"
-#include "tdoc_fakedrootstorage.hxx"
-#endif /* ROOTSTORAGE_ACCESS_WORKAROUND */
+#include "com/sun/star/document/XStorageBasedDocument.hpp"
 
 #include "tdoc_docmgr.hxx"
 
@@ -286,21 +277,14 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
         {
             osl::MutexGuard aGuard( m_aMtx );
 
-#ifdef ROOTSTORAGE_ACCESS_WORKAROUND
-
-            uno::Reference< document::XDocumentSubStorageSupplier >
-                xSupplier( Event.Source, uno::UNO_QUERY );
-            OSL_ENSURE( xSupplier.is(),
-                        "Got no document::XDocumentSubStorageSupplier!" );
+            uno::Reference< frame::XModel >
+                 xModel( Event.Source, uno::UNO_QUERY );
+            OSL_ENSURE( xModel.is(), "Got no frame::XModel!" );
 
             DocumentList::const_iterator it = m_aDocs.begin();
             while ( it != m_aDocs.end() )
             {
-                rtl::Reference< FakedRootStorage > xCurrStorage(
-                    static_cast< FakedRootStorage * >(
-                        (*it).second.xStorage.get() ) );
-
-                if ( xCurrStorage->getSubStorageSupplier() == xSupplier )
+                if ( (*it).second.xModel == xModel )
                 {
                     // already known.
                     break;
@@ -312,22 +296,18 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
             {
                 // new document
 
-                uno::Reference< frame::XModel >
-                    xModel( Event.Source, uno::UNO_QUERY );
-                OSL_ENSURE( xModel.is(), "Got no frame::XModel!" );
+                uno::Reference< document::XStorageBasedDocument >
+                    xDoc( Event.Source, uno::UNO_QUERY );
+                OSL_ENSURE( xDoc.is(), "Got no document::XStorageBasedDocument!" );
+
+                uno::Reference< embed::XStorage > xStorage
+                    = xDoc->getDocumentStorage();
+                OSL_ENSURE( xDoc.is(), "Got no document storage!" );
 
                 rtl:: OUString aDocId = getDocumentId( Event.Source );
                 rtl:: OUString aTitle = getDocumentTitle( Event.Source );
-                m_aDocs[ aDocId ]
-                    = StorageInfo(
-                        aTitle,
-                        uno::Reference< embed::XStorage >(
-                            new FakedRootStorage(
-                                xSupplier,
-                                aDocId,
-                                static_cast< ContentProvider * >(
-                                    m_pDocEventListener ) ) ),
-                        xModel );
+
+                m_aDocs[ aDocId ] = StorageInfo( aTitle, xStorage, xModel );
 
                 // Propagate document closure.
                 OSL_ENSURE( m_pDocEventListener,
@@ -336,12 +316,6 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 if ( m_pDocEventListener )
                     m_pDocEventListener->notifyDocumentOpened( aDocId );
             }
-#else
-
-            // @@@ get XStorage via Event.Source - API not yet designed.
-            OSL_ENSURE( false, "NYI!!!" );
-
-#endif /* ROOTSTORAGE_ACCESS_WORKAROUND */
         }
     }
     else if ( Event.EventName.equalsAsciiL(
@@ -353,30 +327,24 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
             osl::MutexGuard aGuard( m_aMtx );
 
-#ifdef ROOTSTORAGE_ACCESS_WORKAROUND
-
-            uno::Reference< document::XDocumentSubStorageSupplier >
-                xSupplier( Event.Source, uno::UNO_QUERY );
-            OSL_ENSURE( xSupplier.is(),
-                        "Got no document::XDocumentSubStorageSupplier!" );
+            uno::Reference< frame::XModel >
+                 xModel( Event.Source, uno::UNO_QUERY );
+            OSL_ENSURE( xModel.is(), "Got no frame::XModel!" );
 
             DocumentList::iterator it = m_aDocs.begin();
             while ( it != m_aDocs.end() )
             {
-                rtl::Reference< FakedRootStorage > xCurrStorage(
-                    static_cast< FakedRootStorage * >(
-                        (*it).second.xStorage.get() ) );
-
-                if ( xCurrStorage->getSubStorageSupplier() == xSupplier )
+                if ( (*it).second.xModel == xModel )
                 {
-                    rtl::OUString aDocId( (*it).first );
-
                     // Propagate document closure.
                     OSL_ENSURE( m_pDocEventListener,
                         "OnUnload event: no owner for close event propagation!" );
 
                     if ( m_pDocEventListener )
+                    {
+                        rtl::OUString aDocId( (*it).first );
                         m_pDocEventListener->notifyDocumentClosed( aDocId );
+                    }
 
                     m_aDocs.erase( it );
                     break;
@@ -386,12 +354,42 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
             OSL_ENSURE( it != m_aDocs.end(),
                         "OnUnload event notified for unknown document!" );
-#else
+        }
+    }
+    else if ( Event.EventName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "OnSaveDone" ) ) )
+    {
+        if ( isOfficeDocument( Event.Source ) )
+        {
+            osl::MutexGuard aGuard( m_aMtx );
 
-            // @@@ get XStorage via Event.Source - API not yet designed.
-            OSL_ENSURE( false, "NYI!!!" );
+            uno::Reference< frame::XModel >
+                 xModel( Event.Source, uno::UNO_QUERY );
+            OSL_ENSURE( xModel.is(), "Got no frame::XModel!" );
 
-#endif /* ROOTSTORAGE_ACCESS_WORKAROUND */
+            DocumentList::iterator it = m_aDocs.begin();
+            while ( it != m_aDocs.end() )
+            {
+                if ( (*it).second.xModel == xModel )
+                {
+                    // Storage gets exchanged while saving.
+                    uno::Reference< document::XStorageBasedDocument >
+                        xDoc( Event.Source, uno::UNO_QUERY );
+                    OSL_ENSURE( xDoc.is(),
+                                "Got no document::XStorageBasedDocument!" );
+
+                    uno::Reference< embed::XStorage > xStorage
+                        = xDoc->getDocumentStorage();
+                    OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+
+                    (*it).second.xStorage = xStorage;
+                    break;
+                }
+                ++it;
+            }
+
+            OSL_ENSURE( it != m_aDocs.end(),
+                        "OnSaveDone event notified for unknown document!" );
         }
     }
     else if ( Event.EventName.equalsAsciiL(
@@ -401,22 +399,27 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
         {
             osl::MutexGuard aGuard( m_aMtx );
 
-#ifdef ROOTSTORAGE_ACCESS_WORKAROUND
-
-            uno::Reference< document::XDocumentSubStorageSupplier >
-                xSupplier( Event.Source, uno::UNO_QUERY );
-            OSL_ENSURE( xSupplier.is(),
-                        "Got no document::XDocumentSubStorageSupplier!" );
+            uno::Reference< frame::XModel >
+                 xModel( Event.Source, uno::UNO_QUERY );
+            OSL_ENSURE( xModel.is(), "Got no frame::XModel!" );
 
             DocumentList::iterator it = m_aDocs.begin();
             while ( it != m_aDocs.end() )
             {
-                rtl::Reference< FakedRootStorage > xCurrStorage(
-                    static_cast< FakedRootStorage * >(
-                        (*it).second.xStorage.get() ) );
-
-                if ( xCurrStorage->getSubStorageSupplier() == xSupplier )
+                if ( (*it).second.xModel == xModel )
                 {
+                    // Storage gets exchanged while saving.
+                    uno::Reference< document::XStorageBasedDocument >
+                        xDoc( Event.Source, uno::UNO_QUERY );
+                    OSL_ENSURE( xDoc.is(),
+                                "Got no document::XStorageBasedDocument!" );
+
+                    uno::Reference< embed::XStorage > xStorage
+                        = xDoc->getDocumentStorage();
+                    OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+
+                    (*it).second.xStorage = xStorage;
+
                     // Adjust title.
                     (*it).second.aTitle = getDocumentTitle( Event.Source );
                     break;
@@ -426,12 +429,6 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
             OSL_ENSURE( it != m_aDocs.end(),
                         "OnSaveAsDone event notified for unknown document!" );
-#else
-
-            // @@@ get XStorage via Event.Source - API not yet designed.
-            OSL_ENSURE( false, "NYI!!!" );
-
-#endif /* ROOTSTORAGE_ACCESS_WORKAROUND */
         }
     }
 }
@@ -550,25 +547,11 @@ void OfficeDocumentsManager::buildDocumentsList()
                         {
                             if ( isOfficeDocument( xModel ) )
                             {
-#ifdef ROOTSTORAGE_ACCESS_WORKAROUND
-                                uno::Reference<
-                                    document::XDocumentSubStorageSupplier >
-                                        xSupplier( xModel, uno::UNO_QUERY );
-                                OSL_ENSURE( xSupplier.is(),
-                                    "Got no "
-                                    "document::XDocumentSubStorageSupplier!" );
-
                                 DocumentList::const_iterator it
                                     = m_aDocs.begin();
                                 while ( it != m_aDocs.end() )
                                 {
-                                    rtl::Reference< FakedRootStorage >
-                                        xCurrStorage(
-                                            static_cast< FakedRootStorage* >(
-                                                (*it).second.xStorage.get() ) );
-
-                                    if ( xCurrStorage->getSubStorageSupplier()
-                                            == xSupplier )
+                                    if ( (*it).second.xModel == xModel )
                                     {
                                         // already known.
                                         break;
@@ -583,25 +566,23 @@ void OfficeDocumentsManager::buildDocumentsList()
                                         = getDocumentId( xModel );
                                     rtl::OUString aTitle
                                         = getDocumentTitle( xModel );
+
+                                    uno::Reference<
+                                        document::XStorageBasedDocument >
+                                            xDoc( xModel, uno::UNO_QUERY );
+                                    OSL_ENSURE( xDoc.is(),
+                                        "Got no "
+                                        "document::XStorageBasedDocument!" );
+
+                                    uno::Reference< embed::XStorage > xStorage
+                                        = xDoc->getDocumentStorage();
+                                    OSL_ENSURE( xDoc.is(),
+                                        "Got no document storage!" );
+
                                     m_aDocs[ aDocId ]
                                         = StorageInfo(
-                                            aTitle,
-                                            uno::Reference< embed::XStorage >(
-                                                new FakedRootStorage(
-                                                    xSupplier,
-                                                    aDocId,
-                                                    static_cast<
-                                                        ContentProvider * >(
-                                                            m_pDocEventListener )
-                                                                    ) ),
-                                            xModel );
+                                            aTitle, xStorage, xModel );
                                 }
-#else
-                                // @@@ get XStorage via Event.Source - API not yet
-                                // designed.
-                                OSL_ENSURE( false, "NYI!!!" );
-
-#endif /* ROOTSTORAGE_ACCESS_WORKAROUND */
                             }
                         }
                     }
