@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:27:12 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,9 @@
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
 #endif
+
 #ifndef SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
-#endif
-#ifndef SC_XCLIMPOBJECTS_HXX
-#include "XclImpObjects.hxx"
 #endif
 
 class SvStorage;
@@ -101,6 +99,8 @@ class ScBaseCell;
 class ScRangeList;
 class ScConditionalFormat;
 class ScDBData;
+
+class ScfSimpleProgressBar;
 
 class XclImpStream;
 class XclImpAutoFilterBuffer;
@@ -223,6 +223,9 @@ class ImportExcel8 : public ImportExcel
         void                    EndSheet( void );
         virtual void            EndAllChartObjects( void );     // -> excobj.cxx
         virtual void            PostDocLoad( void );
+
+        /** Post processes all Escher objects, and inserts them into the document. */
+        void                    ApplyEscherObjects();
 
         virtual FltError        ReadChart8( ScfSimpleProgressBar&, const BOOL bOwnTab );
 
