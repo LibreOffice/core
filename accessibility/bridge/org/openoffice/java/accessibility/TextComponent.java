@@ -64,13 +64,8 @@ import com.sun.star.accessibility.*;
  */
 public class TextComponent extends Component implements javax.accessibility.Accessible {
 
-    boolean multiLine = false;
-    boolean editable = false;
-
-    protected TextComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext, XAccessibleStateSet xAccessibleStateSet) {
+    protected TextComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
-        editable = xAccessibleStateSet.contains(AccessibleStateType.EDITABLE);
-        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTI_LINE);
     }
 
     protected class AccessibleTextComponentListener extends AccessibleUNOComponentListener {
@@ -82,11 +77,9 @@ public class TextComponent extends Component implements javax.accessibility.Acce
         protected void setComponentState(short state, boolean enable) {
             switch (state) {
                 case AccessibleStateType.EDITABLE:
-                    editable = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.EDITABLE, enable);
                     break;
                 case AccessibleStateType.MULTI_LINE:
-                    multiLine = enable;
                     fireStatePropertyChange(javax.accessibility.AccessibleState.MULTI_LINE, enable);
                     break;
                 case AccessibleStateType.SINGLE_LINE:
@@ -114,22 +107,6 @@ public class TextComponent extends Component implements javax.accessibility.Acce
         */
         protected AccessibleTextComponent() {
             super();
-        }
-
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            if (editable) {
-                states.add(javax.accessibility.AccessibleState.EDITABLE);
-            }
-            if (multiLine) {
-                states.add(javax.accessibility.AccessibleState.MULTI_LINE);
-            } else {
-                states.add(javax.accessibility.AccessibleState.SINGLE_LINE);
-            }
-
-            return states;
         }
 
         /*
