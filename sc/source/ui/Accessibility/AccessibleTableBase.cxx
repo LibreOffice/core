@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:54 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 }
 
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("Here should be a implementation to fill the description");
     //setAccessibleRowDescription(nRow, xAccessible); // to remember the created Description
@@ -173,7 +173,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 }
 
 ::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("Here should be a implementation to fill the description");
     //setAccessibleColumnDescription(nColumn, xAccessible); // to remember the created Description
@@ -181,42 +181,58 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
+        (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
+        throw lang::IndexOutOfBoundsException();
+
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
 
     if (mpDoc)
     {
-        sal_uInt16 nEndRow, nEndCol;
-        mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
-            nEndCol, nEndRow, maRange.aStart.Tab());
-        if (nEndRow > nRow)
-            nCount = nEndRow - nRow + 1;
+        sal_uInt16 nEndRow(0);
+        sal_uInt16 nEndCol(0);
+        if (mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
+            nEndCol, nEndRow, maRange.aStart.Tab()))
+        {
+            if (nEndRow > nRow)
+                nCount = nEndRow - nRow + 1;
+        }
     }
 
     return nCount;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
+        (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
+        throw lang::IndexOutOfBoundsException();
+
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
 
     if (mpDoc)
     {
-        sal_uInt16 nEndRow, nEndCol;
-        mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
-            nEndCol, nEndRow, maRange.aStart.Tab());
-        if (nEndCol > nColumn)
-            nCount = nEndCol - nColumn + 1;
+        sal_uInt16 nEndRow(0);
+        sal_uInt16 nEndCol(0);
+        if (mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
+            nEndCol, nEndRow, maRange.aStart.Tab()))
+        {
+            if (nEndCol > nColumn)
+                nCount = nEndCol - nColumn + 1;
+        }
     }
 
     return nCount;
@@ -257,14 +273,14 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 nRow )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
     return sal_False;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
     return sal_False;
@@ -295,7 +311,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSumma
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
     return sal_False;
@@ -304,7 +320,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 nRow, s
     //=====  XAccessibleExtendedTable  ========================================
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
@@ -314,7 +330,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
@@ -322,7 +338,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();

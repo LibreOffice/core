@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-05 09:29:56 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,12 +135,14 @@ public:
     ///  Returns a boolean value indicating whether the specified row is selected.
     virtual sal_Bool SAL_CALL
                 isAccessibleRowSelected( sal_Int32 nRow )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException,
+                    ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Returns a boolean value indicating whether the specified column is selected.
     virtual sal_Bool SAL_CALL
                 isAccessibleColumnSelected( sal_Int32 nColumn )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException,
+                    ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Returns the Accessible at a specified row and column in the table.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
@@ -153,7 +155,8 @@ public:
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
     virtual sal_Bool SAL_CALL
                 isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (::com::sun::star::uno::RuntimeException);
+                    throw (::com::sun::star::uno::RuntimeException,
+                    ::com::sun::star::lang::IndexOutOfBoundsException);
 
     ///=====  XAccessibleComponent  ============================================
 
