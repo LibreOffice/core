@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:27:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_VIEWDATA_HXX
 #define SC_VIEWDATA_HXX
 
@@ -250,6 +249,7 @@ public:
     SfxDispatcher&  GetDispatcher();        // from ViewShell's ViewFrame
 
     ScMarkData&     GetMarkData()           { return aMarkData; }
+    const ScMarkData& GetMarkData() const   { return aMarkData; }
 
     Window*         GetDialogParent();          // von tabvwsh weitergeleitet
     Window*         GetActiveWin();             // von View
@@ -260,8 +260,8 @@ public:
 
     void            WriteUserData(String& rData);
     void            ReadUserData(const String& rData);
-    void            WriteExtOptions(ScExtDocOptions& rOpt);
-    void            ReadExtOptions(const ScExtDocOptions& rOpt);
+    void            WriteExtOptions( ScExtDocOptions& rOpt ) const;
+    void            ReadExtOptions( const ScExtDocOptions& rOpt );
     void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
     void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
 
