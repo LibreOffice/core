@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:15:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,10 +151,10 @@ ModalDialog DLG_UUI_LOGIN
         Text[ chinese_simplified ] = "Â·¾¶(~P)";
         Text[ russian ] = "Ïóòü";
         Text[ polish ] = "Œcie¿ka";
-        Text[ japanese ] = "Êß½(~H)";
-        Text[ chinese_traditional ] = "¸ô®|(~H)";
+        Text[ japanese ] = "Êß½(~P)";
+        Text[ chinese_traditional ] = "¸ô®|(~P)";
         Text[ greek ] = "ÄéáäñïìŞ";
-        Text[ korean ] = "°æ·Î";
+        Text[ korean ] = "°æ·Î(~P)";
         Text[ arabic ] = "ÇáãÓÇÑ";
         Text[ turkish ] = "Veri yolu";
     };
@@ -197,7 +197,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ japanese ] = "Õ°»Ş°–¼(~U)";
         Text[ chinese_traditional ] = "¨Ï¥Î¦W(~U)";
         Text[ greek ] = "¼íïìá ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§";
+        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
         Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı adı";
     };
@@ -234,7 +234,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ japanese ] = "Êß½Ü°ÄŞ(~W)";
         Text[ chinese_traditional ] = "±K½X(~W)";
         Text[ greek ] = "Êùäéêüò ğñüóâ~áóçò";
-        Text[ korean ] = "ÆĞ½º¿öµå";
+        Text[ korean ] = "ÆĞ½º¿öµå(~W)";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "Şifre";
     };
@@ -266,7 +266,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ chinese_simplified ] = "ÕÊºÅ(~C)";
         Text[ chinese_traditional ] = "±b¸¹(~C)";
         Text[ greek ] = "Ëïãáñéáóìü~ò";
-        Text[ korean ] = "°èÁ¤";
+        Text[ korean ] = "°èÁ¤(~C)";
         Text[ arabic ] = "ÇÔÊÑÇß";
         Text[ turkish ] = "Hesap";
     };
@@ -298,7 +298,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•Û‘¶(~S)";
         Text[ chinese_traditional ] = "Àx¦s±K½X(~S)";
         Text[ greek ] = "ÁğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
-        Text[ korean ] = "ÆĞ½º¿öµå ÀúÀå";
+        Text[ korean ] = "ÆĞ½º¿öµå ÀúÀå(~S)";
         Text[ arabic ] = "ÍİÙ ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "Şifreyi kaydet";
     };
