@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:31:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,6 @@ class AnimImpImpl
 {
 public:
     Reference< XPropertySet > mxLastShape;
-    sal_Int32 mnPresOrder;
     OUString maLastShapeId;
 
     OUString msDimColor;
@@ -423,8 +422,7 @@ public:
     OUString msIsAnimation;
 
     AnimImpImpl()
-    :   mnPresOrder( 0 ),
-        msDimColor( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) ),
+    :   msDimColor( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) ),
         msDimHide( RTL_CONSTASCII_USTRINGPARAM( "DimHide" ) ),
         msDimPrev( RTL_CONSTASCII_USTRINGPARAM( "DimPrevious" ) ),
         msEffect( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ),
@@ -666,9 +664,6 @@ void XMLAnimationsEffectContext::EndElement()
 
                     mpImpl->maLastShapeId = maShapeId;
                     mpImpl->mxLastShape = xSet;
-
-                    aAny <<= mpImpl->mnPresOrder++;
-                    xSet->setPropertyValue( mpImpl->msPresOrder, aAny );
                 }
             }
             else
