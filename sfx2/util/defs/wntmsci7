@@ -8703,3 +8703,6 @@ _TI1?AVException@uno@star@sun@com@@
 ?suspend@Thread@osl@@UAAXXZ
 ?terminate@Thread@osl@@UAAXXZ
 threadFunc
+?Show@SfxChildWindow@@QAEXG@Z
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx107592256@@YAXABVSbxVariableRef@@PAX@Z
+?SetChildWindow@SfxViewFrame@@QAEXGEE@Z
