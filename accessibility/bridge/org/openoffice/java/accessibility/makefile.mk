@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2003-06-12 08:03:20 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:29:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ USE_JAVAVER:=TRUE
 .IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 JAVADIR = $(OUT)$/misc$/java
-JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
+JARFILES = jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
     logging$/XAccessibleEventLog.java \
     logging$/XAccessibleTextLog.java \
