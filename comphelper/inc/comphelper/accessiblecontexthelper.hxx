@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 05:51:23 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 14:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,12 @@ namespace comphelper
             XAccessible, we can compare it with all the children, instead of asking all children for their
             context and comparing this context with ourself.</p>
         */
-        void lateInit( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _rxAccessible );
+        void    lateInit( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _rxAccessible );
+
+        /** retrieves the creator previously set with <method>lateInit</method>
+        */
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+                getAccessibleCreator( ) const;
 
     public:
         // XAccessibleEventBroadcaster
@@ -270,6 +275,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/04/26 05:51:23  fs
+ *  #98750# use correct broadcasthelper (in the WeagAggComponentImpl* base)
+ *
  *  Revision 1.1  2002/04/23 11:07:38  fs
  *  initial checkin - helper for implementing an XAccessibleContext
  *
