@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-08 15:47:03 $
+#   last change: $Author: hjs $ $Date: 2001-02-08 17:08:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2529,7 +2529,7 @@ $(NOPCHTARGET):
 # - PROJECT pre compiled headers -
 # --------------------------------
 .IF "$(PROJECTPCHTARGET)"!=""
-$(PROJECTPCHTARGET): $(PROJECTPCHSOURCE).cxx
+$(PROJECTPCHTARGET) .PHONY :
 .IF "$(COM)"=="MSC" || "(COM)"=="BLC"
 .IF "$(PROJECTPCH4DLL)" != ""
     $(CC) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(PCHSLOFLAGSC) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
