@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 12:02:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,13 @@ File gid_File_Oo_Office_Ui_Calccommands_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/CalcCommands.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_Calc_UISort_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_UISort;
+    Name = "/registry/spool/org/openoffice/TypeDetection/UISort-calc.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Calc_Types_Xcu
