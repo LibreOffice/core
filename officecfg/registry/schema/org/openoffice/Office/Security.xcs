@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Security.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:32:05 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 				<desc xml:lang="sv">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="pl">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="pt-BR">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
-				<desc xml:lang="ja">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
+				<desc xml:lang="ja">安全なファイル拡張子を提供します。安全なファイルを開けば、リスクが発生しません。</desc>
 				<desc xml:lang="ko">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="tr">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="th">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="hi-IN">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
+				<desc xml:lang="x-comment">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
 			</info>
 			<prop oor:name="Extension" oor:type="xs:string">
 				<info>
@@ -114,11 +115,12 @@
 					<desc xml:lang="sv">Provides a file extension that is not case-sensitive.</desc>
 					<desc xml:lang="pl">Provides a file extension that is not case-sensitive.</desc>
 					<desc xml:lang="pt-BR">Provides a file extension that is not case-sensitive.</desc>
-					<desc xml:lang="ja">Provides a file extension that is not case-sensitive.</desc>
+					<desc xml:lang="ja">大文字、小文字を区別しないファイル拡張子を提供します。</desc>
 					<desc xml:lang="ko">Provides a file extension that is not case-sensitive.</desc>
 					<desc xml:lang="tr">Provides a file extension that is not case-sensitive.</desc>
 					<desc xml:lang="th">Provides a file extension that is not case-sensitive.</desc>
 					<desc xml:lang="hi-IN">Provides a file extension that is not case-sensitive.</desc>
+					<desc xml:lang="x-comment">Provides a file extension that is not case-sensitive.</desc>
 				</info>
 			</prop>
 		</group>
@@ -145,11 +147,12 @@
 				<desc xml:lang="sv">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="pl">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="pt-BR">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
-				<desc xml:lang="ja">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
+				<desc xml:lang="ja">安全なファイル拡張子のリストを提供します。安全なファイルを開けば、リスクが発生しません。</desc>
 				<desc xml:lang="ko">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="tr">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="th">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
 				<desc xml:lang="hi-IN">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
+				<desc xml:lang="x-comment">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
 			</info>
 		</set>
 		<group oor:name="Hyperlinks">
@@ -173,11 +176,12 @@
 				<desc xml:lang="sv">Specifies how secure hyperlinks are processed.</desc>
 				<desc xml:lang="pl">Specifies how secure hyperlinks are processed.</desc>
 				<desc xml:lang="pt-BR">Specifies how secure hyperlinks are processed.</desc>
-				<desc xml:lang="ja">Specifies how secure hyperlinks are processed.</desc>
+				<desc xml:lang="ja">安全なハイパーリンクの処理方法を指定します。</desc>
 				<desc xml:lang="ko">Specifies how secure hyperlinks are processed.</desc>
 				<desc xml:lang="tr">Specifies how secure hyperlinks are processed.</desc>
 				<desc xml:lang="th">Specifies how secure hyperlinks are processed.</desc>
 				<desc xml:lang="hi-IN">Specifies how secure hyperlinks are processed.</desc>
+				<desc xml:lang="x-comment">Specifies how secure hyperlinks are processed.</desc>
 			</info>
 			<prop oor:name="Open" oor:type="xs:int">
 				<info>
@@ -200,16 +204,18 @@
 					<desc xml:lang="sv">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
 					<desc xml:lang="pl">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
 					<desc xml:lang="pt-BR">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
-					<desc xml:lang="ja">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
+					<desc xml:lang="ja">ハイパーリンクの開き方を指定します (0 = 開かない、1 = セキュリティチェックを行う、2 = 開く)。</desc>
 					<desc xml:lang="ko">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
 					<desc xml:lang="tr">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
 					<desc xml:lang="th">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
 					<desc xml:lang="hi-IN">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
+					<desc xml:lang="x-comment">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
 				</info>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
