@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:40:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData ):
     pOutlineListBuffer = new OutlineListBuffer( );
 
     // ab Biff8
-    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( pExcRoot, aIn );
+    pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( aIn );
 
     bTabTruncated = FALSE;
 
@@ -240,7 +240,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData ):
     if( pExcRoot->fRowScale <= 0.0 )
         pExcRoot->fRowScale = 1.0;
 
-    pExcRoot->bBreakSharedFormula = FALSE;
     pExcRoot->bChartTab = FALSE;
 
     // Excel-Dokument per Default auf 31.12.1899, entspricht Excel-Einstellungen mit 1.1.1900
