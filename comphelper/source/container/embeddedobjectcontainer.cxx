@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:06:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ EmbeddedObjectContainer::~EmbeddedObjectContainer()
         pImpl->mxStorage->dispose();
 
     delete pImpl->mpTempObjectContainer;
+    delete pImpl;
 }
 
 ::rtl::OUString EmbeddedObjectContainer::CreateUniqueObjectName()
