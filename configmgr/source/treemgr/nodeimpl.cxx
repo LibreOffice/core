@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,12 +518,12 @@ void ValueElementNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* ,
 // legacy commit
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> SetNodeImpl::preCommitChanges()
+std::auto_ptr<SubtreeChange> SetNodeImpl::preCommitChanges(ElementList& _rRemovedElements)
 {
     // cannot have changes if elements not yet loaded
     if (implHasLoadedElements())
     {
-        return doPreCommitChanges();
+        return doPreCommitChanges(_rRemovedElements);
     }
     else
     {
@@ -557,7 +557,7 @@ void SetNodeImpl::failedCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> SetNodeImpl::doPreCommitChanges()
+std::auto_ptr<SubtreeChange> SetNodeImpl::doPreCommitChanges(ElementList& )
 {
     OSL_ENSURE(!hasChanges(),"ERROR: Committing to an old changes tree is not supported on this node");
     return std::auto_ptr<SubtreeChange>();

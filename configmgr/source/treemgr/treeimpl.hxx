@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@ namespace configmgr
         class RootTreeImpl; // for 'dynamic-casting'
         class ElementTreeImpl; // for 'dynamic-casting'
 
+        typedef vos::ORef<ElementTreeImpl> ElementTreeHolder; // see also setnodeimplbase.hxx
+        typedef std::vector< ElementTreeHolder > ElementList; // see also setnodeimplbase.hxx
+
         /** is the Implementation class for class <type>Tree</type>.
             <p> Holds a list of <type>Node</type> which it allows to access by
                 <type>NodeOffset</type> (which is basically a one-based index).
@@ -372,13 +375,13 @@ namespace configmgr
             void commitDirect();
 
             // full commit protocol
-            std::auto_ptr<SubtreeChange>    preCommitChanges();
+            std::auto_ptr<SubtreeChange>    preCommitChanges(ElementList& _rRemovedElements);
             void finishCommit(SubtreeChange& rRootChange);
             void revertCommit(SubtreeChange& rRootChange);
             void recoverFailedCommit(SubtreeChange& rRootChange);
         protected:
             // implementation of  commit protocol
-            std::auto_ptr<SubtreeChange> doCommitChanges(NodeOffset nNode);
+            std::auto_ptr<SubtreeChange> doCommitChanges(ElementList& _rRemovedElements, NodeOffset nNode);
             void doFinishCommit(SubtreeChange& rChange, NodeOffset nNode);
             void doRevertCommit(SubtreeChange& rChange, NodeOffset nNode);
             void doFailedCommit(SubtreeChange& rChange, NodeOffset nNode);
@@ -389,7 +392,7 @@ namespace configmgr
 
         private:
             // recursion helpers for implementation of protocols
-            void doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode);
+            void doCommitSubChanges(ElementList& _rRemovedElements, SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
+ *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,22 @@
 #ifndef CONFIGMGR_NODEIMPLOBJECTS_HXX_
 #define CONFIGMGR_NODEIMPLOBJECTS_HXX_
 
+#ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #include "nodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 #include "groupnodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_SETNODEIMPL_HXX_
 #include "setnodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
+#endif
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace configmgr
 {
@@ -390,8 +401,7 @@ namespace configmgr
 
 
         protected:
-        // legacy commit support
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
+            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(ElementList& _rRemovedElements);
             virtual void doFinishCommit(SubtreeChange& rChanges);
             virtual void doRevertCommit(SubtreeChange& rChanges);
             virtual void doFailedCommit(SubtreeChange& rChanges);
@@ -443,7 +453,7 @@ namespace configmgr
 
         protected:
         // legacy commit support
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
+            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(ElementList& _rRemovedElements);
             virtual void doFinishCommit(SubtreeChange& rChanges);
             virtual void doRevertCommit(SubtreeChange& rChanges);
             virtual void doFailedCommit(SubtreeChange& rChanges);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,9 +452,9 @@ void TreeImpl::makeIndirect(bool bIndirect)
 // old-style commit handling
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> TreeImpl::preCommitChanges()
+std::auto_ptr<SubtreeChange> TreeImpl::preCommitChanges(ElementList& _rRemovedElements)
 {
-    return doCommitChanges( root() );
+    return doCommitChanges( _rRemovedElements, root() );
 }
 //-----------------------------------------------------------------------------
 
@@ -497,7 +497,7 @@ void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> TreeImpl::doCommitChanges(NodeOffset nNode)
+std::auto_ptr<SubtreeChange> TreeImpl::doCommitChanges(ElementList& _rRemovedElements, NodeOffset nNode)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
@@ -512,7 +512,7 @@ std::auto_ptr<SubtreeChange> TreeImpl::doCommitChanges(NodeOffset nNode)
     }
     else if (pNode->isSetNode())
     {
-        aRet = pNode->setImpl().preCommitChanges();
+        aRet = pNode->setImpl().preCommitChanges(_rRemovedElements);
     }
     else if (pNode->isGroupNode())
     {
@@ -520,7 +520,7 @@ std::auto_ptr<SubtreeChange> TreeImpl::doCommitChanges(NodeOffset nNode)
 
         OSL_ASSERT(aGroupChange.get());
         if (aGroupChange.get())
-            doCommitSubChanges( *aGroupChange, nNode);
+            doCommitSubChanges(_rRemovedElements, *aGroupChange, nNode);
 
         aRet = aGroupChange;
     }
@@ -634,13 +634,13 @@ void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeC
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode)
+void TreeImpl::doCommitSubChanges(ElementList& _rRemovedElements, SubtreeChange& aChangesParent, NodeOffset nParentNode)
 {
     for(NodeOffset nNode = firstChild(nParentNode); nNode != 0; nNode = findNextChild(nParentNode,nNode) )
     {
         if (node(nNode)->hasChanges())
         {
-            std::auto_ptr<SubtreeChange> aSubChanges( doCommitChanges(nNode) );
+            std::auto_ptr<SubtreeChange> aSubChanges( doCommitChanges(_rRemovedElements, nNode) );
             std::auto_ptr<Change> aSubChangesBase( aSubChanges.release() );
             aChangesParent.addChange( aSubChangesBase );
         }
