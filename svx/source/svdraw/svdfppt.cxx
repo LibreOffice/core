@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-07 14:58:18 $
+ *  last change: $Author: sj $ $Date: 2002-11-11 16:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5146,8 +5146,8 @@ PPTTextSpecInfoAtomInterpreter::PPTTextSpecInfoAtomInterpreter() :
 {
 }
 
-sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn,
-            const DffRecordHeader& rRecHd, sal_uInt16 nRecordType )
+sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader& rRecHd,
+    sal_uInt16 nRecordType, const PPTTextSpecInfo* pTextSpecDefault )
 {
     bValid = sal_False;
     sal_uInt32  nCharIdx = 0;
@@ -5167,6 +5167,8 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn,
 
         sal_uInt16 nVal0, nVal2;
         PPTTextSpecInfo* pEntry = new PPTTextSpecInfo( nCharIdx );
+        if ( pTextSpecDefault )
+            pEntry->nLanguage = pTextSpecDefault->nLanguage;
         for ( i = 1; nFlags && i ; i <<= 1 )
         {
             switch( nFlags & i )
@@ -6009,9 +6011,9 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     sal_uInt16 nLanguage = mnLanguage;
     if ( !nLanguage )
          nLanguage = mrStyleSheet.maTxSI.nLanguage;
-    rSet.Put( SvxLanguageItem( mnLanguage, EE_CHAR_LANGUAGE ) );
-    rSet.Put( SvxLanguageItem( mnLanguage, EE_CHAR_LANGUAGE_CJK ) );
-    rSet.Put( SvxLanguageItem( mnLanguage, EE_CHAR_LANGUAGE_CTL ) );
+    rSet.Put( SvxLanguageItem( nLanguage, EE_CHAR_LANGUAGE ) );
+    rSet.Put( SvxLanguageItem( nLanguage, EE_CHAR_LANGUAGE_CJK ) );
+    rSet.Put( SvxLanguageItem( nLanguage, EE_CHAR_LANGUAGE_CTL ) );
 }
 
 SvxFieldItem* PPTPortionObj::GetTextField()
@@ -7026,25 +7028,44 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_TextSpecInfoAtom,
                                                         aClientTextBoxHd.GetRecEndFilePos(), &aTextSpecInfoHd ) )
                             {
-                                if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom ) )
+                                if ( aTextSpecInfoAtomInterpreter.Read( rIn, aTextSpecInfoHd, PPT_PST_TextSpecInfoAtom,
+                                        &(rSdrPowerPointImport.pPPTStyleSheet->maTxSI) ) )
                                 {
-                                    sal_uInt32 nI = 0;
+                                    sal_uInt32  nI = 0;
                                     PPTTextSpecInfo* pSpecInfo;
                                     for ( pSpecInfo = (PPTTextSpecInfo*)aTextSpecInfoAtomInterpreter.aList.First();
                                         pSpecInfo; pSpecInfo =(PPTTextSpecInfo*)aTextSpecInfoAtomInterpreter.aList.Next() )
                                     {
-                                        // todo: this is not 100% correct
+                                        sal_uInt32 nCharIdx = pSpecInfo->nCharIdx;
+
                                         // portions and text have to been splitted in some cases
                                         for ( ; nI < aStyleTextPropReader.aCharPropList.Count(); )
                                         {
                                             PPTCharPropSet* pSet = (PPTCharPropSet*)aStyleTextPropReader.aCharPropList.GetObject( nI );
-                                            if ( pSet->mnOriginalTextPos < pSpecInfo->nCharIdx )
+                                            if ( pSet->mnOriginalTextPos < nCharIdx )
                                             {
                                                 pSet->mnLanguage = pSpecInfo->nLanguage;
-                                                nI++;
+                                                // test if the current portion needs to be splitted
+                                                if ( pSet->maString.Len() > 1 )
+                                                {
+                                                    sal_Int32 nIndexOfNextPortion = pSet->maString.Len() + pSet->mnOriginalTextPos;
+                                                    sal_Int32 nNewLen = nIndexOfNextPortion - nCharIdx;
+                                                    sal_Int32 nOldLen = pSet->maString.Len() - nNewLen;
+
+                                                    if ( ( nNewLen > 0 ) && ( nOldLen > 0 ) )
+                                                    {
+                                                        String aString( pSet->maString );
+                                                        PPTCharPropSet* pNew = new PPTCharPropSet( *pSet );
+                                                        pSet->maString = String( aString, 0, (sal_uInt16)nOldLen );
+                                                        pNew->maString = String( aString, (sal_uInt16)nOldLen, (sal_uInt16)nNewLen );
+                                                        pNew->mnOriginalTextPos += nOldLen;
+                                                        aStyleTextPropReader.aCharPropList.Insert( pNew, nI + 1 );
+                                                    }
+                                                }
                                             }
                                             else
                                                 break;
+                                            nI++;
                                         }
                                     }
                                 }
