@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:22:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 13:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,7 @@
 #ifndef _PSPRINT_FONTMANAGER_HXX_
 #define _PSPRINT_FONTMANAGER_HXX_
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 #ifndef __SGI_STL_MAP
 #include <map>
 #endif
