@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:30:34 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,14 +1211,14 @@ TabPage RID_HFBASE
         Text [ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen." ;
         Text [ spanish ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc." ;
         Text [ english_us ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
-        Text[ chinese_simplified ] = "ÇëÄú°´»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
+        Text[ chinese_simplified ] = "Çëµã»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
         Text[ russian ] = "Äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ êàê äàòà, âğåìÿ è ò.ä. èñïîëüçóéòå êíîïêè.";
         Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
         Text[ japanese ] = "Ì«İÄ‚Ì•ÏX‚Ü‚½‚Í“ú•tÌ¨°ÙÄŞ‚âÌ¨°ÙÄŞ‚È‚Ç‚ğ‘}“ü‚·‚é‚Æ‚«‚ÍA•ÏXÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ü‚·B";
         Text[ chinese_traditional ] = "½Ğ±z«ö¤@¤U«ö¶s¡MÅÜ§ó¦r«¬©Î´¡¤J¤é´Á¡M®É¶¡µ¥°Ï°ì«ü¥O¡C";
         Text[ arabic ] = "ÇÓÊÎÏã ÇáãİÇÊíÍ áÊÛííÑ äæÚ ÇáÎØ Ãæ áÅÖÇİÉ ÃæÇãÑ ÍŞæá¡ ãËá ÇáÊÇÑíÎ¡ Ãæ ÇáæŞÊ ...ÅáÎ.";
         Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
-        Text[ chinese_simplified ] = "ÇëÄú°´»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
+        Text[ chinese_simplified ] = "Çëµã»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
         Text[ greek ] = "×ñçóéìïğïéŞóôå ôá ğåäßá åíôïëŞò ãéá íá áëëÜîåôå ôçí ãñáììáôïóåéñÜ Ş ãéá íá åéóÜãåôå ğåäßá åíôïëşí, üğùò ğ.÷. çìåñïìçíßá, şñá, êôë.";
         Text[ korean ] = "±Û²ÃÀ» º¯°æÇÏ°Å³ª ³¯Â¥, ½Ã°£µîÀÇ ÇÊµå ¸í·É¾î¸¦ »ğÀÔÇÏ±â À§ÇØ¼­´Â ¹öÆ°À» »ç¿ëÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Yazıtipini değiştirmek ya da tarih, saat gibi alan komutları eklemek için düğmeleri kullanınız.";
@@ -1375,4 +1375,5 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
