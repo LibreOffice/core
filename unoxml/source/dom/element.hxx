@@ -2,9 +2,9 @@
  *
  *  $RCSfile: element.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace DOM
 
     protected:
         CElement(const xmlNodePtr aNodePtr);
-        
+
     public:
 
         /**
@@ -114,19 +114,19 @@ namespace DOM
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all descendant Elements with a given tag name, 
-        in the order in which they are 
+        Returns a NodeList of all descendant Elements with a given tag name,
+        in the order in which they are
         encountered in a preorder traversal of this Element tree.
         */
         virtual Reference< XNodeList > SAL_CALL getElementsByTagName(const OUString& name)
             throw (RuntimeException);
 
         /**
-        Returns a NodeList of all the descendant Elements with a given local 
+        Returns a NodeList of all the descendant Elements with a given local
         name and namespace URI in the order in which they are encountered in
         a preorder traversal of this Element tree.
         */
-        virtual Reference< XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, 
+        virtual Reference< XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI,
                 const OUString& localName)
             throw (RuntimeException);
 
@@ -187,10 +187,16 @@ namespace DOM
             throw (DOMException);
 
         /**
-        Adds a new attribute. 
+        Adds a new attribute.
         */
         virtual void SAL_CALL setAttributeNS(
                 const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
+            throw (DOMException);
+
+        /**
+        sets the element name
+        */
+        virtual void SAL_CALL setElementName(const OUString& elementName)
             throw (DOMException);
 
         // overrides for XNode base
