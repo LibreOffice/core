@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MappingException.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2002-03-21 16:25:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,10 @@ package com.sun.star.uno;
  * The exception is replaced by the com.sun.star.lang.DisposedException.
  * @deprecated since UDK 3.0.2
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2002-03-21 16:25:03 $
+ * @version     $Revision: 1.4 $ $ $Date: 2004-11-03 09:06:05 $
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IQueryInterface
  * @see         com.sun.star.uno.IBridge
- * @since       UDK1.0
  */
 public class MappingException extends com.sun.star.uno.RuntimeException {
     /**
