@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-19 10:00:53 $
+ *  last change: $Author: mib $ $Date: 2001-03-09 07:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,9 +811,21 @@ sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
             GetImport().GetTextImport()->GetDataStyleKey(sDataStyleName);
 
         // if the key is valid, insert Item into ItemSet
-        DBG_ASSERT(NULL != pItemSet, "need ItemSet");
-        if ((NULL != pItemSet) && (-1 != nFormat))
+        if( -1 != nFormat )
         {
+            if( !pItemSet )
+            {
+                Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+                                                   UNO_QUERY);
+                ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+                SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                                    SwXTextCursor::getUnoTunnelId() );
+                ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+                SwDoc *pDoc = pTxtCrsr->GetDoc();
+
+                SfxItemPool& rItemPool = pDoc->GetAttrPool();
+                pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
+            }
             SwTblBoxNumFormat aNumFormatItem(nFormat);
             pItemSet->Put(aNumFormatItem);
         }
