@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-08 01:28:59 $
+#   last change: $Author: hr $ $Date: 2002-08-27 11:34:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,12 +74,12 @@ TARGET=salapp
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"!="MACOSX"
+.IF "$(GUIBASE)"!="aqua"
 
 dummy:
-    @echo "Nothing to build for this platform"
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
-.ELSE		# "$(OS)"!="MACOSX"
+.ELSE		# "$(GUIBASE)"!="aqua"
 
 OBJFILES=	$(OBJ)$/salmain.obj			\
             $(OBJ)$/VCLApplication.obj	\
@@ -98,7 +98,7 @@ SLOFILES=   $(SLO)$/salinst.obj			\
 EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
             $(OBJ)$/salmain.obj
 
-.ENDIF		# "$(OS)"!="MACOSX"
+.ENDIF		# "$(GUIBASE)"!="aqua"
 
 # --- Targets ------------------------------------------------------
 
