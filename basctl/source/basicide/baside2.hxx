@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-05 10:22:47 $
+ *  last change: $Author: sb $ $Date: 2002-07-24 13:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,10 @@ private:
     BOOL            bHighlightning;
     BOOL            bDoSyntaxHighlight;
     BOOL            bDelayHighlight;
+
+    virtual
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+    GetComponentInterface(BOOL bCreate = TRUE);
 
 protected:
     virtual void    Paint( const Rectangle& );

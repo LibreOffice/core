@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-15 09:01:03 $
+ *  last change: $Author: sb $ $Date: 2002-07-24 13:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <vcl/sound.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/txtattr.hxx>
+#include <svtools/textwindowaccessibility.hxx>
 
 #include <helpid.hrc>
 #include <baside2.hrc>
@@ -1713,6 +1714,24 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
             Invalidate();
         }
     }
+}
+
+// virtual
+uno::Reference< awt::XWindowPeer >
+EditorWindow::GetComponentInterface(BOOL bCreate)
+{
+    uno::Reference< awt::XWindowPeer > xPeer(
+        Window::GetComponentInterface(false));
+    if (!xPeer.is() && bCreate)
+    {
+        // Make sure edit engine and view are available:
+        if (!pEditEngine)
+            CreateEditEngine();
+
+        xPeer = new svtools::TextWindowAccessibility(*GetEditView());
+        SetComponentInterface(xPeer);
+    }
+    return xPeer;
 }
 
 WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
