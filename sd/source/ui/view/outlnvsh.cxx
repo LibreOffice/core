@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:59:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,11 +203,9 @@
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
 #include "AccessibleOutlineView.hxx"
 #endif
+#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
-#endif
-#ifndef SD_SUB_SHELL_MANAGER_HXX
-#include "SubShellManager.hxx"
 #endif
 
 using namespace ::rtl;
@@ -270,31 +268,20 @@ void OutlineViewShell::Construct(DrawDocShell* pDocSh)
     Size aViewSize(Size(29700, 21000));
     Point aWinPos (0, 0);
     Point aViewOrigin(0, 0);
-    aOutlineBtn.Check(TRUE);
-    pWindow->SetMinZoomAutoCalc(FALSE);
-    pWindow->SetMinZoom( MIN_ZOOM );
-    pWindow->SetMaxZoom( MAX_ZOOM );
+    GetActiveWindow()->SetMinZoomAutoCalc(FALSE);
+    GetActiveWindow()->SetMinZoom( MIN_ZOOM );
+    GetActiveWindow()->SetMaxZoom( MAX_ZOOM );
     InitWindows(aViewOrigin, aViewSize, aWinPos);
-    pOlView = new OutlineView(GetDocSh(), pWindow, this);
-    pView = pOlView;             // Pointer der Basisklasse ViewShell
+    pOlView = new OutlineView(GetDocSh(), GetActiveWindow(), this);
+    mpView = pOlView;            // Pointer der Basisklasse ViewShell
 
     SetPool( &GetDoc()->GetPool() );
 
     SetZoom(69);
 
-    // Create uno controller.
-    mpController = new SdUnoOutlineView (GetViewShellBase(), *this, *pView);
-    mxController = static_cast<XWeak*>(mpController);
-
-    // Create the object bars and register them at the sub shell
-    // manager.
-    GetObjectBarManager().RegisterObjectBar (
-        RID_DRAW_TEXT_TOOLBOX,
-        ::std::auto_ptr<SfxShell>(
-            new TextObjectBar (this, GetDoc()->GetPool(), pOlView)));
-
     // Activate the object bar.
-    GetObjectBarManager().PushObjectBar (RID_DRAW_TEXT_TOOLBOX);
+    GetObjectBarManager().EnableObjectBarSwitching();
+    GetObjectBarManager().SwitchObjectBar (RID_DRAW_TEXT_TOOLBOX);
 
     // Einstellungen der FrameView uebernehmen
     ReadFrameViewData(pFrameView);
@@ -313,8 +300,30 @@ void OutlineViewShell::Construct(DrawDocShell* pDocSh)
     SetName (aName);
 
     SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
-    pWindow->SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
-    pWindow->SetUniqueId( SD_IF_SDOUTLINEVIEWSHELL );
+    GetActiveWindow()->SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
+    GetActiveWindow()->SetUniqueId( SD_IF_SDOUTLINEVIEWSHELL );
+}
+
+
+
+
+DrawController* OutlineViewShell::GetController (void)
+{
+    if ( ! mpController.is() && IsMainViewShell())
+    {
+        // Create uno controller for the main view shell.  For the ones
+        // displayed in the non-center panes we may later introduce
+        // sub-controllers.
+        DrawController* pController = new SdUnoOutlineView (
+            GetViewShellBase(),
+            *this,
+            *GetView());
+        mpController = ::comphelper::ImplementationReference<
+        DrawController,
+            ::com::sun::star::uno::XInterface,
+            ::com::sun::star::uno::XWeak> (pController);
+    }
+    return mpController.get();
 }
 
 
@@ -329,8 +338,9 @@ void OutlineViewShell::Construct(DrawDocShell* pDocSh)
 OutlineViewShell::OutlineViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
+    ::Window* pParentWindow,
     FrameView* pFrameViewArgument)
-    : ViewShell(pFrame, rViewShellBase),
+    : ViewShell(pFrame, pParentWindow, rViewShellBase),
       pOlView(NULL),
       pLastPage( NULL ),
       pClipEvtLstnr(NULL),
@@ -357,13 +367,15 @@ OutlineViewShell::OutlineViewShell (
 |*
 \************************************************************************/
 
-OutlineViewShell::OutlineViewShell(SfxViewFrame* pFrame,
-                                 const OutlineViewShell& rShell) :
-    ViewShell(pFrame, rShell),
-    pOlView(NULL),
-    pLastPage( NULL ),
-    pClipEvtLstnr(NULL),
-    bPastePossible(FALSE)
+OutlineViewShell::OutlineViewShell (
+    SfxViewFrame* pFrame,
+    ::Window* pParentWindow,
+    const OutlineViewShell& rShell)
+    : ViewShell (pFrame, pParentWindow, rShell),
+      pOlView(NULL),
+      pLastPage( NULL ),
+      pClipEvtLstnr(NULL),
+      bPastePossible(FALSE)
 {
     pFrameView = new FrameView(GetDoc());
     pFrameView->Connect();
@@ -395,17 +407,10 @@ OutlineViewShell::~OutlineViewShell()
         pFuOld = NULL;
     }
 
-    /*af
-    // Umschaltung der ObjectBarShells unterdruecken, sonst versucht die
-    // sterbende Funktion eventuell die ObjectBars zu wechseln. Die
-    // entsprechende Shell ist aber schon vom SFX vom Dispatcher-Stack
-    // genommen worden.
-    bObjectBarSwitchEnabled = FALSE;
-    */
     // The sub shell manager will be destroyed in a short time.
     // Disable the switching of object bars now anyway just in case
     // the object bars would access invalid data when switched.
-    //GetObjectBarManager().DisableObjectBarSwitching();
+    GetObjectBarManager().DisableObjectBarSwitching();
 
     delete pOlView;
 
@@ -439,44 +444,13 @@ void OutlineViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     }
 }
 
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
-void OutlineViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
-{
-    ViewShell::InnerResizePixel(rPos, rSize);
-}
-
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
-void OutlineViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
-{
-    ViewShell::OuterResizePixel(rPos, rSize);
-}
-
-
-/** This call is simply delegated to the base class.
-*/
-void OutlineViewShell::AdjustPosSizePixel(const Point &rNewPos,
-                                            const Size &rNewSize)
-{
-    ViewShell::AdjustPosSizePixel (rNewPos, rNewSize);
-}
-
-
 void OutlineViewShell::ArrangeGUIElements ()
 {
     // Retrieve the current size (thickness) of the scroll bars.  That is
     // the width of the vertical and the height of the horizontal scroll
     // bar.
-    int nScrollBarSize = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
+    int nScrollBarSize =
+        GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
     aScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
     ViewShell::ArrangeGUIElements ();
@@ -484,38 +458,31 @@ void OutlineViewShell::ArrangeGUIElements ()
     long nSizeX = aViewSize.Width() - aScrBarWH.Width();
     long nSizeY = aViewSize.Height() - aScrBarWH.Height();
 
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    ::sd::Window* pWindow = mpContentWindow.get();
+    if (pWindow != NULL)
     {
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
+        pWindow->SetMinZoomAutoCalc(FALSE);
+
+        // pWindow->SetPosSizePixel(rNewPos, Size(nSizeX, nSizeY));
+
+        // OutputArea der OutlinerView aendern
+        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+
+        Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
+        aWin = pWindow->PixelToLogic(aWin);
+        pOutlinerView->SetOutputArea(aWin);
+
+        Rectangle aVis = pOutlinerView->GetVisArea();
+
+        Rectangle aText = Rectangle(Point(0,0),
+            Size(pOlView->GetPaperWidth(),
+                pOlView->GetOutliner()->GetTextHeight()));
+        aText.Bottom() += aWin.GetHeight();
+
+        if (!aWin.IsEmpty())            // nicht beim Oeffnen
         {
-            ::sd::Window* pWindow = pWinArray[nX][nY];
-
-            if (pWindow)
-            {
-                pWindow->SetMinZoomAutoCalc(FALSE);
-
-                // pWindow->SetPosSizePixel(rNewPos, Size(nSizeX, nSizeY));
-
-                // OutputArea der OutlinerView aendern
-                OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
-
-                Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
-                aWin = pWindow->PixelToLogic(aWin);
-                pOutlinerView->SetOutputArea(aWin);
-
-                Rectangle aVis = pOutlinerView->GetVisArea();
-
-                Rectangle aText = Rectangle(Point(0,0),
-                                            Size(pOlView->GetPaperWidth(),
-                                                 pOlView->GetOutliner()->GetTextHeight()));
-                aText.Bottom() += aWin.GetHeight();
-
-                if (!aWin.IsEmpty())            // nicht beim Oeffnen
-                {
-                    InitWindows(Point(0,0), aText.GetSize(), Point(aVis.TopLeft()));
-                    UpdateScrollBars();
-                }
-            }
+            InitWindows(Point(0,0), aText.GetSize(), Point(aVis.TopLeft()));
+            UpdateScrollBars();
         }
     }
 }
@@ -601,7 +568,7 @@ void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 
     if( bIsMDIActivate )
     {
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( pWindow );
+        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
         ::Outliner* pOutl = pOutlinerView->GetOutliner();
         pOutl->UpdateFields();
 
@@ -650,7 +617,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     {
         SvxHyperlinkItem aHLinkItem;
 
-        OutlinerView* pOLV = pOlView->GetViewByWindow(pWindow);
+        OutlinerView* pOLV = pOlView->GetViewByWindow(GetActiveWindow());
         if (pOLV)
         {
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
@@ -780,7 +747,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         {
             if( pOlView )
             {
-                OutlinerView* pOutlView = pOlView->GetViewByWindow(pWindow);
+                OutlinerView* pOutlView = pOlView->GetViewByWindow(GetActiveWindow());
                 if (pOutlView)
                 {
                     KeyCode  aKCode(KEY_DELETE);
@@ -798,39 +765,12 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
-            GetViewShellBase().GetSubShellManager().HandleSlot (nSlot, rReq);
+            GetViewShellBase().GetPaneManager().HandleModeChangeSlot (
+                nSlot,
+                rReq);
             rReq.Done();
             break;
 
-            /*
-        case SID_DRAWINGMODE:
-            GetViewShellBase().GetSubShellManager()
-                .RequestMainSubShellChange (ViewShell::ST_IMPRESS);
-            rReq.Done();
-            break;
-
-        case SID_NOTESMODE:
-            GetViewShellBase().GetSubShellManager()
-                .RequestMainSubShellChange (ViewShell::ST_NOTES);
-            rReq.Done();
-            break;
-
-        case SID_HANDOUTMODE:
-            GetViewShellBase().GetSubShellManager()
-                .RequestMainSubShellChange (ViewShell::ST_HANDOUT);
-            rReq.Done();
-            break;
-
-        case SID_DIAMODE:
-            GetViewShellBase().GetSubShellManager()
-                .RequestMainSubShellChange (ViewShell::ST_SLIDE);
-            rReq.Done();
-            break;
-
-        case SID_OUTLINEMODE:
-            rReq.Done();
-            break;
-*/
         case SID_RULER:
             SetRuler( !HasRuler() );
             Invalidate( SID_RULER );
@@ -873,7 +813,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_TRANSLITERATE_HIRAGANA:
         case SID_TRANSLITERATE_KATAGANA:
         {
-            OutlinerView* pOLV = pOlView->GetViewByWindow( pWindow );
+            OutlinerView* pOLV = pOlView->GetViewByWindow( GetActiveWindow() );
             if( pOLV )
             {
                 using namespace ::com::sun::star::i18n;
@@ -957,30 +897,22 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
     {
         case SID_EDIT_OUTLINER:
         {
-            SfxUndoManager* pUndoManager = NULL;
             // Empty the undo manager of the text object bar.
-            if (GetObjectBarManager().GetTopObjectBarId()
-                == RID_DRAW_TEXT_TOOLBOX)
-            {
-                SfxShell* pTextObjectBar =
-                    GetObjectBarManager().GetTopObjectBar();
+            SfxUndoManager* pUndoManager = NULL;
+            SfxShell* pTextObjectBar =
+                GetObjectBarManager().GetObjectBar (RID_DRAW_TEXT_TOOLBOX);
+            if (pTextObjectBar != NULL)
                 pUndoManager = pTextObjectBar->GetUndoManager();
-            }
+
             DBG_ASSERT(pUndoManager,
                 "UndoManager of text object bar not found");
-            pUndoManager->Clear();
-            /*af
-            // den an der Shell der TextObjectBar gesetzten UndoManager leeren
-            SfxUndoManager* pUndoMgr = GetSubShell(0)->GetUndoManager();
-            DBG_ASSERT(pUndoMgr, "UndoManager nicht gefunden");
-            pUndoMgr->Clear();
-            */
+            if (pUndoManager != NULL)
+                pUndoManager->Clear();
 
             ::Outliner* pOutl = pOlView->GetOutliner();
             pOutl->UpdateFields();
 
-            pFuActual = new
-            FuOutlineText(this,pWindow,pOlView,GetDoc(),rReq);
+            pFuActual = new FuOutlineText(this,GetActiveWindow(),pOlView,GetDoc(),rReq);
 
             rReq.Done();
         }
@@ -1032,15 +964,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 {
     ViewShell::GetMenuState(rSet);
 
-    if (GetDocSh()->IsPreview())
-    {
-        aPresentationBtn.Disable();
-    }
-    else
-    {
-        aPresentationBtn.Enable();
-    }
-
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
         SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(
@@ -1053,7 +976,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
              GetDocSh()->IsPreview() )
         {
             rSet.DisableItem( SID_PRESENTATION );
-            aPresentationBtn.Disable();
         }
     }
 
@@ -1078,9 +1000,9 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_IN ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_OUT ) )
     {
-        if( pWindow->GetZoom() <= pWindow->GetMinZoom() || GetDocSh()->IsUIActive() )
+        if( GetActiveWindow()->GetZoom() <= GetActiveWindow()->GetMinZoom() || GetDocSh()->IsUIActive() )
             rSet.DisableItem( SID_ZOOM_IN );
-        if( pWindow->GetZoom() >= pWindow->GetMaxZoom() || GetDocSh()->IsUIActive() )
+        if( GetActiveWindow()->GetZoom() >= GetActiveWindow()->GetMaxZoom() || GetDocSh()->IsUIActive() )
             rSet.DisableItem( SID_ZOOM_OUT );
     }
 
@@ -1125,7 +1047,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     BOOL bDisableCollapse = TRUE;
     BOOL bDisableExpand   = TRUE;
     BOOL bUnique          = TRUE;
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(GetActiveWindow());
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
 
@@ -1198,38 +1120,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if (bDisableCollapseAll)
         rSet.DisableItem(SID_OUTLINE_COLLAPSE_ALL);
 
-
-    /*  if ( GetDocSh()->GetActualFunction() )
-    {
-        rSet.ClearItem( SID_DRAWINGMODE );
-        rSet.DisableItem( SID_DRAWINGMODE );
-        aDrawBtn.Disable();
-
-        rSet.ClearItem( SID_NOTESMODE );
-        rSet.DisableItem( SID_NOTESMODE );
-        aNotesBtn.Disable();
-
-        rSet.ClearItem( SID_HANDOUTMODE );
-        rSet.DisableItem( SID_HANDOUTMODE );
-        aHandoutBtn.Disable();
-
-        rSet.ClearItem( SID_OUTLINEMODE );
-        rSet.DisableItem( SID_OUTLINEMODE );
-        aOutlineBtn.Disable();
-
-        rSet.ClearItem( SID_DIAMODE );
-        rSet.DisableItem( SID_DIAMODE );
-        aSlideBtn.Disable();
-    }
-    else
-    {
-    */      aDrawBtn.Enable();
-        aNotesBtn.Enable();
-        aHandoutBtn.Enable();
-        aOutlineBtn.Enable();
-        aSlideBtn.Enable();
-        //  }
-
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) )
     {
         if ( !pClipEvtLstnr )
@@ -1253,7 +1143,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (!pOlView->GetViewByWindow(pWindow)->HasSelection())
+    if (!pOlView->GetViewByWindow(GetActiveWindow())->HasSelection())
     {
         rSet.DisableItem(SID_CUT);
         rSet.DisableItem(SID_COPY);
@@ -1412,7 +1302,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         if( bDisable || GetDocSh()->IsPreview())
         {
             rSet.DisableItem( SID_PRESENTATION );
-            aPresentationBtn.Disable();
         }
     }
 
@@ -1429,33 +1318,24 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
 long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
-    short nX = 0, nY = 0;
-
-    // Spalte der zu scrollenden Fenster bestimmen
-    while ( nX < MAX_HSPLIT_CNT &&  pHScroll != pHScrlArray[nX] )
-        ++nX;
-
     long   nThumb = pHScroll->GetThumbPos();
     long   nRange = pHScroll->GetRange().Len();
     double fX     = (double) nThumb / nRange;
 
-    // alle Fenster der Spalte scrollen
-    while ( nY < MAX_VSPLIT_CNT && pWinArray[nX][nY] )
-    {
-        Window*       pWin          = pWinArray[nX][nY++];
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
-        long          nViewWidth    = pWin->PixelToLogic(
-                                                pWin->GetSizePixel()).Width();
-        long          nTextWidth    = pOlView->GetPaperWidth();
-        nViewWidth                  = Max(nViewWidth, nTextWidth);
-        long          nCurrentPos   = pOutlinerView->GetVisArea().Left();
-        long          nTargetPos    = (long)(fX * nViewWidth);
-        long          nDelta        = nTargetPos - nCurrentPos;
+    Window*       pWin          = mpContentWindow.get();
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
+    long          nViewWidth    = pWin->PixelToLogic(
+        pWin->GetSizePixel()).Width();
+    long          nTextWidth    = pOlView->GetPaperWidth();
+    nViewWidth                  = Max(nViewWidth, nTextWidth);
+    long          nCurrentPos   = pOutlinerView->GetVisArea().Left();
+    long          nTargetPos    = (long)(fX * nViewWidth);
+    long          nDelta        = nTargetPos - nCurrentPos;
 
-        pOutlinerView->HideCursor();
-        pOutlinerView->Scroll(-nDelta, 0);
-        pOutlinerView->ShowCursor(FALSE);
-    }
+    pOutlinerView->HideCursor();
+    pOutlinerView->Scroll(-nDelta, 0);
+    pOutlinerView->ShowCursor(FALSE);
+
     return 0;
 }
 
@@ -1467,33 +1347,24 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
 long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 {
-    short nX = 0, nY = 0;
-
-    // Zeile der zu scrollenden Fenster bestimmen
-    while ( nY < MAX_VSPLIT_CNT &&  pVScroll != pVScrlArray[nY] )
-        ++nY;
-
     long nThumb = pVScroll->GetThumbPos();
     long nRange = pVScroll->GetRange().Len();
     double fY = (double) nThumb / nRange;
 
-    // alle Fenster der Zeile scrollen
-    while ( nX < MAX_HSPLIT_CNT && pWinArray[nX][nY] )
-    {
-        Window*       pWin          = pWinArray[nX++][nY];
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
-        long          nViewHeight   = pWin->PixelToLogic(
-                                            pWin->GetSizePixel()).Height();
-        long          nTextHeight   = pOlView->GetOutliner()->GetTextHeight();
-        nViewHeight                += nTextHeight;
-        long          nCurrentPos   = pOutlinerView->GetVisArea().Top();
-        long          nTargetPos    = (long)(fY * nViewHeight);
-        long          nDelta        = nTargetPos - nCurrentPos;
+    Window*       pWin          = mpContentWindow.get();
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
+    long          nViewHeight   = pWin->PixelToLogic(
+        pWin->GetSizePixel()).Height();
+    long          nTextHeight   = pOlView->GetOutliner()->GetTextHeight();
+    nViewHeight                += nTextHeight;
+    long          nCurrentPos   = pOutlinerView->GetVisArea().Top();
+    long          nTargetPos    = (long)(fY * nViewHeight);
+    long          nDelta        = nTargetPos - nCurrentPos;
 
-        pOutlinerView->HideCursor();
-        pOutlinerView->Scroll(0, -nDelta);
-        pOutlinerView->ShowCursor(FALSE);
-    }
+    pOutlinerView->HideCursor();
+    pOutlinerView->Scroll(0, -nDelta);
+    pOutlinerView->ShowCursor(FALSE);
+
     return 0;
 }
 
@@ -1523,20 +1394,14 @@ void OutlineViewShell::SetZoom(long nZoom)
 {
     ViewShell::SetZoom(nZoom);
 
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    ::sd::Window* pWindow = mpContentWindow.get();
+    if (pWindow)
     {
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            ::sd::Window* pWindow = pWinArray[nX][nY];
-            if (pWindow)
-            {
-                // OutputArea der OutlinerView aendern
-                OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
-                Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
-                aWin = pWindow->PixelToLogic(aWin);
-                pOutlinerView->SetOutputArea(aWin);
-            }
-        }
+        // OutputArea der OutlinerView aendern
+        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+        Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
+        aWin = pWindow->PixelToLogic(aWin);
+        pOutlinerView->SetOutputArea(aWin);
     }
 
     // #106268#
@@ -1553,20 +1418,14 @@ void OutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
 {
     ViewShell::SetZoomRect(rZoomRect);
 
-    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    ::sd::Window* pWindow = mpContentWindow.get();
+    if (pWindow)
     {
-        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
-        {
-            ::sd::Window* pWindow = pWinArray[nX][nY];
-            if (pWindow)
-            {
-                // OutputArea der OutlinerView aendern
-                OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
-                Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
-                aWin = pWindow->PixelToLogic(aWin);
-                pOutlinerView->SetOutputArea(aWin);
-            }
-        }
+        // OutputArea der OutlinerView aendern
+        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+        Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
+        aWin = pWindow->PixelToLogic(aWin);
+        pOutlinerView->SetOutputArea(aWin);
     }
 
     // #106268#
@@ -1683,7 +1542,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
         SvxZoomItem* pZoomItem;
-        UINT16 nZoom = (UINT16) pWindow->GetZoom();
+        UINT16 nZoom = (UINT16) GetActiveWindow()->GetZoom();
 
         pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
 
@@ -1757,9 +1616,9 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        pWindow->ReleaseMouse();
+        GetActiveWindow()->ReleaseMouse();
 
-        OutlinerView* pOLV = pOlView->GetViewByWindow(pWindow);
+        OutlinerView* pOLV = pOlView->GetViewByWindow(GetActiveWindow());
         Point aPos(rCEvt.GetMousePosPixel());
 
         if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
@@ -1842,7 +1701,7 @@ Size OutlineViewShell::GetOptimalSizePixel() const
         if (pOutliner)
         {
             Size aTemp = pOutliner->CalcTextSize();
-            aTemp = pWindow->LogicToPixel(aTemp);
+            aTemp = GetActiveWindow()->LogicToPixel(aTemp);
             aResult.Width() = Max(aResult.Width(), aTemp.Width());
             aResult.Height() = Max(aResult.Height(), aTemp.Height());
             if (4 * aResult.Height() > 3 * aResult.Width())
@@ -1853,8 +1712,8 @@ Size OutlineViewShell::GetOptimalSizePixel() const
     }
 
     // und jetzt jetzt das Standardgelumpe draufaddieren
-    aResult.Width()  += pVScrlArray[0]->GetSizePixel().Width();
-    aResult.Height() += pHScrlArray[0]->GetSizePixel().Height();
+    aResult.Width()  += mpVerticalScrollBar->GetSizePixel().Width();
+    aResult.Height() += mpHorizontalScrollBar->GetSizePixel().Height();
         //!!! + System::GetMenuBarHeightPixel();  // statt Titlebar
     return aResult;
 }
@@ -1870,7 +1729,7 @@ String OutlineViewShell::GetSelectionText(BOOL bCompleteWords)
 {
     String aStrSelection;
     ::Outliner* pOl = pOlView->GetOutliner();
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( pWindow );
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
 
     if (pOl && pOlView)
     {
@@ -1905,7 +1764,7 @@ BOOL OutlineViewShell::HasSelection(BOOL bText) const
 
     if (bText)
     {
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( pWindow );
+        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
 
         if (pOutlinerView && pOutlinerView->GetSelected().Len() != 0)
         {
@@ -1945,7 +1804,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_FAMILY5:
             {
-                SfxStyleSheet* pStyleSheet = pOlView->GetViewByWindow(pWindow)->GetStyleSheet();
+                SfxStyleSheet* pStyleSheet = pOlView->GetViewByWindow(GetActiveWindow())->GetStyleSheet();
 
                 if( pStyleSheet )
                 {
@@ -2223,17 +2082,17 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 {
     // vom ShowWindow der DiaShow?
     // ggfs. Preview den neuen Kontext mitteilen
-    SfxChildWindow* pPreviewChildWindow =
+    /*  SfxChildWindow* pPreviewChildWindow =
         GetViewFrame()->GetChildWindow(PreviewChildWindow::GetChildWindowId());
     if (pPreviewChildWindow)
     {
         PreviewWindow* pPreviewWin =
             static_cast<PreviewWindow*>(pPreviewChildWindow->GetWindow());
         if (pPreviewWin && ( bInit || pPreviewWin->GetDoc() == GetDoc() ) )
-        {
+    */      {
             BOOL bNewObject = FALSE;
 
-            OutlinerView* pOutlinerView = pOlView->GetViewByWindow( pWindow );
+            OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
             ::Outliner* pOutliner = pOutlinerView->GetOutliner();
             List* pList = pOutlinerView->CreateSelectionList();
             Paragraph* pPara = (Paragraph*)pList->First();
@@ -2276,8 +2135,10 @@ void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
                 pLastPage = pPage;
                 ViewShell::UpdatePreview( pPage, TRUE );
             }
+            if (bNewPage)
+                SetCurrentPage (pPage);
         }
-    }
+    //  }
 }
 
 /*************************************************************************
@@ -2521,7 +2382,7 @@ void OutlineViewShell::VisAreaChanged(const Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 
-    if (mpController != NULL)
+    if (mpController.is() != NULL)
     {
         mpController->FireVisAreaChanged( rRect );
     }
@@ -2582,5 +2443,28 @@ void OutlineViewShell::GetState (SfxItemSet& rSet)
         nWhich = aIter.NextWhich();
     }
 }
+
+
+
+
+void OutlineViewShell::SetCurrentPage (SdPage* pPage)
+{
+    SdUnoOutlineView* pController (
+        static_cast<SdUnoOutlineView*>(GetController()));
+
+    // Adapt the selection of the model.
+    for (USHORT i=0; i<GetDoc()->GetSdPageCount(PK_STANDARD); i++)
+        GetDoc()->SetSelected(
+            GetDoc()->GetSdPage(i, PK_STANDARD),
+            FALSE);
+    GetDoc()->SetSelected (pPage, TRUE);
+    if (pController != NULL)
+        pController->FireSelectionChangeListener();
+
+    // Tell the controller to notify its listeners.
+    if (pController != NULL)
+        pController->FireSwitchCurrentPage (pPage);
+}
+
 
 } // end of namespace sd
