@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2002-06-14 12:42:21 $
+#   last change: $Author: kz $ $Date: 2003-11-18 14:31:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,8 @@ SLOFILES=	$(SLO)$/access.obj		\
             $(SLO)$/unohelp.obj     \
             $(SLO)$/unohelp2.obj    \
             $(SLO)$/vclevent.obj	\
-            $(SLO)$/i18nhelp.obj
+            $(SLO)$/i18nhelp.obj	\
+            $(SLO)$/salvtables.obj
 
 .IF "$(remote)"!=""
 EXCEPTIONSFILES=					\
