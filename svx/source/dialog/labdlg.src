@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:52:06 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "간격(~S)";
         Text[ turkish ] = "~Uzakl�k";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Espa~cio";
+        Text[ catalan ] = "~Espaiat";
         Text[ finnish ] = "~Objektiv�lit";
         Text[ thai ] = "~ระยะห่าง";
     };
@@ -157,7 +157,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "각도(~A)";
         Text[ turkish ] = "~A��";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "�~ngulo";
+        Text[ catalan ] = "~Angle";
         Text[ finnish ] = "~Kulma";
         Text[ thai ] = "~มุม";
     };
@@ -339,11 +339,11 @@ TabPage RID_SVXPAGE_CAPTION
     };
     StringList [ catalan ] =
     {
-            < "Cualquiera" ; 1 ; > ;
-        < "30 grados" ; 3000 ; > ;
-        < "45 grados" ; 4500 ; > ;
-        < "60 grados" ; 6000 ; > ;
-        < "90 grados" ; 9000 ; > ;
+            < "Lliure" ; 1 ; > ;
+        < "30 graus" ; 3000 ; > ;
+        < "45 graus" ; 4500 ; > ;
+        < "60 graus" ; 6000 ; > ;
+        < "90 graus" ; 9000 ; > ;
     };
     StringList [ finnish ] =
     {
@@ -387,7 +387,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "확장자(~E)";
         Text[ turkish ] = "U~zatma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Salida";
+        Text[ catalan ] = "~Sortida";
         Text[ finnish ] = "~Loppuliite";
         Text[ thai ] = "~ส่วนขยาย";
     };
@@ -569,9 +569,9 @@ TabPage RID_SVXPAGE_CAPTION
     };
     StringList [ catalan ] =
     {
-            < "�ptimo" ; 4 ; > ;
-        < "Desde arriba" ; 3 ; > ;
-        < "De izquierda" ; 3 ; > ;
+            < "�ptim" ; 4 ; > ;
+        < "Des de la part superior" ; 3 ; > ;
+        < "Des de l'esquerra" ; 3 ; > ;
         < "Horitzontal" ; 1 ; > ;
         < "Vertical" ; 2 ; > ;
     };
@@ -617,7 +617,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "만큼(~B)";
         Text[ turkish ] = "~De�er";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~De";
+        Text[ catalan ] = "~Per";
         Text[ finnish ] = "~Laatija";
         Text[ thai ] = "โ~ดย";
     };
@@ -660,7 +660,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "위치(~P)";
         Text[ turkish ] = "~Konum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Posici�n";
+        Text[ catalan ] = "~Posici�";
         Text[ finnish ] = "~Sijainti";
         Text[ thai ] = "~ตำแหน่ง";
     };
@@ -699,7 +699,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "길이(~L)";
         Text[ turkish ] = "~Uzunluk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Longitud";
+        Text[ catalan ] = "~Longitud";
         Text[ finnish ] = "~Pituus";
         Text[ thai ] = "ความ~ยาว";
     };
@@ -743,7 +743,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "최적(~O)";
         Text[ turkish ] = "~Optimum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "�~ptimo";
+        Text[ catalan ] = "�~ptim";
         Text[ finnish ] = "~Optimaalinen";
         Text[ thai ] = "เ~หมาะที่สุด";
     };
@@ -770,7 +770,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "직선";
         Text[ turkish ] = "D�z �izgili";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "L�nea recta";
+        Text[ catalan ] = "L�nia recta";
         Text[ finnish ] = "Suora viiva";
         Text[ thai ] = "เส้นตรง";
     };
@@ -797,7 +797,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "각진 선";
         Text[ turkish ] = "A��l� �izgi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "L�nea acodada";
+        Text[ catalan ] = "L�nia angular";
         Text[ finnish ] = "Kulmikas viiva";
         Text[ thai ] = "เส้นเป็นเหลี่ยมเป็นมุม";
     };
@@ -824,7 +824,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "각진 선을 한번 꺾음";
         Text[ turkish ] = "Tek a��l� �izgi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "L�nea acodada con un solo �ngulo";
+        Text[ catalan ] = "L�nia angular amb nom�s un angle";
         Text[ finnish ] = "Kulmikas liitinviiva";
         Text[ thai ] = "เส้นเชื่อมต่อเป็นเหลี่ยมเป็นมุม";
     };
@@ -851,7 +851,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "각진 선을 두번 꺾음";
         Text[ turkish ] = "�ift a��l� �izgi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "L�nea acodada con dos �ngulos";
+        Text[ catalan ] = "L�nia angular amb dos angles";
         Text[ finnish ] = "Kaksikulmainen viiva";
         Text[ thai ] = "เส้นเป็นเหลี่ยมเป็นมุมคู่";
     };
@@ -878,7 +878,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "위;가운데;아래";
         Text[ turkish ] = "�st;Orta;Alt";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Arriba;centro;abajo";
+        Text[ catalan ] = "Part superior;Mig;Part inferior";
         Text[ finnish ] = "Yl�osa;Keskiosa;Alaosa";
         Text[ thai ] = "บน;กลาง;ล่าง";
     };
@@ -905,7 +905,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ korean ] = "왼쪽;가운데;오른쪽";
         Text[ turkish ] = "Sol;Orta;Sa�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Izquierda;centrado;derecha";
+        Text[ catalan ] = "Esquerra;Mig;Dreta";
         Text[ finnish ] = "Vasen;Keskiosa;Oikea";
         Text[ thai ] = "ซ้าย;กลาง;ขวา";
     };
@@ -951,7 +951,7 @@ TabPage RID_SVXPAGE_CAPTION
     Text[ korean ] = "범례";
     Text[ turkish ] = "Belirtme �izgisi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Leyenda";
+    Text[ catalan ] = "Llegendes";
     Text[ finnish ] = "Kuvatekstit";
     Text[ thai ] = "คำบรรยายภาพ";
 };
@@ -1035,7 +1035,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ korean ] = "범례";
                 Text[ turkish ] = "Belirtme �izgisi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Leyenda";
+                Text[ catalan ] = "Llegenda";
                 Text[ finnish ] = "Kuvateksti";
                 Text[ thai ] = "คำบรรยายภาพ";
             };
@@ -1051,7 +1051,7 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ korean ] = "범례";
     Text[ turkish ] = "Belirtme �izgisi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Leyenda";
+    Text[ catalan ] = "Llegendes";
     Text[ finnish ] = "Kuvatekstit";
     Text[ thai ] = "คำบรรยายภาพ";
 };
