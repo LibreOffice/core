@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:06:31 $
+ *  last change: $Author: mt $ $Date: 2001-05-18 11:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_COLOR, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_FONTWIDTH, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_WEIGHT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_UNDERLINE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_STRIKEOUT, SFX_ITEM_POOLABLE },
