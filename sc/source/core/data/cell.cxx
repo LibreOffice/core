@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,6 @@
 #endif
 
 // STATIC DATA -----------------------------------------------------------
-
-#pragma code_seg("SCSTATICS")
 
 #ifdef USE_MEMPOOL
 // MemPools auf 4k Boundaries  - 64 Bytes ausrichten
@@ -264,60 +262,64 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc, BOOL bOnlyRelNames )
             for( ScToken* t = pArr->GetNextReferenceRPN(); t;
                           t = pArr->GetNextReferenceRPN() )
             {
+                StackVar eType = t->GetType();
+                SingleRefData& rRef1 = t->GetSingleRef();
+                SingleRefData& rRef2 = (eType == svDoubleRef ?
+                    t->GetDoubleRef().Ref2 : rRef1);
                 if ( !bOnlyRelNames || (bOnlyRelNames
-                    && (t->aRef.Ref1.IsRelName() || t->aRef.Ref2.IsRelName())))
+                    && (rRef1.IsRelName() || rRef2.IsRelName())))
                 {
-                    switch( t->GetType() )
+                    switch( eType )
                     {
                         case svSingleRef:
-                            t->aRef.Ref1.CalcAbsIfRel( pFormCell->aPos );
-                            if ( t->aRef.Ref1.Valid() )
+                            rRef1.CalcAbsIfRel( pFormCell->aPos );
+                            if ( rRef1.Valid() )
                             {
                                 pDoc->StartListeningCell(
-                                    ScAddress( t->aRef.Ref1.nCol,
-                                               t->aRef.Ref1.nRow,
-                                               t->aRef.Ref1.nTab ), pFormCell );
+                                    ScAddress( rRef1.nCol,
+                                               rRef1.nRow,
+                                               rRef1.nTab ), pFormCell );
                             }
-                            break;
+                        break;
                         case svDoubleRef:
-                            t->aRef.CalcAbsIfRel( pFormCell->aPos );
-                            if ( t->aRef.Valid() )
+                            t->CalcAbsIfRel( pFormCell->aPos );
+                            if ( rRef1.Valid() && rRef2.Valid() )
                             {
                                 if ( t->GetOpCode() == ocColRowNameAuto )
                                 {   // automagically
-                                    if ( t->aRef.Ref1.IsColRel() )
+                                    if ( rRef1.IsColRel() )
                                     {   // ColName
                                         pDoc->StartListeningArea( ScRange (
                                             0,
-                                            t->aRef.Ref1.nRow,
-                                            t->aRef.Ref1.nTab,
+                                            rRef1.nRow,
+                                            rRef1.nTab,
                                             MAXCOL,
-                                            t->aRef.Ref2.nRow,
-                                            t->aRef.Ref2.nTab ), pFormCell );
+                                            rRef2.nRow,
+                                            rRef2.nTab ), pFormCell );
                                     }
                                     else
                                     {   // RowName
                                         pDoc->StartListeningArea( ScRange (
-                                            t->aRef.Ref1.nCol,
+                                            rRef1.nCol,
                                             0,
-                                            t->aRef.Ref1.nTab,
-                                            t->aRef.Ref2.nCol,
+                                            rRef1.nTab,
+                                            rRef2.nCol,
                                             MAXROW,
-                                            t->aRef.Ref2.nTab ), pFormCell );
+                                            rRef2.nTab ), pFormCell );
                                     }
                                 }
                                 else
                                 {
                                     pDoc->StartListeningArea( ScRange (
-                                        t->aRef.Ref1.nCol,
-                                        t->aRef.Ref1.nRow,
-                                        t->aRef.Ref1.nTab,
-                                        t->aRef.Ref2.nCol,
-                                        t->aRef.Ref2.nRow,
-                                        t->aRef.Ref2.nTab ), pFormCell );
+                                        rRef1.nCol,
+                                        rRef1.nRow,
+                                        rRef1.nTab,
+                                        rRef2.nCol,
+                                        rRef2.nRow,
+                                        rRef2.nTab ), pFormCell );
                                 }
                             }
-                            break;
+                        break;
                     }
                 }
             }
@@ -351,60 +353,64 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, BOOL bOnlyRelNames,
             for( ScToken* t = pArr->GetNextReferenceRPN(); t;
                           t = pArr->GetNextReferenceRPN() )
             {
+                StackVar eType = t->GetType();
+                SingleRefData& rRef1 = t->GetSingleRef();
+                SingleRefData& rRef2 = (eType == svDoubleRef ?
+                    t->GetDoubleRef().Ref2 : rRef1);
                 if ( !bOnlyRelNames || (bOnlyRelNames
-                    && (t->aRef.Ref1.IsRelName() || t->aRef.Ref2.IsRelName())))
+                    && (rRef1.IsRelName() || rRef2.IsRelName())))
                 {
                     switch( t->GetType() )
                     {
                         case svSingleRef:
-                            t->aRef.Ref1.CalcAbsIfRel( aPos );
-                            if ( t->aRef.Ref1.Valid() )
+                            rRef1.CalcAbsIfRel( aPos );
+                            if ( rRef1.Valid() )
                             {
                                 pDoc->EndListeningCell(
-                                    ScAddress( t->aRef.Ref1.nCol,
-                                               t->aRef.Ref1.nRow,
-                                               t->aRef.Ref1.nTab ), pFormCell );
+                                    ScAddress( rRef1.nCol,
+                                               rRef1.nRow,
+                                               rRef1.nTab ), pFormCell );
                             }
-                            break;
+                        break;
                         case svDoubleRef:
-                            t->aRef.CalcAbsIfRel( aPos );
-                            if ( t->aRef.Valid() )
+                            t->CalcAbsIfRel( aPos );
+                            if ( rRef1.Valid() && rRef2.Valid() )
                             {
                                 if ( t->GetOpCode() == ocColRowNameAuto )
                                 {   // automagically
-                                    if ( t->aRef.Ref1.IsColRel() )
+                                    if ( rRef1.IsColRel() )
                                     {   // ColName
                                         pDoc->EndListeningArea( ScRange (
                                             0,
-                                            t->aRef.Ref1.nRow,
-                                            t->aRef.Ref1.nTab,
+                                            rRef1.nRow,
+                                            rRef1.nTab,
                                             MAXCOL,
-                                            t->aRef.Ref2.nRow,
-                                            t->aRef.Ref2.nTab ), pFormCell );
+                                            rRef2.nRow,
+                                            rRef2.nTab ), pFormCell );
                                     }
                                     else
                                     {   // RowName
                                         pDoc->EndListeningArea( ScRange (
-                                            t->aRef.Ref1.nCol,
+                                            rRef1.nCol,
                                             0,
-                                            t->aRef.Ref1.nTab,
-                                            t->aRef.Ref2.nCol,
+                                            rRef1.nTab,
+                                            rRef2.nCol,
                                             MAXROW,
-                                            t->aRef.Ref2.nTab ), pFormCell );
+                                            rRef2.nTab ), pFormCell );
                                     }
                                 }
                                 else
                                 {
                                     pDoc->EndListeningArea( ScRange (
-                                        t->aRef.Ref1.nCol,
-                                        t->aRef.Ref1.nRow,
-                                        t->aRef.Ref1.nTab,
-                                        t->aRef.Ref2.nCol,
-                                        t->aRef.Ref2.nRow,
-                                        t->aRef.Ref2.nTab ), pFormCell );
+                                        rRef1.nCol,
+                                        rRef1.nRow,
+                                        rRef1.nTab,
+                                        rRef2.nCol,
+                                        rRef2.nRow,
+                                        rRef2.nTab ), pFormCell );
                                 }
                             }
-                            break;
+                        break;
                     }
                 }
             }
@@ -697,7 +703,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
         {
             if ( t->GetType() == svIndex )
             {
-                ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->nIndex );
+                ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
                 if( pRangeData )
                 {
                     if( pRangeData->HasReferences() )
@@ -845,7 +851,9 @@ BOOL lcl_IsBeyond( ScTokenArray* pCode, USHORT nMaxRow )
     ScToken* t;
     pCode->Reset();
     while ( t = pCode->GetNextReferenceRPN() )  // RPN -> auch in Namen
-        if ( t->aRef.Ref1.nRow > nMaxRow || t->aRef.Ref2.nRow > nMaxRow )
+        if ( t->GetSingleRef().nRow > nMaxRow ||
+                (t->GetType() == svDoubleRef &&
+                t->GetDoubleRef().Ref2.nRow > nMaxRow) )
             return TRUE;
     return FALSE;
 }
@@ -941,10 +949,11 @@ void ScFormulaCell::GetFormula( String& rFormula ) const
             ScBaseCell* pCell = NULL;
             if ( !IsInChangeTrack() )
             {
-                p->aRef.Ref1.CalcAbsIfRel( aPos );
-                if ( p->aRef.Ref1.Valid() )
-                    pCell = pDocument->GetCell( ScAddress( p->aRef.Ref1.nCol,
-                        p->aRef.Ref1.nRow, p->aRef.Ref1.nTab ) );
+                SingleRefData& rRef = p->GetSingleRef();
+                rRef.CalcAbsIfRel( aPos );
+                if ( rRef.Valid() )
+                    pCell = pDocument->GetCell( ScAddress( rRef.nCol,
+                        rRef.nRow, rRef.nTab ) );
             }
             if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
             {
@@ -1553,32 +1562,46 @@ ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
     aPos = pCell->aPos;
 }
 
+BOOL lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
+{
+    SingleRefData& rRef1 = p->GetSingleRef();
+    if ( rRef1.IsColDeleted() || rRef1.IsRowDeleted() || rRef1.IsTabDeleted()
+            || !rRef1.Valid() )
+        return TRUE;
+    if ( p->GetType() == svDoubleRef )
+    {
+        SingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+        if ( rRef2.IsColDeleted() || rRef2.IsRowDeleted() || rRef2.IsTabDeleted()
+                || !rRef2.Valid() )
+            return TRUE;
+    }
+    return FALSE;
+}
+
 BOOL ScDetectiveRefIter::GetNextRef( ScTripel& rStart, ScTripel& rEnd )
 {
     BOOL bRet = FALSE;
 
     ScToken* p = pCode->GetNextReferenceRPN();
     if (p)
-        p->aRef.CalcAbsIfRel( aPos );
+        p->CalcAbsIfRel( aPos );
 
-    while ( p && ( p->aRef.Ref1.IsColDeleted() || p->aRef.Ref2.IsColDeleted() ||
-                   p->aRef.Ref1.IsRowDeleted() || p->aRef.Ref2.IsRowDeleted() ||
-                   p->aRef.Ref1.IsTabDeleted() || p->aRef.Ref2.IsTabDeleted() ||
-                   !p->aRef.Ref1.Valid() || !p->aRef.Ref2.Valid() ) )
+    while ( p && lcl_ScDetectiveRefIter_SkipRef( p ) )
     {
         p = pCode->GetNextReferenceRPN();
         if (p)
-            p->aRef.CalcAbsIfRel( aPos );
+            p->CalcAbsIfRel( aPos );
     }
 
     if( p )
     {
-        rStart.Put( p->aRef.Ref1.nCol,
-                    p->aRef.Ref1.nRow,
-                    p->aRef.Ref1.nTab );
-        rEnd.Put( p->aRef.Ref2.nCol,
-                  p->aRef.Ref2.nRow,
-                  p->aRef.Ref2.nTab );
+        SingleDoubleRefProvider aProv( *p );
+        rStart.Put( aProv.Ref1.nCol,
+                    aProv.Ref1.nRow,
+                    aProv.Ref1.nTab );
+        rEnd.Put( aProv.Ref2.nCol,
+                  aProv.Ref2.nRow,
+                  aProv.Ref2.nTab );
         bRet = TRUE;
     }
 

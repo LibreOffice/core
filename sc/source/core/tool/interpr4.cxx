@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 19:01:55 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,6 @@ extern void ShowTheTeam();
 extern BOOL bOderSo; // in GLOBAL.CXX
 
 //-----------------------------statische Daten-----------------
-
-const sal_Unicode ScInterpreter::cEmptyString = 0;
 
 USHORT ScInterpreter::nGlobalError = 0; // fuer matherr
 
@@ -453,24 +451,10 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
         switch (pCell->GetCellType())
         {
             case CELLTYPE_STRING:
-            {
                 ((ScStringCell*) pCell)->GetString(rStr);
-                if (rStr.Len() >= MAXSTRLEN)
-                {
-                    rStr.Erase();
-                    nErr = errStringOverflow;
-                }
-            }
             break;
             case CELLTYPE_EDIT:
-            {
                 ((ScEditCell*) pCell)->GetString(rStr);
-                if (rStr.Len() >= MAXSTRLEN)
-                {
-                    rStr.Erase();
-                    nErr = errStringOverflow;
-                }
-            }
             break;
             case CELLTYPE_FORMULA:
             {
@@ -859,11 +843,11 @@ void ScInterpreter::PushTempToken( const ScToken& r )
 }
 
 
-//! Nur fuer PushDouble/PushInt!
-//! Das Token wurde per new angelegt und darf nach diesem Aufruf wg.
-//! eventuellem delete bei errStackOverflow nicht mehr benutzt werden, falls
-//! nicht ein RefCount gesetzt wurde!
-void ScInterpreter::PushTempToken( ScDoubleToken* p )
+//! Only for PushDouble/PushInt!
+//! The Token had to be allocated with `new' and must not be used after this
+//! call because eventually it gets deleted in case of a errStackOverflow if
+//! no RefCount was set!
+void ScInterpreter::PushTempToken( ScToken* p )
 {
     ((ScToken*)p)->IncRef();
     if ( sp >= MAXSTACK )
@@ -895,12 +879,12 @@ double ScInterpreter::PopDouble()
         if ( !nGlobalError )
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svDouble )
-            return p->nValue;
+            return p->GetDouble();
         else if( p->GetType() == svMissing )
-            return 0;
+            return 0.0;
     }
     SetError(errUnknownStackVariable);
-    return 0;
+    return 0.0;
 }
 
 
@@ -913,7 +897,7 @@ BYTE ScInterpreter::PopByte()
         if ( !nGlobalError )
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svByte )
-            return p->cByte;
+            return p->GetByte();
         else if( p->GetType() == svMissing )
             SetError( errIllegalParameter );
     }
@@ -922,7 +906,7 @@ BYTE ScInterpreter::PopByte()
 }
 
 
-const sal_Unicode* ScInterpreter::PopString()
+const String& ScInterpreter::PopString()
 {
     nCurFmtType = NUMBERFORMAT_TEXT;
     nCurFmtIndex = 0;
@@ -933,12 +917,12 @@ const sal_Unicode* ScInterpreter::PopString()
         if ( !nGlobalError )
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svString )
-            return p->cStr;
+            return p->GetString();
         else if( p->GetType() == svMissing )
-            return &cEmptyString;
+            return EMPTY_STRING;
     }
     SetError(errUnknownStackVariable);
-    return &cEmptyString;
+    return EMPTY_STRING;
 }
 
 
@@ -952,24 +936,24 @@ void ScInterpreter::PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab)
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svSingleRef )
         {
-            const SingleRefData& aRef = p->aRef.Ref1;
-            if ( aRef.IsColRel() )
-                rCol = aPos.Col() + aRef.nRelCol;
+            const SingleRefData& rRef = p->GetSingleRef();
+            if ( rRef.IsColRel() )
+                rCol = aPos.Col() + rRef.nRelCol;
             else
-                rCol = aRef.nCol;
-            if ( aRef.IsRowRel() )
-                rRow = aPos.Row() + aRef.nRelRow;
+                rCol = rRef.nCol;
+            if ( rRef.IsRowRel() )
+                rRow = aPos.Row() + rRef.nRelRow;
             else
-                rRow = aRef.nRow;
-            if ( aRef.IsTabRel() )
-                rTab = aPos.Tab() + aRef.nRelTab;
+                rRow = rRef.nRow;
+            if ( rRef.IsTabRel() )
+                rTab = aPos.Tab() + rRef.nRelTab;
             else
-                rTab = aRef.nTab;
-            if( rCol < 0 || rCol > MAXCOL || aRef.IsColDeleted() )
+                rTab = rRef.nTab;
+            if( rCol < 0 || rCol > MAXCOL || rRef.IsColDeleted() )
                 SetError( errNoRef ), rCol = 0;
-            if( rRow < 0 || rRow > MAXROW || aRef.IsRowDeleted() )
+            if( rRow < 0 || rRow > MAXROW || rRef.IsRowDeleted() )
                 SetError( errNoRef ), rRow = 0;
-            if( rTab < 0 || rTab >= pDok->GetTableCount() || aRef.IsTabDeleted() )
+            if( rTab < 0 || rTab >= pDok->GetTableCount() || rRef.IsTabDeleted() )
                 SetError( errNoRef ), rTab = 0;
             if ( aTableOpList.Count() > 0 )
                 ReplaceCell( rCol, rRow, rTab );
@@ -993,24 +977,24 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
         if( p->GetType() == svSingleRef )
         {
             short nCol, nRow, nTab;
-            const SingleRefData& aRef = p->aRef.Ref1;
-            if ( aRef.IsColRel() )
-                nCol = aPos.Col() + aRef.nRelCol;
+            const SingleRefData& rRef = p->GetSingleRef();
+            if ( rRef.IsColRel() )
+                nCol = aPos.Col() + rRef.nRelCol;
             else
-                nCol = aRef.nCol;
-            if ( aRef.IsRowRel() )
-                nRow = aPos.Row() + aRef.nRelRow;
+                nCol = rRef.nCol;
+            if ( rRef.IsRowRel() )
+                nRow = aPos.Row() + rRef.nRelRow;
             else
-                nRow = aRef.nRow;
-            if ( aRef.IsTabRel() )
-                nTab = aPos.Tab() + aRef.nRelTab;
+                nRow = rRef.nRow;
+            if ( rRef.IsTabRel() )
+                nTab = aPos.Tab() + rRef.nRelTab;
             else
-                nTab = aRef.nTab;
-            if( nCol < 0 || nCol > MAXCOL || aRef.IsColDeleted() )
+                nTab = rRef.nTab;
+            if( nCol < 0 || nCol > MAXCOL || rRef.IsColDeleted() )
                 SetError( errNoRef ), nCol = 0;
-            if( nRow < 0 || nRow > MAXROW || aRef.IsRowDeleted() )
+            if( nRow < 0 || nRow > MAXROW || rRef.IsRowDeleted() )
                 SetError( errNoRef ), nRow = 0;
-            if( nTab < 0 || nTab >= pDok->GetTableCount() || aRef.IsTabDeleted() )
+            if( nTab < 0 || nTab >= pDok->GetTableCount() || rRef.IsTabDeleted() )
                 SetError( errNoRef ), nTab = 0;
             rAdr.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
             if ( aTableOpList.Count() > 0 )
@@ -1036,47 +1020,48 @@ void ScInterpreter::PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svDoubleRef )
         {
+            const ComplRefData& rCRef = p->GetDoubleRef();
             USHORT nMaxTab = pDok->GetTableCount();
             {
-                const SingleRefData& aRef = p->aRef.Ref1;
-                if ( aRef.IsColRel() )
-                    rCol1 = aPos.Col() + aRef.nRelCol;
+                const SingleRefData& rRef = rCRef.Ref1;
+                if ( rRef.IsColRel() )
+                    rCol1 = aPos.Col() + rRef.nRelCol;
                 else
-                    rCol1 = aRef.nCol;
-                if ( aRef.IsRowRel() )
-                    rRow1 = aPos.Row() + aRef.nRelRow;
+                    rCol1 = rRef.nCol;
+                if ( rRef.IsRowRel() )
+                    rRow1 = aPos.Row() + rRef.nRelRow;
                 else
-                    rRow1 = aRef.nRow;
-                if ( aRef.IsTabRel() )
-                    rTab1 = aPos.Tab() + aRef.nRelTab;
+                    rRow1 = rRef.nRow;
+                if ( rRef.IsTabRel() )
+                    rTab1 = aPos.Tab() + rRef.nRelTab;
                 else
-                    rTab1 = aRef.nTab;
-                if( rCol1 < 0 || rCol1 > MAXCOL || aRef.IsColDeleted() )
+                    rTab1 = rRef.nTab;
+                if( rCol1 < 0 || rCol1 > MAXCOL || rRef.IsColDeleted() )
                     SetError( errNoRef ), rCol1 = 0;
-                if( rRow1 < 0 || rRow1 > MAXROW || aRef.IsRowDeleted() )
+                if( rRow1 < 0 || rRow1 > MAXROW || rRef.IsRowDeleted() )
                     SetError( errNoRef ), rRow1 = 0;
-                if( rTab1 < 0 || rTab1 >= nMaxTab || aRef.IsTabDeleted() )
+                if( rTab1 < 0 || rTab1 >= nMaxTab || rRef.IsTabDeleted() )
                     SetError( errNoRef ), rTab1 = 0;
             }
             {
-                const SingleRefData& aRef = p->aRef.Ref2;
-                if ( aRef.IsColRel() )
-                    rCol2 = aPos.Col() + aRef.nRelCol;
+                const SingleRefData& rRef = rCRef.Ref2;
+                if ( rRef.IsColRel() )
+                    rCol2 = aPos.Col() + rRef.nRelCol;
                 else
-                    rCol2 = aRef.nCol;
-                if ( aRef.IsRowRel() )
-                    rRow2 = aPos.Row() + aRef.nRelRow;
+                    rCol2 = rRef.nCol;
+                if ( rRef.IsRowRel() )
+                    rRow2 = aPos.Row() + rRef.nRelRow;
                 else
-                    rRow2 = aRef.nRow;
-                if ( aRef.IsTabRel() )
-                    rTab2 = aPos.Tab() + aRef.nRelTab;
+                    rRow2 = rRef.nRow;
+                if ( rRef.IsTabRel() )
+                    rTab2 = aPos.Tab() + rRef.nRelTab;
                 else
-                    rTab2 = aRef.nTab;
-                if( rCol2 < 0 || rCol2 > MAXCOL || aRef.IsColDeleted() )
+                    rTab2 = rRef.nTab;
+                if( rCol2 < 0 || rCol2 > MAXCOL || rRef.IsColDeleted() )
                     SetError( errNoRef ), rCol2 = 0;
-                if( rRow2 < 0 || rRow2 > MAXROW || aRef.IsRowDeleted() )
+                if( rRow2 < 0 || rRow2 > MAXROW || rRef.IsRowDeleted() )
                     SetError( errNoRef ), rRow2 = 0;
-                if( rTab2 < 0 || rTab2 >= nMaxTab || aRef.IsTabDeleted() )
+                if( rTab2 < 0 || rTab2 >= nMaxTab || rRef.IsTabDeleted() )
                     SetError( errNoRef ), rTab2 = 0;
             }
             if ( aTableOpList.Count() > 0 && !bDontCheckForTableOp )
@@ -1104,49 +1089,50 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svDoubleRef )
         {
+            const ComplRefData& rCRef = p->GetDoubleRef();
             short nCol, nRow, nTab;
             USHORT nMaxTab = pDok->GetTableCount();
             {
-                const SingleRefData& aRef = p->aRef.Ref1;
-                if ( aRef.IsColRel() )
-                    nCol = aPos.Col() + aRef.nRelCol;
+                const SingleRefData& rRef = rCRef.Ref1;
+                if ( rRef.IsColRel() )
+                    nCol = aPos.Col() + rRef.nRelCol;
                 else
-                    nCol = aRef.nCol;
-                if ( aRef.IsRowRel() )
-                    nRow = aPos.Row() + aRef.nRelRow;
+                    nCol = rRef.nCol;
+                if ( rRef.IsRowRel() )
+                    nRow = aPos.Row() + rRef.nRelRow;
                 else
-                    nRow = aRef.nRow;
-                if ( aRef.IsTabRel() )
-                    nTab = aPos.Tab() + aRef.nRelTab;
+                    nRow = rRef.nRow;
+                if ( rRef.IsTabRel() )
+                    nTab = aPos.Tab() + rRef.nRelTab;
                 else
-                    nTab = aRef.nTab;
-                if( nCol < 0 || nCol > MAXCOL || aRef.IsColDeleted() )
+                    nTab = rRef.nTab;
+                if( nCol < 0 || nCol > MAXCOL || rRef.IsColDeleted() )
                     SetError( errNoRef ), nCol = 0;
-                if( nRow < 0 || nRow > MAXROW || aRef.IsRowDeleted() )
+                if( nRow < 0 || nRow > MAXROW || rRef.IsRowDeleted() )
                     SetError( errNoRef ), nRow = 0;
-                if( nTab < 0 || nTab >= nMaxTab || aRef.IsTabDeleted() )
+                if( nTab < 0 || nTab >= nMaxTab || rRef.IsTabDeleted() )
                     SetError( errNoRef ), nTab = 0;
                 rRange.aStart.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
             }
             {
-                const SingleRefData& aRef = p->aRef.Ref2;
-                if ( aRef.IsColRel() )
-                    nCol = aPos.Col() + aRef.nRelCol;
+                const SingleRefData& rRef = rCRef.Ref2;
+                if ( rRef.IsColRel() )
+                    nCol = aPos.Col() + rRef.nRelCol;
                 else
-                    nCol = aRef.nCol;
-                if ( aRef.IsRowRel() )
-                    nRow = aPos.Row() + aRef.nRelRow;
+                    nCol = rRef.nCol;
+                if ( rRef.IsRowRel() )
+                    nRow = aPos.Row() + rRef.nRelRow;
                 else
-                    nRow = aRef.nRow;
-                if ( aRef.IsTabRel() )
-                    nTab = aPos.Tab() + aRef.nRelTab;
+                    nRow = rRef.nRow;
+                if ( rRef.IsTabRel() )
+                    nTab = aPos.Tab() + rRef.nRelTab;
                 else
-                    nTab = aRef.nTab;
-                if( nCol < 0 || nCol > MAXCOL || aRef.IsColDeleted() )
+                    nTab = rRef.nTab;
+                if( nCol < 0 || nCol > MAXCOL || rRef.IsColDeleted() )
                     SetError( errNoRef ), nCol = 0;
-                if( nRow < 0 || nRow > MAXROW || aRef.IsRowDeleted() )
+                if( nRow < 0 || nRow > MAXROW || rRef.IsRowDeleted() )
                     SetError( errNoRef ), nRow = 0;
-                if( nTab < 0 || nTab >= nMaxTab || aRef.IsTabDeleted() )
+                if( nTab < 0 || nTab >= nMaxTab || rRef.IsTabDeleted() )
                     SetError( errNoRef ), nTab = 0;
                 rRange.aEnd.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
             }
@@ -1217,7 +1203,7 @@ ScMatrix* ScInterpreter::PopMatrix()
         if ( !nGlobalError )
             nGlobalError = pErrorStack[ sp ];
         if( p->GetType() == svMatrix )
-            return p->pMat;
+            return p->GetMatrix();
         else if( p->GetType() == svMissing )
             SetError( errIllegalParameter );
     }
@@ -1236,59 +1222,45 @@ void ScInterpreter::PushDouble(double nVal)
         SetError(errIllegalFPOperation);
     }
 #endif
-    ScDoubleToken* pToken = new ScDoubleToken;
-    ((ScToken*)pToken)->SetDouble( nVal );
-    ((ScToken*)pToken)->bRaw = FALSE;
-    PushTempToken( pToken );
+    PushTempToken( new ScDoubleToken( nVal ) );
 }
 
 
 void ScInterpreter::PushInt(int nVal)
 {
-    ScDoubleToken* pToken = new ScDoubleToken;
-    ((ScToken*)pToken)->SetInt( nVal );
-    ((ScToken*)pToken)->bRaw = FALSE;
-    PushTempToken( pToken );
+    PushTempToken( new ScDoubleToken( nVal ) );
 }
 
 
-void ScInterpreter::PushString( const sal_Unicode* cString )
+void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )
 {
-    ScToken aToken;
-    aToken.SetString( cString );
-    PushTempToken( aToken );
-}
-
-
-void ScInterpreter::PushStringObject(const String& aString)
-{
-    if( aString.Len() >= MAXSTRLEN )
-    {
-        SetError( errStringOverflow );
-        PushString( NULL );
-    }
+    if ( pString )
+        PushString( String( pString ) );
     else
-        PushString( aString.GetBuffer() );
+        PushString( EMPTY_STRING );
+}
+
+
+void ScInterpreter::PushString( const String& rString )
+{
+    PushTempToken( new ScStringToken( rString ) );
 }
 
 
 void ScInterpreter::PushSingleRef(USHORT nCol, USHORT nRow, USHORT nTab)
 {
-    ScToken aToken;
     SingleRefData aRef;
     aRef.InitFlags();
     aRef.nCol = nCol;
     aRef.nRow = nRow;
     aRef.nTab = nTab;
-    aToken.SetSingleReference( aRef );
-    PushTempToken( aToken );
+    PushTempToken( new ScSingleRefToken( aRef ) );
 }
 
 
 void ScInterpreter::PushDoubleRef(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                                   USHORT nCol2, USHORT nRow2, USHORT nTab2)
 {
-    ScToken aToken;
     ComplRefData aRef;
     aRef.InitFlags();
     aRef.Ref1.nCol = nCol1;
@@ -1297,16 +1269,13 @@ void ScInterpreter::PushDoubleRef(USHORT nCol1, USHORT nRow1, USHORT nTab1,
     aRef.Ref2.nCol = nCol2;
     aRef.Ref2.nRow = nRow2;
     aRef.Ref2.nTab = nTab2;
-    aToken.SetDoubleReference( aRef );
-    PushTempToken( aToken );
+    PushTempToken( new ScDoubleRefToken( aRef ) );
 }
 
 
 void ScInterpreter::PushMatrix(ScMatrix* pMat)
 {
-    ScToken aToken;
-    aToken.SetMatrix( pMat );
-    PushTempToken( aToken );
+    PushTempToken( new ScMatrixToken( pMat ) );
 }
 
 
@@ -1451,16 +1420,16 @@ double ScInterpreter::GetDouble()
                 SetError(errIllegalArgument);
                 nVal = 0.0;
             }
-            break;
         }
+        break;
         case svSingleRef:
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
             ScBaseCell* pCell = GetCell( aAdr );
             nVal = GetCellValue( aAdr, pCell );
-            break;
         }
+        break;
         case svDoubleRef:
         {   // positionsabhaengige SingleRef generieren
             ScRange aRange;
@@ -1486,9 +1455,8 @@ double ScInterpreter::GetDouble()
 }
 
 
-const sal_Unicode* ScInterpreter::GetString()
+const String& ScInterpreter::GetString()
 {
-    const sal_Unicode* p;
     StackVar eRes = (StackVar) GetStackType();
     if( eRes == svDouble && pStack[ sp-1 ]->GetType() == svMissing )
         eRes = svString;
@@ -1501,11 +1469,12 @@ const sal_Unicode* ScInterpreter::GetString()
                                     NUMBERFORMAT_NUMBER,
                                     ScGlobal::eLnge);
             pFormatter->GetInputLineString(fVal, nIndex, aTempStr);
-            p = aTempStr.GetBuffer();
-            break;
+            return aTempStr;
         }
+        break;
         case svString:
-            p = PopString(); break;
+            return PopString();
+        break;
         case svSingleRef:
         {
             ScAddress aAdr;
@@ -1514,12 +1483,12 @@ const sal_Unicode* ScInterpreter::GetString()
             {
                 ScBaseCell* pCell = GetCell( aAdr );
                 GetCellString( aTempStr, pCell );
-                p = aTempStr.GetBuffer();
+                return aTempStr;
             }
             else
-                p = &cEmptyString;
-            break;
+                return EMPTY_STRING;
         }
+        break;
         case svDoubleRef:
         {   // positionsabhaengige SingleRef generieren
             ScRange aRange;
@@ -1529,18 +1498,17 @@ const sal_Unicode* ScInterpreter::GetString()
             {
                 ScBaseCell* pCell = GetCell( aAdr );
                 GetCellString( aTempStr, pCell );
-                p = aTempStr.GetBuffer();
+                return aTempStr;
             }
             else
-                p = &cEmptyString;
+                return EMPTY_STRING;
         }
         break;
         default:
             Pop();
             SetError(errIllegalParameter);
-            p = &cEmptyString;
     }
-    return p;
+    return EMPTY_STRING;
 }
 
 
@@ -1576,14 +1544,14 @@ void ScInterpreter::ScDBGet()
                     {
                         String rString;
                         ((ScStringCell*)pCell)->GetString(rString);
-                        PushStringObject(rString);
+                        PushString(rString);
                     }
                     break;
                     case CELLTYPE_EDIT:
                     {
                         String rString;
                         ((ScEditCell*)pCell)->GetString(rString);
-                        PushStringObject(rString);
+                        PushString(rString);
                     }
                     break;
                     case CELLTYPE_FORMULA:
@@ -1603,7 +1571,7 @@ void ScInterpreter::ScDBGet()
                         {
                             String rString;
                             ((ScFormulaCell*)pCell)->GetString(rString);
-                            PushStringObject(rString);
+                            PushString(rString);
                         }
                     }
                     break;
@@ -1628,9 +1596,8 @@ void ScInterpreter::ScExternal()
     USHORT nIndex;
     BYTE nParamCount = GetByte();
     String aUnoName;
-    // Achtung: Der String faengt im 2. Byte an!!
-    const sal_Unicode* pFuncName = pCur->cStr + 1;
-    if (ScGlobal::GetFuncCollection()->SearchFunc(pFuncName, nIndex))
+    String aFuncName( pCur->GetExternal() );
+    if (ScGlobal::GetFuncCollection()->SearchFunc(aFuncName, nIndex))
     {
         FuncData* pFuncData = (FuncData*)ScGlobal::GetFuncCollection()->At(nIndex);
         if (nParamCount == pFuncData->GetParamCount() - 1)
@@ -1730,7 +1697,7 @@ void ScInterpreter::ScExternal()
                             ppParam[0] = pcErg;
                             pFuncData->Call(ppParam);
                             String aUni( pcErg, osl_getThreadTextEncoding() );
-                            PushString( aUni.GetBuffer() );
+                            PushString( aUni );
                             delete[] pcErg;
                         }
                         break;
@@ -1775,7 +1742,7 @@ void ScInterpreter::ScExternal()
                                     PushDouble( pAs->GetValue() );
                                     break;
                                 case PTR_STRING :
-                                    PushStringObject( pAs->GetString() );
+                                    PushString( pAs->GetString() );
                                     break;
                                 default:
                                     SetError( errUnknownState );
@@ -1804,7 +1771,7 @@ void ScInterpreter::ScExternal()
             PushInt(0);
         }
     }
-    else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(pFuncName, FALSE) ).Len()  )
+    else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, FALSE) ).Len()  )
     {
         //  bLocalFirst=FALSE in FindFunction, cFunc should be the stored internal name
 
@@ -2144,7 +2111,7 @@ void ScInterpreter::ScExternal()
                 }                               // otherwise error code has been set in GetNewMat
             }
             else if ( aCall.HasString() )
-                PushStringObject( aCall.GetString() );
+                PushString( aCall.GetString() );
             else
                 PushDouble( aCall.GetValue() );
         }
@@ -2163,9 +2130,7 @@ void ScInterpreter::ScExternal()
 
 void ScInterpreter::ScMissing()
 {
-    ScToken aToken;
-    aToken.SetOpCode( ocMissing );
-    PushTempToken( aToken );
+    PushTempToken( new ScMissingToken );
 }
 
 
@@ -2174,7 +2139,7 @@ void ScInterpreter::ScMacro()
     SbxBase::ResetError();
 
     BYTE nParamCount = GetByte();
-    const sal_Unicode* pMacro = pCur->cStr + 1; // Achtung: Der String faengt im 2. Byte an!!
+    String aMacro( pCur->GetString() );
 
     SfxObjectShell* pDocSh = pDok->GetDocumentShell();
     if ( !pDocSh || !pDok->CheckMacroWarn() )
@@ -2196,7 +2161,7 @@ void ScInterpreter::ScMacro()
     //  dann aBasicStr, aMacroStr fuer SfxObjectShell::CallBasic zusammenbauen
 
     StarBASIC* pRoot = pDocSh->GetBasic();
-    SbxVariable* pVar = pRoot->Find( String( pMacro ), SbxCLASS_METHOD );
+    SbxVariable* pVar = pRoot->Find( aMacro, SbxCLASS_METHOD );
     if( !pVar || pVar->GetType() == SbxVOID || !pVar->ISA(SbMethod) )
     {
         SetError( errNoName );
@@ -2233,7 +2198,7 @@ void ScInterpreter::ScMacro()
                 pPar->PutDouble( GetDouble() );
             break;
             case svString:
-                pPar->PutString( String( GetString() ) );
+                pPar->PutString( GetString() );
             break;
             case svSingleRef:
             {
@@ -2381,7 +2346,7 @@ void ScInterpreter::ScMacro()
                 SetNoValue();
         }
         else
-            PushStringObject( refRes->GetString() );
+            PushString( refRes->GetString() );
         if( pVar->GetError() )
             SetNoValue();
     }
@@ -2501,7 +2466,7 @@ void ScInterpreter::ScTableOp()
     {
         String aCellString;
         GetCellString(aCellString, pFCell);
-        PushStringObject(aCellString);
+        PushString(aCellString);
     }
     if (pTableOp)
     {
@@ -2540,7 +2505,7 @@ void ScInterpreter::ScDefPar()
 
 void ScInterpreter::ScDBArea()
 {
-    ScDBData* pDBData = pDok->GetDBCollection()->FindIndex( pCur->nIndex);
+    ScDBData* pDBData = pDok->GetDBCollection()->FindIndex( pCur->GetIndex());
     if (pDBData)
     {
         ComplRefData aRefData;
@@ -2552,9 +2517,7 @@ void ScInterpreter::ScDBArea()
                           (USHORT&) aRefData.Ref2.nRow);
         aRefData.Ref2.nTab    = aRefData.Ref1.nTab;
         aRefData.CalcRelFromAbs( aPos );
-        ScToken aTok;
-        aTok.SetDoubleReference( aRefData );
-        PushTempToken( aTok );
+        PushTempToken( new ScDoubleRefToken( aRefData ) );
     }
     else
         SetError(errNoName);
@@ -2563,7 +2526,7 @@ void ScInterpreter::ScDBArea()
 
 void ScInterpreter::ScColRowNameAuto()
 {
-    ComplRefData aRefData( pCur->aRef );
+    ComplRefData aRefData( pCur->GetDoubleRef() );
     aRefData.CalcAbsIfRel( aPos );
     if ( aRefData.Valid() )
     {
@@ -2636,9 +2599,7 @@ void ScInterpreter::ScColRowNameAuto()
     }
     else
         SetError( errNoRef );
-    ScToken aTok;
-    aTok.SetDoubleReference( aRefData );
-    PushTempToken( aTok );
+    PushTempToken( new ScDoubleRefToken( aRefData ) );
 }
 
 // --- internals ------------------------------------------------------------
@@ -2666,7 +2627,7 @@ void ScInterpreter::ScCalcTeam()
         String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Timm, Ballach, Rathke, Rentz, Nebel" ) );
         if ( (GetByte() == 1) && SolarMath::ApproxEqual( GetDouble(), 1996) )
             aTeam.AppendAscii( "   (a word with 'B': -Olk, -Nietsch, -Daeumling)" );
-        PushStringObject( aTeam );
+        PushString( aTeam );
         bShown = TRUE;
     }
     else
@@ -2688,11 +2649,11 @@ void ScInterpreter::ScSpewFunc()
             case svSingleRef:
             case svDoubleRef:
             {
-                const sal_Unicode* p = GetString();
-                if ( !bRefresh && *p < 256 )
-                    bRefresh = (tolower( (sal_uChar) *p ) == 'r');
-                if ( !bClear && *p < 256 )
-                    bClear = (tolower( (sal_uChar) *p ) == 'c');
+                const sal_Unicode ch = GetString().GetChar(0);
+                if ( !bRefresh && ch < 256 )
+                    bRefresh = (tolower( (sal_uChar) ch ) == 'r');
+                if ( !bClear && ch < 256 )
+                    bClear = (tolower( (sal_uChar) ch ) == 'c');
             }
             break;
             default:
@@ -2712,7 +2673,7 @@ void ScInterpreter::ScSpewFunc()
 #else
     aStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "spitted out all spew :-(" ) );
 #endif
-    PushStringObject( aStr );
+    PushString( aStr );
 }
 
 
@@ -2893,9 +2854,9 @@ int main()
     while ( nParamCount-- )
         Pop();
     if ( !aResult.Len() )
-        PushStringObject( String( pGames[ eGame ], RTL_TEXTENCODING_ASCII_US ) );
+        PushString( String( pGames[ eGame ], RTL_TEXTENCODING_ASCII_US ) );
     else
-        PushStringObject( aResult );
+        PushString( aResult );
 }
 
 void ScInterpreter::ScTTT()
@@ -2929,7 +2890,7 @@ void ScInterpreter::ScTTT()
         aFace[2] = sBads[ rand() % ((sizeof( sBads )/sizeof(sal_Unicode)) - 1) ];
     }
     aFace[3] = 0;
-    PushString( aFace );
+    PushStringBuffer( aFace );
 }
 
 // -------------------------------------------------------------------------
@@ -3029,7 +2990,7 @@ StackVar ScInterpreter::Interpret()
             && (!nGlobalError || nErrorFunction <= nErrorFunctionCount) )
     {
         OpCode eOp = pCur->GetOpCode();
-        cPar = pCur->cByte;
+        cPar = pCur->GetByte();
         if ( eOp == ocPush )
         {
             Push( (ScToken&) *pCur );
@@ -3466,7 +3427,7 @@ StackVar ScInterpreter::Interpret()
             switch( eResult = pCur->GetType() )
             {
                 case svDouble :
-                    nResult = pCur->nValue;
+                    nResult = pCur->GetDouble();
                     if ( nFuncFmtType == NUMBERFORMAT_UNDEFINED )
                     {
                         nRetTypeExpr = NUMBERFORMAT_NUMBER;

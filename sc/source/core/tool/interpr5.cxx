@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 19:01:55 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ void ScInterpreter::ScMatValue()
                                 BOOL bIsString;
                                 const MatValue* pMatVal = pMat->Get(nC, nR, bIsString);
                                 if (bIsString)
-                                    PushStringObject(*(pMatVal->pS));
+                                    PushString(*(pMatVal->pS));
                                 else
                                     PushDouble(pMatVal->fVal);
                             }
@@ -700,7 +700,7 @@ void ScInterpreter::ScMatValue()
                     {
                         String aStr;
                         GetCellString(aStr, pCell);
-                        PushStringObject(aStr);
+                        PushString(aStr);
                     }
                 }
                 else
@@ -719,7 +719,7 @@ void ScInterpreter::ScMatValue()
                         BOOL bIsString;
                         const MatValue* pMatVal = pMat->Get(nC, nR, bIsString);
                         if (bIsString)
-                            PushStringObject(*(pMatVal->pS));
+                            PushString(*(pMatVal->pS));
                         else
                             PushDouble(pMatVal->fVal);
                     }
@@ -1741,11 +1741,9 @@ void ScInterpreter::ScAmpersand()
     }
     else
     {
-        sStr1 += sStr2;
-        if (sStr1.Len() < MAXSTRLEN)
-            PushStringObject(sStr1);
-        else
-            SetError(errStringOverflow);
+        if ( CheckStringResultLen( sStr1, sStr2 ) )
+            sStr1 += sStr2;
+        PushString(sStr1);
     }
 }
 
@@ -4024,7 +4022,7 @@ void ScInterpreter::ScMatRef()
                 BOOL bIsString;
                 const MatValue* pMatVal = pMat->Get(nC, nR, bIsString);
                 if (bIsString)
-                    PushStringObject(*(pMatVal->pS));
+                    PushString(*(pMatVal->pS));
                 else
                 {
                     PushDouble(pMatVal->fVal);
@@ -4047,7 +4045,7 @@ void ScInterpreter::ScMatRef()
             {
                 String aVal;
                 pCell->GetString( aVal );
-                PushStringObject( aVal );
+                PushString( aVal );
             }
             pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex, aAdr, *pCell );
             nFuncFmtType = nCurFmtType;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-02-16 17:48:54 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2314,34 +2314,48 @@ void ScChangeActionContent::PutValueToDoc( ScBaseCell* pCell,
 }
 
 
-void lcl_InvalidateReference( ComplRefData& rRef, const ScBigAddress& rPos )
+void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
 {
+    SingleRefData& rRef1 = rTok.GetSingleRef();
     if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
     {
-        rRef.Ref1.nCol = (INT16)(~0);
-        rRef.Ref1.nRelCol = (INT16)(~0);
-        rRef.Ref1.SetColDeleted( TRUE );
-        rRef.Ref2.nCol = (INT16)(~0);
-        rRef.Ref2.nRelCol = (INT16)(~0);
-        rRef.Ref2.SetColDeleted( TRUE );
+        rRef1.nCol = (INT16)(~0);
+        rRef1.nRelCol = (INT16)(~0);
+        rRef1.SetColDeleted( TRUE );
     }
     if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
     {
-        rRef.Ref1.nRow = (INT16)(~0);
-        rRef.Ref1.nRelRow = (INT16)(~0);
-        rRef.Ref1.SetRowDeleted( TRUE );
-        rRef.Ref2.nRow = (INT16)(~0);
-        rRef.Ref2.nRelRow = (INT16)(~0);
-        rRef.Ref2.SetRowDeleted( TRUE );
+        rRef1.nRow = (INT16)(~0);
+        rRef1.nRelRow = (INT16)(~0);
+        rRef1.SetRowDeleted( TRUE );
     }
     if ( rPos.Tab() < 0 || MAXTAB < rPos.Tab() )
     {
-        rRef.Ref1.nTab = (INT16)(~0);
-        rRef.Ref1.nRelTab = (INT16)(~0);
-        rRef.Ref1.SetTabDeleted( TRUE );
-        rRef.Ref2.nTab = (INT16)(~0);
-        rRef.Ref2.nRelTab = (INT16)(~0);
-        rRef.Ref2.SetTabDeleted( TRUE );
+        rRef1.nTab = (INT16)(~0);
+        rRef1.nRelTab = (INT16)(~0);
+        rRef1.SetTabDeleted( TRUE );
+    }
+    if ( rTok.GetType() == svDoubleRef )
+    {
+        SingleRefData& rRef2 = rTok.GetDoubleRef().Ref2;
+        if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
+        {
+            rRef2.nCol = (INT16)(~0);
+            rRef2.nRelCol = (INT16)(~0);
+            rRef2.SetColDeleted( TRUE );
+        }
+        if ( rPos.Row() < 0 || MAXROW < rPos.Row() )
+        {
+            rRef2.nRow = (INT16)(~0);
+            rRef2.nRelRow = (INT16)(~0);
+            rRef2.SetRowDeleted( TRUE );
+        }
+        if ( rPos.Tab() < 0 || MAXTAB < rPos.Tab() )
+        {
+            rRef2.nTab = (INT16)(~0);
+            rRef2.nRelTab = (INT16)(~0);
+            rRef2.SetTabDeleted( TRUE );
+        }
     }
 }
 
@@ -2440,10 +2454,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScTokenArray* pArr = ((ScFormulaCell*)pOldCell)->GetCode();
                 pArr->Reset();
                 while ( t = pArr->GetNextReference() )
-                    lcl_InvalidateReference( t->aRef, rPos );
+                    lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
                 while ( t = pArr->GetNextReferenceRPN() )
-                    lcl_InvalidateReference( t->aRef, rPos );
+                    lcl_InvalidateReference( *t, rPos );
             }
             if ( bNewFormula )
             {
@@ -2451,10 +2465,10 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
                 ScTokenArray* pArr = ((ScFormulaCell*)pNewCell)->GetCode();
                 pArr->Reset();
                 while ( t = pArr->GetNextReference() )
-                    lcl_InvalidateReference( t->aRef, rPos );
+                    lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
                 while ( t = pArr->GetNextReferenceRPN() )
-                    lcl_InvalidateReference( t->aRef, rPos );
+                    lcl_InvalidateReference( *t, rPos );
             }
         }
     }

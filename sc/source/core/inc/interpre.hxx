@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 19:01:00 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ struct ScCompare
         }
 };
 
-struct ScToken;
+class ScToken;
 
 #define MAXSTACK      (4096 / sizeof(ScToken*))
 
@@ -192,7 +192,6 @@ private:
     static ScTokenStack*    pGlobalStack;
     static ScErrorStack*    pGlobalErrorStack;
     static BOOL             bGlobalStackInUse;
-    static const sal_Unicode cEmptyString;      // =0 for return &cEmptyString
 
     ScTokenIterator aCode;
     ScAddress   aPos;
@@ -275,12 +274,12 @@ BOOL CreateCellArr(USHORT nCol1, USHORT nRow1, USHORT nTab1,
 //-----------------------------------------------------------------------------
 void Push( ScToken& r );
 void PushTempToken( const ScToken& );
-void PushTempToken( ScDoubleToken* );       //! see warnings in interpr4.cxx
+void PushTempToken( ScToken* );             //! see warnings in interpr4.cxx
 void Pop();
 void PopError();
 BYTE PopByte();
 double PopDouble();
-const sal_Unicode* PopString();
+const String& PopString();
 void PopSingleRef( ScAddress& );
 void PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab);
 void PopDoubleRef( ScRange&, BOOL bDontCheckForTableOp = FALSE );
@@ -294,8 +293,8 @@ ScMatrix* PopMatrix();
 //void PushByte(BYTE nVal);
 void PushDouble(double nVal);
 void PushInt( int nVal );
-void PushString(const sal_Unicode* cString);
-void PushStringObject(const String& aString);
+void PushStringBuffer( const sal_Unicode* pString );
+void PushString( const String& rString );
 void PushSingleRef(USHORT nCol, USHORT nRow, USHORT nTab);
 void PushDoubleRef(USHORT nCol1, USHORT nRow1, USHORT nTab1,
                                  USHORT nCol2, USHORT nRow2, USHORT nTab2);
@@ -312,7 +311,7 @@ double GetLong();
 BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDouble();
 BOOL GetBool() { return GetDouble() != 0.0; }
-const sal_Unicode* GetString();
+const String& GetString();
 ScMatrix* GetMatrix(USHORT& nMatInd);                   // in interpr2.cxx
 void ScTableOp();                                       // Mehrfachoperationen
 void ScErrCell();                                       // Sonderbehandlung
@@ -322,6 +321,9 @@ void ScDefPar();                                        // DefaultParameter
 void SetMaxIterationCount(USHORT n);
 inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
+// Check for String overflow of rResult+rAdd and set error and erase rResult
+// if so. Return TRUE if ok, FALSE if overflow
+inline BOOL CheckStringResultLen( String& rResult, const String& rAdd );
 //---------------------------------Funktionen in interpr1.cxx---------
 //-----------------------------Textfunktionen
 void ScIfJump();
@@ -740,5 +742,16 @@ inline BOOL ScInterpreter::MustHaveParamCountMin( BYTE nAct, BYTE nMin )
     return FALSE;
 }
 
+
+inline BOOL ScInterpreter::CheckStringResultLen( String& rResult, const String& rAdd )
+{
+    if ( (ULONG) rResult.Len() + rAdd.Len() > STRING_MAXLEN )
+    {
+        SetError( errStringOverflow );
+        rResult.Erase();
+        return FALSE;
+    }
+    return TRUE;
+}
 
 #endif

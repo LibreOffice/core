@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-13 17:12:29 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,7 @@ void ScDocument::InsertMatrixFormula(USHORT nCol1, USHORT nRow1,
             {
                 aRefData.nTab = i;
                 aRefData.nRelTab = i - nTab1;
-                t->SetSingleReference( aRefData );
-                t->NewOpCode( ocMatRef );
+                t->GetSingleRef() = aRefData;
             }
             for (j = nCol1; j <= nCol2; j++)
             {
@@ -221,7 +220,7 @@ void ScDocument::InsertMatrixFormula(USHORT nCol1, USHORT nRow1,
                         // Array muss geklont werden, damit jede
                         // Zelle ein eigenes Array erhaelt!
                         aPos = ScAddress( j, k, i );
-                        t->aRef.CalcRelFromAbs( aPos );
+                        t->CalcRelFromAbs( aPos );
                         pCell = new ScFormulaCell( this, aPos, aArr.Clone(), MM_REFERENCE );
                         pTab[i]->PutCell(j, k, (ScBaseCell*) pCell);
                     }

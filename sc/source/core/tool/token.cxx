@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-16 19:09:06 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,13 +97,33 @@ struct ImpTokenIterator
 // SubCode via ScTokenIterator Push/Pop moeglich
 IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 );
 
-// Raw-ScToken Groesse ist FixMembers + MAXSTRLEN ~= 264
-IMPL_FIXEDMEMPOOL_NEWDEL( ScToken, 8, 4 );
-// ScDoubleToken werden evtl. massig gebraucht, FixMembers + sizeof(double) ~= 16
-const USHORT nMemPoolDoubleToken = (0x4000 - 64) / sizeof(ScDoubleToken);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleToken, nMemPoolDoubleToken, nMemPoolDoubleToken );
+// Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
-//-----------------------Funktionen der Klasse ScToken------------------------
+// Since RawTokens are temporary for the compiler, don't align on 4k and waste memory.
+// ScRawToken size is FixMembers + MAXSTRLEN ~= 264
+IMPL_FIXEDMEMPOOL_NEWDEL( ScRawToken, 8, 4 );
+// Some ScDoubleRawToken, FixMembers + sizeof(double) ~= 16
+const USHORT nMemPoolDoubleRawToken = 0x0400 / sizeof(ScDoubleRawToken);
+IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken, nMemPoolDoubleRawToken, nMemPoolDoubleRawToken );
+
+// Need a whole bunch of ScSingleRefToken
+const USHORT nMemPoolSingleRefToken = (0x4000 - 64) / sizeof(ScSingleRefToken);
+IMPL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken, nMemPoolSingleRefToken, nMemPoolSingleRefToken );
+// Need a lot of ScDoubleToken
+const USHORT nMemPoolDoubleToken = (0x3000 - 64) / sizeof(ScDoubleToken);
+IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleToken, nMemPoolDoubleToken, nMemPoolDoubleToken );
+// Need a lot of ScByteToken
+const USHORT nMemPoolByteToken = (0x3000 - 64) / sizeof(ScByteToken);
+IMPL_FIXEDMEMPOOL_NEWDEL( ScByteToken, nMemPoolByteToken, nMemPoolByteToken );
+// Need quite a lot of ScDoubleRefToken
+const USHORT nMemPoolDoubleRefToken = (0x2000 - 64) / sizeof(ScDoubleRefToken);
+IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken, nMemPoolDoubleRefToken, nMemPoolDoubleRefToken );
+// Need several ScStringToken
+const USHORT nMemPoolStringToken = (0x1000 - 64) / sizeof(ScStringToken);
+IMPL_FIXEDMEMPOOL_NEWDEL( ScStringToken, nMemPoolStringToken, nMemPoolStringToken );
+
+
+// --- helpers --------------------------------------------------------------
 
 inline BOOL lcl_IsReference( OpCode eOp, StackVar eType )
 {
@@ -116,7 +136,9 @@ inline BOOL lcl_IsReference( OpCode eOp, StackVar eType )
 }
 
 
-xub_StrLen ScToken::GetStrLen( const sal_Unicode* pStr )
+// --- class ScRawToken -----------------------------------------------------
+
+xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
 {
     if ( !pStr )
         return 0;
@@ -127,20 +149,263 @@ xub_StrLen ScToken::GetStrLen( const sal_Unicode* pStr )
 }
 
 
+void ScRawToken::SetOpCode( OpCode e )
+{
+    eOp   = e;
+    if( eOp == ocIf )
+    {
+        eType = svJump; nJump[ 0 ] = 3; // If, Else, Behind
+    }
+    else if( eOp == ocChose )
+    {
+        eType = svJump; nJump[ 0 ] = MAXJUMPCOUNT+1;
+    }
+    else if( eOp == ocMissing )
+        eType = svMissing;
+    else
+        eType = svByte, cByte = 0;
+    nRefCnt = 0;
+}
+
+void ScRawToken::SetString( const sal_Unicode* pStr )
+{
+    eOp   = ocPush;
+    eType = svString;
+    if ( pStr )
+    {
+        xub_StrLen nLen = GetStrLen( pStr ) + 1;
+        if( nLen > MAXSTRLEN )
+            nLen = MAXSTRLEN;
+        memcpy( cStr, pStr, GetStrLenBytes( nLen ) );
+        cStr[ nLen-1 ] = 0;
+    }
+    else
+        cStr[0] = 0;
+    nRefCnt = 0;
+}
+
+void ScRawToken::SetSingleReference( const SingleRefData& rRef )
+{
+    eOp       = ocPush;
+    eType     = svSingleRef;
+    aRef.Ref1 =
+    aRef.Ref2 = rRef;
+    nRefCnt   = 0;
+}
+
+void ScRawToken::SetDoubleReference( const ComplRefData& rRef )
+{
+    eOp   = ocPush;
+    eType = svDoubleRef;
+    aRef  = rRef;
+    nRefCnt = 0;
+}
+
+void ScRawToken::SetReference( ComplRefData& rRef )
+{
+    DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
+    aRef = rRef;
+    if( GetType() == svSingleRef )
+        aRef.Ref2 = aRef.Ref1;
+}
+
+void ScRawToken::SetByte( BYTE c )
+{
+    eOp   = ocPush;
+    eType = svByte;
+    cByte = c;
+    nRefCnt = 0;
+}
+
+void ScRawToken::SetDouble(double rVal)
+{
+    eOp   = ocPush;
+    eType = svDouble;
+    nValue = rVal;
+    nRefCnt = 0;
+}
+
+void ScRawToken::SetInt(int rVal)
+{
+    eOp   = ocPush;
+    eType = svDouble;
+    nValue = (double)rVal;
+    nRefCnt = 0;
+}
+
+void ScRawToken::SetName( USHORT n )
+{
+    eOp    = ocName;
+    eType  = svIndex;
+    nIndex = n;
+    nRefCnt = 0;
+}
+
+ComplRefData& ScRawToken::GetReference()
+{
+    DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
+    return aRef;
+}
+
+void ScRawToken::SetExternal( const sal_Unicode* pStr )
+{
+    eOp   = ocExternal;
+    eType = svExternal;
+    xub_StrLen nLen = GetStrLen( pStr ) + 1;
+    if( nLen >= MAXSTRLEN )
+        nLen = MAXSTRLEN-1;
+    // Platz fuer Byte-Parameter lassen!
+    memcpy( cStr+1, pStr, GetStrLenBytes( nLen ) );
+    cStr[ nLen+1 ] = 0;
+    nRefCnt = 0;
+}
+
+void ScRawToken::SetMatrix( ScMatrix* p )
+{
+    eOp   = ocPush;
+    eType = svMatrix;
+    pMat  = p;
+    nRefCnt = 0;
+}
+
+ScRawToken* ScRawToken::Clone() const
+{
+    ScRawToken* p;
+    if ( eType == svDouble )
+    {
+        p = (ScRawToken*) new ScDoubleRawToken;
+        p->eOp = eOp;
+        p->eType = eType;
+        p->nValue = nValue;
+    }
+    else
+    {
+        USHORT n = offsetof( ScRawToken, cByte );
+        switch( eType )
+        {
+            case svByte:        n++; break;
+            case svDouble:      n += sizeof(double); break;
+            case svString:      n += GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ); break;
+            case svSingleRef:
+            case svDoubleRef:   n += sizeof(aRef); break;
+            case svMatrix:      n += sizeof(ScMatrix*); break;
+            case svIndex:       n += sizeof(USHORT); break;
+            case svJump:        n += nJump[ 0 ] * 2 + 2; break;
+            case svExternal:    n += GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ); break;
+            default:            n += (BYTE) cStr[ 0 ];  // unbekannt eingelesen!
+        }
+        p = (ScRawToken*) new BYTE[ n ];
+        memcpy( p, this, n * sizeof(BYTE) );
+    }
+    p->nRefCnt = 0;
+    p->bRaw = FALSE;
+    return p;
+}
+
+
+ScToken* ScRawToken::CreateToken() const
+{
+    switch ( GetType() )
+    {
+        case svByte :
+            return new ScByteToken( eOp, cByte );
+        break;
+        case svDouble :
+            return new ScDoubleToken( eOp, nValue );
+        break;
+        case svString :
+            return new ScStringToken( eOp, String( cStr ) );
+        break;
+        case svSingleRef :
+            return new ScSingleRefToken( eOp, aRef.Ref1 );
+        break;
+        case svDoubleRef :
+            return new ScDoubleRefToken( eOp, aRef );
+        break;
+        case svMatrix :
+            return new ScMatrixToken( eOp, pMat );
+        break;
+        case svIndex :
+            return new ScIndexToken( eOp, nIndex );
+        break;
+        case svJump :
+            return new ScJumpToken( eOp, (short*) nJump );
+        break;
+        case svExternal :
+            return new ScExternalToken( eOp, (BYTE) cStr[0], String( cStr[1] ) );
+        break;
+        case svMissing :
+            return new ScMissingToken( eOp );
+        break;
+        case svErr :
+            return new ScErrToken( eOp );
+        break;
+        default:
+            // read in unknown!
+            return new ScUnknownToken( eOp, GetType(), (BYTE*) cStr );
+    }
+}
+
+
+void ScRawToken::Delete()
+{
+    if ( bRaw )
+        delete this;                            // FixedMemPool ScRawToken
+    else
+    {   // created per Clone
+        switch ( eType )
+        {
+            case svDouble :
+                delete (ScDoubleRawToken*) this;    // FixedMemPool ScDoubleRawToken
+            break;
+            default:
+                delete [] (BYTE*) this;
+        }
+    }
+}
+
+
+// --- class ScToken --------------------------------------------------------
+
+SingleRefData lcl_ScToken_InitSingleRef()
+{
+    SingleRefData aRef;
+    aRef.InitAddress( ScAddress() );
+    return aRef;
+}
+
+ComplRefData lcl_ScToken_InitDoubleRef()
+{
+    ComplRefData aRef;
+    aRef.Ref1 = lcl_ScToken_InitSingleRef();
+    aRef.Ref2 = aRef.Ref1;
+    return aRef;
+}
+
+SingleRefData   ScToken::aDummySingleRef = lcl_ScToken_InitSingleRef();
+ComplRefData    ScToken::aDummyDoubleRef = lcl_ScToken_InitDoubleRef();
+String          ScToken::aDummyString;
+
+
+ScToken::~ScToken()
+{
+}
+
+
 BOOL ScToken::IsFunction() const
 {
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
-           (cByte != 0                              // x Parameter
-        || (ocEndUnOp < eOp && eOp <= ocEndNoPar)   // kein Parameter
-        || (ocIf == eOp ||  ocChose ==  eOp     )   //@ Sprung Kommandos
-        || (ocEndNoPar < eOp && eOp <= ocEnd1Par)   // ein Parameter
-        || (ocEnd1Par < eOp && eOp <= ocEnd2Par)    // x Parameter (cByte==0 in
+           (GetByte() != 0                          // x parameters
+        || (ocEndUnOp < eOp && eOp <= ocEndNoPar)   // no parameter
+        || (ocIf == eOp ||  ocChose ==  eOp     )   // @ jump commands
+        || (ocEndNoPar < eOp && eOp <= ocEnd1Par)   // one parameter
+        || (ocEnd1Par < eOp && eOp <= ocEnd2Par)    // x parameters (cByte==0 in
                                                     // FuncAutoPilot)
-        || eOp == ocMacro || eOp == ocExternal      // Makros, AddIns
-        || eOp == ocAnd || eOp == ocOr              // ehemals binaer, jetzt x Params
-        || eOp == ocNot || eOp == ocNeg             // unaer aber Function
-        || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     // Internal
+        || eOp == ocMacro || eOp == ocExternal      // macros, AddIns
+        || eOp == ocAnd || eOp == ocOr              // former binary, now x parameters
+        || eOp == ocNot || eOp == ocNeg             // unary but function
+        || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     // internal
         ));
 }
 
@@ -149,22 +414,22 @@ BYTE ScToken::GetParamCount() const
 {
     if ( eOp <= ocEndDiv && eOp != ocExternal && eOp != ocMacro &&
             eOp != ocIf && eOp != ocChose )
-        return 0;       // Parameter und Specials
-                        // ocIf und ocChose fuer FAP nicht, haben dann cByte
-//2do: BOOL-Parameter ob FAP oder nicht?
-    else if ( cByte )
-        return cByte;   // alle Funktionen, gilt auch fuer ocExternal und ocMacro
+        return 0;       // parameters and specials
+                        // ocIf and ocChose not for FAP, have cByte then
+//2do: BOOL parameter whether FAP or not?
+    else if ( GetByte() )
+        return GetByte();   // all functions, also ocExternal and ocMacro
     else if ( ocEndDiv < eOp && eOp <= ocEndBinOp )
-        return 2;       // binaer
+        return 2;           // binary
     else if ( ocEndBinOp < eOp && eOp <= ocEndUnOp )
-        return 1;       // unaer
+        return 1;           // unary
     else if ( ocEndUnOp < eOp && eOp <= ocEndNoPar )
-        return 0;       // kein Parameter
+        return 0;           // no parameter
     else if ( ocEndNoPar < eOp && eOp <= ocEnd1Par )
-        return 1;       // ein Parameter
+        return 1;           // one parameter
     else
-        return 0;       // der Rest, kein Parameter, oder
-                        // wenn dann sollte er in cByte sein
+        return 0;           // all the rest, no Parameter, or
+                            // if so then it should be in cByte
 }
 
 
@@ -189,218 +454,90 @@ BOOL ScToken::IsMatrixFunction() const
 }
 
 
-void ScToken::SetOpCode( OpCode e )
-{
-    eOp   = e;
-    if( eOp == ocIf )
-    {
-        eType = svJump; nJump[ 0 ] = 3; // If, Else, Behind
-    }
-    else if( eOp == ocChose )
-    {
-        eType = svJump; nJump[ 0 ] = MAXJUMPCOUNT+1;
-    }
-    else if( eOp == ocMissing )
-        eType = svMissing;
-    else
-        eType = svByte, cByte = 0;
-    nRefCnt = 0;
-}
-
-void ScToken::SetString( const sal_Unicode* pStr )
-{
-    eOp   = ocPush;
-    eType = svString;
-    if ( pStr )
-    {
-        xub_StrLen nLen = GetStrLen( pStr ) + 1;
-        if( nLen > MAXSTRLEN )
-            nLen = MAXSTRLEN;
-        memcpy( cStr, pStr, GetStrLenBytes( nLen ) );
-        cStr[ nLen-1 ] = 0;
-    }
-    else
-        cStr[0] = 0;
-    nRefCnt = 0;
-}
-
-void ScToken::SetSingleReference( const SingleRefData& rRef )
-{
-    eOp       = ocPush;
-    eType     = svSingleRef;
-    aRef.Ref1 =
-    aRef.Ref2 = rRef;
-    nRefCnt   = 0;
-}
-
-void ScToken::SetDoubleReference( const ComplRefData& rRef )
-{
-    eOp   = ocPush;
-    eType = svDoubleRef;
-    aRef  = rRef;
-    nRefCnt = 0;
-}
-
-void ScToken::SetReference( ComplRefData& rRef )
-{
-    DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "SetReference: no Ref" );
-    aRef = rRef;
-    if( GetType() == svSingleRef )
-        aRef.Ref2 = aRef.Ref1;
-}
-
-void ScToken::SetByte( BYTE c )
-{
-    eOp   = ocPush;
-    eType = svByte;
-    cByte = c;
-    nRefCnt = 0;
-}
-
-void ScToken::SetDouble(double rVal)
-{
-    eOp   = ocPush;
-    eType = svDouble;
-    nValue = rVal;
-    nRefCnt = 0;
-}
-
-void ScToken::SetInt(int rVal)
-{
-    eOp   = ocPush;
-    eType = svDouble;
-    nValue = (double)rVal;
-    nRefCnt = 0;
-}
-
-void ScToken::SetName( USHORT n )
-{
-    eOp    = ocName;
-    eType  = svIndex;
-    nIndex = n;
-    nRefCnt = 0;
-}
-
-ComplRefData& ScToken::GetReference()
-{
-    DBG_ASSERT( lcl_IsReference( eOp, GetType() ), "GetReference: no Ref" );
-    return aRef;
-}
-
-void ScToken::SetExternal( const sal_Unicode* pStr )
-{
-    eOp   = ocExternal;
-    eType = svExternal;
-    xub_StrLen nLen = GetStrLen( pStr ) + 1;
-    if( nLen >= MAXSTRLEN )
-        nLen = MAXSTRLEN-1;
-    // Platz fuer Byte-Parameter lassen!
-    memcpy( cStr+1, pStr, GetStrLenBytes( nLen ) );
-    cStr[ nLen+1 ] = 0;
-    nRefCnt = 0;
-}
-
-void ScToken::SetMatrix( ScMatrix* p )
-{
-    eOp   = ocPush;
-    eType = svMatrix;
-    pMat  = p;
-    nRefCnt = 0;
-}
-
 ScToken* ScToken::Clone() const
 {
-    ScToken* p;
-    if ( eType == svDouble )
+    switch ( GetType() )
     {
-        p = (ScToken*) new ScDoubleToken;
-        p->eOp = eOp;
-        p->eType = eType;
-        p->nValue = nValue;
+        case svByte :
+            return new ScByteToken( *static_cast<const ScByteToken*>(this) );
+        break;
+        case svDouble :
+            return new ScDoubleToken( *static_cast<const ScDoubleToken*>(this) );
+        break;
+        case svString :
+            return new ScStringToken( *static_cast<const ScStringToken*>(this) );
+        break;
+        case svSingleRef :
+            return new ScSingleRefToken( *static_cast<const ScSingleRefToken*>(this) );
+        break;
+        case svDoubleRef :
+            return new ScDoubleRefToken( *static_cast<const ScDoubleRefToken*>(this) );
+        break;
+        case svMatrix :
+            return new ScMatrixToken( *static_cast<const ScMatrixToken*>(this) );
+        break;
+        case svIndex :
+            return new ScIndexToken( *static_cast<const ScIndexToken*>(this) );
+        break;
+        case svJump :
+            return new ScJumpToken( *static_cast<const ScJumpToken*>(this) );
+        break;
+        case svExternal :
+            return new ScExternalToken( *static_cast<const ScExternalToken*>(this) );
+        break;
+        case svMissing :
+            return new ScMissingToken( *static_cast<const ScMissingToken*>(this) );
+        break;
+        case svErr :
+            return new ScErrToken( *static_cast<const ScErrToken*>(this) );
+        break;
+        default:
+            // read in unknown!
+            return new ScUnknownToken( *static_cast<const ScUnknownToken*>(this) );
     }
-    else
-    {
-        USHORT n = offsetof( ScToken, cByte );
-        switch( eType )
-        {
-            case svByte:        n++; break;
-            case svDouble:      n += sizeof(double); break;
-            case svString:      n += GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ); break;
-            case svSingleRef:
-            case svDoubleRef:   n += sizeof(aRef); break;
-            case svMatrix:      n += sizeof(ScMatrix*); break;
-            case svIndex:       n += sizeof(USHORT); break;
-            case svJump:        n += nJump[ 0 ] * 2 + 2; break;
-            case svExternal:    n += GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ); break;
-            default:            n += (BYTE) cStr[ 0 ];  // unbekannt eingelesen!
-        }
-        p = (ScToken*) new BYTE[ n ];
-        memcpy( p, this, n * sizeof(BYTE) );
-    }
-    p->nRefCnt = 0;
-    p->bRaw = FALSE;
-    return p;
 }
 
-BOOL ScToken::operator== (const ScToken& rToken) const
+BOOL ScToken::operator==( const ScToken& rToken ) const
 {
-    //  Ref-Count und bRaw darf hier nicht mit verglichen werden!!!
-
-    USHORT n = 0;
-    switch( eType )
-    {
-        case svByte:        n++; break;
-        case svDouble:      n += sizeof(double); break;
-        case svString:      n += GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ); break;
-        case svSingleRef:
-        case svDoubleRef:   n += sizeof(aRef); break;
-        case svMatrix:      n += sizeof(ScMatrix*); break;
-        case svIndex:       n += sizeof(USHORT); break;
-        case svJump:        n += nJump[ 0 ] * 2 + 2; break;
-        case svExternal:    n += GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ); break;
-        default:            n += (BYTE) cStr[ 0 ];  // unbekannt eingelesen!
-    }
-    return eOp == rToken.eOp && eType == rToken.eType &&
-            ( n == 0 || memcmp( &cByte, &rToken.cByte, n ) == 0 );
+    // don't compare reference count!
+    return eOp == rToken.eOp && eType == rToken.eType;
 }
 
-void ScToken::Delete()
-{
-    if ( bRaw )
-        delete this;                            // FixedMemPool ScToken
-    else
-    {   // per Clone erzeugt
-        switch ( eType )
-        {
-            case svDouble :
-                delete (ScDoubleToken*) this;   // FixedMemPool ScDoubleToken
-            break;
-            default:
-                delete [] (BYTE*) this;
-        }
-    }
-}
 
-//  TextEqual: gleiche Formel eingegeben (fuer Optimierung beim Sortieren)
-
-BOOL ScToken::TextEqual(const ScToken& rToken) const
+//  TextEqual: if same formula entered (for optimization in sort)
+BOOL ScToken::TextEqual( const ScToken& rToken ) const
 {
     if ( eType == svSingleRef || eType == svDoubleRef )
     {
-        //  bei relativen Refs auch nur den relativen Teil vergleichen
+        //  in relative Refs only compare relative parts
 
         if ( eOp != rToken.eOp || eType != rToken.eType )
             return FALSE;
 
-        ComplRefData aTemp1 = aRef;
-        ComplRefData aTemp2 = rToken.aRef;
+        ComplRefData aTemp1;
+        if ( eType == svSingleRef )
+        {
+            aTemp1.Ref1 = GetSingleRef();
+            aTemp1.Ref2 = aTemp1.Ref1;
+        }
+        else
+            aTemp1 = GetDoubleRef();
+
+        ComplRefData aTemp2;
+        if ( rToken.eType == svSingleRef )
+        {
+            aTemp2.Ref1 = rToken.GetSingleRef();
+            aTemp2.Ref2 = aTemp2.Ref1;
+        }
+        else
+            aTemp2 = rToken.GetDoubleRef();
 
         ScAddress aPos;
         aTemp1.SmartRelAbs(aPos);
         aTemp2.SmartRelAbs(aPos);
 
-        //  memcmp geht schief wegen des Alignment-Bytes hinter bFlags
-        //  nach SmartRelAbs muessen nur die absoluten Teile verglichen werden
+        //  memcmp doesn't work because of the alignment byte after bFlags.
+        //  After SmartRelAbs only absolute parts have to be compared.
         return aTemp1.Ref1.nCol   == aTemp2.Ref1.nCol   &&
                aTemp1.Ref1.nRow   == aTemp2.Ref1.nRow   &&
                aTemp1.Ref1.nTab   == aTemp2.Ref1.nTab   &&
@@ -411,8 +548,217 @@ BOOL ScToken::TextEqual(const ScToken& rToken) const
                aTemp1.Ref2.bFlags == aTemp2.Ref2.bFlags;
     }
     else
-        return *this == rToken;     // sonst normaler operator==
+        return *this == rToken;     // else normal operator==
 }
+
+
+// virtual dummy methods
+
+BYTE ScToken::GetByte() const
+{
+    // ok to be called for any derived class
+    return 0;
+}
+
+void ScToken::SetByte( BYTE n )
+{
+    DBG_ERRORFILE( "ScToken::SetByte: virtual dummy called" );
+}
+
+double ScToken::GetDouble() const
+{
+    DBG_ERRORFILE( "ScToken::GetDouble: virtual dummy called" );
+    return 0.0;
+}
+
+const String& ScToken::GetString() const
+{
+    DBG_ERRORFILE( "ScToken::GetString: virtual dummy called" );
+    return aDummyString;
+}
+
+const SingleRefData& ScToken::GetSingleRef() const
+{
+    DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
+    return aDummySingleRef;
+}
+
+SingleRefData& ScToken::GetSingleRef()
+{
+    DBG_ERRORFILE( "ScToken::GetSingleRef: virtual dummy called" );
+    return aDummySingleRef;
+}
+
+const ComplRefData& ScToken::GetDoubleRef() const
+{
+    DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
+    return aDummyDoubleRef;
+}
+
+ComplRefData& ScToken::GetDoubleRef()
+{
+    DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
+    return aDummyDoubleRef;
+}
+
+void ScToken::CalcAbsIfRel( const ScAddress& rPos )
+{
+    DBG_ERRORFILE( "ScToken::CalcAbsIfRel: virtual dummy called" );
+}
+
+void ScToken::CalcRelFromAbs( const ScAddress& rPos )
+{
+    DBG_ERRORFILE( "ScToken::CalcRelFromAbs: virtual dummy called" );
+}
+
+ScMatrix* ScToken::GetMatrix() const
+{
+    DBG_ERRORFILE( "ScToken::GetMatrix: virtual dummy called" );
+    return NULL;
+}
+
+USHORT ScToken::GetIndex() const
+{
+    DBG_ERRORFILE( "ScToken::GetIndex: virtual dummy called" );
+    return 0;
+}
+
+void ScToken::SetIndex( USHORT n )
+{
+    DBG_ERRORFILE( "ScToken::SetIndex: virtual dummy called" );
+}
+
+short* ScToken::GetJump() const
+{
+    DBG_ERRORFILE( "ScToken::GetJump: virtual dummy called" );
+    return NULL;
+}
+
+const String& ScToken::GetExternal() const
+{
+    DBG_ERRORFILE( "ScToken::GetExternal: virtual dummy called" );
+    return aDummyString;
+}
+
+BYTE* ScToken::GetUnknown() const
+{
+    DBG_ERRORFILE( "ScToken::GetUnknown: virtual dummy called" );
+    return NULL;
+}
+
+
+// real implementations of virtual functions
+
+BYTE ScByteToken::GetByte() const                       { return nByte; }
+void ScByteToken::SetByte( BYTE n )                     { nByte = n; }
+BOOL ScByteToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && nByte == r.GetByte();
+}
+
+
+double ScDoubleToken::GetDouble() const                 { return fDouble; }
+BOOL ScDoubleToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && fDouble == r.GetDouble();
+}
+
+
+const String& ScStringToken::GetString() const          { return aString; }
+BOOL ScStringToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && aString == r.GetString();
+}
+
+
+const SingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
+SingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
+void                    ScSingleRefToken::CalcAbsIfRel( const ScAddress& rPos )
+                            { aSingleRef.CalcAbsIfRel( rPos ); }
+void                    ScSingleRefToken::CalcRelFromAbs( const ScAddress& rPos )
+                            { aSingleRef.CalcRelFromAbs( rPos ); }
+BOOL ScSingleRefToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && aSingleRef == r.GetSingleRef();
+}
+
+
+const SingleRefData&    ScDoubleRefToken::GetSingleRef() const  { return aDoubleRef.Ref1; }
+SingleRefData&          ScDoubleRefToken::GetSingleRef()        { return aDoubleRef.Ref1; }
+const ComplRefData&     ScDoubleRefToken::GetDoubleRef() const  { return aDoubleRef; }
+ComplRefData&           ScDoubleRefToken::GetDoubleRef()        { return aDoubleRef; }
+void                    ScDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
+                            { aDoubleRef.CalcAbsIfRel( rPos ); }
+void                    ScDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
+                            { aDoubleRef.CalcRelFromAbs( rPos ); }
+BOOL ScDoubleRefToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && aDoubleRef == r.GetDoubleRef();
+}
+
+
+ScMatrix* ScMatrixToken::GetMatrix() const              { return pMatrix; }
+BOOL ScMatrixToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && pMatrix == r.GetMatrix();
+}
+
+
+USHORT  ScIndexToken::GetIndex() const                  { return nIndex; }
+void    ScIndexToken::SetIndex( USHORT n )              { nIndex = n; }
+BOOL ScIndexToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && nIndex == r.GetIndex();
+}
+
+
+short* ScJumpToken::GetJump() const                     { return pJump; }
+BOOL ScJumpToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
+        memcmp( pJump+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0;
+}
+ScJumpToken::~ScJumpToken()
+{
+    delete [] pJump;
+}
+
+
+const String&   ScExternalToken::GetExternal() const    { return aExternal; }
+BYTE            ScExternalToken::GetByte() const        { return nByte; }
+void            ScExternalToken::SetByte( BYTE n )      { nByte = n; }
+BOOL ScExternalToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && nByte == r.GetByte() &&
+        aExternal == r.GetExternal();
+}
+
+
+double          ScMissingToken::GetDouble() const       { return 0.0; }
+const String&   ScMissingToken::GetString() const       { return aDummyString; }
+BOOL ScMissingToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r );
+}
+
+
+BOOL ScErrToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r );
+}
+
+
+BYTE* ScUnknownToken::GetUnknown() const                { return pUnknown; }
+BOOL ScUnknownToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && pUnknown[0] == r.GetUnknown()[0] &&
+        memcmp( pUnknown+1, r.GetUnknown()+1, pUnknown[0] * sizeof(BYTE) ) == 0;
+}
+ScUnknownToken::~ScUnknownToken()
+{
+    delete [] pUnknown;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -607,20 +953,20 @@ BOOL ScTokenArray::IsReference( ScRange& rRange ) const
     BOOL bIs = FALSE;
     if ( pCode && nLen == 1 )
     {
-        ScToken* pToken = pCode[0];
+        const ScToken* pToken = pCode[0];
         if ( pToken )
         {
             if ( pToken->GetType() == svSingleRef )
             {
-                SingleRefData& rRef = pToken->GetReference().Ref1;
+                const SingleRefData& rRef = ((const ScSingleRefToken*)pToken)->GetSingleRef();
                 rRange.aStart = rRange.aEnd = ScAddress( rRef.nCol, rRef.nRow, rRef.nTab );
                 bIs = TRUE;
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
-                ComplRefData& rCompl = pToken->GetReference();
-                SingleRefData& rRef1 = rCompl.Ref1;
-                SingleRefData& rRef2 = rCompl.Ref2;
+                const ComplRefData& rCompl = ((const ScDoubleRefToken*)pToken)->GetDoubleRef();
+                const SingleRefData& rRef1 = rCompl.Ref1;
+                const SingleRefData& rRef2 = rCompl.Ref2;
                 rRange.aStart = ScAddress( rRef1.nCol, rRef1.nRow, rRef1.nTab );
                 rRange.aEnd   = ScAddress( rRef2.nCol, rRef2.nRow, rRef2.nTab );
                 bIs = TRUE;
@@ -630,9 +976,13 @@ BOOL ScTokenArray::IsReference( ScRange& rRange ) const
     return bIs;
 }
 
-inline void lcl_GetAddress( ScAddress& rAddress, const ScToken& rToken )    // rToken must be a svSingleRef
+inline void lcl_GetAddress( ScAddress& rAddress, const ScToken& rToken )
 {
-    rAddress.Set( rToken.aRef.Ref1.nCol, rToken.aRef.Ref1.nRow, rToken.aRef.Ref1.nTab );
+    if ( rToken.GetType() == svSingleRef )
+    {
+        const SingleRefData& rRef = ((const ScSingleRefToken&)rToken).GetSingleRef();
+        rAddress.Set( rRef.nCol, rRef.nRow, rRef.nTab );
+    }
 }
 
 BOOL ScTokenArray::GetTableOpRefs(
@@ -735,7 +1085,7 @@ void ScTokenArray::Load30( SvStream& rStream, const ScAddress& rPos )
 {
     Clear();
     ScToken* pToks[ MAXCODE ];
-    ScToken t;
+    ScRawToken t;
     for( nLen = 0; nLen < MAXCODE; nLen++ )
     {
         t.Load30( rStream );
@@ -747,7 +1097,7 @@ void ScTokenArray::Load30( SvStream& rStream, const ScAddress& rPos )
             nRefs++;
             t.aRef.CalcRelFromAbs( rPos );
         }
-        ScToken* p = pToks[ nLen ] = t.Clone();
+        ScToken* p = pToks[ nLen ] = t.CreateToken();
         p->IncRef();
     }
     pCode = new ScToken*[ nLen ];
@@ -779,7 +1129,7 @@ void ScTokenArray::Load( SvStream& rStream, USHORT nVer, const ScAddress& rPos )
         rStream >> nError;
     ScToken* pToks[ MAXCODE ];
     ScToken** pp = pToks;
-    ScToken t;
+    ScRawToken t;
     if( cData & 0x40 )
     {
         rStream >> nLen;
@@ -789,7 +1139,7 @@ void ScTokenArray::Load( SvStream& rStream, USHORT nVer, const ScAddress& rPos )
             if ( t.GetType() == svSingleRef || t.GetType() == svDoubleRef )
                 t.aRef.CalcRelFromAbs( rPos );
                 // gespeichert wurde und wird immer absolut
-            *pp = t.Clone();
+            *pp = t.CreateToken();
             (*pp++)->IncRef();
         }
         pCode = new ScToken*[ nLen ];
@@ -813,7 +1163,7 @@ void ScTokenArray::Load( SvStream& rStream, USHORT nVer, const ScAddress& rPos )
                 if ( t.GetType() == svSingleRef || t.GetType() == svDoubleRef )
                     t.aRef.CalcRelFromAbs( rPos );
                     // gespeichert wurde und wird immer absolut
-                *pp = t.Clone();
+                *pp = t.CreateToken();
             }
             else
             {
@@ -874,10 +1224,10 @@ void ScTokenArray::Store( SvStream& rStream, const ScAddress& rPos ) const
             switch ( (*p)->GetType() )
             {
                 case svSingleRef :
-                        (*p)->aRef.Ref1.CalcAbsIfRel( rPos );
+                        (*p)->GetSingleRef().CalcAbsIfRel( rPos );
                     break;
                 case svDoubleRef :
-                        (*p)->aRef.CalcAbsIfRel( rPos );
+                        (*p)->GetDoubleRef().CalcAbsIfRel( rPos );
                     break;
             }
             (*p)->Store( rStream );
@@ -911,10 +1261,10 @@ void ScTokenArray::Store( SvStream& rStream, const ScAddress& rPos ) const
                 switch ( t->GetType() )
                 {
                     case svSingleRef :
-                            t->aRef.Ref1.CalcAbsIfRel( rPos );
+                            t->GetSingleRef().CalcAbsIfRel( rPos );
                         break;
                     case svDoubleRef :
-                            t->aRef.CalcAbsIfRel( rPos );
+                            t->GetDoubleRef().CalcAbsIfRel( rPos );
                         break;
                 }
                 rStream << (BYTE) 0xFF;
@@ -1052,6 +1402,11 @@ void ScTokenArray::Clear()
     ClearRecalcMode();
 }
 
+ScToken* ScTokenArray::AddToken( const ScRawToken& r )
+{
+    return Add( r.CreateToken() );
+}
+
 ScToken* ScTokenArray::AddToken( const ScToken& r )
 {
     return Add( r.Clone() );
@@ -1081,74 +1436,69 @@ ScToken* ScTokenArray::Add( ScToken* t )
 
 ScToken* ScTokenArray::AddOpCode( OpCode e )
 {
-    ScToken t;
+    ScRawToken t;
     t.SetOpCode( e );
     return AddToken( t );
 }
 
 ScToken* ScTokenArray::AddString( const sal_Unicode* pStr )
 {
-    ScToken t;
-    t.SetString( pStr );
-    return AddToken( t );
+    return AddString( String( pStr ) );
 }
 
-ScToken* ScTokenArray::AddDouble(double rVal )
+ScToken* ScTokenArray::AddString( const String& rStr )
 {
-    ScToken t;
-    t.SetDouble( rVal );
-    return AddToken( t );
+    return Add( new ScStringToken( rStr ) );
+}
+
+ScToken* ScTokenArray::AddDouble( double fVal )
+{
+    return Add( new ScDoubleToken( fVal ) );
 }
 
 ScToken* ScTokenArray::AddSingleReference( const SingleRefData& rRef )
 {
-    ScToken t;
-    t.SetSingleReference( rRef );
-    return AddToken( t );
+    return Add( new ScSingleRefToken( rRef ) );
 }
 
 ScToken* ScTokenArray::AddDoubleReference( const ComplRefData& rRef )
 {
-    ScToken t;
-    t.SetDoubleReference( rRef );
-    return AddToken( t );
+    return Add( new ScDoubleRefToken( rRef ) );
 }
 
 ScToken* ScTokenArray::AddName( USHORT n )
 {
-    ScToken t;
-    t.SetName( n );
-    return AddToken( t );
+    return Add( new ScIndexToken( ocName, n ) );
 }
 
 ScToken* ScTokenArray::AddExternal( const sal_Unicode* pStr )
 {
-    ScToken t;
-    t.SetExternal( pStr );
-    return AddToken( t );
+    return AddExternal( String( pStr ) );
+}
+
+ScToken* ScTokenArray::AddExternal( const String& rStr )
+{
+    return Add( new ScExternalToken( ocExternal, rStr ) );
 }
 
 ScToken* ScTokenArray::AddMatrix( ScMatrix* p )
 {
-    ScToken t;
-    t.SetMatrix( p );
-    return AddToken( t );
+    return Add( new ScMatrixToken( p ) );
 }
 
 ScToken* ScTokenArray::AddColRowName( const SingleRefData& rRef )
 {
-    ScToken t;
-    t.SetSingleReference( rRef );
-    t.eOp = ocColRowName;
-    return AddToken( t );
+    return Add( new ScSingleRefToken( ocColRowName, rRef ) );
 }
 
 ScToken* ScTokenArray::AddBad( const sal_Unicode* pStr )
 {
-    ScToken t;
-    t.SetString( pStr );
-    t.eOp = ocBad;
-    return AddToken( t );
+    return AddBad( String( pStr ) );
+}
+
+ScToken* ScTokenArray::AddBad( const String& rStr )
+{
+    return Add( new ScStringToken( ocBad, rStr ) );
 }
 
 
@@ -1191,7 +1541,7 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
         ScToken* t = pRPN[nRPN-1];
         if ( t->GetType() == svByte )
         {
-            BYTE nParamCount = t->cByte;
+            BYTE nParamCount = t->GetByte();
             if ( nParamCount && nRPN > nParamCount )
             {
                 BOOL bRet = FALSE;
@@ -1202,9 +1552,49 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
                     switch ( p->GetType() )
                     {
                         case svSingleRef :
+                        {
+                            SingleRefData& rRef = p->GetSingleRef();
+                            rRef.CalcAbsIfRel( rPos );
+                            switch ( eDir )
+                            {
+                                case DIR_BOTTOM :
+                                    if ( rRef.nRow == nRow
+                                            && rRef.nRow > nExtend )
+                                    {
+                                        nExtend = rRef.nRow;
+                                        bRet = TRUE;
+                                    }
+                                break;
+                                case DIR_RIGHT :
+                                    if ( rRef.nCol == nCol
+                                            && rRef.nCol > nExtend )
+                                    {
+                                        nExtend = rRef.nCol;
+                                        bRet = TRUE;
+                                    }
+                                break;
+                                case DIR_TOP :
+                                    if ( rRef.nRow == nRow
+                                            && rRef.nRow < nExtend )
+                                    {
+                                        nExtend = rRef.nRow;
+                                        bRet = TRUE;
+                                    }
+                                break;
+                                case DIR_LEFT :
+                                    if ( rRef.nCol == nCol
+                                            && rRef.nCol < nExtend )
+                                    {
+                                        nExtend = rRef.nCol;
+                                        bRet = TRUE;
+                                    }
+                                break;
+                            }
+                        }
+                        break;
                         case svDoubleRef :
                         {
-                            ComplRefData& rRef = p->GetReference();
+                            ComplRefData& rRef = p->GetDoubleRef();
                             rRef.CalcAbsIfRel( rPos );
                             switch ( eDir )
                             {
@@ -1242,6 +1632,7 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( USHORT& nExtend,
                                 break;
                             }
                         }
+                        break;
                     } // switch
                 } // for
                 return bRet;
@@ -1323,8 +1714,7 @@ BOOL ScTokenArray::HasMatrixDoubleRefOps()
         // RPN-Interpreter Simulation
         // als Ergebnis jeder Funktion wird einfach ein Double angenommen
         ScToken** pStack = new ScToken* [nRPN];
-        ScToken* pResult = new ScToken;
-        pResult->SetDouble( 0.0 );
+        ScToken* pResult = new ScDoubleToken( ocPush, 0.0 );
         short sp = 0;
         for ( USHORT j = 0; j < nRPN; j++ )
         {
@@ -1387,7 +1777,7 @@ BOOL ScTokenArray::HasMatrixDoubleRefOps()
 
 ///////////////////////////////////////////////////////////////////////////
 
-void ScToken::Load30( SvStream& rStream )
+void ScRawToken::Load30( SvStream& rStream )
 {
     UINT16 nOp;
     BYTE n;
@@ -1507,7 +1897,7 @@ void ScToken::Load30( SvStream& rStream )
 // Bei unbekannten Tokens steht in cStr (k)ein Pascal-String (cStr[0] = Laenge),
 // der nur gepuffert wird. cStr[0] = GESAMT-Laenge inkl. [0] !!!
 
-void ScToken::Load( SvStream& rStream, USHORT nVer )
+void ScRawToken::Load( SvStream& rStream, USHORT nVer )
 {
     BYTE n;
     UINT16 nOp;
@@ -1637,59 +2027,75 @@ void ScToken::Store( SvStream& rStream ) const
     switch( eType )
     {
         case svByte:
-            rStream << cByte;
+            rStream << GetByte();
             break;
         case svDouble:
-            rStream << nValue;
+            rStream << GetDouble();
             break;
         case svExternal:
         {
-            ByteString aTmp( cStr+1, rStream.GetStreamCharSet() );
-            rStream << cByte
+            ByteString aTmp( GetExternal(), rStream.GetStreamCharSet() );
+            aTmp.Erase( 255 );      // old SO5 can't handle more
+            rStream << GetByte()
                     << (UINT8) aTmp.Len();
             rStream.Write( aTmp.GetBuffer(), (UINT8) aTmp.Len() );
         }
             break;
         case svString:
         {
-            ByteString aTmp( cStr, rStream.GetStreamCharSet() );
+            ByteString aTmp( GetString(), rStream.GetStreamCharSet() );
+            aTmp.Erase( 255 );      // old SO5 can't handle more
             rStream << (UINT8) aTmp.Len();
             rStream.Write( aTmp.GetBuffer(), (UINT8) aTmp.Len() );
         }
             break;
         case svSingleRef:
-        case svDoubleRef:
         {
-            const SingleRefData& r = aRef.Ref1;
+            const SingleRefData& r = GetSingleRef();
             BYTE n = r.CreateStoreByteFromFlags();
             rStream << (INT16) r.nCol
                     << (INT16) r.nRow
                     << (INT16) r.nTab
                     << (BYTE) n;
-            if( eType == svDoubleRef )
-            {
-                const SingleRefData& r = aRef.Ref2;
-                BYTE n = r.CreateStoreByteFromFlags();
-                rStream << (INT16) r.nCol
-                        << (INT16) r.nRow
-                        << (INT16) r.nTab
-                        << (BYTE) n;
-            }
-            break;
         }
+            break;
+        case svDoubleRef:
+        {
+            const ComplRefData& rRef = GetDoubleRef();
+            const SingleRefData& r1 = rRef.Ref1;
+            BYTE n = r1.CreateStoreByteFromFlags();
+            rStream << (INT16) r1.nCol
+                    << (INT16) r1.nRow
+                    << (INT16) r1.nTab
+                    << (BYTE) n;
+            const SingleRefData& r2 = rRef.Ref2;
+            n = r2.CreateStoreByteFromFlags();
+            rStream << (INT16) r2.nCol
+                    << (INT16) r2.nRow
+                    << (INT16) r2.nTab
+                    << (BYTE) n;
+        }
+            break;
         case svIndex:
-            rStream << (UINT16) nIndex;
+            rStream << (UINT16) GetIndex();
             break;
         case svJump:
-            rStream << (BYTE) nJump[ 0 ];
-            for( i = 1; i <= nJump[ 0 ]; i++ )
-                rStream << (UINT16) nJump[ i ];
+        {
+            short* pJump = GetJump();
+            rStream << (BYTE) pJump[ 0 ];
+            for( i = 1; i <= pJump[ 0 ]; i++ )
+                rStream << (UINT16) pJump[ i ];
+        }
             break;
         case svMissing:
         case svErr:
             break;
         default:
-            rStream.Write( cStr, cStr[ 0 ] );
+        {
+            BYTE* pUnknown = GetUnknown();
+            if ( pUnknown )
+                rStream.Write( pUnknown, pUnknown[ 0 ] );
+        }
     }
 }
 

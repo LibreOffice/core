@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-06 09:14:39 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,15 @@ BOOL lcl_HasRelRef( ScTokenArray* pFormula )
         ScToken* t;
         for( t = pFormula->GetNextReference(); t; t = pFormula->GetNextReference() )
         {
-            ComplRefData& rRef = t->GetReference();
-            if ( rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() || rRef.Ref1.IsTabRel() ||
-                 rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() || rRef.Ref2.IsTabRel() )
+            SingleRefData& rRef1 = t->GetSingleRef();
+            if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
                 return TRUE;
+            if ( t->GetType() == svDoubleRef )
+            {
+                SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
+                    return TRUE;
+            }
         }
     }
     return FALSE;
@@ -220,13 +225,13 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
             {
                 if ( pToken->GetType() == svDouble )
                 {
-                    nVal1 = pToken->nValue;
+                    nVal1 = pToken->GetDouble();
                     DELETEZ(pFormula1);             // nicht als Formel merken
                 }
                 else if ( pToken->GetType() == svString )
                 {
                     bIsStr1 = TRUE;
-                    aStrVal1 = pToken->cStr;        // char-ptr
+                    aStrVal1 = pToken->GetString();
                     DELETEZ(pFormula1);             // nicht als Formel merken
                 }
             }
@@ -244,13 +249,13 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
             {
                 if ( pToken->GetType() == svDouble )
                 {
-                    nVal2 = pToken->nValue;
+                    nVal2 = pToken->GetDouble();
                     DELETEZ(pFormula2);             // nicht als Formel merken
                 }
                 else if ( pToken->GetType() == svString )
                 {
                     bIsStr2 = TRUE;
-                    aStrVal2 = pToken->cStr;        // char-ptr
+                    aStrVal2 = pToken->GetString();
                     DELETEZ(pFormula2);             // nicht als Formel merken
                 }
             }
@@ -406,13 +411,13 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                 {
                     if ( pToken->GetType() == svDouble )
                     {
-                        nVal1 = pToken->nValue;
+                        nVal1 = pToken->GetDouble();
                         DELETEZ(pFormula1);             // nicht als Formel merken
                     }
                     else if ( pToken->GetType() == svString )
                     {
                         bIsStr1 = TRUE;
-                        aStrVal1 = pToken->cStr;        // char-ptr
+                        aStrVal1 = pToken->GetString();
                         DELETEZ(pFormula1);             // nicht als Formel merken
                     }
                 }
@@ -431,13 +436,13 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
                 {
                     if ( pToken->GetType() == svDouble )
                     {
-                        nVal2 = pToken->nValue;
+                        nVal2 = pToken->GetDouble();
                         DELETEZ(pFormula2);             // nicht als Formel merken
                     }
                     else if ( pToken->GetType() == svString )
                     {
                         bIsStr2 = TRUE;
-                        aStrVal2 = pToken->cStr;        // char-ptr
+                        aStrVal2 = pToken->GetString();
                         DELETEZ(pFormula2);             // nicht als Formel merken
                     }
                 }
@@ -944,56 +949,56 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
             ScToken* t;
             for( t = pFormula->GetNextReference(); t; t = pFormula->GetNextReference() )
             {
-                ComplRefData& rRef = t->GetReference();
-                if ( rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() || rRef.Ref1.IsTabRel() ||
-                     rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() || rRef.Ref2.IsTabRel() )
+                SingleDoubleRefProvider aProv( *t );
+                if ( aProv.Ref1.IsColRel() || aProv.Ref1.IsRowRel() || aProv.Ref1.IsTabRel() ||
+                     aProv.Ref2.IsColRel() || aProv.Ref2.IsRowRel() || aProv.Ref2.IsTabRel() )
                 {
                     //  absolut muss getroffen sein, relativ bestimmt Bereich
 
                     BOOL bHit = TRUE;
                     INT16 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
 
-                    if ( rRef.Ref1.IsColRel() )
-                        nCol2 = rChanged.Col() - rRef.Ref1.nRelCol;
+                    if ( aProv.Ref1.IsColRel() )
+                        nCol2 = rChanged.Col() - aProv.Ref1.nRelCol;
                     else
                     {
-                        bHit &= ( rChanged.Col() >= rRef.Ref1.nCol );
+                        bHit &= ( rChanged.Col() >= aProv.Ref1.nCol );
                         nCol2 = MAXCOL;
                     }
-                    if ( rRef.Ref1.IsRowRel() )
-                        nRow2 = rChanged.Row() - rRef.Ref1.nRelRow;
+                    if ( aProv.Ref1.IsRowRel() )
+                        nRow2 = rChanged.Row() - aProv.Ref1.nRelRow;
                     else
                     {
-                        bHit &= ( rChanged.Row() >= rRef.Ref1.nRow );
+                        bHit &= ( rChanged.Row() >= aProv.Ref1.nRow );
                         nRow2 = MAXROW;
                     }
-                    if ( rRef.Ref1.IsTabRel() )
-                        nTab2 = rChanged.Tab() - rRef.Ref1.nRelTab;
+                    if ( aProv.Ref1.IsTabRel() )
+                        nTab2 = rChanged.Tab() - aProv.Ref1.nRelTab;
                     else
                     {
-                        bHit &= ( rChanged.Tab() >= rRef.Ref1.nTab );
+                        bHit &= ( rChanged.Tab() >= aProv.Ref1.nTab );
                         nTab2 = MAXTAB;
                     }
 
-                    if ( rRef.Ref2.IsColRel() )
-                        nCol1 = rChanged.Col() - rRef.Ref2.nRelCol;
+                    if ( aProv.Ref2.IsColRel() )
+                        nCol1 = rChanged.Col() - aProv.Ref2.nRelCol;
                     else
                     {
-                        bHit &= ( rChanged.Col() <= rRef.Ref2.nCol );
+                        bHit &= ( rChanged.Col() <= aProv.Ref2.nCol );
                         nCol1 = 0;
                     }
-                    if ( rRef.Ref2.IsRowRel() )
-                        nRow1 = rChanged.Row() - rRef.Ref2.nRelRow;
+                    if ( aProv.Ref2.IsRowRel() )
+                        nRow1 = rChanged.Row() - aProv.Ref2.nRelRow;
                     else
                     {
-                        bHit &= ( rChanged.Row() <= rRef.Ref2.nRow );
+                        bHit &= ( rChanged.Row() <= aProv.Ref2.nRow );
                         nRow1 = 0;
                     }
-                    if ( rRef.Ref2.IsTabRel() )
-                        nTab1 = rChanged.Tab() - rRef.Ref2.nRelTab;
+                    if ( aProv.Ref2.IsTabRel() )
+                        nTab1 = rChanged.Tab() - aProv.Ref2.nRelTab;
                     else
                     {
-                        bHit &= ( rChanged.Tab() <= rRef.Ref2.nTab );
+                        bHit &= ( rChanged.Tab() <= aProv.Ref2.nTab );
                         nTab1 = 0;
                     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 14:12:29 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ class SvStream;
 class ScFormulaCell;
 class SdrObject;
 class ScDocument;
-struct ScToken;
+class ScToken;
 class ScToken2;
 class ScExtDocOptions;
 class _ScRangeListTabs;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-06 13:44:55 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,9 @@ BOOL ScRangeData::IsBeyond( USHORT nMaxRow ) const
     ScToken* t;
     pCode->Reset();
     while ( t = pCode->GetNextReference() )
-        if ( t->aRef.Ref1.nRow > nMaxRow || t->aRef.Ref2.nRow > nMaxRow )
+        if ( t->GetSingleRef().nRow > nMaxRow ||
+                (t->GetType() == svDoubleRef &&
+                t->GetDoubleRef().Ref2.nRow > nMaxRow) )
             return TRUE;
 
     return FALSE;
@@ -287,23 +289,23 @@ void ScRangeData::GuessPosition()
     pCode->Reset();
     while ( t = pCode->GetNextReference() )
     {
-        ComplRefData& rRef = t->aRef;
-
-        if ( rRef.Ref1.IsColRel() && rRef.Ref1.nRelCol < nMinCol )
-            nMinCol = rRef.Ref1.nRelCol;
-        if ( rRef.Ref1.IsRowRel() && rRef.Ref1.nRelRow < nMinRow )
-            nMinRow = rRef.Ref1.nRelRow;
-        if ( rRef.Ref1.IsTabRel() && rRef.Ref1.nRelTab < nMinTab )
-            nMinTab = rRef.Ref1.nRelTab;
+        SingleRefData& rRef1 = t->GetSingleRef();
+        if ( rRef1.IsColRel() && rRef1.nRelCol < nMinCol )
+            nMinCol = rRef1.nRelCol;
+        if ( rRef1.IsRowRel() && rRef1.nRelRow < nMinRow )
+            nMinRow = rRef1.nRelRow;
+        if ( rRef1.IsTabRel() && rRef1.nRelTab < nMinTab )
+            nMinTab = rRef1.nRelTab;
 
         if ( t->GetType() == svDoubleRef )
         {
-            if ( rRef.Ref2.IsColRel() && rRef.Ref2.nRelCol < nMinCol )
-                nMinCol = rRef.Ref2.nRelCol;
-            if ( rRef.Ref2.IsRowRel() && rRef.Ref2.nRelRow < nMinRow )
-                nMinRow = rRef.Ref2.nRelRow;
-            if ( rRef.Ref2.IsTabRel() && rRef.Ref2.nRelTab < nMinTab )
-                nMinTab = rRef.Ref2.nRelTab;
+            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            if ( rRef2.IsColRel() && rRef2.nRelCol < nMinCol )
+                nMinCol = rRef2.nRelCol;
+            if ( rRef2.IsRowRel() && rRef2.nRelRow < nMinRow )
+                nMinRow = rRef2.nRelRow;
+            if ( rRef2.IsTabRel() && rRef2.nRelTab < nMinTab )
+                nMinTab = rRef2.nRelTab;
         }
     }
 
@@ -377,14 +379,17 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
     {
         if( t->GetType() != svIndex )
         {
-            ComplRefData& rRef = t->GetReference();
+            SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
+                SingleDoubleRefModifier( t->GetSingleRef() ) :
+                SingleDoubleRefModifier( t->GetDoubleRef() ));
+            ComplRefData& rRef = rMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
                 ( t->GetType() == svSingleRef ||
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
-                if ( ScRefUpdate::UpdateTranspose( pDoc, rSource, rDest, t->aRef ) != UR_NOTHING )
+                if ( ScRefUpdate::UpdateTranspose( pDoc, rSource, rDest, rRef ) != UR_NOTHING )
                     bChanged = TRUE;
             }
         }
@@ -404,14 +409,17 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY
     {
         if( t->GetType() != svIndex )
         {
-            ComplRefData& rRef = t->GetReference();
+            SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
+                SingleDoubleRefModifier( t->GetSingleRef() ) :
+                SingleDoubleRefModifier( t->GetDoubleRef() ));
+            ComplRefData& rRef = rMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
                 ( t->GetType() == svSingleRef ||
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
-                if ( ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY, t->aRef ) != UR_NOTHING )
+                if ( ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY, rRef ) != UR_NOTHING )
                     bChanged = TRUE;
             }
         }
@@ -610,14 +618,19 @@ void ScRangeData::TransferTabRef( USHORT nOldTab, USHORT nNewTab )
     pCode->Reset();
     while ( t = pCode->GetNextReference() )
     {
-        if ( t->aRef.Ref1.IsTabRel() )
-            t->aRef.Ref1.nTab += nPosDiff;
+        SingleRefData& rRef1 = t->GetSingleRef();
+        if ( rRef1.IsTabRel() )
+            rRef1.nTab += nPosDiff;
         else
-            t->aRef.Ref1.nTab += nTabDiff;
-        if ( t->aRef.Ref2.IsTabRel() )
-            t->aRef.Ref2.nTab += nPosDiff;
-        else
-            t->aRef.Ref2.nTab += nTabDiff;
+            rRef1.nTab += nTabDiff;
+        if ( t->GetType() == svDoubleRef )
+        {
+            SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            if ( rRef2.IsTabRel() )
+                rRef2.nTab += nPosDiff;
+            else
+                rRef2.nTab += nTabDiff;
+        }
     }
 }
 
@@ -629,10 +642,11 @@ void ScRangeData::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
     {
         if ( p->GetOpCode() == ocName )
         {
-            USHORT nNewIndex = rMap.Find( p->nIndex );
-            if ( p->nIndex != nNewIndex )
+            USHORT nIndex = p->GetIndex();
+            USHORT nNewIndex = rMap.Find( nIndex );
+            if ( nIndex != nNewIndex )
             {
-                p->nIndex = nNewIndex;
+                p->SetIndex( nNewIndex );
                 bCompile = TRUE;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 19:54:11 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ void ScAnyRefDlg::ShowFormulaReference( const XubString& rStr )
                 pTabViewShell->ClearHighlightRanges();
 
                 pScTokA->Reset();
-                ScToken*  pToken=pScTokA->GetNextReference();
+                const ScToken* pToken=pScTokA->GetNextReference();
 
                 USHORT nIndex=0;
 
@@ -710,17 +710,19 @@ void ScAnyRefDlg::ShowFormulaReference( const XubString& rStr )
                     if(pToken->GetType()==svSingleRef || bDoubleRef)
                     {
                         ScRange aRange;
-                        ComplRefData aRef( pToken->GetReference() );
-                        aRef.Ref1.CalcAbsIfRel( aPos );
                         if(bDoubleRef)
                         {
-                            aRef.Ref2.CalcAbsIfRel( aPos );
-                            aRange=ScRange( aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab,
-                                        aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab);
+                            ComplRefData aRef( pToken->GetDoubleRef() );
+                            aRef.CalcAbsIfRel( aPos );
+                            aRange.aStart.Set( aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab );
+                            aRange.aEnd.Set( aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab );
                         }
                         else
                         {
-                            aRange=ScRange( aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab);
+                            SingleRefData aRef( pToken->GetSingleRef() );
+                            aRef.CalcAbsIfRel( aPos );
+                            aRange.aStart.Set( aRef.nCol, aRef.nRow, aRef.nTab );
+                            aRange.aEnd = aRange.aStart;
                         }
                         ColorData aColName=ScRangeFindList::GetColorName(nIndex++);
                         pTabViewShell->AddHighlightRange(aRange, aColName);

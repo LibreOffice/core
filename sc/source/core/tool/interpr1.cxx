@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-01-10 18:48:10 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,19 +123,20 @@ BOOL ScInterpreter::bGlobalStackInUse = FALSE;
 
 void ScInterpreter::ScIfJump()
 {
-    short nJumpCount = pCur->nJump[ 0 ];
+    const short* pJump = pCur->GetJump();
+    short nJumpCount = pJump[ 0 ];
     if ( GetBool() )
     {   // TRUE
         if( nJumpCount >= 2 )
         {   // then Zweig
             nFuncFmtType = NUMBERFORMAT_UNDEFINED;
-            aCode.Jump( pCur->nJump[ 1 ], pCur->nJump[ nJumpCount ] );
+            aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
         }
         else
         {   // kein Parameter fuer then
             nFuncFmtType = NUMBERFORMAT_LOGICAL;
             PushInt(1);
-            aCode.Jump( pCur->nJump[ nJumpCount ], pCur->nJump[ nJumpCount ] );
+            aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
         }
     }
     else
@@ -143,13 +144,13 @@ void ScInterpreter::ScIfJump()
         if( nJumpCount == 3 )
         {   // else Zweig
             nFuncFmtType = NUMBERFORMAT_UNDEFINED;
-            aCode.Jump( pCur->nJump[ 2 ], pCur->nJump[ nJumpCount ] );
+            aCode.Jump( pJump[ 2 ], pJump[ nJumpCount ] );
         }
         else
         {   // kein Parameter fuer else
             nFuncFmtType = NUMBERFORMAT_LOGICAL;
             PushInt(0);
-            aCode.Jump( pCur->nJump[ nJumpCount ], pCur->nJump[ nJumpCount ] );
+            aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
         }
     }
 }
@@ -157,10 +158,11 @@ void ScInterpreter::ScIfJump()
 
 void ScInterpreter::ScChoseJump()
 {
-    short nJumpCount = pCur->nJump[ 0 ];
+    const short* pJump = pCur->GetJump();
+    short nJumpCount = pJump[ 0 ];
     double nJumpIndex = SolarMath::ApproxFloor( GetDouble() );
     if ((nJumpIndex >= 1) && (nJumpIndex < nJumpCount))
-        aCode.Jump( pCur->nJump[ (short) nJumpIndex ], pCur->nJump[ nJumpCount ] );
+        aCode.Jump( pJump[ (short) nJumpIndex ], pJump[ nJumpCount ] );
     else
         SetError(errIllegalArgument);
 }
@@ -1224,7 +1226,7 @@ void ScInterpreter::ScFormula()
             Pop();
             SetError( NOVALUE );
     }
-    PushStringObject( aFormula );
+    PushString( aFormula );
 }
 
 
@@ -1419,7 +1421,7 @@ void ScInterpreter::ScTrim()
             aStr += *p;
         p++;
     }
-    PushStringObject( aStr );
+    PushString( aStr );
 }
 
 
@@ -1427,7 +1429,7 @@ void ScInterpreter::ScUpper()
 {
     String aString = GetString();
     ScGlobal::pCharClass->toUpper(aString);
-    PushStringObject(aString);
+    PushString(aString);
 }
 
 
@@ -1454,15 +1456,15 @@ void ScInterpreter::ScPropper()
         nPos++;
     }
     aStr.ReleaseBufferAccess( nLen );
-    PushStringObject( aStr );
+    PushString( aStr );
 }
 
 
 void ScInterpreter::ScLower()
 {
-    String aString = GetString();
+    String aString( GetString() );
     ScGlobal::pCharClass->toLower(aString);
-    PushStringObject(aString);
+    PushString(aString);
 }
 
 
@@ -1501,19 +1503,19 @@ void ScInterpreter::ScT()
                 }
             }
             if ( bValue )
-                PushString( NULL );
+                PushString( EMPTY_STRING );
             else
             {
                 //  wie GetString()
                 GetCellString( aTempStr, pCell );
-                PushString( aTempStr.GetBuffer() );
+                PushString( aTempStr );
             }
         }
         break;
         case svDouble :
         {
             PopError();
-            PushString( NULL );
+            PushString( EMPTY_STRING );
         }
         break;
         case svString :
@@ -1552,15 +1554,15 @@ void ScInterpreter::ScClean()
         if ( !lcl_ScInterpreter_IsPrintable( aStr.GetChar( i ) ) )
             aStr.Erase(i,1);
     }
-    PushStringObject(aStr);
+    PushString(aStr);
 }
 
 
 void ScInterpreter::ScCode()
 {
 //2do: make it full range unicode?
-    const sal_Unicode* pStr = GetString();
-    PushInt( (sal_uChar) ByteString::ConvertFromUnicode( pStr[0], gsl_getSystemTextEncoding() ) );
+    const String& rStr = GetString();
+    PushInt( (sal_uChar) ByteString::ConvertFromUnicode( rStr.GetChar(0), gsl_getSystemTextEncoding() ) );
 }
 
 
@@ -1572,10 +1574,9 @@ void ScInterpreter::ScChar()
         SetIllegalArgument();
     else
     {
-        sal_Unicode cs[2];
-        cs[0] = ByteString::ConvertToUnicode( (sal_Char) fVal, gsl_getSystemTextEncoding() );
-        cs[1] = 0;
-        PushString(cs);
+        String aStr( '0' );
+        aStr.SetChar( 0, ByteString::ConvertToUnicode( (sal_Char) fVal, gsl_getSystemTextEncoding() ) );
+        PushString( aStr );
     }
 }
 
@@ -3370,7 +3371,7 @@ void ScInterpreter::ScLookup()
             if (pMat3->IsValue(nDelta))
                 PushDouble(pMat3->GetDouble(nDelta));
             else
-                PushStringObject(pMat3->GetString(nDelta));
+                PushString(pMat3->GetString(nDelta));
         }
         else
         {
@@ -3393,7 +3394,7 @@ void ScInterpreter::ScLookup()
             {
                 String aStr;
                 GetCellString(aStr, pCell);
-                PushStringObject(aStr);
+                PushString(aStr);
             }
         }
     }
@@ -3551,14 +3552,14 @@ void ScInterpreter::ScLookup()
         if (bSpMatrix)
         {
             if (pMat1->IsString(nDelta, nR1-1))
-                PushStringObject(pMat1->GetString(nDelta, nR1-1));
+                PushString(pMat1->GetString(nDelta, nR1-1));
             else
                 PushDouble(pMat1->GetDouble(nDelta, nR1-1));
         }
         else
         {
             if (pMat1->IsString(nC1-1, nDelta))
-                PushStringObject(pMat1->GetString(nC1-1, nDelta));
+                PushString(pMat1->GetString(nC1-1, nDelta));
             else
                 PushDouble(pMat1->GetDouble(nC1-1, nDelta));
         }
@@ -3767,7 +3768,7 @@ void ScInterpreter::ScHLookup()
                     if (!pMat->IsString(nDelta, nZIndex))
                         PushDouble(pMat->GetDouble(nDelta, nZIndex));
                     else
-                        PushStringObject(pMat->GetString(nDelta, nZIndex));
+                        PushString(pMat->GetString(nDelta, nZIndex));
                 }
                 else
                     SetNV();
@@ -3795,7 +3796,7 @@ void ScInterpreter::ScHLookup()
                     {
                         String aStr;
                         GetCellString(aStr, pCell);
-                        PushStringObject(aStr);
+                        PushString(aStr);
                     }
                 }
                 else
@@ -4009,7 +4010,7 @@ void ScInterpreter::ScVLookup()
                     if (!pMat->IsString(nSpIndex, nDelta))
                         PushDouble(pMat->GetDouble(nSpIndex, nDelta));
                     else
-                        PushStringObject(pMat->GetString(nSpIndex, nDelta));
+                        PushString(pMat->GetString(nSpIndex, nDelta));
                 }
                 else
                     SetNV();
@@ -4035,7 +4036,7 @@ void ScInterpreter::ScVLookup()
                     {
                         String aStr;
                         GetCellString(aStr, pCell);
-                        PushStringObject(aStr);
+                        PushString(aStr);
                     }
                 }
                 else
@@ -4415,12 +4416,10 @@ void ScInterpreter::ScAdress()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 4 ) )
     {
-        const sal_Unicode* sTabStr;
+        String sTabStr;
         USHORT nAbs = 1;
         if (nParamCount == 4)
             sTabStr = GetString();
-        else
-            sTabStr = NULL;
         if (nParamCount >= 3)
             nAbs = (USHORT) SolarMath::ApproxFloor(GetDouble());
         USHORT nCol = (USHORT) SolarMath::ApproxFloor(GetDouble());
@@ -4449,12 +4448,12 @@ void ScInterpreter::ScAdress()
             else if (nAbs == 3)
                 aRefStr.Erase(aRefStr.Search('$',1),1);
         }
-        if (sTabStr != NULL)
+        if ( sTabStr.Len() )
         {
             aRefStr.Insert('.',0);
             aRefStr.Insert(sTabStr,0);
         }
-        PushStringObject(aRefStr);
+        PushString(aRefStr);
     }
 }
 
@@ -4614,7 +4613,7 @@ void ScInterpreter::ScIndex()
                     if (!pMat->IsString(nCol-1, nRow-1))
                         PushDouble(pMat->GetDouble(nCol-1, nRow-1));
                     else
-                        PushStringObject(pMat->GetString(nCol-1, nRow-1));
+                        PushString(pMat->GetString(nCol-1, nRow-1));
                 }
                 ResetNewMat(nMatInd1);
             }
@@ -4743,7 +4742,7 @@ void ScInterpreter::ScCurrency()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
     {
-        String cStr;
+        String aStr;
         double fDec;
         if (nParamCount == 2)
         {
@@ -4784,16 +4783,16 @@ void ScInterpreter::ScCurrency()
                                                    1);          // 1 Vorkommanull
             if (!pFormatter->GetPreviewString(sFormatString,
                                                   fVal,
-                                                  cStr,
+                                                  aStr,
                                                   &pColor,
                                                   ScGlobal::eLnge))
                 SetError(errIllegalParameter);
         }
         else
         {
-            pFormatter->GetOutputString(fVal, nIndex, cStr, &pColor);
+            pFormatter->GetOutputString(fVal, nIndex, aStr, &pColor);
         }
-        PushStringObject(cStr);
+        PushString(aStr);
     }
 }
 
@@ -4811,13 +4810,9 @@ void ScInterpreter::ScReplace()
         else
         {
             aOldStr.Erase( nPos-1, nCount );
-            aOldStr.Insert( aNewStr, nPos-1 );
-            if( aOldStr.Len() >= MAXSTRLEN )
-            {
-                SetError(errStringOverflow);
-                aOldStr.Erase();
-            }
-            PushStringObject( aOldStr );
+            if ( CheckStringResultLen( aOldStr, aNewStr ) )
+                aOldStr.Insert( aNewStr, nPos-1 );
+            PushString( aOldStr );
         }
     }
 }
@@ -4828,7 +4823,7 @@ void ScInterpreter::ScFixed()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
-        String cStr;
+        String aStr;
         double fDec;
         BOOL bThousand;
         if (nParamCount == 3)
@@ -4872,12 +4867,12 @@ void ScInterpreter::ScFixed()
                                                1);          // 1 Vorkommanull
         if (!pFormatter->GetPreviewString(sFormatString,
                                                   fVal,
-                                                  cStr,
+                                                  aStr,
                                                   &pColor,
                                                   ScGlobal::eLnge))
             SetIllegalParameter();
         else
-            PushStringObject(cStr);
+            PushString(aStr);
     }
 }
 
@@ -4928,7 +4923,7 @@ void ScInterpreter::ScLeft()
         if (nParamCount == 2)
         {
             double nVal = SolarMath::ApproxFloor(GetDouble());
-            if (nVal < 0.0 || nVal > MAXSTRLEN)
+            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
             {
                 SetIllegalParameter();
                 return ;
@@ -4940,7 +4935,7 @@ void ScInterpreter::ScLeft()
             n = 1;
         String aStr( GetString() );
         aStr.Erase( n );
-        PushStringObject( aStr );
+        PushString( aStr );
     }
 }
 
@@ -4954,7 +4949,7 @@ void ScInterpreter::ScRight()
         if (nParamCount == 2)
         {
             double nVal = SolarMath::ApproxFloor(GetDouble());
-            if (nVal < 0.0 || nVal > MAXSTRLEN)
+            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
             {
                 SetIllegalParameter();
                 return ;
@@ -4967,7 +4962,7 @@ void ScInterpreter::ScRight()
         String aStr( GetString() );
         if( n < aStr.Len() )
             aStr.Erase( 0, aStr.Len() - n );
-        PushStringObject( aStr );
+        PushString( aStr );
     }
 }
 
@@ -5015,11 +5010,11 @@ void ScInterpreter::ScMid()
     {
         double fAnz    = SolarMath::ApproxFloor(GetDouble());
         double fAnfang = SolarMath::ApproxFloor(GetDouble());
-        String sStr = GetString();
+        const String& rStr = GetString();
         if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
             SetIllegalParameter();
         else
-            PushStringObject(sStr.Copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
+            PushString(rStr.Copy( (xub_StrLen) fAnfang - 1, (xub_StrLen) fAnz ));
     }
 }
 
@@ -5030,7 +5025,7 @@ void ScInterpreter::ScText()
     {
         String sFormatString = GetString();
         double fVal = GetDouble();
-        String cStr;
+        String aStr;
         Color* pColor = NULL;
         LanguageType eCellLang;
         const ScPatternAttr* pPattern = pDok->GetPattern(
@@ -5040,11 +5035,11 @@ void ScInterpreter::ScText()
                 pPattern->GetItem( ATTR_LANGUAGE_FORMAT )).GetValue();
         else
             eCellLang = ScGlobal::eLnge;
-        if ( !pFormatter->GetPreviewStringGuess( sFormatString, fVal, cStr,
+        if ( !pFormatter->GetPreviewStringGuess( sFormatString, fVal, aStr,
                 &pColor, eCellLang ) )
             SetIllegalParameter();
         else
-            PushStringObject(cStr);
+            PushString(aStr);
     }
 }
 
@@ -5058,7 +5053,7 @@ void ScInterpreter::ScSubstitute()
         if (nParamCount == 4)
         {
             double fAnz = SolarMath::ApproxFloor(GetDouble());
-            if( fAnz < 1 || fAnz > MAXSTRLEN )
+            if( fAnz < 1 || fAnz > STRING_MAXLEN )
             {
                 SetIllegalParameter();
                 return;
@@ -5084,9 +5079,12 @@ void ScInterpreter::ScSubstitute()
                 if( !nAnz || nCount == nAnz )
                 {
                     sStr.Erase(nPos,nOldLen);
-                    sStr.Insert(sNewStr,nPos);
-                    nPos += nNewLen;
-                    if( sStr.Len() >= MAXSTRLEN )
+                    if ( CheckStringResultLen( sStr, sNewStr ) )
+                    {
+                        sStr.Insert(sNewStr,nPos);
+                        nPos += nNewLen;
+                    }
+                    else
                         break;
                 }
                 else
@@ -5095,7 +5093,7 @@ void ScInterpreter::ScSubstitute()
             else
                 break;
         }
-        PushStringObject( sStr );
+        PushString( sStr );
     }
 }
 
@@ -5105,23 +5103,29 @@ void ScInterpreter::ScRept()
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         double fAnz = SolarMath::ApproxFloor(GetDouble());
+        String aStr( GetString() );
         if ( fAnz < 0.0 )
             SetIllegalParameter();
-        else if ( fAnz > MAXSTRLEN )
+        else if ( fAnz * aStr.Len() > STRING_MAXLEN )
         {
             SetError( errStringOverflow );
             PushInt(0);
         }
         else if ( fAnz == 0.0 )
-            PushString( NULL );
+            PushString( EMPTY_STRING );
         else
         {
-            short n = (short) fAnz;
+            xub_StrLen n = (xub_StrLen) fAnz;
+            const xub_StrLen nLen = aStr.Len();
             String aRes;
-            String aStr( GetString() );
+            const sal_Unicode* const pSrc = aStr.GetBuffer();
+            sal_Unicode* pDst = aRes.AllocBuffer( n * nLen );
             while( n-- )
-                aRes += aStr;
-            PushStringObject( aRes );
+            {
+                memcpy( pDst, pSrc, nLen * sizeof(sal_Unicode) );
+                pDst += nLen;
+            }
+            PushString( aRes );
         }
     }
 }
@@ -5133,10 +5137,10 @@ void ScInterpreter::ScConcat()
     String aRes;
     while( nParamCount-- )
     {
-        const sal_Unicode* p = GetString();
-        aRes.Insert( p, 0 );
+        const String& rStr = GetString();
+        aRes.Insert( rStr, 0 );
     }
-    PushStringObject( aRes );
+    PushString( aRes );
 }
 
 

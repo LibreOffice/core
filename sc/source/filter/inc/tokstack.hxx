@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:55:27 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ typedef OpCode DefTokenId;
 //------------------------------------------------------------------------
 struct ComplRefData;
 class TokenStack;
-struct ScToken;
+class ScToken;
 
 
 enum E_TYPE

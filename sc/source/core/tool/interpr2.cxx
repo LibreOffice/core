@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-31 17:43:04 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,9 +1577,9 @@ void ScInterpreter::ScCurrent()
         break;
         case svString :
         {
-            const sal_Unicode* pStr = PopString();
-            PushString( pStr );
-            PushString( pStr );
+            const String& rStr = PopString();
+            PushString( rStr );
+            PushString( rStr );
         }
         break;
         case svDoubleRef :
@@ -1605,8 +1605,8 @@ void ScInterpreter::ScCurrent()
                 {
                     String aStr;
                     GetCellString( aStr, pCell );
-                    PushStringObject( aStr );
-                    PushStringObject( aStr );
+                    PushString( aStr );
+                    PushString( aStr );
                 }
             }
             else
@@ -1794,11 +1794,12 @@ void ScInterpreter::ScBase()
             0
         };
         static const int nDigits = (sizeof(pDigits)/sizeof(sal_Unicode))-1;
+        const size_t nBuf = 384;
         USHORT nMinLen;
         if ( nParamCount == 3 )
         {
             double fLen = SolarMath::ApproxFloor( GetDouble() );
-            if ( 1 <= fLen && fLen < MAXSTRLEN )
+            if ( 1 <= fLen && fLen < nBuf-1 )
                 nMinLen = (USHORT) fLen;
             else
                 nMinLen = 0;    // Error
@@ -1810,12 +1811,8 @@ void ScInterpreter::ScBase()
 
         if ( !nGlobalError && nMinLen && 2 <= fBase && fBase <= nDigits && 0 <= fVal )
         {
-            const size_t nBuf = MAXSTRLEN+1;
             sal_Unicode pBuf[nBuf];
-            for ( size_t j=0; j<nBuf;  j++ )
-            {
-                pBuf[j] = '0';
-            }
+            memset( pBuf, '0', nBuf );
             sal_Unicode* p = pBuf + nBuf - 1;
             *p = 0;
             if ( fVal <= (ULONG)(~0) )
@@ -1889,7 +1886,7 @@ void ScInterpreter::ScBase()
             {
                 if ( nBuf - (p - pBuf) <= nMinLen )
                     p = pBuf + nBuf - 1 - nMinLen;
-                PushString( p );
+                PushStringBuffer( p );
             }
         }
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refdata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,8 @@
 
 #pragma hdrstop
 
-#include <segmentc.hxx>
+#include "refdata.hxx"
 
-#include "compiler.hxx"
-
-SEG_EOFGLOBALS()
-
-
-#pragma SEG_FUNCDEF(refdata_01)
 
 void SingleRefData::CalcRelFromAbs( const ScAddress& rPos )
 {
@@ -81,8 +75,6 @@ void SingleRefData::CalcRelFromAbs( const ScAddress& rPos )
     nRelTab = nTab - rPos.Tab();
 }
 
-
-#pragma SEG_FUNCDEF(refdata_02)
 
 void SingleRefData::SmartRelAbs( const ScAddress& rPos )
 {
@@ -102,8 +94,6 @@ void SingleRefData::SmartRelAbs( const ScAddress& rPos )
         nRelTab = nTab - rPos.Tab();
 }
 
-
-#pragma SEG_FUNCDEF(refdata_06)
 
 void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 {
@@ -127,8 +117,6 @@ void SingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     }
 }
 
-
-#pragma SEG_FUNCDEF(refdata_03)
 
 void SingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
 {
@@ -208,8 +196,6 @@ void SingleRefData::OldBoolsToNewFlags( const OldSingleRefBools& rBools )
  Aber immer noch nCol > MAXCOL und gut sollte sein..
  */
 
-#pragma SEG_FUNCDEF(refdata_04)
-
 BYTE SingleRefData::CreateStoreByteFromFlags() const
 {
     return (BYTE)(
@@ -225,8 +211,6 @@ BYTE SingleRefData::CreateStoreByteFromFlags() const
 }
 
 
-#pragma SEG_FUNCDEF(refdata_05)
-
 void SingleRefData::CreateFlagsFromLoadByte( BYTE n )
 {
     Flags.bColRel       = (n & 0x01 );
@@ -240,7 +224,14 @@ void SingleRefData::CreateFlagsFromLoadByte( BYTE n )
 }
 
 
-#pragma SEG_FUNCDEF(refdata_07)
+BOOL SingleRefData::operator==( const SingleRefData& r ) const
+{
+    return bFlags == r.bFlags &&
+        (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
+        (Flags.bRowRel ? nRelRow == r.nRelRow : nRow == r.nRow) &&
+        (Flags.bTabRel ? nRelTab == r.nRelTab : nTab == r.nTab);
+}
+
 
 // Abs-Refs muessen vorher aktualisiert werden!
 // wird in refupdat.cxx mit MoveRelWrap verwendet
@@ -336,42 +327,3 @@ void ComplRefData::PutInOrder()
     Ref2.Flags.bRelName = ( nRelState2 ? TRUE : FALSE );
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.10  2000/09/17 14:08:42  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.9  2000/08/31 16:38:04  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.8  1997/11/13 20:06:50  NN
-    ifndef PCH raus
-
-
-      Rev 1.7   13 Nov 1997 21:06:50   NN
-   ifndef PCH raus
-
-      Rev 1.6   08 Jan 1997 20:11:54   ER
-   ScAddress als Reference (keine temporaeren Objekte ohne inlining)
-
-      Rev 1.5   14 May 1996 13:59:32   ER
-   ComplRefData PutInOrder
-
-      Rev 1.4   24 Apr 1996 21:30:48   ER
-   CalcAbsIfRel: !valid => flag deleted
-
-      Rev 1.3   24 Apr 1996 12:23:04   ER
-   unbenamster struct geht nicht
-
-      Rev 1.2   23 Apr 1996 19:23:06   ER
-   ScTokenArray::Store mit Position, CalcAbsIfRel vor ScToken::Store
-
-      Rev 1.1   23 Apr 1996 13:49:04   ER
-   RelRefs, zweite Runde
-
-      Rev 1.0   22 Apr 1996 11:29:28   ER
-   *RefData: token.cxx --> refdata.cxx
-
-------------------------------------------------------------------------*/
-#pragma SEG_EOFMODULE
