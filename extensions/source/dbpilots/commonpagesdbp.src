@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:42:30 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,9 +367,87 @@ TabPage RID_PAGE_OPTION_DBFIELD
     Text[ catalan ] = "Campo de base de datos";
     Text[ finnish ] = "Tietokantakenttä";
 };
+
+TabPage RID_PAGE_FORM_DATASOURCE_STATUS
+{
+    FixedLine FL_FORMSETINGS
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+        Text = "Formular";
+        Text [ english ] = "Form";
+        Text [ english_us ] = "Form";
+    };
+    FixedText FT_FORMDATASOURCELABEL
+    {
+        Pos = MAP_APPFONT ( 7 , 15 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "Datenquelle" ;
+        Text [ english ] = "Data Source" ;
+        Text [ english_us ] = "Data source";
+    };
+    FixedText FT_FORMDATASOURCE
+    {
+        Pos = MAP_APPFONT ( 7 + 60 + 3 , 15 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X / 2 - 80 - 3 , 8 ) ;
+    };
+
+    FixedText FT_FORMCONTENTTYPELABEL
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3, 15 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "Art des Inhaltes" ;
+        Text [ English ] = "Content type" ;
+        Text [ english_us ] = "Content type";
+    };
+    FixedText FT_FORMCONTENTTYPE
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3 + 60 , 15 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - ( WINDOW_SIZE_X / 2 + 3 + 60 ) - 7 , 8 ) ;
+    };
+
+    FixedText FT_FORMTABLELABEL
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3, 26 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "Inhalt" ;
+        Text [ english ] = "Content" ;
+        Text [ english_us ] = "Content";
+    };
+    FixedText FT_FORMTABLE
+    {
+        Pos = MAP_APPFONT ( WINDOW_SIZE_X / 2 + 3 + 60 , 26 ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - ( WINDOW_SIZE_X / 2 + 3 + 60 ) - 7 , 8 ) ;
+    };
+};
+
+String RID_STR_TYPE_TABLE
+{
+    Text = "Tabelle";
+    Text [ English ] = "Table";
+    Text [ english_us ] = "Table";
+};
+
+String RID_STR_TYPE_QUERY
+{
+    Text = "Abfrage";
+    Text [ English ] = "Query";
+    Text [ english_us ] = "Query";
+};
+
+String RID_STR_TYPE_COMMAND
+{
+    Text = "SQL-Befehl";
+    Text [ English ] = "SQL command";
+    Text [ english_us ] = "SQL command";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/17 07:42:30  kz
+ *  Merge SRC632: 17.05.01 - 09:42:46 (NoBranch)
+ *
  *  Revision 1.11  2001/05/12 06:49:53  rt
  *  Merge SRC631: 12.05.01 - 08:50:12 (NoBranch)
  *
