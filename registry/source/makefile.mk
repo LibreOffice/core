@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: patrick.luby $ $Date: 2000-09-25 02:34:55 $
+#   last change: $Author: svesik $ $Date: 2001-02-02 14:04:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,10 +83,8 @@ SLOFILES= \
             $(SLO)$/reflwrit.obj
 
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
 
