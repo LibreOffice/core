@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_provider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:16:12 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ ContentProvider::createDocumentContent(
 
 //=========================================================================
 //
-// interface OfficeDocumentsCloseListener
+// interface OfficeDocumentsEventListener
 //
 //=========================================================================
 
@@ -275,20 +275,85 @@ void ContentProvider::notifyDocumentClosed( const rtl::OUString & rDocId )
 
     // Notify all content objects related to the closed doc.
 
+    bool bFoundDocumentContent = false;
+    rtl::Reference< Content > xRoot;
+
     while ( it != end )
     {
-        const rtl::OUString aURL
-            = (*it)->getIdentifier()->getContentIdentifier();
-        sal_Int32 nLen = TDOC_URL_SCHEME_LENGTH + 2; // url-scheme + :/
+        Uri aUri( (*it)->getIdentifier()->getContentIdentifier() );
+        OSL_ENSURE( aUri.isValid(),
+                    "ContentProvider::notifyDocumentClosed - Invalid URI!" );
 
-        if ( aURL.match( rDocId, nLen ) )
+        if ( !bFoundDocumentContent )
+        {
+            if ( aUri.isRoot() )
+            {
+                xRoot = static_cast< Content * >( (*it).getBodyPtr() );
+            }
+            else if ( aUri.isDocument() )
+            {
+                if ( aUri.getDocumentId() == rDocId )
+                {
+                    bFoundDocumentContent = true;
+
+                    // document content will notify removal of child itself;
+                    // no need for the root to propagate this.
+                    xRoot.clear();
+                }
+            }
+        }
+
+        if ( aUri.getDocumentId() == rDocId )
         {
             // Inform content.
             rtl::Reference< Content > xContent
                 = static_cast< Content * >( (*it).getBodyPtr() );
 
-            xContent->notifyDocumentClosure();
+            xContent->notifyDocumentClosed();
         }
+
+        ++it;
+    }
+
+    if ( xRoot.is() )
+    {
+        // No document content found for rDocId but root content
+        // instanciated. Root content must announce document removal
+        // to content event listeners.
+        xRoot->notifyChildRemoved( rDocId );
+    }
+}
+
+//=========================================================================
+// virtual
+void ContentProvider::notifyDocumentOpened( const rtl::OUString & rDocId )
+{
+    vos::OGuard aGuard( getContentListMutex() );
+
+    ::ucb::ContentRefList aAllContents;
+    queryExistingContents( aAllContents );
+
+    ::ucb::ContentRefList::const_iterator it  = aAllContents.begin();
+    ::ucb::ContentRefList::const_iterator end = aAllContents.end();
+
+    // Find root content. If instanciated let it propagate document insertion.
+
+    while ( it != end )
+    {
+        Uri aUri( (*it)->getIdentifier()->getContentIdentifier() );
+        OSL_ENSURE( aUri.isValid(),
+                    "ContentProvider::notifyDocumentOpened - Invalid URI!" );
+
+        if ( aUri.isRoot() )
+        {
+            rtl::Reference< Content > xRoot
+                = static_cast< Content * >( (*it).getBodyPtr() );
+            xRoot->notifyChildInserted( rDocId );
+
+            // Done.
+            break;
+        }
+
         ++it;
     }
 }
