@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 10:19:06 $
+ *  last change: $Author: gt $ $Date: 2001-06-01 12:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,7 @@ double SAL_CALL AnalysisAddIn::getDisc( constREFXPS& xOpt,
 {
     if( fPrice <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
         THROW_IAE;
-
-    return ( fRedemp / fPrice - 1.0 ) / GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, GetOptBase( rOB ) );
+    return ( 1.0 - fPrice / fRedemp ) / GetYearFrac( xOpt, nSettle, nMat, GetOptBase( rOB ) );
 }
 
 
