@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLData.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XSQLInput;
-interface XSQLOutput;
+ published interface XSQLInput;
+ published interface XSQLOutput;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XSQLData
@@ -87,7 +87,7 @@ interface XSQLOutput;
     directly.
     </p>
  */
-interface XSQLData: com::sun::star::uno::XInterface
+published interface XSQLData: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XSQLData::getSQLTypeName
