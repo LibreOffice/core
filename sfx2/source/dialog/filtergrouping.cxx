@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 11:29:46 $
+ *  last change: $Author: hr $ $Date: 2001-10-11 16:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ namespace sfx2
     //--------------------------------------------------------------------
     void lcl_GroupAndClassify( SfxFilterMatcherIter& _rFilterMatcher, GroupedFilterList& _rAllFilters )
     {
-        _rAllFilters.swap( GroupedFilterList() );
+        _rAllFilters.clear();
 
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         // read the classification of filters
@@ -945,6 +945,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/10/11 11:29:46  vg
+ *  #65293# corrected for solaris' compiler
+ *
  *  Revision 1.3  2001/10/09 08:42:06  fs
  *  finalized #91894# - filter grouping and classifying now works (hopefully :)
  *
