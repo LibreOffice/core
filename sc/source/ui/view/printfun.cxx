@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-06 14:52:49 $
+ *  last change: $Author: nn $ $Date: 2002-11-21 19:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,9 +1037,10 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     SetDateTime( Date(), Time() );
 
     aFieldData.aTitle       = pDocShell->GetTitle();
-    aFieldData.aLongDocName = pDocShell->GetMedium()->GetName();
+    const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
+    aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( aFieldData.aLongDocName.Len() )
-        aFieldData.aShortDocName = INetURLObject( aFieldData.aLongDocName ).GetName();
+        aFieldData.aShortDocName = rURLObj.GetName( INetURLObject::DECODE_UNAMBIGUOUS );
     else
         aFieldData.aShortDocName = aFieldData.aLongDocName = aFieldData.aTitle;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 13:16:37 $
+ *  last change: $Author: nn $ $Date: 2002-11-21 19:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1789,9 +1789,10 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     pDoc->GetName( nTab, rData.aTabName );
 
     rData.aTitle        = pDocShell->GetTitle();
-    rData.aLongDocName  = pDocShell->GetMedium()->GetName();
+    const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
+    rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( rData.aLongDocName.Len() )
-        rData.aShortDocName = INetURLObject( rData.aLongDocName ).GetName();
+        rData.aShortDocName = rURLObj.GetName( INetURLObject::DECODE_UNAMBIGUOUS );
     else
         rData.aShortDocName = rData.aLongDocName = rData.aTitle;
     rData.nPageNo       = 1;

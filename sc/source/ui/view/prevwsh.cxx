@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-17 09:50:48 $
+ *  last change: $Author: nn $ $Date: 2002-11-21 19:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,9 +747,10 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     pDoc->GetName( nTab, rData.aTabName );
 
     rData.aTitle        = pDocShell->GetTitle();
-    rData.aLongDocName  = pDocShell->GetMedium()->GetName();
+    const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
+    rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( rData.aLongDocName.Len() )
-        rData.aShortDocName = INetURLObject( rData.aLongDocName ).GetName();
+        rData.aShortDocName = rURLObj.GetName( INetURLObject::DECODE_UNAMBIGUOUS );
     else
         rData.aShortDocName = rData.aLongDocName = rData.aTitle;
     rData.nPageNo       = pPreview->GetPageNo() + 1;
