@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:43:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ hebrew ] = "Feldtyp";
         Text[ hindi ] = "Field type";
         Text[ slovak ] = "Typ poľa";
+        Text[ hungarian ] = "Mezőtípus";
+        Text[ slovenian ] = "Vrsta polja";
     };
     RadioButton RBT_FIX
     {
@@ -113,7 +115,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ english_us ] = "~Fixed" ;
         Text [ portuguese_brazilian ] = "~Fixo" ;
         Text [ swedish ] = "~fast" ;
-        Text [ danish ] = "fast" ;
+        Text [ danish ] = "~Fast" ;
         Text [ italian ] = "~Fisso" ;
         Text [ spanish ] = "~fijo" ;
         Text [ french ] = "~fixe" ;
@@ -135,6 +137,8 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ hebrew ] = "~fix";
         Text[ hindi ] = "~स्थिर";
         Text[ slovak ] = "~Nemenný";
+        Text[ hungarian ] = "~Rögzített";
+        Text[ slovenian ] = "~Fiksno";
     };
     RadioButton RBT_VAR
     {
@@ -147,7 +151,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ english_us ] = "~Variable" ;
         Text [ portuguese_brazilian ] = "~Vari�vel" ;
         Text [ swedish ] = "~variabel" ;
-        Text [ danish ] = "variabel" ;
+        Text [ danish ] = "~Variabel" ;
         Text [ italian ] = "~Variabile" ;
         Text [ spanish ] = "~variable" ;
         Text [ french ] = "~variable" ;
@@ -169,6 +173,8 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ hebrew ] = "~variabel";
         Text[ hindi ] = "~परिवर्ती";
         Text[ slovak ] = "~Premenný";
+        Text[ hungarian ] = "~Változó";
+        Text[ slovenian ] = "~Spremenljivo";
     };
     FixedText FT_LANGUAGE
     {
@@ -185,7 +191,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ spanish ] = "~Idioma";
         Text[ finnish ] = "K~ieli";
         Text[ italian ] = "Lin~gua";
-        Text[ danish ] = "Sprog";
+        Text[ danish ] = "S~prog";
         Text[ swedish ] = "~Spr�k";
         Text[ polish ] = "J�zyk";
         Text[ portuguese_brazilian ] = "~Idioma";
@@ -201,6 +207,8 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
         Text[ slovak ] = "~Jazyk";
+        Text[ hungarian ] = "~Nyelv";
+        Text[ slovenian ] = "~Jezik";
     };
 
     ListBox LB_LANGUAGE
@@ -228,7 +236,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ english_us ] = "F~ormat" ;
         Text [ portuguese_brazilian ] = "Forma~to" ;
         Text [ swedish ] = "F~ormat" ;
-        Text [ danish ] = "Format" ;
+        Text [ danish ] = "~Format" ;
         Text [ italian ] = "F~ormato" ;
         Text [ spanish ] = "F~ormato" ;
         Text [ french ] = "F~ormat" ;
@@ -251,6 +259,8 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "~रचना";
         Text[ slovak ] = "F~ormát";
+        Text[ hungarian ] = "F~ormátum";
+        Text[ slovenian ] = "O~blika";
     };
     OKButton BTN_OK
     {
@@ -297,7 +307,10 @@ ModalDialog DLG_FIELD_MODIFY
     Text[ hebrew ] = "Feldbefehl bearbeiten";
     Text[ hindi ] = "क्षेत्र का संपादन";
     Text[ slovak ] = "Upraviť pole";
+    Text[ hungarian ] = "Mező szerkesztése";
+    Text[ slovenian ] = "Urejanje polja";
 };
+
 
 
 
