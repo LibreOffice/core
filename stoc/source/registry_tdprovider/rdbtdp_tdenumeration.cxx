@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-13 16:01:19 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
             if ( (*it)->isValid() )
                 (*it)->closeKey();
         }
-        catch (...)
+        catch (Exception &)
         {
             // No exceptions from dtors, please!
             OSL_ENSURE( sal_False,
