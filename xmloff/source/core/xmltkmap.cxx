@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltkmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ SvXMLTokenMapEntry_Impl *SvXMLTokenMap::_Find( sal_uInt16 nKeyPrefix,
     return pRet;
 }
 
-SvXMLTokenMap::SvXMLTokenMap( SvXMLTokenMapEntry *pMap ) :
+SvXMLTokenMap::SvXMLTokenMap( const SvXMLTokenMapEntry *pMap ) :
     pImpl( new SvXMLTokenMap_Impl )
 {
     while( pMap->eLocalName != XML_TOKEN_INVALID )
