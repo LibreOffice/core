@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 #ifndef _SVARRAY_HXX
@@ -87,7 +87,11 @@
 
 #include "bibmod.hxx"
 class BibDataManager;
-
+namespace com{namespace sun{namespace star{
+    namespace form{
+        class XFormController;
+    }
+}}}
 class BibStatusDispatch
 {
 public:
@@ -121,6 +125,7 @@ friend class BibFrameCtrl_Impl;
 
     DECL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void* );
 
+    sal_Bool                    SaveModified(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController);
 public:
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent);
                                 BibFrameController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-16 22:44:42 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #define MN_EDIT 20
 #define MN_VIEW 21
 #define MN_EXTRA 22
+#define MN_INSERT 23
 #define MN_WIN 30
 #define MN_HELP 31
 
@@ -180,14 +181,15 @@ Menu RID_MAIN_MENU
                         Text[ polish ] = "Przyporzπdkowanie kolumn...";
                         Text[ portuguese_brazilian ] = "~Column assignment...";
                         Text[ japanese ] = "Âàó„ÅÆÂàÜÈ°û(~C)...";
-                        Text[ korean ] = "Ïó¥ Î∞∞Ï†ï(~C)...";
+                        Text[ korean ] = "Ïó¥ ÏßÄÏ†ï(~C)...";
                         Text[ chinese_simplified ] = "ÁºñÊéíÂàó(~C)...";
                         Text[ chinese_traditional ] = "Á∑®ÊéíÊ¨Ñ(~C)...";
                         Text[ arabic ] = " ⁄ÌÌ‰ «·√⁄„œ…...";
                         Text[ turkish ] = "~S¸tun d¸zeni...";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~AsignaciÛn de columnas...";
+                        Text[ catalan ] = "DisposiciÛ de les ~columnes...";
                         Text[ finnish ] = "~Sarakej‰rjestys";
+                        Text[ thai ] = "‡∏à‡∏±‡∏î‡πÄ‡∏£‡∏µ‡∏¢‡∏á~‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå...";
                     };
             MenuItem
             {
@@ -209,17 +211,27 @@ Menu RID_MAIN_MENU
                         Text[ swedish ] = "~Datak‰lla...";
                         Text[ polish ] = "èrÛd≥o danych...";
                         Text[ portuguese_brazilian ] = "~Data source...";
-                        Text[ japanese ] = "ÔæÉÔæûÔΩ∞ÔæÄÔΩøÔΩ∞ÔΩΩ(~D)...";
+                        Text[ japanese ] = "„Éá„Éº„Çø„ÇΩ„Éº„Çπ(~D)...";
                         Text[ korean ] = "Îç∞Ïù¥ÌÑ∞ ÏÜåÏä§(~D)...";
                         Text[ chinese_simplified ] = "Êï∞ÊçÆÊ∫ê(~D)...";
                         Text[ chinese_traditional ] = "Ë≥áÊñôÊ∫ê(~D)...";
                         Text[ arabic ] = "„’œ— «·»Ì«‰« ...";
                         Text[ turkish ] = "~Veri kayna˝...";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~Fuente de datos...";
+                        Text[ catalan ] = "Font de les ~dades...";
                         Text[ finnish ] = "~Tietol‰hde";
-                    };
-        };
+                        Text[ thai ] = "‡πÅ‡∏´‡∏•‡πà‡∏á~‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•...";
+               };
+            MenuItem
+            {
+                HelpId = HID_BIB_DELETE_RECORD;
+                Command = ".uno:Bib/DeleteRecord" ;
+                Identifier = RID_MAIN_DELETE_RECORD;
+                Checkable=TRUE;
+                Text = "~Datensatz lˆschen" ;
+                Text[ english_us ] = "Delete ~Record";
+            };
+            };
         };
         Text[ russian ] = "~œ‡‚Í‡";
             Text[ polish ] = "~Edytuj";
@@ -231,7 +243,8 @@ Menu RID_MAIN_MENU
             Text[ korean ] = "Ìé∏Ïßë(~E)";
             Text[ turkish ] = "~D¸zenle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Editar";
+            Text[ catalan ] = "~Edita";
+            Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç";
         };
         MenuItem
         {
@@ -267,7 +280,31 @@ Menu RID_MAIN_MENU
             Text[ arabic ] = "~⁄—÷";
             Text[ turkish ] = "Gˆr¸n¸m";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Ver";
+            Text[ catalan ] = "~Visualitza";
+            Text[ thai ] = "~‡∏°‡∏∏‡∏°‡∏°‡∏≠‡∏á";
+        };
+        MenuItem
+        {
+            Identifier = MN_INSERT;
+            HelpID = MN_INSERT ;
+            Text = "~Einf¸gen" ;
+            Text [ English ] = "~Insert" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        HelpId = HID_BIB_INSERT_RECORD;
+                        Command = ".uno:Bib/InsertRecord" ;
+                        Identifier = RID_MAIN_INSERT_RECORD;
+                        Checkable=TRUE;
+                        Text = "~Datensatz" ;
+                        Text[ English ] = "~Record" ;
+                    };
+
+                };
+            };
         };
     MenuItem
     {
@@ -308,15 +345,16 @@ Menu RID_MAIN_MENU
                         Text[ swedish ] = "~Filtrera...";
                         Text[ polish ] = "Filtruj...";
                         Text[ portuguese_brazilian ] = "Filter...";
-                        Text[ japanese ] = "ÔæåÔΩ®ÔæôÔæÄ(~F)...";
+                        Text[ japanese ] = "„Éï„Ç£„É´„Çø(~F)...";
                         Text[ korean ] = "ÌïÑÌÑ∞ÎßÅ(~F)...";
                         Text[ chinese_simplified ] = "Á≠õÈÄâ(~F)...";
                         Text[ chinese_traditional ] = "ÁØ©ÈÅ∏(~F)...";
                         Text[ arabic ] = " ’›Ì…...";
                         Text[ turkish ] = "~Filtrele...";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~Filter...";
+                        Text[ catalan ] = "~Filtre...";
                         Text[ finnish ] = "~Suodatin";
+                        Text[ thai ] = "~‡∏ï‡∏±‡∏ß‡∏Å‡∏£‡∏≠‡∏á...";
                     };
              MenuItem
             {
@@ -332,29 +370,18 @@ Menu RID_MAIN_MENU
             Text[ russian ] = "~—Â‚ËÒ";
             Text[ greek ] = "≈~Ò„·ÎÂﬂ·";
             Text[ polish ] = "~NarzÍdzia";
-            Text[ japanese ] = "ÔæÇÔΩ∞Ôæô(~T)";
+            Text[ japanese ] = "„ÉÑ„Éº„É´(~T)";
             Text[ korean ] = "ÎèÑÍµ¨(~T)";
             Text[ chinese_simplified ] = "Â∑•ÂÖ∑(~T)";
             Text[ chinese_traditional ] = "Â∑•ÂÖ∑(~T)";
             Text[ arabic ] = "√~œÊ« ";
             Text[ turkish ] = "~AraÁlar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Herramientas";
+            Text[ catalan ] = "E~ines";
+            Text[ thai ] = "‡πÄ~‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏°‡∏∑‡∏≠";
         };
     ITEM_WINDOW_MENU
     ITEM_HELP_MENU
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
 

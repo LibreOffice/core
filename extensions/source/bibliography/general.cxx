@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,9 +539,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);
     if(xRowSet.is())
         xRowSet->addRowSetListener(xPosListener);
-    xFormCtrl = uno::Reference< form::XFormController > (
-        xMgr->createInstance(C2U("com.sun.star.form.controller.FormController")), UNO_QUERY);
-    xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (pDatMan->getForm(), UNO_QUERY));
+    uno::Reference< form::XFormController > xFormCtrl = pDatMan->GetFormController();
     xFormCtrl->setContainer(xCtrlContnr);
     xFormCtrl->activateTabOrder();
 
@@ -578,6 +576,7 @@ BibGeneralPage::~BibGeneralPage()
  ---------------------------------------------------------------------------*/
 void    BibGeneralPage::CommitActiveControl()
 {
+    uno::Reference< form::XFormController > xFormCtrl = pDatMan->GetFormController();
     uno::Reference< awt::XControl >  xCurr = xFormCtrl->getCurrentControl();
     if(xCurr.is())
     {

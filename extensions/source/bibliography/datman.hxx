@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:41 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
+#include <com/sun/star/form/XFormController.hpp>
+#endif
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
 #endif
@@ -111,6 +113,7 @@ private:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            m_xGridModel;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xSourceProps;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xParser;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >         m_xFormCtrl;
         ::rtl::OUString                     aActiveDataTable;
         ::rtl::OUString                     aDataSourceURL;
         ::rtl::OUString                     aQuoteChar;
@@ -196,6 +199,8 @@ public:
 
         const rtl::OUString&        GetIdentifierMapping();
         void                        ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > GetFormController();
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-02-22 09:40:36 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1846,5 +1846,19 @@ void BibDataManager::SetToolbar(BibToolBar* pSet)
     pToolbar = pSet;
     if(pToolbar)
         pToolbar->SetDatMan(*this);
+}
+/* -----------------------------08.05.2002 09:26------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Reference< form::XFormController > BibDataManager::GetFormController()
+{
+    if(!m_xFormCtrl.is())
+    {
+        Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
+        m_xFormCtrl = uno::Reference< form::XFormController > (
+            xMgr->createInstance(C2U("com.sun.star.form.controller.FormController")), UNO_QUERY);
+        m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
+    }
+    return m_xFormCtrl;
 }
 

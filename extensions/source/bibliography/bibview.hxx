@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

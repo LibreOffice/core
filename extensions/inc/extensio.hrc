@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-12 12:24:12 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,4 +159,6 @@
 #define UID_DBIWIZARD_HELP                      (HID_EXTENSIONS_START + 70)
 #define HID_DBIWIZARD_FILESELECTION             (HID_EXTENSIONS_START + 71)
 
+#define HID_BIB_DELETE_RECORD                   (HID_EXTENSIONS_START + 72)
+#define HID_BIB_INSERT_RECORD                   (HID_EXTENSIONS_START + 73)
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 //#endif
 #ifndef _COM_SUN_STAR_FORM_XBOUNDCOMPONENT_HPP_
 #include <com/sun/star/form/XBoundComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
-#include <com/sun/star/form/XFormController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
@@ -175,9 +172,6 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public TabPage
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                         xCtrlContnr;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >
-                        xFormCtrl;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         xMgr;

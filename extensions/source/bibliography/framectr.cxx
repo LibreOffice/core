@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:42:24 $
+ *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,9 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
-
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 #ifndef _BIB_FRAMECTR_HXX
 #include "framectr.hxx"
 #endif
@@ -112,7 +114,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_FORM_XCONFIRMDELETELISTENER_HPP_
+#include <com/sun/star/form/XConfirmDeleteListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
+#include <com/sun/star/form/XFormController.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
@@ -122,10 +129,20 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
+#include <com/sun/star/sdb/RowChangeAction.hpp>
+#endif
 
 using namespace osl;
 using namespace cppu;
 using namespace rtl;
+using namespace com::sun::star::sdbc;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
@@ -325,6 +342,53 @@ uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispat
 {
     return uno::Sequence<uno::Reference< XDispatch > >();
 }
+sal_Bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
+{
+    sal_Int32 nPriv = 0;
+    _rxCursorSet->getPropertyValue(C2U("Privileges")) >>= nPriv;
+    return ((_rxCursorSet.is() && (nPriv & sdbcx::Privilege::INSERT) != 0));
+}
+/* -----------------------------08.05.2002 08:58------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::XFormController>& xController)
+{
+    if (!xController.is())
+        return sal_False;
+    sal_Bool bInserted = sal_False;
+
+    Reference< XResultSetUpdate> _xCursor = Reference< XResultSetUpdate>(xController->getModel(), UNO_QUERY);
+
+    if (!_xCursor.is())
+        return sal_False;
+
+    Reference< beans::XPropertySet> _xSet = Reference< beans::XPropertySet>(_xCursor, UNO_QUERY);
+    if (!_xSet.is())
+        return sal_False;
+
+    // muß gespeichert werden ?
+    sal_Bool  bIsNew        = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsNew")));
+    sal_Bool  bIsModified   = ::comphelper::getBOOL(_xSet->getPropertyValue(C2U("IsModified")));
+    sal_Bool bResult = !bIsModified;
+    if (bIsModified)
+    {
+        try
+        {
+            if (bIsNew)
+                _xCursor->insertRow();
+            else
+                _xCursor->updateRow();
+            bResult = sal_True;
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("SaveModified: Exception occured!");
+        }
+
+        bInserted = bIsNew && bResult;
+    }
+    return bResult;
+}
 
 //class XDispatch
 void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException)
@@ -470,6 +534,85 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
             Application::PostUserEvent( STATIC_LINK( this, BibFrameController_Impl,
                                         DisposeHdl ), 0 );
 
+        }
+        else if(aCommand.EqualsAscii("Bib/InsertRecord"))
+        {
+            Reference<form::XFormController > xFormCtrl = pDatMan->GetFormController();
+            if(SaveModified(xFormCtrl))
+            {
+                try
+                {
+                    Reference< sdbc::XResultSet >  xCursor( pDatMan->getForm(), UNO_QUERY );
+                    xCursor->last();
+
+                    Reference< XResultSetUpdate >  xUpdateCursor( pDatMan->getForm(), UNO_QUERY );
+                    xUpdateCursor->moveToInsertRow();
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR("Exception in last() or moveToInsertRow()")
+                }
+            }
+        }
+        else if(aCommand.EqualsAscii("Bib/DeleteRecord"))
+        {
+            Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(pDatMan->getForm(), UNO_QUERY);
+            Reference< XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
+            Reference< beans::XPropertySet >  xSet(pDatMan->getForm(), UNO_QUERY);
+            sal_Bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue(C2U("IsNew")));
+            if(!bIsNew)
+            {
+                sal_uInt32 nCount = 0;
+                xSet->getPropertyValue(C2U("RowCount")) >>= nCount;
+                // naechste position festellen
+                sal_Bool bLeft = xCursor->isLast() && nCount > 1;
+                sal_Bool bRight= !xCursor->isLast();
+                sal_Bool bSuccess = sal_False;
+                try
+                {
+                    // ask for confirmation
+                    Reference< frame::XController > xCtrl = pImp->pController;
+                    Reference< form::XConfirmDeleteListener >  xConfirm(pDatMan->GetFormController(),UNO_QUERY);
+                    if (xConfirm.is())
+                    {
+                        sdb::RowChangeEvent aEvent;
+                        aEvent.Source = Reference< XInterface > (xCursor, UNO_QUERY);
+                        aEvent.Action = sdb::RowChangeAction::DELETE;
+                        aEvent.Rows = 1;
+                        bSuccess = xConfirm->confirmDelete(aEvent);
+                    }
+
+                    // das Ding loeschen
+                    if (bSuccess)
+                        xUpdateCursor->deleteRow();
+                }
+                catch(Exception&)
+                {
+                    bSuccess = sal_False;
+                }
+                if (bSuccess)
+                {
+                    if (bLeft || bRight)
+                        xCursor->relative(bRight ? 1 : -1);
+                    else
+                    {
+                        sal_Bool bCanInsert = canInsertRecords(xSet);
+                        // kann noch ein Datensatz eingefuegt weden
+                        try
+                        {
+                            if (bCanInsert)
+                                xUpdateCursor->moveToInsertRow();
+                            else
+                                // Datensatz bewegen um Stati neu zu setzen
+                                xCursor->first();
+                        }
+                        catch(Exception&)
+                        {
+                            DBG_ERROR("DeleteRecord : exception caught !");
+                        }
+                    }
+                }
+            }
         }
     }
 }
