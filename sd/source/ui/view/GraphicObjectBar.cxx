@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicObjectBar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:13:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@
 #endif
 
 #pragma hdrstop
+
+#include <sfx2/objface.hxx>
 
 #include "app.hrc"
 #include "res_bmp.hrc"
