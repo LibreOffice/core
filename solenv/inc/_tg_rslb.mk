@@ -19,26 +19,6 @@ ALLTAR : $(HIDRES1PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION).ilst2 : $(RSC_MULTI1)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION).ilst2 : $(RSC_MULTI1)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI1) : \
         $(RESLIB1SRSFILES) \
         $(RESLIB1TARGETN) \
@@ -50,10 +30,10 @@ $(RSC_MULTI1) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -67,11 +47,11 @@ $(RSC_MULTI1) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -122,26 +102,6 @@ ALLTAR : $(HIDRES2PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION).ilst2 : $(RSC_MULTI2)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION).ilst2 : $(RSC_MULTI2)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI2) : \
         $(RESLIB2SRSFILES) \
         $(RESLIB2TARGETN) \
@@ -153,10 +113,10 @@ $(RSC_MULTI2) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -170,11 +130,11 @@ $(RSC_MULTI2) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -225,26 +185,6 @@ ALLTAR : $(HIDRES3PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION).ilst2 : $(RSC_MULTI3)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION).ilst2 : $(RSC_MULTI3)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI3) : \
         $(RESLIB3SRSFILES) \
         $(RESLIB3TARGETN) \
@@ -256,10 +196,10 @@ $(RSC_MULTI3) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -273,11 +213,11 @@ $(RSC_MULTI3) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -328,26 +268,6 @@ ALLTAR : $(HIDRES4PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION).ilst2 : $(RSC_MULTI4)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION).ilst2 : $(RSC_MULTI4)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI4) : \
         $(RESLIB4SRSFILES) \
         $(RESLIB4TARGETN) \
@@ -359,10 +279,10 @@ $(RSC_MULTI4) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -376,11 +296,11 @@ $(RSC_MULTI4) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -431,26 +351,6 @@ ALLTAR : $(HIDRES5PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION).ilst2 : $(RSC_MULTI5)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION).ilst2 : $(RSC_MULTI5)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI5) : \
         $(RESLIB5SRSFILES) \
         $(RESLIB5TARGETN) \
@@ -462,10 +362,10 @@ $(RSC_MULTI5) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -479,11 +379,11 @@ $(RSC_MULTI5) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -534,26 +434,6 @@ ALLTAR : $(HIDRES6PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION).ilst2 : $(RSC_MULTI6)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION).ilst2 : $(RSC_MULTI6)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI6) : \
         $(RESLIB6SRSFILES) \
         $(RESLIB6TARGETN) \
@@ -565,10 +445,10 @@ $(RSC_MULTI6) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -582,11 +462,11 @@ $(RSC_MULTI6) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -637,26 +517,6 @@ ALLTAR : $(HIDRES7PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION).ilst2 : $(RSC_MULTI7)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION).ilst2 : $(RSC_MULTI7)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI7) : \
         $(RESLIB7SRSFILES) \
         $(RESLIB7TARGETN) \
@@ -668,10 +528,10 @@ $(RSC_MULTI7) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -685,11 +545,11 @@ $(RSC_MULTI7) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -740,26 +600,6 @@ ALLTAR : $(HIDRES8PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION).ilst2 : $(RSC_MULTI8)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION).ilst2 : $(RSC_MULTI8)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI8) : \
         $(RESLIB8SRSFILES) \
         $(RESLIB8TARGETN) \
@@ -771,10 +611,10 @@ $(RSC_MULTI8) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -788,11 +628,11 @@ $(RSC_MULTI8) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -843,26 +683,6 @@ ALLTAR : $(HIDRES9PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION).ilst2 : $(RSC_MULTI9)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION).ilst2 : $(RSC_MULTI9)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI9) : \
         $(RESLIB9SRSFILES) \
         $(RESLIB9TARGETN) \
@@ -874,10 +694,10 @@ $(RSC_MULTI9) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -891,11 +711,11 @@ $(RSC_MULTI9) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
@@ -946,26 +766,6 @@ ALLTAR : $(HIDRES10PARTICLE)
 
 .ENDIF # "$(BUILDHIDS)"!=""
 
-.IF "$(common_build_reslib)"!=""
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION).ilst2 : $(RSC_MULTI10)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION).ilst2
-.ELSE           # "$(common_build_reslib)"!=""
-$(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION).ilst2 : $(RSC_MULTI10)
-.IF "$(use_shell)"!="4nt"	
-    $(TYPE) $(mktmp $(foreach,i,$(alllangext) $(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.ilst)) | xargs sed s\#%MODULE%\#%MODULE%$/$(PRJNAME)\# > $@
-.ELSE			# "$(use_shell)"!="4nt"	
-    +$(TYPE) $(foreach,i,$(alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.ilst) | sed `s/MODULE%/MODULE%\/$(PRJNAME)/` > $@
-.ENDIF			# "$(use_shell)"!="4nt"	
-
-ALLTAR : $(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION).ilst2
-.ENDIF          # "$(common_build_reslib)"!=""
-
 $(RSC_MULTI10) : \
         $(RESLIB10SRSFILES) \
         $(RESLIB10TARGETN) \
@@ -977,10 +777,10 @@ $(RSC_MULTI10) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
     -oil{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -994,11 +794,11 @@ $(RSC_MULTI10) : \
     $(foreach,i,$(alllangext) $(rsclang_{$i}) \
     $(rescharset_{$i}) \
     -fs{$(BIN)$/$(RESLIB10NAME)$(RESLIB10VERSION)$i.res} \
-    $(foreach,j,$(RESLIB1IMAGES) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
     -lip{$j} ) \
     -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
-    -subMODULE=$(PRJ) \
+    -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
     -oil$(BIN) \
     -ft$@ \
