@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-15 17:23:37 $
+ *  last change: $Author: sab $ $Date: 2001-06-20 14:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3721,7 +3721,7 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
             break;
         case svIndex:
         {
-            String aStr;
+            rtl::OUStringBuffer aBuffer;
             switch ( eOp )
             {
                 case ocName:
@@ -3730,11 +3730,11 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
                     if (pData)
                     {
                         if (pData->HasType(RT_SHARED))
-                            pData->UpdateSymbol( aStr, aPos,
+                            pData->UpdateSymbol( aBuffer, aPos,
                                         pSymbolTable == pSymbolTableEnglish,
                                         bCompileXML );
                         else
-                            pData->GetName(aStr);
+                            aBuffer.append(pData->GetName());
                     }
                 }
                 break;
@@ -3742,14 +3742,14 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
                 {
                     ScDBData* pDBData = pDoc->GetDBCollection()->FindIndex(t->GetIndex());
                     if (pDBData)
-                        pDBData->GetName(aStr);
+                        aBuffer.append(pDBData->GetName());
                 }
                 break;
             }
-            if ( !aStr.Len() )
-                rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
+            if ( aBuffer.getLength() )
+                rBuffer.append(aBuffer);
             else
-                rBuffer.append(aStr);
+                rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
             break;
         }
         case svExternal:
