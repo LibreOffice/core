@@ -1,5 +1,5 @@
 <!--
-	$Id: script.mod,v 1.7 2001-08-09 13:22:49 dvo Exp $
+	$Id: script.mod,v 1.8 2004-11-09 12:25:32 hr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -53,24 +53,49 @@
 
 -->
 
+<!ELEMENT script:libraries (script:library-embedded | script:library-linked)*>
+<!ATTLIST script:libraries xmlns:script CDATA #FIXED "http://openoffice.org/2000/script">
+<!ATTLIST script:libraries xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+
+<!ENTITY % boolean "(true|false)">
+
 <!ELEMENT script:library-embedded (script:module*)>
 <!ATTLIST script:library-embedded script:name %string; #REQUIRED>
-<!ATTLIST script:library-embedded script:password %string; #IMPLIED>
+<!ATTLIST script:library-embedded script:readonly %boolean; #IMPLIED>
 
 <!ELEMENT script:library-linked EMPTY>
 <!ATTLIST script:library-linked script:name %string; #REQUIRED>
 <!ATTLIST script:library-linked xlink:href %string; #REQUIRED>
 <!ATTLIST script:library-linked xlink:type (simple) #FIXED "simple">
+<!ATTLIST script:library-linked script:readonly %boolean; #IMPLIED>
 
-<!ELEMENT script:module (#PCDATA)>
+<!ELEMENT script:module (script:source-code)>
 <!ATTLIST script:module script:name %string; #REQUIRED>
-<!ATTLIST script:module script:language %string; #IMPLIED>
+
+<!ELEMENT script:source-code (#PCDATA)>
 
 
 <!ENTITY % script-language "script:language %string; #REQUIRED">
 <!ENTITY % event-name "script:event-name %string; #REQUIRED">
 <!ENTITY % location "script:location (document|application) #REQUIRED">
 <!ENTITY % macro-name "script:macro-name %string; #REQUIRED">
+
+<!ELEMENT script:event (#PCDATA)>
+<!ATTLIST script:event %script-language;
+                       %event-name;
+                       %location;
+					   %macro-name;>
+    %location;
+					   %macro-name;>
+<!ENTITY % location "script:location (document|application) #REQUIRED">
+<!ENTITY % macro-name "script:macro-name %string; #REQUIRED">
+
+<!ELEMENT script:event (#PCDATA)>
+<!ATTLIST script:event %script-language;
+                       %event-name;
+                       %location;
+					   %macro-name;>
+
 
 <!ELEMENT script:event (#PCDATA)>
 <!ATTLIST script:event %script-language;
