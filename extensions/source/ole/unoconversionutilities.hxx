@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-02 09:46:25 $
+ *  last change: $Author: kz $ $Date: 2005-01-19 15:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #ifndef _UNO_CONVERSION_UTILITIES
 #define _UNO_CONVERSION_UTILITIES
 
-#include "external/boost/scoped_array.hpp"
+#include "boost/scoped_array.hpp"
 #include "com/sun/star/script/XInvocationAdapterFactory.hpp"
 #include "com/sun/star/script/XInvocationAdapterFactory2.hpp"
 #include "com/sun/star/script/XTypeConverter.hpp"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:07:58 $
+ *  last change: $Author: kz $ $Date: 2005-01-19 15:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "osl/doublecheckedlocking.h"
 #include "osl/thread.h"
 
-#include "external/boost/scoped_array.hpp"
+#include "boost/scoped_array.hpp"
 
 #ifndef _COM_SUN_STAR_SCRIPT_FAILREASON_HPP_
 #include <com/sun/star/script/FailReason.hpp>
