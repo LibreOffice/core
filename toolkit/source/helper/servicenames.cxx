@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicenames.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:00:29 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ const sal_Char __FAR_DATA szServiceName_UnoControlScrollBar[] = "stardiv.vcl.con
 const sal_Char __FAR_DATA szServiceName_UnoControlScrollBarModel[] = "stardiv.vcl.controlmodel.ScrollBar", szServiceName2_UnoControlScrollBarModel[] = "com.sun.star.awt.UnoControlScrollBarModel";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedLine[] = "stardiv.vcl.control.FixedLine", szServiceName2_UnoControlFixedLine[] = "com.sun.star.awt.UnoControlFixedLine";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedLineModel[] = "stardiv.vcl.controlmodel.FixedLine", szServiceName2_UnoControlFixedLineModel[] = "com.sun.star.awt.UnoControlFixedLineModel";
-
+const sal_Char __FAR_DATA szServiceName_UnoControlRoadmap[] = "stardiv.vcl.control.Roadmap", szServiceName2_UnoControlRoadmap[] = "com.sun.star.awt.UnoControlRoadmap";
+const sal_Char __FAR_DATA szServiceName_UnoControlRoadmapModel[] = "stardiv.vcl.controlmodel.Roadmap", szServiceName2_UnoControlRoadmapModel[] = "com.sun.star.awt.UnoControlRoadmapModel";
 const sal_Char __FAR_DATA szServiceName_UnoSpinButtonControl[] = "com.sun.star.awt.UnoControlSpinButton";
 const sal_Char __FAR_DATA szServiceName_UnoSpinButtonModel[] = "com.sun.star.awt.UnoControlSpinButtonModel";
