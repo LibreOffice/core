@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-31 08:23:29 $
+ *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <vcl/resary.hxx>
+#include <tools/solmath.hxx>
 #include "analysishelper.hxx"
 #include "analysis.hrc"
 
@@ -2774,13 +2775,15 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 }
 
 
-STRING Complex::GetString( sal_Bool bi ) const
+STRING Complex::GetString( sal_Bool bi ) const THROWDEF_RTE_IAE
 {
     static const STRING aI( "i", 1, RTL_TEXTENCODING_MS_1252 );
     static const STRING aJ( "j", 1, RTL_TEXTENCODING_MS_1252 );
     static const STRING aPlus( "+", 1, RTL_TEXTENCODING_MS_1252 );
     static const STRING aMinus( "-", 1, RTL_TEXTENCODING_MS_1252 );
 
+    CHK_FINITE(r);
+    CHK_FINITE(i);
     STRING              aRet( ::GetString( r ) );
 
     if( i == 1.0 )

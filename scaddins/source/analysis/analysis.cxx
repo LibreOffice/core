@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-09 14:22:48 $
+ *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,8 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
 double SAL_CALL AnalysisAddIn::getYearfrac( constREFXPS& xOpt,
     sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& rMode ) THROWDEF_RTE_IAE
 {
-    return GetYearFrac( xOpt, nStartDate, nEndDate, GetOptBase( rMode ) );
+    double fRet = GetYearFrac( xOpt, nStartDate, nEndDate, GetOptBase( rMode ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -808,10 +809,11 @@ double SAL_CALL AnalysisAddIn::getMultinomial( const SEQSEQ( sal_Int32 )& aV ) T
         }
     }
 
-    if( nZ <= 170 )
-        return Fak( nZ ) / fN;
-    else
+    if( nZ > 170 )
         THROW_IAE;
+
+    double fRet = Fak( nZ ) / fN;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -841,13 +843,14 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
         }
     }
 
-    return fRet;
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenum ) THROWDEF_RTE_IAE
 {
-    return SolarMath::ApproxFloor( fNum / fDenum );
+    double fRet = SolarMath::ApproxFloor( fNum / fDenum );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -856,13 +859,15 @@ double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_R
     if( fMult == 0.0 )
         return fMult;
 
-    return fMult * SolarMath::Round( fNum / fMult );
+    double fRet = fMult * SolarMath::Round( fNum / fMult );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE_IAE
 {
-    return sqrt( fNum * PI );
+    double fRet = sqrt( fNum * PI );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -879,7 +884,8 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWD
     fMax -= fMin;
     fMax /= double( RAND_MAX );
 
-    return SolarMath::Round( fMin + fMax * double( rand() ) );
+    double fRet = SolarMath::Round( fMin + fMax * double( rand() ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -904,7 +910,7 @@ double SAL_CALL AnalysisAddIn::getGcd( const SEQSEQ( double )& aVLst, const SEQ(
         p = aValList.Next();
     }
 
-    return f;
+    RETURN_FINITE( f );
 }
 
 
@@ -936,19 +942,21 @@ double SAL_CALL AnalysisAddIn::getLcm( const SEQSEQ( ANY )& aVLst, const SEQ( un
         p = aValList.Next();
     }
 
-    return f;
+    RETURN_FINITE( f );
 }
 
 
 double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
-    return Bessel( fNum, nOrder, sal_True );
+    double fRet = Bessel( fNum, nOrder, sal_True );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
 {
-    return Bessel( fNum, nOrder, sal_False );
+    double fRet = Bessel( fNum, nOrder, sal_False );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -957,7 +965,8 @@ double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROW
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
 
-    return Besselk( fNum, nOrder );
+    double fRet = Besselk( fNum, nOrder );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -967,7 +976,8 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
         THROW_IAE;
 
 //  return yn( nOrder, fNum );
-    return Bessely( fNum, nOrder );
+    double fRet = Bessely( fNum, nOrder );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -990,7 +1000,8 @@ STRING SAL_CALL AnalysisAddIn::getBin2Oct( const STRING& aNum, const ANY& rPlace
 
 double SAL_CALL AnalysisAddIn::getBin2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    return ConvertToDec( aNum, 2, _P );
+    double fRet = ConvertToDec( aNum, 2, _P );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -1008,7 +1019,8 @@ STRING SAL_CALL AnalysisAddIn::getOct2Bin( const STRING& aNum, const ANY& rPlace
 
 double SAL_CALL AnalysisAddIn::getOct2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    return ConvertToDec( aNum, 8, _P );
+    double fRet = ConvertToDec( aNum, 8, _P );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -1044,7 +1056,8 @@ STRING SAL_CALL AnalysisAddIn::getHex2Bin( const STRING& aNum, const ANY& rPlace
 
 double SAL_CALL AnalysisAddIn::getHex2Dec( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    return ConvertToDec( aNum, 16, _P );
+    double fRet = ConvertToDec( aNum, 16, _P );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -1066,26 +1079,30 @@ sal_Int32 SAL_CALL AnalysisAddIn::getDelta( double fNum1, const ANY& rNum2 ) THR
 
 double SAL_CALL AnalysisAddIn::getErf( double fLL, const ANY& rUL ) THROWDEF_RTE_IAE
 {
+    double fRet;
     switch( rUL.getValueTypeClass() )
     {
         case uno::TypeClass_VOID:
-            return Erf( fLL );
+            fRet = Erf( fLL );
             break;
         case uno::TypeClass_DOUBLE:
+            {
             double  fUL = *( double* ) rUL.getValue();
-            return Erf( fUL ) - Erf( fLL );
+            fRet = Erf( fUL ) - Erf( fLL );
+            }
             break;
+        default:
+            THROW_IAE;
     }
 
-    THROW_IAE;
-
-    return 0.0;
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getErfc( double f ) THROWDEF_RTE_IAE
 {
-    return 1.0 - Erf( f );
+    double fRet = 1.0 - Erf( f );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -1101,19 +1118,22 @@ sal_Int32 SAL_CALL AnalysisAddIn::getGestep( double fNum, const ANY& rStep ) THR
 
 double SAL_CALL AnalysisAddIn::getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE
 {
-    return FactDouble( nNum );
+    double fRet = FactDouble( nNum );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getImabs( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    return Complex( aNum ).Abs();
+    double fRet = Complex( aNum ).Abs();
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getImaginary( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    return Complex( aNum ).Imag();
+    double fRet = Complex( aNum ).Imag();
+    RETURN_FINITE( fRet );
 }
 
 
@@ -1129,7 +1149,8 @@ STRING SAL_CALL AnalysisAddIn::getImpower( const STRING& aNum, double f ) THROWD
 
 double SAL_CALL AnalysisAddIn::getImargument( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    return Complex( aNum ).Arg();
+    double fRet = Complex( aNum ).Arg();
+    RETURN_FINITE( fRet );
 }
 
 
@@ -1226,7 +1247,8 @@ STRING SAL_CALL AnalysisAddIn::getImproduct( const SEQSEQ( STRING )& aNum1, cons
 
 double SAL_CALL AnalysisAddIn::getImreal( const STRING& aNum ) THROWDEF_RTE_IAE
 {
-    return Complex( aNum ).Real();
+    double fRet = Complex( aNum ).Real();
+    RETURN_FINITE( fRet );
 }
 
 
@@ -1312,7 +1334,8 @@ double SAL_CALL AnalysisAddIn::getConvert( double f, const STRING& aFU, const ST
     if( !pCDL )
         pCDL = new ConvertDataList();
 
-    return pCDL->Convert( f, aFU, aTU );
+    double fRet = pCDL->Convert( f, aFU, aTU );
+    RETURN_FINITE( fRet );
 }
 
 

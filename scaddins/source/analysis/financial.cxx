@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-23 16:13:18 $
+ *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "analysis.hxx"
 #include "analysishelper.hxx"
+#include <tools/solmath.hxx>
 
 
 
@@ -72,7 +73,8 @@ double SAL_CALL AnalysisAddIn::getAmordegrc( constREFXPS& xOpt,
     if( nDate > nFirstPer || fRate <= 0.0 || fRestVal > fCost )
         THROW_IAE;
 
-    return GetAmordegrc( GetNullDate( xOpt ), fCost, nDate, nFirstPer, fRestVal, fPer, fRate, GetOptBase( rOB ) );
+    double fRet = GetAmordegrc( GetNullDate( xOpt ), fCost, nDate, nFirstPer, fRestVal, fPer, fRate, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -83,7 +85,8 @@ double SAL_CALL AnalysisAddIn::getAmorlinc( constREFXPS& xOpt,
     if( nDate > nFirstPer || fRate <= 0.0 || fRestVal > fCost )
         THROW_IAE;
 
-    return GetAmorlinc( GetNullDate( xOpt ), fCost, nDate, nFirstPer, fRestVal, fPer, fRate, GetOptBase( rOB ) );
+    double fRet = GetAmorlinc( GetNullDate( xOpt ), fCost, nDate, nFirstPer, fRestVal, fPer, fRate, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -94,7 +97,8 @@ double SAL_CALL AnalysisAddIn::getAccrint( constREFXPS& xOpt,
     if( fRate <= 0.0 || fVal <= 0.0 || CHK_Freq || nIssue >= nSettle )
         THROW_IAE;
 
-    return fVal * fRate * GetYearDiff( GetNullDate( xOpt ), nIssue, nSettle, GetOptBase( rOB ) );
+    double fRet = fVal * fRate * GetYearDiff( GetNullDate( xOpt ), nIssue, nSettle, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -106,7 +110,8 @@ double SAL_CALL AnalysisAddIn::getAccrintm( constREFXPS& xOpt,
     if( fRate <= 0.0 || fVal <= 0.0 || nIssue >= nSettle )
         THROW_IAE;
 
-    return fVal * fRate * GetYearDiff( GetNullDate( xOpt ), nIssue, nSettle, GetOptBase( rOB ) );
+    double fRet = fVal * fRate * GetYearDiff( GetNullDate( xOpt ), nIssue, nSettle, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -116,7 +121,8 @@ double SAL_CALL AnalysisAddIn::getReceived( constREFXPS& xOpt,
     if( fInvest <= 0.0 || fDisc <= 0.0 )
         THROW_IAE;
 
-    return fInvest / ( 1.0 - ( fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, GetOptBase( rOB ) ) ) );
+    double fRet = fInvest / ( 1.0 - ( fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, GetOptBase( rOB ) ) ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -125,7 +131,8 @@ double SAL_CALL AnalysisAddIn::getDisc( constREFXPS& xOpt,
 {
     if( fPrice <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
         THROW_IAE;
-    return ( 1.0 - fPrice / fRedemp ) / GetYearFrac( xOpt, nSettle, nMat, GetOptBase( rOB ) );
+    double fRet = ( 1.0 - fPrice / fRedemp ) / GetYearFrac( xOpt, nSettle, nMat, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -136,7 +143,8 @@ double SAL_CALL AnalysisAddIn::getDuration( constREFXPS& xOpt,
     if( fCoup < 0.0 || fYield < 0.0 || CHK_Freq || nSettle >= nMat )
         THROW_IAE;
 
-    return GetDuration( GetNullDate( xOpt ),  nSettle, nMat, fCoup, fYield, nFreq, GetOptBase( rOB ) );
+    double fRet = GetDuration( GetNullDate( xOpt ),  nSettle, nMat, fCoup, fYield, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -147,7 +155,8 @@ double SAL_CALL AnalysisAddIn::getEffect( double fNominal, sal_Int32 nPeriods ) 
 
     double  fPeriods = nPeriods;
 
-    return pow( 1.0 + fNominal / fPeriods, fPeriods ) - 1.0;
+    double fRet = pow( 1.0 + fNominal / fPeriods, fPeriods ) - 1.0;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -164,20 +173,20 @@ double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods,
 
     fKapZ = 0.0;
 
-    sal_uInt32  nAnfang = sal_uInt32( nStartPer );
-    sal_uInt32  nEnde = sal_uInt32( nEndPer );
+    sal_uInt32  nStart = sal_uInt32( nStartPer );
+    sal_uInt32  nEnd = sal_uInt32( nEndPer );
 
-    if( nAnfang == 1 )
+    if( nStart == 1 )
     {
         if( nPayType <= 0 )
             fKapZ = fRmz + fVal * fRate;
         else
             fKapZ = fRmz;
 
-        nAnfang++;
+        nStart++;
     }
 
-    for( sal_uInt32 i = nAnfang ; i <= nEnde ; i++ )
+    for( sal_uInt32 i = nStart ; i <= nEnd ; i++ )
     {
         if( nPayType > 0 )
             fKapZ += fRmz - ( GetZw( fRate, double( i - 2 ), fRmz, fVal, 1 ) - fRmz ) * fRate;
@@ -185,7 +194,7 @@ double SAL_CALL AnalysisAddIn::getCumprinc( double fRate, sal_Int32 nNumPeriods,
             fKapZ += fRmz - GetZw( fRate, double( i - 1 ), fRmz, fVal, 0 ) * fRate;
     }
 
-    return fKapZ;
+    RETURN_FINITE( fKapZ );
 }
 
 
@@ -202,18 +211,18 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
 
     fZinsZ = 0.0;
 
-    sal_uInt32  nAnfang = sal_uInt32( nStartPer );
-    sal_uInt32  nEnde = sal_uInt32( nEndPer );
+    sal_uInt32  nStart = sal_uInt32( nStartPer );
+    sal_uInt32  nEnd = sal_uInt32( nEndPer );
 
-    if( nAnfang == 1 )
+    if( nStart == 1 )
     {
         if( nPayType <= 0 )
             fZinsZ = -fVal;
 
-        nAnfang++;
+        nStart++;
     }
 
-    for( sal_uInt32 i = nAnfang ; i <= nEnde ; i++ )
+    for( sal_uInt32 i = nStart ; i <= nEnd ; i++ )
     {
         if( nPayType > 0 )
             fZinsZ += GetZw( fRate, double( i - 2 ), fRmz, fVal, 1 ) - fRmz;
@@ -223,7 +232,7 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
 
     fZinsZ *= fRate;
 
-    return fZinsZ;
+    RETURN_FINITE( fZinsZ );
 }
 
 
@@ -234,7 +243,8 @@ double SAL_CALL AnalysisAddIn::getPrice( constREFXPS& xOpt,
     if( fYield < 0.0 || fRate < 0.0 || fRedemp <= 0 || CHK_Freq || nSettle >= nMat )
         THROW_IAE;
 
-    return getPrice_( GetNullDate( xOpt ), nSettle, nMat, fRate, fYield, fRedemp, nFreq, GetOptBase( rOB ) );
+    double fRet = getPrice_( GetNullDate( xOpt ), nSettle, nMat, fRate, fYield, fRedemp, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -244,7 +254,8 @@ double SAL_CALL AnalysisAddIn::getPricedisc( constREFXPS& xOpt,
     if( fDisc <= 0.0 || fRedemp <= 0 || nSettle >= nMat )
         THROW_IAE;
 
-    return fRedemp * ( 1.0 - fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, GetOptBase( rOB ) ) );
+    double fRet = fRedemp * ( 1.0 - fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, GetOptBase( rOB ) ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -267,7 +278,7 @@ double SAL_CALL AnalysisAddIn::getPricemat( constREFXPS& xOpt,
     fRet -= fIssSet * fRate;
     fRet *= 100.0;
 
-    return fRet;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -282,7 +293,7 @@ double SAL_CALL AnalysisAddIn::getMduration( constREFXPS& xOpt,
 
     double      fRet = GetDuration( GetNullDate( xOpt ),  nSettle, nMat, fCoup, fYield, nFreq, GetOptBase( rOB ) );
     fRet /= 1.0 + ( fYield / double( nFreq ) );
-    return fRet;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -292,7 +303,8 @@ double SAL_CALL AnalysisAddIn::getNominal( double fRate, sal_Int32 nPeriods ) TH
         THROW_IAE;
 
     double  fPeriods = nPeriods;
-    return ( pow( fRate + 1.0, 1.0 / fPeriods ) - 1.0 ) * fPeriods;
+    double fRet = ( pow( fRate + 1.0, 1.0 / fPeriods ) - 1.0 ) * fPeriods;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -312,7 +324,7 @@ double SAL_CALL AnalysisAddIn::getDollarfr( double fDollarDec, sal_Int32 nFrac )
 
     fRet += fInt;
 
-    return fRet;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -332,7 +344,7 @@ double SAL_CALL AnalysisAddIn::getDollarde( double fDollarFrac, sal_Int32 nFrac 
 
     fRet += fInt;
 
-    return fRet;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -343,7 +355,8 @@ double SAL_CALL AnalysisAddIn::getYield( constREFXPS& xOpt,
     if( fCoup < 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || CHK_Freq || nSettle >= nMat )
         THROW_IAE;
 
-    return getYield_( GetNullDate( xOpt ), nSettle, nMat, fCoup, fPrice, fRedemp, nFreq, GetOptBase( rOB ) );
+    double fRet = getYield_( GetNullDate( xOpt ), nSettle, nMat, fCoup, fPrice, fRedemp, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -357,10 +370,9 @@ double SAL_CALL AnalysisAddIn::getYielddisc( constREFXPS& xOpt,
     sal_Int32   nNullDate = GetNullDate( xOpt );
 
     double      fRet = 1.0 - fPrice / fRedemp;
-//  fRet /= GetYearDiff( nNullDate, nSettle, nMat, nBase );
     fRet /= GetYearFrac( nNullDate, nSettle, nMat, nBase );
-
-    return fRet / 0.99795;  // don't know what this constant means in original
+    fRet /= 0.99795;  // don't know what this constant means in original
+    RETURN_FINITE( fRet );
 }
 
 
@@ -371,7 +383,8 @@ double SAL_CALL AnalysisAddIn::getYieldmat( constREFXPS& xOpt,
     if( fRate < 0.0 || fRate <= 0.0 || nSettle >= nMat )
         THROW_IAE;
 
-    return GetYieldmat( GetNullDate( xOpt ),  nSettle, nMat, nIssue, fRate, fPrice, GetOptBase( rOB ) );
+    double fRet = GetYieldmat( GetNullDate( xOpt ),  nSettle, nMat, nIssue, fRate, fPrice, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -385,7 +398,8 @@ double SAL_CALL AnalysisAddIn::getTbilleq( constREFXPS& xOpt,
     if( fDisc <= 0.0 || nSettle >= nMat || nDiff > 360 )
         THROW_IAE;
 
-    return ( 365 * fDisc ) / ( 360 - ( fDisc * double( nDiff ) ) );
+    double fRet = ( 365 * fDisc ) / ( 360 - ( fDisc * double( nDiff ) ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -403,7 +417,8 @@ double SAL_CALL AnalysisAddIn::getTbillprice( constREFXPS& xOpt,
     if( modf( fFraction, &fDummy ) == 0.0 )
         THROW_IAE;
 
-    return 100.0 * ( 1.0 - fDisc * fFraction );
+    double fRet = 100.0 * ( 1.0 - fDisc * fFraction );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -422,7 +437,7 @@ double SAL_CALL AnalysisAddIn::getTbillyield( constREFXPS& xOpt, sal_Int32 nSett
     fRet /= double( nDiff );
     fRet *= 360.0;
 
-    return fRet;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -433,7 +448,8 @@ double SAL_CALL AnalysisAddIn::getOddfprice( constREFXPS& xOpt,
     if( fRate < 0 || fYield < 0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         THROW_IAE;
 
-    return GetOddfprice( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fYield, fRedemp, nFreq, GetOptBase( rOB ) );
+    double fRet = GetOddfprice( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fYield, fRedemp, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -444,8 +460,9 @@ double SAL_CALL AnalysisAddIn::getOddfyield( constREFXPS& xOpt,
     if( fRate < 0 || fPrice <= 0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         THROW_IAE;
 
-    return GetOddfyield( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fPrice, fRedemp, nFreq,
+    double fRet = GetOddfyield( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fPrice, fRedemp, nFreq,
                         GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -456,8 +473,9 @@ double SAL_CALL AnalysisAddIn::getOddlprice( constREFXPS& xOpt,
     if( fRate < 0 || fYield < 0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
         THROW_IAE;
 
-    return GetOddlprice( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fYield, fRedemp, nFreq,
+    double fRet = GetOddlprice( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fYield, fRedemp, nFreq,
                         GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -468,8 +486,9 @@ double SAL_CALL AnalysisAddIn::getOddlyield( constREFXPS& xOpt,
     if( fRate < 0 || fPrice <= 0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
         THROW_IAE;
 
-    return GetOddlyield( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fPrice, fRedemp, nFreq,
+    double fRet = GetOddlyield( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fPrice, fRedemp, nFreq,
                         GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -541,7 +560,7 @@ double SAL_CALL AnalysisAddIn::getXirr(
     }
 
     if( floor( f ) == 0.0 || fabs( fDiff ) <= 1e-10 )
-        return fYld;
+        RETURN_FINITE( fYld );
     else
         THROW_IAE;
 }
@@ -568,7 +587,7 @@ double SAL_CALL AnalysisAddIn::getXnpv(
     for( sal_Int32 i = 0 ; i < nNum ; i++ )
         fRet += *aValList.Get( i ) / ( pow( fRate, ( *aDateList.Get( i ) - fNull ) / 365.0 ) );
 
-    return fRet;
+    RETURN_FINITE( fRet );
 }
 
 
@@ -578,49 +597,56 @@ double SAL_CALL AnalysisAddIn::getIntrate( constREFXPS& xOpt,
     if( fInvest <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
         THROW_IAE;
 
-    return ( ( fRedemp / fInvest ) - 1.0 ) / GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, GetOptBase( rOB ) );
+    double fRet = ( ( fRedemp / fInvest ) - 1.0 ) / GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getCoupncd( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    return GetCoupncd( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    double fRet = GetCoupncd( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getCoupdays( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    return GetCoupdays( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    double fRet = GetCoupdays( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getCoupdaysnc( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    return GetCoupdaysnc( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    double fRet = GetCoupdaysnc( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getCoupdaybs( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    return GetCoupdaybs( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    double fRet = GetCoupdaybs( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getCouppcd( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    return GetCouppcd( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    double fRet = GetCouppcd( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
 double SAL_CALL AnalysisAddIn::getCoupnum( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    return GetCoupnum( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    double fRet = GetCoupnum( GetNullDate( xOpt ), nSettle, nMat, nFreq, GetOptBase( rOB ) );
+    RETURN_FINITE( fRet );
 }
 
 
@@ -633,7 +659,7 @@ double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const SEQSEQ( doubl
     for( const double* p = aSchedList.First() ; p ; p = aSchedList.Next() )
         fPrinc *= 1.0 + *p;
 
-    return fPrinc;
+    RETURN_FINITE( fPrinc );
 }
 
 

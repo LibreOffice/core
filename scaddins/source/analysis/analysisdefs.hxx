@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisdefs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
+ *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #define THROWDEF_RTE_IAE    throw(CSS::uno::RuntimeException,CSS::lang::IllegalArgumentException)
 #define THROW_IAE           throw CSS::lang::IllegalArgumentException()
 
-#define CHK_Freq        ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
+#define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
+#define CHK_FINITE(d)       if( !SOMA_FINITE( d ) ) THROW_IAE
+#define RETURN_FINITE(d)    if( SOMA_FINITE( d ) ) return d; else THROW_IAE
 
 #endif
 
