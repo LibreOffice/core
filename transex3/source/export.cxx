@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -883,9 +883,13 @@ int Export::Execute( int nToken, char * pToken )
             if ( nList ) {
                 SetChildWithText();
                 ByteString sEntry( sToken.GetToken( 1, '\"' ));
+                if ( sToken.GetTokenCount( '\"' ) > 3 )
+                    sEntry += "\"";
+                if ( sEntry == "\\\"" )
+                    sEntry = "\"";
                 sEntry = sEntry.Convert( aCharSet, RTL_TEXTENCODING_MS_1252 );
                 InsertListEntry( sEntry, sOrig );
-                if ( bMergeMode ) {
+                if ( bMergeMode && ( sEntry != "\"" )) {
                     PrepareTextToMerge( sOrig, nList, nListLang, pResData );
                 }
             }
