@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-31 08:49:41 $
+ *  last change: $Author: fs $ $Date: 2002-07-31 09:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,7 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, sal_Bool bPaintCursor)
                 m_eStatus = (pCur->isAfterLast() || pCur->isBeforeFirst()) ? GRS_INVALID : GRS_CLEAN;
             else
             {
-                Reference< XPropertySet >  xSet((Reference< XInterface >)*pCur,UNO_QUERY);
+                Reference< XPropertySet > xSet = pCur->getPropertySet();
                 if (xSet.is())
                 {
                     m_bIsNew = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
@@ -947,7 +947,7 @@ void DbGridRow::SetState(CursorWrapper* pCur, sal_Bool bPaintCursor)
             m_eStatus = GRS_CLEAN;
             if (!bPaintCursor)
             {
-                Reference< XPropertySet >  xSet((Reference< XInterface >)*pCur, UNO_QUERY);
+                Reference< XPropertySet > xSet = pCur->getPropertySet();
                 DBG_ASSERT(xSet.is(), "DbGridRow::SetState : invalid cursor !");
 
                 if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED)))
@@ -1330,7 +1330,7 @@ sal_uInt16 DbGridControl::SetOptions(sal_uInt16 nOpt)
     m_nOptionMask = nOpt;
 
     // normalize the new options
-    Reference< XPropertySet >  xDataSourceSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+    Reference< XPropertySet > xDataSourceSet = m_pDataCursor->getPropertySet();
     if (xDataSourceSet.is())
     {
         // feststellen welche Updatemöglichkeiten bestehen
@@ -1544,7 +1544,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     if (m_pDataCursor)
     {
         m_pDataSourcePropListener = new FmXGridSourcePropListener(this);
-        m_pDataSourcePropMultiplexer = new ::comphelper::OPropertyChangeMultiplexer(m_pDataSourcePropListener, Reference< XPropertySet > ((Reference< XInterface >)*m_pDataCursor, UNO_QUERY));
+        m_pDataSourcePropMultiplexer = new ::comphelper::OPropertyChangeMultiplexer(m_pDataSourcePropListener, m_pDataCursor->getPropertySet() );
         m_pDataSourcePropMultiplexer->acquire();
         m_pDataSourcePropMultiplexer->addProperty(FM_PROP_ISMODIFIED);
         m_pDataSourcePropMultiplexer->addProperty(FM_PROP_ISNEW);
@@ -1619,7 +1619,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     if (m_pSeekCursor)
     {
-        Reference< XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+        Reference< XPropertySet > xSet = m_pDataCursor->getPropertySet();
         xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
         m_bRecordCountFinal = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
 
@@ -1883,7 +1883,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, sal_B
         EnablePaint(sal_False);
 
     // Cache an den sichtbaren Bereich anpassen
-    Reference< XPropertySet >  xSet((Reference< XInterface >)*m_pSeekCursor, UNO_QUERY);
+    Reference< XPropertySet > xSet = m_pSeekCursor->getPropertySet();
     sal_Int32 nCacheSize;
     xSet->getPropertyValue(FM_PROP_FETCHSIZE) >>= nCacheSize;
     sal_Bool bCacheAligned   = sal_False;
@@ -1971,7 +1971,7 @@ void DbGridControl::AdjustRows()
     if (!m_pSeekCursor)
         return;
 
-    Reference< XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+    Reference< XPropertySet > xSet = m_pDataCursor->getPropertySet();
 
     // Aktualisieren des RecordCounts
     sal_Int32 nRecordCount;
@@ -2107,11 +2107,11 @@ sal_Bool DbGridControl::SetCurrent(long nNewRow, sal_Bool bForceInsertIfNewRow)
                     // to we need to move the cursor to the insert row?
                     // we need to insert the if the current row isn't the insert row or if the
                     // cursor triggered the move by itselt and we need a reinitialization of the row
-                    Reference< XPropertySet > xCursorProps((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                    Reference< XPropertySet > xCursorProps = m_pDataCursor->getPropertySet();
                     //  if ( !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)) || (bForceInsertIfNewRow && !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW))) )
                     if ( !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)) )
                     {
-                        Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                        Reference< XResultSetUpdate > xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
                         xUpdateCursor->moveToInsertRow();
                     }
                     bNewRowInserted = sal_True;
@@ -2327,7 +2327,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     if (!m_pSeekCursor)
         return -1;
 
-    Reference< XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+    Reference< XPropertySet > xSet = m_pDataCursor->getPropertySet();
 
     // jetzt den seekcursor an den DatenCursor angleichen
     if (::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW)))
@@ -3181,7 +3181,7 @@ void DbGridControl::resetCurrentRow()
         // would never delete the obsolet "second insert row". Thus in this special case this method here
         // is the only possibility to determine the redundance of the row (resetCurrentRow is called when the
         // "first insert row" is about to be cleaned, so of course the "second insert row" is redundant now)
-        Reference< XPropertySet >  xDataSource((Reference< XInterface >)*getDataSource(), UNO_QUERY);
+        Reference< XPropertySet > xDataSource = getDataSource()->getPropertySet();
         if (xDataSource.is() && !::comphelper::getBOOL(xDataSource->getPropertyValue(FM_PROP_ISMODIFIED)))
         {
             // are we on a new row currently ?
