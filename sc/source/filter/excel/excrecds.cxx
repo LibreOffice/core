@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:51 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,9 +538,9 @@ const BYTE* ExcDummy_02c::GetData( void ) const
 XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_COUNTRY, 4 )
 {
-    mnUICountry = static_cast< sal_uInt16 >(
-        ::svx::ConvertLanguageToCountry( rRoot.GetUILanguage() ) );
-    mnDocCountry = static_cast< sal_uInt16 >(
+    /*  #i31530# set document country as UI country too -
+        needed for correct behaviour of number formats. */
+    mnUICountry = mnDocCountry = static_cast< sal_uInt16 >(
         ::svx::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
 }
 
@@ -1571,7 +1571,6 @@ void ExcNameListEntry::SetCode( const ExcUPN& rUPN )
     }
 }
 
-
 void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
 {
     if(rStrm.GetRoot().GetBiff() < xlBiff8)
@@ -1612,15 +1611,20 @@ ULONG ExcNameListEntry::GetLen() const
     return 16 + nFormLen;
 }
 
+const String& ExcNameListEntry::GetName() const
+{
+    return EMPTY_STRING;
+}
 
 
 //------------------------------------------------------------- class ExcName -
 
-void ExcName::Init( BOOL bHid, BOOL bBIn )
+void ExcName::Init( BOOL bHid, BOOL bBIn, BOOL bBMacro )
 {
     eBiff = pExcRoot->eDateiTyp;
     bHidden = bHid;
     bBuiltIn = bBIn;
+    bMacro = bBMacro;
 }
 
 
@@ -1701,9 +1705,17 @@ ExcName::ExcName( RootData& rRootData, const ScRange& rRange, UINT8 nKey, BOOL b
         ExcNameListEntry( rRootData, rRange.aStart.Tab(), nKey ),
         ExcRoot( &rRootData )
 {
-    Init( bHid, TRUE );
+    Init( bHid, TRUE, FALSE );
     aName = sal_Unicode( nKey );
     BuildFormula( rRange );
+}
+
+ExcName::ExcName( RootData& rRootData, const String& rName ) :
+        ExcRoot( &rRootData )
+{
+    Init();
+    bMacro = TRUE;
+    aName = rName;
 }
 
 
@@ -1770,8 +1782,8 @@ void ExcName::SaveCont( XclExpStream& rStrm )
 {
     UINT8   nNameLen = (UINT8) Min( aName.Len(), (xub_StrLen)255 );
     UINT16  nGrbit = (bHidden ? EXC_NAME_HIDDEN : 0) | (bBuiltIn ? EXC_NAME_BUILTIN : 0);
-    if( !nFormLen )
-        nGrbit |= EXC_NAME_VB | EXC_NAME_PROC;
+    if( !nFormLen || bMacro )
+        nGrbit |= EXC_NAME_FUNC | EXC_NAME_VB | EXC_NAME_PROC;
 
     rStrm   << nGrbit                   // grbit
             << (BYTE) 0x00              // chKey
@@ -2001,6 +2013,16 @@ UINT16 ExcNameList::GetBuiltInIx( const ExcNameListEntry* pName )
     return 0xFFFF;
 }
 
+UINT16 ExcNameList::GetMacroIdx( RootData& rRootData, const String &rName )
+{
+    for( USHORT nIndex = 0; nIndex < List::Count(); nIndex++ )
+    {
+        ExcNameListEntry* pName = _Get( nIndex );
+        if(pName && pName->GetName().Equals(rName))
+            return nIndex+1;
+    }
+    return Append( new ExcName( rRootData, rName ) );
+}
 
 void ExcNameList::Save( XclExpStream& rStrm )
 {
