@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:27:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ gint WizardDialog::button_clicked( GtkWidget* pButton, WizardDialog* pThis )
         if( pThis->m_nCurrentPage != -1 )
             pThis->m_aPages[pThis->m_nCurrentPage]->update();
 
-        if( send_crash_report( *pThis, pThis->getSettings() ) )
+        if( send_crash_report( pThis, pThis->getSettings() ) )
             gtk_main_quit();
     }
 
@@ -353,6 +353,11 @@ MainPage::MainPage( WizardDialog* pParent ) : WizardPage( pParent )
 
     gtk_label_set_mnemonic_widget( GTK_LABEL(m_pEditLabel), m_pEdit );
 
+    hash_map<string, string>::iterator aIter;
+    aIter = rSettings.find( "TITLE" );
+    if( aIter != rSettings.end() )
+        gtk_entry_set_text( GTK_ENTRY(m_pEdit), aIter->second.c_str() );
+
     m_pEntryVBox = gtk_vbox_new( FALSE, 5 );
     gtk_widget_show( m_pEntryVBox );
     gtk_box_pack_start( GTK_BOX(m_pLeftColumn), m_pEntryVBox, TRUE, TRUE, 0 );
@@ -372,6 +377,14 @@ MainPage::MainPage( WizardDialog* pParent ) : WizardPage( pParent )
     gtk_widget_show( m_pEntry );
     gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW(m_pEntry), GTK_WRAP_WORD );
     gtk_container_add( GTK_CONTAINER(m_pScrolledEntry), m_pEntry );
+
+    aIter = rSettings.find( "DESCRIPTION" );
+    if( aIter != rSettings.end() )
+    {
+        GtkTextBuffer* pBuffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_pEntry) );
+        gtk_text_buffer_set_text( pBuffer, aIter->second.c_str(), -1 );
+    }
+
 
     gtk_label_set_mnemonic_widget( GTK_LABEL(m_pEntryLabel), m_pEntry );
 
@@ -404,7 +417,6 @@ MainPage::MainPage( WizardDialog* pParent ) : WizardPage( pParent )
     //gtk_box_pack_start( GTK_BOX(m_pPageContents), m_pCheck, FALSE, FALSE, 5 );
     gtk_box_pack_start( GTK_BOX(m_pLeftColumn), m_pCheck, FALSE, FALSE, 5 );
 
-    hash_map<string, string>::iterator aIter;
     aIter = rSettings.find( "CONTACT" );
     if( aIter != rSettings.end() )
     {
