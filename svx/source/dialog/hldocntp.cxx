@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:16:20 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,23 +318,20 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
         // Insert into listbox
         if ( aDocumentUrl.getLength() )
         {
-            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=10425" ) )                // SJ: #106216# do not start
+            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=6686" ) )             // SJ: #106216# do not start
                 aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
 
-            const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory ( aDocumentUrl );
-            if ( pFactory )
+            // insert private-url and default-extension as user-data
+            const SfxFilter* pFilter = SfxFilter::GetDefaultFilterFromFactory( aDocumentUrl );
+            if ( pFilter )
             {
                 // insert doc-name and image
-
                 String aTitleName( aTitle );
                 aTitleName.Erase( aTitleName.Search( (sal_Unicode)'~' ), 1 );
 
                 sal_Int16 nPos = maLbDocTypes.InsertEntry ( aTitleName );
-
-                // insert private-url and default-extension as user-data
-                String aStrDefExt( pFactory->GetFilter ( 0 )->GetDefaultExtension () );
-                DocumentTypeData *pTypeData = new DocumentTypeData ( aDocumentUrl,
-                                                  aStrDefExt.Copy( 2, aStrDefExt.Len() ) );
+                String aStrDefExt( pFilter->GetDefaultExtension () );
+                DocumentTypeData *pTypeData = new DocumentTypeData ( aDocumentUrl, aStrDefExt.Copy( 2, aStrDefExt.Len() ) );
                 maLbDocTypes.SetEntryData ( nPos, pTypeData );
             }
         }
