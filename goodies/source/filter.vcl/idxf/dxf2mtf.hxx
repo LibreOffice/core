@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dxf2mtf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 10:04:09 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,12 @@
 #include "dxfreprd.hxx"
 #include <vcl/font.hxx>
 
-#ifndef NOOLDSV
-#include <vcl/gdiobj.hxx>
-#else // NOOLDSV
+// MT: NOOLDSV, someone should change the code...
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 enum BrushStyle { BRUSH_NULL, BRUSH_SOLID, BRUSH_HORZ, BRUSH_VERT,
                   BRUSH_CROSS, BRUSH_DIAGCROSS, BRUSH_UPDIAG, BRUSH_DOWNDIAG,
                   BRUSH_25, BRUSH_50, BRUSH_75,
                   BRUSH_BITMAP };
-#endif // NOOLDSV
 
 class DXF2GDIMetaFile {
 private:
