@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:46 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ swedish ] = "Bestämmer veckodifferensen mellan två datum";
         Text[ polish ] = "Oblicza liczbê tygodni zawartych miêdzy dwiema datami";
         Text[ portuguese_brazilian ] = "returns number of weeks between two dates";
-        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚ÌT‚Ì”‚ğ•Ô‚µ‚Ü‚·";
+        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚ÌT‚Ì”‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÖÜ²î¶î";
         Text[ chinese_traditional ] = "­pºâ¨â­Ó¼Æ¾Úªº¶g®tÃB";
         Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃÓÇÈíÚ ÇáæÇŞÚÉ Èíä ÊÇÑíÎíä";
@@ -361,7 +361,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ swedish ] = "Bestämmer månadsdifferensen mellan två datum";
         Text[ polish ] = "Oblicza liczbê miesiêcy zawartych miêdzy dwoma datami";
         Text[ portuguese_brazilian ] = "returns number of months between two dates";
-        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚ÌŒ”‚ğ•Ô‚µ‚Ü‚·";
+        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚ÌŒ”‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÔÂ²î¶î";
         Text[ chinese_traditional ] = "­pºâ¨â­Ó¼Æ¾Úªº¤ë®tÃB";
         Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃÔåÑ ÇáæÇŞÚÉ Èíä ÊÇÑíÎíä";
@@ -489,7 +489,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ swedish ] = "Bestämmer årsdifferensen mellan två datum";
         Text[ polish ] = "Oblicza liczbê lat zawartych miêdzy dwiema datami";
         Text[ portuguese_brazilian ] = "returns number of years between two dates";
-        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚Ì”N”‚ğ•Ô‚µ‚Ü‚·";
+        Text[ japanese ] = "2‚Â‚Ì“ú•t‚ÌŠÔ‚Ì”N”‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÊı¾İµÄÄê²î¶î";
         Text[ chinese_traditional ] = "­pºâ¨â­Ó¼Æ¾Úªº¦~®tÃB";
         Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÓäæÇÊ ÇáæÇŞÚÉ Èíä ÊÇÑíÎíä";
@@ -617,7 +617,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ swedish ] = "Returnerar 1(SANT) om året är ett skottår annars 0(FALSKT)";
         Text[ polish ] = "Podaje 1 (PRAWDA), jeœli rok jest rokiem przestêpnym, w innym wypadku 0 (FA£SZ).";
         Text[ portuguese_brazilian ] = "returns 1 if the date is in a LeapYear, 0 otherwise";
-        Text[ japanese ] = "‚»‚Ì”N‚ª‰[”N‚Å‚ ‚ê‚Î 1(TRUE)A‚»‚¤‚Å‚È‚¯‚ê‚Î0(FALSE)‚ğ•Ô‚µ‚Ü‚·B";
+        Text[ japanese ] = "‚»‚Ì”N‚ª‰[”N‚Å‚ ‚ê‚Î 1(TRUE)A‚»‚¤‚Å‚È‚¯‚ê‚Î 0(FALSE)‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "Èç¹ûÊÇÈòÄê¾Í·´À¡ 1(TRUE) £¬·ñÔò¾Í·´À¡ 0 (FALSE)";
         Text[ chinese_traditional ] = "¦pªG¬O¶|¦~´N¶Ç¦^ 1(TRUE)¡A§_«h´N¶Ç¦^ 0 (FALSE)";
         Text[ arabic ] = "íŞÏã 1 (ÕÍíÍ) ÚäÏãÇ Êßæä ÇáÓäÉ ßÈíÓÉ¡ ÚÏÇ Ğáß 0 (ÎØÃ)";
@@ -663,14 +663,14 @@ Resource RID_SC_ADDIN_DFA
         Text[ portuguese ] = "devolve o número de dias no mês para uma determinada data";
         Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî äíåé â ìåñÿöå äëÿ óêàçàííîé äàòû";
         Text[ dutch ] = "Geeft als resultaat het aantal dagen in een maand bij een bepaalde datum";
-        Text[ french ] = "Renvoie le nombre de jours dans le mois pour une date";
+        Text[ french ] = "Renvoie le nombre de jours dans le mois en relation avec la date indiquée.";
         Text[ spanish ] = "Determina la cantidad de días en un mes para una fecha";
         Text[ italian ] = "Restituisce il numero dei giorni del mese per una determinata data";
         Text[ danish ] = "Bestemmer antallet af dage i en måned til en dato";
         Text[ swedish ] = "Bestämmer antalet dagar i månaden till ett datum";
         Text[ polish ] = "Oblicza liczbê dni w miesi¹cu do podanej daty";
         Text[ portuguese_brazilian ] = "returns the number of days in the month for a date";
-        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚ÌŒ‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·";
+        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚ÌŒ‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÔÂµÄÌìÊı";
         Text[ chinese_traditional ] = "­pºâ¤@­ÓÄİ©óµ¹©w¤é´Áªº¤ëªº¤Ñ¼Æ";
         Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃíÇã İí ÇáÔåÑ ÍÊì ÊÇÑíÎ ãÇ";
@@ -716,14 +716,14 @@ Resource RID_SC_ADDIN_DFA
         Text[ portuguese ] = "devolve o número de dias no ano para uma determinada data";
         Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî äíåé â ãîäó äëÿ óêàçàííîé äàòû.";
         Text[ dutch ] = "Geeft als resultaat het aantal dagen in een jaar bij een bepaalde datum";
-        Text[ french ] = "renvoie le nombre de jours dans l'année pour une date";
+        Text[ french ] = "Renvoie le nombre de jours dans l'année en relation avec la date indiquée.";
         Text[ spanish ] = "Determina la cantidad de días en un año para una fecha";
         Text[ italian ] = "Restituisce il numero dei giorni dell'anno per una deteminata data";
         Text[ danish ] = "Bestemmer antallet af dage i et år til en dato";
         Text[ swedish ] = "Bestämmer antalet dagar i året till ett datum";
         Text[ polish ] = "Oblicza liczbê dni w roku do podanej daty";
         Text[ portuguese_brazilian ] = "returns the number of days in the year for a date";
-        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚Ì”N‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·";
+        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚Ì”N‚Ì‰½“ú–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÄêµÄÌìÊı";
         Text[ chinese_traditional ] = "­pºâ¤@­ÓÄİ©óµ¹©w¤é´Áªº¦~ªº¤Ñ¼Æ";
         Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃíÇã İí ÇáÓäÉ ÍÊì ÊÇÑíÎ ãÇ";
@@ -769,14 +769,14 @@ Resource RID_SC_ADDIN_DFA
         Text[ portuguese ] = "Devolve o número de semanas no ano para uma determinada data";
         Text[ russian ] = "Îïğåäåëÿåò êîëè÷åñòâî íåäåëü â ãîäó äëÿ óêàçàííîé äàòû.";
         Text[ dutch ] = "Geeft als resultaat het aantal weken in een jaar bij een datum";
-        Text[ french ] = "Renvoie le nombre de semaines dans l'année pour une date";
+        Text[ french ] = "Renvoie le nombre de semaines dans l'année en relation avec la date indiquée.";
         Text[ spanish ] = "Determina la cantidad de semanas en un año para una fecha";
         Text[ italian ] = "Restituisce il numero delle settimane dell'anno per una determinata data";
         Text[ danish ] = "Bestemmer antallet af dage i en måned til en dato";
         Text[ swedish ] = "Bestämmer antalet veckor i året till ett datum";
         Text[ polish ] = "Oblicza liczbê tygodni w roku do podanej daty";
         Text[ portuguese_brazilian ] = "returns the number of weeks in the year for a date";
-        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚Ì”N‚Ì‰½T–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·";
+        Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚Ì”N‚Ì‰½T–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·B";
         Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊôÓÚ¸ø¶¨ÈÕÆÚµÄÄêµÄĞÇÆÚÊı";
         Text[ chinese_traditional ] = "­pºâ¤@­ÓÄİ©óµ¹©w¤é´Áªº¦~ªº¬P´Á¼Æ";
         Text[ arabic ] = "íÍÏÏ ÚÏÏ ÇáÃÓÇÈíÚ İí ÇáÓäÉ ÍÊì ÊÇÑíÎ ãÇ";
