@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-30 16:07:38 $
+ *  last change: $Author: pl $ $Date: 2001-11-01 21:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifdef DEBUG
 #include <stdio.h>
+#endif
+#if !(defined FREEBSD || defined NETBSD)
+#include <alloca.h>
 #endif
 
 #include <prex.h>
@@ -520,7 +523,21 @@ void I18NStatus::setStatusText( const String& rText )
 {
     if( m_pStatusWindow )
     {
-        m_pStatusWindow->setText( rText );
+        /*
+         *  #93614# convert fullwidth ASCII forms to ascii
+         */
+        int nChars = rText.Len()+1;
+        sal_Unicode* pBuffer = (sal_Unicode*)alloca( nChars*sizeof( sal_Unicode ) );
+        const sal_Unicode* pCopy = rText.GetBuffer();
+        for( int i = 0; i < nChars; i++ )
+        {
+            if( pCopy[i] >=0xff00 && pCopy[i] <= 0xff5f )
+                pBuffer[i] = (pCopy[i] & 0xff) + 0x20;
+            else
+                pBuffer[i] = pCopy[i];
+        }
+        String aText( pBuffer );
+        m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
         m_pStatusWindow->show( true );
     }
