@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:38:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <button.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <controllayout.hxx>
@@ -791,7 +794,7 @@ void Button::DataChanged( const DataChangedEvent& rDCEvt )
 
 void PushButton::ImplInitData()
 {
-    mbPushButton    = TRUE;
+    mpWindowImpl->mbPushButton    = TRUE;
 
     meSymbol        = SYMBOL_NOSYMBOL;
     meState         = STATE_NOCHECK;
@@ -2486,7 +2489,7 @@ void RadioButton::ImplDrawRadioButton( bool bLayout )
 
 void RadioButton::ImplUncheckAllOther()
 {
-    mnStyle |= WB_TABSTOP;
+    mpWindowImpl->mnStyle |= WB_TABSTOP;
 
     // Gruppe mit RadioButtons durchgehen und die gecheckten Buttons
     Window* pWindow;
@@ -2511,7 +2514,7 @@ void RadioButton::ImplUncheckAllOther()
                 }
                 // Um falsch gesetzt WB_TABSTOPS immer zu entfernen, nicht
                 // innerhalb der if-Abfrage
-                pWindow->mnStyle &= ~WB_TABSTOP;
+                pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
             }
 
             if ( nStyle & WB_GROUP )
@@ -2542,7 +2545,7 @@ void RadioButton::ImplUncheckAllOther()
             }
             // Um falsch gesetzt WB_TABSTOPS immer zu entfernen, nicht
             // innerhalb der if-Abfrage
-            pWindow->mnStyle &= ~WB_TABSTOP;
+            pWindow->mpWindowImpl->mnStyle &= ~WB_TABSTOP;
         }
 
         pWindow = pWindow->GetWindow( WINDOW_NEXT );
@@ -2555,7 +2558,7 @@ void RadioButton::ImplCallClick( BOOL bGrabFocus, USHORT nFocusFlags )
 {
     mbStateChanged = !mbChecked;
     mbChecked = TRUE;
-    mnStyle |= WB_TABSTOP;
+    mpWindowImpl->mnStyle |= WB_TABSTOP;
     ImplDrawRadioButtonState();
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
@@ -2986,9 +2989,9 @@ void RadioButton::SetState( BOOL bCheck )
 {
     // TabStop-Flag richtig mitfuehren
     if ( bCheck )
-        mnStyle |= WB_TABSTOP;
+        mpWindowImpl->mnStyle |= WB_TABSTOP;
     else
-        mnStyle &= ~WB_TABSTOP;
+        mpWindowImpl->mnStyle &= ~WB_TABSTOP;
 
     if ( mbChecked != bCheck )
     {
@@ -3004,9 +3007,9 @@ void RadioButton::Check( BOOL bCheck )
 {
     // TabStop-Flag richtig mitfuehren
     if ( bCheck )
-        mnStyle |= WB_TABSTOP;
+        mpWindowImpl->mnStyle |= WB_TABSTOP;
     else
-        mnStyle &= ~WB_TABSTOP;
+        mpWindowImpl->mnStyle &= ~WB_TABSTOP;
 
     if ( mbChecked != bCheck )
     {
