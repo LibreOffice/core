@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:18:15 $
+ *  last change: $Author: hdu $ $Date: 2001-07-09 15:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,9 +1158,63 @@ ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 // -----------------------------------------------------------------------
 
+static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
+static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
+static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
+
 ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
-    return 0;
+    int nRangeCount = 0;
+
+    DWORD CmapTag = 'c' + ('m'<<8) + ('a'<<16)  + ('p'<<24);
+    DWORD rc = GetFontData( maGraphicsData.mhDC, CmapTag, 0, NULL, 0 );
+    if( rc != GDI_ERROR )
+    {
+        // we have a truetype font
+        int nLength = rc;
+        unsigned char* pCmap = new unsigned char[ nLength ];
+        rc = GetFontData( maGraphicsData.mhDC, CmapTag, 0, pCmap, nLength );
+
+        if( (rc != GDI_ERROR) && GetUShort( pCmap )==0 )
+        {
+            int nSubTables  = GetUShort( pCmap + 2 );
+            const unsigned char* p = pCmap + 4;
+            int nOffset = 0;
+            int nFormat = -1;
+            for( ; --nSubTables>=0; p+=8 )
+            {
+                int nPlatform = GetUShort( p );
+                int nEncoding = GetUShort( p+2 );
+                if( nEncoding!=0 && nEncoding!=1 )  // unicode encodings?
+                    continue;
+                nOffset       = GetUInt( p+4 );
+                nFormat       = GetUShort( pCmap + nOffset );
+                if( nFormat==4 )
+                    break;
+            }
+
+            if( nFormat==4 && (nOffset+16)<nLength )
+            {
+                // analyze most common unicode mapping table
+                int nSegCount = GetUShort( pCmap + nOffset + 6 );
+                nRangeCount = nSegCount/2 - 1;
+                if( pCodePairs )
+                {
+                    const unsigned char* pLimit = pCmap + nOffset + 14;
+                    const unsigned char* pBegin = pLimit + 2 + nSegCount;
+                    for( int i = 0; i < nRangeCount; ++i )
+                    {
+                        *(pCodePairs++) = GetUShort( pBegin + 2*i );
+                        *(pCodePairs++) = GetUShort( pLimit + 2*i ) + 1;
+                    }
+                }
+            }
+         }
+
+         delete[] pCmap;
+    }
+
+    return nRangeCount;
 }
 
 // -----------------------------------------------------------------------
