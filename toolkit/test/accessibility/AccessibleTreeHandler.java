@@ -1,3 +1,4 @@
+import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.IndexOutOfBoundsException;
@@ -7,36 +8,80 @@ import com.sun.star.lang.IndexOutOfBoundsException;
  * Map the tree of accessibility objects into their
  * AccessibilityTreeModel counterparts.
  */
-class AccessibleTreeHandler extends NodeHandler
+class AccessibleTreeHandler
+    extends NodeHandler
 {
-    protected XAccessibleContext getContext(Object aObject)
+    protected XAccessibleContext mxContext;
+
+    public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleContext xContext =
-            (XAccessibleContext) UnoRuntime.queryInterface (
-                 XAccessibleContext.class, aObject);
-        return xContext;
+        if (xContext != null)
+            return new AccessibleTreeHandler (xContext);
+        else
+            return null;
     }
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeHandler ()
     {
-        XAccessibleContext aContext = getContext(aObject);
-        return (aContext == null) ? 0 : aContext.getAccessibleChildCount();
+        super();
+        mxContext = null;
     }
 
-    public Object getChild(Object aObject, int nIndex)
+    public AccessibleTreeHandler (XAccessibleContext xContext)
     {
-        Object aRet = null;
-        XAccessibleContext aContext = getContext(aObject);
-        if( aContext != null )
+        super();
+        mxContext = xContext;
+        if (mxContext != null)
+            // Add one to the number of children to include the string node
+            // that tells you how many children there are.
+            maChildList.setSize (1 + mxContext.getAccessibleChildCount());
+    }
+
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
+    {
+        AccessibleTreeNode aChild = null;
+        if (mxContext != null)
         {
-            try
+            if (nIndex == 0)
+                aChild = new StringNode ("Child count: " + mxContext.getAccessibleChildCount(),
+                    aParent);
+            else
             {
-                aRet = AccessibilityTreeModel.
-                    createDefaultNode(aContext.getAccessibleChild(nIndex));
+                // Lower index to skip the string node.
+                nIndex -= 1;
+                try
+                {
+                    XAccessible xChild = mxContext.getAccessibleChild (nIndex);
+                    aChild = AccessibilityTreeModel.createDefaultNode (
+                        xChild, aParent);
+                }
+                catch( IndexOutOfBoundsException e )
+                {
+                    aChild = new StringNode ("ERROR: no child with index " + nIndex, aParent);
+                }
             }
-            catch( IndexOutOfBoundsException e )
-            { } // return null
         }
-        return aRet;
+        else
+            aChild = new StringNode ("XAccessibleContext interface not supported", aParent);
+        return aChild;
     }
+
+    /** Try to add the specified accessible child into the lists of
+        children.  The insertion position is determined from the
+        getIndexInParent method of the child.
+    */
+    public AccessibleTreeNode addAccessibleChild (AccessibleTreeNode aParent, XAccessible xChild)
+    {
+        AccessibleTreeNode aChild = null;
+
+        XAccessibleContext xContext = xChild.getAccessibleContext();
+        int nIndex = xContext.getAccessibleIndexInParent() + 1;
+        if ((nIndex >= 0) || (nIndex <= maChildList.size()))
+        {
+            aChild = AccessibilityTreeModel.createDefaultNode (xChild, aParent);
+            maChildList.insertElementAt (aChild, nIndex);
+        }
+        return aChild;
+    }
+
 }

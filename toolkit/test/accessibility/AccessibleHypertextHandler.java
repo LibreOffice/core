@@ -1,25 +1,42 @@
 
 import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleHypertext;
 
 
 class AccessibleHypertextHandler extends AccessibleTreeHandler
 {
-    protected XAccessibleHypertext getHypertext(Object aObject)
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleHypertext xText =
+            (XAccessibleHypertext) UnoRuntime.queryInterface (
+                XAccessibleHypertext.class, xContext);
+        if (xText != null)
+            return new AccessibleHypertextHandler (xText);
+        else
+            return null;
+    }
+
+    public AccessibleHypertextHandler ()
+    {
+    }
+
+    public AccessibleHypertextHandler (XAccessibleHypertext xText)
+    {
+        if (xText != null)
+            maChildList.setSize (1);
+    }
+
+    protected static XAccessibleHypertext getHypertext (AccTreeNode aNode)
     {
         XAccessibleHypertext xHypertext =
             (XAccessibleHypertext) UnoRuntime.queryInterface (
-                 XAccessibleHypertext.class, aObject);
+                 XAccessibleHypertext.class, aNode.getContext());
         return xHypertext;
     }
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
     {
-        return (getHypertext(aObject) == null) ? 0 : 1;
-    }
-
-    public Object getChild(Object aObject, int nIndex)
-    {
-        return "interface XAccessibleHypertext is supported";
+        return new StringNode ("interface XAccessibleHypertext is supported", aParent);
     }
 }

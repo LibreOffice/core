@@ -20,18 +20,45 @@ import com.sun.star.lang.XServiceInfo;
 public class AccessibilityTreeModel
     implements TreeModel, XAccessibleEventListener
 {
-    public AccessibilityTreeModel( Object aRoot )
+    // Map to translate from accessible object to corresponding tree node.
+    protected HashMap maXAccessibleToNode;
+
+    // Making both of these static is clearly a hack.
+    protected static MessageInterface maMessageArea;
+    protected static Print maPrinter;
+    protected static boolean mbVerbose = true;
+
+    // If the lock count is higher then zero, then no events are processed.
+    private int mnLockCount;
+
+    // The list of TreeModelListener objects.
+    private Vector maTMListeners;
+
+    // default handlers, Vector<HandlerPair>
+    private static Vector aDefaultHandlers;
+    private static NodeHandler maContextHandler = new AccessibleContextHandler();
+    private static NodeHandler maTextHandler = new AccessibleTextHandler();
+    private static NodeHandler maEditableTextHandler = new AccessibleEditableTextHandler();
+    private static NodeHandler maComponentHandler = new AccessibleComponentHandler();
+    private static NodeHandler maExtendedComponentHandler = new AccessibleExtendedComponentHandler();
+    private static NodeHandler maActionHandler = new AccessibleActionHandler();
+    private static NodeHandler maImageHandler = new AccessibleImageHandler();
+    private static NodeHandler maTableHandler = new AccessibleTableHandler();
+    private static NodeHandler maHypertextHandler = new AccessibleHypertextHandler();
+    private static NodeHandler maHyperlinkHandler = new AccessibleHyperlinkHandler();
+    private static NodeHandler maTreeHandler = new AccessibleTreeHandler();
+
+    public AccessibilityTreeModel (Object aRoot, MessageInterface aMessageArea, Print aPrinter)
     {
         // create default node (unless we have a 'proper' node)
-        if( ! (aRoot instanceof AccTreeNode) )
-            aRoot = createDefaultNode( aRoot );
+        if( ! (aRoot instanceof AccessibleTreeNode) )
+            aRoot = new StringNode ("Root", null);
         maRoot = aRoot;
+        maMessageArea = aMessageArea;
+        maPrinter = aPrinter;
 
-        aListeners = new Vector();
-        aParents = new HashMap();
-        aChildren = new HashMap();
-        aNodes = new HashMap();
-        aNodes.put( normalize(maRoot), maRoot );
+        maTMListeners = new Vector();
+        maXAccessibleToNode = new HashMap ();
 
         // syncronous or asyncronous event delivery? (i.e. same thread
         // or in s seperate event delivery thread)
@@ -39,6 +66,29 @@ public class AccessibilityTreeModel
         xListener = new QueuedListener();   // asyncronous event delivery
     }
 
+    /** Lock the tree.  While the tree is locked, events from the outside are
+        not processed.  Lock the tree when you change its internal structure.
+    */
+    public void lock ()
+    {
+        mnLockCount += 1;
+    }
+
+    /** Unlock the tree.  After unlocking the tree as many times as locking
+        it, a treeStructureChange event is sent to the event listeners.
+        @param aNodeHint
+            If not null and treeStructureChange events are thrown then this
+            node is used as root of the modified subtree.
+    */
+    public void unlock (AccessibleTreeNode aNodeHint)
+    {
+        mnLockCount -= 1;
+        if (mnLockCount == 0)
+        {
+            if (aNodeHint instanceof AccTreeNode)
+                fireTreeStructureChanged (createEvent (((AccTreeNode)aNodeHint).getAccessible()));
+        }
+    }
 
     //
     // the root node
@@ -58,198 +108,150 @@ public class AccessibilityTreeModel
 
     public int getChildCount(Object aParent)
     {
-        return (aParent instanceof AccTreeNode) ?
-            ((AccTreeNode)aParent).getChildCount() : 0;
+        return (aParent instanceof AccessibleTreeNode) ?
+            ((AccessibleTreeNode)aParent).getChildCount() : 0;
     }
 
-    public Object getChild(Object aParent, int nIndex)
+    public Object getChild (Object aParent, int nIndex)
     {
-        Object aRet = (aParent instanceof AccTreeNode) ?
-            ((AccTreeNode)aParent).getChild(nIndex) : null;
-        setNode( aParent, nIndex, aRet );   // update tree cache
-        return aRet;
+        Object aChild = null;
+        try
+        {
+            if (aParent instanceof AccessibleTreeNode)
+                aChild = getChild ((AccessibleTreeNode)aParent, nIndex);
+            else
+                System.out.println ("getChild called for unknown parent node");
+        }
+        catch (com.sun.star.lang.IndexOutOfBoundsException e)
+        {
+            aChild = ("no child " + nIndex + " from " + aParent + ": " + e);
+        }
+        return aChild;
+    }
+
+    /** Delegate the request to the parent and then register listeners at
+        the child and add the child to the canvas.
+    */
+    public synchronized AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
+        throws com.sun.star.lang.IndexOutOfBoundsException
+    {
+        AccessibleTreeNode aChild = null;
+        if (aParent != null)
+            aChild = aParent.getChild(nIndex);
+        registerAccListener (aChild);
+
+        // Keep translation table up-to-date.
+        if (aChild != null)
+            if (aChild instanceof AccTreeNode)
+            {
+                maXAccessibleToNode.put (((AccTreeNode)aChild).getAccessible(), aChild);
+                addToCanvas ((AccTreeNode)aChild);
+            }
+        if (aChild == null)
+            System.out.println ("getChild: child not found");
+        return aChild;
     }
 
     /** iterate over all children and look for child */
-    public int getIndexOfChild(Object aParent, Object aChild)
+    public int getIndexOfChild (Object aParent, Object aChild)
     {
-        aChild = normalize( aChild );
-
-        // compare to all children
-        int nChildCount = getChildCount( aParent );
-        for( int i = 0; i < nChildCount; i++ )
+        int nIndex = -1;
+        try
         {
-            if( aChild.equals( normalize( getChild(aParent, i) ) ) )
-                return i;
+            if ((aParent instanceof AccessibleTreeNode) && (aChild instanceof AccessibleTreeNode))
+            {
+                AccessibleTreeNode aParentNode = (AccessibleTreeNode) aParent;
+                AccessibleTreeNode aChildNode = (AccessibleTreeNode) aChild;
+
+                int nChildCount = aParentNode.getChildCount();
+                for( int i = 0; i < nChildCount; i++ )
+                {
+                    if (aChildNode.equals (aParentNode.getChild (i)))
+                    {
+                        nIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+        catch (com.sun.star.lang.IndexOutOfBoundsException e)
+        {
+            // Return -1 by falling through.
         }
 
         // not found?
-        return -1;
+        return nIndex;
     }
 
 
-    public boolean isLeaf(Object aNode)
+    public boolean isLeaf (Object aNode)
     {
-        return (aNode instanceof AccTreeNode) ?
-            ((AccTreeNode)aNode).isLeaf() : true;
+        return (aNode instanceof AccessibleTreeNode) ?
+            ((AccessibleTreeNode)aNode).isLeaf() : true;
     }
 
 
-    //
-    // tree cache and child cache
-    //
 
-    /** store parents of an object in the tree; HashMap<Object> */
-    private HashMap aParents;
-
-    /** store a vector with the children in each tree;
-     *  HashMap<Vector<Object>> */
-    private HashMap aChildren;
-
-    /** store a mapping of 'normalized' nodes to nodes in the tree */
-    private HashMap aNodes;
-
-
-    /** normalize an object reference:
-     * 0) for an Any, get the containing Object
-     * 1) for AccTreeNode, get the data object
-     * 2) for XAccessible, get the accessible object
-     * 3) cast all UNO objects to XInterface
-     */
-    static protected Object normalize(Object aObject)
+    /** Remove a node (and all children) from the tree model.
+    */
+    protected synchronized void removeNode (AccessibleTreeNode aNode)
     {
-        // 0) for an Any, get the containing Object
-        if( aObject instanceof Any )
-            aObject = ((Any)aObject).getObject();
-
-        // 1) for AccTreeNode, get the data object
-        if( aObject instanceof AccTreeNode )
-            aObject = ((AccTreeNode)aObject).getDataObject();
-
-        if( aObject instanceof XInterface )
+        try
         {
-            // 2) for XAccessible, get the accessible object
-            XAccessible xAcc = (XAccessible)UnoRuntime.queryInterface(
-                                   XAccessible.class, aObject);
-            if( xAcc != null )
-                aObject = xAcc.getAccessibleContext();
+            if( aNode == null )
+                return;
+            removeAccListener (aNode);
+            removeFromCanvas (aNode);
+            if (aNode instanceof AccTreeNode)
+                maXAccessibleToNode.remove (((AccTreeNode)aNode).getAccessible());
+            AccessibleTreeNode aParent = aNode.getParent();
+            if (aParent != null)
+            {
+                int nIndex = aParent.indexOf(aNode);
+                aParent.removeChild (nIndex);
+            }
 
-            // 3) cast all UNO objects to XInterface
-            aObject = (XInterface)UnoRuntime.queryInterface( XInterface.class,
-                                                             aObject);
+            // depth-first removal of children
+            while (aNode.getChildCount() > 0)
+                removeNode (aNode.getChild (0));
         }
-        return aObject;
-    }
-
-    /** add a parent/child int the node cache */
-    protected void setNode(Object aOParent, int nIndex, Object aOChild)
-    {
-        Object aParent = normalize(aOParent);
-        Object aChild = normalize(aOChild);
-
-        // store nodes
-        aNodes.put( aParent, aOParent );
-        aNodes.put( aChild, aOChild );
-
-        // store the child's parent
-        aParents.put( aChild, aParent );
-
-        // store the parent's child
-        Vector aKids = (Vector)aChildren.get( aParent );
-        if( aKids == null )
+        catch (com.sun.star.lang.IndexOutOfBoundsException e)
         {
-            // no children known... insert a new vector
-            aKids = new Vector();
-            aChildren.put( aParent, aKids );
-        }
-
-        // make sure we have enough room
-        if( aKids.size() <= nIndex )
-            aKids.setSize( nIndex + 1 ); // alternative: use child count
-
-        // add child at appropriate positions; remove old listeners,
-        // get new ones
-        removeAccListener( aKids.elementAt( nIndex ) );
-        aKids.setElementAt( aChild, nIndex );
-        registerAccListener( aKids.elementAt( nIndex ) );
-
-        // update canvas
-        addToCanvas( aChild );
-    }
-
-    /** remove a node (and all children) from the node cache */
-    protected void removeNode(Object aNode)
-    {
-        if( aNode == null )
-            return;
-
-        aNode = normalize( aNode );
-        removeAccListener( aNode );
-
-        // get parent + kids (before this information is deleted)
-        Vector aKids = (Vector)aChildren.get( aNode );
-        Object aParent = aParents.get( aNode );
-
-        // remove information about this node
-        removeFromCanvas( aNode );        // update canvas
-        aParents.remove( aNode );
-        aChildren.remove( aNode );
-        aNodes.remove( aNode );
-
-        // depth-first removal of children
-        int nLength = (aKids == null) ? 0 : aKids.size();
-        for( int i = nLength-1; i >= 0; i-- )
-        {
-            removeNode( aKids.elementAt(i) );
-        }
-
-        // remove from parents' child vector
-        if( aParent != null )
-        {
-            Vector aParentKids = (Vector)aChildren.get( aParent );
-            if( aParentKids != null )
-                aParentKids.remove( aNode );
+            // Ignore.
         }
     }
 
-    /** determine whether this node is in the node cache */
-    protected boolean knowsNode(Object aNode)
+    protected synchronized boolean addNode (AccTreeNode aParentNode, XAccessible xNewChild)
     {
-        // we never 'know' null; we 'know' a node if it has a parent
-        return (aNode != null) && (aNodes.get(normalize(aNode)) != null);
-    }
+        boolean bRet = false;
 
-    protected Object getNode(Object aObject)
-    {
-        return aNodes.get( normalize(aObject) );
-    }
-
-    /** recursively traverse aParents, and add nodes to path in
-     * post-order fashion. This causes the root to be the first
-     * element, just as demanded by TreeModelEvent.
-     * @see javax.swing.event.TreeModelEvent#TreeModelEvent
-     */
-    private void createPath(Object aNode, Vector aPath)
-    {
-        aNode = normalize(aNode);
-        Object aParent = aParents.get(aNode);
-        if( aParent != null )
-            createPath( aParent, aPath );
-        Object aPathElem = aNodes.get(aNode);
-        if( aPathElem != null )
-            aPath.add( aPathElem );
+        AccessibleTreeNode aChildNode = (AccessibleTreeNode)maXAccessibleToNode.get (xNewChild);
+        if (aChildNode == null)
+        {
+            AccTreeNode aChild = (AccTreeNode)((AccTreeNode)aParentNode).addAccessibleChild (xNewChild);
+            TreePath aPath = new TreePath (createPath (aChild));
+            if (aChild != null)
+            {
+                registerAccListener (aChild);
+                maXAccessibleToNode.put (aChild.getAccessible(), aChild);
+                addToCanvas (aChild);
+            }
+            bRet = true;
+        }
         else
-            System.out.println("Unknown node in path! (" + aNode +
-                               ", pos. " + aPath.size() + ")");
+            System.out.println ("node already present");
+
+        return bRet;
     }
+
 
     /** create path to node, suitable for TreeModelEvent constructor
      * @see javax.swing.event.TreeModelEvent#TreeModelEvent
      */
-    protected Object[] createPath(Object aNode)
+    protected Object[] createPath (AccessibleTreeNode aNode)
     {
         Vector aPath = new Vector();
-        createPath( aNode, aPath );
+        aNode.createPath (aPath);
         return aPath.toArray();
     }
 
@@ -260,92 +262,87 @@ public class AccessibilityTreeModel
     // tree cache, and we should get removed as soon as they are out.
     //
 
-    Vector aListeners;
-
     public void addTreeModelListener(TreeModelListener l)
     {
-        aListeners.add(l);
+        maTMListeners.add(l);
     }
 
     public void removeTreeModelListener(TreeModelListener l)
     {
-        aListeners.remove(l);
+        maTMListeners.remove(l);
     }
 
     protected void fireTreeNodesChanged(TreeModelEvent e)
     {
         System.out.println("treeNodesChanges: " + e);
-        for(int i = 0; i < aListeners.size(); i++)
+        for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)aListeners.get(i)).treeNodesChanged(e);
+            ((TreeModelListener)maTMListeners.get(i)).treeNodesChanged(e);
         }
     }
 
     protected void fireTreeNodesInserted(final TreeModelEvent e)
     {
         System.out.println("treeNodesInserted: " + e);
-        for(int i = 0; i < aListeners.size(); i++)
+        for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)aListeners.get(i)).treeNodesInserted(e);
+            ((TreeModelListener)maTMListeners.get(i)).treeNodesInserted(e);
         }
     }
 
     protected void fireTreeNodesRemoved(final TreeModelEvent e)
     {
         System.out.println("treeNodesRemoved: " + e);
-        for(int i = 0; i < aListeners.size(); i++)
+        for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)aListeners.get(i)).treeNodesRemoved(e);
+            ((TreeModelListener)maTMListeners.get(i)).treeNodesRemoved(e);
         }
     }
 
-    protected void fireTreeStructureChanged(final TreeModelEvent e)
+    protected synchronized void fireTreeStructureChanged(final TreeModelEvent e)
     {
         System.out.println("treeStructureChanged: " + e);
-        for(int i = 0; i < aListeners.size(); i++)
+        for(int i = 0; i < maTMListeners.size(); i++)
         {
-            ((TreeModelListener)aListeners.get(i)).treeStructureChanged(e);
+            ((TreeModelListener)maTMListeners.get(i)).treeStructureChanged(e);
         }
     }
 
-    protected TreeModelEvent createEvent( Object aNode )
+    protected TreeModelEvent createEvent (XAccessible xParent)
     {
-        return createEvent( aNode, null );
+        return createEvent (xParent, null );
     }
 
-    protected TreeModelEvent createEvent( Object aParent, Object aChild )
+    /** Create a TreeModelEvent object that informs listeners that one child
+        has been removed from or inserted into its parent.
+    */
+    protected TreeModelEvent createEvent (XAccessible xParent, XAccessible xChild)
     {
         // get parent node and create the tree path
-        Object aParentNode = getNode( aParent );
-        Object[] aPath = createPath( aParentNode );
+        AccessibleTreeNode aParentNode = (AccessibleTreeNode)maXAccessibleToNode.get (xParent);
+        Object[] aPathToParent = createPath (aParentNode);
 
-        // if we already know the node (e.g. when deleting a node),
-        // use the position from the node cache. Else (e.g. when
-        // inserting a node), call getIndexOfChild to look for it.
-        int nIndex =-1;
-        if( aChild != null )
-        {
-            if( knowsNode( aChild ) )
-            {
-                Vector aKids = (Vector)aChildren.get( aParent );
-                if( aKids != null )
-                {
-                    nIndex = aKids.indexOf( getNode( aChild ) );
-                }
-            }
-            else
-                nIndex = getIndexOfChild( aParentNode, aChild );
-        }
+        AccessibleTreeNode aChildNode = null;
+        if (xChild != null)
+            aChildNode = (AccessibleTreeNode)maXAccessibleToNode.get (xChild);
+        int nIndexInParent = -1;
+        if (xChild != null)
+            nIndexInParent = aParentNode.indexOf (aChildNode);
 
+        System.out.println (aParentNode + " " + aChildNode);
 
-        // If we have a position, broadcast the position, otherwise
-        // create a 'position-less' event without the child info.
-        return ( nIndex == -1 )
-            ? new TreeModelEvent( this, aPath )
-                : new TreeModelEvent( this, aPath,
-                                      new int[] { nIndex },
-                                      new Object[] { getNode( aChild ) } );
+        if (nIndexInParent == -1)
+            // This event may be passed only to treeStructureChanged of the listeners.
+            return new TreeModelEvent (this,
+                aPathToParent);
+        else
+            // General purpose event for removing or inserting known nodes.
+            return new TreeModelEvent (this,
+                aPathToParent,
+                new int[] {nIndexInParent},
+                new Object[] {aChildNode} );
     }
+
 
     /**
      * broadcast a tree event in a seperate Thread
@@ -355,9 +352,9 @@ public class AccessibilityTreeModel
     {
         public void run()
         {
-            for(int i = 0; i < aListeners.size(); i++)
+            for(int i = 0; i < maTMListeners.size(); i++)
             {
-                fire( (TreeModelListener)aListeners.get(i) );
+                fire( (TreeModelListener)maTMListeners.get(i) );
             }
         }
 
@@ -375,7 +372,7 @@ public class AccessibilityTreeModel
     protected XAccessibleEventBroadcaster getBroadcaster( Object aObject )
     {
         if( aObject instanceof AccTreeNode )
-            aObject = ((AccTreeNode)aObject).getDataObject();
+            aObject = ((AccTreeNode)aObject).getContext();
         return (XAccessibleEventBroadcaster) UnoRuntime.queryInterface (
             XAccessibleEventBroadcaster.class, aObject);
     }
@@ -411,105 +408,78 @@ public class AccessibilityTreeModel
     // static methods + members for creating default nodes
     //
 
-    // default handlers, Vector<HandlerPair>
-    private static Vector aDefaultHandlers;
-
-    // initialize default handlers
-    static
-    {
-        aDefaultHandlers = new Vector();
-        aDefaultHandlers.add(
-            new HandlerPair( Vector.class,
-                             new VectorHandler() ) );
-
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleContext.class,
-                             new AccessibleContextHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleContext.class,
-                             new AccessibleTreeHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleText.class,
-                             new AccessibleTextHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleComponent.class,
-                             new AccessibleComponentHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleExtendedComponent.class,
-                             new AccessibleExtendedComponentHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleAction.class,
-                             new AccessibleActionHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleImage.class,
-                             new AccessibleImageHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleTable.class,
-                             new AccessibleTableHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleEditableText.class,
-                             new AccessibleEditableTextHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleHypertext.class,
-                             new AccessibleHypertextHandler() ) );
-        aDefaultHandlers.add(
-            new HandlerPair( XAccessibleHyperlink.class,
-                             new AccessibleHyperlinkHandler() ) );
-
-        // ... ADD NEW DEFAULT HANDLERS HERE ...
-
-    }
-
 
 
     /** add default handlers based on the supported interfaces */
-    public static void addDefaultHandlers( AccTreeNode aNode )
+    public static void addDefaultHandlers (AccTreeNode aNode, XAccessibleContext xContext)
     {
-        Object aObject = aNode.getDataObject();
-
-        // try each type
-        Enumeration aEnum = aDefaultHandlers.elements();
-        while( aEnum.hasMoreElements() )
+        if (false)
         {
-            HandlerPair aPair = (HandlerPair)aEnum.nextElement();
-            Class aType = aPair.aType;
+            // Slow but complete version: try each handler type separately.
+            aNode.addHandler (maContextHandler.createHandler (xContext));
+            aNode.addHandler (maTextHandler.createHandler (xContext));
+            aNode.addHandler (maEditableTextHandler.createHandler (xContext));
+            aNode.addHandler (maComponentHandler.createHandler (xContext));
+            aNode.addHandler (maExtendedComponentHandler.createHandler (xContext));
+            aNode.addHandler (maActionHandler.createHandler (xContext));
+            aNode.addHandler (maImageHandler.createHandler (xContext));
+            aNode.addHandler (maTableHandler.createHandler (xContext));
+            aNode.addHandler (maHypertextHandler.createHandler (xContext));
+            aNode.addHandler (maHyperlinkHandler.createHandler (xContext));
+            aNode.addHandler (maTreeHandler.createHandler (xContext));
+        }
+        else
+        {
+            // Exploit dependencies between interfaces.
+            NodeHandler aHandler;
+            aNode.addHandler (maContextHandler.createHandler (xContext));
 
-            // try instanceof, and a UNO query, if we have an XInterface
-            if( aType.isInstance( aObject ) )
+            aHandler = maTextHandler.createHandler (xContext);
+            if (aHandler != null)
             {
-                aNode.addHandler( aPair.aHandler );
+                aNode.addHandler (aHandler);
+                aNode.addHandler (maEditableTextHandler.createHandler (xContext));
+                aNode.addHandler (maHypertextHandler.createHandler (xContext));
+                aNode.addHandler (maHyperlinkHandler.createHandler (xContext));
             }
-            else if( XInterface.class.isAssignableFrom( aType ) )
+            aHandler = maComponentHandler.createHandler (xContext);
+            if (aHandler != null)
             {
-                Object aQuery = UnoRuntime.queryInterface(aType, aObject);
-                if( aQuery != null )
-                    aNode.addHandler( aPair.aHandler );
+                aNode.addHandler (aHandler);
+                aNode.addHandler (maExtendedComponentHandler.createHandler (xContext));
             }
+            aNode.addHandler (maActionHandler.createHandler (xContext));
+            aNode.addHandler (maImageHandler.createHandler (xContext));
+            aNode.addHandler (maTableHandler.createHandler (xContext));
+            aNode.addHandler (maTreeHandler.createHandler (xContext));
         }
     }
 
     /** create a node with the default handlers */
-    public static AccTreeNode createDefaultNode( Object aObject )
+    public static AccTreeNode createDefaultNode (XAccessible xAccessible, AccessibleTreeNode aParent)
     {
         // default: aObject + aDisplay
-        Object aDisplay = aObject;
+        String sDisplay;
 
         // if we are accessible, we use the context + name instead
-        XAccessible xAccessible =
-            (XAccessible) UnoRuntime.queryInterface (
-                XAccessible.class, aObject);
+        XAccessibleContext xContext = null;
         if (xAccessible != null)
-        {
-            XAccessibleContext aContext = xAccessible.getAccessibleContext();
+            xContext = xAccessible.getAccessibleContext();
+        if (xContext != null)
+            sDisplay = xContext.getAccessibleName();
+        else
+            sDisplay = new String ("not accessible");
 
-            // for accessibles, use context + name!
-            aObject = aContext;
-            aDisplay = aContext.getAccessibleName();
-        }
 
         // create node, and add default handlers
-        AccTreeNode aNode = new AccTreeNode( aObject, aDisplay );
-        AccessibilityTreeModel.addDefaultHandlers( aNode );
+        AccTreeNode aNode = new AccTreeNode (xContext, sDisplay, aParent);
+        AccessibilityTreeModel.addDefaultHandlers (aNode, xContext);
+
+        if (mbVerbose)
+            maPrinter.print (". ");
+
+        if (aNode == null)
+            System.out.println ("createDefaultNode == null");
         return aNode;
     }
 
@@ -537,7 +507,7 @@ public class AccessibilityTreeModel
 
     public void disposing( EventObject aEvent)
     {
-        System.out.println("dispose: " + objectToString(aEvent.Source));
+        /*        System.out.println("dispose: " + objectToString(aEvent.Source));
 
         if( knowsNode( aEvent.Source ) )
         {
@@ -546,7 +516,7 @@ public class AccessibilityTreeModel
             removeNode( aEvent.Source );
 //            fireTreeStructureChanged( createEvent( getRoot() ) );
         }
-
+        */
     }
 
     static final String[] aEventNames =
@@ -562,39 +532,74 @@ public class AccessibilityTreeModel
         "[UNKNOWN]"
     };
 
-    public void notifyEvent( AccessibleEventObject aEvent )
+    /** This method is called from accessible objects that broadcast
+        modifications of themselves or from their children.  The event is
+        processed only, except printing some messages, if the tree is not
+        locked.  It should be locked during changes to its internal
+        structure like expanding nodes.
+    */
+    public synchronized void notifyEvent( AccessibleEventObject aEvent )
     {
 
         int nId = aEvent.EventId;
         if( (nId < 0) || (nId >= aEventNames.length) )
             nId = 0;
 
-        Object aSource = normalize( aEvent.Source );
-        Object aOld = normalize( aEvent.OldValue );
-        Object aNew = normalize( aEvent.NewValue );
+        System.out.println( "notify: " + aEvent.EventId + " "
+            + aEventNames[nId] + ": "
+            + objectToString(aEvent.Source) + " "
+            + objectToString(aEvent.OldValue) + "->"
+            + objectToString(aEvent.NewValue) );
 
-        System.out.println( "notify: " + aEvent.EventId + " " +
-                            aEventNames[nId] + ": " +
-                            objectToString(aEvent.Source) + " (" +
-                            (knowsNode(aEvent.Source) ? "known" : "unknown") +
-                            "), " +
-                            objectToString(aEvent.OldValue) + "->" +
-                            objectToString(aEvent.NewValue) );
+        if (mnLockCount > 0)
+        {
+            System.out.println ("ignoring event because tree is locked");
+            return;
+        }
 
+        XAccessible xSource = (XAccessible)UnoRuntime.queryInterface(
+            XAccessible.class,aEvent.Source);
 
         switch( aEvent.EventId )
         {
             case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
                 // fire insertion and deletion events:
-                if( aOld != null )
+                if (aEvent.OldValue != null)
                 {
-                    TreeModelEvent aTreeEvent = createEvent( aSource, aOld );
-                    removeNode( aOld );
-                    fireTreeNodesRemoved( aTreeEvent );
+                    XAccessible xOld = (XAccessible)UnoRuntime.queryInterface(
+                        XAccessible.class,aEvent.OldValue);
+                    // Create event before removing the node to get the old
+                    // index of the node.
+                    TreeModelEvent aRemoveEvent = createEvent (xSource, xOld);
+                    removeNode ((AccessibleTreeNode)maXAccessibleToNode.get (xOld));
+                    fireTreeNodesRemoved (aRemoveEvent);
                 }
-                if( aNew != null )
+                // Insertion and removal of children should be mutually
+                // exclusive.  But then there is this 'should' ...
+                if (aEvent.NewValue != null)
                 {
-                    fireTreeNodesInserted( createEvent( aSource, aNew ) );
+                    XAccessible xNew = (XAccessible)UnoRuntime.queryInterface(
+                        XAccessible.class,aEvent.NewValue);
+                    // Create event after inserting it so that its new index
+                    // in the parent can be determined.
+                    AccessibleTreeNode aParentNode = (AccessibleTreeNode)maXAccessibleToNode.get (xSource);
+                    if (aParentNode instanceof AccTreeNode)
+                    {
+                        if (addNode ((AccTreeNode)aParentNode, xNew))
+                        {
+                            ((AccTreeNode)aParentNode).update ();
+                            updateOnCanvas (xSource);
+
+                            // A call to fireTreeNodesInserted for xNew
+                            // should be sufficient but at least the
+                            // StringNode object that contains the number of
+                            // children also changes and we do not know its
+                            // index relative to its parent.  Therefore the
+                            // more expensive fireTreeStructureChanged is
+                            // necessary.
+                            fireTreeStructureChanged (createEvent (xSource));
+                        }
+                    }
                 }
                 break;
             case AccessibleEventId.ACCESSIBLE_TABLE_MODEL_CHANGED:
@@ -628,8 +633,13 @@ public class AccessibilityTreeModel
             case AccessibleEventId.LABEL_FOR_PROPERTY:
             case AccessibleEventId.LABELED_BY_PROPERTY:
             case AccessibleEventId.MEMBER_OF_PROPERTY:
-                fireTreeNodesChanged( createEvent( aSource ) );
-                updateOnCanvas( aSource );
+                //                fireTreeNodesChanged (createEvent
+                //                (xSource));
+                // Some child(s) of xSource have changed.  We do not know
+                // which so all we can do is send a structure change event
+                // to all listeners.
+                fireTreeStructureChanged (createEvent (xSource));
+                updateOnCanvas (xSource);
                 break;
 
 
@@ -660,13 +670,15 @@ public class AccessibilityTreeModel
         return xAcc;
     }
 
-    protected void addToCanvas( Object aObject )
+    protected void addToCanvas (AccTreeNode aNode)
     {
-        XAccessibleContext xContext = getContext( aObject );
-        if( (maCanvas != null) && (xContext != null) )
-            maCanvas.addContext( xContext,
-                                 new TreePath( createPath( xContext ) ) );
-    }
+        return;
+        /*        XAccessibleContext xContext = aNode.getContext();
+        if ((maCanvas != null) && (xContext != null))
+            maCanvas.addContext (
+                xContext,
+                new TreePath (createPath (aNode)));
+        */    }
 
     protected void removeFromCanvas( Object aObject )
     {

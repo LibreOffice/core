@@ -1,19 +1,85 @@
+import java.util.Vector;
+
+
 /**
  * Map an arbitrary object into parts of a tree node.
  */
 abstract class NodeHandler
 {
+    /** This vector is used as cache for the child objects.
+    */
+    protected Vector maChildList;
+
+
+    public abstract NodeHandler createHandler (
+        drafts.com.sun.star.accessibility.XAccessibleContext xContext);
+
+    public NodeHandler ()
+    {
+        maChildList = new Vector ();
+    }
+
+    /** Clear the cache of child objects.
+    */
+    public void clear ()
+    {
+        maChildList = new Vector ();
+    }
+
+    /** This factory method creates an individual handler for the specified
+        object that may hold information to accelerate the access to its children.
+    */
+    //    public abstract NodeHandler createHandler (Object aObject);
+
     /** return the number of children this object has */
-    public abstract int getChildCount(Object aObject);
+    public int getChildCount(Object aObject)
+    {
+        return maChildList.size();
+    }
 
     /**
-     * return a child object.
-     * You can use any object type for trivial nodes. Complex
+     * return a child object. Complex
      * children have to be AccTreeNode instances.
      * @see AccTreeNode
      */
-    public abstract Object getChild(Object aObject, int nIndex);
+    public AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
+    {
+        AccessibleTreeNode aChild = (AccessibleTreeNode)maChildList.get(nIndex);
+        if (aChild == null)
+        {
+            aChild = createChild (aParent, nIndex);
+            if (aChild == null)
+                aChild = new StringNode ("could not create child", aParent);
+            maChildList.setElementAt (aChild, nIndex);
+        }
+        return aChild;
+    }
 
+    /** Remove the specified child from the list of children.
+    */
+    public boolean removeChild (AccessibleTreeNode aNode, int nIndex)
+    {
+        try
+        {
+            maChildList.remove (nIndex);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public int indexOf (AccessibleTreeNode aNode)
+    {
+        return maChildList.indexOf (aNode);
+    }
+
+    /** Create a child object for the specified data.  This method is called
+        usually from getChild and put there into the cache.
+    */
+    public abstract AccessibleTreeNode createChild (
+        AccessibleTreeNode aParent, int nIndex);
 
     //
     // The following methods support editing of children and actions.
@@ -27,7 +93,7 @@ abstract class NodeHandler
     }
 
     /** change this child's value */
-    public void setChild(Object aObject, int nIndex) { }
+    //    public void setChild(Object aObject, int nIndex) { }
 
 
     /** get names of suported actions */
@@ -37,5 +103,7 @@ abstract class NodeHandler
     }
 
     /** perform action */
-    public void performAction(Object aObject, int nIndex) { }
+    public void performAction(Object aObject, int nIndex)
+    {
+    }
 }

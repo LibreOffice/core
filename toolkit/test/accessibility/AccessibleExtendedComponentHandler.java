@@ -1,48 +1,71 @@
-
 import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleExtendedComponent;
 
 
-class AccessibleExtendedComponentHandler extends AccessibleTreeHandler
+class AccessibleExtendedComponentHandler
+    extends NodeHandler
 {
-    private XAccessibleExtendedComponent getComponent(Object aObject)
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleExtendedComponent xEComponent =
+            (XAccessibleExtendedComponent) UnoRuntime.queryInterface (
+                XAccessibleExtendedComponent.class, xContext);
+        if (xEComponent != null)
+            return new AccessibleExtendedComponentHandler (xEComponent);
+        else
+            return null;
+    }
+
+    public AccessibleExtendedComponentHandler ()
+    {
+    }
+
+    public AccessibleExtendedComponentHandler (XAccessibleExtendedComponent xEComponent)
+    {
+        if (xEComponent != null)
+            maChildList.setSize (2);
+    }
+
+    private static XAccessibleExtendedComponent getComponent (AccTreeNode aNode)
     {
         return (XAccessibleExtendedComponent) UnoRuntime.queryInterface (
-            XAccessibleExtendedComponent.class, aObject);
+            XAccessibleExtendedComponent.class,
+            aNode.getContext());
     }
 
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
-        return (getComponent(aObject) == null) ? 0 : 2;
-    }
-
-    public Object getChild(Object aObject, int nIndex)
-    {
-        XAccessibleExtendedComponent xEComponent = getComponent(aObject);
-
-        Object aRet = null;
-        if( xEComponent != null )
+        AccessibleTreeNode aChild = null;
+        if (aParent instanceof AccTreeNode)
         {
-            int nColor;
-            switch( nIndex )
+            XAccessibleExtendedComponent xEComponent = getComponent ((AccTreeNode)aParent);
+
+            if (xEComponent != null)
             {
-                case 0:
-                    nColor = xEComponent.getForeground();
-                    aRet = "Foreground color: R"
-                        +       (nColor>>16&0xff)
-                        + "G" + (nColor>>8&0xff)
-                        + "B" + (nColor>>0&0xff);
-                    break;
-                case 1:
-                    nColor = xEComponent.getBackground();
-                    aRet = "Background color: R"
-                        +       (nColor>>16&0xff)
-                        + "G" + (nColor>>8&0xff)
-                        + "B" + (nColor>>0&0xff);
-                    break;
+                int nColor;
+                switch( nIndex )
+                {
+                    case 0:
+                        nColor = xEComponent.getForeground();
+                        aChild = new StringNode ("Foreground color: R"
+                            +       (nColor>>16&0xff)
+                            + "G" + (nColor>>8&0xff)
+                            + "B" + (nColor>>0&0xff),
+                            aParent);
+                        break;
+                    case 1:
+                        nColor = xEComponent.getBackground();
+                        aChild = new StringNode ("Background color: R"
+                            +       (nColor>>16&0xff)
+                            + "G" + (nColor>>8&0xff)
+                            + "B" + (nColor>>0&0xff),
+                            aParent);
+                        break;
+                }
             }
         }
-        return aRet;
+        return aChild;
     }
 }

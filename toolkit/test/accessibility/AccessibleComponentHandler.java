@@ -1,45 +1,69 @@
 
 import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleComponent;
 
 
-class AccessibleComponentHandler extends AccessibleTreeHandler
+class AccessibleComponentHandler
+    extends NodeHandler
 {
-    private XAccessibleComponent getComponent(Object aObject)
+
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleComponent xComponent = getComponent (xContext);
+        if (xComponent != null)
+            return new AccessibleComponentHandler (xComponent);
+        else
+            return null;
+
+    }
+
+    public AccessibleComponentHandler ()
+    {
+    }
+
+    public AccessibleComponentHandler (XAccessibleComponent xComponent)
+    {
+        if (xComponent != null)
+            maChildList.setSize (3);
+    }
+
+    private static XAccessibleComponent getComponent(Object aObject)
     {
         return (XAccessibleComponent) UnoRuntime.queryInterface (
             XAccessibleComponent.class, aObject);
     }
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
-        return (getComponent(aObject) == null) ? 0 : 3;
-    }
-
-    public Object getChild(Object aObject, int nIndex)
-    {
-        XAccessibleComponent xComponent = getComponent(aObject);
-
-        Object aRet = null;
-        if( xComponent != null )
+        AccessibleTreeNode aChild = null;
+        if (aParent instanceof AccTreeNode)
         {
-            switch( nIndex )
+            XAccessibleComponent xComponent = getComponent (
+                ((AccTreeNode)aParent).getContext());
+
+            if (xComponent != null)
             {
-                case 0:
-                    aRet = "Location: "+ xComponent.getLocation().X +
-                        ", " + xComponent.getLocation().Y;
-                    break;
-                case 1:
-                    aRet = "Location on Screen: "+
-                        xComponent.getLocationOnScreen().X + ", " +
-                        xComponent.getLocationOnScreen().Y;
-                    break;
-                case 2:
-                    aRet =  "Size: "+ xComponent.getSize().Width + ", " +
-                        xComponent.getSize().Height;
-                    break;
+                switch (nIndex)
+                {
+                    case 0:
+                        aChild = new StringNode ("Location: "+ xComponent.getLocation().X +
+                            ", " + xComponent.getLocation().Y, aParent);
+                        break;
+                    case 1:
+                        aChild = new StringNode ("Location on Screen: "
+                            + xComponent.getLocationOnScreen().X + ", "
+                            + xComponent.getLocationOnScreen().Y,
+                            aParent);
+                        break;
+                    case 2:
+                        aChild = new StringNode ("Size: "+ xComponent.getSize().Width + ", "
+                            + xComponent.getSize().Height,
+                            aParent);
+                        break;
+                }
             }
         }
-        return aRet;
+        return aChild;
     }
 }

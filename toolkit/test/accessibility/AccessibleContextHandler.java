@@ -1,39 +1,60 @@
-
+import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.uno.UnoRuntime;
 
 
-class AccessibleContextHandler extends AccessibleTreeHandler
+class AccessibleContextHandler
+    extends NodeHandler
 {
-    public int getChildCount(Object aObject)
+    protected int nChildrenCount;
+
+    public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        return (getContext(aObject) == null) ? 0 : 4;
+        if (xContext != null)
+            return new AccessibleContextHandler (xContext);
+        else
+            return null;
     }
 
-    public Object getChild(Object aObject, int nIndex)
+    public AccessibleContextHandler ()
     {
-        XAccessibleContext xContext = getContext(aObject);
+        super ();
+    }
 
-        Object aRet = null;
-        if( xContext != null )
+    public AccessibleContextHandler (XAccessibleContext xContext)
+    {
+        super();
+        if (xContext != null)
+            maChildList.setSize (3);
+    }
+
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
+    {
+        XAccessibleContext xContext = null;
+        if (aParent instanceof AccTreeNode)
+            xContext = ((AccTreeNode)aParent).getContext();
+
+        String sChild = new String();
+        if (xContext != null)
         {
             switch( nIndex )
             {
                 case 0:
-                    aRet = "Description: " +
+                    sChild = "Description: " +
                         xContext.getAccessibleDescription();
                     break;
                 case 1:
-                    aRet = "Role: " + xContext.getAccessibleRole();
+                    sChild = "Role: " + xContext.getAccessibleRole();
                     break;
                 case 2:
-                    aRet = "Has parent: " +
+                    sChild = "Has parent: " +
                         (xContext.getAccessibleParent()!=null ? "yes" : "no");
                     break;
-                case 3:
-                    aRet = "Child count: " + xContext.getAccessibleChildCount();
-                    break;
+                    /*                case 3:
+                    sChild = "Child count: " + xContext.getAccessibleChildCount();
+                    break;*/
             }
         }
-        return aRet;
+        return new StringNode (sChild, aParent);
     }
 }

@@ -1,4 +1,5 @@
 
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleText;
 import drafts.com.sun.star.accessibility.XAccessibleEditableText;
 import drafts.com.sun.star.accessibility.AccessibleTextType;
@@ -25,12 +26,32 @@ import javax.swing.text.JTextComponent;
 
 class AccessibleTextHandler extends NodeHandler
 {
+    private XAccessibleText mxText;
+
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleText xText = (XAccessibleText) UnoRuntime.queryInterface (
+            XAccessibleText.class, xContext);
+        if (xText != null)
+            return new AccessibleTextHandler (xText);
+        else
+            return null;
+    }
+
+    public AccessibleTextHandler ()
+    {
+    }
+
+    public AccessibleTextHandler (XAccessibleText xText)
+    {
+        mxText = xText;
+        if (mxText != null)
+            maChildList.setSize (12);
+    }
+
     protected XAccessibleText getText( Object aObject )
     {
-        XAccessibleText xText =
-            (XAccessibleText) UnoRuntime.queryInterface (
-                 XAccessibleText.class, aObject);
-        return xText;
+        return mxText;
     }
 
     protected XAccessibleEditableText getEditText( Object aObject )
@@ -43,67 +64,82 @@ class AccessibleTextHandler extends NodeHandler
 
 
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
-        return (getText(aObject) != null) ? 12 : 0;
-    }
+        AccessibleTreeNode aChild = null;
+        XAccessibleText xText = null;
+        if (aParent instanceof AccTreeNode)
+            xText = getText (((AccTreeNode)aParent).getContext());
 
-    public Object getChild(Object aObject, int nIndex)
-    {
-        Object aRet = null;
-
-        XAccessibleText xText = getText( aObject );
-        if( xText != null )
+        try
         {
-            switch( nIndex )
+            if( xText != null )
             {
-                case 0:
-                    aRet = xText.getText();
-                    break;
-                case 1:
-                    aRet = "# chars: " + xText.getCharacterCount();
-                    break;
-                case 2:
-                    aRet = characters( xText );
-                    break;
-                case 3:
-                    aRet = "selection: " + "[" + xText.getSelectionStart() +
-                        "," + xText.getSelectionEnd() + "] \"" +
-                        xText.getSelectedText() + "\"";
-                    break;
-                case 4:
-                    aRet = "getCaretPosition: " + xText.getCaretPosition();
-                    break;
-                case 5:
-                    aRet = textAtIndexNode( xText, "Character",
-                                            AccessibleTextType.CHARACTER );
-                    break;
-                case 6:
-                    aRet = textAtIndexNode( xText, "Word",
-                                            AccessibleTextType.WORD );
-                    break;
-                case 7:
-                    aRet = textAtIndexNode( xText, "Sentence",
-                                            AccessibleTextType.SENTENCE );
-                    break;
-                case 8:
-                    aRet = textAtIndexNode( xText, "Paragraph",
-                                            AccessibleTextType.PARAGRAPH );
-                    break;
-                case 9:
-                    aRet = textAtIndexNode( xText, "Line",
-                                            AccessibleTextType.LINE );
-                    break;
-                case 10:
-                    aRet = textAtIndexNode( xText, "Attribute",
-                                            (short)6/*AccessibleTextType.ATTRIBUTE*/);
-                    break;
-                case 11:
-                    aRet = bounds( xText );
-                    break;
+                switch( nIndex )
+                {
+                    case 0:
+                        aChild = new StringNode (xText.getText(), aParent);
+                        break;
+                    case 1:
+                        aChild = new StringNode ("# chars: " + xText.getCharacterCount(), aParent);
+                        break;
+                    case 2:
+                        aChild = new StringNode (characters( xText ), aParent);
+                        break;
+                    case 3:
+                        aChild = new StringNode ("selection: "
+                            + "[" + xText.getSelectionStart()
+                            + "," + xText.getSelectionEnd()
+                            + "] \"" + xText.getSelectedText() + "\"",
+                            aParent);
+                        break;
+                    case 4:
+                        aChild = new StringNode ("getCaretPosition: " + xText.getCaretPosition(), aParent);
+                        break;
+                    case 5:
+                        aChild = textAtIndexNode( xText, "Character",
+                            AccessibleTextType.CHARACTER,
+                            aParent);
+                        break;
+                    case 6:
+                        aChild = textAtIndexNode( xText, "Word",
+                            AccessibleTextType.WORD,
+                            aParent);
+                        break;
+                    case 7:
+                        aChild = textAtIndexNode( xText, "Sentence",
+                            AccessibleTextType.SENTENCE,
+                            aParent);
+                        break;
+                    case 8:
+                        aChild = textAtIndexNode( xText, "Paragraph",
+                            AccessibleTextType.PARAGRAPH,
+                            aParent);
+                        break;
+                    case 9:
+                        aChild = textAtIndexNode( xText, "Line",
+                            AccessibleTextType.LINE,
+                            aParent);
+                        break;
+                    case 10:
+                        aChild = textAtIndexNode( xText, "Attribute",
+                            (short)6/*AccessibleTextType.ATTRIBUTE*/,
+                            aParent);
+                        break;
+                    case 11:
+                        aChild = new StringNode (bounds( xText ), aParent);
+                        break;
+                    default:
+                        aChild = new StringNode ("unknown child index " + nIndex, aParent);
+                }
             }
         }
-        return aRet;
+        catch (Exception e)
+        {
+            // Return empty child.
+        }
+
+        return aChild;
     }
 
 
@@ -119,12 +155,13 @@ class AccessibleTextHandler extends NodeHandler
 
     /** Create a text node that lists all strings of a particular text type
      */
-    private Object textAtIndexNode(
+    private AccessibleTreeNode textAtIndexNode(
         XAccessibleText xText,
         String sName,
-        short nTextType)
+        short nTextType,
+        AccessibleTreeNode aParent)
     {
-        Vector aWords = new Vector();
+        VectorNode aNode = new VectorNode (sName, aParent);
 
         // get word at all positions;
         // for nicer display, compare current word to previous one and
@@ -149,8 +186,8 @@ class AccessibleTextHandler extends NodeHandler
                     if( ! ( sTmp.equals( sWord ) && sTBef.equals( sBefore ) &&
                             sTBeh.equals( sBehind ) ) )
                     {
-                        aWords.add( textAtIndexNodeString(
-                            nStart, i, sWord, sBefore, sBehind) );
+                        aNode.addChild (new StringNode (textAtIndexNodeString(
+                            nStart, i, sWord, sBefore, sBehind), aNode));
                         sWord = sTmp;
                         sBefore = sTBef;
                         sBehind = sTBeh;
@@ -158,24 +195,21 @@ class AccessibleTextHandler extends NodeHandler
                     }
 
                     // don't generate more than 50 children.
-                    if( aWords.size() > 50 )
+                    if (aNode.getChildCount() > 50)
                     {
                         sWord = "...";
                         break;
                     }
                 }
-                aWords.add( textAtIndexNodeString(
-                    nStart, nLength, sWord, sBefore, sBehind) );
+                aNode.addChild (new StringNode (textAtIndexNodeString(
+                    nStart, nLength, sWord, sBefore, sBehind), aNode));
             }
             catch( IndexOutOfBoundsException e )
             {
-                aWords.add( e.toString() );
+                aNode.addChild (new StringNode (e.toString(), aNode));
             }
         }
 
-        // create node, and add default handlers
-        AccTreeNode aNode = new AccTreeNode( aWords, sName );
-        AccessibilityTreeModel.addDefaultHandlers( aNode );
         return aNode;
     }
 

@@ -1,45 +1,68 @@
 
 import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.lang.IndexOutOfBoundsException;
 
-class AccessibleActionHandler extends NodeHandler
+class AccessibleActionHandler
+    extends NodeHandler
 {
-    protected XAccessibleAction getAction(Object aObject)
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleAction xEComponent =
+            (XAccessibleAction) UnoRuntime.queryInterface (
+                XAccessibleAction.class, xContext);
+        if (xEComponent != null)
+            return new AccessibleActionHandler (xEComponent);
+        else
+            return null;
+    }
+
+    public AccessibleActionHandler ()
+    {
+    }
+
+    public AccessibleActionHandler (XAccessibleAction xAction)
+    {
+        if (xAction != null)
+            maChildList.setSize (1 + xAction.getAccessibleActionCount());
+    }
+
+    protected static XAccessibleAction getAction (AccTreeNode aParent)
     {
         return (XAccessibleAction) UnoRuntime.queryInterface (
-            XAccessibleAction.class, aObject);
+            XAccessibleAction.class, aParent.getContext());
     }
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
-        XAccessibleAction xAction = getAction(aObject);
-        return (xAction == null) ? 0 : 1 + xAction.getAccessibleActionCount();
-    }
+        AccessibleTreeNode aChild = null;
 
-    public Object getChild(Object aObject, int nIndex)
-    {
-        Object aRet = null;
-
-        XAccessibleAction xAction = getAction(aObject);
-        if( xAction != null )
+        if (aParent instanceof AccTreeNode)
         {
-            if( nIndex == 1 )
-                aRet = "Actions: " + xAction.getAccessibleActionCount();
-            else
+            XAccessibleAction xAction = getAction ((AccTreeNode)aParent);
+            if( xAction != null )
             {
-                try
+                if (nIndex == 0)
+                    aChild = new StringNode ("Number of actions: " + xAction.getAccessibleActionCount(),
+                        aParent);
+                else
                 {
-                    aRet = "Action " + (nIndex-1) + " : " +
-                        xAction.getAccessibleActionDescription(nIndex-1);
-                }
-                catch( IndexOutOfBoundsException e )
-                {
-                    aRet = "ERROR";
+                    nIndex -= 1;
+                    try
+                    {
+                        aChild = new StringNode ("Action " + nIndex + " : "
+                            + xAction.getAccessibleActionDescription (nIndex),
+                            aParent);
+                    }
+                    catch( IndexOutOfBoundsException e )
+                    {
+                        aChild = new StringNode ("ERROR", aParent);
+                    }
                 }
             }
         }
 
-        return aRet;
+        return aChild;
     }
 }

@@ -1,25 +1,48 @@
 
 import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleImage;
 
 
 class AccessibleImageHandler extends NodeHandler
 {
-    protected XAccessibleImage getImage(Object aObject)
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleImage xImage =
+            (XAccessibleImage) UnoRuntime.queryInterface (
+                XAccessibleImage.class, xContext);
+        if (xImage != null)
+            return new AccessibleImageHandler (xImage);
+        else
+            return null;
+    }
+
+    public AccessibleImageHandler ()
+    {
+    }
+
+    public AccessibleImageHandler (XAccessibleImage xImage)
+    {
+        if (xImage != null)
+            maChildList.setSize (1);
+    }
+
+    protected static XAccessibleImage getImage (AccTreeNode aNode)
     {
         return (XAccessibleImage) UnoRuntime.queryInterface (
-            XAccessibleImage.class, aObject);
+            XAccessibleImage.class, aNode.getContext());
     }
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
-        return (getImage(aObject) == null) ? 0 : 1;
-    }
-
-    public Object getChild(Object aObject, int nIndex)
-    {
-        XAccessibleImage xImage = getImage(aObject);
-        return (xImage == null) ? "" :
-            "Image description: " + xImage.getAccessibleImageDescription();
+        if (aParent instanceof AccTreeNode)
+        {
+            XAccessibleImage xImage = getImage ((AccTreeNode)aParent);
+            if (xImage != null)
+                return new StringNode (
+                    "Image description: " + xImage.getAccessibleImageDescription(),
+                    aParent);
+        }
+        return null;
     }
 }

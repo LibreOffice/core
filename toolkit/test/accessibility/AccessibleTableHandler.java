@@ -1,24 +1,40 @@
 
 import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleTable;
 
 
 class AccessibleTableHandler extends NodeHandler
 {
-    protected XAccessibleTable getTable(Object aObject)
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleTable xTable =
+            (XAccessibleTable) UnoRuntime.queryInterface (
+                XAccessibleTable.class, xContext);
+        if (xTable != null)
+            return new AccessibleTableHandler (xTable);
+        else
+            return null;
+    }
+
+    public AccessibleTableHandler ()
+    {
+    }
+
+    public AccessibleTableHandler (XAccessibleTable xTable)
+    {
+        if (xTable != null)
+            maChildList.setSize (1);
+    }
+
+    protected static XAccessibleTable getTable(Object aObject)
     {
         return (XAccessibleTable) UnoRuntime.queryInterface (
             XAccessibleTable.class, aObject);
     }
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
     {
-        return (getTable(aObject) == null) ? 0 : 1;
-    }
-
-    public Object getChild(Object aObject, int nIndex)
-    {
-        XAccessibleTable xTable = getTable(aObject);
-        return "interface XAccessibleTable is supported";
+        return new StringNode ("interface XAccessibleTable is supported", aParent);
     }
 }

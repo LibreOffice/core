@@ -179,7 +179,7 @@ public class AccessibilityWorkBench
         maMainPanel.add (aScrollPane);
 
         //  Accessible Tree.
-        maTree = new AccessibilityTree (this, maCanvas);
+        maTree = new AccessibilityTree (this, maCanvas, this);
         aScrollPane = new JScrollPane(maTree,
             JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -212,8 +212,8 @@ public class AccessibilityWorkBench
         aConnectButton = createButton ("Connect", "connect");
         aLoadButton = createButton ("Load", "load");
         aUpdateButton = createButton ("Update", "update");
-        aShapesButton = createButton ("Shapes", "shapes");
-        aExpandButton = createButton ("Expand", "expand");
+        aShapesButton = createButton ("Expand Shapes", "shapes");
+        aExpandButton = createButton ("Expand All", "expand");
         aTextButton = createButton("Text", "text");
         aQuitButton = createButton ("Quit", "quit");
 
@@ -232,6 +232,7 @@ public class AccessibilityWorkBench
     public JButton createButton (String title, String command)
     {
         JButton aButton = new JButton (title);
+        aButton.setEnabled (false);
         aButton.setActionCommand (command);
         aButton.addActionListener (this);
         GridBagConstraints constraints = new GridBagConstraints ();
@@ -253,9 +254,17 @@ public class AccessibilityWorkBench
 
         // create new model (with new documents)
         AccessibilityTreeModel aModel =
-            new AccessibilityTreeModel( createTreeModelRoot() );
+            new AccessibilityTreeModel (createTreeModelRoot(), this, this);
         aModel.setCanvas( maCanvas );
         maTree.setModel( aModel );
+
+        aConnectButton.setEnabled (true);
+        aQuitButton.setEnabled (true);
+        aLoadButton.setEnabled (true);
+        aUpdateButton.setEnabled (true);
+        aExpandButton.setEnabled (true);
+        aShapesButton.setEnabled (true);
+        aTextButton.setEnabled (true);
 
         //        if (office != null && office.getDesktop() != null)
         //  office.getDesktop().addTerminateListener (this);
@@ -293,15 +302,22 @@ public class AccessibilityWorkBench
         }
         else if (e.getActionCommand().equals("shapes"))
         {
+            Cursor aCursor = getCursor();
+            setCursor (new Cursor (Cursor.WAIT_CURSOR));
             maTree.expandShapes();
+            setCursor (aCursor);
         }
         else if (e.getActionCommand().equals("expand"))
         {
+            Cursor aCursor = getCursor();
+            setCursor (new Cursor (Cursor.WAIT_CURSOR));
             maTree.expandAll();
+            setCursor (aCursor);
         }
         else if (e.getActionCommand().equals("text"))
         {
             Canvas.bPaintText = ! Canvas.bPaintText;
+            maCanvas.repaint ();
         }
         else
         {
@@ -315,8 +331,8 @@ public class AccessibilityWorkBench
     /** Create an AccessibilityTreeModel root which contains the documents */
     private Object createTreeModelRoot()
     {
-        Vector aRoots = new Vector();
-
+        // create root node
+        VectorNode aRoot = new VectorNode ("Accessibility Tree", null);
         try
         {
             XDesktop xDesktop = office.getDesktop();
@@ -344,11 +360,9 @@ public class AccessibilityWorkBench
                     XAccessible xRoot = office.getAccessibleRoot (xWindow);
 
                     // create document node
-                    aRoots.add(
-                        AccessibilityTreeModel.createDefaultNode(xRoot) );
+                    aRoot.addChild (
+                        AccessibilityTreeModel.createDefaultNode (xRoot, aRoot));
                 }
-                else
-                    aRoots.add( "can't cast component to model" );
             }
             println ("finished getting named documents");
         }
@@ -357,10 +371,7 @@ public class AccessibilityWorkBench
             System.out.println ("caught exception while getting document names: " + e);
         }
 
-        // create root node
-        AccTreeNode aNode = new AccTreeNode( aRoots, "Accessibility Tree" );
-        AccessibilityTreeModel.addDefaultHandlers( aNode );
-        return aNode;
+        return aRoot;
     }
 
 
@@ -517,6 +528,7 @@ public class AccessibilityWorkBench
     public  void print (String text)
     {
         maOutputArea.append (text);
+        maOutputArea.paintImmediately (maOutputArea.getVisibleRect());
     }
 
 
@@ -527,6 +539,7 @@ public class AccessibilityWorkBench
         maOutputArea.append (text + "\n");
         JScrollBar aBar = maScrollPane.getVerticalScrollBar();
         aBar.setValue (aBar.getMaximum());
+        maOutputArea.paintImmediately (maOutputArea.getVisibleRect());
     }
 
 

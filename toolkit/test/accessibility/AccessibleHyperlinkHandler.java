@@ -1,10 +1,32 @@
 
 import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleHyperlink;
 
 
 class AccessibleHyperlinkHandler extends AccessibleTreeHandler
 {
+    public NodeHandler createHandler (XAccessibleContext xContext)
+    {
+        XAccessibleHyperlink xLink =
+            (XAccessibleHyperlink) UnoRuntime.queryInterface (
+                XAccessibleHyperlink.class, xContext);
+        if (xLink != null)
+            return new AccessibleHyperlinkHandler (xLink);
+        else
+            return null;
+    }
+
+    public AccessibleHyperlinkHandler ()
+    {
+    }
+
+    public AccessibleHyperlinkHandler (XAccessibleHyperlink xLink)
+    {
+        if (xLink != null)
+            maChildList.setSize (1);
+    }
+
     protected XAccessibleHyperlink getHyperlink(Object aObject)
     {
         XAccessibleHyperlink xHyperlink =
@@ -13,13 +35,8 @@ class AccessibleHyperlinkHandler extends AccessibleTreeHandler
         return xHyperlink;
     }
 
-    public int getChildCount(Object aObject)
+    public AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
     {
-        return (getHyperlink(aObject) == null) ? 0 : 1;
-    }
-
-    public Object getChild(Object aObject, int nIndex)
-    {
-        return "interface XAccessibleHyperlink is supported";
+        return new StringNode ("interface XAccessibleHyperlink is supported", aParent);
     }
 }

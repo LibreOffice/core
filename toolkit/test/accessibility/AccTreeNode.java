@@ -1,4 +1,6 @@
-
+import com.sun.star.uno.UnoRuntime;
+import drafts.com.sun.star.accessibility.XAccessible;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 import java.util.Vector;
 
 /**
@@ -8,92 +10,188 @@ import java.util.Vector;
  * type.
  */
 class AccTreeNode
+    extends AccessibleTreeNode
 {
-    private Vector aHandlers;       /// NodeHandlers for this node
-    private Object aDataObject;     /// the actual data object
-    private Object aDisplayObject;  /// object to be displayed
-
-    public AccTreeNode( Object aData )
+    class HandlerDescriptor
     {
-        this( aData, aData );
+        public HandlerDescriptor (NodeHandler aHandler)
+        {
+            maHandler = aHandler;
+            mnChildCount = -1;
+        }
+        public NodeHandler maHandler;
+        public int mnChildCount;
+    }
+    /// NodeHandlers for this node
+    private Vector maHandlers;
+
+    // The accessible context of this node.
+    private XAccessible mxAccessible;
+    private XAccessibleContext mxContext;
+
+    public AccTreeNode (XAccessibleContext xContext, AccessibleTreeNode aParent)
+    {
+        this (xContext, xContext, aParent);
     }
 
-    public AccTreeNode( Object aData, Object aDisplay )
+    public AccTreeNode (XAccessibleContext xContext, Object aDisplay, AccessibleTreeNode aParent)
     {
-        aHandlers = new Vector();
-        aDataObject = aData;
-        aDisplayObject = aDisplay;
+        super (aDisplay, aParent);
+
+        maHandlers = new Vector(5);
+        mxContext = xContext;
+        mxAccessible = null;
     }
 
-    public Object getDataObject() { return aDataObject; }
-    public Object getDisplayObject() { return aDisplayObject; }
+    /** Update the internal data extracted from the corresponding accessible
+        object.  This is done by replacing every handler by a new one.  An
+        update method at each handler would be better of course.
+    */
+    public void update ()
+    {
+        for (int i=0; i<maHandlers.size(); i++)
+        {
+            System.out.println ("replacing handler " + i);
+            HandlerDescriptor aDescriptor = (HandlerDescriptor)maHandlers.get(i);
+            aDescriptor.maHandler = aDescriptor.maHandler.createHandler (mxContext);
+            aDescriptor.mnChildCount =
+                    aDescriptor.maHandler.getChildCount (this);
+        }
+    }
+
+    public XAccessibleContext getContext()
+    {
+        return mxContext;
+    }
+
+    public XAccessible getAccessible()
+    {
+        if ((mxAccessible == null) && (mxContext != null))
+            mxAccessible = (XAccessible)UnoRuntime.queryInterface(
+                XAccessible.class, mxContext);
+        return mxAccessible;
+    }
 
     public void addHandler( NodeHandler aHandler )
     {
-        aHandlers.add( aHandler );
+        if (aHandler != null)
+            maHandlers.add (new HandlerDescriptor (aHandler));
     }
 
 
     /** iterate over handlers and return child sum */
+    protected HandlerDescriptor getHandlerDescriptor (int i)
+    {
+        HandlerDescriptor aDescriptor = (HandlerDescriptor)maHandlers.get(i);
+        if (aDescriptor.mnChildCount < 0)
+            aDescriptor.mnChildCount =
+                    aDescriptor.maHandler.getChildCount (this);
+        return aDescriptor;
+    }
+
     public int getChildCount()
     {
-        int nRet = 0;
-        for(int i = 0; i < aHandlers.size(); i++)
+        int nChildCount = 0;
+        for (int i = 0; i < maHandlers.size(); i++)
         {
-            nRet += ((NodeHandler)aHandlers.get(i)).
-                getChildCount( aDataObject );
+            HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+            nChildCount += aDescriptor.mnChildCount;
         }
-        return nRet;
+        return nChildCount;
     }
 
     /** iterate over handlers until the child is found */
-    public Object getChild(int nIndex)
+    public AccessibleTreeNode getChild (int nIndex)
+        throws IndexOutOfBoundsException
     {
         if( nIndex >= 0 )
         {
-            for(int i = 0; i < aHandlers.size(); i++)
+            for(int i = 0; i < maHandlers.size(); i++)
             {
                 // check if this handler has the child, and if not
                 // search with next handler
-                NodeHandler aHandler = (NodeHandler)aHandlers.get(i);
-                int nCount = aHandler.getChildCount( aDataObject );
-                if( nCount > nIndex )
-                    return aHandler.getChild( aDataObject, nIndex );
+                HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+                if (nIndex < aDescriptor.mnChildCount)
+                    return aDescriptor.maHandler.getChild (this, nIndex);
                 else
-                    nIndex -= nCount;
+                    nIndex -= aDescriptor.mnChildCount;
             }
         }
+        else
+            throw new IndexOutOfBoundsException();
 
         // nothing found?
         return null;
     }
 
+    public boolean removeChild (int nIndex)
+        throws IndexOutOfBoundsException
+    {
+        boolean bStatus = false;
+        if (nIndex >= 0)
+        {
+            for (int i=0; i<maHandlers.size(); i++)
+            {
+                // check if this handler has the child, and if not
+                // search with next handler
+                HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+                if (nIndex < aDescriptor.mnChildCount)
+                {
+                    bStatus = aDescriptor.maHandler.removeChild (this, nIndex);
+                    aDescriptor.mnChildCount = aDescriptor.maHandler.getChildCount (this);
+                    break;
+                }
+                else
+                    nIndex -= aDescriptor.mnChildCount;
+            }
+        }
+        else
+            throw new IndexOutOfBoundsException();
+
+        return bStatus;
+    }
+
+
+    public int indexOf (AccessibleTreeNode aNode)
+    {
+        int nBaseIndex = 0;
+        if (aNode != null)
+        {
+            for (int i=0; i<maHandlers.size(); i++)
+            {
+                HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+                int nIndex = aDescriptor.maHandler.indexOf (aNode);
+                if (nIndex >= 0)
+                    return nBaseIndex + nIndex;
+                else
+                    nBaseIndex += aDescriptor.mnChildCount;
+            }
+        }
+
+        return -1;
+    }
 
     /** this node is a leaf if have no handlers, or is those
             handlers show no children */
     public boolean isLeaf()
     {
-        return (aHandlers.size() == 0) || (getChildCount() == 0);
+        return (maHandlers.size() == 0);// || (getChildCount() == 0);
     }
 
-    public boolean equals(Object aOther)
+    public boolean equals (Object aOther)
     {
-        return (this == aOther) || aOther.equals( aDataObject );
-    }
-
-    public String toString()
-    {
-        return aDisplayObject.toString();
+        return (this == aOther) || aOther.equals(mxContext);
     }
 
 
     /** iterate over handlers until the child is found */
     public void getActions(Vector aActions)
     {
-        for(int i = 0; i < aHandlers.size(); i++)
+        for(int i = 0; i < maHandlers.size(); i++)
         {
-            NodeHandler aHandler = (NodeHandler)aHandlers.get(i);
-            String[] aHandlerActions = aHandler.getActions( aDataObject );
+            HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+            NodeHandler aHandler = aDescriptor.maHandler;
+            String[] aHandlerActions = aHandler.getActions (this);
             for(int j = 0; j < aHandlerActions.length; j++ )
             {
                 aActions.add( aHandlerActions[j] );
@@ -105,15 +203,16 @@ class AccTreeNode
     {
         if( nIndex >= 0 )
         {
-            for(int i = 0; i < aHandlers.size(); i++)
+            for(int i = 0; i < maHandlers.size(); i++)
             {
                 // check if this handler has the child, and if not
                 // search with next handler
-                NodeHandler aHandler = (NodeHandler)aHandlers.get(i);
-                int nCount = aHandler.getActions( aDataObject ).length;
+                HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+                NodeHandler aHandler = aDescriptor.maHandler;
+                int nCount = aHandler.getActions(this).length;
                 if( nCount > nIndex )
                 {
-                    aHandler.performAction( aDataObject, nIndex );
+                    aHandler.performAction(this, nIndex );
                     return;
                 }
                 else
@@ -122,4 +221,24 @@ class AccTreeNode
         }
     }
 
+    /** Try to add the specified accessible object as new accessible child of the
+        AccessibleTreeHandler.
+        Note that child is used in another context than
+        it is used in the other methods of this class.
+    */
+    public AccessibleTreeNode addAccessibleChild (XAccessible xChild)
+    {
+        for(int i = 0; i < maHandlers.size(); i++)
+        {
+            HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
+            if (aDescriptor.maHandler instanceof AccessibleTreeHandler)
+            {
+                AccessibleTreeHandler aHandler = (AccessibleTreeHandler)aDescriptor.maHandler;
+                AccessibleTreeNode aNode = aHandler.addAccessibleChild (this, xChild);
+                aDescriptor.mnChildCount = aHandler.getChildCount (this);
+                return aNode;
+            }
+        }
+        return null;
+    }
 }

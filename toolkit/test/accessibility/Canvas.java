@@ -172,34 +172,36 @@ class Canvas
 
     public void mouseMoved (MouseEvent e)
     {
-        maActiveObject = null;
-        for (int i=0; i<maObjects.size(); i++)
+        int nObjects = maObjects.size();
+        for (int i=nObjects-1; i>=0; i--)
         {
             AccessibleObject aObject = (AccessibleObject)(maObjects.elementAt(i));
             if (aObject != null)
             {
-                aObject.deselect ();
-                if (aObject != null)
-                    if (aObject.contains (e.getX(),e.getY()))
+                if (aObject.contains (e.getX(),e.getY()))
+                {
+                    if (aObject != maActiveObject)
                     {
-                        maActiveObject = aObject;
-                    }
-            }
-        }
-        if (maActiveObject != null)
-        {
-            maActiveObject.select ();
-            maMessageDisplay.message ("mouse moved to " + e.getX() + "," + e.getY() + ": "
-                +maActiveObject.toString());
-            System.out.println ("path: " + maActiveObject.getPath());
+                        if (maActiveObject != null)
+                            maActiveObject.deselect();
 
-            if (maTree != null)
-            {
-                maTree.scrollPathToVisible (maActiveObject.getPath());
-                maTree.repaint ();
+                        maActiveObject = aObject;
+                        maMessageDisplay.message ("object under mouse is "
+                            +maActiveObject.toString());
+                        maActiveObject.select ();
+
+                        if (maTree != null)
+                        {
+                            maTree.scrollPathToVisible (maActiveObject.getPath());
+                            maTree.repaint ();
+                        }
+
+                        repaint ();
+                    }
+                    break;
+                }
             }
         }
-        repaint ();
     }
 
     protected int
