@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamsection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:35:12 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@ namespace comphelper
 
 //-------------------------------------------------------------------------
 OStreamSection::OStreamSection(const staruno::Reference< stario::XDataInputStream >& _rxInput)
-    :m_xInStream(_rxInput)
-    ,m_xMarkStream(_rxInput, ::com::sun::star::uno::UNO_QUERY)
+    :m_xMarkStream(_rxInput, ::com::sun::star::uno::UNO_QUERY)
+    ,m_xInStream(_rxInput)
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)
 {
@@ -87,8 +87,8 @@ OStreamSection::OStreamSection(const staruno::Reference< stario::XDataInputStrea
 
 //-------------------------------------------------------------------------
 OStreamSection::OStreamSection(const staruno::Reference< stario::XDataOutputStream >& _rxOutput, sal_Int32 _nPresumedLength)
-    :m_xOutStream(_rxOutput)
-    ,m_xMarkStream(_rxOutput, ::com::sun::star::uno::UNO_QUERY)
+    :m_xMarkStream(_rxOutput, ::com::sun::star::uno::UNO_QUERY)
+    ,m_xOutStream(_rxOutput)
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)
 {
