@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-23 15:20:15 $
+ *  last change: $Author: hro $ $Date: 2001-08-20 09:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ extern oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile );
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
     TCHAR   szBuffer[MAX_PATH];
-    DWORD   dwLen = GetCurrentDirectory( sizeof(szBuffer), szBuffer );
+    DWORD   dwLen = GetCurrentDirectory( sizeof(szBuffer) / sizeof(TCHAR), szBuffer );
 
     if ( dwLen )
     {
