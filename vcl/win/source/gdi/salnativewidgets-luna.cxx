@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-luna.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 09:00:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,10 @@ HRESULT VisualStylesAPI::GetThemePartSize( HTHEME hTheme, HDC hdc, int iPartId, 
  *********************************************************/
 void SalData::initNWF( void )
 {
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // the menu bar and the top docking area should have a common background (gradient)
+    pSVData->maNWFData.mbMenuBarDockingAreaCommonBG = true;
 }
 
 
@@ -293,6 +297,17 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Tab");
             break;
+        case CTRL_TOOLBAR:
+            if( nPart == PART_ENTIRE_CONTROL || nPart == PART_BUTTON )
+                hTheme = getThemeHandle( mhWnd, L"Toolbar");
+            else
+                // use rebar theme for grip and background
+                hTheme = getThemeHandle( mhWnd, L"Rebar");
+            break;
+        case CTRL_MENUBAR:
+            if( nPart == PART_ENTIRE_CONTROL )
+                hTheme = getThemeHandle( mhWnd, L"Rebar");
+            break;
         default:
             hTheme = NULL;
             break;
@@ -335,6 +350,21 @@ BOOL ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
     return (hr == S_OK);
 }
 
+
+Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const Rectangle& aRect )
+{
+    SIZE aSz;
+    RECT rc;
+    rc.left = aRect.nLeft;
+    rc.right = aRect.nRight;
+    rc.top = aRect.nTop;
+    rc.bottom = aRect.nBottom;
+    HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, NULL, TS_TRUE, &aSz ); // TS_TRUE returns optimal size
+    if( hr == S_OK )
+        return Rectangle( 0, 0, aSz.cx, aSz.cy );
+    else
+        return Rectangle();
+}
 
 // Helper functions
 // ----
@@ -808,6 +838,50 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iState = TILES_NORMAL;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
+
+    if( nType == CTRL_TOOLBAR )
+    {
+        if( nPart == PART_BUTTON )
+        {
+            iPart = TP_BUTTON;
+            BOOL bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
+            if( !(nState & CTRL_STATE_ENABLED) )
+                //iState = TS_DISABLED;
+                // disabled buttons are typically not painted at all but we need visual
+                // feedback when travelling by keyboard over disabled entries
+                iState = TS_HOT;
+            else if( nState & CTRL_STATE_PRESSED )
+                iState = TS_PRESSED;
+            else if( nState & CTRL_STATE_ROLLOVER )
+                iState = bChecked ? TS_HOTCHECKED : TS_HOT;
+            else
+                iState = bChecked ? TS_CHECKED : TS_NORMAL;
+            return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+        }
+        else if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
+        {
+            // the vertical gripper is not supported in most themes and it makes no
+            // sense to only support horizontal gripper
+            //iPart = (nPart == PART_THUMB_HORZ) ? RP_GRIPPERVERT : RP_GRIPPER;
+            //return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+        }
+        else if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
+        {
+            ToolbarValue *pValue = (ToolbarValue*) aValue.getOptionalVal();
+            if( pValue && pValue->mbIsTopDockingArea )
+                rc.top = 0; // extend potential gradient to cover menu bar as well
+            return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+        }
+    }
+
+    if( nType == CTRL_MENUBAR )
+    {
+        MenubarValue *pValue = (MenubarValue*) aValue.getOptionalVal();
+        if( pValue )
+            rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
+        return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
+    }
+
     return false;
 }
 
@@ -872,6 +946,17 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
         case CTRL_TAB_ITEM:
         case CTRL_FIXEDBORDER:
             hTheme = getThemeHandle( mhWnd, L"Tab");
+            break;
+        case CTRL_TOOLBAR:
+            if( nPart == PART_ENTIRE_CONTROL || nPart == PART_BUTTON )
+                hTheme = getThemeHandle( mhWnd, L"Toolbar");
+            else
+                // use rebar for grip and background
+                hTheme = getThemeHandle( mhWnd, L"Rebar");
+            break;
+        case CTRL_MENUBAR:
+            if( nPart == PART_ENTIRE_CONTROL )
+                hTheme = getThemeHandle( mhWnd, L"Rebar");
             break;
         default:
             hTheme = NULL;
@@ -956,24 +1041,49 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 Region &rNativeContentRegion )
 {
     BOOL bRet = FALSE;
-    /*
-    if( nType == CTRL_PUSHBUTTON && nPart == PART_ENTIRE_CONTROL )
+
+    HDC hDC = GetDC( mhWnd );
+    if( nType == CTRL_TOOLBAR )
     {
-        if( nState & CTRL_STATE_DEFAULT )
+        if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
         {
-            // make default button bigger
-            rNativeContentRegion = rControlRegion;
-            Rectangle aBoundRect = rControlRegion.GetBoundRect();
-            aBoundRect.Top() -= 5;
-            aBoundRect.Bottom() += 5;
-            aBoundRect.Left() -= 8;
-            aBoundRect.Right() += 8;
-            rNativeBoundingRegion = Region( aBoundRect );
-            bRet = TRUE;
+            /*
+            // the vertical gripper is not supported in most themes and it makes no
+            // sense to only support horizontal gripper
+
+            HTHEME hTheme = getThemeHandle( mhWnd, L"Rebar");
+            if( hTheme )
+            {
+                Rectangle aRect( ImplGetThemeRect( hTheme, hDC, nPart == PART_THUMB_HORZ ? RP_GRIPPERVERT : RP_GRIPPER,
+                    0, rControlRegion.GetBoundRect() ) );
+                if( nPart == PART_THUMB_HORZ && !aRect.IsEmpty() )
+                {
+                    Rectangle aVertRect( 0, 0, aRect.getHeight(), aRect.getWidth() );
+                    rNativeContentRegion = aVertRect;
+                }
+                else
+                    rNativeContentRegion = aRect;
+                rNativeBoundingRegion = rNativeContentRegion;
+                if( !rNativeContentRegion.IsEmpty() )
+                    bRet = TRUE;
+            }
+            */
+        }
+        if( nPart == PART_BUTTON )
+        {
+            HTHEME hTheme = getThemeHandle( mhWnd, L"Toolbar");
+            if( hTheme )
+            {
+                Rectangle aRect( ImplGetThemeRect( hTheme, hDC, TP_SPLITBUTTONDROPDOWN,
+                    TS_HOT, rControlRegion.GetBoundRect() ) );
+                rNativeContentRegion = aRect;
+                rNativeBoundingRegion = rNativeContentRegion;
+                if( !rNativeContentRegion.IsEmpty() )
+                    bRet = TRUE;
+            }
         }
     }
-*/
+    ReleaseDC( mhWnd, hDC );
     return( bRet );
 }
-
 
