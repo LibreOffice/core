@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:22:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #include <rgbcolor.hxx>
 #include <hslcolor.hxx>
 #include <layermanager.hxx>
+
+#include "boost/optional.hpp"
+#include <cstdlib>
 
 
 namespace com { namespace sun { namespace star { namespace beans
@@ -335,6 +338,25 @@ namespace presentation
          */
         RGBColor unoColor2RGBColor( sal_Int32 );
 
+
+        /// Gets a random ordinal [0,n)
+        inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
+        {
+            return static_cast< ::std::size_t >(
+                double(n) * rand() / (RAND_MAX + 1.0) );
+        }
+
+        /// To work around ternary operator in initializer lists
+        /// (Solaris compiler problems)
+        template <typename T>
+        inline T const & ternary_op(
+            const bool cond, T const & arg1, T const & arg2 )
+        {
+            if (cond)
+                return arg1;
+            else
+                return arg2;
+        }
     }
 }
 
