@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-16 10:19:24 $
+ *  last change: $Author: mmi $ $Date: 2004-07-16 10:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,9 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
-#if 0
 //MM : search for the default profile
 #include <unotools/streamhelper.hxx>
 //MM : end
-#endif
 
 /* SEInitializer component */
 #define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
@@ -113,7 +111,6 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 
     ImplCreateSEInitializer();
 
-#if 0
     //MM : search for the default profile
     rtl::OUString tokenPath = rTokenPath;
 
@@ -147,16 +144,17 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 
                     xInputStream->closeInput();
 
+                    while (cToken[numbers-1] == 0x0a || cToken[numbers-1] == 0x0d ) numbers--;
                     tokenPath = rtl::OStringToOUString(rtl::OString((const sal_Char*)cToken, numbers), RTL_TEXTENCODING_UTF8);
                 }
             }
         }
     }
+
     mxSecurityContext = mxSEInitializer->createSecurityContext( tokenPath );
     //MM : end
-#endif
 
-    mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
+    //mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
 
     return mxSecurityContext.is();
 }
