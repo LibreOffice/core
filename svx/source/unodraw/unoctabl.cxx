@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:13:46 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 17:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     void * pRet = 0;
     if( pServiceManager && rtl_str_compare( pImplName, "stardiv.one.drawing.SvxUnoColorTable" ) )
     {
-        uno::Reference< lang::XSingleServiceFactory > xFactory( createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+        uno::Reference< lang::XSingleServiceFactory > xFactory( createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
             SvxUnoColorTable::getImplementationName_Static(),
             SvxUnoColorTable_createInstance,
             SvxUnoColorTable::getSupportedServiceNames_Static() ) );
