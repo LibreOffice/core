@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-31 20:22:14 $
+ *  last change: $Author: rt $ $Date: 2001-08-06 08:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ModalDialog DLG_DOC_TEMPLATE
     Text [ spanish ] = "Plantilla de documento" ;
     Text [ english_us ] = "Templates" ;
     Text[ chinese_simplified ] = "ќƒµµ—щ љ";
-    Text[ russian ] = "Ўаблоны документа";
+    Text[ russian ] = "Ўаблоны";
     Text[ polish ] = "Szablony dokumentu";
     Text[ japanese ] = "ОƒОёОЈО≠О“ОЁОƒО√ОЁОћОяОЏО∞Оƒ";
     Text[ chinese_traditional ] = "§е•уЉЋ¶°";
@@ -302,6 +302,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ catalan ] = "~Administrar...";
     };
 };
+
 
 
 
