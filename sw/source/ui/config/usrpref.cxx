@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-05-14 13:17:46 $
+ *  last change: $Author: os $ $Date: 2002-08-13 15:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,7 @@ void SwLayoutViewConfig::Commit()
             case 10: pValues[nProp] <<= (sal_Int32)rParent.GetZoom(); break;// "Zoom/Value",
             case 11: pValues[nProp] <<= (sal_Int32)rParent.GetZoomType(); break;// "Zoom/Type",
             case 12: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
-            case 13: pValues[nProp] <<= rParent.GetDefTab(); break;// "Other/TabStop",
+            case 13: pValues[nProp] <<= TWIP_TO_MM100(rParent.GetDefTab()); break;// "Other/TabStop",
             case 14: bSet = rParent.IsVRulerRight(); break;// "Window/IsVerticalRulerRight",
         }
         if(nProp < 7 || nProp == 9)
@@ -426,7 +426,7 @@ void SwLayoutViewConfig::Load()
                     case 13:
                     {
                         sal_Int32 nTab; pValues[nProp] >>= nTab;
-                        rParent.SetDefTab(nTab, TRUE);
+                        rParent.SetDefTab(MM100_TO_TWIP(nTab), TRUE);
                     }
                     break;// "Other/TabStop",
                     case 14: rParent.SetVRulerRight(bSet); break;// "Window/IsVerticalRulerRight",
