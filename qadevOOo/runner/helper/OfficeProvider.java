@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2004-03-19 14:29:16 $
+ *  last change:$Date: 2004-04-22 17:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 package helper;
-
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
@@ -74,8 +73,22 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.XNamingService;
 import com.sun.star.util.XCloseable;
+import com.sun.star.util.XStringSubstitution;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import lib.TestParameters;
+
+import share.DescEntry;
+import share.LogWriter;
+
+import util.DynamicClassLoader;
 
 
 /**
@@ -134,8 +147,9 @@ public class OfficeProvider implements AppProvider {
         String cncstr = "uno:" + param.get("ConnectionString") + ";urp" +
                         additionalArgs + "StarOffice.ServiceManager";
 
-        System.out.print("Connecting the Office");
-        System.out.println(" with " + cncstr);
+        if (debug) {
+            System.out.print("Connecting the Office with " + cncstr);
+        }
 
         debug = param.getBool("DebugIsActive");
 
@@ -163,7 +177,25 @@ public class OfficeProvider implements AppProvider {
                 }
 
                 String cmd = (String) param.get("AppExecutionCommand");
-                ProcessHandler ph = new ProcessHandler(cmd);
+                DynamicClassLoader dcl = new DynamicClassLoader();
+                LogWriter log = (LogWriter) dcl.getInstance(
+                                        (String) param.get("LogWriter"));
+
+                //create empty entry
+                DescEntry Entry = new DescEntry();
+                Entry.entryName = "office";
+                Entry.longName = "office";
+                Entry.EntryType = "placebo";
+                Entry.isOptional = false;
+                Entry.isToTest = false;
+                Entry.SubEntryCount = 0;
+                Entry.hasErrorMsg = false;
+                Entry.State = "non possible";
+                Entry.UserDefinedParams = param;
+
+                log.initialize(Entry, debug);
+
+                ProcessHandler ph = new ProcessHandler(cmd, (PrintWriter) log);
                 isExecutable = ph.executeAsynchronously();
 
                 if (isExecutable) {
@@ -193,6 +225,31 @@ public class OfficeProvider implements AppProvider {
                 if (msf == null) {
                     System.out.println("Exception while connecting.\n" +
                                        exc);
+                } else if (isExecutable) {
+                    //copy the user layer to a safe place
+                    try {
+                        XStringSubstitution sts = createStringSubstitution(msf);
+                        String userLayer = sts.getSubstituteVariableValue(
+                                                   "$(user)");
+                        userLayer = getDirSys(userLayer);
+                        param.put("userLayer", userLayer);
+
+                        //System.out.println("UserLayer: "+userLayer);
+                        String copyLayer = System.getProperty("java.io.tmpdir") +
+                                           System.getProperty("file.separator") +
+                                           "user_backup" +
+                                           System.currentTimeMillis();
+                        param.put("copyLayer", copyLayer);
+
+
+                        //System.out.println("CopyLayer: "+copyLayer);
+                        copyDirectory(new File(userLayer), new File(copyLayer));
+                    } catch (com.sun.star.container.NoSuchElementException e) {
+                        System.out.println("User Variable not defined");
+                    } catch (java.io.IOException e) {
+                        System.out.println("Couldn't backup user layer");
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 System.out.println("Could not connect an Office" +
@@ -368,6 +425,22 @@ public class OfficeProvider implements AppProvider {
         param.remove("AppProvider");
         param.remove("ServiceFactory");
 
+        //copy user_backup into user layer
+        try {
+            String userLayer = (String) param.get("userLayer");
+            String copyLayer = (String) param.get("copyLayer");
+            File copyFile = new File(copyLayer);
+            copyDirectory(copyFile, new File(userLayer));
+            deleteDir(copyFile);
+        } catch (java.io.IOException e) {
+            if (debug) {
+                System.out.println("Couldn't recover from backup");
+                e.printStackTrace();
+            }
+
+            ph.kill();
+        }
+
         return result;
     }
 
@@ -396,4 +469,121 @@ public class OfficeProvider implements AppProvider {
 
         return res;
     }
+
+    // Copies src file to dst file.
+    // If the dst file does not exist, it is created
+    void copyFile(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+
+        in.close();
+        out.close();
+    }
+
+    // Copies all files under srcDir to dstDir.
+    // If dstDir does not exist, it will be created.
+    public void copyDirectory(File srcDir, File dstDir)
+                       throws IOException {
+        if (srcDir.getName().endsWith("temp")) {
+            if (debug) {
+                System.out.println("Ignoring: " + srcDir.getName());
+            }
+
+            return;
+        }
+
+        if (srcDir.isDirectory()) {
+            if (!dstDir.exists()) {
+                dstDir.mkdir();
+            }
+
+            String[] children = srcDir.list();
+
+            for (int i = 0; i < children.length; i++) {
+                copyDirectory(new File(srcDir, children[i]),
+                              new File(dstDir, children[i]));
+            }
+        } else {
+            copyFile(srcDir, dstDir);
+        }
+    }
+
+    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF) {
+        Object xPathSubst = null;
+
+        try {
+            xPathSubst = xMSF.createInstance(
+                                 "com.sun.star.util.PathSubstitution");
+        } catch (com.sun.star.uno.Exception e) {
+            e.printStackTrace();
+        }
+
+        if (xPathSubst != null) {
+            return (XStringSubstitution) UnoRuntime.queryInterface(
+                           XStringSubstitution.class, xPathSubst);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+    * converts directory without 'file:///' prefix.
+    * and System dependend file separator
+    */
+    public static String getDirSys(String dir) {
+        String sysDir = "";
+
+        int idx = dir.indexOf("file://");
+
+        // remove leading 'file://'
+        if (idx < 0) {
+            sysDir = dir;
+        } else {
+            sysDir = dir.substring("file://".length());
+        }
+
+        // append '/' if not there (e.g. linux)
+        if (sysDir.charAt(sysDir.length() - 1) != '/') {
+            sysDir += "/";
+        }
+
+        // remove leading '/' and replace others with '\' on windows machines
+        String sep = System.getProperty("file.separator");
+
+        if (sep.equalsIgnoreCase("\\")) {
+            sysDir = sysDir.substring(1);
+            sysDir = sysDir.replace('/', '\\');
+        }
+
+        return sysDir;
+    }
+
+    // Deletes all files and subdirectories under dir.
+    // Returns true if all deletions were successful.
+    // If a deletion fails, the method stops attempting to delete and returns false.
+    public static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir.delete();
+    }
 }
+
