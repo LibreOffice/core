@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-11 11:04:39 $
+ *  last change: $Author: sb $ $Date: 2002-07-22 13:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,20 @@
 #include <osl/module.h>
 #endif
 
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+
 class Window;
 class VCLXWindow;
+class VclSimpleEvent;
 
 namespace com {
 namespace sun {
 namespace star {
+namespace lang {
+    struct EventObject;
+}
 namespace awt {
     struct WindowDescriptor;
     class XDataTransfer;
@@ -122,13 +130,6 @@ protected:
     ::osl::Mutex    maMutex;
 };
 
-// FIXME  Remove these dummies:
-namespace vcl {
-    struct TopWindowEvent {};
-    struct KeyEvent {};
-    struct FocusEvent {};
-}
-
 class VCLXToolkit : public VCLXToolkit_Impl,
                     public cppu::WeakComponentImplHelper5<
                     ::com::sun::star::awt::XToolkit,
@@ -136,8 +137,6 @@ class VCLXToolkit : public VCLXToolkit_Impl,
                     ::com::sun::star::awt::XSystemChildFactory,
                     ::com::sun::star::awt::XDataTransferProviderAccess,
                     ::drafts::com::sun::star::awt::XExtendedToolkit >
-// FIXME  Needs to be derived from Application/VCL TopWindowListener,
-// KeyHandler, and FocusListener
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
@@ -148,33 +147,24 @@ class VCLXToolkit : public VCLXToolkit_Impl,
     ::cppu::OInterfaceContainerHelper m_aTopWindowListeners;
     ::cppu::OInterfaceContainerHelper m_aKeyHandlers;
     ::cppu::OInterfaceContainerHelper m_aFocusListeners;
-    bool m_bTopWindowListener;
-    bool m_bKeyHandler;
-    bool m_bFocusListener;
+    ::Link m_aEventListenerLink;
+    ::Link m_aKeyListenerLink;
+    bool m_bEventListener;
+    bool m_bKeyListener;
 
-    // FIXME  Adopt the following skeleton methods if necessary:
+    DECL_LINK(eventListenerHandler, ::VclSimpleEvent const *);
 
-    virtual void windowOpened(::vcl::TopWindowEvent const & rEvent);
+    DECL_LINK(keyListenerHandler, ::VclSimpleEvent const *);
 
-    virtual void windowClosing(::vcl::TopWindowEvent const & rEvent);
+    void callTopWindowListeners(
+        ::VclSimpleEvent const * pEvent,
+        void (SAL_CALL ::com::sun::star::awt::XTopWindowListener::* pFn)(
+            ::com::sun::star::lang::EventObject const &)
+        throw (::com::sun::star::uno::RuntimeException));
 
-    virtual void windowClosed(::vcl::TopWindowEvent const & rEvent);
+    long callKeyHandlers(::VclSimpleEvent const * pEvent, bool bPressed);
 
-    virtual void windowMinimized(::vcl::TopWindowEvent const & rEvent);
-
-    virtual void windowNormalized(::vcl::TopWindowEvent const & rEvent);
-
-    virtual void windowActivated(::vcl::TopWindowEvent const & rEvent);
-
-    virtual void windowDeactivated(::vcl::TopWindowEvent const & rEvent);
-
-    virtual bool keyPressed(::vcl::KeyEvent const & rEvent);
-
-    virtual bool keyReleased(::vcl::KeyEvent const & rEvent);
-
-    virtual void focusGained(::vcl::FocusEvent const & rEvent);
-
-    virtual void focusLost(::vcl::FocusEvent const & rEvent);
+    void callFocusListeners(::VclSimpleEvent const * pEvent, bool bGained);
 
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
