@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-28 11:49:41 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1838,6 +1838,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     aAny = rPropSet->getPropertyValue( sGraphicURL );
     aAny >>= sURL;
     sURL = GetExport().AddEmbeddedGraphicObject( sURL );
+    setTextEmbeddedGraphicURL( rPropSet, sURL );
 
     // If there still is no url, then teh graphic is empty
     if( sURL.getLength() )
@@ -2049,6 +2050,12 @@ void XMLTextParagraphExport::exportTextEmbedded(
 void XMLTextParagraphExport::getTextEmbeddedObjectProperties(
     const Reference < XPropertySet >& rPropSet,
     OUString& rStreamName, OUString& rClassId ) const
+{
+}
+
+void XMLTextParagraphExport::setTextEmbeddedGraphicURL(
+    const Reference < XPropertySet >& rPropSet,
+    OUString& rStreamName ) const
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:39:25 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,7 +748,12 @@ XMLTextFrameContext::XMLTextFrameContext(
     if( XML_TEXT_FRAME_GRAPHIC == nType )
     {
         // URL
-        aAny <<= GetImport().ResolveGraphicObjectURL( sHRef, sal_False );
+        UniReference < XMLTextImportHelper > xTxtImport =
+            GetImport().GetTextImport();
+        sal_Bool bForceLoad = xTxtImport->IsInsertMode() ||
+                              xTxtImport->IsBlockMode() ||
+                              xTxtImport->IsStylesOnlyMode();
+        aAny <<= GetImport().ResolveGraphicObjectURL( sHRef, !bForceLoad );
         xPropSet->setPropertyValue( sGraphicURL, aAny );
 
         // filter name

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-02 11:28:59 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM,
-        sal_Bool bPrg ) :
+        sal_Bool bPrg,
+        sal_Bool bBlockM ) :
     pTextElemTokenMap( 0 ),
     pTextPElemTokenMap( 0 ),
     pTextPAttrTokenMap( 0 ),
@@ -519,6 +520,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     pRenameMap( 0 ),
     pOutlineStyles( 0 ),
     bInsertMode( bInsertM ),
+    bBlockMode( bBlockM ),
     bStylesOnlyMode( bStylesOnlyM ),
     bProgress( bPrg ),
     pFootnoteBackpatcher( NULL ),
