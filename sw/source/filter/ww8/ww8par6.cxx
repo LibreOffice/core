@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:08:10 $
+ *  last change: $Author: cmc $ $Date: 2001-02-20 10:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3681,7 +3681,9 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
         }
 
         // adjust tabs that were set at this paragraph/style resp. before
-        // we encountered the LR Space Attribute
+        // we encountered the LR Space Attribute. Tabstops in winword
+        // are relative to page, tabstops in OOo are relative to para
+        // edge, so adjust them, and remove negative ones.
         SvxTabStopItem* pTStop;
         pTStop = (SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP );
         if( pTStop )
@@ -3689,16 +3691,19 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
             for( USHORT nCnt = 0; nCnt < pTStop->Count(); ++nCnt )
             {
                 SvxTabStop& rTab = (SvxTabStop&)((*pTStop)[ nCnt ]);
-                if(    SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment()
-                    && rTab.GetTabPos() >= nLeftParaMgn )
-                    rTab.GetTabPos() -= nLeftParaMgn;
-                else
+                if(SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
                 {
-                    pTStop->Remove( nCnt );
-                    --nCnt;
+                    if (rTab.GetTabPos() >= nLeftParaMgn )
+                        rTab.GetTabPos() -= nLeftParaMgn;
+                    else
+                    {
+                        pTStop->Remove( nCnt );
+                        --nCnt;
+                    }
                 }
             }
-            NewAttr( *pTStop );
+            if (pTStop->Count())
+                NewAttr( *pTStop );
         }
         break;
     //sprmPDxaLeft1
@@ -4924,12 +4929,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.12 2001-02-15 20:08:10 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.13 2001-02-20 10:34:57 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/02/15 20:08:10  jp
+      im-/export the Rotate-/ScaleWidth-Character attribut
+
       Revision 1.11  2001/02/07 16:15:13  cmc
       #83307# Change automatic width handling for frames, with special care for header/footer problems
 
