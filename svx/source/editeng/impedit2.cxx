@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
+ *  last change: $Author: mt $ $Date: 2001-03-19 16:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,7 +1272,7 @@ EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
     return aNewPaM;
 }
 
-EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16 nWordType )
+EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16 nWordType, BOOL bAcceptStartOfWord )
 {
     EditSelection aNewSel( rCurSel );
     EditPaM aPaM( rCurSel.Max() );
@@ -1281,8 +1281,13 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
     if ( nType == i18n::WordType::ANY_WORD )
     {
         i18n::Boundary aBoundary = xBI->getWordBoundary( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale( aPaM ), nWordType, sal_True );
-        aNewSel.Min().SetIndex( (USHORT)aBoundary.startPos );
-        aNewSel.Max().SetIndex( (USHORT)aBoundary.endPos );
+        // don't select when curser at end of word
+        if ( ( aBoundary.endPos > aPaM.GetIndex() ) &&
+             ( bAcceptStartOfWord || ( aBoundary.startPos < aPaM.GetIndex() ) ) )
+        {
+            aNewSel.Min().SetIndex( (USHORT)aBoundary.startPos );
+            aNewSel.Max().SetIndex( (USHORT)aBoundary.endPos );
+        }
     }
 
     return aNewSel;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-31 16:22:32 $
+ *  last change: $Author: mt $ $Date: 2001-03-19 16:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE
     // Wenn keine Selektion => die Attribute aufs Wort anwenden.
     // ( Der RTF-Perser sollte die Methode eigentlich nie ohne Range rufen )
     if ( ( nSpecial == ATTRSPECIAL_WHOLEWORD ) && !aSel.HasRange() )
-        aSel = SelectWord( aSel );
+        aSel = SelectWord( aSel, ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, FALSE );
 
     USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
