@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:54:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,26 @@ SvxLineEndDefTabPage::~SvxLineEndDefTabPage()
 void SvxLineEndDefTabPage::Construct()
 {
     aLbLineEnds.Fill( pLineEndList );
+
+    bool bCreateArrowPossible = true;
+
     if( !pPolyObj )
+    {
+        bCreateArrowPossible = false;
+    }
+    else if( !pPolyObj->ISA( SdrPathObj ) )
+    {
+        SdrObjTransformInfoRec aInfoRec;
+        pPolyObj->TakeObjInfo( aInfoRec );
+        SdrObject* pNewObj = 0;
+        if( aInfoRec.bCanConvToPath )
+            pNewObj = pPolyObj->ConvertToPolyObj( TRUE, FALSE );
+
+        bCreateArrowPossible = pNewObj && pNewObj->ISA( SdrPathObj );
+        delete pNewObj;
+    }
+
+    if( !bCreateArrowPossible )
         aBtnAdd.Disable();
 }
 
