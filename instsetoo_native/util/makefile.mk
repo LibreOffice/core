@@ -62,11 +62,16 @@ TARGET=util
 GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
+
+.IF "$(GUI)"=="WNT"
 .IF "$(USE_SHELL)"=="4nt"
 PYTHONPATH:=$(BIN);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
 .ELSE			# "$(USE_SHELL)"=="4nt"
-PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
+PYTHONPATH:=$(shell $(WRAPCMD) echo $(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
+.ELSE			# "$(GUI)"=="WNT"
+PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
+.ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
 .EXPORT: LAST_MINOR
