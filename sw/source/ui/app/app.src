@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:27:06 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,17 +770,17 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ language_user1 ] =
         {
-         < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
-            < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-            < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
-            < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
-            < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
-            < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
-            < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
+         < "Alle; Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
+            < "Verw; Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+            < "Benu; Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Auto; Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Text; Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
+            < "Kapi; Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "List; Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
+            < "Verz; Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
+            < "Vorl; Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML; HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
+            < "Bedi; Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
         Text[ thai ] = "ลักษณะย่อหน้า";
             FilterList [ thai ] =
@@ -950,7 +950,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "自定样式" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ greek ] = "���� ����������";
-            Text[ korean ] = "문자 유형";
+            Text[ korean ] = "문자 스타일";
             FilterList [ greek ] =
         {
             < "���" ; SFXSTYLEBIT_ALL ; > ;
@@ -1476,7 +1476,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < " " ; SFXSTYLEBIT_USED ; > ;
             < " " ; SFXSTYLEBIT_USERDEF ; > ;
         };
-        Text[ language_user1 ] = "��? ����? ��E";
+        Text[ language_user1 ] = "��; ��? ����? ��E";
             Text[ russian ] = "����� ������";
             Text[ polish ] = "Style numeracji";
             Text[ japanese ] = "番号付けスタイル";
@@ -2782,7 +2782,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U 'Ongedaan maken' opheffen?";
     Message[ chinese_simplified ] = "撤消命令功能需要很多的内存。\n要取消撤消命令功能？";
     Message[ greek ] = "� �������� ����� ��� ��������� ������� ������ �������� ������.\n������ �� ��������� ��� ��������;";
-    Message[ korean ] = "이 작동을 실행취소하기 위해서는 대용량의 메모리가 요구됩니다.\n실행취소를 취소하겠습니까?";
+    Message[ korean ] = "이 작동을 계속 진행하기 위해서는 입력 실행 취소 기능이 해제되어야 합니다. 입력 실행 취소 기능을 해제하시겠습니까?";
     Message[ turkish ] = "Bu i�lemde geri alma i�in b�y�k miktarda bellek gerekiyor.\nGeri alma i�levini kapatmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Aquesta operaci� necessita molta mem�ria per poder-la desfer.\nVoleu desactivar l'opci� de Desf�s?";
@@ -3352,7 +3352,7 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     Message[ polish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ portuguese_brazilian ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ japanese ] = "このアクションで、元に戻すのが可能なアクションのリストが削除されます。これまでにドキュメントで行った変更はそのまま残りますが、アクションを元に戻すことはできません。書式設定を続行しますか。";
-    Message[ korean ] = "이 실행을 통해 원래대로 취소할 수 있는 모든 작업 과정의 목록이 삭제됩니다. 지금까지 문서에 변경된 사항은 유효하나 더 이상 취소할 수는 없습니다. 서식 지정을 계속하시겠습니까?";
+    Message[ korean ] = "이 명령을 실행하면 되돌릴 수 있는 모든 작업 단계의 입력 목록이 삭제됩니다. 현재까지 문서에서 변경된 내용은 유효하나 더 이상 입력 실행 취소를 할 수는 없습니다. 서식 설정을 계속하시겠습니까?";
     Message[ chinese_simplified ] = "这项操作会删除用于撤消命令的每一步骤的记录列单。至目前为止文档所有的更改将会保存，但是您无法再撤消这些更改。您要继续执行格式化？";
     Message[ chinese_traditional ] = "這個動作會刪除復原清單的項目。已經變更的內容將會保留不變，但是不可以再復原所有的變更內容。\n要繼續執行這個格式化？";
     Message[ turkish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
@@ -3367,6 +3367,17 @@ QueryBox MSG_INS_MERGE_FIELDS
     DefButton = WB_DEF_YES ;
     Message = "M�chten Sie Namen und Adressen aus einer Datenbank verwenden?";
     Message[english_us] = "Do you want to use names and addresses from a database?";
+    Message[ portuguese ] = "Do you want to use names and addresses from a database?";
+    Message[ russian ] = "Do you want to use names and addresses from a database?";
+    Message[ spanish ] = "Do you want to use names and addresses from a database?";
+    Message[ italian ] = "Do you want to use names and addresses from a database?";
+    Message[ swedish ] = "Do you want to use names and addresses from a database?";
+    Message[ polish ] = "Do you want to use names and addresses from a database?";
+    Message[ portuguese_brazilian ] = "Do you want to use names and addresses from a database?";
+    Message[ japanese ] = "Do you want to use names and addresses from a database?";
+    Message[ korean ] = "Do you want to use names and addresses from a database?";
+    Message[ turkish ] = "Do you want to use names and addresses from a database?";
+    Message[ thai ] = "Do you want to use names and addresses from a database?";
 };
 QueryBox MSG_PRINT_AS_MERGE
 {
@@ -3375,6 +3386,17 @@ QueryBox MSG_PRINT_AS_MERGE
     DefButton = WB_DEF_YES ;
     Message = "Ihr Dokument enth�lt Adressdatenbank-Felder. M�chten Sie einen Serienbrief drucken?";
     Message[english_us] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ portuguese ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ russian ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ spanish ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ italian ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ swedish ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ polish ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ portuguese_brazilian ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ japanese ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ korean ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ turkish ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ thai ] = "Your document contains address database fields. Do you want to print a form letter?";
 };
 WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
 {
@@ -3383,6 +3405,17 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     DefButton = WB_DEF_YES ;
     Message = "Die Datenquelle \"%1\" konnte nicht gefunden werden.\n�berpr�fen Sie die Einstellungen in \'Extras - Datenquellen...\'";
     Message[english_us] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ portuguese ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ russian ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ spanish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ italian ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ swedish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ polish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ portuguese_brazilian ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ japanese ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ korean ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ turkish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ thai ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
 };
 QueryBox MSG_DATA_SOURCES_UNAVAILABLE
 {
@@ -3391,5 +3424,16 @@ QueryBox MSG_DATA_SOURCES_UNAVAILABLE
     DefButton = WB_DEF_YES ;
     Message = "Es steht keine Datenquelle zur Verf�gung. M�chten Sie die Verbindung zu einer Datenquelle herstellen?";
     Message[english_us] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ portuguese ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ russian ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ spanish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ italian ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ swedish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ polish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ portuguese_brazilian ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ japanese ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ korean ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ turkish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ thai ] = "There is no data source available.\nDo you want to establish a data source connnection?";
 };
 
