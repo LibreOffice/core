@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:35:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 
 #include <unohelp.hxx>
+#ifndef _VCL_UNOHELP2_HXX
+#include "unohelp2.hxx"
+#endif
 #include <vos/mutex.hxx>
 
 using namespace ::com::sun::star;
@@ -376,7 +379,8 @@ static sal_Char* pDbgHelpText[] =
 "\n",
 "Window\n",
 "Output to a small debug window. The window size is stored if the debug "
-"dialog is closed with OK and if the window is visible.\n",
+"dialog is closed with OK and if the window is visible. Each assertion text can "
+"be copied to the clipboard via the context menu of the respective entry.\n",
 "\n",
 "Shell\n",
 "Output to a debug system (Windows debug window) when available or under "
@@ -385,11 +389,12 @@ static sal_Char* pDbgHelpText[] =
 "MessageBox\n",
 "Output to a MessageBox. In this case you can select whether the program "
 "must be continued, terminated (Application::Abort) or interrupted with "
-"CoreDump. Because a MessageBox allows further event processing other errors "
-"caused by Paint, Activate/Deactivate, GetFocus/LoseFocus can cause more "
-"errors or incorrect errors and messages. Therefor the message should also be "
-"directed to a file/debugger in case of problems in order to produce the "
-"(right) error messages.\n",
+"CoreDump. Additionally on some systems you get a \"Copy\" button pressing which "
+"copies the text of the MessageBox to the clipboard. Because a MessageBox allows "
+"further event processing other errors caused by Paint, Activate/Deactivate, "
+"GetFocus/LoseFocus can cause more errors or incorrect errors and messages. "
+"Therefor the message should also be directed to a file/debugger in case of "
+"problems in order to produce the (right) error messages.\n",
 "\n",
 "TestTool\n",
 "When the TestTool runs messages will be redirected inside the TestTool.\n",
@@ -494,8 +499,12 @@ public:
 
     virtual BOOL    Close();
     virtual void    Resize();
+    virtual long    PreNotify( NotifyEvent& rNEvt );
     void            InsertLine( const XubString& rLine );
     void            Update() { WorkWindow::Update(); maLstBox.Update(); }
+
+private:
+    void            GetAssertionEntryRange( USHORT nInbetweenEntry, USHORT& nFirst, USHORT& nLast );
 };
 
 // -----------------
@@ -623,22 +632,100 @@ void DbgWindow::Resize()
 
 // -----------------------------------------------------------------------
 
+void DbgWindow::GetAssertionEntryRange( USHORT nInbetweenEntry, USHORT& nFirst, USHORT& nLast )
+{
+    nFirst = nInbetweenEntry;
+    while ( nFirst > 0 )
+    {
+        if ( maLstBox.GetEntryData( nFirst ) != NULL )
+            break;
+        --nFirst;
+    }
+    USHORT nEntryCount = maLstBox.GetEntryCount();
+    nLast = nInbetweenEntry + 1;
+    while ( nLast < nEntryCount )
+    {
+        if ( maLstBox.GetEntryData( nLast ) != NULL )
+            break;
+        ++nLast;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+long DbgWindow::PreNotify( NotifyEvent& rNEvt )
+{
+    if ( rNEvt.GetType() == EVENT_COMMAND )
+    {
+        if ( maLstBox.IsWindowOrChild( rNEvt.GetWindow() ) )
+        {
+            const CommandEvent& rCommand = *rNEvt.GetCommandEvent();
+            if ( rCommand.GetCommand() == COMMAND_CONTEXTMENU )
+            {
+                PopupMenu aMenu;
+                aMenu.InsertItem( 1, String::CreateFromAscii( "copy to clipboard" ) );
+
+                Point aPos;
+                if ( rCommand.IsMouseEvent() )
+                    aPos = rCommand.GetMousePosPixel();
+                else
+                {
+                    Rectangle aEntryRect( maLstBox.GetBoundingRectangle( maLstBox.GetSelectEntryPos() ) );
+                    aPos = aEntryRect.Center();
+                }
+                USHORT nSelected = aMenu.Execute( rNEvt.GetWindow(), aPos );
+                if ( nSelected == 1 )
+                {
+                    // search all entries which belong to this assertion
+                    USHORT nAssertionFirst = 0;
+                    USHORT nAssertionLast = 0;
+                    GetAssertionEntryRange( maLstBox.GetSelectEntryPos(), nAssertionFirst, nAssertionLast );
+
+                    // build the string to copy to the clipboard
+                    String sAssertion;
+                    String sLineFeed = String::CreateFromAscii( "\n" );
+                    sLineFeed.ConvertLineEnd( GetSystemLineEnd() );
+                    while ( nAssertionFirst < nAssertionLast )
+                    {
+                        sAssertion += maLstBox.GetEntry( nAssertionFirst++ );
+                        sAssertion += sLineFeed;
+                    }
+
+                    ::vcl::unohelper::TextDataObject::CopyStringTo( sAssertion, GetClipboard() );
+                }
+            }
+            return 1;   // handled
+        }
+    }
+    return WorkWindow::PreNotify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
 void DbgWindow::InsertLine( const XubString& rLine )
 {
     XubString aStr = rLine;
     aStr.ConvertLineEnd( LINEEND_LF );
     xub_StrLen  nPos = aStr.Search( _LF );
+    BOOL bFirstEntry = TRUE;
     while ( nPos != STRING_NOTFOUND )
     {
         if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
             maLstBox.RemoveEntry( 0 );
-        maLstBox.InsertEntry( aStr.Copy( 0, nPos ) );
+
+        USHORT nInsertionPos = maLstBox.InsertEntry( aStr.Copy( 0, nPos ) );
+        if ( bFirstEntry )
+            maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
+        bFirstEntry = FALSE;
+
         aStr.Erase( 0, nPos+1 );
         nPos = aStr.Search( _LF );
     }
     if ( maLstBox.GetEntryCount() >= DBGWIN_MAXLINES )
         maLstBox.RemoveEntry( 0 );
-    maLstBox.InsertEntry( aStr );
+    USHORT nInsertionPos = maLstBox.InsertEntry( aStr );
+    if ( bFirstEntry )
+        maLstBox.SetEntryData( nInsertionPos, reinterpret_cast< void* >( 0x00000001 ) );
     maLstBox.SetTopEntry( DBGWIN_MAXLINES-1 );
     maLstBox.Update();
 }
@@ -1667,6 +1754,33 @@ void DbgDialogTest( Window* pWindow )
 // =======================================================================
 void DbgPrintShell( const char* pLine );
 
+#ifndef WNT
+#define USE_VCL_MSGBOX
+#define COPY_BUTTON_ID 25
+
+class DbgMessageBox : public ErrorBox
+{
+    String m_aMessage;
+    public:
+    DbgMessageBox( const String& rMessage ) :
+       ErrorBox( NULL, WB_YES_NO_CANCEL | WB_DEF_NO, rMessage ),
+       m_aMessage( rMessage )
+    {
+        SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output") ) );
+        AddButton( String( RTL_CONSTASCII_USTRINGPARAM( "Copy" ) ), COPY_BUTTON_ID, 0 );
+    }
+
+    virtual void Click()
+    {
+        if( GetCurButtonId() == COPY_BUTTON_ID )
+            vcl::unohelper::TextDataObject::CopyStringTo( m_aMessage, GetClipboard() );
+        else
+            ErrorBox::Click();
+    }
+};
+
+#endif
+
 void DbgPrintMsgBox( const char* pLine )
 {
     if ( Application::IsDialogCancelEnabled() )
@@ -1692,7 +1806,7 @@ void DbgPrintMsgBox( const char* pLine )
 #endif
     }
 
-#ifdef UNX
+#ifdef USE_VCL_MSGBOX
     sal_Bool bAcquire = Application::GetSolarMutex().tryToAcquire();
     if (!bAcquire)
     {
@@ -1712,7 +1826,8 @@ void DbgPrintMsgBox( const char* pLine )
     if ( pSVData->maWinData.mpCaptureWin )
         pSVData->maWinData.mpCaptureWin->ReleaseMouse();
 
-#if defined( WNT )
+#if ! defined USE_VCL_MSGBOX
+#ifdef WNT
     BOOL bOldCallTimer = pSVData->mbNoCallTimer;
     pSVData->mbNoCallTimer = TRUE;
     UniString aDebugStr( aDbgOutBuf, RTL_TEXTENCODING_UTF8 );
@@ -1732,38 +1847,16 @@ void DbgPrintMsgBox( const char* pLine )
             nRet = RET_CANCEL;
             break;
     }
-#elif defined( OS2 )
-    BOOL bOldCallTimer = pSVData->mbNoCallTimer;
-    pSVData->mbNoCallTimer = TRUE;
-    PM_ULONG nRet = WinMessageBox( HWND_DESKTOP, HWND_DESKTOP,
-                                   (PSZ)aDbgOutBuf, (PSZ)"Debug Output", 0,
-                                   MB_APPLMODAL | MB_MOVEABLE |
-                                   MB_YESNOCANCEL | MB_DEFBUTTON2 |
-                                   MB_ERROR );
-    pSVData->mbNoCallTimer = bOldCallTimer;
-    switch ( nRet )
-    {
-        case MBID_YES:
-            nRet = RET_YES;
-            break;
-        case MBID_NO:
-            nRet = RET_NO;
-            break;
-        case MBID_CANCEL:
-            nRet = RET_CANCEL;
-            break;
-    }
+#endif // WNT
 #else
     USHORT nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
-    ErrorBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_NO,
-                   UniString( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
-    aBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output") ) );
+    DbgMessageBox aBox( String( aDbgOutBuf, RTL_TEXTENCODING_UTF8 ) );
     Application::SetSystemWindowMode( nOldMode );
     short nRet = aBox.Execute();
 #endif
 
-#ifdef UNX
+#ifdef USE_VCL_MSGBOX
     if (bAcquire)
     {
         Application::GetSolarMutex().release();
