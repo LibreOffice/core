@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:13:52 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2943,7 +2943,8 @@ int OutputDevice::ImplNewFont()
 
             pFontEntry->maMetric.mnAscent       = 0;
             pFontEntry->maMetric.mnDescent      = 0;
-            pFontEntry->maMetric.mnLeading      = 0;
+            pFontEntry->maMetric.mnIntLeading   = 0;
+            pFontEntry->maMetric.mnExtLeading   = 0;
             pFontEntry->maMetric.mnSlant        = 0;
             pFontEntry->maMetric.mnFirstChar    = 0;
             pFontEntry->maMetric.mnLastChar     = 0;
@@ -3391,7 +3392,7 @@ void OutputDevice::ImplInitTextLineSize()
         n2LineDY2 = 1;
 
     nUnderlineOffset = nDescent/2 + 1;
-    nStrikeoutOffset = -((pFontEntry->maMetric.mnAscent-pFontEntry->maMetric.mnLeading)/3);
+    nStrikeoutOffset = -((pFontEntry->maMetric.mnAscent-pFontEntry->maMetric.mnIntLeading)/3);
 
     if ( !pFontEntry->maMetric.mnUnderlineSize )
     {
@@ -3458,33 +3459,32 @@ void OutputDevice::ImplInitAboveTextLineSize()
     long            n2LineDY;
     long            n2LineDY2;
     long            nUnderlineOffset;
-    long            nLeading;
 
-    nLeading = pFontEntry->maMetric.mnLeading;
-    if ( !nLeading )
+    long nIntLeading = pFontEntry->maMetric.mnIntLeading;
+    // TODO: assess usage of nLeading below (changed in extleading CWS)
+    if ( !nIntLeading )
     {
         // if no leading is available, we assume 15% of the ascent
-        nLeading = pFontEntry->maMetric.mnAscent*150/1000;
-        if ( !nLeading )
-
-            nLeading = 1;
+        nIntLeading = pFontEntry->maMetric.mnAscent*150/1000;
+        if ( !nIntLeading )
+            nIntLeading = 1;
     }
 
-    nLineHeight = ((nLeading*25)+50) / 100;
+    nLineHeight = ((nIntLeading*25)+50) / 100;
     if ( !nLineHeight )
         nLineHeight = 1;
     nLineHeight2 = nLineHeight / 2;
     if ( !nLineHeight2 )
         nLineHeight2 = 1;
 
-    nBLineHeight = ((nLeading*50)+50) / 100;
+    nBLineHeight = ((nIntLeading*50)+50) / 100;
     if ( nBLineHeight == nLineHeight )
         nBLineHeight++;
     nBLineHeight2 = nBLineHeight/2;
     if ( !nBLineHeight2 )
         nBLineHeight2 = 1;
 
-    n2LineHeight = ((nLeading*16)+50) / 100;
+    n2LineHeight = ((nIntLeading*16)+50) / 100;
     if ( !n2LineHeight )
         n2LineHeight = 1;
     n2LineDY = n2LineHeight;
@@ -3494,7 +3494,7 @@ void OutputDevice::ImplInitAboveTextLineSize()
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    nUnderlineOffset = -(pFontEntry->maMetric.mnAscent-((nLeading/2)-1));
+    nUnderlineOffset = -(pFontEntry->maMetric.mnAscent-((nIntLeading/2)-1));
 
     if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
     {
@@ -3514,7 +3514,7 @@ void OutputDevice::ImplInitAboveTextLineSize()
     }
     if ( !pFontEntry->maMetric.mnAboveWUnderlineSize )
     {
-        long nWCalcSize = nLeading;
+        long nWCalcSize = nIntLeading;
         if ( nWCalcSize < 6 )
         {
             if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
@@ -6937,7 +6937,7 @@ FontMetric OutputDevice::GetFontMetric() const
     // set aMetric with info from font
     aMetric.SetName( maFont.GetName() );
     aMetric.SetStyleName( pMetric->maStyleName );
-    aMetric.SetSize( PixelToLogic( Size( pMetric->mnWidth, pMetric->mnAscent+pMetric->mnDescent-pMetric->mnLeading ) ) );
+    aMetric.SetSize( PixelToLogic( Size( pMetric->mnWidth, pMetric->mnAscent+pMetric->mnDescent-pMetric->mnIntLeading ) ) );
     aMetric.SetCharSet( pMetric->meCharSet );
     aMetric.SetFamily( pMetric->meFamily );
     aMetric.SetPitch( pMetric->mePitch );
@@ -7002,7 +7002,8 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.mpImplMetric->mbDevice      = pMetric->mbDevice;
     aMetric.mpImplMetric->mnAscent      = ImplDevicePixelToLogicHeight( pMetric->mnAscent+mnEmphasisAscent );
     aMetric.mpImplMetric->mnDescent     = ImplDevicePixelToLogicHeight( pMetric->mnDescent+mnEmphasisDescent );
-    aMetric.mpImplMetric->mnLeading     = ImplDevicePixelToLogicHeight( pMetric->mnLeading+mnEmphasisAscent );
+    aMetric.mpImplMetric->mnIntLeading  = ImplDevicePixelToLogicHeight( pMetric->mnIntLeading+mnEmphasisAscent );
+    aMetric.mpImplMetric->mnExtLeading  = ImplDevicePixelToLogicHeight( pMetric->mnExtLeading );
     aMetric.mpImplMetric->mnLineHeight  = ImplDevicePixelToLogicHeight( pMetric->mnAscent+pMetric->mnDescent+mnEmphasisAscent+mnEmphasisDescent );
     aMetric.mpImplMetric->mnSlant       = ImplDevicePixelToLogicHeight( pMetric->mnSlant );
     aMetric.mpImplMetric->mnFirstChar   = pMetric->mnFirstChar;
