@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:22:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Ope~nen";
             Text[ chinese_simplified ] = "´ò¿ª(~O)";
             Text[ greek ] = "¢í~ïéãìá";
-            Text[ korean ] = "¿­±â";
+            Text[ korean ] = "¿­±â(~O)";
             Text[ turkish ] = "Aç";
             Text[ language_user1 ] = " ";
         };
@@ -175,7 +175,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Be~werken";
             Text[ chinese_simplified ] = "±à¼­(~E)";
             Text[ greek ] = "~Åðåîåñãáóßá";
-            Text[ korean ] = "ÆíÁý";
+            Text[ korean ] = "ÆíÁý(~E)";
             Text[ turkish ] = "D~üzenle";
             Text[ language_user1 ] = " ";
         };
@@ -203,7 +203,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Opnieuw laden";
             Text[ chinese_simplified ] = "ÖØÐÂ×°Èë(~L)";
             Text[ greek ] = "Åðá~íáöüñôùóç";
-            Text[ korean ] = "Àç ·Îµå";
+            Text[ korean ] = "Àç ·Îµå(~L)";
             Text[ turkish ] = "Yeniden yükle";
             Text[ language_user1 ] = " ";
         };
@@ -250,16 +250,16 @@ Menu MN_READONLY_POPUP
             Text [ danish ] = "~HTML-kildetekst" ;
             Text [ portuguese ] = "Texto ~fonte HTML" ;
             Text [ portuguese_brazilian ] = "HTM~L - Quelltext" ;
-            Text[ chinese_simplified ] = "~HTML Ô´ÎÄ±¾";
+            Text[ chinese_simplified ] = "HT~ML Ô´ÎÄ±¾";
             Text[ russian ] = "Èñõîäíûé òåêñò HTM~L";
             Text[ polish ] = "Tekst Ÿród³owy HTML";
-            Text[ japanese ] = "HT~ML ¿°½";
-            Text[ chinese_traditional ] = "~HTML ­ì©lÀÉ";
+            Text[ japanese ] = "HT~ML ¿°½Ã·½Ä";
+            Text[ chinese_traditional ] = "HT~ML ­ì©lÀÉ";
             Text[ arabic ] = "HTML ãÕÏÑ";
             Text[ dutch ] = "~HTML - brontekst";
-            Text[ chinese_simplified ] = "~HTML Ô´ÎÄ±¾";
+            Text[ chinese_simplified ] = "HT~ML Ô´ÎÄ±¾";
             Text[ greek ] = "Êåßìåíï ðñïÝëåõóçò HTM~L";
-            Text[ korean ] = "HTML ¼Ò½ºÅØ½ºÆ®";
+            Text[ korean ] = "HT~ML ¼Ò½ºÅØ½ºÆ®";
             Text[ turkish ] = "HTM~L  kaynak kodu";
             Text[ language_user1 ] = " ";
         };
@@ -279,16 +279,16 @@ Menu MN_READONLY_POPUP
             Text [ danish ] = "~Stop" ;
             Text [ portuguese ] = "S~top" ;
             Text [ portuguese_brazilian ] = "~Stop" ;
-            Text[ chinese_simplified ] = "ÔÝÍ£";
+            Text[ chinese_simplified ] = "ÔÝÍ£(~S)";
             Text[ russian ] = "Ñòîï";
             Text[ polish ] = "Zatrzymaj";
             Text[ japanese ] = "’†Ž~(~S)";
-            Text[ chinese_traditional ] = "¼È°±(~T)";
+            Text[ chinese_traditional ] = "¼È°±(~S)";
             Text[ arabic ] = "ÅíÞÇÝ";
             Text[ dutch ] = "~Stop";
-            Text[ chinese_simplified ] = "ÔÝÍ£";
+            Text[ chinese_simplified ] = "ÔÝÍ£(~S)";
             Text[ greek ] = "~ÄéáêïðÞ";
-            Text[ korean ] = "Á¤Áö";
+            Text[ korean ] = "Á¤Áö(~S)";
             Text[ turkish ] = "Dur";
             Text[ language_user1 ] = " ";
         };
@@ -345,7 +345,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Vooruit";
             Text[ chinese_simplified ] = "ÏòÇ°(~F)";
             Text[ greek ] = "Åìðñü~ò";
-            Text[ korean ] = "¾ÕÀ¸·Î";
+            Text[ korean ] = "¾ÕÀ¸·Î(~F)";
             Text[ turkish ] = "Ýleri";
         };
         SEPARATOR
@@ -375,7 +375,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Koppeling ~toevoegen";
             Text[ chinese_simplified ] = "ÐÂÔöÁ´½Ó(~A)";
             Text[ greek ] = "ÐñïóèÞê~ç óýíäåóçò";
-            Text[ korean ] = "¿¬°á Ãß°¡";
+            Text[ korean ] = "¿¬°á Ãß°¡(~A)";
             Text[ turkish ] = "Baðlantý ekle";
             Text[ language_user1 ] = " ";
         };
@@ -405,7 +405,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Koppeling aan afbeelding toevoegen";
             Text[ chinese_simplified ] = "ÐÂÔöÍ¼ÐÎµÄÁ´½Ó(~A)";
             Text[ greek ] = "ÐñïóèÞêç óýíäåóçò óå ãñá~öéêü";
-            Text[ korean ] = "±×·¡ÇÈ¿¡ ¿¬°á Ãß°¡";
+            Text[ korean ] = "±×·¡ÇÈ¿¡ ¿¬°á Ãß°¡(~A)";
             Text[ turkish ] = "Baðlantýyý grafiðe ekle";
             Text[ language_user1 ] = " ";
         };
@@ -672,7 +672,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Koppeling kopiëren";
             Text[ chinese_simplified ] = "¸´ÖÆÁ´½Ó(~L)";
             Text[ greek ] = "ÁíôéãñáöÞ ~óýíäåóçò";
-            Text[ korean ] = "¸µÅ© º¹»ç";
+            Text[ korean ] = "¸µÅ© º¹»ç(~L)";
             Text[ turkish ] = "Baðlantýyý kopyala";
             Text[ language_user1 ] = " ";
         };
@@ -703,7 +703,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Afbeelding ko~piëren";
             Text[ chinese_simplified ] = "¸´ÖÆÍ¼ÐÎ(~G)";
             Text[ greek ] = "ÁíôéãñáöÞ ãñáöé~êþí";
-            Text[ korean ] = "±×·¡ÇÈ º¹»ç";
+            Text[ korean ] = "±×·¡ÇÈ º¹»ç(~G)";
             Text[ turkish ] = "Grafiði kopyala";
             Text[ language_user1 ] = " ";
         };
@@ -829,7 +829,7 @@ String STR_CHAIN_OK
     Text [ portuguese ] = "Clique no botão esquerdo do rato para ligar as molduras." ;
     Text [ english_us ] = "Click the left mouse button to link the frames." ;
     Text [ portuguese_brazilian ] = "Betätigen Sie die linke Maustaste um die Rahmen zu verketten." ;
-    Text [ swedish ] = "Klicka på den vänstra musknappen för att länka samman ramen." ;
+    Text [ swedish ] = "Klicka på den vänstra musknappen för att länka ramarna." ;
     Text [ danish ] = "Klik på venstre museknap for at kæde rammerne." ;
     Text [ italian ] = "Per collegare la cornice cliccate con il tasto sinistro del mouse." ;
     Text [ spanish ] = "Pulse el botón izquierdo del ratón para vincular las marcos." ;
@@ -907,7 +907,7 @@ String STR_CHAIN_WRONG_AREA
     Text [ portuguese ] = "A moldura de destino encontra-se numa área que não permite a ligação." ;
     Text [ english_us ] = "The target frame for the link is in an invalid area." ;
     Text [ portuguese_brazilian ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung möglich ist." ;
-    Text [ swedish ] = "Målramen finns i ett område där ingen länkning är möjlig. " ;
+    Text [ swedish ] = "Målramen finns i ett område där ingen länkning är möjlig." ;
     Text [ danish ] = "Målrammen befinder sig i et område hvor sammenkædning ikke er mulig." ;
     Text [ italian ] = "La cornice di destinazione si trova in un'area nella quale non sono possibili collegamenti." ;
     Text [ spanish ] = "El marco destino se encuentra en un área en la que los vínculos no son posibles." ;
@@ -959,7 +959,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text [ portuguese ] = "A moldura-fonte já é a fonte de uma ligação." ;
     Text [ english_us ] = "The source frame is already the source of a link." ;
     Text [ portuguese_brazilian ] = "Der Quellrahmen ist bereits Quelle einer Verkettung." ;
-    Text [ swedish ] = "Källramen är redan källa till en länk." ;
+    Text [ swedish ] = "Källramen är redan källa till en länkning." ;
     Text [ danish ] = "Kilderammen er allerede kilde til en sammenkædning." ;
     Text [ italian ] = "La cornice sorgente è già sorgente di un collegamento." ;
     Text [ spanish ] = "El marco origen ya es la fuente de un vínculo." ;
