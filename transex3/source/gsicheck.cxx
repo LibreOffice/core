@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2002-09-11 10:02:15 $
+ *  last change: $Author: gh $ $Date: 2003-02-05 16:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ public:
     GSIBlock( BOOL PbPrintContext, BOOL bInt ) : pSourceLine( NULL ), bPrintContext( PbPrintContext ), bInternal( bInt ) {};
     ~GSIBlock();
     void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
-    void InsertLine( const ByteString &rLine, ULONG nLine , const int sourceLang);
+    void InsertLine( const ByteString &rLine, ULONG nLine , const USHORT nSourceLang);
     BOOL CheckSyntax( ULONG nLine );
 
     void WriteError( SvStream &aErrOut );
@@ -143,7 +143,7 @@ GSIBlock::~GSIBlock()
 }
 
 /*****************************************************************************/
-void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine , const int sourceLang)
+void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine , const USHORT nSourceLang)
 /*****************************************************************************/
 {
     GSILine *pLine = new GSILine( rLine, nLine );
@@ -158,7 +158,7 @@ void GSIBlock::InsertLine( const ByteString &rLine, ULONG nLine , const int sour
     }
 
     USHORT nLangId = sTmp.GetToken( 2, '\t' ).ToInt32();
-    if ( nLangId == sourceLang )
+    if ( nLangId == nSourceLang )
         pSourceLine = pLine;
     else {
         ULONG nPos = 0;
@@ -304,7 +304,7 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.5.1 (c)1999 - 2001 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.5.3 (c)1999 - 2001 by SUN Microsystems\n" );
     fprintf( stdout, "================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files (Gutschmitt-Interface)\n" );
@@ -353,7 +353,7 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bInternal = FALSE;
     BOOL bWriteError = FALSE;
     BOOL bWriteCorrect = FALSE;
-    int  sourceLang=49;
+    USHORT nSourceLang = 49;     // German is default
     ByteString aFilename;
     for ( USHORT i = 1 ; i < argc ; i++ )
     {
@@ -378,7 +378,20 @@ int _cdecl main( int argc, char *argv[] )
                     break;
                 case 'i':bInternal = TRUE;
                     break;
-                case 'l': sourceLang=( *(argv[ i ]+3)-48 )*10 + ( *(argv[ i ]+4)-48 );i++;break;
+                case 'l':
+                    {
+                        if ( (i+1) < argc )
+                        {
+                            nSourceLang = ByteString( argv[ i+1 ] ).ToInt32();
+                            i++;
+                        }
+                        else
+                        {
+                            fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
+                            bError = TRUE;
+                        }
+                    }
+                    break;
                 default:
                     fprintf( stderr, "\nERROR: Unknown Switch %s!\n\n", argv[ i ] );
                     bError = TRUE;
@@ -484,7 +497,7 @@ int _cdecl main( int argc, char *argv[] )
                     aOldId = aId;
                 }
 
-                pBlock->InsertLine( sGSILine, nLine , sourceLang);
+                pBlock->InsertLine( sGSILine, nLine , nSourceLang);
             }
         }
     }
