@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 14:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,15 +117,12 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
 
     FltError                eRet;
 
-    if( rMedium.IsStorage() )
+    SvStorage* pStorage = rMedium.GetStorage();
+    if( pStorage )
     {// OLE2-Datei
         enum BiffType   { BT0, BT5, BT8 };
-        SvStorage*          pStorage = rMedium.GetStorage();
         SvStorage*          pPivotCacheStorage = NULL;
         const String        aPvCchStrgNm( String::CreateFromAscii( pPivotCacheStorageName ) );
-
-        if( pStorage == NULL )
-            return eERR_OPEN;
 
         BiffType            eBT = BT0;
 
@@ -264,15 +261,9 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
     if( &rOutMedium == NULL )
         return eERR_OPEN;
 
-    rOutMedium.GetStorage();
-
-    if( rOutMedium.IsStorage() )
+    SvStorage* pStorage = rOutMedium.GetStorage();
+    if( pStorage )
     {// OLE2-Datei
-        SvStorage*          pStorage = rOutMedium.GetStorage();
-
-        if( pStorage == NULL )
-            return eERR_OPEN;
-
         SvStorageStreamRef  xStStream =
             pStorage->OpenStream( _STRING( pWrkBook ), STREAM_READWRITE | STREAM_TRUNC );
 
