@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 08:10:08 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 08:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@ struct SwCrsrMoveState;
 
 class SwFrm;
 typedef long (SwFrm:: *SwFrmGet)() const;
+typedef BOOL (SwFrm:: *SwFrmMax)( long );
 
 struct SwRectFnCollection
 {
@@ -215,6 +216,8 @@ struct SwRectFnCollection
     SwFrmGet      fnGetBottomMargin;
     SwFrmGet      fnGetLeftMargin;
     SwFrmGet      fnGetRightMargin;
+    SwFrmGet      fnGetLimit;
+    SwFrmMax      fnSetLimit;
 };
 
 typedef SwRectFnCollection* SwRectFn;
@@ -537,13 +540,15 @@ public:
     inline BOOL IsInSct() const;
 #ifdef VERTICAL_LAYOUT
     inline BOOL IsVertical() const;
-    inline void SetVertical( BOOL bNew )   { bVertical    = bNew ? 1 : 0; }
+    inline BOOL GetVerticalFlag() const;
+    inline void SetVertical( BOOL bNew ){ bVertical = bNew ? 1 : 0; }
     inline void SetDerivedVert( BOOL bNew ){ bDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( BOOL bNew) { bInvalidVert = bNew ? 1 : 0; }
     inline BOOL IsRightToLeft() const;
     inline void SetRightToLeft( BOOL bNew ){ bRightToLeft = bNew ? 1 : 0; }
     inline void SetDerivedR2L( BOOL bNew ) { bDerivedR2L  = bNew ? 1 : 0; }
     inline void SetInvalidR2L( BOOL bNew ) { bInvalidR2L  = bNew ? 1 : 0; }
+    void CheckVertical();
 #endif
     BOOL IsMoveable() const;
 
@@ -743,6 +748,10 @@ public:
     long GetBottomMargin() const;
     long GetLeftMargin() const;
     long GetRightMargin() const;
+    long GetPrtLeft() const;
+    long GetPrtBottom() const;
+    BOOL SetMinLeft( long );
+    BOOL SetMaxBottom( long );
 #endif
 
 #ifndef PRODUCT
@@ -786,6 +795,10 @@ BOOL SwFrm::IsVertical() const
 {
     if( bInvalidVert )
         ((SwFrm*)this)->SetDirFlags( TRUE );
+    return bVertical != 0;
+}
+BOOL SwFrm::GetVerticalFlag() const
+{
     return bVertical != 0;
 }
 inline BOOL SwFrm::IsRightToLeft() const

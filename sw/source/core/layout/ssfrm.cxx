@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 08:11:51 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 08:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _SVX_SHADITEM_HXX //autogen
 #include <svx/shaditem.hxx>
 #endif
+#ifndef _FMTCLDS_HXX //autogen
+#include <fmtclds.hxx>
+#endif
 
 #ifdef VERTICAL_LAYOUT
     // No inline cause we need the function pointers
@@ -99,6 +102,68 @@ long SwFrm::GetLeftMargin() const
     { return Prt().Left(); }
 long SwFrm::GetRightMargin() const
     { return Frm().Width() - Prt().Width() - Prt().Left(); }
+long SwFrm::GetPrtLeft() const
+    { return Frm().Left() + Prt().Left(); }
+long SwFrm::GetPrtBottom() const
+    { return Frm().Top() + Prt().Height() + Prt().Top(); }
+
+BOOL SwFrm::SetMinLeft( long nDeadline )
+{
+    SwTwips nDiff = nDeadline - Frm().Left();
+    if( nDiff > 0 )
+    {
+        Frm().Left( nDeadline );
+        Prt().Width( Prt().Width() - nDiff );
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOL SwFrm::SetMaxBottom( long nDeadline )
+{
+    SwTwips nDiff = Frm().Top() + Frm().Height() - nDeadline;
+    if( nDiff > 0 )
+    {
+        Frm().Height( Frm().Height() - nDiff );
+        Prt().Height( Prt().Height() - nDiff );
+        return TRUE;
+    }
+    return FALSE;
+}
+
+/*-----------------11.9.2001 11:11------------------
+ * SwFrm::CheckVertical(..)
+ * checks the horizontal/vertical direction and
+ * invalidates the lower frames rekursivly, if necessary.
+ * --------------------------------------------------*/
+
+void SwFrm::CheckVertical()
+{
+    BOOL bOld = GetVerticalFlag();
+    SetInvalidVert( TRUE );
+    if( IsVertical() != bOld && IsLayoutFrm() )
+    {
+        InvalidateAll();
+        SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();
+        const SwFmtCol* pCol = NULL;
+        SwLayoutFrm* pBody;
+        if( pFrm && IsPageFrm() )
+        {
+            // If we're a page frame and we change our layout direction,
+            // we have to look for columns and rearrange them.
+            pBody = ((SwPageFrm*)this)->FindBodyCont();
+            if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm() )
+                pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
+        }
+        while( pFrm )
+        {
+            pFrm->CheckVertical();
+            pFrm = pFrm->GetNext();
+        }
+        if( pCol )
+            pBody->AdjustColumns( pCol, FALSE );
+    }
+}
 
 #endif
 

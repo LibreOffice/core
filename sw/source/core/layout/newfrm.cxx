@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 08:11:19 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 08:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,9 @@ static SwRectFnCollection aHorizontal = {
     &SwFrm::GetTopMargin,
     &SwFrm::GetBottomMargin,
     &SwFrm::GetLeftMargin,
-    &SwFrm::GetRightMargin
+    &SwFrm::GetRightMargin,
+    &SwFrm::GetPrtBottom,
+    &SwFrm::SetMaxBottom
 };
 
 static SwRectFnCollection aVertical = {
@@ -205,7 +207,9 @@ static SwRectFnCollection aVertical = {
     &SwFrm::GetRightMargin,
     &SwFrm::GetLeftMargin,
     &SwFrm::GetTopMargin,
-    &SwFrm::GetBottomMargin
+    &SwFrm::GetBottomMargin,
+    &SwFrm::GetPrtLeft,
+    &SwFrm::SetMinLeft
 };
 
 SwRectFn fnRectHori = &aHorizontal;
