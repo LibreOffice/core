@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ HtmlDocuFile::WriteBody( csv::File & io_aFile )
             >> *new html::Paragraph
                     << new html::ClassAttr( "copyright" )
                     << new xml::AnAttribute( "align", "center" )
-                    << sCopyright ;
+                    << new xml::XmlCode(sCopyright);
     }
     aBodyData.WriteOut(io_aFile);
 }
