@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:30:02 $
+ *  last change: $Author: kz $ $Date: 2001-02-12 09:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: kz $
- //     $Date: 2000-12-08 18:30:02 $
- // $Revision: 1.4 $
+ //     $Date: 2001-02-12 09:29:37 $
+ // $Revision: 1.5 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -179,7 +179,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_traditional ] = "¦C(~R)";
         Text[ arabic ] = "ÇáÕİ";
         Text[ greek ] = "~ÃñáììŞ";
-        Text[ korean ] = "¼¿¿¡ Çà »ğÀÔ(~R)";
+        Text[ korean ] = "Çà(~R)";
         Text[ turkish ] = "~Satır";
         Text[ language_user1 ] = " ";
     };
@@ -212,7 +212,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -241,7 +241,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_traditional ] = "Äæ(~C)";
         Text[ arabic ] = "ÇáÚãæÏ";
         Text[ greek ] = "~ÓôŞëç";
-        Text[ korean ] = "¼¿¿¡ ¿­ »ğÀÔ(~C)";
+        Text[ korean ] = "¿­(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
     };
@@ -274,7 +274,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
@@ -345,7 +345,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_traditional ] = "¨S¦³«ü©w¤½¦¡¡I";
         Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÃíÉ ÇáÕíÛÉ!";
         Text[ greek ] = "Äåí ïñßóôçêáí ôığïé!";
-        Text[ korean ] = "ÁöÁ¤µÈ ¼ö½ÄÀÌ ¾ø½À´Ï´Ù.";
+        Text[ korean ] = "¼ö½ÄÀÌ ÀÔ·ÂµÇÁö¡¡¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Formül girilmedi!";
         Text[ language_user1 ] = " ";
     };
@@ -371,7 +371,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_traditional ] = "¨S¦³«ü©wÄæ©M¦C¡I";
         Text[ arabic ] = "áã íÊã ÊÍÏíÏ ÇáÕİ æáÇ ÇáÚãæÏ!";
         Text[ greek ] = "Äåí ïñßóôçêå ïıôå ãñáììŞ, ïıôå óôŞëç!";
-        Text[ korean ] = "¿­ ¶Ç´Â ÇàÀÌ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ korean ] = "¿­ ¶Ç´Â ÇàÀÌ ÀÔ·ÂµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Ne satır ne de sütun belirtildi!";
         Text[ language_user1 ] = " ";
     };
@@ -397,7 +397,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_traditional ] = "¨S¦³©w¸q¦WºÙ©Î°Ï°ì¡I";
         Text[ arabic ] = "ÇÓã Ãæ äØÇŞ ÛíÑ ãõÚÑøİ!";
         Text[ greek ] = "Ìç ïñéóìİíï üíïìá Ş ìç ïñéóìİíç ğåñéï÷Ş!";
-        Text[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ÀÌ¸§ ¶Ç´Â ¹üÀ§!";
+        Text[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ÀÌ¸§ ¶Ç´Â ±¸¿ª!";
         Text[ turkish ] = "Tanımlanmamış ad ya da alan!";
         Text[ language_user1 ] = " ";
     };
@@ -423,7 +423,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ chinese_traditional ] = "¨S¦³©w¸q¦WºÙ©Î¿ù»~ªºÀx¦s®æ°Ñ·Ó¡I";
         Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ Ãæ ãÑÌÚ ÎáíÉ ÎÇØÆ!";
         Text[ greek ] = "Ìç ïñéóìİíï üíïìá Ş ëÜèïò áíáöïñÜ êåëéïı!.";
-        Text[ korean ] = "ÁöÁ¤µÇÁö ¾ÊÀº ÀÌ¸§ ¶Ç´Â Àß¸øµÈ ¼¿ ÂüÁ¶";
+        Text[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ÀÌ¸§ ¶Ç´Â Æ²¸° ¼¿ ÂüÁ¶";
         Text[ turkish ] = "Tanımlanmamış ad ya da yanlış hücre referansı!";
         Text[ language_user1 ] = " ";
     };
@@ -486,7 +486,7 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ chinese_traditional ] = "¼Ï¯Ã¤ÀªRªí";
     Text[ arabic ] = "ÚãáíÇÊ ãÊÚÏÏÉ";
     Text[ greek ] = "Ğïëëáğëİò ëåéôïõñãßåò";
-    Text[ korean ] = "º¹ÇÕ ¿¬»ê";
+    Text[ korean ] = "´ÙÁß ¿¬»ê";
     Text[ turkish ] = "Çoklu işlemler";
     Text[ language_user1 ] = " ";
 };
