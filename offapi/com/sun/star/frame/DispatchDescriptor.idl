@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchDescriptor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2002-11-05 09:06:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
     @see XDispatchProvider::queryDispatches()
  */
-struct DispatchDescriptor
+published struct DispatchDescriptor
 {
     //-------------------------------------------------------------------------
     /** specifies the URL of the resource/function
