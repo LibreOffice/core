@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2003-01-13 09:48:44 $
+ *  last change: $Author: lla $ $Date: 2003-01-13 13:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ int _cdecl main( int argc, char* argv[] )
     {
         logPth = opt.getOpt( "-logPth" );
     }
-    setSignalFilename(opt);
 
     bool bLibrary = true;
     if (opt.getParams().empty())
@@ -189,6 +188,8 @@ int _cdecl main( int argc, char* argv[] )
             bLibrary = false;
         }
     }
+
+    setSignalFilename(opt);
 
     /* show usage screen if too less parameters */
     // if ( argc < 2 )
