@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-14 09:36:11 $
+#   last change: $Author: rt $ $Date: 2005-03-29 15:33:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ SLOFILES=           \
                     $(SLO)$/fwkresid.obj                            \
                     $(SLO)$/colorlistener.obj                       \
                     $(SLO)$/framelistanalyzer.obj                   \
-                    $(SLO)$/sfxhelperfunctions.obj
+                    $(SLO)$/sfxhelperfunctions.obj                  \
+                    $(SLO)$/menuextensionsupplier.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
