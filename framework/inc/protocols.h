@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocols.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-08-22 10:05:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ namespace framework{
     a real visible component.
  */
 
+#define SPECIALPROTOCOL_PRIVATE           DECLARE_ASCII("private:"       )       // indicates a loadable content in general!
+#define SPECIALPROTOCOL_PRIVATE_OBJECT    DECLARE_ASCII("private:object" )       // indicates loading of components using a model directly
 #define SPECIALPROTOCOL_PRIVATE_STREAM    DECLARE_ASCII("private:stream" )       // indicates loading of components using a stream only
 #define SPECIALPROTOCOL_PRIVATE_FACTORY   DECLARE_ASCII("private:factory")       // indicates creation of empty documents
 #define SPECIALPROTOCOL_SLOT              DECLARE_ASCII("slot:"          )       // internal protocol of the sfx project for generic dispatch funtionality
@@ -103,6 +105,8 @@ class ProtocolCheck
     enum EProtocol
     {
         E_UNKNOWN_PROTOCOL  ,
+        E_PRIVATE           ,
+        E_PRIVATE_OBJECT    ,
         E_PRIVATE_STREAM    ,
         E_PRIVATE_FACTORY   ,
         E_SLOT              ,
@@ -121,6 +125,14 @@ class ProtocolCheck
      */
     static EProtocol specifyProtocol( const ::rtl::OUString& sURL )
     {
+        // because "private:" is part of e.g. "private:object" too ...
+        // we must check it before all other ones!!!
+        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE,SPECIALPROTOCOL_PRIVATE.getLength()) == 0)
+            return E_PRIVATE;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_OBJECT,SPECIALPROTOCOL_PRIVATE_OBJECT.getLength()) == 0)
+            return E_PRIVATE_OBJECT;
+        else
         if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_STREAM,SPECIALPROTOCOL_PRIVATE_STREAM.getLength()) == 0)
             return E_PRIVATE_STREAM;
         else
@@ -158,6 +170,8 @@ class ProtocolCheck
     {
         switch(eRequired)
         {
+            case E_PRIVATE           : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE        ,SPECIALPROTOCOL_PRIVATE.getLength()        ) == 0); break;
+            case E_PRIVATE_OBJECT    : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_OBJECT ,SPECIALPROTOCOL_PRIVATE_OBJECT.getLength() ) == 0); break;
             case E_PRIVATE_STREAM    : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_STREAM ,SPECIALPROTOCOL_PRIVATE_STREAM.getLength() ) == 0); break;
             case E_PRIVATE_FACTORY   : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_FACTORY,SPECIALPROTOCOL_PRIVATE_FACTORY.getLength()) == 0); break;
             case E_SLOT              : return (sURL.compareTo(SPECIALPROTOCOL_SLOT           ,SPECIALPROTOCOL_SLOT.getLength()           ) == 0); break;
