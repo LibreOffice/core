@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 13:42:33 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 09:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,10 +175,12 @@ void SmSym::SetSymbolName(const String& rName)
 
 SvStream& operator << (SvStream& rStream, const SmSym& rSymbol)
 {
-    rStream.WriteByteString(ExportString(rSymbol.Name));
+    rStream.WriteByteString( ExportString(rSymbol.Name) );
     rStream << rSymbol.Face;
 
-    rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eEnc = rSymbol.Face.GetCharSet();
+    if (RTL_TEXTENCODING_DONTKNOW == eEnc)
+        eEnc = RTL_TEXTENCODING_SYMBOL;
     rStream << ByteString::ConvertFromUnicode( rSymbol.Character, eEnc );
 
     return rStream;
@@ -186,14 +188,17 @@ SvStream& operator << (SvStream& rStream, const SmSym& rSymbol)
 
 SvStream& operator >> (SvStream& rStream, SmSym& rSymbol)
 {
-    rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
-    rStream.ReadByteString(rSymbol.Name, eEnc);
+    rStream.ReadByteString( rSymbol.Name, gsl_getSystemTextEncoding() );
     if (SF_Ident == SF_SM20IDENT)
         ReadSM20Font(rStream, rSymbol.Face);
     else
         rStream >> rSymbol.Face;
     sal_Char cTemp;
     rStream >> cTemp;
+
+    rtl_TextEncoding eEnc = rSymbol.Face.GetCharSet();
+    if (RTL_TEXTENCODING_DONTKNOW == eEnc)
+        eEnc = RTL_TEXTENCODING_SYMBOL;
     rSymbol.Character = ByteString::ConvertToUnicode( cTemp, eEnc );
 
     return rStream;
