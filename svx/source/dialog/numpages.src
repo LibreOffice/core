@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:37:40 $
+ *  last change: $Author: kz $ $Date: 2002-02-28 17:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2352,7 +2352,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ chinese_traditional ] = "ζ¨™ζΊ–";
         Text[ arabic ] = "ήνΗΣν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "κΈ°λ³Έκ°’";
+        Text[ korean ] = "κΈ°λ³Έ κ°’";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
