@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:51:34 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "dlistimp.hxx"
 #include "dicimp.hxx"
 #include "lngopt.hxx"
@@ -984,7 +983,6 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg,
 
     // get stream to be used
     SfxMedium aMedium( rFileURL, STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-    aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
     SvStream *pStream = aMedium.GetInStream();
     if (!pStream || pStream->GetError())
         return FALSE;
