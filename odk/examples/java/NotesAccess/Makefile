@@ -37,18 +37,18 @@ $(OUT_COMP_CLASS) : $(OUT)
 
 $(OFFICE_CLASSES_DIR)/Notes.jar : 
 	@echo --------------------------------------------------------------------------------
-	@echo You need the Notes.jar from Notes/Domino for this example.
+	@echo You need the "$(QM)'Notes.jar$(QM)" from Notes/Domino for this example.
 	@echo You can download it from http://www.servlets.com/cos/index.html
 	@echo and then please copy it into your $(OFFICE_CLASSES_DIR) directory.
 	@echo --------------------------------------------------------------------------------
 
 
-$(CLASSFILES) : $(OUT_COMP_CLASS) $(JAVAFILES) $(OFFICE_CLASSES_DIR)/Notes.jar
+$(CLASSFILES) : $(OFFICE_CLASSES_DIR)/Notes.jar $(OUT_COMP_CLASS) $(JAVAFILES) 
 	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 JavaNotesAccessExample : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
-	@echo Please use one of the following commands to execute the examples!
+	@echo Please use the following command to execute the example!
 	@echo -
 	@echo make NotesAccess.run
 	@echo --------------------------------------------------------------------------------

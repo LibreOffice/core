@@ -36,7 +36,7 @@ CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 CLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
 
 $(COMPONENT1_NAME)_CLASSFILES = $(COMPONENT1_NAME).class \
-		$(COMPONENT1_NAME)$$$(COMPONENT1_NAME)Implementation.class						  
+		$(COMPONENT1_NAME)$(QUOTE)$$$(COMPONENT1_NAME)Implementation.class
 
 $(COMPONENT1_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
 
@@ -98,7 +98,7 @@ endif
 JavaToDoExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The ToDo Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo Please load the ToDo.sxc document to see how this component works, see
+	@echo Please load the "$(QM)ToDo.sxc$(QM)" document to see how this component works, see
 	@echo the example description.
 	@echo --------------------------------------------------------------------------------
 

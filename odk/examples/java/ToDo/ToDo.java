@@ -160,29 +160,6 @@ public class ToDo {
             return( ToDoImplementation.class.getName() );
         }
 
-        /** Provides a sequence of all types (usually interface types)
-         * provided by the object.
-         * @return Sequence of all types (usually interface types) provided by the
-         * service.
-         */
-        public Type[] getTypes() {
-            Type[] typeReturn = {};
-
-            try {
-                typeReturn = new Type[] {
-                    new Type( XToDo.class),
-                    new Type( XTypeProvider.class ),
-                    new Type( XServiceInfo.class ),
-                    new Type( XWeak.class ),
-                    new Type( XInterface.class )
-                };
-            } catch( Exception exception ) {
-                System.err.println( exception );
-            }
-
-            return( typeReturn );
-        }
-
         /** For every bug/feature listed in a spreadsheet document this method calculates
          * the start date, day of week of the start date, the end date and the day of week
          * of the end date. All calculations are dependent on the values of "Needed Days",
@@ -210,8 +187,8 @@ public class ToDo {
                                                xspreadsheetdocument.getSheets() );
 
                 // Getting the first XSpreadsheet
-                XSpreadsheet xspreadsheet = (XSpreadsheet)
-                xindexaccess.getByIndex( 0 );
+                XSpreadsheet xspreadsheet = (XSpreadsheet)UnoRuntime.queryInterface(
+                    XSpreadsheet.class, xindexaccess.getByIndex( 0 ));
 
                 // Querying for the interface XCellRange on the XSpeadsheet
                 XCellRange xcellrange = ( XCellRange )

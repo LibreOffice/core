@@ -73,7 +73,7 @@ public class NotesAccess implements Runnable {
 
     // It is possible to use a different connection string, passed as argument
     if ( args.length == 2 ) {
-        sConnectionString = args[1];
+        sOfficeConnection = args[1];
     }
 
     if ( !args[ 1 ].trim().equals( "" ) ) {
@@ -125,27 +125,6 @@ public class NotesAccess implements Runnable {
          object. */
       XMultiComponentFactory xmulticomponentfactory =
       xcomponentcontext.getServiceManager();
-
-      // NOTE: This is special code, that is only necessary, when connecting to
-      //       a Sun ONE Webtop !
-      // Connection: "portal,host=<portalhost>,port=<port>,service=soffice,user=<username>,password=<passwd>"
-      if ( stringOfficeConnection.regionMatches( 4, "portal", 0, 6 ) ) {
-        com.sun.star.loader.XImplementationLoader ximplementationloader =
-        ( com.sun.star.loader.XImplementationLoader ) UnoRuntime.queryInterface(
-        com.sun.star.loader.XImplementationLoader.class,
-        xmulticomponentfactory.createInstanceWithContext(
-        "com.sun.star.loader.Java", xcomponentcontext ) );
-        com.sun.star.container.XSet xset = (com.sun.star.container.XSet)
-        UnoRuntime.queryInterface( com.sun.star.container.XSet.class,
-        xmulticomponentfactory );
-
-        com.sun.star.lang.XSingleServiceFactory xsingleservicefactory =
-        ( com.sun.star.lang.XSingleServiceFactory ) UnoRuntime.queryInterface(
-        com.sun.star.lang.XSingleServiceFactory.class,
-        ximplementationloader.activate(
-        "com.sun.star.comp.portal_connect.Connector", null, null, null ) );
-        xset.insert( xsingleservicefactory );
-      }
 
       /* Creates an instance of the component UnoUrlResolver which
          supports the services specified by the factory. */
@@ -205,7 +184,8 @@ public class NotesAccess implements Runnable {
       XIndexAccess.class, xspreadsheets );
 
       // Getting the first spreadsheet.
-      XSpreadsheet xspreadsheet = ( XSpreadsheet ) xindexaccess.getByIndex( 0 );
+      XSpreadsheet xspreadsheet = ( XSpreadsheet ) UnoRuntime.queryInterface(
+          XSpreadsheet.class, xindexaccess.getByIndex( 0 ));
 
       Session session;
       if ( !stringHost.equals( "" ) ) {

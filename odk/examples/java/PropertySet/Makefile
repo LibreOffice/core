@@ -71,8 +71,8 @@ endif
 JavaPropertySetExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The PropTest was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo Load the PropertySet.sxw document to see how this component works. You can use 
-	@echo this component inside your office installation, see the example description.
+	@echo Load the "$(QM)PropertySet.sxw$(QM)" document to see how this component works. You 
+	@echo can use this component inside your office installation, see the example description.
 	@echo --------------------------------------------------------------------------------
 
 .PHONY: clean

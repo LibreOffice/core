@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MinimalComponent.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bnolte $ $Date: 2002-01-11 10:31:50 $
+ *  last change: $Author: jsc $ $Date: 2003-02-28 17:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lang.XInitialization;
@@ -73,15 +74,15 @@ import com.sun.star.uno.Type;
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2002-01-11 10:31:50 $
+ * @version $Date: 2003-02-28 17:39:28 $
  * @author Bertram Nolte
  */
 public class MinimalComponent {
   /** This class implements the component. At least the interfaces XServiceInfo,
    * XTypeProvider, and XInitialization should be provided by the service.
    */
-  public static class MinimalComponentImplementation implements XInitialization,
-  XTypeProvider, XServiceInfo {
+  public static class MinimalComponentImplementation extends WeakBase implements XInitialization,
+  XServiceInfo {
     /** The service name, that must be used to get an instance of this service.
      */
     static private final String __serviceName =
@@ -111,27 +112,6 @@ public class MinimalComponent {
     throws com.sun.star.uno.Exception {
       xmultiservicefactory = ( XMultiServiceFactory ) UnoRuntime.queryInterface(
       XMultiServiceFactory.class, object[ 0 ] );
-    }
-
-    /** Provides a sequence of all types (usually interface types)
-     * provided by the object.
-     * @return Sequence of all types (usually interface types) provided by the
-     * service.
-     */
-    public Type[] getTypes() {
-      Type[] typeReturn = {};
-
-      try {
-        typeReturn = new Type[] {
-          new Type( XTypeProvider.class ),
-          new Type( XServiceInfo.class ),
-          new Type( XInitialization.class )
-        };
-      } catch( Exception exception ) {
-        System.err.println( exception );
-      }
-
-      return( typeReturn );
     }
 
     /** This method returns an array of all supported service names.
@@ -167,22 +147,6 @@ public class MinimalComponent {
       return( MinimalComponentImplementation.class.getName() );
     }
 
-    /** This method returns an array of bytes, that can be used to
-     * unambiguously distinguish between two sets of types, e.g.
-     * to realise hashing functionality when the object is introspected.
-     * Two objects that return the same ID also have to return
-     * the same set of types in getTypes(). If an unique
-     * implementation Id cannot be provided this method has to
-     * return an empty sequence. Important: If the object
-     * aggregates other objects the ID has to be unique for the
-     * whole combination of objects.
-     * @return Array of bytes, in order to distinguish between two sets.
-     */
-    public byte[] getImplementationId() {
-        byte[] byteReturn = {};
-
-        return( byteReturn );
-    }
   }
 
 
