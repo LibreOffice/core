@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-30 15:28:14 $
+ *  last change: $Author: dl $ $Date: 2001-04-24 07:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1013,12 +1013,6 @@ void SdStyleSheetPool::UpdateStdNames()
                     else if( aOldName == String( SdResId( STR_PSEUDOSHEET_SUBTITLE ) ) ||
                         aOldName.EqualsAscii( "Untertitel", 0, RTL_CONSTASCII_LENGTH( "Untertitel" )) )
                         nNewId = HID_PSEUDOSHEET_SUBTITLE;
-                    else if( aOldName.Len() == aStr.Len() + 1 &&
-                             aOldName.Match( aStr ) == STRING_MATCH )
-                        nNumber = String( aStr, aStr.Len(), 1 ).ToInt32();
-                    else if( aOldName.Len() == aStr2.Len() + 1 &&
-                             aOldName.Match( aStr2 ) == STRING_MATCH )
-                        nNumber = String( aStr2, aStr2.Len(), 1 ).ToInt32();
                     else if( aOldName == String( SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS ) ) ||
                         aOldName.EqualsAscii( "Hintergrundobjekte", 0, RTL_CONSTASCII_LENGTH( "Hintergrundobjekte" )) )
                         nNewId = HID_PSEUDOSHEET_BACKGROUNDOBJECTS;
@@ -1028,40 +1022,33 @@ void SdStyleSheetPool::UpdateStdNames()
                     else if( aOldName == String( SdResId( STR_PSEUDOSHEET_NOTES ) ) ||
                         aOldName.EqualsAscii( "Notizen", 0, RTL_CONSTASCII_LENGTH( "Notizen" )) )
                         nNewId = HID_PSEUDOSHEET_NOTES;
-
-                    if( nNumber )
-                    {
-                        switch( nNumber )
-                        {
-                            case 1:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE1;
-                                break;
-                            case 2:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE2;
-                                break;
-                            case 3:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE3;
-                                break;
-                            case 4:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE4;
-                                break;
-                            case 5:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE5;
-                                break;
-                            case 6:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE6;
-                                break;
-                            case 7:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE7;
-                                break;
-                            case 8:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE8;
-                                break;
-                            case 9:
-                                nNewId = HID_PSEUDOSHEET_OUTLINE9;
-                                break;
-                        }
-                    }
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "1" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "1" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE1;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "2" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "2" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE2;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "3" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "3" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE3;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "4" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "4" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE4;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "5" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "5" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE5;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "6" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "6" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE6;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "7" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "7" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE7;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "8" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "8" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE8;
+                    else if( aOldName.Equals( String( String( aStr ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "9" ) ) ) ) ) ) ||
+                             aOldName.Equals( String( String( aStr2 ).Append( String( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "9" ) ) ) ) ) ) )
+                        nNewId = HID_PSEUDOSHEET_OUTLINE9;
                 }
 
                 if ( nNewId )
