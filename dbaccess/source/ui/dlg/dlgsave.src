@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:59:01 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,22 +89,22 @@ ModalDialog DLG_SAVE_AS
         Text [ english ] = "Please enter the name of the object to be created:";
         Text [ english_us ] = "Please enter a name for the object to be created:";
         Text[ portuguese ] = "Please enter the name of the object to be created:";
-        Text[ russian ] = "Please enter the name of the object to be created:";
+        Text[ russian ] = "Çàäàéòå, ïîæàëóéñòà, èìÿ äëÿ ñîçäàâàåìîãî îáúåêòà:";
         Text[ greek ] = "Please enter the name of the object to be created:";
         Text[ dutch ] = "Please enter the name of the object to be created:";
-        Text[ french ] = "Please enter the name of the object to be created:";
+        Text[ french ] = "Saisissez un nom pour l'objet à créer :";
         Text[ spanish ] = "Please enter the name of the object to be created:";
         Text[ italian ] = "Indicate il nome dell'oggetto da creare:";
         Text[ danish ] = "Please enter the name of the object to be created:";
         Text[ swedish ] = "Ange ett namn för objektet som ska skapas:";
-        Text[ polish ] = "Please enter the name of the object to be created:";
+        Text[ polish ] = "Podaj nazwê obiektu, który zostanie utworzony:";
         Text[ portuguese_brazilian ] = "Please enter the name of the object to be created:";
         Text[ japanese ] = "Ši”[‚·‚éµÌŞ¼Şª¸Ä‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢:";
         Text[ korean ] = "Please enter the name of the object to be created:";
-        Text[ chinese_simplified ] = "Please enter the name of the object to be created:";
+        Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸öÒªĞÂ½¨¶ÔÏóµÄÃû³Æ£º";
         Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó­n·s«Øª«¥óªº¦WºÙ¡G";
         Text[ turkish ] = "Please enter the name of the object to be created:";
-        Text[ arabic ] = "Please enter the name of the object to be created:";
+        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáßÇÆä ÇáãÑÇÏ ÅäÔÇÄå:";
     };
 
     FixedText FT_CATALOG
@@ -376,22 +376,22 @@ ModalDialog DLG_SAVE_AS
         Text [ english ] = "Paste as";
         Text [ english_us ] = "Paste as";
         Text[ portuguese ] = "Paste as";
-        Text[ russian ] = "Paste as";
+        Text[ russian ] = "Âñòàâèòü êàê";
         Text[ greek ] = "Paste as";
         Text[ dutch ] = "Paste as";
-        Text[ french ] = "Paste as";
+        Text[ french ] = "Insérer comme";
         Text[ spanish ] = "Paste as";
         Text[ italian ] = "Incolla come";
         Text[ danish ] = "Paste as";
         Text[ swedish ] = "Klistra in som";
-        Text[ polish ] = "Paste as";
+        Text[ polish ] = "Wstaw jako";
         Text[ portuguese_brazilian ] = "Paste as";
         Text[ japanese ] = "“\\‚è•t‚¯";
         Text[ korean ] = "Paste as";
-        Text[ chinese_simplified ] = "Paste as";
+        Text[ chinese_simplified ] = "²åÈë·½Ê½Îª";
         Text[ chinese_traditional ] = "´¡¤J¤è¦¡¬°";
         Text[ turkish ] = "Paste as";
-        Text[ arabic ] = "Paste as";
+        Text[ arabic ] = "ÅÏÑÇÌ ßÜ";
     };
     Text [ portuguese_brazilian ] = "Speichern unter" ;
     Text [ swedish ] = "Spara som" ;
