@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:49:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,6 +574,7 @@ class Frame :   // interfaces
 
         css::uno::Reference< css::lang::XMultiServiceFactory >                  m_xFactory                          ;   /// reference to factory, which has create this instance
         css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
+        css::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception            ;   /// points to an external set progress, which should be used instead of the internal one.
         css::uno::Reference< css::frame::XDispatchProvider >                    m_xDispatchHelper                   ;   /// helper for XDispatch/Provider and interception interfaces
         css::uno::Reference< css::frame::XFrames >                              m_xFramesHelper                     ;   /// helper for XFrames, XIndexAccess and XElementAccess interfaces
         ::cppu::OMultiTypeInterfaceContainerHelper                              m_aListenerContainer                ;   /// container for ALL Listener
@@ -595,6 +596,7 @@ class Frame :   // interfaces
         static css::uno::WeakReference< css::frame::XFrame >                    m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
         css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
+
     protected:
 
         FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
