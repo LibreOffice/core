@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:38:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef DBAUI_APPVIEW_HXX
 #include "AppView.hxx"
@@ -690,12 +693,120 @@ void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>&
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::deleteObjects(ElementType _eType
-                                           ,const ::std::vector< ::rtl::OUString>& _rList
-                                           ,sal_uInt16 _nTextResource)
+void OApplicationController::deleteObjects( ElementType _eType, const ::std::vector< ::rtl::OUString>& _rList, bool _bConfirm )
 {
-    Reference<XNameContainer> xNames(getElements(_eType), UNO_QUERY);
-    dbaui::deleteObjects(getView(),getORB(),xNames,_rList,_nTextResource);
+    deleteObjects( Reference< XNameContainer >( getElements( _eType ), UNO_QUERY ), _rList, _bConfirm );
+}
+
+// -----------------------------------------------------------------------------
+void OApplicationController::deleteObjects( const Reference< XNameContainer>& _rxNames, const ::std::vector< ::rtl::OUString>& _rList, bool _bConfirm )
+{
+    Reference< XHierarchicalNameContainer > xHierarchyName( _rxNames, UNO_QUERY );
+    if ( _rxNames.is() )
+    {
+        bool bConfirm = true;
+        ByteString sDialogPosition;
+        svtools::QueryDeleteResult_Impl eResult = _bConfirm ? svtools::QUERYDELETE_YES : svtools::QUERYDELETE_ALL;
+
+        // The list of elements to delete is allowed to contain related elements: A given element may
+        // be the ancestor or child of another element from the list.
+        // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
+        // #i33353# - 2004-09-27 - fs@openoffice.org
+        ::std::set< ::rtl::OUString > aDeleteNames;
+            // Note that this implicitly uses ::std::less< ::rtl::OUString > a comparison operation, which
+            // results in lexicographical order, which is exactly what we need, because "foo" is *before*
+            // any "foo/bar" in this order.
+        ::std::copy(
+            _rList.begin(), _rList.end(),
+            ::std::insert_iterator< ::std::set< ::rtl::OUString > >( aDeleteNames, aDeleteNames.begin() )
+        );
+
+        ::std::set< ::rtl::OUString >::size_type nCount = aDeleteNames.size();
+        for ( ::std::set< ::rtl::OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
+        {
+            ::std::set< ::rtl::OUString >::iterator  aThisRound = aDeleteNames.begin();
+
+            if ( eResult != svtools::QUERYDELETE_ALL )
+            {
+                svtools::QueryDeleteDlg_Impl aDlg( getView(), *aThisRound );
+
+                if ( sDialogPosition.Len() )
+                    aDlg.SetWindowState( sDialogPosition );
+
+                if ( nObjectsLeft > 1 )
+                    aDlg.EnableAllButton();
+
+                if ( aDlg.Execute() == RET_OK )
+                    eResult = aDlg.GetResult();
+                else
+                    return;
+
+                sDialogPosition = aDlg.GetWindowState( );
+            }
+
+            bool bSuccess = false;
+
+            if ( ( eResult == svtools::QUERYDELETE_ALL ) ||
+                 ( eResult == svtools::QUERYDELETE_YES ) )
+            {
+                try
+                {
+                    if ( xHierarchyName.is() )
+                        xHierarchyName->removeByHierarchicalName( *aThisRound );
+                    else
+                        _rxNames->removeByName( *aThisRound );
+
+                    bSuccess = true;
+
+                    // now that we removed the element, care for all it's child elements
+                    // which may also be a part of the list
+                    // #i33353# - 2004-09-27 - fs@openoffice.org
+                    sal_Int32 nLastCharPos = aThisRound->getLength() - 1;
+                    OSL_ENSURE( nLastCharPos >= 0, "OApplicationController::deleteObjects: empty name?" );
+                    ::rtl::OUStringBuffer sSmallestSiblingName( aThisRound->copy( 0, nLastCharPos ) );
+                    sSmallestSiblingName.append( (sal_Unicode)( aThisRound->getStr()[ nLastCharPos ] + 1 ) );
+
+                    ::std::set< ::rtl::OUString >::iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
+                    for ( ::std::set< ::rtl::OUString >::iterator aObsolete = aThisRound;
+                          aObsolete != aUpperChildrenBound;
+                        )
+                    {
+#if OSL_DEBUG_LEVEL > 0
+                        ::rtl::OUString sObsoleteName = *aObsolete;
+#endif
+                        ::std::set< ::rtl::OUString >::iterator aNextObsolete = aObsolete; ++aNextObsolete;
+                        aDeleteNames.erase( aObsolete );
+                        --nObjectsLeft;
+                        aObsolete = aNextObsolete;
+                    }
+                }
+                catch(SQLException& e)
+                {
+                    showError( SQLExceptionInfo(e) );
+                }
+                catch(WrappedTargetException& e)
+                {
+                    SQLException aSql;
+                    if(e.TargetException >>= aSql)
+                        showError( SQLExceptionInfo( aSql ) );
+                    else
+                        OSL_ENSURE( sal_False, "OApplicationController::deleteObjects: something strange happended!" );
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR( "OApplicationController::deleteObjects: caught a generic exception!" );
+                }
+            }
+
+            if ( !bSuccess )
+            {
+                // okay, this object could not be deleted (or the user did not want to delete it),
+                // but continue with the rest
+                aDeleteNames.erase( aThisRound );
+                --nObjectsLeft;
+            }
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::deleteEntries()
@@ -714,13 +825,13 @@ void OApplicationController::deleteEntries()
             deleteTables(aList);
             break;
         case E_QUERY:
-            deleteObjects(E_QUERY,aList,STR_QUERY_DELETE_QUERY);
+            deleteObjects( E_QUERY, aList, true );
             break;
         case E_FORM:
-            deleteObjects(E_FORM,aList,STR_QUERY_DELETE_FORM);
+            deleteObjects( E_FORM, aList, true );
             break;
         case E_REPORT:
-            deleteObjects(E_REPORT,aList,STR_QUERY_DELETE_REPORT);
+            deleteObjects( E_REPORT, aList, true );
             break;
         }
     }
@@ -1581,7 +1692,7 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, NOTINTERESTEDIN )
             {
                 aList.push_back(sName.copy(sErase.getLength() + 1));
                 Reference<XNameContainer> xNames(getElements(m_aAsyncDrop.nType), UNO_QUERY);
-                dbaui::deleteObjects(getView(),getORB(),xNames,aList,0,sal_False);
+                deleteObjects( xNames, aList, false );
             }
         }
     }
