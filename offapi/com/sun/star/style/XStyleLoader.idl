@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStyleLoader.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:43 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,16 +89,15 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::style::XStyleLoader::loadStylesFromURL
     /** loads styles from a document at the given URL.
-
-
-        <p>If <var>OverwriteStyles</var> is <TRUE/>, then all styles
+        <p>
+        If <var>OverwriteStyles</var> is <TRUE/>, then all styles
         will be loaded.  Otherwise, only styles which are not already
         defined in this document are loaded.</p>
          @param string URL:
              The directory and the filename from document with the styles
          @param aOptions :
              Specifies which of the Style families the method should load.
-         The sequence<PropertyValue> has following optional items
+         The sequence <PropertyValue/> has the following, optional items:
          <ul>
         <li> boolean LoadCellStyles </li>
         <li> boolean LoadTextStyles </li>
@@ -107,7 +106,7 @@ interface XStyleLoader: com::sun::star::uno::XInterface
         <li> boolean LoadNumberingStyles </li>
         <li> boolean OverwriteStyles</li>
         </ul>
-     <p>As default all supported style families are loaded and existing styles are overwritten.</p>
+     <p>As the default, all supported style families are loaded and existing styles are overwritten.</p>
      */
     void loadStylesFromURL( [in] string URL,
              [in] sequence<com::sun::star::beans::PropertyValue> aOptions )
@@ -115,9 +114,9 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /** @returns
-                    a sequence of the supported properties as declared in <type>loadStylesFromURL</type>
-     with their current values.
-     */
+    a sequence of the supported properties as declared in <type>loadStylesFromURL</type>
+    with their current values.
+    */
     sequence<com::sun::star::beans::PropertyValue> getStyleLoaderOptions();
 
 };
@@ -129,6 +128,9 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 16:41:43  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2001/02/22 16:19:34  os
     description changed
 

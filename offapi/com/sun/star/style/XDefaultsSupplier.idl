@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDefaultsSupplier.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:43 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,14 +76,14 @@
 
 //=============================================================================
 
-/** This interface provides access to a XPropertySet of defaults. This can
-    either be the parent of a XPropertySet or the global property defaults
+/** This interface provides access to an XPropertySet of defaults. This can
+    either be the parent of an XPropertySet or the global property defaults
     for a document.
  */
 interface XDefaultsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** This method returns a XPropertySet of defaults.
+    /** This method returns an XPropertySet of defaults.
      */
     com::sun::star::beans::XPropertySet getDefaults();
 

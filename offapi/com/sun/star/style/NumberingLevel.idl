@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingLevel.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:18 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ service NumberingLevel
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::NumberingLevel::Suffix
-    /** This suffix is inserted behind the numbering symbol(s).
+    /** This suffix is inserted after the numbering symbol(s).
      */
     [property] string Suffix;
 
@@ -152,6 +152,9 @@ service NumberingLevel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 08:35:18  mi
+    @see interface/service/... ident -> @see ident - for new docu generator
+
     Revision 1.3  2000/11/08 12:44:12  mi
     moved from api
 

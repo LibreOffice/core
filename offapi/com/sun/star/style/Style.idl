@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Style.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:12 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@ service Style
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::Style::IsPhysical
-    /** determins if a style is physically created.
+    /** determines if a style is physically created.
 
         <p> Built in styles may not be created until they are needed.
-        To prevent standard style properties from being exported it may be
-        usefull to check if the style is created first.
+        To prevent standard style properties from being exported, it may be
+        useful to check if the style is created first.
         </p>
      */
     [optional, readonly, property] boolean IsPhysical;
@@ -110,11 +110,11 @@ service Style
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::Style::IsAutoUpdate
-    /** determins if a style is automatically updated if the properties of an object
+    /** determines if a style is automatically updated, if the properties of an object
         that the style is applied to are changed.
 
-        <p> I.e. if a the style is applied to a paragraph and the properties of the paragraph
-        are changed than the style will be updated accordingly.</p>
+        <p> For example, if the style is applied to a paragraph and the properties of the paragraph
+        are changed then the style will be updated accordingly.</p>
      */
     [optional, property] string IsAutoUpdate;
 };
@@ -126,6 +126,9 @@ service Style
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:12  mi
+    moved from api
+
     Revision 1.2  2000/10/10 09:30:02  os
     #79332# IsPhysical and DisplayName now readonly
 

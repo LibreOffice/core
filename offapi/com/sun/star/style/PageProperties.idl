@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 07:57:55 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ service PageProperties
  */
 [property] string HeaderBackGraphicFilter;
 //-----------------------------------------------------------------------------
-/** determins the location of the background graphic of the header.
+/** determines the location of the background graphic of the header.
  */
 [property] com::sun::star::style::GraphicLocation HeaderBackGraphicLocation;
 //-----------------------------------------------------------------------------
@@ -245,52 +245,52 @@ service PageProperties
  */
 [property] long HeaderRightMargin;
 //-----------------------------------------------------------------------------
-/** determins if the the background color of the header is transparent.
+/** determines if the the background color of the header is transparent.
  */
 [property] boolean HeaderBackTransparent;
 //-----------------------------------------------------------------------------
-/** determins the left border of the header.
+/** determines the left border of the header.
  */
 [property] com::sun::star::table::BorderLine HeaderLeftBorder;
 //-----------------------------------------------------------------------------
-/** determins the right border of the header.
+/** determines the right border of the header.
  */
 [property] com::sun::star::table::BorderLine HeaderRightBorder;
 //-----------------------------------------------------------------------------
-/** determins the top border of the header.
+/** determines the top border of the header.
  */
 [property] com::sun::star::table::BorderLine HeaderTopBorder;
 //-----------------------------------------------------------------------------
-/** determins the bottom border of the header.
+/** determines the bottom border of the header.
  */
 [property] com::sun::star::table::BorderLine HeaderBottomBorder;
 
 //-----------------------------------------------------------------------------
-/** determins the left border distance of the header.
+/** determines the left border distance of the header.
  */
 [property] long HeaderLeftBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the right border distance of the header.
+/** determines the right border distance of the header.
  */
 [property] long HeaderRightBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the top border distance of the header.
+/** determines the top border distance of the header.
  */
 [property] long HeaderTopBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the bottom border distance of the header.
+/** determines the bottom border distance of the header.
  */
 [property] long HeaderBottomBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the shadow of the header.
+/** determines the shadow of the header.
  */
 [property] com::sun::star::table::ShadowFormat HeaderShadowFormat;
 //-----------------------------------------------------------------------------
-/** determins the distance between the header and the body text area.
+/** determines the distance between the header and the body text area.
  */
 [property] long HeaderBodyDistance;
 //-----------------------------------------------------------------------------
-/** determins if the header content on left and right pages is the same.
+/** determines if the header content on left and right pages is the same.
  */
 [property] boolean HeaderIsShared;
 //-----------------------------------------------------------------------------
@@ -298,11 +298,11 @@ service PageProperties
  */
 [property] long HeaderHeight;
 //-----------------------------------------------------------------------------
-/** determins if the height of the header depends on the content.
+/** determines if the height of the header depends on the content.
  */
 [property] boolean HeaderIsDynamicHeight;
 //-----------------------------------------------------------------------------
-/** determins if a header is used on the page.
+/** determines if a header is used on the page.
  */
 [property] boolean HeaderIsOn;
 
@@ -336,19 +336,19 @@ service PageProperties
  */
 [property] string FooterBackGraphicFilter;
 //-----------------------------------------------------------------------------
-/** determins the location of the background graphic in the footer.
+/** determines the location of the background graphic in the footer.
  */
 [property] com::sun::star::style::GraphicLocation FooterBackGraphicLocation;
 //-----------------------------------------------------------------------------
-/** determins the left margin of the footer.
+/** determines the left margin of the footer.
  */
 [property] long FooterLeftMargin;
 //-----------------------------------------------------------------------------
-/** determins the right margin of the footer.
+/** determines the right margin of the footer.
  */
 [property] long FooterRightMargin;
 //-----------------------------------------------------------------------------
-/** determins if the background is transparent.
+/** determines if the background is transparent.
  */
 [property] boolean FooterBackTransparent;
 //-----------------------------------------------------------------------------
@@ -384,27 +384,27 @@ service PageProperties
  */
 [property] long FooterBottomBorderDistance;
 //-----------------------------------------------------------------------------
-/** determins the shadow of the footer.
+/** determines the shadow of the footer.
  */
 [property] com::sun::star::table::ShadowFormat FooterShadowFormat;
 //-----------------------------------------------------------------------------
-/** determins the distance between the footer and the body text area.
+/** determines the distance between the footer and the body text area.
  */
 [property] long FooterBodyDistance;
 //-----------------------------------------------------------------------------
-/** determins if the height of the footer depends on the content.
+/** determines if the height of the footer depends on the content.
  */
 [property] boolean FooterIsDynamicHeight;
 //-----------------------------------------------------------------------------
-/** determins if the footer content on left and right pages is the same.
+/** determines if the footer content on left and right pages is the same.
  */
 [property] boolean FooterIsShared;
 //-----------------------------------------------------------------------------
-/** determins the height of the footer.
+/** determines the height of the footer.
  */
 [property] long FooterHeight;
 //-----------------------------------------------------------------------------
-/** determins if a footer is used on the page.
+/** determines if a footer is used on the page.
  */
 [property] boolean FooterIsOn;
 //-----------------------------------------------------------------------------
@@ -440,7 +440,7 @@ of the current page is used as limit.
  */
 [optional,property] byte FootnoteLineRelativeWidth;
 //-----------------------------------------------------------------------------
-/** contains the adjustmen of the separator line between the text and the footnote area.
+/** contains the adjustment of the separator line between the text and the footnote area.
      <p><type scope="com::sun::star::text">HorizontalAdjust</type>s.</p>
  */
 [optional,property] short FootnoteLineAdjust;

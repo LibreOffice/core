@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-23 17:46:57 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicLocation
     /** contains the value for the position of a background graphic.
 
-        <p> </p>@see com::sun::star::style::GraphicLocation</p>
+        @see com::sun::star::style::GraphicLocation
      */
     [optional, property] com::sun::star::style::GraphicLocation ParaBackGraphicLocation;
 
@@ -164,8 +164,6 @@ service ParagraphProperties
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaExpandSingleWord
     /** determines if single words are stretched.
-
-
 
         <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member> and
         <member>ParagraphProperties::ParaLastLineAdjust</member> are also valid.</p>
@@ -191,10 +189,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaTopMargin
     /** determines the top margin of the paragraph in 100th mm.
 
-
-
-        <p>The distance between two paragraphs is specified by:
-        </p>
+        <p>The distance between two paragraphs is specified by:</p>
         <ul>
         <li>either the bottom margin of the previous paragraph.</li>
         <li>or the top margin of the following paragraph.</li>
@@ -208,10 +203,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBottomMargin
     /** determines the bottom margin of the paragraph in 100th mm.
 
-
-
-        <p>The distance between two paragraphs is specified by:
-        </p>
+        <p>The distance between two paragraphs is specified by:</p>
         <ul>
         <li>either the bottom margin of the previous paragraph
         </li>
@@ -308,7 +300,7 @@ service ParagraphProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaKeepTogether
-    /** Setting this property to TRUE prevents page or column
+    /** Setting this property to <TRUE/> prevents page or column
         breaks between this and the following paragraph.
 
 
@@ -320,7 +312,7 @@ service ParagraphProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaSplit
-    /** Setting this property to FALSE prevents the paragraph from
+    /** Setting this property to <FALSE/> prevents the paragraph from
         getting split into two pages or columns.
      */
     [optional, property] boolean ParaSplit;
@@ -328,8 +320,7 @@ service ParagraphProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingLevel
-    /** specifies the numbering level of the
-        paragraph.
+    /** specifies the numbering level of the    paragraph.
      */
     [optional, property] short NumberingLevel;
 
@@ -346,7 +337,7 @@ service ParagraphProperties
     [optional, property] short NumberingStartValue;
 
     //-------------------------------------------------------------------------
-    /** determins if the numbering rules restart counting at the current paragraph.
+    /** determines if the numbering rules restart, counting at the current paragraph.
      */
     [optional, property] boolean ParaIsNumberingRestart;
     //-------------------------------------------------------------------------
@@ -376,20 +367,20 @@ service ParagraphProperties
      */
     [optional, property] byte ParaWidows;
     //-------------------------------------------------------------------------
-    /** determins the type, color and size of the shadow.
+    /** determines the type, color, and size of the shadow.
      @see com.sun.star.table.ShadowFormat
      */
     [optional, property] com::sun::star::table::ShadowFormat ParaShadowFormat;
     //-------------------------------------------------------------------------
-    /** determins if hanging punctuation is allowed.
+    /** determines if hanging punctuation is allowed.
      */
     [optional, property] boolean IsHangingPunctuation;
     //-------------------------------------------------------------------------
-    /** determins if a distance between asian text, western text or complex text is set.
+    /** determines if a distance between asian text, western text or complex text is set.
      */
     [optional, property] boolean IsCharacterDistance;
     //-------------------------------------------------------------------------
-    /** determins if the the rules for forbidden characters at the start or end
+    /** determines if the the rules for forbidden characters at the start or end
          of text lines are considered.
      */
     [optional, property] boolean IsForbiddenRules;
