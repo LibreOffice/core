@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 15:57:29 $
+ *  last change: $Author: dl $ $Date: 2001-03-21 16:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,7 +1358,7 @@ void SdDrawDocument::SetTextDefaults() const
 
     SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, 10 , FALSE);
 
-/*  aNumberFormat.SetLSpace( 0 );
+    aNumberFormat.SetLSpace( 0 );
     aNumberFormat.SetAbsLSpace( 0 );
     aNumberFormat.SetFirstLineOffset( 0 );
     aNumRule.SetLevel( 0, aNumberFormat );
@@ -1371,22 +1371,7 @@ void SdDrawDocument::SetTextDefaults() const
         aNumberFormat.SetFirstLineOffset(-600);
         aNumRule.SetLevel( i, aNumberFormat );
     }
- */
-
-    for( USHORT i = 0; i < 10; i++ )
-    {
-        const short nLSpace = (i + 1) * 600;
-        aNumberFormat.SetLSpace(nLSpace);
-        aNumberFormat.SetAbsLSpace(nLSpace);
-        aNumberFormat.SetFirstLineOffset(-600);
-        aNumRule.SetLevel( i, aNumberFormat );
-    }
 
     SvxNumBulletItem aNumBulletItem( aNumRule, EE_PARA_NUMBULLET );
     pItemPool->SetPoolDefaultItem( aNumBulletItem );
 }
-
-
-
-
-
