@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 14:44:07 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 12:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,14 @@ public:
     virtual sal_Bool _commit();
 
 // stario::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName();
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::beans::XPropertySet
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                                         throw(::com::sun::star::lang::IllegalArgumentException);
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
 
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(ODateModel);
