@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kr $ $Date: 2001-05-17 12:55:05 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:11:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,11 +82,10 @@ JAVACLASSFILES= 											\
     $(CLASSDIR)$/$(PACKAGE)$/Protocol.class					\
     $(CLASSDIR)$/$(PACKAGE)$/ThreadId.class					\
     $(CLASSDIR)$/$(PACKAGE)$/IThreadPool.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/IThreadPoolFactory.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/ThreadPoolFactory.class		\
+    $(CLASSDIR)$/$(PACKAGE)$/ThreadPoolManager.class \
     $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPoolFactory.class	\
     $(CLASSDIR)$/$(PACKAGE)$/JavaThreadPool.class			\
-    $(CLASSDIR)$/$(PACKAGE)$/NativeThreadPoolFactory.class	\
+    $(CLASSDIR)$/$(PACKAGE)$/NativeThreadPool.class \
     $(CLASSDIR)$/$(PACKAGE)$/remote_environment.class
 
 # --- Targets ------------------------------------------------------
