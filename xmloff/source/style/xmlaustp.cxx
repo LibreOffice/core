@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                         {
                             const OUString sName(((XMLTextListAutoStylePool*)&GetExport().GetTextParagraphExport()->GetListAutoStylePool())->Add( xNumRule ));
 
-                            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_LIST_STYLE_NAME, sName );
+                            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_LIST_STYLE_NAME, GetExport().EncodeStyleName( sName ) );
                         }
 
                         bFoundNumberingRulesName = sal_True;
