@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddlgfact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 16:32:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
 
 #include "sddlgfact.hxx"
 
