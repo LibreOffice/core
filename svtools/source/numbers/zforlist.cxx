@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:27:03 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1365,7 +1365,8 @@ ULONG SvNumberFormatter::ImpGetDefaultFormat( short nType )
         {
             const SvNumberformat* pEntry =
                 (const SvNumberformat*) aFTable.GetCurObject();
-            if ( pEntry->IsStandard() && ((pEntry->GetType() & nType) == nType) )
+            if ( pEntry->IsStandard() && ((pEntry->GetType() &
+                            ~NUMBERFORMAT_DEFINED) == nType) )
             {
                 nDefaultFormat = nKey;
                 break;  // while
