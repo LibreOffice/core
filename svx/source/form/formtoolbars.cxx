@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formtoolbars.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:57:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace svxform
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
-    using namespace ::drafts::com::sun::star::frame;
+    using namespace ::com::sun::star::frame;
 
     //====================================================================
     //= FormToolboxes
