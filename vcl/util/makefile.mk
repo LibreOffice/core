@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 14:31:36 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:47:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -266,7 +266,7 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 .IF "$(GUI)"=="UNX"
 
 .IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += -ldl -lstdc++ -lstlport_gcc
+SHL1STDLIBS += -ldl
 .ENDIF
 
 .IF "$(GUIBASE)"=="aqua"
@@ -274,9 +274,6 @@ SHL1STDLIBS += -framework Cocoa
 .ENDIF
 
 .IF "$(GUIBASE)"=="unx"
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS += -lXext
-.ENDIF
 
 # search for freetype in systems dir at runtime
 .IF "$(OS)"=="LINUX"
