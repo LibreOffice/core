@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavservices.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-06 08:38:39 $
+ *  last change: $Author: kso $ $Date: 2001-06-26 16:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,27 +73,24 @@
 #include "webdavprovider.hxx"
 #endif
 
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
+using namespace com::sun::star;
 
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,
-                           const OUString & rImplementationName,
-                              Sequence< OUString > const & rServiceNames )
+                           const rtl::OUString & rImplementationName,
+                           uno::Sequence< rtl::OUString > const & rServiceNames )
 {
-    OUString aKeyName( OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
-    aKeyName += OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
 
-    Reference< XRegistryKey > xKey;
+    uno::Reference< registry::XRegistryKey > xKey;
     try
     {
-        xKey = static_cast< XRegistryKey * >(
+        xKey = static_cast< registry::XRegistryKey * >(
                                     pRegistryKey )->createKey( aKeyName );
     }
-    catch ( InvalidRegistryException const & )
+    catch ( registry::InvalidRegistryException const & )
     {
     }
 
@@ -108,7 +105,7 @@ static sal_Bool writeInfo( void * pRegistryKey,
         {
             xKey->createKey( rServiceNames[ n ] );
         }
-        catch ( InvalidRegistryException const & )
+        catch ( registry::InvalidRegistryException const & )
         {
             bSuccess = sal_False;
             break;
@@ -145,9 +142,10 @@ extern "C" void * SAL_CALL component_getFactory(
 {
     void * pRet = 0;
 
-    Reference< XMultiServiceFactory > xSMgr(
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
-    Reference< XSingleServiceFactory > xFactory;
+    uno::Reference< lang::XMultiServiceFactory > xSMgr(
+            reinterpret_cast< lang::XMultiServiceFactory * >(
+                pServiceManager ) );
+    uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     //////////////////////////////////////////////////////////////////////
     // WebDAV Content Provider.
