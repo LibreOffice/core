@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-12-03 09:52:53 $
+ *  last change: $Author: mib $ $Date: 2002-03-13 14:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2959,8 +2959,11 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Language wirklich als Hint ausgeben?" );
 
-    String sOut = ConvertLanguageToIsoString(
-            ((const SvxLanguageItem &)rHt).GetLanguage() );
+    LanguageType eLang = ((const SvxLanguageItem &)rHt).GetLanguage();
+    if( LANGUAGE_DONTKNOW == eLang )
+        return rWrt;
+
+    String sOut = ConvertLanguageToIsoString( eLang );
 
     rHTMLWrt.OutCSS1_Property( sCSS1_P_so_language, sOut );
 
@@ -3942,6 +3945,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/12/03 09:52:53  mib
+      #95462#: Export COL_AUTO as black instead of white
+
       Revision 1.12  2001/10/24 14:16:17  mib
       #91961#: Support of language
 

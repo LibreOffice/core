@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-12-03 09:52:53 $
+ *  last change: $Author: mib $ $Date: 2002-03-13 14:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,7 +685,6 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         const SvxLanguageItem& rLang =
             (const SvxLanguageItem&)pFmt->GetAttr( nWhichId );
         LanguageType eLang = rLang.GetLanguage();
-        DBG_ASSERT( LANGUAGE_DONTKNOW != eDfltLang, "missing language" );
         if( eLang != eDfltLang )
         {
             if( !pItemSet )
@@ -1161,8 +1160,10 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     if( !bPara ||
         (!rInfo.bInNumBulList && !rHWrt.nDefListLvl) ||
         (rInfo.bInNumBulList && !bNumbered) ||
-        (!rHWrt.bCfgOutStyles && (bHasParSpace || pAdjItem || eLang != rHWrt.eLang)) ||
-        (rHWrt.bCfgOutStyles /*&& rHWrt.bPoolCollTextModified*/) )
+        (!rHWrt.bCfgOutStyles &&
+         (bHasParSpace || pAdjItem ||
+          (eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.eLang))) ||
+        rHWrt.bCfgOutStyles )
     {
         // jetzt werden Optionen ausgegeben
         rHWrt.bTxtAttr = FALSE;
@@ -1171,7 +1172,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         ByteString sOut( '<' );
         sOut += aToken;
 
-        if( eLang != rHWrt.eLang )
+        if( eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.eLang )
         {
             rWrt.Strm() << sOut.GetBuffer();
             rHWrt.OutLanguage( eLang );
@@ -2978,6 +2979,10 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
     if( rHTMLWrt.bOutOpts )
+        return rWrt;
+
+    LanguageType eLang = ((const SvxLanguageItem &)rHt).GetLanguage();
+    if( LANGUAGE_DONTKNOW == eLang )
         return rWrt;
 
     if( rHTMLWrt.bTagOn )
