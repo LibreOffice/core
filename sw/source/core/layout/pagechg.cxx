@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-15 09:33:07 $
+ *  last change: $Author: ama $ $Date: 2002-03-22 16:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,6 +655,9 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             const SwFmtFooter &rNewF = pNewFmt->GetFooter();
             if( rOldF != rNewF )
                 rInvFlags |= 0x10;
+#ifdef VERTICAL_LAYOUT
+            CheckDirChange();
+#endif
         }
             /* kein break hier */
         case RES_FRM_SIZE:
