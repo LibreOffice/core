@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:52:30 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SDPAGE_HXX
 #define _SDPAGE_HXX
 
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
+#endif
+
 #ifndef INCLUDED_LIST
 #include <list>
 #define INCLUDED_LIST
@@ -72,13 +76,17 @@
 #define INCLUDED_FUNCTIONAL
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
-#include <com/sun/star/uno/XInterface.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #endif
+
+#include <list>
+#include <functional>
+
 
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
@@ -101,6 +109,10 @@
 #include "sddllapi.h"
 #endif
 
+namespace com { namespace sun { namespace star { namespace animations {
+    class XAnimationNode;
+} } } }
+
 class SfxStyleSheet;
 class SdDrawDocument;
 class SdrTextObj;
@@ -109,6 +121,18 @@ class StarBASIC;
 class SfxItemSet;
 struct StyleRequestData;
 class SdPage;
+class Paragraph;
+class Outliner;
+
+namespace sd
+{
+    class MainSequence;
+}
+
+namespace boost
+{
+    template<class X> class shared_ptr;
+}
 
 enum PresObjKind
 {
@@ -186,9 +210,17 @@ namespace sd {
     };
 };
 
+namespace sd {
+    class UndoAnimation;
+    class UndoTransition;
+}
+
 class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
 {
 friend class SdGenericDrawPage;
+friend class SdDrawPage;
+friend class sd::UndoAnimation;
+friend class sd::UndoTransition;
 
 protected:
     PageKind    ePageKind;                // Seitentyp
@@ -197,8 +229,6 @@ protected:
     BOOL        bOwnArrangement;          // Objekte werden intern angeordnet
 
     BOOL        bSelected;                // Selektionskennung
-    FadeSpeed   eFadeSpeed;               // Ueberblendgeschwindigkeit
-    ::com::sun::star::presentation::FadeEffect  eFadeEffect;              // Ueberblendeffekt
     PresChange  ePresChange;              // manuell/automatisch/halbautomatisch
     UINT32      nTime;                    // Anzeigedauer in Sekunden
     BOOL        bSoundOn;                 // mit/ohne Sound (TRUE/FALSE)
@@ -216,6 +246,12 @@ protected:
     Orientation eOrientation;             // Print-Orientation
     SdPageLink* pPageLink;                // PageLink (nur bei gelinkten Seiten)
 
+    /** holds the smil animation sequences for this page */
+    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
+
+    /** a helper class to manipulate effects inside the main sequence */
+    boost::shared_ptr< sd::MainSequence > mpMainSequence;
+
     BOOL        InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical,
                               Rectangle rRect, BOOL bInit, sd::PresentationObjectList& rObjList);
 
@@ -230,6 +266,14 @@ protected:
     SfxItemSet* getOrCreateItems();
 
     sd::HeaderFooterSettings    maHeaderFooterSettings;
+
+    // new transition settings
+    sal_Int16 mnTransitionType;
+    sal_Int16 mnTransitionSubtype;
+    sal_Bool mbTransitionDirection;
+    sal_Int32 mnTransitionFadeColor;
+    double mfTransitionDuration;
+
 public:
     TYPEINFO();
 
@@ -290,11 +334,8 @@ public:
     void        SetSelected(BOOL bSel)               { bSelected = bSel; }
     BOOL        IsSelected() const                   { return bSelected; }
 
-    void        SetFadeSpeed(FadeSpeed eNewSpeed)    { eFadeSpeed = eNewSpeed; }
-    FadeSpeed   GetFadeSpeed() const                 { return eFadeSpeed; }
-
-    void        SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect) { eFadeEffect = eNewEffect; }
-    ::com::sun::star::presentation::FadeEffect  GetFadeEffect() const                { return eFadeEffect; }
+    void        SetFadeEffect(::com::sun::star::presentation::FadeEffect eNewEffect);
+    ::com::sun::star::presentation::FadeEffect  GetFadeEffect() const;
 
     void        SetPresChange(PresChange eChange)    { ePresChange = eChange; }
     PresChange  GetPresChange() const                { return ePresChange; }
@@ -314,16 +355,26 @@ public:
     void        SetSoundFile(const String& rStr)    { aSoundFile = rStr; }
     String      GetSoundFile() const                { return aSoundFile; }
 
-#ifndef SVX_LIGHT
+    sal_Int16   getTransitionType() const { return mnTransitionType; }
+    void        setTransitionType( sal_Int16 nTransitionType ) { mnTransitionType = nTransitionType; }
+
+    sal_Int16   getTransitionSubtype() const { return mnTransitionSubtype; }
+    void        setTransitionSubtype( sal_Int16 nTransitionSubtype ) { mnTransitionSubtype = nTransitionSubtype; }
+
+    sal_Bool    getTransitionDirection() const { return mbTransitionDirection; }
+    void        setTransitionDirection( sal_Bool bTransitionbDirection ) { mbTransitionDirection = bTransitionbDirection; }
+
+    sal_Int32   getTransitionFadeColor() const { return mnTransitionFadeColor; }
+    void        setTransitionFadeColor( sal_Int32 nTransitionFadeColor ) { mnTransitionFadeColor = nTransitionFadeColor; }
+
+    double      getTransitionDuration() const { return mfTransitionDuration; }
+    void        setTransitionDuration( double fTranstionDuration ) { mfTransitionDuration = fTranstionDuration; }
+
     // Virtuelle Methoden von SdrObjUserCall
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
                          const Rectangle& rOldBoundRect);
 
     virtual void RequestBasic();
-
-//BFS02 virtual void WriteData(SvStream& rOut) const;
-#endif
-//BFS02 virtual void ReadData(const SdrIOHeader& rHead, SvStream& rIn);
 
     void            SetLayoutName(String aName);
     virtual String  GetLayoutName() const       { return aLayoutName; }
@@ -334,13 +385,11 @@ public:
     virtual String  GetBookmarkName() const       { return aBookmarkName; }
     SdPageLink*     GetLink() { return pPageLink; }
 
-#ifndef SVX_LIGHT
     void            ConnectLink();
     void            DisconnectLink();
 
     void    ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
                          BOOL bScaleAllObj);
-#endif
 
     const String&   GetName();
     String          GetRealName() const { return aPageName; };
@@ -366,6 +415,18 @@ public:
     sal_Bool setAlienAttributes( const com::sun::star::uno::Any& rAttributes );
     void getAlienAttributes( com::sun::star::uno::Any& rAttributes );
 
+    /** returns the main animation node */
+    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getAnimationNode() throw (::com::sun::star::uno::RuntimeException);
+
+    /** returns a helper class to manipulate effects inside the main sequence */
+    boost::shared_ptr< sd::MainSequence > getMainSequence();
+
+    /** returns the SdPage implementation for the given XDrawPage or 0 if not available */
+    static SdPage* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage );
+
+    /** removes all custom animations for the given shape */
+    void removeAnimations( const SdrObject* pObj );
+
     /** Set the name of the page and broadcast a model change.
     */
     virtual void SetName (const String& rName);
@@ -381,10 +442,13 @@ public:
         ::sdr::contact::ViewObjectContact& rOriginal,
         ::sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
+
+    /** callback from the sd::View when a new paragraph for one object on this page is created */
+    void onParagraphInserted( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj );
+
+    /** callback from the sd::View when a paragraph from one object on this page is removed */
+    void onParagraphRemoving( ::Outliner* pOutliner, Paragraph* pPara, SdrObject* pObj );
+
 };
 
 #endif     // _SDPAGE_HXX
-
-
-
-
