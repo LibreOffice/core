@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 18:01:03 $
+ *  last change: $Author: kz $ $Date: 2002-10-31 13:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,7 +1894,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ portuguese ] = "Não existem imagens no tema \"Bullets\" da Gallery.";
         Text[ russian ] = "Â òåìå ãàëåğåè 'Ìàğêåğû' ğèñóíêîâ íå èìååòñÿ.";
         Text[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôï èİìá ôçò Gallery 'Êïõêßäåò'.";
-        Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp  'Bullets'.";
+        Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp 'Bullets'.";
         Text[ french ] = "Il n'existe pas d'image pour le thème 'Puces' dans la Gallery..";
         Text[ spanish ] = "No existen imágenes en el tema 'Viñetas' de la Gallery.";
         Text[ italian ] = "La cartella 'Bullets' della Gallery è vuota.";
@@ -2077,7 +2077,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ italian ] = "Distanza dal testo" ;
         Text [ spanish ] = "~Distancia al texto" ;
         Text [ french ] = "Écart du texte" ;
-        Text [ dutch ] = "Afstand tot de ~tekst" ;
+        Text [ dutch ] = "Afstand tot ~tekst" ;
         Text [ portuguese_brazilian ] = "Einr~?kung" ;
         Text [ portuguese ] = "Distância do ~texto" ;
         Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»";
@@ -2169,7 +2169,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ italian ] = "~Allineamento della numerazione" ;
         Text [ spanish ] = "~Alineación de numeración" ;
         Text [ french ] = "~Alignement de la numérotation" ;
-        Text [ dutch ] = "~Uitlijning van de nummering" ;
+        Text [ dutch ] = "~Uitlijning van nummering" ;
         Text [ portuguese_brazilian ] = "Ausri~chtung der Numerierung" ;
         Text [ portuguese ] = "A~linhamento da numeração" ;
         Text[ chinese_simplified ] = "ç¼–å·å¯¹é½(~U)";
