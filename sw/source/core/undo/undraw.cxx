@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:09:37 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,17 +145,8 @@ struct SwUndoGroupObjImpl
     SdrObject* pObj;
     ULONG nNodeIdx;
 
-    // longs statt einem Point benutzen (sonst legt der Compiler fuer
-    // diese Klasse einen eigenen CTOR an!)
-    long aRelPosX, aRelPosY, aAnchorPosX, aAnchorPosY;
-
-    void SetRelPos( const Point& rPt )
-                            { aRelPosX = rPt.X(), aRelPosY = rPt.Y(); }
-    void SetAnchorPos(const Point& rPt )
-                            { aAnchorPosX = rPt.X(), aAnchorPosY = rPt.Y(); }
-
-    Point& GetRelPos() const            { return *(Point*)(&aRelPosX); }
-    Point& GetAnchorPos() const         { return *(Point*)(&aAnchorPosX); }
+    // OD 2004-04-15 #i26791# - keeping the anchor and the relative position
+    // of drawing objects no longer needed
 };
 
 
@@ -320,8 +311,6 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
     SwDrawContact* pContact = (SwDrawContact*)pFmt->FindContactObj();
     SdrObject* pObj = pContact->GetMaster();
     pObjArr->pObj = pObj;
-    pObjArr->SetAnchorPos( pObj->GetAnchorPos() );
-    pObjArr->SetRelPos( pObj->GetRelativePos() );
 
     //loescht sich selbst!
     pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
@@ -345,13 +334,6 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
         rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
 
         pObj = rSave.pObj;
-        Point aPos( pObj->GetRelativePos() );
-        pObj->NbcSetRelativePos( rSave.GetRelPos() );
-        rSave.SetRelPos( aPos );
-
-        aPos = pObj->GetAnchorPos();
-        pObj->NbcSetAnchorPos( rSave.GetAnchorPos() );
-        rSave.SetAnchorPos( aPos );
 
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->ConnectToLayout();
@@ -372,13 +354,6 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
         pObj = rSave.pObj;
-        Point aPos( pObj->GetRelativePos() );
-        pObj->NbcSetRelativePos( rSave.GetRelPos() );
-        rSave.SetRelPos( aPos );
-
-        aPos = pObj->GetAnchorPos();
-        pObj->NbcSetAnchorPos( rSave.GetAnchorPos() );
-        rSave.SetAnchorPos( aPos );
 
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
         //loescht sich selbst!
@@ -397,13 +372,9 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
     rFlyFmts.Insert( pObjArr->pFmt, rFlyFmts.Count() );
 
-    pObjArr->pObj->NbcSetAnchorPos( pObjArr->GetAnchorPos() );
-    pObjArr->pObj->NbcSetRelativePos( pObjArr->GetRelPos() );
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
-//JP 07.07.99: no ConnectToLayout, because it recalc the ordnum new before
-//              the SdrUndo calls his Redo, and so SdrUndo never find his
-//              SdrObjects for the OrdNums.
-//  pContact->ConnectToLayout();
+    // OD 2004-04-15 #i26791# - correction: connect object to layout
+    pContact->ConnectToLayout();
 }
 
 void SwUndoDrawGroup::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt, SdrObject* pObj )
@@ -411,8 +382,6 @@ void SwUndoDrawGroup::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt, SdrObject* pObj )
     SwUndoGroupObjImpl& rSave = *( pObjArr + nPos + 1 );
     rSave.pObj = pObj;
     rSave.pFmt = pFmt;
-    rSave.SetAnchorPos( pObj->GetAnchorPos() );
-    rSave.SetRelPos( pObj->GetRelativePos() );
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
 
     // alle Uno-Objecte sollten sich jetzt abmelden
@@ -443,8 +412,6 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
 
     pObjArr->pObj = pObj;
     pObjArr->pFmt = pFmt;
-    pObjArr->SetRelPos( pObj->GetRelativePos() );
-    pObjArr->SetAnchorPos( pObj->GetAnchorPos() );
 
     //loescht sich selbst!
     pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
@@ -489,8 +456,6 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
         SwDrawContact* pContact = (SwDrawContact*)rSave.pFmt->FindContactObj();
 
         rSave.pObj = pContact->GetMaster();
-        rSave.SetRelPos( rSave.pObj->GetRelativePos() );
-        rSave.SetAnchorPos( rSave.pObj->GetAnchorPos() );
 
         //loescht sich selbst!
         pContact->Changed( *rSave.pObj, SDRUSERCALL_DELETE,
@@ -508,9 +473,6 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
     // das Group-Object wieder einfuegen
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
     rFlyFmts.Insert( pObjArr->pFmt, rFlyFmts.Count() );
-
-    pObjArr->pObj->NbcSetRelativePos( pObjArr->GetRelPos() );
-    pObjArr->pObj->NbcSetAnchorPos( pObjArr->GetAnchorPos() );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     pContact->ConnectToLayout();
@@ -547,13 +509,6 @@ void SwUndoDrawUnGroup::Redo( SwUndoIter& )
         rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
 
         SdrObject* pObj = rSave.pObj;
-        Point aPos( pObj->GetRelativePos() );
-        pObj->NbcSetRelativePos( rSave.GetRelPos() );
-        rSave.SetRelPos( aPos );
-
-        aPos = pObj->GetAnchorPos();
-        pObj->NbcSetAnchorPos( rSave.GetAnchorPos() );
-        rSave.SetAnchorPos( aPos );
 
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, rSave.pObj );
         pContact->ConnectToLayout();
