@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
+ *  last change: $Author: tra $ $Date: 2001-12-06 09:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         }
         else
         {
+            sal_Bool    bPrintTo = sal_False;
+            OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
             for( ULONG i=0; i < nCount; i++ )
             {
                 aInfo.getCommandArg( i, aDummy );
@@ -363,8 +365,18 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 if( aDummy.indexOf('-',0) != 0 )
                 {
                     bWaitBeforeClose = sal_True;
-                    aDummy = GetURL_Impl( aDummy );
+                    if ( !bPrintTo )
+                        aDummy = GetURL_Impl( aDummy );
+                    bPrintTo = sal_False;
                 }
+                else
+                {
+                    if ( aDummy.equalsIgnoreAsciiCase( aPrintToCmd ))
+                        bPrintTo = sal_True;
+                    else
+                        bPrintTo = sal_False;
+                }
+
                 aArguments += ByteString( String( aDummy ), osl_getThreadTextEncoding() );
                 aArguments += '|';
             }
@@ -500,6 +512,7 @@ void SAL_CALL OfficeIPCThread::run()
                 aCmdLineArgs.GetOpenList( aOpenList );
                 aCmdLineArgs.GetPrintList( aPrintList );
                 aCmdLineArgs.GetPrintToList( aPrintToList );
+                aCmdLineArgs.GetPrinterName( aPrinter );
 
                 // send requests to dispatch watcher
                 if ( aOpenList.getLength() > 0 ||
@@ -510,7 +523,7 @@ void SAL_CALL OfficeIPCThread::run()
                     ApplicationAddress aAppAddress( aPrintToList, aPrinter, aEmpty );
 
                     ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aOpenList, aEmpty, "OPENPRINTCMDLINE", aPrintList );
+                        new ApplicationEvent( aOpenList, aAppAddress, "OPENPRINTCMDLINE", aPrintList );
 
                     ImplPostForeignAppEvent( pAppEvent );
                 }
