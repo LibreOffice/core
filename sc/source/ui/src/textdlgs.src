@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabDialog RID_SCDLG_CHAR
     Text [ ENGLISH ] = "Character" ;
     Text [ norwegian ] = "Character" ;
     Text [ italian ] = "Carattere" ;
-    Text [ portuguese_brazilian ] = "Caractere" ;
+    Text [ portuguese_brazilian ] = "Caracter" ;
     Text [ portuguese ] = "Caracteres" ;
     Text [ finnish ] = "Merkki" ;
     Text [ danish ] = "Tegn" ;
@@ -107,16 +107,19 @@ TabDialog RID_SCDLG_CHAR
                 Text[ danish ] = "Skrifttype";
                 Text[ swedish ] = "Teckensnitt";
                 Text[ polish ] = "Czcionka";
-                Text[ portuguese_brazilian ] = "Character";
+                Text[ portuguese_brazilian ] = "Fonte";
                 Text[ japanese ] = "フォント";
                 Text[ korean ] = "글꼴";
                 Text[ chinese_simplified ] = "字体";
                 Text[ chinese_traditional ] = "字型";
-                Text[ turkish ] = "Character";
+                Text[ turkish ] = "Yaz� tipi";
                 Text[ arabic ] = "����";
                 Text[ catalan ] = "Tipus de lletra";
                 Text[ finnish ] = "Fontti";
                 Text[ thai ] = "ตัวอักษร";
+                Text[ czech ] = "Písmo";
+                Text[ hebrew ] = "‮גופן‬";
+                Text[ hindi ] = "फ़ॉन्ट्";
             };
             PageItem
             {
@@ -133,17 +136,20 @@ TabDialog RID_SCDLG_CHAR
                 Text[ italian ] = "Effetto carattere";
                 Text[ danish ] = "Skrifteffekt";
                 Text[ swedish ] = "Teckeneffekt";
-                Text[ polish ] = "Efekty czcionek";
-                Text[ portuguese_brazilian ] = "Character Extension";
+                Text[ polish ] = "Efekty czcionki";
+                Text[ portuguese_brazilian ] = "Efeitos da Fonte";
                 Text[ japanese ] = "フォント効果";
                 Text[ korean ] = "글꼴 효과";
                 Text[ chinese_simplified ] = "字体效果";
                 Text[ chinese_traditional ] = "字型效果";
-                Text[ turkish ] = "Character Extension";
+                Text[ turkish ] = "Yaz� tipi efektleri";
                 Text[ arabic ] = "������� ������";
                 Text[ catalan ] = "Efectes de lletra";
                 Text[ finnish ] = "Fonttitehosteet";
                 Text[ thai ] = "ลักษณะตัวอักษร";
+                Text[ czech ] = "Efekty pro písmo";
+                Text[ hebrew ] = "‮אפקטים לגופנים‬";
+                Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
             };
             PageItem
             {
@@ -161,16 +167,19 @@ TabDialog RID_SCDLG_CHAR
                 Text[ danish ] = "Skriftplacering";
                 Text[ swedish ] = "Teckenposition";
                 Text[ polish ] = "Pozycja czcionki";
-                Text[ portuguese_brazilian ] = "Character Position";
+                Text[ portuguese_brazilian ] = "Posi��o da Fonte";
                 Text[ japanese ] = "フォントの位置";
                 Text[ korean ] = "글꼴 위치";
                 Text[ chinese_simplified ] = "字体位置";
                 Text[ chinese_traditional ] = "字型位置";
-                Text[ turkish ] = "Character Position";
+                Text[ turkish ] = "Yaz� tipi konumu";
                 Text[ arabic ] = "���� ����";
                 Text[ catalan ] = "Posici� del tipus de lletra";
                 Text[ finnish ] = "Fontin sijainti";
                 Text[ thai ] = "ตำแหน่งตัวอักษร";
+                Text[ czech ] = "Pozice písma";
+                Text[ hebrew ] = "Schriftposition";
+                Text[ hindi ] = "फ़ॉन्ट् का स्थान";
             };
         };
     };
@@ -201,7 +210,7 @@ TabDialog RID_SCDLG_CHAR
         Text [ ENGLISH ] = "Return" ;
         Text [ norwegian ] = "Return" ;
         Text [ italian ] = "Indietro" ;
-        Text [ portuguese_brazilian ] = "Devolver" ;
+        Text [ portuguese_brazilian ] = "Voltar" ;
         Text [ portuguese ] = "Anterior" ;
         Text [ finnish ] = "Edellinen" ;
         Text [ danish ] = "Tilbage" ;
@@ -223,6 +232,9 @@ TabDialog RID_SCDLG_CHAR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enrere";
         Text[ thai ] = "กลับไป";
+        Text[ czech ] = "Zpět";
+        Text[ hebrew ] = "‮קודם‬";
+        Text[ hindi ] = "पीछे";
     };
     Text[ chinese_simplified ] = "字符";
     Text[ russian ] = "������";
@@ -236,6 +248,9 @@ TabDialog RID_SCDLG_CHAR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Car�cter";
     Text[ thai ] = "ตัวอักขระ";
+    Text[ czech ] = "Znak";
+    Text[ hebrew ] = "Zeichen";
+    Text[ hindi ] = "अक्षर";
 };
 
 TabDialog RID_SCDLG_PARAGRAPH
@@ -247,7 +262,7 @@ TabDialog RID_SCDLG_PARAGRAPH
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Par?grafo" ;
+    Text [ portuguese_brazilian ] = "Par�grafo" ;
     Text [ portuguese ] = "Par�grafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -273,7 +288,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientri e distanze" ;
-                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
+                Text [ portuguese_brazilian ] = "Recuos & Afastamentos" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -295,6 +310,9 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sagnats i espaiat";
                 Text[ thai ] = "ระยะเยื้องและระยะห่าง";
+                Text[ czech ] = "Odsazení a proklad znaků";
+                Text[ hebrew ] = "‮שוליים ורווחים‬";
+                Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
             };
             /*
             PageItem  {
@@ -322,7 +340,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text = "Ausrichtung" ;
                 Text [ ENGLISH ] = "Alignment" ;
                 Text [ english_us ] = "Alignment" ;
-                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text [ portuguese_brazilian ] = "Alinhamento" ;
                 Text [ swedish ] = "Justering" ;
                 Text [ danish ] = "Justering" ;
                 Text [ italian ] = "Allineamento" ;
@@ -343,6 +361,9 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
                 Text[ thai ] = "จัดตำแหน่ง";
+                Text[ czech ] = "Zarovnání";
+                Text[ hebrew ] = "‮ישור‬";
+                Text[ hindi ] = "पंक्तिकरण";
             };
             PageItem
             {
@@ -360,16 +381,19 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
-                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ portuguese_brazilian ] = "Tipografia asi�tica";
                 Text[ japanese ] = "日本語文の体裁";
                 Text[ korean ] = "한글 입력 체계";
                 Text[ chinese_simplified ] = "中日韩文字";
                 Text[ chinese_traditional ] = "中日韓文字";
-                Text[ turkish ] = "Asian typography";
+                Text[ turkish ] = "Asya Matbaas�";
                 Text[ arabic ] = "����� ������� ��������";
                 Text[ catalan ] = "Tipografia asi�tica";
                 Text[ finnish ] = "Aasialaiset merkit";
                 Text[ thai ] = "แบบการพิมพ์แบบเอเชีย";
+                Text[ czech ] = "Asijská typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "ऐशियन टइपोग्रफी";
             };
             PageItem
             {
@@ -378,7 +402,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text [ ENGLISH ] = "Paragraph (Tabs)" ;
                 Text [ norwegian ] = "Avsnitt (Tabulatorer)" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Par?grafo (Tabs)" ;
+                Text [ portuguese_brazilian ] = "Tabula��o" ;
                 Text [ portuguese ] = "Tabula��o" ;
                 Text [ finnish ] = "Sarkain" ;
                 Text [ danish ] = "Tabulator" ;
@@ -400,6 +424,9 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pestanya";
                 Text[ thai ] = "ระยะกั้น";
+                Text[ czech ] = "Tabulátor";
+                Text[ hebrew ] = "Tabulator";
+                Text[ hindi ] = "टॉब";
             };
         };
     };
@@ -430,7 +457,7 @@ TabDialog RID_SCDLG_PARAGRAPH
         Text [ ENGLISH ] = "Return" ;
         Text [ norwegian ] = "Return" ;
         Text [ italian ] = "Indietro" ;
-        Text [ portuguese_brazilian ] = "Devolver" ;
+        Text [ portuguese_brazilian ] = "Voltar" ;
         Text [ portuguese ] = "Anterior" ;
         Text [ finnish ] = "Edellinen" ;
         Text [ danish ] = "Tilbage" ;
@@ -452,6 +479,9 @@ TabDialog RID_SCDLG_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enrere";
         Text[ thai ] = "กลับไป";
+        Text[ czech ] = "Zpět";
+        Text[ hebrew ] = "‮קודם‬";
+        Text[ hindi ] = "पीछे";
     };
     Text[ chinese_simplified ] = "段落";
     Text[ russian ] = "�����";
@@ -465,7 +495,19 @@ TabDialog RID_SCDLG_PARAGRAPH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Par�graf";
     Text[ thai ] = "ย่อหน้า";
+    Text[ czech ] = "Odstavec";
+    Text[ hebrew ] = "‮פסקאות‬";
+    Text[ hindi ] = "परिच्छेद";
 };
+
+
+
+
+
+
+
+
+
 
 
 
