@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:46:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 10:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2134,7 +2134,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw UNSUPPORTEDFLAVOREXCEPTION();
         }
-        if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
+        else if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2156,7 +2156,6 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw UNSUPPORTEDFLAVOREXCEPTION();
         }
-
         else
             throw UNSUPPORTEDFLAVOREXCEPTION();
     }
