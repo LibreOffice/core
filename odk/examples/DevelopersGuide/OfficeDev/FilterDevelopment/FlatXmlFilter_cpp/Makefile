@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:39:23 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:38:18 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -106,11 +106,11 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 endif	
 
 $(OUT_BIN)/%.zip : $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) TypeDetection.xcu
-	-$(MKDIRL) $(subst /,$(PS),$(@D))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))
 	$(COPY) TypeDetection.xcu $(subst /,$(PS),$(OUT_COMP_GEN)) 
-	cd $(OUT_COMP_GEN) && jar cvfM ../../bin/$(@F) TypeDetection.xcu $(PACKAGE_LIB_DIR)/$(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && jar cvfM ../../bin/$(@F) TypeDetection.xcu $(PACKAGE_LIB_DIR)/$(<F)
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
