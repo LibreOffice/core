@@ -2,9 +2,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:14:48 $
+#   last change: $Author: kz $ $Date: 2004-06-18 16:53:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,20 @@ sub check_system_path
 
     if (($installer::globals::iswin) && ($installer::globals::iswindowsbuild))
     {
-        @needed_files_in_path = ("zip.exe", "unzip.exe", "msvcp70.dll", "msvcr70.dll", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe");
+        @needed_files_in_path = ("zip.exe", "unzip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe");
+
+        if ( $installer::globals::compiler eq "wntmsci8" )
+        {
+            push(@needed_files_in_path, "msvcp70.dll");
+            push(@needed_files_in_path, "msvcr70.dll");
+        }
+
+        if ( $installer::globals::compiler eq "wntmsci10" )
+        {
+            push(@needed_files_in_path, "msvcp71.dll");
+            push(@needed_files_in_path, "msvcr71.dll");
+        }
+
     }
     elsif ($installer::globals::iswin)
     {
