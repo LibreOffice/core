@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-17 11:00:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,14 +263,14 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
         return E_POINTER;
     HRESULT ret = E_UNEXPECTED;
     // ----------------------------------------
-    if( ! wcscmp( *rgszNames, JSCRIPT_VALUE_FUNC) ||
-        ! wcscmp( *rgszNames, BRIDGE_VALUE_FUNC))
+    if( ! _wcsicmp( *rgszNames, JSCRIPT_VALUE_FUNC) ||
+        ! _wcsicmp( *rgszNames, BRIDGE_VALUE_FUNC))
     {
         *rgdispid= DISPID_JSCRIPT_VALUE_FUNC;
         return S_OK;
     }
-    else if( ! wcscmp( *rgszNames, GET_STRUCT_FUNC) ||
-             ! wcscmp( *rgszNames, BRIDGE_GET_STRUCT_FUNC))
+    else if( ! _wcsicmp( *rgszNames, GET_STRUCT_FUNC) ||
+             ! _wcsicmp( *rgszNames, BRIDGE_GET_STRUCT_FUNC))
     {
         *rgdispid= DISPID_GET_STRUCT_FUNC;
         return S_OK;
