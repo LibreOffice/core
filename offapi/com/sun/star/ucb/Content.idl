@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 10:17:34 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 10:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ service Content
         short ConnectionLimit
 
         // contains the current connection mode for the object.
-           @see com::sun::star::ucb::ConnectionMode
+        // (see <type>ConnectionMode</type>)
         short ConnectionMode
 
         // contains the date and time the object was created.
