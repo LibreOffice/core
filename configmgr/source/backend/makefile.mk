@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+#   last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,13 @@ SLOFILES=\
     $(SLO)$/componentdatahelper.obj \
     $(SLO)$/schemabuilder.obj \
     $(SLO)$/layermerge.obj \
+    $(SLO)$/updatesvc.obj \
+    $(SLO)$/layerupdatehandler.obj \
+    $(SLO)$/basicupdatemerger.obj \
+    $(SLO)$/layerupdatemerger.obj \
+    $(SLO)$/layerupdatebuilder.obj \
+    $(SLO)$/layerupdate.obj \
+    $(SLO)$/updatedata.obj \
 
 # --- Targets ---
 
