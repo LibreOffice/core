@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:29:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,16 +221,57 @@ enum SwXMLDocTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_FONT_DECLS,     XML_TOK_DOC_FONTDECLS   },
+    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS  },
     { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES      },
     { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES    },
     { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES   },
     { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META        },
     { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPT,         XML_TOK_DOC_SCRIPT      },
+    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT      },
     { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
     XML_TOKEN_MAP_END
 };
+
+// ----------------------------------------------------------------------------
+
+class SwXMLBodyContext_Impl : public SvXMLImportContext
+{
+    const SwXMLImport& GetSwImport() const
+        { return (const SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+
+public:
+
+    SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
+                const OUString& rLName,
+                const Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~SwXMLBodyContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                const OUString& rLocalName,
+                const Reference< xml::sax::XAttributeList > & xAttrList );
+};
+
+SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
+                sal_uInt16 nPrfx, const OUString& rLName,
+                const Reference< xml::sax::XAttributeList > & xAttrList ) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+}
+
+SwXMLBodyContext_Impl::~SwXMLBodyContext_Impl()
+{
+}
+
+SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    return GetSwImport().CreateBodyContentContext( rLocalName );
+}
+
+// ----------------------------------------------------------------------------
 
 class SwXMLDocContext_Impl : public SvXMLImportContext
 {
@@ -255,40 +296,6 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    // process document class
-    // global-text is handled via document shell;
-    // we only handle label documents
-    sal_Int16 nLength = xAttrList->getLength();
-    for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-
-        if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-             IsXMLToken( sLocalName, XML_CLASS ) )
-        {
-            if ( IsXMLToken( xAttrList->getValueByIndex(nAttr), XML_LABEL ) )
-            {
-                // OK, we need to set label mode. To do this, tunnel
-                // to get the SwDoc, then set label mode.
-
-                Reference<XText> xText(GetImport().GetModel(), UNO_QUERY);
-                Reference<XUnoTunnel> xTunnel(
-                    GetImport().GetTextImport()->GetText(), UNO_QUERY);
-                DBG_ASSERT(xTunnel.is(), "I can't get the Tunnel");
-                SwXText* pText = (SwXText*)xTunnel->getSomething(
-                    SwXText::getUnoTunnelId());
-                if (NULL != pText)
-                {
-                    SwDoc* pDoc = pText->GetDoc();
-                    if (NULL != pDoc)
-                        pDoc->SetLabelDoc();
-                }
-            }
-        }
-    }
 }
 
 SwXMLDocContext_Impl::~SwXMLDocContext_Impl()
@@ -338,10 +345,11 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DOC_BODY:
         GetSwImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-        pContext = GetSwImport().CreateBodyContext( rLocalName );
+        pContext = new SwXMLBodyContext_Impl( GetSwImport(), nPrefix,
+                                              rLocalName, xAttrList );
         break;
     case XML_TOK_DOC_SETTINGS:
-        pContext = new XMLDocumentSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList );
+        pContext = new XMLDocumentSettingsContext( GetImport(), nPrefix, rLocalName, xAttrList );
         break;
     }
 
@@ -1036,6 +1044,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // --> FME #108724#
     bool bUseFormerTextWrapping = false;
 
+    OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM( "RedlineProtectionKey" ) );
+
     while( nCount-- )
     {
         ULONG nHash = 0;
@@ -1053,7 +1063,17 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             {
                 if( xInfo->hasPropertyByName( pValues->Name ) )
                 {
-                    xProps->setPropertyValue( pValues->Name, pValues->Value );
+                    if( pValues->Name.equals( sRedlineProtectionKey ) )
+                    {
+                        Sequence<sal_Int8> aKey;
+                        pValues->Value >>= aKey;
+                        GetTextImport()->SetChangesProtectionKey( aKey );
+                    }
+                    else
+                    {
+                        xProps->setPropertyValue( pValues->Name,
+                                                  pValues->Value );
+                    }
                 }
 
                 // did we find any of the non-default cases?
@@ -1207,7 +1227,7 @@ void SwXMLImport::initialize(
 OUString SAL_CALL SwXMLImport_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLImporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisImporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames()
@@ -1230,7 +1250,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
 OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLStylesImporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisStylesImporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportStyles_getSupportedServiceNames()
@@ -1258,7 +1278,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
 OUString SAL_CALL SwXMLImportContent_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLContentImporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisContentImporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportContent_getSupportedServiceNames()
@@ -1286,7 +1306,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
 OUString SAL_CALL SwXMLImportMeta_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLMetaImporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisMetaImporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportMeta_getSupportedServiceNames()
@@ -1309,7 +1329,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
 OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLSettingsImporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisSettingsImporter" ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwXMLImportSettings_getSupportedServiceNames()
