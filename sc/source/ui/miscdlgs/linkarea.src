@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:20:39 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ polish ] = "Zewn�trzne dane";
     Text[ portuguese_brazilian ] = "External Data Source";
     Text[ japanese ] = "外部ﾃﾞｰﾀ";
-    Text[ korean ] = "외부 데이터 소스";
+    Text[ korean ] = "외부 데이터";
     Text[ chinese_simplified ] = "外部的数据";
     Text[ chinese_traditional ] = "外部的資料";
     Text[ turkish ] = "External Data Source";
@@ -276,6 +276,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ catalan ] = "External Data Source";
     Text[ finnish ] = "Ulkoinen l�hde";
 };
+
 
 
 
