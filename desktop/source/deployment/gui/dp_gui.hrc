@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dp_gui.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:02:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights andlp
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#if ! defined INCLUDED_DP_GUI_HRC
+#define INCLUDED_DP_GUI_HRC
+
+#include "deployment.hrc"
+#include "../../inc/helpid.hrc"
+
+// Package Manager Dialog:
+#define RID_DLG_PACKAGE_MANAGER                RID_DEPLOYMENT_GUI_START
+
+// local RIDs:
+#define RID_FT_PACKAGES                        5
+
+#define RID_BTN_CLOSE                          10
+#define RID_BTN_HELP                           11
+
+#define RID_BTN_ADD                            20
+#define RID_BTN_REMOVE                         21
+#define RID_BTN_ENABLE                         22
+#define RID_BTN_DISABLE                        23
+#define RID_BTN_EXPORT                         24
+
+#define RID_IMG_PLUS                           41
+#define RID_IMG_PLUS_HC                        42
+#define RID_IMG_MINUS                          43
+#define RID_IMG_MINUS_HC                       44
+//
+
+#define RID_IMG_DEF_INSTALLATION               (RID_DEPLOYMENT_GUI_START+50)
+#define RID_IMG_DEF_INSTALLATION_HC            (RID_DEPLOYMENT_GUI_START+51)
+#define RID_IMG_DEF_DOCUMENT                   (RID_DEPLOYMENT_GUI_START+52)
+#define RID_IMG_DEF_DOCUMENT_HC                (RID_DEPLOYMENT_GUI_START+53)
+#define RID_IMG_DEF_PACKAGE                    (RID_DEPLOYMENT_GUI_START+54)
+#define RID_IMG_DEF_PACKAGE_HC                 (RID_DEPLOYMENT_GUI_START+55)
+
+#define RID_STR_USER_INSTALLATION              (RID_DEPLOYMENT_GUI_START+60)
+#define RID_STR_SHARED_INSTALLATION            (RID_DEPLOYMENT_GUI_START+61)
+#define RID_STR_ENABLED                        (RID_DEPLOYMENT_GUI_START+62)
+#define RID_STR_DISABLED                       (RID_DEPLOYMENT_GUI_START+63)
+#define RID_STR_UNKNOWN                        (RID_DEPLOYMENT_GUI_START+64)
+#define RID_STR_PACKAGE                        (RID_DEPLOYMENT_GUI_START+65)
+#define RID_STR_PACKAGE_STATUS                 (RID_DEPLOYMENT_GUI_START+66)
+
+#define RID_STR_ADD_PACKAGES                   (RID_DEPLOYMENT_GUI_START+70)
+#define RID_STR_EXPORT_PACKAGE                 (RID_DEPLOYMENT_GUI_START+71)
+#define RID_STR_EXPORT_PACKAGES                (RID_DEPLOYMENT_GUI_START+72)
+
+#define RID_CTX_ITEM_ADD                       (RID_DEPLOYMENT_GUI_START+80)
+#define RID_CTX_ITEM_REMOVE                    (RID_DEPLOYMENT_GUI_START+81)
+#define RID_CTX_ITEM_ENABLE                    (RID_DEPLOYMENT_GUI_START+82)
+#define RID_CTX_ITEM_DISABLE                   (RID_DEPLOYMENT_GUI_START+83)
+#define RID_CTX_ITEM_EXPORT                    (RID_DEPLOYMENT_GUI_START+84)
+
+#define RID_STR_ADDING_PACKAGES                (RID_DEPLOYMENT_GUI_START+90)
+#define RID_STR_REMOVING_PACKAGES              (RID_DEPLOYMENT_GUI_START+91)
+#define RID_STR_ENABLING_PACKAGES              (RID_DEPLOYMENT_GUI_START+92)
+#define RID_STR_DISABLING_PACKAGES             (RID_DEPLOYMENT_GUI_START+93)
+#define RID_STR_EXPORTING_PACKAGES             (RID_DEPLOYMENT_GUI_START+94)
+
+#endif
