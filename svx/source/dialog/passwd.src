@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:15:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ korean ] = "ÆÐ½º¿öµå(~P)";
         Text[ turkish ] = "Þif~re";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Contraseña";
     };
     Edit ED_OLD_PASSWD
     {
@@ -137,6 +138,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ korean ] = "ÀÌÀü";
         Text[ turkish ] = "Eski";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Anterior";
     };
     FixedText FT_NEW_PASSWD
     {
@@ -166,6 +168,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ korean ] = "ÆÐ½º¿öµå(~S)";
         Text[ turkish ] = "~Þifre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Co~ntraseña";
     };
     Edit ED_NEW_PASSWD
     {
@@ -200,6 +203,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ korean ] = "½ÇÇà ¹Ýº¹(~R)";
         Text[ turkish ] = "~Yinele";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Repetir";
     };
     Edit ED_REPEAT_PASSWD
     {
@@ -233,6 +237,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ korean ] = "»õ·Î";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nueva";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -276,6 +281,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆÐ½º¿öµå";
         Text[ turkish ] = "Geçersiz þifre";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contraseña no válida";
     };
     String STR_ERR_REPEAT_PASSWD
     {
@@ -302,6 +308,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ korean ] = "ÆÐ½º¿öµå°¡ ÀÏÄ¡ÇÏÁö ¾ÊÀ½";
         Text[ turkish ] = "Þifreler ayný deðil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Las contraseñas no coinciden";
     };
     Text [ english_us ] = "Change Password" ;
     Text [ italian ] = "Cambia password" ;
@@ -322,5 +329,6 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text[ korean ] = "ÆÐ½º¿öµå º¯°æ";
     Text[ turkish ] = "Þifre deðiþtirme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar contraseña";
 };
  // ********************************************************************** EOF
