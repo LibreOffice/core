@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: od $ $Date: 2002-11-20 13:12:13 $
+ *  last change: $Author: fme $ $Date: 2002-12-05 15:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2908,11 +2908,8 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         // to ignore the setting of a new color. Therefore we have to reset
         // the drawing mode
         pOut->SetDrawMode( 0 );
-        if ( pGlobalShell->GetAccessibilityOptions()->IsUseAutomaticBorderColor() )
-        {
-            aShadowColor = pGlobalShell->GetWin()->GetSettings().
-                           GetStyleSettings().GetWindowTextColor();
-        }
+        aShadowColor = pGlobalShell->GetWin()->GetSettings().
+                       GetStyleSettings().GetWindowTextColor();
     }
 
     if ( pOut->GetFillColor() != aShadowColor )
@@ -2966,8 +2963,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
                    ( IsInSct() ? SUBCOL_SECT :
                    ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
     if( pColor && pGlobalShell->GetWin() &&
-        Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
-        pGlobalShell->GetAccessibilityOptions()->IsUseAutomaticBorderColor() )
+        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pColor = &pGlobalShell->GetWin()->GetSettings().GetStyleSettings()
                                                        .GetWindowTextColor();
