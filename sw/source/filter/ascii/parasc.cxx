@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-27 10:00:04 $
+ *  last change: $Author: mib $ $Date: 2002-05-24 12:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // ...Percent()
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
 #endif
 
 #define ASC_BUFFLEN 4096
@@ -682,7 +685,42 @@ ULONG SwASCIIParser::CallParser()
         if( pItemSet->Count() )
         {
             if( bNewDoc )
-                pDoc->SetDefault( *pItemSet );
+            {
+                // Using the pool defaults for the font causes significant
+                // trouble for the HTML filter, because it is not able
+                // to export the pool defaults (or to be more precice:
+                // the HTML filter is not able to detect whether a pool
+                // default has changed or not. Even a comparison with the
+                // HTMLi template does not work, because the defaults are
+                // not copied when a new doc is created. The result of
+                // comparing pool defaults therfor would be that the
+                // defaults are exported always if the have changed for
+                // text documents in general. That's not sensible, as well
+                // as it is not sensible to export them always.
+                SwTxtFmtColl *pColl = 0;
+                sal_uInt16 aWhichIds[4] = { RES_CHRATR_FONT,
+                                            RES_CHRATR_CJK_FONT,
+                                            RES_CHRATR_CTL_FONT,
+                                               0 };
+                sal_uInt16 *pWhichIds = aWhichIds;
+                const SfxPoolItem *pItem;
+                while( *pWhichIds )
+                {
+                    if( SFX_ITEM_SET == pItemSet->GetItemState( *pWhichIds,
+                                                                sal_False,
+                                                                &pItem ) )
+                    {
+                        if( !pColl )
+                            pColl = pDoc->GetTxtCollFromPool(
+                                                    RES_POOLCOLL_STANDARD );
+                        pColl->SetAttr( *pItem );
+                        pItemSet->ClearItem( *pWhichIds );
+                    }
+                    ++pWhichIds;
+                }
+                if( pItemSet->Count() )
+                    pDoc->SetDefault( *pItemSet );
+            }
             else if( pInsPam )
             {
                 // then set over the insert range the defined attributes
