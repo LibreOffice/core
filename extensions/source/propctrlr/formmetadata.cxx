@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 16:28:04 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 16:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,8 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_TABSTOP,             PROPERTY_ID_TABSTOP,            sal_True,  String(ModuleRes(RID_STR_TABSTOP)),          nPos++, HID_PROP_TABSTOP),
                 OPropertyInfoImpl(PROPERTY_TABINDEX,            PROPERTY_ID_TABINDEX,           sal_True,  String(ModuleRes(RID_STR_TABINDEX)),         nPos++, HID_PROP_TABINDEX) ,
                 OPropertyInfoImpl(PROPERTY_DATASOURCE,          PROPERTY_ID_DATASOURCE,         sal_True,  String(ModuleRes(RID_STR_DATASOURCE)),       nPos++, HID_PROP_DATASOURCE) ,
-                OPropertyInfoImpl(PROPERTY_COMMAND,             PROPERTY_ID_COMMAND,            sal_False, String(ModuleRes(RID_STR_CURSORSOURCE)),     nPos++, HID_PROP_CURSORSOURCE),
                 OPropertyInfoImpl(PROPERTY_COMMANDTYPE,         PROPERTY_ID_COMMANDTYPE,        sal_False, String(ModuleRes(RID_STR_CURSORSOURCETYPE)), nPos++, HID_PROP_CURSORSOURCETYPE),
+                OPropertyInfoImpl(PROPERTY_COMMAND,             PROPERTY_ID_COMMAND,            sal_False, String(ModuleRes(RID_STR_CURSORSOURCE)),     nPos++, HID_PROP_CURSORSOURCE),
                 OPropertyInfoImpl(PROPERTY_ESCAPE_PROCESSING,   PROPERTY_ID_ESCAPE_PROCESSING,  sal_False, String(ModuleRes(RID_STR_ESCAPE_PROCESSING)),    nPos++, HID_PROP_ESCAPE_PROCESSING),
                 OPropertyInfoImpl(PROPERTY_FILTER_CRITERIA,     PROPERTY_ID_FILTER_CRITERIA,    sal_False,  String(ModuleRes(RID_STR_FILTER_CRITERIA)), nPos++, HID_PROP_FILTER_CRITERIA ),
                 OPropertyInfoImpl(PROPERTY_SORT,                PROPERTY_ID_SORT,               sal_False,  String(ModuleRes(RID_STR_SORT_CRITERIA)),   nPos++, HID_PROP_SORT_CRITERIA) ,
@@ -474,6 +474,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/02 16:28:04  tbe
+ *  added title property
+ *
  *  Revision 1.5  2001/02/22 09:31:44  tbe
  *  added properties for dialog controls
  *
