@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:19:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 17:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,13 +225,11 @@
 #include "docfilt.hxx"
 #include "docinf.hxx"
 #include "docfac.hxx"
-#include "cfgmgr.hxx"
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
 #include "appdata.hxx"
 #include "doc.hrc"
 #include "sfxsids.hrc"
-//#include "interno.hxx"
 #include "module.hxx"
 #include "dispatch.hxx"
 #include "openflag.hxx"
@@ -767,69 +765,50 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if( pMed->GetLastStorageCreationState() == ERRCODE_NONE )
         {
             DBG_ASSERT( pFilter, "No filter for storage found!" );
-//REMOVE                if( xStor.Is() && !xStor->GetError() && pMed->GetFilter() && pMed->GetFilter()->GetVersion() < SOFFICE_FILEFORMAT_60 )
-//REMOVE                {
-//REMOVE                    // Undoobjekte aufraeumen, muss vor dem eigentlichen Laden erfolgen
-//REMOVE                    SvEmbeddedObjectRef xThis = this;
-//REMOVE                    SvPersistRef xPer;
-//REMOVE                    if ( xThis.Is() )
-//REMOVE                        xPer = new SvEmbeddedObject;
-//REMOVE                    else
-//REMOVE                        xPer = new SvPersist;
-//REMOVE
-//REMOVE                    xPer->DoOwnerLoad(xStor);
-//REMOVE                    xPer->CleanUp();
-//REMOVE                    xPer->DoSave();
-//REMOVE                    xPer->DoSaveCompleted( 0 );
-//REMOVE                }
 
-            uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-            if ( xNameAccess.is() )
+            try
             {
-                try
+                if ( xStorage->getElementNames().getLength() )
                 {
-                    if ( xNameAccess->getElementNames().getLength() )
-                    {
-                        BOOL bHasMacros =
-                                ( xNameAccess->hasByName( ::rtl::OUString::createFromAscii("Basic") )
-                                    && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Basic") ) )
-                                ||  ( xNameAccess->hasByName( ::rtl::OUString::createFromAscii("Scripts") )
-                                    && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Scripts") ) );
+                    BOOL bHasMacros =
+                            ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Basic") )
+                                && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Basic") ) )
+                            ||  ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Scripts") )
+                                && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Scripts") ) );
 
-                        if ( bHasMacros )
+                    if ( bHasMacros )
+                    {
+                        // --> PB 2004-11-09 #i35190#
+                        if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
                         {
-                            // --> PB 2004-11-09 #i35190#
-                            if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
-                            {
-                                // if the signature is broken, show here the warning before
-                                // the macro warning
-                                WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-                                aBox.Execute();
-                                bShowBrokenSignatureWarningAlready = true;
-                            }
-                            // <--
-                            AdjustMacroMode( String() );
-                            if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
-                                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
-                            {
-                                WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
-                                aBox.Execute();
-                            }
+                            // if the signature is broken, show here the warning before
+                            // the macro warning
+                            WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+                            aBox.Execute();
+                            bShowBrokenSignatureWarningAlready = true;
                         }
-                        else
+                        // <--
+                        AdjustMacroMode( String() );
+                        if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+                            && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
                         {
-                            // if macros will be added by the user later, the security check is obsolete
-                            pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+                            WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
+                            aBox.Execute();
                         }
                     }
                     else
-                        SetError( ERRCODE_IO_BROKENPACKAGE );
+                    {
+                        // if macros will be added by the user later, the security check is obsolete
+                        pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+                    }
                 }
-                catch( uno::Exception& )
-                {
-                    // TODO/LATER: may need error code setting based on exception
-                    SetError( ERRCODE_IO_GENERAL );
-                }
+                else
+                    SetError( ERRCODE_IO_BROKENPACKAGE );
+            }
+            catch( uno::Exception& )
+            {
+                // TODO/LATER: may need error code setting based on exception
+                SetError( ERRCODE_IO_GENERAL );
             }
 
             // Load
@@ -878,6 +857,25 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
             bOk = ConvertFrom(*pMedium);
         }
+
+        if ( HasMacros_Impl() )
+        {
+            // no signing in alien formats!
+            AdjustMacroMode( String() );
+            if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+            {
+                WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
+                aBox.Execute();
+            }
+        }
+        else
+        {
+            // if macros will be added by the user later, the security check is obsolete
+            pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+        }
+
+        INetURLObject::SetBaseURL( aOldURL );
     }
 
     if ( bOk )
@@ -1274,6 +1272,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             pMedium->CloseOutStream();
 
             rMedium.Close();
+            rMedium.CreateTempFileNoCopy();
             rMedium.GetOutStream();
         }
         else if ( !bOwnSource && bOwnTarget )
@@ -1299,6 +1298,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 pMedium->Close();
 
                 rMedium.Close();
+                rMedium.CreateTempFileNoCopy();
                 rMedium.GetOutStream();
             }
         }
