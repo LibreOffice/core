@@ -9,6 +9,7 @@ mkdir: %_DEST%\inc%_EXT%\tools
 ..\%__SRC%\bin\wps?????.dll %_DEST%\bin%_EXT%\wps?????.dll
 ..\%__SRC%\lib\atools.lib %_DEST%\lib%_EXT%\atools.lib
 ..\%__SRC%\lib\bootstrp.lib %_DEST%\lib%_EXT%\bootstrp.lib
+..\%__SRC%\lib\bootstrp2.lib %_DEST%\lib%_EXT%\bootstrp2.lib
 ..\%__SRC%\lib\itools.lib %_DEST%\lib%_EXT%\itools.lib
 ..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
 ..\%__SRC%\lib\lib*.sl %_DEST%\lib%_EXT%\lib*.sl
@@ -40,12 +41,12 @@ hedabu: ..\bootstrp\getopt.h %_DEST%\inc%_EXT%\bootstrp\getopt.h
 hedabu: ..\bootstrp\hedabu.hxx %_DEST%\inc%_EXT%\bootstrp\hedabu.hxx
 hedabu: ..\bootstrp\inimgr.hxx %_DEST%\inc%_EXT%\bootstrp\inimgr.hxx
 hedabu: ..\bootstrp\listmacr.hxx %_DEST%\inc%_EXT%\bootstrp\listmacr.hxx
-hedabu: ..\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
 hedabu: ..\bootstrp\revision.hxx %_DEST%\inc%_EXT%\bootstrp\revision.hxx
 hedabu: ..\bootstrp\sstring.hxx %_DEST%\inc%_EXT%\bootstrp\sstring.hxx
 hedabu: ..\bootstrp\uierr.hxx %_DEST%\inc%_EXT%\bootstrp\uierr.hxx
 hedabu: ..\bootstrp\updmake.hxx %_DEST%\inc%_EXT%\bootstrp\updmake.hxx
 hedabu: ..\bootstrp\vermap.hxx %_DEST%\inc%_EXT%\bootstrp\vermap.hxx
+hedabu: ..\inc\abthread.hxx %_DEST%\inc%_EXT%\tools\abthread.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agapi.hxx %_DEST%\inc%_EXT%\tools\agapi.hxx
 hedabu: ..\inc\agitem.hxx %_DEST%\inc%_EXT%\tools\agitem.hxx
