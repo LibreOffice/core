@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:28 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
