@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:12:09 $
+ *  last change: $Author: ssa $ $Date: 2003-05-28 13:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1624,9 +1624,9 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_UNCONVERTABLE_CHARS )
     {
-        TEXT = "Die folgenden Zeichen konnten nicht im gewдhlten Zeichsatz dargestellt werden: $(ARG1)" ;
-        TEXT [ English ] = "These characters could not be exported using the chosen character encoding: $(ARG1)" ;
-        TEXT[ english_us ] = "The following characters could not be displayed in the selected character set: $(ARG1)";
+        TEXT = "Die folgenden Zeichen konnten nicht im gewдhlten Zeichensatz dargestellt werden:\n$(ARG1)" ;
+        TEXT [ English ] = "These characters could not be exported using the chosen character encoding:\n$(ARG1)" ;
+        TEXT[ english_us ] = "The following characters could not be displayed in the selected character set:\n$(ARG1)";
         TEXT[ portuguese ] = "Foi impossнvel representar os seguintes caracteres no conjunto seleccionado: $(ARG1)";
         TEXT[ russian ] = "Невозможно показать следующие символы в выбранном наборе: $(ARG1)";
         TEXT[ greek ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
