@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:15:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ namespace svt
     ORoadmap::~ORoadmap( )
     {
         HL_Vector pLocRoadmapItems = m_pImpl->getHyperLabels();
+        m_pImpl->getHyperLabels().clear();
         for ( HL_Vector::iterator i = pLocRoadmapItems.begin(); i< pLocRoadmapItems.end(); i++)
         {
             delete *i;
@@ -375,7 +376,6 @@ namespace svt
         String sID = ::String::CreateFromInt32( _nPrefix );
         _sDescription.Replace(0 , n_Pos, sID );
         CurHyperLabel->SetLabelAndSize( _nPrefix, _sDescription, m_pImpl->aHyperLabelPixelSize );
-        ItemIndex Index = _nPrefix;
     }
 
     //---------------------------------------------------------------------
