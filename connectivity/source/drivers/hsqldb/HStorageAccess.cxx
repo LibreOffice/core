@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:51:33 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,12 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_o
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_close
   (JNIEnv * env, jobject obj_this,jstring name, jstring key)
 {
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
+        ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
+    }
+#endif
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xFlush = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
     if ( xFlush.is() )
@@ -255,6 +261,12 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
 
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
+#if OSL_DEBUG_LEVEL > 1
+    {
+        ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
+        ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
+    }
+#endif
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference< XInputStream>();
     OSL_ENSURE(xIn.is(),"Input stream is NULL!");
