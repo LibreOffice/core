@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:43:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ OutlineBulletDlg::OutlineBulletDlg(
     // Sonderbehandlung wenn eine Title Objekt selektiert wurde
     if( pView )
     {
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         const ULONG nCount = rMarkList.GetMarkCount();
         for(ULONG nNum = 0; nNum < nCount; nNum++)
         {
