@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-24 11:28:19 $
+ *  last change: $Author: aw $ $Date: 2001-04-25 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,19 @@ XML_CONSTASCII_ACTION( sXML_fontfamily, "fontfamily" );
 XML_CONSTASCII_ACTION( sXML_fontsize, "fontsize" );
 XML_CONSTASCII_ACTION( sXML_fontstyle, "fontstyle" );
 XML_CONSTASCII_ACTION( sXML_fontweight, "fontweight" );
+XML_CONSTASCII_ACTION( sXML_fontwork_adjust, "fontwork-adjust" );
+XML_CONSTASCII_ACTION( sXML_fontwork_distance, "fontwork-distance" );
+XML_CONSTASCII_ACTION( sXML_fontwork_form, "fontwork-form" );
+XML_CONSTASCII_ACTION( sXML_fontwork_hide_form, "fontwork-hide-form" );
+XML_CONSTASCII_ACTION( sXML_fontwork_mirror, "fontwork-mirror" );
+XML_CONSTASCII_ACTION( sXML_fontwork_outline, "fontwork-outline" );
+XML_CONSTASCII_ACTION( sXML_fontwork_shadow, "fontwork-shadow" );
+XML_CONSTASCII_ACTION( sXML_fontwork_shadow_color, "fontwork-shadow-color" );
+XML_CONSTASCII_ACTION( sXML_fontwork_shadow_offset_x, "fontwork-shadow-offset-x" );
+XML_CONSTASCII_ACTION( sXML_fontwork_shadow_offset_y, "fontwork-shadow-offset-y" );
+XML_CONSTASCII_ACTION( sXML_fontwork_shadow_transparence, "fontwork-shadow-transparence" );
+XML_CONSTASCII_ACTION( sXML_fontwork_start, "fontwork-start" );
+XML_CONSTASCII_ACTION( sXML_fontwork_style, "fontwork-style" );
 XML_CONSTASCII_ACTION( sXML_footer, "footer" );
 XML_CONSTASCII_ACTION( sXML_footer_left, "footer-left" );
 XML_CONSTASCII_ACTION( sXML_footer_style, "footer-style" );
@@ -1932,5 +1945,23 @@ XML_CONSTASCII_ACTION( sXML_kind, "kind" );
 XML_CONSTASCII_ACTION( sXML_start_angle, "start-angle" );
 XML_CONSTASCII_ACTION( sXML_cut, "cut" );
 XML_CONSTASCII_ACTION( sXML_arc, "arc" );
+
+XML_CONSTASCII_ACTION( sXML_upright, "upright" );
+XML_CONSTASCII_ACTION( sXML_slant_x, "slant-x" );
+XML_CONSTASCII_ACTION( sXML_slant_y, "slant-y" );
+XML_CONSTASCII_ACTION( sXML_autosize, "autosize" );
+XML_CONSTASCII_ACTION( sXML_slant, "slant" );
+XML_CONSTASCII_ACTION( sXML_topcircle, "topcircle" );
+XML_CONSTASCII_ACTION( sXML_bottomcircle, "bottomcircle" );
+XML_CONSTASCII_ACTION( sXML_leftcircle, "leftcircle" );
+XML_CONSTASCII_ACTION( sXML_rightcircle, "rightcircle" );
+XML_CONSTASCII_ACTION( sXML_toparc, "toparc" );
+XML_CONSTASCII_ACTION( sXML_bottomarc, "bottomarc" );
+XML_CONSTASCII_ACTION( sXML_leftarc, "leftarc" );
+XML_CONSTASCII_ACTION( sXML_rightarc, "rightarc" );
+XML_CONSTASCII_ACTION( sXML_button1, "button1" );
+XML_CONSTASCII_ACTION( sXML_button2, "button2" );
+XML_CONSTASCII_ACTION( sXML_button3, "button3" );
+XML_CONSTASCII_ACTION( sXML_button4, "button4" );
 
 #endif
