@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:14:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3021,14 +3021,15 @@ SdrHint::SdrHint(SdrHintKind eNewHint)
 {
 }
 
-SdrHint::SdrHint(const SdrPage& rNewPage)
-:   mpPage(&rNewPage),
-    mpObj(0L),
-    mpObjList(&rNewPage),
-    meHint(HINT_PAGECHG)
-{
-    maRectangle = Rectangle( 0, 0, rNewPage.GetWdt(), rNewPage.GetHgt());
-}
+// #115423#
+//SdrHint::SdrHint(const SdrPage& rNewPage)
+//: mpPage(&rNewPage),
+//  mpObj(0L),
+//  mpObjList(&rNewPage),
+//  meHint(HINT_PAGECHG)
+//{
+//  maRectangle = Rectangle( 0, 0, rNewPage.GetWdt(), rNewPage.GetHgt());
+//}
 
 SdrHint::SdrHint(const SdrObject& rNewObj)
 :   mpPage(rNewObj.GetPage()),
