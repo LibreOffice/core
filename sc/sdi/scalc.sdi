@@ -496,7 +496,7 @@ SfxVoidItem AuditingFillMode SID_DETECTIVE_FILLMODE
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     /* config: */
@@ -4855,7 +4855,7 @@ SfxVoidItem PreviousPage SID_PREVIEW_PREVIOUS
 
 //--------------------------------------------------------------------------
 SfxVoidItem Protect FID_PROTECT_TABLE
-(SfxBoolItem Protect FID_PROTECT_TABLE,SfxStringItem Password FN_PARAM_1)
+(SfxBoolItem Protect FID_PROTECT_TABLE)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6816,7 +6816,7 @@ SfxVoidItem ToggleRelative SID_TOGGLE_REL
 
 //--------------------------------------------------------------------------
 SfxVoidItem ToolProtectionDocument FID_PROTECT_DOC
-()
+(SfxBoolItem Protect FID_PROTECT_DOC)
 [
     /* flags: */
     AutoUpdate = FALSE,
