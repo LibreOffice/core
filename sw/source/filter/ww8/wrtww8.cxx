@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:11:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,11 @@
 #include <hintids.hxx>
 #endif
 #include <string.h>             // memcpy()
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
+
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -1132,13 +1137,13 @@ bool WW8_WrFkp::Combine()
     ((BYTE*)pFkp)[511] = nIMax;
     bCombined = true;
 
-#if defined __BIGENDIAN         // Hier werden nur die FCs gedreht, die
+#if defined OSL_BIGENDIAN         // Hier werden nur die FCs gedreht, die
     register USHORT i;          // Sprms muessen an anderer Stelle gedreht
                                 // werden
     register UINT32* p;
     for( i = 0, p = (UINT32*)pFkp; i <= nIMax; i++, p++ )
         *p = SWAPLONG( *p );
-#endif // ifdef __BIGENDIAN
+#endif // ifdef OSL_BIGENDIAN
 
     return true;
 }
