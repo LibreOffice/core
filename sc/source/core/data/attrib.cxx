@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2002-07-11 10:52:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ TYPEINIT1(ScTableListItem,      SfxPoolItem);
 TYPEINIT1(ScPageHFItem,         SfxPoolItem);
 TYPEINIT1(ScViewObjectModeItem, SfxEnumItem);
 TYPEINIT1(ScDoubleItem,         SfxPoolItem);
+TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 
 //------------------------------------------------------------------------
 
@@ -179,13 +180,13 @@ ScMergeAttr::ScMergeAttr(const ScMergeAttr& rItem):
     nRowMerge = rItem.nRowMerge;
 }
 
-__EXPORT ScMergeAttr::~ScMergeAttr()
+ScMergeAttr::~ScMergeAttr()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScMergeAttr::GetValueText() const
+String ScMergeAttr::GetValueText() const
 {
     String aString( '(' );
     aString += String::CreateFromInt32( nColMerge );
@@ -197,7 +198,7 @@ String __EXPORT ScMergeAttr::GetValueText() const
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
+int ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
@@ -207,14 +208,14 @@ int __EXPORT ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScMergeAttr::Clone( SfxItemPool * ) const
+SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
 {
     return new ScMergeAttr(*this);
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScMergeAttr::Create( SvStream& rStream, USHORT nVer ) const
+SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, USHORT nVer ) const
 {
     INT16   nCol;
     INT16   nRow;
@@ -225,7 +226,7 @@ SfxPoolItem* __EXPORT ScMergeAttr::Create( SvStream& rStream, USHORT nVer ) cons
 
 //------------------------------------------------------------------------
 
-SvStream& __EXPORT ScMergeAttr::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScMergeAttr::Store( SvStream& rStream, USHORT nVer ) const
 {
     rStream << nColMerge;
     rStream << nRowMerge;
@@ -248,7 +249,7 @@ ScMergeFlagAttr::ScMergeFlagAttr(INT16 nFlags):
 {
 }
 
-__EXPORT ScMergeFlagAttr::~ScMergeFlagAttr()
+ScMergeFlagAttr::~ScMergeFlagAttr()
 {
 }
 
@@ -288,13 +289,13 @@ ScProtectionAttr::ScProtectionAttr(const ScProtectionAttr& rItem):
     bHidePrint   = rItem.bHidePrint;
 }
 
-__EXPORT ScProtectionAttr::~ScProtectionAttr()
+ScProtectionAttr::~ScProtectionAttr()
 {
 }
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId  )
@@ -325,7 +326,7 @@ BOOL __EXPORT ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) con
     return TRUE;
 }
 
-BOOL __EXPORT ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
+BOOL ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     BOOL bRet = FALSE;
     sal_Bool bVal;
@@ -364,7 +365,7 @@ BOOL __EXPORT ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScProtectionAttr::GetValueText() const
+String ScProtectionAttr::GetValueText() const
 {
     String aValue;
     String aStrYes ( ScGlobal::GetRscString(STR_YES) );
@@ -383,7 +384,7 @@ String __EXPORT ScProtectionAttr::GetValueText() const
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation __EXPORT ScProtectionAttr::GetPresentation
+SfxItemPresentation ScProtectionAttr::GetPresentation
     (
         SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric,
@@ -427,7 +428,7 @@ SfxItemPresentation __EXPORT ScProtectionAttr::GetPresentation
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
+int ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
@@ -439,14 +440,14 @@ int __EXPORT ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScProtectionAttr::Clone( SfxItemPool * ) const
+SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
 {
     return new ScProtectionAttr(*this);
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScProtectionAttr::Create( SvStream& rStream, USHORT n ) const
+SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, USHORT n ) const
 {
     BOOL bProtect;
     BOOL bHFormula;
@@ -463,7 +464,7 @@ SfxPoolItem* __EXPORT ScProtectionAttr::Create( SvStream& rStream, USHORT n ) co
 
 //------------------------------------------------------------------------
 
-SvStream& __EXPORT ScProtectionAttr::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScProtectionAttr::Store( SvStream& rStream, USHORT nVer ) const
 {
     rStream << bProtection;
     rStream << bHideFormula;
@@ -509,7 +510,7 @@ BOOL ScProtectionAttr::SetHidePrint( BOOL bHPrint)
 //      ScRangeItem - Tabellenbereich
 // -----------------------------------------------------------------------
 
-void __EXPORT ScRangeItem::Record( SfxArguments& rArgs ) const
+void ScRangeItem::Record( SfxArguments& rArgs ) const
 {
     const ScAddress& rStart = aRange.aStart;
     const ScAddress& rEnd   = aRange.aEnd;
@@ -525,7 +526,7 @@ void __EXPORT ScRangeItem::Record( SfxArguments& rArgs ) const
 
 // -----------------------------------------------------------------------
 
-SfxArgumentError __EXPORT ScRangeItem::Construct( USHORT nId, const SfxArguments& rArgs )
+SfxArgumentError ScRangeItem::Construct( USHORT nId, const SfxArguments& rArgs )
 {
     if ( rArgs.Count() < 7 )
         return SFX_ARGUMENT_ERROR( rArgs.Count(), SFX_ERR_ARGUMENT_EXPECTED );
@@ -549,7 +550,7 @@ SfxArgumentError __EXPORT ScRangeItem::Construct( USHORT nId, const SfxArguments
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
+int ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -558,14 +559,14 @@ int __EXPORT ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScRangeItem::Clone( SfxItemPool* ) const
+SfxPoolItem* ScRangeItem::Clone( SfxItemPool* ) const
 {
     return new ScRangeItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation __EXPORT ScRangeItem::GetPresentation
+SfxItemPresentation ScRangeItem::GetPresentation
     (
         SfxItemPresentation ePres,
         SfxMapUnit          eCoreUnit,
@@ -597,14 +598,14 @@ SfxItemPresentation __EXPORT ScRangeItem::GetPresentation
 
 //-----------------------------------------------------------------------
 
-USHORT __EXPORT ScRangeItem::GetVersion( USHORT nFileVersion ) const
+USHORT ScRangeItem::GetVersion( USHORT nFileVersion ) const
 {
     return 2;
 }
 
 //-----------------------------------------------------------------------
 
-SvStream& __EXPORT ScRangeItem::Store( SvStream& rStrm, USHORT nVer ) const
+SvStream& ScRangeItem::Store( SvStream& rStrm, USHORT nVer ) const
 {
     rStrm << aRange;
     rStrm << nFlags;
@@ -614,7 +615,7 @@ SvStream& __EXPORT ScRangeItem::Store( SvStream& rStrm, USHORT nVer ) const
 
 //-----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScRangeItem::Create( SvStream& rStream, USHORT nVersion ) const
+SfxPoolItem* ScRangeItem::Create( SvStream& rStream, USHORT nVersion ) const
 {
     ScRange aNewRange;
     BOOL    nNewFlags = FALSE;
@@ -697,14 +698,14 @@ ScTableListItem::ScTableListItem( const USHORT nWhich, const List& rList )
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTableListItem::~ScTableListItem()
+ScTableListItem::~ScTableListItem()
 {
     delete [] pTabArr;
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTableListItem::Record( SfxArguments& rArgs ) const
+void ScTableListItem::Record( SfxArguments& rArgs ) const
 {
     rArgs.AppendInteger( nCount );
 
@@ -715,7 +716,7 @@ void __EXPORT ScTableListItem::Record( SfxArguments& rArgs ) const
 
 // -----------------------------------------------------------------------
 
-SfxArgumentError __EXPORT ScTableListItem::Construct( USHORT nId, const SfxArguments& rArgs )
+SfxArgumentError ScTableListItem::Construct( USHORT nId, const SfxArguments& rArgs )
 {
     USHORT nCount = rArgs.Get( 0 ).GetInteger();
 
@@ -761,7 +762,7 @@ ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
+int ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
@@ -785,14 +786,14 @@ int __EXPORT ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScTableListItem::Clone( SfxItemPool* ) const
+SfxPoolItem* ScTableListItem::Clone( SfxItemPool* ) const
 {
     return new ScTableListItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation __EXPORT ScTableListItem::GetPresentation
+SfxItemPresentation ScTableListItem::GetPresentation
     (
         SfxItemPresentation ePres,
         SfxMapUnit          eCoreUnit,
@@ -833,7 +834,7 @@ SfxItemPresentation __EXPORT ScTableListItem::GetPresentation
 
 //-----------------------------------------------------------------------
 
-SvStream& __EXPORT ScTableListItem::Store( SvStream& rStrm, USHORT nVer ) const
+SvStream& ScTableListItem::Store( SvStream& rStrm, USHORT nVer ) const
 {
     rStrm << nCount;
 
@@ -846,7 +847,7 @@ SvStream& __EXPORT ScTableListItem::Store( SvStream& rStrm, USHORT nVer ) const
 
 //-----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScTableListItem::Create( SvStream& rStrm, USHORT ) const
+SfxPoolItem* ScTableListItem::Create( SvStream& rStrm, USHORT ) const
 {
     ScTableListItem* pNewItem;
     List             aList;
@@ -934,7 +935,7 @@ ScPageHFItem::ScPageHFItem( const ScPageHFItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScPageHFItem::~ScPageHFItem()
+ScPageHFItem::~ScPageHFItem()
 {
     delete pLeftArea;
     delete pCenterArea;
@@ -943,7 +944,7 @@ __EXPORT ScPageHFItem::~ScPageHFItem()
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScPageHFItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL ScPageHFItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     uno::Reference<sheet::XHeaderFooterContent> xContent =
         new ScHeaderFooterContentObj( pLeftArea, pCenterArea, pRightArea );
@@ -952,7 +953,7 @@ BOOL __EXPORT ScPageHFItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return TRUE;
 }
 
-BOOL __EXPORT ScPageHFItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+BOOL ScPageHFItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     BOOL bRet = FALSE;
     uno::Reference<sheet::XHeaderFooterContent> xContent;
@@ -1003,14 +1004,14 @@ BOOL __EXPORT ScPageHFItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScPageHFItem::GetValueText() const
+String ScPageHFItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScPageHFItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
+int ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -1023,14 +1024,14 @@ int __EXPORT ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScPageHFItem::Clone( SfxItemPool* ) const
+SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 {
     return new ScPageHFItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-USHORT __EXPORT ScPageHFItem::GetVersion( USHORT nFileVersion ) const
+USHORT ScPageHFItem::GetVersion( USHORT nFileVersion ) const
 {
     // 0 = ohne Feldbefehle
     // 1 = Titel bzw. Dateiname mit SvxFileField
@@ -1100,7 +1101,7 @@ BOOL lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
 
 #define SC_FIELD_COUNT  6
 
-SfxPoolItem* __EXPORT ScPageHFItem::Create( SvStream& rStream, USHORT nVer ) const
+SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, USHORT nVer ) const
 {
     EditTextObject* pLeft   = EditTextObject::Create(rStream);
     EditTextObject* pCenter = EditTextObject::Create(rStream);
@@ -1256,7 +1257,7 @@ void lcl_StoreOldFields( ScFieldChangerEditEngine& rEngine,
         pArea->Store( rStream );
 }
 
-SvStream& __EXPORT ScPageHFItem::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScPageHFItem::Store( SvStream& rStream, USHORT nVer ) const
 {
     if ( pLeftArea && pCenterArea && pRightArea )
     {
@@ -1316,7 +1317,7 @@ SvStream& __EXPORT ScPageHFItem::Store( SvStream& rStream, USHORT nVer ) const
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
+void ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 {
     delete pLeftArea;
     pLeftArea = rNew.Clone();
@@ -1324,7 +1325,7 @@ void __EXPORT ScPageHFItem::SetLeftArea( const EditTextObject& rNew )
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
+void ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
 {
     delete pCenterArea;
     pCenterArea = rNew.Clone();
@@ -1332,13 +1333,13 @@ void __EXPORT ScPageHFItem::SetCenterArea( const EditTextObject& rNew )
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPageHFItem::SetRightArea( const EditTextObject& rNew )
+void ScPageHFItem::SetRightArea( const EditTextObject& rNew )
 {
     delete pRightArea;
     pRightArea = rNew.Clone();
 }
 
-void __EXPORT ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
+void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
 {
     switch ( nArea )
     {
@@ -1368,13 +1369,13 @@ ScViewObjectModeItem::ScViewObjectModeItem( USHORT nWhich, ScVObjMode eMode )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScViewObjectModeItem::~ScViewObjectModeItem()
+ScViewObjectModeItem::~ScViewObjectModeItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-SfxItemPresentation __EXPORT ScViewObjectModeItem::GetPresentation
+SfxItemPresentation ScViewObjectModeItem::GetPresentation
 (
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
@@ -1422,7 +1423,7 @@ SfxItemPresentation __EXPORT ScViewObjectModeItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScViewObjectModeItem::GetValueText( USHORT nVal ) const
+String ScViewObjectModeItem::GetValueText( USHORT nVal ) const
 {
     DBG_ASSERT( nVal <= VOBJ_MODE_DUMMY, "enum overflow!" );
 
@@ -1431,28 +1432,28 @@ String __EXPORT ScViewObjectModeItem::GetValueText( USHORT nVal ) const
 
 //------------------------------------------------------------------------
 
-USHORT __EXPORT ScViewObjectModeItem::GetValueCount() const
+USHORT ScViewObjectModeItem::GetValueCount() const
 {
     return 3;
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScViewObjectModeItem::Clone( SfxItemPool* ) const
+SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 {
     return new ScViewObjectModeItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-USHORT __EXPORT ScViewObjectModeItem::GetVersion( USHORT nFileVersion ) const
+USHORT ScViewObjectModeItem::GetVersion( USHORT nFileVersion ) const
 {
     return 1;
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScViewObjectModeItem::Create(
+SfxPoolItem* ScViewObjectModeItem::Create(
                                     SvStream&   rStream,
                                     USHORT      nVersion ) const
 {
@@ -1489,14 +1490,14 @@ ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScDoubleItem::GetValueText() const
+String ScDoubleItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScDoubleItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
+int ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
     const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
@@ -1506,14 +1507,14 @@ int __EXPORT ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScDoubleItem::Clone( SfxItemPool* ) const
+SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
 {
     return new ScDoubleItem( *this );
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScDoubleItem::Create( SvStream& rStream, USHORT nVer ) const
+SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, USHORT nVer ) const
 {
     double nTmp=0;
     rStream >> nTmp;
@@ -1525,7 +1526,7 @@ SfxPoolItem* __EXPORT ScDoubleItem::Create( SvStream& rStream, USHORT nVer ) con
 
 //------------------------------------------------------------------------
 
-SvStream& __EXPORT ScDoubleItem::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScDoubleItem::Store( SvStream& rStream, USHORT nVer ) const
 {
     rStream << nValue;
 
@@ -1534,12 +1535,122 @@ SvStream& __EXPORT ScDoubleItem::Store( SvStream& rStream, USHORT nVer ) const
 
 //------------------------------------------------------------------------
 
-__EXPORT ScDoubleItem::~ScDoubleItem()
+ScDoubleItem::~ScDoubleItem()
 {
 }
 
-// -----------------------------------------------------------------------
 
+// ============================================================================
 
+ScPageScaleToItem::ScPageScaleToItem() :
+    SfxPoolItem( ATTR_PAGE_SCALETO ),
+    mnWidth( 0 ),
+    mnHeight( 0 )
+{
+}
+
+ScPageScaleToItem::ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight ) :
+    SfxPoolItem( ATTR_PAGE_SCALETO ),
+    mnWidth( nWidth ),
+    mnHeight( nHeight )
+{
+}
+
+ScPageScaleToItem::~ScPageScaleToItem()
+{
+}
+
+ScPageScaleToItem* ScPageScaleToItem::Clone( SfxItemPool* ) const
+{
+    return new ScPageScaleToItem( *this );
+}
+
+int ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
+{
+    DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "ScPageScaleToItem::operator== - unequal wid or type" );
+    const ScPageScaleToItem& rPageCmp = static_cast< const ScPageScaleToItem& >( rCmp );
+    return ((mnWidth == rPageCmp.mnWidth) && (mnHeight == rPageCmp.mnHeight)) ? 1 : 0;
+}
+
+namespace {
+void lclAppendScalePageCount( String& rText, sal_uInt16 nPages )
+{
+    rText.AppendAscii( ": " );
+    if( nPages )
+    {
+        String aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
+        aPages.SearchAndReplaceAscii( "%1", String::CreateFromInt32( nPages ) );
+        rText.Append( aPages );
+    }
+    else
+        rText.Append( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_AUTO ) );
+}
+} // namespace
+
+SfxItemPresentation ScPageScaleToItem::GetPresentation(
+        SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, XubString& rText, const IntlWrapper* ) const
+{
+    rText.Erase();
+    if( !IsValid() || (ePres == SFX_ITEM_PRESENTATION_NONE) )
+        return SFX_ITEM_PRESENTATION_NONE;
+
+    String aName( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETO ) );
+    String aValue( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_WIDTH ) );
+    lclAppendScalePageCount( aValue, mnWidth );
+    aValue.AppendAscii( ", " ).Append( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_HEIGHT ) );
+    lclAppendScalePageCount( aValue, mnHeight );
+
+    switch( ePres )
+    {
+        case SFX_ITEM_PRESENTATION_NONE:
+        break;
+
+        case SFX_ITEM_PRESENTATION_NAMEONLY:
+            rText = aName;
+        break;
+
+        case SFX_ITEM_PRESENTATION_NAMELESS:
+            rText = aValue;
+        break;
+
+        case SFX_ITEM_PRESENTATION_COMPLETE:
+            rText.Assign( aName ).AppendAscii( " (" ).Append( aValue ).Append( ')' );
+        break;
+
+        default:
+            DBG_ERRORFILE( "ScPageScaleToItem::GetPresentation - unknown presentation mode" );
+            ePres = SFX_ITEM_PRESENTATION_NONE;
+    }
+    return ePres;
+}
+
+BOOL ScPageScaleToItem::QueryValue( uno::Any& rAny, BYTE nMemberId ) const
+{
+    BOOL bRet = TRUE;
+    switch( nMemberId )
+    {
+        case SC_MID_PAGE_SCALETO_WIDTH:     rAny <<= mnWidth;   break;
+        case SC_MID_PAGE_SCALETO_HEIGHT:    rAny <<= mnHeight;  break;
+        default:
+            DBG_ERRORFILE( "ScPageScaleToItem::QueryValue - unknown member ID" );
+            bRet = FALSE;
+    }
+    return bRet;
+}
+
+BOOL ScPageScaleToItem::PutValue( const uno::Any& rAny, BYTE nMemberId )
+{
+    BOOL bRet = FALSE;
+    switch( nMemberId )
+    {
+        case SC_MID_PAGE_SCALETO_WIDTH:     bRet = rAny >>= mnWidth;    break;
+        case SC_MID_PAGE_SCALETO_HEIGHT:    bRet = rAny >>= mnHeight;   break;
+        default:
+            DBG_ERRORFILE( "ScPageScaleToItem::PutValue - unknown member ID" );
+    }
+    return bRet;
+}
+
+// ============================================================================
 
 
