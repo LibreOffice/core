@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Date: 2003-03-31 17:04:24 $
+#   last change: $Date: 2004-07-23 13:42:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ TARGET  = runner_org_openoffice
 
 # --- Files --------------------------------------------------------
 
-JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
+JARFILES = ridl.jar jurt.jar unoil.jar
 JAVAFILES =	Runner.java RunnerService.java
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
