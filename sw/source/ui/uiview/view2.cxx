@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-04-23 14:10:22 $
+ *  last change: $Author: os $ $Date: 2002-05-03 14:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,7 +496,16 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 //JP 10.06.99: warten auf SLOT von MBA
 //          else if(Application::GetAppWindow()->IsFullScreenView())
 //              GetViewFrame()->GetDispatcher()->Execute(SID_WIN_FULLSCREEN);
-            break;
+            else if(pWrtShell->GetFlyFrmFmt() )
+            {
+                const SwFrmFmt* pFmt = pWrtShell->GetFlyFrmFmt();
+                if(pWrtShell->GotoFly( pFmt->GetName(), FLYCNTTYPE_FRM ))
+                {
+                    pWrtShell->HideCrsr();
+                    pWrtShell->EnterSelFrmMode();
+                }
+            }
+        break;
         case SID_ATTR_BORDER_INNER:
         case SID_ATTR_BORDER_OUTER:
         case SID_ATTR_BORDER_SHADOW:
