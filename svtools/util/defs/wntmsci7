@@ -7994,3 +7994,4 @@ CreateWindow
 ?GetExportFormatNumberForMediaType@FilterConfigCache@@QAEGABVString@@@Z
 ?GetImportFormatMediaType@FilterConfigCache@@QAE?AVString@@G@Z
 ?GetImportFormatNumberForMediaType@FilterConfigCache@@QAEGABVString@@@Z
+?GetXTransferable@TransferableDataHelper@@QBE?AV?$Reference@VXTransferable@datatransfer@star@sun@com@@@uno@star@sun@com@@XZ
