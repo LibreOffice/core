@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:19:06 $
+#   last change: $Author: kz $ $Date: 2004-08-30 17:22:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -536,6 +536,7 @@ DLLPOST=.dll
 EXECPOST=.exe
 SCPPOST=.inf
 DLLDEST=$(BIN)
+SOLARSHAREDBIN=$(SOLARBINDIR)
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
