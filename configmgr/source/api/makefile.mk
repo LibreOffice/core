@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+#   last change: $Author: dg $ $Date: 2000-11-30 08:17:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,27 +74,31 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/encodename.obj	\
-        $(SLO)$/useradminimpl.obj	\
-        $(SLO)$/readaccessimpl.obj	\
-        $(SLO)$/confaccessfactory.obj	\
-        $(SLO)$/cfgupdatehelper.obj	\
-        $(SLO)$/nodepropset.obj	\
-        $(SLO)$/confreadaccess.obj	\
-        $(SLO)$/confgroupaccess.obj	\
-        $(SLO)$/confsetaccess.obj	\
-        $(SLO)$/confupdateimpl.obj	\
-        $(SLO)$/confupdateaccess.obj	\
-        $(SLO)$/confbaseelement.obj	\
-        $(SLO)$/confbaseaccess.obj	\
-        $(SLO)$/confaccess.obj	\
-        $(SLO)$/confsvccomponent.obj	\
+        $(SLO)$/encodename.obj \
         $(SLO)$/confevents.obj	\
         $(SLO)$/confeventhelpers.obj	\
-        $(SLO)$/confprovider.obj	\
-        $(SLO)$/confproviderimpl.obj	\
-        $(SLO)$/confchangesset.obj	\
-        $(SLO)$/changenotifier.obj	\
+        $(SLO)$/confsvccomponent.obj
+
+
+#		$(SLO)$/useradminimpl.obj	\
+#		$(SLO)$/readaccessimpl.obj	\
+#		$(SLO)$/confaccessfactory.obj	\
+#		$(SLO)$/cfgupdatehelper.obj	\
+#		$(SLO)$/nodepropset.obj	\
+#		$(SLO)$/confreadaccess.obj	\
+#		$(SLO)$/confgroupaccess.obj	\
+#		$(SLO)$/confsetaccess.obj	\
+#		$(SLO)$/confupdateimpl.obj	\
+#		$(SLO)$/confupdateaccess.obj	\
+#		$(SLO)$/confbaseelement.obj	\
+#		$(SLO)$/confbaseaccess.obj	\
+#		$(SLO)$/confaccess.obj	\
+#		$(SLO)$/confsvccomponent.obj	\
+#		$(SLO)$/confeventhelpers.obj	\
+#		$(SLO)$/confprovider.obj	\
+#		$(SLO)$/confproviderimpl.obj	\
+#		$(SLO)$/confchangesset.obj	\
+#		$(SLO)$/changenotifier.obj	\
 
 # --- Targets ----------------------------------
 

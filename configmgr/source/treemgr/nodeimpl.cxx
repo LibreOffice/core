@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,17 +80,10 @@ namespace configmgr
 
 namespace
 {
-    inline void fillInfo(NodeInfo& rInfo,OUString const& sName,NodeAttributes const& aAttributes)
+    inline void fillInfo(NodeInfo& rInfo,OUString const& sName, Attributes const& aAttributes)
     {
-        rInfo.name = Name(sName,Name::NoValidate());
-
-        rInfo.is.writable    = aAttributes.writable;
-        rInfo.is.nullable    = aAttributes.optional;
-        rInfo.is.notified    = aAttributes.notified;
-        rInfo.is.constrained = aAttributes.constrained;
-
-        rInfo.is.localized   = false;
-        rInfo.is.defaultable = false;
+        rInfo.aName = Name(sName,Name::NoValidate());
+        rInfo.aAttributes = aAttributes;
     }
     inline void fetchInfo(NodeInfo& rInfo,INode const& rNode)
     {
@@ -311,7 +304,7 @@ void ValueNodeImpl::setDefault()
 void ValueNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     fetchInfo(rInfo,m_rOriginal);
-    rInfo.is.defaultable = m_rOriginal.hasDefault();
+    rInfo.aAttributes.bDefaultable = m_rOriginal.hasDefault();
 }
 //-----------------------------------------------------------------------------
 

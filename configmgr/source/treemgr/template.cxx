@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,11 @@ TemplateProvider::~TemplateProvider()
 // class Template
 //-----------------------------------------------------------------------------
 
-Template::Template(Name const& aName, Name const& aModule,UnoType const& aType)
+Template::Template(Name const& aName, Name const& aModule,UnoType const& aType, Attributes const& aAttrs)
 : m_aName(aName)
 , m_aModule(aModule)
 , m_aInstanceType(aType)
+, m_aAttributes(aAttrs)
 {
 }
 //-----------------------------------------------------------------------------
@@ -151,17 +152,17 @@ TemplateHolder locate(Name const& aName, Name const& aModule, TemplateProvider c
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder makeSimpleTemplate(UnoType const& aType, TemplateProvider const& aProvider)
+TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, TemplateProvider const& aProvider)
 {
     TemplateName aNames(aType);
-    return TemplateImplHelper::makeTemplate( aNames, aProvider, aType);
+    return TemplateImplHelper::makeTemplate( aNames, aProvider, aType, aAttrs);
 }
 //-----------------------------------------------------------------------------
 
 TemplateHolder makeTreeTemplate(OUString const& sName, TemplateProvider const& aProvider)
 {
     TemplateName aNames( TemplateName::parseTemplatePath(sName) );
-    return TemplateImplHelper::makeTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType());
+    return TemplateImplHelper::makeTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType(), Attributes());
 }
 //-----------------------------------------------------------------------------
 

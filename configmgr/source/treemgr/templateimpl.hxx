@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,15 +174,15 @@ namespace configmgr
             //-----------------------------------------------------------------
 
             static TemplateHolder findTemplate (TemplateName const& aNames, TemplateProvider const& aProvider);
-            static TemplateHolder makeTemplate (TemplateName const& aNames, TemplateProvider const& aProvider, UnoType const& aType);
+            static TemplateHolder makeTemplate (TemplateName const& aNames, TemplateProvider const& aProvider, UnoType const& aType, Attributes const& aAttrs);
             static TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& aProvider, ISubtree const& aSet);
             //-----------------------------------------------------------------
 
-            static TemplateHolder createNew (TemplateName const& aNames,UnoType const& aType);
+            static TemplateHolder createNew (TemplateName const& aNames,UnoType const& aType, Attributes const& aAttrs);
             //-----------------------------------------------------------------
             static TemplateHolder createNew (TemplateName const& aNames)
             {
-                return createNew(aNames, getNoTypeAvailable());
+                return createNew(aNames, getNoTypeAvailable(), Attributes());
             }
             //-----------------------------------------------------------------
         };
@@ -202,7 +202,7 @@ namespace configmgr
             std::auto_ptr<INode> instantiate(TemplateHolder const& aTemplate);
 
             TemplateHolder findTemplate (TemplateName const& aNames);
-            TemplateHolder makeTemplate (TemplateName const& aNames, UnoType const& aType);
+            TemplateHolder makeTemplate (TemplateName const& aNames, UnoType const& aType, Attributes const& aAttrs);
             TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, ISubtree const& aSet);
 
         private:

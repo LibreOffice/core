@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-23 11:56:03 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ namespace
     }
     void CollectElementTrees::add(INode& rNode)
     {
-        bool bWritable = rNode.getAttributes().writable;
+        bool bWritable = rNode.getAttributes().bWritable;
 
         NodeFactory& rNodeFactory = bWritable ? m_rFactory : NodeType::getReadAccessFactory();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:55 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,13 +223,13 @@ NodeInfo implInfo(NodeImpl const& aNode)
 
 Name Node::name()   const
 {
-    return implInfo(*m_pSpecificNode).name;
+    return implInfo(*m_pSpecificNode).aName;
 }
 //-----------------------------------------------------------------------------
 
 Attributes Node::attributes()   const
 {
-    return implInfo(*m_pSpecificNode).is;
+    return implInfo(*m_pSpecificNode).aAttributes;
 }
 //-----------------------------------------------------------------------------
 

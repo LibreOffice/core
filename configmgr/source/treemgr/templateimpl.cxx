@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 03:11:49 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,9 @@ TemplateName TemplateName::parseTemplatePath(OUString const& sName)
 // class TemplateImplHelper
 //-----------------------------------------------------------------------------
 
-TemplateHolder TemplateImplHelper::createNew (TemplateName const& aNames,UnoType const& aType)
+TemplateHolder TemplateImplHelper::createNew (TemplateName const& aNames,UnoType const& aType, Attributes const& aAttrs)
 {
-    return new Template(aNames.aName, aNames.aModule, aType);
+    return new Template(aNames.aName, aNames.aModule, aType, aAttrs);
 }
 //-----------------------------------------------------------------------------
 
@@ -138,12 +138,12 @@ TemplateHolder TemplateImplHelper::findTemplate (TemplateName const& aNames, Tem
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder TemplateImplHelper::makeTemplate (TemplateName const& aNames, TemplateProvider const& aProvider, UnoType const& aType)
+TemplateHolder TemplateImplHelper::makeTemplate (TemplateName const& aNames, TemplateProvider const& aProvider, UnoType const& aType, Attributes const& aAttrs)
 {
     OSL_ENSURE(aProvider.m_aImpl.isValid(), "Cannot find a template without a provider");
 
     if (aProvider.m_aImpl.isValid())
-        return aProvider.m_aImpl->makeTemplate(aNames,aType);
+        return aProvider.m_aImpl->makeTemplate(aNames,aType,aAttrs);
 
     else
         return TemplateHolder(0);
@@ -209,13 +209,13 @@ TemplateHolder TemplateProvider_Impl::findTemplate (TemplateName const& aNames)
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder TemplateProvider_Impl::makeTemplate (TemplateName const& aNames, UnoType const& aType)
+TemplateHolder TemplateProvider_Impl::makeTemplate (TemplateName const& aNames, UnoType const& aType, Attributes const& aAttrs)
 {
     typedef TemplateRepository::value_type Entry;
 
     TemplateRepository::iterator it = m_aRepository.find(aNames);
     if (it == m_aRepository.end())
-        it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames,aType) ) ).first;
+        it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames,aType, aAttrs) ) ).first;
 
     else if (!it->second->isInstanceTypeKnown())
         TemplateImplHelper::assignActualType(it->second.getBody(), aType);
@@ -329,7 +329,7 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
         OSL_ASSERT( aType != TemplateImplHelper::getNoTypeAvailable() );
 
         if (it == m_aRepository.end())
-            it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames,aType) ) ).first;
+            it = m_aRepository.insert( Entry( aNames, TemplateImplHelper::createNew(aNames,aType, aSet.getAttributes()) ) ).first;
 
         else
             TemplateImplHelper::assignActualType(it->second.getBody(), aType);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,8 +284,8 @@ SetElementFactory& SetElementFactory::operator=(SetElementFactory const& aOther)
 SetElementFactory::~SetElementFactory()
 {
 }
-//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
 ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTemplate)
 {
     OSL_ENSURE(m_aProvider.m_aImpl.isValid(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
@@ -304,7 +304,6 @@ ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTempla
     return aRet;
 }
 //-----------------------------------------------------------------------------
-
 ElementTree SetElementFactory::instantiateOnDefault(std::auto_ptr<INode> aTree, TemplateHolder const& aDummyTemplate)
 {
 //  OSL_ENSURE(m_aProvider.get().isValid(), "ERROR: Template Instance Factory has no template provider - cannot instantiate element");
@@ -313,11 +312,15 @@ ElementTree SetElementFactory::instantiateOnDefault(std::auto_ptr<INode> aTree, 
 
     if (!aTree.get()) return ElementTree( 0 );
 
-    ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, c_TreeDepthAll, aDummyTemplate, m_aProvider );
-    pNewTree->takeNodeFrom(aTree);
+    ElementTree aRet( new ElementTreeImpl( aTree, aDummyTemplate, m_aProvider ) );
+    // ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, c_TreeDepthAll, aDummyTemplate, m_aProvider );
+    // pNewTree->takeNodeFrom(aTree);
 
-    return ElementTree( pNewTree );
+    // return ElementTree( pNewTree );
+
+    return aRet;
 }
+
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -333,9 +336,9 @@ ElementTreeHolder ValueSetUpdater::makeValueElement(Name const& aName, UnoAny co
 
     std::auto_ptr<INode> pNode;
     if (aValue.hasValue())
-        pNode.reset( new ValueNode(aName.toString(),aValue) );
+        pNode.reset( new ValueNode(aName.toString(),aValue, m_aTemplate->getAttributes()) );
     else
-        pNode.reset( new ValueNode(aName.toString(),aType) );
+        pNode.reset( new ValueNode(aName.toString(),aType, m_aTemplate->getAttributes()) );
 
     return new ElementTreeImpl(pNode, m_aTemplate, TemplateProvider() );
 }
@@ -385,7 +388,7 @@ static void doValidateSet(Tree const& aParentTree, NodeRef const& aSetNode)
     if (! TreeImplHelper::isSet(aSetNode))
         throw Exception("INTERNAL ERROR: Set Update: node is not a set");
 
-    if (!aSetNode.getAttributes().writable)
+    if (!aSetNode.getAttributes().bWritable)
         throw ConstraintViolation( "Set Update: Set is read-only !" );
 }
 //-----------------------------------------------------------------------------
@@ -534,13 +537,13 @@ UnoAny ValueSetUpdater::implValidateValue(UnoAny const& aValue)
 UnoAny ValueSetUpdater::implValidateValue(NodeRef const& aElementNode, UnoAny const& aValue)
 {
     // Here we assume writable == removable/replaceable
-    if (!aElementNode.getAttributes().writable)
+    if (!aElementNode.getAttributes().bWritable)
         throw ConstraintViolation( "Set Update: Existing element is read-only !" );
 
     // Here we assume nullable != removable
     if (!aValue.hasValue())
     {
-        if (!aElementNode.getAttributes().nullable)
+        if (!aElementNode.getAttributes().bNullable)
             throw ConstraintViolation( "Set Update: Value is not nullable !" );
     }
     return implValidateValue( aValue);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:32:37 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ void GroupUpdater::implValidateNode(Tree const& aTree, NodeRef const& aNode) con
     if (!TreeImplHelper::isValue(aNode))
         throw TypeMismatch( OUString(RTL_CONSTASCII_USTRINGPARAM("An inner Node")) );
 
-    if (!aNode.getAttributes().writable)
+    if (!aNode.getAttributes().bWritable)
         throw ConstraintViolation( "Group Member Update: Node is read-only !" );
 
 }
@@ -162,7 +162,7 @@ UnoAny GroupUpdater::implValidateValue(NodeRef const& aNode, UnoAny const& aValu
 
     if (!aValue.hasValue())
     {
-        if (!aNode.getAttributes().nullable)
+        if (!aNode.getAttributes().bNullable)
             throw ConstraintViolation( "Group Member Update: Node is not nullable !" );
     }
 
@@ -221,7 +221,7 @@ NodeChange GroupUpdater::validateSetDefault(NodeRef const& aValueNode)
 
     OSL_ASSERT(TreeImplHelper::isValue(aValueNode));
 
-    if (!aValueNode.getAttributes().defaultable)
+    if (!aValueNode.getAttributes().bDefaultable)
         throw ConstraintViolation( "Group Member Update: Node may not be default !" );
 
     //if (!TreeImplHelper::node(aValueNode)->valueImpl()->canGetDefaultValue())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ void ReadOnlyValueNodeImpl::setNodeName(Name const& )
 void ReadOnlyValueNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     ValueNodeImpl::getNodeInfo(rInfo);
-    rInfo.is.writable = false;
+    rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
 
@@ -373,7 +373,7 @@ void DeferredValueNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     ValueNodeImpl::getNodeInfo(rInfo);
     if (m_pNewName)
-        rInfo.name = *m_pNewName;
+        rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
@@ -491,8 +491,8 @@ std::auto_ptr<ValueChange> DeferredValueNodeImpl::preCommitChange()
     getNodeInfo(aInfo);
 
     // now make a ValueChange
-    ValueChange* pChange = new ValueChange( aInfo.name.toString(), getValue(),
-                                            eMode, ValueNodeImpl::getValue());
+    ValueChange* pChange = new ValueChange( aInfo.aName.toString(), getValue(),
+                                            aInfo.aAttributes, eMode, ValueNodeImpl::getValue());
 
     return std::auto_ptr<ValueChange>( pChange);
 }
@@ -546,7 +546,7 @@ void ReadOnlyGroupNodeImpl::setNodeName(Name const& )
 void ReadOnlyGroupNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     GroupNodeImpl::getNodeInfo(rInfo);
-    rInfo.is.writable = false;
+    rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
 
@@ -653,7 +653,7 @@ void DeferredGroupNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     GroupNodeImpl::getNodeInfo(rInfo);
     if (m_pNewName)
-        rInfo.name = *m_pNewName;
+        rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
@@ -702,8 +702,9 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitChanges()
         // get the name of this node
         NodeInfo aInfo;
         getNodeInfo(aInfo);
-
-        aRet.reset( new SubtreeChange(aInfo.name.toString()) );
+        aRet.reset( new SubtreeChange(aInfo.aName.toString(),
+                                      rtl::OUString(),
+                                      aInfo.aAttributes) );
     }
     return aRet;
 }
@@ -779,7 +780,7 @@ void ReadOnlyTreeSetNodeImpl::setNodeName(Name const& )
 void ReadOnlyTreeSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     TreeSetNodeImpl::getNodeInfo(rInfo);
-    rInfo.is.writable = false;
+    rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
 
@@ -849,7 +850,7 @@ void ReadOnlyValueSetNodeImpl::setNodeName(Name const& )
 void ReadOnlyValueSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     ValueSetNodeImpl::getNodeInfo(rInfo);
-    rInfo.is.writable = false;
+    rInfo.aAttributes.bWritable = false;
 }
 //-----------------------------------------------------------------------------
 
@@ -1142,7 +1143,7 @@ void DeferredTreeSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     TreeSetNodeImpl::getNodeInfo(rInfo);
     if (m_pNewName)
-        rInfo.name = *m_pNewName;
+        rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
@@ -1326,9 +1327,9 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::preCommitChanges()
     getNodeInfo(aInfo);
 
     // and make a SubtreeChange
-    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.name.toString()) );
-
-    pSetChange->setChildTemplateName(getElementTemplate()->getPath().toString());
+    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.aName.toString(),
+                                                               getElementTemplate()->getPath().toString(),
+                                                               aInfo.aAttributes) );
 
     // commit preexisting nodes
     {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
@@ -1811,7 +1812,7 @@ void DeferredValueSetNodeImpl::getNodeInfo(NodeInfo& rInfo) const
 {
     ValueSetNodeImpl::getNodeInfo(rInfo);
     if (m_pNewName)
-        rInfo.name = *m_pNewName;
+        rInfo.aName = *m_pNewName;
 }
 //-----------------------------------------------------------------------------
 
@@ -1993,9 +1994,7 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::preCommitChanges()
     getNodeInfo(aInfo);
 
     // and make a SubtreeChange
-    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.name.toString()) );
-
-    pSetChange->setChildTemplateName(getElementTemplate()->getPath().toString());
+    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aInfo.aName.toString(), getElementTemplate()->getPath().toString(), aInfo.aAttributes) );
 
     // commit preexisting nodes
     {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();
