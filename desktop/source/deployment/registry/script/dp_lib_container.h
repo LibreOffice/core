@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_lib_container.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:11:41 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@ class LibraryContainer
     mutable t_libs_map m_map;
     mutable bool m_inited;
     mutable bool m_modified;
-    void verify_init(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
-        const;
 
 public:
     inline ~LibraryContainer()
@@ -119,6 +116,9 @@ public:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         css::uno::Reference<css::uno::XComponentContext> const & xContext );
 
+    void init(
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        const;
     void flush(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         const;
