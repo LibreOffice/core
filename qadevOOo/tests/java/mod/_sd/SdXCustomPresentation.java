@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXCustomPresentation.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 09:36:52 $
+ *  last change:$Date: 2003-05-27 13:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import com.sun.star.drawing.XDrawPages;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.presentation.XCustomPresentationSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -113,7 +114,8 @@ public class SdXCustomPresentation extends TestCase {
     */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a draw document" );
@@ -155,10 +157,12 @@ public class SdXCustomPresentation extends TestCase {
     * @see com.sun.star.presentation.XCustomPresentationSupplier
     * @see com.sun.star.presentation.CustomPresentation
     */
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(
+                                TestParameters Param, PrintWriter log) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                    (XMultiServiceFactory)Param.getMSF());
 
         log.println( "creating a test environment" );
 

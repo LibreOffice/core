@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoPresView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 09:32:18 $
+ *  last change:$Date: 2003-05-27 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XModifiable;
@@ -128,7 +129,8 @@ public class SdUnoPresView extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop)
             UnoRuntime.queryInterface(
-                XDesktop.class, DesktopTools.createDesktop(Param.getMSF()) );
+                XDesktop.class, DesktopTools.createDesktop(
+                                    (XMultiServiceFactory)Param.getMSF()) );
     }
 
     /**
@@ -184,7 +186,8 @@ public class SdUnoPresView extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                        (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a impress documents" );
