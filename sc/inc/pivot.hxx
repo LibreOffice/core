@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ struct PivotColRef
 };
 
 typedef PivotField          PivotFieldArr[PIVOT_MAXFIELD];
+typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
 
 class PivotStrCollection : public StrCollection
 {
