@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-25 11:44:53 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <svdata.hxx>
 #include <unohelp.hxx>
 
-#pragma hdrstop
+
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
