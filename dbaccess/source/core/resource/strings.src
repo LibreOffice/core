@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-03 19:15:23 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ chinese_traditional ] = "¤w¸g¹Á¸Õ¹L¶}±Òªí®æ $name$ ¡C";
     Text[ turkish ] = "Tried to open the table $name$";
     Text[ arabic ] = "Êã ãÍÇæáÉ İÊÍ ÇáÌÏæá $name$.";
+    Text[ finnish ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
+    Text[ catalan ] = "Se intentó abrir la tabla $name$";
 };
 String RID_STR_CONNECTION_INVALID
 {
@@ -92,20 +94,22 @@ String RID_STR_CONNECTION_INVALID
     Text[ portuguese ] = "Impossível estabelecer ligação.";
     Text[ russian ] = "Ñîçäàòü ñâÿçü íå óäàëîñü!";
     Text[ greek ] = "Not possible to create a connection!";
-    Text[ dutch ] = "Not possible to create a connection!";
-    Text[ french ] = "Not possible to create a connection!";
+    Text[ dutch ] = "Er kon geen verbinding tot stand worden gebracht!";
+    Text[ french ] = "Impossible d'établir une connexion !";
     Text[ spanish ] = "¡No se pudo crear una conexión!";
     Text[ italian ] = "Impossibile creare il collegamento!";
     Text[ danish ] = "Not possible to create a connection!";
-    Text[ swedish ] = "Det gick inte att skapa en förbindelse!";
+    Text[ swedish ] = "Det gick inte att skapa en förbindelse.";
     Text[ polish ] = "Brak po³¹czenia!";
     Text[ portuguese_brazilian ] = "Not possible to create a connection!";
     Text[ japanese ] = "Ú‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "Not possible to create a connection!";
-    Text[ chinese_simplified ] = "Not possible to create a connection!";
-    Text[ chinese_traditional ] = "Not possible to create a connection!";
+    Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Á¬½Ó£¡";
+    Text[ chinese_traditional ] = "µLªk«Ø¥ß³s½u!";
     Text[ turkish ] = "Not possible to create a connection!";
     Text[ arabic ] = "Not possible to create a connection!";
+    Text[ finnish ] = "Es konnte keine Verbindung erstellt werden.";
+    Text[ catalan ] = "Not possible to create a connection!";
 };
 
 String RID_STR_TABLE_IS_FILTERED
@@ -116,8 +120,8 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ portuguese ] = "A tabela $name$ já existe. Esta foi filtrada.";
     Text[ russian ] = "Òàáëèöà $name$ óæå ñóùåñòâóåò. Îíà îòôèëüòğîâàíà!";
     Text[ greek ] = "the table $name$ already exists. She is only filtered!";
-    Text[ dutch ] = "the table $name$ already exists. She is only filtered!";
-    Text[ french ] = "the table $name$ already exists. She is only filtered!";
+    Text[ dutch ] = "Tabel $name$ bestaat reeds. Hij werd alleen gefilterd!";
+    Text[ french ] = "La table $name$ existe déjà ; elle a été filtrée !";
     Text[ spanish ] = "La tabla $name$ ya existe. ¡Ha sido filtrada!";
     Text[ italian ] = "Il nome della tabella $name$ esiste già in quanto è stato filtrato.";
     Text[ danish ] = "the table $name$ already exists. She is only filtered!";
@@ -126,10 +130,12 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
     Text[ japanese ] = "Ã°ÌŞÙ $name$ ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·BÌ¨ÙÀ‚³‚ê‚Ä‚¢‚Ü‚·B";
     Text[ korean ] = "the table $name$ already exists. She is only filtered!";
-    Text[ chinese_simplified ] = "the table $name$ already exists. She is only filtered!";
-    Text[ chinese_traditional ] = "the table $name$ already exists. She is only filtered!";
+    Text[ chinese_simplified ] = "Õâ¸ö±í¸ñ $name$ ÒÑ¾­´æÔÚ¡£ÒÑ¾­É¸Ñ¡Õâ¸ö±í¸ñ!";
+    Text[ chinese_traditional ] = "³o­Óªí®æ $name$ ¤w¸g¦s¦b¡C¤w¸g¿z¿ï³o­Óªí®æ!";
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
     Text[ arabic ] = "the table $name$ already exists. She is only filtered!";
+    Text[ finnish ] = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
+    Text[ catalan ] = "the table $name$ already exists. She is only filtered!";
 };
 
 String RID_STR_NEED_CONFIG_WRITE_ACCESS
@@ -137,4 +143,23 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
     Text [ english ] = "You have no write access to the configuration data the object is based on.";
     Text [ english_us ] = "You have no write access to the configuration data the object is based on.";
+    Text[ portuguese ] = "Não possui direitos de escrita sobre os dados de configuração do objecto.";
+    Text[ russian ] = "Âû íå îáëàäàåòå ïğàâàìè çàïèñè â êîíôèãóğàöèîííûõ äàííûõ ıòîãî îáúåêòà.";
+    Text[ greek ] = "You have no write access to the configuration data the object is based on.";
+    Text[ dutch ] = "U heeft geen schrijfrechten op de cofiguratiegegevens van het object.";
+    Text[ french ] = "Vous n'avez pas d'accès en écriture sur les données de configuration de l'objet.";
+    Text[ spanish ] = "No es posible el acceso a los datos de configuración para escribir.";
+    Text[ finnish ] = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
+    Text[ italian ] = "You have no write access to the configuration data the object is based on.";
+    Text[ danish ] = "You have no write access to the configuration data the object is based on.";
+    Text[ swedish ] = "Du har ingen skrivåtkomst till objektets konfigurationsdata.";
+    Text[ polish ] = "Brak praw na zapisywanie danych konfiguracjynych obiektu.";
+    Text[ portuguese_brazilian ] = "You have no write access to the configuration data the object is based on.";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ìİ’èÃŞ°À‚Ö‚Ì‘‚«‚İŒ ‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Text[ korean ] = "You have no write access to the configuration data the object is based on.";
+    Text[ chinese_simplified ] = "ÄúÃ»ÓĞÈ¨ÏŞ¶ÁÈ¡Õâ¸ö¶ÔÏóµÄÅäÖÃÊı¾İ¡£";
+    Text[ chinese_traditional ] = "±z¨S¦³Åv­­¦s¨ú³o­Óª«¥óªº°t¸m¸ê®Æ¡C";
+    Text[ turkish ] = "You have no write access to the configuration data the object is based on.";
+    Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
+    Text[ catalan ] = "You have no write access to the configuration data the object is based on.";
 };
