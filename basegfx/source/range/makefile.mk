@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2003-10-28 11:26:38 $
+#   last change: $Author: rt $ $Date: 2004-11-26 18:40:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,9 @@ TARGET=range
 SLOFILES= \
                 $(SLO)$/b1drange.obj		\
                 $(SLO)$/b2drange.obj		\
+                $(SLO)$/b2dmultirange.obj		\
                 $(SLO)$/b3drange.obj
-            
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
