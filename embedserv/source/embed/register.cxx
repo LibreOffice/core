@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-05 15:50:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ uno::Reference<uno::XInterface> SAL_CALL EmbedServer_createInstance(
 uno::Sequence< ::rtl::OUString > SAL_CALL EmbedServer_getSupportedServiceNames() throw()
 {
     uno::Sequence< ::rtl::OUString > aServiceNames( 1 );
-    aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.OleApplicationRegistration" ) );
+    aServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.OleEmbeddedServerRegistration" ) );
     return aServiceNames;
 }
 
