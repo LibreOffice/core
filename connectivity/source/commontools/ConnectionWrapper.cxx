@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:51:13 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
 #ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
 #endif
@@ -92,6 +95,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace ::com::sun::star::reflection;
 // --------------------------------------------------------------------------------
 OConnectionWrapper::OConnectionWrapper()
 {
@@ -111,6 +115,33 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
         m_xTypeProvider.set(m_xConnection,UNO_QUERY);
         m_xUnoTunnel.set(m_xConnection,UNO_QUERY);
         m_xServiceInfo.set(m_xConnection,UNO_QUERY);
+
+        // set ourself as delegator
+        Reference<XInterface> xIf = static_cast< XUnoTunnel* >( this );
+        m_xProxyConnection->setDelegator( xIf );
+
+    }
+    osl_decrementInterlockedCount( &_rRefCount );
+}
+// -----------------------------------------------------------------------------
+void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnection
+                                       ,const Reference< XMultiServiceFactory>& _xORB
+                                       ,oslInterlockedCount& _rRefCount)
+{
+    OSL_ENSURE(_xConnection.is(),"OConnectionWrapper: Connection must be valid!");
+    osl_incrementInterlockedCount( &_rRefCount );
+
+    m_xConnection = _xConnection;
+    m_xTypeProvider.set(m_xConnection,UNO_QUERY);
+    m_xUnoTunnel.set(m_xConnection,UNO_QUERY);
+    m_xServiceInfo.set(m_xConnection,UNO_QUERY);
+
+    Reference< XProxyFactory >  xProxyFactory(_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+    Reference< XAggregation > xConProxy = xProxyFactory->createProxy(_xConnection);
+    if (xConProxy.is())
+    {
+        // transfer the (one and only) real ref to the aggregate to our member
+        m_xProxyConnection = xConProxy;
 
         // set ourself as delegator
         Reference<XInterface> xIf = static_cast< XUnoTunnel* >( this );
