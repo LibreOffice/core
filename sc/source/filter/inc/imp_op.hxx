@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:40:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,6 @@ protected:
     void                    Country( void );                // 0x8C
     void                    Hideobj( void );                // 0x8D
     void                    Bundleheader( void );           // 0x8F
-    void                    Palette( void );                // 0x92
     void                    Standardwidth( void );          // 0x99
     void                    Scl( void );                    // 0xA0
     void                    Shrfmla( void );                // 0xBC
