@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-16 17:18:46 $
+ *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,9 @@
 #endif
 #ifndef _SVX_EMPHITEM_HXX
 #include <svx/emphitem.hxx>
+#endif
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -2100,6 +2103,57 @@ static Writer& OutWW8_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+/*
+ See ww8par6.cxx Read_DoubleLine for some more info
+ */
+static Writer& OutWW8_SvxTwoLinesItem( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    //2000 only
+    if( !rWrtWW8.bWrtWW8 )
+        return rWrt;
+
+    const SvxTwoLinesItem& rAttr = (const SvxTwoLinesItem&)rHt;
+    rWrtWW8.InsUInt16( 0xCA78 );
+    rWrtWW8.pO->Insert( (BYTE)0x06, rWrtWW8.pO->Count() ); //len 6
+    rWrtWW8.pO->Insert( (BYTE)0x02, rWrtWW8.pO->Count() );
+
+    sal_Unicode cStart = rAttr.GetStartBracket();
+    sal_Unicode cEnd = rAttr.GetStartBracket();
+
+    /*
+    As per usual we have problems. We can have seperate left and right brackets
+    in OOo, it doesn't appear that you can in word. Also in word there appear
+    to only be a limited number of possibilities, we can use pretty much
+    anything.
+
+    So if we have none, we export none, if either bracket is set to a known
+    word type we export both as that type (with the bracket winning out in
+    the case of a conflict simply being the order of test here.
+
+    Upshot being a documented created in word will be reexported with no
+    ill effects.
+    */
+
+    USHORT nType;
+    if (!cStart && !cEnd)
+        nType = 0;
+    else if ((cStart == '{') || (cEnd == '}'))
+        nType = 4;
+    else if ((cStart == '<') || (cEnd == '>'))
+        nType = 3;
+    else if ((cStart == '[') || (cEnd == ']'))
+        nType = 2;
+    else
+        nType = 1;
+    rWrtWW8.InsUInt16( nType );
+    rWrtWW8.pO->Insert( (BYTE)0x00, rWrtWW8.pO->Count() );
+    rWrtWW8.pO->Insert( (BYTE)0x00, rWrtWW8.pO->Count() );
+    rWrtWW8.pO->Insert( (BYTE)0x00, rWrtWW8.pO->Count() );
+    return rWrt;
+}
+
+
 
 static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3415,21 +3469,21 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_CTL_WEIGHT */         0,
 /* RES_CHRATR_WRITING_DIRECTION */  0,
 /* RES_CHRATR_EMPHASIS_MARK*/       OutWW8_EmphasisMark,
-/* RES_CHRATR_DUMMY3 */             0,
+/* RES_TXTATR_TWO_LINES */          OutWW8_SvxTwoLinesItem,
 /* RES_CHRATR_DUMMY4 */             0,
 /* RES_CHRATR_DUMMY5 */             0,
 /* RES_CHRATR_DUMMY1 */             0, // Dummy:
 
 /* RES_TXTATR_INETFMT */            OutSwFmtINetFmt,
-/* RES_TXTATR_DUMMY */              0,
+/* RES_TXTATR_DUMMY4 */             0,
 /* RES_TXTATR_REFMARK */            0,      // handel by SwAttrIter
 /* RES_TXTATR_TOXMARK   */          0,      // handel by SwAttrIter
 /* RES_TXTATR_CHARFMT   */          OutWW8_SwTxtCharFmt,
-/* RES_TXTATR_TWO_LINES */          0,
+/* RES_TXTATR_DUMMY5*/              0,
 /* RES_TXTATR_CJK_RUBY */           0,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
-/* RES_TXTATR_DUMMY5 */             0,
 /* RES_TXTATR_DUMMY6 */             0,
+/* RES_TXTATR_DUMMY7 */             0,
 
 /* RES_TXTATR_FIELD */              OutWW8_SwField,
 /* RES_TXTATR_FLYCNT    */          OutWW8_SwFlyCntnt,
@@ -3526,6 +3580,9 @@ SwAttrFnTab aWW8AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/01/16 17:18:46  jp
+      Bug #80650#: Out_SfxItemSet: if switch off the numrule then write the LR_Space direct
+
       Revision 1.5  2000/12/01 11:22:52  jp
       Task #81077#: im-/export of CJK documents
 

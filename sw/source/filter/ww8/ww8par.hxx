@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
+ *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,6 +1061,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     void Read_StyleCode(        USHORT, BYTE* pData, short nLen );
     void Read_Majority(         USHORT, BYTE* pData, short nLen );
+    void Read_DoubleLine( USHORT, BYTE* pDATA, short nLen);
 
                                         // Felder
 
@@ -1141,11 +1142,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.10 2001-01-30 20:11:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.11 2001-02-06 17:28:21 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/01/30 20:11:06  cmc
+      #83362# CJK Forbidden Character {Im|Ex}port
+
       Revision 1.9  2000/12/15 15:33:06  cmc
       #79055# OCX FormControls changes
 

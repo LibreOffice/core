@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
+ *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5870,7 +5870,8 @@ static SprmInfo aWwSprmTab[] = {
     0x7629, 0, L_VAR, // "sprmTTextFlow" tap.rgtc[].fVerticaltap.rgtc[].fBackwardtap.rgtc[].fRotateFont;0 or 10 or 10 or 1;word;
 //0xD62A, 0, L_FIX, // "sprmTDiagLine" ;;;
     0xD62B, 0, L_VAR, // "sprmTVertMerge" tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
-        0xD62C, 0, L_VAR, // "sprmTVertAlign" tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
+    0xD62C, 0, L_VAR, // "sprmTVertAlign" tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
+    0xCA78, 0, L_VAR // undocumented "sprmCDoubleLine ?" i.e. variable length thing.
 
 };
 
@@ -6092,11 +6093,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.7 2001-01-30 20:11:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.8 2001-02-06 17:28:21 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/01/30 20:11:06  cmc
+      #83362# CJK Forbidden Character {Im|Ex}port
+
       Revision 1.6  2001/01/24 16:06:35  cmc
       #79464# Bad Table Row End Search
 

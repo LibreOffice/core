@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-06 13:13:07 $
+ *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,13 +174,15 @@
 #ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
 #endif
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
+#endif
 #ifndef _SVX_SCRIPSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
 #endif
 #ifndef _SVX_HNGPNCTITEM_HXX
 #include <svx/hngpnctitem.hxx>
 #endif
-
 #ifndef _SVX_PBINITEM_HXX
 #include <svx/pbinitem.hxx>
 #endif
@@ -3136,7 +3138,7 @@ void SwWW8ImplReader::Read_Underline( USHORT, BYTE* pData, short nLen )
         {
             switch( *pData )
             {
-            case 2: bWordLine = TRUE;       // kein break;
+            case 2: bWordLine = TRUE;       // no break;
             case 1: eUnderline = (FontUnderline)UNDERLINE_SINGLE;       break;
             case 3: eUnderline = (FontUnderline)UNDERLINE_DOUBLE;       break;
             case 4: eUnderline = (FontUnderline)UNDERLINE_DOTTED;       break;
@@ -3168,6 +3170,49 @@ void SwWW8ImplReader::Read_Underline( USHORT, BYTE* pData, short nLen )
         NewAttr( SvxUnderlineItem( eUnderline ));
         if( bWordLine )
             NewAttr( SvxWordLineModeItem( TRUE ));
+    }
+}
+
+/*
+//The last three vary, measurements, rotation ? ?
+NoBracket   78 CA 06 -  02 00 00 02 34 52
+()          78 CA 06 -  02 01 00 02 34 52
+[]          78 CA 06 -  02 02 00 02 34 52
+<>          78 CA 06 -  02 03 00 02 34 52
+{}          78 CA 06 -  02 04 00 02 34 52
+*/
+void SwWW8ImplReader::Read_DoubleLine( USHORT, BYTE* pData, short nLen )
+{
+    if( nLen < 0 ) // close the tag
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_TWO_LINES);
+    else
+    {
+        if( pData )
+        {
+            ASSERT( (nLen == 6) && (pData[0] == 0x02),
+                "Problems with Two Lines in One CJK feature");
+            if (nLen != 6)
+                return;
+            switch (SVBT16ToShort(pData+1))
+            {
+                default:
+                case 0:
+                    NewAttr( SvxTwoLinesItem());
+                    break;
+                case 1:
+                    NewAttr( SvxTwoLinesItem(sal_True,'(',')'));
+                    break;
+                case 2:
+                    NewAttr( SvxTwoLinesItem(sal_True,'[',']'));
+                    break;
+                case 3:
+                    NewAttr( SvxTwoLinesItem(sal_True,'<','>'));
+                    break;
+                case 4:
+                    NewAttr( SvxTwoLinesItem(sal_True,'{','}'));
+                    break;
+            }
+        }
     }
 }
 
@@ -4751,6 +4796,7 @@ SprmReadInfo aSprmReadTab[] = {
 //0xD62A, ? ? ?  , "sprmTDiagLine", // ;;;
     0xD62B, (FNReadRecord)0, //"sprmTVertMerge" // tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
     0xD62C, (FNReadRecord)0, //"sprmTVertAlign" // tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
+    0xCA78, &SwWW8ImplReader::Read_DoubleLine
 };
 
 //-----------------------------------------
@@ -4819,26 +4865,6 @@ void SwWW8ImplReader::EndSprm( USHORT nId )
         (this->*rSprm.pReadFnc)( nId, 0, -1 );
 }
 
-/*
-// ein bzw. zwei Byte am Anfang des Sprm sind die Id
-USHORT WW8GetSprmId( BYTE nVersion, BYTE* pSp, BYTE* pDelta )
-{
-    USHORT nId = 0;
-    switch( nVersion )  // beachte: 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
-    {
-        case 6:
-        case 7: nId = *pSp;
-                if( pDelta ) *pDelta = 0;
-                break;
-        case 8: nId = SVBT16ToShort( &pSp[ 0 ] );
-                if( pDelta ) *pDelta = 1;
-                break;
-        default:ASSERT( nId, "Es wurde vergessen, nVersion zu kodieren!" );
-    }
-    return nId;
-}
-*/
-
 short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 {
     BYTE nDelta;
@@ -4849,13 +4875,11 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
     else
         nId = WW8GetSprmId( nV, pPos, &nDelta );
 
-
 #ifdef DEBUG
     ASSERT( nId != 0xff, "Sprm FF !!!!" );
 #endif //DEBUG
 
     SprmReadInfo& rSprm = WW8GetSprmReadInfo( nId );
-
 
     short nFixedLen = 1 + nDelta + WW8SprmDataOfs( nId );
     short nL = WW8GetSprmSizeBrutto( nV, pPos, &nId );
@@ -4874,12 +4898,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.8 2001-02-06 13:13:07 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.9 2001-02-06 17:28:21 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/02/06 13:13:07  cmc
+      #83356# Support Explicit Page Start Number for WW6/7
+
       Revision 1.7  2001/01/26 10:57:04  cmc
       ##158## Table relief Border width hack modified
 

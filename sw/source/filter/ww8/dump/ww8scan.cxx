@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 14:56:06 $
+ *  last change: $Author: cmc $ $Date: 2001-02-06 17:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5779,6 +5779,8 @@ static SprmInfo aWwSprmTab[] = {
 
     0x4873, 2, L_FIX, // CJK-Unknown
     0x4874, 2, L_FIX, // CJK-Unknown
+
+    0xCA78, 0, L_VAR //undocumented CJK DoubleLine, i.e. sprmCDoubleLine ?
 };
 
 
@@ -5999,11 +6001,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8scan.cxx,v 1.3 2000-10-24 14:56:06 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/ww8scan.cxx,v 1.4 2001-02-06 17:28:22 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/24 14:56:06  jp
+      new CJK attributes
+
       Revision 1.2  2000/10/24 14:01:34  jp
       changes for unicode
 
