@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:16:19 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     GetPageEdit().SetFont(aFont);
 
     StartListening(*SFX_APP());
-    StartListening(*pCreateView);
+    if ( pCreateView )
+        StartListening(*pCreateView);
     SfxImageManager* pImgMan = pBindings->GetImageManager();
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
