@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mt $ $Date: 2002-03-08 08:55:26 $
+#   last change: $Author: tbe $ $Date: 2002-03-11 17:23:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=   \
             $(SLO)$/vclxaccessiblecomponent.obj 		\
             $(SLO)$/vclxaccessiblebutton.obj			\
+            $(SLO)$/vclxaccessiblecheckbox.obj			\
             $(SLO)$/vclxaccessibledropdownlistbox.obj	\
             $(SLO)$/vclxaccessiblelistbox.obj			\
             $(SLO)$/vclxaccessiblelistitem.obj			\
