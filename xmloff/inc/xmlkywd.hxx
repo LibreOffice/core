@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:32:18 $
+ *  last change: $Author: ab $ $Date: 2000-11-27 13:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ XML_CONSTASCII_ACTION( sXML_np_svg, "svg" );
 XML_CONSTASCII_ACTION( sXML_n_svg, "http://www.w3.org/2000/svg" );
 XML_CONSTASCII_ACTION( sXML_namespace_form, "form" );
 XML_CONSTASCII_ACTION( sXML_url_form, "http://openoffice.org/2000/form" );
+XML_CONSTASCII_ACTION( sXML_namespace_script, "script" );
+XML_CONSTASCII_ACTION( sXML_url_script, "http://openoffice.org/2000/script" );
 
 
 XML_CONSTASCII_ACTION( sXML_np_math, "math");
@@ -500,6 +502,7 @@ XML_CONSTASCII_ACTION( sXML_editor, "editor" );
 XML_CONSTASCII_ACTION( sXML_ellipse , "ellipse" );
 XML_CONSTASCII_ACTION( sXML_email, "email" );
 XML_CONSTASCII_ACTION( sXML_embed, "embed" );
+XML_CONSTASCII_ACTION( sXML_embedded_library, "embedded-library" );
 XML_CONSTASCII_ACTION( sXML_empty, "empty");
 XML_CONSTASCII_ACTION( sXML_end, "end" );
 XML_CONSTASCII_ACTION( sXML_end_cell_address, "end-cell-address" );
@@ -793,6 +796,8 @@ XML_CONSTASCII_ACTION( sXML_line_spacing, "line-spacing" );
 XML_CONSTASCII_ACTION( sXML_linear, "linear" );
 XML_CONSTASCII_ACTION( sXML_lines, "lines" );
 XML_CONSTASCII_ACTION( sXML_lines_used, "lines-used" );
+XML_CONSTASCII_ACTION( sXML_link_target_url, "link-target-url" );
+XML_CONSTASCII_ACTION( sXML_linked_library, "linked-library" );
 XML_CONSTASCII_ACTION( sXML_link_to_source_data, "link-to-source-data" );
 XML_CONSTASCII_ACTION( sXML_list, "list");
 XML_CONSTASCII_ACTION( sXML_list_block, "list-block" );
@@ -882,6 +887,7 @@ XML_CONSTASCII_ACTION( sXML_mode, "mode" );
 XML_CONSTASCII_ACTION( sXML_modern, "modern" );
 XML_CONSTASCII_ACTION( sXML_modification_date, "modification-date" );
 XML_CONSTASCII_ACTION( sXML_modification_time, "modification-time" );
+XML_CONSTASCII_ACTION( sXML_module, "module" );
 XML_CONSTASCII_ACTION( sXML_moment, "moment" );
 XML_CONSTASCII_ACTION( sXML_mono, "mono" );
 XML_CONSTASCII_ACTION( sXML_month, "month" );
@@ -1015,6 +1021,7 @@ XML_CONSTASCII_ACTION( sXML_parent_style_name, "parent-style-name" );
 XML_CONSTASCII_ACTION( sXML_parse_sql_statement, "parse-sql-statement");
 XML_CONSTASCII_ACTION( sXML_parsed, "parsed" );
 XML_CONSTASCII_ACTION( sXML_partialdiff, "partialdiff");
+XML_CONSTASCII_ACTION( sXML_password, "password");
 XML_CONSTASCII_ACTION( sXML_passwort, "passwort");
 XML_CONSTASCII_ACTION( sXML_path , "path" );
 XML_CONSTASCII_ACTION( sXML_percentage, "percentage");
