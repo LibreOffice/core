@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:46:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ DockingWindow FID_FUNCTION_BOX
         < "Ñòàòèñòè÷åñêèå" ; Default ; > ;
         < "Òàáëèöà" ; Default ; > ;
         < "Òåêñò" ; Default ; > ;
-        < "Äîïîëíèòåëüíî" ; Default ; > ;
+        < "Äîïîëíèòåëüíî (Add-in" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -580,19 +580,19 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText [ dutch ] = "Functie invoegen in werkblad" ;
         QuickHelpText [ portuguese ] = "Insere função na folha de cálculo" ;
     QuickHelpText[ russian ] = "Âñòàâèòü ôóíêöèş â ëèñò";
-        QuickHelpText[ polish ] = "Wstaw funkcjê do arkusza!";
-        QuickHelpText[ japanese ] = "•\\‚ÉŠÖ”‚ğ‘}“ü!";
+        QuickHelpText[ polish ] = "Wstaw funkcjê do arkusza";
+        QuickHelpText[ japanese ] = "•\\‚ÉŠÖ”‚ğ‘}“ü";
         QuickHelpText[ chinese_simplified ] = "²åÈëº¯Êı";
         QuickHelpText[ chinese_traditional ] = "´¡¤J¨ç¼Æ";
         QuickHelpText[ arabic ] = "ÅÏÑÇÌ ÏÇáÉ";
         QuickHelpText[ dutch ] = "Functie invoegen in werkblad";
         QuickHelpText[ chinese_simplified ] = "²åÈëº¯Êı";
         QuickHelpText[ greek ] = "ÅéóáãùãŞ óõíÜñôçóçò óå õğïëïãéóôéêü öıëëï";
-        QuickHelpText[ korean ] = "°è»ê¡¡½ÃÆ®¿¡¡¡ÇÔ¼ö¡¡»ğÀÔ!";
+        QuickHelpText[ korean ] = "°è»ê¡¡½ÃÆ®¿¡¡¡ÇÔ¼ö¡¡»ğÀÔ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Funktion in Rechenblatt einfügen";
         QuickHelpText[ catalan ] = "Insertar la función en la hoja de cálculo";
-        QuickHelpText[ finnish ] = "Lisää funktio laskentalomakkeeseen!";
+        QuickHelpText[ finnish ] = "Lisää funktio laskentalomakkeeseen";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Funktionen" ;
@@ -619,5 +619,6 @@ DockingWindow FID_FUNCTION_BOX
     Text[ finnish ] = "Toiminnot";
 };
  // ********************************************************************** EOF
+
 
 
