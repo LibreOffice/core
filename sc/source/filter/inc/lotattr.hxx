@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotattr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:52:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,16 @@
 #include <tools/list.hxx>
 #endif
 
-#include <patattr.hxx>
-#include <scitems.hxx>
+#ifndef SC_SCPATATR_HXX
+#include "patattr.hxx"
+#endif
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 // ----- forwards --------------------------------------------------------
 class ScDocument;
@@ -157,14 +165,14 @@ private:
     struct ENTRY
     {
         const ScPatternAttr*    pPattAttr;
-        UINT16                  nFirstRow;
-        UINT16                  nLastRow;
+        SCROW                   nFirstRow;
+        SCROW                   nLastRow;
     };
 
 public:
                                 ~LotAttrCol( void );
-    void                        SetAttr( const UINT16 nRow, const ScPatternAttr& );
-    void                        Apply( const UINT16 nCol, const UINT16 nTab, const BOOL bClear = TRUE );
+    void                        SetAttr( const SCROW nRow, const ScPatternAttr& );
+    void                        Apply( const SCCOL nCol, const SCTAB nTab, const BOOL bClear = TRUE );
     void                        Clear( void );
 };
 
@@ -172,14 +180,14 @@ public:
 class LotAttrTable
 {
 private:
-    LotAttrCol          pCols[ MAXCOL + 1 ];
+    LotAttrCol          pCols[ MAXCOLCOUNT ];
     LotAttrCache        aAttrCache;
 public:
                         LotAttrTable( void );
                         ~LotAttrTable();
 
-    void                SetAttr( const UINT8 nColFirst, const UINT8 nColLast, const UINT16 nRow, const LotAttrWK3& );
-    void                Apply( const UINT16 nTabNum );
+    void                SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
+    void                Apply( const SCTAB nTabNum );
 };
 
 
