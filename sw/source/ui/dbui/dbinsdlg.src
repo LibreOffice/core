@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:22:57 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 07:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,14 +235,14 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ french ] = "Colonnes de ~BD" ;
         Text [ dutch ] = "Database~kolommen" ;
         Text [ portuguese ] = "~Colunas da base de dados" ;
-        Text[ chinese_simplified ] = "Êı¾İ¿âÀ¸(~C)";
+        Text[ chinese_simplified ] = "Êı¾İ¿âÀ¸Î»(~C)";
         Text[ russian ] = "Êîëîíêè áàçû äàííûõ";
         Text[ polish ] = "Kolumny w bazie danych";
         Text[ japanese ] = "ÃŞ°ÀÍŞ°½—ñ(~C)";
         Text[ chinese_traditional ] = "¸ê®Æ®wÄæ(~C)";
         Text[ arabic ] = "ÃÚãÏÉ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ dutch ] = "Database~kolommen";
-        Text[ chinese_simplified ] = "Êı¾İ¿âÀ¸(~C)";
+        Text[ chinese_simplified ] = "Êı¾İ¿âÀ¸Î»(~C)";
         Text[ greek ] = "ÓôŞëåò âÜóçò äåäïìİíùí";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¿­(~C)";
         Text[ turkish ] = "Veritabanı ~sütunları";
@@ -683,14 +683,14 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text [ french ] = "Insertion de colonnes de base de données" ;
     Text [ dutch ] = "Database-kolommen invoegen" ;
     Text [ portuguese ] = "Inserir colunas para bases de dados" ;
-    Text[ chinese_simplified ] = "²åÈëÊı¾İ¿âÀ¸";
+    Text[ chinese_simplified ] = "²åÈëÊı¾İ¿âÀ¸Î»";
     Text[ russian ] = "Âñòàâêà êîëîíîê áàçû äàííûõ";
     Text[ polish ] = "Wstaw kolumny w bazie danych";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ì—ñ‚Ì‘}“ü";
     Text[ chinese_traditional ] = "´¡¤J¸ê®Æ®wÄæ";
     Text[ arabic ] = "ÅÏÑÇÌ ÃÚãÏÉ ŞÇÚÏÉ ÈíÇäÇÊ";
     Text[ dutch ] = "Database-kolommen invoegen";
-    Text[ chinese_simplified ] = "²åÈëÊı¾İ¿âÀ¸";
+    Text[ chinese_simplified ] = "²åÈëÊı¾İ¿âÀ¸Î»";
     Text[ greek ] = "ĞñïóèŞêç óôçëşí âÜóçò äåäïìİíùí";
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¿­ »ğÀÔ";
     Text[ turkish ] = "Veritabanı sütunu ekle";
