@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:56:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
+#endif
+#ifndef _SV_METRIC_HXX
+#include <metric.hxx>
 #endif
 #include <tools/debug.hxx>
 
@@ -242,9 +245,9 @@ BOOL ImplBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-USHORT ImplBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
+String ImplBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
 {
-    return 0;
+    return String();
 }
 
 // -----------------------------------------------------------------------
@@ -980,11 +983,12 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
 
 // -----------------------------------------------------------------------
 
-USHORT ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
+String ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
                                               const Point& rPos,
                                               Rectangle& rHelpRect )
 {
     USHORT nHelpId = 0;
+    String aHelpStr;
     USHORT nHitTest = ImplHitTest( pData, rPos );
     if ( nHitTest )
     {
@@ -1027,9 +1031,25 @@ USHORT ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
             nHelpId     = SV_HELPTEXT_ALWAYSVISIBLE;
             rHelpRect   = pData->maPinRect;
         }
+        else if ( nHitTest & BORDERWINDOW_HITTEST_TITLE )
+        {
+            if( !pData->maTitleRect.IsEmpty() )
+            {
+                // tooltip only if title truncated
+                if( pData->mbTitleClipped )
+                {
+                    rHelpRect   = pData->maTitleRect;
+                    // no help id, use window title as help string
+                    aHelpStr    = pData->mpBorderWindow->GetText();
+                }
+            }
+        }
     }
 
-    return nHelpId;
+    if( nHelpId )
+        aHelpStr = String( ResId( nHelpId, ImplGetResMgr() ) );
+
+    return aHelpStr;
 }
 
 // -----------------------------------------------------------------------
@@ -1333,6 +1353,7 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mnMenuState     = 0;
     maFrameData.mnHideState     = 0;
     maFrameData.mnHelpState     = 0;
+    maFrameData.mbTitleClipped  = 0;
 
     mpATitleVirDev              = NULL;
     mpDTitleVirDev              = NULL;
@@ -1371,7 +1392,7 @@ BOOL ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-USHORT ImplStdBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
+String ImplStdBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
 {
     return ImplRequestHelp( &maFrameData, rPos, rHelpRect );
 }
@@ -1637,9 +1658,14 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
             if ( pOffset )
                 aInRect.Move( pOffset->X(), pOffset->Y() );
 
-            pDev->DrawText( aInRect, pBorderWindow->GetText(),
-                            TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER |
-                            TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_CLIP );
+            USHORT nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_CLIP;
+
+            // must show tooltip ?
+            TextRectInfo aInfo;
+            pDev->GetTextRect( aInRect, pBorderWindow->GetText(), nTextStyle, &aInfo );
+            pData->mbTitleClipped = aInfo.IsEllipses();
+
+            pDev->DrawText( aInRect, pBorderWindow->GetText(), nTextStyle );
         }
     }
 
@@ -1896,24 +1922,16 @@ void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         Rectangle   aHelpRect;
-        USHORT      nHelpResId = mpBorderView->RequestHelp( aMousePosPixel, aHelpRect );
+        String      aHelpStr( mpBorderView->RequestHelp( aMousePosPixel, aHelpRect ) );
 
         // Rechteck ermitteln
-        if ( nHelpResId )
+        if ( aHelpStr.Len() )
         {
-            Point aPt = OutputToScreenPixel( aHelpRect.TopLeft() );
-            aHelpRect.Left()   = aPt.X();
-            aHelpRect.Top()    = aPt.Y();
-            aPt = OutputToScreenPixel( aHelpRect.BottomRight() );
-            aHelpRect.Right()  = aPt.X();
-            aHelpRect.Bottom() = aPt.Y();
-
-            // Text ermitteln und anzeigen
-            XubString aStr( ResId( nHelpResId, ImplGetResMgr() ) );
+            aHelpRect.SetPos( OutputToScreenPixel( aHelpRect.TopLeft() ) );
             if ( rHEvt.GetMode() & HELPMODE_BALLOON )
-                Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aStr );
+                Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aHelpStr );
             else
-                Help::ShowQuickHelp( this, aHelpRect, aStr );
+                Help::ShowQuickHelp( this, aHelpRect, aHelpStr );
             return;
         }
     }
