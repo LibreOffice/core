@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:44:26 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
@@ -114,6 +113,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
 #endif
 #ifndef _TXTTXMRK_HXX //autogen
 #include <txttxmrk.hxx>
@@ -284,12 +286,7 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
         ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
-#if 0
-        BOOL bWasUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
-#else
         pDoc->StartUndo(UNDO_TOXCHANGE);
-#endif
 
         // Verzeichnisrumpf erzeugen
         pTOX->Update(pSet);
@@ -304,15 +301,7 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
         // Seitennummern eintragen
         pTOX->UpdatePageNum();
 
-#if 0
-        pDoc->DoUndo( bWasUndo );
-
-        //JP erstmal ein Hack, solange keine Verzeichnisse Undofaehig sind
-        if( bWasUndo )
-            pDoc->DelAllUndoObj();
-#else
         pDoc->EndUndo(UNDO_TOXCHANGE);
-#endif
 
         ::EndProgress( pDocSh );
         EndAllAction();
