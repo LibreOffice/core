@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:24:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,6 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 
 SfxBaseModel::~SfxBaseModel()
 {
-    delete m_pData ;
 }
 
 //________________________________________________________________________________________________________
@@ -746,6 +745,8 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
 
     m_pData->m_xCurrent = REFERENCE< XCONTROLLER > ();
     m_pData->m_seqControllers = SEQUENCE< REFERENCE< XCONTROLLER > > () ;
+
+    DELETEZ(m_pData);
 }
 
 //________________________________________________________________________________________________________
@@ -838,7 +839,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
                                                 const   SEQUENCE< PROPERTYVALUE >&  rArgs   )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     if ( rURL.getLength() == 0 && rArgs.getLength() == 1 && rArgs[0].Name.equalsAscii( "SetEmbedded" ) )
     {
@@ -868,10 +869,9 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
                 if ( pInPlaceObj )
                 {
                     Sequence< sal_Int32 > aSize;
-                    if ( ( rArgs[nInd].Value >>= aSize ) && aSize.getLength() == 2 )
+                    if ( ( rArgs[nInd].Value >>= aSize ) && aSize.getLength() == 4 )
                     {
-                        Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
-                        aTmpRect.SetSize( Size( aSize[0], aSize[1] ) );
+                        Rectangle aTmpRect( aSize[0], aSize[1], aSize[2], aSize[3] );
                         pInPlaceObj->SetVisArea( aTmpRect );
                     }
                 }
@@ -936,9 +936,11 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
         {
             Rectangle aTmpRect = pInPlaceObj->GetVisArea( ASPECT_CONTENT );
 
-            Sequence< sal_Int32 > aSize(2);
-            aSize[0] = aTmpRect.GetWidth();
-            aSize[1] = aTmpRect.GetHeight();
+            Sequence< sal_Int32 > aSize(4);
+            aSize[0] = aTmpRect.Left();
+            aSize[1] = aTmpRect.Top();
+            aSize[2] = aTmpRect.Right();
+            aSize[3] = aTmpRect.Bottom();
 
             seqArgsNew.realloc( ++nNewLength );
             seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "WinExtent" );
@@ -2274,13 +2276,13 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
             else if ( pPrintHint->GetWhich() == -3 )
             {
-                sal_Int32 nOld = m_pData->m_aPrintOptions.getLength();
-                sal_Int32 nAdd = pPrintHint->GetAdditionalOptions().getLength();
-                m_pData->m_aPrintOptions.realloc(  nOld + nAdd );
-                for ( sal_Int32 n=0; n<nAdd; n++ )
-                    m_pData->m_aPrintOptions[ nOld+n ] = pPrintHint->GetAdditionalOptions()[n];
+                    sal_Int32 nOld = m_pData->m_aPrintOptions.getLength();
+                    sal_Int32 nAdd = pPrintHint->GetAdditionalOptions().getLength();
+                    m_pData->m_aPrintOptions.realloc(  nOld + nAdd );
+                    for ( sal_Int32 n=0; n<nAdd; n++ )
+                            m_pData->m_aPrintOptions[ nOld+n ] = pPrintHint->GetAdditionalOptions()[n];
             }
-            else
+            else if ( pPrintHint->GetWhich() != -2 )
             {
                 view::PrintJobEvent aEvent;
                 aEvent.Source = m_pData->m_xPrintJob;
