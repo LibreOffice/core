@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-03-05 08:04:38 $
+ *  last change: $Author: os $ $Date: 2002-03-21 10:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3102,14 +3102,15 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 bLastWasText = sal_False;
             }
         }
-        SetActiveControl(pSetActiveControl);
-
         if(!bLastWasText)
         {
             bLastWasText = sal_True;
             SwFormToken aTemp(TOKEN_TEXT);
-            InsertItem(aEmptyStr, aTemp);
+            Control* pCtrl = InsertItem(aEmptyStr, aTemp);
+            if(!pSetActiveControl)
+                pSetActiveControl = pCtrl;
         }
+        SetActiveControl(pSetActiveControl);
     }
     AdjustScrolling();
 }
