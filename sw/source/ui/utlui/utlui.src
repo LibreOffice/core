@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:17:41 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,7 @@ String STR_EVENT_IMAGE_LOAD
     Text[ chinese_simplified ] = "×°ÈëÍ¼ĞÎ³É¹¦";
     Text[ russian ] = "Óñïåøíàÿ çàãğóçêà ãğàôèêè ";
     Text[ polish ] = "Pomyœlne za³adowanie grafiki";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İŠ®—¹";
+    Text[ japanese ] = "}‚Ì“Ç‚İ‚İŠ®—¹";
     Text[ chinese_traditional ] = "¸ü¤J¹Ï§Î¦¨¥\\";
     Text[ arabic ] = "ÊÍãíá ÇáÕæÑÉ ÈäÌÇÍ";
     Text[ greek ] = "Ç öüñôùóç ôùí ãñáöéêşí ğİôõ÷å";
@@ -775,7 +775,7 @@ String STR_EVENT_IMAGE_ABORT
     Text[ chinese_simplified ] = "ÖĞ¶Ï×°ÈëÍ¼ĞÎ";
     Text[ russian ] = "Çàãğóçêà ãğàôèêè ïğåğâàíà";
     Text[ polish ] = "Przerwane ³adowanie grafiki";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ’†~";
+    Text[ japanese ] = "}‚Ì“Ç‚İ‚İ’†~";
     Text[ chinese_traditional ] = "¤¤Â_¸ü¤J¹Ï§Î";
     Text[ arabic ] = "ÇäŞØÇÚ ÚãáíÉ ÊÍãíá ÇáÕæÑÉ";
     Text[ greek ] = "ÄéáêïğŞ öüñôùóçò ãñáöéêïı";
@@ -799,7 +799,7 @@ String STR_EVENT_IMAGE_ERROR
     Text[ chinese_simplified ] = "×°ÈëµÄÍ¼ĞÎ²»ÍêÕû";
     Text[ russian ] = "Ñáîé ïğè çàãğóçêå ãğàôèêè";
     Text[ polish ] = "B³¹d w ³adowaniu grafiki";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ´×°";
+    Text[ japanese ] = "}‚Ì“Ç‚İ‚İ´×°";
     Text[ chinese_traditional ] = "¸ü¤J¹Ï§Î¤£§¹¾ã";
     Text[ arabic ] = "ÎØÃ İí ÚãáíÉ ÊÍãíá ÇáÕæÑÉ";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ãñáöéêïı";
@@ -993,7 +993,7 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ğèñóíêè";
     Text[ polish ] = "Grafiki";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑ";
     Text[ greek ] = "ÃñáöéêÜ";
@@ -1160,7 +1160,7 @@ String STR_CONTENT_TYPE_DRAWOBJECT
     Text [ portuguese_brazilian ] = "Zeichenobjekte" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
     Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
-    Text[ polish ] = "Obiekty rysunkowe";
+    Text[ polish ] = "Obiekty graficzne";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
@@ -1282,7 +1282,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ğèñóíîê";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ greek ] = "Ãñáöéêü";
@@ -1473,7 +1473,7 @@ String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
     Text [ portuguese_brazilian ] = "Zeichenobjekt" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
     Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Obiekt rysunkowy";
+    Text[ polish ] = "Obiekt graficzny";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
     Text[ arabic ] = "ßÇÆä ÑÓæãí";
