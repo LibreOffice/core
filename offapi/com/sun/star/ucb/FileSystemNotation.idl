@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileSystemNotation.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ module com { module sun { module star { module ucb {
 /** The notational conventions used to denote file system paths on different
     file systems or operating systems.
 */
-constants FileSystemNotation
+published constants FileSystemNotation
 {
     //-------------------------------------------------------------------------
     /** No information regarding any conventions is available.
