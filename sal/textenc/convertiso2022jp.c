@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022jp.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:44:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ sal_Size ImplConvertIso2022JpToUnicode(ImplTextConverterData const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         sal_Bool bUndefined = sal_True;
-        sal_uInt32 nChar = *((sal_uChar const *) pSrcBuf)++;
+        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
         switch (eState)
         {
         case IMPL_ISO_2022_JP_TO_UNICODE_STATE_ASCII:
