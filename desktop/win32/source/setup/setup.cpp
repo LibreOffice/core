@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:35:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,125 +111,6 @@ const TCHAR sMsiDll[]        = TEXT( "\\msi.dll" );
 const TCHAR sMsiExe[]        = TEXT( "\\msiexec.exe" );
 const TCHAR sDelayReboot[]   = TEXT( " /c:\"msiinst /delayreboot\"" );
 const TCHAR sMsiQuiet[]      = TEXT( " /q" );
-
-//--------------------------------------------------------------------------
-BOOL CALLBACK SetupDlgProcX( HWND hDlg, UINT message,
-                             WPARAM wParam, LPARAM lParam )
-{
-    switch (message)
-    {
-        case WM_INITDIALOG:
-        {
-            if ( lParam )
-            {
-                HWND hOwner;
-                RECT rc, rcDlg, rcOwner;
-
-                if ( ( hOwner = GetParent( hDlg ) ) == NULL )
-                    hOwner = GetDesktopWindow();
-
-                GetWindowRect( hOwner, &rcOwner );
-                GetWindowRect( hDlg, &rcDlg );
-                CopyRect( &rc, &rcOwner );
-
-                OffsetRect( &rcDlg, -rcDlg.left, -rcDlg.top );
-                OffsetRect( &rc, -rc.left, -rc.top );
-                OffsetRect( &rc, -rcDlg.right, -rcDlg.bottom );
-
-                SetWindowPos( hDlg, HWND_TOP,
-                              rcOwner.left + (rc.right / 2),
-                              rcOwner.top + (rc.bottom / 2),
-                              0, 0, SWP_NOSIZE );
-
-                SetupAppX* pSetup = (SetupAppX*) lParam;
-                SetWindowText( hDlg, pSetup->GetAppTitle() );
-
-                HWND hOKButton = GetDlgItem( hDlg, IDOK );
-                if ( !hOKButton ) return TRUE;
-                TCHAR *sText = new TCHAR[ MAX_STR_LENGTH ];
-                WIN::LoadString( pSetup->GetHInst(), IDS_APP_OK, sText, MAX_STR_LENGTH );
-                WIN::SetWindowText( hOKButton, sText );
-
-                HWND hCancelButton = GetDlgItem( hDlg, IDCANCEL );
-                if ( !hCancelButton ) return TRUE;
-                WIN::LoadString( pSetup->GetHInst(), IDS_APP_CANCEL, sText, MAX_STR_LENGTH );
-                WIN::SetWindowText( hCancelButton, sText );
-
-                HWND hText = GetDlgItem( hDlg, IDC_TEXT01 );
-                if ( !hText ) return TRUE;
-                WIN::LoadString( pSetup->GetHInst(), IDS_CHOOSE_LANG, sText, MAX_STR_LENGTH );
-                WIN::SetWindowText( hText, sText );
-
-                TCHAR *sString = new TCHAR[ MAX_LANGUAGE_LEN ];
-                HWND hList = GetDlgItem( hDlg, IDC_COMBO1 );
-                LRESULT nResult;
-
-                if ( !hList ) return TRUE;
-
-                LANGID nUserDefLang = GetUserDefaultLangID();
-                LANGID nSysDefLang = GetSystemDefaultLangID();
-                long nUserIndex = -1;
-                long nSystemIndex = -1;
-
-                for ( long i=0; i<pSetup->GetLanguageCount(); i++ )
-                {
-                    long nLanguage = pSetup->GetLanguageID( i );
-                    pSetup->GetLanguageName( nLanguage, sString );
-                    nResult = SendMessage( hList, (UINT) CB_ADDSTRING, NULL, (LPARAM) sString );
-                    pSetup->Log( TEXT( "    Info: added Language: %s\r\n" ), sString );
-
-                    if ( nLanguage == nUserDefLang )
-                        nUserIndex = i;
-                    if ( nLanguage == nSysDefLang )
-                        nSystemIndex = i;
-                }
-
-                if ( nUserIndex != -1 )
-                    nResult = SendMessage( hList, (UINT) CB_SETCURSEL, nUserIndex, NULL );
-                else if ( nSystemIndex != -1 )
-                    nResult = SendMessage( hList, (UINT) CB_SETCURSEL, nSystemIndex, NULL );
-                else
-                    nResult = SendMessage( hList, (UINT) CB_SETCURSEL, 0, NULL );
-
-                NONCLIENTMETRICS aNonClientMetrics;
-                aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
-                if ( SystemParametersInfo( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
-                {
-                    HFONT aSysFont = CreateFontIndirect( &aNonClientMetrics.lfMessageFont );
-                    LRESULT lResult;
-                    lResult = SendMessage( hDlg, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
-                    lResult = SendMessage( hOKButton, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
-                    lResult = SendMessage( hCancelButton, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
-                    lResult = SendMessage( hText, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
-                    lResult = SendMessage( hList, (UINT) WM_SETFONT, (WPARAM) aSysFont, (LPARAM) TRUE );
-                }
-
-                delete [] sString;
-                delete [] sText;
-            }
-            return TRUE;
-        }
-        case WM_COMMAND:
-        {
-            if ( wParam == IDCANCEL )
-                EndDialog( hDlg, -1 );
-            else if ( wParam == IDOK )
-            {
-                // get choosen language
-                HWND hList = GetDlgItem( hDlg, IDC_COMBO1 );
-                LRESULT nIndex = -1;
-
-                if ( hList )
-                    nIndex = SendMessage( hList, (UINT) CB_GETCURSEL, NULL, NULL );
-
-                EndDialog( hDlg, nIndex );
-            }
-            return TRUE;
-        }
-        default:
-            return FALSE;
-    }
-}
 
 //--------------------------------------------------------------------------
 SetupAppX::SetupAppX()
