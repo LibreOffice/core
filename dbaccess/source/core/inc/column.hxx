@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:00:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,10 @@ namespace dbaccess
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
 
     public:
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createBaseObject(const ::rtl::OUString& _rName)
+        {
+            return OColumns_BASE::createObject(_rName);
+        }
         /** flag which determines whether the container is filled or not
         */
         sal_Bool    isInitialized() const { return m_bInitialized; }
