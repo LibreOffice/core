@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _FRAME_HXX
 #include <frame.hxx>
 #endif
+#ifndef _ACCFRMOBJ_HXX
+#include <accfrmobj.hxx>
+#endif
 
 // Any method of this class must be called with an acquired solar mutex!
 
@@ -80,14 +83,14 @@ class SwAccessibleFrame
 
     static sal_Int32 GetChildCount( const Rectangle& rVisArea,
                                     const SwFrm *pFrm );
-    static const SwFrm *GetChild( const Rectangle& rVisArea,
+    static SwFrmOrObj GetChild( const Rectangle& rVisArea,
                                   const SwFrm *pFrm,
                                   sal_Int32& rPos );
     static sal_Bool GetChildIndex( const Rectangle& rVisArea,
-                                        const SwFrm *pFrm,
-                                        const SwFrm *pChild,
-                                        sal_Int32& rPos );
-    static const SwFrm *GetChildAt( const Rectangle& rVisArea,
+                                    const SwFrm *pFrm,
+                                    const SwFrmOrObj& rChild,
+                                    sal_Int32& rPos );
+    static SwFrmOrObj GetChildAt( const Rectangle& rVisArea,
                                     const SwFrm *pFrm,
                                     const Point& rPos );
 
@@ -128,6 +131,9 @@ protected:
 public:
     // Return the SwFrm this context is attached to.
     const SwFrm *GetFrm() const { return pFrm; };
+
+    static const SwFrm *GetParent( const SwFrm *pFrm );
+
 protected:
 
     // Return the bounding box of the frame clipped to the vis area. If
@@ -136,14 +142,14 @@ protected:
 
     // Return the upper that has a context attached. This might be
     // another one than the immediate upper.
-    const SwFrm *GetParent() const;
+    inline const SwFrm *GetParent() const;
 
     // Return the lower count or the nth lower, there the lowers have a
     // not be same one as the SwFrm's lowers
     inline sal_Int32 GetChildCount() const;
-    inline const SwFrm *GetChild( sal_Int32 nPos ) const;
-    inline sal_Int32 GetChildIndex( const SwFrm *pFrm ) const;
-    inline const SwFrm *GetChildAt( const Point& rPos ) const;
+    inline SwFrmOrObj GetChild( sal_Int32 nPos ) const;
+    inline sal_Int32 GetChildIndex( const SwFrmOrObj& rChild ) const;
+    inline SwFrmOrObj GetChildAt( const Point& rPos ) const;
 
     static void SetVisArea( const SwFrm *pFrm,
                             const Rectangle& rOldVisArea,
@@ -176,23 +182,28 @@ inline sal_Bool SwAccessibleFrame::IsShowing( const SwFrm *pFrm ) const
     return IsShowing( pFrm->Frm().SVRect() );
 }
 
+inline const SwFrm *SwAccessibleFrame::GetParent() const
+{
+    return GetParent( pFrm );
+}
+
 inline sal_Int32 SwAccessibleFrame::GetChildCount() const
 {
     return GetChildCount( aVisArea, pFrm );
 }
 
-inline const SwFrm *SwAccessibleFrame::GetChild( sal_Int32 nPos ) const
+inline SwFrmOrObj SwAccessibleFrame::GetChild( sal_Int32 nPos ) const
 {
     return GetChild( aVisArea, pFrm, nPos );
 }
 
-inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrm *pChild ) const
+inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrmOrObj& rChild ) const
 {
     sal_Int32 nPos = 0;
-    return GetChildIndex( aVisArea, pFrm, pChild, nPos ) ? nPos : -1L;
+    return GetChildIndex( aVisArea, pFrm, rChild, nPos ) ? nPos : -1L;
 }
 
-inline const SwFrm *SwAccessibleFrame::GetChildAt( const Point& rPos ) const
+inline SwFrmOrObj SwAccessibleFrame::GetChildAt( const Point& rPos ) const
 {
     return GetChildAt( aVisArea, pFrm, rPos );
 }
