@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 22:01:31 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 17:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,14 +160,14 @@ String RID_STR_OPEN
     Text [ dutch ] = "Laden" ;
     Text [ spanish ] = "Cargar" ;
     Text [ english_us ] = "Load" ;
-    Text[ chinese_simplified ] = "×°ÔØ";
+    Text[ chinese_simplified ] = "×°Èë";
     Text[ russian ] = "Çàãğóçèòü";
     Text[ polish ] = "£aduj";
     Text[ japanese ] = "“Ç‚İ‚İ";
-    Text[ chinese_traditional ] = "¸Ë¸ü";
+    Text[ chinese_traditional ] = "¸ü¤J";
     Text[ arabic ] = "ÊÍãíá";
     Text[ dutch ] = "Laden";
-    Text[ chinese_simplified ] = "×°ÔØ";
+    Text[ chinese_simplified ] = "×°Èë";
     Text[ greek ] = "Öüñôùóç";
     Text[ korean ] = "·Îµå";
     Text[ turkish ] = "Yükle";
@@ -264,14 +264,14 @@ String RID_STR_ERROROPENLIB
     Text [ french ] = "Erreur lors du chargement de la bibliothèque" ;
     Text [ dutch ] = "Fout bij het laden van de bibliotheek" ;
     Text [ portuguese ] = "Erro ao carregar a biblioteca." ;
-    Text[ chinese_simplified ] = "ÔÚ×°ÔØ³ÌĞò¿âÊ±·¢Éú´íÎó¡£";
+    Text[ chinese_simplified ] = "ÔÚ×°Èë³ÌĞò¿âÊ±·¢Éú´íÎó¡£";
     Text[ russian ] = "Îøèáêà ïğè çàãğóçêå áèáëèîòåêè";
     Text[ polish ] = "B³¹d przy ³adowaniu biblioteki.";
     Text[ japanese ] = "×²ÌŞ×Ø‚ğ“Ç‚İ‚Ş‚Æ‚«‚Ì´×°‚Å‚·B";
     Text[ chinese_traditional ] = "¸ü¤Jµ{¦¡®w®Éµo¥Í¿ù»~¡C";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãßÊÈÉ";
     Text[ dutch ] = "Fout bij het laden van de bibliotheek";
-    Text[ chinese_simplified ] = "ÔÚ×°ÔØ³ÌĞò¿âÊ±·¢Éú´íÎó¡£";
+    Text[ chinese_simplified ] = "ÔÚ×°Èë³ÌĞò¿âÊ±·¢Éú´íÎó¡£";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôçò âéâëéïèŞêçò";
     Text[ korean ] = "¶óÀÌºê·¯¸® ·Îµå¿¡ ¿À·ù";
     Text[ turkish ] = "Kitaplığı yükleme sırasında hata";
@@ -533,7 +533,7 @@ String RID_STR_SEARCHFROMSTART
     Text[ russian ] = "Ïîèñê áûë îñóùåñòâëåí äî ïîñëåäíåãî ìîäóëÿ. Âû õîòèòå ïğîäîëæèòü ïîèñê ñ ïåğâîãî ìîäóëÿ?";
     Text[ polish ] = "Przeszukano do ostatniego modu³u. Czy kontynuowaæ wyszukiwanie od pierwszego modu³u?";
     Text[ japanese ] = "ÅŒã‚ÌÓ¼Ş­°Ù‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½BÅ‰‚ÌÓ¼Ş­°Ù‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
-    Text[ chinese_traditional ] = "¤w¸g´M§ä¦Ü³Ì«á¤@­Ó¼Ò¶ô¡C±z­n±q²Ä¤@­Ó¼Ò¶ô¶}©l´M§ä¡S";
+    Text[ chinese_traditional ] = "¤w¸g·j´M¦Ü³Ì«á¤@­Ó¼Ò¶ô¡C±z­n±q²Ä¤@­Ó¼Ò¶ô¶}©l·j´M¡S";
     Text[ arabic ] = "Êã ÇáÈÍË ÍÊì ÇáæÍÏÉ ÇáäãØíÉ ÇáÃÎíÑÉ. åá ÊÑíÏ ãæÇÕáÉ ÇáÈÍË ÚäÏ ÇáæÍÏÉ ÇáäãØíÉ ÇáÃæáì¿";
     Text[ dutch ] = "Er werd tot aan de laatste module gezocht. Wilt u het zoeken voortzetten vanaf de eerste module?";
     Text[ chinese_simplified ] = "ÒÑ¾­ËÑÑ°ÖÁ×îºóÒ»¸öÄ£¿é¡£Òª´ÓµÚÒ»¸öÄ£¿é¿ªÊ¼ËÑÑ°£¿";
@@ -2127,7 +2127,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ russian ] = "Íàéòè ñêîáêó";
             Text[ polish ] = "Szukaj nawiasów";
             Text[ japanese ] = "‚©‚Á‚±‚ÌŒŸõ";
-            Text[ chinese_traditional ] = "´M§ä¬A¸¹";
+            Text[ chinese_traditional ] = "·j´M¬A¸¹";
             Text[ arabic ] = "ÇáÈÍË Úä ÃŞæÇÓ";
             Text[ dutch ] = "Haakjes zoeken";
             Text[ chinese_simplified ] = "ËÑÑ°À¨ºÅ";
