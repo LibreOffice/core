@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:54:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include "sc.hrc"
 #include "fudraw.hxx"
@@ -381,7 +382,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    BOOL bOle = pViewShell->GetViewFrame()->ISA(SfxInPlaceFrame);
+                    BOOL bOle = pViewShell->GetViewFrame()->GetFrame()->IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {
