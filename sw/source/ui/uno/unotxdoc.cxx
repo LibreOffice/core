@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-14 13:53:02 $
+ *  last change: $Author: os $ $Date: 2002-12-04 12:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2533,7 +2533,7 @@ void SAL_CALL SwXTextDocument::render(
     const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
     ViewShell* pVwSh = pView->IsA(aSwViewTypeId) ?
              ((SwView*)pView)->GetWrtShellPtr() :
-            &((SwPagePreView*)pView)->GetViewShell();
+            ((SwPagePreView*)pView)->GetViewShell();
 
     uno::Reference< awt::XDevice >  xRenderDevice;
     const sal_Int32                 nPageNumber = nRenderer + 1;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-13 07:25:29 $
+ *  last change: $Author: os $ $Date: 2002-12-04 12:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void SwDocStatPage::Update()
     if ( pVSh->ISA(SwView) )
         pSh = ((SwView*)pVSh)->GetWrtShellPtr();
     else if ( pVSh->ISA(SwPagePreView) )
-        pSh = &((SwPagePreView*)pVSh)->GetViewShell();
+        pSh = ((SwPagePreView*)pVSh)->GetViewShell();
 
     ASSERT( pSh, "Shell not found" );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-13 14:30:18 $
+ *  last change: $Author: os $ $Date: 2002-12-04 12:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,7 +915,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         // add the ViewShell to the ring of the other ViewShell(s)
         if(bOldShellWasPagePreView)
         {
-            ViewShell& rPreviewViewShell = ((SwPagePreView*)pOldSh)->GetViewShell();
+            ViewShell& rPreviewViewShell = *((SwPagePreView*)pOldSh)->GetViewShell();
             pWrtShell->MoveTo(&rPreviewViewShell);
             //#95521# to update the field command et.al. if necessary
             const SwViewOption* pPreViewOpt = rPreviewViewShell.GetViewOptions();

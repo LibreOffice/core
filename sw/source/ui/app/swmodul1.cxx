@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:09:40 $
+ *  last change: $Author: os $ $Date: 2002-12-04 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ void SwModule::MakeUsrPref( SwViewOption &rToFill, sal_Bool bWeb ) const
         }
     }
     else if( 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
-        rToFill = *(pPPView->GetViewShell().GetViewOptions());
+        rToFill = *(pPPView->GetViewShell()->GetViewOptions());
     else
         rToFill = *((SwModule*)this)->GetUsrPref( bWeb );
 }
