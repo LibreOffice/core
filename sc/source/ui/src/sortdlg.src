@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 08:51:31 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,11 +147,11 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ finnish ] = "Lajitteluperuste" ;
         Text [ danish ] = "Sorter efter" ;
         Text [ french ] = "Trier selon" ;
-        Text [ swedish ] = "Sortera efter" ;
+        Text [ swedish ] = "~Sortera efter" ;
         Text [ dutch ] = "Sorteren op" ;
         Text [ spanish ] = "Ordenar según" ;
-        Text [ english_us ] = "Sort by" ;
-        Text[ chinese_simplified ] = "ÅÅĞò°´";
+        Text [ english_us ] = "Sort ~by" ;
+        Text[ chinese_simplified ] = "ÅÅĞò°´ÕÕ";
         Text[ russian ] = "Ñîğòèğîâàòü ïî";
         Text[ polish ] = "Sortuj wed³ug";
         Text[ japanese ] = "Å—Dæ·°";
@@ -245,11 +245,11 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ finnish ] = "Toinen lajitteluehto" ;
         Text [ danish ] = "Og derefter" ;
         Text [ french ] = "Puis selon" ;
-        Text [ swedish ] = "Sedan efter" ;
+        Text [ swedish ] = "Sed~an efter" ;
         Text [ dutch ] = "Daarna op" ;
         Text [ spanish ] = "Después según" ;
-        Text [ english_us ] = "Then by" ;
-        Text[ chinese_simplified ] = "È»ºó°´";
+        Text [ english_us ] = "Then b~y" ;
+        Text[ chinese_simplified ] = "È»ºó°´ÕÕ";
         Text[ russian ] = "Çàòåì ïî";
         Text[ polish ] = "Nastêpnie wed³ug";
         Text[ japanese ] = "‚Q”Ô–Ú‚É—Dæ‚³‚ê‚é·°";
@@ -343,11 +343,11 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ finnish ] = "Toinen lajitteluehto" ;
         Text [ danish ] = "Og derefter" ;
         Text [ french ] = "Puis selon" ;
-        Text [ swedish ] = "Sedan efter" ;
+        Text [ swedish ] = "Seda~n efter" ;
         Text [ dutch ] = "Daarna op" ;
         Text [ spanish ] = "Después según" ;
-        Text [ english_us ] = "Then by" ;
-        Text[ chinese_simplified ] = "È»ºó°´";
+        Text [ english_us ] = "T~hen by" ;
+        Text[ chinese_simplified ] = "È»ºó°´ÕÕ";
         Text[ russian ] = "Â ïîñëåäíşş î÷åğåäü ïî";
         Text[ polish ] = "Nastêpnie wed³ug";
         Text[ japanese ] = "‚R”Ô–Ú‚É—Dæ‚³‚ê‚é·°";
@@ -575,14 +575,14 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ finnish ] = "Mukautettu lajittelu~järjestys" ;
         Text [ danish ] = "Brugerdefineret sorteringsrækkefølge" ;
         Text [ french ] = "Ordre de tri ~utilisateur" ;
-        Text [ swedish ] = "~Användardefinierad sorteringsordning" ;
+        Text [ swedish ] = "An~vändardefinierad sorteringsordning" ;
         Text [ dutch ] = "~Gebruikergedefinieerde sorteervolgorde" ;
         Text [ spanish ] = "Orden de clasificación definida por el ~usuario" ;
         Text [ english_us ] = "Custom sort ~order" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~O)";
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè, îïğåäåëåííûé ïîëüçîâàòåëåì";
-        Text[ polish ] = "Kolejno?æ sortowania okre?lona przez u¿ytkownika";
+        Text[ polish ] = "Kolejnoœæ sortowania okreœlona przez u¿ytkownika";
         Text[ japanese ] = "‡˜‚Ìw’è(~O)";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~O)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
@@ -643,6 +643,26 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Size = MAP_APPFONT ( 132 , 8 ) ;
         Text = "Op~tionen" ;
         Text [ ENGLISH ] = "O~ptions" ;
+        Text[ english_us ] = "O~ptions";
+        Text[ portuguese ] = "O~ptions";
+        Text[ russian ] = "O~ptions";
+        Text[ greek ] = "O~ptions";
+        Text[ dutch ] = "O~ptions";
+        Text[ french ] = "O~ptions";
+        Text[ spanish ] = "Opciones";
+        Text[ finnish ] = "O~ptions";
+        Text[ italian ] = "O~ptions";
+        Text[ danish ] = "O~ptions";
+        Text[ swedish ] = "Al~ternativ";
+        Text[ polish ] = "Opcje";
+        Text[ portuguese_brazilian ] = "O~ptions";
+        Text[ japanese ] = "O~ptions";
+        Text[ korean ] = "O~ptions";
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ turkish ] = "O~ptions";
+        Text[ arabic ] = "O~ptions";
+        Text[ catalan ] = "O~ptions";
     };
     ListBox LB_ALGORITHM
     {
