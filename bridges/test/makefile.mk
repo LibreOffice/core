@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2001-01-02 11:28:05 $
+#   last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -173,7 +173,6 @@ OBJFILES=	\
 # 			$(UNOLIB) \
 # 			$(CPPULIB)	\
 # 			$(CPPUHELPERLIB)	\
-# 			$(VOSLIB)	\
 # 			$(SALLIB)	\
 # 			$(LIBCIMT)
 
@@ -190,7 +189,6 @@ APP2STDLIBS+= -lstdc++
 APP2STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
-            $(VOSLIB)	\
             $(SALLIB)	\
             $(LIBCIMT) 
 
@@ -207,7 +205,6 @@ APP3STDLIBS+= -lstdc++
 APP3STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
-            $(VOSLIB)	\
             $(SALLIB)	\
             $(LIBCIMT) 
 #			imsci_uno.lib
@@ -227,7 +224,6 @@ APP4STDLIBS+= -lstdc++
 APP4STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
-            $(VOSLIB)	\
             $(SALLIB)	\
             $(LIBCIMT) 
 
@@ -247,7 +243,6 @@ APP4DEF=	$(MISC)$/$(APP4TARGET).def
 # 			$(CPPULIB)	\
 # 			$(CPPUHELPERLIB)\
 # 			$(SALLIB)	\
-# 			$(VOSLIB)\
 # 			$(LIBCIMT) 
 
 # APP5DEF=	$(MISC)$/$(APP5TARGET).def

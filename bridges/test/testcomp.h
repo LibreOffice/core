@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,7 @@
 
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 //#include <com/sun/star/bridge/XConnectionAdministration.hpp>
-#include <vos/thread.hxx>
-#include <vos/timer.hxx>
+#include <osl/thread.hxx>
 
 
 void parseCommandLine( char *argv[] ,

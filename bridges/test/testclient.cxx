@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,6 @@ using namespace ::com::sun::star::test::performance;
 #define REG_PREFIX      ""
 #define DLL_POSTFIX     ".dll"
 #endif
-
-
-#include <vos/socket.hxx>
 
 void doPerformanceTest( const Reference < XPerformanceTest > & xBench )
 {

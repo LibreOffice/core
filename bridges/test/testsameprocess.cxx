@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsameprocess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #endif
 
 #include <osl/mutex.hxx>
-#include <osl/thread.h>
+#include <osl/thread.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
 
@@ -79,12 +79,11 @@
 
 #include <test/XTestFactory.hpp>
 
-#include <vos/thread.hxx>
 
 using namespace ::test;
 using namespace ::rtl;
 using namespace ::cppu;
-using namespace ::vos;
+using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::bridge;
@@ -103,7 +102,7 @@ using namespace ::com::sun::star::registry;
  ********/
 
 class MyThread :
-    public OThread
+    public Thread
 {
 public:
     MyThread( const Reference< XAcceptor > &r ,

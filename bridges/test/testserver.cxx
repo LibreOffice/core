@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,7 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.h>
 
-#include <vos/thread.hxx>
-#include <vos/socket.hxx>
+#include <osl/thread.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -90,7 +89,7 @@
 
 using namespace ::test;
 using namespace ::rtl;
-using namespace ::vos;
+using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -109,7 +108,7 @@ using namespace ::com::sun::star::connection;
 
 
 class MyThread :
-    public OThread
+    public Thread
 {
 public:
     MyThread( const Reference< XAcceptor > &r ,
