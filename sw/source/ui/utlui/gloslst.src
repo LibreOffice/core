@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:49:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®£­±×·ì";
         Text[ turkish ] = "Otomatik metin - Grup";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Grupo AutoTexto";
     };
     OKButton PB_OK
     {
@@ -148,6 +149,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ korean ] = "ÅØ½ºÆ® ¼±ÅÃ: ";
     Text[ turkish ] = "Metin bileþeni seç: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar módulo de texto:  ";
 };
 
 
