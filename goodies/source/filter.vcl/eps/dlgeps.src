@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:15:44 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 05:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ModalDialog DLG_EXPORT_EPS
         Text [ ENGLISH ] = "Preview";
         Text[ italian ] = "Anteprima";
         Text[ portuguese_brazilian ] = "Vorschau";
-        Text[ portuguese ] = "PrevisualizaÁ„o";
+        Text[ portuguese ] = "Previsualizar";
         Text[ danish ] = "Eksempel";
         Text[ french ] = "AperÁu";
         Text[ swedish ] = "Fˆrhandsvisning";
@@ -122,7 +122,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ russian ] = "œÓÒÏÓÚ";
         Text[ polish ] = "Podglπd";
         Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
-        Text[ chinese_traditional ] = "¿Àµ¯";
+        Text[ chinese_traditional ] = "πwƒ˝";
         Text[ arabic ] = "„⁄«Ì‰…";
         Text[ dutch ] = "Voorbeeld";
         Text[ chinese_simplified ] = "‘§¿¿";
@@ -462,22 +462,22 @@ ModalDialog DLG_EXPORT_EPS
         Size = MAP_APPFONT ( 182, 8 ) ;
         Text = "Text Einstellungen";
         Text [ ENGLISH ] = "TextMode";
-        Text[ english_us ] = "TextMode";
-        Text[ portuguese ] = "TextMode";
-        Text[ russian ] = "TextMode";
+        Text[ english_us ] = "Text settings";
+        Text[ portuguese ] = "ConfiguraÁ„o de texto";
+        Text[ russian ] = "Õ‡ÒÚÓÈÍË ÚÂÍÒÚ‡";
         Text[ greek ] = "TextMode";
-        Text[ dutch ] = "TextMode";
+        Text[ dutch ] = "Tekstinstellingen";
         Text[ french ] = "TextMode";
-        Text[ spanish ] = "TextMode";
+        Text[ spanish ] = "ConfiguraciÛn de texto";
         Text[ italian ] = "TextMode";
         Text[ danish ] = "TextMode";
         Text[ swedish ] = "Textinst‰llningar";
         Text[ polish ] = "Ustawienia tekstu";
         Text[ portuguese_brazilian ] = "TextMode";
-        Text[ japanese ] = "TextMode";
+        Text[ japanese ] = "√∑Ωƒê›íË";
         Text[ korean ] = "TextMode";
         Text[ chinese_simplified ] = "…Ë∂®Œƒ◊÷";
-        Text[ chinese_traditional ] = "TextMode";
+        Text[ chinese_traditional ] = "≥]©w§Â¶r";
         Text[ turkish ] = "TextMode";
         Text[ arabic ] = "TextMode";
         Text[ catalan ] = "TextMode";
@@ -506,18 +506,18 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ english_us ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Always export glyph outlines" ; > ;
+        < "Never export glyph outlines" ; > ;
     };
     StringList [ portuguese ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Exportar sempre Glyph Outlines" ; > ;
+        < "Nunca exportar Glyph Outlines" ; > ;
     };
     StringList [ russian ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "¬ÒÂ„‰‡ ˝ÍÒÔÓÚËÓ‚‡Ú¸ Glyph Outlines" ; > ;
+        < "ÕËÍÓ„‰‡ ÌÂ ˝ÍÒÔÓÚËÓ‚‡Ú¸ Glyph Outlines" ; > ;
     };
     StringList [ greek ] =
     {
@@ -526,8 +526,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ dutch ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Glyph Outlines altijd exporteren" ; > ;
+        < "Glyph Outlines nooit exporteren" ; > ;
     };
     StringList [ french ] =
     {
@@ -536,8 +536,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ spanish ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Exportar siempre Glyph Outlines" ; > ;
+        < "No exportar nunca Glyph Outlines" ; > ;
     };
     StringList [ italian ] =
     {
@@ -556,8 +556,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ polish ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "Zawsze eksportuj kontury glifÛw (glyph outlines)" ; > ;
+        < "Nigdy nie eksportuj konturÛw glifÛw (glyph outlines)" ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
@@ -566,8 +566,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ japanese ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "∏ﬁÿÃ•±≥ƒ◊≤›ÇÕèÌÇ…¥∏ΩŒﬂ∞ƒÇ∑ÇÈ" ; > ;
+        < "∏ﬁÿÃ•±≥ƒ◊≤›ÇÕê‚ëŒÇ…¥∏ΩŒﬂ∞ƒÇµÇ»Ç¢" ; > ;
     };
     StringList [ korean ] =
     {
@@ -576,13 +576,13 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ chinese_simplified ] =
     {
-            < "◊‹ « ‰≥ˆ◊÷–Õ¬÷¿™" ; > ;
-        < "”¿≤ª ‰≥ˆ◊÷–Õ¬÷¿™" ; > ;
+            < "◊‹ « ‰≥ˆ◊÷ÃÂ¬÷¿™" ; > ;
+        < "”¿≤ª ‰≥ˆ◊÷ÃÂ¬÷¿™" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "Glyph Outlines immer exportieren" ; > ;
-        < "Glyph Outlines niemals exportieren" ; > ;
+            < "¡`¨O∂◊•X¶r´¨Ω¸π¯" ; > ;
+        < "•√§£øÈ•X¶r´¨Ω¸π¯" ; > ;
     };
     StringList [ turkish ] =
     {
