@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhconvdic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:07:31 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ BOOL TextIsAllScriptType( const OUString &rTxt, INT16 nScriptType )
 ///////////////////////////////////////////////////////////////////////////
 
 HHConvDic::HHConvDic( const String &rName, const String &rMainURL ) :
-    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, rMainURL )
+    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, TRUE, rMainURL )
 {
 }
 
