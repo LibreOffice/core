@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:30:33 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -107,11 +108,12 @@ public:
             }
         }
     }
-    catch ( css::uno::Exception& e )
+    catch ( css::uno::Exception& )
     {
     }
     return result;
 }
+
     static ::rtl::OUString xModelToDocTitle( const css::uno::Reference< css::frame::XModel >& xModel )
 {
     // Set a default name, this should never be seen.
@@ -159,7 +161,6 @@ public:
     }
     return docNameOrURL;
 }
-
     static ::rtl::OUString tDocUrlToTitle( const ::rtl::OUString& url )
 {
     ::rtl::OUString title;
@@ -170,51 +171,58 @@ public:
         ::rtl::OUString propName =  OUSTR("Title");
         getUCBProperty( root, propName ) >>= title;
     }
-    catch ( css::ucb::ContentCreationException& cce )
+    catch ( css::ucb::ContentCreationException& )
     {
         // carry on, empty value will be returned
     }
-    catch ( css::uno::RuntimeException& re )
+    catch ( css::uno::RuntimeException& )
     {
         // carry on, empty value will be returned
     }
 
+    OSL_ENSURE( title.getLength() > 0, "Unable to obtain title!" );
     return title;
 }
-    static ::rtl::OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel )
+    static ::rtl::OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
+                                            const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
-    css::uno::Reference < com::sun::star::ucb::XCommandEnvironment > dummy;
-    ::rtl::OUString sDocRoot = OUSTR( "vnd.sun.star.tdoc:/" );
-    ::ucb::Content root( sDocRoot, dummy );
-
-    css::uno::Sequence < ::rtl::OUString > aPropertyNames( 0 );
-    ::rtl::OUString propName = OUSTR( "DocumentModel" );
-
-    css::uno::Reference < com::sun::star::sdbc::XResultSet > xResultSet =
-        root.createCursor( aPropertyNames );
-
-    css::uno::Reference< com::sun::star::ucb::XContentAccess > xContentAccess(
-        xResultSet, css::uno::UNO_QUERY );
-    ::rtl::OUString docUrl;
-    if ( xResultSet.is() && xContentAccess.is() )
+    css::uno::Reference< css::lang::XMultiComponentFactory > xMCF(
+        xContext->getServiceManager() );
+    css::uno::Reference<
+            css::frame::XTransientDocumentsDocumentContentFactory > xDocFac;
+    try
     {
-        css::uno::Reference< css::sdbc::XRow > values( xResultSet, css::uno::UNO_QUERY );
-        if ( values.is() )
-        {
-            while ( xResultSet->next() )
-            {
-                ::rtl::OUString url = xContentAccess->queryContentIdentifierString();
-                css::uno::Reference < css::frame::XModel > xMod( tDocUrlToModel( url ), css::uno::UNO_QUERY );
+        xDocFac =
+            css::uno::Reference<
+                css::frame::XTransientDocumentsDocumentContentFactory >(
+                    xMCF->createInstanceWithContext(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.frame.TransientDocumentsDocumentContentFactory" ) ),
+                        xContext ),
+                css::uno::UNO_QUERY );
+    }
+    catch ( css::uno::Exception const & )
+    {
+        // handled below
+    }
 
-                if ( xMod.is() && xMod == xModel )
-                {
-                    docUrl = url;
-                    break;
-                }
-            }
+    if ( xDocFac.is() )
+    {
+        try
+        {
+            css::uno::Reference< css::ucb::XContent > xContent(
+                xDocFac->createDocumentContent( xModel ) );
+            return xContent->getIdentifier()->getContentIdentifier();
+        }
+        catch ( css::lang::IllegalArgumentException const & )
+        {
+            OSL_ENSURE( false, "Invalid document model!" );
         }
     }
-    return docUrl;
+
+    OSL_ENSURE( false, "Unable to obtain URL for document model!" );
+    return rtl::OUString();
 }
     static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const ::rtl::OUString& url )
 {
@@ -226,11 +234,11 @@ public:
         ::rtl::OUString propName =  OUSTR("DocumentModel");
         result = getUCBProperty( root, propName );
     }
-    catch ( css::ucb::ContentCreationException& cce )
+    catch ( css::ucb::ContentCreationException& )
     {
         // carry on, empty value will be returned
     }
-    catch ( css::uno::RuntimeException& re )
+    catch ( css::uno::RuntimeException& )
     {
         // carry on, empty value will be returned
     }
@@ -244,22 +252,12 @@ public:
 
     static css::uno::Any getUCBProperty( ::ucb::Content& content, ::rtl::OUString& prop )
 {
-    css::uno::Sequence < ::rtl::OUString > aPropertyNames( 1 );
-    ::rtl::OUString* pNames = aPropertyNames.getArray();
-    pNames[ 0 ] = prop;
     css::uno::Any result;
     try
     {
-        css::uno::Sequence< css::uno::Any > props = content.getPropertyValues( aPropertyNames );
-        if ( props.getLength() )
-        {
-            result = props[ 0 ];
-        }
+        result = content.getPropertyValue( prop );
     }
-/*    catch ( ucb::CommandAbortedException& e )
-    {
-    }*/
-    catch ( css::uno::Exception& e )
+    catch ( css::uno::Exception& )
     {
     }
     return result;
