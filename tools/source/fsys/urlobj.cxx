@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-11 07:44:06 $
+ *  last change: $Author: abi $ $Date: 2001-05-29 13:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2330,7 +2330,9 @@ bool INetURLObject::parsePath(sal_Unicode const ** pBegin,
             break;
 
         case INET_PROT_VND_SUN_STAR_HELP:
-            if (pPos == pEnd)
+            if (pPos == pEnd
+                || *pPos == nQueryDelimiter
+                || *pPos == nFragmentDelimiter)
                 aTheSynPath = '/';
             else
             {
