@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:04:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ String SV_BUTTONTEXT_OK
     TEXT[ hebrew ] = "‮אישור‬";
     TEXT[ hindi ] = "ठीक";
     TEXT[ slovak ] = "OK";
+    TEXT[ hungarian ] = "OK";
+    TEXT[ slovenian ] = "V redu";
 };
 
 String SV_BUTTONTEXT_CANCEL
@@ -131,6 +133,8 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ hebrew ] = "‮ביטול‬";
     TEXT[ hindi ] = "रद्द करो";
     TEXT[ slovak ] = "Zrušiť";
+    TEXT[ hungarian ] = "Mégsem";
+    TEXT[ slovenian ] = "Prekliči";
 };
 
 String SV_BUTTONTEXT_YES
@@ -165,6 +169,8 @@ String SV_BUTTONTEXT_YES
     TEXT[ hebrew ] = "‮כן‬";
     TEXT[ hindi ] = "~हाँ";
     TEXT[ slovak ] = "~Áno";
+    TEXT[ hungarian ] = "~Igen";
+    TEXT[ slovenian ] = "~Da";
 };
 
 String SV_BUTTONTEXT_NO
@@ -199,6 +205,8 @@ String SV_BUTTONTEXT_NO
     TEXT[ hebrew ] = "‮לא‬";
     TEXT[ hindi ] = "~नहीं";
     TEXT[ slovak ] = "~Nie";
+    TEXT[ hungarian ] = "~Nem";
+    TEXT[ slovenian ] = "~Ne";
 };
 
 String SV_BUTTONTEXT_RETRY
@@ -208,7 +216,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ italian ] = "Riprova";
     TEXT[ portuguese_brazilian ] = "~Repetir";
     TEXT[ portuguese ] = "~Repetir";
-    TEXT[ danish ] = "Pr�v igen";
+    TEXT[ danish ] = "~Pr�v igen";
     TEXT[ french ] = "~R�essayer";
     TEXT[ swedish ] = "~Upprepa";
     TEXT[ dutch ] = "H~erhalen";
@@ -233,6 +241,8 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ hebrew ] = "‮לנסות שוב‬";
     TEXT[ hindi ] = "~फ़िर से प्रयत्न करना";
     TEXT[ slovak ] = "~Skúsiť znovu";
+    TEXT[ hungarian ] = "Új~ra";
+    TEXT[ slovenian ] = "~Poskusi znova";
 };
 
 String SV_BUTTONTEXT_HELP
@@ -267,6 +277,8 @@ String SV_BUTTONTEXT_HELP
     TEXT[ hebrew ] = "‮עזרה‬";
     TEXT[ hindi ] = "~सहायता";
     TEXT[ slovak ] = "~Pomocník";
+    TEXT[ hungarian ] = "~Súgó";
+    TEXT[ slovenian ] = "~Pomoč";
 };
 
 String SV_BUTTONTEXT_MORE
@@ -301,6 +313,8 @@ String SV_BUTTONTEXT_MORE
     TEXT[ hebrew ] = "‮עוד‬";
     TEXT[ hindi ] = "~अधिक";
     TEXT[ slovak ] = "~Viac";
+    TEXT[ hungarian ] = "~Részletek";
+    TEXT[ slovenian ] = "~Dodatno";
 };
 
 String SV_BUTTONTEXT_IGNORE
@@ -316,7 +330,7 @@ String SV_BUTTONTEXT_IGNORE
     Text[ spanish ] = "~Ignorar";
     Text[ finnish ] = "~Ohita";
     Text[ italian ] = "~Ignora";
-    Text[ danish ] = "Ignorer";
+    Text[ danish ] = "~Ignorer";
     Text[ swedish ] = "~Ignorera";
     Text[ polish ] = "Ignoruj";
     Text[ portuguese_brazilian ] = "~Ignorar";
@@ -332,6 +346,8 @@ String SV_BUTTONTEXT_IGNORE
     Text[ hebrew ] = "‮להתעלם‬";
     Text[ hindi ] = "~उपेक्षा करो";
     Text[ slovak ] = "~Ignorovať";
+    Text[ hungarian ] = "~Mellőzés";
+    Text[ slovenian ] = "Prezr~i";
 };
 
 String SV_BUTTONTEXT_ABORT
@@ -347,7 +363,7 @@ String SV_BUTTONTEXT_ABORT
     Text[ spanish ] = "~Cancelar";
     Text[ finnish ] = "~Peruuta";
     Text[ italian ] = "~Interrompi";
-    Text[ danish ] = "~Cancel";
+    Text[ danish ] = "~Afbryd";
     Text[ swedish ] = "~Avbryt";
     Text[ polish ] = "Anuluj";
     Text[ portuguese_brazilian ] = "~Abortar";
@@ -363,6 +379,8 @@ String SV_BUTTONTEXT_ABORT
     Text[ hebrew ] = "~Abbrechen";
     Text[ hindi ] = "~रद्द करो";
     Text[ slovak ] = "Pr~erušiť";
+    Text[ hungarian ] = "~Megszakítás";
+    Text[ slovenian ] = "P~rekini";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
@@ -399,6 +417,7 @@ YES         ~Kyll�
 NO          ~Ei
 RETRY       ~Yrit�uudelleen
 */
+
 
 
 
