@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-08-15 03:37:09 $
+ *  last change: $Author: hjs $ $Date: 2002-06-19 17:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ bool LibDump::PrintDataBase()
     FILE *pFp;
     pFp = fopen (cBName,"w+");
     if (!pFp)
-        fprintf( stderr, "Error opening DataBase File\n" );
+            DumpError( 600 );
 
     LibExport *pData;
     for ( unsigned long i=0; i < nBaseLines+10; i++ )
