@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hbox.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:14:57 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hbox.h,v 1.2 2005-02-16 18:14:57 vg Exp $ */
+/* $Id: hbox.h,v 1.3 2005-04-04 07:55:49 rt Exp $ */
 
 #ifndef _HBOX_H_
 #define _HBOX_H_
@@ -233,7 +233,7 @@ struct Tab: public HBox
 
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
 
-enum { TBL_TYPE, TXT_TYPE, EQU_TYPE, BUTTON_TYPE, HYPERTEXT_TYPE };
+enum ttype { TBL_TYPE, TXT_TYPE, EQU_TYPE, BUTTON_TYPE, HYPERTEXT_TYPE };
 enum                                              /* TxtBox->margin[n][?] */
 {
     OUT_M, IN_M, CELL_M
@@ -242,7 +242,7 @@ enum                                              /* TxtBox->margin[?][n] */
 {
     L_M, R_M, T_M, B_M
 };
-enum { CHAR_ANCHOR, PARA_ANCHOR, PAGE_ANCHOR, PAPER_ANCHOR };
+enum anchor { CHAR_ANCHOR, PARA_ANCHOR, PAGE_ANCHOR, PAPER_ANCHOR };
 enum { TF_OCCUPY_SPACE, TF_TRANSPARENT,TF_ARROUND_TEXT };
 enum
 {
@@ -588,7 +588,7 @@ struct Table
 };
 
 /* picture (11) 그림, OLE그림, 삽입그림, 그리기 */
-enum
+enum pictype
 {
     PICTYPE_FILE, PICTYPE_OLE, PICTYPE_EMBED,
     PICTYPE_DRAW, PICTYPE_UNKNOWN

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdef.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:13:50 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* NAME $Id: drawdef.h,v 1.2 2005-02-16 18:13:50 vg Exp $
+/* NAME $Id: drawdef.h,v 1.3 2005-04-04 07:55:32 rt Exp $
  *
  * HISTORY
  *        frog - Jan 11, 1999: Created.
@@ -77,7 +77,7 @@ class HWPPara;
 /**
  * Constant for drawing objects
  */
-enum
+enum objtype
 {
     HWPDO_CONTAINER,
     HWPDO_LINE,
