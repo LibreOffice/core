@@ -9,7 +9,9 @@ qa  qadevOOo\runner\helper                               nmake   -   all qa_help
 qa  qadevOOo\runner\basicrunner\basichelper              nmake   -   all qa_basicrunner_basichelper qa_helper NULL
 qa  qadevOOo\runner\basicrunner                          nmake   -   all qa_basicrunner qa_basicrunner_basichelper NULL
 qa  qadevOOo\runner\base                                 nmake   -   all qa_base qa_basicrunner NULL
-qa  qadevOOo\runner\org\openoffice                       nmake   -   all org_openoffice qa_base NULL
+qa  qadevOOo\runner\convwatch                            nmake   -   all qa_convwatch qa_helper qa_complexlib qa_lib NULL
+qa  qadevOOo\runner\util\compare                         nmake   -   all qa_util_compare qa_convwatch NULL
+qa  qadevOOo\runner\org\openoffice                       nmake   -   all org_openoffice qa_base qa_util_compare NULL
 qa  qadevOOo\tests\java\ifc\accessibility                nmake   -   all ifc_accessibility org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\awt                          nmake   -   all ifc_awt org_openoffice NULL
 qa  qadevOOo\tests\java\ifc\beans                        nmake   -   all ifc_beans org_openoffice NULL
@@ -117,7 +119,7 @@ qa  qadevOOo\tests\java\mod\_remotebridge                nmake   -   all mod__re
 qa  qadevOOo\tests\java\mod\_remotebridge.uno            nmake   -   all mod__remotebridgeuno org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_sc                          nmake   -   all mod__sc ifc_util ifc_xml_sax ifc_accessibility ifc_document ifc_sheet org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_sch                         nmake   -   all mod__sch ifc_accessibility org_openoffice NULL
-qa  qadevOOo\tests\java\mod\_sd                          nmake   -   all mod__sd ifc_accessibility org_openoffice NULL
+qa  qadevOOo\tests\java\mod\_sd                          nmake   -   all mod__sd ifc_accessibility ifc_view org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_sfx                         nmake   -   all mod__sfx org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_servicemgr.uno              nmake   -   all mod__servicemgruno org_openoffice NULL
 qa  qadevOOo\tests\java\mod\_shlibloader.uno             nmake   -   all mod__shlibloaderuno org_openoffice NULL
