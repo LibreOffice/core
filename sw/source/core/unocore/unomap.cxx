@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 10:46:12 $
+ *  last change: $Author: os $ $Date: 2000-11-09 14:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,8 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -455,7 +457,38 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     qsort(aMapArr[nId], i, sizeof(SfxItemPropertyMap), lcl_CompareMap);
 }
 
+#define _STANDARD_FONT_PROPERTIES \
+    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),           RES_CHRATR_FONTSIZE  ,  &::getCppuType((Float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},      \
+    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),           RES_CHRATR_WEIGHT    ,  &::getCppuType((Float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},                    \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),        RES_CHRATR_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },                  \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),  RES_CHRATR_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },                    \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),      RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },    \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),    RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },                    \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),       RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
+    { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),          RES_CHRATR_POSTURE   ,  &::getCppuType((FontSlant*)0),          PropertyAttribute::MAYBEVOID, MID_POSTURE},                   \
+    { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE),           RES_CHRATR_LANGUAGE ,   &::getCppuType((Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 
+#define _CJK_FONT_PROPERTIES \
+    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT_ASIAN),         RES_CHRATR_CJK_FONTSIZE  ,  &::getCppuType((Float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},   \
+    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT_ASIAN),         RES_CHRATR_CJK_WEIGHT    ,  &::getCppuType((Float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},                 \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_ASIAN),      RES_CHRATR_CJK_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },               \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN),RES_CHRATR_CJK_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },                 \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_ASIAN),    RES_CHRATR_CJK_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },    \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET_ASIAN),  RES_CHRATR_CJK_FONT,        &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },                 \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_ASIAN),     RES_CHRATR_CJK_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
+    { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE_ASIAN),        RES_CHRATR_CJK_POSTURE   ,  &::getCppuType((FontSlant*)0),          PropertyAttribute::MAYBEVOID, MID_POSTURE},                \
+    { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE_ASIAN),         RES_CHRATR_CJK_LANGUAGE ,   &::getCppuType((Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
+
+#define _CTL_FONT_PROPERTIES \
+    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT_COMPLEX),           RES_CHRATR_CTL_FONTSIZE  ,  &::getCppuType((Float*)0),          PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},\
+    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT_COMPLEX),           RES_CHRATR_CTL_WEIGHT    ,  &::getCppuType((Float*)0),              PropertyAttribute::MAYBEVOID, MID_WEIGHT},              \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_COMPLEX),        RES_CHRATR_CTL_FONT,        &::getCppuType((OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },            \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_COMPLEX),  RES_CHRATR_CTL_FONT,        &::getCppuType((OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },              \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_COMPLEX),      RES_CHRATR_CTL_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },    \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX),    RES_CHRATR_CTL_FONT,        &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },              \
+    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
+    { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE_COMPLEX),          RES_CHRATR_CTL_POSTURE   ,  &::getCppuType((FontSlant*)0),          PropertyAttribute::MAYBEVOID, MID_POSTURE},             \
+    { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE_COMPLEX),           RES_CHRATR_CTL_LANGUAGE ,   &::getCppuType((Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
 /* -----------------24.06.98 18:12-------------------
  *
  * --------------------------------------------------*/
@@ -476,14 +509,6 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT),        RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int8*)0)  ,       PropertyAttribute::MAYBEVOID, MID_ESC_HEIGHT},                                               \
         { SW_PROP_NAME(UNO_NAME_CHAR_AUTO_ESCAPEMENT),          RES_CHRATR_ESCAPEMENT,  &::getBooleanCppuType()  ,              PropertyAttribute::MAYBEVOID, MID_AUTO_ESC  },                                                \
         { SW_PROP_NAME(UNO_NAME_CHAR_FLASH              ),  RES_CHRATR_BLINK    ,   &::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                                 \
-        { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),                   RES_CHRATR_FONTSIZE  ,  &::getCppuType((const Float*)0),            PropertyAttribute::MAYBEVOID, MID_FONTHEIGHT|CONVERT_TWIPS},                                 \
-        { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),                   RES_CHRATR_WEIGHT    ,  &::getCppuType((const Float*)0),            PropertyAttribute::MAYBEVOID, MID_WEIGHT},                                                   \
-        { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),                RES_CHRATR_FONT,        &::getCppuType((const OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },                                            \
-        { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),          RES_CHRATR_FONT,        &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },                                              \
-        { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),          RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },                                         \
-        { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },                                            \
-        { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),           RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },                                          \
-        { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),       PropertyAttribute::MAYBEVOID, MID_POSTURE},                                                  \
         { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),            PropertyAttribute::MAYBEVOID, MID_UNDERLINE},                                                \
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_URL      ),        RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_URL    },                                          \
         { SW_PROP_NAME(UNO_NAME_PARA_GRAPHIC_FILTER  ),         RES_BACKGROUND,         &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_FILTER    },                                       \
@@ -491,8 +516,10 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},                                   \
         { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},                                  \
         { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},                         \
+        _STANDARD_FONT_PROPERTIES \
+        _CJK_FONT_PROPERTIES \
+        _CTL_FONT_PROPERTIES \
         { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PropertyAttribute::MAYBEVOID,   0},                                                           \
-        { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE         ),      RES_CHRATR_LANGUAGE ,   &::getCppuType((const lang::Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },                                            \
         { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),  RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID,     0},                                                                 \
         { SW_PROP_NAME(UNO_NAME_CHAR_SHADOWED),             RES_CHRATR_SHADOWED  ,  &::getBooleanCppuType()  ,          PropertyAttribute::MAYBEVOID, 0},                                                                     \
         { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),           RES_TXTATR_CHARFMT,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID,     0},                                                         \
@@ -615,19 +642,11 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT),           RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ESC          },
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT),        RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE, MID_ESC_HEIGHT},
                     { SW_PROP_NAME(UNO_NAME_CHAR_FLASH           ),     RES_CHRATR_BLINK    ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),                   RES_CHRATR_FONTSIZE  ,  &::getCppuType((const Float*)0),            PROPERTY_NONE, MID_FONTHEIGHT|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_FONT_HEIGHT),     RES_CHRATR_FONTSIZE  ,  &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE,MID_FONTHEIGHT_PROP|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_FONT_HEIGHT),     RES_CHRATR_FONTSIZE  ,  &::getCppuType((const Float*)0),            PROPERTY_NONE,MID_FONTHEIGHT_DIFF|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),                RES_CHRATR_FONT,        &::getCppuType((const OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),          RES_CHRATR_FONT,        &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),          RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),           RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),                   RES_CHRATR_WEIGHT    ,  &::getCppuType((const Float*)0),    PROPERTY_NONE, MID_WEIGHT},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),   PROPERTY_NONE, MID_POSTURE},
+                    _STANDARD_FONT_PROPERTIES
+                    _CJK_FONT_PROPERTIES
+                    _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING       ),           RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE         ),      RES_CHRATR_LANGUAGE ,   &::getCppuType((const lang::Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),      RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_SHADOWED),             RES_CHRATR_SHADOWED  ,  &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_CONTOURED),                RES_CHRATR_CONTOUR,     &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
@@ -667,16 +686,9 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT),           RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ESC          },
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT),        RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE, MID_ESC_HEIGHT},
                     { SW_PROP_NAME(UNO_NAME_CHAR_FLASH              ),  RES_CHRATR_BLINK    ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),                   RES_CHRATR_FONTSIZE  ,  &::getCppuType((const Float*)0),            PROPERTY_NONE, MID_FONTHEIGHT|CONVERT_TWIPS},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_PROP_FONT_HEIGHT),     RES_CHRATR_FONTSIZE  ,  &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE,MID_FONTHEIGHT_PROP|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_DIFF_FONT_HEIGHT),     RES_CHRATR_FONTSIZE  ,  &::getCppuType((const Float*)0),            PROPERTY_NONE,MID_FONTHEIGHT_DIFF|CONVERT_TWIPS },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),                RES_CHRATR_FONT,        &::getCppuType((const OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),          RES_CHRATR_FONT,        &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),          RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),           RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),                   RES_CHRATR_WEIGHT    ,  &::getCppuType((const Float*)0),    PROPERTY_NONE, MID_WEIGHT},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),   PROPERTY_NONE, MID_POSTURE},
+                    _STANDARD_FONT_PROPERTIES
+                    _CJK_FONT_PROPERTIES
+                    _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
@@ -685,7 +697,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE),   RES_LR_SPACE,       &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_REL_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE         ),      RES_CHRATR_LANGUAGE ,   &::getCppuType((const lang::Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),  RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_SHADOWED),             RES_CHRATR_SHADOWED  ,  &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_CONTOURED),                RES_CHRATR_CONTOUR,     &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
@@ -1006,20 +1017,14 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT),           RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ESC          },
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT),        RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE, MID_ESC_HEIGHT},
                     { SW_PROP_NAME(UNO_NAME_CHAR_FLASH              ),  RES_CHRATR_BLINK    ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),                   RES_CHRATR_FONTSIZE  ,  &::getCppuType((const Float*)0),            PROPERTY_NONE, MID_FONTHEIGHT},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),                   RES_CHRATR_WEIGHT    ,  &::getCppuType((const Float*)0),    PROPERTY_NONE, MID_WEIGHT},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),                RES_CHRATR_FONT,        &::getCppuType((const OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),          RES_CHRATR_FONT,        &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),          RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),           RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),   PROPERTY_NONE, MID_POSTURE},
+                    _STANDARD_FONT_PROPERTIES
+                    _CJK_FONT_PROPERTIES
+                    _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE         ),      RES_CHRATR_LANGUAGE ,   &::getCppuType((const lang::Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),  RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_SHADOWED),             RES_CHRATR_SHADOWED  ,  &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),           RES_TXTATR_CHARFMT,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID,     0},
@@ -1592,20 +1597,14 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT),           RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_ESC          },
                     { SW_PROP_NAME(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT),        RES_CHRATR_ESCAPEMENT,  &::getCppuType((const sal_Int8*)0)  ,       PROPERTY_NONE, MID_ESC_HEIGHT},
                     { SW_PROP_NAME(UNO_NAME_CHAR_FLASH              ),  RES_CHRATR_BLINK    ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_HEIGHT),                   RES_CHRATR_FONTSIZE  ,  &::getCppuType((const Float*)0),            PROPERTY_NONE, MID_FONTHEIGHT},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME),                RES_CHRATR_FONT,        &::getCppuType((const OUString*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME),          RES_CHRATR_FONT,        &::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),          RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),           RES_CHRATR_FONT,        &::getCppuType((const sal_Int16*)0),                    PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_WEIGHT),                   RES_CHRATR_WEIGHT    ,  &::getCppuType((const Float*)0),    PROPERTY_NONE, MID_WEIGHT},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE),              RES_CHRATR_POSTURE   ,  &::getCppuType((const awt::FontSlant*)0),   PROPERTY_NONE, MID_POSTURE},
+                    _STANDARD_FONT_PROPERTIES
+                    _CJK_FONT_PROPERTIES
+                    _CTL_FONT_PROPERTIES
                     { SW_PROP_NAME(UNO_NAME_CHAR_UNDERLINE),            RES_CHRATR_UNDERLINE ,  &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_UNDERLINE},
                     { SW_PROP_NAME(UNO_NAME_PARA_LEFT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_RIGHT_MARGIN),             RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_PARA_FIRST_LINE_INDENT),        RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_FIRST_LINE_INDENT|CONVERT_TWIPS},
                     { SW_PROP_NAME(UNO_NAME_CHAR_KERNING            ),  RES_CHRATR_KERNING    , &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,  0},
-                    { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE         ),      RES_CHRATR_LANGUAGE ,   &::getCppuType((const lang::Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
                     { SW_PROP_NAME(UNO_NAME_CHAR_NO_HYPHENATION     ),  RES_CHRATR_NOHYPHEN ,   &::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_SHADOWED),             RES_CHRATR_SHADOWED  ,  &::getBooleanCppuType()  ,          PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_CHAR_STYLE_NAME),           RES_TXTATR_CHARFMT,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID,     0},

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:42:49 $
+ *  last change: $Author: os $ $Date: 2000-11-09 14:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,6 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_FOLLOW_STYLE(MAP_CHAR_LEN("FollowStyle"
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_PHYSICAL                            (MAP_CHAR_LEN("IsPhysical"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_AUTO_UPDATE                         (MAP_CHAR_LEN("IsAutoUpdate"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_DISPLAY_NAME                           (MAP_CHAR_LEN("DisplayName"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_NAME                         (MAP_CHAR_LEN("CharFontName"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_STYLE_NAME                   (MAP_CHAR_LEN("CharFontStyleName"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_FAMILY                       (MAP_CHAR_LEN("CharFontFamily"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_CHAR_SET                     (MAP_CHAR_LEN("CharFontCharSet"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_PITCH                        (MAP_CHAR_LEN("CharFontPitch"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_GRAPHIC_URL                       (MAP_CHAR_LEN("ParaBackGraphicURL"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_GRAPHIC_FILTER                    (MAP_CHAR_LEN("ParaBackGraphicFilter"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_GRAPHIC_URL                     (MAP_CHAR_LEN("HeaderBackGraphicURL"));
@@ -136,8 +131,37 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_SUFFIX                                 
 const SwPropNameLen __FAR_DATA  UNO_NAME_PREFIX                                 (MAP_CHAR_LEN("Prefix"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARENT_NUMBERING                       (MAP_CHAR_LEN("ParentNumbering"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_START_WITH                             (MAP_CHAR_LEN("StartWith"));
+
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_HEIGHT                            (MAP_CHAR_LEN("CharHeight"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_NAME                         (MAP_CHAR_LEN("CharFontName"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_STYLE_NAME                   (MAP_CHAR_LEN("CharFontStyleName"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_FAMILY                       (MAP_CHAR_LEN("CharFontFamily"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_CHAR_SET                     (MAP_CHAR_LEN("CharFontCharSet"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_PITCH                        (MAP_CHAR_LEN("CharFontPitch"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_POSTURE                           (MAP_CHAR_LEN("CharPosture"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_WEIGHT                            (MAP_CHAR_LEN("CharWeight"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_LOCALE                            (MAP_CHAR_LEN("CharLocale"));
+
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_HEIGHT_ASIAN                      (MAP_CHAR_LEN("CharHeightAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_NAME_ASIAN                   (MAP_CHAR_LEN("CharFontNameAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN             (MAP_CHAR_LEN("CharFontStyleNameAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_FAMILY_ASIAN                 (MAP_CHAR_LEN("CharFontFamilyAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_CHAR_SET_ASIAN               (MAP_CHAR_LEN("CharFontCharSetAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_PITCH_ASIAN                  (MAP_CHAR_LEN("CharFontPitchAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_POSTURE_ASIAN                     (MAP_CHAR_LEN("CharPostureAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_WEIGHT_ASIAN                      (MAP_CHAR_LEN("CharWeightAsian"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_LOCALE_ASIAN                      (MAP_CHAR_LEN("CharLocaleAsian"));
+
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_HEIGHT_COMPLEX                    (MAP_CHAR_LEN("CharHeightComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_NAME_COMPLEX                 (MAP_CHAR_LEN("CharFontNameComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_STYLE_NAME_COMPLEX           (MAP_CHAR_LEN("CharFontStyleNameComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_FAMILY_COMPLEX               (MAP_CHAR_LEN("CharFontFamilyComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX             (MAP_CHAR_LEN("CharFontCharSetComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FONT_PITCH_COMPLEX                (MAP_CHAR_LEN("CharFontPitchComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_POSTURE_COMPLEX                   (MAP_CHAR_LEN("CharPostureComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_WEIGHT_COMPLEX                    (MAP_CHAR_LEN("CharWeightComplex"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_LOCALE_COMPLEX                    (MAP_CHAR_LEN("CharLocaleComplex"));
+
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_AUTO_KERNING                      (MAP_CHAR_LEN("CharAutoKerning"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_UNDERLINE                         (MAP_CHAR_LEN("CharUnderline"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_ESCAPEMENT                        (MAP_CHAR_LEN("CharEscapement"));
@@ -147,14 +171,12 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_STRIKEOUT                         
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_CROSSED_OUT                       (MAP_CHAR_LEN("CharCrossedOut"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_NO_HYPHENATION                    (MAP_CHAR_LEN("CharNoHyphenation"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_AUTO_ESCAPEMENT                   (MAP_CHAR_LEN("CharAutoEscapement"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_HEIGHT                            (MAP_CHAR_LEN("CharHeight"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_PROP_FONT_HEIGHT                  (MAP_CHAR_LEN("CharPropFontHeight"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_DIFF_FONT_HEIGHT                  (MAP_CHAR_LEN("CharDiffFontHeight"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_ESCAPEMENT_HEIGHT                 (MAP_CHAR_LEN("CharEscapementHeight"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_COLOR                             (MAP_CHAR_LEN("CharColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FLASH                             (MAP_CHAR_LEN("CharFlash"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_KERNING                           (MAP_CHAR_LEN("CharKerning"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_LOCALE                            (MAP_CHAR_LEN("CharLocale"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_BACK_COLOR                        (MAP_CHAR_LEN("CharBackColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_BACK_TRANSPARENT          (MAP_CHAR_LEN("CharBackTransparent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_LINE_SPACING                      (MAP_CHAR_LEN("ParaLineSpacing"));

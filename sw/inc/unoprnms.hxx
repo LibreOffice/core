@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:19:40 $
+ *  last change: $Author: os $ $Date: 2000-11-09 14:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,6 @@ extern const SwPropNameLen  __FAR_DATA  UNO_NAME_FOLLOW_STYLE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_PHYSICAL                      ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_AUTO_UPDATE                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DISPLAY_NAME                     ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_NAME                       ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_STYLE_NAME               ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_FAMILY                   ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_CHAR_SET                 ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_PITCH                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_GRAPHIC_URL                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_GRAPHIC_FILTER                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_GRAPHIC_URL                 ;
@@ -140,8 +135,37 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SUFFIX                         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PREFIX                         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARENT_NUMBERING               ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_START_WITH                       ;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_NAME                       ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_STYLE_NAME               ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_FAMILY                   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_CHAR_SET                 ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_PITCH                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_POSTURE                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_WEIGHT                      ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_HEIGHT                          ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_LOCALE                          ;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_NAME_ASIAN                     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN               ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_FAMILY_ASIAN                   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_CHAR_SET_ASIAN                 ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_PITCH_ASIAN                    ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_POSTURE_ASIAN                   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_WEIGHT_ASIAN                        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_HEIGHT_ASIAN                        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_LOCALE_ASIAN                        ;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_NAME_COMPLEX                       ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_STYLE_NAME_COMPLEX               ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_FAMILY_COMPLEX                   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX                 ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FONT_PITCH_COMPLEX                    ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_POSTURE_COMPLEX                   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_WEIGHT_COMPLEX                      ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_HEIGHT_COMPLEX                          ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_LOCALE_COMPLEX                          ;
+
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_AUTO_KERNING                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_UNDERLINE                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ESCAPEMENT                      ;
@@ -151,14 +175,12 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_STRIKEOUT                   
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_CROSSED_OUT                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_NO_HYPHENATION                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_AUTO_ESCAPEMENT                 ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_HEIGHT                          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_PROP_FONT_HEIGHT              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_DIFF_FONT_HEIGHT              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ESCAPEMENT_HEIGHT             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COLOR                       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FLASH                           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_KERNING                     ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_LOCALE                          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_BACK_COLOR                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_BACK_TRANSPARENT        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_LINE_SPACING                    ;
