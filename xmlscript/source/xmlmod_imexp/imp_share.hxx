@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:54:28 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,10 +58,7 @@
  *
  *
  ************************************************************************/
-#include <vector>
 
-#include <xmlscript/xmldlg_imexp.hxx>
-#include <xmlscript/xmllib_imexp.hxx>
 #include <xmlscript/xmlmod_imexp.hxx>
 
 #include <cppuhelper/implbase1.hxx>
@@ -76,9 +73,11 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
-#include <com/sun/star/xml/sax2/XExtendedAttributes.hpp>
-#include <com/sun/star/xml/XImportContext.hpp>
-#include <com/sun/star/xml/XImporter.hpp>
+#include <com/sun/star/xml/input/XRoot.hpp>
+
+#include <vector>
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
 using namespace ::rtl;
@@ -88,77 +87,21 @@ using namespace ::com::sun::star::uno;
 
 namespace xmlscript
 {
-//
-inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
-{
-    sal_Int32 nVal;
-    if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
-    {
-        nVal = rStr.copy( 2 ).toInt32( 16 );
-    }
-    else
-    {
-        nVal = rStr.toInt32();
-    }
-    return nVal;
-}
-inline bool getBoolAttr(
-    sal_Bool * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
-{
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, rAttrName ) );
-    if (aValue.getLength())
-    {
-        if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
-        {
-            *pRet = sal_True;
-            return true;
-        }
-        else if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("false") ))
-        {
-            *pRet = sal_False;
-            return true;
-        }
-        else
-        {
-            throw xml::sax::SAXException(
-                rAttrName + OUString( RTL_CONSTASCII_USTRINGPARAM(": no boolean value (true|false)!") ),
-                Reference< XInterface >(), Any() );
-        }
-    }
-    return false;
-}
-inline bool getStringAttr(
-    OUString * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
-{
-    *pRet = xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, rAttrName );
-    return (pRet->getLength() > 0);
-}
-inline bool getLongAttr(
-    sal_Int32 * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
-{
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_SCRIPT_UID, rAttrName ) );
-    if (aValue.getLength())
-    {
-        *pRet = toInt32( aValue );
-        return true;
-    }
-    return false;
-}
-
 
 //==================================================================================================
 // Script module import
 
 //==================================================================================================
 struct ModuleImport
-    : public ::cppu::WeakImplHelper1< xml::XImporter >
+    : public ::cppu::WeakImplHelper1< xml::input::XRoot >
 {
     friend class ModuleElement;
 
     ModuleDescriptor& mrModuleDesc;
+
+    sal_Int32 XMLNS_SCRIPT_UID;
+    sal_Int32 XMLNS_LIBRARY_UID;
+    sal_Int32 XMLNS_XLINK_UID;
 
 public:
     inline ModuleImport( ModuleDescriptor& rModuleDesc )
@@ -167,8 +110,9 @@ public:
     virtual ~ModuleImport()
         SAL_THROW( () );
 
-    // XImporter
-    virtual void SAL_CALL startDocument()
+    // XRoot
+    virtual void SAL_CALL startDocument(
+        Reference< container::XNameAccess > const & xUidMapping )
         throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL endDocument()
         throw (xml::sax::SAXException, RuntimeException);
@@ -178,52 +122,55 @@ public:
     virtual void SAL_CALL setDocumentLocator(
         Reference< xml::sax::XLocator > const & xLocator )
         throw (xml::sax::SAXException, RuntimeException);
-    virtual Reference< xml::XImportContext > SAL_CALL createRootContext(
+    virtual Reference< xml::input::XElement > SAL_CALL startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 };
 
 //==================================================================================================
 class ModuleElement
-    : public ::cppu::WeakImplHelper1< xml::XImportContext >
+    : public ::cppu::WeakImplHelper1< xml::input::XElement >
 {
 protected:
     ModuleImport * _pImport;
     ModuleElement * _pParent;
 
     OUString _aLocalName;
-    Reference< xml::sax2::XExtendedAttributes > _xAttributes;
+    Reference< xml::input::XAttributes > _xAttributes;
     ::rtl::OUStringBuffer _StrBuffer;
 
 public:
     ModuleElement(
         OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+        Reference< xml::input::XAttributes > const & xAttributes,
         ModuleElement * pParent, ModuleImport * pImport )
         SAL_THROW( () );
     virtual ~ModuleElement()
         SAL_THROW( () );
 
-    // XImportContext
-    virtual Reference< xml::XImportContext > SAL_CALL getParent()
+    // XElement
+    virtual Reference< xml::input::XElement > SAL_CALL getParent()
         throw (RuntimeException);
     virtual OUString SAL_CALL getLocalName()
         throw (RuntimeException);
     virtual sal_Int32 SAL_CALL getUid()
         throw (RuntimeException);
-    virtual Reference< xml::sax2::XExtendedAttributes > SAL_CALL getAttributes()
+    virtual Reference< xml::input::XAttributes > SAL_CALL getAttributes()
         throw (RuntimeException);
     virtual void SAL_CALL ignorableWhitespace(
         OUString const & rWhitespaces )
         throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL characters( OUString const & rChars )
         throw (xml::sax::SAXException, RuntimeException);
+    virtual void SAL_CALL processingInstruction(
+        OUString const & rTarget, OUString const & rData )
+        throw (xml::sax::SAXException, RuntimeException);
     virtual void SAL_CALL endElement()
         throw (xml::sax::SAXException, RuntimeException);
-    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
+    virtual Reference< xml::input::XElement > SAL_CALL startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+        Reference< xml::input::XAttributes > const & xAttributes )
         throw (xml::sax::SAXException, RuntimeException);
 };
 
