@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 12:56:18 $
+#   last change: $Author: kr $ $Date: 2001-02-13 18:05:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ TARGET  = com_sun_star_comp_helper
 JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
 
 JAVAFILES=	\
+    Bootstrap.java				\
     SharedLibraryLoader.java	\
     RegistryServiceFactory.java
 
