@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-07 18:18:20 $
+ *  last change: $Author: ka $ $Date: 2000-12-14 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,9 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoBitmapTable_createInstance( Sdr
 /** returns a GraphicObject for this URL */
 GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw()
 {
-    if( rURL.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) ) )
+    const String aURL( rURL ), aPrefix( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
+
+    if( aURL.Search( aPrefix ) == 0 )
     {
         // graphic manager url
         ByteString aUniqueID( String(rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 )), RTL_TEXTENCODING_UTF8 );
@@ -339,16 +341,13 @@ GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw()
     }
     else
     {
-        SfxMedium aMedium( rURL, STREAM_READ, TRUE );
-        SvStream* pStream = aMedium.GetInStream();
+        SfxMedium   aMedium( aURL, STREAM_READ, TRUE );
+        SvStream*   pStream = aMedium.GetInStream();
+        Graphic     aGraphic;
 
-        Graphic         aGraphic;
         if( pStream )
-        {
-            ULONG nRC = GraphicConverter::Import( *pStream, aGraphic );
-        }
+            GraphicConverter::Import( *pStream, aGraphic );
+
         return GraphicObject( aGraphic );
     }
 }
-
-
