@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:01:28 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 13:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@
 
 #include "attrib.hxx"
 
-#define SvxDrawToolItem             SfxUInt16Item
+#define SvxDrawToolItem             SfxEnumItem
 #define SvxDrawAlignItem            SfxEnumItem
 #define SvxChooseControlItem        SfxEnumItem
 
