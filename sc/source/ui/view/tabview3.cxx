@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:06:09 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,8 +543,10 @@ void ScTabView::CursorPosChanged()
 
 void ScTabView::TestHintWindow()
 {
-    //  Eingabemeldung (Gueltigkeit)
-    //! per Timer / ControllerItem anzeigen ???
+    //  show input help window and list drop-down button for validity
+
+    BOOL bListValButton = FALSE;
+    ScAddress aListValPos;
 
     ScDocument* pDoc = aViewData.GetDocument();
     const SfxUInt32Item* pItem = (const SfxUInt32Item*)
@@ -620,9 +622,20 @@ void ScTabView::TestHintWindow()
         }
         else
             DELETEZ(pInputHintWindow);
+
+        // list drop-down button
+        if ( pData && pData->HasSelectionList() )
+        {
+            aListValPos.Set( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
+            bListValButton = TRUE;
+        }
     }
     else
         DELETEZ(pInputHintWindow);
+
+    for ( USHORT i=0; i<4; i++ )
+        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
+            pGridWin[i]->UpdateListValPos( bListValButton, aListValPos );
 }
 
 void ScTabView::RemoveHintWindow()
