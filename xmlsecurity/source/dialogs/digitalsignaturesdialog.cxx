@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-19 06:45:40 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 10:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,11 +213,18 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
         CertificateChooser aChooser( this, xSecEnv, aCurrentSignatureInformations );
         if( aChooser.Execute() )
         {
+            uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
+            rtl::OUString aCertSerial = bigIntegerToNumericString( xCert->getSerialNumber() );
+            if ( !aCertSerial.getLength() )
+            {
+                DBG_ERROR( "Error in Certificate, problem with serial number!" );
+                return -1;
+            }
+
             maSignatureHelper.StartMission();
 
             sal_Int32 nSecurityId = maSignatureHelper.GetNewSecurityId();
-            uno::Reference< ::com::sun::star::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
-            maSignatureHelper.SetX509Certificate( nSecurityId, xCert->getIssuerName(), bigIntegerToNumericString( xCert->getSerialNumber() ) );
+            maSignatureHelper.SetX509Certificate( nSecurityId, xCert->getIssuerName(), aCertSerial );
 
             std::vector< rtl::OUString > aElements = DocumentSignatureHelper::CreateElementList( mxStore, rtl::OUString(), meSignatureMode );
 

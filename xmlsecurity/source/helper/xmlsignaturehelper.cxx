@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-21 14:31:25 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 10:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -98,10 +100,8 @@ XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< lang::XMultiServic
 
 XMLSignatureHelper::~XMLSignatureHelper()
 {
-    if (mxSEInitializer.is())
-    {
+    if ( mxSEInitializer.is() && mxSecurityContext.is() )
         mxSEInitializer->freeSecurityContext( mxSecurityContext );
-    }
 }
 
 bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
