@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:12:08 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,9 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 sfwkLibType = sfwkLibType.replaceAt( startOfReplace, charsToReplace, lang );
                 OSL_TRACE("******************************");
                 OSL_TRACE(" BackEnd detected lang = %s  ",
-                     OUStringToOString( lang, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                     rtl::OUStringToOString( lang, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE(" for url %s",
-                     OUStringToOString( source.sSystemId, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                     rtl::OUStringToOString( source.sSystemId, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE("******************************");
                 return PackageImpl::create(
                     this, url, mediaType, xCmdEnv, sfwkLibType );

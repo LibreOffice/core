@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_parceldesc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:19:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ParcelDescDocHandler::startElement( const OUString& aName,
             RuntimeException )
 {
     OSL_TRACE("ParcelDescDocHandler::startElement() for %s",
-        OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        rtl::OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
     if ( !skipIndex )
     {
         if ( aName.equals( OUString::createFromAscii( "parcel" ) ) )
@@ -134,7 +134,7 @@ ParcelDescDocHandler::startElement( const OUString& aName,
     else
     {
         OSL_TRACE("ParcelDescDocHandler::startElement() skipping for %s",
-            OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            rtl::OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
 
 }
@@ -146,7 +146,7 @@ void SAL_CALL ParcelDescDocHandler::endElement( const OUString & aName )
     {
         --skipIndex;
         OSL_TRACE("ParcelDescDocHandler::endElement() skipping for %s",
-            OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            rtl::OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
 }
 
