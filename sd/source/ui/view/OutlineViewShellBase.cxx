@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineViewShellBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:38:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,30 @@ class DrawDocShell;
 
 TYPEINIT1(OutlineViewShellBase, ViewShellBase);
 
+// We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
+// new OutlineViewShellBase object has been constructed.
+
+/*
 SFX_IMPL_VIEWFACTORY(OutlineViewShellBase, SdResId(STR_DEFAULTVIEW))
+{
+    SFX_VIEW_REGISTRATION(DrawDocShell);
+}
+*/
+SfxViewFactory* OutlineViewShellBase::pFactory;
+SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
+    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+{
+    OutlineViewShellBase* pBase = new OutlineViewShellBase(pFrame, pOldView);
+    pBase->LateInit();
+    return pBase;
+}
+void OutlineViewShellBase::RegisterFactory( USHORT nPrio )
+{
+    pFactory = new SfxViewFactory(
+        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+    InitFactory();
+}
+void OutlineViewShellBase::InitFactory()
 {
     SFX_VIEW_REGISTRATION(DrawDocShell);
 }
