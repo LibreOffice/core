@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ CheckBox CB_USE_PASSWD
     Text [ english_us ] = "~Password" ;
     Text[ chinese_simplified ] = "密码(~P)";
     Text[ russian ] = "������";
-    Text[ polish ] = "Has�o";
+    Text[ polish ] = "~Has�o";
     Text[ japanese ] = "パスワード(~P)";
     Text[ chinese_traditional ] = "密碼(~P)";
     Text[ arabic ] = "���� ����";
@@ -88,6 +88,9 @@ CheckBox CB_USE_PASSWD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Contrasenya";
     Text[ thai ] = "~รหัสผ่าน";
+    Text[ czech ] = "Heslo";
+    Text[ hebrew ] = "‮סיסמה‬";
+    Text[ hindi ] = "~कूटशब्द";
 };
 CheckBox CB_READ_ONLY
 {
@@ -95,7 +98,7 @@ CheckBox CB_READ_ONLY
     Text [ ENGLISH ] = "~Read only" ;
     Text [ norwegian ] = "~Skrivebeskyttet" ;
     Text [ italian ] = "~Sola lettura" ;
-    Text [ portuguese_brazilian ] = "~S?leitura" ;
+    Text [ portuguese_brazilian ] = "~Somente leitura" ;
     Text [ portuguese ] = "~S� leitura" ;
     Text [ finnish ] = "Vain ~luku" ;
     Text [ danish ] = "Skrivebeskyttet" ;
@@ -106,7 +109,7 @@ CheckBox CB_READ_ONLY
     Text [ english_us ] = "~Read-only" ;
     Text[ chinese_simplified ] = "只读(~R)";
     Text[ russian ] = "������ ��� ������";
-    Text[ polish ] = "Tylko do odczytu";
+    Text[ polish ] = "Tylko ~do odczytu";
     Text[ japanese ] = "読み取り専用(~R)";
     Text[ chinese_traditional ] = "唯讀(~R)";
     Text[ arabic ] = "������� ���";
@@ -116,6 +119,9 @@ CheckBox CB_READ_ONLY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nom�s lectura";
     Text[ thai ] = "~อ่านอย่างเดียว";
+    Text[ czech ] = "Pouze pro čtení";
+    Text[ hebrew ] = "‮קריאה בלבד‬";
+    Text[ hindi ] = "~केवल पढ़ने केलिए";
 };
 String STR_LINKEDIT_TEXT
 {
@@ -124,7 +130,7 @@ String STR_LINKEDIT_TEXT
     Text [ ENGLISH ] = "Edit links" ;
     Text [ norwegian ] = "Edit links" ;
     Text [ italian ] = "Modifica collegamenti" ;
-    Text [ portuguese_brazilian ] = "Editar liga??s" ;
+    Text [ portuguese_brazilian ] = "Editar v�nculos" ;
     Text [ portuguese ] = "Editar liga��es" ;
     Text [ finnish ] = "Muokkaa linkkej�" ;
     Text [ danish ] = "Rediger k�der" ;
@@ -145,6 +151,9 @@ String STR_LINKEDIT_TEXT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modifica els enlla�os";
     Text[ thai ] = "แก้ไขการเชื่อมโยง";
+    Text[ czech ] = "Upravit odkazy";
+    Text[ hebrew ] = "Verknüpfungen bearbeiten";
+    Text[ hindi ] = "लिंक्स का संपादन";
 };
 String STR_PATH_NOT_FOUND1
 {
@@ -153,7 +162,7 @@ String STR_PATH_NOT_FOUND1
     Text [ English ] = "The directory '" ;
     Text [ norwegian ] = "The directory '" ;
     Text [ italian ] = "La cartella" ;
-    Text [ portuguese_brazilian ] = "O diret?io" ;
+    Text [ portuguese_brazilian ] = "O diret�rio " ;
     Text [ portuguese ] = "O direct�rio '" ;
     Text [ finnish ] = "Hakemistoa" ;
     Text [ danish ] = "Biblioteket '" ;
@@ -164,7 +173,7 @@ String STR_PATH_NOT_FOUND1
     Text [ english_us ] = "The directory '" ;
     Text[ chinese_simplified ] = "这个目录 '";
     Text[ russian ] = "������� '";
-    Text[ polish ] = "Katalog";
+    Text[ polish ] = "Katalog '";
     Text[ japanese ] = "ディレクトリ「";
     Text[ language_user1 ] = " ";
     Text[ chinese_traditional ] = "這個目錄<";
@@ -174,6 +183,9 @@ String STR_PATH_NOT_FOUND1
     Text[ turkish ] = "Dizin '";
     Text[ catalan ] = "El directori '";
     Text[ thai ] = "ไดเร็กทอรี่ '";
+    Text[ czech ] = "Adresář ";
+    Text[ hebrew ] = "Das Verzeichnis '";
+    Text[ hindi ] = "डैरक्टरी '";
 };
 String STR_PATH_NOT_FOUND2
 {
@@ -183,7 +195,7 @@ String STR_PATH_NOT_FOUND2
     Text [ English ] = "' does not exist." ;
     Text [ norwegian ] = "' does not exist." ;
     Text [ italian ] = "' non esiste." ;
-    Text [ portuguese_brazilian ] = "' n?o existe." ;
+    Text [ portuguese_brazilian ] = " n�o existe." ;
     Text [ portuguese ] = "' n�o existe." ;
     Text [ finnish ] = "ei ole olemassa." ;
     Text [ danish ] = "' eksisterer ikke." ;
@@ -194,7 +206,7 @@ String STR_PATH_NOT_FOUND2
     Text [ english_us ] = "' does not exist." ;
     Text[ chinese_simplified ] = "' 不存在。";
     Text[ russian ] = "' �� ����������.";
-    Text[ polish ] = "nie istnieje.";
+    Text[ polish ] = "' nie istnieje.";
     Text[ japanese ] = "」はありません。";
     Text[ chinese_traditional ] = ">不存在。";
     Text[ arabic ] = "' ��� �����.";
@@ -204,11 +216,23 @@ String STR_PATH_NOT_FOUND2
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "' no existeix.";
     Text[ thai ] = "' ไม่มีอยู่";
+    Text[ czech ] = " neexistuje.";
+    Text[ hebrew ] = "' existiert nicht.";
+    Text[ hindi ] = "' अस्तित्व में नहीं है ।";
 };
 String STR_FLT_SGV
 {
     Text = "SGV - StarDraw 2.0,SGV" ;
 };
+
+
+
+
+
+
+
+
+
 
 
 
