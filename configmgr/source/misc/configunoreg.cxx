@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-23 09:51:07 $
+ *  last change: $Author: fs $ $Date: 2000-12-01 14:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,15 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
-#ifndef _UNO_LBNAMES_H_
-#include <uno/lbnames.h>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
 
-#ifndef CONFIGMGR_API_FACTORY_HXX_
-#include "confapifactory.hxx"
+#ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
+#include "providerfactory.hxx"
 #endif
-
 #ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
 #include "confsvccomponent.hxx"
+#endif
+#ifndef CONFIGMGR_API_FACTORY_HXX_
+#include "confapifactory.hxx"
 #endif
 #ifndef CONFIGMGR_API_PROVIDER2_HXX_
 #include "confprovider2.hxx"
@@ -83,40 +76,15 @@
 #include "adminprovider.hxx"
 #endif
 
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-
-
-/********************************************************************************************/
-
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using configmgr::ServiceInfo;
-using configmgr::AsciiServiceName;
-
-#define THISREF() static_cast< ::cppu::OWeakObject* >(this)
-
+using ::configmgr::ServiceInfo;
+using ::configmgr::AsciiServiceName;
 
 typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
         (
@@ -125,197 +93,6 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
             ::cppu::ComponentInstantiation pCreateFunction,
             const Sequence< OUString > & rServiceNames
         );
-
-// ***************************************************************************************
-
-namespace configmgr
-{
-
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::cppu;
-    using namespace ::osl;
-
-//=======================================================================================
-//= OProviderFactory
-//=======================================================================================
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XSingleServiceFactory > OProviderFactory_Base;
-    /** a special factory for the configuration provider, which implements some kind of
-        "shared multiple instances" factory.
-    */
-    class OProviderFactory : public OProviderFactory_Base
-    {
-    protected:
-        ::osl::Mutex                        m_aMutex;
-        ::cppu::ComponentInstantiation      m_pObjectCreator;
-        Reference< XMultiServiceFactory >   m_xORB;
-        Reference< XInterface >             m_xDefaultProvider;
-
-        typedef ::com::sun::star::uno::WeakReference< XInterface >  ProviderReference;
-        DECLARE_STL_USTRINGACCESS_MAP(ProviderReference, UserSpecificProvider);
-        UserSpecificProvider    m_aUserProvider;                // provider for all non-plugin sessions
-        UserSpecificProvider    m_aPluginSessionProviders;      // provider for pluin session
-
-    public:
-        OProviderFactory(
-            const Reference< XMultiServiceFactory >& _rxORB,
-            ::cppu::ComponentInstantiation _pObjectCreator);
-
-        virtual Reference< XInterface > SAL_CALL createInstance(  ) throw(Exception, RuntimeException);
-        virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
-
-        Reference< XInterface > createProvider();
-        Reference< XInterface > createProviderWithArguments(const Sequence< Any >& _rArguments);
-
-    protected:
-        void    ensureDefaultProvider();
-
-        // from the given map, extract a provider for the guven user. (if necessary, create one and insert it into the map)
-        Reference< XInterface > implGetProvider(
-                    UserSpecificProvider& _rExistentProviders,
-                    sal_Bool _bCreateWithPassword,
-                    const ::rtl::OUString& _rCreateForUser,
-                    const Sequence< Any > _rArguments
-                );
-    };
-
-    //=======================================================================================
-    //= OProviderFactory
-    //=======================================================================================
-    //---------------------------------------------------------------------------------------
-    OProviderFactory::OProviderFactory(const Reference< XMultiServiceFactory >& _rxORB, ::cppu::ComponentInstantiation _pObjectCreator)
-        :m_pObjectCreator(_pObjectCreator)
-        ,m_xORB(_rxORB)
-    {
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::implGetProvider(UserSpecificProvider& _rExistentProviders,
-            sal_Bool _bCreateWithPassword, const ::rtl::OUString& _rCreateForUser, const Sequence< Any > _rArguments)
-    {
-        Reference< XInterface > xReturn;
-        if (!_bCreateWithPassword)
-        {
-            UserSpecificProviderIterator aExistentProvider = _rExistentProviders.find(_rCreateForUser);
-            if (_rExistentProviders.end() != aExistentProvider)
-                xReturn = aExistentProvider->second;
-        }
-
-        if (!xReturn.is())
-        {
-            xReturn = (*m_pObjectCreator)(m_xORB);
-            if (!_bCreateWithPassword)
-                _rExistentProviders[_rCreateForUser] = xReturn;
-
-            // initialize it
-            Reference< XInitialization > xProvInit(xReturn, UNO_QUERY);
-            if (xProvInit.is())
-                xProvInit->initialize(_rArguments);
-        }
-
-        return xReturn;
-    }
-
-    //---------------------------------------------------------------------------------------
-    void OProviderFactory::ensureDefaultProvider()
-    {
-        MutexGuard aGuard(m_aMutex);
-        if (m_xDefaultProvider.is())
-            return;
-        m_xDefaultProvider = (*m_pObjectCreator)(m_xORB);
-
-        // initialize it with an empty sequence, thus we ensure the provider establishes it's connection
-        Reference< XInitialization > xProvInit(m_xDefaultProvider, UNO_QUERY);
-        if (xProvInit.is())
-            xProvInit->initialize(Sequence< Any >());
-
-        // TODO : we need direct access to the provider implementation. This way we won't need the XInitialization
-        // interface, and we don't need this weird behaviour of initializing with an empty argument sequence
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProvider()
-    {
-        MutexGuard aGuard(m_aMutex);
-        ensureDefaultProvider();
-        return m_xDefaultProvider;
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > OProviderFactory::createProviderWithArguments(const Sequence< Any >& _rArguments)
-    {
-        MutexGuard aGuard(m_aMutex);
-        ::rtl::OUString sUser;
-        // #78409
-        // if a provider is queried with a password, we always create a new instance for it,
-        // as don't wan't to remember the passwords for the user.
-        ::rtl::OUString sPassword;
-        bool bPasswordUsed = false;
-
-        ::rtl::OUString sServerType;
-
-        const Any* pArguments = _rArguments.getConstArray();
-        PropertyValue aCurrentArg;
-        for (sal_Int32 i=0; i<_rArguments.getLength(); ++i, ++pArguments)
-        {
-            if (!((*pArguments) >>= aCurrentArg))
-                throw IllegalArgumentException(::rtl::OUString::createFromAscii("Arguments have to be com.sun.star.beans.PropertyValue's."), NULL, (sal_Int16)i);
-            if (0 == aCurrentArg.Name.compareToAscii("user"))
-            {
-                if (!(aCurrentArg.Value >>= sUser) || !sUser.getLength())
-                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The user name specified is invalid."), NULL, (sal_Int16)i);
-            }
-
-            // sesions which query for a password are always one instance
-            if (0 == aCurrentArg.Name.compareToAscii("password"))
-            {
-                bPasswordUsed = true;
-                if (!(aCurrentArg.Value >>= sPassword))
-                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The password specified is invalid."), NULL, (sal_Int16)i);
-            }
-
-            // check for the server type
-            if (0 == aCurrentArg.Name.compareToAscii("servertype"))
-            {
-                if (!(aCurrentArg.Value >>= sServerType))
-                    throw IllegalArgumentException(::rtl::OUString::createFromAscii("The servertype specified is invalid."), NULL, (sal_Int16)i);
-            }
-        }
-
-        if (0 == sServerType.compareToAscii("plugin"))
-            return implGetProvider(m_aPluginSessionProviders, bPasswordUsed, sUser, _rArguments);
-        else
-            return implGetProvider(m_aUserProvider, bPasswordUsed, sUser, _rArguments);
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OProviderFactory::createInstance(  ) throw(Exception, RuntimeException)
-    {
-        // default provider
-        return createProvider();
-    }
-
-    //---------------------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OProviderFactory::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw(Exception, RuntimeException)
-    {
-        return createProviderWithArguments(_rArguments);
-    }
-
-    //=======================================================================================
-    Reference< XSingleServiceFactory > SAL_CALL createProviderFactory(
-            const Reference< XMultiServiceFactory > & rServiceManager,
-            const OUString & rComponentName,
-            ::cppu::ComponentInstantiation pCreateFunction,
-            const Sequence< OUString > & rServiceNames
-        )
-    {
-        OSL_ENSHURE(0 == rComponentName.compareToAscii(OConfigurationProvider::staticServiceInfo.implementationName),
-            "configmgr::createProviderFactory : invalid argument !");
-        return new OProviderFactory(rServiceManager, pCreateFunction);
-    }
-
-}   // namespace configmgr
 
 // ***************************************************************************************
 //
@@ -402,7 +179,7 @@ struct ProviderRequest
                 xRet->acquire();
                 // we want to transport the interface pointer as flat C void pointer, so this prevents deletion
         }
-        catch(...)
+        catch(Exception&)
         {
         }
         return xRet.is();
@@ -431,7 +208,7 @@ struct ProviderRequest
                 xRet->acquire();
                 // we want to transport the interface pointer as flat C void pointer, so this prevents deletion
         }
-        catch(...)
+        catch(Exception&)
         {
         }
         return xRet.is();
