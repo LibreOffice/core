@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 14:39:02 $
+ *  last change: $Author: mav $ $Date: 2003-12-08 15:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const ::rtl::OUString& sEntName,
-                                                                    sal_Bool bIsReadonly )
+                                                                    sal_Bool bIsReadonly,
+                                                                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             container::NoSuchElementException,
             io::IOException,
@@ -277,7 +278,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                                         sEntName,
                                                         embed::EntryInitModes::ENTRY_DEFAULT_INIT,
                                                         aTempMediaDescr,
-                                                        uno::Sequence< beans::PropertyValue >() );
+                                                        lObjArgs );
     }
     else
     {
@@ -321,7 +322,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             if ( !xOleEmbCreator.is() )
                 throw uno::RuntimeException(); // TODO:
 
-            xResult = xOleEmbCreator->createInstanceInitFromEntry( xStorage, sEntName, bIsReadonly );
+            xResult = xOleEmbCreator->createInstanceInitFromEntry( xStorage, sEntName, bIsReadonly, lObjArgs );
         }
         else
         {
