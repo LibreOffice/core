@@ -32,7 +32,7 @@ st	svtools\source\filter.vcl\jpeg			nmake	-	all	st_vjpeg NULL
 st	svtools\source\filter.vcl\ixbm			nmake	-	all	st_vixbm NULL
 st	svtools\source\filter.vcl\ixpm			nmake	-	all	st_vixpm NULL
 st	svtools\source\filter.vcl\ipng			nmake	-	all	st_vipng NULL
-st	svtools\source\brwbox					nmake	-	all	st__brw NULL
+st	svtools\source\brwbox					nmake	-	all	st__brw st_bmp NULL
 st	svtools\source\urlobj					nmake	-	all	st__url NULL
 st	svtools\source\misc						nmake	-	all	st__misc st_bmp NULL
 st	svtools\source\contnr					nmake	-	all	st__ctr NULL
