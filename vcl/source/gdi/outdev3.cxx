@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: obo $ $Date: 2003-11-12 17:15:19 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,10 @@
 #endif
 #ifndef _OSL_FILE_H
 #include <osl/file.h>
+#endif
+
+#ifndef _SV_GLYPHCACHE_HXX
+#include <glyphcache.hxx>
 #endif
 
 #include <unohelp.hxx>
@@ -1288,8 +1292,7 @@ static void ImplCalcType( ULONG& rType, FontWeight& rWeight, FontWidth& rWidth,
 
 // =======================================================================
 
-ImplDevFontList::ImplDevFontList() :
-    List( CONTAINER_MAXBLOCKSIZE, 96, 32 )
+ImplDevFontList::ImplDevFontList() : List( CONTAINER_MAXBLOCKSIZE, 96, 32 )
 {
     mbMatchData = FALSE;
     mbMapNames  = FALSE;
@@ -1317,7 +1320,9 @@ void ImplDevFontList::ImplClear()
             ImplFontData* pNextFD = pFontData->mpNext;
 
             // tell lower layers about the imminent death
-            SalGraphics::RemovingFont( pFontData );
+#ifdef UNX
+            GlyphCache::GetInstance().RemoveFont( pFontData );
+#endif
             delete pFontData;
 
             pFontData = pNextFD;
@@ -4530,7 +4535,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
         if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aOutPoint, nStart ) )
             break;
 
-        if( !mpGraphics->GetGlyphBoundRect( nGlyphIndex, aRectangle, NULL ) )
+        if( !mpGraphics->GetGlyphBoundRect( nGlyphIndex, aRectangle ) )
             continue;
 
         if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
@@ -5411,8 +5416,11 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
         if( !mpGraphics )
             if( !ImplGetGraphics() )
                 return;
+        // FIXME: make fax on unix work again
+#if 0
         xub_StrLen nCutStart, nCutStop;
         aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rStr, nIndex, nLen, nCutStart, nCutStop );
+#endif
     }
     SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt );
 #else
@@ -5478,6 +5486,8 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
         if( !mpGraphics )
             if( !ImplGetGraphics() )
                 return;
+        // FIXME: make fax work again on UNX
+#if 0
         xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
         aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rStr, nIndex, nLen, nCutStart, nCutStop );
         if( nCutStop != nCutStart )
@@ -5488,6 +5498,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
             memcpy( pAry+nCutStart-nIndex, pDXAry + nOrgLen - (nCutStop-nIndex), nLen - (nCutStop-nIndex) );
             pDXAry = pAry;
         }
+#endif
     }
     SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt, 0, pDXAry );
 #else
@@ -5638,8 +5649,11 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
         if( !mpGraphics )
             if( !ImplGetGraphics() )
                 return;
+        // FIXME: make fax work again
+#if 0
         xub_StrLen nCutStart, nCutStop;
         aStr = mpGraphics->maGraphicsData.FaxPhoneComment( rStr, nIndex, nLen, nCutStart, nCutStop );
+#endif
     }
     SalLayout* pSalLayout = ImplLayout( aStr, nIndex, nLen, rStartPt, nWidth );
 #else
