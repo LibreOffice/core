@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:02:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-30 10:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,18 @@ void OColumnWrapper::setFastPropertyValue_NoBroadcast(
 {
     OColumn::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
-
+// -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL OColumnWrapper::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
+{
+    sal_Int64 nRet = OColumn::getSomething(aIdentifier);
+    if(!nRet)
+    {
+        Reference<XUnoTunnel> xTunnel(m_xAggregate,UNO_QUERY);
+        if(xTunnel.is())
+            nRet = xTunnel->getSomething(aIdentifier);
+    }
+    return nRet;
+}
 //============================================================
 //= OTableColumnDescriptorWrapper
 //============================================================
