@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrapfield.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:26:58 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,17 @@
 #include <vcl/field.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 namespace svx {
 
 // ============================================================================
 
 /** A numeric spin field that wraps around the value on limits.
     @descr  Note: Use type "NumericField" in resources. */
-class WrapField : public NumericField
+class SVX_DLLPUBLIC WrapField : public NumericField
 {
 public:
     explicit            WrapField( Window* pParent, WinBits nWinStyle );
