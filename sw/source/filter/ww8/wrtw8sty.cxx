@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:25:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVX_LRSPITEM_HXX
+#include <svx/lrspitem.hxx>
 #endif
 
 #ifndef _WRTWW8_HXX
@@ -1261,6 +1264,16 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
                 // am Nachkommen NUR  die Spaltigkeit gemaess Sect-Attr.
                 // umsetzen
                 aSet.Put( rSepInfo.pSectionFmt->GetAttr( RES_COL ) );
+
+                const SvxLRSpaceItem &rSectionLR =
+                    (const SvxLRSpaceItem&)(rSepInfo.pSectionFmt->GetAttr(RES_LR_SPACE));
+                const SvxLRSpaceItem &rPageLR =
+                    (const SvxLRSpaceItem&)(pPdFmt->GetAttr(RES_LR_SPACE));
+
+                SvxLRSpaceItem aResultLR(rPageLR.GetLeft() + rSectionLR.GetLeft(),
+                    rPageLR.GetRight() + rSectionLR.GetRight());
+
+                aSet.Put(aResultLR);
 
                 // und raus damit ins WW-File
                 const SfxItemSet* pOldI = rWrt.pISet;
