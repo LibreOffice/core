@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:03:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ SV_IMPL_VARARR_SORT( _ZSortFlys, _ZSortFly )
 // alignment attributes for a drawing object, which is newly connected to
 // the layout. Used for a newly formed group object <SwDoc::GroupSelection(..)>
 // and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
-void lcl_AdjustPositioningAttr( SwFrmFmt* _pFrmFmt,
+void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                 const SdrObject& _rSdrObj )
 {
     const SwContact* pContact = GetUserCall( &_rSdrObj );
@@ -303,6 +303,9 @@ void lcl_AdjustPositioningAttr( SwFrmFmt* _pFrmFmt,
 
     _pFrmFmt->SetAttr( SwFmtHoriOrient( nHoriRelPos, HORI_NONE, FRAME ) );
     _pFrmFmt->SetAttr( SwFmtVertOrient( nVertRelPos, VERT_NONE, FRAME ) );
+    // --> OD 2005-03-11 #i44334#, #i44681# - positioning attributes already set
+    _pFrmFmt->PosAttrSet();
+    // <--
     // --> OD 2004-10-01 #i34750# - keep current object rectangle for  drawing
     // objects. The object rectangle is used on events from the drawing layer
     // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
