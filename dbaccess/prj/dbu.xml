@@ -72,4 +72,43 @@
         <supported-service>com.sun.star.form.control.GridControl</supported-service>
         <supported-service>com.sun.star.form.control.InteractionGridControl</supported-service>
     </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.OQueryDesign</name>
+        <description>Represents the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdb.QueryDesign</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.JoinViewAccessbility</name>
+        <description>Represents the accessiblity view port for the connection and the tables in the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessbility.Accessible</supported-service>
+        <supported-service>drafts.com.sun.star.accessbility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.TableWindowAccessbility</name>
+        <description>Represents the accessiblity object for a table in the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessbility.Accessible</supported-service>
+        <supported-service>drafts.com.sun.star.accessbility.AccessibleContext</supported-service>
+    </component-description>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.dbu.ConnectionLineAccessbility</name>
+        <description>Represents the accessiblity object for the connection between two tables in the query design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>drafts.com.sun.star.accessbility.Accessible</supported-service>
+        <supported-service>drafts.com.sun.star.accessbility.AccessibleContext</supported-service>
+    </component-description>
 </module-description>
