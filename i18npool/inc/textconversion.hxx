@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:52:51 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ public:
         getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
 protected :
-    sal_Char* implementationName;
+    const sal_Char* implementationName;
 };
 
 // for Hangul2Hanja conversion
