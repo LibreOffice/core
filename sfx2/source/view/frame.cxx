@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:54:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,10 +201,7 @@ SfxFrame::~SfxFrame()
         pParentFrame = 0;
     }
 
-    // Nur TopLevel-Frames verwalten ihren Descriptor selbst, bei den anderen
-    // tut es das Frameset
-    if ( pImp->pDescr && !pImp->pDescr->GetParent() )
-        delete pImp->pDescr;
+    delete pImp->pDescr;
 
     if ( pChildArr )
     {
@@ -520,14 +517,6 @@ SfxFrame* SfxFrame::SearchFrame( const String& rName, SfxMedium* pMedium )
             if ( aName.CompareIgnoreCaseToAscii( pParent->GetFrameName() ) == COMPARE_EQUAL )
                 return pParent;
 
-            if ( pParent->pImp->pDescr->GetFrameSet() )
-            {
-                // Wenn es ein Parent Frameset gibt, dort suchen
-                pFrame = pParent->SearchChildrenForName_Impl( aName );
-                if ( pFrame )
-                    return pFrame;
-            }
-
             // Weiter nach oben
             pParent = pParent->GetParentFrame();
         }
@@ -823,17 +812,11 @@ void SfxFrame::SetDescriptor( SfxFrameDescriptor *pD )
     if ( pImp->pDescr )
     {
         sal_uInt16 nPos = pImp->pDescr->GetItemPos();
-        SfxFrameSetDescriptor *pSet = pImp->pDescr->GetParent();
 
         // Nur TopLevel-Frames verwalten ihren Descriptor selbst, bei den
         // anderen tut es das Frameset
         if ( !pParentFrame )
             delete pImp->pDescr;
-        if ( pSet && !pD->GetParent() )
-        {
-            pSet->RemoveFrame( pImp->pDescr );
-            pSet->InsertFrame( pD, nPos );
-        }
     }
     pImp->pDescr = pD;
 }
@@ -848,7 +831,7 @@ SfxFrameDescriptor* SfxFrame::GetDescriptor() const
     if ( !pImp->pDescr )
     {
         DBG_ASSERT( !GetParentFrame(), "Kein TopLevel-Frame, aber kein Descriptor!" );
-        pImp->pDescr = new SfxFrameDescriptor( NULL );
+        pImp->pDescr = new SfxFrameDescriptor;
         if ( GetCurrentDocument() )
             pImp->pDescr->SetURL( GetCurrentDocument()->GetMedium()->GetOrigURL() );
     }
@@ -1302,14 +1285,6 @@ SfxFrame* SfxFrame::findFrame(const ::rtl::OUString& aTargetframename, sal_Int32
             if ( aName.CompareIgnoreCaseToAscii( pParent->GetFrameName() ) == COMPARE_EQUAL )
                 return pParent;
 
-            if ( pParent->pImp->pDescr->GetFrameSet() )
-            {
-                // Wenn es ein Parent Frameset gibt, dort suchen
-                pFrame = pParent->SearchChildrenForName_Impl( aName );
-                if ( pFrame )
-                    return pFrame;
-            }
-
             // Weiter nach oben
             pParent = pParent->GetParentFrame();
         }
@@ -1512,26 +1487,6 @@ void SfxFrame::GrabFocusOnComponent_Impl()
 
     if( !pWindow->HasChildPathFocus() )
         pWindow->GrabFocus();
-}
-
-void SfxFrame::ReFill_Impl( const SfxFrameSetDescriptor* pSet )
-{
-    {
-        SfxFrameSetDescriptor *pOld = pImp->pDescr->GetFrameSet();
-        SfxFrameSetDescriptor *pNew = pSet->Clone();
-        pImp->pDescr->SetFrameSet( pNew );
-        for ( sal_uInt16 n=0; n<pSet->GetFrameCount(); n++ )
-        {
-            SfxFrameDescriptor* pD = pNew->GetFrame(n);
-            SfxURLFrame* pFrame = PTR_CAST( SfxURLFrame, SearchChildrenForName_Impl( pD->GetName() ) );
-            if ( pFrame )
-                pFrame->Update( pD );
-            if ( pD->GetFrameSet() )
-                pFrame->ReFill_Impl( pD->GetFrameSet() );
-        }
-
-        delete pOld;
-    }
 }
 
 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  SfxFrame::GetInterceptor_Impl()
