@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-05 10:24:46 $
+#   last change: $Author: hjs $ $Date: 2001-09-11 10:16:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,12 +126,12 @@ SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
 .IF "$(COMP$(TNR)TYPELIST)"==""
 
 #fallback
-LOCAL$(TNR)DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL$(TNR)TARGET)))}.xml)
+LOCAL$(TNR)DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL$(TNR)TARGET)))}.xml))
 .IF "$(LOCAL$(TNR)DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC$(TNR))"==""
-SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL$(TNR)DESC:b)_description.obj
+SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL$(TNR)DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC$(TNR))"==""
 
 .ENDIF          # "$(COMP$(TNR)TYPELIST)"==""

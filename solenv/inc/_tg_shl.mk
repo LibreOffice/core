@@ -26,12 +26,12 @@ SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 .IF "$(COMP1TYPELIST)"==""
 
 #fallback
-LOCAL1DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL1TARGET)))}.xml)
+LOCAL1DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL1TARGET)))}.xml))
 .IF "$(LOCAL1DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC1)"==""
-SHL1DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL1DESC:b)_description.obj
+SHL1DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL1DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC1)"==""
 
 .ENDIF          # "$(COMP1TYPELIST)"==""
@@ -453,12 +453,12 @@ SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
 .IF "$(COMP2TYPELIST)"==""
 
 #fallback
-LOCAL2DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL2TARGET)))}.xml)
+LOCAL2DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL2TARGET)))}.xml))
 .IF "$(LOCAL2DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC2)"==""
-SHL2DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL2DESC:b)_description.obj
+SHL2DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL2DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC2)"==""
 
 .ENDIF          # "$(COMP2TYPELIST)"==""
@@ -880,12 +880,12 @@ SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
 .IF "$(COMP3TYPELIST)"==""
 
 #fallback
-LOCAL3DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL3TARGET)))}.xml)
+LOCAL3DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL3TARGET)))}.xml))
 .IF "$(LOCAL3DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC3)"==""
-SHL3DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL3DESC:b)_description.obj
+SHL3DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL3DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC3)"==""
 
 .ENDIF          # "$(COMP3TYPELIST)"==""
@@ -1307,12 +1307,12 @@ SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
 .IF "$(COMP4TYPELIST)"==""
 
 #fallback
-LOCAL4DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL4TARGET)))}.xml)
+LOCAL4DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL4TARGET)))}.xml))
 .IF "$(LOCAL4DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC4)"==""
-SHL4DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL4DESC:b)_description.obj
+SHL4DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL4DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC4)"==""
 
 .ENDIF          # "$(COMP4TYPELIST)"==""
@@ -1734,12 +1734,12 @@ SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
 .IF "$(COMP5TYPELIST)"==""
 
 #fallback
-LOCAL5DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL5TARGET)))}.xml)
+LOCAL5DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL5TARGET)))}.xml))
 .IF "$(LOCAL5DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC5)"==""
-SHL5DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL5DESC:b)_description.obj
+SHL5DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL5DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC5)"==""
 
 .ENDIF          # "$(COMP5TYPELIST)"==""
@@ -2161,12 +2161,12 @@ SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
 .IF "$(COMP6TYPELIST)"==""
 
 #fallback
-LOCAL6DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL6TARGET)))}.xml)
+LOCAL6DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL6TARGET)))}.xml))
 .IF "$(LOCAL6DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC6)"==""
-SHL6DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL6DESC:b)_description.obj
+SHL6DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL6DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC6)"==""
 
 .ENDIF          # "$(COMP6TYPELIST)"==""
@@ -2588,12 +2588,12 @@ SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
 .IF "$(COMP7TYPELIST)"==""
 
 #fallback
-LOCAL7DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL7TARGET)))}.xml)
+LOCAL7DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL7TARGET)))}.xml))
 .IF "$(LOCAL7DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC7)"==""
-SHL7DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL7DESC:b)_description.obj
+SHL7DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL7DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC7)"==""
 
 .ENDIF          # "$(COMP7TYPELIST)"==""
@@ -3015,12 +3015,12 @@ SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
 .IF "$(COMP8TYPELIST)"==""
 
 #fallback
-LOCAL8DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL8TARGET)))}.xml)
+LOCAL8DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL8TARGET)))}.xml))
 .IF "$(LOCAL8DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC8)"==""
-SHL8DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL8DESC:b)_description.obj
+SHL8DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL8DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC8)"==""
 
 .ENDIF          # "$(COMP8TYPELIST)"==""
@@ -3442,12 +3442,12 @@ SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
 .IF "$(COMP9TYPELIST)"==""
 
 #fallback
-LOCAL9DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL9TARGET)))}.xml)
+LOCAL9DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL9TARGET)))}.xml))
 .IF "$(LOCAL9DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC9)"==""
-SHL9DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL9DESC:b)_description.obj
+SHL9DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL9DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC9)"==""
 
 .ENDIF          # "$(COMP9TYPELIST)"==""
@@ -3869,12 +3869,12 @@ SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
 .IF "$(COMP10TYPELIST)"==""
 
 #fallback
-LOCAL10DESC:=$(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL10TARGET)))}.xml)
+LOCAL10DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL10TARGET)))}.xml))
 .IF "$(LOCAL10DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
 .ELSE           # "$(LOCALDESC10)"==""
-SHL10DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL10DESC:b)_description.obj
+SHL10DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL10DESC:b)$($(WINVERSIONNAMES)_MAJOR)_description.obj
 .ENDIF          # "$(LOCALDESC10)"==""
 
 .ENDIF          # "$(COMP10TYPELIST)"==""
