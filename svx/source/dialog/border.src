@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 21:41:57 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 15:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ chinese_traditional ] = "η·ζΆζ’εΊ";
         Text[ arabic ] = "ίΗΟΡ";
         Text[ greek ] = "Διάταξη γραμμών";
-        Text[ korean ] = "μ„  μ •λ ¬";
+        Text[ korean ] = "μ™Έκ³½μ„  λ―Έλ¦¬λ³΄κΈ°";
         Text[ turkish ] = "Ηerηeve";
         Text[ language_user1 ] = "EM6April01: Found in Text doc under Format - Page - Borders tab.";
         Text[ catalan ] = "Marco";
