@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:48:47 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     // gray lines
     mnTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES;
     mnLineH = mnTotLineH - 2;
-    mnLeading = (USHORT) GetFontMetric().GetLeading();
+    mnLeading = (USHORT) GetFontMetric().GetIntLeading();
 
     Font aFont;
     {
