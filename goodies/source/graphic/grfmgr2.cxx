@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 15:17:49 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 09:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,26 +192,44 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_VERT );
     }
 
-    if( ( rObj.GetType() == GRAPHIC_BITMAP ) || ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
+    if( ( rObj.GetType() == GRAPHIC_BITMAP ) ||
+        ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
     {
+        // create output and fill cache
         const Size aOutSize( pOut->GetOutputSizePixel() );
 
-        // metafile recording?
-        if( ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
+        if( !( nFlags & GRFMGR_DRAW_CACHED ) ||
+            rObj.IsAnimated() ||
+            ( pOut->GetOutDevType() == OUTDEV_PRINTER ) ||
             ( pOut->GetConnectMetaFile() && !pOut->IsOutputEnabled() &&
               ( aOutSize.Width() == 1 ) && ( aOutSize.Height() == 1 ) ) )
         {
+            // simple output of transformed graphic
             const Graphic aGraphic( rObj.GetTransformedGraphic( &aAttr ) );
 
             if( aGraphic.IsSupportedGraphic() )
+            {
+                const USHORT nRot10 = aAttr.GetRotation() % 3600;
+
+                if( nRot10 )
+                {
+                    Polygon aPoly( Rectangle( aPt, aSz ) );
+
+                    aPoly.Rotate( aPt, nRot10 );
+                    const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+                    aPt = aRotBoundRect.TopLeft();
+                    aSz = aRotBoundRect.GetSize();
+                }
+
                 aGraphic.Draw( pOut, aPt, aSz );
+            }
 
             bRet = TRUE;
         }
 
-        // cached/direct drawing
         if( !bRet )
         {
+            // cached/direct drawing
             if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, aAttr ) )
                 bRet = ImplDraw( pOut, aPt, aSz, rObj, aAttr, rCached );
             else

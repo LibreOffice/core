@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-08 10:06:40 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 09:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,27 +647,7 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         pSz = &rSz;
     }
 
-    if( IsAnimated() || !( nFlags & GRFMGR_DRAW_CACHED ) )
-    {
-        GetGraphic();
-
-        if( maGraphic.IsSupportedGraphic() && !maGraphic.IsSwapOut() )
-        {
-            Graphic aGraphic( GetTransformedGraphic( &rActAttr ) );
-
-            if( aGraphic.IsSupportedGraphic() )
-            {
-                aGraphic.Draw( pOut, *pPt, *pSz );
-                bRet = TRUE;
-            }
-            else
-                bRet = FALSE;
-        }
-        else
-            bRet = FALSE;
-    }
-    else
-        bRet = mpMgr->DrawObj( pOut, *pPt, *pSz, *this, rActAttr, nFlags, bCached );
+    bRet = mpMgr->DrawObj( pOut, *pPt, *pSz, *this, rActAttr, nFlags, bCached );
 
     if( bCached )
     {
