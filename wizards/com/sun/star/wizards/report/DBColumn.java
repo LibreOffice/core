@@ -43,6 +43,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertyState;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
+import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.style.ParagraphAdjust;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
@@ -91,16 +92,22 @@ public class DBColumn {
 
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i) throws Exception{
         CurRecordTable = new RecordTable(_oTextTableHandler);
-        initializeRecordTableMembers(CurRecordTable, _oTextTableHandler, _CurDBMetaData, i);
+        initializeRecordTableMembers(CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
+    }
+
+
+    public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i,  boolean _bforce) throws Exception{
+        initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, _bforce);
     }
 
 
     public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i) throws Exception{
-        initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i);
+        initializeRecordTableMembers(_CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
     }
 
 
-    private void initializeRecordTableMembers(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i) throws Exception{
+
+    private void initializeRecordTableMembers(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bForce) throws Exception{
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
         this.CurRecordTable = _CurRecordTable;
@@ -109,12 +116,34 @@ public class DBColumn {
             setDBField(CurDBMetaData.RecordFieldColumns[i].DisplayFieldName);
         else
             setDBField(CurDBMetaData.RecordFieldNames[i]);
-        xNameCell = CurRecordTable.xCellRange.getCellByPosition(i,0);
-        String CellName = (String) Helper.getUnoPropertyValue(xNameCell, "CellName");
-        xNameTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xNameCell);
-        xValCell = CurRecordTable.xCellRange.getCellByPosition(i,1);
-        xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
-        xValCellCursor = TextDocument.createTextCursor(xValCell);
+        if (_bForce)
+            assignCells(i, true);
+        else{
+            for (int n = 0; n < CurRecordTable.xTableColumns.getCount(); n++){
+                assignCells(n, false);
+            }
+        }
+    }
+
+    private boolean assignCells(int _nColumn, boolean _bforce){
+    try {
+        XCell xCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn,0);
+        XTextRange xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
+        String CellString = xTextCell.getString();
+        String CompString = "Column";
+        XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
+        if (isNameCell(xLocCellCursor, CurDBField.AliasName, CompString) || (_bforce)){
+            xNameCell = xCell;
+            xNameTextCell = xTextCell;
+            xValCell = CurRecordTable.xCellRange.getCellByPosition(_nColumn,1);
+            xValTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xValCell);
+            xValCellCursor = TextDocument.createTextCursor(xValCell);
+            return true;
+        }
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }
+    return false;
     }
 
 
@@ -210,6 +239,15 @@ public class DBColumn {
 
     public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler){
         XTextCursor xTextCursor = TextDocument.createTextCursor(xNameCell);
+        xTextCursor.gotoStart(false);
+        xTextCursor.gotoEnd(true);
+        xTextCursor.setString("");
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.DisplayFieldName, CurDBField.AliasName);
+    }
+
+
+    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler, XCell xCell){
+        XTextCursor xTextCursor = TextDocument.createTextCursor(xCell);
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
@@ -344,7 +382,7 @@ public class DBColumn {
             XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
             XPropertySet xMaster = xDependent.getTextFieldMaster();
             String UserFieldName = (String) xMaster.getPropertyValue("Name");
-            boolean bIsNameCell = ((UserFieldName.equals(CompString)) || (UserFieldName.equals(CurFieldName)));
+            boolean bIsNameCell = ((UserFieldName.startsWith(CompString)) || (UserFieldName.equals(CurFieldName)));
             return bIsNameCell;
         }
     }
