@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:56:45 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:33:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=index
-
+LIBTARGET=NO
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -83,12 +83,18 @@ SLOFILES =  \
         $(SLO)$/cnttab.obj \
         $(SLO)$/cntex.obj \
         $(SLO)$/idxmrk.obj \
+        $(SLO)$/swuiidxmrk.obj \
         $(SLO)$/multmrk.obj \
         $(SLO)$/toxmgr.obj
 
 EXCEPTIONSFILES =  \
         $(SLO)$/cntex.obj
+LIB1TARGET= $(SLB)$/$(TARGET).lib
 
+LIB1OBJFILES = \
+        $(SLO)$/idxmrk.obj \
+        $(SLO)$/toxmgr.obj
+        
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
