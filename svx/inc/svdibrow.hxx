@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:27:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ protected:
     virtual void KeyInput(const KeyEvent& rEvt);
     virtual void Select();
     virtual void SetDirty(); // wird z.B. bei Modusumschaltungen gerufen
+    virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 nIndex);
+    virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint);
 public:
     _SdrItemBrowserControl(Window* pParent, WinBits nBits=WB_3DLOOK|WB_BORDER|WB_TABSTOP);
     virtual ~_SdrItemBrowserControl();
