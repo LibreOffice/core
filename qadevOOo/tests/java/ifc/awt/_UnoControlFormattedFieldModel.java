@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlFormattedFieldModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:08:16 $
+ *  last change:$Date: 2004-11-16 12:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,18 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     public void _DefaultControl() {
         log.println("Testing with custom Property tester") ;
         testProperty("DefaultControl", ControlTester) ;
+    }
+
+    /**
+    * This property can be VOID, and in case if it is so new
+    * value must defined.
+    */
+    public void _BorderColor() {
+        testProperty("BorderColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object old) {
+                return utils.isVoid(old) ? new Integer(1234) : null ;
+            }
+        }) ;
     }
 
     /**
