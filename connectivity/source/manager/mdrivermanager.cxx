@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 11:54:20 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 12:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
+#include <algorithm>
+#include <functional>
 
 namespace connectivity
 {
@@ -223,7 +226,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         AcceptsURL( const ::rtl::OUString& _rURL ) : m_rURL( _rURL ) { }
 
         //.................................................................
-        bool operator()( SdbcDriver& _rDriver ) const
+        bool operator()( const SdbcDriver& _rDriver ) const
         {
             // ask the driver
             if ( _rDriver.is() && _rDriver->acceptsURL( m_rURL ) )
