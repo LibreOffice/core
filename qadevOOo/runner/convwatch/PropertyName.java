@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyName.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:23:52 $
+ *  last change: $Date: 2004-12-10 16:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,25 @@ package convwatch;
 
 public interface PropertyName
 {
-    final public static String INPUT_PATH =                 "DOC_COMPARATOR_INPUT_PATH";
-    final public static String OUTPUT_PATH =                "DOC_COMPARATOR_OUTPUT_PATH";
-    final public static String DIFF_PATH =                  "DOC_COMPARATOR_DIFF_PATH";
-    final public static String REFERENCE_PATH =             "DOC_COMPARATOR_REFERENCE_PATH";
-    final public static String REFERENCE_INPUT_PATH =       "DOC_COMPARATOR_REFERENCE_INPUT_PATH";
-    final public static String REFERENCE_TYPE =             "DOC_COMPARATOR_REFERENCE_CREATOR_TYPE";
-    final public static String PRINTER_NAME =               "DOC_COMPARATOR_PRINTER_NAME";
-    final public static String DEFAULT_XML_FORMAT_APP =     "DOC_COMPARATOR_DEFAULT_XML_FORMAT_APP";
-    final public static String INCLUDE_SUBDIRS =            "DOC_COMPARATOR_INCLUDE_SUBDIRS";
-    final public static String PRINT_MAX_PAGE =             "DOC_COMPARATOR_PRINT_MAX_PAGE";
-    final public static String PRINT_ONLY_PAGE =            "DOC_COMPARATOR_PRINT_ONLY_PAGE";
-    final public static String GFX_OUTPUT_DPI_RESOLUTION =  "DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION";
-    final public static String OVERWRITE_REFERENCE =        "DOC_COMPARATOR_OVERWRITE_REFERENCE";
+    final public static String DOC_COMPARATOR_INPUT_PATH =                 "DOC_COMPARATOR_INPUT_PATH";
+    final public static String DOC_COMPARATOR_OUTPUT_PATH =                "DOC_COMPARATOR_OUTPUT_PATH";
+    final public static String DOC_COMPARATOR_DIFF_PATH =                  "DOC_COMPARATOR_DIFF_PATH";
+    final public static String DOC_COMPARATOR_REFERENCE_PATH =             "DOC_COMPARATOR_REFERENCE_PATH";
+    final public static String DOC_COMPARATOR_REFERENCE_INPUT_PATH =       "DOC_COMPARATOR_REFERENCE_INPUT_PATH";
+    final public static String DOC_COMPARATOR_REFERENCE_TYPE =             "DOC_COMPARATOR_REFERENCE_CREATOR_TYPE";
+    final public static String DOC_COMPARATOR_PRINTER_NAME =               "DOC_COMPARATOR_PRINTER_NAME";
+    final public static String DOC_COMPARATOR_DEFAULT_XML_FORMAT_APP =     "DOC_COMPARATOR_DEFAULT_XML_FORMAT_APP";
+    final public static String DOC_COMPARATOR_INCLUDE_SUBDIRS =            "DOC_COMPARATOR_INCLUDE_SUBDIRS";
+    final public static String DOC_COMPARATOR_PRINT_MAX_PAGE =             "DOC_COMPARATOR_PRINT_MAX_PAGE";
+    final public static String DOC_COMPARATOR_PRINT_ONLY_PAGE =            "DOC_COMPARATOR_PRINT_ONLY_PAGE";
+    final public static String DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION =  "DOC_COMPARATOR_GFX_OUTPUT_DPI_RESOLUTION";
+    final public static String DOC_COMPARATOR_OVERWRITE_REFERENCE =        "DOC_COMPARATOR_OVERWRITE_REFERENCE";
+
+    final public static String DOC_COMPARATOR_HTML_OUTPUT_PREFIX =         "DOC_COMPARATOR_HTML_OUTPUT_PREFIX";
+    final public static String DOC_COMPARATOR_GFXCMP_WITH_BORDERMOVE =     "DOC_COMPARATOR_GFXCMP_WITH_BORDERMOVE";
+
+    final public static String DOC_CONVERTER_IMPORT_FILTER_NAME =          "DOC_CONVERTER_IMPORT_FILTER_NAME";
+    final public static String DOC_CONVERTER_EXPORT_FILTER_NAME =          "DOC_CONVERTER_EXPORT_FILTER_NAME";
+    final public static String DOC_CONVERTER_OFFICE_PROGRAM =              "DOC_CONVERTER_OFFICE_PROGRAM";
+    final public static String DOC_CONVERTER_REUSE_OFFICE =                "DOC_CONVERTER_REUSE_OFFICE";
 }

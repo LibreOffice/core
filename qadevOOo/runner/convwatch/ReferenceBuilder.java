@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReferenceBuilder.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:24:25 $
+ *  last change: $Date: 2004-12-10 16:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,30 +131,30 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
         {
             // MUST PARAMETER
             // INPUT_PATH ----------
-            String sINPATH = (String)param.get( PropertyName.INPUT_PATH );
+            String sINPATH = (String)param.get( PropertyName.DOC_COMPARATOR_INPUT_PATH );
             boolean bQuit = false;
             String sError = "";
             if (sINPATH == null || sINPATH.length() == 0)
             {
-                log.println("Please set input path (path to documents) " + PropertyName.INPUT_PATH + "=path.");
+                log.println("Please set input path (path to documents) " + PropertyName.DOC_COMPARATOR_INPUT_PATH + "=path.");
                 bQuit = true;
             }
             else
             {
-                log.println("found " + PropertyName.INPUT_PATH + " " + sINPATH);
+                log.println("found " + PropertyName.DOC_COMPARATOR_INPUT_PATH + " " + sINPATH);
                 m_sInputPath = sINPATH;
             }
 
             // REFERENCE_PATH ----------
-            String sREF = (String)param.get( PropertyName.REFERENCE_PATH );
+            String sREF = (String)param.get( PropertyName.DOC_COMPARATOR_REFERENCE_PATH );
             if (sREF == null || sREF.length() == 0)
             {
-                log.println("Please set output path (path to a directory, where the references should stay) " + PropertyName.REFERENCE_PATH + "=path.");
+                log.println("Please set output path (path to a directory, where the references should stay) " + PropertyName.DOC_COMPARATOR_REFERENCE_PATH + "=path.");
                 bQuit = true;
             }
             else
             {
-                log.println("found " + PropertyName.REFERENCE_PATH + " " + sREF);
+                log.println("found " + PropertyName.DOC_COMPARATOR_REFERENCE_PATH + " " + sREF);
                 m_sReferencePath = sREF;
             }
 
@@ -209,6 +209,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     String sEntry = (String)aList[i];
 
                     String sNewReferencePath = m_sReferencePath + fs + FileHelper.removeFirstDirectorysAndBasenameFrom(sEntry, m_sInputPath);
+                    log.println("- next file is: ------------------------------");
                     log.println(sEntry);
 
                     runGDC(sEntry, sNewReferencePath);
@@ -219,8 +220,14 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 runGDC(m_sInputPath, m_sReferencePath);
             }
         }
+
     void runGDC(String _sInputPath, String _sReferencePath)
         {
+            // first do a check if the reference not already exist, this is a big speedup, due to the fact,
+            // we don't need to start a new office.
+            GraphicalTestArguments aGTA_local = getGraphicalTestArguments();
+            if (GraphicalDifferenceCheck.isReferenceExists(_sInputPath, _sReferencePath, aGTA_local) == false)
+            {
             // start a fresh Office
             OfficeProvider aProvider = new OfficeProvider();
             XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
@@ -244,3 +251,5 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             aProvider.closeExistingOffice(param, true);
         }
 }
+}
+
