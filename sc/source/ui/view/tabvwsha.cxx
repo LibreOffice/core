@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:33:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,14 +207,14 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
             case SID_DELETE_PRINTAREA:
                 if ( nTabSelCount > 1 )
                 {
+                    // #i22589# also take "Print Entire Sheet" into account here
                     BOOL bHas = FALSE;
-                    for (USHORT i=0; i<nTabCount; i++)
-                        if (rMark.GetTableSelect(i) && pDoc->GetPrintRangeCount(i) )
-                            bHas = TRUE;
+                    for (USHORT i=0; !bHas && i<nTabCount; i++)
+                        bHas = rMark.GetTableSelect(i) && (pDoc->GetPrintRangeCount(i) || pDoc->IsPrintEntireSheet(i));
                     if (!bHas)
                         rSet.DisableItem( nWhich );
                 }
-                else if ( !pDoc->GetPrintRangeCount( nTab ) )
+                else if ( !pDoc->GetPrintRangeCount( nTab ) && !pDoc->IsPrintEntireSheet( nTab ) )
                     rSet.DisableItem( nWhich );
                 break;
 
