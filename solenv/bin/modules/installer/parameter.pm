@@ -173,6 +173,7 @@ sub getparameter
         elsif ($param eq "-format") { $installer::globals::packageformat = shift(@ARGV); }
         elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
         elsif ($param eq "-debug") { $installer::globals::debug = 1; }
+        elsif ($param eq "-tab") { $installer::globals::tab = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
         elsif ($param eq "-i") { $installer::globals::rootpath = shift(@ARGV); }
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
@@ -589,6 +590,7 @@ sub outputparameter
     if (($installer::globals::iswindowsbuild) && ($installer::globals::addchildprojects )) { push(@output, "Adding child projects into installation set\n"); }
     if ( $installer::globals::globallogging ) { push(@output, "Complete logging activated\n"); }
     if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
+    if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
     if ( $installer::globals::dounzip ) { push(@output, "Unzip ARCHIVE files\n"); }
     else  { push(@output, "Not unzipping ARCHIVE files\n"); }
     if ( $installer::globals::servicesrdb_can_be_created ) { push(@output, "services.rdb can be created\n"); }
