@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-14 12:58:34 $
+#   last change: $Author: hjs $ $Date: 2002-01-11 18:06:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,13 +71,13 @@ TARGET=so_stlport
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COMID)"=="gcc3"
+.IF "$(COMID)"=="gcc3" || "$(COMID)"=="MSC"
 TARFILE_NAME=STLport-4.5
 PATCH_FILE_NAME=STLport-4.5.patch
-.ELSE			# "$(COMID)"=="gcc3"
+.ELSE			# "$(COMID)"=="gcc3" || "$(COMID)"=="MSC"
 TARFILE_NAME=STLport-4.0
 PATCH_FILE_NAME=STLport-4.0.patch
-.ENDIF			# "$(COMID)"=="gcc3"
+.ENDIF			# "$(COMID)"=="gcc3" || "$(COMID)"=="MSC"
 
 .IF "$(GUI)"=="WNT"
 TAR_EXCLUDES=*/SC5/*
@@ -140,11 +140,4 @@ OUT2LIB= \
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
-
-.IF "$(GUI)"=="WNT"
-$(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    +win32_custom.bat $(PACKAGE_DIR) "$(BACK_PATH)" && $(TOUCH) $@
-    
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
-.ENDIF          # "$(GUI)"=="WNT"
 
