@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:19:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String STR_TOP
     TEXT[ czech ] = "Nahoru";
     TEXT[ hebrew ] = "~Oben";
     TEXT[ hindi ] = "~ऊपर";
+    TEXT[ slovak ] = "~Hore";
 };
 String STR_BOTTOM
 {
@@ -124,6 +125,7 @@ String STR_BOTTOM
     TEXT[ czech ] = "Dolů";
     TEXT[ hebrew ] = "~Unten";
     TEXT[ hindi ] = "~नीचे";
+    TEXT[ slovak ] = "~Dole";
 };
 String STR_CENTER_HORI
 {
@@ -155,6 +157,7 @@ String STR_CENTER_HORI
     TEXT[ czech ] = "Na střed";
     TEXT[ hebrew ] = "~Zentriert";
     TEXT[ hindi ] = "~केन्द्रित";
+    TEXT[ slovak ] = "Na ~stred";
 };
 String STR_FROMTOP
 {
@@ -186,6 +189,7 @@ String STR_FROMTOP
     TEXT[ czech ] = "Shora";
     TEXT[ hebrew ] = "‮מלמעלה‬";
     TEXT[ hindi ] = "ऊपर से";
+    TEXT[ slovak ] = "Zhora";
 };
 String STR_FROMBOTTOM
 {
@@ -216,6 +220,7 @@ String STR_FROMBOTTOM
     Text[ czech ] = "Zdola";
     Text[ hebrew ] = "Von Unten";
     Text[ hindi ] = "नीचे से";
+    Text[ slovak ] = "Zdola";
 };
 String STR_BELOW
 {
@@ -246,6 +251,7 @@ String STR_BELOW
     Text[ czech ] = "Níže";
     Text[ hebrew ] = "Unterhalb";
     Text[ hindi ] = "नीचे";
+    Text[ slovak ] = "Pod";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Align
@@ -280,6 +286,7 @@ String STR_LEFT
     TEXT[ czech ] = "Vlevo";
     TEXT[ hebrew ] = "Links";
     TEXT[ hindi ] = "बायाँ";
+    TEXT[ slovak ] = "Vľavo";
 };
 String STR_MIR_LEFT
 {
@@ -310,6 +317,7 @@ String STR_MIR_LEFT
     Text[ czech ] = "Uvnitř";
     Text[ hebrew ] = "Innen";
     Text[ hindi ] = "भीतर";
+    Text[ slovak ] = "Vnútri";
 };
 String STR_RIGHT
 {
@@ -341,6 +349,7 @@ String STR_RIGHT
     TEXT[ czech ] = "Vpravo";
     TEXT[ hebrew ] = "Rechts";
     TEXT[ hindi ] = "दाहिना";
+    TEXT[ slovak ] = "Vpravo";
 };
 String STR_MIR_RIGHT
 {
@@ -372,6 +381,7 @@ String STR_MIR_RIGHT
     TEXT[ czech ] = "Vně";
     TEXT[ hebrew ] = "Außen";
     TEXT[ hindi ] = "बाहर";
+    TEXT[ slovak ] = "Zvonka";
 };
 String STR_CENTER_VERT
 {
@@ -402,6 +412,7 @@ String STR_CENTER_VERT
     Text[ czech ] = "Střed";
     Text[ hebrew ] = "~Mitte";
     Text[ hindi ] = "~मध्य";
+    Text[ slovak ] = "Str~ed";
 };
 String STR_FROMLEFT
 {
@@ -433,6 +444,7 @@ String STR_FROMLEFT
     TEXT[ czech ] = "Zleva";
     TEXT[ hebrew ] = "‮משמאל‬";
     TEXT[ hindi ] = "बायाँ ओर से";
+    TEXT[ slovak ] = "Zľava";
 };
 String STR_MIR_FROMLEFT
 {
@@ -463,6 +475,7 @@ String STR_MIR_FROMLEFT
     Text[ czech ] = "Zevnitř";
     Text[ hebrew ] = "Von Innen";
     Text[ hindi ] = "भीतर से";
+    Text[ slovak ] = "Zvnútra";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel
@@ -496,6 +509,7 @@ String STR_REL_BORDER
     Text[ czech ] = "Okraj";
     Text[ hebrew ] = "Rand";
     Text[ hindi ] = "पृष्ठ-प्रान्त";
+    Text[ slovak ] = "Okraj";
 };
 String STR_REL_PRTAREA
 {
@@ -526,6 +540,7 @@ String STR_REL_PRTAREA
     Text[ czech ] = "Oblast textu";
     Text[ hebrew ] = "Textbereich";
     Text[ hindi ] = "टेक्स्ट् विस्तीर्ण";
+    Text[ slovak ] = "Oblasť textu";
 };
 String STR_TOPPRT
 {
@@ -557,6 +572,7 @@ String STR_TOPPRT
     TEXT[ czech ] = "Horní okraj";
     TEXT[ hebrew ] = "Oberer Rand";
     TEXT[ hindi ] = "ऊपरी पृष्ठ-प्रान्त";
+    TEXT[ slovak ] = "Horný okraj";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Rel
@@ -590,6 +606,7 @@ String STR_FLY_REL_PG_LEFT
     Text[ czech ] = "Levý okraj rámce";
     Text[ hebrew ] = "Rahmenrand links";
     Text[ hindi ] = "बायाँ फ्रेम का किनारा";
+    Text[ slovak ] = "Ohraničenie ľavého okraja";
 };
 String STR_FLY_MIR_REL_PG_LEFT
 {
@@ -620,6 +637,7 @@ String STR_FLY_MIR_REL_PG_LEFT
     Text[ czech ] = "Vnitřní okraj rámce";
     Text[ hebrew ] = "Rahmenrand innen";
     Text[ hindi ] = "भीतरी फ्रेम का किनारा";
+    Text[ slovak ] = "Vnútorné ohraničenie";
 };
 String STR_FLY_REL_PG_RIGHT
 {
@@ -650,6 +668,7 @@ String STR_FLY_REL_PG_RIGHT
     Text[ czech ] = "Pravý okraj rámce";
     Text[ hebrew ] = "Rahmenrand rechts";
     Text[ hindi ] = "दाहिना फ्रेम का किनारा";
+    Text[ slovak ] = "Ohraničenie pravého okraja";
 };
 String STR_FLY_MIR_REL_PG_RIGHT
 {
@@ -680,6 +699,7 @@ String STR_FLY_MIR_REL_PG_RIGHT
     Text[ czech ] = "Vnější okraj rámce";
     Text[ hebrew ] = "Rahmenrand außen";
     Text[ hindi ] = "बाहरी फ्रेम का किनारा";
+    Text[ slovak ] = "Vonkajší okraj rámca";
 };
 String STR_FLY_REL_PG_FRAME
 {
@@ -710,6 +730,7 @@ String STR_FLY_REL_PG_FRAME
     Text[ czech ] = "Celý rámec";
     Text[ hebrew ] = "Gesamter Rahmen";
     Text[ hindi ] = "सम्पूर्ण फ्रेम ";
+    Text[ slovak ] = "Celý rámec";
 };
 String STR_FLY_REL_PG_PRTAREA
 {
@@ -740,6 +761,7 @@ String STR_FLY_REL_PG_PRTAREA
     Text[ czech ] = "Oblast textu v rámci";
     Text[ hebrew ] = "Rahmentextbereich";
     Text[ hindi ] = "फ्रेम टेक्स्ट् विस्तीर्ण";
+    Text[ slovak ] = "Ohraničenie textovej oblasti";
 };
 String STR_FRAME
 {
@@ -770,6 +792,7 @@ String STR_FRAME
     Text[ czech ] = "Oblast odstavce";
     Text[ hebrew ] = "Absatzbereich";
     Text[ hindi ] = "परिच्छेद विस्तीर्ण";
+    Text[ slovak ] = "Oblasť odstavca";
 };
 String STR_PRTAREA
 {
@@ -800,6 +823,7 @@ String STR_PRTAREA
     Text[ czech ] = "Oblast textu v odstavci";
     Text[ hebrew ] = "Absatztextbereich";
     Text[ hindi ] = "परिच्छेद टेक्स्ट् विस्तीर्ण";
+    Text[ slovak ] = "Oblasť textu v odstavci";
 };
 String STR_REL_PG_LEFT
 {
@@ -830,6 +854,7 @@ String STR_REL_PG_LEFT
     Text[ czech ] = "Levý okraj stránky";
     Text[ hebrew ] = "Seitenrand links";
     Text[ hindi ] = "बायाँ पृष्ठ किनारा";
+    Text[ slovak ] = "Okraj ľavej stránky";
 };
 String STR_MIR_REL_PG_LEFT
 {
@@ -860,6 +885,7 @@ String STR_MIR_REL_PG_LEFT
     Text[ czech ] = "Vnitřní okraj stránky";
     Text[ hebrew ] = "Seitenrand innen";
     Text[ hindi ] = "भीतरी पृष्ठ किनारा";
+    Text[ slovak ] = "Vnútorný okraj stránky";
 };
 String STR_REL_PG_RIGHT
 {
@@ -890,6 +916,7 @@ String STR_REL_PG_RIGHT
     Text[ czech ] = "Pravý okraj stránky";
     Text[ hebrew ] = "Seitenrand rechts";
     Text[ hindi ] = "दाहिना पृष्ठ किनारा";
+    Text[ slovak ] = "Pravý okraj strany";
 };
 String STR_MIR_REL_PG_RIGHT
 {
@@ -920,6 +947,7 @@ String STR_MIR_REL_PG_RIGHT
     Text[ czech ] = "Vnější okraj stránky";
     Text[ hebrew ] = "Seitenrand außen";
     Text[ hindi ] = "बाहरी पृष्ठ किनारा";
+    Text[ slovak ] = "Vonkajší okraj stránky";
 };
 String STR_REL_FRM_LEFT
 {
@@ -950,6 +978,7 @@ String STR_REL_FRM_LEFT
     Text[ czech ] = "Levý okraj odstavce";
     Text[ hebrew ] = "Absatzrand links";
     Text[ hindi ] = "बायाँ परिच्छेद किनारा ";
+    Text[ slovak ] = "Ľavé ohraničenie odstavca";
 };
 String STR_MIR_REL_FRM_LEFT
 {
@@ -980,6 +1009,7 @@ String STR_MIR_REL_FRM_LEFT
     Text[ czech ] = "Vnitřní okraj odstavce";
     Text[ hebrew ] = "Absatzrand innen";
     Text[ hindi ] = "भीतरी परिच्छेद किनारा";
+    Text[ slovak ] = "Vnútorný okraj odstavca";
 };
 String STR_REL_FRM_RIGHT
 {
@@ -1010,6 +1040,7 @@ String STR_REL_FRM_RIGHT
     Text[ czech ] = "Pravý okraj odstavce";
     Text[ hebrew ] = "Absatzrand rechts";
     Text[ hindi ] = "दाहिना परिच्छेद किनारा";
+    Text[ slovak ] = "Pravý okraj odstavca";
 };
 String STR_MIR_REL_FRM_RIGHT
 {
@@ -1040,6 +1071,7 @@ String STR_MIR_REL_FRM_RIGHT
     Text[ czech ] = "Vnější okraj odstavce";
     Text[ hebrew ] = "Absatzrand außen";
     Text[ hindi ] = "बाहरी परिच्छेद किनारा";
+    Text[ slovak ] = "Vonkajší okraj odstavca";
 };
 String STR_REL_PG_FRAME
 {
@@ -1070,6 +1102,7 @@ String STR_REL_PG_FRAME
     Text[ czech ] = "Celá stránka";
     Text[ hebrew ] = "‮דף שלם‬";
     Text[ hindi ] = "सम्पूर्ण पृष्ठ";
+    Text[ slovak ] = "Celá stránka";
 };
 String STR_REL_PG_PRTAREA
 {
@@ -1100,6 +1133,7 @@ String STR_REL_PG_PRTAREA
     Text[ czech ] = "Textová oblast stránky";
     Text[ hebrew ] = "Seitentextbereich";
     Text[ hindi ] = "पृष्ठ टेक्स्ट् विस्तीर्ण";
+    Text[ slovak ] = "Textová oblasť stránky";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel Zeichenausrichtungen
@@ -1133,6 +1167,7 @@ String STR_REL_BASE
     Text[ czech ] = "Základní čára";
     Text[ hebrew ] = "Grundlinie";
     Text[ hindi ] = "आधार रेखा";
+    Text[ slovak ] = "Základná čiara";
 };
 String STR_REL_CHAR
 {
@@ -1163,6 +1198,7 @@ String STR_REL_CHAR
     Text[ czech ] = "Znak";
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
+    Text[ slovak ] = "Znak";
 };
 String STR_REL_ROW
 {
@@ -1193,6 +1229,7 @@ String STR_REL_ROW
     Text[ czech ] = "Řádek";
     Text[ hebrew ] = "Zeile";
     Text[ hindi ] = "पंक्ति";
+    Text[ slovak ] = "Riadok";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
@@ -1226,6 +1263,7 @@ String STR_TOP_BASE
     Text[ czech ] = "Základní nahoře";
     Text[ hebrew ] = "Grundlinie ~oben";
     Text[ hindi ] = "ऊपर में आधार रेखा at ~top";
+    Text[ slovak ] = "Základná ~hore";
 };
 String STR_BOTTOM_BASE
 {
@@ -1256,6 +1294,7 @@ String STR_BOTTOM_BASE
     Text[ czech ] = "Základní dole";
     Text[ hebrew ] = "Grundlinie ~unten";
     Text[ hindi ] = "नीचे में ~आधार रेखा";
+    Text[ slovak ] = "Základná ~dole";
 };
 String STR_CENTER_BASE
 {
@@ -1286,6 +1325,7 @@ String STR_CENTER_BASE
     Text[ czech ] = "Základní uprostřed";
     Text[ hebrew ] = "Grundlinie ~zentriert";
     Text[ hindi ] = "आधार रेखा ~मध्यभाग में";
+    Text[ slovak ] = "Základná upro~stred";
 };
 String STR_LINE_TOP
 {
@@ -1316,6 +1356,7 @@ String STR_LINE_TOP
     Text[ czech ] = "Vrchol řádku";
     Text[ hebrew ] = "Zeile oben";
     Text[ hindi ] = "रेखा के ऊपर";
+    Text[ slovak ] = "Vrchol riadku";
 };
 String STR_LINE_BOTTOM
 {
@@ -1346,6 +1387,7 @@ String STR_LINE_BOTTOM
     Text[ czech ] = "Pata řádku";
     Text[ hebrew ] = "Zeile unten";
     Text[ hindi ] = "रेखा के नीचे";
+    Text[ slovak ] = "Päta riadku";
 };
 String STR_LINE_CENTER
 {
@@ -1376,6 +1418,7 @@ String STR_LINE_CENTER
     Text[ czech ] = "Střed řádku";
     Text[ hebrew ] = "Zeile zentriert";
     Text[ hindi ] = "रेखा के मध्य";
+    Text[ slovak ] = "Stred riadku";
 };
 String STR_CHAR_TOP
 {
@@ -1406,6 +1449,7 @@ String STR_CHAR_TOP
     Text[ czech ] = "Vrchol znaku";
     Text[ hebrew ] = "Zeichen oben";
     Text[ hindi ] = "अक्षर के ऊपर";
+    Text[ slovak ] = "Vrchol znaku";
 };
 String STR_CHAR_BOTTOM
 {
@@ -1436,6 +1480,7 @@ String STR_CHAR_BOTTOM
     Text[ czech ] = "Pata znaku";
     Text[ hebrew ] = "Zeichen unten";
     Text[ hindi ] = "अक्षर के नीचे";
+    Text[ slovak ] = "Päta znaku";
 };
 String STR_CHAR_CENTER
 {
@@ -1466,6 +1511,7 @@ String STR_CHAR_CENTER
     Text[ czech ] = "Střed znaku";
     Text[ hebrew ] = "Zeichen zentriert";
     Text[ hindi ] = "अक्षर के मध्य";
+    Text[ slovak ] = "Stred znaku";
 };
 String STR_OLE_INSERT
 {
@@ -1498,6 +1544,7 @@ String STR_OLE_INSERT
     TEXT[ czech ] = "Vložit objekt";
     TEXT[ hebrew ] = "‮הוספת אוביקת‬";
     TEXT[ hindi ] = "वस्तु जोड़ो";
+    TEXT[ slovak ] = "Vložiť objekt";
 };
 String STR_OLE_EDIT
 {
@@ -1529,6 +1576,7 @@ String STR_OLE_EDIT
     TEXT[ czech ] = "Upravit objekt";
     TEXT[ hebrew ] = "Objekt bearbeiten";
     TEXT[ hindi ] = "वस्तु संपादन";
+    TEXT[ slovak ] = "Upraviť objekt";
 };
 String STR_COLL_HEADER
 {
@@ -1560,6 +1608,7 @@ String STR_COLL_HEADER
     TEXT[ czech ] = " (Šablona: ";
     TEXT[ hebrew ] = " (Vorlage:";
     TEXT[ hindi ] = " (नमूना: ";
+    TEXT[ slovak ] = " (Šablóna: ";
 };
 String STR_FRMUI_BORDER
 {
@@ -1591,6 +1640,7 @@ String STR_FRMUI_BORDER
     Text[ czech ] = "Okraje";
     Text[ hebrew ] = "‮מסגרות‬";
     Text[ hindi ] = "किनारें";
+    Text[ slovak ] = "Okraje";
 };
 String STR_FRMUI_PATTERN
 {
@@ -1622,6 +1672,7 @@ String STR_FRMUI_PATTERN
     Text[ czech ] = "Pozadí";
     Text[ hebrew ] = "‮רקע‬";
     Text[ hindi ] = "पृष्ठभाग";
+    Text[ slovak ] = "Pozadie";
 };
 String STR_FRMUI_WRAP
 {
@@ -1653,6 +1704,7 @@ String STR_FRMUI_WRAP
     Text[ czech ] = "Obtékání textu";
     Text[ hebrew ] = "‮שבירת שורות‬";
     Text[ hindi ] = "लपेटना";
+    Text[ slovak ] = "Obtekanie textu";
 };
 InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
 {
@@ -1687,6 +1739,7 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE[ czech ] = "Rozteč sloupců je větší než šířka sloupce.";
     MESSAGE[ hebrew ] = "Der Spaltenabstand ist zu groß für die Spaltenbreite.";
     MESSAGE[ hindi ] = "स्तंभ के बीच का अंतर स्तंभ चौड़ाई से अधिक है ।";
+    MESSAGE[ slovak ] = "Rozostup stĺpcov je väčší ako šírka stĺpca.";
 };
 String STR_REL_PG_TOP
 {
@@ -1715,6 +1768,7 @@ String STR_REL_PG_TOP
     Text[ czech ] = "Horní okraj stránky";
     Text[ hebrew ] = "Seitenrand oben";
     Text[ hindi ] = "Top page border";
+    Text[ slovak ] = "Horný okraj strany";
 };
 String STR_REL_PG_BOTTOM
 {
@@ -1743,6 +1797,7 @@ String STR_REL_PG_BOTTOM
     Text[ czech ] = "Dolní okraj stránky";
     Text[ hebrew ] = "Seitenrand unten";
     Text[ hindi ] = "Bottom page border";
+    Text[ slovak ] = "Dolný okraj strany";
 };
 String STR_REL_FRM_TOP
 {
@@ -1771,6 +1826,7 @@ String STR_REL_FRM_TOP
     Text[ czech ] = "Horní okraj odstavce";
     Text[ hebrew ] = "Absatzrand oben";
     Text[ hindi ] = "Top paragraph border";
+    Text[ slovak ] = "Horný okraj odstavca";
 };
 String STR_REL_FRM_BOTTOM
 {
@@ -1799,6 +1855,7 @@ String STR_REL_FRM_BOTTOM
     Text[ czech ] = "Dolní okraj odstavce";
     Text[ hebrew ] = "Absatzrand unten";
     Text[ hindi ] = "Bottom paragraph border";
+    Text[ slovak ] = "Dolný okraj odstavca";
 };
 String STR_FROMRIGHT
 {
@@ -1827,7 +1884,10 @@ String STR_FROMRIGHT
     TEXT[ czech ] = "Zprava";
     TEXT[ hebrew ] = "‮מימין‬";
     TEXT[ hindi ] = "From right";
+    TEXT[ slovak ] = "Sprava";
 };
+
+
 
 
 
