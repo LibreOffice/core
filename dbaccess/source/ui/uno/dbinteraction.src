@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:26:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ czech ] = "Zapamatovat heslo do konce sezení";
     Text[ hebrew ] = "Kennwort bis Applikationsende ~merken";
     Text[ hindi ] = "कूटशब्द को कार्य-काल के अंत तक ~स्मरण में रखो";
+    Text[ slovak ] = "Za~pamätať si heslo do konca sedenia";
 };
 
 String STR_REMEMBERPASSWORD_PERSISTENT
@@ -125,12 +126,21 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ czech ] = "Zapamatovat heslo";
     Text[ hebrew ] = "Kennwort dauerhaft ~speichern";
     Text[ hindi ] = "~कूटशब्द याद करो";
+    Text[ slovak ] = "~Zapamätať si heslo";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20.24.1  2003/06/12 10:58:10  gh
+ *  final Merge RC
+ *
+ *  Revision 1.20  2003/04/29 17:26:25  hr
+ *  INTEGRATION: CWS mergem8 (1.19.8); FILE MERGED
+ *  2003/04/29 08:34:15 gh 1.19.8.2: final merge for Beta2
+ *  2003/04/14 15:04:55 gh 1.19.8.1: merging all languages
+ *
  *  Revision 1.19.8.2  2003/04/29 08:34:15  gh
  *  final merge for Beta2
  *
@@ -214,6 +224,8 @@ String STR_REMEMBERPASSWORD_PERSISTENT
  *
  *  Revision 1.0 25.10.00 14:10:52  fs
  ************************************************************************/
+
+
 
 
 
