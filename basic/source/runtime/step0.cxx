@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:02:10 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ inline void checkUnoStructCopy( SbxVariableRef& refVal, SbxVariableRef& refVar )
         return;
 
     SbxObjectRef xValObj = (SbxObject*)refVal->GetObject();
-    if( xValObj->ISA(SbUnoAnyObject) )
+    if( !xValObj.Is() || xValObj->ISA(SbUnoAnyObject) )
         return;
 
     SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
