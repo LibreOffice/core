@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 13:39:17 $
+ *  last change: $Author: os $ $Date: 2000-10-12 08:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,6 @@
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
-#ifndef _CFGID_H
-#include <cfgid.h>
-#endif
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
@@ -171,10 +168,6 @@
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
 #endif
-#ifndef _CFGSTR_HRC
-#include <cfgstr.hrc>
-#endif
-
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
