@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 14:25:52 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,42 +72,11 @@
 #include <com/sun/star/text/XText.hpp>
 #endif
 
-#ifndef _PAM_HXX //autogen wg. SwPaM
-#include <pam.hxx>
-#endif
-#ifndef _DOC_HXX //autogen wg. SwDoc
-#include <doc.hxx>
-#endif
-#ifndef _MDIEXP_HXX
-#include <mdiexp.hxx>       // ...Percent()
-#endif
-#ifndef _STATSTR_HRC
-#include <statstr.hrc>      // ResId fuer Statusleiste
-#endif
-#ifndef _SHL_HXX //autogen wg. SHL_WRITER
-#include <tools/shl.hxx>
-#endif
-#ifndef _SWMODULE_HXX //autogen wg. SW_MOD
-#include <swmodule.hxx>
-#endif
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-
-#ifndef _SWDOCSH_HXX
-#include <docsh.hxx>
-#endif
-#ifndef _DOCSTAT_HXX
-#include "docstat.hxx"
-#endif
-#ifndef _NDOLE_HXX
-#include "ndole.hxx"
-#endif
-#ifndef _NDGRF_HXX
-#include "ndgrf.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -125,8 +94,21 @@
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
 #endif
-#ifndef _UNOFRAME_HXX
-#include "unoframe.hxx"
+
+#ifndef _PAM_HXX //autogen wg. SwPaM
+#include <pam.hxx>
+#endif
+#ifndef _DOC_HXX //autogen wg. SwDoc
+#include <doc.hxx>
+#endif
+#ifndef _SWMODULE_HXX //autogen wg. SW_MOD
+#include <swmodule.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _DOCSTAT_HXX
+#include <docstat.hxx>
 #endif
 
 #ifndef _XMLTEXTE_HXX
@@ -137,12 +119,10 @@
 #endif
 
 using namespace ::rtl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 #ifdef XML_CORE_API
@@ -184,7 +164,7 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 
 SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
              const OUString& rFileName,
-             const Reference< xml::sax::XDocumentHandler > & rHandler,
+             const Reference< XDocumentHandler > & rHandler,
              const Reference< XIndexContainer > & rEmbeddedGrfObjs,
              sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
              sal_Bool bShowProg, SvStorage *pPkg ) :
@@ -405,50 +385,4 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
 }
 #endif
 
-const SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
-    const Reference < XPropertySet >& rPropSet )
-{
-    Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
-    SwXFrame *pFrame =
-                (SwXFrame *)xCrsrTunnel->getSomething(
-                                    SwXFrame::getUnoTunnelId() );
-    ASSERT( pFrame, "SwXFrame missing" );
-    SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
-    const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
-    const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
-    return  pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode();
-}
 
-#if 0
-OUString SwXMLTextParagraphExport::exportTextEmbeddedGraphic(
-    const Reference < XPropertySet >& rPropSet )
-{
-    OUString aName;
-    const SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
-    if( GRAPHIC_NONE != pGrfNd->GetGrf().GetType() )
-    {
-        // Falls die Grafik bereits im Storage ist, ist der Stream-Name
-        // gesetzt. Dann brauchen wir sie nicht mehr zu speichern.
-        // oder es ist ein SaveAs, dann auf jedenfall kopieren
-        SvStorage *pPackage = ((SwXMLExport&)GetExport()).GetPackage();
-        if(  !pPackage ||
-             !((SwGrfNode *)pGrfNd)->StoreGraphics( pPackage ) )
-        {
-//          Warning( WARN_SWG_POOR_LOAD );
-        }
-        else
-            aName = OUString( pGrfNd->GetStreamName() );
-    }
-    return aName;
-}
-#endif
-
-OUString SwXMLTextParagraphExport::exportTextEmbeddedObject(
-    const Reference < XPropertySet >& rPropSet )
-{
-    const SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
-
-    OUString aName( pOLENd->GetOLEObj().GetName() );
-    return aName;
-}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:42:23 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@ public:
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
-            createAndInsertOLEObject( const ::rtl::OUString& rHRef );
+            createAndInsertOLEObject( SvXMLImport& rImport,
+                                      const ::rtl::OUString& rHRef,
+                                         const ::rtl::OUString& rClassId );
 
     virtual sal_Bool IsInHeaderFooter() const;
 };

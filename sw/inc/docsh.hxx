@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 10:14:33 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ public:
 
     // globaler IO
     virtual BOOL            Save();
+    inline BOOL                 SaveAsChilds( SvStorage *pStor );
 
     // fuer VorlagenPI
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
@@ -305,4 +306,8 @@ public:
                                 BOOL bUnoCall );
 };
 
+inline BOOL SwDocShell::SaveAsChilds( SvStorage *pStor )
+{
+    return SfxInPlaceObject::SaveAsChilds( pStor );
+}
 #endif

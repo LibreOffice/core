@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,71 +65,34 @@
 
 #pragma hdrstop
 
-#ifndef _HINTS_HXX //autogen wg. SwFmtChg
-#include <hints.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
-#include <com/sun/star/text/XText.hpp>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _SVSTDARR_STRINGSSORT_DECL
-#define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
 #endif
-
-#ifndef _XMLOFF_XMLASTPL_HXX
-#include <xmloff/xmlastpl.hxx>
-#endif
-
 #ifndef _XMLOFF_XMLITMPR_HXX
 #include <xmloff/xmlexpit.hxx>
 #endif
-
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
 #endif
-
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
-
-#ifndef _XMLOFF_TXTSTYLE_HXX
-#include <xmloff/txtstyle.hxx>
+#ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
+#include <xmloff/XMLTextListAutoStylePool.hxx>
+#endif
+#ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT
+#include <xmloff/XMLTextMasterPageExport.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLPROPERTYSETMAPPER_HXX
-#include <xmloff/xmlprmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLPROPMAPPINGTYPES_HXX
-#include <xmloff/maptype.hxx>
-#endif
-#ifndef _XMLOFF_XMLTYPES_HXX
-#include <xmloff/xmltypes.hxx>
-#endif
-#ifndef _XMLOFF_TXTPARAE_HXX
-#include <xmloff/txtparae.hxx>
-#endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLEXPPR_HXX
-#include <xmloff/xmlexppr.hxx>
 #endif
 #ifndef _XMLOFF_XMLASTPLP_HXX
 #include <xmloff/xmlaustp.hxx>
@@ -144,93 +107,25 @@
 #ifndef _FORMAT_HXX //autogen wg. SwFmt
 #include <format.hxx>
 #endif
-#ifndef _FMTCOL_HXX //autogen wg. SwTxtFmtColl
-#include <fmtcol.hxx>
-#endif
-#ifndef _CHARFMT_HXX //autogen wg. SwCharFmt
-#include <charfmt.hxx>
-#endif
-#ifndef _PARATR_HXX
-#include <paratr.hxx>
-#endif
 #ifndef _FMTPDSC_HXX
 #include <fmtpdsc.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
 #endif
+#ifndef _UNOSTYLE_HXX
+#include <unostyle.hxx>
+#endif
+#ifndef _CELLATR_HXX
+#include <cellatr.hxx>
+#endif
 
-#ifndef _DOC_HXX //autogen wg. SwDoc
-#include <doc.hxx>
-#endif
-#include "docary.hxx"
-#ifndef _NDTXT_HXX //autogen wg. SwTxtNode
-#include <ndtxt.hxx>
-#endif
-#ifndef _SECTION_HXX //autogen wg. SwSection
-#include <section.hxx>
-#endif
-#ifndef _PAM_HXX //autogen wg. SwPaM
-#include <pam.hxx>
-#endif
-#ifndef _TXATBASE_HXX
-#include <txatbase.hxx>
-#endif
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
-#ifndef _XMLTEXTE_HXX
-#include "xmltexte.hxx"
-#endif
 
-#ifndef _SWDOCSH_HXX
-#include "docsh.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
-#include <xmloff/XMLTextListAutoStylePool.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HPP_
-#include <com/sun/star/text/XTextField.hpp>
-#endif
-
-#ifndef _UNOFIELD_HXX
-#include <unofield.hxx>
-#endif
-
-#ifndef _XMLOFF_TXTFLDE_HXX
-#include <xmloff/txtflde.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLNUMFE_HXX
-#include <xmloff/xmlnumfe.hxx>
-#endif
-#ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT
-#include <xmloff/XMLTextMasterPageExport.hxx>
-#endif
-
-#ifndef _UNOSTYLE_HXX
-#include "unostyle.hxx"
-#endif
-
-#ifndef _CELLATR_HXX
-#include "cellatr.hxx"
-#endif
-
-
-using namespace rtl;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::frame;
+using namespace ::rtl;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 
 void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
@@ -326,119 +221,6 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
     }
 }
 
-SwXMLTextParagraphExport::SwXMLTextParagraphExport(
-        SwXMLExport& rExp,
-         SvXMLAutoStylePoolP& rAutoStylePool ) :
-    XMLTextParagraphExport( rExp, rAutoStylePool ),
-    sTextTable( RTL_CONSTASCII_USTRINGPARAM( "TextTable" ) )
-{
-}
-
-SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
-{
-}
-
-void SwXMLTextParagraphExport::exportStyleContent(
-        const Reference< XStyle > & rStyle )
-{
-
-    const SwXStyle* pStyle = 0;
-    Reference<XUnoTunnel> xStyleTunnel( rStyle, UNO_QUERY);
-    if( xStyleTunnel.is() )
-    {
-        pStyle = (SwXStyle*)xStyleTunnel->getSomething(
-                                            SwXStyle::getUnoTunnelId() );
-    }
-    if( pStyle && SFX_STYLE_FAMILY_PARA == pStyle->GetFamily() )
-    {
-        const SwDoc& rDoc = ((SwXMLExport&)GetExport()).GetDoc();
-        const SwTxtFmtColl *pColl =
-            rDoc.FindTxtFmtCollByName( SwXStyleFamilies::GetUIName( pStyle->GetStyleName(), SFX_STYLE_FAMILY_PARA ) );
-        ASSERT( pColl, "There is the text collection?" );
-        if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
-        {
-            const SwFmtCollConditions& rConditions =
-                ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
-            for( sal_uInt16 i=0; i < rConditions.Count(); i++ )
-            {
-                const SwCollCondition& rCond = *rConditions[i];
-
-                const sal_Char *pFunc = 0;
-                OUStringBuffer sBuffer( 20 );
-                switch( rCond.GetCondition() )
-                {
-                case PARA_IN_LIST:
-                    pFunc = sXML_list_level;
-                    sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
-                    break;
-                case PARA_IN_OUTLINE:
-                    pFunc = sXML_outline_level;
-                    sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
-                    break;
-                case PARA_IN_FRAME:
-                    pFunc = sXML_text_box;
-                    break;
-                case PARA_IN_TABLEHEAD:
-                    pFunc = sXML_table_header;
-                    break;
-                case PARA_IN_TABLEBODY:
-                    pFunc = sXML_table;
-                    break;
-                case PARA_IN_SECTION:
-                    pFunc = sXML_section;
-                    break;
-                case PARA_IN_FOOTENOTE:
-                    pFunc = sXML_footnote;
-                    break;
-                case PARA_IN_FOOTER:
-                    pFunc = sXML_footer;
-                    break;
-                case PARA_IN_HEADER:
-                    pFunc = sXML_header;
-                    break;
-                case PARA_IN_ENDNOTE:
-                    pFunc = sXML_endnote;
-                    break;
-                }
-                OUString sVal( sBuffer.makeStringAndClear() );
-
-                DBG_ASSERT( pFunc, "SwXMLExport::ExportFmt: unknon condition" );
-                if( pFunc )
-                {
-                    sBuffer.appendAscii( pFunc );
-                    sBuffer.append( (sal_Unicode)'(' );
-                    sBuffer.append( (sal_Unicode)')' );
-                    if( sVal.getLength() )
-                    {
-                        sBuffer.append( (sal_Unicode)'=' );
-                        sBuffer.append( sVal );
-                    }
-
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                sXML_condition,
-                                sBuffer.makeStringAndClear() );
-                    const String& rName =
-                        SwXStyleFamilies::GetProgrammaticName(
-                                    rCond.GetTxtFmtColl()->GetName(),
-                                    SFX_STYLE_FAMILY_PARA );
-                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-                                sXML_apply_style_name, rName );
-                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                              sXML_map, sal_True, sal_True );
-                }
-            }
-        }
-    }
-}
-
-void SwXMLTextParagraphExport::exportTextAutoStyles()
-{
-    XMLTextParagraphExport::exportTextAutoStyles();
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_SD_GRAPHICS_ID,
-                                   GetExport().GetDocHandler(),
-                                   GetExport().GetMM100UnitConverter(),
-                                   GetExport().GetNamespaceMap() );
-}
 
 void SwXMLExport::_ExportStyles( sal_Bool bUsed )
 {

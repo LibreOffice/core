@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-15 12:14:46 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,8 +264,9 @@ SwXMLImport::SwXMLImport(
         sal_Bool bLDoc, sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
         const ::com::sun::star::uno::Reference<
                  ::com::sun::star::frame::XModel > & rModel,
-         const ::com::sun::star::uno::Reference<
-                ::com::sun::star::container::XIndexContainer > & rEGO ) :
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::container::XIndexContainer > & rEGO,
+        SvStorage *pPkg ) :
     SvXMLImport( rModel, rEGO ),
     bLoadDoc( bLDoc ),
     bInsert( bInsertMode ),
@@ -276,7 +277,8 @@ SwXMLImport::SwXMLImport(
     pSttNdIdx( 0 ),
     bProgressValid( sal_False ),
     bShowProgress( sal_True ),
-    nProgress( 0 )
+    nProgress( 0 ),
+    xPackage( pPkg )
 {
     _InitItemImport();
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ab $ $Date: 2000-11-28 11:40:36 $
+#   last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ CXXFILES = \
         wrtxml.cxx      \
         xmlexp.cxx      \
         xmltext.cxx      \
+        xmltexte.cxx      \
         xmltexti.cxx      \
         xmltbli.cxx      \
         xmltble.cxx      \
@@ -105,6 +106,7 @@ SLOFILES =  \
         $(SLO)$/wrtxml.obj \
         $(SLO)$/xmlexp.obj \
         $(SLO)$/xmltext.obj \
+        $(SLO)$/xmltexte.obj \
         $(SLO)$/xmltexti.obj \
         $(SLO)$/xmltbli.obj \
         $(SLO)$/xmltble.obj \

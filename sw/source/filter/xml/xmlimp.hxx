@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-15 12:14:46 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _XMLIMP_HXX
 #define _XMLIMP_HXX
 
+#ifndef _SVSTOR_HXX
+#include <so3/svstor.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
@@ -96,6 +100,7 @@ class SwXMLImport: public SvXMLImport
     SvXMLItemMapEntriesRef  xTableColItemMap;
     SvXMLItemMapEntriesRef  xTableRowItemMap;
     SvXMLItemMapEntriesRef  xTableCellItemMap;
+    SvStorageRef            xPackage;
 
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Int32               nProgress;
@@ -135,7 +140,8 @@ public:
                  const ::com::sun::star::uno::Reference<
                      ::com::sun::star::frame::XModel > & rModel,
                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::container::XIndexContainer > & );
+                    ::com::sun::star::container::XIndexContainer > &,
+                   SvStorage *pPkg );
 
     ~SwXMLImport();
 
@@ -180,6 +186,8 @@ public:
                              ::rtl::OUString *pParent=0 ) const;
 
     virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
+
+    SvStorage *GetPackage() { return &xPackage; }
 };
 
 inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const

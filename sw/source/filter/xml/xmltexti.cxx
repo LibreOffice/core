@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:41:51 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,12 @@
 
 #pragma hdrstop
 
+#ifndef _SO_CLSIDS_HXX
+#include <so3/clsids.hxx>
+#endif
+#ifndef _EMBOBJ_HXX
+#include <so3/embobj.hxx>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -82,6 +88,9 @@
 #endif
 #ifndef _UNOCOLL_HXX
 #include "unocoll.hxx"
+#endif
+#ifndef _SW3IO_HXX
+#include <sw3io.hxx>
 #endif
 
 #ifndef _XMLIMP_HXX
@@ -138,9 +147,25 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
     return pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
 }
 
-Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject( const OUString& rHRef )
+Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
+           SvXMLImport& rImport,
+        const OUString& rHRef,
+        const OUString& rClassId )
 {
-    String aObjName( rHRef );
+    Reference < XPropertySet > xPropSet;
+
+    String aObjName;
+    if( 0 == rHRef.compareToAscii( "#./", 3 ) )
+        aObjName = rHRef.copy( 3 );
+    else if( rHRef.getLength() && '#' == rHRef[0] )
+        aObjName = rHRef.copy( 1 );
+
+    if( !aObjName.Len() )
+        return xPropSet;
+
+    SvGlobalName aClassId;
+    if( !rClassId.getLength() || !aClassId.MakeId( rClassId ) )
+        return xPropSet;
 
     Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
@@ -150,10 +175,39 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject( const
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
+    SvStorage *pPackage = ((SwXMLImport&)rImport).GetPackage();
+    if( !pPackage || !pDoc->GetPersist() )
+        return xPropSet;
+
+    String aSrcObjName( aObjName );
+    SvPersistRef xDstDoc( pDoc->GetPersist() );
+    SvStorageRef xDst( pDoc->GetPersist()->GetStorage() );
+
+    // Sind Objektname und Storagename eindeutig?
+    if( xDstDoc->GetObjectList() )
+    {
+        for( ULONG i = 0; i < xDstDoc->GetObjectList()->Count(); i++ )
+        {
+            SvInfoObject* pTst = xDstDoc->GetObjectList()->GetObject(i);
+            // TODO: unicode: is this correct?
+            if( aObjName.EqualsIgnoreCaseAscii( pTst->GetObjName() ) ||
+                aObjName.EqualsIgnoreCaseAscii( pTst->GetStorageName() ) )
+            {
+                aObjName = Sw3Io::UniqueName( xDst, "Obj" );
+                break;
+            }
+        }
+    }
+
+    if( !pPackage->CopyTo( aSrcObjName, xDst, aObjName ) )
+        return xPropSet;
+
+    SvInfoObjectRef xInfo = new SvEmbeddedInfoObject( aObjName, aClassId );
+    pDoc->GetPersist()->Insert( xInfo );
+
     SwFrmFmt *pFrmFmt = pTxtCrsr->GetDoc()->InsertOLE( *pTxtCrsr->GetPaM(),
                                                        aObjName );
-    Reference < XPropertySet > xPropSet( SwXFrames::GetObject( *pFrmFmt,
-                                                       FLYCNTTYPE_OLE ) );
+    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     return xPropSet;
 }
 
