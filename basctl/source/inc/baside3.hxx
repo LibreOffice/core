@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:20:11 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,7 @@ protected:
 
 public:
                         TYPEINFO();
-                        DialogWindow( Window* pParent, StarBASIC* pBasic,
-                            SfxObjectShell* pShell, String aLibName, String aName,
+                        DialogWindow( Window* pParent, SfxObjectShell* pShell, String aLibName, String aName,
                             const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel );
                         DialogWindow( DialogWindow* pCurView );
                         ~DialogWindow();
@@ -124,6 +123,7 @@ public:
     void                DisableBrowser();
     void                UpdateBrowser();
     virtual String      GetTitle();
+    virtual BasicEntryDescriptor CreateEntryDescriptor();
     virtual void        SetReadOnly( BOOL bReadOnly );
     virtual BOOL        IsReadOnly();
 
