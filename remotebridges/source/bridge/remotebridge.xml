@@ -1,60 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Joerg Budischewski </Author>
-
-<Name>  com.sun.star.comp.remotebridges.Bridge.various </Name>
-
-<Description>
-    This component initializes the bridge between two processes
-    using either iiop or urp (UnoRemoteProtocol) protocol.
-</Description>
-
-<ModuleName>    remotebridge    </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  c++ </Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>  com.sun.star.bridge.Bridge  </SupportedService>
-<SupportedService>  com.sun.star.bridge.IiopBridge  </SupportedService>
-<SupportedService>  com.sun.star.bridge.UrpBridge   </SupportedService>
-
-<ServiceDependency> ... </ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-<RuntimeModuleDependency>   rmcxt           </RuntimeModuleDependency>
-
-
-<RuntimeModuleDependency>   cppuhelper2 </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
-<RuntimeModuleDependency>   rmcxt2      </RuntimeModuleDependency>
-
-
-<Type>   com.sun.star.bridge.XBridgeFactory                     </Type>
-<Type>   com.sun.star.bridge.XInstanceProvider                  </Type>
-<Type>   com.sun.star.bridge.XBridge                                </Type>
-<Type>   com.sun.star.bridge.BridgeExistsException              </Type>
-<Type>   com.sun.star.lang.XMultiServiceFactory         </Type>
-<Type>   com.sun.star.lang.XSingleServiceFactory                </Type>
-<Type>   com.sun.star.lang.XInitialization                      </Type>
-<Type>   com.sun.star.lang.XComponent                               </Type>
-<Type>   com.sun.star.lang.XServiceInfo                         </Type>
-<Type>   com.sun.star.lang.XTypeProvider                </Type>
-<Type>   com.sun.star.lang.IllegalArgumentException             </Type>
-<Type>   com.sun.star.lang.XInitialization                          </Type>
-<Type>   com.sun.star.registry.XRegistryKey                         </Type>
-<Type>   com.sun.star.uno.XWeak                                 </Type>
-<Type>   com.sun.star.uno.TypeClass                             </Type>
-<Type>   com.sun.star.uno.XAggregation                          </Type>
-
-</COMPONENTDESCRIPTION>
-
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   remotebridge    </module-name>
+    <component-description>
+        <author> Joerg Budischewski </author>
+        <name>  com.sun.star.comp.remotebridges.Bridge.various </name>
+        <description>
+            This component initializes the bridge between two processes
+            using either iiop or urp (UnoRemoteProtocol) protocol.
+        </description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.bridge.Bridge  </supported-service>
+        <supported-service> com.sun.star.bridge.IiopBridge  </supported-service>
+        <supported-service> com.sun.star.bridge.UrpBridge   </supported-service>
+        <service-dependency>    ... </service-dependency>
+        <type>   com.sun.star.bridge.XBridgeFactory         </type>
+        <type>   com.sun.star.bridge.XInstanceProvider      </type>
+        <type>   com.sun.star.bridge.XBridge                </type>
+        <type>   com.sun.star.bridge.BridgeExistsException  </type>
+        <type>   com.sun.star.lang.XMultiServiceFactory     </type>
+        <type>   com.sun.star.lang.XSingleServiceFactory    </type>
+        <type>   com.sun.star.lang.XInitialization          </type>
+        <type>   com.sun.star.lang.XComponent               </type>
+        <type>   com.sun.star.lang.XServiceInfo             </type>
+        <type>   com.sun.star.lang.XTypeProvider            </type>
+        <type>   com.sun.star.lang.IllegalArgumentException </type>
+        <type>   com.sun.star.lang.XInitialization          </type>
+        <type>   com.sun.star.registry.XRegistryKey         </type>
+        <type>   com.sun.star.uno.XWeak                     </type>
+        <type>   com.sun.star.uno.TypeClass                 </type>
+        <type>   com.sun.star.uno.XAggregation              </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> rmcxt           </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper2 </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> rmcxt2      </runtime-module-dependency>
+</module-description>

@@ -1,51 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION
-    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-
-<Author> Daniel Boelzle </Author>
-
-<Name>  com.sun.star.comp.bridge.UnoUrlResolver </Name>
-
-<Description>
-    This component allows
-    to retrieve an object reference from another process.
-</Description>
-
-<ModuleName>    uuresolver  </ModuleName>
-
-<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
-
-<Language>  c++ </Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>  com.sun.star.bridge.UnoUrlResolver  </SupportedService>
-
-<ServiceDependency> ... </ServiceDependency>
-
-<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
-<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
-<ProjectBuildDependency>    sal         </ProjectBuildDependency>
-
-<RuntimeModuleDependency>   cppuhelper2 </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
-
-
-<Type>   com.sun.star.uno.TypeClass                         </Type>
-<Type>   com.sun.star.lang.XTypeProvider                    </Type>
-<Type>   com.sun.star.lang.XServiceInfo                         </Type>
-<Type>   com.sun.star.lang.XSingleServiceFactory            </Type>
-<Type>   com.sun.star.lang.XMultiServiceFactory     </Type>
-<Type>   com.sun.star.lang.XComponent                       </Type>
-<Type>   com.sun.star.registry.XRegistryKey                 </Type>
-<Type>   com.sun.star.connection.XConnector                     </Type>
-<Type>   com.sun.star.bridge.XBridgeFactory                 </Type>
-<Type>   com.sun.star.bridge.XUnoUrlResolver        </Type>
-<Type>   com.sun.star.uno.XAggregation                      </Type>
-<Type>   com.sun.star.uno.XWeak                                 </Type>
-
-</COMPONENTDESCRIPTION>
-
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   uuresolver  </module-name>
+    <component-description>
+        <author> Daniel Boelzle </author>
+        <name>  com.sun.star.comp.bridge.UnoUrlResolver </name>
+        <description>
+            This component allows
+            to retrieve an object reference from another process.
+        </description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.bridge.UnoUrlResolver </supported-service>
+        <service-dependency> ... </service-dependency>
+        <type>   com.sun.star.uno.TypeClass                 </type>
+        <type>   com.sun.star.lang.XTypeProvider            </type>
+        <type>   com.sun.star.lang.XServiceInfo             </type>
+        <type>   com.sun.star.lang.XSingleServiceFactory    </type>
+        <type>   com.sun.star.lang.XMultiServiceFactory     </type>
+        <type>   com.sun.star.lang.XComponent               </type>
+        <type>   com.sun.star.registry.XRegistryKey         </type>
+        <type>   com.sun.star.connection.XConnector         </type>
+        <type>   com.sun.star.bridge.XBridgeFactory         </type>
+        <type>   com.sun.star.bridge.XUnoUrlResolver        </type>
+        <type>   com.sun.star.uno.XAggregation              </type>
+        <type>   com.sun.star.uno.XWeak                     </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper2 </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>
