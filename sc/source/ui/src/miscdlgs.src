@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:40:52 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 15:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ chinese_simplified ] = "ε ι™¤ζ•΄ε—(~C)";
         Text[ russian ] = "Σδΰλθςό βρώ κξλξνκσ";
         Text[ polish ] = "Usuρ ca³e kolumny";
-        Text[ japanese ] = "ε…¨ε—γ‚’ε‰ι™¤(~C)";
+        Text[ japanese ] = "ε—ε…¨δ½“γ‚’ε‰ι™¤(~C)";
         Text[ chinese_traditional ] = "εªι™¤ζ•΄ζ¬„(~C)";
         Text[ arabic ] = "ΝΠέ ΓΪγΟΙ ΘΓίγαεΗ";
         Text[ greek ] = "Διαγραφή ολόκληρης στήλης";
@@ -156,7 +156,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ chinese_simplified ] = "ε ι™¤ζ•΄θ΅(~R)";
         Text[ russian ] = "Σδΰλθςό βρώ ρςπξκσ";
         Text[ polish ] = "Usuρ ca³e wiersze";
-        Text[ japanese ] = "ε…¨θ΅γ‚’ε‰ι™¤(~R)";
+        Text[ japanese ] = "θ΅ε…¨δ½“γ‚’ε‰ι™¤(~R)";
         Text[ chinese_traditional ] = "εªι™¤ζ•΄ε—(~R)";
         Text[ arabic ] = "ΝΠέ ΓΣΨΡ ΘΓίγαεΗ";
         Text[ greek ] = "Διαγραφή ολόκληρων γραμμών";
@@ -2520,7 +2520,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ chinese_simplified ] = "ε·¥δ½ζ—¥(~W)";
         Text[ russian ] = "Δενό νεδελθ";
         Text[ polish ] = "Dzie~ρ tygodnia";
-        Text[ japanese ] = "ζ›ζ—¥(~W)";
+        Text[ japanese ] = "εΉ³ζ—¥(~W)";
         Text[ chinese_traditional ] = "ε·¥δ½ζ—¥(~W)";
         Text[ arabic ] = "νζγ ΓΣΘζΪ";
         Text[ greek ] = "Ημέρα εβδομάδας";
@@ -3813,6 +3813,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lδhdetietoalue";
 };
+
 
 
 
