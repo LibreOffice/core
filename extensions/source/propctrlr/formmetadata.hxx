@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:05:36 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ namespace pcr
     #define PROPERTY_ID_DATEMIN              36
     #define PROPERTY_ID_DATEMAX              37
     #define PROPERTY_ID_DATEFORMAT           38
-        // FREE
+    #define PROPERTY_ID_SELECTEDITEMS        39
     #define PROPERTY_ID_DEFAULT_DATE         40
     #define PROPERTY_ID_TIMEMIN              41
     #define PROPERTY_ID_TIMEMAX              42
