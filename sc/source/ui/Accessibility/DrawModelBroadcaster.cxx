@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawModelBroadcaster.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:02:04 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,14 @@ ScDrawModelBroadcaster::ScDrawModelBroadcaster( SdrModel *pDrawModel ) :
     maEventListeners( maListenerMutex ),
     mpDrawModel( pDrawModel )
 {
-    StartListening( *mpDrawModel );
+    if (mpDrawModel)
+        StartListening( *mpDrawModel );
 }
 
 ScDrawModelBroadcaster::~ScDrawModelBroadcaster()
 {
-    EndListening( *mpDrawModel );
+    if (mpDrawModel)
+        EndListening( *mpDrawModel );
 }
 
 void SAL_CALL ScDrawModelBroadcaster::addEventListener( const uno::Reference< document::XEventListener >& xListener )
