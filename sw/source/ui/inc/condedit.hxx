@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: os $ $Date: 2001-07-05 10:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ class ConditionEdit : public Edit
 {
     BOOL bBrackets;
 
-    virtual BOOL QueryDrop( DropEvent& rEvt );
+//    virtual BOOL QueryDrop( DropEvent& rEvt );
 
 public:
     ConditionEdit( Window* pParent, const ResId& rResId );

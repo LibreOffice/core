@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2001-07-05 10:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,14 @@ ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId ) :
         Edit( pParent, rResId ),
         bBrackets(TRUE)
 {
-    EnableDrop();
+//    EnableDrop();
 }
 
 /*--------------------------------------------------------------------
     Beschreibung: Drop moeglich, bzw Format bekannt?
  --------------------------------------------------------------------*/
 
-BOOL ConditionEdit::QueryDrop( DropEvent& rDEvt )
+/*BOOL ConditionEdit::QueryDrop( DropEvent& rDEvt )
 {
     rDEvt.SetAction(DROP_COPY);
 
@@ -143,37 +143,6 @@ BOOL ConditionEdit::QueryDrop( DropEvent& rDEvt )
 
     return Edit::QueryDrop( rDEvt );
 }
-
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.7  2000/09/18 16:06:17  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.6  2000/04/18 15:14:08  os
-      UNICODE
-
-      Revision 1.5  2000/02/11 15:00:29  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.4  1998/11/17 21:18:48  JP
-      Task #59398#: ClipboardFormatId Umstellungen
-
-
-      Rev 1.3   17 Nov 1998 22:18:48   JP
-   Task #59398#: ClipboardFormatId Umstellungen
-
-      Rev 1.2   18 May 1998 14:53:24   OM
-   #50001 Keine eckigen Klammern in DB-Condition-Fields
-
-      Rev 1.1   12 Mar 1998 16:32:42   OM
-   Datenbanknamen in eckigen Klammern bei Drop
-
-      Rev 1.0   19 Nov 1997 16:21:42   OM
-   Initial revision.
-
-*************************************************************************/
+*/
 
 

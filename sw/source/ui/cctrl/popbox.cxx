@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: os $ $Date: 2001-07-05 10:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,72 +111,15 @@ long SwHelpToolBox::DoubleClick( ToolBox* pCaller )
 SwHelpToolBox::~SwHelpToolBox() {}
 
 
-BOOL    SwHelpToolBox::Drop( const DropEvent& rEvt)
-{
-    return GetParent()->Drop(rEvt);
-}
+//BOOL    SwHelpToolBox::Drop( const DropEvent& rEvt)
+//{
+//    return GetParent()->Drop(rEvt);
+//}
 
 
-BOOL    SwHelpToolBox::QueryDrop( DropEvent& rEvt)
-{
-    return GetParent()->QueryDrop(rEvt);
-}
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.17  2000/09/18 16:05:12  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.16  2000/04/11 08:03:01  os
-    UNICODE
-
-    Revision 1.15  1997/11/03 12:09:46  MA
-    precomp entfernt
-
-
-      Rev 1.14   03 Nov 1997 13:09:46   MA
-   precomp entfernt
-
-      Rev 1.13   28 Aug 1996 08:23:42   OS
-   includes
-
-      Rev 1.12   19 Jun 1996 14:57:58   OS
-   +Drop/QueryDrop
-
-      Rev 1.11   16 Apr 1996 17:03:48   OM
-   Unbenutzten Ctor entfernt
-
-      Rev 1.10   24 Nov 1995 16:57:38   OM
-   PCH->PRECOMPILED
-
-      Rev 1.9   07 Jul 1995 09:27:26   OM
-   Mouse_Contextmenu entfernt
-
-      Rev 1.8   06 Jul 1995 22:52:36   ER
-   Hack wg. MOUSE_CONTEXTMENU
-
-      Rev 1.7   09 Mar 1995 14:46:30   MA
-   Aufgeraeumt
-
-      Rev 1.6   04 Mar 1995 23:14:18   ER
-   Help::EnableBalloonMode() hammernichmehr
-
-      Rev 1.5   25 Jan 1995 17:13:58   OS
-   Timerinstrumentierung
-
-      Rev 1.4   09 Jan 1995 16:24:12   ER
-    del: initui hxx
-
-      Rev 1.3   25 Oct 1994 14:55:16   ER
-   add: PCH
-
-      Rev 1.2   19 Oct 1994 13:14:08   MA
-   Syntax
-
-      Rev 1.1   19 Oct 1994 12:21:12   MA
-   SV-ChangeXXX -> SetXXX.
-
-------------------------------------------------------------------------*/
+//BOOL    SwHelpToolBox::QueryDrop( DropEvent& rEvt)
+//{
+//    return GetParent()->QueryDrop(rEvt);
+//}
 
 
