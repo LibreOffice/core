@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:05:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,6 +1894,14 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
+    };
+    CheckBox CB_FOLLOWTEXTFLOW
+    {
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Textfluss folgen" ;
+        Text [ english_us ] = "Follow text flow" ;
     };
     FixedLine FL_POSITION
     {
