@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_dsapi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:43:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,17 +144,25 @@ Context_Docu::Context_Docu( Token_Receiver & o_rReceiver )
     :   aStateMachine(C_nStatusSize, C_nCppInitialNrOfStati),
         pReceiver(&o_rReceiver),
         pParentContext(0),
-        pCx_EoHtml( new Cx_EoHtml(o_rReceiver, *this) ),
-        pCx_EoXmlConst( new Cx_EoXmlConst(o_rReceiver, *this) ),
-        pCx_EoXmlLink_BeginTag( new Cx_EoXmlLink_BeginTag(o_rReceiver, *this) ),
-        pCx_EoXmlLink_EndTag( new Cx_EoXmlLink_EndTag(o_rReceiver, *this) ),
-        pCx_EoXmlFormat_BeginTag( new Cx_EoXmlFormat_BeginTag(o_rReceiver, *this) ),
-        pCx_EoXmlFormat_EndTag( new Cx_EoXmlFormat_EndTag(o_rReceiver, *this) ),
-        pCx_CheckStar( new Cx_CheckStar(*pReceiver,*this) ),
+        pCx_EoHtml(0),
+        pCx_EoXmlConst(0),
+        pCx_EoXmlLink_BeginTag(0),
+        pCx_EoXmlLink_EndTag(0),
+        pCx_EoXmlFormat_BeginTag(0),
+        pCx_EoXmlFormat_EndTag(0),
+        pCx_CheckStar(0),
         pNewToken(0),
         pFollowUpContext(0),
         bIsMultiline(false)
 {
+    pCx_EoHtml = new Cx_EoHtml(o_rReceiver, *this);
+    pCx_EoXmlConst = new Cx_EoXmlConst(o_rReceiver, *this);
+    pCx_EoXmlLink_BeginTag = new Cx_EoXmlLink_BeginTag(o_rReceiver, *this);
+    pCx_EoXmlLink_EndTag = new Cx_EoXmlLink_EndTag(o_rReceiver, *this);
+    pCx_EoXmlFormat_BeginTag = new Cx_EoXmlFormat_BeginTag(o_rReceiver, *this);
+    pCx_EoXmlFormat_EndTag = new Cx_EoXmlFormat_EndTag(o_rReceiver, *this);
+    pCx_CheckStar = new Cx_CheckStar(*pReceiver,*this);
+
     SetupStateMachine();
 }
 
@@ -264,6 +272,7 @@ Context_Docu::PerformStatusFunction( uintt              i_nStatusSignal,
                         pNewToken = new Tok_DocuEnd;
                         pFollowUpContext = pParentContext;
                     }
+                    pReceiver->Increment_CurLine();
                     break;
                 default:
                     csv_assert(false);
