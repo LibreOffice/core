@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:52:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <com/sun/star/awt/XProgressMonitor.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // -----------
 // - Defines -
 // -----------
@@ -112,11 +116,11 @@ class FmFormModel;
 class ImageMap;
 class Gallery;
 
-ResMgr*         GetGalleryResMgr();
+SVX_DLLPUBLIC ResMgr*           GetGalleryResMgr();
 USHORT          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, BOOL bShowProgress = FALSE );
 BOOL            GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel );
 BOOL            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
-String          GetReducedString( const INetURLObject& rURL, ULONG nMaxLen );
+SVX_DLLPUBLIC String            GetReducedString( const INetURLObject& rURL, ULONG nMaxLen );
 String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
 BOOL            FileExists( const INetURLObject& rURL );
@@ -170,7 +174,7 @@ public:
 
 class GraphicFilter;
 
-class GalleryProgress
+class SVX_DLLPUBLIC GalleryProgress
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XProgressBar > mxProgressBar;
     GraphicFilter*                                                          mpFilter;
