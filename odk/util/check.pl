@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:48:25 $
+#   last change: $Author: obo $ $Date: 2003-10-20 13:14:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,7 +131,7 @@ if (-d "$StartDir") {
     #check configure files
     print "check config files: ";
     if ($OperatingSystem eq "windows") {
-    if (! -e "$StartDir/configureWindowsNT.bat") {
+    if (! -e "$StartDir/configureWindows.bat") {
         print "-";
         $return++;
     }
@@ -256,8 +256,8 @@ if (-d "$StartDir") {
         $return++;
     }
 
-    my @idl_dirlist = ( "OLE","OLE/vbscript","OLE/delphi","OLE/delphi/InsertTables","OLE/activex","cpp","cpp/counter","cpp/remoteclient","cpp/DocumentLoader","java","java/Text","java/ToDo","java/NotesAccess","java/ConverterServlet","java/Inspector","java/Drawing","java/MinimalComponent","java/PropertySet","java/Spreadsheet","java/DocumentHandling","java/DocumentHandling/test","basic","basic/text","basic/text/modifying_text_automatically","basic/text/creating_an_index","basic/sheet","basic/drawing","basic/forms_and_controls","basic/stock_quotes_updater","DevelopersGuide","DevelopersGuide/UCB","DevelopersGuide/UCB/data","DevelopersGuide/Text","DevelopersGuide/Charts","DevelopersGuide/Config","DevelopersGuide/Forms","DevelopersGuide/FirstSteps","DevelopersGuide/OfficeDev","DevelopersGuide/OfficeDev/FilterDevelopment","DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection","DevelopersGuide/OfficeDev/Linguistic","DevelopersGuide/OfficeDev/Clipboard","DevelopersGuide/OfficeDev/PathSettings","DevelopersGuide/OfficeDev/TerminationTest","DevelopersGuide/OfficeDev/DesktopEnvironment","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/unix","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/windows","DevelopersGuide/OfficeDev/DisableCommands","DevelopersGuide/OfficeDev/PathSubstitution","DevelopersGuide/Components","DevelopersGuide/Components/JavaComponent","DevelopersGuide/Components/Thumbs","DevelopersGuide/Components/Thumbs/org","DevelopersGuide/Components/Thumbs/org/openoffice","DevelopersGuide/Components/Thumbs/org/openoffice/comp","DevelopersGuide/Components/Thumbs/org/openoffice/comp/test","DevelopersGuide/Components/Thumbs/org/openoffice/test","DevelopersGuide/Components/CppComponent","DevelopersGuide/Components/Addons","DevelopersGuide/Components/Addons/JobsAddon","DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java","DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp","DevelopersGuide/BasicAndDialogs","DevelopersGuide/BasicAndDialogs/ToolkitControls","DevelopersGuide/BasicAndDialogs/CreatingDialogs","DevelopersGuide/ProfUNO","DevelopersGuide/ProfUNO/CppBinding","DevelopersGuide/ProfUNO/InterprocessConn","DevelopersGuide/ProfUNO/Lifetime","DevelopersGuide/Drawing","DevelopersGuide/Accessibility","DevelopersGuide/OfficeBean","DevelopersGuide/OfficeBean/OfficeWriterBean","DevelopersGuide/OfficeBean/SimpleBean","DevelopersGuide/Database","DevelopersGuide/Database/DriverSkeleton","DevelopersGuide/Spreadsheet");
-    foreach $i (@idl_dirlist)
+    my @dirlist = ( "OLE","OLE/vbscript","OLE/delphi","OLE/delphi/InsertTables","OLE/activex","cpp","cpp/counter","cpp/remoteclient","cpp/DocumentLoader","java","java/Text","java/ToDo","java/NotesAccess","java/ConverterServlet","java/Inspector","java/Drawing","java/MinimalComponent","java/PropertySet","java/Spreadsheet","java/DocumentHandling","java/DocumentHandling/test","basic","basic/text","basic/text/modifying_text_automatically","basic/text/creating_an_index","basic/sheet","basic/drawing","basic/forms_and_controls","basic/stock_quotes_updater","DevelopersGuide","DevelopersGuide/UCB","DevelopersGuide/UCB/data","DevelopersGuide/Text","DevelopersGuide/Charts","DevelopersGuide/Config","DevelopersGuide/Forms","DevelopersGuide/FirstSteps","DevelopersGuide/OfficeDev","DevelopersGuide/OfficeDev/FilterDevelopment","DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java","DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection","DevelopersGuide/OfficeDev/Linguistic","DevelopersGuide/OfficeDev/Clipboard","DevelopersGuide/OfficeDev/PathSettings","DevelopersGuide/OfficeDev/TerminationTest","DevelopersGuide/OfficeDev/DesktopEnvironment","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/unix","DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/windows","DevelopersGuide/OfficeDev/DisableCommands","DevelopersGuide/OfficeDev/PathSubstitution","DevelopersGuide/Components","DevelopersGuide/Components/JavaComponent","DevelopersGuide/Components/Thumbs","DevelopersGuide/Components/Thumbs/org","DevelopersGuide/Components/Thumbs/org/openoffice","DevelopersGuide/Components/Thumbs/org/openoffice/comp","DevelopersGuide/Components/Thumbs/org/openoffice/comp/test","DevelopersGuide/Components/Thumbs/org/openoffice/test","DevelopersGuide/Components/CppComponent","DevelopersGuide/Components/Addons","DevelopersGuide/Components/Addons/JobsAddon","DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java","DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp","DevelopersGuide/BasicAndDialogs","DevelopersGuide/BasicAndDialogs/ToolkitControls","DevelopersGuide/BasicAndDialogs/CreatingDialogs","DevelopersGuide/ProfUNO","DevelopersGuide/ProfUNO/CppBinding","DevelopersGuide/ProfUNO/InterprocessConn","DevelopersGuide/ProfUNO/Lifetime","DevelopersGuide/Drawing","DevelopersGuide/Accessibility","DevelopersGuide/OfficeBean","DevelopersGuide/OfficeBean/OfficeWriterBean","DevelopersGuide/OfficeBean/SimpleBean","DevelopersGuide/Database","DevelopersGuide/Database/DriverSkeleton","DevelopersGuide/Spreadsheet");
+    foreach $i (@dirlist)
     {
         if (! -d "$StartDir/examples/$i") {
         $return++;
