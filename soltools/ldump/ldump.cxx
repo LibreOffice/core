@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 12:47:36 $
+ *  last change: $Author: hr $ $Date: 2004-08-09 11:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,9 @@
 #include "ldump.hxx"
 #include "hashtbl.hxx"
 
-#define MAXSYM     32768
-#define MAXBASE    49152
-#ifdef WNT
+#define MAXSYM     65536
+#define MAXBASE    98304
 #define MAX_MAN     4096
-#else
-#define MAX_MAN     4095
-#endif
 
 int bFilter = 0;
 int bLdump3 = 0;
