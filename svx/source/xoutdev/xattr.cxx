@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:28:20 $
+ *  last change: $Author: cl $ $Date: 2002-06-10 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3423,6 +3423,7 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
             aGradient.StepCount = aXGradient.GetSteps();
 
             rVal <<= aGradient;
+            break;
         }
 
         case MID_NAME:
