@@ -1,86 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-<Author>Niklas Nebel</Author>
-<Name>com.sun.star.comp.office.ScTableValidationObj</Name>
-<Description>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>sc</module-name>
+    <component-description>
+        <author>Niklas Nebel</author>
+        <name>com.sun.star.comp.office.ScTableValidationObj</name>
+        <description>
     This component provides access to the validation settings for a cell or cell range.
-</Description>
-
-<ModuleName>sc</ModuleName>
-
-<LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
-
-<Language>c++</Language>
-
-<Status StatusValue="final"/>
-
-<SupportedService>com.sun.star.sheet.TableValidation</SupportedService>
-
-<!--
-<ServiceDependency>...</ServiceDependency>
-
-<RuntimeModuleDependency>...</RuntimeModuleDependency>
--->
-
-<ProjectBuildDependency>cppu</ProjectBuildDependency>
-<ProjectBuildDependency>cppuhelper</ProjectBuildDependency>
-<ProjectBuildDependency>osl</ProjectBuildDependency>
-<ProjectBuildDependency>rtl</ProjectBuildDependency>
-<ProjectBuildDependency>sal</ProjectBuildDependency>
-<ProjectBuildDependency>stl</ProjectBuildDependency>
-<ProjectBuildDependency>svtools</ProjectBuildDependency>
-<ProjectBuildDependency>tools</ProjectBuildDependency>
-<ProjectBuildDependency>typelib</ProjectBuildDependency>
-<ProjectBuildDependency>uno</ProjectBuildDependency>
-<ProjectBuildDependency>vcl</ProjectBuildDependency>
-<ProjectBuildDependency>vos</ProjectBuildDependency>
-
-<Type>com.sun.star.beans.Property</Type>
-<Type>com.sun.star.beans.PropertyChangeEvent</Type>
-<Type>com.sun.star.beans.PropertyState</Type>
-<Type>com.sun.star.beans.PropertyValue</Type>
-<Type>com.sun.star.beans.PropertyVetoException</Type>
-<Type>com.sun.star.beans.UnknownPropertyException</Type>
-<Type>com.sun.star.beans.XPropertyChangeListener</Type>
-<Type>com.sun.star.beans.XPropertySet</Type>
-<Type>com.sun.star.beans.XPropertySetInfo</Type>
-<Type>com.sun.star.beans.XVetoableChangeListener</Type>
-<Type>com.sun.star.container.NoSuchElementException</Type>
-<Type>com.sun.star.container.XElementAccess</Type>
-<Type>com.sun.star.container.XEnumeration</Type>
-<Type>com.sun.star.container.XEnumerationAccess</Type>
-<Type>com.sun.star.container.XIndexAccess</Type>
-<Type>com.sun.star.container.XNameAccess</Type>
-<Type>com.sun.star.lang.EventObject</Type>
-<Type>com.sun.star.lang.IllegalArgumentException</Type>
-<Type>com.sun.star.lang.IndexOutOfBoundsException</Type>
-<Type>com.sun.star.lang.WrappedTargetException</Type>
-<Type>com.sun.star.lang.XEventListener</Type>
-<Type>com.sun.star.lang.XMultiServiceFactory</Type>
-<Type>com.sun.star.lang.XServiceInfo</Type>
-<Type>com.sun.star.lang.XTypeProvider</Type>
-<Type>com.sun.star.lang.XUnoTunnel</Type>
-<Type>com.sun.star.sheet.ConditionOperator</Type>
-<Type>com.sun.star.sheet.ValidationAlertStyle</Type>
-<Type>com.sun.star.sheet.ValidationType</Type>
-<Type>com.sun.star.sheet.XSheetCondition</Type>
-<Type>com.sun.star.sheet.XSheetConditionalEntries</Type>
-<Type>com.sun.star.sheet.XSheetConditionalEntry</Type>
-<Type>com.sun.star.table.CellAddress</Type>
-<Type>com.sun.star.uno.Any</Type>
-<Type>com.sun.star.uno.Exception</Type>
-<Type>com.sun.star.uno.Reference</Type>
-<Type>com.sun.star.uno.RuntimeException</Type>
-<Type>com.sun.star.uno.Sequence</Type>
-<Type>com.sun.star.uno.Type</Type>
-<Type>com.sun.star.uno.TypeClass</Type>
-<Type>com.sun.star.uno.XAdapter</Type>
-<Type>com.sun.star.uno.XAggregation</Type>
-<Type>com.sun.star.uno.XInterface</Type>
-<Type>com.sun.star.uno.XReference</Type>
-<Type>com.sun.star.uno.XWeak</Type>
-<Type>com.sun.star.uno.genfunc</Type>
-
-</COMPONENTDESCRIPTION>
+</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sheet.TableValidation</supported-service>
+        <type>com.sun.star.beans.Property</type>
+        <type>com.sun.star.beans.PropertyChangeEvent</type>
+        <type>com.sun.star.beans.PropertyState</type>
+        <type>com.sun.star.beans.PropertyValue</type>
+        <type>com.sun.star.beans.PropertyVetoException</type>
+        <type>com.sun.star.beans.UnknownPropertyException</type>
+        <type>com.sun.star.beans.XPropertyChangeListener</type>
+        <type>com.sun.star.beans.XPropertySet</type>
+        <type>com.sun.star.beans.XPropertySetInfo</type>
+        <type>com.sun.star.beans.XVetoableChangeListener</type>
+        <type>com.sun.star.container.NoSuchElementException</type>
+        <type>com.sun.star.container.XElementAccess</type>
+        <type>com.sun.star.container.XEnumeration</type>
+        <type>com.sun.star.container.XEnumerationAccess</type>
+        <type>com.sun.star.container.XIndexAccess</type>
+        <type>com.sun.star.container.XNameAccess</type>
+        <type>com.sun.star.lang.EventObject</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.IndexOutOfBoundsException</type>
+        <type>com.sun.star.lang.WrappedTargetException</type>
+        <type>com.sun.star.lang.XEventListener</type>
+        <type>com.sun.star.lang.XMultiServiceFactory</type>
+        <type>com.sun.star.lang.XServiceInfo</type>
+        <type>com.sun.star.lang.XTypeProvider</type>
+        <type>com.sun.star.lang.XUnoTunnel</type>
+        <type>com.sun.star.sheet.ConditionOperator</type>
+        <type>com.sun.star.sheet.ValidationAlertStyle</type>
+        <type>com.sun.star.sheet.ValidationType</type>
+        <type>com.sun.star.sheet.XSheetCondition</type>
+        <type>com.sun.star.sheet.XSheetConditionalEntries</type>
+        <type>com.sun.star.sheet.XSheetConditionalEntry</type>
+        <type>com.sun.star.table.CellAddress</type>
+        <type>com.sun.star.uno.Any</type>
+        <type>com.sun.star.uno.Exception</type>
+        <type>com.sun.star.uno.Reference</type>
+        <type>com.sun.star.uno.RuntimeException</type>
+        <type>com.sun.star.uno.Sequence</type>
+        <type>com.sun.star.uno.Type</type>
+        <type>com.sun.star.uno.TypeClass</type>
+        <type>com.sun.star.uno.XAdapter</type>
+        <type>com.sun.star.uno.XAggregation</type>
+        <type>com.sun.star.uno.XInterface</type>
+        <type>com.sun.star.uno.XReference</type>
+        <type>com.sun.star.uno.XWeak</type>
+        <type>com.sun.star.uno.genfunc</type>
+    </component-description>
+    <project-build-dependency>cppu</project-build-dependency>
+    <project-build-dependency>cppuhelper</project-build-dependency>
+    <project-build-dependency>osl</project-build-dependency>
+    <project-build-dependency>rtl</project-build-dependency>
+    <project-build-dependency>sal</project-build-dependency>
+    <project-build-dependency>stl</project-build-dependency>
+    <project-build-dependency>svtools</project-build-dependency>
+    <project-build-dependency>tools</project-build-dependency>
+    <project-build-dependency>typelib</project-build-dependency>
+    <project-build-dependency>uno</project-build-dependency>
+    <project-build-dependency>vcl</project-build-dependency>
+    <project-build-dependency>vos</project-build-dependency>
+</module-description>
