@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 15:48:22 $
+ *  last change: $Author: th $ $Date: 2001-05-11 16:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ sal_Bool SfxXMLMetaElementContext::ParseISODateTimeString(
         bSuccess = sal_False;
     else
     {
-        sal_int32 n = 0;
+        sal_Int32 n = 0;
         if ( !lcl_GetNumber( aDateStr.getToken( 0, '-', n ), nYear, 9999 ) )
             bSuccess = sal_False;
         if ( nDateTokens >= 2 )
@@ -306,7 +306,7 @@ sal_Bool SfxXMLMetaElementContext::ParseISODateTimeString(
             bSuccess = sal_False;
         else
         {
-            sal_int32 n = 0;
+            sal_Int32 n = 0;
             if ( !lcl_GetNumber( aTimeStr.getToken( 0, ':', n ), nHour, 23 ) )
                 bSuccess = sal_False;
             if ( nTimeTokens >= 2 )

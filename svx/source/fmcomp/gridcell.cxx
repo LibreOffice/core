@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 13:39:32 $
+ *  last change: $Author: th $ $Date: 2001-05-11 16:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2301,7 +2301,7 @@ void DbFilterField::Update()
                 aStatement.AssignAscii("SELECT DISTINCT ");
 
                 aStatement += quoteName(aQuote, aName);
-                if (aFieldName.len() && aName != aFieldName)
+                if (aFieldName.getLength() && aName != aFieldName)
                 {
                     aStatement.AppendAscii(" AS ");
                     aStatement += quoteName(aQuote, aFieldName);
