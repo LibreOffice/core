@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:57:54 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,32 @@ ErrCode SfxCallMacro( BasicManager* pMgr, const String& rCode,
 }
 
 //==========================================================================
+
+SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
+    bAppBasic(TRUE),
+    nSlotId(0),
+    nRefCnt(0),
+    pSlot(0),
+    pHelpText(0)
+{
+    if ( rURL.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
+    {
+        String aTmp = rURL.Copy( 6 );
+        if ( aTmp.GetTokenCount('/') == 3 )
+        {
+            // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
+            // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
+            if ( aTmp.CompareToAscii("///", 3 ) != COMPARE_EQUAL )
+                bAppBasic = FALSE;
+            aTmp = rURL.GetToken( 3, '/' );
+            aLibName = aTmp.GetToken( 0, '.' );
+            aModuleName = aTmp.GetToken( 1, '.' );
+            aMethodName = aTmp.GetToken( 2, '.' );
+        }
+    }
+
+    DBG_ASSERT( aLibName.Len() && aModuleName.Len() && aMethodName.Len(), "Wrong macro URL!" );
+}
 
 SfxMacroInfo::SfxMacroInfo( SfxObjectShell *pDoc ) :
     bAppBasic(pDoc == NULL),
