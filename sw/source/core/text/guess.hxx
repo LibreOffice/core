@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-07 11:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,9 @@ class SwTxtGuess
     xub_StrLen nBreakStart;     // start index of word containing line break
     xub_StrLen nBreakPos;       // start index of break position
     KSHORT nBreakWidth;         // width of the broken portion
-    KSHORT nHeight;             // GetTxtSize()-Height
 public:
     inline SwTxtGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
-                        nBreakPos(0), nBreakWidth(0), nHeight(0)
+                        nBreakPos(0), nBreakWidth(0)
         { }
     ~SwTxtGuess() { delete pHanging; }
 
@@ -111,7 +110,6 @@ public:
     inline xub_StrLen CutPos() const { return nCutPos; }
     inline xub_StrLen BreakStart() const { return nBreakStart; }
     inline xub_StrLen BreakPos() const {return nBreakPos; }
-    inline KSHORT Height() const { return nHeight; }
     inline uno::Reference< XHyphenatedWord > HyphWord() const
         { return xHyphWord; }
     static xub_StrLen GetWordStart( const SwTxtFormatInfo &rInf,
