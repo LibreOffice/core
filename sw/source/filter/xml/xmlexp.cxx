@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
+ *  last change: $Author: mib $ $Date: 2001-05-21 13:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,9 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 #define NUM_EXPORTED_CONFIGURATION_SETTINGS 15
 void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
-    Reference < XPropertySet > xPropSet = Reference<XPropertySet>(GetModel(), UNO_QUERY);
+    Reference < XMultiServiceFactory > xCreate(GetModel(), UNO_QUERY);
+    Reference < XPropertySet > xPropSet(
+        xCreate->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.document.Settings"))), UNO_QUERY);
     if (xPropSet.is())
     {
         aProps.realloc ( NUM_EXPORTED_CONFIGURATION_SETTINGS );
