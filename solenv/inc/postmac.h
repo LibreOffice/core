@@ -3,8 +3,8 @@
 #*    $Workfile:   svpm.h  $
 #*
 #*    Ersterstellung    DV 01.10.97
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-11-28 19:13:56 $
-#*    $Revision: 1.3 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-11 17:45:21 $
+#*    $Revision: 1.4 $
 #*
 #*    $Logfile:   T:/tools/os2/inc/svpm.h_v  $
 #*
@@ -14,11 +14,14 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/inc/postmac.h,v 1.3 2000-11-28 19:13:56 pluby Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/solenv/inc/postmac.h,v 1.4 2001-03-11 17:45:21 pluby Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/28 19:13:56  pluby
+      Added Line to #define and #undef statements.
+
       Revision 1.2  2000/09/27 22:52:33  patrick.luby
       Updates to handle <AppKit/AppKit.h> includes
 
@@ -60,3 +63,4 @@
 #undef BOOL
 #undef ULONG
 #undef Line
+#undef TimeValue
