@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChaosContentProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:34:04 $
+ *  last change:$Date: 2003-09-08 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,17 @@
 
 package mod._cnt;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.ucb.XContentIdentifierFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.ucb.XContentIdentifierFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -110,7 +112,6 @@ public class ChaosContentProvider extends TestCase {
         XInterface oObj = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
-        Object relationContainer = null ;
         Object cntFactory = null ;
 
         try {
