@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:16:15 $
+ *  last change:$Date: 2003-05-27 13:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.accessibility.AccessibleRole;
@@ -88,7 +89,7 @@ public class AccessibleOLEShape extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a drawdoc" );
@@ -120,7 +121,7 @@ public class AccessibleOLEShape extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
         final XShape oShape = SOF.createShape
             (xDrawDoc,5000,5000,1500,1000,"OLE2");
 
@@ -150,7 +151,7 @@ public class AccessibleOLEShape extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow (tParam.getMSF(),aModel);
+        XWindow xWindow = at.getCurrentWindow ((XMultiServiceFactory)tParam.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log,xRoot);
