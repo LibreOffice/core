@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-21 10:50:37 $
+ *  last change: $Author: sj $ $Date: 2002-03-25 10:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,8 @@ BOOL SdPPTImport::Import()
                         else if ( ( nID2 == PPT_PLACEHOLDER_BODY )
                             && ( ( nID1 == PPT_PLACEHOLDER_OBJECT ) || ( nID1 == PPT_PLACEHOLDER_MEDIACLIP ) ) )
                             eAutoLayout = AUTOLAYOUT_OBJTEXT;
+                        else if ( ( nID1 == PPT_PLACEHOLDER_OBJECT ) && ( nID2 == PPT_PLACEHOLDER_OBJECT  ) )
+                            eAutoLayout = AUTOLAYOUT_OBJ;
                     }
                     break;
 
