@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 11:26:16 $
+ *  last change: $Author: mt $ $Date: 2002-08-21 15:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             aOldTextAfterStartPos.Erase( nMax );
         mpIMEInfos = new ImplIMEInfos( aPaM, aOldTextAfterStartPos );
         mpIMEInfos->bWasCursorOverwrite = !pView->IsInsertMode();
+        UndoActionStart( EDITUNDO_INSERT );
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
     {
@@ -574,6 +575,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
             pView->SetInsertMode( !bWasCursorOverwrite );
         }
+        UndoActionEnd( EDITUNDO_INSERT );
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
     {
