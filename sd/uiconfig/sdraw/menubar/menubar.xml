@@ -225,7 +225,7 @@
             </menu:menu>
 
             <menu:menuseparator/>
-            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
             <menu:menuseparator/>
 
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings" menu:helpid="10958" menu:label="" />
