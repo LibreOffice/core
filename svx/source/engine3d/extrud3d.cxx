@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:32:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,13 +250,13 @@ PolyPolygon3D E3dExtrudeObj::GetBackSide(const PolyPolygon3D& rFrontSide)
 |*
 \************************************************************************/
 
-void E3dExtrudeObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+::basegfx::B3DPolyPolygon E3dExtrudeObj::Get3DLineGeometry() const
 {
-    // #78972# add extrude line polys
-    rLinePolyPolygon.Insert(maLinePolyPolygon);
+    ::basegfx::B3DPolyPolygon aRetval;
 
-    // don't call parent
-    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    aRetval.append(maLinePolyPolygon.getB3DPolyPolygon());
+
+    return aRetval;
 }
 
 void E3dExtrudeObj::CreateGeometry()
@@ -384,20 +384,19 @@ UINT16 E3dExtrudeObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-void E3dExtrudeObj::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf,
-    E3dDragDetail eDetail)
-{
-    if ( eDetail == E3DDETAIL_ALLLINES ||
-        (eDetail == E3DDETAIL_DEFAULT && GetDragDetail() == E3DDETAIL_ALLLINES) )
-    {
-        // Detailliert erzeugen
-    }
-    else
-    {
-        // call parent
-        E3dObject::CreateWireframe(rWirePoly, pTf, eDetail);
-    }
-}
+//BFS01void E3dExtrudeObj::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf, E3dDragDetail eDetail)
+//BFS01{
+//BFS01 if ( eDetail == E3DDETAIL_ALLLINES ||
+//BFS01     (eDetail == E3DDETAIL_DEFAULT && GetDragDetail() == E3DDETAIL_ALLLINES) )
+//BFS01 {
+//BFS01     // Detailliert erzeugen
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     // call parent
+//BFS01     E3dObject::CreateWireframe(rWirePoly, pTf, eDetail);
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -405,45 +404,45 @@ void E3dExtrudeObj::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf,
 |*
 \************************************************************************/
 
-void E3dExtrudeObj::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-    if(nVersion < 3800)
-    {
-        // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
-        ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
-    }
-
-    // call parent
-    E3dCompoundObject::WriteData(rOut);
-
-    E3dIOCompat aCompat(rOut, STREAM_WRITE, 1);
-    rOut << aExtrudePolygon;
-    rOut << fExtrudeScale;
-
-    rOut << (double)GetExtrudeDepth();
-
-    rOut << (double)GetPercentBackScale() / 100.0;
-
-    rOut << (double)GetPercentDiagonal() / 200.0;
-
-    rOut << GetSmoothNormals(); // #107245# (BOOL)bExtrudeSmoothed;
-    rOut << GetSmoothLids(); // #107245# (BOOL)bExtrudeSmoothFrontBack;
-    rOut << GetCharacterMode(); // #107245# (BOOL)bExtrudeCharacterMode;
-
-    // Ab Version 513a (5.2.99): Parameter fuer das
-    // Erzeugen der Vorder/Rueckwand
-    rOut << GetCloseFront(); // #107245# (BOOL)bExtrudeCloseFront;
-    rOut << GetCloseBack(); // #107245# (BOOL)bExtrudeCloseBack;
-
-    if(nVersion < 3800)
-    {
-        // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
-        ((E3dCompoundObject*)this)->ReCreateGeometry();
-    }
-#endif
-}
+//BFS01void E3dExtrudeObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
+//BFS01 }
+//BFS01
+//BFS01 // call parent
+//BFS01 E3dCompoundObject::WriteData(rOut);
+//BFS01
+//BFS01 E3dIOCompat aCompat(rOut, STREAM_WRITE, 1);
+//BFS01 rOut << aExtrudePolygon;
+//BFS01 rOut << fExtrudeScale;
+//BFS01
+//BFS01 rOut << (double)GetExtrudeDepth();
+//BFS01
+//BFS01 rOut << (double)GetPercentBackScale() / 100.0;
+//BFS01
+//BFS01 rOut << (double)GetPercentDiagonal() / 200.0;
+//BFS01
+//BFS01 rOut << GetSmoothNormals(); // #107245# (BOOL)bExtrudeSmoothed;
+//BFS01 rOut << GetSmoothLids(); // #107245# (BOOL)bExtrudeSmoothFrontBack;
+//BFS01 rOut << GetCharacterMode(); // #107245# (BOOL)bExtrudeCharacterMode;
+//BFS01
+//BFS01 // Ab Version 513a (5.2.99): Parameter fuer das
+//BFS01 // Erzeugen der Vorder/Rueckwand
+//BFS01 rOut << GetCloseFront(); // #107245# (BOOL)bExtrudeCloseFront;
+//BFS01 rOut << GetCloseBack(); // #107245# (BOOL)bExtrudeCloseBack;
+//BFS01
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry();
+//BFS01 }
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -451,230 +450,230 @@ void E3dExtrudeObj::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    // call parent
-    E3dCompoundObject::ReadData(rHead, rIn);
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    BOOL bAllDone(FALSE);
-
-    if(AreBytesLeft())
-    {
-        E3dIOCompat aIoCompat(rIn, STREAM_READ);
-        if(aIoCompat.GetVersion() >= 1)
-        {
-            BOOL bTmp;
-            double fTmp;
-
-            rIn >> aExtrudePolygon;
-            rIn >> fExtrudeScale;
-
-            rIn >> fTmp;
-            GetProperties().SetObjectItemDirect(Svx3DDepthItem(sal_uInt32(fTmp + 0.5)));
-
-            rIn >> fTmp;
-            GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(sal_uInt16(fTmp * 100.0)));
-
-            rIn >> fTmp;
-            GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
-
-            rIn >> bTmp; // #107245# bExtrudeSmoothed = bTmp;
-            GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(bTmp));
-
-            rIn >> bTmp; // #107245# bExtrudeSmoothFrontBack = bTmp;
-            GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(bTmp));
-
-            rIn >> bTmp; // #107245# bExtrudeCharacterMode = bTmp;
-            GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(bTmp));
-
-            bAllDone = TRUE;
-
-            if(aIoCompat.GetBytesLeft())
-            {
-                // Ab Version 513a (5.2.99): Parameter fuer das
-                // Erzeugen der Vorder/Rueckwand
-                BOOL bTmp;
-
-                rIn >> bTmp; // #107245# bExtrudeCloseFront = bTmp;
-                GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(bTmp));
-
-                rIn >> bTmp; // #107245# bExtrudeCloseBack = bTmp;
-                GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(bTmp));
-            }
-            else
-            {
-                // #107245# bExtrudeCloseFront = TRUE;
-                GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(sal_True));
-
-                // #107245# bExtrudeCloseBack = TRUE;
-                GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(sal_True));
-            }
-        }
-    }
-
-    if(!bAllDone)
-    {
-        // Geometrie aus geladenen PolyObj's rekonstruieren
-        SdrObjList* pSubList = GetSubList();
-        if(pSubList && pSubList->GetObjCount())
-        {
-            // Vorderseite und Rueckseite sind die ersten
-            // PolyObj's in der Liste, hole diese
-            E3dPolyObj* pFront = NULL;
-            E3dPolyObj* pBack = NULL;
-            E3dPolyObj* pOther = NULL;
-
-            UINT16 a;
-            for(a=0;a<pSubList->GetObjCount();a++)
-            {
-                E3dPolyObj* pCandidate = (E3dPolyObj*)pSubList->GetObj(a);
-                if(pCandidate->ISA(E3dPolyObj))
-                {
-                    // Die Nromalen der Vorder/Rueckseiten zeigen in Z-Richtung,
-                    // nutze dies aus
-                    const Vector3D& rNormal = pCandidate->GetNormal();
-                    if(fabs(rNormal.X()) < 0.0000001 && fabs(rNormal.Y()) < 0.0000001)
-                    {
-                        if(rNormal.Z() > 0.0)
-                        {
-                            // Vorderseite
-                            pFront = pCandidate;
-                        }
-                        else
-                        {
-                            // Rueckseite
-                            pBack = pCandidate;
-                        }
-                    }
-                    else
-                    {
-                        if(!pOther)
-                            pOther = pCandidate;
-                    }
-                }
-            }
-
-            // Extrude-Tiefe feststellen
-            if(pOther)
-            {
-                const PolyPolygon3D& rOtherPoly = pOther->GetPolyPolygon3D();
-                // Hintereinanderliegende Paare in der alten Version waren
-                // 0,1 und 3,2 (0,3 vorne)
-                double fVal = (rOtherPoly[0][1] - rOtherPoly[0][0]).GetLength();
-                GetProperties().SetObjectItemDirect(Svx3DDepthItem(sal_uInt32(fVal + 0.5)));
-            }
-            else
-            {
-                // Einen Default vorsehen, kann aber eigentlich nie geschehen
-                GetProperties().SetObjectItemDirect(Svx3DDepthItem(100));
-            }
-
-            // Polygon fuer Vorderseite holen
-            if(pFront)
-            {
-                aExtrudePolygon = pFront->GetPolyPolygon3D();
-            }
-            else
-            {
-                if(pBack)
-                {
-                    // Rueckseite benutzen und um -fExtrudeDepth in Z
-                    // verschieben
-                    aExtrudePolygon = pBack->GetPolyPolygon3D();
-                    Matrix4D aMat;
-                    aMat.Translate(Vector3D(0.0, 0.0, -(double)GetExtrudeDepth()));
-                    aExtrudePolygon.Transform(aMat);
-                }
-                else
-                {
-                    // Die Polygondaten koennen aus den Vorderkanten
-                    // der weiteren Polygone (Punkte 0,3) restauriert werden.
-                    // evtl. spaeter ergaenzen
-                    aExtrudePolygon.Clear();
-                }
-            }
-
-            // Bestimmen, ob die Teilpolygone von aExtrudePolygon
-            // geschlossen waren. Sie waren geschlossen, wenn ein
-            // entsprechendes PolyObj existiert
-            for(a=0;a<aExtrudePolygon.Count();a++)
-            {
-                Polygon3D &rPoly = aExtrudePolygon[a];
-                USHORT nCnt = rPoly.GetPointCount();
-
-                if(nCnt)
-                {
-                    Vector3D& rFirst = rPoly[0];
-                    Vector3D& rLast = rPoly[nCnt - 1];
-                    BOOL bClosePoly(FALSE);
-
-                    for(UINT16 b=0;b<pSubList->GetObjCount();b++)
-                    {
-                        E3dPolyObj* pCandidate = (E3dPolyObj*)pSubList->GetObj(b);
-                        if(pCandidate->ISA(E3dPolyObj)
-                            && pCandidate != pFront && pCandidate != pBack)
-                        {
-                            const PolyPolygon3D& rCandPoly = pCandidate->GetPolyPolygon3D();
-                            if(rCandPoly[0].GetPointCount() > 2)
-                            {
-                                if(rCandPoly[0][0] == rFirst && rCandPoly[0][3] == rLast)
-                                    bClosePoly = TRUE;
-                                if(rCandPoly[0][3] == rFirst && rCandPoly[0][0] == rLast)
-                                    bClosePoly = TRUE;
-                            }
-                        }
-                    }
-
-                    rPoly.SetClosed(bClosePoly);
-                }
-            }
-
-            // Setze die weiteren Parameter auf die defaults
-            fExtrudeScale = 1.0;
-
-            GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(100));
-            GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(10));
-
-            // #107245# bExtrudeSmoothed = TRUE;
-            GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(sal_True));
-
-            // #107245# bExtrudeSmoothFrontBack = FALSE;
-            GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(sal_False));
-
-            // #107245# bExtrudeCharacterMode = FALSE;
-            GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(sal_False));
-        }
-    }
-
-    // correct position of extrude polygon, in case it's not positioned
-    // at the Z==0 layer
-    if(aExtrudePolygon.Count() && aExtrudePolygon[0].GetPointCount())
-    {
-        const Vector3D& rFirstPoint = aExtrudePolygon[0][0];
-        if(rFirstPoint.Z() != 0.0)
-        {
-            // change transformation so that source poly lies in Z == 0,
-            // so it can be exported as 2D polygon
-            //
-            // ATTENTION: the translation has to be multiplied from LEFT
-            // SIDE since it was executed as the first translate for this
-            // 3D object during it's creation.
-            double fTransDepth(rFirstPoint.Z());
-            Matrix4D aTransMat;
-            aTransMat.TranslateZ(fTransDepth);
-            NbcSetTransform(GetTransform() * aTransMat); // #112587#
-
-            // correct polygon itself
-            aTransMat.Identity();
-            aTransMat.TranslateZ(-fTransDepth);
-            aExtrudePolygon.Transform(aTransMat);
-        }
-    }
-
-    // Geometrie neu erzeugen
-    ReCreateGeometry();
-}
+//BFS01void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 // call parent
+//BFS01 E3dCompoundObject::ReadData(rHead, rIn);
+//BFS01
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 BOOL bAllDone(FALSE);
+//BFS01
+//BFS01 if(AreBytesLeft())
+//BFS01 {
+//BFS01     E3dIOCompat aIoCompat(rIn, STREAM_READ);
+//BFS01     if(aIoCompat.GetVersion() >= 1)
+//BFS01     {
+//BFS01         BOOL bTmp;
+//BFS01         double fTmp;
+//BFS01
+//BFS01         rIn >> aExtrudePolygon;
+//BFS01         rIn >> fExtrudeScale;
+//BFS01
+//BFS01         rIn >> fTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DDepthItem(sal_uInt32(fTmp + 0.5)));
+//BFS01
+//BFS01         rIn >> fTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(sal_uInt16(fTmp * 100.0)));
+//BFS01
+//BFS01         rIn >> fTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
+//BFS01
+//BFS01         rIn >> bTmp; // #107245# bExtrudeSmoothed = bTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(bTmp));
+//BFS01
+//BFS01         rIn >> bTmp; // #107245# bExtrudeSmoothFrontBack = bTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(bTmp));
+//BFS01
+//BFS01         rIn >> bTmp; // #107245# bExtrudeCharacterMode = bTmp;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(bTmp));
+//BFS01
+//BFS01         bAllDone = TRUE;
+//BFS01
+//BFS01         if(aIoCompat.GetBytesLeft())
+//BFS01         {
+//BFS01             // Ab Version 513a (5.2.99): Parameter fuer das
+//BFS01             // Erzeugen der Vorder/Rueckwand
+//BFS01             BOOL bTmp;
+//BFS01
+//BFS01             rIn >> bTmp; // #107245# bExtrudeCloseFront = bTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(bTmp));
+//BFS01
+//BFS01             rIn >> bTmp; // #107245# bExtrudeCloseBack = bTmp;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(bTmp));
+//BFS01         }
+//BFS01         else
+//BFS01         {
+//BFS01             // #107245# bExtrudeCloseFront = TRUE;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(sal_True));
+//BFS01
+//BFS01             // #107245# bExtrudeCloseBack = TRUE;
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(sal_True));
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 if(!bAllDone)
+//BFS01 {
+//BFS01     // Geometrie aus geladenen PolyObj's rekonstruieren
+//BFS01     SdrObjList* pSubList = GetSubList();
+//BFS01     if(pSubList && pSubList->GetObjCount())
+//BFS01     {
+//BFS01         // Vorderseite und Rueckseite sind die ersten
+//BFS01         // PolyObj's in der Liste, hole diese
+//BFS01         E3dPolyObj* pFront = NULL;
+//BFS01         E3dPolyObj* pBack = NULL;
+//BFS01         E3dPolyObj* pOther = NULL;
+//BFS01
+//BFS01         UINT16 a;
+//BFS01         for(a=0;a<pSubList->GetObjCount();a++)
+//BFS01         {
+//BFS01             E3dPolyObj* pCandidate = (E3dPolyObj*)pSubList->GetObj(a);
+//BFS01             if(pCandidate->ISA(E3dPolyObj))
+//BFS01             {
+//BFS01                 // Die Nromalen der Vorder/Rueckseiten zeigen in Z-Richtung,
+//BFS01                 // nutze dies aus
+//BFS01                 const Vector3D& rNormal = pCandidate->GetNormal();
+//BFS01                 if(fabs(rNormal.X()) < 0.0000001 && fabs(rNormal.Y()) < 0.0000001)
+//BFS01                 {
+//BFS01                     if(rNormal.Z() > 0.0)
+//BFS01                     {
+//BFS01                         // Vorderseite
+//BFS01                         pFront = pCandidate;
+//BFS01                     }
+//BFS01                     else
+//BFS01                     {
+//BFS01                         // Rueckseite
+//BFS01                         pBack = pCandidate;
+//BFS01                     }
+//BFS01                 }
+//BFS01                 else
+//BFS01                 {
+//BFS01                     if(!pOther)
+//BFS01                         pOther = pCandidate;
+//BFS01                 }
+//BFS01             }
+//BFS01         }
+//BFS01
+//BFS01         // Extrude-Tiefe feststellen
+//BFS01         if(pOther)
+//BFS01         {
+//BFS01             const PolyPolygon3D& rOtherPoly = pOther->GetPolyPolygon3D();
+//BFS01             // Hintereinanderliegende Paare in der alten Version waren
+//BFS01             // 0,1 und 3,2 (0,3 vorne)
+//BFS01             double fVal = (rOtherPoly[0][1] - rOtherPoly[0][0]).GetLength();
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DDepthItem(sal_uInt32(fVal + 0.5)));
+//BFS01         }
+//BFS01         else
+//BFS01         {
+//BFS01             // Einen Default vorsehen, kann aber eigentlich nie geschehen
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DDepthItem(100));
+//BFS01         }
+//BFS01
+//BFS01         // Polygon fuer Vorderseite holen
+//BFS01         if(pFront)
+//BFS01         {
+//BFS01             aExtrudePolygon = pFront->GetPolyPolygon3D();
+//BFS01         }
+//BFS01         else
+//BFS01         {
+//BFS01             if(pBack)
+//BFS01             {
+//BFS01                 // Rueckseite benutzen und um -fExtrudeDepth in Z
+//BFS01                 // verschieben
+//BFS01                 aExtrudePolygon = pBack->GetPolyPolygon3D();
+//BFS01                 Matrix4D aMat;
+//BFS01                 aMat.Translate(Vector3D(0.0, 0.0, -(double)GetExtrudeDepth()));
+//BFS01                 aExtrudePolygon.Transform(aMat);
+//BFS01             }
+//BFS01             else
+//BFS01             {
+//BFS01                 // Die Polygondaten koennen aus den Vorderkanten
+//BFS01                 // der weiteren Polygone (Punkte 0,3) restauriert werden.
+//BFS01                 // evtl. spaeter ergaenzen
+//BFS01                 aExtrudePolygon.Clear();
+//BFS01             }
+//BFS01         }
+//BFS01
+//BFS01         // Bestimmen, ob die Teilpolygone von aExtrudePolygon
+//BFS01         // geschlossen waren. Sie waren geschlossen, wenn ein
+//BFS01         // entsprechendes PolyObj existiert
+//BFS01         for(a=0;a<aExtrudePolygon.Count();a++)
+//BFS01         {
+//BFS01             Polygon3D &rPoly = aExtrudePolygon[a];
+//BFS01             USHORT nCnt = rPoly.GetPointCount();
+//BFS01
+//BFS01             if(nCnt)
+//BFS01             {
+//BFS01                 Vector3D& rFirst = rPoly[0];
+//BFS01                 Vector3D& rLast = rPoly[nCnt - 1];
+//BFS01                 BOOL bClosePoly(FALSE);
+//BFS01
+//BFS01                 for(UINT16 b=0;b<pSubList->GetObjCount();b++)
+//BFS01                 {
+//BFS01                     E3dPolyObj* pCandidate = (E3dPolyObj*)pSubList->GetObj(b);
+//BFS01                     if(pCandidate->ISA(E3dPolyObj)
+//BFS01                         && pCandidate != pFront && pCandidate != pBack)
+//BFS01                     {
+//BFS01                         const PolyPolygon3D& rCandPoly = pCandidate->GetPolyPolygon3D();
+//BFS01                         if(rCandPoly[0].GetPointCount() > 2)
+//BFS01                         {
+//BFS01                             if(rCandPoly[0][0] == rFirst && rCandPoly[0][3] == rLast)
+//BFS01                                 bClosePoly = TRUE;
+//BFS01                             if(rCandPoly[0][3] == rFirst && rCandPoly[0][0] == rLast)
+//BFS01                                 bClosePoly = TRUE;
+//BFS01                         }
+//BFS01                     }
+//BFS01                 }
+//BFS01
+//BFS01                 rPoly.SetClosed(bClosePoly);
+//BFS01             }
+//BFS01         }
+//BFS01
+//BFS01         // Setze die weiteren Parameter auf die defaults
+//BFS01         fExtrudeScale = 1.0;
+//BFS01
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(100));
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(10));
+//BFS01
+//BFS01         // #107245# bExtrudeSmoothed = TRUE;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(sal_True));
+//BFS01
+//BFS01         // #107245# bExtrudeSmoothFrontBack = FALSE;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(sal_False));
+//BFS01
+//BFS01         // #107245# bExtrudeCharacterMode = FALSE;
+//BFS01         GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(sal_False));
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 // correct position of extrude polygon, in case it's not positioned
+//BFS01 // at the Z==0 layer
+//BFS01 if(aExtrudePolygon.Count() && aExtrudePolygon[0].GetPointCount())
+//BFS01 {
+//BFS01     const Vector3D& rFirstPoint = aExtrudePolygon[0][0];
+//BFS01     if(rFirstPoint.Z() != 0.0)
+//BFS01     {
+//BFS01         // change transformation so that source poly lies in Z == 0,
+//BFS01         // so it can be exported as 2D polygon
+//BFS01         //
+//BFS01         // ATTENTION: the translation has to be multiplied from LEFT
+//BFS01         // SIDE since it was executed as the first translate for this
+//BFS01         // 3D object during it's creation.
+//BFS01         double fTransDepth(rFirstPoint.Z());
+//BFS01         Matrix4D aTransMat;
+//BFS01         aTransMat.TranslateZ(fTransDepth);
+//BFS01         NbcSetTransform(GetTransform() * aTransMat); // #112587#
+//BFS01
+//BFS01         // correct polygon itself
+//BFS01         aTransMat.Identity();
+//BFS01         aTransMat.TranslateZ(-fTransDepth);
+//BFS01         aExtrudePolygon.Transform(aTransMat);
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 // Geometrie neu erzeugen
+//BFS01 ReCreateGeometry();
+//BFS01}
 
 /*************************************************************************
 |*
@@ -802,4 +801,4 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
     return pPathObj;
 }
 
-// EOF
+// eof
