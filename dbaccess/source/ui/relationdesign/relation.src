@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-23 11:24:21 $
+ *  last change: $Author: obo $ $Date: 2001-07-24 20:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,13 +611,13 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text [ ENGLISH ] = "When you delete this table all corresponding relations will be deleted as well. Continue?" ;
     Text[ english_us ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ portuguese ] = "Se eliminar esta tabela serão também eliminadas todas as relações correspondentes. Continuar?";
-    Text[ russian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ russian ] = "Óäàëåíèå ıòîé òàáëèöû ïîâëå÷åò çà ñîáîé óäàëåíèå âñåõ îòíîñÿùèõñÿ ê íåé ñâÿçåé. Ïğîäîëæèòü íåñìîòğÿ íà ıòî?";
     Text[ greek ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ dutch ] = "Als u deze tabel wist worden alle bijbehorende verbindingen eveneens gewist. Wilt u doorgaan?";
     Text[ french ] = "Supprimer cette table entraîne la suppression des relations associées. Continuer ?";
     Text[ spanish ] = "Si elimina esta tabla se eliminarán también todas las relaciones correspondientes. ¿Desea continuar?";
     Text[ finnish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ italian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ italian ] = "Eliminando questa tabella eliminerete anche tutte le relazioni corrispondenti. Volete procedere comunque?";
     Text[ danish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ swedish ] = "Om du raderar den här tabellen raderas även alla tillhörande relationer. Vill du fortsätta?";
     Text[ polish ] = "Wraz z tabel¹ usuniête zostan¹ wszystkie przynale¿ne relacje. Kontynuowaæ?";
@@ -630,6 +630,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ catalan ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
 };
+
 
 
 
