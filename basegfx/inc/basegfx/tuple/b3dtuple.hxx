@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:16:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,11 @@
 #include <basegfx/numeric/ftools.hxx>
 #endif
 
-
 namespace basegfx
 {
+    // predeclarations
+    class B3ITuple;
+
     /** Base class for all Points/Vectors with three double values
 
         This class provides all methods common to Point
@@ -129,6 +131,13 @@ namespace basegfx
             mfY( rTup.mfY ),
             mfZ( rTup.mfZ )
         {}
+
+        /** Create a copy of a 3D integer Tuple
+
+            @param rTup
+            The 3D Tuple which will be copied.
+        */
+        B3DTuple(const B3ITuple& rTup);
 
         ~B3DTuple()
         {}
@@ -450,6 +459,12 @@ namespace basegfx
         aNew /= t;
         return aNew;
     }
+
+    /** Round double to nearest integer for 3D tuple
+
+        @return the nearest integer for this tuple
+    */
+    B3ITuple fround(const B3DTuple& rTup);
 } // end of namespace basegfx
 
 #endif /* _BGFX_TUPLE_B3DTUPLE_HXX */
