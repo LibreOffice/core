@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XGridFieldDataSupplier.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 
     @deprecated
  */
-interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
+published interface XGridFieldDataSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** checks whether or not the content of the grid's columns can be retrieved in the requested format.
