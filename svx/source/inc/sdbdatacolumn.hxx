@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbdatacolumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,7 @@ namespace svxform
         sal_Bool supportsUpdate() const { return m_xColumnUpdate.is(); }
 
         DataColumn* operator ->() { return this; }
-        //  operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const { return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> m_xColumn; }
-        operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const{ return m_xColumn;; }
+        operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> () const{ return m_xColumn.get(); }
 
         // 'conversions'
         inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& getPropertySet() const
