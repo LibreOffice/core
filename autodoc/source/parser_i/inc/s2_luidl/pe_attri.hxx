@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_attri.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,16 +70,16 @@
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
+#include <ary/idl/i_property.hxx>
     // PARAMETERS
 #include <ary/idl/i_gate.hxx>
-#include <ary/idl/i_property.hxx>
 
 
 namespace ary
 {
      namespace idl
     {
-         class Service;
+         class Attribute;
     }
 }
 
@@ -90,6 +90,7 @@ namespace uidl
 
 
 class PE_Variable;
+class PE_Type;
 
 class PE_Attribute : public UnoIDL_PE,
                      public ParseEnvState
@@ -97,18 +98,9 @@ class PE_Attribute : public UnoIDL_PE,
   public:
     typedef ary::idl::Ce_id                     Ce_id;
     typedef ary::idl::Type_id                   Type_id;
-    typedef ary::idl::Property::Stereotypes     Stereotypes;
-
-    enum E_ParsedType
-    {
-        parse_attribute,
-        parse_property
-    };
-
 
                         PE_Attribute(
-                            Ce_id &             i_rCurOwner,
-                            E_ParsedType        i_eCeType );
+                            const Ce_id &       i_rCurOwner );
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
@@ -121,6 +113,9 @@ class PE_Attribute : public UnoIDL_PE,
     virtual void        ProcessToken(
                             const Token &       i_rToken );
 
+    virtual void        Process_Identifier(
+                            const TokIdentifier &
+                                                i_rToken );
     virtual void        Process_Stereotype(
                             const TokStereotype &
                                                 i_rToken );
@@ -129,20 +124,19 @@ class PE_Attribute : public UnoIDL_PE,
     virtual void        Process_Punctuation(
                             const TokPunctuation &
                                                 i_rToken );
+    virtual void        Process_Raises();
     virtual void        Process_Default();
 
-    void                PresetOptional()        { bIsOptional = true; }
-    void                PresetStereotypes(
-                            Stereotypes::E_Flags
-                                                i_eFlag )
-                                                { aStereotypes.Set_Flag(i_eFlag); }
   private:
     enum E_State
     {
         e_none,
         e_start,
-        expect_variable,
-        in_variable
+        in_variable,
+        expect_end,
+        in_raise_std,   /// before 'get', 'set', ';' or '}'
+        in_get,
+        in_set
     };
 
     virtual void        InitData();
@@ -152,16 +146,18 @@ class PE_Attribute : public UnoIDL_PE,
 
     // DATA
     E_State             eState;
-    Ce_id *             pCurOwner;
+    const Ce_id *       pCurOwner;
 
     Dyn<PE_Variable>    pPE_Variable;
+    Dyn<PE_Type>        pPE_Exception;
 
         // object-data
+    ary::idl::Attribute *
+                        pCurAttribute;
     Type_id             nCurParsedType;
     String              sCurParsedName;
-    bool                bIsOptional;
-    Stereotypes         aStereotypes;
-    E_ParsedType        eCeType;
+    bool                bReadOnly;
+    bool                bBound;
 };
 
 
