@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 13:12:54 $
+ *  last change: $Author: sj $ $Date: 2000-12-20 18:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3271,7 +3271,11 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                     }
                     // Handelt es sich um 3D?
                     if( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 )
-                        pRet = Import3DObject( pRet, aSet, aBoundRect, aObjData.bIsAutoText );
+                    {
+                        // #81981# not all objects are effected by 3d effects
+                        if ( !bGraphic )
+                            pRet = Import3DObject( pRet, aSet, aBoundRect, aObjData.bIsAutoText );
+                    }
                 }
                 if ( pRet )
                 {
