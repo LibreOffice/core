@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ using namespace cppu_threadpool;
 // The C-Interface
 //
 //-------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putRequest(
+extern "C"  void SAL_CALL uno_threadpool_putRequest(
     sal_Sequence *pThreadId, void *pThreadSpecificData,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ), sal_Bool bIsOneway )
     SAL_THROW_EXTERN_C()
@@ -444,7 +444,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putRequest(
 
 
 
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putReply(
+extern "C"  void SAL_CALL uno_threadpool_putReply(
     sal_Sequence *pThreadId, void *pThreadSpecificData )
     SAL_THROW_EXTERN_C()
 {
@@ -452,7 +452,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putReply(
 }
 
 
-extern "C" SAL_DLLEXPORT  struct uno_threadpool_Handle * SAL_CALL
+extern "C"  struct uno_threadpool_Handle * SAL_CALL
 uno_threadpool_createHandle( sal_Int64 nDisposeId )
     SAL_THROW_EXTERN_C()
 {
@@ -467,7 +467,7 @@ uno_threadpool_createHandle( sal_Int64 nDisposeId )
     return pHandle;
 }
 
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_enter(
+extern "C" void SAL_CALL uno_threadpool_enter(
     struct uno_threadpool_Handle *pHandle , void **ppThreadSpecificData )
     SAL_THROW_EXTERN_C()
 {
@@ -481,14 +481,14 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_enter(
 }
 
 
-extern "C" SAL_DLLEXPORT void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_disposeThreads( sal_Int64 nDisposeId )
     SAL_THROW_EXTERN_C()
 {
     ThreadPool::getInstance()->dispose( nDisposeId );
 }
 
-extern "C" SAL_DLLEXPORT void SAL_CALL
+extern "C" void SAL_CALL
 uno_threadpool_stopDisposeThreads( sal_Int64 nDisposeId )
     SAL_THROW_EXTERN_C()
 {

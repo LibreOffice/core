@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:25:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ static inline typelib_TypeDescriptionReference * __getTypeByName( rtl_uString * 
 extern "C"
 {
 //##################################################################################################
-SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
+typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     typelib_TypeClass eTypeClass )
     SAL_THROW_EXTERN_C()
 {
@@ -350,7 +350,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
+void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
     SAL_THROW_EXTERN_C()
@@ -372,7 +372,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL typelib_static_sequence_type_init(
+void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeDescriptionReference * pElementType )
     SAL_THROW_EXTERN_C()
@@ -408,7 +408,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_sequence_type_init(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
+void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
@@ -480,7 +480,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
+void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
@@ -533,7 +533,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL typelib_static_enum_type_init(
+void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     sal_Int32 nDefaultValue )
@@ -574,7 +574,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_enum_type_init(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL typelib_static_union_type_init(
+void SAL_CALL typelib_static_union_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pDiscriminantTypeRef,

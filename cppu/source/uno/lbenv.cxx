@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ static void writeLine( void * stream, const OUString & rLine, const sal_Char * p
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironment(
+extern "C" void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
     SAL_THROW( () )
 {
@@ -698,7 +698,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironment(
     writeLine( stream, "##############################################################################", pFilter );
 }
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironmentByName(
+extern "C" void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvTypeName, const sal_Char * pFilter )
     SAL_THROW( () )
 {
@@ -1013,7 +1013,7 @@ static void SAL_CALL anonymous_defenv_release( uno_Environment * pEnv )
 
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_createEnvironment(
+void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
     SAL_THROW_EXTERN_C()
 {
@@ -1027,7 +1027,7 @@ SAL_DLLEXPORT void SAL_CALL uno_createEnvironment(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_getEnvironment(
+void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
     SAL_THROW_EXTERN_C()
 {
@@ -1048,7 +1048,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getEnvironment(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_getRegisteredEnvironments(
+void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvTypeName )
     SAL_THROW_EXTERN_C()

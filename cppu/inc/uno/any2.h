@@ -2,9 +2,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ typedef struct _uno_Any
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_any_assign(
+void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -123,7 +123,7 @@ SAL_DLLEXPORT void SAL_CALL uno_any_assign(
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_any_assign(
+void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -137,7 +137,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_assign(
     @param pTypeDescr       type description of value; defaults (0) to void
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_any_construct(
+void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
@@ -150,7 +150,7 @@ SAL_DLLEXPORT void SAL_CALL uno_any_construct(
     @param pType            type of value; defaults (0) to void
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_any_construct(
+void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
@@ -163,7 +163,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_construct(
     @param pTypeDescr       type description of value; defaults (0) to void
     @param mapping          mapping to convert/ map interfaces
 */
-SAL_DLLEXPORT void SAL_CALL uno_any_constructAndConvert(
+void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping )
@@ -175,7 +175,7 @@ SAL_DLLEXPORT void SAL_CALL uno_any_constructAndConvert(
     @param pType            type of value; defaults (0) to void
     @param mapping          mapping to convert/ map interfaces
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_any_constructAndConvert(
+void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_Mapping * mapping )
@@ -186,7 +186,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_any_constructAndConvert(
     @param pValue           pointer to any
     @param release          function called each time an interface needs to be released. defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_any_destruct(
+void SAL_CALL uno_any_destruct(
     uno_Any * pValue, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 

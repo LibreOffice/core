@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadident.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ static inline void createLocalId( sal_Sequence **ppThreadId )
 }
 
 
-extern "C" SAL_DLLEXPORT void SAL_CALL
+extern "C" void SAL_CALL
 uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
     SAL_THROW_EXTERN_C()
 {
@@ -125,7 +125,7 @@ uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
 }
 
 
-extern "C" SAL_DLLEXPORT  void SAL_CALL uno_releaseIdFromCurrentThread()
+extern "C"   void SAL_CALL uno_releaseIdFromCurrentThread()
     SAL_THROW_EXTERN_C()
 {
     IdContainer *p = getIdContainer();
@@ -139,7 +139,7 @@ extern "C" SAL_DLLEXPORT  void SAL_CALL uno_releaseIdFromCurrentThread()
     }
 }
 
-extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
+extern "C"  sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
     SAL_THROW_EXTERN_C()
 {
     IdContainer *p = getIdContainer();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapping.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ typedef struct _uno_Mapping
                         in this language environment)
     @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
-SAL_DLLEXPORT void SAL_CALL uno_getMapping(
+void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping,
     uno_Environment * pFrom,
     uno_Environment * pTo,
@@ -158,7 +158,7 @@ typedef void (SAL_CALL * uno_getMappingFunc)(
     <br>
     @param pCallback    callback function
 */
-SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
+void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C();
 
@@ -166,7 +166,7 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
     <br>
     @param pCallback    callback function
 */
-SAL_DLLEXPORT void SAL_CALL uno_revokeMappingCallback(
+void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C();
 
@@ -187,7 +187,7 @@ typedef void (SAL_CALL * uno_freeMappingFunc)( uno_Mapping * pMapping );
     @param pTo          destination environment
     @param pAddPurpose  additional purpose string; defaults to 0
 */
-SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
+void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C();
@@ -197,7 +197,7 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
     <br>
     @param pMapping     mapping to be revoked
 */
-SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
+void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C();
 
@@ -211,7 +211,7 @@ SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
                         in this language environment)
     @param pAddPurpose  additional purpose of mapping (e.g., protocolling); defaults to 0 (none)
 */
-SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
+void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping,
     rtl_uString * pFrom,
     rtl_uString * pTo,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ static Mapping getMediateMapping(
 extern "C"
 {
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_getMapping(
+void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -583,7 +583,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getMapping(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
+void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
     rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -613,7 +613,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
+void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
     SAL_THROW_EXTERN_C()
@@ -651,7 +651,7 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
+void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C()
 {
@@ -676,7 +676,7 @@ SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
 }
 
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
+void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -686,7 +686,7 @@ SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
     rData.aCallbacks.insert( pCallback );
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_revokeMappingCallback(
+void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence2.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ typedef sal_Sequence uno_Sequence;
     @param pTypeDescr   type description of the <B>sequence</B> and <b>not</b> of an element
     @param release      function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_sequence_assign(
+void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -95,7 +95,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_assign(
     @param pType        type of the <B>sequence</B> and <b>not</b> of an element
     @param release      function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_assign(
+void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pType,
@@ -110,7 +110,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_assign(
     @param len                number of elements
     @param acquire            function called each time an interface needs to be acquired; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_sequence_construct(
+void SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
@@ -124,7 +124,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_construct(
     @param len                number of elements
     @param acquire            function called each time an interface needs to be acquired; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_construct(
+void SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
@@ -139,7 +139,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_construct(
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_sequence_reference2One(
+void SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire,
@@ -153,7 +153,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_reference2One(
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_reference2One(
+void SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire,
@@ -169,7 +169,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_reference2One(
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_sequence_realloc(
+void SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     sal_Int32 nSize,
@@ -185,7 +185,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_realloc(
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
     @param release          function called each time an interface needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_realloc(
+void SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     sal_Int32 nSize,

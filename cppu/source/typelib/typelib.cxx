@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:25:35 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ static TypeDescriptor_Init_Impl aInit;
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_registerCallback(
+extern "C" void SAL_CALL typelib_typedescription_registerCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -435,7 +435,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_registerCallback(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_revokeCallback(
+extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C()
 {
@@ -688,7 +688,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_new(
+extern "C" void SAL_CALL typelib_typedescription_new(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass,
     rtl_uString * pTypeName,
@@ -768,7 +768,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_new(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newUnion(
+extern "C" void SAL_CALL typelib_typedescription_newUnion(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     typelib_TypeDescriptionReference * pDiscriminantTypeRef,
@@ -821,7 +821,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newUnion(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newEnum(
+extern "C" void SAL_CALL typelib_typedescription_newEnum(
     typelib_TypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_Int32 nDefaultValue,
@@ -850,7 +850,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newEnum(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterface(
+extern "C" void SAL_CALL typelib_typedescription_newInterface(
     typelib_InterfaceTypeDescription ** ppRet,
     rtl_uString * pTypeName,
     sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
@@ -920,7 +920,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterface(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterfaceMethod(
+extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     typelib_InterfaceMethodTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     sal_Bool bOneWay,
@@ -991,7 +991,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterfaceMetho
 
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterfaceAttribute(
+extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
     sal_Int32 nAbsolutePosition,
     rtl_uString * pTypeName,
@@ -1028,7 +1028,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_newInterfaceAttri
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_acquire(
+extern "C" void SAL_CALL typelib_typedescription_acquire(
     typelib_TypeDescription * pTypeDescription )
     SAL_THROW_EXTERN_C()
 {
@@ -1159,7 +1159,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_release(
+extern "C" void SAL_CALL typelib_typedescription_release(
     typelib_TypeDescription * pTD )
     SAL_THROW_EXTERN_C()
 {
@@ -1233,7 +1233,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_release(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_register(
+extern "C" void SAL_CALL typelib_typedescription_register(
     typelib_TypeDescription ** ppNewDescription )
     SAL_THROW_EXTERN_C()
 {
@@ -1373,7 +1373,7 @@ static inline sal_Bool type_equals(
              p1->pTypeName->length == p2->pTypeName->length &&
              rtl_ustr_compare( p1->pTypeName->buffer, p2->pTypeName->buffer ) == 0));
 }
-extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_equals(
+extern "C" sal_Bool SAL_CALL typelib_typedescription_equals(
     const typelib_TypeDescription * p1, const typelib_TypeDescription * p2 )
     SAL_THROW_EXTERN_C()
 {
@@ -1532,7 +1532,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_getByName(
+extern "C" void SAL_CALL typelib_typedescription_getByName(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
     SAL_THROW_EXTERN_C()
 {
@@ -1666,7 +1666,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_getByName(
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
+extern "C" void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,
     const sal_Char * pTypeName )
@@ -1676,7 +1676,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_newByAsc
     typelib_typedescriptionreference_new( ppTDR, eTypeClass, aTypeName.pData );
 }
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_new(
+extern "C" void SAL_CALL typelib_typedescriptionreference_new(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass, rtl_uString * pTypeName )
     SAL_THROW_EXTERN_C()
@@ -1772,7 +1772,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_new(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_acquire(
+extern "C" void SAL_CALL typelib_typedescriptionreference_acquire(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
 {
@@ -1780,7 +1780,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_acquire(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_release(
+extern "C" void SAL_CALL typelib_typedescriptionreference_release(
     typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
 {
@@ -1815,7 +1815,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_release(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_getDescription(
+extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
     typelib_TypeDescription ** ppRet, typelib_TypeDescriptionReference * pRef )
     SAL_THROW_EXTERN_C()
 {
@@ -1897,7 +1897,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
 }
 
 //------------------------------------------------------------------------
-extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
+extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_equals(
     const typelib_TypeDescriptionReference * p1,
     const typelib_TypeDescriptionReference * p2 )
     SAL_THROW_EXTERN_C()
@@ -1909,7 +1909,7 @@ extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_equa
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_assign(
+extern "C" void SAL_CALL typelib_typedescriptionreference_assign(
     typelib_TypeDescriptionReference ** ppDest,
     typelib_TypeDescriptionReference * pSource )
     SAL_THROW_EXTERN_C()
@@ -1923,7 +1923,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_assign(
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
+extern "C" void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( nNewSize >= 0, "### illegal cache size given!" );
@@ -1960,7 +1960,7 @@ static sal_Bool s_aAssignableFromTab[11][11] =
 };
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
+extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
     typelib_TypeDescriptionReference * pAssignable,
     typelib_TypeDescriptionReference * pFrom )
     SAL_THROW_EXTERN_C()
@@ -2024,7 +2024,7 @@ extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescriptionreference_isAs
     return sal_False;
 }
 //##################################################################################################
-extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
+extern "C" sal_Bool SAL_CALL typelib_typedescription_isAssignableFrom(
     typelib_TypeDescription * pAssignable,
     typelib_TypeDescription * pFrom )
     SAL_THROW_EXTERN_C()
@@ -2034,7 +2034,7 @@ extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_isAssignableF
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_complete(
+extern "C" sal_Bool SAL_CALL typelib_typedescription_complete(
     typelib_TypeDescription ** ppTypeDescr )
     SAL_THROW_EXTERN_C()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,7 +539,7 @@ IdContainer * getIdContainer() SAL_THROW( () )
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_getCurrentContext(
+extern "C" void SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C()

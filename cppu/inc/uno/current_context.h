@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current_context.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ extern "C"
     @param pEnvTypeName type name of returned interface's environment
     @param pEnvContext context of returned interface's environment (commonly 0)
 */
-SAL_DLLEXPORT void SAL_CALL uno_getCurrentContext(
+void SAL_CALL uno_getCurrentContext(
     void ** ppCurrentContext,
     rtl_uString * pEnvTypeName, void * pEnvContext )
     SAL_THROW_EXTERN_C();

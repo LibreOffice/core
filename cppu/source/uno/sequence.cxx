@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:27:08 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ static inline void __reallocSequence(
 extern "C"
 {
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_construct(
+void SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
@@ -634,7 +634,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_construct(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_sequence_construct(
+void SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
@@ -671,7 +671,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_construct(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_realloc(
+void SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType, sal_Int32 nSize,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
@@ -690,7 +690,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_realloc(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_sequence_realloc(
+void SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr, sal_Int32 nSize,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
@@ -706,7 +706,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_realloc(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_reference2One(
+void SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -745,7 +745,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_sequence_reference2One(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_sequence_reference2One(
+void SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -779,7 +779,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_reference2One(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_sequence_assign(
+void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescription * pTypeDescr,
@@ -794,7 +794,7 @@ SAL_DLLEXPORT void SAL_CALL uno_sequence_assign(
     }
 }
 //##################################################################################################
-SAL_DLLEXPORT void SAL_CALL uno_type_sequence_assign(
+void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pType,

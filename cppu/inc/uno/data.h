@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ typedef void (SAL_CALL * uno_ReleaseFunc)(
     @param release          function to release queried interfaces; defaults (0) to uno
     @return true if values are equal
 */
-SAL_DLLEXPORT sal_Bool SAL_CALL uno_equalData(
+sal_Bool SAL_CALL uno_equalData(
     void * pVal1, typelib_TypeDescription * pVal1TypeDescr,
     void * pVal2, typelib_TypeDescription * pVal2TypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -123,7 +123,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_equalData(
     @param release          function to release queried interfaces; defaults (0) to uno
     @return true if values are equal
 */
-SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_equalData(
+sal_Bool SAL_CALL uno_type_equalData(
     void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -137,7 +137,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_equalData(
     @param pTypeDescr       type description of source
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_copyData(
+void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
@@ -149,7 +149,7 @@ SAL_DLLEXPORT void SAL_CALL uno_copyData(
     @param pType            type of source
     @param acquire          function called each time an interface needs to be acquired; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_copyData(
+void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C();
@@ -163,7 +163,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_copyData(
     @param pTypeDescr       type description of source
     @param mapping          mapping to convert/ map interfaces
 */
-SAL_DLLEXPORT void SAL_CALL uno_copyAndConvertData(
+void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr, uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
@@ -176,7 +176,7 @@ SAL_DLLEXPORT void SAL_CALL uno_copyAndConvertData(
     @param pType            type of source
     @param mapping          mapping to convert/ map interfaces
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_copyAndConvertData(
+void SAL_CALL uno_type_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType, uno_Mapping * mapping )
     SAL_THROW_EXTERN_C();
@@ -187,7 +187,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_copyAndConvertData(
     @param pTypeDescr       type description of value
     @param release          function called each time an interface pointer needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_destructData(
+void SAL_CALL uno_destructData(
     void * pValue, typelib_TypeDescription * pTypeDescr, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 /** Destructs a given value; does <b>not</b> free its memory!
@@ -196,7 +196,7 @@ SAL_DLLEXPORT void SAL_CALL uno_destructData(
     @param pType            type of value
     @param release          function called each time an interface pointer needs to be released; defaults (0) to uno
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_destructData(
+void SAL_CALL uno_type_destructData(
     void * pValue, typelib_TypeDescriptionReference * pType, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C();
 
@@ -206,7 +206,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_destructData(
     @param pMem             pointer to memory of value to be constructed
     @param pTypeDescr       type description of value to be constructed
 */
-SAL_DLLEXPORT void SAL_CALL uno_constructData(
+void SAL_CALL uno_constructData(
     void * pMem, typelib_TypeDescription * pTypeDescr )
     SAL_THROW_EXTERN_C();
 /** Default constructs a value. All simple types are set to 0, enums are set to their default
@@ -215,7 +215,7 @@ SAL_DLLEXPORT void SAL_CALL uno_constructData(
     @param pMem             pointer to memory of value to be constructed
     @param pType            type of value to be constructed
 */
-SAL_DLLEXPORT void SAL_CALL uno_type_constructData(
+void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
@@ -232,7 +232,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_constructData(
     @param release          function called each time an interface needs to be released; defaults (0) to uno
     @return true if destination has been successfully assigned
 */
-SAL_DLLEXPORT sal_Bool SAL_CALL uno_assignData(
+sal_Bool SAL_CALL uno_assignData(
     void * pDest, typelib_TypeDescription * pDestTypeDescr,
     void * pSource, typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
@@ -250,7 +250,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_assignData(
     @param release          function called each time an interface needs to be released; defaults (0) to uno
     @return true if destination has been successfully assigned
 */
-SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_assignData(
+sal_Bool SAL_CALL uno_type_assignData(
     void * pDest, typelib_TypeDescriptionReference * pDestType,
     void * pSource, typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )

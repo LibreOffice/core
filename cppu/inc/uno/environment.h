@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:56 $
+ *  last change: $Author: dbo $ $Date: 2001-03-28 10:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
     @param pEnvTypeName type name of environment
     @param pContext     some context pointer (e.g., to distinguish java vm; set 0 if not needed)
 */
-SAL_DLLEXPORT void SAL_CALL uno_getEnvironment(
+void SAL_CALL uno_getEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
     SAL_THROW_EXTERN_C();
 
@@ -311,7 +311,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getEnvironment(
     @param memAlloc     function for allocating memory that is passed back
     @param pEnvTypeName type name of environments; 0 defaults to all
 */
-SAL_DLLEXPORT void SAL_CALL uno_getRegisteredEnvironments(
+void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     rtl_uString * pEnvTypeName )
     SAL_THROW_EXTERN_C();
@@ -323,7 +323,7 @@ SAL_DLLEXPORT void SAL_CALL uno_getRegisteredEnvironments(
     @param pEnvTypeName name of environment
     @param pContext     context pointer (e.g., to distinguish java vm); set 0 if not needed
 */
-SAL_DLLEXPORT void SAL_CALL uno_createEnvironment(
+void SAL_CALL uno_createEnvironment(
     uno_Environment ** ppEnv, rtl_uString * pEnvTypeName, void * pContext )
     SAL_THROW_EXTERN_C();
 
@@ -333,7 +333,7 @@ SAL_DLLEXPORT void SAL_CALL uno_createEnvironment(
     @param pEnv         environment to be dumped
     @param pFilter      if not null, filters output
 */
-SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironment(
+void SAL_CALL uno_dumpEnvironment(
     void * stream, uno_Environment * pEnv, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C();
 /** Dumps out environment information, i.e. registered interfaces.
@@ -342,7 +342,7 @@ SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironment(
     @param pEnvTypeName type name of environment to be dumped
     @param pFilter      if not null, filters output
 */
-SAL_DLLEXPORT void SAL_CALL uno_dumpEnvironmentByName(
+void SAL_CALL uno_dumpEnvironmentByName(
     void * stream, rtl_uString * pEnvTypeName, const sal_Char * pFilter )
     SAL_THROW_EXTERN_C();
 
