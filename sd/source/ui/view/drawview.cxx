@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-07 09:01:30 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 14:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1190,6 +1190,7 @@ void SdDrawView::SetAnimationMode(BOOL bStart)
             MapMode aMapMode = pWindow->GetMapMode();
             pSlideShow->SetAnimationMode(ANIMATIONMODE_VIEW, (SdShowWindow*) pWindow);  // CAST IST FALSCH!
             pSlideShow->StartShow();
+            pSlideShow->Resize( pWindow->GetOutputSizePixel() );
             pWindow->SetMapMode(aMapMode);
         }
         else if (pViewSh)
