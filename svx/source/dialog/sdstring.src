@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 17:02:09 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text [ spanish ] = "El gradiente de color ha sido modificado sin guardar.\nPuede modificarlo\no aсadir uno nuevo." ;
     Text [ english_us ] = "The gradient was modified without saving. \nModify the selected gradient or add a new gradient." ;
     Text[ chinese_simplified ] = "’вЄц≤ …ЂЌЉ∞Є“—Њ≠±їЄьЄƒ£ђµЂ «їє√ї”–±ї±£іж°£\nƒъƒ№єїЄьЄƒ—°÷–µƒ≤ …ЂЌЉ∞Є\nїт’я–¬‘ц“їЄц–¬µƒ≤ …ЂЌЉ∞Є°£";
-    Text[ russian ] = "√радиентна€ была изменена. но не сохранена. \n¬ы можете изменить выбранную градиентную \nили добавить новую градиентную.";
+    Text[ russian ] = "√радиентна€ была изменена. но не сохранена. \n¬ы можете изменить выбранную \nили добавить новую градиентную.";
     Text[ polish ] = "Gradient zosta≥ zmieniony i nie zapisany. \nMoњesz zmieniж zaznaczony gradient \nlub dodaж nowy gradient.";
     Text[ japanese ] = "Єё„√ё∞ЉЃЁВ™ХѕНXВ≥ВкВƒХџСґВ≥ВкВƒВҐВ№ВєВсБB\nСIСрВµВљЄё„√ё∞ЉЃЁВћХѕНXВ№ВљВЌ\nРVВµВҐЄё„√ё∞ЉЃЁВћТ«ЙЅВ™В≈ВЂВ№ВЈБB";
     Text[ chinese_traditional ] = "≥o≠”±m¶вєѕЃ„§wЄg≈№Іу°M¶эђO©|•Љјx¶s°C\n±zѓа∞ч≈№Іуњп®ъ™Ї±m¶вєѕЃ„\n©ќ™ћЉW•[§@≠”Јs™Ї±m¶вєѕЃ„°C";
@@ -363,7 +363,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text [ spanish ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no aсadir uno nuevo." ;
     Text [ english_us ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
     Text[ chinese_simplified ] = "’вЄцќїЌЉ—щ љ“—Њ≠±їЄьЄƒ£ђµЂ «√ї”–±ї±£іж°£ \nƒъƒ№єїЄьЄƒ—°÷–µƒќїЌЉ\nїт’я–¬‘ц“їЄц–¬µƒќїЌЉ°£";
-    Text[ russian ] = "Bitmap был изменен, но не сохранен. \n¬ы можете изменить выбранный bitmap \nили добавить новый bitmap.";
+    Text[ russian ] = "Bitmap был изменен, но не сохранен. \n¬ы можете изменить выбранный \nили добавить новый bitmap.";
     Text[ polish ] = "Mapa bitowa zosta≥a zmieniona i nie zapisana. \nMoњesz zmieniж zaznaczonє mapк bitowє \nlub dodaж nowє mapк bitowє.";
     Text[ japanese ] = "ЋёѓƒѕѓћяВ™ХѕНXВ≥ВкВƒХџСґВ≥ВкВƒВҐВ№ВєВсБB\nСIСрВµВљЋёѓƒѕѓћяВћХѕНXВ№ВљВЌ\nРVВµВҐЋёѓƒѕѓћяВћТ«ЙЅВ™В≈ВЂВ№ВЈБB";
     Text[ chinese_traditional ] = "≥o≠”¬I∞}єѕ™ЇЉЋ¶°§wЄg≈№Іу°M¶эђO©|•Љјx¶s°C \n±zѓа∞ч≈№Іуњп®ъ™Ї¬I∞}єѕ\n©ќ™ћЉW•[§@≠”Јs™Ї¬I∞}єѕ°C";
@@ -859,7 +859,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text [ spanish ] = "El color ha sido modificado sin guardar.\nPuede modificar el color seleccionado\no aсadir uno nuevo." ;
     Text [ english_us ] = "The color was modified without saving.\nModify the selected color or add a new color." ;
     Text[ chinese_simplified ] = "’вЄц—’…Ђ“—Њ≠±їЄьЄƒ£ђµЂ «√ї”–±ї±£іж°£ \nƒъƒ№єїЄьЄƒ—°÷–µƒ—’…Ђ\nїт’я–¬‘ц“їЄц–¬µƒ—’…Ђ°£";
-    Text[ russian ] = "÷вет был изменен, но не сохранен. \n¬ы можете изменить выбранный цвет \nили добавить новый цвет.";
+    Text[ russian ] = "÷вет был изменен, но не сохранен. \n¬ы можете изменить выбранный \nили добавить новый цвет.";
     Text[ polish ] = "Kolor zosta≥ zmieniony i nie zapisany. \nMoњesz zmieniж zaznaczony kolor \nlub dodaж nowy kolor.";
     Text[ japanese ] = "РFВ™ХѕНXВ≥ВкВƒХџСґВ≥ВкВƒВҐВ№ВєВсБB\nСIСрВµВљРFВћХѕНXВ№ВљВЌ\nРVВµВҐРFВћТ«ЙЅВ™В≈ВЂВ№ВЈБB";
     Text[ chinese_traditional ] = "≥o≠”√C¶в§wЄg≈№Іу°M¶эђO©|•Љјx¶s°C \n±zѓа∞ч≈№Іуњп®ъ™Ї√C¶в\n©ќ™ћЉW•[§@≠”Јs™Ї√C¶в°C";
@@ -967,7 +967,7 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
     Text[ chinese_simplified ] = "’вЄц±нЄс“—Њ≠±їЄьЄƒ£ђµЂ «√ї”–±ї±£іж°£ \nƒъ“™±£іж’вЄц±нЄс¬р£њ";
     Text[ russian ] = "“аблица была изменена, но не сохранена. \n—охранить таблицу сейчас?";
     Text[ polish ] = "Tabela zosta≥a zmieniona i nie jest zapisana. \nCzy tabela ma byж zapisana?";
-    Text[ japanese ] = "Х\\В™ХѕНXВ≥ВкХџСґВ≥ВкВƒВҐВ№ВєВсБB\nХ\\ВрХџСґВµВ№ВЈВ©?";
+    Text[ japanese ] = "Х\\ВћХѕНXВ™В†ВиХџСґВ≥ВкВƒВҐВ№ВєВсБB\nХ\\ВрХџСґВµВ№ВЈВ©БB";
     Text[ chinese_traditional ] = "≥o≠”™нЃж§wЄg≈№Іу°M¶эђO©|•Љјx¶s°C \n±z≠nјx¶s≥o≠”™нЃж°H";
     Text[ arabic ] = " г  џнн— «бћѕжб жбг н г ЌЁўе »Џѕ.\nеб  —нѕ ЌЁў «бћѕжб «б¬дњ";
     Text[ greek ] = "« ляуфб фспрпрпйёизке кбй ден брпизкеэфзке.\n»Ёлефе нб фзн брпизкеэуефе фюсб;";
@@ -1129,7 +1129,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text[ chinese_simplified ] = "’вЄцѕяґЋ“—Њ≠±їЄьЄƒ£ђµЂ «√ї”–±ї±£іж°£\nƒъ“™ѕ÷‘Џ±£іж’вЄцѕяґЋ¬р£њ";
     Text[ russian ] = " онец линии был изменен, но не сохранен. \n¬ы хотите сейчас сохранить конец линии?";
     Text[ polish ] = "Koсcуwki linii zosta≥y zmienione i nie zapisane. \nCzy chcesz zmieniж teraz koсcуwki linii?";
-    Text[ japanese ] = "РьТ[В™ХѕНXВ≥ВкВƒХџСґВ≥ВкВƒВҐВ№ВєВсБB\nВ±ВћРьТ[ВрН°ХџСґВµВ№ВЈВ©?";
+    Text[ japanese ] = "РьТ[В™ХѕНXВ≥ВкВƒХџСґВ≥ВкВƒВҐВ№ВєВсБB\nВ±ВћРьТ[ВрН°ВЈВЃХџСґВµВ№ВЈВ©БB";
     Text[ chinese_traditional ] = "≥o≠”љuЇЁ§wЄg≈№Іу°M¶эђO©|•Љјx¶s°C\n±z≠n≤{¶bјx¶s≥o≠”љuЇЁ°H";
     Text[ arabic ] = " г  џнн— де«н… «бќЎ жбг н г ЌЁўе« »Џѕ.\nеб  —нѕ ЌЁў де«н… «бќЎ «б¬дњ";
     Text[ greek ] = "‘п фЁлпт гсбммёт фспрпрпйёизке кбй ден брпизкеэфзке.\n»Ёлефе нб фп брпизкеэуефе фюсб;";
