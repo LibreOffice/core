@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.134 $
+#   $Revision: 1.135 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:00:20 $
+#   last change: $Author: mh $ $Date: 2003-06-17 10:40:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1024,6 +1024,10 @@ SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
 .IF "$(OFFICEUPD)"!=""
 SCPDEFS+=-DOFFICEUPD=$(OFFICEUPD)
 .ENDIF			# "$(OFFICEUPD)"!=""
+
+.IF "$(BUILD_SPECIAL)"!=""
+SCPDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
+.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 .IF "$(L10N_framework)"!=""
 SCPDEFS+=-DISO_CODE=$(L10N_framework)
