@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:26:35 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkList();
-    SwDrawFrmFmt *pFmt;
+    SwDrawFrmFmt *pFmt(0);
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
     BOOL bNoGroup = ( 0 == pObj->GetUpGroup() );
     if( bNoGroup )
@@ -783,11 +783,11 @@ void SwDoc::DrawNotifyUndoHdl()
     pDrawModel->SetNotifyUndoActionHdl( Link() );
 }
 
-/*************************************************************************/
-/*
-/* Am Outliner Link auf Methode fuer Felddarstellung in Editobjekten setzen
-/*
-/*************************************************************************/
+/*************************************************************************
+*
+* Am Outliner Link auf Methode fuer Felddarstellung in Editobjekten setzen
+*
+*************************************************************************/
 
 void SwDoc::SetCalcFieldValueHdl(Outliner* pOutliner)
 {
