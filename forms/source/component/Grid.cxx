@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:17 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
+#endif
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -517,7 +520,7 @@ void OGridControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_AGGREGATION_PROPERTY_HELPER(33, m_xAggregateSet)
+    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(33, m_xAggregateSet)
         DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
@@ -551,7 +554,7 @@ void OGridControlModel::fillProperties(
         DECL_PROP3(ALWAYSSHOWCURSOR,    sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP3(DISPLAYSYNCHRON,     sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP2(HELPURL,             ::rtl::OUString,    BOUND, MAYBEDEFAULT);
-    END_AGGREGATION_PROPERTY_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
