@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 13:08:47 $
+ *  last change: $Author: tl $ $Date: 2002-11-12 14:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@
 #endif
 #ifndef _SWGLOBDOCSH_HXX
 #include <globdoc.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
@@ -2573,7 +2576,14 @@ void SAL_CALL SwXTextDocument::render(
         if (xModel != pDocShell->GetModel())    // 'export selection' ?
             aOptions.bPrintSelection = TRUE;
 
+        SwViewOption aViewOpt( *pVwSh->GetViewOptions() );
+        aViewOpt.SetPDFExport( TRUE );
+        pVwSh->ApplyViewOptions( aViewOpt );
+
         pVwSh->Prt( aOptions, aProgress, pOut );
+
+        aViewOpt.SetPDFExport( FALSE );
+        pVwSh->ApplyViewOptions( aViewOpt );
     }
 }
 /* -----------------------------20.06.00 09:54--------------------------------
