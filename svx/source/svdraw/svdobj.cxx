@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-04 12:55:42 $
+ *  last change: $Author: aw $ $Date: 2001-07-10 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,10 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
     {
         double fHalfLineWidth((double)mrLineAttr.GetLineWidth() / 2.0);
         Vector3D aEdge = *pRight - *pLeft;
-        Vector3D aPerpend = aEdge.GetPerpendicular2D();
+        // #78972#
+        Vector3D aPerpend = aEdge;
+        aPerpend.Normalize();
+        aPerpend = aPerpend.GetPerpendicular2D();
         XLineJoint eJoint = mrLineAttr.GetLineJoint();
 
         // joints need eventually not be done
@@ -607,12 +610,16 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
                 if(pPrev)
                 {
                     aPerpendLeft = *pLeft - *pPrev;
+                    // #78972#
+                    aPerpendLeft.Normalize();
                     aPerpendLeft = aPerpendLeft.GetPerpendicular2D();
                 }
 
                 if(pNext)
                 {
                     aPerpendRight = *pNext - *pRight;
+                    // #78972#
+                    aPerpendRight.Normalize();
                     aPerpendRight = aPerpendRight.GetPerpendicular2D();
                 }
 
@@ -638,6 +645,8 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
                 if(pNext)
                 {
                     aPerpendRight = *pNext - *pRight;
+                    // #78972#
+                    aPerpendRight.Normalize();
                     aPerpendRight = aPerpendRight.GetPerpendicular2D();
                     double fAngle = atan2(aPerpend.Y(), aPerpend.X());
                     double fRightAngle = atan2(aPerpendRight.Y(), aPerpendRight.X());
@@ -724,7 +733,8 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
                                     double fDegree = fRightAngle - (double)a * fAngleDiff;
                                     Vector3D aNewPos(
                                         pRight->X() - (cos(fDegree) * fHalfLineWidth),
-                                        pRight->Y() - (sin(fDegree) * fHalfLineWidth));
+                                        pRight->Y() - (sin(fDegree) * fHalfLineWidth),
+                                        pRight->Z()); // #78972#
                                     aNewPoly[4 + a] = aNewPos;
                                 }
                             }
@@ -739,7 +749,8 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
                                     double fDegree = fAngle - (double)a * fAngleDiff;
                                     Vector3D aNewPos(
                                         pRight->X() + (cos(fDegree) * fHalfLineWidth),
-                                        pRight->Y() + (sin(fDegree) * fHalfLineWidth));
+                                        pRight->Y() + (sin(fDegree) * fHalfLineWidth),
+                                        pRight->Z()); // #78972#
                                     aNewPoly[2 + a] = aNewPos;
                                 }
                             }
@@ -795,7 +806,10 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
                 if(pPrev)
                 {
                     Vector3D aLeftVec(*pLeft - *pPrev);
-                    Vector3D aPerpendLeft = aLeftVec.GetPerpendicular2D();
+                    // #78972#
+                    Vector3D aPerpendLeft = aLeftVec;
+                    aPerpendLeft.Normalize();
+                    aPerpendLeft = aPerpendLeft.GetPerpendicular2D();
                     aPerpendLeft *= fHalfLineWidth;
                     double fUpperCut = ImpSimpleFindCutPoint(*pPrev + aPerpendLeft, aLeftVec, *pRight + aPerpend, -aEdge);
 
@@ -825,6 +839,8 @@ void LineGeometryCreator::ImpCreateLineSegment(const Vector3D* pPrev, const Vect
                 {
                     Vector3D aRightVec(*pRight - *pNext);
                     Vector3D aPerpendRight = -aRightVec;
+                    // #78972#
+                    aPerpendRight.Normalize();
                     aPerpendRight = aPerpendRight.GetPerpendicular2D();
                     aPerpendRight *= fHalfLineWidth;
                     double fUpperCut = ImpSimpleFindCutPoint(*pNext + aPerpendRight, aRightVec, *pRight + aPerpend, aEdge);
