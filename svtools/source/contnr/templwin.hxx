@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-12 08:00:17 $
+ *  last change: $Author: gt $ $Date: 2001-09-12 13:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,26 @@ namespace com{ namespace sun { namespace star { namespace awt   { class XWindow;
 namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } };
 namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } };
 
+// class SvtDummyHeaderBar_Impl ------------------------------------------
+
+class SvtDummyHeaderBar_Impl : public Window
+{
+private:
+    void                UpdateBackgroundColor();
+protected:
+public:
+                        SvtDummyHeaderBar_Impl( Window* pParent );
+                        ~SvtDummyHeaderBar_Impl();
+
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+};
+
 // class SvtIconWindow_Impl ----------------------------------------------
 
 class SvtIconWindow_Impl : public Window
 {
 private:
-    HeaderBar           aHeaderBar;
+    SvtDummyHeaderBar_Impl  aDummyHeaderBar;    // spaceholder instead of HeaderBar
     SvtIconChoiceCtrl   aIconCtrl;
 
     String              aTemplateRootURL;
@@ -108,7 +122,7 @@ public:
     void                SetFocus();
 };
 
-// class SvtFileViewWindow_Impl -----------------------------------------_
+// class SvtFileViewWindow_Impl ------------------------------------------
 
 class SvtFileViewWindow_Impl : public Window
 {

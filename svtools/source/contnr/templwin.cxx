@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-12 07:59:29 $
+ *  last change: $Author: gt $ $Date: 2001-09-12 13:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,22 +252,44 @@ static SvtDocInfoMapping_Impl __READONLY_DATA DocInfoMap_Impl[] =
     NULL,           0,                  STRING_TYPE
 };
 
+// class SvtDummyHeaderBar_Impl ------------------------------------------
+
+void SvtDummyHeaderBar_Impl::UpdateBackgroundColor()
+{
+    SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
+}
+
+SvtDummyHeaderBar_Impl::SvtDummyHeaderBar_Impl( Window* pPar ) : Window( pPar )
+{
+    SetSizePixel( HeaderBar( this, 0 ).CalcWindowSizePixel() ); // HeaderBar used only to calculate size
+
+    UpdateBackgroundColor();
+}
+
+SvtDummyHeaderBar_Impl::~SvtDummyHeaderBar_Impl()
+{
+}
+
+void SvtDummyHeaderBar_Impl::DataChanged( const DataChangedEvent& r )
+{
+    Window::DataChanged( r );
+    if( r.GetType() == DATACHANGED_SETTINGS )
+        UpdateBackgroundColor();
+}
+
 // class SvtIconWindow_Impl ----------------------------------------------
 
 SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     Window( pParent, WB_DIALOGCONTROL ),
 
-    aHeaderBar( this, 0 ),
+    aDummyHeaderBar( this ),
     aIconCtrl( this, WB_3DLOOK | WB_ICON | WB_NOCOLUMNHEADER |
                      WB_HIGHLIGHTFRAME | WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP ),
     nMaxTextLength( 0 )
 
 {
-    Size aNewSize = aHeaderBar.CalcWindowSizePixel();
-    aHeaderBar.SetSizePixel( aNewSize );
-    aHeaderBar.SetBackground( Wallpaper( Color( COL_WHITE ) ) );
-    aHeaderBar.Show();
+    aDummyHeaderBar.Show();
 
     aIconCtrl.SetStyle( WB_3DLOOK | WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
                         WB_NOSELECTION | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
@@ -373,10 +395,12 @@ SvxIconChoiceCtrlEntry* SvtIconWindow_Impl::GetEntry( const String& rURL ) const
 void SvtIconWindow_Impl::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
-    Size aHeaderSize = aHeaderBar.GetSizePixel();
+//  Size aHeaderSize = aHeaderBar.GetSizePixel();
+    Size aHeaderSize = aDummyHeaderBar.GetSizePixel();
     aHeaderSize.Width() = aWinSize.Width();
-    aHeaderBar.SetSizePixel( aHeaderSize );
-    aHeaderBar.SetItemSize( HBI_CATEGORY, aWinSize.Width() );
+//  aHeaderBar.SetSizePixel( aHeaderSize );
+    aDummyHeaderBar.SetSizePixel( aHeaderSize );
+//  aHeaderBar.SetItemSize( HBI_CATEGORY, aWinSize.Width() );
     long nHeaderHeight = aHeaderSize.Height();
     aWinSize.Height() -= nHeaderHeight;
     aIconCtrl.SetPosSizePixel( Point( 0, nHeaderHeight ), aWinSize );
