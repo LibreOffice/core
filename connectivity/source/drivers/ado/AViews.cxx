@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AViews.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:43:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
 {
     OAdoView* pView = new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
     pView->setNew(sal_False);
@@ -147,13 +147,6 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OViews::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
-}
-// -----------------------------------------------------------------------------
 
 
 
