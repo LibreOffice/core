@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:15:14 $
+#   last change: $Author: vg $ $Date: 2004-01-06 18:34:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,6 @@ SLOFILES=       $(SLO)$/toolsin.obj     \
             $(SLO)$/l2txtenc.obj    \
             $(SLO)$/gen.obj			\
             $(SLO)$/config.obj		\
-            $(SLO)$/supd.obj		\
             $(SLO)$/poly.obj		\
             $(SLO)$/poly2.obj		\
             $(SLO)$/line.obj
@@ -104,7 +103,6 @@ OBJFILES=       $(OBJ)$/toolsin.obj     \
             $(OBJ)$/l2txtenc.obj    \
             $(OBJ)$/gen.obj			\
             $(OBJ)$/config.obj		\
-            $(OBJ)$/supd.obj		\
             $(OBJ)$/poly.obj		\
             $(OBJ)$/poly2.obj		\
             $(OBJ)$/line.obj
