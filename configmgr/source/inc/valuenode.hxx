@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:17:35 $
+ *  last change: $Author: avy $ $Date: 2001-08-08 11:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace configmgr
     class ValueNode;
 
     // helper (tag) class
-    namespace argument { struct NoChildCopy {}; }
+    namespace treeop { struct NoChildCopy {}; }
     //==========================================================================
     //= Visitors
     //==========================================================================

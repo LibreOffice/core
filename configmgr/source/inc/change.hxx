@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
+ *  last change: $Author: avy $ $Date: 2001-08-08 11:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ namespace configmgr
         friend class MutatingChildIterator;
     public:
         /// A parameter for disabling copying of children
-        typedef argument::NoChildCopy NoChildCopy;
+        typedef treeop::NoChildCopy NoChildCopy;
 
         SubtreeChange(const rtl::OUString& _rName,
                       const configuration::Attributes& _rAttr)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtree.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 11:00:46 $
+ *  last change: $Author: avy $ $Date: 2001-08-08 11:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace configmgr
         virtual INode* doGetChild(OUString const& name) const;
 
     public:
-        typedef argument::NoChildCopy NoChildCopy;
+        typedef treeop::NoChildCopy NoChildCopy;
 
         Subtree(){}
         Subtree(const OUString& _rName,
