@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMacroExpander.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:34:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com {  module sun {  module star {  module util {
 
     @since #107627#
 */
-interface XMacroExpander : com::sun::star::uno::XInterface
+published interface XMacroExpander : com::sun::star::uno::XInterface
 {
     /** Expands macrofied expressions.
 
