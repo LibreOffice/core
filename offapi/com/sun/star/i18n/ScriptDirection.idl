@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptDirection.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:11:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module i18n {
      @since #107627#
 */
 
-constants ScriptDirection
+published constants ScriptDirection
 {
     /// Script direction is neutral
     const short NEUTRAL         = 0;
