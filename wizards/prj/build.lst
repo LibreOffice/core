@@ -1,3 +1,4 @@
+wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\euro                                     nmake           -       all     wz_eurowiz NULL
 wz      wizards\source\formwizard                               nmake           -       all     wz_formwiz NULL
 wz      wizards\source\gimmicks                                 nmake           -       all     wz_gimmickswz NULL
