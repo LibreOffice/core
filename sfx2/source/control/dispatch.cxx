@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:07:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 09:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,13 @@
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 #include <svtools/helpopt.hxx>
+
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #ifndef GCC
 #pragma hdrstop
@@ -1709,6 +1716,24 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
     if ( pBindings )
         pBindings->DENTERREGISTRATIONS();
 
+    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame = pBindings->GetActiveFrame();
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, com::sun::star::uno::UNO_QUERY );
+    com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    if ( xPropSet.is() )
+    {
+        try
+        {
+            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
+            aValue >>= xLayoutManager;
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    if ( xLayoutManager.is() )
+        xLayoutManager->lock();
+
     // Test auf InPlaceFrame und speziell internes InPlace
     sal_Bool bIsIPActive = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
     SfxInPlaceClient *pClient = pImp->pFrame ? pImp->pFrame->GetViewShell()->GetUIActiveClient() : NULL;
@@ -1717,8 +1742,8 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         SetMenu_Impl();
 //        pAppMenu = pImp->pFrame->GetViewShell()->GetMenuBar_Impl();
 //        pAppMenu->ResetObjectMenus();
-        pBindings->Invalidate( SID_FORMATMENUSTATE );
-        pBindings->Update( SID_FORMATMENUSTATE );
+//        pBindings->Invalidate( SID_FORMATMENUSTATE );
+//        pBindings->Update( SID_FORMATMENUSTATE );
     }
 
     // Environment
@@ -1793,7 +1818,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
 
 //        if ( pAppMenu )
         {
-            pBindings->Invalidate( SID_FORMATMENUSTATE );
+//            pBindings->Invalidate( SID_FORMATMENUSTATE );
 //            pAppMenu->UpdateObjectMenus();
         }
 
@@ -1806,12 +1831,16 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
         }
     }
 
-    if ( pTaskWin )
-        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->UpdateStatusBar_Impl();
+//  if ( pTaskWin )
+//        pImp->pFrame->GetFrame()->GetWorkWindow_Impl()->UpdateStatusBar_Impl();
         //pTaskWin->UpdateStatusBar_Impl();
 
     if ( pBindings )
         pBindings->DLEAVEREGISTRATIONS();
+
+    if ( xLayoutManager.is() )
+        xLayoutManager->unlock();
+
     return 1;
 }
 
