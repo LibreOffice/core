@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:46:50 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,31 +59,22 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_FTOOLS_HXX
 #define SC_FTOOLS_HXX
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#include <vector>
+#include <limits>
+#include <memory>
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
-#ifndef _COLOR_HXX
-#include <tools/color.hxx>
-#endif
-
-#include <vector>
-#include <list>
-#include <stack>
-#include <algorithm>
-#include <memory>
-#include <limits>
-#include <boost/shared_ptr.hpp>
 
 // Common macros ==============================================================
 
@@ -117,39 +108,35 @@
 
 /** Returns the value, if it is not less than nMin, otherwise nMin. */
 template< typename ReturnType, typename Type >
-inline ReturnType llimit( Type nValue, ReturnType nMin )
+inline ReturnType llimit_cast( Type nValue, ReturnType nMin )
 { return static_cast< ReturnType >( ::std::max< Type >( nValue, nMin ) ); }
 
 /** Returns the value, if it fits into ReturnType, otherwise the minimum value of ReturnType. */
 template< typename ReturnType, typename Type >
-inline ReturnType llimit( Type nValue )
-{ return ::llimit( nValue, ::std::numeric_limits< ReturnType >::min() ); }
+inline ReturnType llimit_cast( Type nValue )
+{ return llimit_cast( nValue, ::std::numeric_limits< ReturnType >::min() ); }
 
 /** Returns the value, if it is not greater than nMax, otherwise nMax. */
 template< typename ReturnType, typename Type >
-inline ReturnType ulimit( Type nValue, ReturnType nMax )
-{ return static_cast< ReturnType >( ::std::min( nValue, static_cast< Type >( nMax ) ) ); }
+inline ReturnType ulimit_cast( Type nValue, ReturnType nMax )
+{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
 
 /** Returns the value, if it fits into ReturnType, otherwise the maximum value of ReturnType. */
 template< typename ReturnType, typename Type >
-inline ReturnType ulimit( Type nValue )
-{ return ::ulimit( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+inline ReturnType ulimit_cast( Type nValue )
+{ return ulimit_cast( nValue, ::std::numeric_limits< ReturnType >::max() ); }
 
 /** Returns the value, if it is not less than nMin and not greater than nMax, otherwise one of the limits. */
 template< typename ReturnType, typename Type >
-inline ReturnType lulimit( Type nValue, ReturnType nMin, ReturnType nMax )
+inline ReturnType limit_cast( Type nValue, ReturnType nMin, ReturnType nMax )
 { return static_cast< ReturnType >( ::std::max< Type >( ::std::min< Type >( nValue, nMax ), nMin ) ); }
 
 /** Returns the value, if it fits into ReturnType, otherwise one of the limits of ReturnType. */
 template< typename ReturnType, typename Type >
-inline ReturnType lulimit( Type nValue )
-{ return ::lulimit( nValue, ::std::numeric_limits< ReturnType >::min(), ::std::numeric_limits< ReturnType >::max() ); }
+inline ReturnType limit_cast( Type nValue )
+{ return limit_cast( nValue, ::std::numeric_limits< ReturnType >::min(), ::std::numeric_limits< ReturnType >::max() ); }
 
 // Read from bitfields --------------------------------------------------------
-
-// deprecated
-inline bool HasFlag( sal_uInt32 nValue, sal_uInt32 nMask )
-{ return (nValue & nMask) != 0; }
 
 /** Returns true, if at least one of the bits set in nMask is set in nBitField. */
 template< typename Type >
@@ -193,10 +180,10 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 class ScfNoCopy
 {
 private:
-                                ScfNoCopy( const ScfNoCopy& );
-    ScfNoCopy&                  operator=( const ScfNoCopy& );
+                        ScfNoCopy( const ScfNoCopy& );
+    ScfNoCopy&          operator=( const ScfNoCopy& );
 protected:
-    inline                      ScfNoCopy() {}
+    inline              ScfNoCopy() {}
 };
 
 // ----------------------------------------------------------------------------
@@ -206,6 +193,53 @@ class ScfNoInstance : private ScfNoCopy {};
 
 // ============================================================================
 
+/** Simple shared pointer (NOT thread-save, but faster than boost::shared_ptr). */
+template< typename Type >
+class ScfRef
+{
+    template< typename Type2 > friend class ScfRef;
+
+public:
+    typedef Type        element_type;
+    typedef ScfRef      this_type;
+
+    inline explicit     ScfRef( element_type* pObj = 0 ) { eat( pObj ); }
+    inline /*implicit*/ ScfRef( const this_type& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
+    template< typename Type2 >
+    inline /*implicit*/ ScfRef( const ScfRef< Type2 >& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
+    inline              ~ScfRef() { rel(); }
+
+    inline void         reset( element_type* pObj = 0 ) { rel(); eat( pObj ); }
+    inline this_type&   operator=( const this_type& rRef ) { if( this != &rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); } return *this; }
+    template< typename Type2 >
+    inline this_type&   operator=( const ScfRef< Type2 >& rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); return *this; }
+
+    inline const element_type* get() const { return mpObj; }
+    inline element_type* get() { return mpObj; }
+    inline bool         is() const { return mpObj != 0; }
+
+    inline const element_type* operator->() const { return mpObj; }
+    inline element_type* operator->() { return mpObj; }
+
+    inline const element_type& operator*() const { return *mpObj; }
+    inline element_type& operator*() { return *mpObj; }
+
+    inline bool         operator!() const { return mpObj == 0; }
+    typedef bool (this_type::*bool_type)() const;
+    inline              operator bool_type() const { return mpObj ? &this_type::is : 0; }
+
+private:
+    inline void         eat( element_type* pObj, size_t* pnCount = 0 ) { mpObj = pObj; mpnCount = mpObj ? (pnCount ? pnCount : new size_t( 0 )) : 0; if( mpnCount ) ++*mpnCount; }
+    inline void         rel() { if( mpnCount && !--*mpnCount ) { DELETEZ( mpObj ); DELETEZ( mpnCount ); } }
+
+private:
+    Type*               mpObj;
+    size_t*             mpnCount;
+};
+
+// ============================================================================
+
+class Color;
 class SfxPoolItem;
 class SfxItemSet;
 class ScStyleSheet;
@@ -223,30 +257,30 @@ public:
 // *** common methods *** -----------------------------------------------------
 
     /** Reads a 10-byte-long-double and converts it to double. */
-    static double               ReadLongDouble( SvStream& rStrm );
+    static double       ReadLongDouble( SvStream& rStrm );
     /** Returns system charset for byte string conversion. */
-    static CharSet              GetSystemCharSet();
+    static CharSet      GetSystemCharSet();
     /** Returns a string representing the hexadecimal value of nValue. */
-    static String               GetHexStr( sal_uInt16 nValue );
+    static String       GetHexStr( sal_uInt16 nValue );
 
     /** Mixes RGB components with given transparence.
         @param nTrans  Foreground transparence (0x0000 == full nFore ... 0x8000 = full nBack). */
-    static sal_uInt8            GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt16 nTrans );
+    static sal_uInt8    GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt16 nTrans );
     /** Mixes colors with given transparence.
         @param nTrans  Foreground transparence (0x0000 == full rFore ... 0x8000 = full rBack). */
-    static Color                GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt16 nTrans );
+    static Color        GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt16 nTrans );
 
 // *** conversion of names *** ------------------------------------------------
 
     /** Converts a string to a valid Calc sheet name.
         @descr  Sheet names in Calc may contain letters, digits, underscores, and spaces
         (space characters are not allowed at first position). */
-    static void                 ConvertToScSheetName( String& rName );
+    static void         ConvertToScSheetName( String& rName );
     /** Converts a string to a valid Calc defined name or database range name.
         @descr  Defined names in Calc may contain letters, digits (*), underscores, periods (*),
         colons (*), question marks, and dollar signs.
         (*) = not allowed at first position. */
-    static void                 ConvertToScDefinedName( String& rName );
+    static void         ConvertToScDefinedName( String& rName );
 
 // *** streams and storages *** -----------------------------------------------
 
@@ -264,7 +298,7 @@ public:
 
     /** Returns true, if the passed item set contains the item.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool                 CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep );
+    static bool         CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -273,9 +307,9 @@ public:
         @param rItem  The item to put into the item set.
         @param nWhichId  The Which-ID to set with the item.
         @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
-    static void                 PutItem(
-                                    SfxItemSet& rItemSet, const SfxPoolItem& rItem,
-                                    sal_uInt16 nWhichId, bool bSkipPoolDef );
+    static void         PutItem(
+                            SfxItemSet& rItemSet, const SfxPoolItem& rItem,
+                            USHORT nWhichId, bool bSkipPoolDef );
 
     /** Puts the item into the passed item set.
         @descr  The item will be put into the item set, if bSkipPoolDef is false,
@@ -283,7 +317,7 @@ public:
         @param rItemSet  The destination item set.
         @param rItem  The item to put into the item set.
         @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
-    static void                 PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSkipPoolDef );
+    static void         PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSkipPoolDef );
 
 // *** style sheet handling *** -----------------------------------------------
 
@@ -291,62 +325,62 @@ public:
         @descr  If the style sheet is already in the pool, another unused style name is used.
         @param bForceName  Controls behaviour, if the style already exists:
         true = Old existing style will be renamed; false = New style gets another name. */
-    static ScStyleSheet&        MakeCellStyleSheet(
-                                    ScStyleSheetPool& rPool,
-                                    const String& rStyleName, bool bForceName );
+    static ScStyleSheet& MakeCellStyleSheet(
+                            ScStyleSheetPool& rPool,
+                            const String& rStyleName, bool bForceName );
     /** Creates and returns a page style sheet and inserts it into the pool.
         @descr  If the style sheet is already in the pool, another unused style name is used.
         @param bForceName  Controls behaviour, if the style already exists:
         true = Old existing style will be renamed; false = New style gets another name. */
-    static ScStyleSheet&        MakePageStyleSheet(
-                                    ScStyleSheetPool& rPool,
-                                    const String& rStyleName, bool bForceName );
+    static ScStyleSheet& MakePageStyleSheet(
+                            ScStyleSheetPool& rPool,
+                            const String& rStyleName, bool bForceName );
 
 // *** byte string import operations *** --------------------------------------
 
     /** Reads and returns a zero terminted byte string. */
-    static ByteString           ReadCString( SvStream& rStrm );
+    static ByteString   ReadCString( SvStream& rStrm );
     /** Reads and returns a zero terminted byte string. */
-    inline static String        ReadCString( SvStream& rStrm, CharSet eSrc )
-                                    { return String( ReadCString( rStrm ), eSrc ); }
+    inline static String ReadCString( SvStream& rStrm, CharSet eSrc )
+                            { return String( ReadCString( rStrm ), eSrc ); }
 
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
-    static ByteString           ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft );
+    static ByteString   ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft );
     /** Reads and returns a zero terminted byte string and decreases a stream counter. */
-    inline static String        ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, CharSet eSrc )
-                                    { return String( ReadCString( rStrm, rnBytesLeft ), eSrc ); }
+    inline static String ReadCString( SvStream& rStrm, sal_Int32& rnBytesLeft, CharSet eSrc )
+                            { return String( ReadCString( rStrm, rnBytesLeft ), eSrc ); }
 
     /** Appends a zero terminted byte string. */
-    static void                 AppendCString( SvStream& rStrm, ByteString& rString );
+    static void         AppendCString( SvStream& rStrm, ByteString& rString );
     /** Appends a zero terminted byte string. */
-    static void                 AppendCString( SvStream& rStrm, String& rString, CharSet eSrc );
+    static void         AppendCString( SvStream& rStrm, String& rString, CharSet eSrc );
 
 // *** HTML table names <-> named range names *** -----------------------------
 
     /** Returns the built-in range name for an HTML document. */
-    static const String&        GetHTMLDocName();
+    static const String& GetHTMLDocName();
     /** Returns the built-in range name for all HTML tables. */
-    static const String&        GetHTMLTablesName();
+    static const String& GetHTMLTablesName();
     /** Returns the built-in range name for an HTML table, specified by table index. */
-    static String               GetNameFromHTMLIndex( sal_uInt32 nIndex );
+    static String       GetNameFromHTMLIndex( sal_uInt32 nIndex );
     /** Returns the built-in range name for an HTML table, specified by table name. */
-    static String               GetNameFromHTMLName( const String& rTabName );
+    static String       GetNameFromHTMLName( const String& rTabName );
 
     /** Returns true, if rSource is the built-in range name for an HTML document. */
-    static bool                 IsHTMLDocName( const String& rSource );
+    static bool         IsHTMLDocName( const String& rSource );
     /** Returns true, if rSource is the built-in range name for all HTML tables. */
-    static bool                 IsHTMLTablesName( const String& rSource );
+    static bool         IsHTMLTablesName( const String& rSource );
     /** Converts a built-in range name to an HTML table name.
         @param rSource  The string to be determined.
         @param rName  The HTML table name.
         @return  true, if conversion was successful. */
-    static bool                 GetHTMLNameFromName( const String& rSource, String& rName );
+    static bool         GetHTMLNameFromName( const String& rSource, String& rName );
 
 private:
     /** Returns the prefix for table index names. */
-    static const String&        GetHTMLIndexPrefix();
+    static const String& GetHTMLIndexPrefix();
     /** Returns the prefix for table names. */
-    static const String&        GetHTMLNamePrefix();
+    static const String& GetHTMLNamePrefix();
 };
 
 // Containers =================================================================
@@ -357,12 +391,6 @@ typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
 typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
 
-typedef ::std::stack< sal_uInt8,  ScfUInt8Vec >     ScfUInt8Stack;
-typedef ::std::stack< sal_Int16, ScfInt16Vec >      ScfInt16Stack;
-typedef ::std::stack< sal_uInt16, ScfUInt16Vec >    ScfUInt16Stack;
-typedef ::std::stack< sal_Int32, ScfInt32Vec >      ScfInt32Stack;
-typedef ::std::stack< sal_uInt32, ScfUInt32Vec >    ScfUInt32Stack;
-
 // ----------------------------------------------------------------------------
 
 /** Template for a list that owns the contained objects.
@@ -370,42 +398,42 @@ typedef ::std::stack< sal_uInt32, ScfUInt32Vec >    ScfUInt32Stack;
     on destruction. The Clear() method deletes all objects too. */
 template< typename Type > class ScfDelList
 {
-private:
-    mutable List                maList;     /// The base container object.
-
 public:
-    inline explicit             ScfDelList( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
-                                    maList( nInitSize, nResize ) {}
+    inline explicit     ScfDelList( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+                            maList( nInitSize, nResize ) {}
     /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
-    inline explicit             ScfDelList( const ScfDelList& rSrc ) { *this = rSrc; }
-    virtual                     ~ScfDelList();
+    inline explicit     ScfDelList( const ScfDelList& rSrc ) { *this = rSrc; }
+    virtual             ~ScfDelList();
 
     /** Creates a deep copy of the passed list (copy-constructs all contained objects). */
-    ScfDelList&                 operator=( const ScfDelList& rSrc );
+    ScfDelList&         operator=( const ScfDelList& rSrc );
 
-    inline void                 Insert( Type* pObj, sal_uInt32 nIndex ) { if( pObj ) maList.Insert( pObj, nIndex ); }
-    inline void                 Append( Type* pObj )                    { if( pObj ) maList.Insert( pObj, LIST_APPEND ); }
+    inline void         Insert( Type* pObj, ULONG nIndex )      { if( pObj ) maList.Insert( pObj, nIndex ); }
+    inline void         Append( Type* pObj )                    { if( pObj ) maList.Insert( pObj, LIST_APPEND ); }
     /** Removes the object without deletion. */
-    inline Type*                Remove( sal_uInt32 nIndex )             { return static_cast< Type* >( maList.Remove( nIndex ) ); }
+    inline Type*        Remove( ULONG nIndex )                  { return static_cast< Type* >( maList.Remove( nIndex ) ); }
     /** Removes and deletes the object. */
-    inline void                 Delete( sal_uInt32 nIndex )             { delete Remove( nIndex ); }
+    inline void         Delete( ULONG nIndex )                  { delete Remove( nIndex ); }
     /** Exchanges the contained object with the passed, returns the old. */
-    inline Type*                Exchange( Type* pObj, sal_uInt32 nIndex ){ return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
+    inline Type*        Exchange( Type* pObj, ULONG nIndex )    { return static_cast< Type* >( maList.Replace( pObj, nIndex ) ); }
     /** Replaces (deletes) the contained object. */
-    inline void                 Replace( Type* pObj, sal_uInt32 nIndex ){ delete Exchange( pObj, nIndex ); }
+    inline void         Replace( Type* pObj, ULONG nIndex )     { delete Exchange( pObj, nIndex ); }
 
-    void                        Clear();
-    inline sal_uInt32           Count() const                           { return maList.Count(); }
-    inline bool                 Empty() const                           { return maList.Count() == 0; }
+    void                Clear();
+    inline ULONG        Count() const                           { return maList.Count(); }
+    inline bool         Empty() const                           { return maList.Count() == 0; }
 
-    inline Type*                GetCurObject() const                    { return static_cast< Type* >( maList.GetCurObject() ); }
-    inline sal_uInt32           GetCurPos() const                       { return maList.GetCurPos(); }
-    inline Type*                GetObject( sal_uInt32 nIndex ) const    { return static_cast< Type* >( maList.GetObject( nIndex ) ); }
+    inline Type*        GetCurObject() const                    { return static_cast< Type* >( maList.GetCurObject() ); }
+    inline ULONG        GetCurPos() const                       { return maList.GetCurPos(); }
+    inline Type*        GetObject( sal_uInt32 nIndex ) const    { return static_cast< Type* >( maList.GetObject( nIndex ) ); }
 
-    inline Type*                First() const                           { return static_cast< Type* >( maList.First() ); }
-    inline Type*                Last() const                            { return static_cast< Type* >( maList.Last() ); }
-    inline Type*                Next() const                            { return static_cast< Type* >( maList.Next() ); }
-    inline Type*                Prev() const                            { return static_cast< Type* >( maList.Prev() ); }
+    inline Type*        First() const                           { return static_cast< Type* >( maList.First() ); }
+    inline Type*        Last() const                            { return static_cast< Type* >( maList.Last() ); }
+    inline Type*        Next() const                            { return static_cast< Type* >( maList.Next() ); }
+    inline Type*        Prev() const                            { return static_cast< Type* >( maList.Prev() ); }
+
+private:
+    mutable List        maList;     /// The base container object.
 };
 
 template< typename Type > ScfDelList< Type >& ScfDelList< Type >::operator=( const ScfDelList& rSrc )
@@ -438,92 +466,18 @@ template< typename Type >
 class ScfDelStack : private ScfDelList< Type >
 {
 public:
-    inline                      ScfDelStack( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
-                                    ScfDelList< Type >( nInitSize, nResize ) {}
+    inline              ScfDelStack( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+                            ScfDelList< Type >( nInitSize, nResize ) {}
 
-    inline void                 Push( Type* pObj )      { Append( pObj ); }
+    inline void         Push( Type* pObj )      { Append( pObj ); }
     /** Removes the top object without deletion. */
-    inline Type*                Pop()                   { return Remove( Count() - 1 ); }
+    inline Type*        Pop()                   { return Remove( Count() - 1 ); }
 
-    inline Type*                Top() const             { return GetObject( Count() - 1 ); }
+    inline Type*        Top() const             { return GetObject( Count() - 1 ); }
 
-                                ScfDelList< Type >::Clear;
-                                ScfDelList< Type >::Count;
-                                ScfDelList< Type >::Empty;
-};
-
-// ----------------------------------------------------------------------------
-
-/** List class for sal_uInt16 values.
-    @deprecated */
-class ScfUInt16List : protected List
-{
-public:
-    inline                      ScfUInt16List() : List() {}
-    inline                      ScfUInt16List( const ScfUInt16List& rCopy ) : List( rCopy ) {}
-
-    inline ScfUInt16List&       operator=( const ScfUInt16List& rSource )
-                                        { List::operator=( rSource ); return *this; }
-
-                                List::Clear;
-                                List::Count;
-    inline bool                 Empty() const   { return List::Count() == 0; }
-
-    inline sal_uInt16           First() { return (sal_uInt16)(sal_uInt32) List::First(); }
-    inline sal_uInt16           Last()  { return (sal_uInt16)(sal_uInt32) List::Last(); }
-    inline sal_uInt16           Next()  { return (sal_uInt16)(sal_uInt32) List::Next(); }
-    inline sal_uInt16           Prev()  { return (sal_uInt16)(sal_uInt32) List::Prev(); }
-
-    inline sal_uInt16           GetValue( sal_uInt32 nIndex ) const
-                                        { return (sal_uInt16)(sal_uInt32) List::GetObject( nIndex ); }
-    inline bool                 Contains( sal_uInt16 nValue ) const
-                                        { return List::GetPos( (void*)(sal_uInt32) nValue ) != LIST_ENTRY_NOTFOUND; }
-
-    inline void                 Insert( sal_uInt16 nValue, sal_uInt32 nIndex )
-                                        { List::Insert( (void*)(sal_uInt32) nValue, nIndex ); }
-    inline void                 Append( sal_uInt16 nValue )
-                                        { List::Insert( (void*)(sal_uInt32) nValue, LIST_APPEND ); }
-    inline sal_uInt16           Replace( sal_uInt16 nValue, sal_uInt32 nIndex )
-                                        { return (sal_uInt16)(sal_uInt32) List::Replace( (void*)(sal_uInt32) nValue, nIndex ); }
-    inline sal_uInt16           Remove( sal_uInt32 nIndex )
-                                        { return (sal_uInt16)(sal_uInt32) List::Remove( nIndex ); }
-};
-
-// ----------------------------------------------------------------------------
-
-/** List class for sal_uInt32 values.
-    @deprecated */
-class ScfUInt32List : protected List
-{
-public:
-    inline                      ScfUInt32List() : List() {}
-    inline                      ScfUInt32List( const ScfUInt32List& rCopy ) : List( rCopy ) {}
-
-    inline ScfUInt32List&       operator=( const ScfUInt32List& rSource )
-                                        { List::operator=( rSource ); return *this; }
-
-                                List::Clear;
-                                List::Count;
-    inline bool                 Empty() const   { return List::Count() == 0; }
-
-    inline sal_uInt32           First() { return (sal_uInt32) List::First(); }
-    inline sal_uInt32           Last()  { return (sal_uInt32) List::Last(); }
-    inline sal_uInt32           Next()  { return (sal_uInt32) List::Next(); }
-    inline sal_uInt32           Prev()  { return (sal_uInt32) List::Prev(); }
-
-    inline sal_uInt32           GetValue( sal_uInt32 nIndex ) const
-                                        { return (sal_uInt32) List::GetObject( nIndex ); }
-    inline bool                 Contains( sal_uInt32 nValue ) const
-                                        { return List::GetPos( (void*) nValue ) != LIST_ENTRY_NOTFOUND; }
-
-    inline void                 Insert( sal_uInt32 nValue, sal_uInt32 nIndex )
-                                        { List::Insert( (void*) nValue, nIndex ); }
-    inline void                 Append( sal_uInt32 nValue )
-                                        { List::Insert( (void*) nValue, LIST_APPEND ); }
-    inline sal_uInt32           Replace( sal_uInt32 nValue, sal_uInt32 nIndex )
-                                        { return (sal_uInt32) List::Replace( (void*) nValue, nIndex ); }
-    inline sal_uInt32           Remove( sal_uInt32 nIndex )
-                                        { return (sal_uInt32) List::Remove( nIndex ); }
+                        ScfDelList< Type >::Clear;
+                        ScfDelList< Type >::Count;
+                        ScfDelList< Type >::Empty;
 };
 
 // ============================================================================
