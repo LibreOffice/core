@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:17:47 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #include <math.h>
 
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
+#endif
 #include <svtools/saveopt.hxx>
 #include <svtools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -545,6 +548,10 @@ void SfxObjectShell::UpdateDocInfoForSave()
 
         if ( !pImp->bIsSaving )
             rDocInfo.SetPasswd( pImp->bPasswd );
+
+        // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
+        if ( SvtSecurityOptions().IsOptionSet( SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
+            rDocInfo.DeleteUserData( rDocInfo.IsUseUserData() );
 
         Broadcast( SfxDocumentInfoHint( &rDocInfo ) );
     }
