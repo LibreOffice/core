@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-07 15:06:28 $
+ *  last change: $Author: dg $ $Date: 2000-12-07 16:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ namespace configmgr
         SettingsImpl        m_aImpl;
 
         ::osl::Profile*     m_pSRegistry;
+        sal_Bool            m_bFoundRegistry;
 
     public:
         /// default ctor
@@ -158,7 +159,7 @@ namespace configmgr
         }
 
         // check setting existence
-        sal_Bool            hasRegistryRC() const { return m_pSRegistry != 0; }
+        sal_Bool            hasRegistry() const { return m_bFoundRegistry; }
         sal_Bool            hasUser() const;
         sal_Bool            hasPassword() const;
         sal_Bool            hasServer() const;
