@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-30 14:19:20 $
+ *  last change: $Author: hdu $ $Date: 2002-11-04 18:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,8 +291,8 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
 
         if ( bNewFontLists )
         {
-#ifndef REMOTE_APPSERVER
             // we need a graphics
+#ifndef REMOTE_APPSERVER
             if ( ImplGetGraphics() )
 #else
             if ( ImplGetServerGraphics() )
@@ -319,7 +319,7 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
     mbInitFont = TRUE;
     mbNewFont = TRUE;
 
-    // Bei Fenstern auch alle Child-Fenster mit updaten
+    // also update child windows if needed
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
         Window* pChild = ((Window*)this)->mpFirstChild;
@@ -337,7 +337,7 @@ void OutputDevice::ImplUpdateAllFontData( BOOL bNewFontLists )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Alle Fenster updaten
+    // update all windows
     Window* pFrame = pSVData->maWinData.mpFirstFrame;
     while ( pFrame )
     {
@@ -353,7 +353,7 @@ void OutputDevice::ImplUpdateAllFontData( BOOL bNewFontLists )
         pFrame = pFrame->mpFrameData->mpNextFrame;
     }
 
-    // Alle VirDev's updaten
+    // update all virtual devices
     VirtualDevice* pVirDev = pSVData->maGDIData.mpFirstVirDev;
     while ( pVirDev )
     {
@@ -361,7 +361,7 @@ void OutputDevice::ImplUpdateAllFontData( BOOL bNewFontLists )
         pVirDev = pVirDev->mpNext;
     }
 
-    // Alle Printer updaten
+    // update all printers
     Printer* pPrinter = pSVData->maGDIData.mpFirstPrinter;
     while ( pPrinter )
     {
@@ -369,7 +369,7 @@ void OutputDevice::ImplUpdateAllFontData( BOOL bNewFontLists )
         pPrinter = pPrinter->mpNext;
     }
 
-    // Globale Fontlisten leeren, damit diese geupdatet werden
+    // clear global font lists to have them updated
     pSVData->maGDIData.mpScreenFontCache->Clear();
     if ( bNewFontLists )
     {
@@ -4477,97 +4477,6 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 
 // -----------------------------------------------------------------------
 
-#ifndef ENABLE_CTL // TODO: implement for ENABLE_CTL
-BOOL OutputDevice::ImplDrawRotateText( long nX, long nY,
-                                       const xub_Unicode* pStr, xub_StrLen nLen,
-                                       const long* pDXAry )
-{
-    if ( !mpOutDevData )
-        ImplInitOutDevData();
-    if ( !mpOutDevData->mpRotateDev )
-        mpOutDevData->mpRotateDev = new VirtualDevice( *this, 1 );
-
-    VirtualDevice*  pVDev = mpOutDevData->mpRotateDev;
-    long            nWidth = ImplGetTextWidth( pStr, nLen, pDXAry );
-    long            nHeight = mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent;
-    Size            aSize( nWidth, nHeight );
-
-    if ( pVDev->SetOutputSizePixel( aSize ) )
-    {
-        Font    aFont( GetFont() );
-        Bitmap  aBmp;
-        long    nOff;
-
-        nX -= mnTextOffX;
-        nY -= mnTextOffY;
-        if ( GetTextAlign() == ALIGN_TOP )
-        {
-            nOff = 0L;
-            nY  += mpFontEntry->maMetric.mnAscent;
-        }
-        else if ( GetTextAlign() == ALIGN_BOTTOM )
-        {
-            nOff = mpFontEntry->maMetric.mnAscent;
-            nY  += -mpFontEntry->maMetric.mnDescent;
-        }
-        else
-            nOff = mpFontEntry->maMetric.mnAscent;
-
-        aFont.SetShadow( FALSE );
-        aFont.SetOutline( FALSE );
-        aFont.SetRelief( RELIEF_NONE );
-        aFont.SetOrientation( 0 );
-        aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
-        pVDev->SetFont( aFont );
-        // Da Farben und Alignment noch im Font haengen, muessen diese jedesmal
-        // gesetzt werden
-        pVDev->SetTextAlign( ALIGN_TOP );
-        pVDev->SetTextColor( Color( COL_BLACK ) );
-        pVDev->SetTextFillColor();
-        pVDev->ImplNewFont();
-        pVDev->ImplInitFont();
-        pVDev->ImplInitTextColor();
-        pVDev->ImplDrawText( 0, 0, pStr, nLen, pDXAry );
-
-        aBmp = pVDev->GetBitmap( Point(), aSize );
-        if ( !!aBmp && aBmp.Rotate( mpFontEntry->mnOwnOrientation, COL_WHITE ) )
-        {
-            Point           aTempPoint;
-            Polygon         aPoly( Rectangle( aTempPoint, aSize ) );
-            long            nOldOffX = mnOutOffX;
-            long            nOldOffY = mnOutOffY;
-            GDIMetaFile*    pOldMetaFile = mpMetaFile;
-            BOOL            bOldMap = mbMap;
-
-            aTempPoint.Y() = nOff;
-            aPoly.Rotate( aTempPoint, mpFontEntry->mnOwnOrientation );
-            const Rectangle aBound( aPoly.GetBoundRect() );
-
-            mnOutOffX   = 0L;
-            mnOutOffY   = 0L;
-            mpMetaFile  = NULL;
-            mbMap       = FALSE;
-
-            DrawMask( Point( nX + aBound.Left(),
-                             nY + aBound.Top() - (mpFontEntry->maMetric.mnAscent+mnEmphasisAscent) ),
-                      aBmp, GetTextColor() );
-
-            mnOutOffX   = nOldOffX;
-            mnOutOffY   = nOldOffY;
-
-            mbMap       = bOldMap;
-            mpMetaFile  = pOldMetaFile;
-        }
-
-        return TRUE;
-    }
-
-    return FALSE;
-}
-#endif // ENABLE_CTL
-
-// -----------------------------------------------------------------------
-
 bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
 {
     if ( !mpOutDevData )
@@ -6564,14 +6473,13 @@ USHORT OutputDevice::GetDevFontCount() const
     DBG_TRACE( "OutputDevice::GetDevFontCount()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    // Wenn wir schon eine Liste der Fonts haben, dann nicht iterieren
-
-    if ( mpGetDevFontList )
+    // if we already have a font list we know enough
+    if( mpGetDevFontList )
         return (USHORT)mpGetDevFontList->Count();
 
     ((OutputDevice*)this)->mpGetDevFontList = new ImplGetDevFontList;
 
-    // Fill Fontlist
+    // fill font list
     ImplDevFontListData* pFontListData = mpFontList->First();
     while ( pFontListData )
     {
@@ -6663,7 +6571,6 @@ USHORT OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
 
     return (USHORT)mpGetDevSizeList->Count();
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -6930,8 +6837,10 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
             Point aRotatedOfs = pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
             aRotatedOfs += Point( mnTextOffX, mnTextOffY );
-            aPixelRect += aRotatedOfs;
-            rRect = ImplDevicePixelToLogic( aPixelRect );
+            aPixelRect -= aRotatedOfs;
+            rRect = PixelToLogic( aPixelRect );
+            if( mbMap )
+                rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
         }
 
         pSalLayout->Release();
