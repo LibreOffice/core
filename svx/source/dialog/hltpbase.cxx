@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-25 10:51:33 $
+ *  last change: $Author: gt $ $Date: 2002-08-14 07:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ IMPL_LINK ( SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, void *, EMPTYARG )
         SfxMacroAssignDlg aDlg (this, *pItemSet );
 
         // add events
-        SfxSmallMacroTabPage *pMacroPage = (SfxSmallMacroTabPage*) aDlg.GetTabPage();
+        SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
 
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOVER_OBJECT )
             pMacroPage->AddEvent( String( SVX_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
