@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-02 16:31:39 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 15:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     aAny = xPropSet->getPropertyValue(sIsProtected);
     if (*(sal_Bool*)aAny.getValue())
     {
-        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_protect,
+        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_protected,
                                       sXML_true);
     }
     Sequence<sal_Int8> aPassword;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-09 13:13:23 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 15:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,10 @@ static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_SECTION_NAME },
     { XML_NAMESPACE_TEXT, sXML_condition, XML_TOK_SECTION_CONDITION },
     { XML_NAMESPACE_TEXT, sXML_display, XML_TOK_SECTION_DISPLAY },
-    { XML_NAMESPACE_TEXT, sXML_protect, XML_TOK_SECTION_PROTECT },
+    { XML_NAMESPACE_TEXT, sXML_protected, XML_TOK_SECTION_PROTECT },
     { XML_NAMESPACE_TEXT, sXML_protection_key, XML_TOK_SECTION_PROTECTION_KEY},
+    // compatibility with SRC629 (or earlier) versions
+    { XML_NAMESPACE_TEXT, sXML_protect, XML_TOK_SECTION_PROTECT },
     XML_TOKEN_MAP_END
 };
 
