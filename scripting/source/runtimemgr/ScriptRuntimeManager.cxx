@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-06 18:21:30 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 12:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ throw( RuntimeException )
                 Reference< XInterface >() );
         }
         validateXRef( xInterface,
-            "ScriptRuntimeManager::GetScriptRuntime: cannot get ScriptRuntimeForJava Service"
+            "ScriptRuntimeManager::GetScriptRuntime: cannot get appropriate ScriptRuntime Service"
         );
         xScriptInvocation = Reference< XScriptInvocation >( xInterface, UNO_QUERY_THROW );
     }
