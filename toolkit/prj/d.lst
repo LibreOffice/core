@@ -44,3 +44,4 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\inc\toolkit\helper\externallock.hxx %_DEST%\inc%_EXT%\toolkit\helper\externallock.hxx
 
 ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\unohlp.hxx
+..\inc\toolkit\dllapi.h %_DEST%\inc%_EXT%\toolkit\dllapi.h
