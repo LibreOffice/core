@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-23 16:15:51 $
+ *  last change: $Author: abi $ $Date: 2001-11-23 16:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ namespace chelp {
                     ret = true;
             }
             else
-                ret = l < r;
+                ret = bool( l < r );
 
             return ret;
         }
