@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-30 15:29:03 $
+ *  last change: $Author: fme $ $Date: 2001-12-14 12:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,7 @@ BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
  * searches for script changes in rTxt and stores them
  *************************************************************************/
 
-void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
+void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                                    const OutputDevice& rOut )
 {
 
@@ -588,24 +588,41 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
         if( nEnd > rTxt.Len() )
             nEnd = rTxt.Len();
 
-        ASSERT( GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() ),
-                "Wrong default language" );
-
-        if ( WEAK == nScript )
+//        if ( WEAK == nScript )
             nScript = (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 
-        // map scripts to font indices
+        ASSERT( LATIN == nScript || ASIAN == nScript || COMPLEX == nScript,
+                "Wrong default language" );
+
+        // map scripts to font indices, CTL font is always the last one
         const BYTE nScripts[3] = {
-                 nScript - 1, nScript % 3, ( nScript + 1 ) % 3 };
+                 nScript - 1,
+                 LATIN == nScript ? 1 : 0,
+                 2 };
 
         xub_StrLen nOldChg = nChg;
+        const SwFont* pCurrFont = rAH.GetFont();
+
+        SwFontIter* pIter = 0;
+
+        if ( rNode.GetpSwpHints() )
+        {
+            // this is only necessary if there are font changes within the
+            // weak region
+            pIter = new SwFontIter( rNode, rAH, 0, nEnd );
+            pCurrFont = &pIter->GetCurrFont( nChg );
+            // the next end is the next font change
+            nEnd = pIter->NextFontChg();
+        }
+
+        ASSERT( pCurrFont, "I told you not to use an AttrHandler without a font" )
 
         while ( nChg < nEnd )
         {
             for ( BYTE i = 0; i < 3; ++i )
             {
                 nChg = rOut.HasGlyphs(
-                         rFnt.GetFnt( nScripts[i] ), rTxt, nChg, nEnd - nChg );
+                         pCurrFont->GetFnt( nScripts[i] ), rTxt, nChg, nEnd - nChg );
 
                 if ( nChg > nOldChg )
                 {
@@ -631,7 +648,16 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
                 if ( nChg == nEnd )
                     break;
             }
+
+            if ( pIter )
+            {
+                pCurrFont = &pIter->GetCurrFont( nChg );
+                // advance to the next font change
+                nEnd = pIter->NextFontChg();
+            }
         }
+
+        delete pIter;
 
         // Get next script type or set to weak in order to exit
         nScript = ( nEnd < rTxt.Len() ) ?

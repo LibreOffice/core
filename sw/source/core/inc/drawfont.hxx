@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-12 12:44:27 $
+ *  last change: $Author: fme $ $Date: 2001-12-14 12:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class Size;
 class SwFont;
 class ViewShell;
 class SwTxtNode;
+class SwAttrHandler;
 
 #ifdef VERTICAL_LAYOUT
 class SwTxtFrm;
@@ -113,7 +114,7 @@ public:
     inline SwScriptInfo() : nInvalidityPos( 0 ) {};
 
     // determines script changes
-    void InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
+    void InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                          const OutputDevice& rOut );
 
     // set/get position from which data is invalid

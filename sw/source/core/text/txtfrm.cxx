@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 10:59:24 $
+ *  last change: $Author: fme $ $Date: 2001-12-14 12:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,25 @@ long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
     SwitchVerticalToHorizontal( aTmp );
     return aTmp.Y();
 }
+
+SwFrmSwapper::SwFrmSwapper( const SwTxtFrm* pTxtFrm, sal_Bool bSwapIfNotSwapped )
+    : pFrm( pTxtFrm ), bUndo( sal_False )
+{
+    if ( pFrm->IsVertical() &&
+        ( (   bSwapIfNotSwapped && ! pFrm->IsSwapped() ) ||
+          ( ! bSwapIfNotSwapped && pFrm->IsSwapped() ) ) )
+    {
+        bUndo = sal_True;
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+    }
+}
+
+SwFrmSwapper::~SwFrmSwapper()
+{
+    if ( bUndo )
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+}
+
 #endif
 
 /*************************************************************************
@@ -685,8 +704,10 @@ void SwTxtFrm::CalcLineSpace()
 }
 
 #define SET_SCRIPT_INVAL( nPos )\
-    if( GetPara() )\
-        GetPara()->GetScriptInfo().SetInvalidity( nPos );
+{ \
+    if( GetPara() ) \
+        GetPara()->GetScriptInfo().SetInvalidity( nPos ); \
+}
 
 void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
 {
@@ -825,9 +846,17 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
                 _InvalidateRange( SwCharRange( nPos, nLen) );
                 MSHORT nTmp = ((SwUpdateAttr*)pNew)->nWhichAttr;
-                if( !nTmp || RES_CHRATR_LANGUAGE == nTmp ||
-                    RES_TXTATR_CHARFMT == nTmp || RES_FMT_CHG == nTmp )
-                    SET_WRONG( nPos, nPos + nLen, Invalidate );
+
+                if( !nTmp || RES_TXTATR_CHARFMT == nTmp || RES_FMT_CHG == nTmp )
+                {
+                    SET_WRONG( nPos, nPos + nLen, Invalidate )
+                    SET_SCRIPT_INVAL( nPos )
+                }
+                else if ( RES_CHRATR_LANGUAGE == nTmp )
+                    SET_WRONG( nPos, nPos + nLen, Invalidate )
+                else if ( RES_CHRATR_FONT == nTmp || RES_CHRATR_CJK_FONT == nTmp ||
+                          RES_CHRATR_CTL_FONT == nTmp )
+                    SET_SCRIPT_INVAL( nPos )
             }
         }
         break;
@@ -1001,10 +1030,22 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 }
             }
 
-            if( SFX_ITEM_SET == rNewSet.GetItemState( RES_CHRATR_LANGUAGE,
-                sal_False ) || SFX_ITEM_SET == rNewSet.GetItemState(
-                RES_TXTATR_CHARFMT, sal_False ) )
-                SET_WRONG( 0, STRING_LEN, Invalidate );
+            if ( SFX_ITEM_SET ==
+                 rNewSet.GetItemState( RES_TXTATR_CHARFMT, sal_False ) )
+            {
+                SET_WRONG( 0, STRING_LEN, Invalidate )
+                SET_SCRIPT_INVAL( 0 )
+            }
+            else if ( SFX_ITEM_SET ==
+                      rNewSet.GetItemState( RES_CHRATR_LANGUAGE, sal_False ) )
+                SET_WRONG( 0, STRING_LEN, Invalidate )
+            else if ( SFX_ITEM_SET ==
+                      rNewSet.GetItemState( RES_CHRATR_FONT, sal_False ) ||
+                      SFX_ITEM_SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CJK_FONT, sal_False ) ||
+                      SFX_ITEM_SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CTL_FONT, sal_False ) )
+                SET_SCRIPT_INVAL( 0 )
 
             if( nCount )
             {
@@ -1237,9 +1278,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         sal_Bool bNotify )
 {
 #ifdef VERTICAL_LAYOUT
-    ASSERT( ! IsVertical() || ! IsSwapped(),
-            "SwTxtFrm::Prepare with swapped frame" )
+    SwFrmSwapper aSwapper( this, sal_False );
 #endif
+
 #ifdef DEBUG
     const SwTwips nDbgY = Frm().Top();
 #endif

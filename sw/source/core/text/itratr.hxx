@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-19 12:13:07 $
+ *  last change: $Author: fme $ $Date: 2001-12-14 12:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,5 +175,33 @@ public:
 #endif
 };
 
+/*************************************************************************
+ *                      class SwFontIter
+ *
+ * A minimal attribute iterator class. In opposite to the other iterators
+ * it does not need an SwScriptInfo object.
+ *************************************************************************/
+
+class SwFontIter
+{
+    SwFont aFnt;
+    SwAttrHandler& rAttrHandler;
+    const SwpHints* pHints;
+    xub_StrLen nStartIndex, nEndIndex, nCurrPos, nEndPos;
+
+public:
+    // Konstruktor, Destruktor
+    // be sure to pass a fully initialised AttrHandler
+    // (i.e., it has to have a valid pFnt member )
+    SwFontIter( const SwTxtNode& rNode, SwAttrHandler& rAH,
+                xub_StrLen nStt, xub_StrLen nEnd );
+    ~SwFontIter();
+
+    // returns the next position the font changes and changes the font
+    xub_StrLen NextFontChg() const;
+
+    // return the current cont
+    const SwFont& GetCurrFont( xub_StrLen nNewPos );
+};
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-30 13:52:05 $
+ *  last change: $Author: fme $ $Date: 2001-12-14 12:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,3 +1121,74 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
            ( nWidth ? ((100 * aIter.GetFnt()->_GetTxtSize( aDrawInf ).Height()) / nWidth ) : 0 );
 }
 
+SwFontIter::SwFontIter( const SwTxtNode& rNode, SwAttrHandler& rAH,
+                        xub_StrLen nStt, xub_StrLen nEnd )
+    : aFnt( *rAH.GetFont() ), rAttrHandler( rAH ), pHints( rNode.GetpSwpHints() ),
+      nStartIndex( 0 ), nEndIndex( 0 ), nCurrPos( nStt ), nEndPos( nEnd )
+{
+    ASSERT( pHints,
+            "I think SwFontIter is too expensive if we do not have hints" )
+}
+
+SwFontIter::~SwFontIter()
+{
+    rAttrHandler.Reset();
+}
+
+xub_StrLen SwFontIter::NextFontChg() const
+{
+   xub_StrLen nNextPos = STRING_LEN;
+
+    if (pHints->GetStartCount() > nStartIndex) // Gibt es noch Starts?
+       nNextPos = (*pHints->GetStart(nStartIndex)->GetStart());
+    if (pHints->GetEndCount() > nEndIndex) // Gibt es noch Enden?
+    {
+        xub_StrLen nNextEnd = (*pHints->GetEnd(nEndIndex)->GetAnyEnd());
+        if ( nNextEnd < nNextPos ) nNextPos = nNextEnd; // Wer ist naeher?
+    }
+
+    return Min( nEndPos, nNextPos );
+}
+
+const SwFont& SwFontIter::GetCurrFont( xub_StrLen nNewPos )
+{
+    ASSERT( nNewPos >= nCurrPos, "Do not use me (SwFontIter) like this" )
+
+    // change font for position nPos:
+    const SwTxtAttr *pTxtAttr;
+
+    if ( nStartIndex )
+    {
+        while ( ( nEndIndex < pHints->GetEndCount() ) &&
+                (*(pTxtAttr = pHints->GetEnd(nEndIndex))->GetAnyEnd() <= nNewPos))
+        {
+            // close attributes in front of old position
+            if ( *pTxtAttr->GetStart() <= nCurrPos )
+                rAttrHandler.PopAndChg( *pTxtAttr, aFnt );
+
+            nEndIndex++;
+        }
+    }
+    else // skip non open attributes
+    {
+        while ( ( nEndIndex < pHints->GetEndCount() ) &&
+                (*(pTxtAttr = pHints->GetEnd(nEndIndex))->GetAnyEnd() <= nNewPos))
+        {
+            nEndIndex++;
+        }
+    }
+
+    while ( ( nStartIndex < pHints->GetStartCount() ) &&
+           (*(pTxtAttr = pHints->GetStart(nStartIndex))->GetStart() <= nNewPos))
+    {
+        // open attributes behind new position
+        if ( *pTxtAttr->GetAnyEnd() > nNewPos )
+            rAttrHandler.PushAndChg( *pTxtAttr, aFnt );
+
+        nStartIndex++;
+    }
+
+    nCurrPos = nNewPos;
+
+    return aFnt;
+}
