@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:01:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@
 #include "basmgr.hxx"
 #include "dlgcont.hxx"
 #include "scriptcont.hxx"
-#include "helper.hxx"
+#include "sorgitm.hxx"
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
