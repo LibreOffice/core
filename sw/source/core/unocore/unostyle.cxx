@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-20 15:18:27 $
+ *  last change: $Author: os $ $Date: 2001-04-23 10:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,7 +1180,9 @@ BOOL SwXStyle::supportsService(const OUString& rServiceName) throw( RuntimeExcep
 {
     BOOL bRet = C2U("com.sun.star.style.Style") == rServiceName;
     if(!bRet && SFX_STYLE_FAMILY_CHAR == eFamily)
-        bRet = C2U("com.sun.star.style.CharacterProperties") == rServiceName;
+        bRet = !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties")||
+        !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian")||
+        !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex");
     if(!bRet && SFX_STYLE_FAMILY_PARA == eFamily)
         bRet = (C2U("com.sun.star.style.ParagraphStyle") == rServiceName)||
             (C2U("com.sun.star.style.ParagraphProperties") == rServiceName);
@@ -1200,13 +1202,17 @@ Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( RuntimeExce
             nCount++;
     }
     else if(SFX_STYLE_FAMILY_CHAR == eFamily)
-        nCount = 2;
+        nCount = 4;
     Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.style.Style");
     switch(eFamily)
     {
-        case SFX_STYLE_FAMILY_CHAR:     pArray[1] = C2U("com.sun.star.style.CharacterProperties"); break;
+        case SFX_STYLE_FAMILY_CHAR:
+            pArray[1] = C2U("com.sun.star.style.CharacterProperties");
+            pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
+            pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
+        break;
         case SFX_STYLE_FAMILY_PARA:
             pArray[1] = C2U("com.sun.star.style.ParagraphStyle");
             pArray[2] = C2U("com.sun.star.style.ParagraphProperties");
@@ -2069,7 +2075,6 @@ Sequence< Any > SwXStyle::getPropertyValues(
     return aRet;
 }
 /*-- 18.04.01 13:07:29---------------------------------------------------
-
   -----------------------------------------------------------------------*/
 void SwXStyle::addPropertiesChangeListener(
     const Sequence< OUString >& aPropertyNames,
