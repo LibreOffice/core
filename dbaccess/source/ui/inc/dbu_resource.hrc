@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 07:55:26 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,7 @@
 #define STR_OBJECT_ALREADY_EXISTS           RID_STRING_START + 191
 #define STR_NO_COLUMNNAME_MATCHING          RID_STRING_START + 192
 #define STR_ERROR_OCCURED_WHILE_COPYING     RID_STRING_START + 193
+#define STR_QUERY_DROP_ALL                  RID_STRING_START + 194
 
 
 //========================================================================
@@ -469,6 +470,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.63  2001/10/02 07:55:26  oj
+ *  #87728# drag&drop of table row and tableinformation repaired
+ *
  *  Revision 1.62  2001/09/25 13:24:37  oj
  *  #91719# implementing the XRename handling
  *
@@ -483,66 +487,6 @@
  *
  *  Revision 1.58  2001/07/23 13:15:04  oj
  *  #90074# check if calc doc exists
- *
- *  Revision 1.57  2001/07/18 08:51:09  oj
- *  #89772# set new configurationnode when datasource was renamed
- *
- *  Revision 1.56  2001/07/16 13:42:36  oj
- *  #89650# check if table was created for html/rtf format
- *
- *  Revision 1.55  2001/07/09 06:56:48  oj
- *  #88144# d&d for creating relations corrected
- *
- *  Revision 1.54  2001/07/06 08:13:55  oj
- *  #88923# correct table altering
- *
- *  Revision 1.53  2001/07/04 13:09:13  oj
- *  #85663# check if table is accessable and returns data
- *
- *  Revision 1.52  2001/07/03 07:46:45  oj
- *  #80211# set title for datasource browser
- *
- *  Revision 1.51  2001/06/20 12:25:48  oj
- *  #88434# new query msg
- *
- *  Revision 1.50  2001/06/20 08:25:48  fs
- *  #87909# disambiguated duplicate ids
- *
- *  Revision 1.49  2001/06/20 07:02:10  oj
- *  #88434# new id for user admin page
- *
- *  Revision 1.48  2001/06/19 10:58:12  fs
- *  #88393# new direct sql dialog
- *
- *  Revision 1.47  2001/05/29 13:11:51  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.46  2001/05/23 14:16:41  oj
- *  #87149# new helpids
- *
- *  Revision 1.45  2001/05/16 15:33:27  fs
- *  #87065# +QUERY_VIEW_DESIGN_SAVEMODIFIED
- *
- *  Revision 1.44  2001/05/14 11:59:28  oj
- *  #86744# some changes for entries and views
- *
- *  Revision 1.43  2001/05/10 12:13:54  fs
- *  #86223# +STR_MISSING_TABLES_XDROP / +STR_BUTTON_TEXT_ALL / +QUERY_NEED_TO_SAVE_FILTER / +ERR_CANTDOTABLEACTION
- *
- *  Revision 1.42  2001/05/08 12:09:00  fs
- *  #86224# new strings
- *
- *  Revision 1.41  2001/05/02 11:43:55  fs
- *  #86434# +STR_INDEX_NAME_ALREADY_USED
- *
- *  Revision 1.40  2001/04/26 11:49:58  fs
- *  file is alive, again - added support for data source associated bookmarks
- *
- *  Revision 1.39  2001/04/24 14:34:10  oj
- *  impl views and a menu
- *
- *  Revision 1.38  2001/04/12 15:30:17  fs
- *  +STR_LOADING_TABLE/-QUERY
  *
  *  Revision 1.0 25.09.00 08:50:32  fs
  ************************************************************************/

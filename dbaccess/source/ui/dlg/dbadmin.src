@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:00:57 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3072,6 +3072,12 @@ String STR_DOCUMENT_OBJECTS
     Text[ catalan ] = "Bookmarks";
 };
 
+String STR_QUERY_DROP_ALL
+{
+    Text = "Wollen Sie die alle Selektierten löschen?";
+    Text [ english ] = "Do you want to delete all selected?";
+};
+
 String STR_QUERY_DROP_DOCUMENT_LINK
 {
     Text = "Wollen Sie die Dokument-Verknüpfung \"$name$\" löschen?\n\n"
@@ -3361,6 +3367,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.74  2001/10/02 21:00:57  kz
+ *  Merge SRC641: 02.10.01 - 23:00:14
+ *
  *  Revision 1.73  2001/09/27 20:40:25  kz
  *  Merge SRC641: 27.09.01 - 22:39:41
  *
