@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:38:40 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,15 +970,12 @@ String SfxTopViewFrame::UpdateTitle()
     DBG_CHKTHIS(SfxTopViewFrame, 0);
 
     const SfxObjectFactory &rFact = GetObjectShell()->GetFactory();
-    if ( rFact.GetFilterContainer()->GetFilterCount() )
+    pImp->aFactoryName = String::CreateFromAscii( rFact.GetShortName() );
+    USHORT nSlotId = rFact.GetCreateNewSlotId();
+    if ( nSlotId )
     {
-        pImp->aFactoryName = String::CreateFromAscii( rFact.GetShortName() );
-        USHORT nSlotId = rFact.GetCreateNewSlotId();
-        if ( nSlotId )
-        {
-            pImp->aFactoryName += String::CreateFromAscii("?slot=");
-            pImp->aFactoryName += String::CreateFromInt32( (sal_Int32) nSlotId );
-        }
+        pImp->aFactoryName += String::CreateFromAscii("?slot=");
+        pImp->aFactoryName += String::CreateFromInt32( (sal_Int32) nSlotId );
     }
 
     String aTitle = SfxViewFrame::UpdateTitle();
