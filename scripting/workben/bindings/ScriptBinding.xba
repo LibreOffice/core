@@ -71,6 +71,8 @@ private	allEventTypesDoc( 14 ) as new com.sun.star.beans.PropertyValue
 &apos;Array of props to store all event types (Name) and textual description (Value)
 private allEventTypes( 14 ) as new com.sun.star.beans.PropertyValue
 
+
+private dialogName as String
 REM ------ Storage Refresh Function ------
 
 
@@ -185,6 +187,7 @@ Sub createAndPopulateKeyArrays()
 End Sub 
 
 Sub ExecuteKeyBinding()
+	dialogName = &quot;Key&quot;
     createAndPopulateKeyArrays()
 	xmlFileName = GetDocumentType( &quot;Key&quot; )
 
@@ -230,6 +233,7 @@ End Sub
 
 
 Sub ExecuteEventBinding
+	dialogName = &quot;Event&quot;
 	createAllEventTypes()
 	createAllEventBindings()
 	
@@ -251,7 +255,7 @@ Sub ExecuteEventBinding
 End Sub
 
 Sub ExecuteMenuBinding()
-
+	dialogName = &quot;Menu&quot;
 	xmlFileName = GetDocumentType( &quot;Menu&quot; )
 	if not (ReadXMLToArray( &quot;Menu&quot; )) then
 		Exit Sub
@@ -1369,6 +1373,9 @@ sub KeyListListener()
 	selectedShortCut = keyShortCutList.getSelectedItem()
 	combo = bindingDialog.getControl( &quot;KeyCombo&quot; ) 
 
+	menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
+	selectedScript = menuScriptList.getSelectedItem()
+
 	keyGroup = combo.text
     dim keyGroupIndex as Integer
     dim selectedKeyIndex as Integer
@@ -1383,7 +1390,9 @@ sub KeyListListener()
 	if  keyAllocationMap( keyGroupIndex, selectedKeyIndex ).Value &gt; 1 then 
 		bindingDialog.Model.Delete.enabled = true
 		bindingDialog.Model.AddOn.enabled = true
-		bindingDialog.Model.NewButton.enabled = true
+		if selectedScript &lt;&gt; &quot;&quot; then
+			bindingDialog.Model.NewButton.enabled = true
+		endif
 
 	else
 
@@ -1392,10 +1401,11 @@ sub KeyListListener()
 			bindingDialog.Model.AddOn.enabled = false
 			bindingDialog.Model.NewButton.enabled = false
 		else
-
 			bindingDialog.Model.Delete.enabled = false
 			bindingDialog.Model.AddOn.enabled = false
-			bindingDialog.Model.NewButton.enabled = true
+			if selectedScript &lt;&gt; &quot;&quot; then
+				bindingDialog.Model.NewButton.enabled = true
+			end if
 		end if
 	end if
 end sub
@@ -1439,8 +1449,21 @@ sub LangLocComboListener()
     if scriptList.getSelectedItem() = &quot;&quot; then
         bindingDialog.Model.NewButton.enabled = false
     else
-		bindingDialog.Model.NewButton.enabled = true
+	&apos;	bindingDialog.Model.NewButton.enabled = true
     end if
+    
+    
+    &apos; extra dialog dependant processing
+    if dialogName = &quot;Menu&quot; then
+    	&apos; will set New button to false if no text in LableBox
+    	MenuLabelBoxListener()
+    elseif dialogName = &quot;Key&quot; then
+    	&apos; will set Assigne button to false if appropriate
+    	KeyListListener()
+    elseif dialogName = &quot;Event&quot; then
+    	EventListListener()
+    end if
+    
 end sub
 
 
@@ -1486,6 +1509,9 @@ sub EventListListener()
 
     allApps = bindingDialog.getControl( &quot;AllAppsOption&quot; )
 
+	menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
+	selectedScript = menuScriptList.getSelectedItem()
+	
     dim binding as integer
     if allApps.state = true then
     	binding = allEventTypesApp( eventPos ).Value
@@ -1494,11 +1520,19 @@ sub EventListListener()
     endif
 
     if ( binding &gt; 1 ) then
-       	bindingDialog.Model.Delete.enabled = true
+    	if ( selectedScript &lt;&gt; &quot;&quot; ) then
+	       	bindingDialog.Model.Delete.enabled = true
+	    endif	
     else
        	bindingDialog.Model.Delete.enabled = false
     end if
-
+    
+	if ( binding = 1 ) then
+		&apos; staroffice binding, can&apos;t assign
+		bindingDialog.Model.NewButton.enabled = false
+	elseif (  selectedScript &lt;&gt; &quot;&quot; ) then
+		bindingDialog.Model.NewButton.enabled = true
+	end if
     exit sub
 
     ErrorHandler:
