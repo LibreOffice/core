@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:00:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #include <svx/txencbox.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
@@ -135,7 +139,7 @@
 
 //------------------------------------------------------------------------
 
-class ScImportOptions
+class SC_DLLPUBLIC ScImportOptions
 {
 public:
         ScImportOptions()
