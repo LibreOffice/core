@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-19 09:00:47 $
+#   last change: $Author: rt $ $Date: 2004-05-21 09:38:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,9 +73,6 @@ LIBTARGET=NO
 CFLAGS+=-DDG_DLL
 
 # --- Files --------------------------------------------------------
-
-IMGLST_SRS=$(SRS)$/dialogs.srs
-BMP_IN=$(PRJ)$/win/res
 
 SRS1NAME=dialogs
 SRC1FILES =  \
