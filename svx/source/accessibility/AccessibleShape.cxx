@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 11:53:17 $
+ *  last change: $Author: af $ $Date: 2002-05-17 16:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
 #include "AccessibleShapeInfo.hxx"
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -169,36 +172,8 @@ AccessibleShape::~AccessibleShape (void)
 
 void AccessibleShape::Init (void)
 {
-    // Set the opaque state for certain shape types when their fill style is
-    // solid.
-    ::utl::AccessibleStateSetHelper* pStateSet =
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet != NULL)
-        switch (ShapeTypeHandler::Instance().GetTypeId (mxShape))
-        {
-            case DRAWING_PAGE:
-            case DRAWING_RECTANGLE:
-            case DRAWING_TEXT:
-            {
-                uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
-                if (xSet.is())
-                {
-                    try
-                    {
-                        uno::Any aValue = xSet->getPropertyValue (
-                            OUString::createFromAscii ("FillStyle"));
-                        drawing::FillStyle aFillStyle;
-                        aValue >>= aFillStyle;
-                        if (aFillStyle == drawing::FillStyle_SOLID)
-                            pStateSet->AddState (AccessibleStateType::OPAQUE);
-                    }
-                    catch (::com::sun::star::beans::UnknownPropertyException)
-                    {
-                        // Ignore.
-                    }
-                }
-            }
-        }
+    // Update the OPAQUE and SELECTED shape.
+    UpdateStates ();
 
     // Create a children manager when this shape has children of its own.
     Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
@@ -233,6 +208,77 @@ void AccessibleShape::Init (void)
             ::std::auto_ptr<SvxEditSource>(pEditSource));
     }
 #endif
+}
+
+
+
+
+void AccessibleShape::UpdateStates (void)
+{
+    ::utl::AccessibleStateSetHelper* pStateSet =
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    if (pStateSet == NULL)
+        return;
+
+    // Set the opaque state for certain shape types when their fill style is
+    // solid.
+    bool bShapeIsOpaque = false;
+    switch (ShapeTypeHandler::Instance().GetTypeId (mxShape))
+    {
+        case DRAWING_PAGE:
+        case DRAWING_RECTANGLE:
+        case DRAWING_TEXT:
+        {
+            uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
+            if (xSet.is())
+            {
+                try
+                {
+                    uno::Any aValue = xSet->getPropertyValue (
+                        OUString::createFromAscii ("FillStyle"));
+                        drawing::FillStyle aFillStyle;
+                        aValue >>= aFillStyle;
+                        if (aFillStyle == drawing::FillStyle_SOLID)
+                            bShapeIsOpaque = true;
+                }
+                catch (::com::sun::star::beans::UnknownPropertyException)
+                {
+                    // Ignore.
+                }
+            }
+        }
+    }
+    if (bShapeIsOpaque)
+        pStateSet->AddState (AccessibleStateType::OPAQUE);
+    else
+        pStateSet->RemoveState (AccessibleStateType::OPAQUE);
+
+    // Set the selected state.
+    bool bShapeIsSelected = false;
+    Reference<view::XSelectionSupplier> xSelectionSupplier (
+        maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+    {
+        Reference<drawing::XShape> xSelectedShape (
+            xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+        if (xSelectedShape.is() && xSelectedShape == mxShape)
+            bShapeIsSelected = true;
+        else
+        {
+            Reference<container::XIndexAccess> xSelectedShapes (
+                xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+            for (sal_Int32 i=0,nCount=xSelectedShapes->getCount();
+                 i<nCount && !bShapeIsSelected; i++)
+            {
+                if (xSelectedShapes->getByIndex(i) == mxShape)
+                    bShapeIsSelected = true;
+            }
+        }
+    }
+    if (bShapeIsSelected)
+        pStateSet->AddState (AccessibleStateType::SELECTED);
+    else
+        pStateSet->RemoveState (AccessibleStateType::SELECTED);
 }
 
 
@@ -1171,6 +1217,13 @@ void AccessibleShape::disposing (void)
 {
     CheckDisposedState ();
     OSL_TRACE ("AccessibleShape::disposing()");
+
+    // Make sure to send an event that this object looses the focus in the
+    // case that it has the focus.
+    ::utl::AccessibleStateSetHelper* pStateSet =
+          static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    if (pStateSet != NULL)
+        pStateSet->RemoveState (AccessibleStateType::FOCUSED);
 
     // Unregister at broadcasters.
     Reference<lang::XComponent> xComponent (mxShape, uno::UNO_QUERY);
