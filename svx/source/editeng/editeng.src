@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-29 20:21:11 $
+ *  last change: $Author: kz $ $Date: 2001-11-16 22:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,7 @@ Menu RID_MENU_SPELL
         };
     };
 };
+
 
 
 
