@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ class SwXMLWriter : public StgWriter
 {
     sal_Bool bPlain;
 
+    sal_uInt32 _Write();
+
 protected:
     virtual sal_uInt32 WriteStream();
     virtual sal_uInt32 WriteStorage();
@@ -83,8 +85,9 @@ public:
     SwXMLWriter( sal_Bool bPl );
     virtual ~SwXMLWriter();
 
-    virtual sal_uInt32 Write( SwPaM& rPam, SfxMedium& rMed,
-                              const String* pFileName );
+    virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
+
+    virtual sal_Bool IsStgWriter() const;
 };
 
 

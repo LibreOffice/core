@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@ public:
 
     sal_Bool IsShowProgress() const { return bShowProgress; }
     sal_Bool IsBlockMode() const { return bBlock; }
+
+    // XUnoTunnel
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const

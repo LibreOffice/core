@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,24 @@ Reference< XInterface > SAL_CALL SwXMLExport_createInstance(
     throw( Exception )
 {
     return (cppu::OWeakObject*)new SwXMLExport;
+}
+
+const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
+{
+    static Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
+    return aSeq;
+}
+
+sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
+    throw(RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    return SvXMLExport::getSomething( rId );
 }
 
 #ifdef XML_CORE_API

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 10:55:18 $
+ *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 
 SwXMLWriter::SwXMLWriter( sal_Bool bPl ) :
     bPlain( bPl )
@@ -124,22 +125,7 @@ __EXPORT SwXMLWriter::~SwXMLWriter()
 {
 }
 
-sal_uInt32 SwXMLWriter::WriteStream()
-{
-    ASSERT( !this, "SwXMLWriter::WriteStream: use Write!" );
-
-    return ERR_SWG_WRITE_ERROR;
-}
-
-sal_uInt32 SwXMLWriter::WriteStorage()
-{
-    ASSERT( !this, "SwXMLWriter::WriteStorage: use Write!" );
-
-    return ERR_SWG_WRITE_ERROR;
-}
-
-sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
-                               const String* pFileName )
+sal_uInt32 SwXMLWriter::_Write()
 {
     // Get service factory
     Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -155,23 +141,22 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = 0;
 
-    SvStorage *pStorage = bPlain ? 0 : rMed.GetOutputStorage( sal_True );
-    if( pStorage )
+    if( pStg )
     {
-        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+        pGraphicHelper = SvXMLGraphicHelper::Create( *pStg,
                                                      GRAPHICHELPER_MODE_WRITE,
                                                      sal_False );
         xGraphicResolver = pGraphicHelper;
 
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
-        xDocStream = pStorage->OpenStream( sDocName,
+        xDocStream = pStg->OpenStream( sDocName,
                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
         xDocStream->SetBufferSize( 16*1024 );
         xOut = new utl::OOutputStreamWrapper( *xDocStream );
     }
     else
     {
-        xOut = rMed.GetDataSink();
+        xOut = new utl::OOutputStreamWrapper( *pStrm );
     }
 
     // get writer
@@ -205,7 +190,7 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
 
     //Get model
     Reference< lang::XComponent > xModelComp(
-        rPaM.GetDoc()->GetDocShell()->GetModel(), UNO_QUERY );
+        pDoc->GetDocShell()->GetModel(), UNO_QUERY );
     ASSERT( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
@@ -213,14 +198,24 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     // connect model and filter
     xExporter->setSourceDocument( xModelComp );
 
-    pDoc = rPaM.GetDoc();
     PutNumFmtFontsInAttrPool();
     PutEditEngFontsInAttrPool();
 
-    Sequence < PropertyValue > aProps( 1 );
-    PropertyValue *pProps = aProps.getArray();
-    pProps->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FileName") );
-    (pProps++)->Value <<= OUString( rMed.GetName() );
+    Sequence < PropertyValue > aProps( pOrigFileName ? 1 : 0 );
+    if( pOrigFileName )
+    {
+        PropertyValue *pProps = aProps.getArray();
+        pProps->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FileName") );
+        (pProps++)->Value <<= OUString( *pOrigFileName  );
+    }
+
+    if( bBlock )
+    {
+        Reference<XUnoTunnel> xFilterTunnel( xExporter, UNO_QUERY );
+        SwXMLExport *pFilter = (SwXMLExport *)xFilterTunnel->getSomething(
+                                            SwXMLExport::getUnoTunnelId() );
+        pFilter->setBlockMode();
+    }
 
     Reference < XFilter > xFilter( xExporter, UNO_QUERY );
     xFilter->filter( aProps );
@@ -228,16 +223,36 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     if( xDocStream.Is() )
         xDocStream->Commit();
 
-    if( pStorage )
-        pDoc->GetDocShell()->SaveAsChilds( pStorage );
+    if( pStg )
+        pDoc->GetDocShell()->SaveAsChilds( pStg );
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
     xGraphicResolver = 0;
 
-    ResetWriter();
-
     return 0;
+}
+sal_uInt32 SwXMLWriter::WriteStream()
+{
+    return _Write();
+}
+
+sal_uInt32 SwXMLWriter::WriteStorage()
+{
+    return _Write();
+}
+
+sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
+                               const String* pFileName )
+{
+    return IsStgWriter()
+            ? ((StgWriter *)this)->Write( rPaM, *rMed.GetOutputStorage( sal_True ), pFileName )
+            : ((Writer *)this)->Write( rPaM, *rMed.GetOutStream(), pFileName );
+}
+
+sal_Bool SwXMLWriter::IsStgWriter() const
+{
+    return !bPlain;
 }
 
 // -----------------------------------------------------------------------
@@ -253,11 +268,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.12 2001-01-17 10:55:18 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.13 2001-01-22 12:31:45 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/01/17 10:55:18  mib
+      XML filter now is a component
+
       Revision 1.11  2001/01/12 16:34:01  cl
       #82042# added support for xml filter components
 
