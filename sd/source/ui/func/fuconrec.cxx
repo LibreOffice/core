@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-24 12:02:59 $
+ *  last change: $Author: aw $ $Date: 2001-08-27 14:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@
 #include <svx/adjitem.hxx>
 #endif
 
+// #88751#
+#ifndef _SVDCAPT_HXX
+#include <svx/svdocapt.hxx>
+#endif
 
 #include "viewshel.hxx"
 #include "sdresid.hxx"
@@ -327,6 +331,18 @@ BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
             String aStr(SdResId(STR_LAYER_MEASURELINES));
             pObj->SetLayer(rAdmin.GetLayerID(aStr, FALSE));
+        }
+
+        // #88751# init text position when vertica caption object is created
+        if(pObj && pObj->ISA(SdrCaptionObj) && nSlotId == SID_DRAW_CAPTION_VERTICAL)
+        {
+            // draw text object, needs to be initialized when vertical text is used
+            SfxItemSet aSet(pObj->GetItemSet());
+
+            aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+            aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+            pObj->SetItemSet(aSet);
         }
 
         bReturn = TRUE;
