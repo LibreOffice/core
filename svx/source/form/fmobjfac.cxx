@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:17:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
+static BOOL bInit = FALSE;
+
 /*************************************************************************
 |*
 |* Ctor
@@ -154,31 +156,34 @@ using namespace ::svxform;
 \************************************************************************/
 FmFormObjFactory::FmFormObjFactory()
 {
-    SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
+    if ( !bInit )
+    {
+        SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
 
-    //////////////////////////////////////////////////////////////////////
-    // Konfigurations-::com::sun::star::frame::Controller und NavigationBar registrieren
-    SvxFmTbxCtlConfig::RegisterControl( SID_FM_CONFIG );
-    SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
-    SvxFmTbxCtlRecText::RegisterControl( SID_FM_RECORD_TEXT );
-    SvxFmTbxCtlRecFromText::RegisterControl( SID_FM_RECORD_FROM_TEXT );
-    SvxFmTbxCtlRecTotal::RegisterControl( SID_FM_RECORD_TOTAL );
-    SvxFmTbxPrevRec::RegisterControl( SID_FM_RECORD_PREV );
-    SvxFmTbxNextRec::RegisterControl( SID_FM_RECORD_NEXT );
-    ControlConversionMenuController::RegisterControl(SID_FM_CHANGECONTROLTYPE);
+        //////////////////////////////////////////////////////////////////////
+        // Konfigurations-::com::sun::star::frame::Controller und NavigationBar registrieren
+        SvxFmTbxCtlConfig::RegisterControl( SID_FM_CONFIG );
+        SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
+        SvxFmTbxCtlRecText::RegisterControl( SID_FM_RECORD_TEXT );
+        SvxFmTbxCtlRecFromText::RegisterControl( SID_FM_RECORD_FROM_TEXT );
+        SvxFmTbxCtlRecTotal::RegisterControl( SID_FM_RECORD_TOTAL );
+        SvxFmTbxPrevRec::RegisterControl( SID_FM_RECORD_PREV );
+        SvxFmTbxNextRec::RegisterControl( SID_FM_RECORD_NEXT );
+        ControlConversionMenuController::RegisterControl(SID_FM_CHANGECONTROLTYPE);
 
-    // Registrieung von globalen fenstern
-    FmFieldWinMgr::RegisterChildWindow();
-    FmPropBrwMgr::RegisterChildWindow();
-    NavigatorFrameManager::RegisterChildWindow();
-    FmFilterNavigatorWinMgr::RegisterChildWindow();
+        // Registrieung von globalen fenstern
+        FmFieldWinMgr::RegisterChildWindow();
+        FmPropBrwMgr::RegisterChildWindow();
+        NavigatorFrameManager::RegisterChildWindow();
+        FmFilterNavigatorWinMgr::RegisterChildWindow();
 
-    //////////////////////////////////////////////////////////////////////
-    // Interface fuer die Formshell registrieren
-    FmFormShell::RegisterInterface(0);
+        //////////////////////////////////////////////////////////////////////
+        // Interface fuer die Formshell registrieren
+        FmFormShell::RegisterInterface(0);
 
-    ImplSmartRegisterUnoServices();
-
+        ImplSmartRegisterUnoServices();
+        bInit = TRUE;
+    }
 }
 
 
