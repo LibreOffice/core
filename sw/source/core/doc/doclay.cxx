@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:50:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,11 @@
 #include <comcore.hrc>      // STR-ResId's
 #endif
 
+// #i11176#
+#ifndef _UNOFRAME_HXX
+#include <unoframe.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -486,7 +491,18 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     if( rSource.GetRegisteredIn() != pSrcDoc->GetDfltFrmFmt() )
         pDest = CopyFrmFmt( *(SwFrmFmt*)rSource.GetRegisteredIn() );
     if( bFly )
-        pDest = MakeFlyFrmFmt( rSource.GetName(), pDest );
+    {
+        // #i11176#
+        // To do a correct cloning concerning the ZOrder for all objects
+        // it is necessary to actually create a draw object for fly frames, too.
+        // These are then added to the DrawingLayer (which needs to exist).
+        // Together with correct sorting of all drawinglayer based objects
+        // before cloning ZOrder transfer works correctly then.
+        SwFlyFrmFmt *pFormat = MakeFlyFrmFmt( rSource.GetName(), pDest );
+        pDest = pFormat;
+
+        SwXFrame::GetOrCreateSdrObject(pFormat);
+    }
     else
         pDest = MakeDrawFrmFmt( aEmptyStr, pDest );
 
