@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-02 11:06:51 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,19 @@ Menu RID_MAIN_MENU
                         Text[ korean ] = "ë³´ë‚´ê¸°(~D)";
                         Text[ chinese_simplified ] = "å‘é€(~D)";
                         Text[ chinese_traditional ] = "å‚³é€(~D)";
+                        Text[ portuguese ] = "Sen~d";
+                        Text[ russian ] = "Sen~d";
+                        Text[ greek ] = "Sen~d";
+                        Text[ dutch ] = "Sen~d";
+                        Text[ spanish ] = "~Enviar";
+                        Text[ finnish ] = "Sen~d";
+                        Text[ danish ] = "Sen~d";
+                        Text[ polish ] = "Sen~d";
+                        Text[ portuguese_brazilian ] = "Sen~d";
+                        Text[ turkish ] = "Sen~d";
+                        Text[ arabic ] = "Sen~d";
+                        Text[ catalan ] = "Sen~d";
+                        Text[ thai ] = "Sen~d";
                     };
             MenuItem
             {
@@ -237,7 +250,7 @@ Menu RID_MAIN_MENU
                         Text[ french ] = "~Assignation de colonnes...";
                         Text[ spanish ] = "~Asignación de columnas...";
                         Text[ italian ] = "A~ssegnazione colonne...";
-                        Text[ danish ] = "Kolonnetildeling...";
+                        Text[ danish ] = "~Kolonnetildeling...";
                         Text[ swedish ] = "~Kolumntilldelning...";
                         Text[ polish ] = "Przyporz¹dkowanie kolumn...";
                         Text[ portuguese_brazilian ] = "~Column assignment...";
@@ -260,11 +273,26 @@ Menu RID_MAIN_MENU
                 Checkable=TRUE;
                 Text = "~Datenquelle auswählen..." ;
                 Text[ english_us ] = "~Choose Data Source...";
-                   Text[ swedish ] = "Byt ut ~datakälla...";
-                        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®äº¤æ›...";
-                        Text[ korean ] = "ë°ì´í„° ì›ë³¸ êµí™˜(~D)...";
-                        Text[ chinese_simplified ] = "æ›´æ¢æ•°æ®æº(~D)...";
-                        Text[ chinese_traditional ] = "æ›¿æ›è³‡æ–™æº(~D)...";
+                   Text[ swedish ] = "Välj ut ~datakälla...";
+                        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®é¸æŠ...";
+                        Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ êµí™˜(~D)...";
+                        Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº...";
+                        Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº...";
+                        Text[ portuguese ] = "~Fonte de dados...";
+                        Text[ russian ] = "~Èñõîäíûå äàííûå...";
+                        Text[ greek ] = "Ğñïİëåõóç ~äåäïìİíùí...";
+                        Text[ dutch ] = "~Gegevensbron...";
+                        Text[ french ] = "~Sélection de la source de données...";
+                        Text[ spanish ] = "~Seleccionar fuente de datos...";
+                        Text[ finnish ] = "~Tietolähde";
+                        Text[ italian ] = "~Seleziona sorgente dati...";
+                        Text[ danish ] = "~Datakilde...";
+                        Text[ polish ] = "ród³o danych...";
+                        Text[ portuguese_brazilian ] = "~Data source...";
+                        Text[ turkish ] = "~Veri kaynağı...";
+                        Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ...";
+                        Text[ catalan ] = "Font de les ~dades...";
+                        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡~à¸‚à¹‰à¸­à¸¡à¸¹à¸¥...";
                     };
             MenuItem
             {
@@ -373,8 +401,8 @@ Menu RID_MAIN_MENU
             Text[ chinese_traditional ] = "æ’å…¥(~I)";
             Text[ turkish ] = "~Insert";
             Text[ arabic ] = "~Insert";
-            Text[ catalan ] = "~Insert";
-            Text[ thai ] = "~Insert";
+            Text[ catalan ] = "~Insereix";
+            Text[ thai ] = "~à¸§à¸²à¸‡";
         };
     MenuItem
     {
@@ -386,7 +414,7 @@ Menu RID_MAIN_MENU
         Text [ italian ] = "~Strumenti" ;
         Text [ portuguese_brazilian ] = "F~erramentas" ;
         Text [ portuguese ] = "~Ferramentas" ;
-        Text [ finnish ] = "~Ty?alut" ;
+        Text [ finnish ] = "~Työkalut" ;
         Text [ danish ] = "Fun~ktioner" ;
         Text [ french ] = "~Outils" ;
         Text [ swedish ] = "~Verktyg" ;
@@ -411,7 +439,7 @@ Menu RID_MAIN_MENU
                         Text[ french ] = "~Filtrer...";
                         Text[ spanish ] = "~Filtrar...";
                         Text[ italian ] = "~Filtra...";
-                        Text[ danish ] = "Filtrer...";
+                        Text[ danish ] = "~Filtrer...";
                         Text[ swedish ] = "~Filtrera...";
                         Text[ polish ] = "Filtruj...";
                         Text[ portuguese_brazilian ] = "Filter...";
@@ -452,7 +480,7 @@ Menu RID_MAIN_MENU
             Text[ arabic ] = "Ã~ÏæÇÊ";
             Text[ turkish ] = "~Araçlar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "E~ines";
+            Text[ catalan ] = "Ei~nes";
             Text[ thai ] = "à¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­";
         };
     ITEM_WINDOW_MENU
