@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-05 17:00:15 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,9 @@
 // nur temporaer !!!
 // #define RID_SVXPAGE_COLOR 999
 
-#define GRP_COLORTABLE 1
-#define GRP_COLORMODEL 2
+//#define GRP_COLORTABLE 1
+//#define GRP_COLORMODEL 2
+
 #define BTN_WORK_ON 2
 #define CTL_COLORTABLE 3
 #define CTL_PREVIEW_OLD 1
@@ -161,7 +162,7 @@
 #define MTR_FLD_2 2
 #define MTR_FLD_3 3
 #define MTR_FLD_4 4
-
+#define FT_TABLE_NAME 7
 #define MTR_FLD_X_SIZE 4
 #define MTR_FLD_Y_SIZE 5
 #define GRP_SIZE 6

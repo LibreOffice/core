@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 17:03:18 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,8 @@ SvxColorTabPage::SvxColorTabPage
     aXFillColorItem     ( String(), Color( COL_BLACK ) ),
 
     aValSetColorTable   ( this, ResId( CTL_COLORTABLE ) ),
-    aGrpColorTable      ( this, ResId( GRP_COLORTABLE ) ),
+//    aGrpColorTable      ( this, ResId( GRP_COLORTABLE ) ),
+    aTableNameFT        ( this, ResId( FT_TABLE_NAME ) ),
     aFtName             ( this, ResId( FT_NAME ) ),
     aEdtName            ( this, ResId( EDT_NAME ) ),
     aFtColor            ( this, ResId( FT_COLOR ) ),
@@ -143,14 +144,14 @@ SvxColorTabPage::SvxColorTabPage
     aMtrFldColorModel3  ( this, ResId( MTR_FLD_3 ) ),
     aFtColorModel4      ( this, ResId( FT_4 ) ),
     aMtrFldColorModel4  ( this, ResId( MTR_FLD_4 ) ),
-    aGrpColorModel      ( this, ResId( GRP_COLORMODEL ) ),
+//    aGrpColorModel      ( this, ResId( GRP_COLORMODEL ) ),
     aBtnAdd             ( this, ResId( BTN_ADD ) ),
     aBtnModify          ( this, ResId( BTN_MODIFY ) ),
     aBtnWorkOn          ( this, ResId( BTN_WORK_ON ) ),
     aBtnDelete          ( this, ResId( BTN_DELETE ) ),
     aCtlPreviewOld      ( this, ResId( CTL_PREVIEW_OLD ), &XOutOld ),
     aCtlPreviewNew      ( this, ResId( CTL_PREVIEW_NEW ), &XOutNew ),
-    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
+//    aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
     aBtnLoad            ( this, ResId( BTN_LOAD ) ),
     aBtnSave            ( this, ResId( BTN_SAVE ) ),
 
@@ -277,7 +278,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& rSet )
             else
                 aString += aURL.getBase();
 
-            aGrpColorTable.SetText( aString );
+            aTableNameFT.SetText( aString );
 
             // Damit evtl. geaenderte Farbe verworfen wird
             SelectColorLBHdl_Impl( this );
@@ -817,7 +818,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, p )
                     else
                         aString += aURL.getBase();
 
-                    aGrpColorTable.SetText( aString );
+                    aTableNameFT.SetText( aString );
 
                     // Flag fuer gewechselt setzen
                     *pnColorTableState |= CT_CHANGED;
@@ -911,7 +912,7 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, p )
             }
             else
                 aString += aURL.getBase();
-            aGrpColorTable.SetText( aString );
+            aTableNameFT.SetText( aString );
 
             // Flag fuer gespeichert setzen
             *pnColorTableState |= CT_SAVED;
