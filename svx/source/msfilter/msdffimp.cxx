@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:13:41 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2445,8 +2445,9 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
     return bRet;
 }
 
+//static
 void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
-                                    ULONG nRecLen, FASTBOOL bUniCode ) const
+                                    ULONG nRecLen, FASTBOOL bUniCode )
 {
     sal_uInt16 nLen = (sal_uInt16)nRecLen;
     if( nLen )
