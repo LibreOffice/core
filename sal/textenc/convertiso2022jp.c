@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022jp.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:41:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,17 +103,10 @@ typedef struct
     sal_uInt32 m_nRow;
 } ImplIso2022JpToUnicodeContext;
 
-typedef enum
-{
-    IMPL_UNICODE_TO_ISO_2022_JP_SET_NONE,
-    IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII,
-    IMPL_UNICODE_TO_ISO_2022_JP_SET_0208
-} ImplUnicodeToIso2022JpSet;
-
 typedef struct
 {
     sal_Unicode m_nHighSurrogate;
-    ImplUnicodeToIso2022JpSet m_eSet;
+    sal_Bool m_b0208;
 } ImplUnicodeToIso2022JpContext;
 
 void * ImplCreateIso2022JpToUnicodeContext(void)
@@ -362,8 +355,7 @@ void * ImplCreateUnicodeToIso2022JpContext(void)
     void * pContext
         = rtl_allocateMemory(sizeof (ImplUnicodeToIso2022JpContext));
     ((ImplUnicodeToIso2022JpContext *) pContext)->m_nHighSurrogate = 0;
-    ((ImplUnicodeToIso2022JpContext *) pContext)->m_eSet
-        = IMPL_UNICODE_TO_ISO_2022_JP_SET_NONE;
+    ((ImplUnicodeToIso2022JpContext *) pContext)->m_b0208 = sal_False;
     return pContext;
 }
 
@@ -372,8 +364,7 @@ void ImplResetUnicodeToIso2022JpContext(void * pContext)
     if (pContext)
     {
         ((ImplUnicodeToIso2022JpContext *) pContext)->m_nHighSurrogate = 0;
-        ((ImplUnicodeToIso2022JpContext *) pContext)->m_eSet
-            = IMPL_UNICODE_TO_ISO_2022_JP_SET_NONE;
+        ((ImplUnicodeToIso2022JpContext *) pContext)->m_b0208 = sal_False;
     }
 }
 
@@ -391,7 +382,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
         = ((ImplIso2022JpConverterData const *) pData)->
               m_pUnicodeToJisX0208Data;
     sal_Unicode nHighSurrogate = 0;
-    ImplUnicodeToIso2022JpSet eSet = IMPL_UNICODE_TO_ISO_2022_JP_SET_NONE;
+    sal_Bool b0208 = sal_False;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
     sal_Char * pDestBufPtr = pDestBuf;
@@ -402,7 +393,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
     {
         nHighSurrogate
             = ((ImplUnicodeToIso2022JpContext *) pContext)->m_nHighSurrogate;
-        eSet = ((ImplUnicodeToIso2022JpContext *) pContext)->m_eSet;
+        b0208 = ((ImplUnicodeToIso2022JpContext *) pContext)->m_b0208;
     }
 
     for (; nConverted < nSrcChars; ++nConverted)
@@ -433,16 +424,16 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
 
         if (nChar == 0x0A || nChar == 0x0D) /* LF, CR */
         {
-            if (eSet == IMPL_UNICODE_TO_ISO_2022_JP_SET_0208)
+            if (b0208)
                 if (pDestBufEnd - pDestBufPtr >= 3)
                 {
                     *pDestBufPtr++ = 0x1B; /* ESC */
                     *pDestBufPtr++ = 0x28; /* ( */
                     *pDestBufPtr++ = 0x42; /* B */
+                    b0208 = sal_False;
                 }
                 else
                     goto no_output;
-            eSet = IMPL_UNICODE_TO_ISO_2022_JP_SET_NONE;
             if (pDestBufPtr != pDestBufEnd)
                 *pDestBufPtr++ = (sal_Char) nChar;
             else
@@ -452,13 +443,13 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
             goto bad_input;
         else if (nChar < 0x80)
         {
-            if (eSet != IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII)
+            if (b0208)
                 if (pDestBufEnd - pDestBufPtr >= 3)
                 {
                     *pDestBufPtr++ = 0x1B; /* ESC */
                     *pDestBufPtr++ = 0x28; /* ( */
                     *pDestBufPtr++ = 0x42; /* B */
-                    eSet = IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII;
+                    b0208 = sal_False;
                 }
                 else
                     goto no_output;
@@ -497,13 +488,13 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
             }
             if (nBytes != 0)
             {
-                if (eSet != IMPL_UNICODE_TO_ISO_2022_JP_SET_0208)
+                if (!b0208)
                     if (pDestBufEnd - pDestBufPtr >= 3)
                     {
                         *pDestBufPtr++ = 0x1B; /* ESC */
                         *pDestBufPtr++ = 0x24; /* $ */
                         *pDestBufPtr++ = 0x42; /* B */
-                        eSet = IMPL_UNICODE_TO_ISO_2022_JP_SET_0208;
+                        b0208 = sal_True;
                     }
                     else
                         goto no_output;
@@ -530,7 +521,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
                     pDestBufEnd,
                     &nInfo,
                     "\x1B(B",
-                    eSet == IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII ? 0 : 3,
+                    b0208 ? 3 : 0,
                     &bWritten))
         {
         case IMPL_BAD_INPUT_STOP:
@@ -539,7 +530,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
 
         case IMPL_BAD_INPUT_CONTINUE:
             if (bWritten)
-                eSet = IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII;
+                b0208 = sal_False;
             nHighSurrogate = 0;
             continue;
 
@@ -571,8 +562,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
                             pDestBufEnd,
                             &nInfo,
                             "\x1B(B",
-                            eSet == IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII ?
-                                0 : 3,
+                            b0208 ? 3 : 0,
                             &bWritten))
                 {
                 case IMPL_BAD_INPUT_STOP:
@@ -582,7 +572,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
 
                 case IMPL_BAD_INPUT_CONTINUE:
                     if (bWritten)
-                        eSet = IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII;
+                        b0208 = sal_False;
                     nHighSurrogate = 0;
                     break;
 
@@ -591,7 +581,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
                     break;
                 }
         if (bFlush
-            && eSet == IMPL_UNICODE_TO_ISO_2022_JP_SET_0208
+            && b0208
             && (nFlags & RTL_UNICODETOTEXT_FLAGS_FLUSH) != 0)
         {
             if (pDestBufEnd - pDestBufPtr >= 3)
@@ -599,7 +589,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
                 *pDestBufPtr++ = 0x1B; /* ESC */
                 *pDestBufPtr++ = 0x28; /* ( */
                 *pDestBufPtr++ = 0x42; /* B */
-                eSet = IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII;
+                b0208 = sal_False;
             }
             else
                 nInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
@@ -610,7 +600,7 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
     {
         ((ImplUnicodeToIso2022JpContext *) pContext)->m_nHighSurrogate
             = nHighSurrogate;
-        ((ImplUnicodeToIso2022JpContext *) pContext)->m_eSet = eSet;
+        ((ImplUnicodeToIso2022JpContext *) pContext)->m_b0208 = b0208;
     }
     if (pInfo)
         *pInfo = nInfo;
