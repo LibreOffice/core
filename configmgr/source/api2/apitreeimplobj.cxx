@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:18:54 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ class ApiTreeImpl::ComponentAdapter : public lang::XEventListener
     uno::Reference< lang::XComponent > xParent;
 public:
     ComponentAdapter(ApiTreeImpl& rParent) : pOwner(&rParent) {}
+    virtual ~ComponentAdapter() {}
 
     void clear();
 
@@ -416,24 +417,26 @@ configuration::DefaultProvider extractDefaultProvider(ApiTreeImpl* pParentTree)
 }
 //-------------------------------------------------------------------------
 ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
-: m_pInstance(pInstance)
-, m_aTree(aTree)
+: m_aTree(aTree)
+, m_aNotifier(new NotifierImpl(aTree))
 , m_aDefaultProvider(rParentTree.getDefaultProvider())
+, m_xProvider()
 , m_rProvider(rParentTree.getProvider())
 , m_pParentTree(0)
-, m_aNotifier(new NotifierImpl(aTree))
+, m_pInstance(pInstance)
 {
     setNodeInstance(aTree.getRootNode(), pInstance);
     init(&rParentTree);
 }
 //-------------------------------------------------------------------------
 ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::TreeRef const& aTree, ApiTreeImpl* pParentTree)
-: m_pInstance(pInstance)
-, m_aTree(aTree)
+: m_aTree(aTree)
+, m_aNotifier(new NotifierImpl(aTree))
 , m_aDefaultProvider(extractDefaultProvider(pParentTree))
+, m_xProvider()
 , m_rProvider(rProvider)
 , m_pParentTree(0)
-, m_aNotifier(new NotifierImpl(aTree))
+, m_pInstance(pInstance)
 {
     OSL_ENSURE(pParentTree == NULL || &rProvider == &pParentTree->m_rProvider,"WARNING: Parent tree has a different provider - trouble may be ahead");
     setNodeInstance(aTree.getRootNode(), pInstance);
@@ -441,12 +444,13 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, config
 }
 //-------------------------------------------------------------------------
 ApiTreeImpl::ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, configuration::TreeRef const& _aTree, DefaultProvider const& _aDefaultProvider)
-: m_pInstance(_pInstance)
-, m_aTree(_aTree)
+: m_aTree(_aTree)
+, m_aNotifier(new NotifierImpl(_aTree))
 , m_aDefaultProvider(_aDefaultProvider)
+, m_xProvider()
 , m_rProvider(_rProvider)
 , m_pParentTree(0)
-, m_aNotifier(new NotifierImpl(_aTree))
+, m_pInstance(_pInstance)
 {
     setNodeInstance(_aTree.getRootNode(), _pInstance);
     init(NULL);
@@ -462,9 +466,9 @@ ApiTreeImpl::~ApiTreeImpl()
 
 ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, TreeOptions const& _xOptions)
 : m_aTreeImpl(pInstance, rProvider, aTree.getRef(), createDefaultProvider(rProvider, aTree, _xOptions))
+, m_aLocationPath( configuration::Path::Rep() )
 , m_pNotificationListener(NULL)
 , m_xOptions(_xOptions)
-, m_aLocationPath( configuration::Path::Rep() )
 {
     implSetLocation(aTree);
     enableNotification(true);
