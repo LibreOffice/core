@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:16:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4013,6 +4013,7 @@
 		</group>
 		<group oor:name="MailCommandLineProfile">
 			<info>
+				<deprecated>Without replacement.</deprecated>
 				<author>OBR</author>
 				<desc xml:lang="en-US">Contains the command line profile for external mail applications.</desc>
 				<desc xml:lang="el">Contains the command line profile for external mail applications.</desc>
@@ -28556,6 +28557,7 @@
 			</info>
 			<prop oor:name="UseDefaultMailer" oor:type="xs:boolean">
 				<info>
+					<deprecated>Without replacement.</deprecated>
 					<desc xml:lang="en-US">Indicates if the mail application in the OS specific user settings should be used.</desc>
 					<desc xml:lang="el">Indicates if the mail application in the OS specific user settings should be used.</desc>
 					<desc xml:lang="nl">Indicates if the mail application in the OS specific user settings should be used.</desc>
@@ -28621,6 +28623,7 @@
 			</prop>
 			<prop oor:name="CommandProfile" oor:type="xs:string">
 				<info>
+					<deprecated>Without replacement.</deprecated>
 					<desc xml:lang="en-US">Specifies the default external mail application.</desc>
 					<desc xml:lang="el">Specifies the default external mail application.</desc>
 					<desc xml:lang="nl">Specifies the default external mail application.</desc>
@@ -28654,6 +28657,7 @@
 			</prop>
 			<set oor:name="Profiles" oor:node-type="MailCommandLineProfile">
 				<info>
+					<deprecated>Without replacement.</deprecated>
 					<desc xml:lang="en-US">Contains a set of supported command line profiles.</desc>
 					<desc xml:lang="el">Contains a set of supported command line profiles.</desc>
 					<desc xml:lang="nl">Contains a set of supported command line profiles.</desc>
