@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 13:29:11 $
+ *  last change: $Author: fs $ $Date: 2001-03-08 09:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,7 @@ void ODbaseTable::refreshIndexes()
         aURL.SetURL(getEntry());
 
         aURL.setExtension(String::CreateFromAscii("inf"));
-        Config aInfFile(aURL.GetURLNoPass());
+        Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
         aInfFile.SetGroup(dBASE_III_GROUP);
         USHORT nKeyCnt = aInfFile.GetKeyCount();
         ByteString aKeyName;
