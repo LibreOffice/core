@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:41:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,18 +252,20 @@ SfxItemSet& SdStyleSheet::GetItemSet()
             USHORT nWhichPairTable[] = { XATTR_LINE_FIRST,              XATTR_LINE_LAST,
                                          XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
-                                         SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
-                                         SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_HORZADJUST,
-                                         SDRATTR_TEXT_ANIKIND,          SDRATTR_TEXT_CONTOURFRAME,
-                                         SDRATTR_EDGE_FIRST,            SDRATTR_EDGE_LAST,
-                                         SDRATTR_MEASURE_FIRST,         SDRATTR_MEASURE_LAST,
+                                        SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
+                                        SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
 
-                                         EE_PARA_START,                 EE_CHAR_END,
+                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_AUTOGROWSIZE,
 
-                                         SDRATTR_XMLATTRIBUTES,         SDRATTR_XMLATTRIBUTES,
+                                        SDRATTR_EDGE_FIRST,             SDRATTR_EDGE_LAST,
+                                        SDRATTR_MEASURE_FIRST,          SDRATTR_MEASURE_LAST,
 
-                                         SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                                         0, 0 };
+                                        EE_PARA_START,                  EE_CHAR_END,
+
+                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
+
+                                        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                                        0, 0 };
 
             pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);
         }
@@ -291,8 +293,10 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                              XATTR_FILL_FIRST,              XATTR_FILL_LAST,
 
                                              SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
-                                             SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_HORZADJUST,
-                                             SDRATTR_TEXT_ANIKIND,          SDRATTR_TEXT_CONTOURFRAME,
+                                             SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_CONTOURFRAME,
+
+                                             SDRATTR_TEXT_WORDWRAP,         SDRATTR_TEXT_AUTOGROWSIZE,
+
                                              SDRATTR_EDGE_FIRST,            SDRATTR_EDGE_LAST,
                                              SDRATTR_MEASURE_FIRST,         SDRATTR_MEASURE_LAST,
 
