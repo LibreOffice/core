@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-26 07:54:04 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ protected:
     BOOL bTmplBrowseMode : 1;
     BOOL bReadUTF8: 1;      // Stream als UTF-8 interpretieren
     BOOL bBlockMode: 1;
+    BOOL bOrganizerMode : 1;
 
 public:
     Reader();
@@ -297,6 +298,9 @@ public:
 
     BOOL IsBlockMode() const { return bBlockMode; }
     void SetBlockMode( BOOL bSet ) { bBlockMode = bSet; }
+
+    BOOL IsOrganizerMode() const { return bOrganizerMode; }
+    void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
 
     virtual BOOL HasGlossaries() const;
     virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
@@ -478,6 +482,7 @@ public:
     BOOL bUCS2_WithStartChar : 1;
 
     BOOL bBlock : 1;
+    BOOL bOrganizerMode : 1;
 
     Writer();
     virtual ~Writer();
@@ -543,6 +548,9 @@ public:
 #else
     SvStream& Strm();
 #endif
+
+    BOOL IsOrganizerMode() const { return bOrganizerMode; }
+    void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
 };
 
 #ifndef SW_DECL_WRITER_DEFINED

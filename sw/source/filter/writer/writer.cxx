@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-27 14:59:28 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,8 @@ Writer::Writer()
 {
     bWriteAll = bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
-        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock = FALSE;
+        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
+        bOrganizerMode = FALSE;
 }
 
 Writer::~Writer()
@@ -245,7 +246,8 @@ void Writer::ResetWriter()
 
     bShowProgress = bUCS2_WithStartChar = TRUE;
     bASCII_NoLastLineEnd = bASCII_ParaAsBlanc = bASCII_ParaAsCR =
-        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock = FALSE;
+        bWriteClipboardDoc = bWriteOnlyFirstTable = bBlock =
+        bOrganizerMode = FALSE;
 }
 
 BOOL Writer::CopyNextPam( SwPaM ** ppPam )
@@ -658,11 +660,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.8 2001-02-27 14:59:28 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.9 2001-03-06 11:13:10 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/02/27 14:59:28  os
+      Complete use of DefaultNumbering component
+
       Revision 1.7  2001/01/22 12:29:52  mib
       Block mode for Writers added
 

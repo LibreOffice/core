@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-05 12:48:58 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,16 @@ BOOL SwDocShell::Save()
             break;
 
         case SFX_CREATE_MODE_ORGANIZER:
-            if( !bXML )
+            if( bXML )
+            {
+                WriterRef xWrt;
+                ::GetXMLWriter( aEmptyStr, xWrt );
+                xWrt->SetOrganizerMode( TRUE );
+                SwWriter aWrt( *pIo->GetStorage(), *pDoc );
+                nErr = aWrt.Write( xWrt );
+                xWrt->SetOrganizerMode( FALSE );
+            }
+            else
                 nErr = pIo->SaveStyles();
             break;
 
