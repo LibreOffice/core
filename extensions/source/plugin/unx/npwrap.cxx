@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-27 19:44:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ extern void* pPluginLib;
 
 static long GlobalConnectionLostHdl( void* pInst, void* pArg )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "xhello exiting due to connection lost\n" );
 #endif
     exit( 0 );
@@ -178,7 +178,7 @@ static void CheckPlugin( const char* pPath )
     void *pLib = dlopen( pPath, RTLD_LAZY );
     if( ! pLib )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "could not dlopen( %s ) (%s)\n", pPath, dlerror() );
 #endif
         return;
@@ -188,7 +188,7 @@ static void CheckPlugin( const char* pPath )
         dlsym( pLib, "NP_GetMIMEDescription" );
     if( pNP_GetMIMEDescription )
         printf( "%s\n", pNP_GetMIMEDescription() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "could not dlsym NP_GetMIMEDescription (%s)\n", dlerror() );
 #endif
