@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
+ *  last change: $Author: jl $ $Date: 2002-09-17 13:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,16 +183,22 @@ namespace stoc_javaloader {
             javaVM = _xSMgr->createInstanceWithContext(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine")),
                 xCtx );
-            if(!javaVM.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 10")), Reference<XInterface>());
+            if(!javaVM.is())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - could not create com.sun.star.java.JavaVirtualMachine")), Reference<XInterface>());
             Reference<XJavaVM>    javaVM_xJavaVM(javaVM, UNO_QUERY);
-            if(!javaVM_xJavaVM.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 11")), Reference<XInterface>());
+            if(!javaVM_xJavaVM.is())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - could not get XJavaVM interface from JavaVirtualMachine service")), Reference<XInterface>());
 
             Sequence<sal_Int8> processID(16);
             rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8 *>(processID.getArray()));
 
             if(javaVM_xJavaVM->getJavaVM(processID).hasValue())
                 pJavaVM = *(JavaVM **)(javaVM_xJavaVM->getJavaVM(processID).getValue());
-            if(!pJavaVM) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 12")), Reference<XInterface>());
+            if(!pJavaVM)
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                   "javaloader error - JavaVirtualMachine service could not provide a VM")), Reference<XInterface>());
 
             xJavaThreadRegister_11 = Reference<XJavaThreadRegister_11>(javaVM, UNO_QUERY);
             if(xJavaThreadRegister_11.is())
@@ -202,24 +208,39 @@ namespace stoc_javaloader {
 
 
             // instantiate the java JavaLoader
-            jclass jcJavaLoader = pJNIEnv->FindClass("com/sun/star/comp/loader/JavaLoader");     if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("error - 26")), Reference<XInterface>());
-            jmethodID jmJavaLoader_init = pJNIEnv->GetMethodID(jcJavaLoader, "<init>", "()V");   if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("error - 27")), Reference<XInterface>());
-            jobject joJavaLoader = pJNIEnv->NewObject(jcJavaLoader, jmJavaLoader_init);          if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("error - 28")), Reference<XInterface>());
+            jclass jcJavaLoader = pJNIEnv->FindClass("com/sun/star/comp/loader/JavaLoader");
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - could not find class com/sun/star/comp/loader/JavaLoader")), Reference<XInterface>());
+            jmethodID jmJavaLoader_init = pJNIEnv->GetMethodID(jcJavaLoader, "<init>", "()V");
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed")), Reference<XInterface>());
+            jobject joJavaLoader = pJNIEnv->NewObject(jcJavaLoader, jmJavaLoader_init);
+            if(pJNIEnv->ExceptionOccurred())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - instantiation of com.sun.star.comp.loader.JavaLoader failed")), Reference<XInterface>());
 
 
             // map the java JavaLoader to this environment
             OUString sJava(RTL_CONSTASCII_USTRINGPARAM("java"));
 
             uno_getRegisteredEnvironments(&ppJava_environments, &size, (uno_memAlloc)malloc, sJava.pData);
-            if(!size) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 1")), Reference<XInterface>());
+            if(!size)
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no Java environment available")), Reference<XInterface>());
 
             // why is there no convinient contructor?
             OUString sCppu_current_lb_name(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
             uno_getEnvironment(&pUno_environment, sCppu_current_lb_name.pData, NULL);
-            if(!pUno_environment) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 2")), Reference<XInterface>());
+            if(!pUno_environment)
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no C++ environment available")), Reference<XInterface>());
 
             Mapping java_curr(ppJava_environments[0], pUno_environment);
-            if(!java_curr.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 3")), Reference<XInterface>());
+            if(!java_curr.is())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no mapping from java to C++ ")), Reference<XInterface>());
 
             // release all java environments
             for(sal_Int32 i = 0; i < size; ++ i)
@@ -232,10 +253,15 @@ namespace stoc_javaloader {
             pUno_environment = NULL;
 
             getCppuType((Reference<XImplementationLoader> *) 0).getDescription((typelib_TypeDescription **) & pType_XImplementationLoader);
-            if(!pType_XImplementationLoader) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 4")), Reference<XInterface>());
+            if(!pType_XImplementationLoader)
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - no type information for XImplementationLoader")), Reference<XInterface>());
 
-            _javaLoader = Reference<XImplementationLoader>(reinterpret_cast<XImplementationLoader *>(java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
-            if(!_javaLoader.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 13")), Reference<XInterface>());
+            _javaLoader = Reference<XImplementationLoader>(reinterpret_cast<XImplementationLoader *>(
+                              java_curr.mapInterface(joJavaLoader, pType_XImplementationLoader)));
+            if(!_javaLoader.is())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - mapping of java XImplementationLoader to c++ failed")), Reference<XInterface>());
 
             typelib_typedescription_release(reinterpret_cast<typelib_TypeDescription *>(pType_XImplementationLoader));
             pType_XImplementationLoader = NULL;
@@ -255,7 +281,9 @@ namespace stoc_javaloader {
 
             // set the service manager at the javaloader
             Reference<XInitialization> javaLoader_XInitialization(_javaLoader, UNO_QUERY);
-            if(!javaLoader_XInitialization.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader error - 14")), Reference<XInterface>());
+            if(!javaLoader_XInitialization.is())
+                throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "javaloader error - initialization of java javaloader failed, no XInitialization")), Reference<XInterface>());
 
             Any any;
             any <<= _xSMgr;
