@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:39:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ czech ] = "Kvalita";
         Text[ hebrew ] = "‮איכות‬";
         Text[ hindi ] = "गुण";
+        Text[ slovak ] = "Kvalita";
     };
     FixedText FI_DESCR
     {
@@ -162,6 +163,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ czech ] = "1: min. kvalita\n100: max. kvalita";
         Text[ hebrew ] = "‮1 - איכות מזערית\n100 - איכות מירבית‬";
         Text[ hindi ] = "1: min. quality\n100: max. quality";
+        Text[ slovak ] = "1: min. kvalita\n100: max. kvalita";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -209,6 +211,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ czech ] = "Počet barev";
         Text[ hebrew ] = "‮רזולוצית הצבע‬";
         Text[ hindi ] = "रंग का रेजॉल्यूशन्";
+        Text[ slovak ] = "Počet farieb";
     };
     RadioButton RB_GRAY
     {
@@ -244,6 +247,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ czech ] = "Stupně šedi";
         Text[ hebrew ] = "‮סולם האפור‬";
         Text[ hindi ] = "ग्रेस्केल्";
+        Text[ slovak ] = "Stupne šedej";
     };
     RadioButton RB_RGB
     {
@@ -279,6 +283,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ czech ] = "Pravé barvy";
         Text[ hebrew ] = "‮צבע אמיתי‬";
         Text[ hindi ] = "True Colors";
+        Text[ slovak ] = "Skutočné farby";
     };
     Text [ portuguese_brazilian ] = "Op��es JPEG" ;
     Text [ portuguese ] = "Op��es JPEG" ;
@@ -300,7 +305,10 @@ ModalDialog DLG_EXPORT_JPG
     Text[ czech ] = "Možnosti JPEG";
     Text[ hebrew ] = "‮אפשרויות ‬JPEG";
     Text[ hindi ] = "JPEG विकल्प";
+    Text[ slovak ] = "Nastavenia JPEG";
 };
+
+
 
 
 
