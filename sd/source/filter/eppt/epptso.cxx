@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-05 16:11:03 $
+ *  last change: $Author: sj $ $Date: 2001-06-07 14:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
+#endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
@@ -587,14 +590,15 @@ FontCollection::~FontCollection()
 {
     for( void* pStr = List::First(); pStr; pStr = List::Next() )
         delete (FontCollectionEntry*)pStr;
+    delete pVDev;
 }
 
-FontCollection::FontCollection()
+FontCollection::FontCollection() :
+    pVDev ( NULL )
 {
-
 }
 
-sal_uInt32 FontCollection::GetId( const FontCollectionEntry& rEntry )
+sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
 {
     if( rEntry.Name.Len() )
     {
@@ -603,6 +607,27 @@ sal_uInt32 FontCollection::GetId( const FontCollectionEntry& rEntry )
         for( sal_uInt32 i = 0; i < nCount; i++ )
             if( GetById( i )->Name == rEntry.Name )
                 return i;
+
+        Font aFont;
+        aFont.SetCharSet( rEntry.CharSet );
+        aFont.SetName( rEntry.Name );
+//      aFont.SetFamily( rEntry.Family );
+//      aFont.SetPitch( rEntry.Pitch );
+        aFont.SetHeight( 100 );
+
+        if ( !pVDev )
+            pVDev = new VirtualDevice;
+        pVDev->SetFont( aFont );
+        FontMetric aMetric( pVDev->GetFontMetric() );
+
+        sal_uInt16 nTxtHeight = (sal_uInt16)aMetric.GetAscent() + (sal_uInt16)aMetric.GetDescent();
+
+        if ( nTxtHeight )
+        {
+            double fScaling = (double)nTxtHeight / 120.0;
+            if ( ( fScaling > 0.50 ) && ( fScaling < 1.5 ) )
+                rEntry.Scaling = fScaling;
+        }
 
         List::Insert( new FontCollectionEntry( rEntry ), LIST_APPEND );
         return nCount;
@@ -1572,6 +1597,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 
     for ( ParagraphObj* pPara = rTextObj.First() ; pPara; pPara = rTextObj.Next(), bFirstParagraph = FALSE )
     {
+        PortionObj* pPortion = (PortionObj*)pPara->First();
         nCharCount = pPara->Count();
 
         nDepth = pPara->nDepth;
@@ -1582,14 +1608,31 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_Adjust, pPara->mnTextAdjust ) ) )
             nPropertyFlags |= 0x00000800;
         nLineSpacing = pPara->mnLineSpacing;
-        if ( bFirstParagraph && ( nLineSpacing > 100 ) )
+
+        const FontCollectionEntry* pDesc = maFontCollection.GetById( pPortion->mnFont );
+        sal_Int16 nNormalSpacing = 100;
+        if ( bFirstParagraph && pDesc )
         {
-            nLineSpacing = 100;
+            double fN = 100.0;
+            fN /= pDesc->Scaling;
+            nNormalSpacing = (sal_Int16)( fN + 0.5 );
+        }
+        if ( bFirstParagraph && ( nLineSpacing > nNormalSpacing ) )
+        {
+            nLineSpacing = nNormalSpacing;
             nPropertyFlags |= 0x00001000;
         }
-        else if ( ( pPara->meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
-            nPropertyFlags |= 0x00001000;
+        else
+        {
+            if ( nLineSpacing > 0 )
+            {
+                if ( pDesc )
+                     nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+            }
+            if ( ( pPara->meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
+                nPropertyFlags |= 0x00001000;
+        }
         if ( ( pPara->meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) ) )
             nPropertyFlags |= 0x00004000;

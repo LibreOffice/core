@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:58:23 $
+ *  last change: $Author: sj $ $Date: 2001-06-07 13:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2202,16 +2202,25 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
 }
 
 void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                        FontCollection& rFontCollection, int nLevel, sal_uInt16 nCharacterHeight )
+                                        FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel )
 {
     ParagraphObj aParagraphObj( rXPropSet, rBuProv );
-    aParagraphObj.CalculateGraphicBulletSize( nCharacterHeight );
+    aParagraphObj.CalculateGraphicBulletSize( rCharLevel.mnFontHeight );
     PPTExParaLevel& rLev = maParaLevel[ nLevel ];
 
     if ( aParagraphObj.meTextAdjust == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         rLev.mnAdjust = aParagraphObj.mnTextAdjust;
     if ( aParagraphObj.meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        rLev.mnLineFeed = aParagraphObj.mnLineSpacing;
+    {
+        sal_Int16 nLineSpacing = aParagraphObj.mnLineSpacing;
+        if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
+        {
+            const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
+            if ( pDesc )
+                 nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+        }
+        rLev.mnLineFeed = nLineSpacing;
+    }
     if ( aParagraphObj.meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         rLev.mnLowerDist = aParagraphObj.mnLineSpacingBottom;
     if ( aParagraphObj.meLineSpacingTop == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
@@ -2332,7 +2341,7 @@ void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::c
         return;
 
     mpCharSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel );
-    mpParaSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel, mpCharSheet[ nInstance ]->maCharLevel[ nLevel ].mnFontHeight );
+    mpParaSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel, mpCharSheet[ nInstance ]->maCharLevel[ nLevel ] );
 }
 
 sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue )

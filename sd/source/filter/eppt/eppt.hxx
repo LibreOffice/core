@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-04 15:56:03 $
+ *  last change: $Author: sj $ $Date: 2001-06-07 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,7 @@ class SoundCollection : private List
 struct FontCollectionEntry
 {
         String                  Name;
+        double                  Scaling;
         sal_Int16               Family;
         sal_Int16               Pitch;
         sal_Int16               CharSet;
@@ -423,18 +424,21 @@ struct FontCollectionEntry
                             Name    ( rName ),
                             Family  ( nFamily ),
                             Pitch   ( nPitch ),
-                            CharSet ( nCharSet ) {};
+                            CharSet ( nCharSet ),
+                            Scaling ( 1.0 ) {};
         FontCollectionEntry( const String& rName ) :
                             Name    ( rName ) {};
 };
 
+class VirtualDevice;
 class FontCollection : private List
 {
+        VirtualDevice* pVDev;
     public :
                     FontCollection();
                     ~FontCollection();
 
-        sal_uInt32  GetId( const FontCollectionEntry& rFontDescriptor );
+        sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
         sal_uInt32  GetCount() const { return List::Count(); };
         const FontCollectionEntry*                      GetById( sal_uInt32 nId );
         FontCollectionEntry&    GetLast() { return *(FontCollectionEntry*)List::Last(); };
@@ -531,7 +535,7 @@ struct PPTExParaSheet
                 PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv );
 
                 void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
-                                        FontCollection& rFontCollection, int nLevel, sal_uInt16 nCharHeight );
+                                        FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
                 void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
 };
 
