@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: mib $ $Date: 2001-07-11 11:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,7 +447,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
         // Im STYLE-Tag des String direct ausgeben
         if( pVal )
             sOut += pVal;
-        else if( pVal )
+        else if( pSVal )
         {
             ByteString sTmp( *pSVal, eDestEnc );
             sOut += sTmp;
@@ -3495,6 +3495,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.6  2000/12/21 16:21:48  jp
       writegraphic optional in original format and not general as JPG
 
