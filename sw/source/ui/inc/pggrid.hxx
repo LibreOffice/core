@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-16 10:59:43 $
+ *  last change: $Author: os $ $Date: 2002-04-22 14:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,19 +112,23 @@ class SwTextGridPage: public SfxTabPage
     FixedText       aColorFT;
     ColorListBox    aColorLB;
 
+    Window*         aControls[16];
+
     sal_Int32       m_nRubyUserValue;
     sal_Bool        m_bRubyUserValue;
-    sal_Int32       m_nPageWidth;
+    Size            m_aPageSize;
     sal_Bool        m_bVertical;
 
     SwTextGridPage(Window *pParent, const SfxItemSet &rSet);
     ~SwTextGridPage();
 
-    void UpdatePageWidth(const SfxItemSet& rSet);
+    void UpdatePageSize(const SfxItemSet& rSet);
     void PutGridItem(SfxItemSet& rSet);
 
+    DECL_LINK(GridTypeHdl, RadioButton*);
     DECL_LINK(CharSizeChangedHdl, SpinField*);
     DECL_LINK(GridModifyHdl, void*);
+    DECL_LINK(DisplayGridHdl, CheckBox*);
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();
