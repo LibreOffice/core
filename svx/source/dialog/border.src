@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 10:56:35 $
+ *  last change: $Author: pb $ $Date: 2002-11-26 10:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,4 +741,81 @@ TabPage RID_SVXPAGE_BORDER
     Text[ catalan ] = "Borders";
     Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
 };
- // **********************************************************************
+
+String RID_SVXSTR_TABLE_PRESET_NONE
+{
+    Text = "Keine Umrandung zeichnen" ;
+    Text [ english_us ] = "Set No Borders" ;
+};
+String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
+{
+    Text = "Nur äußere Umrandung zeichnen" ;
+    Text [ english_us ] = "Set Outer Border Only" ;
+};
+String RID_SVXSTR_TABLE_PRESET_OUTERHORI
+{
+    Text = "Äußere Umrandung und horizontale Linien zeichnen" ;
+    Text [ english_us ] = "Set Outer Border and Horizontal Lines" ;
+};
+String RID_SVXSTR_TABLE_PRESET_OUTERALL
+{
+    Text = "Äußere Umrandung und alle inneren Linien zeichnen" ;
+    Text [ english_us ] = "Set Outer Border and All Inner Lines" ;
+};
+String RID_SVXSTR_TABLE_PRESET_OUTERINNER
+{
+    Text = "Äußere Umrandung zeichnen ohne innere Linien zu verändern" ;
+    Text [ english_us ] = "Set Outer Border Without Changing Inner Lines" ;
+};
+String RID_SVXSTR_PARA_PRESET_NONE
+{
+    Text = "Keine Umrandung zeichnen" ;
+    Text [ english_us ] = "Set No Border" ;
+};
+String RID_SVXSTR_PARA_PRESET_ALL
+{
+    Text = "Komplette Umrandung zeichnen" ;
+    Text [ english_us ] = "Set All Four Borders" ;
+};
+String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
+{
+    Text = "Nur rechten und linken Rand zeichnen" ;
+    Text [ english_us ] = "Set Left and Right Borders Only" ;
+};
+String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
+{
+    Text = "Nur oberen und unteren Rand zeichnen" ;
+    Text [ english_us ] = "Set Top and Bottom Borders Only" ;
+};
+String RID_SVXSTR_PARA_PRESET_ONLYLEFT
+{
+    Text = "Nur linken Rand zeichnen" ;
+    Text [ english_us ] = "Set Left Border Only" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_NONE
+{
+    Text = "Kein Schatten" ;
+    Text [ english_us ] = "No Shadow" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
+{
+    Text = "Schatten nach rechts unten werfen" ;
+    Text [ english_us ] = "Cast Shadow to Bottom Right" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
+{
+    Text = "Schatten nach rechts oben werfen" ;
+    Text [ english_us ] = "Cast Shadow to Top Right" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
+{
+    Text = "Schatten nach links unten werfen" ;
+    Text [ english_us ] = "Cast Shadow to Bottom Left" ;
+};
+String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
+{
+    Text = "Schatten nach links oben werfen" ;
+    Text [ english_us ] = "Cast Shadow to Top Left" ;
+};
+
+// **********************************************************************
