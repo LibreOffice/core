@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 09:46:38 $
+ *  last change: $Author: thb $ $Date: 2002-06-13 18:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,9 @@ namespace accessibility
                 SetShapeFocus( sal_False );
 
             maParaManager.SetFocus( nChild );
+
+            // we just received the focus, also send caret event then
+            UpdateSelection();
         }
         else
         {
@@ -1095,14 +1098,11 @@ namespace accessibility
                 {
                     case HINT_BEGEDIT:
                     {
-                        // per definition, edit mode text has the focus
-                        SetFocus( sal_True );
-
                         // change children state
                         maParaManager.SetActive();
 
-                        // find the one selected
-                        UpdateSelection();
+                        // per definition, edit mode text has the focus
+                        SetFocus( sal_True );
                         break;
                     }
 
