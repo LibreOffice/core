@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-25 13:51:09 $
+ *  last change: $Author: tl $ $Date: 2002-09-27 12:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,22 +421,22 @@ service ParagraphProperties
         /** determins the type of break that is applied at the beginning of the table.
             @see com.sun.star.style.BreakType
          */
-        [property] com::sun::star::style::BreakType BreakType;
+        [optional, property] com::sun::star::style::BreakType BreakType;
 
         //-------------------------------------------------------------------------
         /** specifies the character style name for drop caps.
          */
-        [property] string DropCapCharStyleName;
+        [optional, property] string DropCapCharStyleName;
 
         //-------------------------------------------------------------------------
         /** specifies the indent for the first line.
          */
-        [property] long ParaFirstLineIndent;
+        [optional, property] long ParaFirstLineIndent;
 
         //-------------------------------------------------------------------------
         /** determines if the first line should be indented automatically.
          */
-        [property] boolean ParaIsAutoFirstLineIndent;
+        [optional, property] boolean ParaIsAutoFirstLineIndent;
 
         //-------------------------------------------------------------------------
         /** specifies if automatic hyphenation is applied.
@@ -446,26 +446,26 @@ service ParagraphProperties
         //-------------------------------------------------------------------------
         /** specifies the maximum number of consecutive hyphens.
          */
-        [property] short ParaHyphenationMaxHyphens;
+        [optional, property] short ParaHyphenationMaxHyphens;
 
         //-------------------------------------------------------------------------
         /** specifies the maximum number of characters to remain before the
             hyphen character (when hyphenation is applied).
          */
-        [property] short ParaHyphenationMaxLeadingChars;
+        [optional, property] short ParaHyphenationMaxLeadingChars;
 
         //-------------------------------------------------------------------------
         /** specifies the maximum number of characters to remain after the
             hyphen character (when hyphenation is applied).
          */
-        [property] short ParaHyphenationMaxTrailingChars;
+        [optional, property] short ParaHyphenationMaxTrailingChars;
 
         //-------------------------------------------------------------------------
         /** specifies the vertical alignment of a paragraph.
 
             @see com::sun::star::text::ParagraphVertAlign
          */
-        [property] short ParaVertAlignment;
+        [optional, property] short ParaVertAlignment;
 
         //-------------------------------------------------------------------------
         /** this property stores xml attributes.
@@ -473,7 +473,7 @@ service ParagraphProperties
 
             @see com::sun::star::xml::AttributeContainer
          */
-        [property] com::sun::star::container::XNameContainer ParaUserDefinedAttributes;
+        [optional, property] com::sun::star::container::XNameContainer ParaUserDefinedAttributes;
 
         //-------------------------------------------------------------------------
 };

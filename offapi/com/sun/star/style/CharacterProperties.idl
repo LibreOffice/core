@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-25 13:36:27 $
+ *  last change: $Author: tl $ $Date: 2002-09-27 12:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,12 +401,12 @@ service CharacterProperties
             For subscript characters the value is negative and for
             superscript characters positive.
          */
-        [property] byte CharEscapementHeight;
+        [optional, property] byte CharEscapementHeight;
 
         //-------------------------------------------------------------------------
         /** determines if the word can be hyphenated at the character.
          */
-        [property] boolean CharNoHyphenation;
+        [optional, property] boolean CharNoHyphenation;
 
         //-------------------------------------------------------------------------
         /** gives the color of the underline for that character.
