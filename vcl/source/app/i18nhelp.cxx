@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18nhelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-23 12:03:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+
 
 #include <i18nhelp.hxx>
 
