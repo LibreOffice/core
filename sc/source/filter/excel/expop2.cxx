@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:23:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,7 @@
 
 //------------------------------------------------------------------------
 
-#include <offmgr/fltrcfg.hxx>
-#include <offmgr/app.hxx>
+#include <svtools/fltrcfg.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>
@@ -148,12 +147,12 @@ ExportBiff5::~ExportBiff5()
 FltError ExportBiff5::Write()
 {
     FltError                eRet = eERR_OK;
-    OfaFilterOptions*       pFiltOpt = NULL;
+    SvtFilterOptions*       pFiltOpt = NULL;
     SvStorage*              pRootStorage = pExcRoot->pRootStorage;
 
     if( pExcRoot->eHauptDateiTyp >= Biff8 )
     {
-        pFiltOpt = OFF_APP()->GetFilterOptions();
+        pFiltOpt = SvtFilterOptions::Get();
 
         pExcRoot->bWriteVBAStorage = pFiltOpt && pFiltOpt->IsLoadExcelBasicStorage();
     }
