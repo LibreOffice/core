@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 16:19:01 $
+ *  last change: $Author: hr $ $Date: 2001-10-25 17:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,10 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aBackgroundColor, ::getCppuType((const sal_Int32*)NULL));
             break;
         case PROPERTY_ID_FONT:
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, makeAny(m_aFont), ::getCppuType((const FontDescriptor*)NULL));
+            {
+                com::sun::star::uno::Any aAny(makeAny(m_aFont));
+                bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAny, ::getCppuType((const FontDescriptor*)NULL));
+            }
             break;
         case PROPERTY_ID_ROWHEIGHT:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aRowHeight, ::getCppuType((const sal_Int32*)NULL));
