@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,18 @@ public:
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
+    /** Grabs the focus to this object.
+
+        <p>If this object can not accept the focus,
+        i.e. <member>isFocusTraversable</member> returns <FALSE/> for this
+        object then nothing happens.  Otherwise the object will attempt to
+        take the focus.  Nothing happens if that fails, otherwise the object
+        has the focus.  This method is called <code>requestFocus</code> in
+        the Java Accessibility API 1.4.</p>
+    */
+    virtual void SAL_CALL grabFocus(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
     //=====  XAccessibleContext  ==============================================
 
     /// Return the set of current states.
@@ -135,6 +147,12 @@ public:
     */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns a list of all supported services.
+    */
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:

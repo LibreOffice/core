@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 13:43:59 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,12 @@ ScAccessibleContextBase::ScAccessibleContextBase (
     mpEventListeners(NULL),
     mpFocusListeners(NULL)
 {
+    if (rxParent.is())
+    {
+        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (rxParent->getAccessibleContext(), uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->addEventListener(this);
+    }
 }
 
 
@@ -124,28 +130,25 @@ ScAccessibleContextBase::~ScAccessibleContextBase(void)
             delete mpFocusListeners;
         }
     }
+    if (mxParent.is())
+    {
+        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeEventListener(this);
+    }
 }
 
 void ScAccessibleContextBase::SetDefunc()
 {
-    if (mpEventListeners || mpFocusListeners)
-    {
-        lang::EventObject aEvent;
-        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-        if (mpEventListeners)
-        {
-            mpEventListeners->disposeAndClear(aEvent);
-            delete mpEventListeners;
-            mpEventListeners = NULL;
-        }
-        if (mpFocusListeners)
-        {
-            mpFocusListeners->disposeAndClear(aEvent);
-            delete mpFocusListeners;
-            mpFocusListeners = NULL;
-        }
-    }
     CommitDefunc();
+
+    if (mxParent.is())
+    {
+        uno::Reference< XAccessibleEventBroadcaster > xBroadcaster (mxParent->getAccessibleContext(), uno::UNO_QUERY);
+        if (xBroadcaster.is())
+            xBroadcaster->removeEventListener(this);
+        mxParent = NULL;
+    }
 }
 
 //=====  SfxListener  =====================================================
@@ -168,9 +171,10 @@ uno::Reference< XAccessibleContext> SAL_CALL
 sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    awt::Rectangle aBounds(getBounds());
-    return !((rPoint.X < aBounds.X) || (rPoint.X > (aBounds.X + aBounds.Width)) ||
-            (rPoint.Y < aBounds.Y) || (rPoint.Y > (aBounds.Y + aBounds.Height)));
+    ::osl::MutexGuard aGuard (maMutex);
+    Rectangle aBounds(GetBoundingBox());
+    return !((rPoint.X < aBounds.getX()) || (rPoint.X > (aBounds.getX() + aBounds.getWidth())) ||
+            (rPoint.Y < aBounds.getY()) || (rPoint.Y > (aBounds.getY() + aBounds.getHeight())));
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAt(
@@ -184,6 +188,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAt(
 awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     Rectangle aCoreBounds(GetBoundingBox());
     awt::Rectangle aBounds;
     aBounds.X = aCoreBounds.getX();
@@ -196,6 +201,7 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     awt::Point aLocation;
     Rectangle aRect(GetBoundingBox());
     aLocation.X = aRect.getX();
@@ -206,6 +212,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     awt::Point aPoint;
     Rectangle aRect(GetBoundingBoxOnScreen());
     aPoint.X = aRect.getX();
@@ -216,6 +223,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     awt::Size aSize;
     Rectangle aRect(GetBoundingBox());
     aSize.Width = aRect.getWidth();
@@ -226,6 +234,7 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
 sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     sal_Bool bShowing(sal_False);
     uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
     if (xParentComponent.is())
@@ -257,6 +266,7 @@ void SAL_CALL ScAccessibleContextBase::addFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     if (xListener.is())
     {
         if (!mpFocusListeners)
@@ -269,6 +279,7 @@ void SAL_CALL ScAccessibleContextBase::removeFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     if (xListener.is() && mpFocusListeners)
         mpFocusListeners->removeInterface(xListener);
 }
@@ -296,18 +307,12 @@ sal_Int32 SAL_CALL
     return 0;
 }
 
-
-
-
 uno::Reference<XAccessible> SAL_CALL
     ScAccessibleContextBase::getAccessibleChild (sal_Int32 nIndex)
         throw (com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::uno::RuntimeException) {
     DBG_ERROR("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();
 }
-
-
-
 
 uno::Reference<XAccessible> SAL_CALL
        ScAccessibleContextBase::getAccessibleParent (void)
@@ -316,14 +321,15 @@ uno::Reference<XAccessible> SAL_CALL
     return mxParent;
 }
 
-
-
-
 sal_Int32 SAL_CALL
        ScAccessibleContextBase::getAccessibleIndexInParent (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     //  Use a simple but slow solution for now.  Optimize later.
+   //   Return -1 to indicate that this object's parent does not know about the
+   //   object.
+    sal_Int32 nIndex(-1);
 
     //  Iterate over all the parent's children and search for this object.
     if (mxParent.is())
@@ -340,19 +346,14 @@ sal_Int32 SAL_CALL
                 {
                     uno::Reference<XAccessibleContext> xChildContext = xChild->getAccessibleContext();
                     if (xChildContext == (XAccessibleContext*)this)
-                        return i;
+                        nIndex = i;
                 }
             }
         }
    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
-   return -1;
+   return nIndex;
 }
-
-
-
 
 sal_Int16 SAL_CALL
     ScAccessibleContextBase::getAccessibleRole (void)
@@ -361,13 +362,11 @@ sal_Int16 SAL_CALL
     return maRole;
 }
 
-
-
-
 ::rtl::OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
@@ -385,13 +384,11 @@ sal_Int16 SAL_CALL
     return msDescription;
 }
 
-
-
-
 OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     if (!msName.getLength())
     {
         OUString sName(createAccessibleName());
@@ -409,12 +406,6 @@ OUString SAL_CALL
     return msName;
 }
 
-
-
-
-/** Return empty reference to indicate that the relation set is not
-    supported.
-*/
 uno::Reference<XAccessibleRelationSet> SAL_CALL
        ScAccessibleContextBase::getAccessibleRelationSet (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -422,17 +413,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     return uno::Reference<XAccessibleRelationSet>();
 }
 
-
-
-
-/** Create the set of states the object is in.  Possible states are:
-        EDITABLE
-        ENABLED
-        SHOWING
-        VISIBLE
-    For now, return only an empty reference and wait for an implementation of
-    the XAccessibleStateSet interface.
-*/
 uno::Reference<XAccessibleStateSet> SAL_CALL
         ScAccessibleContextBase::getAccessibleStateSet (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -440,14 +420,12 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return uno::Reference<XAccessibleStateSet>();
 }
 
-
-
-
 lang::Locale SAL_CALL
        ScAccessibleContextBase::getLocale (void)
     throw (IllegalAccessibleComponentStateException,
         ::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -461,11 +439,14 @@ lang::Locale SAL_CALL
     throw IllegalAccessibleComponentStateException ();
 }
 
+    //=====  XAccessibleEventBroadcaster  =====================================
+
 void SAL_CALL
        ScAccessibleContextBase::addEventListener (
            const uno::Reference<XAccessibleEventListener>& xListener)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     if (xListener.is())
     {
         if (!mpEventListeners)
@@ -474,16 +455,30 @@ void SAL_CALL
     }
 }
 
-
-
-
 void SAL_CALL
        ScAccessibleContextBase::removeEventListener (
         const uno::Reference<XAccessibleEventListener>& xListener)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     if (xListener.is() && mpEventListeners)
         mpEventListeners->removeInterface(xListener);
+}
+
+    //=====  XAccessibleEventListener  ========================================
+
+void SAL_CALL ScAccessibleContextBase::disposing(
+    const lang::EventObject& rSource )
+        throw (uno::RuntimeException)
+{
+    if (rSource.Source == mxParent)
+        SetDefunc();
+}
+
+void SAL_CALL ScAccessibleContextBase::notifyEvent(
+        const AccessibleEventObject& aEvent )
+        throw (uno::RuntimeException)
+{
 }
 
 //=====  XServiceInfo  ========================================================
@@ -513,8 +508,15 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        ScAccessibleContextBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
-    return uno::Sequence<OUString> (&sServiceName, 1);
+    uno::Sequence<OUString> aServiceNames(2);
+    OUString* pServiceNames = aServiceNames.getArray();
+    if (pServiceNames)
+    {
+        pServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.Accessible"));
+        pServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+    }
+
+    return aServiceNames;
 }
 
 //=====  XTypeProvider  =======================================================
@@ -527,16 +529,20 @@ uno::Sequence< ::com::sun::star::uno::Type>
         ::getCppuType((const uno::Reference<
             XAccessible>*)0),
         ::getCppuType((const uno::Reference<
+            XAccessibleComponent>*)0),
+        ::getCppuType((const uno::Reference<
             XAccessibleContext>*)0),
+        ::getCppuType((const uno::Reference<
+            XAccessibleEventBroadcaster>*)0),
+        ::getCppuType((const uno::Reference<
+            XAccessibleEventListener>*)0),
         ::getCppuType((const uno::Reference<
             lang::XServiceInfo>*)0),
         ::getCppuType((const uno::Reference<
-            lang::XTypeProvider>*)0),
-        ::getCppuType((const uno::Reference<
-            lang::XServiceName>*)0)
+            lang::XTypeProvider>*)0)
         };
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
-        aTypeSequence (aTypeList, 5);
+        aTypeSequence (aTypeList, 6);
     return aTypeSequence;
 }
 
@@ -552,15 +558,6 @@ uno::Sequence<sal_Int8> SAL_CALL
         rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
     }
     return aId;
-}
-
-//=====  XServiceName  ========================================================
-
-::rtl::OUString
-    ScAccessibleContextBase::getServiceName (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.accessibility.AccessibleContext"));
 }
 
 //=====  internal  ============================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,13 +264,6 @@ public:
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns a list of all supported services.  In this case that are
-        the AccessibleContext and AccessibleTable service.
-    */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
-        getSupportedServiceNames (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
     //=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
@@ -278,20 +271,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
         getTypes (void)
         throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
-        getImplementationId (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //=====  XServiceName  ====================================================
-
-    /** Returns the name of the service that can be used to create another
-        object like this one.
-    */
-    virtual ::rtl::OUString SAL_CALL
-        getServiceName (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
 
 protected:
     /// contains the range of the table, because it could be a subrange of the complete table

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,9 +164,10 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
         static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
-    ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn));
+    ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos);
     return pAccessibleCell;
 }
 
@@ -176,6 +177,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
     const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     uno::Reference< XAccessible > xAccessible;
     if (mpViewShell)
     {
@@ -186,14 +188,30 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
     return xAccessible;
 }
 
+void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
+        throw (uno::RuntimeException)
+{
+    if (getAccessibleParent().is())
+    {
+        uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
+        if (xAccessibleComponent.is())
+            xAccessibleComponent->grabFocus();
+    }
+}
+
     //=====  XAccessibleContext  ==============================================
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleSpreadsheet::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
 {
-    uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-    uno::Reference<XAccessibleStateSet> xParentStates = xParentContext->getAccessibleStateSet();
+    ::osl::MutexGuard aGuard (maMutex);
+    uno::Reference<XAccessibleStateSet> xParentStates;
+    if (getAccessibleParent().is())
+    {
+        uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
+        xParentStates = xParentContext->getAccessibleStateSet();
+    }
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
@@ -218,6 +236,20 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         throw (uno::RuntimeException)
 {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleSpreadsheet"));
+}
+
+uno::Sequence< ::rtl::OUString> SAL_CALL
+    ScAccessibleSpreadsheet::getSupportedServiceNames (void)
+        throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleTableBase::getSupportedServiceNames();
+    sal_Int32 nOldSize(aSequence.getLength());
+    aSequence.realloc(nOldSize + 1);
+    ::rtl::OUString* pNames = aSequence.getArray();
+
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessibleSpreadsheet"));
+
+    return aSequence;
 }
 
     //====  internal  =========================================================
@@ -251,7 +283,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBox()
 sal_Bool ScAccessibleSpreadsheet::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return (mpViewShell == NULL) ||
+    return (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 

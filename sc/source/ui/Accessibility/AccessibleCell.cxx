@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
 #endif
+#ifndef SC_MISCUNO_HXX
+#include "miscuno.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -94,6 +97,8 @@
 #include <svx/brshitem.hxx>
 #endif
 
+#include <float.h>
+
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 
@@ -103,18 +108,125 @@ ScAccessibleCell::ScAccessibleCell (
         const uno::Reference<XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScAddress& rCellAddress,
-        sal_Int32 nIndex)
+        sal_Int32 nIndex,
+        ScSplitPos eSplitPos)
     :
     ScAccessibleContextBase (rxParent, AccessibleRole::TABLE_CELL),
     mpViewShell(pViewShell),
     mpDoc(GetDocument(pViewShell)),
     maCellAddress(rCellAddress),
-    mnIndex(nIndex)
+    mnIndex(nIndex),
+    meSplitPos(eSplitPos)
 {
 }
 
 ScAccessibleCell::~ScAccessibleCell ()
 {
+}
+
+    //=====  XInterface  ======================================================
+
+uno::Any SAL_CALL
+    ScAccessibleCell::queryInterface(
+    const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    SC_QUERYINTERFACE( XAccessibleValue )
+
+    return ScAccessibleContextBase::queryInterface( rType );
+}
+
+/** Increase the reference count.
+*/
+void SAL_CALL
+    ScAccessibleCell::acquire (void)
+    throw ()
+{
+    OWeakObject::acquire ();
+}
+
+/** Decrease the reference count.
+*/
+void SAL_CALL
+    ScAccessibleCell::release (void)
+    throw ()
+{
+    OWeakObject::release ();
+}
+
+    //=====  XAccessibleComponent  ============================================
+
+uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
+        const awt::Point& rPoint )
+        throw (uno::RuntimeException)
+{
+    uno::Reference< XAccessible > xAccessible = NULL;
+    // should be implemented in the Accessible Text helper
+    return xAccessible;
+}
+
+sal_Bool SAL_CALL ScAccessibleCell::isVisible(  )
+        throw (uno::RuntimeException)
+{
+     ::osl::MutexGuard aGuard (maMutex);
+    // test whether the cell is hidden (column/row - hidden/filtered)
+    sal_Bool bVisible(sal_True);
+    if (mpDoc)
+    {
+        BYTE nColFlags = mpDoc->GetColFlags(maCellAddress.Col(), maCellAddress.Tab());
+        BYTE nRowFlags = mpDoc->GetRowFlags(maCellAddress.Row(), maCellAddress.Tab());
+        if (((nColFlags & CR_HIDDEN) == CR_HIDDEN) || ((nColFlags & CR_FILTERED) == CR_FILTERED) ||
+            ((nRowFlags & CR_HIDDEN) == CR_HIDDEN) || ((nRowFlags & CR_FILTERED) == CR_FILTERED))
+            bVisible = sal_False;
+    }
+    return bVisible;
+}
+
+void SAL_CALL ScAccessibleCell::grabFocus(  )
+        throw (uno::RuntimeException)
+{
+     ::osl::MutexGuard aGuard (maMutex);
+    if (getAccessibleParent().is() && mpViewShell)
+    {
+        uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
+        if (xAccessibleComponent.is())
+        {
+            xAccessibleComponent->grabFocus();
+            mpViewShell->SetCursor(maCellAddress.Col(), maCellAddress.Row());
+        }
+    }
+}
+
+Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void)
+        throw (uno::RuntimeException)
+{
+    Rectangle aCellRect(GetBoundingBox());
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWindow)
+        {
+            Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
+            aCellRect.setX(aCellRect.getX() + aRect.getX());
+            aCellRect.setY(aCellRect.getY() + aRect.getY());
+        }
+    }
+    return aCellRect;
+}
+
+Rectangle ScAccessibleCell::GetBoundingBox(void)
+        throw (uno::RuntimeException)
+{
+    Rectangle aCellRect;
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        sal_Int32 nSizeX, nSizeY;
+        mpViewShell->GetViewData()->GetMergeSizePixel(
+            maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
+        aCellRect.SetSize(Size(nSizeX, nSizeY));
+        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos));
+    }
+    return aCellRect;
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -141,6 +253,7 @@ sal_Int32
     ScAccessibleCell::getAccessibleIndexInParent (void)
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     return mnIndex;
 }
 
@@ -179,8 +292,13 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleCell::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
 {
-    uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-    uno::Reference<XAccessibleStateSet> xParentStates = xParentContext->getAccessibleStateSet();
+    ::osl::MutexGuard aGuard (maMutex);
+    uno::Reference<XAccessibleStateSet> xParentStates;
+    if (getAccessibleParent().is())
+    {
+        uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
+        xParentStates = xParentContext->getAccessibleStateSet();
+    }
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
@@ -205,6 +323,55 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
+    //=====  XAccessibleValue  ================================================
+
+uno::Any SAL_CALL
+    ScAccessibleCell::getCurrentValue(  )
+    throw (uno::RuntimeException)
+{
+     ::osl::MutexGuard aGuard (maMutex);
+    uno::Any aAny;
+    if (mpDoc)
+        aAny <<= mpDoc->GetValue(maCellAddress);
+
+    return aAny;
+}
+
+sal_Bool SAL_CALL
+    ScAccessibleCell::setCurrentValue( const uno::Any& aNumber )
+    throw (uno::RuntimeException)
+{
+     ::osl::MutexGuard aGuard (maMutex);
+    double fValue;
+    sal_Bool bResult(sal_False);
+    if((aNumber >>= fValue) && mpDoc)
+    {
+        mpDoc->SetValue(maCellAddress.Col(), maCellAddress.Row(), maCellAddress.Tab(), fValue);
+        bResult = sal_True;
+    }
+    return bResult;
+}
+
+uno::Any SAL_CALL
+    ScAccessibleCell::getMaximumValue(  )
+    throw (uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= DBL_MAX;
+
+    return aAny;
+}
+
+uno::Any SAL_CALL
+    ScAccessibleCell::getMinimumValue(  )
+    throw (uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= DBL_MIN;
+
+    return aAny;
+}
+
     //=====  XServiceInfo  ====================================================
 
 ::rtl::OUString SAL_CALL ScAccessibleCell::getImplementationName (void)
@@ -213,12 +380,44 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleCell"));
 }
 
+uno::Sequence< ::rtl::OUString> SAL_CALL
+    ScAccessibleCell::getSupportedServiceNames (void)
+        throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    sal_Int32 nOldSize(aSequence.getLength());
+    aSequence.realloc(nOldSize + 1);
+    ::rtl::OUString* pNames = aSequence.getArray();
+
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessibleCell"));
+
+    return aSequence;
+}
+
+    //=====  XTypeProvider  ===================================================
+
+uno::Sequence< uno::Type> SAL_CALL ScAccessibleCell::getTypes (void)
+        throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+    uno::Sequence< uno::Type>
+        aTypeSequence = ScAccessibleContextBase::getTypes();
+    sal_Int32 nOldSize(aTypeSequence.getLength());
+    aTypeSequence.realloc(nOldSize + 1);
+    uno::Type* pTypes = aTypeSequence.getArray();
+
+    pTypes[nOldSize] = ::getCppuType((const uno::Reference<
+            XAccessibleValue>*)0);
+
+    return aTypeSequence;
+}
+
     //====  internal  =========================================================
 
 sal_Bool ScAccessibleCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return (mpDoc == NULL) || (mpViewShell == NULL) ||
+    return (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
          (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 

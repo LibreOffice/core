@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,11 @@ public:
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    /** Returns a list of all supported services.
+    */
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames (void)
+        throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     /// Return this object's description.

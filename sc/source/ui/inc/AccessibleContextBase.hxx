@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ class ScAccessibleContextBase
                 ::drafts::com::sun::star::accessibility::XAccessibleComponent,
                 ::drafts::com::sun::star::accessibility::XAccessibleContext,
                 ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-                ::com::sun::star::lang::XServiceInfo,
-                ::com::sun::star::lang::XServiceName
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener,
+                ::com::sun::star::lang::XServiceInfo
                 >,
         public SfxListener
 {
@@ -418,6 +418,17 @@ public:
                 ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
+    //=====  XAccessibleEventListener  ========================================
+
+    virtual void SAL_CALL
+        disposing( const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        notifyEvent(
+        const ::drafts::com::sun::star::accessibility::AccessibleEventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -433,7 +444,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.  In this case that is just
-        the AccessibleContext service.
+        the AccessibleContext and Accessible service.
     */
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
         getSupportedServiceNames (void)
@@ -453,17 +464,6 @@ public:
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId (void)
         throw (::com::sun::star::uno::RuntimeException);
-
-
-    //=====  XServiceName  ====================================================
-
-    /** Returns the name of the service that can be used to create another
-        object like this one.
-    */
-    virtual ::rtl::OUString SAL_CALL
-        getServiceName (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
 
 protected:
     /// Return this object's description.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 13:55:33 $
+ *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     uno::Reference<XAccessible> xAccessible = NULL;
     SdrPage* pDrawPage = GetDrawPage();
     if (pDrawPage)
@@ -221,12 +222,21 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
 void SAL_CALL ScAccessibleDocument::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    // grab only focus if it does not have the focus and it is not hidden
-    if (mpViewShell &&
-        (mpViewShell->GetViewData()->GetActivePart() != meSplitPos) &&
-        mpViewShell->GetWindowByPos(meSplitPos)->IsVisible())
+    ::osl::MutexGuard aGuard (maMutex);
+    if (getAccessibleParent().is())
     {
-        mpViewShell->ActivatePart(meSplitPos);
+        uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
+        if (xAccessibleComponent.is())
+        {
+            xAccessibleComponent->grabFocus();
+            // grab only focus if it does not have the focus and it is not hidden
+            if (mpViewShell &&
+                (mpViewShell->GetViewData()->GetActivePart() != meSplitPos) &&
+                mpViewShell->GetWindowByPos(meSplitPos)->IsVisible())
+            {
+                mpViewShell->ActivatePart(meSplitPos);
+            }
+        }
     }
 }
 
@@ -237,6 +247,7 @@ long SAL_CALL
     ScAccessibleDocument::getAccessibleChildCount (void)
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     sal_Int32 nShapes (0);
     SdrPage* pDrawPage = GetDrawPage();
     if (pDrawPage)
@@ -258,6 +269,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (uno::RuntimeException/*,
         lang::IndexOutOfBoundsException*/)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     uno::Reference<XAccessible> xAccessible;// = GetChild(nIndex);
     if (!xAccessible.is())
     {
@@ -280,8 +292,13 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleDocument::getAccessibleStateSet (void)
     throw (uno::RuntimeException)
 {
-    uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
-    uno::Reference<XAccessibleStateSet> xParentStates = xParentContext->getAccessibleStateSet();
+    ::osl::MutexGuard aGuard (maMutex);
+    uno::Reference<XAccessibleStateSet> xParentStates;
+    if (getAccessibleParent().is())
+    {
+        uno::Reference<XAccessibleContext> xParentContext = getAccessibleParent()->getAccessibleContext();
+        xParentStates = xParentContext->getAccessibleStateSet();
+    }
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
@@ -298,8 +315,6 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
-    */
 ::rtl::OUString SAL_CALL
     ScAccessibleDocument::getImplementationName (void)
     throw (uno::RuntimeException)
@@ -307,6 +322,19 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleDocument"));
 }
 
+uno::Sequence< ::rtl::OUString> SAL_CALL
+    ScAccessibleDocument::getSupportedServiceNames (void)
+        throw (uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    sal_Int32 nOldSize(aSequence.getLength());
+    aSequence.realloc(nOldSize + 1);
+    ::rtl::OUString* pNames = aSequence.getArray();
+
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.AccessibleSpreadsheetDocumentView"));
+
+    return aSequence;
+}
 
     //=====  internal  ========================================================
 
@@ -321,6 +349,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleDocument::createAccessibleName (void)
     throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard (maMutex);
     rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM ("Spreadsheet Document View "));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += rtl::OUString::valueOf(nNumber);
@@ -402,7 +431,7 @@ SdrPage* ScAccessibleDocument::GetDrawPage()
 sal_Bool ScAccessibleDocument::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return (mpViewShell == NULL) ||
+    return (mpViewShell == NULL) || !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
