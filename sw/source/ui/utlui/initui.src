@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:02:26 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Pagina" ;
         TEXT [ portuguese_brazilian ] = "P·gina" ;
         TEXT [ portuguese ] = "P·gina" ;
-        TEXT [ finnish ] = "Sivu" ;
+        TEXT [ finnish ] = "Sivu " ;
         TEXT [ danish ] = "Side" ;
         TEXT [ french ] = "Page" ;
         TEXT [ swedish ] = "Sida" ;
@@ -120,6 +120,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "Sat˝r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "LÌnea";
+        Text[ finnish ] = "Viiva";
     };
     String STR_POSTIT_AUTHOR
     {
@@ -129,7 +130,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Autore" ;
         TEXT [ portuguese_brazilian ] = "Autor" ;
         TEXT [ portuguese ] = "Autor" ;
-        TEXT [ finnish ] = "Tekij‰" ;
+        TEXT [ finnish ] = "Laatija" ;
         TEXT [ danish ] = "Forfatter" ;
         TEXT [ french ] = "Auteur" ;
         TEXT [ swedish ] = "Fˆrfattare" ;
@@ -155,7 +156,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "** Errore di sintassi **" ;
         TEXT [ portuguese_brazilian ] = "** Erro de sintaxe **" ;
         TEXT [ portuguese ] = "** Erro de sintaxe **" ;
-        TEXT [ finnish ] = "** Muotovirhe **" ;
+        TEXT [ finnish ] = "** Syntaksivirhe **" ;
         TEXT [ danish ] = "** Syntaksfejl **" ;
         TEXT [ french ] = "** Erreur de syntaxe **" ;
         TEXT [ swedish ] = "** Syntaxfel **" ;
@@ -209,7 +210,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "** Parentesi errate **" ;
         TEXT [ portuguese_brazilian ] = "** Colchetes errÙneos **" ;
         TEXT [ portuguese ] = "** ParÍnteses errados **" ;
-        TEXT [ finnish ] = "** Virheelliset sulkeet **" ;
+        TEXT [ finnish ] = "** Virheellinen sulkeiden k‰yttˆ **" ;
         TEXT [ danish ] = "** Forkert brug af parenteser **" ;
         TEXT [ french ] = "** Erreur de parenthËses **" ;
         TEXT [ swedish ] = "** Felaktig anv‰ndning av parenteser **" ;
@@ -236,7 +237,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "** Overflow nella funzione quadrato **" ;
         TEXT [ portuguese_brazilian ] = "** Transbordo de funÁ„o quadr·tica **" ;
         TEXT [ portuguese ] = "** Transbordo da funÁ„o quadr·tica **" ;
-        TEXT [ finnish ] = "** Neliˆjuurifunktion ylivuoto **" ;
+        TEXT [ finnish ] = "** Neliˆfunktion ylivuoto **" ;
         TEXT [ danish ] = "** Overl¯b i kvadratfunktion **" ;
         TEXT [ french ] = "** DÈpassement de capacitÈ de la fonction carrÈ**" ;
         TEXT [ swedish ] = "** Spill i kvadratfunktion **" ;
@@ -374,7 +375,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "** Errore nell'espressione **" ;
         TEXT [ portuguese_brazilian ] = "** Erro na express„o **" ;
         TEXT [ portuguese ] = "** Express„o errada **" ;
-        TEXT [ finnish ] = "** Virhe lausekkeessa **" ;
+        TEXT [ finnish ] = "** Virheellinen lauseke **" ;
         TEXT [ danish ] = "** Fejlagtigt udtryk **" ;
         TEXT [ french ] = "** Expression erronÈe **" ;
         TEXT [ swedish ] = "** Felaktigt uttryck **" ;
@@ -417,6 +418,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "¸st";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "arriba";
+        Text[ finnish ] = "ylh‰‰ll‰";
     };
     String STR_GETREFFLD_DOWN
     {
@@ -442,6 +444,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "alt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "abajo";
+        Text[ finnish ] = "alhaalla";
     };
     String STR_ALLPAGE_HEADFOOT
     {
@@ -467,6 +470,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "T¸m¸";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Todos";
+        Text[ finnish ] = "Kaikki";
     };
     String STR_TEMPLATE_NONE
     {
@@ -492,6 +496,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ninguno";
+        Text[ finnish ] = "Ei mit‰‰n";
     };
     String STR_FIELD_FIXED
     {
@@ -501,7 +506,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "(fissa)" ;
         TEXT [ portuguese_brazilian ] = "(fix)" ;
         TEXT [ portuguese ] = "(fixo)" ;
-        TEXT [ finnish ] = "(vakio)" ;
+        TEXT [ finnish ] = "(kiinte‰)" ;
         TEXT [ danish ] = "(fast)" ;
         TEXT [ french ] = "(fixe)" ;
         TEXT [ swedish ] = "(fix)" ;
@@ -528,7 +533,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Indice analitico" ;
         TEXT [ portuguese_brazilian ] = "Õndice" ;
         TEXT [ portuguese ] = "Õndice remissivo" ;
-        TEXT [ finnish ] = "Hakemisto" ;
+        TEXT [ finnish ] = "Aakkostettu hakemisto" ;
         TEXT [ danish ] = "Stikordsregister" ;
         TEXT [ french ] = "Index lexical" ;
         TEXT [ swedish ] = "Sakregister" ;
@@ -537,7 +542,7 @@ Resource RID_SW_SHELLRES
         TEXT [ english_us ] = "Alphabetical Index" ;
         TEXT[ chinese_simplified ] = "À˜“˝";
         TEXT[ russian ] = "œÂ‰ÏÂÚÌ˚È ÛÍ‡Á‡ÚÂÎ¸";
-        TEXT[ polish ] = "Zestaw hase≥";
+        TEXT[ polish ] = "Skorowidz";
         TEXT[ japanese ] = "çıà¯";
         TEXT[ chinese_traditional ] = "Ø¡§ﬁ•ÿø˝";
         TEXT[ arabic ] = "›Â—” √»ÃœÌ";
@@ -556,7 +561,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Indice personalizzato" ;
         TEXT [ portuguese_brazilian ] = "Tabela definida pelo usu·rio de" ;
         TEXT [ portuguese ] = "Personalizado" ;
-        TEXT [ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰ taulukko: " ;
+        TEXT [ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰" ;
         TEXT [ danish ] = "Brugerdefineret" ;
         TEXT [ french ] = "Index personnalisÈ" ;
         TEXT [ swedish ] = "Anv‰ndardefinierad" ;
@@ -628,6 +633,7 @@ Resource RID_SW_SHELLRES
         TEXT[ turkish ] = "KaynakÁa dizini";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "BibliografÌa";
+        TEXT[ finnish ] = "Bibliografia";
     };
     String STR_TOX_TBL
     {
@@ -653,6 +659,7 @@ Resource RID_SW_SHELLRES
         TEXT[ turkish ] = "Tablo dizini";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Õndice de tablas";
+        TEXT[ finnish ] = "Taulukkohakemisto";
     };
     String STR_TOX_OBJ
     {
@@ -678,6 +685,7 @@ Resource RID_SW_SHELLRES
         TEXT[ turkish ] = "Nesne dizini";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Õndice de objetos";
+        TEXT[ finnish ] = "Objektiluettelo";
     };
     String STR_TOX_ILL
     {
@@ -703,6 +711,7 @@ Resource RID_SW_SHELLRES
         TEXT[ turkish ] = "Resim dizini";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Õndice de ilustraciones";
+        TEXT[ finnish ] = "Kuvitushakemisto";
     };
 
 
@@ -825,7 +834,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Info 0" ;
         TEXT [ portuguese_brazilian ] = "InformaÁ„o 0" ;
         TEXT [ portuguese ] = "InformaÁ„o 0" ;
-        TEXT [ finnish ] = "Tieto 0" ;
+        TEXT [ finnish ] = "Tiedot 0" ;
         TEXT [ danish ] = "Info 0" ;
         TEXT [ french ] = "Info 0" ;
         TEXT [ swedish ] = "Info 0" ;
@@ -852,7 +861,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Info 1" ;
         TEXT [ portuguese_brazilian ] = "InformaÁ„o 1" ;
         TEXT [ portuguese ] = "InformaÁ„o 1" ;
-        TEXT [ finnish ] = "Tieto 1" ;
+        TEXT [ finnish ] = "Tiedot 1" ;
         TEXT [ danish ] = "Info 1" ;
         TEXT [ french ] = "Info 1" ;
         TEXT [ swedish ] = "Info 1" ;
@@ -879,7 +888,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Info 2" ;
         TEXT [ portuguese_brazilian ] = "InformaÁ„o 2" ;
         TEXT [ portuguese ] = "InformaÁ„o 2" ;
-        TEXT [ finnish ] = "Tieto 2" ;
+        TEXT [ finnish ] = "Tiedot 2" ;
         TEXT [ danish ] = "Info 2" ;
         TEXT [ french ] = "Info 2" ;
         TEXT [ swedish ] = "Info 2" ;
@@ -906,7 +915,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Info 3" ;
         TEXT [ portuguese_brazilian ] = "InformaÁ„o 3" ;
         TEXT [ portuguese ] = "InformaÁ„o 3" ;
-        TEXT [ finnish ] = "Tieto 3" ;
+        TEXT [ finnish ] = "Tiedot 3" ;
         TEXT [ danish ] = "Info 3" ;
         TEXT [ french ] = "Info 3" ;
         TEXT [ swedish ] = "Info 3" ;
@@ -988,7 +997,7 @@ Resource RID_SW_SHELLRES
         TEXT [ italian ] = "Ultima stampa" ;
         TEXT [ portuguese_brazilian ] = "Impresso" ;
         TEXT [ portuguese ] = "⁄ltima impress„o" ;
-        TEXT [ finnish ] = "Tulostettu" ;
+        TEXT [ finnish ] = "Edellinen tulostus" ;
         TEXT [ danish ] = "Sidste udskrift" ;
         TEXT [ french ] = "DerniËre impression" ;
         TEXT [ swedish ] = "Senaste utskrift" ;
@@ -1031,6 +1040,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "Belge numaras˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "N˙mero del documento";
+        Text[ finnish ] = "Asiakirjan numero";
     };
     String FLD_DOCINFO_EDIT
     {
@@ -1056,6 +1066,7 @@ Resource RID_SW_SHELLRES
         Text[ turkish ] = "D¸zenleme s¸resi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tiempo de ediciÛn";
+        Text[ finnish ] = "Muokkausaika";
     };
     BITMAP BMP_FRAME_ANCHOR { FILE = "anchor.bmp" ; };
     BITMAP BMP_FRAME_DRAG_ANCHOR { FILE = "danchor.bmp" ; };
@@ -1084,6 +1095,7 @@ Resource RID_SW_SHELLRES
         Text[ arabic ] = " ÕÊÌ· $(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet.";
         Text[ catalan ] = "Convertir $(ARG1)";
+        Text[ finnish ] = "Konvert $(ARG1)";
     };
     String STR_PAGEDESC_FIRSTNAME
     {
@@ -1109,6 +1121,7 @@ Resource RID_SW_SHELLRES
         Text[ arabic ] = "√Ê·  ÕÊÌ·$(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
         Text[ catalan ] = "Primera conversiÛn $(ARG1)";
+        Text[ finnish ] = "Erste Konvert $(ARG1)";
     };
     String STR_PAGEDESC_FOLLOWNAME
     {
@@ -1134,6 +1147,7 @@ Resource RID_SW_SHELLRES
         Text[ arabic ] = " ÕÊÌ·  «·Ì $(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
         Text[ catalan ] = "Convertir serie $(ARG1)";
+        Text[ finnish ] = "Konvert Folge $(ARG1)";
     };
 };
 
@@ -1161,6 +1175,7 @@ String STR_AUTH_TYPE_ARTICLE
     Text[ turkish ] = "Dergi makalesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ArtÌculo de revista";
+    Text[ finnish ] = "Lehtiartikkeli";
 };
 String STR_AUTH_TYPE_BOOK
 {
@@ -1186,6 +1201,7 @@ String STR_AUTH_TYPE_BOOK
     Text[ turkish ] = "Kitap";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Libro";
+    Text[ finnish ] = "Kirja";
 };
 String STR_AUTH_TYPE_BOOKLET
 {
@@ -1211,6 +1227,7 @@ String STR_AUTH_TYPE_BOOKLET
     Text[ turkish ] = "Bro˛¸r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Folleto";
+    Text[ finnish ] = "Esitteet";
 };
 String STR_AUTH_TYPE_CONFERENCE
 {
@@ -1236,6 +1253,7 @@ String STR_AUTH_TYPE_CONFERENCE
     Text[ turkish ] = "Toplant˝ raporu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Informe de conferencia";
+    Text[ finnish ] = "Konferenssimenettelyt";
 };
 String STR_AUTH_TYPE_INBOOK
 {
@@ -1261,6 +1279,7 @@ String STR_AUTH_TYPE_INBOOK
     Text[ turkish ] = "Kitap bˆl¸m¸";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Extracto de libro";
+    Text[ finnish ] = "Kirjan otos";
 };
 String STR_AUTH_TYPE_INCOLLECTION
 {
@@ -1286,6 +1305,7 @@ String STR_AUTH_TYPE_INCOLLECTION
     Text[ turkish ] = "Ba˛l˝kl˝ kitap bˆl¸m¸";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Extracto de libro con tÌtulo";
+    Text[ finnish ] = "Kirjan otos ja otsikko";
 };
 String STR_AUTH_TYPE_INPROCEEDINGS
 {
@@ -1311,6 +1331,7 @@ String STR_AUTH_TYPE_INPROCEEDINGS
     Text[ turkish ] = "Konferans raporu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Informe de reuniÛn";
+    Text[ finnish ] = "Konferenssimenettelyt";
 };
 String STR_AUTH_TYPE_JOURNAL
 {
@@ -1336,6 +1357,7 @@ String STR_AUTH_TYPE_JOURNAL
     Text[ turkish ] = "Dergi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Revista";
+    Text[ finnish ] = "Lehti";
 };
 String STR_AUTH_TYPE_MANUAL
 {
@@ -1361,6 +1383,7 @@ String STR_AUTH_TYPE_MANUAL
     Text[ turkish ] = "Teknik dok¸mantasyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Manual";
+    Text[ finnish ] = "Tekninen asiakirja";
 };
 String STR_AUTH_TYPE_MASTERSTHESIS
 {
@@ -1386,6 +1409,7 @@ String STR_AUTH_TYPE_MASTERSTHESIS
     Text[ turkish ] = "Tez";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Diplomatura";
+    Text[ finnish ] = "Tutkielma";
 };
 String STR_AUTH_TYPE_MISC
 {
@@ -1411,6 +1435,7 @@ String STR_AUTH_TYPE_MISC
     Text[ turkish ] = "Muhtelif";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Diversos";
+    Text[ finnish ] = "Sekalaiset";
 };
 String STR_AUTH_TYPE_PHDTHESIS
 {
@@ -1436,6 +1461,7 @@ String STR_AUTH_TYPE_PHDTHESIS
     Text[ turkish ] = "Doktora Áal˝˛mas˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tesis doctoral";
+    Text[ finnish ] = "V‰itˆskirja";
 };
 String STR_AUTH_TYPE_PROCEEDINGS
 {
@@ -1461,6 +1487,7 @@ String STR_AUTH_TYPE_PROCEEDINGS
     Text[ turkish ] = "Konferans raporu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Informe de reuniÛn";
+    Text[ finnish ] = "Konferenssimenettelyt";
 };
 String STR_AUTH_TYPE_TECHREPORT
 {
@@ -1486,6 +1513,7 @@ String STR_AUTH_TYPE_TECHREPORT
     Text[ turkish ] = "Ara˛t˝rma raporu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Informe de investigaciÛn";
+    Text[ finnish ] = "Tutkimusraportti";
 };
 String STR_AUTH_TYPE_UNPUBLISHED
 {
@@ -1511,6 +1539,7 @@ String STR_AUTH_TYPE_UNPUBLISHED
     Text[ turkish ] = "Yay˝mlanmam˝˛";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "InÈdito";
+    Text[ finnish ] = "Julkaisematon";
 };
 String STR_AUTH_TYPE_EMAIL
 {
@@ -1536,6 +1565,7 @@ String STR_AUTH_TYPE_EMAIL
     Text[ turkish ] = "e-posta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "E-mail";
+    Text[ finnish ] = "s‰hkˆposti";
 };
 String STR_AUTH_TYPE_WWW
 {
@@ -1561,6 +1591,7 @@ String STR_AUTH_TYPE_WWW
     Text[ turkish ] = "WWW belgesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Documento WWW";
+    Text[ finnish ] = "Web-asiakirja";
 };
 String STR_AUTH_TYPE_CUSTOM1
 {
@@ -1586,6 +1617,7 @@ String STR_AUTH_TYPE_CUSTOM1
     Text[ turkish ] = "Kullan˝c˝ tipi1";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usuario1";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰1";
 };
 String STR_AUTH_TYPE_CUSTOM2
 {
@@ -1611,6 +1643,7 @@ String STR_AUTH_TYPE_CUSTOM2
     Text[ turkish ] = "Kullan˝c˝ tipi2";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usuario2";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰2";
 };
 String STR_AUTH_TYPE_CUSTOM3
 {
@@ -1636,6 +1669,7 @@ String STR_AUTH_TYPE_CUSTOM3
     Text[ turkish ] = "Kullan˝c˝ tipi3";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usuario3";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰3";
 };
 String STR_AUTH_TYPE_CUSTOM4
 {
@@ -1661,6 +1695,7 @@ String STR_AUTH_TYPE_CUSTOM4
     Text[ turkish ] = "Kullan˝c˝ tipi4";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usuario4";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰4";
 };
 String STR_AUTH_TYPE_CUSTOM5
 {
@@ -1686,6 +1721,7 @@ String STR_AUTH_TYPE_CUSTOM5
     Text[ turkish ] = "Kullan˝c˝ tipi5";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usuario5";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰5";
 };
 
 String STR_AUTH_FIELD_IDENTIFIER
@@ -1711,6 +1747,7 @@ String STR_AUTH_FIELD_IDENTIFIER
     Text[ arabic ] = "«”„ „Œ ’—";
     Text[ turkish ] = "~K˝sa ad";
     Text[ catalan ] = "~Abreviatura";
+    Text[ finnish ] = "Lyhyt nimi";
 };
 String STR_AUTH_FIELD_AUTHORITY_TYPE
 {
@@ -1736,6 +1773,7 @@ String STR_AUTH_FIELD_AUTHORITY_TYPE
     Text[ turkish ] = "~Tip";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Tipo";
+    Text[ finnish ] = "Tyyppi";
 };
 String STR_AUTH_FIELD_ADDRESS
 {
@@ -1761,6 +1799,7 @@ String STR_AUTH_FIELD_ADDRESS
     Text[ turkish ] = "~Yay˝nevi adresi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~DirecciÛn editorial";
+    Text[ finnish ] = "Julkaisijan osoite";
 };
 String STR_AUTH_FIELD_ANNOTE
 {
@@ -1786,6 +1825,7 @@ String STR_AUTH_FIELD_ANNOTE
     Text[ turkish ] = "~Not";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Notas";
+    Text[ finnish ] = "Huomautukset";
 };
 String STR_AUTH_FIELD_AUTHOR
 {
@@ -1811,6 +1851,7 @@ String STR_AUTH_FIELD_AUTHOR
     Text[ turkish ] = "Ya~zan(lar)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "A~utor(es)";
+    Text[ finnish ] = "Laatijat";
 };
 String STR_AUTH_FIELD_BOOKTITLE
 {
@@ -1836,6 +1877,7 @@ String STR_AUTH_FIELD_BOOKTITLE
     Text[ turkish ] = "Kitap ~ad˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "TÌtulo del li~bro";
+    Text[ finnish ] = "Kirjan otsikko";
 };
 String STR_AUTH_FIELD_CHAPTER
 {
@@ -1861,6 +1903,7 @@ String STR_AUTH_FIELD_CHAPTER
     Text[ turkish ] = "B~ˆl¸m";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "CapÌt~ulo";
+    Text[ finnish ] = "Luku";
 };
 String STR_AUTH_FIELD_EDITION
 {
@@ -1886,6 +1929,7 @@ String STR_AUTH_FIELD_EDITION
     Text[ turkish ] = "Bas˝~m";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Edi~ciÛn";
+    Text[ finnish ] = "Laitos";
 };
 String STR_AUTH_FIELD_EDITOR
 {
@@ -1911,6 +1955,7 @@ String STR_AUTH_FIELD_EDITOR
     Text[ turkish ] = "Yay˝m~c˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Editor";
+    Text[ finnish ] = "Muokkaaja";
 };
 String STR_AUTH_FIELD_HOWPUBLISHED
 {
@@ -1936,6 +1981,7 @@ String STR_AUTH_FIELD_HOWPUBLISHED
     Text[ turkish ] = "Yay˝m ~t¸r¸";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tip~o de ediciÛn";
+    Text[ finnish ] = "Julkaisutyyppi";
 };
 String STR_AUTH_FIELD_INSTITUTION
 {
@@ -1961,6 +2007,7 @@ String STR_AUTH_FIELD_INSTITUTION
     Text[ turkish ] = "K~urum";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Institu~ciÛn";
+    Text[ finnish ] = "Instituutio";
 };
 String STR_AUTH_FIELD_JOURNAL
 {
@@ -1986,6 +2033,7 @@ String STR_AUTH_FIELD_JOURNAL
     Text[ turkish ] = "De~rgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Revista";
+    Text[ finnish ] = "Lehti";
 };
 String STR_AUTH_FIELD_MONTH
 {
@@ -2011,6 +2059,7 @@ String STR_AUTH_FIELD_MONTH
     Text[ turkish ] = "~Ay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Mes";
+    Text[ finnish ] = "Kuukausi";
 };
 String STR_AUTH_FIELD_NOTE
 {
@@ -2036,6 +2085,7 @@ String STR_AUTH_FIELD_NOTE
     Text[ turkish ] = "~Not";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nota";
+    Text[ finnish ] = "Huomau~tus";
 };
 String STR_AUTH_FIELD_NUMBER
 {
@@ -2061,6 +2111,7 @@ String STR_AUTH_FIELD_NUMBER
     Text[ turkish ] = "Numa~ra";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "N˙~mero";
+    Text[ finnish ] = "Luku";
 };
 String STR_AUTH_FIELD_ORGANIZATIONS
 {
@@ -2086,6 +2137,7 @@ String STR_AUTH_FIELD_ORGANIZATIONS
     Text[ turkish ] = "~Organizasyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~OrganizaciÛn";
+    Text[ finnish ] = "Organisaatio";
 };
 String STR_AUTH_FIELD_PAGES
 {
@@ -2111,6 +2163,7 @@ String STR_AUTH_FIELD_PAGES
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "P·ginas";
+    Text[ finnish ] = "Sivut";
 };
 String STR_AUTH_FIELD_PUBLISHER
 {
@@ -2136,6 +2189,7 @@ String STR_AUTH_FIELD_PUBLISHER
     Text[ turkish ] = "Yay˝nev~i";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Editorial";
+    Text[ finnish ] = "Julkaisijat";
 };
 String STR_AUTH_FIELD_SCHOOL
 {
@@ -2161,6 +2215,7 @@ String STR_AUTH_FIELD_SCHOOL
     Text[ turkish ] = "‹niversite";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Colegio/~Universidad";
+    Text[ finnish ] = "Yliopisto";
 };
 String STR_AUTH_FIELD_SERIES
 {
@@ -2186,6 +2241,7 @@ String STR_AUTH_FIELD_SERIES
     Text[ turkish ] = "Seri ~ad˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No~mbre de la serie";
+    Text[ finnish ] = "Sarjan nimi";
 };
 String STR_AUTH_FIELD_TITLE
 {
@@ -2211,6 +2267,7 @@ String STR_AUTH_FIELD_TITLE
     Text[ turkish ] = "A~d";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "TÌt~ulo";
+    Text[ finnish ] = "Otsikko";
 };
 String STR_AUTH_FIELD_TYPE
 {
@@ -2236,6 +2293,7 @@ String STR_AUTH_FIELD_TYPE
     Text[ turkish ] = "Rapor t¸r¸";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo de informe";
+    Text[ finnish ] = "Raporttityyppi";
 };
 String STR_AUTH_FIELD_VOLUME
 {
@@ -2261,6 +2319,7 @@ String STR_AUTH_FIELD_VOLUME
     Text[ turkish ] = "Cilt say˝s˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "N˙mero de tomo";
+    Text[ finnish ] = "Osan numero";
 };
 String STR_AUTH_FIELD_YEAR
 {
@@ -2286,6 +2345,7 @@ String STR_AUTH_FIELD_YEAR
     Text[ turkish ] = "Yay˝m y˝l˝";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AÒo de publi~caciÛn";
+    Text[ finnish ] = "Julkaisuvuosi";
 };
 String STR_AUTH_FIELD_URL
 {
@@ -2311,6 +2371,7 @@ String STR_AUTH_FIELD_URL
     Text[ turkish ] = "URL";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "URL";
+    Text[ finnish ] = "URL-osoite";
 };
 String STR_AUTH_FIELD_CUSTOM1
 {
@@ -2336,6 +2397,7 @@ String STR_AUTH_FIELD_CUSTOM1
     Text[ turkish ] = "Kullan˝c˝ alan˝~1";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de usuario~1";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰~1";
 };
 String STR_AUTH_FIELD_CUSTOM2
 {
@@ -2361,6 +2423,7 @@ String STR_AUTH_FIELD_CUSTOM2
     Text[ turkish ] = "Kullan˝c˝ alan˝~2";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de usuario~2";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰~2";
 };
 String STR_AUTH_FIELD_CUSTOM3
 {
@@ -2386,6 +2449,7 @@ String STR_AUTH_FIELD_CUSTOM3
     Text[ turkish ] = "Kullan˝c˝ alan˝~3";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de usuario~3";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰~3";
 };
 String STR_AUTH_FIELD_CUSTOM4
 {
@@ -2411,6 +2475,7 @@ String STR_AUTH_FIELD_CUSTOM4
     Text[ turkish ] = "Kullan˝c˝ alan˝~4";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de usuario~4";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰~4";
 };
 String STR_AUTH_FIELD_CUSTOM5
 {
@@ -2436,6 +2501,7 @@ String STR_AUTH_FIELD_CUSTOM5
     Text[ turkish ] = "Kullan˝c˝ alan˝~5";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de usuario~5";
+    Text[ finnish ] = "K‰ytt‰j‰n m‰‰ritt‰m‰~5";
 };
 String STR_AUTH_FIELD_ISBN
 {
@@ -2461,6 +2527,7 @@ String STR_AUTH_FIELD_ISBN
     Text[ turkish ] = "ISBN";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "ISBN";
+    Text[ finnish ] = "ISBN";
 };
 
 
