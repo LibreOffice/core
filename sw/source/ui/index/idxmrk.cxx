@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-09-11 09:12:06 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,8 @@ void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
                             : TransliterationModules_IGNORE_CASE) );
 
     rSh.ClearMark();
-    ULONG nRet = rSh.Find( aSearchOpt,  DOCPOS_START, DOCPOS_END,
+    BOOL bCancel;
+    ULONG nRet = rSh.Find( aSearchOpt,  DOCPOS_START, DOCPOS_END, bCancel,
                         (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 14:12:36 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,10 +835,9 @@ SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
 }
 
 
-FASTBOOL SwShellCrsr::MaxReplaceArived()
+short SwShellCrsr::MaxReplaceArived()
 {
-    BOOL bRet = FALSE;
-    short nRet;
+    short nRet = RET_YES;
     Window* pDlg = ::GetSearchDialog();
     if( pDlg )
     {
@@ -868,15 +867,7 @@ FASTBOOL SwShellCrsr::MaxReplaceArived()
         // ansonsten aus dem Basic, und dann auf RET_YES schalten
         nRet = RET_YES;
 
-    if( RET_CANCEL == nRet )
-        bRet = TRUE;
-    else if( RET_YES == nRet )
-    {
-        SwDoc* pDoc = GetDoc();
-        pDoc->DelAllUndoObj();
-        pDoc->DoUndo( FALSE );
-    }
-    return bRet;
+    return nRet;
 }
 
 void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
@@ -1019,7 +1010,7 @@ SwCursor* SwShellTableCrsr::Create( SwPaM* pRing ) const
 {
     return SwShellCrsr::Create( pRing );
 }
-FASTBOOL SwShellTableCrsr::MaxReplaceArived()
+short SwShellTableCrsr::MaxReplaceArived()
 {
     return SwShellCrsr::MaxReplaceArived();
 }

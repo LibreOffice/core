@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-05 07:00:19 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,7 @@ int SwFindParaText::IsReplaceMode() const
 
 ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
                         SwDocPositions nStart, SwDocPositions nEnde,
+                        BOOL& bCancel,
                         FindRanges eFndRngs, int bReplace )
 {
     // OLE-Benachrichtigung abschalten !!
@@ -474,14 +475,13 @@ ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
     if( bSearchSel )
         eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
     SwFindParaText aSwFindParaText( rSearchOpt, bReplace, *this );
-    ULONG nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs );
+    ULONG nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
         pDoc->SetModified();
 
     if( bSttUndo )
         pDoc->EndUndo( UNDO_REPLACE );
-
     return nRet;
 }
 

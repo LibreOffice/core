@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ class SwCursor : public SwPaM
 
     _SwCursor_SavePos* pSavePos;
 
-    ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges );
+    ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, BOOL& bCancel );
 
 protected:
     virtual _SwCursor_SavePos* CreateNewSavePos() const;
@@ -139,7 +139,7 @@ public:
     inline operator const SwUnoCrsr* () const;
     inline operator const SwUnoTableCrsr* () const;
 
-    virtual FASTBOOL MaxReplaceArived();
+    virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
     void FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const;
@@ -148,16 +148,19 @@ public:
 
     ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 SwDocPositions nStart, SwDocPositions nEnde,
+                BOOL& bCancel,
                 FindRanges = FND_IN_BODY,
                 int bReplace = FALSE );
 
     ULONG Find( const SwTxtFmtColl& rFmtColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
+                BOOL& bCancel,
                 FindRanges = FND_IN_BODY,
                 const SwTxtFmtColl* pReplFmt = 0 );
 
     ULONG Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
+                BOOL& bCancel,
                 FindRanges = FND_IN_BODY,
                 const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                 const SfxItemSet* rReplSet = 0 );

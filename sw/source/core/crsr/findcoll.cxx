@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findcoll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
 
 
 //------------------ Methoden der CrsrShell ---------------------------
@@ -123,7 +126,7 @@ int SwFindParaFmtColl::IsReplaceMode() const
 
 
 ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
-                    SwDocPositions nStart, SwDocPositions nEnde,
+                    SwDocPositions nStart, SwDocPositions nEnde, BOOL& bCancel,
                     FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
 {
     // OLE-Benachrichtigung abschalten !!
@@ -137,7 +140,7 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
 
     SwFindParaFmtColl aSwFindParaFmtColl( rFmtColl, pReplFmtColl, *this );
 
-    ULONG nRet = FindAll( aSwFindParaFmtColl, nStart, nEnde, eFndRngs );
+    ULONG nRet = FindAll( aSwFindParaFmtColl, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
 
     if( nRet && pReplFmtColl )
@@ -145,7 +148,6 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
 
     if( bSttUndo )
         pDoc->EndUndo( UNDO_REPLACE );
-
     return nRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:18:53 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,8 @@ void SwEditShell::ApplyAutoMark()
                     aSearchOpt.searchString = sToSelect;
 
                     KillPams();
-                    ULONG nRet = Find( aSearchOpt,  DOCPOS_START, DOCPOS_END,
+                    BOOL bCancel;
+                    ULONG nRet = Find( aSearchOpt,  DOCPOS_START, DOCPOS_END, bCancel,
                                     (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY),
                                     FALSE );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:09:29 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#ifdef PRECOMPILED
+#include "core_pch.hxx"
+#endif
+
+#pragma hdrstop
+
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
@@ -72,12 +78,6 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
-
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -134,6 +134,9 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -1462,7 +1465,7 @@ int SwFindParaAttr::IsReplaceMode() const
 
 
 ULONG SwCursor::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
-                    SwDocPositions nStart, SwDocPositions nEnde,
+                    SwDocPositions nStart, SwDocPositions nEnde, BOOL& bCancel,
                     FindRanges eFndRngs,
                     const SearchOptions* pSearchOpt, const SfxItemSet* pReplSet )
 {
@@ -1481,7 +1484,7 @@ ULONG SwCursor::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
 
-    ULONG nRet = FindAll(aSwFindParaAttr, nStart, nEnde, eFndRngs );
+    ULONG nRet = FindAll(aSwFindParaAttr, nStart, nEnde, eFndRngs, bCancel );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )
         pDoc->SetModified();

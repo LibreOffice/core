@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:24:11 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,27 +2819,29 @@ FASTBOOL SwCrsrShell::IsInVerticalText( const Point* pPt ) const
     // die Suchfunktionen
 ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt,
                             SwDocPositions eStart, SwDocPositions eEnde,
+                            BOOL& bCancel,
                             FindRanges eRng, int bReplace )
 {
     if( pTblCrsr )
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    ULONG nRet = pCurCrsr->Find( rSearchOpt, eStart, eEnde, eRng, bReplace );
-    if( nRet )
+    ULONG nRet = pCurCrsr->Find( rSearchOpt, eStart, eEnde, bCancel, eRng, bReplace );
+    if( nRet || bCancel )
         UpdateCrsr();
     return nRet;
 }
 
 ULONG SwCrsrShell::Find( const SwTxtFmtColl& rFmtColl,
                             SwDocPositions eStart, SwDocPositions eEnde,
+                            BOOL& bCancel,
                             FindRanges eRng, const SwTxtFmtColl* pReplFmt )
 {
     if( pTblCrsr )
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    ULONG nRet = pCurCrsr->Find( rFmtColl, eStart, eEnde, eRng, pReplFmt );
+    ULONG nRet = pCurCrsr->Find( rFmtColl, eStart, eEnde, bCancel, eRng, pReplFmt );
     if( nRet )
         UpdateCrsr();
     return nRet;
@@ -2847,6 +2849,7 @@ ULONG SwCrsrShell::Find( const SwTxtFmtColl& rFmtColl,
 
 ULONG SwCrsrShell::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                             SwDocPositions eStart, SwDocPositions eEnde,
+                            BOOL& bCancel,
                             FindRanges eRng, const SearchOptions* pSearchOpt,
                             const SfxItemSet* rReplSet )
 {
@@ -2854,7 +2857,7 @@ ULONG SwCrsrShell::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
         GetCrsr();
     delete pTblCrsr, pTblCrsr = 0;
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    ULONG nRet = pCurCrsr->Find( rSet, bNoCollections, eStart, eEnde,
+    ULONG nRet = pCurCrsr->Find( rSet, bNoCollections, eStart, eEnde, bCancel,
                                 eRng, pSearchOpt, rReplSet );
     if( nRet )
         UpdateCrsr();

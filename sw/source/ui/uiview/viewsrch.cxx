@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:01:45 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                         nFound = FUNC_Search( aOpts );
                         pWrtShell->EndAllAction();
                     }
-                    rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0));
+                    rReq.SetReturnValue(SfxBoolItem(nSlot, nFound != 0 && ULONG_MAX != nFound));
                     if( !nFound )
                     {
                         if( !bApi )
@@ -402,7 +402,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                         return;
                     }
 
-                    if( !bApi )
+                    if( !bApi && !ULONG_MAX == nFound)
                     {
                         String aText( SW_RES( STR_NB_REPLACED ) );
                         const xub_StrLen nPos = aText.Search( String::CreateFromAscii("XX") );
@@ -872,6 +872,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/06/27 09:01:45  mba
+    #100714#: macro recording
+
     Revision 1.9  2001/10/31 15:55:46  jp
     Bug #93764#: ExechSearch - return correct WhichId range
 

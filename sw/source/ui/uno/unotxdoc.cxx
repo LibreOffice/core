@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 14:46:31 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,8 +856,9 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
                             0);
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
+        BOOL bCancel;
         nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
-                    eStart, eEnd,
+                    eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
                     pSearch->sSearchText.Len() ? &aSearchOpt : 0,
                     &aReplace );
@@ -867,15 +868,17 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         SwTxtFmtColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
         SwTxtFmtColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCrsr->GetDoc());;
 
+        BOOL bCancel;
         nResult = pUnoCrsr->Find( *pSearchColl,
-                    eStart, eEnd,
+                    eStart, eEnd, bCancel,
                     (FindRanges)eRanges, pReplaceColl );
 
     }
     else
     {
+        BOOL bCancel;
         nResult = pUnoCrsr->Find( aSearchOpt,
-            eStart, eEnd,
+            eStart, eEnd, bCancel,
             (FindRanges)eRanges,
             sal_True );
     }
@@ -987,8 +990,9 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
                                 RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
                                 0);
             pSearch->FillSearchItemSet(aSearch);
+            BOOL bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
-                        eStart, eEnd,
+                        eStart, eEnd, bCancel,
                         (FindRanges)eRanges,
                         pSearch->sSearchText.Len() ? &aSearchOpt : 0,
                         0 );
@@ -998,15 +1002,16 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
             SwTxtFmtColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
             //pSearch->sReplaceText
             SwTxtFmtColl *pReplaceColl = 0;
-
+            BOOL bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( *pSearchColl,
-                        eStart, eEnd,
+                        eStart, eEnd, bCancel,
                         (FindRanges)eRanges, pReplaceColl );
         }
         else
         {
+            BOOL bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( aSearchOpt,
-                    eStart, eEnd,
+                    eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
                     /*int bReplace =*/sal_False );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-08-06 14:43:25 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // ...Percent()
 #endif
@@ -145,7 +147,7 @@
 
 using namespace ::com::sun::star::i18n;
 
-static const USHORT coSrchRplcThreshold = 500;
+static const USHORT coSrchRplcThreshold = 60000;
 
 struct _PercentHdl
 {
@@ -746,7 +748,7 @@ SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
 ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                         SwMoveFn fnMove, SwCursor*& pFndRing,
                         SwPaM& aRegion, FindRanges eFndRngs,
-                        FASTBOOL bInReadOnly )
+                        FASTBOOL bInReadOnly, BOOL& bCancel )
 {
     SwDoc* pDoc = pCurCrsr->GetDoc();
     FASTBOOL bDoesUndo = pDoc->DoesUndo();
@@ -811,11 +813,24 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
             }
 
             if( coSrchRplcThreshold == nFound && pDoc->DoesUndo()
-                && rParas.IsReplaceMode() &&
-                pCurCrsr->MaxReplaceArived() )
+                && rParas.IsReplaceMode())
             {
-                bEnde = TRUE;
-                break;
+                short nRet = pCurCrsr->MaxReplaceArived();
+                if( RET_YES == nRet )
+                {
+                    pDoc->DelAllUndoObj();
+                    pDoc->DoUndo( FALSE );
+                }
+                else
+                {
+                    bEnde = TRUE;
+                    if(RET_CANCEL == nRet)
+                    {
+                        bCancel = TRUE;
+                        //unwind() ??
+                    }
+                    break;
+                }
             }
 
             if( bSrchBkwrd )
@@ -919,8 +934,9 @@ int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 
 ULONG SwCursor::FindAll( SwFindParas& rParas,
                             SwDocPositions nStart, SwDocPositions nEnde,
-                            FindRanges eFndRngs )
+                            FindRanges eFndRngs, BOOL& bCancel )
 {
+    bCancel = FALSE;
     SwCrsrSaveState aSaveState( *this );
 
     // Region erzeugen, ohne das diese in den Ring aufgenommen wird !
@@ -941,7 +957,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
         // der Cursor beleibt unveraendert
         if( 0 == ( nFound = lcl_FindSelection( rParas, this, fnMove,
                                                 pFndRing, aRegion, eFndRngs,
-                                                bInReadOnly ) ))
+                                                bInReadOnly, bCancel ) ))
             return nFound;
 
         // der String wurde ein- bis mehrmals gefunden. Das steht alles
@@ -974,7 +990,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
                     GetPoint()->nNode.GetIndex() ))
         {
             nFound = lcl_FindSelection( rParas, this, fnMove, pFndRing,
-                                        aRegion, eFndRngs, bInReadOnly );
+                                        aRegion, eFndRngs, bInReadOnly, bCancel );
         }
 
         if( !nFound )
@@ -1028,7 +1044,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
             : lcl_MakeSelFwrd( *pSttNd, rNds.GetEndOfContent(), *this, FALSE ))
         {
             nFound = lcl_FindSelection( rParas, this, fnMove, pFndRing,
-                                        aRegion, eFndRngs, bInReadOnly );
+                                        aRegion, eFndRngs, bInReadOnly, bCancel );
         }
 
         if( !nFound )
@@ -1121,9 +1137,9 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
     }
 }
 
-FASTBOOL SwCursor::MaxReplaceArived()
+short SwCursor::MaxReplaceArived()
 {
-    return FALSE;
+    return RET_YES;
 }
 
 FASTBOOL SwCursor::IsStartWord() const

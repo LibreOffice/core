@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-07 11:04:58 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,14 +408,17 @@ public:
     // die Suchfunktionen
     ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 SwDocPositions eStart, SwDocPositions eEnde,
+                BOOL& bCancel,
                 FindRanges eRng, int bReplace = FALSE );
 
     ULONG Find( const SwTxtFmtColl& rFmtColl,
                 SwDocPositions eStart, SwDocPositions eEnde,
+                BOOL& bCancel,
                 FindRanges eRng, const SwTxtFmtColl* pReplFmt = 0 );
 
     ULONG Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnde,
+                BOOL& bCancel,
                 FindRanges eRng,
                 const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                 const SfxItemSet* rReplSet = 0 );

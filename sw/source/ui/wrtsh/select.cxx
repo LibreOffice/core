@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-04-23 14:09:52 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,14 @@ ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt,
         // keine Erweiterung bestehender Selektionen
     if(!(eFlags & FND_IN_SEL))
         ClearMark();
-    return Find( rSearchOpt, eStt, eEnd, eFlags, bReplace );
+    BOOL bCancel = FALSE;
+    ULONG nRet = Find( rSearchOpt, eStt, eEnd, bCancel, eFlags, bReplace );
+    if(bCancel)
+    {
+        Undo(0, 1);
+        nRet = ULONG_MAX;
+    }
+    return nRet;
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Suche nach Vorlagen
@@ -278,8 +285,15 @@ ULONG SwWrtShell::SearchTempl( const String &rTempl,
     if( pReplTempl )
         pReplaceColl = GetParaStyle(*pReplTempl, SwWrtShell::GETSTYLE_CREATESOME );
 
-    return Find(pColl? *pColl: GetDfltTxtFmtColl(),
-                               eStt,eEnd,eFlags, pReplaceColl);
+    BOOL bCancel = FALSE;
+    ULONG nRet = Find(pColl? *pColl: GetDfltTxtFmtColl(),
+                               eStt,eEnd, bCancel, eFlags, pReplaceColl);
+    if(bCancel)
+    {
+        Undo(0, 1);
+        nRet = ULONG_MAX;
+    }
+    return nRet;
 }
 
 // Suche nach Attributen ----------------------------------------------------
@@ -296,7 +310,15 @@ ULONG SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, BOOL bNoColls,
         ClearMark();
 
     // Suchen
-    return Find( rFindSet, bNoColls, eStart, eEnde, eFlags, pSearchOpt, pReplaceSet);
+    BOOL bCancel = FALSE;
+    ULONG nRet = Find( rFindSet, bNoColls, eStart, eEnde, bCancel, eFlags, pSearchOpt, pReplaceSet);
+
+    if(bCancel)
+    {
+        Undo(0, 1);
+        nRet = ULONG_MAX;
+    }
+    return nRet;
 }
 
 // ---------- Selektionsmodi ----------
