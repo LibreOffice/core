@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-26 12:23:46 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 11:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,32 +73,71 @@
 #endif
 
 
+#ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #include <toolkit/controls/unocontrols.hxx>
+#endif
+#ifndef _TOOLKIT_HELPERS_GEOMETRYCONTROLMODEL_HXX_
 #include <toolkit/controls/geometrycontrolmodel.hxx>
+#endif
+#ifndef _TOOLKIT_CONTROLS_STDTABCONTROLLER_HXX_
 #include <toolkit/controls/stdtabcontroller.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_UNOMEMORYSTREAM_HXX_
 #include <toolkit/helper/unomemorystream.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_SERVICENAMES_HXX_
 #include <toolkit/helper/servicenames.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
 
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
+#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
 
+#ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
+#endif
+#ifndef _SV_GROUP_HXX
 #include <vcl/group.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
+#endif
+#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
+#endif
+#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
+#endif
 
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -1852,6 +1891,13 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
     xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
+
+    // as default, set the "AutoToggle" to true
+    // (it is set to false in VCLXToolkit::ImplCreateWindow because of #87254#, but we want to
+    // have it enabled by default because of 85071)
+    uno::Reference< awt::XVclWindowPeer >  xVclWindowPeer( getPeer(), uno::UNO_QUERY );
+    if ( xVclWindowPeer.is() )
+        xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), ::cppu::bool2any( sal_True ) );
 }
 
 void UnoRadioButtonControl::addItemListener(const uno::Reference < awt::XItemListener > & l) throw(uno::RuntimeException)
