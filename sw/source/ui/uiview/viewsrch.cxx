@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-13 15:27:15 $
+ *  last change: $Author: jp $ $Date: 2001-10-08 14:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,8 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     //
     SearchOptions aSearchOpt( pSrchItem->GetSearchOptions() );
     aSearchOpt.Locale = CreateLocale( GetAppLanguage() );
+    if( !bDoReplace )
+        aSearchOpt.replaceString = aEmptyStr;
 
     ULONG nFound;
     if( aSrchSet.Count() || ( pReplSet && pReplSet->Count() ))
@@ -834,6 +836,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/09/13 15:27:15  jp
+    #92075# update for new compiler
+
     Revision 1.6  2001/03/27 21:43:57  jp
     optimize SeachOption initialisation
 
