@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesdocumenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:39:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,7 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
