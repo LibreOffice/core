@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:17:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,7 +1264,7 @@ void XMLDatabaseDisplayImportContext::EndElement()
                         // set presentation
                         aAny <<= GetContent();
                         xField->setPropertyValue(sPropertyCurrentPresentation,
-                                                 aAny);
+                                                    aAny);
 
                         // success!
                         return;
