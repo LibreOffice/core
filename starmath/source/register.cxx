@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-23 07:46:57 $
+ *  last change: $Author: cmc $ $Date: 2002-07-19 15:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,13 @@ extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL SmXMLExportSettings_createInstance(const ::com::sun::star::uno::Reference<
     ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw(
     ::com::sun::star::uno::Exception );
+extern ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+SmXMLExportContent_getSupportedServiceNames() throw();
+extern ::rtl::OUString SAL_CALL SmXMLExportContent_getImplementationName() throw();
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+SAL_CALL SmXMLExportContent_createInstance(const ::com::sun::star::uno::Reference<
+    ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw(
+    ::com::sun::star::uno::Exception );
 
 extern "C" {
 
@@ -131,31 +138,6 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
             xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pRegistryKey ) ) ;
 
     // Eigentliche Implementierung und ihre Services registrieren
-/*    ::rtl::OUString aImpl (RTL_CONSTASCII_USTRINGPARAM("/"));
-    ::rtl::OUString aTempStr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey;
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xLoaderKey;
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SmFrameLoader::impl_getStaticImplementationName();
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader") );
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
-    xNewKey = xKey->createKey( aTempStr );
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
-
-    xLoaderKey = xKey->createKey( aTempStr );
-
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
-    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/smath" )) );
-
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extension")) );
-    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smf")) );
-*/
     sal_Int32 i;
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey;
 
@@ -208,6 +190,13 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     for(i = 0; i < rServices.getLength(); i++ )
         xNewKey->createKey( rServices.getConstArray()[i]);
 
+    xNewKey = xKey->createKey(::rtl::OUString(
+    RTL_CONSTASCII_USTRINGPARAM("/") ) + SmXMLExportContent_getImplementationName() +
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+    rServices = SmXMLExportContent_getSupportedServiceNames();
+    for(i = 0; i < rServices.getLength(); i++ )
+        xNewKey->createKey( rServices.getConstArray()[i]);
 
 
     return sal_True;
@@ -276,6 +265,14 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
             SmXMLExportSettings_getImplementationName(),
             SmXMLExportSettings_createInstance,
             SmXMLExportSettings_getSupportedServiceNames() );
+        }
+        else if( SmXMLExportContent_getImplementationName().equalsAsciiL(
+            pImplementationName, strlen(pImplementationName)) )
+        {
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            SmXMLExportContent_getImplementationName(),
+            SmXMLExportContent_createInstance,
+            SmXMLExportContent_getSupportedServiceNames() );
         }
 
         // Factory is valid - service was found.

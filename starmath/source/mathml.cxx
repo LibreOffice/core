@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-29 15:44:54 $
+ *  last change: $Author: cmc $ $Date: 2002-07-19 15:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport;
+    return (cppu::OWeakObject*)new SmXMLImport(IMPORT_ALL);
 }
 
 OUString SAL_CALL SmXMLExport_getImplementationName() throw()
@@ -468,9 +468,8 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_CONTENT );
+    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_ALL );
 }
-
 
 OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
 {
@@ -537,6 +536,26 @@ OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLSettingsExporter" ) );
 }
 
+OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLContentExporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SmXMLExportContent_getSupportedServiceNames()
+        throw()
+{
+    const OUString aServiceName( EXPORT_SVC_NAME );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_CONTENT );
+}
+
 // XServiceInfo
 // override empty method from parent class
 rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
@@ -545,7 +564,7 @@ rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
     switch( getExportFlags() )
     {
         default:
-        case EXPORT_CONTENT:
+        case EXPORT_ALL:
             return SmXMLExport_getImplementationName();
             break;
         case EXPORT_META:
@@ -553,6 +572,9 @@ rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
             break;
         case EXPORT_SETTINGS:
             return SmXMLExportSettings_getImplementationName();
+            break;
+        case EXPORT_CONTENT:
+            return SmXMLExportContent_getImplementationName();
             break;
     }
 }
@@ -887,7 +909,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 
             bRet = WriteThroughComponent(
                     pStg, xModelComp, "content.xml", xServiceFactory, xInfoSet,
-                    "com.sun.star.comp.Math.XMLExporter");
+                    "com.sun.star.comp.Math.XMLContentExporter");
         }
 
         if( bRet )
@@ -911,7 +933,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 
         bRet = WriteThroughComponent(
             xOut, xModelComp, xServiceFactory, xInfoSet,
-            "com.sun.star.comp.Math.XMLExporter");
+            "com.sun.star.comp.Math.XMLContentExporter");
     }
 
     if (xStatusIndicator.is())
@@ -965,9 +987,6 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
         _ExportContent();
         GetDocHandler()->endDocument();
     }
-
-    //ProgressBarHelper *pProgress = GetProgressBarHelper();
-    //pProgress->SetValue( pProgress->GetValue() + 1 );
 
     bSuccess=sal_True;
     return 0;
