@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:40:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,15 +383,14 @@ void DlgEditor::DoScroll( ScrollBar* pActScroll )
 
     pWindow->Update();
 
-    Brush aOldBrush( pWindow->GetBackgroundBrush() );
-    Brush aBrush( BRUSH_NULL );
-    pWindow->SetBackgroundBrush( aBrush );
+    Wallpaper aOldBackground = pWindow->GetBackground();
+    pWindow->SetBackground();
     pWindow->Scroll( -nX, -nY, SCROLL_NOCHILDREN );
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
     pWindow->SetMapMode( aMap );
     pWindow->Update();
 
-    pWindow->SetBackgroundBrush( aOldBrush );
+    pWindow->SetBackground( aOldBackground );
 
     DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
     Broadcast( aHint );
@@ -1048,18 +1047,16 @@ void DlgEditor::ClearModifyFlag()
 
 void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working yet
 {
-    short nLeftMargin   = LMARGPRN;
+    pPrinter->Push();
+
+    short nLeftMargin = LMARGPRN;
     Size aSz = pPrinter->GetOutputSize();
     short nBorder = BORDERPRN;
 
-    Pen aOldPen( pPrinter->GetPen() );
-    Brush aOldBrush( pPrinter->GetFillInBrush() );
-    Font aOldFont( pPrinter->GetFont() );
+    pPrinter->SetLineColor( COL_BLACK );
+    pPrinter->SetFillColor();
 
-    pPrinter->SetPen( Pen( (PenStyle)PEN_SOLID ) );
-    pPrinter->SetFillInBrush( Brush( BRUSH_NULL ) );
-
-    Font aFont( aOldFont );
+    Font aFont( pPrinter->GetFont() );
     aFont.SetWeight( WEIGHT_BOLD );
     aFont.SetAlign( ALIGN_BOTTOM );
     pPrinter->SetFont( aFont );
@@ -1084,9 +1081,7 @@ void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working y
 
     pPrinter->DrawLine( Point( nXLeft, nY ), Point( nXRight, nY ) );
 
-    pPrinter->SetPen( aOldPen );
-    pPrinter->SetFont( aOldFont );
-    pPrinter->SetFillInBrush( aOldBrush );
+    pPrinter->Pop();
 }
 
 //----------------------------------------------------------------------------
