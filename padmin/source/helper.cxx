@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:27:24 $
+ *  last change: $Author: pl $ $Date: 2001-07-04 14:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,11 @@ ResId padmin::PaResId( ULONG nId )
     static ResMgr* pPaResMgr = NULL;
     if( ! pPaResMgr )
     {
-        LanguageType aType = LANGUAGE_SYSTEM;
-        pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), aType );
-        International aInternational( aType, LANGUAGE_SYSTEM );
-        Application::SetAppInternational( aInternational );
+        LanguageType nLang = LANGUAGE_SYSTEM;
+        pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), nLang );
+        AllSettings aSettings = Application::GetSettings();
+        aSettings.SetUILanguage( nLang );
+        Application::SetSettings( aSettings );
     }
     return ResId( nId, pPaResMgr );
 }
