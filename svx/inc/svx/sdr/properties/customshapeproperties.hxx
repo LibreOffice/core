@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customshapeproperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:01:21 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,11 @@ namespace sdr
             virtual void ClearObjectItemDirect(const sal_uInt16 nWhich = 0);
 
         public:
+
+            // force default attributes for a specific object type, called from
+            // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
+            virtual void ForceDefaultAttributes();
+
             // basic constructor
             CustomShapeProperties(SdrObject& rObj);
 
