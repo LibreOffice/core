@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,8 +346,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
              OUString transliteration;
              getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
              translit->loadModuleByImplName(transliteration, aLocale);
-             Sequence< long > offset;
-             result += translit->transliterate(tmp, 0, tmp.getLength(), offset);
+             result += translit->transliterateString2String(tmp, 0, tmp.getLength());
            } catch (Exception& ) {
             // When translteration property is missing, return default number (bug #101141#)
             result += OUString::valueOf( number );
