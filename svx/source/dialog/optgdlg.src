@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:21:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,14 +227,14 @@ TabPage OFA_TP_VIEW
     FixedText FT_WINDOWSIZE
     {
         Pos = MAP_APPFONT ( 12 , OFFS_TEXTBOX_FIXEDTEXT( ROW_MF_SCALING ) ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ de ] = "~Skalierung" ;
         Text [ en-US ] = "Sc~aling" ;
     };
     MetricField MF_WINDOWSIZE
     {
-        Pos = MAP_APPFONT ( 75 , ROW_MF_SCALING ) ;
-        Size = MAP_APPFONT ( 51 , 12 ) ;
+        Pos = MAP_APPFONT ( 95 , ROW_MF_SCALING ) ;
+        Size = MAP_APPFONT ( 31 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -251,15 +251,15 @@ TabPage OFA_TP_VIEW
     };
     FixedText FT_ICONSIZE
     {
-        Pos = MAP_APPFONT ( 12 , OFFS_TEXTBOX_FIXEDTEXT( ROW_LB_BIG ) ) ;
-        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , ROW_FT_ICONSIZE  ) ;
+        Size = MAP_APPFONT ( 114 , 8 ) ;
         Text [ de ] = "Symbolgröße" ;
-        Text [ en-US ] = "Toolbar icon size" ;
+        Text [ en-US ] = "Icon size" ;
     };
     ListBox LB_ICONSIZE
     {
-        Pos = MAP_APPFONT ( 75 , ROW_LB_BIG ) ;
-        Size = MAP_APPFONT ( 51 , 60 ) ;
+        Pos = MAP_APPFONT ( 12 , ROW_LB_ICONSIZE ) ;
+        Size = MAP_APPFONT ( 114 , 60 ) ;
         DropDown = TRUE ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -280,7 +280,8 @@ TabPage OFA_TP_VIEW
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT( 12, ROW_CB_SYSTEM_FONT );
-        Size = MAP_APPFONT( 110, 12 );
+        Size = MAP_APPFONT( 110, 24 );
+        WordBreak = TRUE;
         Text[ de ] = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
         Text[ en-US ] = "Use system ~font for user interface";
     };
@@ -389,14 +390,14 @@ TabPage OFA_TP_VIEW
     CheckBox BTN_DOCVIEW
     {
         Pos = MAP_APPFONT ( 139 , 14 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~Bearbeitungsansicht" ;
         Text [ en-US ] = "Editing view";
     };
     CheckBox BTN_OPENWIN
     {
         Pos = MAP_APPFONT ( 139 , 27 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "Ge~öffnete Fenster" ;
         Text [ en-US ] = "Open ~windows" ;
     };
@@ -410,7 +411,7 @@ TabPage OFA_TP_VIEW
     CheckBox CB_3D_OPENGL
     {
         Pos = MAP_APPFONT ( 139, 58 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~OpenGL benutzen" ;
         Text [ en-US ] = "Use ~OpenGL" ;
     };
@@ -425,14 +426,14 @@ TabPage OFA_TP_VIEW
     CheckBox CB_3D_DITHERING
     {
         Pos = MAP_APPFONT ( 139 , 84 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~Dithering benutzen" ;
         Text [ en-US ] = "Use ~dithering" ;
     };
     CheckBox CB_3D_SHOWFULL
     {
         Pos = MAP_APPFONT ( 139 , 97 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text [ de ] = "~Volldarstellung bei Interaktion" ;
         Text [ en-US ] = "Ob~ject refresh during interaction" ;
     };
