@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:42:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 #ifndef _FLTTYPES_HXX
 #include "flttypes.hxx"
@@ -151,8 +154,8 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ExcNameList*        pNameList;
     ScRangeName*        pScNameList;        // stores range names and DB ranges
     ExcExternDup*       pExtSheetCntAndRecs;
-    UINT16              nColMax;
-    UINT16              nRowMax;
+    SCCOL               nColMax;
+    SCROW               nRowMax;
     // Biff8
     XclObjList*         pObjRecs;
     String              sAddNoteText;       // text to append at current note (multiple hyperlinks)
