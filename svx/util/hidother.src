@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 10:52:16 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ hidspecial HID_PROP_MAXTEXTLEN              { HelpID = HID_PROP_MAXTEXTLEN; };
 hidspecial HID_PROP_SPIN                    { HelpID = HID_PROP_SPIN; };
 hidspecial HID_PROP_STRICTFORMAT            { HelpID = HID_PROP_STRICTFORMAT; };
 hidspecial HID_PROP_SHOWTHOUSANDSEP         { HelpID = HID_PROP_SHOWTHOUSANDSEP; };
-hidspecial HID_PROP_HARDLINEBREAKS          { HelpID = HID_PROP_HARDLINEBREAKS; };
 hidspecial HID_PROP_TARGET_URL              { HelpID = HID_PROP_TARGET_URL; };
 hidspecial HID_PROP_TARGET_FRAME            { HelpID = HID_PROP_TARGET_FRAME; };
 hidspecial HID_PROP_TAG                     { HelpID = HID_PROP_TAG; };
