@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingUtils.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2002-11-20 14:11:22 $
+ *  last change:$Date: 2003-03-25 17:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,28 +75,6 @@ public class ScriptingUtils {
     private XScriptStorageManager storageManager;
     private static ScriptingUtils utils;
 
-    public static final String USER_LOGICAL_NAME =
-        "script://user.jsuite.test";
-    public static final String SHARE_LOGICAL_NAME =
-        "script://share.jsuite.test";
-    public static final String DOC_LOGICAL_NAME =
-        "script://doc.jsuite.testMethod";
-
-    public static final String SCRIPT_IN_CLASSFILE_DOC_NAME =
-        "script_in_class_file.sxw";
-
-    public static final String SCRIPT_IN_JARFILE_DOC_NAME =
-        "script_in_jar_file.sxw";
-
-    public static final String DOC_WITH_ONE_SCRIPT =
-        "doc_with_one_script.sxw";
-
-    public static final String DOC_WITH_TWO_SCRIPTS =
-        "doc_with_two_scripts.sxw";
-
-    public static final String XSCRIPTCONTEXT_TEST_DOCUMENT =
-        "xscriptcontext_test_document.sxw";
-
     private ScriptingUtils() {
     }
 
@@ -116,9 +94,21 @@ public class ScriptingUtils {
     public static void cleanShareDir() {
     }
 
-    public int getScriptStorageId(XMultiServiceFactory xMSF, String uri) {
+    public Object getScriptStorage(XMultiServiceFactory xMSF, String location) {
+        int id = getStorageId(xMSF, location);
+        return storageManager.getScriptStorage(id);
+    }
+
+    public int getStorageId(XMultiServiceFactory xMSF, String location) {
+
+        if (location.equals("share"))
+            return 0;
+
+        if (location.equals("user"))
+            return 1;
 
         XSimpleFileAccess access = null;
+        String uri = util.utils.getFullTestURL(location);
 
         if (storageManager == null) {
             try {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInfoAccess.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-25 16:55:04 $
+ *  last change:$Date: 2003-03-25 17:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,8 @@
 
 package ifc.script.framework.storage;
 
-import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
+import ifc.script.framework.ScriptingUtils;
+
 import drafts.com.sun.star.script.framework.storage.XScriptInfoAccess;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 
@@ -196,6 +197,60 @@ public class _XScriptInfoAccess extends MultiMethodTest {
         catch (com.sun.star.uno.Exception e) {
             log.println("Caught UNO Exception:" + e);
             output = "com.sun.star.uno.Exception";
+        }
+
+        log.println("expected: " + expected + ", output: " + output);
+        if (output.equals(expected))
+            return true;
+        else
+            return false;
+    }
+
+    public void _getAllImplementations() {
+        boolean result = true;
+
+        Collection c =
+            (Collection) tEnv.getObjRelation("_getAllImplementations");
+
+        Iterator tests;
+
+        if (c != null) {
+            tests = c.iterator();
+
+            while (tests.hasNext()) {
+                result &= runGetAllImplementationsTest((Parameters)tests.next());
+            }
+        }
+        else {
+            result = false;
+        }
+
+        tRes.tested("getAllImplementations()", result);
+    }
+
+    private boolean runGetAllImplementationsTest(Parameters testdata) {
+        String description = testdata.get("description");
+        String location = testdata.get("location");
+        String expected = testdata.get("expected");
+        String output = "";
+
+        log.println(testdata.get("description"));
+
+        Object obj = ScriptingUtils.getDefault().getScriptStorage(
+            tParam.getMSF(), location);
+
+        XScriptInfoAccess access = (XScriptInfoAccess)
+            UnoRuntime.queryInterface(XScriptInfoAccess.class, obj);
+
+        XScriptInfo[] impls = access.getAllImplementations();
+
+        if (impls == null || impls.length == 0) {
+            output = "empty";
+        }
+        else {
+            for (int i = 0; i < impls.length - 1; i++)
+                output += impls[i].getLogicalName() + ",";
+            output += impls[impls.length - 1].getLogicalName();
         }
 
         log.println("expected: " + expected + ", output: " + output);

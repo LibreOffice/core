@@ -1,3 +1,4 @@
 "ScriptStorage";"drafts::com::sun::star::script::framework::storage::XScriptInfoAccess";"getScriptLogicalNames()"
 "ScriptStorage";"drafts::com::sun::star::script::framework::storage::XScriptInfoAccess";"getImplementations()"
+"ScriptStorage";"drafts::com::sun::star::script::framework::storage::XScriptInfoAccess";"getAllImplementations()"
 "ScriptStorage";"drafts::com::sun::star::script::framework::storage::XScriptStorageRefresh";"refresh()"

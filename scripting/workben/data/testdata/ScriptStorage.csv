@@ -1,3 +1,4 @@
 _getScriptLogicalNames;description=Try to get logical names;expected=MemoryUtils.MemUsage
 _getImplementations;description=Try to get a valid implementation;logicalname=script://MemoryUtils.MemUsage?location=document;expected=MemoryUtils.MemUsage
+_getAllImplementations;description=Try to get all valid implementations;location=doc_with_beanshell_scripts.sxw;expected=returns-Integer,returns-String,returns-Frame
 _refresh;description=Try calling refresh;expected=success
