@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 12:27:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,30 +372,30 @@ protected:
 
 //----------------------------------------------------------------------------------
 #define DECL_PROP1(varname, type, attrib1)  \
-    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::##attrib1)
+    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1)
 //----------------------------------------------------------------------------------
 #define DECL_PROP1_BOOL(varname, attrib1)   \
-    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::##attrib1)
+    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1)
 //----------------------------------------------------------------------------------
 #define DECL_PROP1_IFACE(varname, iface, attrib1)   \
-    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::##attrib1)
+    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::attrib1)
 //----------------------------------------------------------------------------------
 #define DECL_PROP2_IFACE(varname, iface, attrib1, attrib2)  \
-    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::##attrib1 | ::com::sun::star::beans::PropertyAttribute::##attrib2)
+    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
 //----------------------------------------------------------------------------------
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
-    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::##attrib1 | ::com::sun::star::beans::PropertyAttribute::##attrib2)
+    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 //----------------------------------------------------------------------------------
 #define DECL_PROP2_BOOL(varname, attrib1, attrib2)  \
-    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::##attrib1 | ::com::sun::star::beans::PropertyAttribute::##attrib2)
+    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2)
 
 //----------------------------------------------------------------------------------
 #define DECL_PROP3(varname, type, attrib1, attrib2, attrib3)    \
-    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::##attrib1 | ::com::sun::star::beans::PropertyAttribute::##attrib2 | ::com::sun::star::beans::PropertyAttribute::##attrib3)
+    DECL_PROP_IMPL(varname, ::getCppuType((const type *)0)) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
 //----------------------------------------------------------------------------------
 #define DECL_PROP3_BOOL(varname, attrib1, attrib2, attrib3) \
-    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::##attrib1 | ::com::sun::star::beans::PropertyAttribute::##attrib2 | ::com::sun::star::beans::PropertyAttribute::##attrib3)
+    DECL_PROP_IMPL(varname, ::getBooleanCppuType()) ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3)
 
 
 //----------------------------------------------------------------------------------
