@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 16:02:37 $
+ *  last change: $Author: mtg $ $Date: 2001-02-16 09:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,8 +318,62 @@ SwXMLTextBlocks::SwXMLTextBlocks( SvStorage& rStg )
     pDoc->AddLink();
 
 
-    bReadOnly = FALSE;
     SvStorageRef refStg = &rStg;
+    const OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
+    if ( refStg->IsContained ( sDocName ) )
+    {
+        Reference< lang::XMultiServiceFactory > xServiceFactory =
+                comphelper::getProcessServiceFactory();
+        ASSERT( xServiceFactory.is(),
+                "XMLReader::Read: got no service manager" );
+        if( !xServiceFactory.is() )
+        {
+            // Throw an exception ?
+        }
+
+        xml::sax::InputSource aParserInput;
+        aParserInput.sSystemId = sDocName;
+
+        SvStorageStreamRef xDocStream = refStg->OpenStream( sDocName, STREAM_STGREAD );
+        xDocStream->Seek( 0L );
+        xDocStream->SetBufferSize( 16*1024 );
+        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+
+        // get parser
+        Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+        ASSERT( xXMLParser.is(),
+            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+        if( !xXMLParser.is() )
+        {
+            // Maybe throw an exception?
+        }
+
+        // get filter
+        Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( *this );
+
+        // connect parser and filter
+        Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+        xParser->setDocumentHandler( xFilter );
+
+        // parse
+        try
+        {
+            xParser->parseStream( aParserInput );
+        }
+        catch( xml::sax::SAXParseException&  )
+        {
+            // re throw ?
+        }
+        catch( xml::sax::SAXException&  )
+        {
+            // re throw ?
+        }
+        catch( io::IOException& )
+        {
+            // re throw ?
+        }
+    }
     bInfoChanged = FALSE;
 }
 
