@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-17 18:35:17 $
+ *  last change: $Author: pl $ $Date: 2000-11-18 16:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.3 $  $Author: cp $  $Date: 2000-11-17 18:35:17 $   //
+// $Revision: 1.4 $  $Author: pl $  $Date: 2000-11-18 16:48:26 $   //
 //                                                                            //
 // $Workfile:   salgdi.h  $                                                   //
 //  $Modtime:   10 Sep 1997 11:55:36  $                                       //
@@ -121,8 +121,9 @@ class SalGraphicsData
                             STDAPI( SalGraphicsData )
 
 #ifdef USE_PSPRINT
-            ::psp::JobData* m_pJobData;
-            ::psp::PrinterGfx* m_pPrinterGfx;
+            ::psp::JobData*         m_pJobData;
+            ::psp::PrinterGfx*      m_pPrinterGfx;
+            String*                 m_pPhoneNr;
 #endif
 
             SalColormapRef  xColormap_;
@@ -257,6 +258,8 @@ public:
     inline  BOOL            IsCompatible( USHORT       nDepth,
                                           SalColormap *pMap ) const;
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
+
+            void            FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen ) const;
 };
 
 #ifdef _SV_SALDATA_HXX

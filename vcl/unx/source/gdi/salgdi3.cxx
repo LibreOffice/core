@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
+ *  last change: $Author: pl $ $Date: 2000-11-18 16:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,13 +130,19 @@
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifndef PRINTER_DUMMY
-static void
-FaxPhoneComment( Display* pDisplay, const sal_Unicode* pStr, USHORT nLen )
+void SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen ) const
 {
-    #define FAX_PHONE_TOKEN          "@@#"
-    #define FAX_PHONE_TOKEN_LENGTH   3
-    #define FAX_END_TOKEN            "@@"
+#ifdef USE_PSPRINT
+    if( ! m_pPhoneNr )
+        return;
+#else
+    if( ! bPrinter_ )
+        return;
+#endif
+
+#define FAX_PHONE_TOKEN          "@@#"
+#define FAX_PHONE_TOKEN_LENGTH   3
+#define FAX_END_TOKEN            "@@"
 
     USHORT nPos;
     ByteString aPhone( pStr, nLen, gsl_getSystemTextEncoding() );
@@ -163,11 +169,15 @@ FaxPhoneComment( Display* pDisplay, const sal_Unicode* pStr, USHORT nLen )
         aPhoneNumber += aPhone;
         if( ! bIsCollecting )
         {
+#ifndef PRINTER_DUMMY
+#ifndef USE_PSPRINT
             aPhone = "PhoneNumber(";
             aPhone += aPhoneNumber;
             aPhone += ")\n";
-#ifndef USE_PSPRINT
-            XpPSComment( pDisplay, aPhone.GetBuffer() );
+            XpPSComment( GetDisplay()->GetDisplay(), aPhone.GetBuffer() );
+#else
+            *m_pPhoneNr = String( aPhoneNumber, gsl_getSystemTextEncoding() );
+#endif
 #endif
             aPhoneNumber = ByteString();
         }
@@ -178,7 +188,6 @@ FaxPhoneComment( Display* pDisplay, const sal_Unicode* pStr, USHORT nLen )
         aPhoneNumber = ByteString();
     }
 }
-#endif
 
 // ----------------------------------------------------------------------------
 //
@@ -838,12 +847,7 @@ void
 SalGraphicsData::DrawText( long nX, long nY,
         const sal_Unicode *pStr, USHORT nLen )
 {
-#ifndef PRINTER_DUMMY
-    if( bPrinter_ )
-        FaxPhoneComment( GetXDisplay(), pStr, nLen );
-#endif
-
-    #ifdef __notdef__
+#ifdef __notdef__
     // XXX Fix me this part is not unicode / multibyte aware
 
     // Bug: #45670#
@@ -888,7 +892,7 @@ SalGraphicsData::DrawText( long nX, long nY,
         }
     }
 
-    #endif /* __notdef__ */
+#endif /* __notdef__ */
 
     Display             *pDisplay = GetXDisplay();
     SalConverterCache   *pCvt     = GetDisplay()->GetConverter();
@@ -901,18 +905,19 @@ SalGraphicsData::DrawText( long nX, long nY,
 void
 SalGraphics::DrawText( long nX, long nY, const xub_Unicode* pStr, USHORT nLen )
 {
-    #if defined(USE_PSPRINT)
+    maGraphicsData.FaxPhoneComment( pStr, nLen );
+#if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
          maGraphicsData.m_pPrinterGfx->DrawText (Point(nX, nY), pStr, nLen);
     else
     {
-    #endif
+#endif
 
     maGraphicsData.DrawText( nX, nY, pStr, nLen );
 
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     }
-    #endif
+#endif
 }
 
 //--------------------------------------------------------------------------
@@ -942,10 +947,6 @@ SalGraphicsData::DrawText(
         long nX, long nY,
         const sal_Unicode* pStr, USHORT nLen, const long* pDXAry )
 {
-    #ifndef PRINTER_DUMMY
-    if( bPrinter_ )
-        FaxPhoneComment( GetXDisplay(), pStr, nLen );
-    #endif
     GC pGC = SelectFont();
 
     // workaround for problems with negative coordinates
@@ -1028,12 +1029,13 @@ void
 SalGraphics::DrawTextArray( long nX, long nY,
         const xub_Unicode *pStr, USHORT nLen, const long *pDXAry )
 {
-    #if defined(USE_PSPRINT)
+    maGraphicsData.FaxPhoneComment( pStr, nLen );
+#if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
          maGraphicsData.m_pPrinterGfx->DrawText (Point(nX, nY), pStr, nLen, pDXAry);
     else
     {
-    #endif
+#endif
 
     maGraphicsData.DrawText( nX, nY, pStr, nLen, pDXAry );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
+ *  last change: $Author: pl $ $Date: 2000-11-18 16:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,11 @@ inline SalPolyLine::~SalPolyLine()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 final SalGraphicsData::SalGraphicsData()
 {
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     m_pJobData          = NULL;
     m_pPrinterGfx       = NULL;
-    #endif
+    m_pPhoneNr          = NULL;
+#endif
     hDrawable_          = None;
 
     pClipRegion_        = NULL;
