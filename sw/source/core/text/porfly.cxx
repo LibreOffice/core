@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:44:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #ifndef _ASCHARANCHOREDOBJECTPOSITION_HXX
 #include <ascharanchoredobjectposition.hxx>
 #endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 // OD 2004-04-13 #i26791#
 #ifndef _ANCHOREDDRAWOBJECT_HXX
 #include <anchoreddrawobject.hxx>
@@ -150,7 +154,7 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
         SetLen( 1 );
     }
 
-    const KSHORT nNewWidth = rInf.X() + PrtWidth();
+    const USHORT nNewWidth = rInf.X() + PrtWidth();
     if( rInf.Width() <= nNewWidth )
     {
         Truncate();
@@ -216,71 +220,36 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
  *************************************************************************/
 void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd )
 {
-    SwDrawObjs *pObjs;
+    SwSortedObjs *pObjs = 0L;
     if ( 0 != (pObjs = GetDrawObjs()) )
     {
-        for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
+        for ( sal_uInt32 i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
         {
             // OD 2004-03-29 #i26791#
-            SdrObject* pSdrObj = (*pObjs)[MSHORT(i)];
-            SwContact* pContact = static_cast<SwContact*>(GetUserCall( pSdrObj ));
-            ASSERT( pContact,
-                    "<SwTxtFrm::MoveFlyInCnt(..) - missing contact object. Please inform OD." );
-            if ( pContact && pContact->ObjAnchoredAsChar() )
+            // --> OD 2004-07-06 #i28701# - consider changed type of
+            // <SwSortedList> entries
+            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+            const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
+            if ( rAnch.GetAnchorId() == FLY_IN_CNTNT )
             {
-                const SwFmtAnchor& rAnch = pContact->GetAnchorFmt();
                 const SwPosition* pPos = rAnch.GetCntntAnchor();
                 xub_StrLen nIdx = pPos->nContent.GetIndex();
                 if ( nIdx >= nStart && nEnd > nIdx )
                 {
-                    if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
+                    if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
-                        SwFlyFrm* pFly =
-                            static_cast<SwVirtFlyDrawObj*>(pSdrObj)->GetFlyFrm();
-                        RemoveFly( pFly );
-                        pNew->AppendFly( pFly );
+                        RemoveFly( static_cast<SwFlyFrm*>(pAnchoredObj) );
+                        pNew->AppendFly( static_cast<SwFlyFrm*>(pAnchoredObj) );
                     }
-                    else if ( pContact->ISA(SwDrawContact) )
+                    else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
                     {
-                        RemoveDrawObj( static_cast<SwDrawContact*>(pContact) );
-                        pNew->AppendDrawObj( static_cast<SwDrawContact*>(pContact) );
+                        RemoveDrawObj( *pAnchoredObj );
+                        pNew->AppendDrawObj( *pAnchoredObj );
                     }
                     --i;
                 }
             }
-//            SdrObject *pO = (*pObjs)[MSHORT(i)];
-//            if ( pO->ISA(SwVirtFlyDrawObj) )
-//            {
-//                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-//                if( pFly->IsFlyInCntFrm() )
-//                {
-//                    const SwFmtAnchor &rAnch = pFly->GetFmt()->GetAnchor();
-//                    const SwPosition *pPos = rAnch.GetCntntAnchor();
-//                    xub_StrLen nIdx = pPos->nContent.GetIndex();
-//                    if ( nIdx >= nStart && nEnd > nIdx )
-//                    {
-//                        RemoveFly( pFly );
-//                        pNew->AppendFly( pFly );
-//                        --i;
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pO);
-//                const SwFmtAnchor &rAnch = pContact->GetFmt()->GetAnchor();
-//                if ( FLY_IN_CNTNT == rAnch.GetAnchorId() )
-//                {
-//                    const SwPosition *pPos = rAnch.GetCntntAnchor();
-//                    xub_StrLen nIdx = pPos->nContent.GetIndex();
-//                    if ( nIdx >= nStart && nEnd > nIdx )
-//                    {
-//                        RemoveDrawObj( pContact );
-//                        pNew->AppendDrawObj( pContact );
-//                        --i;
-//                    }
-//                }
-//            }
+            // <--
         }
     }
 }
@@ -428,41 +397,6 @@ const SwFrmFmt *SwFlyCntPortion::GetFrmFmt() const
         return GetFlyFrm()->GetFmt();
 }
 
-// ============================================================================
-// OD 2004-04-13 #i26791#
-// helper class for notify that positioning of drawing object is in progress
-// ============================================================================
-class SwObjPositioningInProgress
-{
-    private:
-        SwAnchoredDrawObject* mpAnchoredDrawObj;
-
-    public:
-        SwObjPositioningInProgress( const bool _bIsDrawObj,
-                                    SdrObject* _pSdrObj );
-        ~SwObjPositioningInProgress();
-};
-
-SwObjPositioningInProgress::SwObjPositioningInProgress( const bool _bIsDrawObj,
-                                                        SdrObject* _pSdrObj ) :
-    mpAnchoredDrawObj( 0L )
-{
-    if ( _bIsDrawObj )
-    {
-        mpAnchoredDrawObj = static_cast<SwAnchoredDrawObject*>(
-                        ::GetUserCall( _pSdrObj )->GetAnchoredObj( _pSdrObj ));
-        mpAnchoredDrawObj->SetPositioningInProgress( true );
-    }
-}
-
-SwObjPositioningInProgress::~SwObjPositioningInProgress()
-{
-    if ( mpAnchoredDrawObj )
-    {
-        mpAnchoredDrawObj->SetPositioningInProgress( false );
-    }
-}
-
 /*************************************************************************
  *                  SwFlyCntPortion::SetBase()
  *
@@ -507,7 +441,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
     // OD 2004-04-13 #i26791# - scope of local variable <aObjPosInProgress>
     {
         // OD 2004-04-13 #i26791#
-        SwObjPositioningInProgress aObjPosInProgress( bDraw, pSdrObj );
+        SwObjPositioningInProgress aObjPosInProgress( *pSdrObj );
         aObjPositioning.CalcPosition();
     }
 
