@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-30 10:49:31 $
+ *  last change: $Author: dr $ $Date: 2002-07-30 13:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,7 +872,11 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     bModified   (FALSE),
     pRedlinTable(NULL)
 {
+    Image aImgTimeHC( ResId( IMG_TIME_H ) );
     FreeResource();
+
+    aIbClock.SetModeImage( aImgTimeHC, BMP_COLOR_HIGHCONTRAST );
+    aIbClock2.SetModeImage( aImgTimeHC, BMP_COLOR_HIGHCONTRAST );
 
     aDfDate.SetShowDateCentury( TRUE );
     aDfDate2.SetShowDateCentury( TRUE );
