@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:46:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #include <uno/environment.h>
 #include <uno/mapping.hxx>
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #include <cppuhelper/servicefactory.hxx>
 
