@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:14:22 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 12:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #include "helpid.hrc"
 #include "dialogs.hrc"
 #include "tabarea.hrc"
- // pragma ----------------------------------------------------------------
+
+#define MASKCOLOR       MaskColor = Color{ Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+
 
  // RID_SVXPAGE_AREA ------------------------------------------------------
 #define TRANS_GRAD_OFFSET_X             6
@@ -2402,12 +2404,7 @@ TabPage RID_SVXPAGE_HATCH
             {
                 File = "sc05501.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Загрузить набор штриховок";
         QuickHelpText[ polish ] = "Јaduj tabelк kreskowaс";
@@ -2449,12 +2446,7 @@ TabPage RID_SVXPAGE_HATCH
             {
                 File = "sc05502.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Сохранить набор штриховок";
         QuickHelpText[ polish ] = "Zapisz tabelк kreskowaс";
@@ -2804,12 +2796,7 @@ TabPage RID_SVXPAGE_BITMAP
             {
                 File = "sc05501.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Загрузить набор Bitmap";
         QuickHelpText[ polish ] = "Јaduj tabelк mapy bitowej";
@@ -2848,12 +2835,7 @@ TabPage RID_SVXPAGE_BITMAP
             {
                 File = "sc05502.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Сохранить набор Bitmap";
         QuickHelpText[ polish ] = "Zapisz tabelк mapy bitowej";
@@ -3632,12 +3614,7 @@ TabPage RID_SVXPAGE_GRADIENT
             {
                 File = "sc05501.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Загрузить набор градиентных";
         QuickHelpText[ polish ] = "Јaduj tabelк gradientуw";
@@ -3676,12 +3653,7 @@ TabPage RID_SVXPAGE_GRADIENT
             {
                 File = "sc05502.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Сохранить набор градиентных";
         QuickHelpText[ polish ] = "Zapisz tabelк gradientуw";
@@ -4232,12 +4204,7 @@ TabPage RID_SVXPAGE_COLOR
             {
                 File = "sc05501.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Загрузить набор цветов";
         QuickHelpText[ polish ] = "Јaduj tabelк kolorуw";
@@ -4276,12 +4243,7 @@ TabPage RID_SVXPAGE_COLOR
             {
                 File = "sc05502.bmp" ;
             };
-            MaskColor = Color
-            {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
-            };
+            MASKCOLOR
         };
         QuickHelpText[ russian ] = "Сохранить набор цветов";
         QuickHelpText[ polish ] = "Zapisz tabelк kolorуw";
@@ -4563,12 +4525,7 @@ Image RID_SVXIMG_LOAD_H
     {
         File = "sch05501.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xff00 ;
-        Green = 0x0000 ;
-        Blue = 0xff00 ;
-    };
+    MASKCOLOR
 };
 
 Image RID_SVXIMG_SAVE_H
@@ -4577,12 +4534,7 @@ Image RID_SVXIMG_SAVE_H
     {
         File = "sch05502.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xff00 ;
-        Green = 0x0000 ;
-        Blue = 0xff00 ;
-    };
+    MASKCOLOR
 };
 
  // ********************************************************************** EOF
