@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 20:15:15 $
+ *  last change: $Author: jp $ $Date: 2001-08-21 12:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1599,10 +1599,10 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                         aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                         aFmt.SetFirstLineOffset( lBullFirstLineOffset );
                         aFmt.SetAbsLSpace( nAbsPos );
-                        aRule.Set( n, aFmt );
-
                         if( !aFmt.GetCharFmt() )
                             aFmt.SetCharFmt( pCFmt );
+
+                        aRule.Set( n, aFmt );
 
                         if( n == nLvl &&
                             nFrmWidth < ( nSpaceSteps * MAXLEVEL ) )
