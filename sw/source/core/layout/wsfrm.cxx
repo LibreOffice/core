@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:31:17 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2061,18 +2061,24 @@ void SwCntntFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
             }
             _InvalidatePrt();
         }
-        SwFrm *pTmp;
-        if ( 0 != (pTmp = GetIndNext()) && nInvFlags & 0x10)
+        SwFrm* pNextFrm = GetIndNext();
+        if ( pNextFrm && nInvFlags & 0x10)
         {
-            pTmp->_InvalidatePrt();
-            pTmp->InvalidatePage( pPage );
+            pNextFrm->_InvalidatePrt();
+            pNextFrm->InvalidatePage( pPage );
         }
-        if ( nInvFlags & 0x80 && pTmp )
-            pTmp->SetCompletePaint();
-        if ( nInvFlags & 0x20 && 0 != (pTmp = GetPrev()) )
+        if ( pNextFrm && nInvFlags & 0x80 )
         {
-            pTmp->_InvalidatePrt();
-            pTmp->InvalidatePage( pPage );
+            pNextFrm->SetCompletePaint();
+        }
+        if ( nInvFlags & 0x20 )
+        {
+            SwFrm* pPrevFrm = GetPrev();
+            if ( pPrevFrm )
+            {
+                pPrevFrm->_InvalidatePrt();
+                pPrevFrm->InvalidatePage( pPage );
+            }
         }
         if ( nInvFlags & 0x40 )
             InvalidateNextPos();
@@ -2107,10 +2113,13 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
 
         case RES_UL_SPACE:
             {
-                if( IsInFtn() && !GetIndNext() )
+                // OD 2004-02-18 #106629# - correction
+                // Invalidation of the printing area of next frame, not only
+                // for footnote content.
+                if ( !GetIndNext() )
                 {
                     SwFrm* pNxt = FindNext();
-                    if( pNxt )
+                    if ( pNxt )
                     {
                         SwPageFrm* pPg = pNxt->FindPageFrm();
                         pNxt->InvalidatePage( pPg );
@@ -2125,6 +2134,7 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
                             }
                         }
                         pNxt->SetCompletePaint();
+
                     }
                 }
                 Prepare( PREP_UL_SPACE );   //TxtFrm muss Zeilenabst. korrigieren.
