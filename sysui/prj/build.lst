@@ -1,5 +1,6 @@
 su	sysui	:	xml2cmp drafts rdbmaker NULL
-su	sysui\win32\office\icons				nmake	-	w	su_iconsw NULL
+su	sysui\win32\office\icons		nmake	-	w	su_iconsw NULL
+su	sysui\java\office\icons			nmake	-	all	su_iconsj NULL
 su	sysui\tools\lngconv				nmake	-	u	su_lngconv NULL
 su	sysui\unix\office 				nmake	-	u	su_iconsu NULL
 su	sysui\unix\office\cde 			nmake	-	u	su_cdezips su_lngconv.u NULL
