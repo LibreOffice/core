@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:41:04 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,7 @@ void SdXMLGenericPageContext::EndElement()
 
                     if( bFixed )
                     {
-                        xSet->setPropertyValue( aStrDateTimeTextProp,
-                                            makeAny( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
+                        xSet->setPropertyValue( aStrDateTimeTextProp, makeAny( aText ) );
                     }
                     else if( aDateTimeFormat.getLength() )
                     {
