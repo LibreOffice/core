@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:34:15 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 15:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,30 +80,30 @@ IndexEntrySupplier::IndexEntrySupplier( const Reference < XMultiServiceFactory >
 
 Sequence < Locale > SAL_CALL IndexEntrySupplier::getLocaleList() throw (RuntimeException)
 {
-    return LocaleData().getAllInstalledLocaleNames();
+        return LocaleData().getAllInstalledLocaleNames();
 }
 
 Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Locale& rLocale ) throw (RuntimeException)
 {
-    return LocaleData().getIndexAlgorithm(rLocale);
+        return LocaleData().getIndexAlgorithm(rLocale);
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
         sal_Int32 collatorOptions ) throw (RuntimeException)
 {
-    Sequence < OUString > algorithmList = getAlgorithmList( rLocale );
-    for (sal_Int32 i = 0; i < algorithmList.getLength(); i++) {
-        if (algorithmList[i] == SortAlgorithm) {
-            if (getLocaleSpecificIndexEntrySupplier(rLocale, SortAlgorithm).is())
-                return xIES->loadAlgorithm(rLocale, SortAlgorithm, collatorOptions);
+        Sequence < OUString > algorithmList = getAlgorithmList( rLocale );
+        for (sal_Int32 i = 0; i < algorithmList.getLength(); i++) {
+            if (algorithmList[i] == SortAlgorithm) {
+                if (getLocaleSpecificIndexEntrySupplier(rLocale, SortAlgorithm).is())
+                    return xIES->loadAlgorithm(rLocale, SortAlgorithm, collatorOptions);
+            }
         }
-    }
-    return sal_False;
+        return sal_False;
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale ) throw (RuntimeException)
 {
-    return LocaleData().hasPhonetic(rLocale);
+        return LocaleData().hasPhonetic(rLocale);
 }
 
 OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
@@ -157,7 +157,10 @@ OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rInd
 OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
         const OUString& rPhoneticEntry, const Locale& rLocale ) throw (RuntimeException)
 {
-        return xIES->getIndexKey(rIndexEntry, rPhoneticEntry, rLocale);
+        if (xIES.is())
+            return xIES->getIndexKey(rIndexEntry, rPhoneticEntry, rLocale);
+        else
+            throw RuntimeException();
 }
 
 sal_Int16 SAL_CALL IndexEntrySupplier::compareIndexEntry(
@@ -165,8 +168,11 @@ sal_Int16 SAL_CALL IndexEntrySupplier::compareIndexEntry(
         const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
         throw (com::sun::star::uno::RuntimeException)
 {
-        return xIES->compareIndexEntry(rIndexEntry1, rPhoneticEntry1, rLocale1,
+        if (xIES.is())
+            return xIES->compareIndexEntry(rIndexEntry1, rPhoneticEntry1, rLocale1,
                                         rIndexEntry2, rPhoneticEntry2, rLocale2);
+        else
+            throw RuntimeException();
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexEntry,
@@ -192,56 +198,56 @@ sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(con
 Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
 {
-    if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&
+        if (xIES.is() && rSortAlgorithm == aSortAlgorithm && rLocale.Language == aLocale.Language &&
                 rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
-        return xIES;
-    else if (xMSF.is()) {
-        aLocale = rLocale;
-        aSortAlgorithm = rSortAlgorithm;
+            return xIES;
+        else if (xMSF.is()) {
+            aLocale = rLocale;
+            aSortAlgorithm = rSortAlgorithm;
 
-        sal_Int32 l = rLocale.Language.getLength();
-        sal_Int32 c = rLocale.Country.getLength();
-        sal_Int32 v = rLocale.Variant.getLength();
-        sal_Int32 a = rSortAlgorithm.getLength();
-        OUStringBuffer aBuf(l+c+v+a+4);
+            sal_Int32 l = rLocale.Language.getLength();
+            sal_Int32 c = rLocale.Country.getLength();
+            sal_Int32 v = rLocale.Variant.getLength();
+            sal_Int32 a = rSortAlgorithm.getLength();
+            OUStringBuffer aBuf(l+c+v+a+4);
 
-        if ((l > 0 && c > 0 && v > 0 && a > 0 &&
-            // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
-            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                    rLocale.Country).append(under).append(rLocale.Variant).append(under).append(
-                    rSortAlgorithm).makeStringAndClear())) ||
-        (l > 0 && c > 0 && a > 0 &&
-            // load service with name <base>_<lang>_<country>_<algorithm>
-            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                    rLocale.Country).append(under).append(rSortAlgorithm).makeStringAndClear())) ||
-        (l > 0 && c > 0 && a > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
-                        (rLocale.Country.compareToAscii("HK") == 0 ||
-                        rLocale.Country.compareToAscii("MO") == 0) &&
-            // if the country code is HK or MO, one more step to try TW.
-            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).appendAscii(
-                    "TW").append(under).append(rSortAlgorithm).makeStringAndClear())) ||
-        (l > 0 && a > 0 &&
-            // load service with name <base>_<lang>_<algorithm>
-            createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
-                    rSortAlgorithm).makeStringAndClear())) ||
-            // load service with name <base>_<algorithm>
-        (a > 0 && createLocaleSpecificIndexEntrySupplier(rSortAlgorithm)) ||
-            // load default service with name <base>_Unicode
-            createLocaleSpecificIndexEntrySupplier(OUString::createFromAscii("Unicode"))) {
-        return xIES;
+            if ((l > 0 && c > 0 && v > 0 && a > 0 &&
+                        // load service with name <base>_<lang>_<country>_<varian>_<algorithm>
+                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
+                                    rLocale.Country).append(under).append(rLocale.Variant).append(under).append(
+                                    rSortAlgorithm).makeStringAndClear())) ||
+                (l > 0 && c > 0 && a > 0 &&
+                        // load service with name <base>_<lang>_<country>_<algorithm>
+                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
+                                    rLocale.Country).append(under).append(rSortAlgorithm).makeStringAndClear())) ||
+                (l > 0 && c > 0 && a > 0 && rLocale.Language.compareToAscii("zh") == 0 &&
+                                            (rLocale.Country.compareToAscii("HK") == 0 ||
+                                            rLocale.Country.compareToAscii("MO") == 0) &&
+                        // if the country code is HK or MO, one more step to try TW.
+                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).appendAscii(
+                                    "TW").append(under).append(rSortAlgorithm).makeStringAndClear())) ||
+                (l > 0 && a > 0 &&
+                        // load service with name <base>_<lang>_<algorithm>
+                        createLocaleSpecificIndexEntrySupplier(aBuf.append(rLocale.Language).append(under).append(
+                                    rSortAlgorithm).makeStringAndClear())) ||
+                        // load service with name <base>_<algorithm>
+                (a > 0 && createLocaleSpecificIndexEntrySupplier(rSortAlgorithm)) ||
+                        // load default service with name <base>_Unicode
+                        createLocaleSpecificIndexEntrySupplier(OUString::createFromAscii("Unicode"))) {
+                return xIES;
+            }
         }
-    }
-    throw RuntimeException();
+        throw RuntimeException();
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePages,
         const Locale& rLocale ) throw (RuntimeException)
 {
-    Sequence< OUString > aFollowPageWords = LocaleData().getFollowPageWords(rLocale);
+        Sequence< OUString > aFollowPageWords = LocaleData().getFollowPageWords(rLocale);
 
-    return (bMorePages && aFollowPageWords.getLength() > 1) ?
-        aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ?
-        aFollowPageWords[0] : OUString());
+        return (bMorePages && aFollowPageWords.getLength() > 1) ?
+            aFollowPageWords[1] : (aFollowPageWords.getLength() > 0 ?
+            aFollowPageWords[0] : OUString());
 }
 
 #define implementationName "com.sun.star.i18n.IndexEntrySupplier"
@@ -249,21 +255,21 @@ OUString SAL_CALL IndexEntrySupplier::getIndexFollowPageWord( sal_Bool bMorePage
 OUString SAL_CALL
 IndexEntrySupplier::getImplementationName() throw( RuntimeException )
 {
-    return OUString::createFromAscii( implementationName );
+        return OUString::createFromAscii( implementationName );
 }
 
 sal_Bool SAL_CALL
 IndexEntrySupplier::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.compareToAscii(implementationName) == 0;
+        return rServiceName.compareToAscii(implementationName) == 0;
 }
 
 Sequence< OUString > SAL_CALL
 IndexEntrySupplier::getSupportedServiceNames() throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii( implementationName );
-    return aRet;
+        Sequence< OUString > aRet(1);
+        aRet[0] = OUString::createFromAscii( implementationName );
+        return aRet;
 }
 
 } } } }
