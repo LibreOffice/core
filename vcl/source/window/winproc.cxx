@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:05:12 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,9 +521,10 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             pChild->ImplReMirror( aMousePos );
 #endif
         }
-        // no mouse messages to system object windows
-        if ( pChild->mpSysObj )
-            return 0;
+        // no mouse messages to system object windows ?
+        // !!!KA: Is it OK to comment this out? !!!
+//        if ( pChild->mpSysObj )
+//            return 0;
 
         // no mouse messages to disabled windows
         // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
@@ -2210,33 +2211,86 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
         case SALEVENT_MOUSEMOVE:
             nRet = ImplHandleSalMouseMove( (Window*)pInst, (SalMouseEvent*)pEvent );
             break;
+        case SALEVENT_EXTERNALMOUSEMOVE:
+        {
+            MouseEvent*     pMouseEvt = (MouseEvent*) pEvent;
+            SalMouseEvent   aSalMouseEvent;
+
+            aSalMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
+            aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
+            aSalMouseEvent.mnButton = 0;
+            aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
+
+            nRet = ImplHandleSalMouseMove( (Window*)pInst, &aSalMouseEvent );
+        }
+        break;
         case SALEVENT_MOUSELEAVE:
             nRet = ImplHandleSalMouseLeave( (Window*)pInst, (SalMouseEvent*)pEvent );
             break;
         case SALEVENT_MOUSEBUTTONDOWN:
             nRet = ImplHandleSalMouseButtonDown( (Window*)pInst, (SalMouseEvent*)pEvent );
             break;
+        case SALEVENT_EXTERNALMOUSEBUTTONDOWN:
+        {
+            MouseEvent*     pMouseEvt = (MouseEvent*) pEvent;
+            SalMouseEvent   aSalMouseEvent;
+
+            aSalMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
+            aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
+            aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
+            aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
+
+            nRet = ImplHandleSalMouseButtonDown( (Window*)pInst, &aSalMouseEvent );
+        }
+        break;
         case SALEVENT_MOUSEBUTTONUP:
             nRet = ImplHandleSalMouseButtonUp( (Window*)pInst, (SalMouseEvent*)pEvent );
             break;
+        case SALEVENT_EXTERNALMOUSEBUTTONUP:
+        {
+            MouseEvent*     pMouseEvt = (MouseEvent*) pEvent;
+            SalMouseEvent   aSalMouseEvent;
+
+            aSalMouseEvent.mnTime = Time::GetSystemTicks();
+            aSalMouseEvent.mnX = pMouseEvt->GetPosPixel().X();
+            aSalMouseEvent.mnY = pMouseEvt->GetPosPixel().Y();
+            aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
+            aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
+
+            nRet = ImplHandleSalMouseButtonUp( (Window*)pInst, &aSalMouseEvent );
+        }
+        break;
         case SALEVENT_MOUSEACTIVATE:
             nRet = ImplHandleSalMouseActivate( (Window*)pInst, (SalMouseActivateEvent*)pEvent );
             break;
-
         case SALEVENT_KEYINPUT:
-        case SALEVENT_EXTERNALKEYINPUT:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
             nRet = ImplHandleKey( (Window*)pInst, EVENT_KEYINPUT,
-                pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, SALEVENT_KEYINPUT ? TRUE : FALSE );
+                pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, TRUE );
+            }
+            break;
+        case SALEVENT_EXTERNALKEYINPUT:
+            {
+            KeyEvent* pKeyEvt = (KeyEvent*) pEvent;
+            nRet = ImplHandleKey( (Window*) pInst, EVENT_KEYINPUT,
+                pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), FALSE );
             }
             break;
         case SALEVENT_KEYUP:
-        case SALEVENT_EXTERNALKEYUP:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
             nRet = ImplHandleKey( (Window*)pInst, EVENT_KEYUP,
-                pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, SALEVENT_KEYUP ? TRUE : FALSE );
+                pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, TRUE );
+            }
+            break;
+        case SALEVENT_EXTERNALKEYUP:
+            {
+            KeyEvent* pKeyEvt = (KeyEvent*) pEvent;
+            nRet = ImplHandleKey( (Window*) pInst, EVENT_KEYUP,
+                pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), FALSE );
             }
             break;
         case SALEVENT_KEYMODCHANGE:
