@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:38:47 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 14:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2135,6 +2135,59 @@ String STR_POOLSHEET_ARROW
 };
 
 
-
+String STR_LOAD_DOC
+{
+    Text = "Dokument laden" ;
+    Text [ ENGLISH ] = "Load document" ;
+    Text [ norwegian ] = "Load document" ;
+    Text [ italian ] = "Carica documento" ;
+    Text [ portuguese_brazilian ] = "Carregar documento" ;
+    Text [ portuguese ] = "Carregar documento" ;
+    Text [ finnish ] = "Lataa asiakirja" ;
+    Text [ danish ] = "Indlæs dokument" ;
+    Text [ french ] = "Charger un document" ;
+    Text [ swedish ] = "Ladda dokument" ;
+    Text [ dutch ] = "Document laden" ;
+    Text [ spanish ] = "Cargar documento" ;
+    Text [ english_us ] = "Load document" ;
+    Text[ chinese_simplified ] = "×°ÈëÎÄµµ";
+    Text[ russian ] = "Çàãğóçêà äîêóìåíòà";
+    Text[ polish ] = "£aduj dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ“Ç‚İ‚Ş";
+    Text[ chinese_traditional ] = "¸ü¤J¤å¥ó";
+    Text[ arabic ] = "ÊÍãíá ãáİ";
+    Text[ greek ] = "Öüñôùóç åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ·Îµå";
+    Text[ turkish ] = "Belgeyi yükle";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cargar documento";
+};
+String STR_SAVE_DOC
+{
+    Text = "Dokument speichern" ;
+    Text [ ENGLISH ] = "Save document" ;
+    Text [ norwegian ] = "Save document" ;
+    Text [ italian ] = "Salva documento" ;
+    Text [ portuguese_brazilian ] = "Gravar documento" ;
+    Text [ portuguese ] = "Guardar documento" ;
+    Text [ finnish ] = "Tallenna asiakirja" ;
+    Text [ danish ] = "Gem dokument" ;
+    Text [ french ] = "Enregistrer le document" ;
+    Text [ swedish ] = "Spara dokument" ;
+    Text [ dutch ] = "Document opslaan" ;
+    Text [ spanish ] = "Guardar documento" ;
+    Text [ english_us ] = "Save document" ;
+    Text[ chinese_simplified ] = "´æÅÌÎÄµµ";
+    Text[ russian ] = "Ñîõğàíèòü äîêóìåíò";
+    Text[ polish ] = "Zapisz dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•Û‘¶";
+    Text[ chinese_traditional ] = "Àx¦s¤å¥ó";
+    Text[ arabic ] = "ÍİÙ ÇáãÓÊäÏ";
+    Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ÀúÀå";
+    Text[ turkish ] = "Belgeyi kaydet";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Guardar documento";
+};
 
 

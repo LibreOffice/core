@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 10:12:29 $
+ *  last change: $Author: cl $ $Date: 2001-07-24 14:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
 #endif
+
+#include "sdresid.hxx"
+#include "glob.hrc"
 
 using namespace com::sun::star;
 using namespace rtl;
@@ -280,7 +283,10 @@ sal_Bool SdXMLFilter::Import()
                 CreateStatusIndicator();
 
                 if( mxStatusIndicator.is() )
-                    mxStatusIndicator->start( ::rtl::OUString::createFromAscii( "XML Import" ), 100 );
+                {
+                    OUString aMsg( String( SdResId( STR_LOAD_DOC ) ) );
+                    mxStatusIndicator->start(aMsg, 100);
+                }
             }
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
@@ -529,7 +535,8 @@ sal_Bool SdXMLFilter::Export()
                 {
                     sal_Int32 nProgressRange(1000000);
                     sal_Int32 nProgressCurrent(0);
-                    mxStatusIndicator->start(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("XML Export")), nProgressRange);
+                    OUString aMsg( String( SdResId( STR_SAVE_DOC ) ) );
+                    mxStatusIndicator->start(aMsg, nProgressRange);
 
                     // set ProgressRange
                     uno::Any aProgRange;
