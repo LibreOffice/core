@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:24 $
+ *  last change: $Author: mib $ $Date: 2001-07-27 13:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,9 @@
 #include "wrthtml.hxx"
 
 // TODO: Unicode: Are these characters the correct ones?
-#define HTML_BULLETCHAR_DISC    (0xf000 + 34)
-#define HTML_BULLETCHAR_CIRCLE  (0xf000 + 38)
-#define HTML_BULLETCHAR_SQUARE  (0xf000 + 36)
+#define HTML_BULLETCHAR_DISC    (0xe008)
+#define HTML_BULLETCHAR_CIRCLE  (0xe009)
+#define HTML_BULLETCHAR_SQUARE  (0xe00b)
 
 
 // <UL TYPE=...>
