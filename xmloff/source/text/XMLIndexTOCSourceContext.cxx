@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
 const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
 const sal_Char sAPI_Level[] = "Level";
+const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
 
 TYPEINIT1( XMLIndexTOCSourceContext, XMLIndexSourceBaseContext );
 
@@ -150,7 +151,10 @@ XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
         bUseMarks(sal_True),
         sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks)),
         sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level)),
-        sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
+       sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline)),
+        sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_CreateFromLevelParagraphStyles)),
+        bUseParagraphStyles(sal_False)
 {
 }
 
@@ -192,6 +196,16 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
             break;
         }
 
+        case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
+        {
+            sal_Bool bTmp;
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bUseParagraphStyles = bTmp;
+            }
+            break;
+        }
+
         default:
             // default: ask superclass
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
@@ -208,6 +222,9 @@ void XMLIndexTOCSourceContext::EndElement()
 
     aAny.setValue(&bUseOutline, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromOutline, aAny);
+
+    aAny.setValue(&bUseParagraphStyles, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
 
     aAny <<= (sal_Int16)nOutlineLevel;
     rIndexPropertySet->setPropertyValue(sLevel, aAny);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ class XMLSectionExport
     const ::rtl::OUString sIsCommaSeparated;
     const ::rtl::OUString sIsAutomaticUpdate;
     const ::rtl::OUString sIsRelativeTabstops;
+    const ::rtl::OUString sCreateFromLevelParagraphStyles;
 
     const ::rtl::OUString sTableOfContent;
     const ::rtl::OUString sIllustrationIndex;

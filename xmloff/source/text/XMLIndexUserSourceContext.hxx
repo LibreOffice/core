@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexUserSourceContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ class XMLIndexUserSourceContext : public XMLIndexSourceBaseContext
     const ::rtl::OUString sCreateFromTables;
     const ::rtl::OUString sCreateFromTextFrames;
     const ::rtl::OUString sUseLevelFromSource;
+    const ::rtl::OUString sCreateFromLevelParagraphStyles;
 
     sal_Bool bUseObjects;
     sal_Bool bUseGraphic;
@@ -96,6 +97,7 @@ class XMLIndexUserSourceContext : public XMLIndexSourceBaseContext
     sal_Bool bUseTables;
     sal_Bool bUseFrames;
     sal_Bool bUseLevelFromSource;
+    sal_Bool bUseLevelParagraphStyles;
 
 public:
 

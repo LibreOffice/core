@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,12 @@ class XMLIndexTOCSourceContext : public XMLIndexSourceBaseContext
     const ::rtl::OUString sLevel;
     const ::rtl::OUString sCreateFromChapter;
     const ::rtl::OUString sCreateFromOutline;
+    const ::rtl::OUString sCreateFromLevelParagraphStyles;
 
     sal_Int32 nOutlineLevel;
     sal_Bool bUseOutline;
     sal_Bool bUseMarks;
+    sal_Bool bUseParagraphStyles;
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexUserSourceContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
 const sal_Char sAPI_CreateFromTables[] = "CreateFromTables";
 const sal_Char sAPI_CreateFromTextFrames[] = "CreateFromTextFrames";
 const sal_Char sAPI_UseLevelFromSource[] = "UseLevelFromSource";
+const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
 
 TYPEINIT1(XMLIndexUserSourceContext, XMLIndexSourceBaseContext);
 
@@ -154,12 +155,15 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
             sAPI_CreateFromTextFrames)),
         sUseLevelFromSource(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_UseLevelFromSource)),
+        sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_CreateFromLevelParagraphStyles)),
         bUseObjects(sal_False),
         bUseGraphic(sal_False),
         bUseMarks(sal_False),
         bUseTables(sal_False),
         bUseFrames(sal_False),
-        bUseLevelFromSource(sal_False)
+        bUseLevelFromSource(sal_False),
+        bUseLevelParagraphStyles(sal_False)
 {
 }
 
@@ -217,6 +221,13 @@ void XMLIndexUserSourceContext::ProcessAttribute(
             }
             break;
 
+        case XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bUseLevelParagraphStyles = bTmp;
+            }
+            break;
+
         default:
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
             break;
@@ -245,6 +256,9 @@ void XMLIndexUserSourceContext::EndElement()
 
     aAny.setValue(&bUseFrames, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromTextFrames, aAny);
+
+    aAny.setValue(&bUseLevelParagraphStyles, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
 
     XMLIndexSourceBaseContext::EndElement();
 }

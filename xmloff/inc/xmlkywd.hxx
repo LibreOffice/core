@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 11:33:42 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1362,6 +1362,7 @@ XML_CONSTASCII_ACTION( sXML_use_floating_frames, "use-floating-frames" );
 XML_CONSTASCII_ACTION( sXML_use_graphics, "use-graphics" );
 XML_CONSTASCII_ACTION( sXML_use_image_objects, "use-image-objects" );
 XML_CONSTASCII_ACTION( sXML_use_index_marks, "use-index-marks" );
+XML_CONSTASCII_ACTION( sXML_use_index_source_styles, "use-index-source-styles" );
 XML_CONSTASCII_ACTION( sXML_use_keys_as_entries, "use-keys-as-entries" );
 XML_CONSTASCII_ACTION( sXML_use_label, "use-label" );
 XML_CONSTASCII_ACTION( sXML_use_math_objects, "use-math-objects" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 09:39:34 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,8 @@ XMLSectionExport::XMLSectionExport(
         sIsCommaSeparated(RTL_CONSTASCII_USTRINGPARAM("IsCommaSeparated")),
         sIsAutomaticUpdate(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticUpdate")),
         sIsRelativeTabstops(RTL_CONSTASCII_USTRINGPARAM("IsRelativeTabstops")),
+        sCreateFromLevelParagraphStyles(
+            RTL_CONSTASCII_USTRINGPARAM("CreateFromLevelParagraphStyles")),
         sTableOfContent(RTL_CONSTASCII_USTRINGPARAM(sXML_table_of_content)),
         sIllustrationIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_illustration_index)),
         sAlphabeticalIndex(RTL_CONSTASCII_USTRINGPARAM(sXML_alphabetical_index)),
@@ -591,13 +593,12 @@ void XMLSectionExport::ExportTableOfContentStart(
         }
 
         // use index marks
-        aAny = rPropertySet->getPropertyValue(sCreateFromMarks);
-        if (! (*(sal_Bool*)aAny.getValue()))
-        {
-            GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
-                                          sXML_use_index_marks,
-                                          sXML_true);
-        }
+        ExportBoolean(rPropertySet, sCreateFromMarks,
+                      sXML_use_index_marks, sal_True);
+
+        // use level styles
+        ExportBoolean(rPropertySet, sCreateFromLevelParagraphStyles,
+                      sXML_use_index_source_styles, sal_False);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_TOC, rPropertySet);
     }
@@ -730,6 +731,8 @@ void XMLSectionExport::ExportUserIndexStart(
                       sXML_use_floating_frames, sal_False);
         ExportBoolean(rPropertySet, sUseLevelFromSource,
                       sXML_copy_outline_levels, sal_False);
+        ExportBoolean(rPropertySet, sCreateFromLevelParagraphStyles,
+                      sXML_use_index_source_styles, sal_False);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_USER, rPropertySet);
     }

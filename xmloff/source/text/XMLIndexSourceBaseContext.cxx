@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSourceBaseContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-20 19:56:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-21 11:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,9 @@ static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
     { XML_NAMESPACE_TEXT,
           sXML_comma_separated,
           XML_TOK_INDEXSOURCE_COMMA_SEPARATED },
+    { XML_NAMESPACE_TEXT,
+          sXML_use_index_source_styles,
+          XML_TOK_INDEXSOURCE_USE_INDEX_SOURCE_STYLES },
 
     XML_TOKEN_MAP_END
 };
