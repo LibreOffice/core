@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 14:24:18 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XSQLERRORLISTENER_HPP_
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 #endif
@@ -89,6 +92,9 @@
 #ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
 #include <com/sun/star/awt/XFocusListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
@@ -104,8 +110,8 @@
 #ifndef _SFXCANCEL_HXX
 #include <svtools/cancel.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
@@ -127,12 +133,14 @@ namespace dbaui
 
     // =========================================================================
 
-    typedef ::cppu::ImplHelper6 <   ::com::sun::star::sdb::XSQLErrorListener
+    typedef ::cppu::ImplHelper8 <   ::com::sun::star::sdb::XSQLErrorListener
                                 ,   ::com::sun::star::form::XDatabaseParameterListener
                                 ,   ::com::sun::star::form::XConfirmDeleteListener
                                 ,   ::com::sun::star::form::XLoadListener
                                 ,   ::com::sun::star::form::XResetListener
                                 ,   ::com::sun::star::awt::XFocusListener
+                                ,   ::com::sun::star::container::XContainerListener
+                                ,   ::com::sun::star::beans::XPropertyChangeListener
                                 >   SbaXDataBrowserController_Base;
 
     class SbaXDataBrowserController
@@ -223,12 +231,15 @@ namespace dbaui
 
         // UNO
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire(  ) throw ();
+        virtual void SAL_CALL release(  ) throw ();
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
-
-        // ::com::sun::star::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
 
         // ::com::sun::star::util::XModifyListener
         virtual void SAL_CALL modified(const ::com::sun::star::lang::EventObject& aEvent) throw( ::com::sun::star::uno::RuntimeException );
@@ -237,6 +248,9 @@ namespace dbaui
         virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
+
+        // XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::awt::XFocusListener
         virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );

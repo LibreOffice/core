@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:23:07 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -180,8 +183,8 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -476,6 +479,28 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::c
 //==================================================================
 //= SbaXDataBrowserController
 //==================================================================
+//------------------------------------------------------------------
+Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (RuntimeException)
+{
+    Sequence< Type > aTypes1 = ::comphelper::concatSequences(
+        OGenericUnoController::getTypes(),
+        SbaXDataBrowserController_Base::getTypes(),
+        OPropertyContainer::getTypes()
+    );
+    return ::comphelper::concatSequences(
+        aTypes1,
+        m_pFormControllerImpl->getTypes()
+    );
+}
+
+//------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId aId;
+    return aId.getImplementationId();
+}
+
+//------------------------------------------------------------------
 Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     // check for our additional interfaces
@@ -495,6 +520,18 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
 
     // no more to offer
     return aRet;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::acquire(  ) throw ()
+{
+    OGenericUnoController::acquire();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL SbaXDataBrowserController::release(  ) throw ()
+{
+    OGenericUnoController::release();
 }
 
 //------------------------------------------------------------------------------
@@ -668,13 +705,13 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
     if (xFormSet.is())
     {
-        xFormSet->addPropertyChangeListener(PROPERTY_ISNEW, (XPropertyChangeListener*)this);
-        xFormSet->addPropertyChangeListener(PROPERTY_ISMODIFIED, (XPropertyChangeListener*)this);
-        xFormSet->addPropertyChangeListener(PROPERTY_ROWCOUNT, (XPropertyChangeListener*)this);
-        xFormSet->addPropertyChangeListener(PROPERTY_ACTIVECOMMAND, (XPropertyChangeListener*)this);
-        xFormSet->addPropertyChangeListener(PROPERTY_ORDER, (XPropertyChangeListener*)this);
-        xFormSet->addPropertyChangeListener(PROPERTY_FILTER, (XPropertyChangeListener*)this);
-        xFormSet->addPropertyChangeListener(PROPERTY_APPLYFILTER, (XPropertyChangeListener*)this);
+        xFormSet->addPropertyChangeListener(PROPERTY_ISNEW, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->addPropertyChangeListener(PROPERTY_ISMODIFIED, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->addPropertyChangeListener(PROPERTY_ROWCOUNT, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->addPropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->addPropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->addPropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->addPropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
     if (xFormError.is())
@@ -803,12 +840,12 @@ void SbaXDataBrowserController::addControlListeners(const Reference< ::com::sun:
     // to ge the 'modified' for the current cell
     Reference< XModifyBroadcaster >  xBroadcaster(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xBroadcaster.is())
-        xBroadcaster->addModifyListener((XModifyListener*)this);
+        xBroadcaster->addModifyListener(static_cast<XModifyListener*>(this));
 
     // introduce ourself as dispatch provider for the grid
     Reference< XDispatchProviderInterception >  xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xInterception.is())
-        xInterception->registerDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
+        xInterception->registerDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
     // add as focus listener to the control (needed for the form controller functionality)
     Reference< XWindow >  xWindow(_xGridControl, UNO_QUERY);
@@ -821,11 +858,11 @@ void SbaXDataBrowserController::removeControlListeners(const Reference< ::com::s
 {
     Reference< XModifyBroadcaster >  xBroadcaster(_xGridControl, UNO_QUERY);
     if (xBroadcaster.is())
-        xBroadcaster->removeModifyListener((XModifyListener*)this);
+        xBroadcaster->removeModifyListener(static_cast<XModifyListener*>(this));
 
     Reference< XDispatchProviderInterception >  xInterception(_xGridControl, UNO_QUERY);
     if (xInterception.is())
-        xInterception->releaseDispatchProviderInterceptor((XDispatchProviderInterceptor*)this);
+        xInterception->releaseDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
     Reference< XWindow >  xWindow(_xGridControl, UNO_QUERY);
     if (xWindow.is())
@@ -839,7 +876,7 @@ void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& e) throw(
     EventObject aEvt(*this);
     ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
-        ((XFormControllerListener*)aIter.next())->formActivated(aEvt);
+        static_cast<XFormControllerListener*>(aIter.next())->formActivated(aEvt);
 }
 
 //------------------------------------------------------------------
@@ -866,7 +903,7 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
     EventObject aEvt(*this);
     ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
-        ((XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
+        static_cast<XFormControllerListener*>(aIter.next())->formDeactivated(aEvt);
 
     // commit the changes of the grid control (as we're deactivated)
     Reference< XBoundComponent >  xCommitable(getBrowserView()->getGridControl(), UNO_QUERY);
@@ -894,13 +931,13 @@ void SbaXDataBrowserController::disposingFormModel(const ::com::sun::star::lang:
     Reference< XPropertySet >  xSourceSet(Source.Source, UNO_QUERY);
     if (xSourceSet.is())
     {
-        xSourceSet->removePropertyChangeListener(PROPERTY_ISNEW, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_ISMODIFIED, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_ROWCOUNT, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_ORDER, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_FILTER, (XPropertyChangeListener*)this);
-        xSourceSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, (XPropertyChangeListener*)this);
+        xSourceSet->removePropertyChangeListener(PROPERTY_ISNEW, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_ISMODIFIED, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_ROWCOUNT, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
 
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(Source.Source, UNO_QUERY);
@@ -1165,13 +1202,13 @@ void SbaXDataBrowserController::disposing()
         Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
         if (xFormSet.is())
         {
-            xFormSet->removePropertyChangeListener(PROPERTY_ISNEW, (XPropertyChangeListener*)this);
-            xFormSet->removePropertyChangeListener(PROPERTY_ISMODIFIED, (XPropertyChangeListener*)this);
-            xFormSet->removePropertyChangeListener(PROPERTY_ROWCOUNT, (XPropertyChangeListener*)this);
-            xFormSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, (XPropertyChangeListener*)this);
-            xFormSet->removePropertyChangeListener(PROPERTY_ORDER, (XPropertyChangeListener*)this);
-            xFormSet->removePropertyChangeListener(PROPERTY_FILTER, (XPropertyChangeListener*)this);
-            xFormSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, (XPropertyChangeListener*)this);
+            xFormSet->removePropertyChangeListener(PROPERTY_ISNEW, static_cast<XPropertyChangeListener*>(this));
+            xFormSet->removePropertyChangeListener(PROPERTY_ISMODIFIED, static_cast<XPropertyChangeListener*>(this));
+            xFormSet->removePropertyChangeListener(PROPERTY_ROWCOUNT, static_cast<XPropertyChangeListener*>(this));
+            xFormSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
+            xFormSet->removePropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
+            xFormSet->removePropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
+            xFormSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
         }
 
         Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
@@ -1299,7 +1336,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
-        Reference< XInteractionHandler > xHandler(getProcessServiceFactory()->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+        Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
         if (xHandler.is())
         {
             ::vos::OGuard aGuard(Application::GetSolarMutex());
