@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:35:59 $
+ *  last change: $Author: pb $ $Date: 2001-07-09 11:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,8 +351,8 @@ public:
     void                setContainerWindow(
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
     void                SetFactory( const String& rFactory, sal_Bool bStart );
+    void                SetHelpURL( const String& rURL );
     void                DoAction( USHORT nActionId );
-    void                FirstOpenMessage();
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
