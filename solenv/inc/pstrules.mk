@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:17:24 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:55:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -211,6 +211,12 @@ ALLPARFILES=$(uniq $(ULFPARFILES) $(MOREPARFILES))
 
 SCP_PRODUCT_TYPE*=FAT
 
+.IF "$(GUI)" == "WNT"
+LANGFILEEXT=mlf
+.ELSE
+LANGFILEEXT=jlf
+.ENDIF
+
 $(PAR)$/%.par :
     @echo ------------------------------
     @echo Making: $@
@@ -226,12 +232,12 @@ $(PAR)$/%.par :
 .ENDIF
 .ENDIF
 .IF "$(common_build_srs)"!=""
-    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$(@:b).ulf} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$(@:b).$(LANGFILEEXT)} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 .ELSE          # "$(common_build_srs)"!=""
-    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(MISC)$/$(@:b).ulf} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(MISC)$/$(@:b).$(LANGFILEEXT)} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 .ENDIF          # "$(common_build_srs)"!=""
 # hacked version    
-#    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l $(@:b).ulf -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+#    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l $(@:b).$(LANGFILEEXT) -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 
 .ENDIF			# "$(PARFILES)"!=""
 
