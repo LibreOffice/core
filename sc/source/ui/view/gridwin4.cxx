@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-01 18:59:31 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ void ScGridWindow::DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT n
             //  get script type of translated "Page" string only once
             nPageScript = pDoc->GetStringScriptType( aPageText );
             if (nPageScript == 0)
-                nPageScript = SCRIPTTYPE_LATIN;
+                nPageScript = ScGlobal::GetDefaultScriptType();
         }
         aPageText += ' ';
 

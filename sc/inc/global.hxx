@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-01 18:56:56 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,6 +653,9 @@ public:
 
     /// a "ReadOnly" formatter for UNO/XML export
     static  SvNumberFormatter*  GetEnglishFormatter();
+
+    static LanguageType GetEditDefaultLanguage();   // for EditEngine::SetDefaultLanguage
+    static BYTE GetDefaultScriptType();             // for all WEAK characters
 };
 #endif
 

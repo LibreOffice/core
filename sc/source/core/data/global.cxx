@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-01 18:58:06 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/algitem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/editobj.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
@@ -951,6 +952,24 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
                                     0L );
 }
 
+//------------------------------------------------------------------------
+
+BYTE ScGlobal::GetDefaultScriptType()
+{
+    //  Used when text contains only WEAK characters.
+    //  Script type of office language is used then (same as GetEditDefaultLanguage,
+    //  to get consistent behavior of text in simple cells and EditEngine,
+    //  also same as GetAppLanguage() in Writer)
+
+    return (BYTE) GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+}
+
+LanguageType ScGlobal::GetEditDefaultLanguage()
+{
+    //  used for EditEngine::SetDefaultLanguage
+
+    return Application::GetSettings().GetLanguage();
+}
 
 //===================================================================
 //  class ScFormulaUtil - statische Methoden

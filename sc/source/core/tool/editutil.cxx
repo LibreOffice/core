@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-17 18:20:39 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,10 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
             ScEnginePoolHelper( pEnginePoolP, bDeleteEnginePoolP ),
             EditEngine( pEnginePoolP )
 {
+    //  All EditEngines use ScGlobal::GetEditDefaultLanguage as DefaultLanguage.
+    //  DefaultLanguage for InputHandler's EditEngine is updated later.
+
+    SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
 
 
@@ -325,6 +329,7 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg 
             ScEnginePoolHelper( rOrg ),
             EditEngine( pEnginePool )
 {
+    SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
 
 

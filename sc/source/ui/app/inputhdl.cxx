@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 16:04:08 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,24 +463,11 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
         BOOL bOnlineSpell = pViewData->GetDocument()->GetDocOptions().IsAutoSpell();
         BOOL bHideSpell = pViewData->GetOptions().IsHideAutoSpell();
 
-        //  language must be set before spelling is started
-        //! is SetDefaultLanguage still needed? (all 3 languages now are in the attributes)
+        //  SetDefaultLanguage is independent of the language attributes,
+        //  ScGlobal::GetEditDefaultLanguage is always used.
+        //  It must be set every time in case the office language was changed.
 
-        USHORT nLanguage;
-        if ( pLastPattern )
-            nLanguage = ((const SvxLanguageItem&)
-                            pLastPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
-        else if ( pActiveViewSh )
-        {
-            LanguageType eLatin, eCjk, eCtl;
-            pActiveViewSh->GetViewData()->GetDocShell()->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
-            nLanguage = eLatin;
-        }
-        else
-            nLanguage = LANGUAGE_SYSTEM;
-        if ( nLanguage == LANGUAGE_SYSTEM )
-            nLanguage = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
-        pEngine->SetDefaultLanguage( nLanguage );
+        pEngine->SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 
         //  if called for changed options, update flags only if already editing
         //  if called from StartTable, always update flags

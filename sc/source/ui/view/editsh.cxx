@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-16 12:15:35 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 if (pArgs)
                 {
                     USHORT nScript = pEditView->GetSelectedScriptType();
-                    if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                    if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
                     SfxItemPool& rPool = GetPool();
                     SvxScriptSetItem aSetItem( nSlot, rPool );
@@ -688,7 +688,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ATTR_CHAR_WEIGHT:
             {
                 USHORT nScript = pEditView->GetSelectedScriptType();
-                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
                 SfxItemPool& rPool = GetPool();
 
                 BOOL bOld = FALSE;
@@ -710,7 +710,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ATTR_CHAR_POSTURE:
             {
                 USHORT nScript = pEditView->GetSelectedScriptType();
-                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
                 SfxItemPool& rPool = GetPool();
 
                 BOOL bOld = FALSE;
@@ -838,7 +838,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     //  choose font info according to selection script type
 
     USHORT nScript = pEditView->GetSelectedScriptType();
-    if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+    if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
     if ( rSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTINFO, nScript );

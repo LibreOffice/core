@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 15:20:22 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,7 +847,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 const SfxItemSet* pCondSet =
                                         pDoc->GetCondResult( nOverX, nOverY, nTab );
                                 BYTE nScript = GetScriptType( pDoc, pCell, pPattern, pCondSet );
-                                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                                if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
                                 if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
                                      nScript != nOldScript || bSyntaxMode )
                                 {
@@ -929,7 +929,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 const SfxItemSet* pCondSet =
                                         pDoc->GetCondResult( nTempX, nY, nTab );
                                 BYTE nScript = GetScriptType( pDoc, pCell, pPattern, pCondSet );
-                                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                                if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
                                 if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
                                      nScript != nOldScript || bSyntaxMode )
                                 {
@@ -1013,7 +1013,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     const ScPatternAttr* pPattern = pInfo->pPatternAttr;
                     const SfxItemSet* pCondSet = pInfo->pConditionSet;
                     BYTE nScript = GetScriptType( pDoc, pInfo->pCell, pPattern, pCondSet );
-                    if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                    if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
                     if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
                          nScript != nOldScript || bSyntaxMode )
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 15:57:42 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
 
         ScBaseCell* pCell = pItems[nIndex].pCell;
         BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
-        if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+        if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
         //  also call SetFont for edit cells, because bGetFont may be set only once
         //  bGetFont is set also if script type changes
@@ -824,8 +824,11 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
             pPattern->FillEditItemSet( pSet, pCondSet );
             pEngine->SetDefaults( pSet );
 
-            if ( ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() )
-                pEngine->SetHyphenator( LinguMgr::GetHyphenator() );
+            if ( ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() ) {
+
+                com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
+                pEngine->SetHyphenator( xXHyphenator );
+            }
 
             Size aPaper = Size( 1000000, 1000000 );
             if (eOrient==SVX_ORIENTATION_STACKED)
@@ -1039,7 +1042,7 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
             USHORT nRow = pItems[nIndex].nRow;
 
             BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
-            if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+            if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
             const ScPatternAttr* pPattern = GetPattern( nRow );
             aOptions.pPattern = pPattern;

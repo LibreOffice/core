@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-31 15:58:35 $
+ *  last change: $Author: nn $ $Date: 2001-11-12 20:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,7 +922,7 @@ BYTE ScViewFunc::GetSelectionScriptType()
     }
 
     if (nScript == 0)
-        nScript = SCRIPTTYPE_LATIN;
+        nScript = ScGlobal::GetDefaultScriptType();
 
     return nScript;
 }
