@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 13:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,9 +732,10 @@ void ScXMLTableRowCellContext::EndElement()
                 DoMerge(aCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !bIsFormula )
             {
-                uno::Reference <table::XCell> xTempCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-                if(nCellType == util::NumberFormat::TEXT)
+                if((nCellType == util::NumberFormat::TEXT) && (nCellsRepeated > 1) &&
+                    (nRepeatedRows > 1))
                 {
+                    uno::Reference <table::XCell> xTempCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
                     uno::Reference <text::XText> xTempText (xTempCell, uno::UNO_QUERY);
                     if (xTempText.is())
                         sOUText=xTempText->getString();
