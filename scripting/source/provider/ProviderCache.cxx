@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 12:07:57 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,21 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
     populateCache();
 }
 
+
+ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext, const Sequence< ::rtl::OUString >& blackList )
+    throw ( RuntimeException ) : m_Sctx( scriptContext ), m_xContext( xContext ), m_sBlackList( blackList )
+
+{
+    OSL_TRACE("ProviderCache::ProviderCache() - ctor");
+    // initialise m_hProviderDetailsCache with details of ScriptProviders
+    // will use createContentEnumeration
+
+    m_xMgr = m_xContext->getServiceManager();
+    validateXRef( m_xMgr, "ProviderCache::ProviderCache() failed to obtain ServiceManager" );
+    OSL_TRACE("ProviderCache::ProviderCache() about to populateCache");
+    populateCache();
+}
+
 ProviderCache::~ProviderCache()
 {
     OSL_TRACE("ProviderCache::ProviderCache() - dtor");
@@ -161,7 +176,7 @@ ProviderCache::getAllProviders() throw ( RuntimeException )
                     xScriptProvider  = createProvider( h_it->second );
                     providers[ providerIndex++ ] = xScriptProvider;
                 }
-                catch ( RuntimeException& e )
+                catch ( Exception& e )
                 {
                     OSL_TRACE("failed to create provider ****");
                     ::rtl::OUString temp = OUSTR( "ProviderCache::getAllProviders: failed to create provider, " );
@@ -223,7 +238,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
             {
                 for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
                 {
-                    if ( serviceNames[ index ].indexOf( providerKey ) == 0 )
+                    if ( serviceNames[ index ].indexOf( providerKey ) == 0 && !isInBlackList(  serviceNames[ index ] ) )
                     {
                         serviceName = serviceNames[ index ];
                         OSL_TRACE("ProviderCache::populateCache(), creating entry with factory for service %s",
