@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.16 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-05 01:57:55 $
+ *  $Revision: 1.17 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-05 20:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,12 +137,11 @@ SalGraphics::~SalGraphics()
 
 // =======================================================================
 
-static void CheckRects ( Rect *rSrcRect, Rect *rDstRect, const Rect *rPortBoundsRect )
+static void CheckRectBounds ( Rect *rSrcRect, Rect *rDstRect, const Rect *rPortBoundsRect )
 
 {
     if ( rSrcRect->top < rPortBoundsRect->top )
     {
-
         rDstRect->top += (rPortBoundsRect->top - rSrcRect->top);
         rSrcRect->top  = rPortBoundsRect->top;
     } // if
@@ -165,27 +164,38 @@ static void CheckRects ( Rect *rSrcRect, Rect *rDstRect, const Rect *rPortBounds
         rDstRect->right += (rPortBoundsRect->right - rSrcRect->right);
         rSrcRect->right  = rPortBoundsRect->right;
     } // if
-}
+} // CheckRectBounds
 
+// =======================================================================
+
+// =======================================================================
+static unsigned short IndexTo32BitDeviceColor ( long  *rIndex ){ unsigned short  color32Bit = 0;    unsigned short  upper8Bits = 0;    unsigned short  lower8Bits = 0;            lower8Bits   = *rIndex & 0xFF;     upper8Bits   =  lower8Bits << 8;   color32Bit   =  upper8Bits | lower8Bits;  *rIndex     >>=  8;           return  color32Bit;} // IndexTo32BitDeviceColor
+
+// -----------------------------------------------------------------------
+
+static void Index2DirectColor ( long      *rIndex,                                RGBColor  *rRGBColor
+                              ){  rRGBColor->blue  = IndexTo32BitDeviceColor ( rIndex ); rRGBColor->green = IndexTo32BitDeviceColor ( rIndex ); rRGBColor->red   = IndexTo32BitDeviceColor ( rIndex );
+} // Index2DirectColor     
+// -----------------------------------------------------------------------
+
+static void Index2EightBitColor ( long        *pIndex,                                  RGBColor    *rRGBColor,
+                                  const GDPtr  pGDevice
+                                ){    CTabPtr    pRGBCTable     = NULL;  PixMapPtr  pGDevicePixMap = NULL;         pGDevicePixMap = *(*pGDevice).gdPMap;  pRGBCTable     = *(*pGDevicePixMap).pmTable;  if ( *pIndex <= pRGBCTable->ctSize )   {      RGBColor  aRGBColor;              aRGBColor        = pRGBCTable->ctTable[*pIndex].rgb;       rRGBColor->red   = aRGBColor.red;      rRGBColor->green = aRGBColor.green;        rRGBColor->blue  = aRGBColor.blue; } // if} // Index2EightBitColor
+// -----------------------------------------------------------------------
+//
+// Here we will convert index color to either 8-bit or 32-bit color
+//
 // -----------------------------------------------------------------------
 
 static RGBColor SALColor2RGBColor ( SalColor nSalColor )
 {
-    const unsigned long aRGBMask[3] = { 0x00FF0000, 0x0000FF00, 0x000000FF };
-
-    RGBColor aRGBColor;
-
-    // Converting from their SAL color scheme causes only colors that are
-    // close to black to be displayed on-screen.
-
-    // Temp:  for now, just give me shades of green
-
-    aRGBColor.red   = (unsigned short)( nSalColor & aRGBMask[0] );
-    aRGBColor.green = (unsigned short)( nSalColor & aRGBMask[1] );
-    aRGBColor.blue  = (unsigned short)( nSalColor & aRGBMask[2] );
+    long       nIndexColor = (long)nSalColor;
+    GDPtr      pGDevice    = NULL; RGBColor   aRGBColor;
+           memset( &aRGBColor, 0, sizeof(RGBColor) );
+   pGDevice = *GetGDevice();         if ( pGDevice->gdType == directType )  {      Index2DirectColor ( &nIndexColor, &aRGBColor );    } // if    else   {      Index2EightBitColor ( &nIndexColor, &aRGBColor, pGDevice );    } // else
 
     return aRGBColor;
-}
+} // SALColor2RGBColor
 
 // =======================================================================
 
@@ -526,7 +536,7 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
 
                 GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
 
-                CheckRects( &aSrcRect, &aDstRect, &aPortBoundsRect );
+                CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
 
                 if ( maGraphicsData.mnPenMode == patCopy )
                 {
