@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-06 14:37:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,8 +332,13 @@ void SvxXMLTableImportContext::importBitmap( USHORT nPrfx, const OUString& rLoca
 
 ///////////////////////////////////////////////////////////////////////
 
-SvxXMLXTableImport::SvxXMLXTableImport( const Reference< XNameContainer > & rTable, Reference< XGraphicObjectResolver >& xGrfResolver )
-: mrTable( rTable )
+// #110680#
+SvxXMLXTableImport::SvxXMLXTableImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const Reference< XNameContainer > & rTable,
+    Reference< XGraphicObjectResolver >& xGrfResolver )
+:   SvXMLImport(xServiceFactory),
+    mrTable( rTable )
 {
     SetGraphicResolver( xGrfResolver );
 }
@@ -408,7 +413,9 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
                 xSourceControl->start();
             }
 
-            Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xTable, xGrfResolver ) );
+            // #110680#
+            // Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xTable, xGrfResolver ) );
+            Reference< XDocumentHandler > xHandler( new SvxXMLXTableImport( xServiceFactory, xTable, xGrfResolver ) );
 
             xParser->setDocumentHandler( xHandler );
             xParser->parseStream( aParserInput );
