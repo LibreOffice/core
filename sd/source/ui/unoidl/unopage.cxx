@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:50:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2183,7 +2183,7 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
     // is it our own implementation?
     SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xSet );
 
-    SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
+    SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
     if( pBack )
     {
@@ -2506,7 +2506,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
         // is it our own implementation?
         SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xSet );
 
-        SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
+        SfxItemSet aSet( GetModel()->GetDoc()->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
 
         if( pBack )
         {
