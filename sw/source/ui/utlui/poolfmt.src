@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:58:48 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 18:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ String STR_POOLCHR_FOOTNOTE
     /* ### ACHTUNG: Neuer Text in Resource? Fußnotenzeichen : Fu˜notenzeichen */
     Text = "Fußnotenzeichen" ;
     Text [ English ] = "Footnote" ;
-    Text [ english_us ] = "Footnote Symbol" ;
+    Text [ english_us ] = "Footnote Characters" ;
     Text [ italian ] = "Carattere note a piè pagina" ;
     Text [ spanish ] = "Símbolo de nota al pie" ;
     Text [ french ] = "Symbole de note de bas de page" ;
@@ -117,7 +117,7 @@ String STR_POOLCHR_LABEL
     Text = "Beschriftungszeichen" ;
     Text [ English ] = "Label" ;
     Text [ dutch ] = "Bijschrifttekens" ;
-    Text [ english_us ] = "Caption characters" ;
+    Text [ english_us ] = "Caption Characters" ;
     Text [ italian ] = "Carattere per dicitura" ;
     Text [ spanish ] = "Caracteres de etiqueta" ;
     Text [ french ] = "Caractères de la légende" ;
@@ -213,7 +213,7 @@ String STR_POOLCHR_INET_NORMAL
 {
     Text = "Internet Link" ;
     Text [ English ] = "Internet link" ;
-    Text [ english_us ] = "Internet link" ;
+    Text [ english_us ] = "Internet Link" ;
     Text [ italian ] = "Link Internet" ;
     Text [ spanish ] = "Vínculo Internet" ;
     Text [ french ] = "Lien Internet" ;
@@ -274,7 +274,7 @@ String STR_POOLCHR_JUMPEDIT
     Text [ portuguese_brazilian ] = "Platzhalter" ;
     Text[ chinese_simplified ] = "Í¨Åä·û";
     Text[ russian ] = "Ìåòêà-çàïîëíèòåëü";
-    Text[ polish ] = "Znak-wype³niacz";
+    Text[ polish ] = "Symbol wieloznaczny";
     Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ";
     Text[ chinese_traditional ] = "³q°t²Å";
     Text[ arabic ] = "ÚäÕÑ äÇÆÈ";
@@ -311,7 +311,7 @@ String STR_POOLCHR_ENDNOTE
 {
     Text = "Endnotenzeichen" ;
     Text [ English ] = "Endnote Symbol" ;
-    Text [ english_us ] = "Endnote Symbol" ;
+    Text [ english_us ] = "Endnote Characters" ;
     Text [ portuguese ] = "Símbolo de nota final" ;
     Text [ portuguese_brazilian ] = "Endnotenzeichen" ;
     Text [ swedish ] = "Slutnotstecken" ;
@@ -456,7 +456,7 @@ String STR_POOLCHR_HTML_CITIATION
     Text = "Zitat" ;
     Text [ English ] = "Citation" ;
     Text [ dutch ] = "Citaat" ;
-    Text [ english_us ] = "Citation" ;
+    Text [ english_us ] = "Quotation" ;
     Text [ swedish ] = "Citat" ;
     Text [ danish ] = "Citat" ;
     Text [ italian ] = "Citazione" ;
@@ -1103,7 +1103,7 @@ String STR_POOLCOLL_SIGNATURE
     Text [ spanish ] = "Firma" ;
     Text [ french ] = "Signature" ;
     Text [ dutch ] = "Ondergetekende" ;
-    Text [ swedish ] = "Signatur" ;
+    Text [ swedish ] = "Underskrift" ;
     Text [ danish ] = "Underskrift" ;
     Text [ portuguese ] = "Assinatura" ;
     Text [ portuguese_brazilian ] = "Unterschrift" ;
@@ -3688,7 +3688,7 @@ String STR_POOLCOLL_TOX_TABLES1
     Text[ russian ] = "Ñïèñîê òàáëèö 1";
     Text[ greek ] = "Ğåñéå÷üìåíá ğßíáêá 1";
     Text[ dutch ] = "Tabellenregister 1";
-    Text[ french ] = "Index de tables 1";
+    Text[ french ] = "Index des tables 1";
     Text[ spanish ] = "Índice de tablas 1";
     Text[ italian ] = "Indice tabella 1";
     Text[ danish ] = "Tabeloversigt 1";
@@ -3717,7 +3717,7 @@ String STR_POOLCOLL_TOX_AUTHORITIESH
     Text[ italian ] = "Intestazione bibliografia";
     Text[ danish ] = "Litteraturliste overskrift";
     Text[ swedish ] = "Litteraturförteckning överskrift";
-    Text[ polish ] = "Spis literatury Tytu³";
+    Text[ polish ] = "Bibliografia - Tytu³";
     Text[ portuguese_brazilian ] = "Index of authorities heading";
     Text[ japanese ] = "Ql•¶Œ£•\\Œ©o‚µ";
     Text[ korean ] = "Âü°í¹®Çå ¸Ó¸®±Û";
@@ -3741,7 +3741,7 @@ String STR_POOLCOLL_TOX_AUTHORITIES1
     Text[ italian ] = "Bibliografia 1";
     Text[ danish ] = "Litteraturliste 1";
     Text[ swedish ] = "Litteraturförteckning 1";
-    Text[ polish ] = "Spis literatury 1";
+    Text[ polish ] = "Bibliografia 1";
     Text[ portuguese_brazilian ] = "Index of authorities 1";
     Text[ japanese ] = "Ql•¶Œ£•\\ 1";
     Text[ korean ] = "Âü°í¹®Çå 1";
@@ -4959,6 +4959,24 @@ String STR_POOLCHR_RUBYTEXT
 {
     Text = "Phonetische Symbole" ;
     Text [ English ] = "Phonetic Symbols" ;
+    Text[ english_us ] = "Phonetic Symbols";
+    Text[ portuguese ] = "Phonetic Symbols";
+    Text[ russian ] = "Phonetic Symbols";
+    Text[ greek ] = "ÖùíçôéêÜ óıìâïëá";
+    Text[ dutch ] = "Phonetic Symbols";
+    Text[ french ] = "Symboles phonétiques";
+    Text[ spanish ] = "Símbolos fonéticos";
+    Text[ italian ] = "Phonetic Symbols";
+    Text[ danish ] = "Phonetic Symbols";
+    Text[ swedish ] = "Fonetiska symboler";
+    Text[ polish ] = "Symbole fonetyczne";
+    Text[ portuguese_brazilian ] = "Phonetic Symbols";
+    Text[ japanese ] = "‚Ó‚è‚ª‚È";
+    Text[ korean ] = "Phonetic Symbols";
+    Text[ chinese_simplified ] = "×¢Òô·ûºÅ";
+    Text[ chinese_traditional ] = "Phonetic Symbols";
+    Text[ turkish ] = "Phonetic Symbols";
+    Text[ arabic ] = "ÑãæÒ ÕæÊíÉ";
 };
 
 String STR_POOLCHR_PRGM_RUBYTEXT
