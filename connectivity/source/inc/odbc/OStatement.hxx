@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 16:02:53 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,10 @@ namespace connectivity
 
         {
         ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
-                                                                        //  for this Statement
         protected:
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            //  for this Statement
+
             ::std::list< ::rtl::OUString>               m_aBatchList;
 
             OConnection*                                m_pConnection;// The owning Connection object
@@ -169,7 +170,7 @@ namespace connectivity
             void setWarning (const  ::com::sun::star::sdbc::SQLWarning &ex) throw( ::com::sun::star::sdbc::SQLException);
             sal_Bool lockIfNecessary (const ::rtl::OUString& sql) throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getColumnCount () throw( ::com::sun::star::sdbc::SQLException);
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (sal_Bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (sal_Bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getRowCount () throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getStmtOption (short fOption) const throw( ::com::sun::star::sdbc::SQLException);
 

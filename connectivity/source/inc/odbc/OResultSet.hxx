@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:33:38 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ namespace connectivity
                             public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
 
+        protected:
             ::std::vector<void*>                        m_aBindVector;
             ::std::vector<sal_Int32>                    m_aLengthVector;
             ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
@@ -175,7 +176,7 @@ namespace connectivity
             void allocBuffer(sal_Bool _bAllocRow);
             void releaseBuffer();
 
-        protected:
+
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
