@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:34:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,11 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+// include ---------------------------------------------------------------
 
 #define ITEMID_SIZE 0
 
