@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-21 13:05:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include <tools/string.hxx>
 #endif
 
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
-#endif
 #ifndef UNOTOOLS_CONFIGVALUECONTAINER_HXX
 #include <unotools/configvaluecontainer.hxx>
 #endif
