@@ -4259,3 +4259,9 @@ __CTA2?AVbad_alloc@std@@
 ?getArray@?$Sequence@V?$Reference@VXInteractionContinuation@task@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Reference@VXInteractionContinuation@task@star@sun@com@@@2345@XZ
 ??_C@_0DF@OACFFDKI@o?3?2SRC680?2wntmsci8?2inc?2com?1sun?1s@
 ??_C@_0CH@OANPDINN@o?3?2SRC680?2wntmsci8?2inc?2rtl?1ustri@
+?acquire@RootActionTriggerContainer@framework@@WFA@AAXXZ
+?queryInterface@RootActionTriggerContainer@framework@@WFA@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@RootActionTriggerContainer@framework@@WFA@AAXXZ
+?acquire@ActionTriggerContainer@framework@@WEM@AAXXZ
+?queryInterface@ActionTriggerContainer@framework@@WEM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
+?release@ActionTriggerContainer@framework@@WEM@AAXXZ
