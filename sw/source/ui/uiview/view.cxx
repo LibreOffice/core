@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:32:32 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 
 #ifndef _UNOTXVW_HXX
@@ -479,6 +482,7 @@ void SwView::SelectShell()
                 if  (  pSfxShell->ISA( SwBaseShell )
                     || pSfxShell->ISA( SwDrawTextShell )
                     || pSfxShell->ISA( svx::ExtrusionBar )
+                    || pSfxShell->ISA( svx::FontworkBar )
                     )
                 {
                     rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_DELETE );
@@ -534,6 +538,10 @@ void SwView::SelectShell()
             pShell = new svx::ExtrusionBar( this );
             SetShell( pShell );
             rDispatcher.Push( *pShell );
+
+            eShellMode = SEL_DRAW;
+            SetShell( new svx::FontworkBar( this ) );
+            rDispatcher.Push( *GetCurShell() );
 
             pShell = new SwDrawShell( *this );
 
