@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-29 13:03:37 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,10 @@ public:
         sal_Bool                        moveRelative(long nMove);
 
         void                        CreateMappingDialog(Window* pParent);
-        ::rtl::OUString                     CreateDBChangeDialog(Window* pParent);
+        ::rtl::OUString             CreateDBChangeDialog(Window* pParent);
+
+        void                        DispatchDBChangeDialog();
+        sal_Bool                    HasActiveConnection() const;
 
         void                        SetView( ::bib::BibView* pView ) { pBibView = pView; }
 
@@ -247,6 +250,8 @@ public:
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > GetFormController();
         // #100312# ----------
         void RegisterInterceptor( ::bib::BibBeamer* pBibBeamer);
+
+        sal_Bool                    HasActiveConnection();
 };
 
 
