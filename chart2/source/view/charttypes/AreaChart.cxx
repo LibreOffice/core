@@ -708,7 +708,11 @@ void AreaChart::createShapes()
                                 {
 //                                     drawing::Position3D aUnScaledPoint( fLogicX, fLogicY,fLogicZ);
 
-                                    createErrorBar(   xPointGroupShape_Shapes
+                                    uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
+                                        getErrorBarsGroupShape(*aSeriesIter, m_xLogicTarget) );
+
+
+                                    createErrorBar(   xErrorBarsGroup_Shapes
                                                     , aUnScaledPoint
                                                     , *m_pPosHelper
                                                     , xErrorBarProp
