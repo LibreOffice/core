@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-18 16:19:44 $
+#   last change: $Author: mh $ $Date: 2001-10-18 09:29:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ SHL1STDLIBS= \
             $(SVTOOLLIB) \
             $(SVLLIB)	\
             $(SVLIB) \
-            $(SJLIB) \
             $(VOSLIB) \
             $(SALLIB) \
             $(SVMEMLIB)	\
@@ -99,6 +98,10 @@ SHL1STDLIBS= \
             $(SOTLIB) \
             $(VOSLIB) \
             $(XMLSCRIPTLIB)
+
+.IF "$(SOLAR_JAVA)" != "TRUE"
+SHL1STDLIBS+=$(SJLIB)
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 #SHL1STDLIBS+=$(LIBCIMT)
@@ -139,7 +142,6 @@ SHL2STDLIBS= \
             $(SVTOOLLIB) \
             $(SVLLIB)	\
             $(SVLIB) \
-            $(SJLIB) \
             $(VOSLIB) \
             $(SALLIB) \
             $(SVMEMLIB)	\
@@ -148,6 +150,9 @@ SHL2STDLIBS= \
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB)
 
+.IF "$(SOLAR_JAVA)" != "TRUE"
+SHL2STDLIBS+=$(SJLIB)
+.ENDIF
 .IF "$(GUI)" != "UNX"
 SHL2OBJS=	\
     $(SLO)$/sb.obj
