@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-04 14:18:30 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
 
+#define SC_LAYERID "LayerID"
+
 using namespace ::com::sun::star;
 
 XMLTableShapeImportHelper::XMLTableShapeImportHelper(
@@ -119,33 +121,51 @@ void XMLTableShapeImportHelper::finishShape(
     uno::Reference< drawing::XShapes >& rShapes )
 {
     XMLShapeImportHelper::finishShape( rShape, xAttrList, rShapes );
-
-    if (!bOnTable)
+    sal_Bool bBackground(sal_False);
+    Rectangle* pRect = NULL;
+    sal_Int32 X(-1);
+    sal_Int32 Y(-1);
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    table::CellAddress aEndCell;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        Rectangle* pRect = NULL;
-        sal_Int32 X(-1);
-        sal_Int32 Y(-1);
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        table::CellAddress aEndCell;
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
-        {
-            const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
-            const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
 
-            rtl::OUString aLocalName;
-            sal_uInt16 nPrefix =
-                rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                &aLocalName );
-            if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_cell_address) == 0)
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix =
+            rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        if(nPrefix = XML_NAMESPACE_TABLE)
+        {
+            if (aLocalName.compareToAscii(sXML_end_cell_address) == 0)
             {
                 sal_Int32 nOffset(0);
                 ScXMLConverter::GetAddressFromString(aEndCell, rValue, rImport.GetDocument(), nOffset);
             }
-            else if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_x) == 0)
+            else if (aLocalName.compareToAscii(sXML_end_x) == 0)
                 rImport.GetMM100UnitConverter().convertMeasure(X, rValue);
-            else if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_y) == 0)
+            else if (aLocalName.compareToAscii(sXML_end_y) == 0)
                 rImport.GetMM100UnitConverter().convertMeasure(Y, rValue);
+            else if (aLocalName.compareToAscii(sXML_table_background) == 0)
+                if (rValue.compareToAscii(sXML_true) == 0)
+                    bBackground = sal_True;
         }
+    }
+    if (bBackground)
+    {
+        uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
+        if( xShapeProp.is() )
+        {
+            sal_Int16 nLayerID = SC_LAYER_BACK;
+            uno::Any aPropAny;
+            aPropAny <<= nLayerID;
+            xShapeProp->setPropertyValue(OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ), aPropAny );
+        }
+    }
+
+    if (!bOnTable)
+    {
         if (X >= 0 && Y >= 0)
             rImport.GetTables().AddShape(rShape, aStartCell, aEndCell, X, Y);
         SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
