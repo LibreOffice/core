@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-14 13:09:49 $
+ *  last change: $Author: mt $ $Date: 2002-08-15 09:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1485,6 +1485,22 @@ USHORT MultiLineEdit::GetLeftMargin() const
         return GetTextEngine()->GetLeftMargin();
     else
         return 0;
+}
+
+void MultiLineEdit::SetRightToLeft( BOOL bRightToLeft )
+{
+    if ( GetTextEngine() )
+        GetTextEngine()->SetRightToLeft( bRightToLeft );
+}
+
+BOOL MultiLineEdit::IsRightToLeft() const
+{
+    BOOL bRightToLeft = FALSE;
+
+    if ( GetTextEngine() )
+        bRightToLeft = GetTextEngine()->IsRightToLeft();
+
+    return bRightToLeft;
 }
 
 // virtual
