@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-09 18:29:14 $
+#   last change: $Author: hjs $ $Date: 2001-02-12 16:17:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -405,10 +405,23 @@ $(MISC)$/s_%.dpcc : %.s
     @makedepend -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CFLAGSCC:s/-f/-x/) $(PCHSLOFLAGSU:s/-f/-x/) $(CFLAGSSLO:s/-f/-x/) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
     @+echo $@ : $(SLO)$/$(<:b).obj >> $@
 
+# generated source files.
+
+$(MISC)$/o_%.dpcc : 
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
+    @+-$(RM) $@ >& $(NULLDEV)
+    @+echo $@ : $(OBJ)$/$(@:b:s/o_//).obj > $@
+   
+$(MISC)$/s_%.dpcc :
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
+    @+-$(RM) $@ >& $(NULLDEV)
+    @+echo $@ : $(SLO)$/$(@:b:s/s_//).obj > $@
 
 # dependencies script files
 
-$(MISC)$/%.dpcc :
+$(MISC)$/%.dpsc :
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
