@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:59:41 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,6 +766,29 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
 
+    SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, FALSE);
+    String aFactName;
+    if ( pFactoryItem )
+        aFactName = pFactoryItem->GetValue();
+   else
+        aFactName = SvtModuleOptions().GetDefaultModuleName();
+
+    SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
+    String aFact = String::CreateFromAscii("private:factory/");
+    aFact += aFactName;
+    aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
+    aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
+    aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_default" ) ) );
+    SFX_APP()->ExecuteSlot( aReq );
+    const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
+    if ( pItem )
+        rReq.SetReturnValue( SfxFrameItem( 0, pItem->GetFrame() ) );
+}
+
+const SfxPoolItem* SfxApplication::NewDocDirectExec_ImplOld( SfxRequest& rReq )
+{
+    DBG_MEMTEST();
+
     SFX_REQUEST_ARG(rReq, pHidden, SfxBoolItem, SID_HIDDEN, FALSE);
 //(mba)/task
 /*
@@ -879,6 +902,8 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
 
         rReq.SetReturnValue( SfxFrameItem( 0, pFrame ) );
     }
+
+    return rReq.GetReturnValue();
 
 //(mba)/task
 /*
