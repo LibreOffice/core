@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-02-03 08:58:21 $
+dnl * Date: $Date: 2005-02-11 14:36:45 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.89 $ )
+AC_REVISION( $Revision: 1.90 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2471,12 +2471,12 @@ if test -n "$with_zip_home" ; then
 	ZIP="$with_zip_home/zip"
     ZIP_HOME="$with_zip_home"
 else
-	ZIP_HOME="ZIP_IN_PATH"
+    AC_PATH_PROG(ZIP, zip)
+    ZIP_HOME=`dirname "$ZIP"`
 fi
 dnl ===================================================================
 dnl Zip must be available or else it is an error, all platforms
 dnl ===================================================================
-AC_PATH_PROG(ZIP, zip)
 if test -z "$ZIP"; then
     AC_MSG_ERROR([Zip is required to build, please install or use --with-zip-home],,)
 fi
