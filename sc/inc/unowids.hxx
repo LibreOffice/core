@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowids.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:13:39 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,17 @@
 #define SC_WID_UNO_HEADERSET        ( SC_WID_UNO_START + 26 )
 #define SC_WID_UNO_FOOTERSET        ( SC_WID_UNO_START + 27 )
 #define SC_WID_UNO_NUMRULES         ( SC_WID_UNO_START + 28 )
-#define SC_WID_UNO_TABLAYOUT        ( SC_WID_UNO_START + 29 )
-#define SC_WID_UNO_AUTOPRINT        ( SC_WID_UNO_START + 30 )
-
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 30 )
+#define SC_WID_UNO_ISACTIVE         ( SC_WID_UNO_START + 29 )
+#define SC_WID_UNO_BORDCOL          ( SC_WID_UNO_START + 30 )
+#define SC_WID_UNO_PROTECT          ( SC_WID_UNO_START + 31 )
+#define SC_WID_UNO_SHOWBORD         ( SC_WID_UNO_START + 32 )
+#define SC_WID_UNO_PRINTBORD        ( SC_WID_UNO_START + 33 )
+#define SC_WID_UNO_COPYBACK         ( SC_WID_UNO_START + 34 )
+#define SC_WID_UNO_COPYSTYL         ( SC_WID_UNO_START + 35 )
+#define SC_WID_UNO_COPYFORM         ( SC_WID_UNO_START + 36 )
+#define SC_WID_UNO_TABLAYOUT        ( SC_WID_UNO_START + 37 )
+#define SC_WID_UNO_AUTOPRINT        ( SC_WID_UNO_START + 38 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 38 )
 
 
 inline BOOL IsScUnoWid( USHORT nWid )
