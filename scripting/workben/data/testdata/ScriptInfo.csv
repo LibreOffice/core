@@ -5,4 +5,4 @@ _getFunctionName;description=Try to get a function name;expected=MemoryUsage.upd
 _getLanguageProperties;description=Try to get language properties;expected=MemUsage.jar
 _getFileSetNames;description=Try to get fileset names;expected=delivered
 _getFilesInFileSet;description=Try to get files in fileset;expected=google.jar
-_getDescription;description=Try to get description;expected=empty
+_getDescription;description=Try to get description;expected=Show JVM memory usage stats

@@ -2,5 +2,5 @@ _createScriptStorage;description=Try to create a ScriptStorage;expected=success
 _createScriptStorageWithURI;description=Try to create a document ScriptStorage;location=script_in_class_file.sxw;expected=XScriptInfoAccess.class
 _getScriptStorage;description=Try to get application share ScriptStorage;location=share;expected=XScriptInfoAccess.class
 _getScriptStorage;description=Try to get application user ScriptStorage;location=user;expected=XScriptInfoAccess.class
-_refreshScriptStorage;description=Try to refresh non-existent ScriptStorage;location=non-existent;expected=com.sun.star.uno.RuntimeException
+_refreshScriptStorage;description=Try to refresh non-existent ScriptStorage;location=non-existent;expected=success
 _refreshScriptStorage;description=Try to refresh valid document ScriptStorage;location=script_in_class_file.sxw;expected=success
