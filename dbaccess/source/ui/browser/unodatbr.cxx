@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:40:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,7 +1287,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
 //                  aReturn.bEnabled = (eType == ET_TABLE || eType == ET_QUERY);
                     break;
                 }// else run through
-                break;
+
             case ID_BROWSER_PASTE:
                 // first look which side is active
                 if(m_pTreeView->HasChildPathFocus())
