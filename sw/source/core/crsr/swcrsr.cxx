@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-15 17:37:37 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 11:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
     if( pNd->IsCntntNode() && 0 == (SwUnoCrsr*)*this )
     {
         const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->GetFrm();
-        if( pFrm && 0 == pFrm->Frm().Height() &&
+        if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
             0 != ( SELOVER_CHANGEPOS & eFlags ) )
         {
             // skip to the next / prev valida paragraph with a layout
