@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:49:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1265,7 +1265,14 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             // OD 11.02.2003 #100556# - reset flag value
             pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
 
-            //apply information from page preview - if available
+            // OD 08.04.2003 #108693# - set visible area before applying
+            // information from print preview. Otherwise, the applied information
+            // is lost.
+            if ( bBrowse )
+                SetVisArea( aVis.TopLeft() );
+            else
+                SetVisArea( aVis );
+            //apply information from print preview - if available
             if( sNewCrsrPos.Len() )
             {
                 long nX = sNewCrsrPos.GetToken( 0, ';' ).ToInt32(),
@@ -1292,10 +1299,6 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
             if( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom )
                 SetZoom( eZoom, nZoomFactor);
-            if ( bBrowse )
-                SetVisArea( aVis.TopLeft() );
-            else
-                SetVisArea( aVis );
 
             pWrtShell->LockView( sal_True );
             pWrtShell->EndAction();
