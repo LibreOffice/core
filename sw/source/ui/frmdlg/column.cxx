@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-12 13:07:52 $
+ *  last change: $Author: os $ $Date: 2002-06-19 13:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,9 @@
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #include <svx/sizeitem.hxx>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include "svx/frmdiritem.hxx"
+#endif
 
 #include "globals.hrc"
 #include "swtypes.hxx"
@@ -174,7 +176,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     SfxItemSet* pColPgSet = 0;
     static USHORT __READONLY_DATA aSectIds[] = { RES_COL, RES_COL,
                                                 RES_FRM_SIZE, RES_FRM_SIZE,
-                                                RES_COLUMNBALANCE, RES_COLUMNBALANCE,
+                                                RES_COLUMNBALANCE, RES_FRAMEDIR,
                                                 0 };
 
     const SwSection* pCurrSection = rWrtShell.GetCurrSection();
@@ -334,7 +336,10 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
             pSet = pFrameSet;
         break;
     }
-    pTabPage->ShowBalance(pSet == pSectionSet || pSet == pSelectionSet);
+
+    BOOL bIsSection = pSet == pSectionSet || pSet == pSelectionSet;
+    pTabPage->ShowBalance(bIsSection);
+    pTabPage->SetInSection(bIsSection);
     pTabPage->SetFrmMode(TRUE);
     pTabPage->SetPageWidth(nWidth);
     pTabPage->Reset(*pSet);
@@ -511,6 +516,10 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aLbl3(this,             ResId(FT_3)),
     aEd3(this,              ResId(ED_3)),
     aFLLayout(this,         ResId(FL_LAYOUT)),
+    aVertFL(this,         ResId(FL_VERT)),
+    aPropertiesFL(  this,    ResId( FL_PROPERTIES    )),
+    aTextDirectionFT( this,  ResId( FT_TEXTDIRECTION )),
+    aTextDirectionLB( this,  ResId( LB_TEXTDIRECTION )),
 
     aPgeExampleWN(this,     ResId(WN_BSP)),
     aFrmExampleWN(this,     ResId(WN_BSP)),
@@ -647,6 +656,16 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
             aBalanceColsCB.Check( TRUE );
     }
 
+    //text direction
+    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR ) )
+    {
+        const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
+        sal_uInt32 nVal  = rItem.GetValue();
+        USHORT nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
+        aTextDirectionLB.SelectEntryPos( nPos );
+        aTextDirectionLB.SaveValue();
+    }
+
     Init();
     ActivatePage( rSet );
 }
@@ -683,6 +702,14 @@ BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
     if(aBalanceColsCB.IsVisible() )
     {
         rSet.Put(SwFmtNoBalancedColumns(!aBalanceColsCB.IsChecked() ));
+    }
+    USHORT nPos;
+    if( aTextDirectionLB.IsVisible() &&
+        ( nPos = aTextDirectionLB.GetSelectEntryPos() ) !=
+                                            aTextDirectionLB.GetSavedValue() )
+    {
+        sal_uInt32 nDirection = (sal_uInt32)aTextDirectionLB.GetEntryData( nPos );
+        rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
     }
     return TRUE;
 }
@@ -1330,6 +1357,31 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
 void SwColumnPage::SetFrmMode(BOOL bMod)
 {
     bFrm = bMod;
+}
+/* -----------------------------2002/06/19 13:08------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwColumnPage::SetInSection(BOOL bSet)
+{
+    aVertFL.Show(bSet);
+    aPropertiesFL.Show(bSet);
+    aTextDirectionFT.Show(bSet);
+    aTextDirectionLB.Show(bSet);
+    if(bSet)
+    {
+        //resize line type FixedLine
+        Point aLtPos = aFLLineType.GetPosPixel();
+        Point aPropPos = aPropertiesFL.GetPosPixel();
+        Size aSz = aFLLineType.GetSizePixel();
+        aSz.Width() = aPropPos.X() - aLtPos.X() - LogicToPixel(Size(8, 8), MAP_APPFONT).Width();
+        aFLLineType.SetSizePixel(aSz);
+    }
+    else
+    {
+        Size aSz = aFLLineType.GetSizePixel();
+        aSz.Width() = LogicToPixel(Size(248, 248), MAP_APPFONT).Width();
+        aFLLineType.SetSizePixel(aSz);
+    }
 }
 
 /*-----------------07.03.97 08.33-------------------

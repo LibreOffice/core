@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-07 13:24:12 $
+ *  last change: $Author: os $ $Date: 2002-06-19 14:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _NUMBERINGTYPELISTBOX_HXX
 #include <numberingtypelistbox.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include "svx/frmdiritem.hxx"
+#endif
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
 #endif
@@ -133,6 +136,7 @@ class SectRepr
     SwFmtFtnAtTxtEnd        aFtnNtAtEnd;
     SwFmtEndAtTxtEnd        aEndNtAtEnd;
     SwFmtNoBalancedColumns  aBalance;
+    SvxFrameDirectionItem   aFrmDirItem;
     USHORT                  nArrPos;
     USHORT                  nColumn;
     BOOL                    bContent    : 1; //zeigt an, ob evtl. Textinhalt im Bereich ist
@@ -152,6 +156,7 @@ public:
     SwFmtFtnAtTxtEnd&   GetFtnNtAtEnd()     { return aFtnNtAtEnd; }
     SwFmtEndAtTxtEnd&   GetEndNtAtEnd()     { return aEndNtAtEnd; }
     SwFmtNoBalancedColumns& GetBalance()        { return aBalance; }
+    SvxFrameDirectionItem&  GetFrmDir()         { return aFrmDirItem; }
 
     USHORT              GetArrPos() const {return nArrPos;}
     const String&       GetCondition() const {return aSection.GetCondition();}

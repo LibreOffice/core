@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 09:11:35 $
+ *  last change: $Author: os $ $Date: 2002-06-19 13:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 #define PB_CANCEL               56
 #define PB_OK                   57
 #define CB_BALANCECOLS          58
+#define FL_PROPERTIES           59
+#define FT_TEXTDIRECTION        60
+#define LB_TEXTDIRECTION        61
+#define FL_VERT                 62
 
 #define LISTBOX_SELECTION       0
 #define LISTBOX_SECTION         1

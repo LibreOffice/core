@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-04-02 15:19:20 $
+ *  last change: $Author: os $ $Date: 2002-06-19 13:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,11 @@ class SwColumnPage : public SfxTabPage
     ListBox         aLinePosDLB;
     FixedLine       aFLLineType;
 
+    FixedLine       aVertFL;
+    FixedLine       aPropertiesFL;
+    FixedText       aTextDirectionFT;
+    ListBox         aTextDirectionLB;
+
     // Example
     SwColExample        aPgeExampleWN;
     SwColumnOnlyExample aFrmExampleWN;
@@ -261,6 +266,7 @@ public:
     void SetFormatUsed(BOOL bFmt) { bFormat = bFmt; }
 
     void ShowBalance(BOOL bShow) {aBalanceColsCB.Show(bShow);}
+    void SetInSection(BOOL bSet);
 
 };
 

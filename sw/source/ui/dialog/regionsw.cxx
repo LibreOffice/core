@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-06-06 13:36:24 $
+ *  last change: $Author: os $ $Date: 2002-06-19 14:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ SectRepr::SectRepr( USHORT nPos, SwSection& rSect ) :
         aFtnNtAtEnd = pFmt->GetFtnAtTxtEnd();
         aEndNtAtEnd = pFmt->GetEndAtTxtEnd();
         aBalance.SetValue(pFmt->GetBalancedColumns().GetValue());
+        aFrmDirItem = pFmt->GetFrmDir();
     }
 }
 
@@ -826,6 +827,9 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
             if( pFmt->GetBalancedColumns() != pRepr->GetBalance() )
                 pSet->Put( pRepr->GetBalance() );
 
+            if( pFmt->GetFrmDir() != pRepr->GetFrmDir() )
+                pSet->Put( pRepr->GetFrmDir() );
+
             rSh.ChgSection( nNewPos, pRepr->GetSection(),
                             pSet->Count() ? pSet : 0 );
             delete pSet;
@@ -1100,7 +1104,7 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
         SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
         SfxItemSet aSet(rSh.GetView().GetPool(),
                             RES_COL, RES_COL,
-                            RES_COLUMNBALANCE, RES_COLUMNBALANCE,
+                            RES_COLUMNBALANCE, RES_FRAMEDIR,
                             RES_BACKGROUND, RES_BACKGROUND,
                             RES_FRM_SIZE, RES_FRM_SIZE,
                             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
@@ -1113,6 +1117,8 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
         aSet.Put( pSectRepr->GetFtnNtAtEnd() );
         aSet.Put( pSectRepr->GetEndNtAtEnd() );
         aSet.Put( pSectRepr->GetBalance() );
+        aSet.Put( pSectRepr->GetFrmDir() );
+
 
         const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
         SwSectionFmts aOrigArray( 0, 5 );
@@ -1134,7 +1140,8 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
             if( pOutSet && pOutSet->Count() )
             {
                 const SfxPoolItem *pColItem, *pBrushItem,
-                                  *pFtnItem, *pEndItem, *pBalanceItem;
+                                  *pFtnItem, *pEndItem, *pBalanceItem,
+                                  *pFrmDirItem;
                 SfxItemState eColState = pOutSet->GetItemState(
                                         RES_COL, FALSE, &pColItem );
                 SfxItemState eBrushState = pOutSet->GetItemState(
@@ -1145,11 +1152,15 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
                                         RES_END_AT_TXTEND, FALSE, &pEndItem );
                 SfxItemState eBalanceState = pOutSet->GetItemState(
                                         RES_COLUMNBALANCE, FALSE, &pBalanceItem );
+                SfxItemState eFrmDirState = pOutSet->GetItemState(
+                                        RES_FRAMEDIR, FALSE, &pFrmDirItem );
+
                 if( SFX_ITEM_SET == eColState ||
                     SFX_ITEM_SET == eBrushState ||
                     SFX_ITEM_SET == eFtnState ||
                     SFX_ITEM_SET == eEndState ||
-                    SFX_ITEM_SET == eBalanceState)
+                    SFX_ITEM_SET == eBalanceState||
+                    SFX_ITEM_SET == eFrmDirState)
                 {
                     SvLBoxEntry* pEntry = aTree.FirstSelected();
                     while( pEntry )
@@ -1165,6 +1176,8 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
                             pRepr->GetEndNtAtEnd() = *(SwFmtEndAtTxtEnd*)pEndItem;
                         if( SFX_ITEM_SET == eBalanceState )
                             pRepr->GetBalance().SetValue(((SwFmtNoBalancedColumns*)pBalanceItem)->GetValue());
+                        if( SFX_ITEM_SET == eFrmDirState )
+                            pRepr->GetFrmDir().SetValue(((SvxFrameDirectionItem*)pFrmDirItem)->GetValue());
 
                         pEntry = aTree.NextSelected(pEntry);
                     }
@@ -1394,7 +1407,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
     SfxItemSet aSet(GetPool(),
             RES_COL, RES_COL,
-            RES_COLUMNBALANCE, RES_COLUMNBALANCE,
+            RES_COLUMNBALANCE, RES_FRAMEDIR,
             RES_BACKGROUND, RES_BACKGROUND,
             RES_FRM_SIZE, RES_FRM_SIZE,
             RES_FTN_AT_TXTEND, RES_END_AT_TXTEND,
@@ -1603,6 +1616,7 @@ void SwInsertSectionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)GetInputSetImpl()->Get(RES_FRM_SIZE);
         ((SwColumnPage&)rPage).SetPageWidth(rSize.GetWidth());
         ((SwColumnPage&)rPage).ShowBalance(TRUE);
+        ((SwColumnPage&)rPage).SetInSection(TRUE);
     }
 }
 /* -----------------21.05.99 13:08-------------------
@@ -2307,7 +2321,10 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
     if( TP_BACKGROUND == nId  )
         ((SvxBackgroundTabPage&)rPage).ShowSelector();
     else if( TP_COLUMN == nId )
+    {
         ((SwColumnPage&)rPage).ShowBalance(TRUE);
+        ((SwColumnPage&)rPage).SetInSection(TRUE);
+    }
 }
 
 
