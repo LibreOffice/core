@@ -124,7 +124,7 @@ public class XMergeBridge {
     private static String offMime=null;
     private static String sdMime=null;
     private static String sFileName=null;
-    private static String sURL=null;
+    private static String sURL="";
 
     //private static FileOutputStream adaptedStream =null;
 
@@ -204,8 +204,8 @@ public class XMergeBridge {
         System.out.println("\n"+msUserData[4]);
         System.out.println("\n"+msUserData[5]);
         */
-        sFileName=null;
-        String sURL=null;
+        sFileName="";
+        sURL="";
         String sDirectory = null;
         String udConvertClass=msUserData[0];
         udJarPath=msUserData[1];
@@ -523,9 +523,12 @@ public class XMergeBridge {
 
 
                      int i=1;
-                     while (docEnum.hasMoreElements() && sFileName.startsWith("file:")) {
-                     URI uri=new URI(sFileName);
-                     String newFileName = getPath(uri);
+                     while (docEnum.hasMoreElements() && sURL.startsWith("file:")) {
+                     //URI uri=new URI(sFileName);
+                     URI uri=new URI(sURL);
+                     String  newFileName= getPath(uri);
+
+
                      //System.out.println("\nURI: "+uri.getPath());
                      File newFile=null;
                      if (newFileName.lastIndexOf(".")!=-1){
