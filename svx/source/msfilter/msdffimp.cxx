@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: sj $ $Date: 2003-06-06 14:55:29 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3391,19 +3391,66 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 delete pObj;
                 pObj = pOrgObj = 0;
             }
+
+            INT32 nTextRotationAngle=0;
+            bool bVerticalText = false;
+            if ( IsProperty( DFF_Prop_txflTextFlow ) )
+            {
+                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
+                    DFF_Prop_txflTextFlow) & 0xFFFF);
+                switch( eTextFlow )
+                {
+                    case mso_txflBtoT:
+                        nTextRotationAngle = 9000;
+                    break;
+                    case mso_txflVertN:
+                    case mso_txflTtoBN:
+                        nTextRotationAngle = 27000;
+                        break;
+                    case mso_txflTtoBA:
+                        bVerticalText = true;
+                    break;
+                    case mso_txflHorzA:
+                        bVerticalText = true;
+                        nTextRotationAngle = 9000;
+                    case mso_txflHorzN:
+                    default :
+                        break;
+                }
+            }
+
+            if (nTextRotationAngle)
+            {
+                while (nTextRotationAngle > 360000)
+                    nTextRotationAngle-=9000;
+                switch (nTextRotationAngle)
+                {
+                    case 9000:
+                    case 27000:
+                        {
+                            long nWidth = rTextRect.GetWidth();
+                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+                        }
+                    default:
+                        break;
+                }
+            }
+
             pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
 
             // Distance of Textbox to it's surrounding Autoshape
-            INT32 nTextLeft  =GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
-            INT32 nTextRight =GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
-            INT32 nTextTop   =GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
-            INT32 nTextBottom=GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
+            INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
+            INT32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
+            INT32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
+            INT32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
 
             ScaleEmu( nTextLeft );
             ScaleEmu( nTextRight );
             ScaleEmu( nTextTop );
             ScaleEmu( nTextBottom );
+
 
             // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
             // hier rausrechnen
@@ -3539,36 +3586,19 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pTextObj->SetItemSet(aSet);
             pTextObj->SetModel(pSdrModel);
 
-            INT32 nTextRotationAngle=0;
-            if ( IsProperty( DFF_Prop_txflTextFlow ) )
-            {
-                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
-                    DFF_Prop_txflTextFlow) & 0xFFFF);
-                switch( eTextFlow )
-                {
-                    case mso_txflBtoT:
-                        pTextObj->SetVerticalWriting( sal_True );
-                        //We don't truly have this, but lets try anyway by
-                        //using vertical text and flipping it around.
-                        nTextRotationAngle = 18000;
-                    break;
-                    case mso_txflTtoBA :
-                    case mso_txflTtoBN :
-                    case mso_txflVertN :
-                        pTextObj->SetVerticalWriting( sal_True );
-                    break;
-                    case mso_txflHorzN :
-                    case mso_txflHorzA :
-                    default :
-                    break;
-                }
-            }
+            if (bVerticalText)
+                pTextObj->SetVerticalWriting(sal_True);
 
-            if ( nTextRotationAngle )
+            if (nTextRotationAngle)
             {
+                long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
+                    rTextRect.GetWidth() : rTextRect.GetHeight();
+                nMinWH /= 2;
+                Point aPivot(rTextRect.TopLeft());
+                aPivot.X() += nMinWH;
+                aPivot.Y() += nMinWH;
                 double a = nTextRotationAngle * nPi180;
-                pTextObj->NbcRotate( aNewRect.Center(), nTextRotationAngle,
-                    sin( a ), cos( a ) );
+                pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
             }
 
             // rotate text with shape ?
@@ -4306,10 +4336,15 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
                              SVXMSDFF_SETTINGS_IMPORT_EXCEL))
                         {
                             if( 0 != nPropVal )
-                                bCanBeReplaced = FALSE;
+                                bCanBeReplaced = false;
                         }
-                        else if (nPropVal == mso_txflBtoT)
-                            bCanBeReplaced = FALSE;
+                        else if (
+                            (nPropVal != mso_txflHorzN) &&
+                            (nPropVal != mso_txflTtoBA)
+                                )
+                        {
+                            bCanBeReplaced = false;
+                        }
                     break;
                     case DFF_Prop_cdirFont :
                         //Writer can now handle right to left and left
