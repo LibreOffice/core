@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:16:03 $
+ *  last change: $Author: vg $ $Date: 2001-10-30 11:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ Sequence< Type > OSubComponent::getTypes() throw (RuntimeException)
 
 // XInterface
 //--------------------------------------------------------------------------
-void OSubComponent::acquire() throw (RuntimeException)
+void OSubComponent::acquire() throw ( )
 {
     OComponentHelper::acquire();
 }
 
 //--------------------------------------------------------------------------
-void OSubComponent::release() throw (RuntimeException)
+void OSubComponent::release() throw ( )
 {
     Reference< XInterface > x( xDelegator );
     if (! x.is())
