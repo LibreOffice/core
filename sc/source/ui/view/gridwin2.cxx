@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:07:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,10 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-BOOL ScGridWindow::DoPageFieldSelection( USHORT nCol, USHORT nRow )
+BOOL ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 {
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTabNo();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
     if ( pDPObj && nCol > 0 )
     {
@@ -121,10 +121,10 @@ BOOL ScGridWindow::DoPageFieldSelection( USHORT nCol, USHORT nRow )
     return FALSE;
 }
 
-void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rMEvt )
+void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
 {
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nTab = pViewData->GetTabNo();
+    SCTAB nTab = pViewData->GetTabNo();
 
     ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
     ScPivot* pPivot = pPivotCollection->GetPivotAtCursor(nCol, nRow, nTab);
@@ -139,7 +139,7 @@ void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rME
 
             ScQueryParam aQueryParam;
             pPivot->GetQuery(aQueryParam);
-            USHORT nSrcTab = pPivot->GetSrcArea().aStart.Tab();
+            SCTAB nSrcTab = pPivot->GetSrcArea().aStart.Tab();
 
             SfxItemSet aArgSet( pViewData->GetViewShell()->GetPool(),
                                         SCITEM_QUERYDATA, SCITEM_QUERYDATA );
@@ -163,13 +163,13 @@ void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rME
                 pNewPivot->SetQuery(rQueryItem.GetQueryData());
 
                 PivotField* pColArr = new PivotField[PIVOT_MAXFIELD];
-                short nColCount;
+                SCSIZE nColCount;
                 pPivot->GetColFields( pColArr, nColCount );
                 PivotField* pRowArr = new PivotField[PIVOT_MAXFIELD];
-                short nRowCount;
+                SCSIZE nRowCount;
                 pPivot->GetRowFields( pRowArr, nRowCount );
                 PivotField* pDataArr = new PivotField[PIVOT_MAXFIELD];
-                short nDataCount;
+                SCSIZE nDataCount;
                 pPivot->GetDataFields( pDataArr, nDataCount );
 
                 pNewPivot->SetColFields( pColArr, nColCount );
@@ -185,7 +185,7 @@ void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rME
         }
         else
         {
-            USHORT nField;
+            SCCOL nField;
             if (pPivot->GetColFieldAtCursor(nCol, nRow, nTab, nField))
             {
                 bPivotMouse     = TRUE;
@@ -228,7 +228,7 @@ void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rME
             ReleaseMouse();         // may have been captured in ButtonDown
 
             ScQueryParam aQueryParam;
-            USHORT nSrcTab = 0;
+            SCTAB nSrcTab = 0;
             const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
             DBG_ASSERT(pDesc, "no sheet source for filter button");
             if (pDesc)
@@ -275,7 +275,7 @@ void ScGridWindow::DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rME
         DBG_ERROR("Da is ja garnix");
 }
 
-void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, short nDestPos )
+void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos )
 {
     if ( nPivotField == PIVOT_DATA_FIELD && bDelete )
     {
@@ -285,7 +285,7 @@ void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, short nDestPos )
 
     if ( bPivotColField != bToCols && !bDelete )
     {
-        short nDestCount = bToCols ? pDragPivot->GetColFieldCount()
+        SCSIZE nDestCount = bToCols ? pDragPivot->GetColFieldCount()
                                    : pDragPivot->GetRowFieldCount();
         if ( nDestCount >= PIVOT_MAXFIELD )     // schon voll?
         {
@@ -296,27 +296,26 @@ void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, short nDestPos )
     }
 
     PivotField* pColArr = new PivotField[PIVOT_MAXFIELD];
-    short nColCount;
+    SCSIZE nColCount;
     pDragPivot->GetColFields( pColArr, nColCount );
 
     PivotField* pRowArr = new PivotField[PIVOT_MAXFIELD];
-    short nRowCount;
+    SCSIZE nRowCount;
     pDragPivot->GetRowFields( pRowArr, nRowCount );
 
     PivotField* pDataArr = new PivotField[PIVOT_MAXFIELD];
-    short nDataCount;
+    SCSIZE nDataCount;
     pDragPivot->GetDataFields( pDataArr, nDataCount );
 
-    short nOldPos = 0;
-    short i;
+    SCSIZE nOldPos = 0;
     PivotField aMoveField;
 
     PivotField* pSource = bPivotColField ? pColArr : pRowArr;
-    short& rCount = bPivotColField ? nColCount : nRowCount;
+    SCSIZE& rCount = bPivotColField ? nColCount : nRowCount;
 
     BOOL bFound = FALSE;
-    for (i=0; i<rCount && !bFound; i++)
-        if (pSource[i].nCol == (short) nPivotField)
+    for (SCSIZE i=0; i<rCount && !bFound; i++)
+        if (pSource[i].nCol == nPivotField)
         {
             nOldPos = i;
             aMoveField = pSource[i];
@@ -334,7 +333,8 @@ void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, short nDestPos )
         if (!bDelete)
         {
             PivotField* pDest = bToCols ? pColArr : pRowArr;
-            short& rDestCount = bToCols ? nColCount : nRowCount;
+            SCSIZE& rDestCount = bToCols ? nColCount : nRowCount;
+
             if (nDestPos < rDestCount)
                 memmove( &pDest[nDestPos+1], &pDest[nDestPos],
                             (rDestCount-nDestPos)*sizeof(PivotField) );
@@ -379,8 +379,8 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
     BOOL bTimer = FALSE;
     Point aPos = rMEvt.GetPosPixel();
 
-    short nDx = 0;
-    short nDy = 0;
+    SCsCOL nDx = 0;
+    SCsROW nDy = 0;
     if ( aPos.X() < 0 )
         nDx = -1;
     if ( aPos.Y() < 0 )
@@ -390,7 +390,7 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         nDx = 1;
     if ( aPos.Y() >= aSize.Height() )
         nDy = 1;
-    if ( nDx || nDy )
+    if ( nDx != 0 || nDy != 0 )
     {
         if (bDragRect)
         {
@@ -398,51 +398,51 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
             bDragRect = FALSE;
         }
 
-        if ( nDx )
+        if ( nDx != 0 )
             pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
-        if ( nDy )
+        if ( nDy != 0 )
             pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
 
         bTimer = TRUE;
     }
 
-    short   nPosX;
-    short   nPosY;
+    SCsCOL  nPosX;
+    SCsROW  nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     BOOL    bMouseLeft;
     BOOL    bMouseTop;
     pViewData->GetMouseQuadrant( aPos, eWhich, nPosX, nPosY, bMouseLeft, bMouseTop );
 
-    USHORT nPiCol1;
-    USHORT nPiRow1;
-    USHORT nPiCol2;
-    USHORT nPiRow2;
-    USHORT nTab;
+    SCCOL nPiCol1;
+    SCROW nPiRow1;
+    SCCOL nPiCol2;
+    SCROW nPiRow2;
+    SCTAB nTab;
     pDragPivot->GetDestArea( nPiCol1, nPiRow1, nPiCol2, nPiRow2, nTab );
 
-    if ( nPosX >= (short) nPiCol1 && nPosX <= (short) nPiCol2 &&
-         nPosY >= (short) nPiRow1 && nPosY <= (short) nPiRow2 )
+    if ( nPosX >= (SCsCOL) nPiCol1 && nPosX <= (SCsCOL) nPiCol2 &&
+         nPosY >= (SCsROW) nPiRow1 && nPosY <= (SCsROW) nPiRow2 )
     {
-        short nFilterAdd = 2;       // Platz fuer Filter-Button
-        short nColRows   = 1;       //! Ueberschrift: 0, wenn keine Zeilen, aber mehrere Datenfelder
-        USHORT nNewStartX;
-        USHORT nNewStartY;
-        USHORT nNewEndX;
-        USHORT nNewEndY;
+        SCsROW nFilterAdd = 2;      // Platz fuer Filter-Button
+        SCsROW nColRows   = 1;      //! Ueberschrift: 0, wenn keine Zeilen, aber mehrere Datenfelder
+        SCCOL nNewStartX;
+        SCROW nNewStartY;
+        SCCOL nNewEndX;
+        SCROW nNewEndY;
 
-        short nRelX = nPosX - (short) nPiCol1;
-        short nRelY = nPosY - (short) nPiRow1 - nFilterAdd;
+        SCsCOL nRelX = nPosX - (SCsCOL) nPiCol1;
+        SCsROW nRelY = nPosY - (SCsROW) nPiRow1 - nFilterAdd;
 
         PivotField* pFieldArr = new PivotField[PIVOT_MAXFIELD];
-        short nColCount;
+        SCSIZE nColCount;
         pDragPivot->GetColFields( pFieldArr, nColCount );
-        short nRowCount;
+        SCSIZE nRowCount;
         pDragPivot->GetRowFields( pFieldArr, nRowCount );
         delete[] pFieldArr;
 
         BOOL bBefore;
-        short nColSize = Max( nColCount, (short) 1 );
-        short nRowSize = Max( nRowCount, (short) 1 );
+        SCsCOL nColSize = static_cast<SCsCOL>(Max( nColCount, (SCSIZE) 1 ));
+        SCsROW nRowSize = static_cast<SCsROW>(Max( nRowCount, (SCSIZE) 1 ));
 
         BOOL bToCols;
         if (nRelX < nColSize && nRelY >= nRowSize)
@@ -450,10 +450,10 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         else if (nRelY < nRowSize && nRelX >= nColSize)
             bToCols = FALSE;                                    // oben
         else
-            bToCols = ( nRelY-nRowSize > nRelX-nColSize );
+            bToCols = ( nRelY-nRowSize > static_cast<SCsCOLROW>(nRelX-nColSize) );
 
-        short nDestCol = 0;
-        short nDestRow = 0;
+        SCsCOL nDestCol = 0;
+        SCsROW nDestRow = 0;
         BOOL bNothing = FALSE;
 
         if ( bToCols )
@@ -465,15 +465,15 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
                 nDestCol = 0;
                 bBefore = TRUE;
             }
-            if (nDestCol >= nColCount)
+            if (nDestCol >= static_cast<SCsCOL>(nColCount))
             {
-                nDestCol = nColCount-1;
+                nDestCol = static_cast<SCsCOL>(nColCount)-1;
                 bBefore = FALSE;
             }
 
-            nNewStartY = nPiRow1 + (USHORT) nFilterAdd + nRowCount + nColRows;
+            nNewStartY = nPiRow1 + nFilterAdd + static_cast<SCROW>(nRowCount) + nColRows;
             nNewEndY   = nPiRow2 - 1;
-            nNewStartX = nPiCol1 + (USHORT) nDestCol;
+            nNewStartX = nPiCol1 + (SCCOL) nDestCol;
             nNewEndX   = nNewStartX;
 
             if ( !bPivotColField )                  // von der anderen Seite
@@ -485,7 +485,7 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
             }
             else
             {
-                USHORT nThisCol = (USHORT) nPosX;           // absolute Spalte ( == Maus )
+                SCCOL nThisCol = (SCCOL) nPosX;         // absolute Spalte ( == Maus )
                 if ( nThisCol < nPivotCol )
                 {
                     nNewEndX = nNewStartX - 1;                      // vor dem Feld
@@ -503,10 +503,9 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         }
         else
         {
-            nDestRow;
-            if (nRelY <= 0 && nRelX < nColCount+nRowCount)
+            if (nRelY <= 0 && static_cast<SCsCOLROW>(nRelX) < static_cast<SCsCOLROW>(nColCount)+static_cast<SCsCOLROW>(nRowCount))
             {
-                nDestRow = nRelX-nColCount;
+                nDestRow = static_cast<SCsCOLROW>(nRelX) - static_cast<SCsCOLROW>(nColCount);
                 bBefore = bMouseLeft;
             }
             else
@@ -519,15 +518,15 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
                 nDestRow = 0;
                 bBefore = TRUE;
             }
-            if (nDestRow >= nRowCount)
+            if (nDestRow >= static_cast<SCsROW>(nRowCount))
             {
-                nDestRow = nRowCount-1;
+                nDestRow = static_cast<SCsROW>(nRowCount)-1;
                 bBefore = FALSE;
             }
 
-            nNewStartX = nPiCol1 + (USHORT) nColCount;
+            nNewStartX = nPiCol1 + (SCCOL) nColCount;
             nNewEndX   = nPiCol2 - 1;
-            nNewStartY = nPiRow1 + (USHORT) nFilterAdd + nDestRow + nColRows;
+            nNewStartY = nPiRow1 + nFilterAdd + nDestRow + nColRows;
             nNewEndY   = nNewStartY;
             if ( bPivotColField )                   // von der anderen Seite
             {
@@ -538,7 +537,10 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
             }
             else
             {
-                USHORT nThisCol = nDestRow+nColCount+nPiCol1;       // absolute Spalte
+                SCCOL nThisCol =
+                    static_cast<SCCOL>(static_cast<SCCOLROW>(nDestRow) +
+                            static_cast<SCCOLROW>(nColCount) + nPiCol1);
+                // absolute Spalte
                 if ( nThisCol < nPivotCol )
                 {
                     bBefore = TRUE;
@@ -582,7 +584,7 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
 
             if (!bNothing)
             {
-                short nDestPos = bToCols ? nDestCol : nDestRow;
+                SCSIZE nDestPos = bToCols ? static_cast<SCSIZE>(nDestCol) : static_cast<SCSIZE>(nDestRow);
                 if (!bBefore)
                     ++nDestPos;
                 DoPivotDrop( FALSE, bToCols, nDestPos );
@@ -640,8 +642,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
     BOOL bTimer = FALSE;
     Point aPixel = rMEvt.GetPosPixel();
 
-    short nDx = 0;
-    short nDy = 0;
+    SCsCOL nDx = 0;
+    SCsROW nDy = 0;
     if ( aPixel.X() < 0 )
         nDx = -1;
     if ( aPixel.Y() < 0 )
@@ -651,13 +653,13 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         nDx = 1;
     if ( aPixel.Y() >= aSize.Height() )
         nDy = 1;
-    if ( nDx || nDy )
+    if ( nDx != 0 || nDy != 0 )
     {
         UpdateDragRect( FALSE, Rectangle() );
 
-        if ( nDx )
+        if ( nDx  != 0)
             pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
-        if ( nDy )
+        if ( nDy != 0 )
             pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
 
         bTimer = TRUE;
@@ -665,8 +667,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
 
     //  ---
 
-    short   nPosX;
-    short   nPosY;
+    SCsCOL  nPosX;
+    SCsROW  nPosY;
     pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), eWhich, nPosX, nPosY );
     BOOL    bMouseLeft;
     BOOL    bMouseTop;
@@ -753,10 +755,10 @@ void ScGridWindow::DPMouseButtonUp( const MouseEvent& rMEvt )
 
 void ScGridWindow::UpdateDragRect( BOOL bShowRange, const Rectangle& rPosRect )
 {
-    USHORT nStartX = ( rPosRect.Left()   >= 0 ) ? rPosRect.Left()   : USHRT_MAX;
-    USHORT nStartY = ( rPosRect.Top()    >= 0 ) ? rPosRect.Top()    : USHRT_MAX;
-    USHORT nEndX   = ( rPosRect.Right()  >= 0 ) ? rPosRect.Right()  : USHRT_MAX;
-    USHORT nEndY   = ( rPosRect.Bottom() >= 0 ) ? rPosRect.Bottom() : USHRT_MAX;
+    SCCOL nStartX = ( rPosRect.Left()   >= 0 ) ? static_cast<SCCOL>(rPosRect.Left())   : SCCOL_MAX;
+    SCROW nStartY = ( rPosRect.Top()    >= 0 ) ? static_cast<SCROW>(rPosRect.Top())    : SCROW_MAX;
+    SCCOL nEndX   = ( rPosRect.Right()  >= 0 ) ? static_cast<SCCOL>(rPosRect.Right())  : SCCOL_MAX;
+    SCROW nEndY   = ( rPosRect.Bottom() >= 0 ) ? static_cast<SCROW>(rPosRect.Bottom()) : SCROW_MAX;
 
     if ( bShowRange == bDragRect && nDragStartX == nStartX && nDragEndX == nEndX &&
                                     nDragStartY == nStartY && nDragEndY == nEndY )
@@ -784,23 +786,25 @@ void ScGridWindow::UpdateDragRect( BOOL bShowRange, const Rectangle& rPosRect )
 //  Page-Break-Modus
 
 USHORT ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
-                                    USHORT* pBreak, USHORT* pPrev )
+                                    SCCOLROW* pBreak, SCCOLROW* pPrev )
 {
     USHORT nFound = SC_PD_NONE;     // 0
     ScRange aSource;
-    USHORT nBreak = 0;
-    USHORT nPrev = 0;
+    SCCOLROW nBreak = 0;
+    SCCOLROW nPrev = 0;
 
     ScPageBreakData* pPageData = pViewData->GetView()->GetPageBreakData();
     if ( pPageData )
     {
         BOOL bHori = FALSE;
         BOOL bVert = FALSE;
-        USHORT nHitX, nHitY;
+        SCCOL nHitX;
+        SCROW nHitY;
 
         long nMouseX = rMouse.X();
         long nMouseY = rMouse.Y();
-        short nPosX, nPosY;
+        SCsCOL nPosX;
+        SCsROW nPosY;
         pViewData->GetPosFromPixel( nMouseX, nMouseY, eWhich, nPosX, nPosY );
         Point aTL = pViewData->GetScrPos( nPosX, nPosY, eWhich );
         Point aBR = pViewData->GetScrPos( nPosX+1, nPosY+1, eWhich );
@@ -870,9 +874,9 @@ USHORT ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
 
                 if ( bVert && bInsideH && !nFound )
                 {
-                    USHORT nRowCount = rData.GetPagesY();
-                    const USHORT* pRowEnd = rData.GetPageEndY();
-                    for (USHORT nRowPos=0; nRowPos+1<nRowCount; nRowPos++)
+                    size_t nRowCount = rData.GetPagesY();
+                    const SCROW* pRowEnd = rData.GetPageEndY();
+                    for (size_t nRowPos=0; nRowPos+1<nRowCount; nRowPos++)
                         if ( pRowEnd[nRowPos]+1 == nHitY )
                         {
                             nFound = SC_PD_BREAK_V;
@@ -886,9 +890,9 @@ USHORT ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
                 }
                 if ( bHori && bInsideV && !nFound )
                 {
-                    USHORT nColCount = rData.GetPagesX();
-                    const USHORT* pColEnd = rData.GetPageEndX();
-                    for (USHORT nColPos=0; nColPos+1<nColCount; nColPos++)
+                    size_t nColCount = rData.GetPagesX();
+                    const SCCOL* pColEnd = rData.GetPageEndX();
+                    for (size_t nColPos=0; nColPos+1<nColCount; nColPos++)
                         if ( pColEnd[nColPos]+1 == nHitX )
                         {
                             nFound = SC_PD_BREAK_H;
@@ -922,8 +926,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
 
     BOOL bTimer = FALSE;
     Point aPos = rMEvt.GetPosPixel();
-    short nDx = 0;
-    short nDy = 0;
+    SCsCOL nDx = 0;
+    SCsROW nDy = 0;
     if ( aPos.X() < 0 ) nDx = -1;
     if ( aPos.Y() < 0 ) nDy = -1;
     Size aSize = GetOutputSizePixel();
@@ -931,7 +935,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
         nDx = 1;
     if ( aPos.Y() >= aSize.Height() )
         nDy = 1;
-    if ( nDx || nDy )
+    if ( nDx != 0 || nDy != 0 )
     {
         if ( bPagebreakDrawn )          // weginvertieren
         {
@@ -940,8 +944,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
             bPagebreakDrawn = FALSE;
         }
 
-        if ( nDx ) pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
-        if ( nDy ) pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
+        if ( nDx != 0 ) pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
+        if ( nDy != 0 ) pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
         bTimer = TRUE;
     }
 
@@ -971,7 +975,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
     //  ab hier neu
 
     //  gesucht wird eine Position zwischen den Zellen (vor nPosX / nPosY)
-    short nPosX, nPosY;
+    SCsCOL nPosX;
+    SCsROW nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     BOOL bLeft, bTop;
     pViewData->GetMouseQuadrant( aPos, eWhich, nPosX, nPosY, bLeft, bTop );
@@ -1062,13 +1067,13 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
         ScViewFunc* pViewFunc = pViewData->GetView();
         ScDocShell* pDocSh = pViewData->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
-        USHORT nTab = pViewData->GetTabNo();
+        SCTAB nTab = pViewData->GetTabNo();
         BOOL bUndo (pDoc->IsUndoEnabled());
 
         if ( bBreak )
         {
             BOOL bColumn = ( nPagebreakMouse == SC_PD_BREAK_H );
-            USHORT nNew = bColumn ? nPosX : nPosY;
+            SCCOLROW nNew = bColumn ? static_cast<SCCOLROW>(nPosX) : static_cast<SCCOLROW>(nPosY);
             if ( nNew != nPagebreakBreak )
             {
                 if (bUndo)
@@ -1080,28 +1085,28 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                 BOOL bGrow = !bHide && nNew > nPagebreakBreak;
                 if ( bColumn )
                 {
-                    if ( pDoc->GetColFlags( nPagebreakBreak, nTab ) & CR_MANUALBREAK )
+                    if ( pDoc->GetColFlags( static_cast<SCCOL>(nPagebreakBreak), nTab ) & CR_MANUALBREAK )
                     {
-                        ScAddress aOldAddr( nPagebreakBreak, nPosY, nTab );
+                        ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
                         pViewFunc->DeletePageBreak( TRUE, TRUE, &aOldAddr, FALSE );
                     }
                     if ( !bHide && !bToEnd )    // am Ende nicht
                     {
-                        ScAddress aNewAddr( nNew, nPosY, nTab );
+                        ScAddress aNewAddr( static_cast<SCCOL>(nNew), nPosY, nTab );
                         pViewFunc->InsertPageBreak( TRUE, TRUE, &aNewAddr, FALSE );
                     }
                     if ( bGrow )
                     {
                         //  vorigen Break auf hart, und Skalierung aendern
-                        if ( nPagebreakPrev > aPagebreakSource.aStart.Col() &&
-                                !(pDoc->GetColFlags( nPagebreakPrev, nTab ) & CR_MANUALBREAK) )
+                        if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() &&
+                                !(pDoc->GetColFlags( static_cast<SCCOL>(nPagebreakPrev), nTab ) & CR_MANUALBREAK) )
                         {
-                            ScAddress aPrev( nPagebreakPrev, nPosY, nTab );
+                            ScAddress aPrev( static_cast<SCCOL>(nPagebreakPrev), nPosY, nTab );
                             pViewFunc->InsertPageBreak( TRUE, TRUE, &aPrev, FALSE );
                         }
 
                         if (!pDocSh->AdjustPrintZoom( ScRange(
-                                      nPagebreakPrev,0,nTab, nNew-1,0,nTab ) ))
+                                      static_cast<SCCOL>(nPagebreakPrev),0,nTab, static_cast<SCCOL>(nNew-1),0,nTab ) ))
                             bGrow = FALSE;
                     }
                 }
