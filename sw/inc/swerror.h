@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swerror.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 05:57:49 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 08:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,9 @@
 #define WARN_SWG_HTML_NO_MACROS         (WARN_SW_WRITE_BASE |75)
 #define WARN_WRITE_ERROR_FILE           (WARN_SW_WRITE_BASE |76)
 
-// More Import - Warnings
+// More Import & Export  - Warnings
 #define WARN_FORMAT_FILE_ROWCOL         (WARN_SW_READ_BASE | 77)
+#define WARN_UNCONVERTABLE_CHARS        (WARN_SW_WRITE_BASE | 78)
 
 #ifndef __RSC
 

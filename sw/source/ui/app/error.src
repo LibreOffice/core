@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:57:22 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 08:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1422,6 +1422,11 @@ Resource RID_SW_ERRHDL
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_UNCONVERTABLE_CHARS )
+    {
+        TEXT = "Die folgenden Zeichen konnten nicht im gewählten Zeichsatz dargestellt werden: $(ARG1)" ;
+        TEXT [ English ] = "These characters could not be exported using the chosen character encoding: $(ARG1)" ;
     };
 };
 
