@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:46:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,16 @@ XclImpEscherObj::~XclImpEscherObj()
 {
 }
 
+bool XclImpEscherObj::IsVisibleArea() const
+{
+    return !mbSkip && (maAnchorRect.GetWidth() > 1) && (maAnchorRect.GetHeight() > 1);
+}
+
+bool XclImpEscherObj::IsValid() const
+{
+    return !mbSkip && mpSdrObj.get() && !maAnchorRect.IsEmpty();
+}
+
 void XclImpEscherObj::SetSdrObj( SdrObject* pSdrObj )
 {
     mpSdrObj.reset( pSdrObj );
@@ -392,7 +402,7 @@ void XclImpEscherTxo::SetAlignment( sal_uInt16 nAlign )
     ::extract_value( meVerAlign, nAlign, 4, 3 );
 }
 
-void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj )
+void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
 {
     if( SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, &rSdrObj ) )
     {
@@ -413,6 +423,30 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj )
                 pTextObj->SetText( mpString->GetText() );
             }
         }
+
+        // horizontal text alignment (#i12188# not stored in Escher stream, but in TXO)
+        SdrTextHorzAdjust eSdrHorAlign = SDRTEXTHORZADJUST_LEFT;
+        SvxAdjust eEEHorAlign = SVX_ADJUST_LEFT;
+        switch( meHorAlign )
+        {
+            case xlTxoHAlignLeft:       eSdrHorAlign = SDRTEXTHORZADJUST_LEFT;      eEEHorAlign = SVX_ADJUST_LEFT;      break;
+            case xlTxoHAlignCenter:     eSdrHorAlign = SDRTEXTHORZADJUST_CENTER;    eEEHorAlign = SVX_ADJUST_CENTER;    break;
+            case xlTxoHAlignRight:      eSdrHorAlign = SDRTEXTHORZADJUST_RIGHT;     eEEHorAlign = SVX_ADJUST_RIGHT;     break;
+            case xlTxoHAlignJustify:    eSdrHorAlign = SDRTEXTHORZADJUST_BLOCK;     eEEHorAlign = SVX_ADJUST_BLOCK;     break;
+        }
+        pTextObj->SetMergedItem( SdrTextHorzAdjustItem( eSdrHorAlign ) );
+        pTextObj->SetMergedItem( SvxAdjustItem( eEEHorAlign, EE_PARA_JUST ) );
+
+        // vertical text alignment (#i12188# not stored in Escher stream, but in TXO)
+        SdrTextVertAdjust eSdrVerAlign = SDRTEXTVERTADJUST_TOP;
+        switch( meVerAlign )
+        {
+            case xlTxoVAlignTop:        eSdrVerAlign = SDRTEXTVERTADJUST_TOP;       break;
+            case xlTxoHAlignCenter:     eSdrVerAlign = SDRTEXTVERTADJUST_CENTER;    break;
+            case xlTxoVAlignBottom:     eSdrVerAlign = SDRTEXTVERTADJUST_BOTTOM;    break;
+            case xlTxoVAlignJustify:    eSdrVerAlign = SDRTEXTVERTADJUST_BLOCK;     break;
+        }
+        pTextObj->SetMergedItem( SdrTextVertAdjustItem( eSdrVerAlign ) );
     }
 }
 
@@ -750,7 +784,7 @@ void XclImpEscherTbxCtrl::InitProgress( ScfProgressBar& rProgress )
 
 void XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
 {
-    if( !mbSkip )
+    if( IsVisibleArea() )
     {
         if( GetObjectManager().CreateSdrObj( *this ) )
         {
@@ -857,9 +891,14 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
             mnCtrlStrmPos = nStorageId;
             bOk = false;    // do not create the storage name for controls
 
-            // try to read additional link data
-            if( rStrm.GetRecLeft() > 8 )
+            if( aUserName.EqualsAscii( "Forms.HTML:Hidden.1" ) )
             {
+                // #i26521# form controls to be ignored
+                SetSkip();
+            }
+            else if( rStrm.GetRecLeft() > 8 )
+            {
+                // read additional link data
                 rStrm.Ignore( 8 );
                 sal_uInt16 nDataSize;
 
@@ -908,10 +947,7 @@ void XclImpEscherOle::InitProgress( ScfProgressBar& rProgress )
 
 void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
 {
-    if( !mbSkip )
-        GetObjectManager().CreateSdrObj( *this );
-
-    if( IsValid() )
+    if( IsVisibleArea() && GetObjectManager().CreateSdrObj( *this ) )
     {
         SfxObjectShell* pDocShell = GetDocShell();
         SdrOle2Obj* pOleSdrObj = PTR_CAST( SdrOle2Obj, mpSdrObj.get() );
@@ -960,7 +996,7 @@ void XclImpEscherChart::InitProgress( ScfProgressBar& rProgress )
 
 void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
 {
-    if( !mpChart.get() || maAnchorRect.IsEmpty() )
+    if( !mpChart.get() || !IsVisibleArea() )
         return;
 
     const XclImpChart_LinkedData* pLinkData = mpChart->GetSourceData();
@@ -1243,7 +1279,7 @@ XclImpDffManager::XclImpDffManager(
     mrObjManager( rObjManager ),
     mnOleImpFlags( 0 )
 {
-    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL );
+    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL | SVXMSDFF_SETTINGS_IMPORT_IAS );
 
     if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
     {
@@ -1315,188 +1351,33 @@ void XclImpDffManager::ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader& r
 SdrObject* XclImpDffManager::ProcessObj(
     SvStream& rStrm, DffObjData& rObjData, void*, Rectangle& rTextRect, SdrObject* pRetSdrObj )
 {
-    if( pRetSdrObj && ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
-        ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
-    {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-        pRetSdrObj->SetMergedItem(XFillColorItem(XubString(), Color(0xffffff)));
-    }
-
-    // #98132# don't ask for the text-ID, Escher export doesn't set one
-//    XclImpEscherTxo* pTxoObj = NULL;
-//    sal_uInt32                      nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
-//    if( nTextId )
-//        pTxoObj = mrObjManager.GetTxoFromStream( rObjData.rSpHd.nFilePos );
-    XclImpEscherTxo* pTxoObj = mrObjManager.GetEscherTxoAcc( rObjData.rSpHd.nFilePos );
-
-    // #102378# ...but that leads to another problem: now the first text is
-    // applied to the omnipresent first dummy shape in the table. In consequence
-    // we will miss this text while processing the real text object.
-    // Solution: filter the dummy shape (it has the flag SP_FPATRIARCH set).
-    bool bDummy = ::get_flag< sal_uInt32 >( rObjData.nSpFlags, SP_FPATRIARCH );
-
-    if( !bDummy && pTxoObj )
+    /*  #102378# Do not process the omnipresent first dummy shape in the table
+        (it has the flag SP_FPATRIARCH set). */
+    if( pRetSdrObj && !::get_flag< sal_uInt32 >( rObjData.nSpFlags, SP_FPATRIARCH ) )
     {
-        if( rObjData.eShapeType == mso_sptRectangle )
-            DELETEZ( pRetSdrObj );
+        // maybe if there is no color, we could do this in ApplyAttributes (writer?, calc?)
+        if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
+            pRetSdrObj->SetMergedItem( XFillColorItem( EMPTY_STRING, Color( COL_WHITE ) ) );
 
-        // Abstaende an den Raendern der Textbox lesen
-
-        INT32 nDefault = 92076;
-        if( GetPropertyValue( DFF_Prop_FitTextToShape ) & 0x08 )
-            nDefault = 20000;   // auto default
-
-        INT32                   nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, nDefault );
-        INT32                   nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, nDefault );
-        INT32                   nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, nDefault / 2 );
-        INT32                   nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, nDefault / 2 );
-        ScaleEmu( nTextLeft );
-        ScaleEmu( nTextRight );
-        ScaleEmu( nTextTop );
-        ScaleEmu( nTextBottom );
-        // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin, hier rausrechnen
-        rTextRect.Bottom() -= nTextTop + nTextBottom;
-
-        INT32 nTextRotationAngle = 0;
-        if( IsProperty( DFF_Prop_txflTextFlow ) )
+        // automatic margin is handled by host
+        if( GetPropertyBool( DFF_Prop_AutoTextMargin ) )
         {
-            MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
-            switch( eTextFlow )
-            {
-                case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
-                    nTextRotationAngle = 9000;
-                break;
-                case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
-                case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
-                case mso_txflVertN :                    // Vertical, non-@, oben -> unten
-                    nTextRotationAngle = 27000;
-                break;
-                case mso_txflHorzN :                    // Horizontal non-@, normal
-                case mso_txflHorzA :                    // Horizontal @-font, normal
-                default :
-                    nTextRotationAngle = 0;
-                break;
-            }
-            if( nTextRotationAngle )
-            {
-                if( rObjData.nSpFlags & SP_FFLIPV )
-                {
-                    if( nTextRotationAngle == 9000 )
-                        nTextRotationAngle = 27000;
-                    else if( nTextRotationAngle == 27000 )
-                        nTextRotationAngle = 9000;
-                }
-                Point nCenter( rTextRect.Center() );
-                sal_Int32            nDX = rTextRect.Right() - rTextRect.Left();
-                sal_Int32            nDY = rTextRect.Bottom() - rTextRect.Top();
-                rTextRect.Left()       = nCenter.X() - nDY/2;
-                rTextRect.Top()        = nCenter.Y() - nDX/2;
-                rTextRect.Right()      = rTextRect.Left() + nDY;
-                rTextRect.Bottom()     = rTextRect.Top()  + nDX;
-            }
+            long nMargin = EXC_ESCHER_AUTOMARGIN;
+            ScaleEmu( nMargin );
+            pRetSdrObj->SetMergedItem( SdrTextLeftDistItem( nMargin ) );
+            pRetSdrObj->SetMergedItem( SdrTextRightDistItem( nMargin ) );
+            pRetSdrObj->SetMergedItem( SdrTextUpperDistItem( nMargin ) );
+            pRetSdrObj->SetMergedItem( SdrTextLowerDistItem( nMargin ) );
         }
 
-        SdrRectObj* pTextSdrObj = new SdrRectObj( OBJ_TEXT, rTextRect );
+        // text data and text alignment properties
+        // #98132# don't ask for a text-ID, Escher export doesn't set one
+        if( const XclImpEscherTxo* pTxoObj = mrObjManager.GetEscherTxo( rObjData.rSpHd.nFilePos ) )
+            pTxoObj->ApplyTextOnSdrObj( *pRetSdrObj );
 
-        if( nTextRotationAngle )
-        {
-            double fAngle = nTextRotationAngle * nPi180;
-            pTextSdrObj->NbcRotate( rTextRect.Center(), nTextRotationAngle, sin( fAngle ), cos( fAngle ) );
-        }
-
-        SfxItemSet aItemSet( pSdrModel->GetItemPool() );
-        if( !pRetSdrObj )
-        {
-            if( ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
-                ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
-            {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-                pTextSdrObj->SetMergedItem(XFillColorItem(XubString(), Color(0xffffff)));
-            }
-
-            ApplyAttributes( rStrm, aItemSet, rObjData.eShapeType, rObjData.nSpFlags );
-        }
-        switch( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
-        {
-            case mso_wrapNone :
-            {
-                if( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )   // be sure this is FitShapeToText
-                    aItemSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-            }
-                break;
-
-            case mso_wrapByPoints :
-                aItemSet.Put( SdrTextContourFrameItem( TRUE ) );
-                break;
-        }
-        aItemSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
-
-        // Abstaende an den Raendern der Textbox setzen
-        aItemSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-        aItemSet.Put( SdrTextRightDistItem( nTextRight ) );
-        aItemSet.Put( SdrTextUpperDistItem( nTextTop ) );
-        aItemSet.Put( SdrTextLowerDistItem( nTextBottom ) );
-
-        // text alignment (#i12188# not stored in Escher stream, but in TXO)
-        SdrTextHorzAdjust eSdrHorAlign = SDRTEXTHORZADJUST_LEFT;
-        SvxAdjust eEEHorAlign = SVX_ADJUST_LEFT;
-        switch( pTxoObj->GetHorAlign() )
-        {
-            case xlTxoHAlignLeft:       eSdrHorAlign = SDRTEXTHORZADJUST_LEFT;      eEEHorAlign = SVX_ADJUST_LEFT;      break;
-            case xlTxoHAlignCenter:     eSdrHorAlign = SDRTEXTHORZADJUST_CENTER;    eEEHorAlign = SVX_ADJUST_CENTER;    break;
-            case xlTxoHAlignRight:      eSdrHorAlign = SDRTEXTHORZADJUST_RIGHT;     eEEHorAlign = SVX_ADJUST_RIGHT;     break;
-            case xlTxoHAlignJustify:    eSdrHorAlign = SDRTEXTHORZADJUST_BLOCK;     eEEHorAlign = SVX_ADJUST_BLOCK;     break;
-        }
-        aItemSet.Put( SdrTextHorzAdjustItem( eSdrHorAlign ) );
-
-        SdrTextVertAdjust eSdrVerAlign = SDRTEXTVERTADJUST_TOP;
-        switch( pTxoObj->GetVerAlign() )
-        {
-            case xlTxoVAlignTop:        eSdrVerAlign = SDRTEXTVERTADJUST_TOP;       break;
-            case xlTxoHAlignCenter:     eSdrVerAlign = SDRTEXTVERTADJUST_CENTER;    break;
-            case xlTxoVAlignBottom:     eSdrVerAlign = SDRTEXTVERTADJUST_BOTTOM;    break;
-            case xlTxoVAlignJustify:    eSdrVerAlign = SDRTEXTVERTADJUST_BLOCK;     break;
-        }
-        aItemSet.Put( SdrTextVertAdjustItem( eSdrVerAlign ) );
-
-        aItemSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
-        pTextSdrObj->SetModel( pSdrModel );
-        // #96092# SetModel() modifies the height of the text box -> restore it with NbcSetSnapRect()
-        pTextSdrObj->NbcSetSnapRect( rTextRect );
-
-        pTextSdrObj->SetMergedItemSet( aItemSet );
-
-        // Apply the text data from the Escher object to the SdrObj
-        pTxoObj->ApplyTextOnSdrObj( *pTextSdrObj );
-
-        // #i12188# this item has to be set after the text
-        pTextSdrObj->SetMergedItem( SvxAdjustItem( eEEHorAlign, EE_PARA_JUST ) );
-
-        // rotate text with shape ?
-        if( mnFix16Angle )
-        {
-            double fAngle = mnFix16Angle * nPi180;
-            pTextSdrObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle, sin( fAngle ), cos( fAngle ) );
-        }
-
-        if( pRetSdrObj )
-        {
-            SdrObject* pGroup = new SdrObjGroup;
-            pGroup->GetSubList()->NbcInsertObject( pRetSdrObj );
-            pGroup->GetSubList()->NbcInsertObject( pTextSdrObj );
-            pRetSdrObj = pGroup;
-        }
-        else
-            pRetSdrObj = pTextSdrObj;
-        pTextSdrObj = NULL;
-
-        if( (rObjData.nCalledByGroup == 0) ||
-            ((rObjData.nSpFlags & SP_FGROUP) && (rObjData.nCalledByGroup < 2)) )
-        {
-            sal_uInt32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
-            StoreShapeOrder( rObjData.nShapeId, nTextId, pRetSdrObj );
-        }
+        // connector rules
+        mrObjManager.UpdateConnectorRules( rObjData, *pRetSdrObj );
     }
-
-    mrObjManager.UpdateConnectorRules( rObjData, pRetSdrObj );
 
     return pRetSdrObj;
 }
@@ -1836,7 +1717,7 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
 }
 
 
-// private --------------------------------------------------------------------
+// *** Misc *** ---------------------------------------------------------------
 
 XclImpDffManager& XclImpObjectManager::GetDffManager()
 {
@@ -1845,29 +1726,25 @@ XclImpDffManager& XclImpObjectManager::GetDffManager()
     return *mpDffManager;
 }
 
-void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrObject* pSdrObj )
+void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrObject& rSdrObj )
 {
-    if( mpSolverContainer.get() && pSdrObj )
+    for( SvxMSDffConnectorRule* pRule = GetFirstConnectorRule(); pRule; pRule = GetNextConnectorRule() )
     {
-        for( SvxMSDffConnectorRule* pPtr = (SvxMSDffConnectorRule*)mpSolverContainer->aCList.First();
-                pPtr; pPtr = (SvxMSDffConnectorRule*)mpSolverContainer->aCList.Next() )
+        if( rObjData.nShapeId == pRule->nShapeC )
         {
-            if( rObjData.nShapeId == pPtr->nShapeC )
+            pRule->pCObj = &rSdrObj;
+        }
+        else
+        {
+            if ( rObjData.nShapeId == pRule->nShapeA )
             {
-                pPtr->pCObj = pSdrObj;
+                pRule->pAObj = &rSdrObj;
+                pRule->nSpFlagsA = rObjData.nSpFlags;
             }
-            else
+            if ( rObjData.nShapeId == pRule->nShapeB )
             {
-                if ( rObjData.nShapeId == pPtr->nShapeA )
-                {
-                    pPtr->pAObj = pSdrObj;
-                    pPtr->nSpFlagsA = rObjData.nSpFlags;
-                }
-                if ( rObjData.nShapeId == pPtr->nShapeB )
-                {
-                    pPtr->pBObj = pSdrObj;
-                    pPtr->nSpFlagsB = rObjData.nSpFlags;
-                }
+                pRule->pBObj = &rSdrObj;
+                pRule->nSpFlagsB = rObjData.nSpFlags;
             }
         }
     }
@@ -1898,6 +1775,8 @@ void XclImpObjectManager::Apply()
     if( mpSolverContainer.get() )
         GetDffManager().SolveSolver( *mpSolverContainer );
 }
+
+// private --------------------------------------------------------------------
 
 void XclImpObjectManager::AppendEscherObj( XclImpEscherObj* pEscherObj )
 {
@@ -2003,13 +1882,6 @@ void XclImpObjectManager::ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSub
     }
 }
 
-SvxMSDffSolverContainer& XclImpObjectManager::GetSolverContainer()
-{
-    if( !mpSolverContainer.get() )
-        mpSolverContainer.reset( new SvxMSDffSolverContainer );
-    return *mpSolverContainer;
-}
-
 XclImpOcxConverter& XclImpObjectManager::GetOcxConverter()
 {
     if( !mpOcxConverter.get() )
@@ -2017,6 +1889,24 @@ XclImpOcxConverter& XclImpObjectManager::GetOcxConverter()
     return *mpOcxConverter;
 }
 
+SvxMSDffSolverContainer& XclImpObjectManager::GetSolverContainer()
+{
+    if( !mpSolverContainer.get() )
+        mpSolverContainer.reset( new SvxMSDffSolverContainer );
+    return *mpSolverContainer;
+}
+
+SvxMSDffConnectorRule* XclImpObjectManager::GetFirstConnectorRule()
+{
+    void* pRule = mpSolverContainer.get() ? mpSolverContainer->aCList.First() : 0;
+    return static_cast< SvxMSDffConnectorRule* >( pRule );
+}
+
+SvxMSDffConnectorRule* XclImpObjectManager::GetNextConnectorRule()
+{
+    void* pRule = mpSolverContainer.get() ? mpSolverContainer->aCList.Next() : 0;
+    return static_cast< SvxMSDffConnectorRule* >( pRule );
+}
 
 // Escher property set helper =================================================
 
