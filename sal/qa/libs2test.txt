@@ -1,0 +1,23 @@
+# This file contain a list of todos for testshl2 automated tests.
+# 
+# $Id: libs2test.txt,v 1.3 2003-04-01 13:18:23 vg Exp $
+#
+# Legend:
+# there exist 2 formats
+# 1. file
+# 2. path ; file
+#
+# 1. if only a file exist, it will be assume, that a directory with name 'file'
+# exist, and a library with name 'file' create.
+# 2. if the path to the file differ from the library file, use this format.
+#
+
+
+ByteSequence
+OStringBuffer   ; OStringBuffer
+
+rtl_strings ; rtl_OUString
+rtl_strings ; rtl_OString
+rtl_strings ; rtl_OUStringBuffer
+
+
