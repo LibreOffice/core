@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-02 14:05:10 $
+ *  last change: $Author: ssa $ $Date: 2002-09-08 15:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     else
         nArrangeIndex = 0;
 
-    // TODO: use GetLayoutMode() here
-    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
-    BOOL bRTL = pEnv ? TRUE : FALSE;
+    BOOL bRTL = Application::GetSettings().GetLayoutRTL() ? TRUE : FALSE;
 
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
