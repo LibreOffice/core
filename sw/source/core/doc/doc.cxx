@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:36:24 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,5 +1236,25 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable )
     }
 }
 
+// #111955#
+void SwDoc::SetOldNumbering(sal_Bool _bOldNumbering)
+{
+    if (bOldNumbering != _bOldNumbering)
+    {
+        bOldNumbering = _bOldNumbering;
 
+        SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
+        for( USHORT n = 0; n < rNmTbl.Count(); ++n )
+            rNmTbl[n]->SetInvalidRule(TRUE);
 
+        UpdateNumRule();
+
+        if (bOldNumbering)
+            GetNodes().UpdateOutlineNodes();
+        else
+        {
+            if (pOutlineRule)
+                UpdateNumRule(*pOutlineRule, 0, TRUE);
+        }
+    }
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:35:40 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,8 @@ class SwDoc
     sal_Bool    bPurgeOLE : 1;          // TRUE: Purge OLE-Objects
     sal_Bool    bKernAsianPunctuation : 1;  // TRUE: kerning also for ASIAN punctuation
     sal_Bool    bReadlineChecked    : 1;  // TRUE: if the query was already shown
+    sal_Bool    bOldNumbering : 1;       // #111955# TRUE: use old numbering
+
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
@@ -1484,6 +1486,11 @@ public:
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
     void UpdateNumRule( const String& rName, sal_uInt32 nUpdPos );
     void UpdateNumRule();   // alle invaliden Updaten
+    /* -> #111955# */
+    void UpdateNumRule( const SwNumRule & rRule, ULONG nUpdatePos,
+                        BOOL bOutline = FALSE);
+    void UpdateNumRuleOld( const SwNumRule & rRule, ULONG nUpdatePos);
+    /* <- #111955# */
     void ChgNumRuleFmts( const SwNumRule& rRule );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );

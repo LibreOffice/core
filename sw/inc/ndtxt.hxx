@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:08:14 $
+ *  last change: $Author: hbrinkm $ $Date: 2003-09-05 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,10 +277,14 @@ public:
     // Numerierung
     const SwNodeNum* UpdateNum( const SwNodeNum& );
     const SwNumRule *GetNumRule() const;
-    const SwNodeNum* GetNum() const             { return pNdNum; }
+    // #111955#
+    const SwNodeNum* GetNum(BOOL bOutline = FALSE) const
+    { return bOutline ? pNdOutl : pNdNum; }
     // OutlineNumerierung
     const SwNodeNum* UpdateOutlineNum( const SwNodeNum& );
-    const SwNodeNum* GetOutlineNum() const      { return pNdOutl; }
+    // #111955#
+    const SwNodeNum* GetOutlineNum() const      { return GetNum(TRUE); }
+    BOOL IsOutlineNum() const;
     void NumRuleChgd();                 // Frames benachrichtigen
     XubString GetNumString() const;     // returnt Outline oder Num - String
     long GetLeftMarginWithNum( BOOL bTxtLeft = FALSE ) const;

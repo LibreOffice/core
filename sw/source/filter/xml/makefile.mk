@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:05:58 $
+#   last change: $Author: hbrinkm $ $Date: 2003-09-05 15:10:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,7 +148,16 @@ EXCEPTIONSFILES= \
         $(SLO)$/xmlfonte.obj \
         $(SLO)$/XMLRedlineImportHelper.obj
 
-# --- Tagets -------------------------------------------------------
+# --- Targets -------------------------------------------------------
+
+$(BIN)/makehash: makehash.cxx DocSettingNames.hxx
+    $(cc) $(CFLAGS) $(CFLAGSCC) -o $(BIN)/makehash makehash.cxx
+    chmod u+x $(BIN)/makehash
+
+$(INCCOM)/hash.hxx: $(BIN)/makehash
+    $(BIN)/makehash > $(INCCOM)/hash.hxx
+
+$(SLO)$/xmlimp.obj: $(INCCOM)/hash.hxx
 
 .INCLUDE :  target.mk
 
