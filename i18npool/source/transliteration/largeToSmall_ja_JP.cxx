@@ -2,9 +2,9 @@
  *
  *  $RCSfile: largeToSmall_ja_JP.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:09:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 // prevent internal compiler error with MSVC6SP3
-#include <stl/utility>
+#include <utility>
 
 #include <i18nutil/oneToOneMapping.hxx>
 #define TRANSLITERATION_largeToSmall_ja_JP
