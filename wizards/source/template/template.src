@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:05:38 $
+ *  last change: $Author: rt $ $Date: 2001-08-24 05:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1456,7 +1456,7 @@ String Newsletter
     Text[English] = "General Layout";
     Text[ english_us ] = "General layout";
     Text[ language_user1 ] = "Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "General Layout";
+    Text[ portuguese ] = "Configuração geral";
     Text[ russian ] = "Îáùàÿ ğàçìåòêà";
     Text[ greek ] = "General Layout";
     Text[ dutch ] = "Algemeen lay-out";
@@ -1469,7 +1469,7 @@ String Newsletter
     Text[ polish ] = "General Layout";
     Text[ portuguese_brazilian ] = "General Layout";
     Text[ japanese ] = "å…¨èˆ¬ï¾šï½²ï½±ï½³ï¾„";
-    Text[ korean ] = "General Layout";
+    Text[ korean ] = "ì¼ë°˜ ë ˆì´ì•„ì›ƒ";
     Text[ chinese_simplified ] = "ä¸€èˆ¬çš„ç‰ˆå¼";
     Text[ chinese_traditional ] = "ä¸€èˆ¬çš„ç‰ˆå¼";
     Text[ turkish ] = "General Layout";
@@ -1484,7 +1484,7 @@ String Newsletter + 1
     Text[English] = "Standard Layout";
     Text[ english_us ] = "Default layout";
     Text[ language_user1 ] = "Layout Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Standard Layout";
+    Text[ portuguese ] = "Configuração padrão";
     Text[ russian ] = "Ñòàíäàğòíàÿ ğàçìåòêà";
     Text[ greek ] = "Standard Layout";
     Text[ dutch ] = "Standaard lay-out";
@@ -1497,7 +1497,7 @@ String Newsletter + 1
     Text[ polish ] = "Standard Layout";
     Text[ portuguese_brazilian ] = "Standard Layout";
     Text[ japanese ] = "æ¨™æº–ï¾šï½²ï½±ï½³ï¾„";
-    Text[ korean ] = "Standard Layout";
+    Text[ korean ] = "í‘œì¤€ ë ˆì´ì•„ì›ƒ";
     Text[ chinese_simplified ] = "æ ‡å‡†çš„ç‰ˆå¼";
     Text[ chinese_traditional ] = "æ¨™æº–çš„ç‰ˆå¼";
     Text[ turkish ] = "Standard Layout";
@@ -1511,7 +1511,7 @@ String Newsletter + 2
     Text[English] = "Party Layout";
     Text[ english_us ] = "Commemorative publication layout";
     Text[ language_user1 ] = "Layout Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Party Layout";
+    Text[ portuguese ] = "Configuração de publicação comemorativa";
     Text[ russian ] = "Şáèëåéíàÿ ñòàòüÿ";
     Text[ greek ] = "Party Layout";
     Text[ dutch ] = "Feestelijk lay-out";
@@ -1524,7 +1524,7 @@ String Newsletter + 2
     Text[ polish ] = "Party Layout";
     Text[ portuguese_brazilian ] = "Party Layout";
     Text[ japanese ] = "è¨˜å¿µåˆŠè¡Œç‰©ï¾šï½²ï½±ï½³ï¾„";
-    Text[ korean ] = "Party Layout";
+    Text[ korean ] = "ëª¨ì„ ë ˆì´ì•„ì›ƒ";
     Text[ chinese_simplified ] = "çºªå¿µæ–‡";
     Text[ chinese_traditional ] = "ç´€å¿µæ–‡";
     Text[ turkish ] = "Party Layout";
@@ -1538,7 +1538,7 @@ String Newsletter + 3
     Text[English] = "Brochure Layout";
     Text[ english_us ] = "Brochure layout";
     Text[ language_user1 ] = "Layout Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Brochure Layout";
+    Text[ portuguese ] = "Configuração de brochura";
     Text[ russian ] = "Ğàçìåòêà áğîøşğû";
     Text[ greek ] = "Brochure Layout";
     Text[ dutch ] = "Brochure lay-out";
@@ -1551,7 +1551,7 @@ String Newsletter + 3
     Text[ polish ] = "Brochure Layout";
     Text[ portuguese_brazilian ] = "Brochure Layout";
     Text[ japanese ] = "ï¾ï¾—ï½¼åºƒå‘Šï¾šï½²ï½±ï½³ï¾„";
-    Text[ korean ] = "Brochure Layout";
+    Text[ korean ] = "ë¸Œë¡œì…” ë ˆì´ì•„ì›ƒ";
     Text[ chinese_simplified ] = "å°æ‰‹å†Œçš„ç‰ˆå¼";
     Text[ chinese_traditional ] = "å°æ‰‹å†Šçš„ç‰ˆå¼";
     Text[ turkish ] = "Brochure Layout";
@@ -1605,7 +1605,7 @@ String Newsletter + 11
     Text[ polish ] = "Single sided";
     Text[ portuguese_brazilian ] = "Single sided";
     Text[ japanese ] = "1é¢";
-    Text[ korean ] = "Single sided";
+    Text[ korean ] = "ë‹¨ë©´";
     Text[ chinese_simplified ] = "å•é¡µ";
     Text[ chinese_traditional ] = "å–®é ";
     Text[ turkish ] = "Single sided";
@@ -1619,7 +1619,7 @@ String Newsletter + 12
     Text[English] = "double sided";
     Text[ english_us ] = "Double-sided";
     Text[ language_user1 ] = "'Format' Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "double sided";
+    Text[ portuguese ] = "Página dupla";
     Text[ russian ] = "Ñ äâóõ ñòîğîí";
     Text[ greek ] = "double sided";
     Text[ dutch ] = "Dubbelzijdig";
@@ -1632,13 +1632,14 @@ String Newsletter + 12
     Text[ polish ] = "double sided";
     Text[ portuguese_brazilian ] = "double sided";
     Text[ japanese ] = "2é¢";
-    Text[ korean ] = "double sided";
+    Text[ korean ] = "ì–‘ë©´";
     Text[ chinese_simplified ] = "åŒé¡µ";
     Text[ chinese_traditional ] = "é›™é ";
     Text[ turkish ] = "double sided";
     Text[ arabic ] = "double sided";
     Text[ catalan ] = "double sided";
 };
+
 
 
 
