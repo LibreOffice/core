@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:01:20 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,7 @@ String STR_TAB_INDEX_SORTORDER
     Text[ czech ] = "Pořadí řazení";
     Text[ hebrew ] = "Sortierreihenfolge";
     Text[ hindi ] = "सोर्ट क्रम";
-    Text[ slovak ] = "Poradie radenia";
+    Text[ slovak ] = "Poradie triedenia";
 };
 String STR_TAB_INDEX_FIELD
 {
@@ -944,6 +944,13 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36.6.1  2003/07/16 17:11:12  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.36  2003/07/03 18:01:20  hr
+ *  INTEGRATION: CWS rc2merge (1.35.8); FILE MERGED
+ *  2003/07/03 14:44:14 ihi 1.35.8.1: rc-2 merge all languages
+ *
  *  Revision 1.35.8.1  2003/07/03 14:44:14  ihi
  *  rc-2 merge all languages
  *
@@ -1096,6 +1103,8 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
+
 
 
 
