@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-18 11:48:16 $
+ *  last change: $Author: tl $ $Date: 2001-04-18 12:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,8 +485,7 @@ void SmParser::NextToken()
         {
             // keep data needed for tokens row and col entry up to date
             ++Row;
-            ColOff = nRealStart;
-            BufferIndex = nRealStart + 1;
+            BufferIndex = ColOff = nRealStart + 1;
             bCont = TRUE;
         }
         else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
