@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:37:32 $
+ *  last change: $Author: kz $ $Date: 2001-04-10 20:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ portuguese ] = "Faixa da nota de rodapé" ;
         Text [ finnish ] = "Alaviitealue" ;
         Text [ danish ] = "Fodnoteområde" ;
-        Text [ french ] = "Plage notes de bas de page" ;
+        Text [ french ] = "Plage note de bas de page" ;
         Text [ swedish ] = "Fotnotsområde" ;
         Text [ dutch ] = "Voetnotenbereik" ;
         Text [ spanish ] = "Área de la nota al pie" ;
