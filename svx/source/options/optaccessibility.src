@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:57:34 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ finnish ] = "Allow animated ~text";
         Text[ italian ] = "Permetti animazione testo";
         Text[ danish ] = "Allow animated ~text";
-        Text[ swedish ] = "Till�t animerad te~xt";
+        Text[ swedish ] = "Till�t animerad t~ext";
         Text[ polish ] = "Allow animated ~text";
         Text[ portuguese_brazilian ] = "Allow animated ~text";
         Text[ japanese ] = "アニメーションテキストを許可する";
@@ -412,12 +412,12 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ finnish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ italian ] = "Use te~xt selection cursor in read-only text documents";
         Text[ danish ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ swedish ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ swedish ] = "Anv�nd mark�r f�r te~xtmarkering i skrivskyddade textdokument";
         Text[ polish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ portuguese_brazilian ] = "Use te~xt selection cursor in read-only text documents";
         Text[ japanese ] = "Use te~xt selection cursor in read-only text documents";
         Text[ korean ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ chinese_simplified ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ chinese_simplified ] = "受保护的文本文字内使用选中文字的鼠标";
         Text[ chinese_traditional ] = "在受保護的文字文件内使用選中文字的游標";
         Text[ turkish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ arabic ] = "Use te~xt selection cursor in read-only text documents";
