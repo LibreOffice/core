@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 15:03:38 $
+#   last change: $Author: hr $ $Date: 2003-04-23 17:26:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
+    $(SLO)$/countryid.obj	\
     $(SLO)$/escherex.obj	\
     $(SLO)$/eschesdo.obj    \
     $(SLO)$/msdffimp.obj	\
