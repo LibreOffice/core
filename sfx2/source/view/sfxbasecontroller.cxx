@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:50:36 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,13 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
         REFERENCE < ::com::sun::star::util::XCloseBroadcaster > xCloseable( xFrame, com::sun::star::uno::UNO_QUERY );
         if ( xCloseable.is() )
             xCloseable->addCloseListener( m_pData->m_xCloseListener );
+
+        if ( m_pData->m_pViewShell )
+        {
+            SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
+            pActFrame->Enable( TRUE );
+            pActFrame->GetDispatcher()->Lock( FALSE );
+        }
     }
 }
 
@@ -715,35 +722,47 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
         if ( !m_pData->m_pViewShell )
             return sal_True;
 
-        if ( m_pData->m_pViewShell->PrepareClose() )
+        if ( !m_pData->m_pViewShell->PrepareClose() )
+            return sal_False;
+
+        if ( getFrame().is() )
+            getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
+        SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
+
+        // weitere View auf dasselbe Doc?
+        SfxObjectShell* pDocShell   =   m_pData->m_pViewShell->GetObjectShell() ;
+        sal_Bool        bOther      =   sal_False                               ;
+
+        for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell ); !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell ) )
+            bOther = (pFrame != pActFrame);
+
+        BOOL bRet = bOther || pDocShell->PrepareClose();
+        if ( bRet )
         {
-            if ( getFrame().is() )
-                getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
-            SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
-
-            // weitere View auf dasselbe Doc?
-            SfxObjectShell* pDocShell   =   m_pData->m_pViewShell->GetObjectShell() ;
-            sal_Bool        bOther      =   sal_False                               ;
-
-            for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell ); !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell ) )
-            {
-                bOther = (pFrame != pActFrame);
-            }
-
-            // Doc braucht nur gefragt zu werden, wenn keine weitere ::com::sun::star::sdbcx::View
-            return ( bOther || pDocShell->PrepareClose() ) ;
+            // disable window and dispatcher until suspend call is withdrawn
+            pActFrame->Enable( FALSE );
+            pActFrame->GetDispatcher()->Lock( TRUE );
         }
-        else
-        {
-            return sal_False ;
-        }
+
+        return bRet;
     }
     else
     {
         if ( getFrame().is() )
             getFrame()->addFrameActionListener( m_pData->m_xListener ) ;
+
+        if ( m_pData->m_pViewShell )
+        {
+            SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
+            pActFrame->Enable( TRUE );
+            pActFrame->GetDispatcher()->Lock( FALSE );
+        }
+
         return sal_True ;
     }
+
+    // cant be reached in real - but we should disable compiler warning :-)
+    return sal_False;
 }
 
 //________________________________________________________________________________________________________
