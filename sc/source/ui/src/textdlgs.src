@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:13:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog RID_SCDLG_CHAR
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट्";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -150,6 +151,7 @@ TabDialog RID_SCDLG_CHAR
                 Text[ czech ] = "Efekty pro písmo";
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "फ़ॉन्ट् प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -180,6 +182,7 @@ TabDialog RID_SCDLG_CHAR
                 Text[ czech ] = "Pozice písma";
                 Text[ hebrew ] = "Schriftposition";
                 Text[ hindi ] = "फ़ॉन्ट् का स्थान";
+                Text[ slovak ] = "Pozícia písma";
             };
         };
     };
@@ -235,6 +238,7 @@ TabDialog RID_SCDLG_CHAR
         Text[ czech ] = "Zpět";
         Text[ hebrew ] = "‮קודם‬";
         Text[ hindi ] = "पीछे";
+        Text[ slovak ] = "Späť";
     };
     Text[ chinese_simplified ] = "字符";
     Text[ russian ] = "������";
@@ -251,6 +255,7 @@ TabDialog RID_SCDLG_CHAR
     Text[ czech ] = "Znak";
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
+    Text[ slovak ] = "Znak";
 };
 
 TabDialog RID_SCDLG_PARAGRAPH
@@ -313,6 +318,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ czech ] = "Odsazení a proklad znaků";
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie a medzery";
             };
             /*
             PageItem  {
@@ -364,6 +370,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -394,6 +401,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
+                Text[ slovak ] = "Ázijská typografia";
             };
             PageItem
             {
@@ -427,6 +435,7 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text[ czech ] = "Tabulátor";
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब";
+                Text[ slovak ] = "Tabulátor";
             };
         };
     };
@@ -482,6 +491,7 @@ TabDialog RID_SCDLG_PARAGRAPH
         Text[ czech ] = "Zpět";
         Text[ hebrew ] = "‮קודם‬";
         Text[ hindi ] = "पीछे";
+        Text[ slovak ] = "Späť";
     };
     Text[ chinese_simplified ] = "段落";
     Text[ russian ] = "�����";
@@ -498,7 +508,10 @@ TabDialog RID_SCDLG_PARAGRAPH
     Text[ czech ] = "Odstavec";
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
+    Text[ slovak ] = "Odstavec";
 };
+
+
 
 
 
