@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:44:42 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 17:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@
 #include <objsh.hxx>
 #include <dinfdlg.hxx>
 #include <sfxtypes.hxx>
+#include "alienwarn.hxx"
 
 #define DOCPROPSNUM 17
 
@@ -281,6 +282,7 @@ public:
     sal_Bool ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilterName );
 
     sal_Int8 CheckStateForSave();
+    sal_Int8 CheckFilter( const ::rtl::OUString& );
 
     sal_Bool CheckFilterOptionsDialogExistence();
 
@@ -618,12 +620,11 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     if ( GetMediaDescr().size() != aAcceptedArgs.size() )
         GetMediaDescr() = aAcceptedArgs;
 
-
     // the document must be modified
     if ( !GetModifiable()->isModified() && !bVersInfoNeedsStore )
         return STATUS_NO_ACTION;
 
-    // if the document is readonly or a new one the saveAs operation must be used
+    // if the document is readonly or a new one a SaveAs operation must be used
     if ( !GetStorable()->hasLocation() || GetStorable()->isReadonly() )
         return STATUS_SAVEAS;
 
@@ -631,58 +632,57 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
                                                     ::rtl::OUString::createFromAscii( "FilterName" ),
                                                     ::rtl::OUString() );
+    return CheckFilter( aOldFilterName );
+}
 
-    ::comphelper::SequenceAsHashMap aOldFiltPropsHM;
-    sal_Int32 nOldFiltFlags = 0;
-    if ( aOldFilterName.getLength() )
+sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
+{
+    ::comphelper::SequenceAsHashMap aFiltPropsHM;
+    sal_Int32 nFiltFlags = 0;
+    if ( aFilterName.getLength() )
     {
-        uno::Sequence< beans::PropertyValue > aOldFilterProps;
-        if ( aOldFilterName.getLength() )
-            m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
+        // get properties of filter
+        uno::Sequence< beans::PropertyValue > aFilterProps;
+        if ( aFilterName.getLength() )
+            m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
-        aOldFiltPropsHM = ::comphelper::SequenceAsHashMap( aOldFilterProps );
-        nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
-                                                                    (sal_Int32)0 );
+        aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
+        nFiltFlags = aFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ), (sal_Int32)0 );
     }
 
     // only a temporary solution until default filter retrieving feature is implemented
     // then GetDocServiceDefaultFilter() must be used
-    // ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceAnyFilter( 3, 0 );
     ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceDefaultFilterCheckFlags( 3, 0 );
-    sal_Int32 nDefFiltFlags = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
-                                                                        (sal_Int32)0 );
+    sal_Int32 nDefFiltFlags = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ), (sal_Int32)0 );
 
     // if the old filter is not acceptable
     // and there is no default filter or it is not acceptable for requested parameters then proceed with saveAs
-    if ( ( !aOldFiltPropsHM.size() || !( nOldFiltFlags & SFX_FILTER_EXPORT ) )
+    if ( ( !aFiltPropsHM.size() || !( nFiltFlags & SFX_FILTER_EXPORT ) )
       && ( !aDefFiltPropsHM.size() || !( nDefFiltFlags & SFX_FILTER_EXPORT ) || nDefFiltFlags & SFX_FILTER_INTERNAL ) )
         return STATUS_SAVEAS;
 
     // so at this point there is either an acceptable old filter or default one
-    if ( !aOldFiltPropsHM.size() || !( nOldFiltFlags & SFX_FILTER_EXPORT ) )
+    if ( !aFiltPropsHM.size() || !( nFiltFlags & SFX_FILTER_EXPORT ) )
     {
         // so the default filter must be acceptable
         return STATUS_SAVEAS_STANDARDNAME;
     }
-    else if ( ( !( nOldFiltFlags & SFX_FILTER_OWN ) || ( nOldFiltFlags & SFX_FILTER_ALIEN ) )
-           && !( nOldFiltFlags & SFX_FILTER_SILENTEXPORT ) && aDefFiltPropsHM.size()
+    else if ( ( !( nFiltFlags & SFX_FILTER_OWN ) || ( nFiltFlags & SFX_FILTER_ALIEN ) )
+           && !( nFiltFlags & SFX_FILTER_SILENTEXPORT ) && aDefFiltPropsHM.size()
            && ( nDefFiltFlags & SFX_FILTER_EXPORT ) && !( nDefFiltFlags & SFX_FILTER_INTERNAL ))
     {
         // the default filter is acceptable and the old filter is alian one
         // so ask to make a saveAs operation
-        ::rtl::OUString aOldUIName = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "UIName" ),
+        ::rtl::OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "UIName" ),
                                                                                 ::rtl::OUString() );
         ::rtl::OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "UIName" ),
-                                                                                ::rtl::OUString() );
-        ::rtl::OUString aDefName = aDefFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Name" ),
                                                                                 ::rtl::OUString() );
         ::rtl::OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(
                                                     ::rtl::OUString::createFromAscii( "PreusedFilterName" ),
                                                     ::rtl::OUString() );
-
-        if ( !aPreusedFilterName.equals( aOldFilterName ) && !aOldFilterName.equals(aDefName) )
+        if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
         {
-            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aOldUIName, aDefUIName, sal_True ) )
+            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, sal_True ) )
                 return STATUS_SAVEAS_STANDARDNAME;
         }
     }
@@ -1234,14 +1234,31 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                                     ::rtl::OUString() );
 
     sal_Bool bUseFilterOptions = sal_False;
-
     ::comphelper::SequenceAsHashMap::const_iterator aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "URL" ) );
-
     if ( aFileNameIter == aModelData.GetMediaDescr().end() )
     {
-        bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName );
-        bDialogUsed = sal_True;
+        sal_Bool bExit = sal_False;
+        while ( !bExit )
+        {
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName );
 
+            ::rtl::OUString aFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
+                                                                            ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                                            ::rtl::OUString() );
+            sal_Int8 nStatusSave = aModelData.CheckFilter( aFilterName );
+            if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
+            {
+                // switch to best filter
+                bSetStandardName = sal_True;
+            }
+            else if ( nStatusSave == STATUS_SAVE )
+            {
+                // user confirmed alien filter or "good" filter is used
+                bExit = sal_True;
+            }
+        }
+
+        bDialogUsed = sal_True;
         aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "URL" ) );
     }
     else
@@ -1813,25 +1830,10 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
                                                     ::rtl::OUString aDefUIName,
                                                     sal_Bool bCanProceedFurther )
 {
+    if ( !SvtSaveOptions().IsWarnAlienFormat() )
+        return sal_True;
+
     Window* pWin = 0;
-
-    ::rtl::OUString aCurrentName;
-
-    try {
-        uno::Reference< frame::XStorable > xStorable( xModel, uno::UNO_QUERY_THROW );
-        aCurrentName = INetURLObject( xStorable->getLocation() ).getName(
-                                        INetURLObject::LAST_SEGMENT,
-                                        sal_True,
-                                        INetURLObject::DECODE_WITH_CHARSET);
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
-    // not possible to proceed with store when there is no location
-    if ( !aCurrentName.getLength() )
-        return sal_False;
-
     try {
         uno::Reference< frame::XController > xController = xModel->getCurrentController();
         if ( xController.is() )
@@ -1853,7 +1855,9 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
     {
     }
 
-    String aWarn;
+    SfxAlienWarningDialog aDlg( pWin, aOldUIName );
+
+    /*String aWarn;
     if ( bCanProceedFurther )
         aWarn = String(SfxResId(STR_QUERY_SAVEOWNFORMAT));
     else
@@ -1865,7 +1869,8 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ), aDefUIName );
 
     QueryBox aWarnBox( pWin, WB_YES_NO|WB_DEF_OK, aWarn );
-    return ( aWarnBox.Execute() == RET_YES );
+    return ( aWarnBox.Execute() == RET_YES );*/
+    return aDlg.Execute() == RET_OK;
 }
 
 // static
