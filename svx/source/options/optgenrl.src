@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:31:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ ENGLISH ] = "~First/Last/Id" ;
         Text [ norwegian ] = "~For/Etter/Id" ;
         Text [ italian ] = "~Nome/Cognome/Iniziali" ;
-        Text [ portuguese_brazilian ] = "~Primeiro/Último" ;
+        Text [ portuguese_brazilian ] = "~Primeiro/?ltimo" ;
         Text [ portuguese ] = "~Nome/Apelido/Iniciais" ;
         Text [ finnish ] = "~Etu-/Sukunimi/Nimikirjaimet" ;
         Text [ danish ] = "For-/Efternavn/Initialer" ;
@@ -284,7 +284,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ italian ] = "C.A.P./Località";
         Text[ danish ] = "Postnr./By";
         Text[ swedish ] = "Postnr/~Ort";
-        Text[ polish ] = "Kod pocztowy/Miejscowoœæ";
+        Text[ polish ] = "Kod pocztowy/Miejscowo?æ";
         Text[ portuguese_brazilian ] = "~Zip/City";
         Text[ japanese ] = "—X•Ö”Ô†/“s“¹•{Œ§–¼";
         Text[ chinese_simplified ] = "ÓÊ±à/³ÇÊĞ";
@@ -344,7 +344,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ danish ] = "Land";
         Text[ swedish ] = "~Land";
         Text[ polish ] = "Pañstwo";
-        Text[ portuguese_brazilian ] = "País/~CEP/Cidade";
+        Text[ portuguese_brazilian ] = "Pa?s/~CEP/Cidade";
         Text[ japanese ] = "‘–¼";
         Text[ chinese_simplified ] = "¹ú¼Ò(~L)";
         Text[ chinese_traditional ] = "°ê®a(~L)";
@@ -495,7 +495,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ ENGLISH ] = " Address " ;
         Text [ norwegian ] = " Adresse " ;
         Text [ italian ] = "Indirizzo " ;
-        Text [ portuguese_brazilian ] = "Endereço " ;
+        Text [ portuguese_brazilian ] = "Endere?o " ;
         Text [ portuguese ] = "Endereço" ;
         Text [ finnish ] = " Osoite" ;
         Text [ danish ] = " Adresse " ;
@@ -530,11 +530,11 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ spanish ] = "Usar ~datos para las propiedades del documento" ;
         Text [ swedish ] = "Använd ~data för dokumentegenskaperna" ;
         Text [ portuguese ] = "Usar ~dados para as propriedades do documento" ;
-        Text[ portuguese_brazilian ] = "~Daten für Dokumenteigenschaften verwenden";
+        Text[ portuguese_brazilian ] = "~Daten f? Dokumenteigenschaften verwenden";
         Text[ danish ] = "Brug data for dokumentegenskaber";
         Text[ chinese_simplified ] = "Ê¹ÓÃÎÄµµÊôĞÔµÄÊı¾İ";
         Text[ russian ] = "Èñïîëüçîâàòü äàííûå äëÿ ñâîéñòâ äîêóìåíòà";
-        Text[ polish ] = "U¿yj danych dla w³aœciwoœci dokumentów";
+        Text[ polish ] = "U¿yj danych dla w³a?ciwo?ci dokumentów";
         Text[ japanese ] = "ÄŞ·­ÒİÄ‘®«‚ÌÃŞ°À‚ğg—p";
         Text[ chinese_traditional ] = "¨Ï¥Î¤å¥óÄİ©Êªº¸ê®Æ";
         Text[ arabic ] = "ÇÓÊÎÏÇã ÈíÇäÇÊ ÎÕÇÆÕ ÇáãÓÊäÏ";
@@ -579,21 +579,21 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ English ] = "Bitte beachten Sie, daß Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?" ;
         Text[ english_us ] = "Note that street, Zip code and city are used for generating the registration key. Until the registration has been carried out successfully, user data cannot be changed. Do you want to modify personal data now?";
         Text[ portuguese ] = "Não esqueça que a rua, o código postal e a localidade serão utilizados para calcular o seu código de registo. Não poderá modificar estes dados de utilizador até efectuar o seu registo. Ainda deseja modificar estes dados?";
-        Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî äàííûå ïî÷òîâîãî àäğåñà áóäóò èñïîëüçîâàíû äëÿ ñîçäàíèÿ ğåãèñòğàöèîííîãî êëş÷à. Èçìåíÿòü ıòè äàííûå äî îñóùåñòâëåíèÿ ğåãèñòğàöèè íåëüçÿ. Âû õîòèòå ñåé÷àñ èçìåíèòü äàííûå ïîëüçîâàòåëÿ?";
+        Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî äàííûå ïî÷òîâîãî àäğåñà áóäóò èñïîëüçîâàíû äëÿ ñîçäàíèÿ ğåãèñòğàöèîííîãî êëş÷à. Èçìåíÿòü ıòè äàííûå äî îñóùåñòâëå";
         Text[ dutch ] = "Wij wijzen u erop dat straat, postcode en plaats worden gebruikt voor het berekenen van de registratiesleutel. Tot aan de registratie mag u deze gegevens niet meer veranderen. Wilt u ze nu nog veranderen?";
         Text[ french ] = "Veuillez noter que le code d'enregistrement est généré à partir de vos données d'identité telles que rue, code postal et ville. Vous ne pourrez plus modifier ces données jusqu'à ce que vous vous fassiez enregistrer. Avez-vous une dernière modification à apporter avant de poursuivre ?";
         Text[ spanish ] = "Tenga en cuenta que la calle, el código postal y la ciudad se tendrán en cuenta para determinar la clave de registro. Estos datos no podrán ser modificados hasta que se registre. ¿Desea modificar aún estos datos de usuario?";
         Text[ italian ] = "Vi preghiamo di osservare che il codice di registrazione si basa sull'indirizzo (via, C.A.P. e città) specificato. Fino alla registrazione questi dati non potranno essere cambiati. Volete cambiarli adesso?";
         Text[ danish ] = "Bemærk venligst, at gade, postnummer og by bruges til at beregne registreringsnøglen. Disse brugerdata kan ikke mere ændres indtil registreringen. Vil du endnu ændre dem nu?";
         Text[ swedish ] = "Observera att gatu- och postadress används för beräkningen av registreringsnyckeln. Fram till registreringen kan Du inte ändra mer på de här användardata. Vill Du ändra de här användardata nu?";
-        Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e podanie nazwy ulicy, kodu pocztowego i miejscowoœci wymagane jest do utworzenia klucza rejestracyjnego. Do czasu rejestracji te danych nie mo¿na zmieniæ. Czy chcesz je teraz zmieniæ?";
-        Text[ portuguese_brazilian ] = "Bitte beachten Sie, daß Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?";
+        Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e podanie nazwy ulicy, kodu pocztowego i miejscowo?ci wymagane jest do utworzenia klucza rejestracyjnego. Do czasu rejestracji te danych nie mo¿na zmieniæ. Czy chcesz je teraz zmieniæ?";
+        Text[ portuguese_brazilian ] = "Bitte beachten Sie, da? Stra?e, Postleitzahl und Ort f? die Berechnung des Registrierungsschl?sels herangezogen werden. Bis zur Registrierung k?nen diese Benutzerdaten nicht mehr ge?ndert werden.  Wollen Sie diese Benutzerdaten jetzt noch ?ndern?";
         Text[ japanese ] = "s’¬‘º–¼‚â—X•Ö”Ô†‚âB–¼A“s“¹•{Œ§–¼‚Í“o˜^·°‚ğ”­s‚·‚éè‚ª‚©‚è‚Æ‚È‚è‚Ü‚·B“o˜^‚ªÏ‚Ş‚Ü‚Å‚ÍÕ°»Ş°ÃŞ°À‚Í•ÏX‚Å‚«‚Ü‚¹‚ñB‚±‚ÌÕ°»Ş°ÃŞ°À‚ğ‚Ü‚¾•ÏX‚µ‚Ü‚·‚©H";
         Text[ chinese_simplified ] = "Çë×¢Òâ£º½ÖµÀ£¬ÓÊ±àºÍ³ÇÊĞÊÇÓÃÀ´Éú³É×¢²áÃÜÂëµÄÊı¾İ¡£ÔÚÕıÊ½×¢²áÇ°Äú²»ÄÜÔÙ¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏ¡£ÄúÏÖÔÚÒª¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏÂğ£¿";
         Text[ chinese_traditional ] = "½Ğµù·N±z¿é¤Jªºµó¹D©M«°¥«µ¥¸ê®Æ¬O¥Î¨Ó²£¥Íµù¥UÁä½X¡C¥¿¦¡µù¥U®É±z¤£¯à­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡C±z²{¦b­n­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡H";
-        Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇáÈíÇäÇÊ ÇáÎÇÕÉ ÈÇáÔÇÑÚ æÇáÑãÒ ÇáÈÑíÏí æÇáãÏíäÉ ÊÏÎá Öãä ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãİÊÇÍ ÇáÊÓÌíá. áÇ íãßäß ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã ÍÊì ÅäåÇÁ ÚãáíÉ ÇáÊÓÌíá. åá ÊÑíÏ ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã åĞå ÇáÂä¿";
-        Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé ç ïäüò, ï Ô.Ê. êáé ç ğüëç ÷ñçóéìïğïéïıíôáé ãéá ôïí äçìéïõñãßá ôïõ êëåéäéïı äŞëùóçò. ¸ùò ôçí äŞëùóç äåí èá ìğïñİóåôå íá áëëÜîåôå áõôÜ ôá äåäïìİíá. Èİëåôå íá áëëÜîåôå êÜğïéï áğü áõôÜ ôá äåäïìİíá ôïõ ÷ñŞóôç;";
-        Text[ korean ] = "ÁÖ¼Ò³ª ¿ìÆí¹øÈ£ µîÀº µî·Ï Å° ±¸¼º¿¡ ÀÌ¿ëµÈ´Ù´Â »ç½ÇÀ» ¸í½ÉÇÏ½Ê½Ã¿À. µî·ÏÀÌ ¿Ï·áµÉ ¶§±îÁö´Â ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ ´õ ÀÌ»ó ¹Ù²Ü ¼ö ¾ø½À´Ï´Ù. Áö±İÀÌ¶óµµ ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇáÈíÇäÇÊ ÇáÎÇÕÉ ÈÇáÔÇÑÚ æÇáÑãÒ ÇáÈÑíÏí æÇáãÏíäÉ ÊÏÎá Öãä ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãİÊÇÍ ÇáÊÓÌíá. áÇ íãßäß ÊÛííÑ ÈíÇäÇÊ Çáã";
+        Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé ç ïäüò, ï Ô.Ê. êáé ç ğüëç ÷ñçóéìïğïéïıíôáé ãéá ôïí äçìéïõñãßá ôïõ êëåéäéïı äŞëùóçò. ¸ùò ôçí äŞëùóç äåí èá ìğïñİóåôå íá ?";
+        Text[ korean ] = "ÁÖ¼Ò³ª ¿ìÆí¹øÈ£ µîÀº µî·Ï Å° ±¸¼º¿¡ ÀÌ¿ëµÈ´Ù´Â »ç½ÇÀ» ¸í½ÉÇÏ½Ê½Ã¿À. µî·ÏÀÌ ¿Ï·áµÉ ¶§±îÁö´Â ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ ´õ ÀÌ»ó ¹Ù²Ü ¼ö ¾ø½À´Ï´Ù. Áö±İÀÌ¶óµµ ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ½Ã°Ú½À?";
         Text[ turkish ] = "Cadde, posta kodu ve şehir bilgilerinin kayıt kodunun oluşturulması için kullanıldığını dikkate alın. Kayıt yapılana kadar bu kullanıcı verileri değiştirilemez. Kullanıcı verilerini şimdi değiştirmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tenga en cuenta que la calle, el código postal y la ciudad se tendrán en cuenta para determinar la clave de registro. Estos datos no podrán ser modificados hasta que se registre. ¿Desea modificar aún estos datos de usuario?";
@@ -624,20 +624,20 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message [ spanish ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirará el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los próximos 30 días.\nEl formulario de registro lo encuentra en el menú Ayuda - Registro...\n¿Desea realmente modificar los datos de usuario?" ;
     Message [ swedish ] = "Du har ändrat Dina användardata.\nTänk på att Din nuvarande registrering därmed löper ut.\nDu behöver en ny registreringsnyckel som måste matas in inom de närmaste 30 dagarna.\nRegistreringsformuläret hittar Du under menyn Hjälp - Registrering...\nVill Du verkligen ändra Dina användardata?" ;
     Message [ portuguese ] = "Modificou os dados de utilizador.\nNão se esqueça de que o seu registo expirará.\nPor esta razão necessitará de um novo código de registo dentro do prazo de 30 dias.\nEncontrará o formulário de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
-    Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten geändert.\nBitte bedenken Sie, daß dadurch die Registrierung verfällt.\nSie benötigen einen neuen Registrierungsschlüssel, der innerhalb der nächsten 30 Tage eingegeben werden muß.\nDas Registrierungsformular finden Sie im Menü Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ändern?";
+    Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten ge?ndert.\nBitte bedenken Sie, da? dadurch die Registrierung verf?llt.\nSie ben?igen einen neuen Registrierungsschl?sel, der innerhalb der n?chsten 30 Tage eingegeben werden mu?.\nDas Registrierungsformular finden Sie im Men?Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ?ndern?";
     Message[ danish ] = "Du har ændret brugerdataene.\nBemærk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnøgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjælp - Registrering...\nEr du sikker på, at du vil ændre brugerdataene?";
     Message[ chinese_simplified ] = "ÄúÒÑ¾­¸ü¸ÄÁËÓÃ»§×ÊÁÏ¡£\nÕâÑùÄúµÄ×¢²á¾Í»áÎŞĞ§¡£\nÄú±ØĞëÔÚ½ñºó30ÌìÖ®ÄÚÊäÈëÒ»¸öĞÂµÄ×¢²áÃÜÂë¡£\nÄúÄÜ¹»ÔÚ²Ëµ¥¡°°ïÖú - ×¢²á...¡±´¦ÕÒµ½×¢²á±íµ¥¡£\nÄúÕæÒª¸ü¸ÄÓÃ»§×ÊÁÏ£¿";
     Message[ russian ] = "Âû èçìåíèëè äàííûå ïîëüçîâàòåëÿ.\nÏîæàëóéñòà, ïîìíèòå, ÷òî èç-çà ıòîãî Âû óòğàòèòå ğåãèñòğàöèş.\nÂàì ïîíîäîáèòñÿ íîâûé ğåãèñòğàöèîííûé êëş÷, êîòîğûé íåîáõîäèìî áóäåò ââåñòè â òå÷åíèå 30 äíåé.\nĞåãèñòğàöèîííûé ôîğìóëÿğ Âû íàéäåòå â ìåíş Ñïğàâêà - Ğåãèñòğàöèÿ...\nÂû äåéñòâèòåëüíî õîòèòå èçìåíèòü äàííûå ïîëüçîâàòåëÿ?";
-    Message[ polish ] = "Zmieniono dane u¿ytkownika.\nNale¿y uwzglêdniæ, ¿e przez to traci wa¿noœæ rejestracja.\nWymagany bêdzie nowy klucz rejestracyjny, który nale¿y wprowadziæ w ci¹gu nastêpnych 30 dni.\nFormularz rejestracyjny znajduje siê w menu Pomoc - Rejestracja...\nCzy na pewno zmieniæ dane u¿ytkownika?";
+    Message[ polish ] = "Zmieniono dane u¿ytkownika.\nNale¿y uwzglêdniæ, ¿e przez to traci wa¿no?æ rejestracja.\nWymagany bêdzie nowy klucz rejestracyjny, który nale¿y wprowadziæ w ci¹gu nastêpnych 30 dni.\nFormularz rejestracyjny znajduje siê w menu Pomoc - Rejestracja...\nCzy na pewno zmieniæ dane u¿ytkownika?";
     Message[ japanese ] = "Õ°»Ş°ÃŞ°À‚ª•ÏX‚³‚ê‚Ü‚µ‚½B\n‚»‚Ì‚½‚ß“o˜^‚ª¸Œø‚·‚é‚Ì‚Í–Æ‚ê‚Ü‚¹‚ñB\nV‚µ‚¢“o˜^·°‚ª•K—v‚Æ‚È‚è¤‚»‚ê‚ğ30“úˆÈ“à‚ÉÏ‚Ü‚³‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\n“o˜^—p†‚Í[ÒÆ­°ÍÙÌß/“o˜^...]‚É‚ ‚è‚Ü‚·B\nÕ°»Ş°ÃŞ°À‚ğ–{“–‚É•ÏX‚µ‚Ü‚·‚©?";
     Message[ chinese_traditional ] = "±z¤w¸gÅÜ§ó¨Ï¥ÎªÌ¸ê®Æ¡C\n³o¼Ë±zªºµù¥U´N·|µL®Ä¡C\n±z»İ­n¤@­Ó·sªº¡M¥B¥²¶·¦b30¤Ñ¤§¤º¿é¤Jªºµù¥U±KÁä½X¡C\n±z¯à°÷¦b¥\\¯àªí»¡©ú¡Aµù¥U¤§¤U§ä¨ìµù¥Uªí®æ¡C\n¯u­n­×§ï¨Ï¥ÎªÌ¸ê®Æ¡H";
     Message[ arabic ] = "áŞÏ ŞãÊ ÈÊÚÏíá ÈíÇäÇÊ ÇáãÓÊÎÏã.\nÇáÑÌÇÁ ãáÇÍÙÉ Ãä åĞÇ ÇáÊÚÏíá Óæİ íÌÚá ÇáÊÓÌíá ÛíÑ ÕÇáÍ.\nÓæİ ÊÍÊÇÌ Åáì ãİÊÇÍ ÊÓÌíá ÌÏíÏ¡ íÌÈ ÅÏÎÇáå ÎáÇá ÇáËáÇËíä íæãÇğ ÇáŞÇÏãíä.\níãßäß ÇáÍÕæá Úáì ÇÓÊãÇÑÉ ÇáÊÓÌíá İí ŞÇÆãÉ \"ãÓÇÚÏÉ\" ÊÍÊ \"ÊÓÌíá\"...\nåá ÊÑíÏ ÈÇáÊÃßíÏ ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã¿";
     Message[ greek ] = "ÁëëÜîáôå ôá äåäïìİíá ôïõ ÷ñŞóôç.\nĞñïóİîôå üôé ìå áõôŞ ôçí åíİñãåéá ğáıåé íá éó÷ıåé ç äŞëùóç.\nÓå áõôŞ ôç ğåñßğôùóç èá ÷ñåéáóôåßôå İíá íİï êëåéäß äŞëùóçò, ôï ïğïßï èá ğñİğåé íá åéóá÷èåß ìİóá óôï ÷ñïíéêü äéÜóôçìá ôùí åğïìİíùí 30 çìåñşí.\nÔç öüñìá äŞëùóçò èá ôç âñåßôå óôï ìåíïı ÂïŞèåéá - ÄŞëùóç...\nÈİëåôå ğñáãìáôéêÜ íá áëëÜîåôå ôá äåäïìİíá ôïõ ÷ñŞóôç;";
-    Message[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ¼Ì½À´Ï´Ù.\n±×·Î ÀÎÇØ µî·ÏÀÌ ¹«È¿È­µÈ´Ù´Â Á¡¿¡ À¯ÀÇÇÏ½Ê½Ã¿À. \n±×·¯¸é ¾ÕÀ¸·Î 30ÀÏ³»¿¡ ÀÔ·ÂÇØ¾ß ÇÒ »õ µî·Ï Å°°¡ ÇÊ¿äÇÕ´Ï´Ù.\nµî·Ï ¾ç½ÄÀº µµ¿ò¸»-µî·Ï... ¸Ş´º¿¡¼­ Ã£À» ¼ö ÀÖ½À´Ï´Ù.\n»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦¡¡Á¤¸» º¯°æÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ¼Ì½À´Ï´Ù.\n±×·Î ÀÎÇØ µî·ÏÀÌ ¹«È¿È­µÈ´Ù´Â Á¡¿¡ À¯ÀÇÇÏ½Ê½Ã¿À. \n±×·¯¸é ¾ÕÀ¸·Î 30ÀÏ³»¿¡ ÀÔ·ÂÇØ¾ß ÇÒ »õ µî·Ï Å°°¡ ÇÊ¿äÇÕ´Ï´Ù.\nµî·Ï ¾ç½ÄÀº µµ¿ò¸»-µî·Ï... ¸Ş´º¿¡¼­ ?";
     Message[ turkish ] = "Kullanıcı verilerini değiştirdiniz.\nBu nedenle kayıt işlemi de iptal edilecektir.\nEn geç 30 gün içerisinde yeni bir kayıt koduı girmeniz gerekiyor.\nİlgili kayıt formunu mönüde, \"Yardım - Kayıt...\" altında bulabilirsiniz.\nKullanıcı verilerini gerçekten değiştirmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirará el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los próximos 30 días.\nEl formulario de registro lo encuentra en el menú Ayuda - Registro...\n¿Desea realmente modificar los datos de usuario?";
-    Message[ finnish ] = "Käyttäjätietoja on muutettu.\nJos jatkat, rekisteröintiavain ei ole enää kelvollinen.\nUusi rekisteröintiavain on hankittava 30 päivän kuluessa.\nRekisteröintilomake löytyy valikosta Ohje - Rekisteröinti.\nHaluatko todella muuttaa käyttäjätietoja?";
+    Message[ finnish ] = "Käyttäjätietoja on muutettu.\nJos jatkat, rekisteröintiavain ei ole enää kelvollinen.\nUusi rekisteröintiavain on hankittava 30 päivän kuluessa.\nRekisteröintilomake löytyy valikosta Ohje - Rekisteröinti.\nHaluatko todella muuttaa käyttäjät";
 };
 
  // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
@@ -699,7 +699,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Meter" ; FUNIT_M ; > ;
         < "Kilometer" ; FUNIT_KM ; > ;
         < "Zoll" ; FUNIT_INCH ; > ;
-        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "Fu?" ; FUNIT_FOOT ; > ;
         < "Meilen" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Ponto" ; FUNIT_POINT ; > ;
