@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:19:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ japanese ] = "ζ€ι©(~O)";
         Text[ chinese_traditional ] = "ζ€ει©(~O)";
         Text[ arabic ] = "ΗαΓγΛα";
-        Text[ greek ] = "Βέλτιστα";
+        Text[ greek ] = "Βέλτιστη";
         Text[ korean ] = "μµμ μΌλ΅(~O)";
         Text[ turkish ] = "Optimum";
         Text[ language_user1 ] = " ";
@@ -227,7 +227,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ japanese ] = "δ»»ζ„(~V)";
         Text[ chinese_traditional ] = "η„΅η΄ηΈ®ζ”Ύ(~V)";
         Text[ arabic ] = "γΚΫνΡ";
-        Text[ greek ] = "Χωρίς βαθμίδε~ς";
+        Text[ greek ] = "Προ~σαρμογή";
         Text[ korean ] = "μ„μ(~V)";
         Text[ turkish ] = "Deπiώken";
         Text[ language_user1 ] = " ";
@@ -260,7 +260,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ english_us ] = "Zoom factor";
         Text[ portuguese ] = "Factor de zoom";
         Text[ russian ] = "Κξύττθφθενς μΰρψςΰαΰ";
-        Text[ greek ] = "Zoom";
+        Text[ greek ] = "Συντελεστής εστίασης";
         Text[ dutch ] = "Zoomfactor";
         Text[ french ] = "Facteur";
         Text[ spanish ] = "Escala";
@@ -299,7 +299,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Pos = MAP_APPFONT ( 104 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ greek ] = "Κλίμακα";
+    Text[ greek ] = "Εστίαση";
     Text[ korean ] = "μ¶•μ†/ν™•λ€";
     Text[ turkish ] = "Yakύnlaώtύr";
     Text[ language_user1 ] = " ";
@@ -327,6 +327,7 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ slovak ] = "Lupa";
 };
  // ********************************************************************** EOF
+
 
 
 
