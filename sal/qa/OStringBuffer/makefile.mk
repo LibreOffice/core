@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:46:21 $
+#   last change: $Author: rt $ $Date: 2004-05-03 08:55:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,7 @@ SHL1OBJS= \
     $(SLO)$/rtl_OStringBuffer.obj \
     $(SLO)$/rtl_String_Utils.obj
 
-SHL1TARGET= OStringBuffer
+SHL1TARGET= rtl_OStringBuffer
 SHL1STDLIBS=\
    $(SALLIB) \
    $(CPPUNITLIB)
