@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 17:01:11 $
+#   last change: $Author: kz $ $Date: 2004-08-02 13:16:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,12 +81,11 @@ SLOFILES=			\
                     $(SLO)$/menubarmanager.obj              \
                     $(SLO)$/fontmenucontroller.obj          \
                     $(SLO)$/fontsizemenucontroller.obj      \
-                    $(SLO)$/formatmenucontroller.obj        \
                     $(SLO)$/objectmenucontroller.obj        \
                     $(SLO)$/headermenucontroller.obj        \
                     $(SLO)$/footermenucontroller.obj        \
                     $(SLO)$/controlmenucontroller.obj       \
-                    $(SLO)$/macrosmenucontroller.obj   \
+                    $(SLO)$/macrosmenucontroller.obj   		\
                     $(SLO)$/uicommanddescription.obj        \
                     $(SLO)$/itemcontainer.obj               \
                     $(SLO)$/constitemcontainer.obj          \
@@ -97,7 +96,8 @@ SLOFILES=			\
                     $(SLO)$/addonstoolbarwrapper.obj        \
                     $(SLO)$/addonstoolbarmanager.obj        \
                     $(SLO)$/generictoolbarcontroller.obj    \
-                    $(SLO)$/toolbarsmenucontroller.obj
+                    $(SLO)$/toolbarsmenucontroller.obj		\
+                    $(SLO)$/recentfilesmenucontroller.obj
 
 # --- Targets ------------------------------------------------------
 
