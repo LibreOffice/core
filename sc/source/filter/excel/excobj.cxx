@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-15 09:02:52 $
+ *  last change: $Author: gt $ $Date: 2001-03-30 13:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,10 +1003,12 @@ void ExcEscherOle::ReadPictFmla( XclImpStream& rIn, UINT16 nLen )
                 rIn >> n16;     // string length
                 if ( n16 )
                 {   // the 4th way Xcl stores a unicode string: not even a Grbit byte present if length 0
-                    INT32 nLeft = INT32(nFmlaLen) - (rIn.GetRecPos() - nPos0);
                     rIn.AppendUniString( aUserName, *pExcRoot->pCharset, n16 );
                     // 0:= ID follows, 1:= pad byte + ID
+#ifndef PRODUCT
+                    INT32 nLeft = INT32(nFmlaLen) - (rIn.GetRecPos() - nPos0);
                     DBG_ASSERT( nLeft == 0 || nLeft == 1, "ExcEscherOle::ReadPictFmla: unknown left over" );
+#endif
 
                     if( aUserName.EqualsAscii( "Forms.", 0, 6 ) )
                         eType = OT_CTRL;
