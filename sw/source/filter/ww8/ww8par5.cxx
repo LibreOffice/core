@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 15:57:48 $
+ *  last change: $Author: cmc $ $Date: 2001-08-03 16:00:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2290,7 +2290,11 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
                             {
                                 sRuby = sPart.Copy(nBegin+1,nEnd-nBegin-1);
                             }
-                            nBegin = sPart.Search(',',nEnd);
+                            if (STRING_NOTFOUND ==
+                                (nBegin = sPart.Search(',',nEnd)))
+                            {
+                                nBegin = sPart.Search(';',nEnd);
+                            }
                             nEnd = sPart.SearchBackward(')');
                             if ((nBegin != STRING_NOTFOUND) &&
                                 (nEnd != STRING_NOTFOUND))
@@ -3161,12 +3165,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.23 2001-07-31 15:57:48 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.24 2001-08-03 16:00:48 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.23  2001/07/31 15:57:48  jp
+      Bug #90441#: change GetUIName to FillUIName or use GetUIName in the correct way
+
       Revision 1.22  2001/07/20 10:32:14  mtg
       #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
 
