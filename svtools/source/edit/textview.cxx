@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 17:25:12 $
+ *  last change: $Author: hr $ $Date: 2001-10-01 12:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,8 +683,10 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                 if ( !rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
-                    if ( aCurSel.HasRange() )
-                        Copy( GetWindow()->GetSelection() );
+                    if ( aCurSel.HasRange() ) {
+                        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+                        Copy( aSelection );
+                    }
                     bMoved = TRUE;
                     if ( nCode == KEY_END )
                         bEndKey = TRUE;
@@ -813,11 +815,13 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
     {
-        Paste( GetWindow()->GetSelection() );
+        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+        Paste( aSelection );
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
-        Copy( GetWindow()->GetSelection() );
+        uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+        Copy( aSelection );
     }
 }
 
@@ -1106,7 +1110,8 @@ void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxCl
 
 void TextView::Copy()
 {
-    Copy( GetWindow()->GetClipboard() );
+    uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+    Copy( aSelection );
 }
 
 void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
@@ -1138,7 +1143,8 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
 
 void TextView::Paste()
 {
-    Paste( GetWindow()->GetClipboard() );
+    uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetSelection());
+    Paste( aSelection );
 }
 
 String TextView::GetSelected()
