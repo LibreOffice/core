@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-18 17:54:26 $
+ *  last change: $Author: hdu $ $Date: 2002-09-19 11:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1918,8 +1918,6 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     DBG_ASSERT( !(aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "cannot subset device font" );
     DBG_ASSERT( aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "can only subset TT font" );
-    //else if( aWinMetric.tmPitchAndFamily & TMPF_VECTOR )
-    //   rInfo.m_nFontType = SAL_FONTSUBSETINFO_TYPE_TYPE1;
 #endif
 
     // get raw font file data
@@ -1932,12 +1930,9 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         return FALSE;
 
     // open font file
-    int nFaceNum = 0;
+    sal_uInt32 nFaceNum = 0;
     if( !*xRawFontData.get() )  // TTC candidate
-    {
-        // #103415# avoid crash, TODO: fix TTC font embedding
-        return FALSE;
-    }
+        nFaceNum = ~0;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
     int nRC = aSftTTF.open( xRawFontData.get(), nFontSize, nFaceNum );
