@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImplementationLoader.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 /** handles activation (loading) of a UNO component.
     @see        com::sun::star::registry::XImplementationRegistration
  */
-interface XImplementationLoader: com::sun::star::uno::XInterface
+published interface XImplementationLoader: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
