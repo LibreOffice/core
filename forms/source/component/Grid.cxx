@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 17:12:27 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 17:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,8 +1015,8 @@ void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
     if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxObject, UNO_QUERY).get())
     {   // the currently selected element was replaced
         m_xSelection.clear();
-        starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
-        NOTIFY_LISTENERS(m_aSelectListeners, starview::XSelectionChangeListener, selectionChanged, aEvt);
+        EventObject aEvt(static_cast<XWeak*>(this));
+        NOTIFY_LISTENERS(m_aSelectListeners, XSelectionChangeListener, selectionChanged, aEvt);
     }
 }
 
@@ -1034,8 +1034,8 @@ void OGridControlModel::implReplaced(const InterfaceRef& _rxReplacedObject, cons
     if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxReplacedObject, UNO_QUERY).get())
     {   // the currently selected element was replaced
         m_xSelection.clear();
-        starlang::EventObject aEvt(static_cast<staruno::XWeak*>(this));
-        NOTIFY_LISTENERS(m_aSelectListeners, starview::XSelectionChangeListener, selectionChanged, aEvt);
+        EventObject aEvt(static_cast<XWeak*>(this));
+        NOTIFY_LISTENERS(m_aSelectListeners, XSelectionChangeListener, selectionChanged, aEvt);
     }
 }
 
