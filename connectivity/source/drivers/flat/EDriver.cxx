@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDriver.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 13:15:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
@@ -122,5 +126,64 @@ sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
 {
     return url.compareTo(::rtl::OUString::createFromAscii("sdbc:flat:"),10) == 0;
 }
+// -----------------------------------------------------------------------------
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+{
+    if ( acceptsURL(url) )
+    {
+        ::std::vector< DriverPropertyInfo > aDriverInfo;
+
+        Sequence< ::rtl::OUString > aBoolean(2);
+        aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+        aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FixedLength"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FixedLength of the database."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldDelimiter"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Field separator."))
+                ,sal_False
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderLine"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text contains headers."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,aBoolean)
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringDelimiter"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text separator."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,aBoolean)
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DecimalDelimiter"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Decimal separator."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,aBoolean)
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ThousandDelimiter"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thousands separator."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                ,aBoolean)
+                );
+        return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size()));
+    }
+    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    return Sequence< DriverPropertyInfo >();
+}
+// -----------------------------------------------------------------------------
 
 
