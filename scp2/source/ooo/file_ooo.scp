@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.25 $
+*  $Revision: 1.26 $
 *
-*  last change: $Author: obo $ $Date: 2004-07-06 17:13:38 $
+*  last change: $Author: hr $ $Date: 2004-07-23 12:33:51 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -2218,12 +2218,22 @@ File gid_File_Xml_javavendors
     Name = "javavendors.xml";
     Styles = (PACKED);
 End
+#endif 
 
+#ifdef SOLAR_JAVA
 File gid_File_Xml_javasettings
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "javasettings.xml";
     Styles = (PACKED);
 End
+#endif
 
+#ifdef SOLAR_JAVA
+File gid_File_JREProperties
+    TXT_FILE_BODY;
+    Name = "JREProperties.class";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
 #endif
