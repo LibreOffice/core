@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:29:47 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
     {
         pFormula->Reset();
         ScToken* t;
-        for( t = pFormula->GetNextReferenceOrName(); t; t = pFormula->GetNextReferenceOrName() )
+        for( t = pFormula->Next(); t; t = pFormula->Next() )
         {
             switch( t->GetType() )
             {
@@ -125,6 +125,21 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
                         if( ScRangeData* pRangeData = pDoc->GetRangeName()->FindIndex( t->GetIndex() ) )
                             if( (nRecursion < 42) && lcl_HasRelRef( pDoc, pRangeData->GetCode(), nRecursion + 1 ) )
                                 return TRUE;
+                }
+                break;
+
+                // #i34474# function result dependent on cell position
+                case svByte:
+                {
+                    switch( t->GetOpCode() )
+                    {
+                        case ocRow:     // ROW() returns own row index
+                        case ocColumn:  // COLUMN() returns own column index
+                        case ocTable:   // SHEET() returns own sheet index
+                        case ocCell:    // CELL() may return own cell address
+                            return TRUE;
+                        break;
+                    }
                 }
                 break;
             }
