@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:37:44 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1234,7 +1234,7 @@ void OTableController::alterColumns()
 
             sal_Int32 nType,nPrecision,nScale,nNullable,nFormatKey=0,nAlignment=0;
             sal_Bool bAutoIncrement;
-            ::rtl::OUString sDescription;
+            ::rtl::OUString sDescription, sTypeName;
             Any aControlDefault;
 
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
@@ -1242,6 +1242,17 @@ void OTableController::alterColumns()
             xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
             xColumn->getPropertyValue(PROPERTY_ISNULLABLE)      >>= nNullable;
             xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT) >>= bAutoIncrement;
+
+            try { xColumn->getPropertyValue(PROPERTY_TYPENAME) >>= sTypeName; }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "no TypeName property?!" );
+                // since this is a last minute fix for #i41785#, I want to be on the safe side,
+                // and catch errors here as early as possible (instead of the whole process of altering
+                // the columns failing)
+                // Normally, sdbcx::Column objects are expected to have a TypeName property
+            }
+
             //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
                 xColumn->getPropertyValue(PROPERTY_HELPTEXT) >>= sDescription;
@@ -1254,6 +1265,7 @@ void OTableController::alterColumns()
 
             // check if something changed
             if((nType != pField->GetType()                  ||
+                sTypeName != pField->GetTypeName()         ||
                 nPrecision != pField->GetPrecision()        ||
                 nScale != pField->GetScale()                ||
                 nNullable != pField->GetIsNullable()        ||
