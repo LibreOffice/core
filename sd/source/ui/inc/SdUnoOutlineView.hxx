@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:54:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "DrawController.hxx"
 #endif
 
+class SdPage;
 
 namespace sd {
 
@@ -80,13 +81,19 @@ class SdUnoOutlineView
     : public DrawController
 {
 public:
+    enum properties
+    {
+        PROPERTY__BEGIN = DrawController::PROPERTY__BEGIN,
+        PROPERTY_CURRENTPAGE = PROPERTY__BEGIN,
+        PROPERTY__END
+    };
     SdUnoOutlineView (
         ViewShellBase& rBase,
         OutlineViewShell& rViewShell,
         View& rView) throw();
     virtual ~SdUnoOutlineView() throw();
 
-    void fireSelectionChangeListener() throw();
+    virtual void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
     /*
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -113,10 +120,28 @@ public:
     // XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual void FillPropertyTable (
+        ::std::vector< ::com::sun::star::beans::Property>& rProperties);
+
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        ::com::sun::star::uno::Any & rConvertedValue,
+        ::com::sun::star::uno::Any & rOldValue,
+        sal_Int32 nHandle,
+        const ::com::sun::star::uno::Any& rValue )
+        throw (::com::sun::star::lang::IllegalArgumentException);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        sal_Int32 nHandle,
+        const ::com::sun::star::uno::Any& rValue )
+        throw (::com::sun::star::uno::Exception);
+    virtual void SAL_CALL getFastPropertyValue(
+        ::com::sun::star::uno::Any& rValue,
+        sal_Int32 nHandle ) const;
 
 private:
+    SdPage* mpCurrentPage;
+
     /** This is a shortcut for accessing the view shell data member of
         the base class casted to the correct class.
     */
