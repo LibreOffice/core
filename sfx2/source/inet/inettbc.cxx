@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-30 09:17:17 $
+ *  last change: $Author: fs $ $Date: 2001-01-31 14:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,6 +572,25 @@ SfxURLBox::SfxURLBox( Window* pParent, INetProtocol eSmart )
         SetSizePixel( Size( 300, 240 ) );
     else
         SetSizePixel( Size( 225, 240 ) );
+    SetText( String() );
+
+    GetSubEdit()->SetAutocompleteHdl( LINK( this, SfxURLBox, AutoCompleteHdl_Impl ) );
+    UpdatePicklistForSmartProtocol_Impl();
+}
+
+SfxURLBox::SfxURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart )
+    :   ComboBox( pParent , _rResId ),
+        bTryAutoComplete( FALSE ),
+        bAutoCompleteMode( FALSE ),
+        bOnlyDirectories( FALSE ),
+        bCtrlClick( FALSE ),
+        pCtx( 0 ),
+        eSmartProtocol( eSmart )
+{
+    SetHelpId( SID_OPENURL );
+    EnableAutocomplete( FALSE );
+    EnableDrop();
+    // no automatic sizing if loaded from a resource (the size should be specified therein)
     SetText( String() );
 
     GetSubEdit()->SetAutocompleteHdl( LINK( this, SfxURLBox, AutoCompleteHdl_Impl ) );
