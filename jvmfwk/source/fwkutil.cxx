@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-17 13:55:31 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 08:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,10 +423,10 @@ rtl::OUString getVendorSettingsURL()
         if (osl_getModuleURLFromAddress((void *) & getVendorSettingsURL,
                                         & sLib.pData) == sal_True)
         {
+            sLib = getDirFromFile(sLib);
             rtl::OUStringBuffer sSettings(256);
             sSettings.append(sLib);
             sSettings.appendAscii("/");
-            sLib = getDirFromFile(sLib);
             sSettings.appendAscii(VENDORSETTINGS);
             return sSettings.makeStringAndClear();
         }
