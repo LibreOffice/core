@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 07:44:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,10 +1217,10 @@ uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException 
         SdrPage* pPage = pObj->GetPage();
         if( !pPage->IsMasterPage() )
         {
-            if( 0 == pPage->GetMasterPageCount() )
+            if(!pPage->TRG_HasMasterPage())
                 return aAny;
 
-            pPage = pPage->GetMasterPage(0);
+            pPage = &(pPage->TRG_GetMasterPage());
         }
 
         String aLayoutName( pPage->GetLayoutName() );
