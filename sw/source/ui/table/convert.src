@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:40:29 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_traditional ] = "»sªν²Ε(~T)";
         TEXT[ arabic ] = "ΪαΗγΙ ΜΟζαΙ";
         TEXT[ greek ] = "Σ~τηλοθέτης";
-        TEXT[ korean ] = "ΕΗ(~T)";
+        TEXT[ korean ] = "ΕΗ";
         TEXT[ turkish ] = "~Sekme";
         TEXT[ language_user1 ] = " ";
     };
@@ -139,7 +139,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_traditional ] = "¤ΐΈΉ(~S)";
         TEXT[ arabic ] = "ΗαέΗΥαΙ ΗαγδήζΨΙ";
         TEXT[ greek ] = "Άνω τε~λεία";
-        TEXT[ korean ] = "ΌΌΉΜΔέ·Π(~S)";
+        TEXT[ korean ] = "ΌΌΉΜΔέ·Π";
         TEXT[ turkish ] = "N~oktalύ virgόl";
         TEXT[ language_user1 ] = " ";
     };
@@ -168,7 +168,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_traditional ] = "¬qΈ¨(~P)";
         TEXT[ arabic ] = "ΗαέήΡΙ";
         TEXT[ greek ] = "Π~αράγραφος";
-        TEXT[ korean ] = "΄ά¶τ(~P)";
+        TEXT[ korean ] = "΄ά¶τ";
         TEXT[ turkish ] = "~Paragraf";
         TEXT[ language_user1 ] = " ";
     };
@@ -194,7 +194,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "¨δ¥L(~O)";
         Text[ arabic ] = "ΫνΡ Παί: ";
         Text[ greek ] = "Άλλα: ";
-        Text[ korean ] = "±βΕΈ (~O)";
+        Text[ korean ] = "±βΕΈ";
         Text[ turkish ] = "Di~πer: ";
         Text[ language_user1 ] = " ";
     };
@@ -286,7 +286,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "ΌΠΓD";
         Text[ arabic ] = "ΗαΪδζΗδ";
         Text[ greek ] = "Επικε~φαλίδα";
-        Text[ korean ] = "ΈΣΈ®±Ϋ";
+        Text[ korean ] = "Η¥Α¦";
         Text[ turkish ] = "Baώ~lύk";
         Text[ language_user1 ] = " ";
     };
@@ -313,7 +313,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ΖΕγ¥ά";
         Text[ arabic ] = "ΚίΡΗΡ έν ία ΥέΝΙ";
         Text[ greek ] = "Εμ~φάνιση σε κάθε σελίδα";
-        Text[ korean ] = "ΈΣΈ®±Ϋ ΉέΊΉ(~R)";
+        Text[ korean ] = "Έπµη΅΅ΒΚΏ΅Ό­΅΅ΉέΊΉ";
         Text[ turkish ] = "έlk satύrύ her sayfada yi~nele";
         Text[ language_user1 ] = " ";
     };
@@ -340,7 +340,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "¤£¤ΐ¶}ªν®ζ";
         Text[ arabic ] = "ΪΟγ έΥα ΗαΜΟζα";
         Text[ greek ] = "Όχι διαίρεση του πί~νακα";
-        Text[ korean ] = "Η¥Έ¦ ΒΙ°³Αφ Έ¶½Κ½ΓΏΐ.";
+        Text[ korean ] = "Η¥ ΊΠΈ®ΗΟΑφ΅΅ΎΚ±β.";
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sύπdύr";
         Text[ language_user1 ] = " ";
     };
@@ -419,7 +419,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_traditional ] = "¤ε¦rΒΰ΄«¦¨ªν®ζ";
         TEXT[ arabic ] = "ΚΝζνα ΗαδΥ Εαμ ΜΟζα";
         TEXT[ greek ] = "Μετατροπή κειμένου σε πίνακα";
-        TEXT[ korean ] = "ΕΨ½ΊΖ®Έ¦ Η¥·Ξ ΐόΘ―";
+        TEXT[ korean ] = "ΕΨ½ΊΖ®Έ¦ Η¥·Ξ Ί―Θ―";
         TEXT[ turkish ] = "Metni tabloya dφnόώtόr";
         TEXT[ language_user1 ] = " ";
     };
@@ -468,7 +468,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "¦Ϋ°Κ®ζ¦΅(~F)...";
         Text[ arabic ] = "ΚδΣνή ΚαήΗΖν...";
         Text[ greek ] = "ΑυτοΜορ~φή...";
-        Text[ korean ] = "ΐΪµΏ Ό­½Δ(~F)...";
+        Text[ korean ] = "ΐΪµΏΌ­½Δ(~F)...";
         Text[ turkish ] = "Otomatik ~formatlama...";
         Text[ language_user1 ] = " ";
     };
