@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widthfolding.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:40:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ OUString widthfolding::decompose_ja_voiced_sound_marks (const OUString& inStr, s
   rtl_uString * newStr;
   x_rtl_uString_new_WithLength( &newStr, nCount * 2 ); // defined in x_rtl_ustring.h  The reference count is 0 now.
 
-  sal_Int32 *p, position;
+  sal_Int32 *p = NULL;
+  sal_Int32 position = 0;
   if (useOffset) {
       // Allocate double of nCount length to offset argument.
       offset.realloc( nCount * 2 );
@@ -167,7 +168,8 @@ OUString widthfolding::compose_ja_voiced_sound_marks (const OUString& inStr, sal
   // will be converted to
   // .. .. GA       .. ..
 
-  sal_Int32 *p, position;
+  sal_Int32 *p = NULL;
+  sal_Int32 position = 0;
   if (useOffset) {
       // Allocate nCount length to offset argument.
       offset.realloc( nCount );
