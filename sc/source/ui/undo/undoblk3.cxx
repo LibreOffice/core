@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:39:24 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,6 @@
 #pragma hdrstop
 
 //----------------------------------------------------------------------------
-
-#define _MACRODLG_HXX
-#define _BIGINT_HXX
-#define _SVDXOUT_HXX
-#define _SVDATTR_HXX
-#define _SVDSURO_HXX
 
 // INCLUDE -------------------------------------------------------------------
 
@@ -1229,7 +1223,7 @@ void __EXPORT ScUndoReplace::Undo()
     }
     else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
     {
-        ScPostIt aNote;
+        ScPostIt aNote(pDoc);
         if (pDoc->GetNote(aCursorPos.Col(), aCursorPos.Row(),
                           aCursorPos.Tab(), aNote))
         {
