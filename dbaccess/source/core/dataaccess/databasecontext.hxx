@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 07:05:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -103,9 +100,6 @@
 #endif
 #ifndef _DBA_REGHELPER_HXX_
 #include "dba_reghelper.hxx"
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -131,12 +125,11 @@ namespace dbaccess
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::WeakComponentImplHelper7    <   ::com::sun::star::lang::XServiceInfo
                                             ,   ::com::sun::star::container::XEnumerationAccess
                                             ,   ::com::sun::star::container::XNameAccess
                                             ,   ::com::sun::star::uno::XNamingService
                                             ,   ::com::sun::star::lang::XEventListener
-                                            ,   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::container::XContainer
                                             ,   ::com::sun::star::lang::XSingleServiceFactory
                                             >   DatabaseAccessContext_Base;
@@ -144,11 +137,12 @@ typedef ::cppu::WeakComponentImplHelper8    <   ::com::sun::star::lang::XService
 class ODatabaseContext
             :public DatabaseAccessContext_Base
 {
-
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL);
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject(const ::rtl::OUString& _rName);
 protected:
     ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceManager;
-    ::utl::OConfigurationTreeRoot                                                               m_aRootNode;
 
     typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper > ObjectCacheType;
     DECLARE_STL_USTRINGACCESS_MAP( ObjectCacheType, ObjectCache );
@@ -175,10 +169,6 @@ public:
 // ::com::sun::star::lang::XSingleServiceFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(  ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::lang::XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething(const ::com::sun::star::uno::Sequence<sal_Int8>& _rIdentifier) throw( ::com::sun::star::uno::RuntimeException );
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -215,9 +205,8 @@ public:
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
-private:
-    /// get the node a data source is based on
-    ::utl::OConfigurationNode getObjectNode(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw();
+    void registerPrivate(const ::rtl::OUString& _sName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xObject);
+    void nameChangePrivate(const ::rtl::OUString& _sOldName, const ::rtl::OUString& _sNewName);
 };
 
 //........................................................................
