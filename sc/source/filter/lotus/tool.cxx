@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:04:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svtools/zforlist.hxx>
 #include <tools/solar.h>
 
+#include <math.h>
 #include "cell.hxx"
 #include "rangenam.hxx"
 #include "compiler.hxx"
@@ -219,16 +220,6 @@ void InitPage( void )
 }
 
 
-
-
-String DosToSystem( sal_Char* p )
-{   // Umwandlung vom internen in externen Zeichensatz
-    return String( p, pLotusRoot->eCharsetQ );
-}
-
-
-
-
 double SnumToDouble( INT16 nVal )
 {
     const double pFacts[ 8 ] = {
@@ -254,7 +245,23 @@ double SnumToDouble( INT16 nVal )
     return fVal;
 }
 
+double Snum32ToDouble( UINT32 nValue )
+{
+    double  fValue;
 
+    fValue = nValue >> 6;
+    if (nValue & 0x0f)
+    {
+        if (nValue & 0x00000010)
+                fValue /= pow(10, (nValue & 0x0f));
+        else
+        fValue *= pow(10, (nValue & 0x0f));
+    }
+
+    if ((nValue & 0x00000020))
+        fValue = -fValue;
+    return fValue;
+}
 
 
 FormCache::FormCache( ScDocument* pDoc, BYTE nNewDefaultFormat )
