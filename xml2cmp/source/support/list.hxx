@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: np $ $Date: 2002-08-08 16:07:56 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,31 +252,31 @@ List<XX>::alloc( unsigned           newSpace,
 template <class XY>
 DynamicList<XY>::~DynamicList()
 {
-    erase_all();
+    this->erase_all();
 }
 
 template <class XY>
 void
 DynamicList<XY>::insert(unsigned pos, XY * const & elem)
 {
-    if ( pos > len )
+    if ( pos > this->len )
       return;
 
-    checkSize(len+2);
-    memmove(inhalt[pos+1], inhalt[pos], (len-pos) * sizeof(XY*) );
-    inhalt[pos] = elem;
-    len++;
+    checkSize(this->len+2);
+    memmove(this->inhalt[pos+1], this->inhalt[pos], (this->len-pos) * sizeof(XY*) );
+    this->inhalt[pos] = elem;
+    this->len++;
 }
 
 template <class XY>
 void
 DynamicList<XY>::remove( unsigned           pos )
 {
-    if (!is_valid_index(pos) )
+    if (!this->is_valid_index(pos) )
         return;
-    len--;
-    delete inhalt[pos];
-    memmove(inhalt[pos], inhalt[pos+1], (len-pos) * sizeof(XY*) );
+    this->len--;
+    delete this->inhalt[pos];
+    memmove(this->inhalt[pos], this->inhalt[pos+1], (this->len-pos) * sizeof(XY*) );
 }
 
 
