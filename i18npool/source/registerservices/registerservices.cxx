@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-25 12:39:42 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@
 #include <collatorImpl.hxx>
 #include <chaptercollator.hxx>
 #include <collator_unicode.hxx>
-#include <collator_icu.hxx>
-#include <collator_simple.hxx>
-#include <collator_cjk.hxx>
 
 #include <inputsequencechecker.hxx>
 #include <inputsequencechecker_th.hxx>
@@ -213,8 +210,6 @@ IMPL_CREATEINSTANCE( BreakIterator_th )
 IMPL_CREATEINSTANCE( BreakIterator_hi )
 IMPL_CREATEINSTANCE_MSF( ChapterCollator )
 IMPL_CREATEINSTANCE_MSF( CollatorImpl )
-IMPL_CREATEINSTANCE( Collator_ICU )
-IMPL_CREATEINSTANCE( Collator_Simple )
 IMPL_CREATEINSTANCE( Collator_Unicode )
 IMPL_CREATEINSTANCE( Collator_zh_pinyin )
 IMPL_CREATEINSTANCE( Collator_zh_radical )
@@ -229,7 +224,6 @@ IMPL_CREATEINSTANCE( Collator_ja_charset )
 IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_first )
 IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_last )
 IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
-IMPL_CREATEINSTANCE( Collator_de_phonebook )
 
 IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
 IMPL_CREATEINSTANCE_MSF( cclass_Unicode )
@@ -496,12 +490,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_Unicode",
         "com.sun.star.i18n.Collator_Unicode",
         &Collator_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.Collator_ICU",
-        "com.sun.star.i18n.Collator_ICU",
-        &Collator_ICU_CreateInstance },
-    {   "com.sun.star.i18n.Collator_Simple",
-        "com.sun.star.i18n.Collator_Simple",
-        &Collator_Simple_CreateInstance },
     {   "com.sun.star.i18n.Collator_zh_pinyin",
         "com.sun.star.i18n.Collator_zh_pinyin",
         &Collator_zh_pinyin_CreateInstance },
@@ -541,9 +529,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_zh_TW_charset",
         "com.sun.star.i18n.Collator_zh_TW_charset",
         &Collator_zh_TW_charset_CreateInstance },
-    {   "com.sun.star.i18n.Collator_de_phonebook",
-        "com.sun.star.i18n.Collator_de_phonebook",
-        &Collator_de_phonebook_CreateInstance },
     {   "com.sun.star.i18n.ScriptTypeDetector",
         "com.sun.star.i18n.ScriptTypeDetector",
         &ScriptTypeDetector_CreateInstance },
