@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:21:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: hr $
- //     $Date: 2003-07-03 17:21:17 $
- // $Revision: 1.27 $
+ //     $Date: 2003-07-17 12:56:23 $
+ // $Revision: 1.28 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -599,6 +599,8 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ hindi ] = "नामों को परिभाषा दो";
     Text[ slovak ] = "Definovať názvy";
 };
+
+
 
 
 
