@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-11-14 18:53:51 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:42:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,32 +62,16 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=notify
 TARGETSTAT=_notify
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
-
-CXXFILES = \
-            smplhint.cxx \
-        hint.cxx \
-        lstner.cxx \
-        isethint.cxx \
-        cancel.cxx \
-        brdcst.cxx \
-        listener.cxx \
-        listenerbase.cxx \
-        listeneriter.cxx \
-        broadcast.cxx
 
 SLOFILES =	\
         $(SLO)$/smplhint.obj \
@@ -112,8 +96,6 @@ OBJFILES =	\
         $(OBJ)$/listenerbase.obj \
         $(OBJ)$/listeneriter.obj \
         $(OBJ)$/broadcast.obj
-
-.ENDIF
 
 HXX1TARGET= notify
 HXX1EXT=    hxx
