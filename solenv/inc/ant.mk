@@ -10,18 +10,20 @@ J2EE_HOME=$(SOLARROOT)$/j2sdkee1.2
 
 # --- ANT build environment  ---------------------------------------
 
+ANT_HOME=$(SOLARBINDIR)
+
 .IF "$(ANT_OPTIONAL)" ==""
-ANT_OPTIONAL=$(SOLARBINDIR)$/jakarta-ant-1.3-optional.jar
+ANT_OPTIONAL=$(SOLARBINDIR)$/jakarta-ant-1.4-optional.jar
 .ENDIF
 
 .IF "$(ANT_CLASSPATH)"==""
-ANT_CLASSPATH:=$(SOLARBINDIR)$/ant.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/xerces.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)
+ANT_CLASSPATH:=$(SOLARBINDIR)$/xerces.jar$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/junit.jar
 .IF "$(ANTPRJ_BOOTSTRAP)"==""
 ANT_CLASSPATH!:=$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/antprj.jar
 .ENDIF
 .ENDIF
 
-ANT=java -Xmx1024m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME)
+ANT=java -Xmx1024m org.apache.tools.ant.Main -Djava.home=$(JAVA_HOME) -Dant.home=$(ANT_HOME)
 
 .IF "$(ANT_BUILDFILE)"==""
 ANT_BUILDFILE=build.xml
@@ -44,9 +46,9 @@ ANT_OPT=on
 .ENDIF
 
 .IF "$(wdkbuild)"==""
-ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext=$(PROEXT) -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) -f $(ANT_BUILDFILE) $(ANT_FLAGS)
+ANT_FLAGS!:=-Dprj=$(PRJ) -Dprjname=$(PRJNAME) -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext=$(PROEXT) -Dsolar.bin=$(SOLARBINDIR) -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) -f $(ANT_BUILDFILE) $(ANT_FLAGS) -emacs
 .ELSE
-ANT_FLAGS!:=-f $(ANT_BUILDFILE) -Dwdk.build=$(wdkbuild) $(ANT_FLAGS)
+ANT_FLAGS!:=-f $(ANT_BUILDFILE) -Dwdk.build=$(wdkbuild) $(ANT_FLAGS) -emacs -v
 .ENDIF
 
 .INCLUDE : target.mk
