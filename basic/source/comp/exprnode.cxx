@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:47:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,18 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
     bComposite= BOOL( aVar.pDef->GetProcDef() != NULL );
 }
 
+// #120061 TypeOf
+SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, USHORT nId )
+{
+    BaseInit( p );
+
+    pLeft     = l;
+    eType     = SbxBOOL;
+    eNodeType = SbxTYPEOF;
+    nStringId = nId;
+}
+
+
 // AB: 17.12.95, Hilfsfunktion fuer Ctor fuer einheitliche Initialisierung
 void SbiExprNode::BaseInit( SbiParser* p )
 {
@@ -167,16 +179,6 @@ SbiExprNode* SbiExprNode::GetRealNode()
     }
     else
         return NULL;
-}
-
-BOOL SbiExprNode::IsOperand()
-{
-    return BOOL( eNodeType != SbxNODE );
-}
-
-BOOL SbiExprNode::IsConstant()
-{
-    return BOOL( eNodeType == SbxSTRVAL || eNodeType == SbxNUMVAL );
 }
 
 // Diese Methode setzt den Typ um, falls er in den Integer-Bereich hineinpasst
