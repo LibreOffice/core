@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-09-22 07:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,18 +713,13 @@ void ScModule::SetDocOptions( const ScDocOptions& rOpt )
     if ( !pDocCfg )
         pDocCfg = new ScDocCfg;
 
-    *(ScDocOptions*)pDocCfg = rOpt;
-    pDocCfg->SetDefault( FALSE );
-    pDocCfg->StoreConfig();
+    pDocCfg->SetOptions( rOpt );
 }
 
 const ScDocOptions& ScModule::GetDocOptions()
 {
     if ( !pDocCfg )
-    {
         pDocCfg = new ScDocCfg;
-        pDocCfg->Initialize();
-    }
 
     return *pDocCfg;
 }
@@ -789,8 +784,7 @@ void ScModule::SetAppOptions( const ScAppOptions& rOpt )
     if ( !pAppCfg )
         pAppCfg = new ScAppCfg;
 
-    *(ScAppOptions*)pAppCfg = rOpt;
-    pAppCfg->SetDefault( FALSE );
+    pAppCfg->SetOptions( rOpt );
 }
 
 void global_InitAppOptions()
@@ -801,10 +795,7 @@ void global_InitAppOptions()
 const ScAppOptions& ScModule::GetAppOptions()
 {
     if ( !pAppCfg )
-    {
         pAppCfg = new ScAppCfg;
-        pAppCfg->Initialize();
-    }
 
     return *pAppCfg;
 }
@@ -1168,9 +1159,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 #endif
 
     if ( bSaveAppOptions )
-    {
-        pAppCfg->SetDefault( FALSE );
-    }
+        pAppCfg->OptionsChanged();
 
     if ( bSaveInputOptions )
         pInputCfg->OptionsChanged();
