@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:14:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,19 +238,18 @@ Menu RID_SVXMNU_XMLSECSTATBAR
         };
     };
 };
- // Images ----------------------------------------------------------------
+
+// Images ----------------------------------------------------------------
+
+#define STD_MASKCOLOR   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
+
 Image RID_SVXBMP_POSITION
 {
     ImageBitmap = Bitmap
     {
         File = "sc10223.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
+    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIZE
 {
@@ -258,12 +257,7 @@ Image RID_SVXBMP_SIZE
     {
         File = "sc10224.bmp" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
+    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET
 {
@@ -271,12 +265,7 @@ Image RID_SVXBMP_SIGNET
     {
         File = "signet_11x16.png" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
+    MaskColor = STD_MASKCOLOR;
 };
 Image RID_SVXBMP_SIGNET_BROKEN
 {
@@ -284,10 +273,22 @@ Image RID_SVXBMP_SIGNET_BROKEN
     {
         File = "caution_11x16.png" ;
     };
-    MaskColor = Color
-    {
-        Red = 0xFFFF ;
-        Green = 0x0000 ;
-        Blue = 0xFFFF ;
-    };
+    MaskColor = STD_MASKCOLOR;
 };
+Image RID_SVXBMP_SIGNET_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "signet_11x16_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIGNET_BROKEN_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "caution_11x16_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
