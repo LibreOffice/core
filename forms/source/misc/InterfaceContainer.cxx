@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 17:48:04 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 09:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw(
 // XPropertyChangeListener
 //------------------------------------------------------------------------------
 void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt)
-{
+throw (::com::sun::star::uno::RuntimeException) {
     if (evt.PropertyName == PROPERTY_NAME)
     {
         ::osl::MutexGuard aGuard( m_rMutex );
