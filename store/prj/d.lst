@@ -5,9 +5,9 @@ mkdir: %_DEST%\inc%_EXT%\store
 ..\util\store.xml %_DEST%\xml%_EXT%\store.xml
 
 ..\%__SRC%\lib\istore.lib %_DEST%\lib%_EXT%\istore.lib
-..\%__SRC%\lib\libsto*.* %_DEST%\lib%_EXT%\libsto*.*
+..\%__SRC%\lib\libstore.*.* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\sto*.dll %_DEST%\bin%_EXT%\sto*.dll
 
 
 
-linklib: libstore.so.*.*.*
+linklib: libstore.*.*
