@@ -2,9 +2,9 @@
  *
  *  $RCSfile: model_ui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:54:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
+#include <com/sun/star/xforms/XDataTypeRepository.hpp>
+#include <com/sun/star/xsd/XDataType.hpp>
+#include <com/sun/star/xsd/DataTypeClass.hpp>
 
 
 using rtl::OUString;
@@ -116,15 +119,48 @@ using namespace com::sun::star::xml::xpath;
 OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
     throw( RuntimeException )
 {
-    // determine default data type; string is default
+    // determine service for control. string/text field is default.
     OUString sService = OUSTRING("com.sun.star.form.component.TextField");
 
-    // TODO: more data types; use repository to find base type
-    OUString sXMLType = queryMIP( xNode ).getTypeName();
-    if( sXMLType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("xsd:double") ) )
-        sService = OUSTRING("com.sun.star.form.component.NumericField");
-    else if( sXMLType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("xsd:boolean")))
-        sService = OUSTRING("com.sun.star.form.component.CheckBox");
+    // query repository for suitable type
+    OSL_ENSURE( mxDataTypes.is(), "no type repository?" );
+    OUString sTypeName = queryMIP( xNode ).getTypeName();
+    if( mxDataTypes->hasByName( sTypeName ) )
+    {
+        OSL_ENSURE( mxDataTypes->getDataType( sTypeName ).is(),
+                    "has or has not?" );
+
+        switch( mxDataTypes->getDataType( sTypeName )->getTypeClass() )
+        {
+        case com::sun::star::xsd::DataTypeClass::BOOLEAN:
+            sService = OUSTRING("com.sun.star.form.component.CheckBox");
+            break;
+        case com::sun::star::xsd::DataTypeClass::DOUBLE:
+        case com::sun::star::xsd::DataTypeClass::DECIMAL:
+        case com::sun::star::xsd::DataTypeClass::FLOAT:
+            sService = OUSTRING("com.sun.star.form.component.NumericField");
+            break;
+
+        case com::sun::star::xsd::DataTypeClass::STRING:
+        case com::sun::star::xsd::DataTypeClass::DURATION:
+        case com::sun::star::xsd::DataTypeClass::DATETIME:
+        case com::sun::star::xsd::DataTypeClass::TIME:
+        case com::sun::star::xsd::DataTypeClass::DATE:
+        case com::sun::star::xsd::DataTypeClass::gYearMonth:
+        case com::sun::star::xsd::DataTypeClass::gYear:
+        case com::sun::star::xsd::DataTypeClass::gMonthDay:
+        case com::sun::star::xsd::DataTypeClass::gDay:
+        case com::sun::star::xsd::DataTypeClass::gMonth:
+        case com::sun::star::xsd::DataTypeClass::hexBinary:
+        case com::sun::star::xsd::DataTypeClass::base64Binary:
+        case com::sun::star::xsd::DataTypeClass::anyURI:
+        case com::sun::star::xsd::DataTypeClass::QName:
+        case com::sun::star::xsd::DataTypeClass::NOTATION:
+        default:
+            // keep default
+            break;
+        }
+    }
 
     return sService;
 }
@@ -390,6 +426,34 @@ OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
     return sID;
 }
 
+Model::XPropertySet_t Model::cloneBindingAsGhost( const XPropertySet_t &xBinding )
+    throw( RuntimeException )
+{
+    // Create a new binding instance first...
+    Binding *pBinding = new Binding();
+
+    // ...and bump up the "defered notification counter"
+    // to prevent this binding from contributing to the
+    // MIPs table...
+    pBinding->deferNotifications(true);
+
+    // Copy the propertyset and return result...
+    XPropertySet_t xNewBinding(pBinding);
+    copy( xBinding, xNewBinding );
+    return xNewBinding;
+}
+
+void Model::removeBindingIfUseless( const XPropertySet_t& xBinding )
+    throw( RuntimeException )
+{
+    Binding* pBinding = Binding::getBinding( xBinding );
+    if( pBinding != NULL )
+    {
+        if( ! pBinding->isUseful() )
+            mpBindings->removeItem( pBinding );
+    }
+}
+
 Model::XDocument_t Model::newInstance( const rtl::OUString& sName,
                          const rtl::OUString& sURL,
                          sal_Bool bURLOnce )
@@ -441,7 +505,9 @@ sal_Int32 xforms::lcl_findInstance( const InstanceCollection* pInstances,
 }
 
 void Model::renameInstance( const rtl::OUString& sFrom,
-                            const rtl::OUString& sTo )
+                            const rtl::OUString& sTo,
+                            const rtl::OUString& sURL,
+                            sal_Bool bURLOnce )
     throw( RuntimeException )
 {
     sal_Int32 nPos = lcl_findInstance( mpInstances, sFrom );
@@ -463,6 +529,16 @@ void Model::renameInstance( const rtl::OUString& sFrom,
 
         // change name
         pSeq[ nProp ].Value <<= sTo;
+
+        // change url
+        nProp = lcl_findProp( pSeq, nLength, OUSTRING("URL") );
+        if(nProp != -1)
+            pSeq[ nProp ].Value <<= sURL;
+
+        // change urlonce
+        nProp = lcl_findProp( pSeq, nLength, OUSTRING("URLOnce") );
+        if(nProp != -1)
+            pSeq[ nProp ].Value <<= bURLOnce;
 
         // set instance
         mpInstances->setItem( nPos, aSeq );
@@ -892,7 +968,6 @@ OUString Model::getResultForExpression(
     OUStringBuffer aBuffer;
     ComputedExpression aExpression;
     aExpression.setExpression( sExpression );
-    aExpression.setNamespaces( pBinding->getBindingNamespaces() );
     if( bIsBindingExpression )
     {
         // binding: use binding context and evaluation
