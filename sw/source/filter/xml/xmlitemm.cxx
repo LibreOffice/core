@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:59:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,10 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
 
     // RES_FRAMEDIR
     M_E( STYLE, WRITING_MODE, RES_FRAMEDIR, 0 ),
+
+    // RES_COLLAPSING_BORDERS
+    M_E( TABLE, BORDER_MODEL, RES_COLLAPSING_BORDERS, 0 ),
+
     M_END
 };
 
