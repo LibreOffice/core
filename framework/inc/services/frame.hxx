@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:51 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,6 @@ class Frame :   // interfaces
 
     protected:
 
-        sal_Bool                                                                m_bIsPlugIn                         ;   /// In objects of these class this member is set to FALSE. But in derived class PlugInFrame it's overwritten with TRUE!
         FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
 
         inline css::uno::Reference< css::lang::XMultiServiceFactory > impl_getFactory()
