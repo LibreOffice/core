@@ -8,7 +8,8 @@
 ..\%__SRC%\lib\liblth.a %_DEST%\lib%_EXT%\liblth.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\liblth*.so %_DEST%\lib%_EXT%\liblth*.so
-..\%__SRC%\bin\lspell* %_DEST%\bin%_EXT%\lspell*
+
+..\%__SRC%\bin\spell* %_DEST%\bin%_EXT%\spell*
 ..\%__SRC%\lib\ilspell* %_DEST%\lib%_EXT%\ilspell*
 ..\%__SRC%\lib\libspell.a %_DEST%\lib%_EXT%\libspell.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
