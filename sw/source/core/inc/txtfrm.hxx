@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:11:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,12 @@ class SwTxtFrm: public SwCntntFrm
 
     ULONG  nAllLines        :24;//Anzahl der Zeilen fuer das Paint (inkl. nThisLines)
     ULONG  nThisLines       :8; //Anzahl der Zeilen dieses Frames
+
+    // The x position for flys anchored at this paragraph.
+    // These values are calculated in SwTxtFrm::CalcBaseOfstForFly()
+    SwTwips mnFlyAnchorOfst;
+    // The x position for wrap-through flys anchored at this paragraph.
+    SwTwips mnFlyAnchorOfstNoWrap;
 
     xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
@@ -224,6 +230,9 @@ class SwTxtFrm: public SwCntntFrm
 
     void ChgThisLines();//Muss immer gerufen werden, wenn sich die Zeilenazahl
                         //veraendert haben kann.
+
+    // required for 'new' relative anchor position
+    void CalcBaseOfstForFly();
 
 public:
 
@@ -534,6 +543,13 @@ public:
     inline void ForbidFollowFormat()
     {
         mbFollowFormatAllowed = false;
+    }
+
+    SwTwips GetBaseOfstForFly( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
+    {
+        return ( bIgnoreFlysAnchoredAtThisFrame ?
+                 mnFlyAnchorOfst :
+                 mnFlyAnchorOfstNoWrap );
     }
 };
 
