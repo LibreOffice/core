@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:14:45 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,27 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ slovak ] = "O~pakovať záhlavie";
         Text[ hungarian ] = "Fejléc ~ismétlése";
         Text[ slovenian ] = "Po~novi glavo";
+    };
+    FixedText FT_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 125 , 88 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Text = "~Spalten" ;
+        Text [ ENGLISH ] = "Rows to repeat" ;
+        Text [ english_us ] = "Rows to repeat" ;
+    };
+    NumericField NF_REPEAT_HEADER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 191 , 87 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        First = 1 ;
     };
     CheckBox CB_DONT_SPLIT
     {
