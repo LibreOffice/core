@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 18:50:45 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 07:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,30 +993,9 @@ String RID_STR_NOFIELDSASSIGNED
 
 String RID_STR_ABP_SUCCESS
 {
-    Text = "Ihr externes Adressbuch wurde erfolgreich in %PRODUCTNAME registriert.\n"
-        "Sie können jetzt Ihre Adressdaten wie jede beliebige andere Datenquelle benutzen.";
-    Text [ english ] = "Your external address book was successully registered in %PRODUCTNAME.\n"
-        "You now can access your address data like any other data source.";
-    Text [ english_us ] = "Your external address book has been successully registered in %PRODUCTNAME.\nYou now can utilize your address data like any other data source.";
-    Text[ portuguese ] = "O seu livro de endereços externo foi registado no %PRODUCTNAME.\nOs dados dos endereços podem ser agora utilizados como qualquer outra fonte de dados.";
-    Text[ russian ] = "Ğåãèñòğàöèÿ âíåøíåé àäğåñíîé êíèãè â %PRODUCTNAME ïğîøëà óñïåøíî.\nÒåïåğü àäğåñíûå äàííûå äîñòóïíû òàêæå êàê è ëşáûå äğóãèå èñõîäíûå äàííûå.";
-    Text[ greek ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ dutch ] = "Uw exter adresboek werd met succes in %PRODUCTNAME geregistreerd.\nNu kunt u uw adresgegevens als gegevensbron gebruiken.";
-    Text[ french ] = "Le carnet d'adresses externe a été enregistré dans %PRODUCTNAME.\nLes données des adresses sont à présent utilisables comme les autres sources de données.";
-    Text[ spanish ] = "Su libreta de direcciones externa se registró satisfactoriamente en %PRODUCTNAME.\nAhora puede usar sus datos de direcciones como cualquier otra fuente de datos.";
-    Text[ finnish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ italian ] = "La vostra Rubrica esterna è stata registrata in %PRODUCTNAME.\nAdesso potete utilizzare i dati della Rubrica come qualsiasi altra sorgente dati.";
-    Text[ danish ] = "Registreringen af det eksterne adressekartotek i %PRODUCTNAME er gennemført.\nDu kan nu bruge dine adressedata som enhver anden datakilde.";
-    Text[ swedish ] = "Din externa adressbok har registrerats i %PRODUCTNAME.\nDu kan nu använda dina adressdata som vilken annan datakälla som helst.";
-    Text[ polish ] = "Zewnêtrzna ksi¹¿ka adresowa zosta³a zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych mo¿na teraz u¿ywaæ tak jak innego Ÿród³a danych.";
-    Text[ portuguese_brazilian ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ japanese ] = "å¤–éƒ¨ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ã® %PRODUCTNAME ã¸ã®ç™»éŒ²ã¯æ­£å¸¸ã«å®Œäº†ã—ã¾ã—ãŸã€‚\nã“ã‚Œã‹ã‚‰ã¯ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ã‚‚ã»ã‹ã®ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¨åŒã˜ã‚ˆã†ã«ä½¿ç”¨ãŒå¯èƒ½ã§ã™ã€‚";
-    Text[ korean ] = "ì™¸ë¶€ ì£¼ì†Œë¡ì´ ì„±ê³µì ìœ¼ë¡œ %PRODUCTNAMEì— ë“±ë¡ë˜ì—ˆìŠµë‹ˆë‹¤.\nì´ì œ ì£¼ì†Œ ë°ì´í„°ë¥¼ ë‹¤ë¥¸ ëª¨ë“  ë°ì´í„° ì†ŒìŠ¤ì²˜ëŸ¼ ì•¡ì„¸ìŠ¤í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å¤–æ¥çš„é€šè®¯ç°¿å·²ç»æˆåŠŸåœ°ç™»è®°åˆ° %PRODUCTNAME é‡Œã€‚\nè¿™æ ·ï¼Œæ‚¨å°±èƒ½å¤Ÿå¦‚åŒä½¿ç”¨ä»»ä½•ä¸€ä¸ªå…¶ä»–çš„æ•°æ®æºä¸€æ ·éšæ„ä½¿ç”¨æ‚¨çš„é€šè®¯ç°¿ã€‚";
-    Text[ chinese_traditional ] = "%PRODUCTNAME å·²ç¶“æˆåŠŸåœ°ç™»è¨˜é€™å€‹å¤–ä¾†çš„é€šè¨ŠéŒ„ã€‚\nå¾ç¾åœ¨èµ·æ‚¨å°±èƒ½å¤ å¦‚åŒä½¿ç”¨ä»»ä½•ä¸€å€‹å…¶ä»–çš„è³‡æ–™æºä¸€æ¨£æ–¹ä¾¿åœ°ä½¿ç”¨é€™å€‹é€šè¨ŠéŒ„ã€‚";
-    Text[ turkish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ arabic ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
-    Text[ catalan ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text = "Ab jetzt können Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So öffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
+    Text [ english ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
+    Text [ english_us ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
 };
 
 //........................................................................
@@ -1029,6 +1008,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2002/09/05 18:50:45  kz
+ *  Merge SRC641: 05.09.02 - 20:47:18
+ *
  *  Revision 1.30  2002/02/22 21:06:41  kz
  *  Merge SRC641: 22.02.02 - 22:06:22
  *
