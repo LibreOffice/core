@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:47:08 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1083,7 +1083,7 @@ TabPage TP_FRM_STD
         Text[ portuguese ] = "At page";
         Text[ russian ] = "Ê ñòğàíèöå";
         Text[ greek ] = "Óôç óåëßäá";
-        Text[ dutch ] = "At page";
+        Text[ dutch ] = "Aan ~pagina";
         Text[ french ] = "À la ~page";
         Text[ spanish ] = "A la pá~gina";
         Text[ italian ] = "Alla pagina";
@@ -1108,10 +1108,10 @@ TabPage TP_FRM_STD
         Text[ portuguese ] = "At paragraph";
         Text[ russian ] = "Ê àáçàöó";
         Text[ greek ] = "~Óôç ğáñÜãñáöï";
-        Text[ dutch ] = "At paragraph";
+        Text[ dutch ] = "Aan ~alinea";
         Text[ french ] = "Au para~graphe";
         Text[ spanish ] = "Al ~párrafo";
-        Text[ italian ] = "At paragraph";
+        Text[ italian ] = "Al paragrafo";
         Text[ danish ] = "At paragraph";
         Text[ swedish ] = "Vid ~stycke";
         Text[ polish ] = "Przy akapicie";
@@ -1133,10 +1133,10 @@ TabPage TP_FRM_STD
         Text[ portuguese ] = "At character";
         Text[ russian ] = "Ê çíàêó";
         Text[ greek ] = "Óôï~í ÷áñáêôŞñá";
-        Text[ dutch ] = "At character";
+        Text[ dutch ] = "Aan ~teken";
         Text[ french ] = "Au ~caractère";
         Text[ spanish ] = "Al cará~cter";
-        Text[ italian ] = "At character";
+        Text[ italian ] = "Al carattere";
         Text[ danish ] = "At character";
         Text[ swedish ] = "Vid tecke~n";
         Text[ polish ] = "Przy znaku";
@@ -1161,7 +1161,7 @@ TabPage TP_FRM_STD
         Text [ italian ] = "quale ~carattere" ;
         Text [ spanish ] = "Como ~carácter" ;
         Text [ french ] = "Comme c~aractère" ;
-        Text [ dutch ] = "als te~ken" ;
+        Text [ dutch ] = "Als te~ken" ;
         Text [ portuguese ] = "como ~carácter" ;
         Text[ chinese_simplified ] = "µ±×÷×Ö·û(~A)";
         Text[ russian ] = "Êàê çíàê";
@@ -1184,10 +1184,10 @@ TabPage TP_FRM_STD
         Text[ portuguese ] = "At frame";
         Text[ russian ] = "Ê ğàìêå";
         Text[ greek ] = "Óôï ğë~áßóéï";
-        Text[ dutch ] = "At frame";
+        Text[ dutch ] = "Aan ~kader";
         Text[ french ] = "Au ca~dre";
         Text[ spanish ] = "~Al marco";
-        Text[ italian ] = "At frame";
+        Text[ italian ] = "Alla cornice";
         Text[ danish ] = "At frame";
         Text[ swedish ] = "Vid r~am";
         Text[ polish ] = "Przy ramce";
@@ -1330,7 +1330,7 @@ TabPage TP_FRM_STD
         Text[ chinese_simplified ] = "ÖÁ";
         Text[ russian ] = "ê";
         Text[ polish ] = "do";
-        Text[ japanese ] = "‘ÎÛ";
+        Text[ japanese ] = "Šî€";
         Text[ chinese_traditional ] = "¦Ü";
         Text[ arabic ] = "Åáì";
         Text[ greek ] = "ğñïò";
@@ -1470,7 +1470,7 @@ TabPage TP_FRM_STD
         Text[ chinese_simplified ] = "ÖÁ";
         Text[ russian ] = "ê";
         Text[ polish ] = "do";
-        Text[ japanese ] = "‘ÎÛ";
+        Text[ japanese ] = "Šî€";
         Text[ chinese_traditional ] = "¦Ü";
         Text[ arabic ] = "Åáì";
         Text[ greek ] = "ğñïò";
