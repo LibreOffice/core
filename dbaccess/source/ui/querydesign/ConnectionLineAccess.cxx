@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:04:13 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@ namespace dbaui
     //  using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star;
 
-    OConnectionLineAccess::OConnectionLineAccess(const OTableConnection* _pLine)
-        :VCLXAccessibleComponent(_pLine->GetParent()->GetComponentInterface().is() ? _pLine->GetParent()->GetWindowPeer() : NULL)
+    OConnectionLineAccess::OConnectionLineAccess(OTableConnection* _pLine)
+        : VCLXAccessibleComponent(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : NULL)
         ,m_pLine(_pLine)
     {
     }
@@ -273,16 +273,13 @@ namespace dbaui
         return AccessibleRelation();
     }
     // -----------------------------------------------------------------------------
-    Reference< XAccessible > OTableConnection::getAccessible() const
+    Reference< XAccessible > OTableConnection::CreateAccessible()
     {
-        if( !m_xAccessible.is() )
-            m_xAccessible = new OConnectionLineAccess(this);
-        return m_xAccessible;
+        return new OConnectionLineAccess(this);
     }
     // -----------------------------------------------------------------------------
     OTableConnection::~OTableConnection()
     {
-        ::comphelper::disposeComponent(m_xAccessible);
         //////////////////////////////////////////////////////////////////////
         // clear vector
         clearLineData();
