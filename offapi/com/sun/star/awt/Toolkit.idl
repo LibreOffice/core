@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Toolkit.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-19 11:04:22 $
+ *  last change: $Author: obr $ $Date: 2001-03-23 12:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 module com {  module sun {  module star {  module awt {
 
-interface XDataTransfer;
+interface XDataTransferProviderAccess;
 
 //=============================================================================
 
@@ -90,7 +90,7 @@ service Toolkit
     interface com::sun::star::awt::XToolkit;
 
     // interface for clipbaord access and drag-and-drop protocol
-    [optional] interface com::sun::star::awt::XDataTransfer;
+    [optional] interface com::sun::star::awt::XDataTransferProviderAccess;
 };
 
 //=============================================================================
@@ -100,6 +100,9 @@ service Toolkit
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/02/19 11:04:22  obr
+    XDataTransfer added
+
     Revision 1.3  2000/11/08 12:42:10  mi
     moved from api
 
