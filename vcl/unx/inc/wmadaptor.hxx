@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 17:54:44 $
+ *  last change: $Author: pl $ $Date: 2001-09-14 12:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,18 @@ public:
      */
     const String& getWindowManagerName() const
     { return m_aWMName; }
+
+    /*
+     *  gets the number of workareas
+     */
+    int getWorkAreaCount() const
+    { return m_aWMWorkAreas.size(); }
+
+    /*
+     *  gets the specified workarea
+     */
+    const Rectangle& getWorkArea( int n ) const
+    { return m_aWMWorkAreas[n]; }
 
     /*
      *  sets window title
