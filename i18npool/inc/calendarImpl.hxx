@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:02:33 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <tools/list.hxx>
+#include <vector>
 
 //  ----------------------------------------------------
 //  class CalendarImpl
@@ -130,7 +130,7 @@ private:
     rtl::OUString uniqueID;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar > xCalendar;
     };
-    List lookupTable;
+    std::vector<lookupTableItem*> lookupTable;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedCalendar > xCalendar;
 };
