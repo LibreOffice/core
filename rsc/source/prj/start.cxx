@@ -2,9 +2,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,15 +245,16 @@ static BOOL CallRsc2( ByteString aRsc2Name,
     {
         for( i = 1; i < (short)(pCmdLine->GetCount() -1); i++ )
         {
-            if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp", 3 )
-              || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo", 3 )
-              || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-pp", 3 )
+            if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 )
+              || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 )
+              || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-pp=", 4 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 9 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rc", 3 )
               || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-+" )
               || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-br" )
               || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-bz" )
               || !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-r" )
+              // Am I the only one that thinks the following line inludes all the tests before?
               || ( '-' != *(char *)pCmdLine->GetEntry( i ) ) )
             {
             }
@@ -362,15 +363,15 @@ int cdecl main ( int argc, char ** argv)
             { // anderer Name fuer den Preprozessor
                 bResponse = TRUE;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "pp", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "pp=", 3 ) )
             { // anderer Name fuer den Preprozessor
-                aPrePro = (*ppStr) + 3;
+                aPrePro = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fo", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fo=", 3 ) )
             { // anderer Name fuer .res-file
-                aResName = (*ppStr) + 3;
+                aResName = (*ppStr) + 4;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fp", 2 ) )
+            else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
                 bSetSrs  = TRUE;
                 aSrsName = (*ppStr);
@@ -392,7 +393,7 @@ int cdecl main ( int argc, char ** argv)
             aResName = OutputFile( *aInputList.First(), "res" );
         if( ! bSetSrs )
         {
-            aSrsName = "-fp";
+            aSrsName = "-fp=";
             aSrsName += OutputFile( *aInputList.First(), "srs" );
         }
     };
