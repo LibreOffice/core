@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.35 $
- *  last change: $Author: kz $ $Date: 2005-01-18 16:07:16 $
+ *  $Revision: 1.36 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2132,7 +2132,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
 
     DBG_PROFSTART(SfxBindingsNextJob_Impl0);
 
-    if ( Application::GetLastInputInterval() < MAX_INPUT_DELAY )
+    if ( Application::GetLastInputInterval() < MAX_INPUT_DELAY && pTimer )
     {
         pImp->aTimer.SetTimeout(TIMEOUT_UPDATING);
         return sal_True;
