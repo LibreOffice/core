@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:58:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 11:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,7 @@ void PutGet( SbxArray& rPar, BOOL bPut )
         short nDims = pArr->GetDims();
         short* pDims = new short[ nDims ];
         bRet = lcl_WriteReadSbxArray(*pArr,pStrm,!bRandom,nDims,pDims,bPut);
-        delete pDims;
+        delete [] pDims;
         if( nBlockLen )
             pStrm->Seek( nFPos + nBlockLen );
     }
