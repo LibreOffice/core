@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2000-12-01 10:30:40 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 12:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,14 +1300,12 @@ void SfxViewShell::DisconnectClients_Impl(SvInPlaceClient *pIP)
         return;
 
     SvInPlaceClientRef aIPClient;
-    for ( USHORT n=0; n < pClients->Count(); )
+    for ( USHORT n=0; n < pClients->Count(); n++ )
     {
         aIPClient = pClients->GetObject(n);
         if( aIPClient.Is() && aIPClient != pIP && aIPClient->GetIPObj() &&
                 !(aIPClient->GetIPObj()->GetMiscStatus() & SVOBJ_MISCSTATUS_ACTIVATEWHENVISIBLE) )
-            aIPClient->DoDisconnect();
-        else
-            n++;
+            aIPClient->GetProtocol().Reset2Connect();
     }
 }
 
