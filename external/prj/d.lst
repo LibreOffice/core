@@ -18,7 +18,7 @@ mkdir: %_DEST%\inc%_EXT%\audio
 mkdir: %_DEST%\inc%_EXT%\external\neon
 
 ..\audio\rtufiles\lib\audio\libaudio.a %_DEST%\lib%_EXT%\libaudio.a
-..\audio\rtufiles\usr.include\audio\* %_DEST%\inc%_EXT%\audio\*
+..\audio\rtufiles\lib\audio\*.h %_DEST%\inc%_EXT%\audio\*
 ..\ado\*.h %_DEST%\inc%_EXT%\external\ado\*.h
 ..\atl\rtufiles\*.h %_DEST%\inc%_EXT%\external\atl\*.h
 ..\atl\rtufiles\*.idl %_DEST%\inc%_EXT%\external\atl\*.idl
