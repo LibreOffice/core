@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:57:59 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage TP_NUMPARA
         Text[ chinese_simplified ] = "±àºÅÑùÊ½";
         Text[ russian ] = "Ñòèëü íóìåğàöèè";
         Text[ polish ] = "Styl numeracji";
-        Text[ japanese ] = "”Ô†•t‚¯‚Ì½À²Ù";
+        Text[ japanese ] = "”Ô†•t‚¯½À²Ù";
         Text[ chinese_traditional ] = "½s¸¹¼Ë¦¡";
         Text[ arabic ] = "äãØ ÇáÊÑŞíã";
         Text[ greek ] = "Óôõë áñßèìçóçò";
@@ -313,7 +313,7 @@ TabPage TP_NUMPARA
         Text [ English ] = "Line numbering" ;
         TabStop = TRUE ;
         Text [ portuguese ] = "Numeração de linhas" ;
-        Text [ english_us ] = "Line Numbering" ;
+        Text [ english_us ] = "Line numbering" ;
         Text [ portuguese_brazilian ] = "Zeilennumerierung" ;
         Text [ swedish ] = "Radnumrering" ;
         Text [ danish ] = "Linjenummerering" ;
@@ -439,3 +439,4 @@ TabPage TP_NUMPARA
     };
 };
  // ********************************************************************** EOF
+
