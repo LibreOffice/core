@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDropDownListBox.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-09-08 12:59:23 $
+ *  last change: $Date: 2004-01-05 20:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -79,6 +68,18 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
 
 /**
  * Test for object which is represented by style list box
@@ -105,7 +106,6 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleDropDownListBox extends TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
 
@@ -113,38 +113,39 @@ public class AccessibleDropDownListBox extends TestCase {
      * Finds AccessibleDropDownListBox walking through the
      * accessible component tree of a writer document.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
 
         shortWait();
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), xTextDoc);
+        XWindow xWindow = at.getCurrentWindow(
+                                  (XMultiServiceFactory) Param.getMSF(),
+                                  xTextDoc);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.COMBO_BOX, "", "AccessibleDropDownListBox");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX,
+                                             "", "AccessibleDropDownListBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleAction acomp = (XAccessibleAction)
-            UnoRuntime.queryInterface(XAccessibleAction.class,oObj);
+        final XAccessibleAction acomp = (XAccessibleAction) UnoRuntime.queryInterface(
+                                                XAccessibleAction.class, oObj);
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    try {
-                        acomp.doAccessibleAction(0);
-                    } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                        throw new StatusException("Can't perform action 0", e);
-                    }
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                try {
+                    acomp.doAccessibleAction(0);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    throw new StatusException("Can't perform action 0", e);
                 }
-            });
+            }
+        });
 
         return tEnv;
     }
@@ -154,7 +155,8 @@ public class AccessibleDropDownListBox extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                         (XMultiServiceFactory) Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
@@ -164,8 +166,9 @@ public class AccessibleDropDownListBox extends TestCase {
     /**
      * Disposes writer document.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
@@ -174,9 +177,9 @@ public class AccessibleDropDownListBox extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(500);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
 }
