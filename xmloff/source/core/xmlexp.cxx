@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-30 10:46:46 $
+ *  last change: $Author: sab $ $Date: 2001-04-04 05:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
+#include <com/sun/star/document/XViewDataSupplier.hpp>
 #endif
 
 #ifndef _XMLOFF_GRADIENTSTYLE_HXX
@@ -773,6 +776,20 @@ void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsEx
 {
     uno::Sequence<beans::PropertyValue> aProps;
     GetViewSettings(aProps);
+    uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
+    if(xViewDataSupplier.is())
+    {
+        uno::Reference<container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
+        if(xIndexAccess.is())
+        {
+            sal_Int32 nOldLength(aProps.getLength());
+            aProps.realloc(nOldLength + 1);
+            beans::PropertyValue aProp;
+            aProp.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Views"));
+            aProp.Value <<= xIndexAccess;
+            aProps[nOldLength] = aProp;
+        }
+    }
     OUString sViewSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_view_settings));
     rSettingsExportHelper.exportSettings(aProps, sViewSettings);
 }
