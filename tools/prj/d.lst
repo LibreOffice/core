@@ -2,6 +2,8 @@ mkdir: %_DEST%\bin%_EXT%\remote
 mkdir: %_DEST%\inc%_EXT%\bootstrp
 mkdir: %_DEST%\inc%_EXT%\tools
 mkdir: %_DEST%\lib%_EXT%\remote
+mkdir: %_DEST%\inc%_EXT%\testSHL
+
 
 ..\%__SRC%\bin\remote\tl?????.dll %_DEST%\bin%_EXT%\remote\tl?????.dll
 ..\%__SRC%\bin\remote\tl?????.sym %_DEST%\bin%_EXT%\remote\tl?????.sym
@@ -25,6 +27,8 @@ mkdir: %_DEST%\lib%_EXT%\remote
 ..\%__SRC%\lib\tools.lib %_DEST%\lib%_EXT%\tools.lib
 ..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
 ..\%__SRC%\slb\btstrpsh.lib %_DEST%\lib%_EXT%\btstrpsh.lib
+..\%__SRC%\lib\tstutil.lib %_DEST%\lib%_EXT%\tstutil.lib
+..\%__SRC%\bin\testSHL.exe %_DEST%\bin%_EXT%\testSHL.exe
 
 hedabu: ..\win\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
 hedabu: ..\%__SRC%\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
@@ -142,6 +146,8 @@ hedabu: ..\inc\btcpcon.hxx %_DEST%\inc%_EXT%\tools\btcpcon.hxx
 hedabu: ..\inc\sasyncfn.hxx %_DEST%\inc%_EXT%\tools\sasyncfn.hxx
 hedabu: ..\inc\tcpdef.hxx %_DEST%\inc%_EXT%\tools\tcpdef.hxx
 hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\tools\config.hxx
+
+..\testSHL\inc\*.hxx %_DEST%\inc%_EXT%\testSHL\*.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
