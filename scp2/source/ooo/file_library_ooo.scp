@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.43 $
+*  $Revision: 1.44 $
 *
-*  last change: $Author: hr $ $Date: 2004-09-08 17:14:01 $
+*  last change: $Author: rt $ $Date: 2004-09-09 08:09:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -370,6 +370,8 @@ STD_UNO_LIB_FILE( gid_File_Lib_Ctl , ctl)
 
 STD_LIB_FILE( gid_File_Lib_Cui, cui)
 
+#ifndef SYSTEM_CURL
+
 File gid_File_Lib_Curl
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -380,6 +382,10 @@ File gid_File_Lib_Curl
     Name = "libcurl.dll";
   #endif
 End
+
+#endif
+
+#ifndef SYSTEM_DB3
 
 File gid_File_Lib_Db31
     TXT_FILE_BODY;
@@ -393,13 +399,13 @@ File gid_File_Lib_Db31
 End
 
 #ifdef UNX
-
 File gid_File_Lib_Db_Cxx
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libdb_cxx-3.2,UNXSUFFIX));
 End
+#endif
 
 #endif
 
@@ -615,7 +621,7 @@ End
 
 #ifdef UNX
 
-#ifndef MACOSX
+#if ! (defined(MACOSX) || defined (SYSTEM_FREETYPE))
 
 File gid_File_Lib_Freetype
   #ifdef LINUX
@@ -1613,6 +1619,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Spl, spl)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
+#ifndef USE_SYSTEM_STL
 File gid_File_Lib_Stlport
     TXT_FILE_BODY;
     Styles = (PACKED, SETUPZIP);
@@ -1641,6 +1648,7 @@ File gid_File_Lib_Stlport
   #endif
   #endif
 End
+#endif
 
 File gid_File_Lib_Stm
     TXT_FILE_BODY;
@@ -1905,8 +1913,10 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xsltfilter, xsltfilter )
 STD_UNO_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
 STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
 
+#ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
 UNO_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
+#endif
 
 #ifdef UNX
 
@@ -1914,6 +1924,7 @@ STD_SETUPZIP_LIB_FILE( gid_File_Lib_Zip, zip )
 
 #endif
 
+#ifndef SYSTEM_LIBXML
 File gid_File_Lib_Xml2
     TXT_FILE_BODY;
     Styles = (PACKED,SETUPZIP);
@@ -1924,8 +1935,8 @@ File gid_File_Lib_Xml2
     Name = "libxml2.dll";
   #endif
 End
+#endif
 
-#ifdef SOLAR_JAVA
 File gid_File_Lib_Jvmfwk
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
@@ -1936,7 +1947,6 @@ File gid_File_Lib_Jvmfwk
   #endif
     Styles = (PACKED,SETUPZIP);
 End
-#endif  
 
 #ifdef SOLAR_JAVA
 File gid_File_Lib_Sunjavaplugin
