@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:12:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,6 +963,8 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
                 aAfmFile += aName;
             }
         }
+        else
+            aAfmFile = aName;
 
         if( aAfmFile.Len() )
         {
