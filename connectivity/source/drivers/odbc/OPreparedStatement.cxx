@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 09:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,14 +775,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 
     if(!isPrepared())
         prepareStatement();
-    if ( x.getLength() > 2000 )
-    {
-        //  setBinaryStream (parameterIndex, new java.io.ByteArrayInputStream(x), x.length);
-    }
-    else
-    {
-        setBinary (parameterIndex, DataType::BINARY, x);
-    }
+    setBinary (parameterIndex, DataType::BINARY, x);
 }
 // -------------------------------------------------------------------------
 

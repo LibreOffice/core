@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 06:45:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-28 09:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,15 +472,20 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
         Sequence< sal_Int8 > nRet;
-        if(m_aRow[columnIndex].getTypeKind() != DataType::BINARY && m_aRow[columnIndex].getTypeKind() != DataType::VARBINARY)
-        {   // something went wrong so we have another type here
-            //  OSL_ENSURE(TypeClass_STRING == m_aRow[columnIndex].getValueTypeClass(),"ONLY string types supported!");
-            ::rtl::OUString sRet;
-            sRet = m_aRow[columnIndex].getString();
-            nRet = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
+        switch(m_aRow[columnIndex].getTypeKind())
+        {
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                nRet = m_aRow[columnIndex];
+                break;
+            default:
+            {
+                ::rtl::OUString sRet;
+                sRet = m_aRow[columnIndex].getString();
+                nRet = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
+            }
         }
-        else
-            nRet = m_aRow[columnIndex];
         return nRet;
     }
 
@@ -1662,7 +1667,8 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
     Reference< XResultSetMetaData > xMeta = getMetaData();
     for(sal_Int32 i=m_nLastColumnPos+1;i <= _nToColumn; ++i)
     {
-        switch (xMeta->getColumnType(i))
+        m_aRow[_nToColumn].setTypeKind(xMeta->getColumnType(i));
+        switch (m_aRow[_nToColumn].getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
