@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">Option Explicit
+
+Public sMSTemplateCheckbox(2) As String
+Public sMSDocumentCheckbox(2) As String
+Public sSODocumentCheckbox(4) As String
+Public sSOHelperdocuments(1) As String
+Public sTemplateCheckbox(SBMAXAPPLCOUNT-1) As String
+Public sDocumentCheckbox(SBMAXAPPLCOUNT-1) As String
+Public sTemplateGroupName(SBMAXAPPLCOUNT-1) As String
+Public sSumDocuments As String  &apos; Todo: Platzhalter einfÃƒÆ’Ã‚Â¼gen
+Public sPathErrorTemplates(SBMAXAPPLCOUNT-1) As String
+Public sPathErrorDocument(SBMAXAPPLCOUNT-1) As String
+Public sPathErrorStarDoc(SBMAXAPPLCOUNT-1) As String
+Public sStarDocLabel(SBMAXAPPLCOUNT-1) As String
+Public sImportLabel As String, sExportLabel As String
+Public sSearchInSubDir As String
+Public SOApplicationName(5) As String
+Public sHelpButton As String, sCancelButton As String, sBackButton As String, sNextButton As String
+Public sSumInclusiveSubDir As String, sSumSaveDocuments As String
+Public sSummaryHeader As String
+Public sWelcometextLabel1 As String, sWelcometextLabel2 As String,  sWelcometextLabel3 As String
+Public sBeginButton As String, sMsgDirNotThere As String
+Public sQueryForNewCreation As String, sPathError3 As String
+Public sNoDirCreation As String
+Public sProgressMoreDocs As String, sProgressMoreTemplates as String
+Public sFileExists As String, sMorePathsError3 As String
+Public sConvertError1 As String, sConvertError2 As String, sPathDialogMessage As String
+Public sRTErrorDesc As String, sRTErrorHeader As String
+Public sProgressPage_1 As String, sProgressPage_2 As String, sProgressPage_3 as String
+Public sProgressFound as String, sProgresspage_5 as String
+Public sContainerName(1) as String
+Public sReady as String, sTitle as String
+
+
+Sub LoadLanguage()
+	If InitResources(&quot;ImportWizard&quot;,&quot;imp&quot;) then
+		sHelpButton = GetResText(1000)
+		sCancelButton = GetResText(1001)
+		sBackButton = GetResText(1002)
+		sNextButton = GetResText(1003)
+		sBeginButton = GetResText(1004)
+
+		sWelcometextLabel1 = ReplaceString(GetResText(1005), GetProductName(),&quot;%PRODUCTNAME&quot;)
+		sWelcometextLabel2 = GetResText(1006)
+		sWelcometextLabel3 = GetResText(1007)
+
+		&apos; Microsoft Documents
+		GetApplResourceArray(1008, 3, sMSTemplateCheckBox())
+
+		&apos; DocumentCheckbox- Captions
+		GetApplResourceArray(1012, 3, sMSDocumentCheckBox())
+
+		&apos; DocumentCheckbox- Captions
+		GetApplResourceArray(2012, 5, sSODocumentCheckBox())
+
+		&apos;StarOffice Applicationnames
+		GetApplResourceArray(2016,2, sSOHelperDocuments())		
+
+		sImportLabel = GetResText(1033)
+		sExportLabel = GetResText(1034)	
+
+		sContainerName(0) = GetResText(1030)
+
+		sContainerName(1) = &quot;StarOffice&quot;
+	
+		sSearchInSubDir = GetResText(1022)
+		sSumInclusiveSubDir = GetResText(1023)
+		sSumSaveDocuments = GetResText(1024)
+		sSumDocuments = GetResText(1025)
+		sSummaryHeader = GetResText(1031)
+
+		sTemplateGroupName(0) = GetResText(1036)
+		sTemplateGroupName(1) = GetResText(1037)
+		sTemplateGroupName(2) = GetResText(1038)
+
+		sProgressMoreDocs = GetResText(1041)
+		sProgressMoreTemplates = GetResText(1042)
+		sNoDirCreation = GetResText(1050)
+		sMsgDirNotThere = GetResText(1051)
+		sQueryForNewCreation = GetResText(1052)
+		sFileExists = GetResText(1053)
+		sMorePathsError3 = GetResText(1054)
+		sConvertError1 = GetResText(1055)
+		sConvertError2 = GetResText(1056)
+		sRTErrorDesc = GetResText(1057)
+		sRTErrorHeader = GetResText(1058)
+		sPathDialogMessage = GetResText(1080)
+		sTitle = GetResText(1081)
+
+		sProgressPage_1 = GetResText(1090)
+		sProgressPage_2 = GetResText(1091)
+		sProgressPage_3 = GetResText(1092)
+		sProgressFound = GetResText(1093)
+		sProgressPage_5 = GetResText(1094)
+		sReady = GetResText(1100)
+		ImportDialogArea.Title = sTitle
+	End If
+End Sub
+
+
+Sub GetApplResourceArray(StartResIndex as Integer, Count as Integer, BigArray())
+Dim i as Integer
+Dim a as Integer
+	a = 0
+	For i = StartResIndex To StartResIndex + Count-1
+		BigArray(a) = GetResText(i)
+		a = a + 1
+	Next			
+End Sub
+
+
+Sub LoadLibrary(sLibname as String)
+Dim oArg(0) as new com.sun.star.beans.PropertyValue
+Dim oUrl as new com.sun.star.util.URL
+Dim oTrans as Object
+Dim oDisp as Object
+
+	oArg(0).Name = &quot;LibraryName&quot;
+	oArg(0).Value = sLibname
+
+	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
+	oUrl.Complete = &quot;slot:6517&quot;
+	oTrans.parsestrict(oUrl)
+
+	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp.dispatch(oUrl, oArg())
+End Sub
+
+</script:module>

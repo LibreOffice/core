@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Autotext" script:language="StarBasic">Public UserfieldDataType(14) as String
+Public oDocument as Object
+Public BulletList(7) as Integer
+
+Sub Main()
+	&apos; Initialization...
+	LoadLibrary(&quot;Tools&quot;)
+
+	UserfieldDatatype(0) = &quot;COMPANY&quot;
+	UserfieldDatatype(1) = &quot;FIRSTNAME&quot;
+	UserfieldDatatype(2) = &quot;NAME&quot;
+	UserfieldDatatype(3) = &quot;SHORTCUT&quot;
+	UserfieldDatatype(4) = &quot;STREET&quot;
+	UserfieldDatatype(5) = &quot;COUNTRY&quot;
+	UserfieldDatatype(6) = &quot;ZIP&quot;
+	UserfieldDatatype(7) = &quot;CITY&quot;
+	UserfieldDatatype(8) = &quot;TITLE&quot;
+	UserfieldDatatype(9) = &quot;POSITION&quot;
+	UserfieldDatatype(10) = &quot;PHONE_PRIVATE&quot;
+	UserfieldDatatype(11) = &quot;PHONE_COMPANY&quot;
+	UserfieldDatatype(12) = &quot;FAX&quot;
+	UserfieldDatatype(13) = &quot;EMAIL&quot;
+	UserfieldDatatype(14) = &quot;STATE&quot;
+	BulletList(0) = 149
+	BulletList(1) = 34
+	BulletList(2) = 65
+	BulletList(3) = 61
+	BulletList(4) = 49
+	BulletList(5) = 47
+	BulletList(6) = 79
+	BulletList(7) = 58
+
+	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	oStyles = oDocument.Stylefamilies.NumberingStyles
+
+	&apos; Prepare the Search-Descriptor
+	oSearchDesc = oDocument.createsearchDescriptor()
+	oSearchDesc.SearchRegularExpression = True
+	oSearchDesc.SearchWords = True
+	oSearchDesc.SearchString  = &quot;&lt;[^&gt;]+&gt;&quot;
+	oFoundall = oDocument.FindAll(oSearchDesc)
+
+	&apos;Loop over the foundings
+	For i = 0 To oFoundAll.Count - 1
+		oFound = oFoundAll.GetByIndex(i)
+		sFoundString = oFound.String
+		&apos;Extract the string inside the brackets
+		sFoundContent = FindPartString(sFoundString,&quot;&lt;&quot;,&quot;&gt;&quot;,1)
+		sFoundContent = LTrim(sFoundContent)
+
+		&apos; Define the Cursor and place it on the founding
+		oCursor = oDocument.Text.CreateTextCursorbyRange(oFound)
+
+		&apos; Find out, which object is to be created...
+		FieldStringThere = Instr(1,sFoundContent,&quot;Field&quot;)
+		ULStringThere = Instr(1,sFoundContent,&quot;UL&quot;)
+		PHStringThere = Instr(1,sFoundContent,&quot;Placeholder&quot;)
+		If FieldStringThere = 1 Then
+			CreateUserDatafield(oCursor, sFoundContent)
+		ElseIf ULStringThere = 1 Then
+			CreateBullet(oCursor, oStyles)
+		ElseIf PHStringThere = 1 Then
+			CreatePlaceholder(oCursor, sFoundContent)
+		End If
+	Next i
+End Sub
+
+
+&apos; creates a User - datafield out of a string with the following structure
+&apos; &quot;&lt;field:Company&gt;&quot;
+Sub	CreateUserDatafield(oCursor, sFoundContent as String)
+Dim MaxIndex as Integer
+Dim sTextFieldNotDefined as String
+	oUserfield = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
+	sFoundList() = ArrayoutofString(sFoundContent,&quot;:&quot;,MaxIndex)
+	UserInfo = UCase(LTrim(sFoundList(1)))
+	UserIndex = IndexinArray(UserInfo, UserfieldDatatype())
+	If UserIndex &lt;&gt; -1 Then
+		oUserField.UserDatatype = UserIndex
+		oCursor.Text.InsertTextContent(oCursor,oUserField,True)
+		oUserField.IsFixed = True
+	Else
+		If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) Then
+			sTextFieldNotDefined = GetResText(1400)
+			Msgbox(UserInfo &amp;&quot;: &quot; &amp; sTextFieldNotDefined,16, GetProductName())
+		End If
+	End If
+End Sub
+
+
+&apos; Creates a Bullet by setting a soft Formatation on the first unsorted List-Templates with a defined
+&apos; Bullet Id
+Sub	CreateBullet(oCursor, oStyles as Object)
+Dim n, m, s as Integer
+	StyleSet = False
+	For s = 0 To Ubound(BulletList())
+		For n = 0 To oStyles.Count - 1
+			ostyle = oStyles.getbyindex(n)
+			oStyleName = oStyle.Name
+			alevel() = ostyle.NumberingRules.getbyindex(0)
+			&apos; The properties of the style are stored in a Name-Value-Array()
+			For m = 0 to Ubound(alevel())
+				&apos; Set the first Numbering template without a bulletID
+				If (aLevel(m).Name = &quot;BulletId&quot;) Then
+					If alevel(m).Value = BulletList(s) Then
+						oCursor.NumberingStyle = oStyle.Name
+						oCursor.SetString(&quot;&quot;)
+						exit Sub
+					End if
+				End If
+			Next m
+		Next n
+	Next s
+	If Not StyleSet Then
+		&apos; The Template with the demanded BulletID is not available, so take the first style in the sequence
+		&apos; that has a defined Bullet ID
+		oCursor.NumberingStyleName = oStyles.GetByIndex(5).Name
+		oCursor.SetString(&quot;&quot;)
+	End If
+End Sub
+
+
+&apos; Creates a placeholder out of a string with the following structure:
+&apos;&lt;placeholder:â€œShowtextâ€œ:â€œHelptextâ€œ&gt;
+Sub	CreatePlaceholder(oCursor, sFoundContent as String)
+Dim MaxIndex as Integer
+	oPlaceholder = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.JumpEdit&quot;)
+	sFoundList() = ArrayoutofString(sFoundContent, &quot;:&quot; &amp; chr(34),MaxIndex)
+	&apos; Delete The Double-quotes
+	oPlaceHolder.Hint = DeleteStr(sFoundList(1),chr(34))
+	oPlaceHolder.placeholder = 	DeleteStr(sFoundList(2),chr(34))
+	oCursor.Text.InsertTextContent(oCursor,oPlaceholder,True)
+End Sub
+
+
+</script:module>

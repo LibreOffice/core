@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="AutoPilotRun" script:language="StarBasic">Option Explicit
+
+Public SourceDir as String
+Public TargetDir as String
+Public TargetStemDir as String
+Public SourceFile as String
+Public TargetFile as String
+Public EuroStyles(50) as String
+Public EuroBools(50) as Boolean
+Public Source as String
+Public SubstFile as String
+Public SubstDir as String
+Public NoArgs()
+Public FilterList(0) as String
+Public GoOn as Boolean
+Public UnprotectList(50,1) as String
+Public DoUnprotect as Integer
+Public Password as String
+Public DocIndex as Integer
+Public oPathSettings as Object	
+Public oDocInfo as Object
+Public oUcb as Object
+Public TotDocCount as Integer
+Public sTotDocCount as String
+
+Sub StartAutoPilot()
+Dim i As Integer
+	LoadLibrary(&quot;tools&quot;)
+	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
+		oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
+		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+		DocDisposed = True
+		oLocale = GetStarOfficeLocale()
+		InitializeConverter(oLocale, 2)
+		DialogConvert.Execute
+	End If
+End Sub
+
+
+Sub ConvertDocuments()		
+Dim FilesList()
+Msgbox DialogModel.lblSource.Label
+	Source = AssignFileName(DialogModel.txtSource.Text, DialogModel.lblSource.Label, True)
+	TargetDir = AssignFileName(DialogModel.txtTarget.Text, DialogModel.lblTarget.Label, False)
+	If Source &lt;&gt; &quot;&quot; And TargetDir &lt;&gt; &quot;&quot; Then
+		bRecursive = DialogModel.chkRecursive.State = 1
+		InitializeThirdStep()
+		If DialogModel.optSingleFile.State = 1 Then
+			SourceFile = Source
+			TotDocCount = 1
+		Else
+			SourceDir = Source
+			TargetStemDir = TargetDir
+			FilesList() = ReadDirectories(SourceDir, bRecursive, True, False, FilterList())
+			TotDocCount = CInt(FilesList(0,0))
+		End If
+		InitializeProgressPage(DialogModel)
+&apos;		ChangeToNextProgressStep()
+		sTotDocCount = CStr(TotDocCount)
+		For DocIndex = 1 To TotDocCount
+			If InitializeDocument(FilesList()) Then
+				ConvertDocument()
+				DocDisposed = StoreDocument()
+			End If
+		Next DocIndex
+		If GoOn Then
+			Msgbox (sMsgREADY,64, sMsgDLGTITLE)
+		End	If
+	End If
+End Sub
+
+
+Function InitializeDocument(FilesList()) as Boolean
+Dim sViewPath as String
+Dim oLocDocument as Object
+Dim oSecDocument as Object
+	&apos; The Autopilot is started from step No. 2
+	If DialogModel.optWholeDir.State = 1 Then
+		SourceFile = FilesList(DocIndex,0)
+		TargetFile = ReplaceString(SourceFile,TargetStemDir,SourceDir)
+		TargetDir = DirectorynameoutofPath(TargetFile, &quot;/&quot;)
+	Else
+		SourceFile = Source
+		TargetFile = TargetDir &amp; &quot;/&quot; &amp; FileNameoutofPath(SourceFile, &quot;/&quot;)
+	End If
+
+	If Not oUcb.Exists(TargetDir) Then
+		oUcb.CreateFolder(TargetDir)
+	End If
+ 	oLocDocument = OpenDocument(SourceFile, NoArgs(), StarDesktop)
+	Set oSecDocument = PrepareForEditing(oLocDocument)
+	If Not IsNull(oDocument) Then
+		DoUnProtect = -6 * Int(DialogModel.chkProtect.State = 1)
+		RetrieveDocumentObjects()
+		sViewPath = CutPathView(SourceFile, 60)
+		DialogModel.LabelCurDocument.Label = Str(DocIndex) &amp; &quot;/&quot; &amp; sTotDocCount &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+		InitializeDocument() = True
+	Else
+		InitializeDocument() = False
+	End If
+End Function
+
+
+Sub ChangeToNextProgressStep()
+	DialogModel.LabelCurProgress.FontBold = False
+	DialogModel.LabelCurProgress.Visible = False
+	DialogModel.LabelCurProgress.Visible = True
+	DialogModel.cmdBack.Enabled = True
+End Sub
+
+
+Function StoreDocument()
+	If TargetFile &lt;&gt; &quot;&quot; Then
+		On Local Error Goto NOSAVING
+		If TargetFile &lt;&gt; SourceFile Then
+			oDocument.StoreToUrl(TargetFile,NoArgs) 
+		Else
+			oDocument.Store
+		End If
+		oDocument.Dispose()
+		StoreDocument() = True
+		NOSAVING:
+		If Err &lt;&gt; 0 Then
+			StoreDocument() = False
+			Resume CLERROR
+		End If
+		CLERROR:
+	End If
+End Function
+
+
+Sub SwapExtent()
+	DialogModel.chkRecursive.Enabled = DialogModel.optWholeDir.State = 1
+	If DialogModel.optWholeDir.State = 1 Then
+		DialogModel.lblSource.Label = sSOURCEDIR     &apos;&quot;Quellverzeichnis:&quot;
+		If Not IsNull(SubstFile) Then
+			SubstFile = DialogModel.txtSource.Text
+			DialogModel.txtSource.Text = SubstDir
+		End If
+	Else
+		DialogModel.LblSource.Label = sSOURCEFILE   &apos;&quot;Quelldatei:&quot;
+		If Not IsNull(SubstDir) Then
+			SubstDir = DialogModel.txtSource.Text
+			DialogModel.txtSource.Text = SubstFile
+		End If
+	End If
+End Sub
+
+
+
+Sub SourceSearchDialog()
+	If DialogModel.optWholeDir.State = 1 Then
+		&apos;Konvertierung eines gesamten Verzeichnisses	
+		Source = Application.FileDialog( &quot;P&quot;, sMsgSELDIR, DialogModel.txtSource.Text )  &apos; &quot;WÃ¤hlen Sie ein Verzeichnis&quot;
+	Else
+		Source = Application.FileDialog( &quot;O&quot;, sMsgSELFILE, DialogModel.txtSource.Text ) &apos; &quot;WÃ¤hlen Sie eine Datei&quot;
+	End If
+	DialogModel.txtSource.Text = AssignFileName(Source, DialogModel.LblSource.Label,True)
+End Sub
+
+
+
+Sub TargetDirectorySearchDialog()
+	TargetDir = Application.FileDialog( &quot;P&quot;, sMsgTARGETDIR, DialogModel.txtTarget.Text )
+	DialogModel.txtTarget.Text = AssignFileName(TargetDir, DialogModel.LblTarget.Label,False)
+End Sub
+
+
+Function AssignFileName(sPath as String, ByVal HeaderString, bCheckFileType as Boolean) as String
+Dim bIsValid as Boolean
+Dim sLocMimeType as String
+Dim sNoDirMessage as String
+	HeaderString = DeleteStr(HeaderString, &quot;:&quot;)
+	sPath = ConvertToUrl(Trim(sPath))
+	bIsValid = oUcb.Exists(sPath)
+	If bIsValid Then
+		If DialogModel.optSingleFile.State = 1 Then
+			If bCheckFileType Then
+				sLocMimeType = GetRealFileContent(oDocInfo, sPath)
+				If Instr(1, sLocMimeType, &quot;calc&quot;) = 0 Then
+					Msgbox(sMsgFileInvalid, 48, sMsgDLGTITLE)
+					bIsValid = False
+				End If
+			End If
+		Else
+			If Not oUcb.IsFolder(sPath) Then
+				sNoDirMessage = ReplaceString(sMsgNODIRECTORY,sPath,&quot;&lt;1&gt;&quot;)
+				Msgbox(sNoDirMessage,48, sMsgDLGTITLE)
+				bIsValid = False
+			Else
+				sPath = RTrimStr(sPath,&quot;/&quot;)
+				sPath = sPath &amp; &quot;/&quot;
+			End If
+		End if
+	Else
+		Msgbox(HeaderString &amp; &quot; &apos;&quot; &amp; sPath &amp; &quot;&apos; &quot; &amp;  sMsgNOTTHERE,48, sMsgDLGTITLE)	
+	End If
+	If bIsValid Then
+		AssignFileName() = sPath
+	Else
+		AssignFilename() = &quot;&quot;
+	End If
+End Function	
+
+
+
+Function UnprotectSheet(oListSheet as Object)
+Dim PWIsCorrect as Boolean
+&apos;Dim Password as String
+Dim QueryText as String
+Dim ListSheetName as String
+Dim OldDoUnprotect as Integer
+Dim sStatustext as String
+	ListSheetName = oListSheet.Name
+	If oListSheet.IsProtected Then
+		OldDoUnprotect = DoUnprotect
+		If DoUnprotect = 0 Then
+			&apos; At First query if sheets shall generally be unprotected
+			DoUnprotect = Msgbox(sMsgUNPROTECT,36,sMsgDLGTITLE)
+		End If
+		If DoUnprotect = 6 Then
+			&apos;the answer is yes...
+			&apos; Try to unprotect the sheet without a Password
+			oListSheet.Unprotect(&quot;&quot;)
+			If oListSheet.IsProtected Then
+				&apos; Sheet is protected by a Password
+				oDocument.CurrentController.SetActiveSheet(oListSheet)
+		
+				QueryText = ReplaceString(sMsgPWPROTECT,&quot;&apos;&quot; &amp; ListSheetName &amp; &quot;&apos;&quot;, &quot;%1TableName%1&quot;) 
+				&apos;&quot;Geben Sie das Kennwort zum EntschÃ¼tzen der Tabelle &apos;&quot; &amp; ListSheetName &amp; &quot; ein:&apos;&quot;
+				Do
+					InitializePasswordDialog()
+					If bCancelProtection Then
+						bCancelProtection = False
+						Msgbox (sMsgSHEETSNOPROTECT, 64, sMsgDLGTITLE)
+						UnprotectSheet = False   &apos;&quot;Tabelle wird nicht entschÃ¼tzt!&quot;
+						exit Function
+					End If
+					oListSheet.Unprotect(Password)
+					If oListSheet.IsProtected Then
+						PWIsCorrect = False
+						Msgbox (sMsgWRONGPW, 64, sMsgDLGTITLE)
+					Else
+						&apos; Sheet could be unprotected
+						AddSheettoUnprotectionlist(ListSheetName,Password)
+						PWIsCorrect = True
+					End If
+				Loop Until PWIsCorrect
+				UnProtectSheet = True
+			Else
+				&apos; The Sheet could be unprotected without a password
+				AddSheettoUnprotectionlist(ListSheetName,&quot;&quot;)
+				UnprotectSheet = True
+			End If
+		Else
+			&apos; The Answer is &apos;No&apos; (Tables shall not be unprotected)
+			If OldDoUnprotect = 0 Then 
+				Msgbox (sMsgSHEETSNOPROTECT, 64, sMsgDLGTITLE)
+			End If       &apos;&quot;Tabellen werden nicht entschÃ¼tzt!&quot;
+			Unprotectsheet = False
+		End If
+	Else
+		UnprotectSheet = True
+	End If
+End Function
+
+
+Sub	InitializePasswordDialog()
+	With DialogPW
+		.Load
+		.Label = QueryText
+		.frmSelection.Label = sMsgPASSWORD
+		.cmdOK.Label = sMsgOK
+		.cmdCancel.Label = sMsgCANCEL
+		.cmdHelp.Label = sHELP
+		.Show
+	End With
+End Sub
+
+Sub ReadPassword()
+	Password = DialogPW.TextBox1.Text
+	DialogPW.Unload
+End Sub
+
+
+Sub RejectPassword()
+	bCancelProtection = True
+	DialogPW.Unload
+End Sub
+
+
+&apos; Reprotects the previousliy protected sheets
+&apos; The passwordinformation is stored in the List &apos;UnProtectList()&apos;
+Sub ReprotectSheets()
+Dim i as Integer
+Dim oProtectSheet as Object
+	If Val(UnProtectList(0,0)) &gt; 0 Then
+&apos;		oStatusline.SetText(sStsREPROTECT)
+		For i = 1 To Val(UnProtectList(0,0))
+			oProtectSheet =  oSheets.GetbyName(UnProtectList(i,0)
+			If Not oProtectSheet.IsProtected Then
+				oProtectSheet.Protect(UnProtectList(i,1))
+			End If
+			UnprotectList(i,0) = &quot;&quot;
+			UnprotectList(i,1) = &quot;&quot;
+		Next i
+	End If
+	UnprotectList(0,0) = &quot;&quot;
+End Sub
+
+
+&apos; Add a Sheet to the list of sheets that finally have to be
+&apos; unprotected
+Sub AddSheettoUnprotectionlist(ListSheetName,Password)
+	UnprotectList(Int(UnProtectList(0,0))+ 1,0) = ListSheetName
+	UnprotectList(Int(UnProtectList(0,0))+ 1,1) = Password		
+	&apos; The first Field contains the highest Index of the list
+	&apos; and therefor has to be incremented
+	UnprotectList(0,0) = Str(Val(UnProtectList(0,0)) + 1)
+End Sub	
+
+
+Sub HelperDialog()
+&apos;Todo: The String &quot;start&quot; can be replaced by a HelpIndex
+	StarDesktop.LoadComponentfromUrl(&quot;vnd.sun.star.help://&quot; &amp; sDocType &amp; &quot;/start&quot;, &quot;_OFFICE_HELP&quot;, 64, NoArgs())
+End Sub
+
+
+Sub	InitializeThirdStep()
+Dim TextBoxText as String
+	DialogModel.lblCurrencies.Visible = False
+	DialogModel.lstCurrencies.Visible = False 
+	DialogModel.cmdBack.Label = sBACK
+	DialogModel.LabelRetrieval.FontBold = True
+	DialogModel.LabelRetrieval.Label = sPrgsRETRIEVAL
+	DialogModel.LabelCurProgress.Label = sPrgsCONVERTING
+	DialogModel.cmdGoOn.Visible = False
+	DialogModel.Step = 3
+	If DialogModel.optWholeDir.State = 1 Then
+		TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot; 
+		If DialogModel.chkRecursive.State = 1 Then
+			TextBoxText = TextBoxText &amp; DeleteStr(sSUBDIR,&quot;&amp;&quot;) &amp; chr(13)&apos; &amp; &quot; &quot; 
+		End If
+	Else
+		TextBoxText = sSOURCEFILE &amp; &quot; &quot; &amp; Source &amp; chr(13) &apos;&amp; &quot; &quot; 
+	End If
+	TextBoxText = TextBoxText &amp; sTARGETDIR &amp; &quot; &quot; &amp; TargetDir &amp; chr(13)&apos; &amp; &quot; &quot; 
+	If DialogModel.chkProtect.State = 1 Then
+		TextBoxText = TextboxText &amp; sPrgsUNPROTECT
+	End If
+	DialogModel.TextBoxConfig.Text = TextBoxText
+	DialogModel.cmdBack.Visible = True
+End Sub
+
+
+Sub SwitchBack()
+	DialogModel.Step = 2
+	DialogModel.lblCurrencies.Visible = True
+	DialogModel.lstCurrencies.Visible = True 
+	DialogModel.cmdBack.Visible = False
+	DialogModel.cmdGoOn.Visible = True	
+End Sub
+
+
+Sub EnableStep2DialogControls(OnValue as Boolean)
+	DialogModel.frmExtent.Enabled = OnValue
+	DialogModel.optWholeDir.Enabled = OnValue
+	DialogModel.optSingleFile.Enabled = OnValue
+	DialogModel.chkProtect.Enabled = OnValue
+	DialogModel.cmdCallSourceDialog.Enabled = False
+	DialogModel.cmdCallTargetDialog.Enabled = False
+	DialogModel.lblSource.Enabled = OnValue
+	DialogModel.lblTarget.Enabled = OnValue
+	DialogModel.txtSource.Enabled = OnValue
+	DialogModel.txtTarget.Enabled = OnValue
+&apos;	DialogModel.Preview1.Enabled = OnValue
+	DialogModel.lstCurrencies.Enabled = OnValue
+	DialogModel.lblCurrencies.Enabled = OnValue
+	If OnValue Then
+		DialogModel.cmdGoOn.Enabled = Ubound(DialogModel.lstCurrencies.SelectedItems()) &gt; -1
+		DialogModel.chkRecursive.Enabled = DialogModel.optWholeDir.State = 1
+	Else
+		DialogModel.cmdGoOn.Enabled = False
+		DialogModel.chkRecursive.Enabled = False
+	End If
+End Sub
+
+
+Sub InitializeProgressPage()
+	DialogModel.LabelRetrieval.Visible = False
+	DialogModel.LabelCurProgress.Visible = False
+	DialogModel.LabelRetrieval.FontBold = False
+	DialogModel.LabelCurProgress.FontBold = True
+	DialogModel.LabelRetrieval.Visible = True
+	DialogModel.LabelCurProgress.Visible = True
+End Sub</script:module>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Main" script:language="StarBasic">&apos;  *****  BASIC  *****
+&apos; Todo: Problematik der VBA-Makros, die angeblich nicht mit abgespeichert werden kÃƒÂ¶nnen.
+&apos; Evt. Erkennen der Arbeitsverzeichnisse von MS Office
+&apos; Filternamen fÃƒÂ¼r Ziel-XML-Dokumente und deren Extensionen feststellen (auch fÃƒÂ¼r StarMath)
+&apos; Extension fÃƒÂ¼r XML-Vorlagen klÃƒÆ’Ã‚Â¤ren
+Public HeaderPreviews(4) as Object
+Public ImportDialog as Object
+Public ImportDialogArea as Object
+
+Sub Main
+	LoadLibrary(&quot;Tools&quot;)
+	sCRLF = CHR(10) &amp; CHR(13)
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	If Not bDebugWizard Then
+		On Error Goto RTError
+	End If
+	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+	SOWorkPath = ConvertToUrl(GetPathSettings(&quot;Work&quot;, False))
+	SOTemplatePath = ConvertToUrl(GetPathSettings(&quot;Template&quot;,False,1))
+  	bCancelTask = False
+	CurOffice = 0
+	ImportDialogArea = LoadDialog(&quot;ImportWizard&quot;,&quot;ImportDialog&quot;)
+
+	ImportDialog = ImportDialogArea.Model
+	LoadLanguage()
+	FillStep_Welcome()
+	RepaintHeaderPreview()
+	SetStates()
+	ImportDialogArea.execute
+	Exit Sub
+RTError:
+	Msgbox sRTErrorDesc, 16, sRTErrorHeader
+End Sub
+
+
+Sub SetStates
+	With ImportDialog	
+		.OptSODocuments.State = 1
+	    .OptMSDocuments.State = 0
+		.TemplateCheckbox.State = 1
+		.DocumentPathCheckbox.State = 0
+	End With
+End Sub
+
+
+Sub NextStep
+Dim iCurStep as Integer
+	If Not bDebugWizard Then
+		On Error Goto RTError
+	End If
+
+  iCurStep = ImportDialog.Step
+	Select Case iCurStep
+		Case 1
+			FillStep_InputPaths(0, True)
+		Case 2
+			If SaveStep_InputPath Then
+				If CurOffice &lt; ApplCount - 1 Then
+					CurOffice = CurOffice + 1
+					FillStep_InputPaths(CurOffice, False)
+					RepaintHeaderPreview()
+				Else
+					FillStep_Summary()
+				End If
+			End If
+		Case 3
+			FillStep_Progress()
+			Select Case WizardMode
+				Case SBMICROSOFTMODE
+					Call ConvertAllDocuments(MSFilterName())
+				CASE SBXMLMODE
+					Call ConvertAllDocuments(XMLFilterName())
+			End Select
+		Case 4
+	End Select
+	Exit Sub
+RTError:
+	Msgbox sRTErrorDesc, 16, sRTErrorHeader
+End Sub
+
+
+
+Sub PrevStep
+Dim iCurStep as Integer
+	If Not bDebugWizard Then
+		On Error Goto RTError
+	End If
+	iCurStep = ImportDialog.Step
+	Select Case iCurStep
+		Case 4
+			FillStep_Summary()
+		Case 3
+&apos;Todo: mÃƒÆ’Ã‚Â¼ssen auch beim ZurÃƒÆ’Ã‚Â¼cksteppen wirklich die Importpfade auf ihre GÃƒÆ’Ã‚Â¼ltigkeit hin ÃƒÆ’Ã‚Â¼berprÃƒÆ’Ã‚Â¼ft werden?
+			FillStep_InputPaths(Applcount-1, False)
+		Case 2
+			If SaveStep_InputPath Then
+				If CurOffice &gt; 0 Then
+					CurOffice = CurOffice - 1
+					FillStep_InputPaths(CurOffice, False)
+					RepaintHeaderPreview()
+				Else
+					FillStep_Welcome()
+&apos;					bDoKeepApplValues = True
+				End If
+			End If
+	End Select
+
+	Exit Sub
+RTError:
+	Msgbox sRTErrorDesc, 16, sRTErrorHeader
+End Sub
+
+
+Sub CancelButton
+	If ImportDialog.Step = 4 Then
+		Call CancelButtonPressed()
+	Else
+		ImportDialogArea.EndExecute
+		ImportDialogArea.Dispose
+		End
+	End If
+End Sub
+
+
+Sub CancelTask()
+	If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
+		ImportDialogArea.EndExecute
+		ImportDialogArea.Dispose
+		End
+	Else
+		bCancelTask = False
+		ImportDialog.cbCancel.Enabled = True
+	End If
+End Sub
+
+
+Sub CancelButtonPressed()
+	ImportDialog.cbCancel.Enabled = False
+	bCancelTask = True
+End Sub
+
+
+Sub TemplateDirSearchDialog()
+	CallDirSearchDialog(ImportDialog.TemplateImportPath)
+End Sub
+
+
+Sub RepaintHeaderPreview()
+Dim Bitmap As Object
+Dim CurStep as Integer
+Dim sBitmapPath as String
+	CurStep = ImportDialog.Step
+	If CurStep = 2 Then
+		sBitmapPath = SOBitmapPath &amp; WizardMode &amp; &quot;-Import_&quot; &amp; CurStep &amp; &quot;-&quot; &amp; Val(Applications(CurOffice,9))+1 &amp; &quot;.bmp&quot;
+	Else
+		sBitmapPath = SOBitmapPath &amp; &quot;Import_&quot; &amp; CurStep &amp; &quot;.bmp&quot;
+	End If
+	Set Bitmap = LoadPicture (sBitmapPath)
+	ImportDialog.ImportPreview.ImageURL = sBitmapPath
+End Sub
+
+
+Sub HelperDialog()
+&apos;Todo: The String &quot;start&quot; can be replaced by a HelpIndex
+	StarDesktop.LoadComponentfromUrl(&quot;vnd.sun.star.help://&quot; &amp; sDocType &amp; &quot;/start&quot;, &quot;_OFFICE_HELP&quot;, 64, NoArgs())
+End Sub
+
+
+Sub DisorEnableCheckboxes(oEvent as Object)
+Dim bMSEnable, bXMLEnable as Boolean
+	Select Case oEvent.Source.Model.Tag
+	Case &quot;MS&quot;
+		bMSEnable = true
+		bXMLEnable = false
+	Case &quot;XML&quot;
+		bMSEnable = false
+		bXMLEnable = true
+	End Select
+	With ImportDialog
+		.ChkFirstSOApplication.Enabled = bXMLEnable
+		.ChkSecondSOApplication.Enabled = bXMLEnable
+		.ChkThirdSOApplication.Enabled = bXMLEnable
+		.ChkFourthSOApplication.Enabled = bXMLEnable
+		.ChkFirstMSApplication.Enabled = bMSEnable
+		.ChkSecondMSApplication.Enabled = bMSEnable
+		.ChkThirdMSApplication.Enabled = bMSEnable
+		.WelcomeTextLabel2.Enabled = bMSEnable
+	End With
+	DisOrEnableNextButton()
+End Sub
+
+
+Sub DisOrEnableNextButton()
+Dim iCurStep as Integer
+Dim bDoEnable as Boolean
+Dim i as Integer
+
+	iCurStep = ImportDialog.Step
+	Select Case iCurStep
+		Case 1
+			With ImportDialog
+				If .OptMSDocuments.State Then
+          			bDoEnable = .ChkFirstMSApplication.State Or .ChkSecondMSApplication.State Or .ChkThirdMSApplication.State
+				Else
+          			bDoEnable = .ChkFirstSOApplication.State Or .ChkSecondSOApplication.State Or .ChkThirdSOApplication.State Or .ChkFourthSOApplication.State
+				End If
+			End With
+&apos;			bDoKeepApplValues = False
+		Case 2
+			bDoEnable = CheckControlPath(ImportDialog.TemplateImportPath, True)
+			bDoEnable = CheckControlPath(ImportDialog.TemplateExportPath, bDoEnable)
+			bDoEnable = CheckControlPath(ImportDialog.DocumentImportPath, bDoEnable)
+			bDoEnable = CheckControlPath(ImportDialog.DocumentExportPath, bDoenable)
+	End Select
+	ImportDialog.cbGoOn.Enabled = bDoEnable
+End Sub
+
+
+Function ControlStateToBool(iState)
+	ControlStateToBool = (Val(iState) = 1)
+End Function
+</script:module>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="BankHoliday" script:language="StarBasic">Option Explicit
+
+Sub Main()
+	Call CalAutopilotTable()
+End Sub
+
+
+Function CalEasterTable&amp;(byval Year%)
+
+	Dim   B,C,D,E,F,G,H,I,K,L,M,N,O, nMonth, nDay As Integer
+
+       N = Year% mod 19
+       B = int(Year% / 100)
+       C = Year% mod 100
+       D = int(B / 4)
+       E = B mod 4
+       F = int((B + 8) / 25)
+       G = int((B - F + 1) / 3)
+       H =(19 * N + B - D - G + 15) mod 30
+       I = int(C / 4)
+       K = C mod 4
+       L =(32 + 2 * E + 2 * I - H - K) mod 7
+       M = int((N + 11 * H + 22 * L) / 451)
+       O = H + L - 7 * M + 114
+       nDay = O mod 31 + 1
+       nMonth = int(O / 31)
+	   CalEasterTable&amp; = DateSerial(Year%, nMonth,nDay)
+End Function
+
+
+
+Sub CalInitGlobalVariablesDate()
+	Dim Count%
+
+	For Count% = 1 To 374
+		CalBankholidayName$(Count%) = &quot;&quot;
+		CalTypeOfBankHoliday%(Count%) = cHolidayType_None
+	Next
+End Sub
+
+
+
+Sub CalInsertBankholiday(byval actDate&amp;, byval Event$, ByVal nBankholidayLevel%)
+	Dim DayInYear%
+	&apos;	Fuegt ein Ereignis in das globale EventArray ein.
+	&apos;	Der Sonderfall der eintreten kann, ist der, dass das Datum
+	&apos;	an dem eingefuegt werden soll, bereits ein Ereignis enthaelt.
+	&apos;	Dann werden beide Ereignisse mit einem Schraegstrich verbunden.
+	DayInYear% =(Month(actDate&amp;)-1)*31 +Day(actDate&amp;)
+
+	&apos;	Hoehere Prioritaet des Feiertagtyps
+	If (0 &lt;&gt; CalTypeOfBankHoliday%(DayInYear%)) Then
+		If (nBankholidayLevel% &lt; CalTypeOfBankHoliday%(DayInYear%)) Then
+			CalTypeOfBankHoliday%(DayInYear%) = nBankholidayLevel%
+		End If
+	Else
+		CalTypeOfBankHoliday%(DayInYear%) = nBankholidayLevel%
+	End If
+
+	If (CalBankHolidayName$(DayInYear%) = &quot;&quot;) Then
+		CalBankHolidayName$(DayInYear%) = Event$
+	Else
+		CalBankHolidayName$(DayInYear%) = CalBankHolidayName$(DayInYear%) + &quot; / &quot; + Event$
+	End If
+End Sub
+
+
+
+Function CalIsLeapYear%(ByVal TheYear%)
+	CalIsLeapYear% = TheYear Mod 4 = 0
+End Function
+
+
+Function CalMaxDayInMonth%(byval YearVal%, byval MonthVal%)
+	&apos;	Liefert den maximalen Tag eines Monats in einem
+	&apos;	bestimmten Jahr.
+
+	Dim tmpDate&amp;
+	Dim	MaxDay%
+	
+	MaxDay = 28
+	tmpDate&amp; = DateSerial(YearVal%, MonthVal%, MaxDay)
+	
+	While Month(tmpDate&amp;) = MonthVal%
+		MaxDay% = MaxDay% + 1
+		tmpDate&amp; = tmpDate&amp; + 1
+	Wend
+	Maxday% = MaxDay% - 1
+	CalMaxDayInMonth% = MaxDay%	
+End Function
+
+
+Function CalGetIntOfShortMonthName%(byval MonthName$)
+
+	Dim nCount%, nMonth%
+	
+	nMonth% = Val(MonthName$)
+	
+	If (1 &lt;= nMonth% And 12 &gt;= nMonth%) Then
+		CalGetIntOfShortMonthName% = nMonth%
+		Exit Function
+	End If	
+	
+	MonthName$ = UCase(Trim(Left(MonthName, 3)))
+
+	For nCount% = 1 To 12 
+		If (UCase(cCalShortMonthNames$(nCount%)) = MonthName$) Then
+			CalGetIntOfShortMonthName% = nCount%
+			Exit Function
+		End If
+	Next
+	
+	&apos;	Not Found
+	CalGetIntOfShortMonthName% = 0
+End Function
+
+
+Sub CalInsertOwnDataInTables(byval YearToInsert%)
+	&apos;	Fügt die eigenen Individuellen Daten aus der Tabelle in die
+	&apos;	bereits erstellte unsortierte Tabelle ein.	
+	Dim i%, actYear%, actMonth%, actDay%, theEvent$
+	
+	For i = 0 To lbOwnData.ListCount() - 1
+		actYear% = Val(Mid$(lbOwnData.List(i%), 10, 4))
+		If (actYear%=YearToInsert%) Or (actYear%=0) Then
+			actMonth% = CalGetIntOfShortMonthname%(Mid$(lbOwnData.List(i%), 5, 3))
+			actDay% = Val(Left$(lbOwnData.List(i%), 2))
+			theEvent$ = Trim(Mid$(lbOwnData.List(i%), 16))
+			CalInsertBankholiday(DateSerial(actYear%, actMonth%, actDay%), theEvent$, cHolidayType_Own)
+		End If
+	Next
+End Sub
+
+
+&apos; Finds eg the first,second Monday in a month
+&apos; Note: in This Function the week starts with the Sunday
+Function GetMonthDate(iWeekDay, iMonth, iCount as Integer)
+Dim bFound as Boolean
+Dim nCount%,lDate as Integer
+	&apos;	1st Tue in Nov : Election Day, Half
+	bFound = False
+	nCount% = 0
+	lDate = DateSerial(YearInt%, iMonth, 1)
+	While Not bFound
+		If (iWeekDay = WeekDay(lDate)) Then nCount% = nCount% + 1
+		If (nCount &lt; iCount) Then
+			lDate = lDate + 1
+		Else
+			bFound = True
+		End If
+	Wend
+	GetMonthDate = lDate
+End Function
+</script:module>

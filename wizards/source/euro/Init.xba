@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
+REM  *****  BASIC  *****
+
+Public sREADY as String
+Public sPROTECT as String
+Public sCONTINUE as String
+
+Public sSELTEMPL as String
+Public sSELCELL as String
+Public sCURRRANGES as String
+Public sTEMPLATES as String
+
+Public sSOURCEFILE as String
+Public sSOURCEDIR as String
+
+Public sStsPROGRESS as String
+Public sStsCELLPROGRSS as String
+Public sStsRELRANGES as String
+Public sStsRELSHEETRANGES as String
+Public sStsREPROTECT as String
+
+Public sMsgREADY as String
+Public sMsgSELDIR as String
+Public sMsgSELFILE as String
+Public sMsgTARGETDIR as String
+Public sMsgNOTTHERE as String
+Public sMsgDLGTITLE as String
+Public sMsgUNPROTECT as String
+Public sMsgPWPROTECT as String
+Public sMsgWRONGPW as String
+Public sMsgSHEETPROTECTED as String
+Public sMsgWARNING as String
+Public sMsgSHEETSNOPROTECT as String
+Public sMsgSHEETNOPROTECT as String
+Public sMsgCHOOSECURRENCY as String
+Public sMsgPASSWORD as String
+Public sMsgOK as String
+Public sMsgCANCEL as String
+Public sMsgFileInvalid as String
+Public sMsgNODIRECTORY as String
+
+Public sCurrPORTUGUESE as String
+Public sCurrDUTCH as String
+Public sCurrFRENCH as String
+Public sCurrSPANISH as String
+Public sCurrITALIAN as String
+Public sCurrGERMAN as String
+Public sCurrBELGIAN as String
+Public sCurrIRISH as String
+Public sCurrLUXEMBOURG as String
+Public sCurrAUSTRIAN as String
+Public sCurrFINNISH as String
+Public sCurrUNKNOWN as String
+Public sCurrSYSUNKNOWN as String
+
+Public sPrgsRETRIEVAL as String
+Public sPrgsCONVERTING as String
+Public sPrgsUNPROTECT as String
+
+Public Const SBCOUNTRYCOUNT = 11
+Public CurCellCount as Long
+Public oSheets as Object
+Public oStyles as Object
+Public oStyle as Object
+Public oFormats as Object
+Public aSimpleStr as String
+Public nSimpleKey as Long
+Public aFormat() as Variant
+Public oRanges as Object
+Public oRange as Object
+Public nLanguage as integer
+Public nFormatLanguage as integer
+Public aCellFormat as Variant
+Public StyleRangeAssignmentList(20,50)as String
+Public oDocument as Object
+Public StartCol, StartRow, EndCol, EndRow as String
+Public oSheet as Object
+Public IntStartCol,	IntStartRow, IntEndCol,	IntEndRow as integer
+Public oSelRanges as Object
+Public nFormatType as Integer
+Public sFormatCurrency as String
+Public sFormatLanguage as String
+Public RangeList(200) as String
+Public SelRangeList(200) as String
+Public ListboxItems(200) as String
+Public CurSheetName as String
+Public oStatusLine as Object
+Public Const SBRELGET = 50
+Public StatusValue as Single
+Public TotCellCount as Long
+Public StyleIndex as Integer
+Public RemoveList(100) as String
+Public RangeIndex as Integer
+Public CurrIndex as Integer
+Public ActLangNumber(1) as Integer
+Public CurExtension(1) as String
+Public Currfactor as Double
+Public CurrSymbolList(2) as String
+Public CurrLanguage as String
+Public CurrValue(10,5) as String
+Public LangIDValue(10,2,2) as String
+Public PreName as String
+Public oAddressRanges as Object
+Public Separator as String
+Public BitmapDir as String
+Public TypeIndex as Integer, CSIndex as Integer, LangIndex as Integer, FSIndex as Integer
+Public oLocale as Object
+Public sEuroSign as String
+Public oPointer as Object
+Public sDocType as String
+Public RangeBools(100) as Boolean
+Public bPreSelected as Boolean
+Public DocDisposed as Boolean
+Public bMacroStopped as Boolean
+Public bRecursive as Boolean
+Public bCancelProtection as Boolean
+Public CurrRoundMode as Boolean
+Public bRangeListDefined as Boolean
+
+
+Sub InitializeResources()
+	DialogModel.cmdCancel.Label =  GetResText(1000)
+	DialogModel.cmdHelp.Label =  GetResText(1001)
+	DialogModel.cmdBack.Label =  GetResText(1002)
+	DialogModel.cmdGoOn.Label =  GetResText(1003)
+	DialogModel.lblHint.Label =  GetResText(1004)
+	DialogModel.lblCurrencies.Label = GetResText(1006)
+&apos; Todo: Dieses Model später am Control unsichtbar machen	
+	If DialogModel.Step = 1 Then
+		DialogModel.chkComplete.Label = GetResText(1100)
+		DialogModel.frmSelection.Label = GetResText(1101)
+		DialogModel.optCellTemplates.Label = GetResText(1102)
+		DialogModel.optSheetRanges.Label = GetResText(1103)
+		DialogModel.optDocRanges.Label = GetResText(1104)
+		DialogModel.optSelRange.Label = GetResText(1105)
+		sCURRRANGES = GetResText(1108)
+		DialogModel.lblSelection.Label = sCURRRANGES
+	Else
+	 	DialogModel.frmExtent.Label = GetResText(1200)
+		DialogModel.optSingleFile.Label = GetResText(1201)
+ 		DialogModel.optWholeDir.Label = GetResText(1202)
+ 		DialogModel.chkProtect.Label = GetResText(1207)
+		sSOURCEFILE = GetResText(1203)
+		sSOURCEDIR = GetResText(1204)
+ 		DialogModel.lblSource.Label = sSOURCEDIR
+ 		DialogModel.chkRecursive.Label = GetResText(1205)
+ 		DialogModel.lblTarget.Label = GetResText(1206)
+		DialogModel.optWholeDir.State = 1
+		DialogModel.txtSource.Text = GetPathSettings(&quot;Work&quot;)
+		DialogModel.txtTarget.Text = DialogModel.txtSource.Text
+
+		DialogModel.frmProgress.Label = GetResText(1600)
+		DialogModel.lblConfig.Label = GetResText(1603)
+		sPrgsRETRIEVAL = GetResText(1601)
+		sPrgsCONVERTING = GetResText(1602)
+		sPrgsUNPROTECT = GetResText(1604)
+	End If
+	DialogModel.cmdBack.Enabled = False
+	sPROTECT = GetResText(1005)
+	sCONTINUE = GetResText(1007)
+	sSELTEMPL = GetResText(1106)
+	sSELCELL = GetResText(1107)
+	sCURRRANGES = GetResText(1108)
+	sTEMPLATES = GetResText(1109)
+	sStsPROGRESS = GetResText(1300)
+	sStsCELLPROGRSS = GetResText(1301)
+	sStsRELSHEETRANGES = GetResText(1302)
+	sStsRELRANGES = GetResText(1303)
+	sStsREPROTECT = GetResText(1304)
+
+	sMsgREADY = GetResText(1400)
+	sMsgSELDIR = GetResText(1401)
+	sMsgSELFILE = GetResText(1402)
+	sMsgTARGETDIR = GetResText(1403)
+	sMsgNOTTHERE = GetResText(1404)
+	sMsgDLGTITLE = GetResText(1405)
+	sMsgUNPROTECT = GetResText(1406)
+	sMsgPWPROTECT = GetResText(1407)
+	sMsgWRONGPW = GetResText(1408)
+	sMsgSHEETPROTECTED = GetResText(1409)
+	sMsgWARNING = GetResText(1410)
+	sMsgSHEETSNOPROTECT = GetResText(1411)
+	sMsgSHEETNOPROTECT = GetResText(1412)
+	sMsgCHOOSECURRENCY = GetResText(1415)
+	sMsgPASSWORD = GetResText(1416)
+	sMsgOK = GetResText(1417)
+	sMsgCANCEL = GetResText(1418)
+	sMsgFILEINVALID = GetResText(1419)
+	sMsgFILEINVALID = ReplaceString(sMsgFILEINVALID,&quot;%PRODUCTNAME&quot;, GetProductname())
+	SMsgNODIRECTORY = GetResText(1420)
+	
+	sCurrPORTUGUESE = GetResText(1500)
+	sCurrDUTCH = GetResText(1501)
+	sCurrFRENCH = GetResText(1502)
+	sCurrSPANISH = GetResText(1503)
+	sCurrITALIAN = GetResText(1504)
+	sCurrGERMAN = GetResText(1505)
+	sCurrBELGIAN = GetResText(1506)
+	sCurrIRISH = GetResText(1507)
+	sCurrLUXEMBOURG = GetResText(1508)
+	sCurrAUSTRIAN = GetResText(1509)
+	sCurrFINNISH = GetResText(1510)
+	sCurrUNKNOWN = GetResText(1511)
+	sCurrSYSUNKNOWN = GetResText(1512)
+End Sub
+
+
+Sub InitializeLanguages()
+	sEuroSign = chr(8364)
+
+&apos; CURRENCIES_PORTUGUESE
+	LangIDValue(0,0,0) = &quot;pt&quot;
+	LangIDValue(0,0,1) = &quot;PT&quot;
+	LangIDValue(0,0,2) = &quot;-816&quot;
+
+&apos; CURRENCIES_DUTCH
+	LangIDValue(1,0,0) = &quot;nl&quot;
+	LangIDValue(1,0,1) = &quot;NL&quot;
+	LangIDValue(1,0,2) = &quot;-413&quot;
+
+&apos; CURRENCIES_FRENCH
+	LangIDValue(2,0,0) = &quot;fr&quot;
+	LangIDValue(2,0,1) = &quot;FR&quot;
+	LangIDValue(2,0,2) = &quot;-40C&quot;
+
+&apos; CURRENCIES_SPANISH
+	LangIDValue(3,0,0) = &quot;es&quot;
+	LangIDValue(3,0,1) = &quot;ES&quot;
+	LangIDValue(3,0,2) = &quot;-40A&quot;
+	
+	&apos;Spanish modern
+	LangIDValue(3,1,0) = &quot;es&quot;
+	LangIDValue(3,1,1) = &quot;ES&quot;
+	LangIDValue(3,1,2) = &quot;-C0A&quot;
+
+&apos; CURRENCIES_ITALIAN
+	LangIDValue(4,0,0) = &quot;it&quot;
+	LangIDValue(4,0,1) = &quot;IT&quot;
+	LangIDValue(4,0,2) = &quot;-410&quot;
+
+&apos; CURRENCIES_GERMAN
+	LangIDValue(5,0,0) = &quot;de&quot;
+	LangIDValue(5,0,1) = &quot;DE&quot;
+	LangIDValue(5,0,2) = &quot;-407&quot;
+
+&apos; CURRENCIES_BELGIAN
+	LangIDValue(6,0,0) = &quot;fr&quot;
+	LangIDValue(6,0,1) = &quot;BE&quot;
+	LangIDValue(6,0,2) = &quot;-80C&quot;
+
+	LangIDValue(6,1,0) = &quot;nl&quot;
+	LangIDValue(6,1,1) = &quot;BE&quot;
+	LangIDValue(6,1,2) = &quot;-813&quot;
+
+&apos; CURRENCIES_IRISH
+	LangIDValue(7,0,0) = &quot;en&quot;
+	LangIDValue(7,0,1) = &quot;IE&quot;
+	LangIDValue(7,0,2) = &quot;-1809&quot;
+
+&apos; CURRENCIES_LUXEMBOURG
+	LangIDValue(8,0,0) = &quot;fr&quot;
+	LangIDValue(8,0,1) = &quot;LU&quot;
+	LangIDValue(8,0,2) = &quot;-140C&quot;
+	
+	LangIDValue(8,1,0) = &quot;de&quot;
+	LangIDValue(8,1,1) = &quot;LU&quot;
+	LangIDValue(8,1,2) = &quot;-1007&quot;
+
+&apos; CURRENCIES_AUSTRIAN
+	LangIDValue(9,0,0) = &quot;de&quot;
+	LangIDValue(9,0,1) = &quot;AT&quot;
+	LangIDValue(9,0,1) = &quot;-C07&quot;
+
+&apos; CURRENCIES_FINNISH
+	LangIDValue(10,0,0) = &quot;fi&quot;
+	LangIDValue(10,0,1) = &quot;FI&quot;
+	LangIDValue(10,0,2) = &quot;-40B&quot;
+
+	LangIDValue(10,1,0) = &quot;sv&quot;
+	LangIDValue(10,1,1) = &quot;FI&quot;
+	LangIDValue(10,1,2) = &quot;-81D&quot;
+End Sub
+
+
+
+Sub InitializeCurrencies()
+Dim i as Integer
+	GoOn = True
+
+	CurrValue(0,0) = sCurrPORTUGUESE
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(0,1) = &quot;200.482&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(0,2) = &quot;200&quot;
+	CurrValue(0,3) = &quot;Esc.&quot;
+	CurrValue(0,4) = &quot;Esc.&quot;
+	CurrValue(0,5) = &quot;PTE&quot;
+
+	CurrValue(1,0) = sCurrDUTCH
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(1,1) = &quot;2.20371&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(1,2) = &quot;2&quot;
+	CurrValue(1,3) = &quot;F&quot;
+	CurrValue(1,4) = &quot;F&quot;
+	CurrValue(1,5) = &quot;NLG&quot;
+
+	CurrValue(2,0) = sCurrFRENCH
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(2,1) = &quot;6.55957&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(2,2) = &quot;7&quot;
+	CurrValue(2,3) = &quot;F&quot;
+	CurrValue(2,4) = &quot;F&quot;
+	CurrValue(2,5) = &quot;FRF&quot;
+
+	CurrValue(3,0) = sCurrSPANISH
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(3,1) = &quot;166.386&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(3,2) = &quot;170&quot;
+	CurrValue(3,3) = &quot;Pts&quot;
+	CurrValue(3,4) = &quot;Pts&quot;
+	CurrValue(3,5) = &quot;ESP&quot;
+
+	CurrValue(4,0) = sCurrITALIAN
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(4,1) = &quot;1936.27&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(4,2) = &quot;2000&quot;
+	CurrValue(4,3) = &quot;L.&quot;
+	CurrValue(4,4) = &quot;L.&quot;
+	CurrValue(4,5) = &quot;ITL&quot;
+
+	CurrValue(5,0) = sCurrGERMAN
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(5,1) = &quot;1.95583&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(5,2) = &quot;140&quot;
+	CurrValue(5,3) = &quot;DM&quot;
+	CurrValue(5,4) = &quot;DM&quot;
+	CurrValue(5,5) = &quot;DEM&quot;
+
+	CurrValue(6,0) = sCurrBELGIAN
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(6,1) = &quot;40.3399&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(6,2) = &quot;40&quot;
+	CurrValue(6,3) = &quot;FB&quot;
+	CurrValue(6,4) = &quot;BF&quot;
+	CurrValue(6,5) = &quot;BEF&quot;
+
+	CurrValue(7,0) = sCurrIRISH
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(7,1) = &quot;0.787564&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(7,2) = &quot;0.8&quot;
+	CurrValue(7,3) = &quot;Â£&quot;
+	CurrValue(7,4) = &quot;Â£&quot;
+	CurrValue(7,5) = &quot;IEP&quot;
+
+	CurrValue(8,0) = sCurrLUXEMBOURG
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(8,1) = &quot;40.3399&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(8,2) = &quot;40&quot;
+	CurrValue(8,3) = &quot;F&quot;
+	CurrValue(8,4) = &quot;F&quot;
+	CurrValue(8,5) = &quot;LUF&quot;
+
+	CurrValue(9,0) = sCurrAUSTRIAN
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(9,1) = &quot;13.7603&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(9,2) = &quot;15&quot;
+	CurrValue(9,3) = &quot;S&quot;
+	CurrValue(9,4) = &quot;S&quot;
+	CurrValue(9,5) = &quot;ATS&quot;
+
+	CurrValue(10,0) = sCurrFINNISH
+	&apos; Wahrer Umrechnungskurs
+	CurrValue(10,1) = &quot;5.94573&quot;
+	&apos; Gerundeter Umrechnungskurs
+	CurrValue(10,2) = &quot;6&quot;
+	CurrValue(10,3) = &quot;mk&quot;
+	CurrValue(10,4) = &quot;mk&quot;
+	CurrValue(10,5) = &quot;FIM&quot;
+
+	i = -1
+	CurrSymbolList(0) = &quot;&quot;
+	CurrSymbolList(1) = &quot;&quot;
+
+	If CurrIndex &lt;&gt; -1 Then
+		&apos; Current language is of the European Currency Union
+		InitializeCurrencyValues(CurrIndex)
+	Else
+		If DialogModel.Step = 1 Then
+			EnableStep1DialogControls(True, False, False)
+		ElseIf DialogModel.Step = 2 Then
+			EnableStep2DialogControls(True)
+		End If
+	End If
+End Sub
+
+
+Sub InitializeConverter(oLocale, iDialogPage as Integer)
+Dim Isthere as Boolean
+	ToggleWindow(False)
+	bCancelProtection = False
+	bMacroStopped = False
+	bRangeListDefined = False
+	sDocType = GetDocumentType(StarDesktop.ActiveFrame.Controller.Model)
+	DialogConvert = LoadDialog(&quot;Euro&quot;, &quot;DialogConvert&quot;)
+	DialogModel = DialogConvert.Model
+	DialogModel.Step = iDialogPage
+	InitializeResources()
+	InitializeLanguages()
+	InitializeLocales(oLocale)
+	InitializeCurrencies()
+	Filterlist(0) = &quot;application/vnd.stardivision.calc&quot;
+	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+	UnprotectList(0,0) = &quot;0&quot;
+	FillUpCurrencyListbox()
+	DialogConvert.Title = sMsgDLGTITLE
+	ToggleWindow(True)
+End Sub
+
+
+Sub	InitializeCurrencyValues(CurrIndex)
+	If CurrIndex &lt;&gt; -1 Then
+		CurrLanguage = CurrValue(CurrIndex,0)
+		CurrFactor = Val(CurrValue(CurrIndex,1))
+		CurrSymbolList(0) = CurrValue(CurrIndex,3)
+		CurrSymbolList(1) = CurrValue(CurrIndex,4)
+		CurrSymbolList(2) = CurrValue(CurrIndex,5)
+	End If
+End Sub		
+
+
+Function InitializeLocales(oLocale) as Boolean
+Dim i as Integer, n as Integer, m as Integer
+Dim sLanguage as String, sCountry as String
+
+	sLanguage = oLocale.Language
+	sCountry = oLocale.Country
+	For n = 0 To SBCOUNTRYCOUNT - 1
+		For m = 0 TO 1
+			If LangIDValue(n,m,0) = sLanguage AND LangIDValue(n,m,1) = sCountry Then
+				CurrIndex = n
+				For i = 0 To 1
+					CurExtension(i) = LangIDValue(CurrIndex,i,2)
+				Next i
+				InitializeLocales = True
+				Exit Function
+			End If
+		Next m
+	Next n
+	CurrIndex = -1
+	InitializeLocales = False
+End Function
+
+
+Sub LoadLibrary(sLibname as String)
+	Dim oArg(0) as new com.sun.star.beans.PropertyValue
+	Dim oUrl as new com.sun.star.util.URL
+	Dim oTrans as Object
+	Dim oDisp as Object
+
+	oArg(0).Name = &quot;LibraryName&quot;
+	oArg(0).Value = sLibname
+
+	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
+	oUrl.Complete = &quot;slot:6517&quot;
+	oTrans.parsestrict( oUrl )
+
+	oDisp = StarDesktop.currentFrame.queryDispatch( oUrl, &quot;_self&quot;, 0)	
+	oDisp.dispatch( oUrl, oArg())
+End Sub
+</script:module>

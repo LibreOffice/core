@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="CreateTable" script:language="StarBasic">Option Explicit
+
+Public Const FirstDayRow = 5          &apos; Row on month sheet for first day of month
+Public Const DateColumn% = 3          &apos; Column on month sheet with days
+Public Const NewYearRow = 4           &apos; Row on year sheet for January 1st
+Public Const NewYearColumn = 2        &apos; Column on year sheet for January 1st
+
+
+Sub CalCreateYearTable(ByVal YearInt%)
+&apos; Completes the overview for whole year
+
+&apos; Needed by StarOffice Calc and StarOffice Schedule
+Dim CalDay%, CalMonth%, Count%, nCount%
+
+&apos; Only needed by StarOffice Schedule
+Dim oYearCell as object
+Dim iDate
+Dim i, s as Integer
+Dim ColPos, RowPos as Integer	
+Dim oNameCell, oDateCell as Object
+Dim iCellValue as Long	
+Dim oRangeFebCell, oCellAddress, oFebcell as Object
+Dim oRangeBlank as Object
+Dim sBlankStyle as String
+	On Error Goto ErrorHandling
+	oStatusLine.Start(GetResText(sProgress),140)
+
+	iDate = DateSerial(Val(DlgBuffer.txtYear.Text),1,1)
+
+	&apos; Insert year
+	oYearCell = oSheet.GetCellRangeByName(&quot;Year&quot;)
+	oYearCell.Value = Val(DlgBuffer.txtYear.Text)
+	&apos; Insert holidays
+	CalMonth% = 1
+	CalDay% = 0
+	s = 10
+	oStatusLine.SetValue(s)
+	For i = 1 To 374
+		CalDay = CalDay+1
+		If CalDay = 32 Then
+			CalDay = 1
+			CalMonth = CalMonth+1
+			s = s + 10
+			oStatusLine.SetValue(s)
+		End If
+		ColPos = NewYearColumn+(2*CalMonth)
+		RowPos = NewYearRow + CalDay
+		FormatCalCells(ColPos,RowPos,i)			
+	Next
+	If NOT CalIsLeapYear(Val(txtYear.Text)) Then
+		&apos; Delete 29th February if necessary
+		oRangeFebCell = oSheet.GetCellRangeByName(&quot;Feb29&quot;)
+		oCellAddress = oRangeFebCell.RangeAddress
+		oFebCell = oSheet.GetCellByPosition(oCellAddress.StartColumn,oCellAddress.StartRow)
+		oFebCell.String = &quot;&quot;
+		&apos; Change the CellStyle according to the Range &quot;Blank&quot;
+		oRangeBlank = oSheet.GetCellRangebyName(&quot;Blank&quot;)
+		sBlankStyle = oRangeBlank.CellStyle
+		oRangeFebCell.CellStyle = sBlankStyle
+	End If
+	oStatusLine.SetValue(150)
+	ErrorHandling:
+	If Err &lt;&gt; 0 Then
+		MsgBox sError$, 16, sWizardTitle$
+	End If
+End Sub
+
+
+
+Sub CalCreateMonthTable(ByVal YearInt%, ByVal MonthInt%)
+Dim oMonthCell, oDateCell as Object
+Dim iDate as Date
+Dim oAddress
+Dim i, s as Integer
+Dim StartDay%, TargetMonth%
+
+&apos; Completes the monthly calendar
+On Error Goto ErrorHandling
+	oStatusLine.Start(GetResText(sProgess),40)
+	&apos; Set month
+	TargetMonth% = CalGetIntOfShortMonthName%(txtMonth.Text)
+	oMonthCell = oSheet.GetCellRangeByName(&quot;Month&quot;)
+
+	iDate = DateSerial(Val(DlgBuffer.txtYear.Text),TargetMonth%,1)
+	oMonthCell.Value = iDate
+	&apos; Inserting holidays
+	StartDay% = (TargetMonth% - 1) * 31 + 1
+	s = 5
+	For i = StartDay% To StartDay%+30
+		oStatusLine.SetValue(s)
+		s = s + 1
+		FormatCalCells(DateColumn+1,FirstDayRow+i-StartDay,i)
+	Next
+	oDateCell = oSheet.GetCellbyPosition(DateColumn,FirstDayRow+i-StartDay - 1)
+	oAddress = oDateCell.RangeAddress
+	
+	Select Case TargetMonth
+		Case 2,4,6,9,11
+			oSheet.RemoveRange(oAddress, com.sun.star.sheet.CellDeleteMode.ROWS) 
+			If TargetMonth = 2 Then
+				oAddress.StartRow = oAddress.StartRow - 1	
+				oAddress.EndRow = oAddress.StartRow
+				oSheet.RemoveRange(oAddress, com.sun.star.sheet.CellDeleteMode.ROWS)
+				If Not CalIsLeapYear(Val(txtYear.Text)) Then
+					oAddress.StartRow = oAddress.StartRow - 1	
+					oAddress.EndRow = oAddress.StartRow
+					oSheet.RemoveRange(oAddress, com.sun.star.sheet.CellDeleteMode.ROWS)
+				End If
+			End If
+	End Select
+	oStatusLine.SetValue(45)
+ErrorHandling:
+	If Err &lt;&gt; 0 Then
+		MsgBox sError$, 16, sWizardTitle$
+	End If
+End Sub
+
+
+
+Sub FormatCalCells(ColPos,RowPos,i as Integer)
+Dim oNameCell, oDateCell as Object
+Dim iCellValue as Long
+	oDateCell = oSheet.GetCellbyPosition(ColPos-1,RowPos)
+	If oDateCell.Value &lt;&gt; 0 Then
+		iCellValue = oDateCell.Value
+		oDateCell.Value = iCellValue
+		If CalBankHolidayName$(i) &lt;&gt; &quot;&quot; Then
+			oNameCell = oSheet.GetCellbyPosition(ColPos,RowPos)
+			oNameCell.String = CalBankHolidayName$(i)
+			If CalTypeOfBankHoliday%(i) = cHolidayType_Full Then
+				oDateCell.CellStyle = cCalStyleWeekend$
+			End If
+		End If
+	End If
+End Sub</script:module>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="UserfieldDlg" dlg:style-id="0">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0"/>
+ </dlg:styles>
+</dlg:window>

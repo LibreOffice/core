@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ChangeAllChars" script:language="StarBasic">&apos; This macro replaces all characters in a writer-documet through &quot;x&quot; or &quot;X&quot; signs.
+&apos; It works on the currently activated document.
+Private const UPPERREPLACECHAR = &quot;X&quot;
+Private const LOWERREPLACECHAR = &quot;x&quot;
+
+Private MSGBOXTITLE
+Private NOTSAVEDTEXT
+Private WARNING
+
+Sub ChangeAllChars   &apos; Change all chars in the active document
+Dim oSheets, oPages as Object
+Dim i as Integer
+Const MBYES = 6
+Const MBABORT = 2
+Const MBNO = 7
+	LoadLibrary(&quot;tools&quot;)
+	Call SetLanguage
+
+	On Local Error GoTo NODOCUMENT
+	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	NODOCUMENT:
+	If Err &lt;&gt; 0 Then
+		Msgbox(&quot;This Macro extracts all Data of a displayed Writer-Document.&quot; &amp; chr(13) &amp; &quot;Activate a Writer-Document!&quot; , 16, &quot;StarOffice 5.2&quot;)
+		Exit Sub
+	End If
+	On Local Error Goto 0
+	
+	sDocType = GetDocumentType(oDocument)
+
+	If oDocument.IsModified And oDocument.Url &lt;&gt; &quot;&quot; Then
+		Status = MsgBox(NOTSAVEDTEXT, 3+32, MSGBOXTITLE)
+		Select Case Status
+			Case MBYES  
+				oDocument.Store
+			Case MBABORT, MBNO
+				End
+		End Select
+	Else
+		Status = MsgBox(WARNING, 3+32, MSGBOXTITLE)
+		If Status = MBNO Or Status = MBABORT Then  &apos; No, Abort
+			End
+		End If
+	End If
+
+	Select Case sDocType
+		Case &quot;sWriter&quot;
+			ReplaceAllStrings(oDocument)	
+
+		Case Else
+			Msgbox(&quot;This Macro only works with Writer-Documents!&quot;, 16, &quot;StarOffice 5.2&quot;) 
+	End Select
+End Sub
+
+
+Sub ReplaceAllStrings(oContainer as Object)	
+	ReplaceStrings(oContainer, &quot;[a-z]&quot;, LOWERREPLACECHAR)
+	ReplaceStrings(oContainer, &quot;[à-þ]&quot;, LOWERREPLACECHAR)
+	ReplaceStrings(oContainer, &quot;[A-Z]&quot;, UPPERREPLACECHAR)
+	ReplaceStrings(oContainer, &quot;[À-ß]&quot;, UPPERREPLACECHAR)
+	ReplaceStrings(oContainer, &quot;[0-9]&quot;, UPPERREPLACECHAR)
+End Sub
+
+
+Sub ReplaceStrings(oContainer as Object, sSearchString, sReplaceString  as String)
+	oReplaceDesc = oContainer.createReplaceDescriptor()
+	oReplaceDesc.SearchCaseSensitive = True
+	oReplaceDesc.SearchRegularExpression = True
+	oReplaceDesc.Searchstring = sSearchString
+	oReplaceDesc.ReplaceString = sReplaceString
+	oReplCount = oContainer.ReplaceAll(oReplaceDesc)	
+End Sub
+
+
+Sub SetLanguage
+Dim ISOLanguage as String
+	ISOLanguage = StarDesktop.ISOLocale.Language
+
+	Select Case ISOLanguage
+
+		Case &quot;en&quot;
+			MSGBOXTITLE = &quot;Change all characters to a &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+			NOTSAVEDTEXT = &quot;This Document is modified: All characters are changed to an &quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Shall the document be saved now?&quot;
+			WARNING = &quot;This macro changes all characters and numbers to an &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; in this document.&quot;
+
+		Case &quot;fr&quot;
+			MSGBOXTITLE = &quot;Remplacer tous les caractères par &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+			NOTSAVEDTEXT = &quot;Le document a été modifé, la macro remplacera tous les caractères par &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Enregistrer avant de procéder?&quot;
+			WARNING = &quot;La macro remplacera tous les caractères et nombres par &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; dans le document.&quot; 
+
+		Case &quot;it&quot;
+			MSGBOXTITLE = &quot;Sostituire tutti i caratteri &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+			NOTSAVEDTEXT = &quot;Il documento è stato modificato, la macro sostituerà tutti i caratteri con &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Salvare il documento prima di procedere?&quot;
+			WARNING = &quot;La macro sostituirà tutti i caratteri e numeri con  &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; nel documento attivo.&quot; 	
+
+		Case &quot;es&quot;
+			MSGBOXTITLE = &quot;Sustituir todos los caracteres por &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+			NOTSAVEDTEXT = &quot;Este documento fue cambiado: todos los caracteres fueron sustituidos por &quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Desea guardar el documento?&quot;
+			WARNING = &quot;Esta macro sustitue todos los caracteres y números en este documento por &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;.&quot;
+
+		Case &quot;pt&quot;
+			MSGBOXTITLE = &quot;Substituir todos os caracteres por &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+			NOTSAVEDTEXT = &quot;Este documento foi modificado: todos os caracteres foram substituídos por &quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Deseja guardar o documento?&quot;
+			WARNING = &quot;Esta macro substitui todos os caracteres e números neste documento por &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;.&quot;
+
+		Case &quot;nl&quot;
+			MSGBOXTITLE = &quot;Verander alle tekens in een&apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+			NOTSAVEDTEXT = &quot;Dit document is veranderd. Alle tekens zijn veranderd in een &quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Wilt u het document nu opslaan?&quot;
+			WARNING = &quot;Dit macro verandert alle tekens en cijfers in een &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; in dit document.&quot;
+
+		Case &quot;sv&quot;
+			MSGBOXTITLE = &quot;Byt ut alla bokstäver mot en &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; &quot;
+			NOTSAVEDTEXT = &quot;Dokumentet har ändrats, med detta makro kommer alla bokstäver att bytas ut mot en &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; . Ska dokumentet säkras/sparas innan?&quot;
+			WARNING = &quot;Makrot ersätter alla bokstäver och tal i detta dokument med en &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;.&quot;
+
+&apos;		Case &quot;da&quot;
+
+&apos;		Case &quot;pl&quot;
+
+&apos;		Case &quot;ru&quot;
+
+		&apos; English &amp; fallback/default
+		Case Else
+			MSGBOXTITLE = &quot;Change all characters to a &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;&quot;
+			NOTSAVEDTEXT = &quot;This Document is modified: All characters are changed to an &quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos;. Shall the document be saved now?&quot;
+			WARNING = &quot;This macro changes all characters and numbers to an &apos;&quot; &amp; UPPERREPLACECHAR &amp; &quot;&apos; in this document.&quot;
+	End Select
+End Sub
+</script:module>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
+
+
+Function SetProgressValue(iValue as Integer)	
+	If iValue = 0 Then
+		oProgressbar.End
+	End If
+	ProgressValue = iValue
+	oProgressbar.Value = iValue
+End Function
+
+
+Function GetPreferredWidth(oModel as Object, bGetMaxWidth as Boolean, Optional LocText)
+Dim aPeerSize as new com.sun.star.awt.Size
+Dim nWidth as Integer
+Dim oControl as Object
+&apos; Todo: Wie geht das mit ImageControls
+	If Not IsMissing(LocText) Then
+		aPeerSize = GetPeerSize(oModel, oControl, LocText)
+	Else
+		aPeerSize = GetPeerSize(oModel, oControl
+	End If
+	nWidth = aPeerSize.Width
+	GetPreferredWidth = PixelTo100thmm(nWidth)
+End Function
+
+
+Function GetPreferredHeight(oModel as Object, Optional LocText)
+Dim aPeerSize as new com.sun.star.awt.Size
+Dim nHeight as Integer
+Dim oControl as Object
+&apos; Todo: Wie geht das mit ImageControls
+	If Not IsMissing(LocText) Then
+		aPeerSize = GetPeerSize(oModel, oControl, LocText)
+	Else
+		aPeerSize = GetPeerSize(oModel, oControl)
+	End If
+	nHeight = aPeerSize.Height
+	GetPreferredHeight = PixelTo100thmm(nHeight)
+End Function
+
+
+Function GetPeerSize(oModel as Object, oControl as Object, Optional LocText)	
+Dim oPeer as Object
+Dim aPeerSize as new com.sun.star.awt.Size
+	oControl = oController.GetControl(oModel)
+	oPeer = oControl.GetPeer()
+	If HasUnoInterfaces(oControl,&quot;com.sun.star.awt.XNumericField&quot;) Then
+		oControl.Value = oControl.Max
+		aPeerSize = oPeer.PreferredSize()
+		oControl.Value = 0
+	ElseIf Not IsMissing(LocText) Then
+		oControl.Text = LocText
+		aPeerSize = oPeer.PreferredSize()
+	Else
+		oControl.Text = &quot;WWWWWWWWWW&quot;
+		aPeerSize = oPeer.PreferredSize()
+		oControl.Text = &quot;&quot;
+	End If
+	GetPeerSize = aPeerSize
+End Function
+
+
+Function TwipToCM(BYVAL nValue as long) as String
+	TwipToCM = trim(str(nValue / 567)) + &quot;cm&quot;
+End function
+
+
+Function TwipTo100telMM(BYVAL nValue as long) as long
+	 TwipTo100telMM = nValue / 0.567
+End function
+
+
+Function TwipToPixel(BYVAL nValue as long) as long &apos; nur ungefaehre Berechnung
+	TwipToPixel = nValue / 15
+End function
+
+
+Function PixelTo100thMM(BYVAL nValue as long) as long
+	 PixelTo100thMM = nValue * 28		&apos; nur ungefähre Berechnung 
+End function
+
+
+Function GetPoint(xPos, YPos) as New com.sun.star.awt.Point
+Dim aPoint as New com.sun.star.awt.Point
+	aPoint.X = xPos
+	aPoint.Y = yPos
+	GetPoint() = aPoint
+End Function
+
+
+Function GetSize(iWidth, iHeight) As New com.sun.star.awt.Size
+Dim aSize As New com.sun.star.awt.Size
+	aSize.Width = iWidth
+	aSize.Height = iHeight
+	GetSize() = aSize
+End Function
+
+
+Sub	ImportStyles()
+Dim CurIndex as Integer
+Dim sImportPath as String
+	oDocument.LockControllers
+	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
+	sImportPath = Styles(8,CurIndex)
+	LoadNewStyles(oDocument, oDialogModel, CurIndex, &quot;&quot;, Styles(), TexturePath)
+	&apos; Todo: Diese Zeile wieder rein wenn Bug #83015 behoben ist
+&apos;	ControlCaptionsToStandardLayout()
+	oDocument.UnlockControllers
+End Sub
+
+
+&apos; Todo: Einbinden!!!
+Function SetMaxNumericValue(ByVal oLocObject as Object, nType as Long) as Object	
+	oLocObject.DecimalAccuracy = 0 	&apos; keine Nachkommastellen
+	oLocObject.ValueMin = 0 		&apos; Minwerte sind 0
+	select Case (nType)
+		case cLong
+			oLocObject.ValueMax = 2147483647 &apos; Maxwert
+		case cInteger
+			oLocObject.ValueMax = 32767 &apos; Maxwert
+		case cShortInt
+			oLocObject.ValueMax = 255 &apos; Maxwert
+		case cDecimal
+			oLocObject.DecimalAccuracy = FieldDecimalAccuracy%(n%) &apos; Nachkommastellen
+	End Select
+	SetMaxColumnValue = oLocObject
+End Function
+
+
+Sub MakeControlsVisible(bIsVisible as Boolean)
+Dim n as Integer
+Dim oControl as Object
+	For n = 0 To MaxIndex
+		oControl = oController.GetControl(oDBShapeList(n).GetControl)
+		oControl.SetVisible(bIsVisible)
+		oControl = oController.GetControl(oTCShapeList(n).GetControl)
+		oControl.SetVisible(bIsVisible)
+	Next n
+End Sub
+
+
+&apos; Todo: Hier werden allgemeine Einstellungen für numerische Werte vorgenommen
+&apos; Was wird mit den Währungen gemacht?; für Dezimalfelder muss die Anzahl der
+&apos; Nachkommastellen, Tausenderstellen, festgelegt werden. Stichwort &quot;Formatüberprüfungen&quot;
+&apos; im Propertybrowser des Controls
+Sub HandleNumerics(oObject)
+	Select Case CurControlType
+		Case cNumericBox
+			oLocObject = SetMaxNumericValue(oLocObject, CurFieldType)
+		Case cCurrencyBox
+			oLocObject.CurrencySymbol = s_aCurrencySymbol
+			oLocObject.PrependCurrencySymbol = s_aPrependCurrencySymbol
+	End Select
+End Sub
+
+
+</script:module>

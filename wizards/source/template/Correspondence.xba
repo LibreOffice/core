@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Correspondence" script:language="StarBasic">Option Explicit
+
+Public msgNoTextmark$, msgError$
+Public sAddressbook$
+Public Table
+Public sCompany$, sFirstName$, sLastName$, sStreet$, sPostalCode$, sCity$, sState$, sInitials$, sPosition$
+Public DialogExited
+Public oDocument, oText, oBookMarks, oBookMark, oBookMarkCursor, oBookText as Object
+
+Sub Main
+	LoadLibrary(&quot;tools&quot;)
+	TemplateDialog = LoadDialog(&quot;Template&quot;, &quot;TemplateDialog&quot;)
+	DialogModel = TemplateDialog.Model
+	DialogModel.Step = 2
+	DialogModel.Optmerge.State = True
+	If LoadLanguageCorrespondence() Then
+		TemplateDialog.Execute
+	End If
+End Sub
+
+
+Function LoadLanguageCorrespondence() as Boolean
+Dim oDBAccess as Object
+Dim oAddressDialog as Object
+Dim oFields as Object
+
+	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) Then
+		oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
+		sAddressbook = oDBAccess.DataSourceName
+		If sAddressbook = &quot;&quot; Then
+			oAddressDialog = CreateUnoService(&quot;com.sun.star.ui.AddressBookSourceDialog&quot;)
+			oAddressDialog.Execute
+			oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
+			sAddressbook = oDBAccess.DataSourceName
+			If sAddressbook = &quot;&quot; Then
+				LoadLanguageCorrespondence() = False
+				Exit Function
+			End If
+		End If
+		oFields = oDBAccess.GetByName(&quot;Fields&quot;)
+		Table = oDBAccess.GetByName(&quot;Command&quot;)
+		sCompany = GetFieldname(oFields, &quot;Company&quot;)
+		sFirstName = GetFieldname(oFields, &quot;FirstName&quot;)
+		sLastName = GetFieldname(oFields, &quot;LastName&quot;)
+		sStreet = GetFieldname(oFields, &quot;Street&quot;)
+		sPostalCode = GetFieldname(oFields, &quot;Zip&quot;)
+		sCity = GetFieldname(oFields, &quot;City&quot;)
+		sState = GetFieldname(oFields, &quot;State&quot;)
+		sInitials = GetFieldname(oFields, &quot;Code&quot;)
+		sPosition = GetFieldname(oFields, &quot;Position&quot;)
+		msgNoTextmark$ = GetResText(1303) &amp; Chr(13) &amp; Chr(10) &amp; GetResText(1301)
+		msgError$ = GetResText(1302)
+		DialogModel.Title = GetResText(1303)
+		DialogModel.CmdCancel.Label = GetResText(1102)
+		DialogModel.CmdCorrGoOn.Label = GetResText(1103)		
+		DialogModel.OptSingle.Label = GetResText(1303 + 1)
+		DialogModel.Optmerge.Label = GetResText(1303 + 2)
+		LoadLanguageCorrespondence() = True
+	Else
+&apos; Todo: Meldung, was Passiert wenn Datenbank nicht angelegt werden konnte	
+		LoadLanguageCorrespondence() = False	
+	End If
+End Function
+
+
+Function GetFieldName(oFieldKnot as Object, GeneralFieldName as String)
+	If oFieldKnot.HasbyName(GeneralFieldName) Then
+		GetFieldName = oFieldKnot.GetbyName(GeneralFieldName).FieldName
+	Else
+		GetFieldName = &quot;&quot;
+	End If
+End Function
+
+
+Sub OK
+Dim ParaBreak
+Dim sDocLang as String
+Dim bMerge as Boolean
+	bMerge = DialogModel.Optmerge.State
+&apos; Todo: das muss wieder rein!
+	DialogTemplate.EndExecute()
+	DialogExited = TRUE
+	If bMerge Then
+		ParaBreak = com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
+		oDocument = StarDesktop.ActiveFrame.Controller.Model
+		oBookmarks = oDocument.Bookmarks
+		oText = oDocument.Text
+		If oBookmarks.HasbyName(&quot;Recipient&quot;)Then
+			oBookMark = oDocument.BookMarks.GetbyName(&quot;Recipient&quot;)
+		Else
+			MsgBox msgNoTextmark, 16, msgError
+			Exit Sub
+		End If
+		oBookMarkCursor = oBookMark.Anchor.Text.CreateTextCursorByRange(oBookMark.Anchor)
+		OBookText = oBookMarkCursor.Text
+		sDocLang = oDocument.CharLocale.Language
+		Select Case sDocLang
+			Case &quot;nl&quot;
+				InsertDBField(sAddressbook, Table, sCompany)
+				oBookMarkCursor.Text.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertBookMarkString(&quot;T.a.v. &quot;)
+				InsertDBField(sAddressbook, Table, sFirstName)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sLastName)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sStreet)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sPostalCode)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sCity)
+
+			Case &quot;en&quot;
+				InsertDBField(sAddressbook, Table, sCompany)
+				oBookMarkCursor.Text.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sFirstName)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sLastName)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sStreet)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sCity)
+				InsertBookMarkString(&quot;, &quot;)
+				InsertDBField(sAddressbook, Table, sState)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sPostalCode)
+
+			Case &quot;sv&quot;
+				InsertDBField(sAddressbook, Table, sCompany)
+				oBookMarkCursor.Text.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sFirstName)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sLastName)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sStreet)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sPostalCode)
+				InsertBookMarkString(&quot;  &quot;)
+				InsertDBField(sAddressbook, Table, sCity)
+
+			Case &quot;ru&quot;
+				InsertDBField(sAddressbook, Table, sPosition)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sCompany)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sLastName)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sInitials)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sPostalCode)
+				InsertBookMarkString(&quot;, &quot;)
+				InsertDBField(sAddressbook, Table, sCity)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sStreet)
+
+			Case Else
+				InsertDBField(sAddressbook, Table, sCompany)
+				oBookMarkCursor.Text.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sFirstName)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sLastName)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sStreet)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				oBookText.insertControlCharacter(oBookMarkCursor, ParaBreak, False)
+				InsertDBField(sAddressbook, Table, sPostalCode)
+				InsertBookMarkString(&quot; &quot;)
+				InsertDBField(sAddressbook, Table, sCity)
+		End Select
+	End If
+End Sub
+
+
+Sub InsertDBField(sDBName as String, sTableName as String, sColName as String)
+Dim oFieldMaster, oField as Object
+	If sColname &lt;&gt; &quot;&quot; Then
+		oFieldMaster = oDocument.createInstance(&quot;com.sun.star.text.FieldMaster.Database&quot;)
+		oField = oDocument.createInstance(&quot;com.sun.star.text.TextField.Database&quot;)
+		oFieldMaster.DataBaseName = sDBName
+		oFieldMaster.DataBaseName = sDBName
+		oFieldMaster.DataTableName = sTableName
+		oFieldMaster.DataColumnName = sColName
+		oField.AttachTextfieldmaster (oFieldMaster)
+		oBookText.InsertTextContent(oBookMarkCursor, oField, True)
+		oField.Content = &quot;&lt;&quot; &amp; sColName &amp; &quot;&gt;&quot;
+	End If
+End Sub
+
+
+Sub InsertBookmarkString(sBookmarkString as String)
+	oBookText.InsertString(oBookMarkCursor, sBookmarkString, True)
+	oBookMarkCursor.CollapseToEnd()
+End Sub
+
+
+Sub LoadLibrary(sLibname as String)
+Dim oArg(0) as new com.sun.star.beans.PropertyValue
+Dim oUrl as new com.sun.star.util.URL
+Dim oTrans as Object
+Dim oDisp as Object
+
+	oArg(0).Name = &quot;LibraryName&quot;
+	oArg(0).Value = sLibname
+
+	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
+	oUrl.Complete = &quot;slot:6517&quot;
+	oTrans.parsestrict(oUrl)
+
+	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp.dispatch(oUrl, oArg())
+End Sub
+</script:module>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="AutoText" script:language="StarBasic">&apos; BASIC
+Option Explicit
+
+&apos; Todo: Problem mit der Spaltenbreite lösen
+&apos; Internationale Vorlage für Überschrift
+Sub Main
+Dim oDocument, oTable, oRows, oDocuText, oTitleCursor as Object
+Dim oAutoTextContainer, oAutogroup, oAutoText as Object
+Dim oCharStyles, oContentStyle, oHeaderStyle, oGroupTitleStyle as Object
+Dim n, m, iAutoCount as Integer
+
+	LoadLibrary(&quot;tools&quot;)
+	LoadLanguage(StarDesktop.ISOLocale.Language)
+
+	&apos; Open a new empty document 
+	oDocument = StarDesktop.LoadComponentFromURL(&quot;staroffice:factory/swriter&quot;,&quot;_blank&quot;,0,NoArgs)
+	oDocuText = oDocument.Text
+
+	&apos; Create The Character-templates
+	oCharStyles = oDocument.StyleFamilies.GetByName(&quot;CharacterStyles&quot;)
+	
+	&apos; The Characterstyle for the Header that describes the Title of Autotextgroups
+	oGroupTitleStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
+	oGroupTitleStyle.charWeight = com.sun.star.awt.FontWeight.BOLD	
+	oGroupTitleStyle.CharHeight = 14
+	oCharStyles.InsertbyName(&quot;AutoTextGroupTitle&quot;, oGroupTitleStyle)
+
+	&apos; The Characterstyle for the Header that describes the Title of Autotextgroups
+	oHeaderStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
+	oHeaderStyle.charWeight = com.sun.star.awt.FontWeight.BOLD	
+	oCharStyles.InsertbyName(&quot;AutoTextHeading&quot;, oHeaderStyle)
+	
+	&apos; &quot;Ordinary&quot; Table Content
+	oContentStyle = oDocument.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
+	oCharStyles.InsertbyName(&quot;TableContent&quot;, oContentStyle)
+
+	oAutoTextContainer = CreateUnoService(&quot;com.sun.star.text.AutoTextContainer&quot;)
+
+	oTitleCursor = oDocuText.CreateTextCursor()
+	oTitleCursor.CharStyle = &quot;AutoTextGroupTitle&quot;
+	&apos; Link the Title with the following table
+	oTitleCursor.ParaKeepTogether = True
+
+	For n = 0 To oAutoTextContainer.Count - 1
+		oAutoGroup = oAutoTextContainer.GetByIndex(n)
+
+		oTitleCursor.SetString(oAutoGroup.Title)
+		oTitleCursor.CollapseToEnd()
+   		oDocuText.insertControlCharacter(oCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
+		oTable = oDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
+		&apos; Divide the table if necessary
+		oTable.Split = True
+&apos;		oTable.KeepTogether = False
+		oTable.RepeatHeadLine = True
+		oTitleCursor.Text.InsertTextContent(oCursor,oTable,False)
+		InsertStringToCell(&quot;AutoText-Title&quot;,oTable.GetCellbyPosition(0,0), &quot;AutoTextHeading&quot;)
+		InsertStringToCell(&quot;AutoText-Name&quot;,oTable.GetCellbyPosition(1,0), &quot;AutoTextHeading&quot;)
+		&apos; Insert one row at the bottom of the table
+		oRows = oTable.Rows
+		iAutoCount = oAutoGroup.Count
+		For m = 0 To iAutoCount-1
+			&apos; Insert the name and the title of all Autotexts
+			oAutoText = oAutoGroup.GetByIndex(m)
+			InsertStringToCell(oAutoGroup.Titles(m), oTable.GetCellbyPosition(0, m + 1), &quot;TableContent&quot;)
+			InsertStringToCell(oAutoGroup.ElementNames(m), oTable.GetCellbyPosition(1, m + 1), &quot;TableContent&quot;)
+			If m &lt; iAutoCount-1 Then
+				oRows.InsertbyIndex(m + 2,1)
+			End If
+		Next m
+   		oDocuText.insertControlCharacter(oCursor,com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK,False)
+		oCursor.CollapseToEnd()
+	Next n
+End Sub
+
+
+Sub InsertStringToCell(sCellString as String, oCell as Object, sCellStyle as String)
+Dim oCellCursor as Object
+	oCellCursor = oCell.CreateTextCursor()
+	oCellCursor.CharStyle = sCellStyle
+	oCell.Text.insertString(oCellCursor,sCellString,False)
+End Sub</script:module>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleControls" script:language="StarBasic">Option Explicit
+
+
+&apos; Accepts the name of a control and returns the respective control model as object
+&apos; The Container can either be a whole document or a specific sheet of a Calc-Document
+&apos; &apos;CName&apos; is the name of the Control
+Function getControlModel(oContainer as Object, CName as String)
+Dim aForm, oForms as Object
+Dim i as Integer
+	oForms = oContainer.Drawpage.GetForms
+	For i = 0 To oForms.Count-1
+		aForm = oForms.GetbyIndex(i)
+		If aForm.HasByName(CName) Then
+			GetControlModel = aForm.GetbyName(CName)
+			Exit Function
+		End If
+	Next i
+	Msgbox(&quot;No Control with the name &apos;&quot; &amp; CName &amp; &quot;&apos; found&quot; , 16, GetProductName())
+End Function
+
+
+
+&apos; Gets the Shape of a Control( e. g. to reset the size or Position of the control
+&apos; Parameters:
+&apos; The &apos;oContainer&apos; is the Document or a specific sheet of a Calc - Document
+&apos; &apos;CName&apos; is the Name of the Control
+Function GetControlShape(oContainer as Object,CName as String)
+Dim i as integer
+Dim aShape as Object
+	For i = 0 to oContainer.DrawPage.Count-1
+		aShape = oContainer.DrawPage(i)
+		If HasUnoInterfaces(aShape, &quot;com.sun.star.drawing.XControlShape&quot;) then
+			If ashape.Control.Name = CName then
+				GetControlShape = aShape
+				exit Function
+			End If
+		End If
+	Next
+End Function
+
+
+&apos; Returns the View of a Control
+&apos; Parameters:
+&apos; The &apos;oContainer&apos; is the Document or a specific sheet of a Calc - Document
+&apos; The &apos;oController&apos; is always directly attached to the Document
+&apos; &apos;CName&apos; is the Name of the Control
+Function getControlView(oContainer , oController as Object, CName as String) as Object
+Dim aForm, oForms, oControlModel as Object
+Dim i as Integer
+	oForms = oContainer.DrawPage.Forms
+	For i = 0 To oForms.Count-1
+		aForm = oforms.GetbyIndex(i)
+		If aForm.HasByName(CName) Then
+			oControlModel = aForm.GetbyName(CName)
+			GetControlView = oController.GetControl(oControlModel)
+			Exit Function
+		End If
+	Next i
+	Msgbox(&quot;No Control with the name &apos;&quot; &amp; CName &amp; &quot;&apos; found&quot; , 16, GetProductName())
+End Function
+
+
+
+&apos; Parameters:
+&apos; The &apos;oContainer&apos; is the Document or a specific sheet of a Calc - Document
+&apos; &apos;CName&apos; is the Name of the Control
+Function DisposeControl(oContainer as Object, CName as String) as Boolean
+Dim aControl as Object
+
+	aControl = GetControlModel(oContainer,CName)
+	If not IsNull(aControl) Then
+		aControl.Dispose()
+		DisposeControl = True
+	Else
+		DisposeControl = False
+	End If
+End Function
+
+
+&apos; Returns a sequence of a group of controls like option buttons or checkboxes
+&apos; The &apos;oContainer&apos; is the Document or a specific sheet of a Calc - Document
+&apos; &apos;sGroupName&apos; is the Name of the Controlgroup
+Function GetControlGroupModel(oContainer as Object, sGroupName as String )
+Dim aForm, oForms As Object
+Dim aControlModel() As Object
+Dim i as integer
+
+	oForms = oContainer.DrawPage.Forms
+	For i = 0 To oForms.Count-1
+		aForm = oForms(i)
+		If aForm.HasbyName(sGroupName) Then
+			aForm.GetGroupbyName(sGroupName,aControlModel)
+			GetControlGroupModel = aControlModel
+			Exit Function
+		End If
+	Next i
+	Msgbox(&quot;No Controlgroup with the name &apos;&quot; &amp; sGroupName &amp; &quot;&apos; found&quot; , 16, GetProductName())
+End Function
+
+
+&apos; Returns the Referencevalue of a group of e.g. option buttons or check boxes
+&apos; &apos;oControlGroup&apos; is a sequence of the Control objects
+Function GetRefValue(oControlGroup() as Object)
+Dim i as Integer
+	For i = 0 To Ubound(oControlGroup())
+&apos;		oControlGroup(i).DefaultState = oControlGroup(i).State
+		If oControlGroup(i).State Then
+			GetRefValue = oControlGroup(i).RefValue
+			exit Function
+		End If
+	Next
+	Msgbox(&quot;No Control selected!&quot;,16, GetProductName())
+End Function
+
+
+Function GetRefValueOfControlGroup(oContainer as Object, GroupName as String)
+Dim oOptGroup() as Object
+Dim iRef as Integer
+	oOptGroup() = GetControlGroupModel(oContainer, GroupName)
+	iRef = GetRefValue(oOptGroup())
+	GetRefValueofControlGroup = iRef
+End Function
+
+
+Function GetOptionGroupValue(oContainer as Object, OptGroupName as String) as Boolean
+Dim oRulesOptions() as Object
+	oRulesOptions() = GetControlGroupModel(oContainer, OptGroupName)
+	GetOptionGroupValue = oRulesOptions(0).State
+End Function
+
+
+
+Function WriteOptValueToCell(oSheet as Object, OptGroupName as String, iCol as Integer, iRow as Integer) as Boolean
+Dim bOptValue as Boolean
+Dim oCell as Object
+	bOptValue = GetOptionGroupValue(oSheet, OptGroupName)
+	oCell = oSheet.GetCellByPosition(iCol, iRow)
+	oCell.SetValue(ABS(CInt(bOptValue)))
+	WriteOptValueToCell() = bOptValue
+End Function
+
+
+Function LoadDialog(Libname as String, DialogName as String)
+Dim oLib as Object
+Dim oDialog as Object
+	dialogs.loadLibrary(Libname)
+	oLib = dialogs.GetByName(Libname)
+	oDialog = CreateUnoDialog(oLib, DialogName)
+	LoadDialog() = oDialog
+End Function
+</script:module>

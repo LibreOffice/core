@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="HtmlAutoPilotBasic" script:language="StarBasic">&apos; Variables must be declared
+Option Explicit
+
+&apos; Maximum number of content templates, style templates and bullets
+Const MaxLayouts = 50
+Const MaxStyles = 100
+Const MaxBullets = 10
+
+Public NumberOfLayouts%, NumberOfStyles%
+
+&apos; Filled with title, previous, next, home, top, bullet, background, file name
+Public Style(8, MaxStyles) as String
+
+&apos; Filled with title, file name
+Public Layout$(2, MaxLayouts%)
+
+Public TextureDir$, BulletDir$, GraphicsDir$, GalleryDir$, PhotosDir$
+Public CurrentBullet$, CurrentPrev$, CurrentNext$, CurrentHome$, CurrentTop$
+Public FileStr as String
+
+Public WebWiz_gWizardName$, WebWiz_gErrContentNotFound$, WebWiz_gErrStyleNotFound$
+Public WebWiz_gErrMainTemplateError$, WebWiz_gErrWhileReloading$
+Public WebWiz_gErrWhileLoadStyles$, WebWiz_gErrMsg$, WebWiz_gErrMainDocumentError$
+
+Public ProgressBar as Object
+Public ProgressValue As Long
+Public oBaseDocument as Object
+Public oViewCursor as Object
+Public oViewSettings as Object
+Public NoArgs as New com.sun.star.beans.PropertyValue
+
+Public oCursor as Object
+Public oBookmarks as Object
+Public oBookMark as Object
+
+Public oUcb as Object
+Public MainDialog as Object
+Public DialogModel as Object
+
+
+Sub Main
+&apos;On Local Error Goto GlobalErrorHandler
+	LoadLibrary(&quot;tools&quot;)
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	oBaseDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter/web&quot;, &quot;_blank&quot;, 0, NoArgs())
+	oViewSettings = oBaseDocument.CurrentController.ViewSettings
+
+	oViewCursor = oBaseDocument.GetCurrentController.ViewCursor
+	ProgressBar = oBaseDocument.GetCurrentController.GetFrame.CreateStatusIndicator
+	ProgressBar.Start(&quot;&quot;, 100)
+	SetProgressValue(2)
+	oBaseDocument.LockControllers
+	oViewSettings.ShowTableBoundaries = False
+	oViewSettings.ShowTextBoundaries = False
+	MainDialog = LoadDialog(&quot;WebWizard&quot;,&quot;WebWzrd&quot;)
+	DialogModel = MainDialog.Model
+	LoadLanguage
+	SetProgressValue(10)
+	GetPaths()
+	NumberofLayouts = FillupWebListbox(oUcb, &quot;/cnt&quot;, MainDialog, &quot;lbTemplate&quot;, Layout$())
+	SetProgressValue(30)
+	GetCurIndex(DialogModel.lbTemplate, Layout(),NumberofLayouts,2)
+	oCursor = oBasedocument.Text.CreateTextCursor
+	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
+	SetProgressValue(40)
+	DialogModel.optTiled.State = 1	
+	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, MainDialog, &quot;lbStyles&quot;, Style())
+	SetProgressValue(50)
+	LoadWebPageStyles(oBaseDocument)
+	SetProgressValue(98)
+	SetProgressValue(0)
+	oBaseDocument.UnlockControllers
+	MainDialog.Execute
+
+GLOBALERRORHANDLER:
+	If Err &lt;&gt; 0 Then
+		MsgBox (WebWiz_gErrMsg$, 16, WebWiz_gWizardName$)
+		CancelHTMLWizard()
+	End If
+End Sub
+
+
+Function SetProgressValue(iValue as Integer)	
+	If iValue = 0 Then
+		ProgressBar.End
+	End If
+	ProgressValue = iValue
+	ProgressBar.Value = iValue
+End Function
+
+
+Sub ReloadCurrentDocument()
+Dim CurInd as Integer
+&apos;On Local Error Goto ErrorOcurred
+&apos; Todo:Check if the pointer is really disabled, when set to Hourglass
+	ToggleWindow(False)
+	oBaseDocument.LockControllers
+	&apos; Get selected list entry and corresponding file name
+	CurInd = GetCurIndex(DialogModel.lbTemplate, Layout$(), NumberofLayouts%, 2)
+	oCursor = oBaseDocument.Text.CreateTextCursor
+	oCursor.GotoStart(False)
+	oCursor.GotoEnd(True)
+	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
+	SetBulletAndGraphics
+	CheckControls(oBaseDocument.DrawPage)	
+ErrorOcurred:
+	If Err &lt;&gt; 0 Then
+		MsgBox(WebWiz_gErrWhileReloading$, 16, WebWiz_gWizardName$)
+	End If
+	oBaseDocument.UnlockControllers
+	oViewCursor.GotoStart(False)
+	ToggleWindow(True)
+End Sub
+
+
+
+Sub LoadWebPageStyles()
+Dim CurIndex as Integer
+	ToggleWindow(False)
+	oBaseDocument.LockControllers
+	CurIndex = GetCurIndex(DialogModel.lbStyles, Style(), NumberofStyles%,8)
+	LoadNewStyles(oBaseDocument, DialogModel, CurIndex, FileStr, Style(), TextureDir)
+	CurrentBullet$ = BulletDir + Style(6, CurIndex)
+	CurrentPrev$ = GraphicsDir + Style(2, CurIndex)
+	CurrentNext$ = GraphicsDir + Style(3, CurIndex)
+	CurrentHome$ = GraphicsDir + Style(4, CurIndex)
+	CurrentTop$ = GraphicsDir + Style(5, CurIndex)
+	With oBaseDocument.DocumentInfo
+		.GetUserFieldValue(0) = ExtractGraphicNames(CurIndex,2)
+		.GetUserFieldValue(1) = ExtractGraphicNames(CurIndex, 4)
+		.GetUserFieldValue(2) = Style(6, CurIndex)       &apos; Bullet
+		.GetUserFieldValue(3) = Style(7, CurIndex)       &apos; Background
+	End With
+	SetBulletAndGraphics()
+	CheckControls(oBaseDocument.DrawPage)
+	oViewCursor.GotoStart(False)	
+	oBaseDocument.UnlockControllers
+	ToggleWindow(True)
+End Sub
+
+
+Function ExtractGraphicNames(CurIndex as Integer, i as Integer) as String
+Dim FieldValue as String
+	FieldValue = GetFileNameWithoutExtension(Style(i,CurIndex))
+	FieldValue = FieldValue &amp; &quot; &quot; &amp;	GetFileNameWithoutExtension(Style(i+1,CurIndex))
+	ExtractGraphicNames = FieldValue
+End Function
+
+
+Function GetCurIndex(oListbox as Object, sList() as String, MaxIndex as Integer, FileIndex as Integer)
+Dim i, n as Integer
+Dim SelValue as String
+	&apos; Get selected list entry
+	n = oListbox.SelectedItems(0)
+	SelValue = oListbox.StringItemList(n)
+	&apos; Find field index for chosen list entry
+	For i = 0 To MaxIndex
+		If sList(1, i) = SelValue Then
+			FileStr = sList(FileIndex, i)
+			Exit For
+		End If
+	Next
+	GetCurIndex = i
+End Function
+
+
+Sub SetBulletAndGraphics
+	SetGraphic(&quot;Prev&quot;, CurrentPrev)
+	SetGraphic(&quot;Next&quot;, CurrentNext)
+	SetGraphic(&quot;Home&quot;, CurrentHome)
+	SetGraphic(&quot;Top&quot;, CurrentTop)
+	SetBulletGraphics(CurrentBullet)
+	SetGraphicsToOriginalSize()
+End Sub
+
+
+Sub SetGraphicsToOriginalSize()
+Dim oGraphics as Object
+Dim oGraphic as Object
+Dim i as Integer
+Dim aActSize as New com.sun.star.awt.Size
+	oGraphics = oBaseDocument.GraphicObjects
+	For i = 0 To oGraphics.Count-1
+		oGraphic = oGraphics.GetByIndex(i)
+		aActSize = oGraphic.ActualSize
+		If aActSize.Height &gt; 0 And aActSize.Width &gt; 0 Then
+			oGraphic.SetSize(aActSize)
+		End If
+	Next i
+End Sub
+
+
+Sub EndDialog()
+	If DialogModel.chkSaveasTemplate.State = 1 Then
+		&apos; Generating template? Set events later!
+		AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;WebWizard.HtmlAutoPilotBasic.SetEvent()&quot;)	
+		&apos; Call the Store template dialog
+		DispatchSlot(5538)
+	Else
+		SetEvent
+	End If
+	MainDialog.EndExecute()
+	MainDialog.Dispose()
+End Sub
+
+
+Sub CancelHTMLWizard()
+	MainDialog.EndExecute()
+	MainDialog.Dispose()
+	oBaseDocument.Dispose()
+End Sub
+
+
+Sub SetEvent()
+Dim oDocument as Object
+&apos; This sub links the events OnSaveDone and OnSaveAsDone to the procedure
+&apos; CopyGraphics. It is invoked when a document is created, either directly
+&apos; from the AutoPilot or from a template. It is not possible to set these
+&apos; links for the template created by the AutoPilot because then it is not
+&apos; possible to modify the template.
+	LoadLibrary(&quot;tools&quot;)
+	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	AttachBasicMacroToEvent(oDocument,&quot;OnSaveDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)	
+	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)	
+End Sub
+
+
+
+Sub CopyGraphics
+&apos; This sub copies all the graphics used in the document to the same directory the
+&apos; document has been copied into and changes the graphics links in the document.
+Dim oGraphicObjects, oGraphic as Object
+Dim i as Integer
+Dim GraphicFilePath as String
+Dim SavePath$
+Dim GraphicFileName as String
+	LoadLibrary(&quot;tools&quot;)
+	GetPaths()	
+	oBaseDocument = StarDesktop.ActiveFrame.Controller.Model
+	Msgbox oBaseDocument.Url
+	SavePath = oBaseDocument.Url
+	oGraphicObjects = oBaseDocument.GraphicObjects
+	
+	For i = 0 to oGraphicObjects.Count-1
+		oGraphic = oGraphicObjects.GetbyIndex(i)
+		GraphicFilePath = oGraphic.GraphicURL
+		GraphicFileName = FileNameoutofPath(GraphicFilePath)
+		FileCopy GraphicFilePath, Savepath &amp; GraphicFileName
+		oGraphic.GraphicURL = Savepath &amp; GraphicFileName
+	Next i
+
+	GraphicFileName = FileNameoutofPath(CurrentBullet)
+	FileCopy BulletDir &amp; GraphicFileName, SavePath &amp; GraphicFileName
+
+	SetBulletGraphics(GraphicFileName)
+	
+&apos;	&apos; Copy background graphic
+&apos;	If ActiveWindow.Page.GrfFilename&lt;&gt;&quot;&quot; Then
+&apos;		&apos; Set new background graphic
+&apos;		ActiveWindow.Page.GrfFilename = SavePath$+GraphicFileName$
+&apos;		ActiveWindow.Page.GrfPosition = 11
+&apos;	End If
+
+	With oBaseDocument.DocumentInfo
+		.GetUserFieldValue(0) = &quot;&quot;
+		.GetUserFieldValue(1) = &quot;&quot;
+		.GetUserFieldValue(2) = &quot;&quot;
+		.GetUserFieldValue(3) = &quot;&quot;
+	End With
+
+&apos;	&apos; Reset events
+	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveDone&quot;, &quot;&quot;)
+	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveAsDone&quot;, &quot;&quot;)
+	AttachBasicMacroToEvent(oBaseDocument,&quot;OnCreate&quot;, &quot;&quot;)
+	oBaseDocument.Store
+End Sub
+
+
+Function FillupWebListbox(oUcb as Object, sFileFilter as String, oDialog as Object, ListboxName as String, List() as String)
+Dim oDocInfo as Object
+Dim oListboxControl as Object
+Dim Description as String
+Dim sField as String
+Dim sFieldList() as String
+Dim bItemFound as Boolean
+Dim MaxIndex as Integer
+Dim DirContent() as String
+Dim FileName as String
+Dim TemplatePath as String
+Dim FilterLen as Integer
+Dim i as Integer
+Dim m as Integer
+Dim n as Integer
+Dim s as Integer
+Dim a as Integer
+Dim SelList(0) as Integer
+Dim LocMaxIndex as Integer
+	oListboxControl = oDialog.GetControl(ListboxName)
+	
+	oDocInfo = createUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
+	FilterLen = Len(sFileFilter)
+	bItemFound = False
+	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)	
+	DirContent() = oUcb.GetFolderContents(TemplatePath,True)
+	LocMaxIndex = Ubound(DirContent())
+	a = 0
+	For i = 0 To LocMaxIndex
+		FileName = DirContent(i)
+		If Instr(1,Filename, sFileFilter) Then
+			bItemFound = True
+			Description = RetrieveDocTitle(oDocInfo, FileName)
+			oListboxControl.AddItem(Description,a)
+			a = a + 1
+			List(1,i) = Description
+			If sFileFilter = &quot;/cnt&quot; Then
+				List(2,i) = Filename
+			Else
+				m = 2
+				For n = 0 To 3
+					sField = oDocInfo.GetUserFieldValue(n)
+					sFieldList() = ArrayoutofString(sField, &quot; &quot;, MaxIndex)
+					For s = 0 To MaxIndex
+						If m &lt; 6 Then
+							List(m,i) = sFieldList(s) &amp; &quot;.gif&quot;
+						Else
+							List(m,i) = sFieldList(s)
+						End If
+						m = m + 1
+					Next s
+				Next n
+				List(8,i) = FileName
+			End If
+		End If
+	Next i
+
+	&apos; No content template? Error message, close new empty document, stop execution
+	If Not bItemfound Then
+		MsgBox(WebWiz_gErrContentNotFound$ , 16, WebWiz_gWizardName$)
+		oBaseDocument.Dispose()
+		Stop
+	End If
+	SelList(0) = 0
+	oListboxControl.Model.SelectedItems() = SelList()
+	FillupWebListbox = i
+End Function
+
+
+Sub SetGraphic(sWhich, sGraphicText as String)
+Dim oLocCursor as Object
+Dim oGraphic as Object
+Dim bGetGraphic as Boolean
+	oBookmarks = oBaseDocument.BookMarks
+	If oBookmarks.HasbyName(sWhich)Then
+		oBookMark = oBookmarks.GetbyName(sWhich)
+		oLocCursor = oBookMark.Anchor.Text.CreateTextCursorByRange(oBookMark.Anchor)
+		oGraphic = oBaseDocument.CreateInstance(&quot;com.sun.star.text.GraphicObject&quot;)
+		oLocCursor.GoRight(3,True)
+		oGraphic.AnchorType = 1
+		oGraphic.GraphicURL = ConverttoURL(sGraphicText)
+		oLocCursor.Text.InsertTextContent(oLocCursor, oGraphic, True)
+		oGraphic.Name = sWhich
+	ElseIf oBaseDocument.GraphicObjects.HasbyName(sWhich) Then
+		oGraphic = oBaseDocument.GraphicObjects.GetByName(sWhich)
+		oGraphic.GraphicUrl = sGraphicText
+	End If
+End Sub
+
+
+
+Sub	ChangeBulletURL(sBulletUrl as String, oBookMarkCursor as Object)
+Dim n, m as Integer
+Dim oLevel()
+Dim oRules
+Dim bDoReplace as Boolean
+Dim oSize as New com.sun.star.awt.Size
+Dim oNumberingBuffer(0) as New com.sun.star.beans.PropertyValue
+Dim oNewBuffer(1) as New com.sun.star.beans.PropertyValue
+	oRules = oBookMarkCursor.NumberingRules
+	If Vartype(oRules()) = 9 Then
+		oNumberingBuffer(0).Name = &quot;NumberingType&quot;
+		oNumberingBuffer(0).Value = com.sun.star.style.NumberingType.BITMAP
+		For n = 0 To oRules.Count - 1
+			oLevel() = oRules.GetByIndex(n)
+			bDoReplace = ModifyPropertyValue(oLevel(), oNumberingBuffer())
+			If bDoReplace Then
+				oRules.ReplaceByIndex(n, oNumberingBuffer())		
+			End If
+		Next n
+		oBookmarkCursor.NumberingRules = oRules
+		oNewBuffer(0).Name = &quot;GraphicURL&quot;
+		oNewBuffer(0).Value = sBulletUrl
+		oNewBuffer(1).Name = &quot;GraphicSize&quot;
+		oSize.Height = 300
+		oSize.Width = 300
+		oNewBuffer(1).Value = oSize		
+		For n = 0 To oRules.Count - 1
+			oLevel() = oRules.GetByIndex(0)
+			bDoReplace = ModifyPropertyValue(oLevel(), oNewBuffer())
+			If bDoReplace Then
+				oRules.ReplaceByIndex(n, oNewBuffer())
+			End If
+		Next n
+		oBookmarkCursor.NumberingRules = oRules
+	End If
+End Sub
+
+
+Sub	SetBulletGraphics(sBulletUrl as String)
+Dim i as Integer
+Dim oBookMarkCursor as Object
+	oBookmarks = oBaseDocument.BookMarks
+	For i = 0 To oBookmarks.Count - 1
+		oBookMark = oBookmarks.GetbyIndex(i)
+		oBookMarkCursor = oBookMark.Anchor.Text.CreateTextCursorByRange(oBookMark.Anchor)
+		If oBookMarkCursor.PropertySetInfo.HasPropertybyName(&quot;NumberingRules&quot;) Then
+			ChangeBulletURL(sBulletUrl, oBookMarkCursor)
+		End If
+	Next i
+End Sub
+
+
+Sub CheckControls(oDrawPage as Object)
+Dim aForm as Object
+Dim m,n as integer
+Dim lColor as Long
+Dim oControl as Object
+	lColor = oBaseDocument.StyleFamilies.GetbyName(&quot;ParagraphStyles&quot;).GetByName(&quot;Standard&quot;).CharColor
+	&apos;SearchFor all possible Controls
+	For n = 0 to oDrawPage.Forms.Count - 1
+		aForm = oDrawPage.Forms(n)
+		For m = 0 to aForm.Count-1
+			oControl = aForm.GetbyIndex(m)
+			oControl.TextColor = lColor
+		Next
+	Next
+End Sub
+
+REM  *****  BASIC  *****
+
+Sub LoadNewStyles(oDocument as Object, oDialogModel as Object, CurIndex as Integer, SourceFile as String, Styles() as String, TextureDir as String)
+Dim BackGroundURL as String
+Dim oBackGraph as Object
+Dim i, BackColor as Long
+Dim oFamilies as Object, oFamily as Object, oStyle as Object
+Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue	
+
+	If SourceFile &lt;&gt; &quot;&quot; Then
+		StylesOptions(0).Name = &quot;OverwriteStyles&quot;
+		StylesOptions(0).Value = true
+		oDocument.StyleFamilies.LoadStylesFromURL(SourceFile, StylesOptions())
+	End If
+
+	&apos; Read array fields for background, bullet &amp; graphics
+	BackgroundURL = Styles(7, CurIndex)
+	If Left(BackgroundURL, 1) &lt;&gt; &quot;#&quot; Then
+		BackgroundURL = TextureDir + BackgroundURL
+		ToggleOptionButtons(oDialogModel, 1)
+	Else
+		BackColor = clng(&quot;&amp;H&quot; &amp; Right(BackgroundURL, Len(BackgroundURL)-1))
+		ToggleOptionButtons(oDialogModel, 0)
+	End If
+	oFamilies = oDocument.StyleFamilies
+	oFamily = oFamilies.GetbyName(&quot;PageStyles&quot;)
+&apos;	oStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)	
+	For i = 0 To oFamily.Count - 1
+		If oFamily.GetByIndex(i).IsInUse Then
+			oStyle = oFamily.GetbyIndex(i)
+			If oStyle.PropertySetInfo.HasPropertybyName(&quot;BackGraphicURL&quot;) Then
+				If Left(BackgroundURL, 1) = &quot;#&quot; Then
+					oStyle.BackGraphicURL = &quot;&quot;
+					oStyle.BackColor = BackColor
+					oStyle.BackTransparent = False
+				Else
+					oStyle.BackGraphicUrl = BackGroundURL
+					SetTileBackgroundorNot(oDialogModel, oStyle)
+				End If
+			End If
+		End If
+	Next i
+ErrorOcurred:
+	If Err &lt;&gt; 0 Then
+		MsgBox(WebWiz_gErrWhileLoadStyles$, 16, WebWiz_gWizardName$)
+		CancelHTMLWizard()
+	End If
+End Sub
+
+
+
+Sub	ToggleOptionButtons(DialogModel as Object, bDoEnable as Integer)
+	DialogModel.optTiled.Enabled = bDoEnable
+	DialogModel.optArea.Enabled = bDoEnable
+	DialogModel.frmBackground.Enabled = bDoEnable
+End Sub
+
+
+Sub SetBackGraphicStyle(oEvent as Object)
+Dim oFamilies as Object
+Dim oFamily as Object
+Dim i as Integer
+Dim oStyle as Object
+Dim oOptModel as Object
+Dim iBackgroundValue as Integer
+Dim oLocDocument as Object
+	ooptModel = oEvent.Source.Model
+	iBackgroundValue = Val(ooptModel.Tag)
+	oLocDocument = StarDesktop.ActiveFrame.Controller.Model
+	oLocDocument.LockControllers
+	oFamilies = oLocDocument.StyleFamilies
+	oFamily = oFamilies.GetbyName(&quot;PageStyles&quot;)
+	For i = 0 To oFamily.Count - 1
+		If oFamily.GetByIndex(i).IsInUse Then	
+			oStyle = oFamily.GetbyIndex(i)
+			If oStyle.PropertySetInfo.HasPropertybyName(&quot;BackGraphicURL&quot;) Then
+				oStyle.BackGraphicLocation = iBackgroundValue
+			End If
+		End If
+	Next i
+	oLocDocument.UnlockControllers
+End Sub
+
+
+Sub SetTileBackgroundorNot(DialogModel as Object, oStyle as Object)
+  	If DialogModel.optTiled.State = 1 Then
+    	oStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.TILED
+  	Else
+    	oStyle.BackGraphicLocation = com.sun.star.style.GraphicLocation.AREA
+  	End If
+End Sub
+
+</script:module>

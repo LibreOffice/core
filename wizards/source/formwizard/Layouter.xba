@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Layouter" script:language="StarBasic">Option Explicit
+
+&apos; Todo: Testplan: ImageControl an erster Stelle im Array der Feldnamen
+&apos; Todo: Durchtesten mit allen möglichen Datentypen in allen möglichen Konstellationen
+&apos; 		Was passiert, wenn Felder jenseits der Ränder positioniert werden?
+&apos; Todo: Die ObjektArrays oDBShapeList() und oTCShaplist könnten 3-Dimensional sein mit dem Model und dem Control 
+&apos; in den anderen beiden Dimensionen
+Public oProgressbar as Object
+Public ProgressValue as Integer
+Public oDocument as Object
+Public oController as Object
+Public oForm as Object
+Public oDrawPage as Object
+Public nMaxColRightX as Long
+Public nMaxTCWidth as Long
+Public nMaxRowRightX as Long
+Public nMaxRowY as Long
+Public MaxIndex as Integer
+Public Const cVertDistance = 200
+Public Const cHoriDistance = 300
+
+Public nPageWidth as Long
+Public nPageHeight as Long
+Public nFormWidth as Long
+Public nFormHeight as Long
+Public nMaxHoriPos as Long
+Public nMaxVertPos as Long
+
+Public CONST SBALIGNLEFT = 0
+Public CONST SBALIGNRIGHT = 2
+
+Public Const SBNOBORDER = 0
+Public Const SB3DBORDER = 1
+Public Const SBSIMPLEBORDER = 2
+
+Public CurArrangement as Integer
+Public CurBorderType as Integer
+Public CurAlignmode as Integer
+
+Public OldArrangement as Integer
+Public Const cColumnarLeft = 1
+Public Const cColumnarTop = 2
+Public Const cLeftJustified = 3
+Public Const cTopJustified = 4
+Public Const cTabled = 5
+Public Const cXOffset = 1000
+Public Const cYOffset = 700
+&apos; This is the viewed space that we lose because of the symbol bars
+Public Const cSymbolMargin = 2000
+Public Const MaxFieldIndex% = 200
+   
+Public Const cControlCollectionCount = 9
+Public Const cLabel 		= 1
+Public Const cTextBox 		= 2
+Public Const cCheckBox	 	= 3
+Public Const cDateBox 		= 4
+Public Const cTimeBox 		= 5
+Public Const cNumericBox 	= 6
+Public Const cCurrencyBox 	= 7
+Public Const cGridControl	= 8
+Public Const cImageControl	= 9
+
+Public Styles(8, 50) as String
+Public FieldMetaValues(MaxFieldIndex,2) as String
+&apos; Description of this List:
+&apos; FieldMetaValues(0-MaxFieldIndex,0) (Datafieldtype)
+&apos; FieldMetaValues(0-MaxFieldIndex,1) (Datafieldlength)
+&apos; FieldMetaValues(0-MaxFieldIndex,2) (ControlType eg. cLabel, cTextbox usw.)
+
+Public FieldNames(MaxFieldIndex) as string
+Public oModelService(cControlCollectionCount) as String
+Public oGridModel as Object
+
+&apos; field label postfix (the label ist the data source followed by a postfix)
+Public nFieldPostfixes (MaxFieldIndex%) as string
+
+
+Function InsertControl (oControlObject as object, aPoint as Object, aSize as Object)
+Dim oShape as object
+	oShape = oDocument.CreateInstance (&quot;com.sun.star.drawing.ControlShape&quot;)
+	oShape.Size = aSize
+	oShape.Position = aPoint
+	oShape.AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
+	oShape.control = oControlObject
+	oDrawPage.Add (oShape)
+	InsertControl = oShape
+End Function
+
+
+Function ArrangeControls()
+Dim oShape as Object
+Dim i as Integer
+&apos; Todo: Was haben diese Postfixes zu bedeuten?
+&apos;	nFieldPostfixes() = nFldLabelPostfixes$()
+	oProgressbar = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
+	oProgressbar.Start(&quot;&quot;, MaxIndex)
+	If OldArrangement = cTabled Then
+		oGridshape.Dispose
+	End If
+	ToggleLayoutPage(False)
+&apos;	oDocument.LockControllers
+	Select Case CurArrangement
+		Case cTabled
+			PositionGridControl(MaxIndex)
+		Case Else
+			PositionControls(MaxIndex)
+	End Select
+&apos;	oDocument.UnlockControllers
+	ToggleLayoutPage(True)
+	oProgressbar.End
+	Exit Function
+
+ErrorAndCloseForm:
+	ToggleWindow(True)
+	MsgBox(Form_gErrMsg$, 16, Form_gWizardName$)
+	oDocument.Dispose()
+	Stop
+	exit function
+End function
+
+
+Sub OpenBaseDocument()
+Dim NoArgs() as new com.sun.star.beans.PropertyValue
+Dim aPageSize As New com.sun.star.awt.Size
+Dim aSize As New com.sun.star.awt.Size
+Dim oViewSettings as Object
+Dim oPageStyle as Object
+
+	oDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 0, NoArgs())
+	oController = oDocument.GetCurrentController
+	oViewSettings = oDocument.CurrentController.ViewSettings
+&apos;	oDocument.LockControllers
+	oViewSettings.ShowTableBoundaries = False
+	oViewSettings.ShowTextBoundaries = False
+	oViewSettings.ShowOnlineLayout = True
+	oViewSettings.ShowHoriRuler = True
+&apos;	oCursor = oDocument.Text.CreateTextCursor
+&apos;	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
+	oDrawPage = oDocument.DrawPage
+	oPageStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)
+	oPageStyle.IsLandscape = True
+&apos; Todo: Prozedur schreiben um Seite auf Landscape/Portrait zu setzen
+	aPageSize = oPageStyle.Size
+	nPageWidth = aPageSize.Width
+	nPageHeight = aPageSize.Height
+	aSize.Width = nPageHeight
+	aSize.Height = nPageWidth
+	oPageStyle.Size = aSize
+	nPageWidth = nPageHeight
+	nPageHeight = oPageStyle.Size.Height
+	&apos; Todo: Es könnte der unterste Grenze in Abhängigkeit von der Anzahl der DB-Felder bestimmt werden.
+	nFormWidth = nPageWidth - oPageStyle.RightMargin - oPageStyle.LeftMargin - 2 * cXOffset
+	nFormHeight = nPageHeight - oPageStyle.TopMargin - oPageStyle.BottomMargin - 2 * cYOffset - cSymbolMargin
+End Sub
+
+
+&apos; Modify the Borders of the Controls
+Sub ChangeBorderLayouts(oEvent as Object)
+Dim oModel as Object
+Dim OldBorderType as Integer
+Dim i as Integer
+Dim oCurModel as Object
+	ToggleLayoutPage(False)
+	oDocument.LockControllers
+	OldBorderType = CurBorderType
+	oModel = oEvent.Source.Model
+	CurBorderType = oModel.Tag
+&apos; Todo: Die Grafikurl des Controls umsetzen, ebenso wie die Grafikurl des 
+&apos; alten Controls
+	If OldBorderType &lt;&gt; CurBorderType Then
+		For i = 0 To MaxIndex
+			oCurModel = oDBShapeList(i).GetControl
+			If oCurModel.PropertySetInfo.HasPropertyByName(&quot;Border&quot;)Then
+				oCurModel.Border = CurBorderType
+			End If
+		Next i
+	End If
+	oDocument.UnLockControllers
+	ToggleLayoutPage(True)
+End Sub
+
+
+Sub ChangeLabelAlignments(oEvent as Object)
+Dim i as Integer
+Dim oCurModel as Object
+Dim OldAlignMode as Integer
+Dim oModel as Object
+	ToggleLayoutPage(False)
+	oDocument.LockControllers()
+	OldAlignMode = CurAlignMode
+	oModel = oEvent.Source.Model
+	CurAlignMode = oEvent.Source.Model.Tag
+	&apos; Todo: Es muss festgestellt werden, welches Imagecontrol vorher selectiert war
+	&apos; und die GrafikUrls müssen entsprechend angepasst werden.	
+	If OldAlignMode &lt;&gt; CurAlignMode Then
+		For i = 0 To MaxIndex
+			oCurModel = oTCShapeList(i).GetControl
+			oCurModel.Align = CurAlignmode
+		Next i
+	End If
+	oDocument.UnlockControllers()
+	ToggleLayoutPage(True)
+End Sub
+
+
+Sub ChangeArrangemode(oEvent as Object)
+Dim oModel as Object
+	OldArrangement = CurArrangement
+	oModel = oEvent.Source.Model
+	oModel.Border = SB3DBORDER	
+	CurArrangement = oModel.Tag
+	If CurArrangement &lt;&gt; OldArrangement Then
+		ArrangeControls()
+		Select Case OldArrangement
+			Case cTabled
+				ToggleBorderGroup(True)
+				ToggleAlignGroup(True)
+			Case cColumnarTop, cTopJustified, cLeftJustified
+				ToggleAlignGroup(True)
+		End Select
+
+		Select Case CurArrangement
+			Case cTabled
+				ToggleBorderGroup(False)
+				ToggleAlignGroup(False)
+			Case cColumnarTop,cLeftJustified, cTopJustified
+				ToggleAlignGroup(False)
+		End Select
+	End If
+End Sub
+
+
+Sub	ToggleBorderGroup(bDoEnable as Boolean)
+	oDialogModel.frmBorderLayout.Enabled = bDoEnable
+	oDialogModel.imgBorder0.Enabled = bDoEnable
+	oDialogModel.imgBorder1.Enabled = bDoEnable	
+	oDialogModel.imgBorder2.Enabled = bDoEnable
+End Sub
+
+
+Sub	ToggleAlignGroup(bDoEnable as Boolean)
+	oDialogModel.frmAlign.Enabled = bDoEnable
+	oDialogModel.imgAlign0.Enabled = bDoEnable
+	oDialogModel.imgAlign2.Enabled = bDoEnable	
+End Sub
+
+
+Sub ToggleLayoutPage(bDoEnable as Boolean)
+	oDialogModel.frmArrangements.Enabled = bDoEnable
+	oDialogModel.imgArrange1.Enabled = bDoEnable
+	oDialogModel.imgArrange2.Enabled = bDoEnable
+	oDialogModel.imgArrange3.Enabled = bDoEnable
+	oDialogModel.imgArrange4.Enabled = bDoEnable
+	oDialogModel.imgArrange5.Enabled = bDoEnable
+	oDialogModel.lblStyles.Enabled = bDoEnable
+	oDialogModel.frmBackground.Enabled = bDoEnable
+	oDialogModel.optTiled.Enabled = bDoEnable
+	oDialogModel.optArea.Enabled = bDoEnable
+	oDialogModel.cmdHelp.Enabled = bDoEnable
+	oDialogModel.cmdBack.Enabled = bDoEnable
+	oDialogModel.cmdGoOn.Enabled = bDoEnable
+	oDialogModel.imgTheme.Enabled = bDoEnable
+	ToggleAlignGroup(bDoEnable)
+	ToggleBorderGroup(bDoEnable)
+End Sub
+
+
+Sub DestroyControlShapes(oDrawPage as Object)
+Dim i as Integer
+Dim oShape as Object
+	For i = oDrawPage.Count-1 To 0 Step -1
+		oShape = oDrawPage.GetByIndex(i)
+		If oShape.ShapeType = &quot;com.sun.star.drawing.ControlShape&quot; Then
+			oShape.Dispose
+		End If
+	Next i
+End Sub</script:module>

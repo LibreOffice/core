@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="CalendarMain" script:language="StarBasic">Option Explicit
+
+Const _DEBUG = 0
+
+&apos; CalenderMain
+Public sCurLangLocale as String
+
+&apos; Dieses Flag dient zur Abfrage ob die individuellen Daten abgespeichert werden sollen.
+Public CalOwnDataChanged%
+
+&apos;BankHolidayFunctions
+Public CalBankholidayName$ (1 To 374)
+Public CalTypeOfBankHoliday% (1 To 374)
+
+Public Const cHolidayType_None = 0
+Public Const cHolidayType_Full = 1
+Public Const cHolidayType_Half = 2
+Public Const cHolidayType_Own = 4
+
+&apos;Dlg_Control
+Public CalTWIPSPicHeight%, CalTWIPSPicWidth%, CalStartX%, CalStartY%
+
+Public CalPicWidth%, CalPicHeight%
+
+Public cCalSubCmdDeleteSelect_DeleteSelEntry$
+Public cCalSubCmdDeleteSelect_DeleteSelEntryTitle$
+Public cCalSubcmdSwitchOwnDataOrGeneral_Back$
+Public cCalSubcmdSwitchOwnDataOrGeneral_OwnData$
+
+&apos;Language
+Public cCalLongMonthNames$(12)
+Public cCalShortMonthNames$(12)
+
+Public sBitmapFilename$
+Public sCalendarTitle$, sMonthTitle$, sWizardTitle$, sError$
+Public cCalStyleWorkday$, cCalStyleWeekend$
+
+&apos; German only
+&apos; Variablen, die zur Verwaltung der Eingabe der Bundesländer dienen
+Public CalChoosenLand%, MouseClicked%, LandWhenClick%
+Public LastMousePosX, LastMousePosY As Single
+
+Public oDocument as Object
+Public oSheets as Object
+Public oSheet as Object
+Public DlgBuffer as Object
+Public oStatusLine as Object
+
+&apos; BL* bedeutet BundesLand*
+Public CONST CalBLBayern         = 1
+Public CONST CalBLBadenWuert     = 2
+Public CONST CalBLBerlin         = 3
+Public CONST CalBLBremen         = 4
+Public CONST CalBLBrandenburg    = 5
+Public CONST CalBLHamburg        = 6
+Public CONST CalBLHessen         = 7
+Public CONST CalBLMeckPomm       = 8
+Public CONST CalBLNiedersachsen  = 9
+Public CONST CalBLNordrheinWest  = 10
+Public CONST CalBLRheinlandPfalz = 11
+Public CONST CalBLSaarland       = 12
+Public CONST CalBLSachsen        = 13
+Public CONST CalBLSachsenAnhalt  = 14
+Public CONST CalBLSchlHolstein   = 15
+Public CONST CalBLThueringen     = 16
+
+
+Sub CalAutopilotTable()
+
+&apos; On Error Goto ErrorHandler
+	Application.LoadLibrary(&quot;tools&quot;)
+	&apos; HauptRoutine zur Erstellung des Kalenders
+	Set DlgBuffer = DlgCalendar
+
+	DlgBuffer.Load()
+	sCurLangLocale = StarDesktop.ISOLocale.Language
+    LoadLanguage(sCurLangLocale)
+	&apos; Da modulübergreifende Variablen unsicher sind, 
+	&apos; wird ihre Initialisierung noch einmal explizit
+	&apos; angegeben.
+	CalInitGlobalVariablesDate()
+	CalCalcPictureData()
+	CalChoosenLand% = -2
+	MouseClicked% = False
+
+	&apos; Die Daten für die eigenen Ereignisdaten werden geladen.
+	CalLoadOwnData()
+	DlgBuffer.lbOwnData.FontName = &quot;Courier&quot;
+	DlgBuffer.cmdDelete.Enabled = False
+	DlgBuffer.txtMonth.Text = cCalShortMonthNames$(Month(Now()))
+	DlgBuffer.txtMonth.Tag = DlgBuffer.txtMonth.Text
+	DlgBuffer.OptYear.SetFocus()
+	DlgBuffer.OptYear.Value = True
+	CalChooseCalendar()  &apos; month
+
+	&apos; Jahr und Monat werden ermittelt
+	DlgBuffer.txtYear.Text = Year(Now())
+	DlgBuffer.txtYear.Tag = DlgBuffer.txtYear.Text
+
+	DlgBuffer.cmbState.ListIndex = 0
+
+	DlgBuffer.CurrentStep = 1
+	
+	DlgBuffer.Show()
+	Exit Sub
+
+ErrorHandler:
+    MsgBox(sError$, 16, sWizardTitle$)
+End Sub
+
+
+Sub CalChooseCalendar()
+	DlgBuffer.lblYear.Enabled = True
+	DlgBuffer.txtYear.Enabled = True
+	DlgBuffer.spinButton1.Enabled = True
+	DlgBuffer.cmbState.Enabled = True
+	
+	DlgBuffer.txtMonth.Enabled = DlgBuffer.optMonth.Value
+	DlgBuffer.lblMonth.Enabled = DlgBuffer.optMonth.Value
+	DlgBuffer.spinButton3.Enabled = DlgBuffer.optMonth.Value
+End Sub
+
+
+Sub CalCmdCancel()
+	If CalOwnDataChanged% Then
+		Call CalSaveOwnData()
+	End If
+	DlgBuffer.Unload()
+End Sub
+
+
+
+Sub CalCmdOk()
+	&apos; cmdOk is called when the Button &apos;Read&apos; is clicked on
+	&apos; It is either given out a month or a year
+	Dim i, iSelYear as Integer
+	Dim SelYear as String
+	DlgBuffer.Hide()
+
+	If cLANGUAGE_GERMAN = sCurLangLocale Then
+		If MouseClicked% Then
+			CalChoosenLand%=LandWhenClick%
+		Else
+			CalChoosenLand% = 0
+		End If
+	End If
+
+	oDocument = StarDesktop.ActiveFrame.Controller.Model      		
+	oSheets = oDocument.sheets
+	If CalOwnDataChanged% Then 
+ 		Call CalSaveOwnData()
+    End If
+      		
+	&apos; Unprotect all tables so they can be deleted or modified
+   	For i = 0 To oSheets.Count - 1
+		oSheets.GetbyIndex(i).unprotect(&quot;&quot;)
+    Next
+	oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
+
+	iSelYear = Val(txtYear.Text)
+	Select Case sCurLangLocale
+		Case cLANGUAGE_GERMAN
+			Call CalFindWholeYearHolidays_GERMANY(iSelYear, CalChoosenLand%)
+		Case cLANGUAGE_ENGLISH
+			Call FindWholeYearHolidays_US(iSelYear)
+		Case cLANGUAGE_FRENCH
+			Call FindWholeYearHolidays_FRANCE(iSelYear)
+		Case cLANGUAGE_ITALIAN
+			Call FindWholeYearHolidays_ITA(iSelYear)
+		Case cLANGUAGE_SPANISH
+			Call FindWholeYearHolidays_SPAIN(iSelYear)
+		Case cLANGUAGE_PORTUGUESE
+			Call FindWholeYearHolidays_PORT(iSelYear)
+		Case cLANGUAGE_DUTCH
+			Call FindWholeYearHolidays_NL(iSelYear)
+		Case cLANGUAGE_SWEDISH
+			Call FindWholeYearHolidays_SWED(iSelYear)
+		Case cLANGUAGE_DANISH
+			Call FindWholeYearHolidays_DK(iSelYear)
+		Case cLANGUAGE_POLISH
+			Call FindWholeYearHolidays_PL(iSelYear)
+		Case cLANGUAGE_RUSSIAN
+			Call FindWholeYearHolidays_RU(iSelYear)
+	End Select
+
+	Call CalInsertOwnDataInTables(iSelYear)
+
+	oStatusline = oDocument.GetCurrentController.GetFrame.GetStatusIndicator
+			
+	If optYear.Value Then 
+		oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
+		oSheet = oSheets.GetbyIndex(0)
+		oSheet.Name = sCalendarTitle$ + &quot; &quot; + txtYear.Text
+		oDocument.AddActionLock
+		Call CalCreateYearTable(iSelYear)
+	ElseIf optMonth.Value Then 
+		oSheets.RemovebyName(oSheets.GetbyIndex(1).Name)
+		oSheet = oSheets.GetbyIndex(0)
+		oSheet.Name = sMonthTitle$ + &quot; &quot; + cCalLongMonthNames$(CalGetIntOfShortMonthName%(txtMonth.Text))
+		oDocument.AddActionLock
+		Call CalCreateMonthTable(iSelYear, CalGetIntOfShortMonthName%(txtMonth.Text))
+	End If
+
+	oDocument.RemoveActionLock
+	&apos; Protect the remaining sheet
+	oSheet.protect(&quot;&quot;)
+	oStatusLine.End
+	DlgBuffer.Unload()
+End Sub
+</script:module>

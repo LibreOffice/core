@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">
+Global Const RID_DB_COMMON_START		= 1000
+Global Const RID_DB_FORM_WIZARD_START	= 2200
+
+
+Public DlgFormDB as Object
+Public oDialogModel as Object
+
+&apos;	Global Msg
+Dim Form_gWizardName$
+Dim Form_gErrMsg$
+Dim Form_gErrFormOpen$
+Dim Form_gErrNoDatabase$
+Dim Form_gErrNoTableInDatabase$
+Dim Form_gErrTitleSuggestedExist$
+Dim Form_gErrTitleSyntaxError$
+Dim Form_gErrTitleAsTableExist$
+Dim Form_gProgressText$
+Dim Form_gCreatedForm$
+Dim Form_gErrCouldNotOpenObject$
+Dim Form_gErrNameToLong$
+
+Dim Form_Dlg_Caption(4) as String
+
+&apos;	Const control-properties
+Dim Form_0_cmdCancel$
+Dim Form_0_cmdBack$
+Dim Form_0_CmdNext$
+Dim Form_1_frameDatabase$
+Dim Form_1_frameTables$
+Dim Form_2_lblAvailable$
+Dim Form_2_lblSelected$
+Dim Form_3_frameStyles$
+Dim Form_3_optStyleCol$
+Dim Form_3_optStyleJustified$
+Dim Form_3_optStyleTabled$
+Dim Form_3_frameOrientation$
+Dim Form_3_optHorizontal$
+Dim Form_3_optVertical$
+Dim Form_5_frameFormTitle$
+Dim Form_5_frameOptRun$
+Dim Form_5_cmdReady$
+
+&apos;	Internal Logic
+Dim Form_ilFormTitleSuggestPrefix$
+
+Dim Form_gDatetime_DateComponent$
+Dim Form_gDatetime_TimeComponent$
+
+Sub LoadLanguage ()
+	Form_gWizardName$ = GetResText(RID_DB_FORM_WIZARD_START + 0)
+	Form_gErrMsg$ = GetResText(RID_DB_COMMON_START + 6)
+	Form_gErrFormOpen$ = GetResText(RID_DB_COMMON_START + 7)
+	Form_gErrNoDatabase$ = GetResText(RID_DB_COMMON_START + 8)
+	Form_gErrNoTableInDatabase$ = GetResText(RID_DB_COMMON_START + 9)
+	Form_gErrTitleSuggestedExist$ = GetResText(RID_DB_COMMON_START + 10)
+	Form_gErrTitleAsTableExist$ = GetResText(RID_DB_COMMON_START + 10)
+	Form_gErrTitleSyntaxError$ = GetResText(RID_DB_COMMON_START + 11)
+	Form_gProgressText$ = GetResText(RID_DB_FORM_WIZARD_START + 2)
+	Form_gCreatedForm$ = GetResText(RID_DB_FORM_WIZARD_START + 26)
+	Form_gErrNameToLong$ = GetResText (RID_DB_FORM_WIZARD_START + 27)
+	Form_gErrCouldNotOpenObject$ = GetResText (RID_DB_COMMON_START + 13)
+
+	&apos;	Internal Logic
+	Form_ilFormTitleSuggestPrefix$ = GetResText(RID_DB_FORM_WIZARD_START + 3)
+	Form_gDatetime_DateComponent$ = GetResText(RID_DB_FORM_WIZARD_START + 4)
+	Form_gDatetime_TimeComponent$ = GetResText(RID_DB_FORM_WIZARD_START + 5)
+
+	&apos;	Non const control-properties
+	Form_Dlg_Caption(0) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 6)
+	Form_Dlg_Caption(1) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 7)
+	Form_Dlg_Caption(2) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 8)
+	Form_Dlg_Caption(3) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 9)
+	Form_Dlg_Caption(4) = Form_gWizardName$ + GetResText(RID_DB_FORM_WIZARD_START + 10)
+
+	Form_2_lblAvailable = GetResText(RID_DB_FORM_WIZARD_START + 12)
+	Form_2_lblSelected = GetResText(RID_DB_FORM_WIZARD_START + 13)
+	Form_3_frameStyles = GetResText(RID_DB_FORM_WIZARD_START + 14)
+	Form_3_optStyleCol = GetResText(RID_DB_FORM_WIZARD_START + 15)
+	Form_3_optStyleJustified = GetResText(RID_DB_FORM_WIZARD_START + 16)
+	Form_3_optStyleTabled = GetResText(RID_DB_FORM_WIZARD_START + 17)
+	Form_3_frameOrientation = GetResText(RID_DB_FORM_WIZARD_START + 18)
+	Form_3_optHorizontal = GetResText(RID_DB_FORM_WIZARD_START + 19)
+	Form_3_optVertical = GetResText(RID_DB_FORM_WIZARD_START + 20)
+	Form_5_frameFormTitle = GetResText(RID_DB_FORM_WIZARD_START + 22)
+	Form_5_frameOptRun = GetResText(RID_DB_FORM_WIZARD_START + 23)
+	Form_5_cmdReady = GetResText(RID_DB_COMMON_START + 0)
+	SetDialogLanguage()
+End Sub
+
+Sub SetDialogLanguage ()
+	DlgFormDB = LoadDialog(&quot;FormWizard&quot;, &quot;DlgFormDB&quot;)
+	oDialogModel = DlgFormDB.Model
+	oDialogModel.cmdCancel.Label = GetResText(RID_DB_COMMON_START + 1)
+	oDialogModel.cmdBack.Label = GetResText(RID_DB_COMMON_START + 2)
+	oDialogModel.cmdGoOn.Label = GetResText(RID_DB_COMMON_START + 3)
+	oDialogModel.lblDatabases.Label = GetResText(RID_DB_COMMON_START + 4)
+	oDialogModel.lblTables.Label = GetResText(RID_DB_FORM_WIZARD_START + 11) &apos;Form_1_frameTables
+
+	oDialogModel.lblFields.Label = GetResText(RID_DB_FORM_WIZARD_START + 12) &apos;Form_2_lblAvailable
+	oDialogModel.lblSelFields.Label = GetResText(RID_DB_FORM_WIZARD_START + 13) &apos;Form_2_lblSelected
+&apos; Todo: Die folgenden Resourcen lassen sich immer noch als Hilfetexte für die ImageControls missbrauchen
+&apos;	.optStyleCol.Caption = Form_3_optStyleCol
+&apos;	oDialogModel.optStyleHorizontal.Label = Form_3_optHorizontal
+&apos;	oDialogModel.optStyleVertical.Label = Form_3_optVertical
+&apos;	oDialogModel.optStyleJustified.Label = Form_3_optStyleJustified
+&apos;	oDialogModel.optStyleTabled.Label = Form_3_optStyleTabled
+
+	oDialogModel.lblStyles.Label = GetResText(RID_DB_FORM_WIZARD_START + 21)
+&apos; Todo: Die Position des Eingabefeld für den Formulartitel entsprechend der Länge seines Labels bestimmen	
+&apos;	oDialogModel.frameFormTitle.Label = Form_5_frameFormTitle
+&apos;	oDialogModel.frameOptRun.Label = Form_5_frameOptRun
+	oDialogModel.optEditDocument.Label = GetResText(RID_DB_FORM_WIZARD_START + 24)
+	oDialogModel.optSaveDocument.Label = GetResText(RID_DB_FORM_WIZARD_START + 25)
+	oDialogModel.optEditDocument.Enabled = True
+	oDialogModel.frmBorderLayout.Label = GetResText(RID_DB_FORM_WIZARD_START + 28)
+&apos;	oDialogModel.OptNoFrame.Label = GetResText(RID_DB_FORM_WIZARD_START + 29)
+&apos;	oDialogModel.Opt3D.Label = GetResText(RID_DB_FORM_WIZARD_START + 30)
+&apos;	oDialogModel.OptFlat.Label = GetResText(RID_DB_FORM_WIZARD_START + 31)
+End Sub
+
+
+
+Sub InitializeWidthList()
+&apos;Todo: Was ist mit Currencies? Wieso sind dafür in der API keine Feldtypen definiert?
+	WidthList(0,0) = com.sun.star.sdbc.DataType.BIT   			&apos; = -7;
+	WidthList(0,1) = 5
+	WidthList(0,2) = cCheckbox
+	WidthList(0,3) = False
+
+	WidthList(1,0) = com.sun.star.sdbc.DataType.TINYINT			&apos; =  -6;
+	WidthList(1,1) = 4
+	WidthList(1,2) = cNumericBox
+	WidthList(1,3) = False
+	
+	WidthList(2,0) = com.sun.star.sdbc.DataType.SMALLINT		&apos; =   5;
+	WidthList(2,1) = 4
+	WidthList(2,2) = cNumericBox
+	WidthList(2,3) = False
+	
+	WidthList(3,0) = com.sun.star.sdbc.DataType.INTEGER			&apos; =   4;
+	WidthList(3,1) = 6
+	WidthList(3,2) = cNumericBox
+	WidthList(3,3) = False
+	
+	WidthList(4,0) = com.sun.star.sdbc.DataType.BIGINT			&apos; =  -5;
+	WidthList(4,1) = 11
+	WidthList(4,2) = cNumericBox
+	WidthList(4,3) = False
+	
+	WidthList(5,0) = com.sun.star.sdbc.DataType.FLOAT			&apos; =   6;
+	WidthList(5,1) = 21
+	WidthList(5,2) = cNumericBox
+	WidthList(5,3) = False
+	
+	WidthList(6,0) = com.sun.star.sdbc.DataType.REAL			&apos; =   7;
+	WidthList(6,1) = 21
+	WidthList(6,2) = cNumericBox
+	WidthList(6,3) = False
+	
+	WidthList(7,0) = com.sun.star.sdbc.DataType.DOUBLE			&apos; =   8;
+	WidthList(7,1) = 21
+	WidthList(7,2) = cNumericBox
+	WidthList(7,3) = False
+	
+	WidthList(8,0) = com.sun.star.sdbc.DataType.NUMERIC			&apos; =   2;
+	WidthList(8,1) = 21
+	WidthList(8,2) = cNumericBox
+	WidthList(8,3) = False
+	
+	WidthList(9,0) = com.sun.star.sdbc.DataType.DECIMAL			&apos; =   3;
+	WidthList(9,1) = 10	&apos; ToDo: Dies muss in einer Routine errechnet werden
+	WidthList(9,2) = cNumericBox
+	WidthList(9,3) = False
+	
+	WidthList(10,0) = com.sun.star.sdbc.DataType.CHAR			&apos; =   1;
+	WidthList(10,1) = 3
+	WidthList(10,2) = cTextBox
+	WidthList(10,3) = False
+	&apos; Todo: Sollte die Feldlänge vielleicht lieber aus den Metadaten ausgelesen werden?	
+	WidthList(11,0) = com.sun.star.sdbc.DataType.VARCHAR		&apos; =  12;
+	WidthList(11,1) = 20
+	WidthList(11,2) = cTextBox
+	WidthList(11,3) = True
+	
+	WidthList(12,0) = com.sun.star.sdbc.DataType.LONGVARCHAR	&apos; =  -1;
+	WidthList(12,1) = 20
+	WidthList(12,2) = cTextBox
+	WidthList(12,3) = True
+	
+	WidthList(13,0) = com.sun.star.sdbc.DataType.DATE			&apos; =  91;
+	WidthList(13,1) = 12
+	WidthList(13,2) = cDateBox
+	WidthList(13,3) = False
+	
+	WidthList(14,0) = com.sun.star.sdbc.DataType.TIME			&apos; =  92;
+	WidthList(14,1) = 11
+	WidthList(14,2) = cTimeBox
+	WidthList(14,3) = False
+	
+&apos; Todo: Die folgenden Felder auffüllen!	
+	WidthList(15,0) = com.sun.star.sdbc.DataType.TIMESTAMP		&apos; =  93;
+&apos;	WidthList(15,1) = 
+&apos;	WidthList(15,2) = 
+	WidthList(15,3) = False
+	
+	WidthList(16,0) = com.sun.star.sdbc.DataType.BINARY			&apos; =  -2;
+&apos;	WidthList(16,1) = 
+&apos;	WidthList(16,2) = cImageControl
+	WidthList(16,3) = False
+	
+	WidthList(17,0) = com.sun.star.sdbc.DataType.VARBINARY		&apos; =  -3;
+&apos;	WidthList(17,1) = 
+&apos;	WidthList(17,2) = cImageControl
+	WidthList(17,3) = False
+	
+	WidthList(18,0) = com.sun.star.sdbc.DataType.LONGVARBINARY	&apos; =  -4;
+&apos;	WidthList(18,1) = 
+&apos;	WidthList(18,2) = cImageControl
+	WidthList(18,3) = False
+	
+	WidthList(19,0) = com.sun.star.sdbc.DataType.SQLNULL		&apos; =   0;
+&apos;	WidthList(19,1) = 
+&apos;	WidthList(19,2) = 
+	WidthList(19,3) = False
+	
+	WidthList(20,0) = com.sun.star.sdbc.DataType.OTHER			&apos; = 1111;
+&apos;	WidthList(20,1) = 
+&apos;	WidthList(20,2) = 
+	WidthList(20,3) = False
+	
+	WidthList(21,0) = com.sun.star.sdbc.DataType.OBJECT			&apos; = 2000;
+&apos;	WidthList(21,1) = 
+&apos;	WidthList(21,2) = 
+	WidthList(21,3) = False
+	
+	WidthList(22,0) = com.sun.star.sdbc.DataType.DISTINCT		&apos; = 2001;
+&apos;	WidthList(22,1) = 
+&apos;	WidthList(22,2) = 
+	WidthList(22,3) = False
+	
+	WidthList(23,0) = com.sun.star.sdbc.DataType.STRUCT			&apos; = 2002;
+&apos;	WidthList(23,1) = 
+&apos;	WidthList(23,2) = 
+	WidthList(23,3) = False
+	
+	WidthList(24,0) = com.sun.star.sdbc.DataType.ARRAY			&apos; = 2003;
+&apos;	WidthList(24,1) = 
+&apos;	WidthList(24,2) = 
+	WidthList(24,3) = False
+	
+	WidthList(25,0) = com.sun.star.sdbc.DataType.BLOB			&apos; = 2004;
+&apos;	WidthList(25,1) = 
+&apos;	WidthList(25,2) = 
+	WidthList(25,3) = False
+	
+	WidthList(26,0) = com.sun.star.sdbc.DataType.CLOB			&apos; = 2005;
+&apos;	WidthList(26,1) = 
+&apos;	WidthList(26,2) = 
+	WidthList(26,3) = False
+	
+	WidthList(27,0) = com.sun.star.sdbc.DataType.REF			&apos; = 2006;
+&apos;	WidthList(27,1) = 
+&apos;	WidthList(27,2) = 
+	WidthList(27,3) = False
+
+	ControlList(cCheckBox) = &quot;CheckBox&quot;							&apos; cBoolean
+	ControlList(cNumericBox) = &quot;NumericField&quot;					&apos; cFloat, cInteger, cLong, cCounter, cDecimal, cShortInt
+	ControlList(cCurrencyBox) = &quot;CurrencyField&quot;					&apos; cCurrency
+	ControlList(cDateBox) = &quot;DateField&quot;
+	ControlList(cTimeBox) = &quot;TimeField&quot;
+	ControlList(cTextBox) = &quot;TextField&quot;
+	ControlList(cImageControl) = &quot;ImageControl&quot;
+&apos; Todo: Und was ist hiermit?
+&apos;const cLabel 		= 1 
+&apos;const cGridControl	= 8
+&apos;const cImageControl	= 9
+
+	oModelService(cLabel) = &quot;com.sun.star.form.component.FixedText&quot;
+	oModelService(cTextBox) = &quot;com.sun.star.form.component.TextField&quot;
+	oModelService(cCheckBox) = &quot;com.sun.star.form.component.CheckBox&quot;
+	oModelService(cDateBox) = &quot;com.sun.star.form.component.DateField&quot;
+	oModelService(cTimeBox) = &quot;com.sun.star.form.component.TimeField&quot;
+	oModelService(cNumericBox) = &quot;com.sun.star.form.component.NumericField&quot;
+	oModelService(cCurrencyBox) = &quot;com.sun.star.form.component.CurrencyField&quot;
+	oModelService(cGridControl) = &quot;com.sun.star.form.component.GridControl&quot;
+	oModelService(cImageControl) = &quot;com.sun.star.form.component.DatabaseImageControl&quot;
+End Sub
+
+
+Sub LoadLibrary(sLibname as String)
+Dim oArg(0) as new com.sun.star.beans.PropertyValue
+Dim oUrl as new com.sun.star.util.URL
+Dim oTrans as Object
+Dim oDisp as Object
+
+	oArg(0).Name = &quot;LibraryName&quot;
+	oArg(0).Value = sLibname
+
+	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
+	oUrl.Complete = &quot;slot:6517&quot;
+	oTrans.parsestrict(oUrl)
+
+	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
+	oDisp.dispatch(oUrl, oArg())
+End Sub
+
+</script:module>

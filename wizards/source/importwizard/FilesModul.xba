@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="FilesModul" script:language="StarBasic">Option Explicit
+
+Public AbsTemplateFound as Integer
+Public AbsDocuFound as Integer
+
+
+Function ReadApplicationDirectories(ApplIndex as Integer, FilesList(),bIsDocument as Boolean, sFiltername()) as Integer
+Dim bCheckDocuType as Boolean
+Dim FilterIndex as Integer
+Dim bRecursive as Boolean
+Dim sSourceDir as String
+Dim bCheckRealType as Boolean
+Dim a as Integer
+Dim sFileContent() as String
+Dim NewList(200,1) as String
+Dim Index as Integer
+Dim sLocExtension as String
+	Index = Val(Applications(ApplIndex,9)
+	sLocExtension = &quot;&quot;
+	If bIsDocument Then
+		&apos; Documents
+		bCheckDocuType = ControlStateToBool(Applications(ApplIndex,1))
+		bCheckRealType = False
+		bRecursive = ControlStateToBool(Applications(ApplIndex,2))
+		FilterIndex = Index
+		sSourceDir = Applications(ApplIndex,3)
+	Else
+		&apos; Templates
+		bCheckDocuType = ControlStateToBool(Applications(ApplIndex,5))
+		&apos; In SO the documenttype cannot be derived from the extension name
+		bCheckRealType = WizardMode = SBXMLMODE
+		If bCheckRealType Then
+			&apos; Note: StarOffice-Math-Documents cannot be treated like templates
+			bCheckRealType = Index &lt;&gt; 3
+			If bCheckRealType Then
+				sLocExtension = &quot;vor&quot;
+			End If
+			bIsDocument = Not bCheckRealType
+		End If
+		bRecursive = ControlStateToBool(Applications(ApplIndex,6))
+    	FilterIndex = Index + MaxApplCount
+		sSourceDir = Applications(ApplIndex,7)
+	End If
+	If bCheckDocuType Then
+		sFileContent() = GetMimeTypeList(sFilterName(FilterIndex))
+		NewList() = ReadDirectories(sSourceDir, bRecursive, bCheckRealType, False, sFileContent(), sLocExtension)
+		AddListtoList(FilesList(), NewList(), ApplIndex)
+		LabelRetrieval.Caption = sProgressPage_2 &amp;  &quot;  &quot; &amp;  ReplaceString(sProgressPage_5, FilesList(0,0) &amp; &quot; &quot;, &quot;%1&quot;)
+	End If
+	ReadApplicationDirectories() = Val(NewList(0,0))
+End Function
+
+
+
+Sub	ShowCurrentProgress(bIsDocument as Boolean, CurFound as Integer)
+	If bIsDocument Then
+		AbsDocuFound = AbsDocuFound + CurFound
+		ImportDialog.LabelCurDocumentRetrieval.Label =  sProgressFound &amp; &quot; &quot; &amp; CStr(AbsDocuFound) &amp;  &quot; &quot; &amp; sProgressMoreDocs
+	Else
+		AbsTemplateFound = AbsTemplateFound + CurFound
+		ImportDialog.LabelCurTemplateRetrieval.Label = sProgressFound &amp; &quot; &quot; &amp; CStr(AbsTemplateFound) &amp; &quot; &quot; &amp; sProgressMoreTemplates
+  End If
+End Sub
+
+Sub ConvertAllDocuments(sFilterName())
+Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
+Dim OpenProperties(0) as new com.sun.star.beans.PropertyValue
+Dim FilesList(500,2) as String
+Dim sViewPath as String
+Dim i as Integer
+Dim FilterIndex as Integer
+Dim sFullName as String
+Dim sFileName as String
+Dim oDocument as Object
+Dim sExtension as String
+Dim OldExtension as String
+Dim CurFound as Integer
+Dim TargetStemDir as String
+Dim SourceStemDir as String
+Dim TargetDir as String
+Dim TargetFile as String
+Dim CurFilterName as String
+Dim ApplIndex as Integer
+Dim Index as Integer
+Dim bIsDocument as Boolean
+Dim iOverWrite as Integer
+Dim bDoSave as Boolean
+Dim sCurFileExists as String
+Dim oTaskEnum as Object
+Dim oTask as Object
+Dim oModel as Object
+Dim oTaskController as Object
+	AbsTemplateFound = 0
+	AbsDocuFound = 0
+	For i = 0 To ApplCount-1
+		&apos;templates
+		bIsDocument = False
+		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
+		ShowCurrentProgress(bIsDocument, CurFound)
+	Next i
+
+	For i = 0 To ApplCount-1
+		&apos;documents
+		bIsDocument = True
+		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
+		ShowCurrentProgress(bIsDocument, CurFound)
+	Next i
+
+	InitializeProgressPage(ImportDialog)
+
+	OpenProperties(0).Name = &quot;Hidden&quot;
+	OpenProperties(0).Value = True
+	For i = 1 To cInt(FilesList(0, 0))
+		bDoSave = True
+		If bCancelTask Then
+			Call CancelTask()
+		End if
+
+		sFullName = FilesList(i,0)
+		CurFiltername =	GetFilterName(FilesList(i,1), sFilterName(), sExtension, FilterIndex)
+		ApplIndex = FilesList(i,2)
+		sViewPath = CutPathView(sFullName, 60)
+		ImportDialog.LabelCurDocument.Label = Str(i) &amp; &quot;/&quot; &amp; FilesList(0,0) &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
+		If i = 1 Then
+
+		End If
+		oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
+		If Not IsNull(oDocument) Then
+			Select Case sExtension
+				Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;mml&quot;
+					SourceStemDir = RTrimStr(Applications(ApplIndex,3), &quot;/&quot;)
+					TargetStemDir = RTrimStr(Applications(ApplIndex,4), &quot;/&quot;)
+			Case Else 								&apos; Templates and Helper-Applications remain
+					SourceStemDir = RTrimStr(Applications(ApplIndex,7), &quot;/&quot;)
+					TargetStemDir = RTrimStr(Applications(ApplIndex,8), &quot;/&quot;)
+			End Select
+
+			TargetFile = ReplaceString(sFullname, TargetStemDir, SourceStemDir)
+			sFileName = GetFileNameWithoutExtension(TargetFile, &quot;/&quot;)
+			OldExtension = GetFileNameExtension(TargetFile)
+
+			TargetFile = RTrimStr(TargetFile, OldExtension)
+			TargetFile = TargetFile &amp; sExtension
+			TargetDir = RTrimStr(TargetFile, sFileName &amp; &quot;.&quot; &amp; sExtension)
+			If Not oUcb.Exists(TargetDir) Then
+				oUcb.CreateFolder(TargetDir)
+			End If
+			If oUcb.Exists(TargetFile) Then
+				sCurFileExists = ReplaceString(sFileExists, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)
+				sCurFileExists = ReplaceString(sCurFileExists, chr(13), &quot;&lt;CR&gt;&quot;)
+				iOverWrite = Msgbox (sCurFileExists, 32 + 3, sTitle)
+				Select Case iOverWrite
+					Case 1	&apos; OK
+						&apos; In the FileProperty-Bean this is already default
+						bDoSave = True
+					Case 2 	&apos; Abort
+						Call CancelTask()
+					Case 7 	&apos; No
+						bDoSave = False
+				End Select
+			End If
+			If bDoSave Then
+				On Local Error Resume Next
+				FileProperties(0).Name = &quot;FilterName&quot;
+				FileProperties(0).Value = CurFilterName
+				oDocument.StoreToUrl(TargetFile,FileProperties())
+				oDocument.Dispose()
+				On Local Error Goto 0
+			End If
+			oTaskenum = StarDesktop.Tasks.CreateEnumeration
+&apos;			While oTaskEnum.HasmoreElements
+&apos;				oTask = oTaskenum.NextElement
+&apos;				If oTask.Name &lt;&gt; &quot;&quot; Then
+&apos;					oTaskController = oTask.Controller
+&apos;					PrintdbgInfo oTaskController
+&apos;					If hasUnoInterfaces(oTaskController,&quot;com.sun.star.frame.XModel&quot;) then
+&apos;						oModel = oTaskController.Model
+&apos;						If Ucase(oModel.Url) = Ucase(sFullName) Then
+&apos;							oTask.Close
+&apos;						End If
+&apos;					End If
+&apos;				End If
+&apos;			Wend
+		End If
+	Next i
+	Msgbox sReady, 64, sTitle
+	ImportDialogArea.endExecute
+	ImportDialogArea.Dispose	
+	End
+
+	Exit Sub
+RTError:
+	Msgbox sRTErrorDesc, 16, sRTErrorHeader
+End Sub
+
+
+Sub AddListtoList(FirstList(), SecList(), ApplIndex as Integer)
+Dim FirstStart as Integer, FirstEnd as Integer, i as Integer, s as Integer
+	FirstStart = Val(FirstList(0,0)) + 1
+	FirstEnd = FirstStart + Val(SecList(0,0))
+	s = 1
+	For i = FirstStart To FirstEnd
+		FirstList(i,0) = SecList(s,0)
+		FirstList(i,1) = SecList(s,1)
+		FirstList(i,2) = CStr(ApplIndex)
+		s = s + 1
+	Next i
+	FirstList(0,0) = i-2
+End Sub
+
+
+Function GetTargetTemplatePath(Index as Integer)
+	Select Case WizardMode
+		Case SBMICROSOFTMODE
+			GetTargetTemplatePath() = SOTemplatePath &amp; &quot;/&quot; &amp; sTemplateGroupName(Index)
+		Case SBXMLMODE
+			If Index = 3 Then
+				&apos; Helper Application
+				GetTargetTemplatePath = SOWorkPath
+			Else
+				GetTargetTemplatePath = SOTemplatePath
+			End If
+	End Select
+End Function
+
+
+&apos; Retrieves the second value for a next to &apos;SearchString&apos; in
+&apos; a two-dimensional string-Array
+Function GetFilterName(sMimetypeorExtension as String, sFilterName(), sExtension as string, FilterIndex as Integer) as String
+Dim i as Integer
+Dim MaxIndex as Integer
+Dim sLocFilterlist() as String
+	For i = 0 To Ubound(sFiltername(),1)
+		If Instr(1,sFilterName(i,0),sMimeTypeOrExtension) &lt;&gt; 0 Then
+			sLocFilterList() = ArrayoutofString(sFiltername(i,0),&quot;|&quot;, MaxIndex)
+			If MaxIndex = 0 Then
+				sExtension = sFiltername(i,2)
+				GetFilterName = sFilterName(i,1)
+			Else
+				Dim a as Integer
+				Dim sLocExtensionList() as String
+				a =	SearchArrayForPartString(sMimetypeOrExtension, sLocFilterList())
+				sLocFilterList() = ArrayoutofString(sFiltername(i,1),&quot;|&quot;, MaxIndex)
+				GetFilterName = sLocFilterList(a)
+				sLocExtensionList() = ArrayoutofString(sFilterName(i,2), &quot;|&quot;, MaxIndex)
+				sExtension = sLocExtensionList(a)
+			End If
+			Exit For
+		End If
+	Next
+	FilterIndex = i
+End Function
+
+
+Function SearchArrayforPartString(SearchString as String, LocList()) as Integer
+Dim i as integer
+	For i = Lbound(LocList(),1) to Ubound(LocList(),1)
+		If Instr(1,LocList(i), SearchString) &lt;&gt; 0 Then
+			SearchArrayForPartString() = i
+			Exit Function
+		End if
+	Next
+	IndexinArray = -1
+End Function
+
+
+Function GetMimeTypeList(BigFiltername as STring)
+Dim sMimeTypeList()
+	sMimeTypeList() = ArrayoutofString(BigFilterName,&quot;;&quot;)
+	If Instr(sMimetypeList(0), &quot;|&quot;) &lt;&gt; 0 Then
+		sMimeTypeList() = ArrayoutofString(sMimeTypeList(0),&quot;|&quot;)
+	End If
+	GetMimetypeList() = sMimeTypeList()
+End Function</script:module>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
+&apos;Very new version
+Public DocumentName as String
+Public FormPath$, FormDBName$, FormReturnValue$
+Public TemplatePath$
+Public WizardPath as String
+Public WebWizardPath as String
+Public TexturePath as String
+Public sQueryName as String
+Public NumberofStyles as Integer
+Public oDBConnection as Object
+Public s_aCurrencySymbol As String
+Public s_aPrependCurrencySymbol As Boolean
+
+Public bNeedFieldRefresh as Boolean
+Public bIsQuery as Boolean
+Public oDBForm as Object
+Public oColumns() as Object
+Public sDatabaseList()
+Public TableNames() as String
+Public QueryNames() as String
+Public FieldNames() as String
+Public oDBContext as Object
+Public oUcb as Object
+Public oDocInfo as Object
+&apos;Public TemplateList(50,1) as String
+Public WidthList(27,3) as Long
+Public ControlList(1 To 9) as String
+Public sDBName as String
+Public Tablename as String
+
+
+Sub MainWithDefault()
+&apos;On Local Error Goto GlobalError
+	LoadLibrary(&quot;tools&quot;)
+	LoadLibrary(&quot;webwizard&quot;)
+	bControlsareCreated = False	
+	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
+		Exit Sub
+	End If
+	MaxIndex = -1
+	oDBContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)
+	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	FormPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/bitmap&quot;)
+	WebWizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/web&quot;)
+	WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
+	TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
+	OpenBaseDocument()
+	GetDatabaseNames()
+	InitializeWidthList()
+	&apos; calc some special currency control properties (they depend from the system language)
+	&apos; Todo: What&apos;s going on here?
+&apos;	calcCurrencyProperties()
+	LoadLanguage
+	bNeedFieldRefresh = True
+	CreateForm()
+
+GlobalError:
+	If Err &lt;&gt; 0 Then
+		ToggleWindow(True)
+		MsgBox(Form_gErrMsg$ , 16, Form_gWizardName$)
+	End If
+End Sub
+
+
+Sub CreateForm() as String
+Dim i as Integer
+&apos; On Error Goto GlobalError
+	oDialogModel.optIgnoreBinaries.State = True
+	oDialogModel.optEditDocument.State = True
+	oDialogModel.cmdBack.Enabled = False
+	oDialogModel.cmdGoOn.Enabled = False
+	oDialogModel.lblTables.Enabled = False
+	oDialogModel.lstSelFields.Tag = False	
+	ToggleListboxControls(oDialogModel, False)
+	oDialogModel.Step = 1
+	oDialogModel.lstDatabases.StringItemList()= sDatabaseList()&apos; = AddItem(sDatabaseList(i)
+	oDialogModel.Title = Form_Dlg_Caption(oDialogModel.Step)
+	NumberofStyles = FillupWebListbox(oUcb, &quot;/stl&quot;, oDialogModel.lstStyles, Styles(), False)
+	ImportStyles()
+	ToggleWindow(True)
+	DlgFormDB.Execute()
+	Exit Sub
+
+GlobalError:
+	MsgBox(Form_gErrMsg$ , 16, Form_gWizardName$)
+	ToggleWindow(True)
+	DlgFormDB.EndExecute()
+	Reset
+	Stop
+End Sub
+
+
+Function AddListtoList(FirstArray(), SecondArray(), Optional StarIndex)
+Dim n as Integer
+Dim m as Integer
+Dim MaxIndex as Integer	
+	MaxIndex = Ubound(FirstArray()) + Ubound(SecondArray()) + 1
+	Dim ResultArray(MaxIndex)
+	For m = 0 To Ubound(FirstArray())
+		ResultArray(m) = FirstArray(m)
+	Next m
+	For n = 0 To Ubound(SecondArray())
+		ResultArray(m) = SecondArray(n)
+		m = m + 1
+	Next n
+	AddListToList() = ResultArray()
+End Function
+	
+
+Sub FormGetFields()
+Dim i as Integer
+Dim n as Integer
+Dim DocTest as String
+	ToggleDatabasePage(False)
+	n = Ubound(oDialogModel.lstTables.SelectedItems())
+	If n &lt;&gt; -1 Then
+		Tablename = Tablenames(oDialogModel.lstTables.SelectedItems(0))
+&apos; Todo: Ask, what&apos; happening here
+&apos;		DocTest$ = SuggestTitleStr$(FormAvailForms, Form_ilFormTitleSuggestPrefix$  + FormActiveTableName$)
+		DocTest = ReplaceString(TableName,&quot;_&quot;,&quot;:&quot;)
+&apos;		i= instr(1, DocTest$,  &quot;:&quot; ,1)
+&apos;		If i &gt; 0 then Mid(DocTest$,i,1,&quot;_&quot;)
+&apos;		DlgFormDB.txtDocTitle.Text = DocTest
+		bIsQuery = FieldinArray(QueryNames(), Ubound(QueryNames()), TableName)
+		If (bIsQuery) Then
+			oColumns = oDBConnection.Queries.GetByName(TableName).Columns
+		Else
+			oColumns = oDBConnection.Tables.GetByName(Tablename).Columns
+		End If
+&apos; Todo What&apos;s going on here?
+&apos;			sActFieldName$ = FieldsInQueries.Item (n%)	&apos; should be the same as aField.Name
+&apos;			sActFieldName$ = Left (sActFieldName$, InStr (1, sActFieldName$, &quot;,&quot;) - 1)
+&apos;		Call FixODBCBug()
+		GetSpecificFieldNames()
+		ToggleListboxControls(oDialogModel, True)
+	End If
+	SetUpOriginalList(oDialogModel.lstFields)
+	ToggleDatabasePage(True)
+
+&apos;	bNeedFieldRefresh = False
+	Exit Sub
+no_fields:
+	MsgBox Form_gErrCouldNotOpenObject$, 16, Form_gWizardName$
+End Sub
+
+
+Sub CancelFormWizard()
+	DlgFormDB.EndExecute()
+	DlgFormDB.Dispose()
+	oDocument.Dispose()
+	Stop
+End Sub
+
+
+Sub PreviousStep()
+	oDialogModel.Step = oDialogModel.Step - 1
+	oDialogModel.cmdBack.Enabled = oDialogModel.Step &lt;&gt; 1
+	oDialogModel.cmdGoOn.Enabled = True
+	If oDialogModel.Step = 1 Then
+		oDialogModel.lstSelFields.Tag = Not bControlsareCreated
+	End If
+&apos; Todo: Finde für jeden Step eine sinnige Überschrift
+&apos;	DlgForm.DB.Caption = Form_Dlg_Caption(DlgFormDB.CurrentStep-1)
+End Sub
+
+
+Sub NextStep()
+	Select Case oDialogModel.Step
+		Case 1
+			GetTableMetaData()
+			CreateDBForm()	
+			InitializeLayoutSettings()
+			oDialogModel.Step = 2
+		Case 2
+			oDialogModel.cmdGoOn.Label = Form_5_cmdReady
+			ToggleControlsofLastPage()				
+			oDialogModel.Step = 3
+		Case 3
+			HandleCreatedDocument()
+	End Select
+End Sub
+
+
+Sub InitializeLayoutSettings()
+	bControlsAreCreated = Not (CBool(oDialogModel.lstSelFields.Tag))
+	If Not bControlsAreCreated Then
+		oDialogModel.optTiled.State = 1
+		OldArrangement = 0
+		CurArrangement = cTabled
+		CurBorderType = SB3DBORDER
+		CurAlignmode = SBALIGNLEFT
+		ToggleBorderGroup(False)
+		ToggleAlignGroup(False)
+		ArrangeControls()
+	End If
+		
+	&apos; Todo: Hier die Grafik Urls der ImageControls setzen.
+	&apos; Alternativ würde es vielleicht reichen die Border auf 3-D zu setzen
+End Sub	
+
+
+Sub HandleCreatedDocument()
+Dim sPath as String
+Dim NoArgs() as new com.sun.star.beans.PropertyValue
+	On Local Error Goto NOSAVING
+
+	If oDialogModel.optSaveDocument.State = 1 Then
+		sPath = oDialogModel.txtInputPath.Text
+		oDocument.StoreToUrl(sPath,NoArgs()
+	End If
+	NOSAVING:
+	If Err &lt;&gt; 0 Then
+		Msgbox(&quot;Todo: Resourcen für fehlerhaftes Abspeichern suchen!&quot;, 16, GetProductname)
+		Resume CLERROR
+	Else
+		oDocument.Dispose
+	End If
+	CLERROR:
+End Sub
+
+
+Sub ChangeDocumentTitle
+	oDocument.DocumentInfo.Title = oDialogModel.txtTitle.Text
+End Sub
+
+
+Sub ChangeDialogHeight
+	If oDialogModel.Height &lt;&gt; 40 Then
+		oDialogModel.Height = 40
+	Else
+		oDialogModel.Height = 210
+	End If
+End Sub
+
+
+Sub CheckPathValidation()
+Dim sPath as String
+Dim sDir as String
+	sPath = ConvertToUrl(oDialogModel.txtInputPath.Text)
+&apos; Todo: Abklären, ob Verzeichnisse auch rekursiv erstellt werden sollen!
+&apos; Wenn ja muss beim Abspeichern eine Sicherheitsabfrage erscheinen
+	sDir = DirectorynameoutofPath(sPath , &quot;/&quot;)
+	If oUcb.IsFolder(sDir) Then
+		oDialogModel.cmdGoOn.Enabled = oUcb.Exists(sDir)
+	Else
+		oDialogModel.cmdGoOn.Enabled = False
+	End If
+End Sub
+
+
+Sub ToggleControlsofLastPage()
+	If oDialogModel.optEditDocument.State = 1 Then
+		oDialogModel.cmdGoOn.Enabled = True
+		oDialogModel.txtInputPath.Enabled = False
+		oDialogModel.cmdGetPathDialog.Enabled = False
+		oDialogMode.lblPath.Enabled = False
+	Else
+		oDialogMode.lblPath.Enabled = True
+		oDialogModel.txtInputPath.Enabled = True
+		oDialogModel.cmdGetPathDialog.Enabled = True
+		CheckPathValidation()
+	End If
+End Sub
+
+
+Sub ToggleDatabasePage(bDoEnable as Boolean)
+	oDialogModel.frmBinaries.Enabled = bDoEnable
+	oDialogModel.optIgnoreBinaries.Enabled = bDoEnable
+	oDialogModel.optBinariesasGraphics.Enabled = bDoEnable
+	oDialogModel.cmdHelp.Enabled = bDoEnable
+End Sub</script:module>

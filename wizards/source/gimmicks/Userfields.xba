@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Userfields" script:language="StarBasic">
+Public iUserFieldCount as integer
+Public LabelArray(10) as Object
+Public EditArray(10) as Object
+Public UserFieldName(255) as String
+Public UserFieldValue(255) as String
+Public oDocument as Object
+Public aTextField as Object
+Public aTextFieldEnum as Object
+Public const MAXFIELDCOUNT = 9
+Public UserFieldDataType(14) as String
+Public ScrollBarValue as Integer
+
+Sub StartChangesUserfields
+Dim a as Integer
+Dim CurElement, TFMaster as Object
+
+	LoadLibrary(&quot;tools&quot;)
+	LoadLanguage(StarDesktop.ISOLocale.Language)
+	ScrollBarValue = 0
+	UserFieldDatatype(0) = &quot;COMPANY&quot;
+	UserFieldDatatype(1) = &quot;FIRSTNAME&quot;
+	UserFieldDatatype(2) = &quot;NAME&quot;
+	UserFieldDatatype(3) = &quot;SHORTCUT&quot;
+	UserFieldDatatype(4) = &quot;STREET&quot;
+	UserFieldDatatype(5) = &quot;COUNTRY&quot;
+	UserFieldDatatype(6) = &quot;ZIP&quot;
+	UserFieldDatatype(7) = &quot;CITY&quot;
+	UserFieldDatatype(8) = &quot;TITLE&quot;
+	UserFieldDatatype(9) = &quot;POSITION&quot;
+	UserFieldDatatype(10) = &quot;PHONE_PRIVATE&quot;
+	UserFieldDatatype(11) = &quot;PHONE_COMPANY&quot;
+	UserFieldDatatype(12) = &quot;FAX&quot;   
+	UserFieldDatatype(13) = &quot;EMAIL&quot;  
+	UserFieldDatatype(14) = &quot;STATE&quot;  
+
+	On Local Error GoTo NODOCUMENT
+	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	NODOCUMENT:
+	If Err &lt;&gt; 0 Then
+		Msgbox(Error$ &amp; &quot;This Macro gives you the opportunity to change all Userfields of a displayed Document.&quot; &amp; chr(13) &amp;_
+			   &quot;To start this macro you have to activate a Document first!&quot; , 16, &quot;StarOffice 5.2&quot;)
+		Exit Sub
+	End If
+	On Local Error Goto 0
+	
+	&apos; Define TextFields
+	aTextfield = oDocument.getTextfields
+	aTextFieldEnum = aTextField.CreateEnumeration
+	a = 0
+	While aTextFieldEnum.hasmoreElements
+		CurElement = aTextFieldEnum.NextElement
+		If Not IsNull(CurElement) Then
+			If CurElement.PropertySetInfo.hasPropertybyName(&quot;Content&quot;) Then
+				TFMaster = CurElement.TextFieldMaster
+				a = a + 1
+				If a &gt;= 255 Then
+					MsgBox ErrorMsg1, 0 + 16, ErrorHeader
+					Exit Sub
+				End If
+				UserFieldName(a) = UserFieldDataType(CurElement.UserDataType)
+				UserFieldValue(a) = CurElement.Content
+			End If
+		End If
+	Wend
+	iUserFieldCount = a
+	If iUserFieldCount = 0 Then
+		MsgBox ErrorMsg2, 0+48, ErrorHeader
+		Exit Sub
+	End If
+
+	UserfieldDlg.Load
+
+	Call SetControlArray()
+	Call FillDialog()
+
+	UserFieldDlg.Show
+End Sub
+
+
+
+Sub FillDialog()
+Dim a as Integer
+	Call SetDialogText
+	For a = 1 To MaxFieldCount
+		If a &lt;= iUserFieldCount Then
+			LabelArray(a).Caption = UserFieldName(a)
+			EditArray(a).Text = UserFieldValue(a)
+		Else
+			LabelArray(a).Caption = &quot;&quot;
+			EditArray(a).Text = &quot;&quot;
+			LabelArray(a).Enabled = False
+			EditArray(a).Enabled = false
+		End If
+	Next a
+
+	If iUserFieldCount &gt; MaxFieldCount Then
+		UserfieldDlg.VScrollbar.Min = 0
+		UserfieldDlg.VScrollbar.Max = iUserFieldCount-MaxFieldCount
+		UserfieldDlg.VScrollbar.LargeChange = MaxFieldCount
+		UserfieldDlg.VScrollbar.SmallChange = 1
+	Else
+		UserfieldDlg.VScrollbar.enabled = False
+	End If
+
+End Sub
+
+
+
+Sub Dlg_Scroll(ScrollValue)
+	Call ChangeArray(ScrollBarValue)
+	ScrollBarValue = UserfieldDlg.VScrollbar.Value 
+	If (ScrollBarValue + MaxFieldCount) &gt; iUserFieldCount Then
+		ScrollBarValue = iUserFieldCount - MaxFieldCount
+	End If
+
+	For a = 1 To MaxFieldCount
+		LabelArray(a).Caption = UserFieldName(a + ScrollBarValue)
+		EditArray(a).Text = UserFieldValue(a + ScrollBarValue)	
+	Next a
+End Sub
+
+
+Sub ChangeArray(ByVal ScrollBarValue)
+Dim a as Integer
+	For a = 1 To MaxFieldCount
+		UserFieldValue(a + ScrollBarValue) = EditArray(a).Text
+	Next a
+End Sub
+
+
+Sub Cancel_Click
+	UserfieldDlg.Hide
+End Sub
+
+
+Sub Save_Click
+Dim i as Integer
+Dim CurElement, TFMaster as Object
+
+	UserfieldDlg.CancelChanges.Enabled = false
+	UserfieldDlg.SaveChanges.Enabled = false
+
+	ChangeArray(UserfieldDlg.VScrollbar.Value)
+
+	aTextfield = oDocument.getTextfields
+	aTextFieldEnum = aTextField.CreateEnumeration
+	i = 1
+	While aTextFieldEnum.hasmoreElements
+		CurElement = aTextFieldEnum.NextElement
+		If Not IsNull(CurElement) Then
+			If Curelement.PropertySetInfo.hasPropertybyName(&quot;Content&quot;) Then
+				If CurElement.Content &lt;&gt; UserFieldValue(i) Then
+					CurElement.Content = UserFieldValue(i)
+				End If
+				i = i  + 1
+			End If
+		End If
+	Wend
+	aTextField.Refresh
+	UserfieldDlg.Hide
+End Sub
+
+
+
+Sub SetControlArray()
+	Set LabelArray(1) = UserfieldDlg.Label1
+	Set EditArray(1) = UserfieldDlg.Textbox1
+	Set LabelArray(2) = UserfieldDlg.Label2
+	Set EditArray(2) = UserfieldDlg.Textbox2
+	Set LabelArray(3) = UserfieldDlg.Label3
+	Set EditArray(3) = UserfieldDlg.Textbox3
+	Set LabelArray(4) = UserfieldDlg.Label4
+	Set EditArray(4) = UserfieldDlg.Textbox4
+	Set LabelArray(5) = UserfieldDlg.Label5
+	Set EditArray(5) = UserfieldDlg.Textbox5
+	Set LabelArray(6) = UserfieldDlg.Label6
+	Set EditArray(6) = UserfieldDlg.Textbox6
+	Set LabelArray(7) = UserfieldDlg.Label7
+	Set EditArray(7) = UserfieldDlg.Textbox7
+	Set LabelArray(8) = UserfieldDlg.Label8
+	Set EditArray(8) = UserfieldDlg.Textbox8
+	Set LabelArray(9) = UserfieldDlg.Label9
+	Set EditArray(9) = UserfieldDlg.Textbox9
+End Sub
+
+
+Sub SetDialogText
+	UserfieldDlg.caption = HeaderLabel
+	UserfieldDlg.HeaderLabel.Caption = HeaderLabel
+	UserfieldDlg.CancelChanges.Caption = CancelButton
+	UserfieldDlg.SaveChanges.Caption = SaveButton	
+End Sub
+</script:module>

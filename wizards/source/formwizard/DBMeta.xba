@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="DBMeta" script:language="StarBasic">REM  *****  BASIC  *****
+Public sDatabaseList()
+Public sTableName as String
+
+
+Sub GetDatabaseNames()
+	If oDBContext.HasElements Then
+		sDatabaseList() = oDBContext.ElementNames()
+	End If
+End Sub
+
+
+Sub GetSelectedDBMetaData()
+Dim NullList()
+Dim OldsDBname as String
+	ToggleDatabasePage(False)
+	GetDBMetaData(sDatabaseList(), oDialogModel.lstDatabases.SelectedItems(0) )
+	oDialogModel.lstTables.Enabled = True
+	oDialogModel.lblTables.Enabled = True
+	oDialogModel.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+	oDialogModel.lstFields.StringItemList() = NullList()
+	oDialogModel.lstSelFields.StringItemList() = NullList()
+	ToggleDatabasePage(True)
+End Sub
+
+
+Sub GetDBMetaData(sDataBaseList(), DBIndex as Integer)
+Dim oDatabase as Object
+	If oDBContext.HasElements Then
+		oDatabase = oDBContext.GetByName(sDatabaseList(DBIndex))
+		sDBName = oDatabase.Name
+		If Not oDatabase.IsPasswordRequired Then
+			oDBConnection = oDBContext.GetByName(sDatabaseList(DBIndex)).GetConnection(&quot;&quot;,&quot;&quot;)
+		Else
+			Msgbox(&quot;Todo: Passwortabfrage!&quot;)
+			oDBConnection = oDBContext.GetByName(sDatabaseList(DBIndex)).GetConnection(&quot;extra&quot;,&quot;extra&quot;)
+		End If
+		Tablenames() = oDBConnection.Tables.ElementNames()
+		Querynames() = oDBConnection.Queries.ElementNames()
+	Else
+		MsgBox(Form_gErrNoDatabase$, 64, Form_gWizardName$)
+	End If
+End Sub
+
+
+Sub GetTableMetaData()
+Dim iType as Long
+Dim ActType$, subType$, ShowAfterCreate$, sSQLExpr$
+Dim m as Integer
+Dim Found as Boolean
+	MaxIndex = Ubound(oDialogModel.lstSelFields.StringItemList())
+	Dim ColumnMap(MaxIndex)as Integer
+	
+	FieldNames() = oDialogModel.lstSelFields.StringItemList()
+
+	&apos; Build a structure which maps the position of a selected field (within the selection) to the the column position within
+	&apos; the table. So we ensure that the controls are placed in the same order the according fields are selected.
+	For i = 0 To Ubound(FieldNames())
+		sFieldName = FieldNames(i)
+		Found = False
+		n = 0
+		While (n&lt; MaxIndex And (Not Found))
+			If (FieldNames(n) = sFieldName) Then
+				Found = True
+				ColumnMap(n) = i
+			End If
+			n = n + 1
+		Wend
+	Next i
+
+&apos; Todo: Was Wenn die Reihenfolge durcheinandergebracht ist?
+	For n = 0 to MaxIndex
+		sFieldname = FieldNames(n)
+		iType = oColumns.GetByName(sFieldName).Type
+		FieldMetaValues(n,0) = iType
+		FieldMetaValues(n,1) = GetValueoutofList(iType, WidthList(),1)
+		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),2)
+	Next
+End Sub
+
+
+Sub GetSpecificFieldNames()
+Dim n as Integer
+Dim m as Integer
+Dim iType as Integer
+Dim oField as Object
+Dim MaxIndex as Integer
+	If Ubound(oDialogModel.lstTables.StringItemList()) &gt; -1 Then
+		FieldNames() = oColumns.GetElementNames()
+		If oDialogModel.optIgnoreBinaries.State Then
+			MaxIndex = Ubound(FieldNames())
+			Dim ResultFieldNames(MaxIndex)
+			m = 0
+			For n = 0 To MaxIndex
+				oField = oColumns.GetByName(FieldNames(n))
+				iType = oField.Type
+				If (iType &lt;&gt; com.sun.star.sdbc.DataType.BINARY)AND(iType &lt;&gt; com.sun.star.sdbc.DataType.VARBINARY)AND(iType &lt;&gt; com.sun.star.sdbc.DataType.LONGVARBINARY) Then
+					ResultFieldNames(m) = FieldNames(n)
+					m = m + 1
+				End If
+			Next n
+			&apos; Todo: Den folgenden Code wieder reinnehmen:
+			&apos; Redim ResultFieldNames(m-1) Preserve
+			&apos; Redim FieldNames(m-1) Preserve
+			FieldNames() = ResultFieldNames()
+		End If
+		oDialogModel.lstFields.StringItemList = FieldNames	
+	End If
+End Sub
+
+
+Sub CreateDBForm()
+  	oDBForm = oDocument.CreateInstance(&quot;com.sun.star.form.component.Form&quot;)
+	oDocument.Drawpage.Forms.InsertByIndex (0, oDBForm)
+	oDBForm.Name = &quot;Standard&quot;
+	oDBForm.DataSourceName = sDBName
+	oDBForm.Command = sTableName
+	&apos; Todo: Ist diese Abfrage notwendig?
+	If bIsQuery Then
+		oDBForm.CommandType=1 &apos; Abfrage
+	else
+		oDBForm.CommandType=0 &apos; Tabelle
+	End If
+End Sub
+</script:module>

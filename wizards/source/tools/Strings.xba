@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Strings" script:language="StarBasic">Option Explicit
+Public sProductname as String
+
+&apos; Deletes out of a String &apos;BigString&apos; all possible PartStrings, that are summed up
+&apos; in the Array &apos;ElimArray&apos;
+Function ElimChar(ByVal BigString as String, ElimArray() as String)
+Dim i% ,n%
+	For i = 0 to Ubound(ElimArray)
+		BigString = DeleteStr(BigString,ElimArray(i)
+	Next
+	ElimChar = BigString
+End Function
+
+
+
+&apos; Deletes out of a String &apos;BigString&apos; a possible Partstring &apos;CompString&apos;
+Function DeleteStr(ByVal BigString,CompString as String) as String
+Dim i%, CompLen%, BigLen%
+	CompLen = Len(CompString)
+	i = 1
+	While i &lt;&gt; 0
+		i = Instr(i, BigString,CompString)
+		If i &lt;&gt; 0 then
+			BigLen = Len(BigString)
+			BigString = Mid(BigString,1,i-1) + Mid(BigString,i+CompLen,BigLen-i+1-CompLen)
+		End If
+	Wend
+	DeleteStr = BigString
+End Function
+
+
+
+&apos; Finds a PartString, that is framed by the Strings &apos;Prestring&apos; and &apos;PostString&apos;
+Function FindPartString(BigString, PreString, PostString as String, SearchPos as Integer) as String
+Dim StartPos%, EndPos%
+Dim BigLen%,PreLen%,PostLen%
+
+	StartPos = Instr(SearchPos,BigString,PreString)
+	If StartPos &lt;&gt; 0 Then
+		PreLen = Len(PreString)
+		EndPos = Instr(StartPos + PreLen,BigString,PostString)
+		If EndPos &lt;&gt; 0 Then
+			BigLen = Len(BigString)
+			PostLen = Len(PostString)
+			FindPartString = Mid(BigString,StartPos + PreLen, EndPos - (StartPos + PreLen))
+			&apos; Da diese Funktion daf?r programmiert wurde, in einer Schleife abgearbeitet zu werden
+			&apos; muss die initiale Suchposition hinter die Position des gefundenen Teilstrings gesetzt werden.
+			SearchPos = EndPos + PostLen
+		Else
+			Msgbox(&quot;No final tag for &apos;&quot; &amp; PreString &amp; &quot;&apos; existing&quot;, 16, GetProductName())
+			FindPartString = &quot;&quot;
+		End If
+	Else
+		FindPartString = &quot;&quot;
+	End If
+End Function
+
+
+
+&apos; Deletes the String &apos;SmallString&apos; out of the String &apos;BigString&apos;
+&apos; in case SmallString&apos;s Position in BigString is right at the end
+Function RTrimStr(ByVal BigString, SmallString as String) as String
+Dim SmallLen%
+Dim BigLen%
+
+	SmallLen = Len(SmallString)
+	BigLen = Len(BigString)
+	If Mid(BigString,BigLen + 1 - SmallLen, SmallLen) = SmallString Then
+		RTrimStr = Mid(BigString,1,BigLen - SmallLen)
+	Else
+		RTrimStr = BigString
+	End If
+End Function
+
+
+
+&apos; Deletes the Char &apos;CompChar&apos; out of the String &apos;BigString&apos;
+&apos; in case CompChar&apos;s Position in BigString is right at the beginning
+Function LTRimChar(ByVal BigString as String,CompChar as String) as String
+Dim BigLen as integer
+	BigLen = Len(BigString)
+	If BigLen &gt; 1 Then
+		If Left(BigString,1) = CompChar then
+	 		BigString = Mid(BigString,2,BigLen-1)
+	 	End If
+	ElseIf BigLen = 1 Then
+	 	BigString = &quot;&quot;
+	End If
+	LTrimChar = BigString
+End Function
+
+
+
+&apos; Retrieves an Array out of a String.
+&apos; The fields of the Array are separated by the parameter &apos;Separator&apos;, that is contained
+&apos; in the Array
+&apos; The Array MaxLocindex delivers the highest Index of this Array
+Function ArrayOutOfString(BigString, Separator as String, Optional MaxIndex as integer)
+Dim i%, OldPos%, Pos%, SepLen%, BigLen%
+Dim LocList(200) as string
+
+	OldPos = 1
+	i = -1
+	SepLen = Len(Separator)
+	BigLen = Len(BigString)
+	Do
+		Pos = Instr(OldPos,BigString,Separator)
+		i = i + 1
+		If Pos = 0 Then
+			LocList(i) = Mid(BigString,OldPos,BigLen - OldPos + 1 )
+		Else
+			LocList(i) = Mid(BigString,OldPos,Pos-OldPos )
+			OldPos = Pos + SepLen
+		End If
+	Loop until Pos = 0
+	If Vartype(Maxindex) &lt;&gt; 0 Then
+		MaxIndex = i
+	End If
+	ArrayoutofString = LocList()
+End Function
+
+
+
+&apos; Deletes all fieldvalues in one-dimensional Array
+Sub ClearArray(BigArray)
+Dim i as integer
+	For i = Lbound(BigArray()) to Ubound(BigArray())
+		BigArray(i) = &quot;&quot;
+	Next
+End Sub
+
+
+&apos; Deletes all fieldvalues in a multidimensional Array
+Sub ClearMultiDimArray(BigArray,DimCount as integer)
+Dim n%, m%
+	For n = Lbound(BigArray(),1) to Ubound(BigArray(),1)
+		For m = 0 to Dimcount - 1
+			BigArray(n,m) = &quot;&quot;
+		Next m
+	Next n
+End Sub
+
+
+&apos; Checks if a Field (LocField) is already defined in an Array
+&apos; Returns &apos;True&apos; or &apos;False&apos;
+Function FieldinArray(LocArray(), MaxIndex as integer, LocField as String) As Boolean
+Dim i as integer
+	For i = Lbound(LocArray()) to MaxIndex
+		If Ucase(LocArray(i)) = Ucase(LocField) Then
+			FieldInArray = True
+			Exit Function
+		End if
+	Next
+	FieldInArray = False
+End Function
+
+
+
+&apos; Checks if a Field (LocField) is already defined in an Array
+&apos; Returns &apos;True&apos; or &apos;False&apos;
+Function FieldinList(LocField, BigList()) As Boolean
+Dim i as integer
+	For i = Lbound(BigList()) to Ubound(BigList())
+		If LocField = BigList(i) Then
+			FieldInList = True
+			Exit Function
+		End if
+	Next
+	FieldInList = False
+End Function
+
+
+&apos; Retrieves the Index of the delivered String &apos;SearchString&apos; in
+&apos; the Array LocList()&apos;
+Function IndexinArray(SearchString as String, LocList()) as Integer
+Dim i as integer
+	For i = Lbound(LocList(),1) to Ubound(LocList(),1)
+		If Ucase(LocList(i,0)) = Ucase(SearchString) Then
+			IndexinArray = i
+			Exit Function
+		End if
+	Next
+	IndexinArray = -1
+End Function
+
+
+Sub MultiArrayInListbox(oDialog as Object, ListboxName as String, ValList(), iDim as Integer)
+Dim oListbox as Object
+Dim i as integer
+Dim a as Integer
+	a = 0
+	oListbox = oDialog.GetControl(ListboxName)	
+	oListbox.RemoveItems(0, oListbox.GetItemCount)
+	For i = 0 to Ubound(ValList(), 1)
+		If ValList(i) &lt;&gt; &quot;&quot; Then
+			oListbox.AddItem(ValList(i, iDim-1), a)
+			a = a + 1
+		End If
+	Next
+End Sub
+
+
+&apos; Replaces the string &quot;OldReplace&quot; through the String &quot;NewReplace&quot; in the String
+&apos; &apos;BigString&apos;
+Function ReplaceString(ByVal Bigstring, NewReplace, OldReplace as String)  as String
+Dim i%, OldReplLen%, BigLen%
+
+	If NewReplace &lt;&gt; OldReplace Then
+		OldReplLen = Len(OldReplace)
+		i = 1
+		Do
+			Biglen = Len(BigString)
+			i = Instr(i,BigString,OldReplace)
+			If i &lt;&gt; 0 then
+				BigString = Mid(BigString,1,i-1) &amp; NewReplace &amp; Mid(BigString,i + OldReplLen,BigLen  - i + 1 - OldReplLen
+				i = i + Len(NewReplace)
+			End If
+		Loop until i = 0
+	End If
+	ReplaceString = BigString
+End Function
+
+
+&apos; Converts an &quot;ordinary&quot; path to a &quot;URL-Path&quot;
+Function ConverttoURL(ByVal BigString as String) as String
+Dim Separator as String
+	If sProductname = &quot;&quot; Then
+		sProductname = GetProductname()
+	End If
+	If BigString &lt;&gt; &quot;&quot; Then
+		If Instr(1,sProductname,&quot;Sun Webtop&quot;) = 0 Then
+			Separator = GetPathSeparator()
+			&apos; Is the delivered Path already a URL
+			If Instr(1,UCase(BigString),&quot;FILE:///&quot;) = 0 Then
+				BigString = ReplaceString(BigString,&quot;/&quot;,Separator)
+				BigString = ReplaceString(BigString,&quot;|&quot;,&quot;:&quot;)
+				BigString = &quot;file:///&quot; &amp; BigString
+			End If
+		End If
+		ConvertToURL = BigString
+	Else
+		ConvertToUrl = &quot;&quot;
+	End If
+End Function
+
+
+&apos; Converts an &quot;URL-Path&quot; to an ordinary &quot;Path&quot;
+Function ConvertfromURL(ByVal BigString as String) as String
+Dim Separator as String
+	Separator = GetPathSeparator()
+	If Left(Ucase(BigString),8)= &quot;FILE:///&quot; Then
+		BigString = Mid(BigString, 9, Len(BigString)-8)
+		BigString = ReplaceString(BigString,Separator,&quot;/&quot;)
+		BigString = ReplaceString(BigString,&quot;:&quot;,&quot;|&quot;)
+		ConvertFromUrl = BigString
+	End If
+End Function
+
+
+
+&apos; Retrieves the second value for a next to &apos;SearchString&apos; in
+&apos; a two-dimensional string-Array
+Function FindSecondValue(SearchString as String, TwoDimList() as String ) as String
+Dim i as Integer
+	For i = 0 To Ubound(TwoDimList,1)
+		If Ucase(SearchString) = Ucase(TwoDimList(i,0)) Then
+			FindSecondValue = TwoDimList(i,1)
+			Exit For
+		End If
+	Next
+End Function
+
+
+&apos; raises a base to a certain power
+Function Power(Basis as Double, Exponent as Double) as Double
+	Power = Exp(Exponent*Log(Basis))
+End Function
+
+
+&apos; rounds a Real to a given Number of Decimals
+Function Round(BaseValue as Double, Decimals as Integer) as Double
+Dim Multiplicator as Long
+Dim DblValue#, RoundValue#
+	Multiplicator = Power(10,Decimals)
+	RoundValue = Int(BaseValue * Multiplicator)
+	Round = RoundValue/Multiplicator
+End Function
+
+
+&apos;Retrieves the mere filename out of a whole path
+Function FileNameoutofPath(ByVal Path as String, Separator as String) as String
+Dim i as Integer
+Dim SepList() as String
+	SepList() = ArrayoutofString(Path,&quot;/&quot;,i)
+	FileNameoutofPath = SepList(i)
+End Function
+
+
+Function GetFileNameExtension(ByVal FileName as String)
+Dim MaxIndex as Integer
+Dim SepList() as String
+	SepList() = ArrayoutofString(FileName,&quot;.&quot;, MaxIndex)
+	GetFileNameExtension = SepList(MaxIndex)
+End Function
+
+
+Function GetFileNameWithoutExtension(ByVal FileName as String, Optional Separator as String)
+Dim MaxIndex as Integer
+Dim SepList() as String
+	If not IsMissing(Separator) Then
+		FileName = FileNameoutofPath(FileName, Separator)
+	End If
+	SepList() = ArrayoutofString(FileName,&quot;.&quot;, MaxIndex)
+	GetFileNameWithoutExtension = RTrimStr(FileName, &quot;.&quot; &amp; SepList(MaxIndex)
+End Function
+
+
+Function DirectorynameoutofPath(sPath as String, Separator as String) as String
+Dim LocFileName as String
+	LocFileName = FileNameoutofPath(sPath, Separator)
+	DirectoryNameoutofPath = DeleteStr(sPath, Separator &amp; LocFileName)
+End Function
+
+
+Function CountCharsinString(BigString, LocChar as String, ByVal StartPos as Integer) as Integer
+Dim LocCount%, LocPos%
+	LocCount = 0
+	Do
+		LocPos = Instr(StartPos,BigString,LocChar)
+		If LocPos &lt;&gt; 0 Then
+			LocCount = LocCount + 1
+			StartPos = LocPos+1
+		End If
+	Loop until LocPos = 0
+	CountCharsInString = LocCount
+End Function
+
+
+Function BubbleSortList(ByVal SortList())
+Dim s as Integer
+Dim t as Integer
+Dim i as Integer
+Dim DisplayDummy as String
+	i = Val(SortList(0,0))
+	For s = 1 to i - 1
+		For t = 0 to i-s
+			If SortList(t,0) &gt; SortList(t+1, 0) Then
+				DisplayDummy = SortList(t,0)
+				SortList(t,0) = SortList(t+1,0)
+				SortList(t+1,0) = DisplayDummy
+
+				DisplayDummy = SortList(t,1)
+				SortList(t,1) = SortList(t+1,1)
+				SortList(t+1,1) = DisplayDummy	
+			End If
+		Next t
+	Next s 
+	BubbleSortList = SortList()		
+End Function
+</script:module>

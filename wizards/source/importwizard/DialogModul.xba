@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="DialogModul" script:language="StarBasic">Option Explicit
+
+Public Const bDebugWizard=True
+
+Public Const SBFIRSTAPPLCHECKED = 0
+Public Const SBSECONDAPPLCHECKED = 1
+Public Const SBTHIRDAPPLCHECKED = 2
+Public Const SBFOURTHAPPLCHECKED = 3
+&apos;Public bDoKeepApplValues as Boolean
+Public WizardMode as String
+Public Const SBMICROSOFTMODE = &quot;MS&quot;
+Public Const SBXMLMODE = &quot;XML&quot;
+&apos; The absolute maximal Number of possible Applications
+Public Const Twip = 425
+Public Const SBMAXAPPLCOUNT = 4
+Public MaxApplCount as Integer
+Public CurOffice As Integer
+Public SOBitmapPath As String
+Public SOWorkPath As String
+Public SOTemplatePath as String
+Public bCancelTask As Boolean
+Public iApplSection as Integer
+Public oUcb as Object
+Public PathSeparator as String
+
+Public ApplCount as Integer
+Public sKeyName(SBMAXAPPLCOUNT-1) as String
+Public sValueName(SBMAXAPPLCOUNT-1) as String
+Public sCRLF as String
+Public MSFilterName(5,2) as String
+Public XMLFilterName(7,2)
+
+&apos; e.g.:
+&apos; XMLFilterName(x,0) = &quot;sdw&quot; 						&apos; in documents we take the extensions; in SO-templates the appropriate Filtername
+&apos; XMLFilterName(x,1) = &quot;swriter: StarWriter 5.0&quot; 	&apos; the filtername of the target-format
+&apos; XMLFilterName(x,2) = &quot;sxw&quot; 						&apos; the target extension
+
+Public ChkApplication(SBMAXAPPLCOUNT-1) as Object
+Public Applications(SBMAXAPPLCOUNT-1,9)
+
+&apos; Application-relating Data are stored in this Array
+&apos; according to the following structure:
+&apos; Applications(X,0) = &quot;TRUE/FALSE&quot; 		(Application is to be converted)
+&apos; Applications(X,1) = &quot;TRUE/FALSE&quot; 		(Documents are to be converted)
+&apos; Applications(X,2) = &quot;TRUE/FALSE&quot;		(Including Subdirectories)
+&apos; Applications(X,3) = &quot;File:///...&quot;		(SourceUrl of the documents)
+&apos; Applications(X,4) = &quot;File///:...&quot;		(TargetUrl of the documents)
+&apos; Applications(X,5) = &quot;TRUE/FALSE&quot;		(Templates are to be converted)
+&apos; Applications(X,6) = &quot;TRUE/FALSE&quot; 		(Including Subdirectories)
+&apos; Applications(X,7) = &quot;File:///...&quot;		(SourceUrl of the templates)
+&apos; Applications(X,8) = &quot;File:///...&quot; 	(TargetUrl of the templates)
+&apos; Applications(X,9) = &quot;0&quot;				(Key to the original Index of the Applications)
+
+
+Sub FillStep_Welcome()
+Dim i as Integer
+&apos;	bDoKeepApplValues = False
+	With ImportDialog
+		.cbHelp.Label = sHelpButton
+		.cbCancel.Label = sCancelButton
+		.cbBack.Label = sBackButton
+		.cbGoOn.Label = sNextButton
+		.WelcomeTextLabel.Label = sWelcomeTextLabel1
+		.WelcomeTextLabel2.Label = sWelcomeTextLabel2
+		.WelcomeTextLabel3.Label = sWelcomeTextLabel3
+
+		.OptMSDocuments.Label = sContainerName(0)
+		.ChkFirstMSApplication.Label = sMsDocumentCheckbox(0)
+		.ChkSecondMSApplication.Label = sMsDocumentCheckbox(1)
+		.ChkThirdMSApplication.Label = sMsDocumentCheckbox(2)
+
+		.OptSODocuments.Label = sContainerName(1)
+		.ChkFirstSOApplication.Label = sSODocumentCheckbox(0)
+		.ChkSecondSOApplication.Label = sSODocumentCheckbox(1)
+		.ChkThirdSOApplication.Label = sSODocumentCheckbox(2)
+		.ChkFourthSOApplication.Label = sSODocumentCheckbox(3)
+		.cbBack.Enabled = False
+		.Step = 1
+	End With
+	DisorEnableNextButton()
+End Sub
+
+
+Sub FillStep_InputPaths(OfficeIndex as Integer, bStartup as Boolean)
+Dim Index as Integer
+	If bStartup Then
+    If ImportDialog.OptMSDocuments.State Then
+			SetupMSConfiguration()
+		Else
+			SetupXMLConfiguration()
+	End If
+		&apos; TemplateCheckBox-Captions
+		GetApplResourceArray(1008 + iApplSection, ApplCount, sTemplateCheckBox())
+		&apos; DocumentCheckbox- Captions
+		GetApplResourceArray(1012 + iApplSection, ApplCount, sDocumentCheckBox())
+
+		AssignCheckboxObjects()
+
+		FillUpApplicationList()
+	End If
+
+	CurOffice = OfficeIndex
+
+	Index = Val(Applications(CurOffice,9))
+	With ImportDialog
+		.TemplateCheckbox.Label = sTemplateCheckbox(Index)
+		.TemplateSearchSubDir.Label = sSearchInSubDir
+
+		.DocumentImportLabel.Label =  sImportLabel
+		.DocumentExportLabel.Label = sExportLabel
+		.DocumentSearchSubDir.Label = sSearchInSubDir
+
+    	.DocumentPathCheckbox.State = Val(Applications(CurOffice,1))
+    	.DocumentSearchSubDir.State = Val(Applications(CurOffice,2))
+		.DocumentImportPath.Text = ConvertFromUrl(Applications(CurOffice,3))
+		.DocumentExportPath.Text = ConvertFromUrl(Applications(CurOffice,4))
+		.DocumentFrame.Label = sProgressMoreDocs
+
+		If WizardMode = SBXMLMODE AND Index = 3 Then
+			&apos; Note: SO-Helper Applications are partly treated like templates although they only have documents
+			.TemplateFrame.Label = sProgressMoreDocs
+			.TemplateCheckbox.Label = sSOHelperDocuments(0)
+			.DocumentPathCheckbox.Label = sSOHelperDocuments(1)
+		Else
+			.TemplateCheckbox.Label = sTemplateCheckbox(Index)
+			.DocumentPathCheckbox.Label = sDocumentCheckbox(Index)
+			.TemplateFrame.Label = sProgressMoreTemplates
+		End If
+&apos;Todo: Enable this Checkbox as soon as an XML-Template-Format is defined
+		.TemplateCheckbox.State = Val(Applications(CurOffice,5))
+		.TemplateSearchSubDir.State = Val(Applications(CurOffice,6))
+		.TemplateImportPath.Text = ConvertFromUrl(Applications(CurOffice,7))
+		.TemplateImportLabel.Label = sImportLabel
+		.TemplateExportPath.Text = ConvertFromUrl(Applications(CurOffice,8))
+		.TemplateExportLabel.Label = sExportLabel
+
+&apos;		Call SetEnabledTemplate_InputPath()
+&apos;		Call SetEnabledDocument_InputPath()
+		.cbGoOn.Label = sNextButton
+		.cbBack.Enabled = True
+		ImportDialog.Step = 2
+	End With
+	DisOrEnableNextButton()
+End Sub
+
+
+Sub	FillUpApplicationList()
+Dim i as Integer
+Dim a as Integer
+Dim sBoolValue as String
+
+&apos;	If Not bDoKeepApplValues Then
+		a = 0
+		For i = 0 To ApplCount - 1
+      		sBoolValue = CStr(ChkApplication(i).State)
+			Applications(a,0) = sBoolValue
+			Applications(a,1) = sBoolValue
+			Applications(a,2) = sBoolValue
+			Applications(a,3) = GetDefaultPath(i)
+			Applications(a,4) = SOWorkPath
+			Applications(a,5) = sBoolValue
+			Applications(a,6) = sBoolValue
+			Applications(a,7) = GetTemplateDefaultPath(i)
+			Applications(a,8) = GetTargetTemplatePath(i)
+			Applications(a,9) = CStr(i)
+      		If ChkApplication(i).State = 1 Then a = a + 1
+		Next i
+		ApplCount = a
+&apos;	End If
+End Sub
+
+
+
+Function SaveStep_InputPath() as Boolean
+Dim bSaveConfiguration as Boolean
+	bSaveConfiguration = CheckInputPaths
+	If bSaveConfiguration Then
+    	Applications(CurOffice,1)  = CStr(ImportDialog.DocumentPathCheckbox.State)
+    	Applications(CurOffice,2)  = CStr(ImportDialog.DocumentSearchSubDir.State)
+		Applications(CurOffice,3)  = ConvertToURL(ImportDialog.DocumentImportPath.Text)
+		Applications(CurOffice,4) = ConvertToUrl(ImportDialog.DocumentExportPath.Text)
+    	Applications(CurOffice,5) = CStr(ImportDialog.TemplateCheckbox.State)
+    	Applications(CurOffice,6) = CStr(ImportDialog.TemplateSearchSubDir.State)
+		Applications(CurOffice,7) = ConvertToURL(ImportDialog.TemplateImportPath.Text)
+		Applications(CurOffice,8) = ConvertToURL(ImportDialog.TemplateExportPath.Text)
+	End If
+	SaveStep_InputPath = bSaveConfiguration
+End Function
+
+
+Sub SetEnabledTemplate_InputPath()
+Dim bDoEnable as Boolean
+	With ImportDialog
+    	bDoEnable = ImportDialog.TemplateCheckbox.State = 1
+		.TemplateImportLabel.Enabled = bDoEnable
+		.TemplateExportLabel.Enabled = bDoEnable
+		.TemplateImportPath.Enabled = bDoEnable
+		.TemplateExportPath.Enabled = bDoEnable
+		.TemplateSearchSubDir.Enabled = bDoEnable
+		.TemplateImportPath.Enabled = bDoEnable
+&apos;Note: The following lines have bee disabled due to Bug 82532
+&apos;		If Not bDoEnable Then
+&apos;     .cbGoOn.Enabled = .DocumentPathCheckBox.State
+&apos;		Else
+&apos;			.cbGoOn.Enabled = True
+&apos;		End If
+	End With
+End Sub
+
+
+Sub SetEnabledDocument_InputPath()
+Dim bDoEnable as Boolean
+	With ImportDialog
+    	bDoEnable = .DocumentPathCheckbox.State = 1
+		.DocumentImportLabel.Enabled = bDoEnable
+		.DocumentExportLabel.Enabled = bDoEnable
+		.DocumentSearchSubDir.Enabled = bDoEnable
+		.DocumentImportPath.Enabled = bDoEnable
+		.DocumentExportPath.Enabled = bDoEnable
+&apos;Note: The following lines have bee disabled due to Bug 82532
+
+&apos;		If Not bDoEnable Then
+&apos;     .cbGoOn.Enabled = .TemplateCheckBox.State
+&apos;		Else
+&apos;			.cbGoOn.Enabled = True
+&apos;		End If
+	End With
+End Sub
+
+
+Function MakeSummaryString()
+Dim sTmpText As String
+Dim i as Integer
+Dim Index as Integer
+Dim sAddText as String
+	For i = 0 To ApplCount -1
+		Index = Val(Applications(i,9))
+		If 	Applications(i,5) = &quot;1&quot; Then
+			&apos; Templates are to be converted
+			If Index = 3 Then
+				sAddText = ReplaceString(sSumDocuments(Index),sSOHelperDocuments(0),&quot;%1&quot;) &amp; sCRLF
+			Else
+				sAddText = ReplaceString(sSumDocuments(Index),sTemplateCheckBox(Index),&quot;%1&quot;) &amp; sCRLF
+			End If
+			sTmpText = sTmpText &amp; sAddText &amp;  Applications(i,7) &amp; sCRLF
+			If Applications(i,6) = &quot;1&quot; Then
+				&apos; Including Subdirectories
+				sTmpText = sTmpText &amp; sSumInclusiveSubDir &amp; sCRLF
+			End If
+			sTmpText = sTmpText &amp; sSumSaveDocuments &amp; sCRLF
+			sTmpText = sTmpText &amp; Applications(i,8) &amp; sCRLF
+			sTmpText = sTmpText &amp; sCRLF
+		End If
+
+		If 	Applications(i,1) = &quot;1&quot; Then
+			&apos; Documents are to be converted
+			If Index = 3 Then
+				sAddText = ReplaceString(sSumDocuments(Index),sSOHelperDocuments(1),&quot;%1&quot;) &amp; sCRLF
+			Else
+				sAddText = ReplaceString(sSumDocuments(Index),sDocumentCheckBox(Index),&quot;%1&quot;) &amp; sCRLF
+			End If
+			sTmpText = sTmpText &amp; sAddText &amp; Applications(i,3) &amp; sCRLF
+
+			If Applications(i,2) = &quot;1&quot; Then
+				&apos; Including Subdirectories
+				sTmpText = sTmpText &amp; sSumInclusiveSubDir &amp; sCRLF
+			End If
+
+			sTmpText = sTmpText &amp; sSumSaveDocuments &amp; sCRLF
+			sTmpText = sTmpText &amp; Applications(i,4) &amp; sCRLF
+			sTmpText = sTmpText &amp; sCRLF
+		End If
+	Next i
+	MakeSummaryString = sTmpText
+End Function
+
+
+Sub FillStep_Summary()
+&apos; Todo: Angabe ÃƒÆ’Ã‚Â¼ber die Vorlagengruppen,bzw. Template-Exportpfad
+	With ImportDialog
+		.SummaryTextbox.Text = MakeSummaryString()
+		.cbGoOn.Enabled = .SummaryTextbox.Text &lt;&gt; &quot;&quot;
+		.cbGoOn.Label = sBeginButton
+		.SummaryHeaderLabel.Label = sSummaryHeader
+		.Step = 3
+	End With
+End Sub
+
+
+Sub FillStep_Progress()
+	With ImportDialog
+		.cbBack.Enabled = False
+		.cbGoOn.Enabled = False
+	    .FrameProgress.Label = sProgressPage_1
+	    .LabelRetrieval.FontWeight = com.sun.star.awt.FontWeight.BOLD
+   	 	.LabelRetrieval.Label = sProgressPage_2
+   	 	.LabelCurProgress.Label = sProgressPage_3
+   	 	.LabelCurDocumentRetrieval.Label = &quot;&quot;
+   	 	.LabelCurTemplateRetrieval.Label = &quot;&quot;
+   		.LabelCurDocument.Label = &quot;&quot;
+		.Step = 4
+	End With
+End Sub
+
+
+Sub DocumentDirSearchDialog()
+	CallDirSearchDialog(ImportDialog.DocumentImportPath)
+End Sub
+
+
+Sub StarDocumentDirSearchDialog()
+	CallDirSearchDialog(ImportDialog.DocumentExportPath)
+End Sub
+
+
+Sub CallDirSearchDialog(oTargetControl as Object)
+Dim sDirName as String
+	sDirName = Application.FileDialog(&quot;P&quot;, sPathDialogMessage, oTargetControl.Text)
+	If Len(sDirName) &gt; 0 Then
+		oTargetControl.Text = sDirName
+	End If
+End Sub
+
+
+Sub	SetupMSConfiguration()
+	iApplSection = 0
+	Wizardmode = SBMICROSOFTMODE
+	MaxApplCount = 3
+	ApplCount = 3
+
+	sKeyName(0) = &quot;Software\Microsoft\Office\8.0\Word\Options&quot;
+	sKeyName(1) = &quot;Software\Microsoft\Office\8.0\Excel\Microsoft Excel&quot;
+	sKeyName(2) = &quot;Software\Microsoft\Office\8.0\PowerPoint\Recent Folder List\Default&quot;
+
+	sValueName(0) = &quot;DOC-PATH&quot;
+	sValueName(1) = &quot;DefaultPath&quot;
+	sValueName(2) = &quot;&quot;
+
+&apos; See definition of Filtername-Array about meaning of fields
+	MSFilterName(0,0) = &quot;doc&quot;
+	MSFilterName(0,1) = &quot;swriter: StarOffice XML (Writer)&quot;
+	MSFilterName(0,2) = &quot;sxw&quot;
+
+	MSFilterName(1,0) = &quot;xls&quot;
+	MSFilterName(1,1) = &quot;scalc: StarOffice XML (Calc)&quot;
+	MSFilterName(1,2) = &quot;sxc&quot;
+
+	MSFilterName(2,0) = &quot;pod&quot;
+	MSFilterName(2,1) = &quot;simpress: StarOffice XML (Impress)&quot;
+	MSFilterName(2,2) = &quot;sxi&quot;
+
+	MSFilterName(3,0) = &quot;dot&quot;
+	MSFilterName(3,1) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
+	MSFilterName(3,2) = &quot;stw&quot;
+
+	MSFilterName(4,0) = &quot;xlt&quot;
+	MSFilterName(4,1) = &quot;scalc: calc_StarOffice_XML_Calc_Template&quot;
+	MSFilterName(4,2) = &quot;stc&quot;
+
+	MSFilterName(5,0) = &quot;pot&quot;
+	MSFilterName(5,1) = &quot;simpress: impress_StarOffice_XML_Impress_Template&quot;
+	MSFilterName(5,2) = &quot;sti&quot;
+End Sub
+
+
+
+Sub SetupXMLConfiguration()
+	iApplSection = 1000
+	Wizardmode = SBXMLMODE
+	ApplCount = 4
+	MaxApplCount = 4
+
+	XMLFilterName(0,0) = &quot;sdw&quot;
+	XMLFilterName(0,1) = &quot;swriter: StarOffice XML (Writer)&quot;
+	XMLFilterName(0,2) = &quot;sxw&quot;
+
+	XMLFilterName(1,0) = &quot;sdc&quot;
+	XMLFilterName(1,1) = &quot;scalc: StarOffice XML (Calc)&quot;
+	XMLFilterName(1,2) = &quot;sxc&quot;
+
+	XMLFilterName(2,0) = &quot;sdd|sda&quot;
+	XMLFilterName(2,1) = &quot;simpress: StarOffice XML (Impress)|sdraw: StarOffice XML (Draw)&quot;
+	XMLFilterName(2,2) = &quot;sxi|sxd&quot;
+
+	XMLFilterName(3,0) = &quot;smf&quot;
+	XMLFilterName(3,1) = &quot;smath: MathML XML (Math)&quot;
+	XMLFilterName(3,2) = &quot;mml&quot;
+
+	XMLFilterName(4,0) = &quot;application/vnd.stardivision.writer;application/x-starwriter&quot;
+	XMLFilterName(4,1) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
+	XMLFilterName(4,2) = &quot;stw&quot;
+
+	XMLFilterName(5,0) = &quot;application/vnd.stardivision.calc;application/x-starcalc&quot;
+	XMLFilterName(5,1) = &quot;scalc: calc_StarOffice_XML_Calc_Template&quot;
+	XMLFilterName(5,2) = &quot;stc&quot;
+
+	XMLFilterName(6,0) = &quot;application/vnd.stardivision.impress;application/x-starimpress|application/vnd.stardivision.draw;application/x-stardraw&quot;
+	XMLFilterName(6,1) = &quot;simpress: impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
+	XMLFilterName(6,2) = &quot;sti|std&quot;
+
+&apos; ToDo: define Filter for Masterdocument
+	XMLFilterName(7,0) = &quot;sgl&quot;
+	XMLFilterName(7,1) = &quot;swriter: writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
+	XMLFilterName(7,2) = &quot;sxg&quot;
+End Sub
+
+
+Function CheckControlPath(oTextBox as Object, ByVal bDoEnable as Boolean)
+Dim Path as String
+	If Not bDoEnable Then
+		CheckControlPath = False
+	Else
+		CheckControlPath = oTextBox.Text &lt;&gt; &quot;&quot;
+	End If
+End Function
+
+
+Sub AssignCheckboxObjects()
+	With ImportDialog
+    	If .OptSODocuments.State Then
+			Set ChkApplication(0) = .ChkFirstSOApplication
+			Set ChkApplication(1) = .ChkSecondSOApplication
+			Set ChkApplication(2) = .ChkThirdSOApplication
+			Set ChkApplication(3) = .ChkFourthSOApplication
+		Else
+			Set ChkApplication(0) = .ChkFirstMSApplication
+			Set ChkApplication(1) = .ChkSecondMSApplication
+			Set ChkApplication(2) = .ChkThirdMSApplication
+		End If
+	End With
+End Sub
+
+
+Function CheckInputPaths() as Boolean
+Dim bChangePage as Boolean
+	bChangePage = CheckTextBoxPath(ImportDialog.TemplateImportPath, True, False)
+	bChangePage = CheckTextBoxPath(ImportDialog.TemplateExportPath, bChangePage, True)
+	bChangePage = CheckTextBoxPath(ImportDialog.DocumentImportPath, bChangePage, False)
+	bChangePage = CheckTextBoxPath(ImportDialog.DocumentExportPath, bChangePage, True)
+	CheckInputPaths = bChangePage
+End Function
+
+
+Function CheckTextBoxPath(oTextBox as Object, ByVal bCheck as Boolean, bCreateNew as Boolean) as Boolean
+Dim iCreate as Integer
+Dim sQueryMessage as String
+Dim sUrlPath as String
+Dim sMessageNoDir as String
+Dim sShowPath as String
+	If oTextBox.Enabled Then
+		If bCheck Then
+			sShowPath = ConvertToUrl(oTextBox.Text)
+			sUrlPath = ConvertToUrl(sShowPath)
+			If Not oUcb.Exists(sUrlPath) Then
+				If Not bCreateNew Then
+					&apos; Sourcedirectories must be existing, Targetdirectories may be created new
+					sQueryMessage = ReplaceString(sMsgDirNotThere, sShowPath,&quot;%1&quot;)
+					Msgbox(sQueryMessage,16,sTitle)
+					CheckTextBoxPath() = False
+					Exit Function
+				Else
+					sQueryMessage = ReplaceString(sMsgDirNotThere, sShowPath,&quot;%1&quot;)
+					sQueryMessage = sQueryMessage &amp; Chr(13) &amp; sQueryForNewCreation
+					iCreate = Msgbox (sQueryMessage, 36, sTitle)
+					If iCreate = 6 Then
+						On Local Error Goto NOVALIDPATH
+						oUcb.CreateFolder(sUrlPath)
+						If Not oUcb.Exists(sUrlPath) Then
+							Goto NOVALIDPATH
+						End If
+					Else
+						CheckTextBoxPath() = False
+						Exit Function
+					End If
+				End If
+			End If
+			CheckTextBoxPath() = True
+		Else
+			CheckTextBoxPath() = False
+		End If
+	Else
+		CheckTextBoxPath() = True
+	End If
+	Exit Function
+NOVALIDPATH:
+	sMessageNoDir = ReplaceString(sNoDirCreation, sShowPath, &quot;%1&quot;)
+	Msgbox(sMessageNoDir, 16, sTitle)
+	CheckTextBoxPath() = False
+End Function
+
+
+Sub InitializeProgressPage(oDialog as Object)
+  &apos;oDialog.LabelRetrieval.Label = &quot;&quot;
+  &apos;oDialog.LabelCurProgress.Label = &quot;&quot;
+  oDialog.LabelRetrieval.FontWeight = com.sun.star.awt.FontWeight.NORMAL
+  oDialog.LabelCurProgress.FontWeight = com.sun.star.awt.FontWeight.BOLD
+End Sub
+</script:module>
