@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-27 08:01:56 $
+ *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,8 +625,9 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
         break;
         case SC_CAT_DELETE_TABS :
         {
-            //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TYPE, XML_TABLE);
-            DBG_ERROR("not implemented feature");
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TYPE, XML_TABLE);
+            nPosition = nStartSheet;
+            //DBG_ERROR("not implemented feature");
         }
         break;
         default :
@@ -681,7 +682,7 @@ void ScChangeTrackingExportHelper::WriteCutOffs(const ScChangeActionDel* pAction
         rtl::OUStringBuffer sBuffer;
         if (pCutOffIns)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pAction->GetActionNumber()));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(pCutOffIns->GetActionNumber()));
             SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(pAction->GetCutOffCount()));
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_POSITION, sBuffer.makeStringAndClear());
             SvXMLElementExport aInsertCutOffElem (rExport, XML_NAMESPACE_TABLE, XML_INSERTION_CUT_OFF, sal_True, sal_True);
@@ -721,29 +722,8 @@ void ScChangeTrackingExportHelper::WriteMovement(ScChangeAction* pAction)
 {
     const ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*> (pAction);
     SvXMLElementExport aElemChange(rExport, XML_NAMESPACE_TABLE, XML_MOVEMENT, sal_True, sal_True);
-    const ScBigRange& rBigRange = pMoveAction->GetFromRange();
-    WriteBigRange(rBigRange, XML_SOURCE_RANGE_ADDRESS);
-    sal_Int32 nStartColumn(0);
-    sal_Int32 nEndColumn(0);
-    sal_Int32 nStartRow(0);
-    sal_Int32 nEndRow(0);
-    sal_Int32 nStartSheet(0);
-    sal_Int32 nEndSheet(0);
-    rBigRange.GetVars(nStartColumn, nStartRow, nStartSheet,
-        nEndColumn, nEndRow, nEndSheet);
-    sal_Int32 nDx(0);
-    sal_Int32 nDy(0);
-    sal_Int32 nDz(0);
-    pMoveAction->GetDelta(nDx, nDy, nDz);
-    nStartColumn += nDx;
-    nEndColumn += nDx;
-    nStartRow += nDy;
-    nEndRow += nDy;
-    nStartSheet += nDz;
-    nEndSheet += nDz;
-    ScBigRange aBigRange(nStartColumn, nStartRow, nStartSheet,
-        nEndColumn, nEndRow, nEndSheet);
-    WriteBigRange(aBigRange, XML_TARGET_RANGE_ADDRESS);
+    WriteBigRange(pMoveAction->GetFromRange(), XML_SOURCE_RANGE_ADDRESS);
+    WriteBigRange(pMoveAction->GetBigRange(), XML_TARGET_RANGE_ADDRESS);
     WriteChangeInfo(pAction);
     WriteDependings(pAction);
 }

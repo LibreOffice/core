@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-03 14:51:05 $
+ *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,7 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
     sal_Bool bPrevAutoStyle((*pRowDefaults)[nRow].bIsAutoStyle);
     sal_Int32 i(nRow + 1);
     sal_Bool bReady(sal_False);
-    while ((i < nEnd) && !bReady)
+    while ((i < nEnd) && !bReady && (i < pRowDefaults->size()))
     {
         if ((nPrevIndex != (*pRowDefaults)[i].nIndex) ||
             (bPrevAutoStyle != (*pRowDefaults)[i].bIsAutoStyle))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-28 15:37:32 $
+ *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,6 @@ ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
     pCurrentAction(NULL),
     pDoc(NULL),
     pTrack(NULL),
-    pViewSettings(NULL),
     bChangeTrack(sal_False)
 {
     nPrefixLength = sIDPrefix.getLength();
@@ -467,13 +466,6 @@ void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, cons
         DBG_ERROR("try to insert a generated action to a wrong action");
 }
 
-ScChangeViewSettings* ScXMLChangeTrackingImportHelper::GetViewSettings()
-{
-    if (!pViewSettings)
-        pViewSettings = new ScChangeViewSettings();
-    return pViewSettings;
-}
-
 void ScXMLChangeTrackingImportHelper::EndChangeAction()
 {
     if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
@@ -551,7 +543,6 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction
             aUser = pUser->GetString();
 
         String sComment (pAction->aInfo.sComment);
-
 
         ScChangeAction* pNewAction = new ScChangeActionMove(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
             pAction->pMoveRanges->aTargetRange, aUser, aDateTime, sComment, pAction->pMoveRanges->aSourceRange , pTrack);
@@ -756,7 +747,8 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
                     if (pContentAct && (*aItr)->pCellInfo)
                     {
                         ScBaseCell* pCell = (*aItr)->pCellInfo->CreateCell(pDoc);
-                        pContentAct->SetNewCell(pCell, pDoc);
+                        if (!ScBaseCell::CellEqual(pCell, pContentAct->GetNewCell()))
+                            pContentAct->SetNewCell(pCell, pDoc);
                     }
                 }
                 if (*aItr)
@@ -918,17 +910,5 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
             pTrack->SetProtection(aProtect);
 
         pDoc->SetChangeTrack(pTrack);
-        if (!pViewSettings)
-        {
-            pViewSettings = new ScChangeViewSettings();
-            pViewSettings->SetShowChanges(sal_True);
-        }
-        if (sRangeList.getLength())
-        {
-            ScRangeList aRangeList;
-            ScXMLConverter::GetRangeListFromString(aRangeList, sRangeList, pDoc);
-            pViewSettings->SetTheRangeList(aRangeList);
-        }
-        pDoc->SetChangeViewSettings(*pViewSettings);
     }
 }

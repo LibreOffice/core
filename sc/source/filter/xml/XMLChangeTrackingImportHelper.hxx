@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 13:46:40 $
+ *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,9 +231,7 @@ class ScXMLChangeTrackingImportHelper
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
     ScMyBaseAction*     pCurrentAction;
-    ScChangeViewSettings* pViewSettings;
     rtl::OUString       sIDPrefix;
-    rtl::OUString       sRangeList;
     sal_uInt32          nPrefixLength;
     sal_Int16           nMultiSpanned;
     sal_Int16           nMultiSpannedSlaveCount;
@@ -265,9 +263,6 @@ public:
     void SetMoveRanges(const ScBigRange& aSourceRange, const ScBigRange& aTargetRange);
     void GetMultiSpannedRange();
     void AddGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
-
-    ScChangeViewSettings* GetViewSettings();
-    void SetRangeList(rtl::OUString& sValue) { sRangeList = sValue; }
 
     void EndChangeAction();
 
