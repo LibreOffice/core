@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 11:02:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _ENHANCED_CUSTOMSHAPE_TYPE_NAMES_HXX
 #include "EnhancedCustomShapeTypeNames.hxx"
+#endif
+#ifndef _ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
+#include "EnhancedCustomShapeFunctionParser.hxx"
 #endif
 #ifndef _SVDOASHP_HXX
 #include "svdoashp.hxx"
@@ -134,11 +137,8 @@
 #ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeSegmentCommand_hpp__
 #include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
-#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeEquation_hpp__
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
-#endif
-#ifndef __drafts_com_sun_star_drawing_EnhancedCustomShapeOperation_hpp__
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeOperation.hpp>
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
 #endif
 
 //#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
@@ -187,15 +187,261 @@ void EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( EnhancedCustomShape
     rParameter.Value <<= nNewValue;
 }
 
-void EnhancedCustomShape2d::SetEnhancedCustomShapeEquationParameter( EnhancedCustomShapeParameter& rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue )
+rtl::OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int16 nP1, sal_Int16 nP2, sal_Int16 nP3 )
 {
-    sal_Int32 nValue = 0;
+    rtl::OUString aEquation;
+    sal_Bool b1Special = ( nFlags & 0x2000 ) != 0;
+    sal_Bool b2Special = ( nFlags & 0x4000 ) != 0;
+    sal_Bool b3Special = ( nFlags & 0x8000 ) != 0;
+    switch( nFlags & 0xff )
+    {
+        case 0 :
+        case 14 :
+        {
+            sal_Int32 nOptimize = 0;
+            if ( nP1 )
+                nOptimize |= 1;
+            if ( nP2 )
+                nOptimize |= 2;
+            if ( b1Special )
+                nOptimize |= 4;
+            if ( b2Special )
+                nOptimize |= 8;
+            switch( nOptimize )
+            {
+                case 0 :
+                break;
+                case 1 :
+                case 4 :
+                case 5 :
+                    EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+                break;
+                case 2 :
+                case 8 :
+                case 10:
+                    EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+                break;
+                default :
+                {
+                    EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+                    aEquation += rtl::OUString( (sal_Unicode)'+' );
+                    EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+                }
+                break;
+            }
+            if ( b3Special || nP3 )
+            {
+                aEquation += rtl::OUString( (sal_Unicode)'-' );
+                EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            }
+        }
+        break;
+        case 1 :
+        {
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            if ( b2Special || ( nP2 != 1 ) )
+            {
+                aEquation += rtl::OUString( (sal_Unicode)'*' );
+                EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            }
+            if ( b3Special || ( ( nP3 != 1 ) && ( nP3 != 0 ) ) )
+            {
+                aEquation += rtl::OUString( (sal_Unicode)'/' );
+                EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            }
+        }
+        break;
+        case 2 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "+" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")/2" ) );
+        }
+        break;
+        case 3 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "abs(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+        }
+        break;
+        case 4 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "min(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+        }
+        break;
+        case 5 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "max(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+        }
+        break;
+        case 6 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "if(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( (sal_Unicode)',' );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( (sal_Unicode)',' );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( (sal_Unicode)')' );
+        }
+        break;
+        case 7 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sqrt(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "+" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "+" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( (sal_Unicode)')' );
+        }
+        break;
+        case 8 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "atan2(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")/(pi/180)" ) );
+        }
+        break;
+        case 9 :
+        {
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*sin(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))" ) );
+        }
+        break;
+        case 10 :
+        {
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*cos(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))" ) );
+        }
+        break;
+        case 11 :
+        {
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "cos(atan2(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "))" ) );
+        }
+        break;
+        case 12 :
+        {
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sin(atan2(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "," ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "))" ) );
+        }
+        break;
+        case 13 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sqrt(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+        }
+        break;
+        case 15 :
+        {
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*sqrt(1-(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "))" ) );
+        }
+        break;
+        case 16 :
+        {
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*tan(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ) );
+        }
+        break;
+        case 0x80 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "sqrt(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( (sal_Unicode)')' );
+        }
+        break;
+        case 0x81 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "(cos(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800)+sin(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800))+10800" ) );
+        }
+        break;
+        case 0x82 :
+        {
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-(sin(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800)-cos(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "*(pi/180))*(" ) );
+            EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
+            aEquation += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "-10800))+10800" ) );
+        }
+        break;
+    }
+    return aEquation;
+}
+
+void EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( rtl::OUString& rParameter, const sal_Int16 nPara, const sal_Bool bIsSpecialValue )
+{
     if ( bIsSpecialValue )
     {
         if ( nPara & 0x400 )
         {
-            nValue = nPara & 0xff;
-            rParameter.Type = EnhancedCustomShapeParameterType::EQUATION;
+            rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "?" ) );
+            rParameter += rtl::OUString::valueOf( (sal_Int32)( nPara & 0xff ) );
+            rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
         }
         else
         {
@@ -212,31 +458,38 @@ void EnhancedCustomShape2d::SetEnhancedCustomShapeEquationParameter( EnhancedCus
                 case DFF_Prop_adjust9Value :
                 case DFF_Prop_adjust10Value :
                 {
-                    nValue = nPara - DFF_Prop_adjustValue;
-                    rParameter.Type = EnhancedCustomShapeParameterType::ADJUSTMENT;
+                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "$" ) );
+                    rParameter += rtl::OUString::valueOf( (sal_Int32)( nPara - DFF_Prop_adjustValue ) );
+                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
                 }
                 break;
                 case DFF_Prop_geoLeft :
-                    rParameter.Type = EnhancedCustomShapeParameterType::LEFT;
+                {
+                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "left" ) );
+                }
                 break;
                 case DFF_Prop_geoTop :
-                    rParameter.Type = EnhancedCustomShapeParameterType::TOP;
+                {
+                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "top" ) );
+                }
                 break;
                 case DFF_Prop_geoRight :
-                    rParameter.Type = EnhancedCustomShapeParameterType::RIGHT;
+                {
+                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "right" ) );
+                }
                 break;
                 case DFF_Prop_geoBottom :
-                    rParameter.Type = EnhancedCustomShapeParameterType::BOTTOM;
+                {
+                    rParameter += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "bottom" ) );
+                }
                 break;
             }
         }
     }
     else
     {
-        nValue = nPara;
-        rParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
+        rParameter += rtl::OUString::valueOf( (sal_Int32)( nPara ) );
     }
-    rParameter.Value <<= nValue;
 }
 
 void EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( EnhancedCustomShapeParameter& rParameter, const sal_Int32 nPara, const sal_Bool bIsSpecialValue, sal_Bool bHorz )
@@ -270,10 +523,10 @@ void EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( EnhancedCusto
             else
                 rParameter.Type = EnhancedCustomShapeParameterType::BOTTOM;
         }
-        else if ( nPara == 2 )
-        {
-            nValue = 0;
-            rParameter.Type = EnhancedCustomShapeParameterType::CENTER;
+        else if ( nPara == 2 )  // means to be centered, but should not be
+        {                       // used in our implementation
+            nValue = 5600;
+            rParameter.Type = EnhancedCustomShapeParameterType::NORMAL;
         }
         else
         {
@@ -611,25 +864,33 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
         }
     }
 
-    ///////////////////////
-    // Path/StretchPoint //
-    ///////////////////////
-    const rtl::OUString sStretchPoint( RTL_CONSTASCII_USTRINGPARAM ( "StretchPoint" ) );
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchPoint );
+    ///////////////////
+    // Path/StretchX //
+    ///////////////////
+    const rtl::OUString sStretchX( RTL_CONSTASCII_USTRINGPARAM ( "StretchX" ) );
+    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchX );
     if ( pAny )
     {
-        com::sun::star::awt::Point aStretchPoint;
-        if ( *pAny >>= aStretchPoint )
-        {
-            nXRef = aStretchPoint.X;
-            nYRef = aStretchPoint.Y;
-        }
+        sal_Int32 nStretchX;
+        if ( *pAny >>= nStretchX )
+            nXRef = nStretchX;
     }
     else if ( pDefCustomShape )
-    {
         nXRef = pDefCustomShape->nXRef;
-        nYRef = pDefCustomShape->nYRef;
+
+    ///////////////////
+    // Path/StretchY //
+    ///////////////////
+    const rtl::OUString sStretchY( RTL_CONSTASCII_USTRINGPARAM ( "StretchY" ) );
+    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, sStretchY );
+    if ( pAny )
+    {
+        sal_Int32 nStretchY;
+        if ( *pAny >>= nStretchY )
+            nYRef = nStretchY;
     }
+    else if ( pDefCustomShape )
+        nYRef = pDefCustomShape->nYRef;
 
     /////////////////////
     // Path/TextFrames //
@@ -665,17 +926,8 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
         seqEquations.realloc( nCount );
 
         const SvxMSDffCalculationData* pData = pDefCustomShape->pCalculation;
-        EnhancedCustomShapeEquation aEquation;
-        aEquation.Parameters.realloc( 3 );
         for ( i = 0; i < nCount; i++, pData++ )
-        {
-            sal_uInt16 nFlags = pData->nFlags;
-            aEquation.Operation = nFlags & 0xff;
-            SetEnhancedCustomShapeEquationParameter( aEquation.Parameters[ 0 ], pData->nVal[ 0 ], ( nFlags & 0x2000 ) != 0 );
-            SetEnhancedCustomShapeEquationParameter( aEquation.Parameters[ 1 ], pData->nVal[ 1 ], ( nFlags & 0x4000 ) != 0 );
-            SetEnhancedCustomShapeEquationParameter( aEquation.Parameters[ 2 ], pData->nVal[ 2 ], ( nFlags & 0x8000 ) != 0 );
-            seqEquations[ i ] = aEquation;
-        }
+            seqEquations[ i ] = GetEquation( pData->nFlags, pData->nVal[ 0 ], pData->nVal[ 1 ], pData->nVal[ 2 ] );
     }
 
     /////////////
@@ -849,6 +1101,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     nColorData          ( 0 ),
     bTextFlow           ( sal_False ),
     bFilled             ( ((const XFillStyleItem&)pAObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue() != XFILL_NONE ),
+    bStroked            ( ((const XLineStyleItem&)pAObj->GetMergedItem( XATTR_LINESTYLE )).GetValue() != XLINE_NONE ),
     bFlipH              ( sal_False ),
     bFlipV              ( sal_False )
 {
@@ -862,13 +1115,13 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     aP.Y() -= aS.Height() / 2;
     aLogicRect = Rectangle( aP, aS );
 
-    const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
+    const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
     const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
     const rtl::OUString sMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
 
     rtl::OUString sShapeType;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)(const SdrCustomShapeGeometryItem&)pCustomShapeObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    Any* pAny = rGeometryItem.GetPropertyValueByName( sPredefinedType );
+    Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
         *pAny >>= sShapeType;
     eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
@@ -963,8 +1216,65 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     }
     fXScale = (double)aLogicRect.GetWidth() / (double)nCoordWidth;
     fYScale = (double)aLogicRect.GetHeight() / (double)nCoordHeight;
-}
+    if ( nXRef != 0x80000000 )
+    {
+        fXRatio = (double)aLogicRect.GetWidth() / (double)aLogicRect.GetHeight();
+        if ( fXRatio > 1 )
+            fXScale /= fXRatio;
+        else
+            fXRatio = 1.0;
+    }
+    else
+        fXRatio = 1.0;
+    if ( nYRef != 0x80000000 )
+    {
+        fYRatio = (double)aLogicRect.GetHeight() / (double)aLogicRect.GetWidth();
+        if ( fYRatio > 1 )
+            fYScale /= fYRatio;
+        else
+            fYRatio = 1.0;
+    }
+    else
+        fYRatio = 1.0;
 
+    sal_Int32 i, nLength = seqEquations.getLength();
+    if ( nLength )
+    {
+        vNodesSharedPtr.resize( nLength );
+        for ( i = 0; i < seqEquations.getLength(); i++ )
+        {
+            try
+            {
+                vNodesSharedPtr[ i ] = EnhancedCustomShapeFunctionParser::parseFunction( seqEquations[ i ], *this );
+            }
+            catch ( ParseError& )
+            {
+                sal_Bool bUps = sal_True;
+            }
+        }
+    }
+}
+double EnhancedCustomShape2d::GetEnumFunc( const EnumFunc eFunc ) const
+{
+    double fRet;
+    switch( eFunc )
+    {
+        case ENUM_FUNC_PI :         fRet = F_PI; break;
+        case ENUM_FUNC_LEFT :       fRet = 0.0; break;
+        case ENUM_FUNC_TOP :        fRet = 0.0; break;
+        case ENUM_FUNC_RIGHT :      fRet = (double)nCoordWidth * fXRatio;   break;
+        case ENUM_FUNC_BOTTOM :     fRet = (double)nCoordHeight * fYRatio; break;
+        case ENUM_FUNC_XSTRETCH :   fRet = nXRef; break;
+        case ENUM_FUNC_YSTRETCH :   fRet = nYRef; break;
+        case ENUM_FUNC_HASSTROKE :  fRet = bStroked ? 1.0 : 0.0; break;
+        case ENUM_FUNC_HASFILL :    fRet = bFilled ? 1.0 : 0.0; break;
+        case ENUM_FUNC_WIDTH :      fRet = nCoordWidth; break;
+        case ENUM_FUNC_HEIGHT :     fRet = nCoordHeight; break;
+        case ENUM_FUNC_LOGWIDTH :   fRet = aLogicRect.GetWidth(); break;
+        case ENUM_FUNC_LOGHEIGHT :  fRet = aLogicRect.GetHeight(); break;
+    }
+    return fRet;
+}
 double EnhancedCustomShape2d::GetAdjustValueAsDouble( const sal_Int32 nIndex ) const
 {
     double fNumber = 0.0;
@@ -977,6 +1287,23 @@ double EnhancedCustomShape2d::GetAdjustValueAsDouble( const sal_Int32 nIndex ) c
             sal_Int32 nNumber;
             seqAdjustmentValues[ nIndex ].Value >>= nNumber;
             fNumber = (double)nNumber;
+        }
+    }
+    return fNumber;
+}
+double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex ) const
+{
+    double fNumber = 0.0;
+    if ( nIndex < (sal_Int32)vNodesSharedPtr.size() )
+    {
+        if ( vNodesSharedPtr[ nIndex ].get() )
+        try
+        {
+            fNumber = (*vNodesSharedPtr[ nIndex ])();
+        }
+        catch ( ... )
+        {
+            sal_Bool bUps = sal_True;
         }
     }
     return fNumber;
@@ -1005,17 +1332,13 @@ sal_Bool EnhancedCustomShape2d::SetAdjustValueAsDouble( const double& rValue, co
         // updating our local adjustment sequence
         seqAdjustmentValues[ nIndex ].Value <<= rValue;
         seqAdjustmentValues[ nIndex ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
-/*
-        Any* pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sAdjustmentValues );
-        if ( pAny )
-            *pAny <<= seqAdjustmentValues;
-*/
         bRetValue = sal_True;
     }
     return bRetValue;
 }
 
-Point EnhancedCustomShape2d::GetPoint( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPair, sal_Bool bScale ) const
+Point EnhancedCustomShape2d::GetPoint( const drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPair,
+                                        const sal_Bool bScale, const sal_Bool bReplaceGeoSize ) const
 {
     Point       aRetValue;
     sal_Bool    bExchange = ( nFlags & DFF_CUSTOMSHAPE_EXCH ) != 0; // x <-> y
@@ -1028,77 +1351,38 @@ Point EnhancedCustomShape2d::GetPoint( const drafts::com::sun::star::drawing::En
             nIndex ^= 1;
 
         double      fVal;
-        sal_Bool    bScaleWidth = nPass == 0;
-        sal_uInt32  nGeometryFlags = 0;
         const EnhancedCustomShapeParameter& rParameter = nIndex ? rPair.Second : rPair.First;
-        GetParameter( fVal, nGeometryFlags, rParameter );
-        if ( bScale )
+        if ( nPass )    // height
         {
-            if ( nGeometryFlags & bExchange )   // left <-> top, right <-> bottom
+            GetParameter( fVal, rParameter, sal_False, bReplaceGeoSize );
+            if ( bScale )
             {
-                nGeometryFlags = ( ( nGeometryFlags & 1 ) << 1 ) | ( ( nGeometryFlags & 2 ) >> 1 ) |
-                                    ( ( nGeometryFlags & 4 ) << 1 ) | ( ( nGeometryFlags & 8 ) >> 1 );
-            }
-            if ( bScaleWidth )
-            {
-                if ( ( aLogicRect.GetWidth() > aLogicRect.GetHeight() ) && ( ( nXRef != 0x80000000 ) || nGeometryFlags ) )
-                {
-                    sal_Bool bGeo = ( ( ( nGeometryFlags & GEOMETRY_USED_LEFT ) == 0 ) && ( fVal > nXRef ) )
-                                        || ( ( nGeometryFlags & GEOMETRY_USED_RIGHT ) != 0 );
-                    if ( ( nGeometryFlags & ( GEOMETRY_USED_LEFT | GEOMETRY_USED_RIGHT ) ) == ( GEOMETRY_USED_LEFT | GEOMETRY_USED_RIGHT ) )
-                    {
-                        fVal -= (double)nCoordWidth * 0.5;
-                        fVal *= fYScale;
-                        fVal += (double)aLogicRect.GetWidth() * 0.5;
-                    }
-                    else
-                    {
-                        fVal *= fYScale;
-                        if ( bGeo )
-                            fVal += (double)nCoordWidth * fXScale - (double)nCoordWidth * fYScale;
-                    }
-                }
-                else
-                    fVal *= fXScale;
-                if ( nFlags & DFF_CUSTOMSHAPE_FLIP_H )
-                    fVal = aLogicRect.GetWidth() - fVal;
-            }
-            else
-            {
-                if ( ( aLogicRect.GetHeight() > aLogicRect.GetWidth() ) && ( ( nYRef != 0x80000000 ) || nGeometryFlags ) )
-                {
-                    sal_Bool bGeo = ( ( ( nGeometryFlags & GEOMETRY_USED_TOP ) == 0 ) && ( fVal > nYRef ) )
-                                        || ( ( nGeometryFlags & GEOMETRY_USED_BOTTOM ) != 0 );
-                    if ( ( nGeometryFlags & ( GEOMETRY_USED_TOP | GEOMETRY_USED_BOTTOM ) ) == ( GEOMETRY_USED_TOP | GEOMETRY_USED_BOTTOM ) )
-                    {
-                        fVal -= (double)nCoordHeight * 0.5;
-                        fVal *= fXScale;
-                        fVal += (double)aLogicRect.GetHeight() * 0.5;
-                    }
-                    else
-                    {
-                        fVal *= fXScale;
-                        if ( bGeo )
-                            fVal += (double)nCoordHeight * fYScale - (double)nCoordHeight * fXScale;
-                    }
-                }
-                else
-                    fVal *= fYScale;
+                fVal *= fYScale;
+
                 if ( nFlags & DFF_CUSTOMSHAPE_FLIP_V )
                     fVal = aLogicRect.GetHeight() - fVal;
             }
-        }
-        if ( nPass )
             aRetValue.Y() = (sal_Int32)fVal;
-        else
+        }
+        else            // width
+        {
+            GetParameter( fVal, rParameter, bReplaceGeoSize, sal_False );
+            if ( bScale )
+            {
+                fVal *= fXScale;
+
+                if ( nFlags & DFF_CUSTOMSHAPE_FLIP_H )
+                    fVal = aLogicRect.GetWidth() - fVal;
+            }
             aRetValue.X() = (sal_Int32)fVal;
+        }
     }
     while ( ++nPass < 2 );
     return aRetValue;
 }
 
-sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, sal_uInt32& nGeometryFlags,
-                        const EnhancedCustomShapeParameter& rParameter ) const
+sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCustomShapeParameter& rParameter,
+                                                const sal_Bool bReplaceGeoWidth, const sal_Bool bReplaceGeoHeight ) const
 {
     rRetValue = 0.0;
     sal_Bool bRetValue = sal_False;
@@ -1119,7 +1403,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, sal_uInt32& nGe
             sal_Int32 nEquationIndex;
             if ( rParameter.Value >>= nEquationIndex )
             {
-                rRetValue = GetEquationValue( nEquationIndex, nGeometryFlags );
+                rRetValue = GetEquationValueAsDouble( nEquationIndex );
                 bRetValue = sal_True;
             }
         }
@@ -1142,233 +1426,40 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, sal_uInt32& nGe
                 {
                     rRetValue = nValue;
                     bRetValue = sal_True;
+                    if ( bReplaceGeoWidth && ( nValue == nCoordWidth ) )
+                        rRetValue *= fXRatio;
+                    else if ( bReplaceGeoHeight && ( nValue == nCoordHeight ) )
+                        rRetValue *= fYRatio;
                 }
             }
         }
         break;
         case EnhancedCustomShapeParameterType::LEFT :
         {
-            nGeometryFlags |= GEOMETRY_USED_LEFT;
             rRetValue  = 0.0;
             bRetValue = sal_True;
         }
         break;
         case EnhancedCustomShapeParameterType::TOP :
         {
-            nGeometryFlags |= GEOMETRY_USED_TOP;
             rRetValue  = 0.0;
             bRetValue = sal_True;
         }
         break;
         case EnhancedCustomShapeParameterType::RIGHT :
         {
-            nGeometryFlags |= GEOMETRY_USED_RIGHT;
             rRetValue = nCoordWidth;
             bRetValue = sal_True;
         }
         break;
         case EnhancedCustomShapeParameterType::BOTTOM :
         {
-            nGeometryFlags |= GEOMETRY_USED_BOTTOM;
             rRetValue = nCoordHeight;
             bRetValue = sal_True;
         }
         break;
-        case EnhancedCustomShapeParameterType::CENTER :
-        {
-            rRetValue = nCoordWidth / 2;
-            bRetValue = sal_True;
-        }
-        break;
     }
     return bRetValue;
-}
-
-sal_Bool EnhancedCustomShape2d::GetEquationParameter( double& rParameterReturnValue, sal_uInt32& nGeometryFlags,
-                                const drafts::com::sun::star::drawing::EnhancedCustomShapeEquation& rEquation, const sal_Int32 nIndex ) const
-{
-    rParameterReturnValue = 0.0;
-    sal_Bool bRetValue = rEquation.Parameters.getLength() > nIndex;
-    if ( bRetValue )
-        bRetValue = GetParameter( rParameterReturnValue, nGeometryFlags, rEquation.Parameters[ nIndex ] );
-    return bRetValue;
-}
-
-double EnhancedCustomShape2d::GetEquationValue( sal_Int32 nIndex, sal_uInt32& nGeometryFlags ) const
-{
-    double fP1, fP2, fRetValue = 0;
-    if ( seqEquations.getLength() > nIndex )
-    {
-        const EnhancedCustomShapeEquation& rEquation = seqEquations[ nIndex ];
-        GetEquationParameter( fRetValue, nGeometryFlags, rEquation, 0 );
-        switch( rEquation.Operation )
-        {
-            case EnhancedCustomShapeOperation::SUM :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                    fRetValue += fP1;
-                if ( GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                    fRetValue -= fP2;
-            }
-            break;
-            case EnhancedCustomShapeOperation::PROD :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && ( fP1 != 0.0 ) )
-                    fRetValue *= fP1;
-                if ( GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) && ( fP2 != 0.0 ) )
-                    fRetValue /= fP2;
-            }
-            break;
-            case EnhancedCustomShapeOperation::MID :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                {
-                    fRetValue += fP1;
-                    fRetValue /= 2.0;
-                }
-            }
-            break;
-            case EnhancedCustomShapeOperation::ABS :
-            {
-                fRetValue = fabs( fRetValue );
-            }
-            break;
-            case EnhancedCustomShapeOperation::MIN :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                {
-                    if ( fP1 < fRetValue )
-                        fRetValue = fP1;
-                }
-            }
-            break;
-            case EnhancedCustomShapeOperation::MAX :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                {
-                    if ( fP1 > fRetValue )
-                        fRetValue = fP1;
-                }
-            }
-            break;
-            case EnhancedCustomShapeOperation::IF :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                {
-                    if ( fRetValue > 0.0 )
-                        fRetValue = fP1;
-                    else
-                        fRetValue = fP2;
-                }
-            }
-            break;
-            case EnhancedCustomShapeOperation::MOD :
-            {
-                GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 );
-                GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 );
-                fRetValue = sqrt( fRetValue * fRetValue + fP1 * fP1 + fP2 * fP2 );
-            }
-            break;
-            case EnhancedCustomShapeOperation::ATAN2 :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                {
-                    fRetValue = atan2( fP1, fRetValue ) / F_PI180;
-//                  fRetValue *= 65536.0;
-                }
-            }
-            break;
-            case EnhancedCustomShapeOperation::SIN :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                    fRetValue *= sin( ( fP1 /* / 65536 */ ) * F_PI180 );
-            }
-            break;
-            case EnhancedCustomShapeOperation::COS :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                    fRetValue *= cos( ( fP1 /* / 65536 */ ) * F_PI180 );
-            }
-            break;
-            case EnhancedCustomShapeOperation::COSATAN2 :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                    fRetValue *= cos( atan2( fP2, fP1 ) );
-            }
-            break;
-            case EnhancedCustomShapeOperation::SINATAN2 :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                    fRetValue *= sin( atan2( fP2, fP1 ) );
-            }
-            break;
-            case EnhancedCustomShapeOperation::SQRT :
-            {
-                fRetValue = sqrt( fRetValue );
-            }
-            break;
-            case EnhancedCustomShapeOperation::SUMANGLE :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                    fRetValue += fP1; //* 65536.0;
-                if ( GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                    fRetValue -= fP2; //* 65536.0;
-            }
-            break;
-            case EnhancedCustomShapeOperation::ELLIPSE :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) && ( fP1 != 0.0 ) )
-                {
-                    fRetValue /= fP1;
-                    fRetValue = fP2 * sqrt( 1 - fRetValue * fRetValue );
-                }
-            }
-            break;
-            case EnhancedCustomShapeOperation::TAN :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) )
-                    fRetValue *= tan( fP1 );
-            }
-            break;
-
-            case 0x80 :
-            {
-                // fVal[0]^2 + fVal[1]^2 = fVal[2]^2
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                {
-                    if ( fP2 == 0.0 )
-                        fRetValue = sqrt( fRetValue * fRetValue + fP1 * fP1 );
-                    else
-                    {
-                        double fA = fRetValue != 0.0 ? fRetValue : fP1;
-                        fRetValue = sqrt( fP2 * fP2 - fA * fA );
-                    }
-                }
-            }
-            break;
-            case 0x81 :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                {
-                    double fAngle = F_PI1800 * fP2;
-                    fRetValue = ( cos( fAngle ) * ( fRetValue - 10800 )
-                                    + sin( fAngle ) * ( fP1 - 10800 ) ) + 10800;
-                }
-            }
-            break;
-            case 0x82 :
-            {
-                if ( GetEquationParameter( fP1, nGeometryFlags, rEquation, 1 ) && GetEquationParameter( fP2, nGeometryFlags, rEquation, 2 ) )
-                {
-                    double fAngle = F_PI1800 * fP2;
-                    fRetValue = - ( sin( fAngle ) * ( fRetValue - 10800 )
-                                    - cos( fAngle ) * ( fP1 - 10800 ) ) + 10800;
-                }
-            }
-            break;
-        }
-    }
-    return fRetValue;
 }
 
 // nLumDat 28-31 = number of luminance entries in nLumDat
@@ -1420,8 +1511,8 @@ Rectangle EnhancedCustomShape2d::GetTextRect() const
     nIndex = 0;
     if ( bTextFlow && ( nSize > 1 ) )
         nIndex++;
-    Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, sal_True ) );
-    Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, sal_True ) );
+    Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, sal_True, sal_True ) );
+    Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, sal_True, sal_True ) );
     Rectangle aRect( aTopLeft, aBottomRight );
     aRect.Move( aLogicRect.Left(), aLogicRect.Top() );
     return aRect;
@@ -1442,13 +1533,12 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
         {
             if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
             {
-                Point aReferencePoint( GetPoint( aHandle.aPolar, sal_True ) );
+                Point aReferencePoint( GetPoint( aHandle.aPolar, sal_True, sal_False ) );
 
                 double      fAngle;
                 double      fRadius;
-                sal_uInt32  nGeometryFlags = 0;
-                GetParameter( fRadius, nGeometryFlags, aHandle.aPosition.First );
-                GetParameter( fAngle,  nGeometryFlags, aHandle.aPosition.Second );
+                GetParameter( fRadius, aHandle.aPosition.First, sal_False, sal_False );
+                GetParameter( fAngle,  aHandle.aPosition.Second, sal_False, sal_False );
 
                 double a = ( 360.0 - fAngle ) * F_PI180;
                 double dx = fRadius * fXScale;
@@ -1468,7 +1558,7 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
                         aHandle.aPosition.Second = aFirst;
                     }
                 }
-                rReturnPosition = GetPoint( aHandle.aPosition, sal_True );
+                rReturnPosition = GetPoint( aHandle.aPosition, sal_True, sal_False );
             }
             if ( nRotateAngle )
             {
@@ -1533,10 +1623,9 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
 
                 if ( aHandle.nFlags & HANDLE_FLAGS_POLAR )
                 {
-                    sal_uInt32 nDummy;
                     double fXRef, fYRef, fAngle;
-                    GetParameter( fXRef, nDummy, aHandle.aPolar.First );
-                    GetParameter( fYRef, nDummy, aHandle.aPolar.Second );
+                    GetParameter( fXRef, aHandle.aPolar.First, sal_False, sal_False );
+                    GetParameter( fYRef, aHandle.aPolar.Second, sal_False, sal_False );
                     const double fDX = fPos1 - fXRef;
                     fAngle = -( atan2( -fPos2 + fYRef, ( ( fDX == 0.0L ) ? 0.000000001 : fDX ) ) / F_PI180 );
                     double fX = ( fPos1 - fXRef );
@@ -1545,14 +1634,14 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                     if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MINIMUM )
                     {
                         double fMin;
-                        GetParameter( fMin, nDummy, aHandle.aRadiusRangeMinimum );
+                        GetParameter( fMin,  aHandle.aRadiusRangeMinimum, sal_False, sal_False );
                         if ( fRadius < fMin )
                             fRadius = fMin;
                     }
                     if ( aHandle.nFlags & HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM )
                     {
                         double fMax;
-                        GetParameter( fMax, nDummy, aHandle.aRadiusRangeMaximum );
+                        GetParameter( fMax, aHandle.aRadiusRangeMaximum, sal_False, sal_False );
                         if ( fRadius > fMax )
                             fRadius = fMax;
                     }
@@ -1567,17 +1656,15 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                     {
                         if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MINIMUM )        // check if horizontal handle needs to be within a range
                         {
-                            sal_uInt32 nDummy;
                             double fXMin;
-                            GetParameter( fXMin, nDummy, aHandle.aXRangeMinimum );
+                            GetParameter( fXMin, aHandle.aXRangeMinimum, sal_False, sal_False );
                             if ( fPos1 < fXMin )
                                 fPos1 = fXMin;
                         }
                         if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_X_MAXIMUM )        // check if horizontal handle needs to be within a range
                         {
-                            sal_uInt32 nDummy;
                             double fXMax;
-                            GetParameter( fXMax, nDummy, aHandle.aXRangeMaximum );
+                            GetParameter( fXMax, aHandle.aXRangeMaximum, sal_False, sal_False );
                             if ( fPos1 > fXMax )
                                 fPos1 = fXMax;
                         }
@@ -1587,17 +1674,15 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                     {
                         if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MINIMUM )        // check if vertical handle needs to be within a range
                         {
-                            sal_uInt32 nDummy;
                             double fYMin;
-                            GetParameter( fYMin, nDummy, aHandle.aYRangeMinimum );
+                            GetParameter( fYMin, aHandle.aYRangeMinimum, sal_False, sal_False );
                             if ( fPos2 < fYMin )
                                 fPos2 = fYMin;
                         }
                         if ( aHandle.nFlags & HANDLE_FLAGS_RANGE_Y_MAXIMUM )        // check if vertical handle needs to be within a range
                         {
-                            sal_uInt32 nDummy;
                             double fYMax;
-                            GetParameter( fYMax, nDummy, aHandle.aYRangeMaximum );
+                            GetParameter( fYMax, aHandle.aYRangeMaximum, sal_False, sal_False );
                             if ( fPos2 > fYMax )
                                 fPos2 = fYMax;
                         }
@@ -1698,7 +1783,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
         aPoly = XPolygon( (sal_uInt16)( nCoordSize + 1 ) );
         const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
         for ( nPtNum = 0; nPtNum < nCoordSize; nPtNum++ )
-            aPoly[ (sal_uInt16)nPtNum ] = GetPoint( *pTmp++, sal_True );
+            aPoly[ (sal_uInt16)nPtNum ] = GetPoint( *pTmp++, sal_True, sal_True );
         if ( aPoly[ 0 ] != aPoly[ (sal_uInt16)( nPtNum - 1 ) ] )
             aPoly[ (sal_uInt16)nPtNum ] = aPoly[ 0 ];
     }
@@ -1723,7 +1808,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         aPolyPoly.Insert( aPoly );
                     aPoly = aEmptyPoly;
                     if ( rSrcPt < nCoordSize )
-                        aPoly[ 0 ] = GetPoint( seqCoordinates[ rSrcPt++ ] );
+                        aPoly[ 0 ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
                 }
                 break;
                 case ENDSUBPATH :
@@ -1745,11 +1830,11 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     sal_uInt16 nDstPt = aPoly.GetPointCount();
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {
-                        aPoly[ nDstPt ] = GetPoint( seqCoordinates[ rSrcPt++ ] );
+                        aPoly[ nDstPt ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
                         aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                        aPoly[ nDstPt ] = GetPoint( seqCoordinates[ rSrcPt++ ] );
+                        aPoly[ nDstPt ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
                         aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                        aPoly[ nDstPt++ ] = GetPoint( seqCoordinates[ rSrcPt++ ] );
+                        aPoly[ nDstPt++ ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
                     }
                 }
                 break;
@@ -1766,11 +1851,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 2 ) < nCoordSize ); i++ )
                     {    // create a circle
 
-                        sal_uInt32 nFlags = 0;
-                        Point aCenter( GetPoint( seqCoordinates[ rSrcPt ] ) );
+                        Point aCenter( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
                         double fWidth, fHeight;
-                        GetParameter( fWidth, nFlags, seqCoordinates[ rSrcPt + 1 ].First  );
-                        GetParameter( fHeight, nFlags, seqCoordinates[ rSrcPt + 1 ].Second );
+                        GetParameter( fWidth,  seqCoordinates[ rSrcPt + 1 ].First, sal_True, sal_False  );
+                        GetParameter( fHeight,  seqCoordinates[ rSrcPt + 1 ].Second, sal_False, sal_True );
                         fWidth *= fXScale;
                         fHeight*= fYScale;
                         Point aP( (sal_Int32)( aCenter.X() - fWidth ), (sal_Int32)( aCenter.Y() - fHeight ) );
@@ -1779,8 +1863,8 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {
                             double fStartAngle, fEndAngle;
-                            GetParameter( fStartAngle, nFlags, seqCoordinates[ rSrcPt + 2 ].First  );
-                            GetParameter( fEndAngle  , nFlags, seqCoordinates[ rSrcPt + 2 ].Second );
+                            GetParameter( fStartAngle, seqCoordinates[ rSrcPt + 2 ].First,  sal_False, sal_False );
+                            GetParameter( fEndAngle  , seqCoordinates[ rSrcPt + 2 ].Second, sal_False, sal_False );
 
                             if ( ((sal_Int32)fStartAngle % 360) != ((sal_Int32)fEndAngle % 360) )
                             {
@@ -1846,7 +1930,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 {
                     sal_uInt16 nDstPt = aPoly.GetPointCount();
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
-                        aPoly[ nDstPt++ ] = GetPoint( seqCoordinates[ rSrcPt++ ] );
+                        aPoly[ nDstPt++ ] = GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True );
                 }
                 break;
 
@@ -1864,10 +1948,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     sal_uInt32 nXor = bClockwise ? 3 : 2;
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 3 ) < nCoordSize ); i++ )
                     {
-                        Rectangle aRect( GetPoint( seqCoordinates[ rSrcPt ] ), GetPoint( seqCoordinates[ rSrcPt + 1 ] ) );
+                        Rectangle aRect( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ), GetPoint( seqCoordinates[ rSrcPt + 1 ], sal_True, sal_True ) );
                         Point aCenter( aRect.Center() );
-                        Point aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ] ) );
-                        Point aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ] ) );
+                        Point aStart( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + nXor ) ], sal_True, sal_True ) );
+                        Point aEnd( GetPoint( seqCoordinates[ (sal_uInt16)( rSrcPt + ( nXor ^ 1 ) ) ], sal_True, sal_True ) );
                         aStart.X() = (sal_Int32)( ( (double)( aStart.X() - aCenter.X() ) / fXScale ) ) + aCenter.X();
                         aStart.Y() = (sal_Int32)( ( (double)( aStart.Y() - aCenter.Y() ) / fYScale ) ) + aCenter.Y();
                         aEnd.X() = (sal_Int32)( ( (double)( aEnd.X() - aCenter.X() ) / fXScale ) ) + aCenter.X();
@@ -1886,10 +1970,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         sal_uInt32 nModT = ( nCommand == ELLIPTICALQUADRANTX ) ? 1 : 0;
-                        Point aCurrent( GetPoint( seqCoordinates[ rSrcPt ] ) );
+                        Point aCurrent( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
                         if ( rSrcPt )   // we need a previous point
                         {
-                            Point aPrev( GetPoint( seqCoordinates[ rSrcPt - 1 ] ) );
+                            Point aPrev( GetPoint( seqCoordinates[ rSrcPt - 1 ], sal_True, sal_True ) );
                             sal_Int32 nX, nY;
                             nX = aCurrent.X() - aPrev.X();
                             nY = aCurrent.Y() - aPrev.Y();
@@ -1940,7 +2024,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 default :
                 {
                     ByteString aString( "CustomShapes::unknown PolyFlagValue :" );
-                    aString.Append( ByteString::CreateFromInt32( nPolyFlags ) );
+                    aString.Append( ByteString::CreateFromInt32( nCommand ) );
                     DBG_ERROR( aString.GetBuffer() );
                 }
                 break;
@@ -2235,7 +2319,7 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
             XPolygon aXP( (sal_uInt16)nNumElemVert );
             const EnhancedCustomShapeParameterPair* pTmp = seqCoordinates.getArray();
             for ( nPtNum = 0; nPtNum < nNumElemVert; nPtNum++ )
-                aXP[ (sal_uInt16)nPtNum ] = GetPoint( *pTmp++, sal_False );
+                aXP[ (sal_uInt16)nPtNum ] = GetPoint( *pTmp++, sal_False, sal_False );
             aPolyBoundRect = Rectangle( aXP.GetBoundRect() );
         }
         else
@@ -2344,7 +2428,7 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
         for ( i = 0; i < nCount; i++ )
         {
             SdrGluePoint aGluePoint;
-            const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True );
+            const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
             double fXRel = rPoint.X();
             double fYRel = rPoint.Y();
             fXRel = fXRel / aLogicRect.GetWidth() * 10000;
