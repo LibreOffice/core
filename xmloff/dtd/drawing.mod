@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.15 2000-12-05 17:55:46 cl Exp $
+	$Id: drawing.mod,v 1.16 2000-12-05 18:00:47 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -271,7 +271,7 @@
 <!ATTLIST style:properties draw:refY %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:tile-repeat-offset CDATA #IMPLIED>
 <!ENTITY % noneOrFloatOrPercentage "CDATA">
-<!ATTLIST style:properties draw:transparency %Percentage; #IMPLIED>
+<!ATTLIST style:properties draw:transparency %percentage; #IMPLIED>
 <!ATTLIST style:properties draw:transparency-name %styleName; #IMPLIED>
 
 <!-- graphic attributes -->
