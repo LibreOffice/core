@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 20:17:53 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 16:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,8 +612,30 @@ sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
     }
 
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_document,
-                                sal_True, sal_True );
+        char* pRootService;
+        const sal_Int32 nExportMode = mnExportFlags & (EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT);
+        if( EXPORT_META == nExportMode )
+        {
+            // export only meta
+            pRootService = sXML_document_meta;
+        }
+        else if( EXPORT_STYLES == nExportMode )
+        {
+            // export only styles
+            pRootService = sXML_document_styles;
+        }
+        else if( EXPORT_CONTENT == nExportMode )
+        {
+            // export only content
+            pRootService = sXML_document_content;
+        }
+        else
+        {
+            // the god'ol one4all element
+            pRootService = sXML_document;
+        }
+
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, pRootService, sal_True, sal_True );
 
         // meta information
         if( mnExportFlags & EXPORT_META )
