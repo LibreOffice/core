@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:40:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,11 +165,11 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 {
-    HANDLE          hProcess;
     oslProcessImpl* pProcImpl;
+    HANDLE hProcess = OpenProcess(
+        STANDARD_RIGHTS_REQUIRED | PROCESS_QUERY_INFORMATION | SYNCHRONIZE, FALSE, (DWORD)Ident);
 
-    if (hProcess = OpenProcess(STANDARD_RIGHTS_REQUIRED |
-                               PROCESS_QUERY_INFORMATION | SYNCHRONIZE, FALSE, (DWORD)Ident))
+    if (hProcess)
     {
         pProcImpl = rtl_allocateMemory(sizeof(oslProcessImpl));
         pProcImpl->m_hProcess  = hProcess;
@@ -351,7 +351,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 
 /***************************************************************************/
 
-sal_uInt32 SAL_CALL osl_getCommandArgCount()
+sal_uInt32 SAL_CALL osl_getCommandArgCount(void)
 {
     if (lpArgvW == NULL)
     {
@@ -391,8 +391,7 @@ static sal_Bool ReadPipe(oslPipe hPipe,
         *nBytes = osl_receivePipe(hPipe, pBuffer, BytesToRead);
         OSL_TRACE("tried to recieve %d, recieved %d.\n",
                         BytesToRead, *nBytes);
-        return (*nBytes >= 0) &&
-               (osl_getLastPipeError(hPipe) == osl_Pipe_E_None);
+        return (sal_Bool)((*nBytes >= 0) && (osl_getLastPipeError(hPipe) == osl_Pipe_E_None));
 }
 
 static sal_Bool WritePipe(oslPipe hPipe,
@@ -403,8 +402,7 @@ static sal_Bool WritePipe(oslPipe hPipe,
         *nBytes = osl_sendPipe(hPipe, pBuffer, BytesToSend);
         OSL_TRACE("tried to send %d, sent %d\n",
                         BytesToSend, *nBytes);
-        return (*nBytes == BytesToSend) &&
-               (osl_getLastPipeError(hPipe) == osl_Pipe_E_None);
+        return (sal_Bool)((*nBytes == BytesToSend) && (osl_getLastPipeError(hPipe) == osl_Pipe_E_None));
 }
 
 sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
