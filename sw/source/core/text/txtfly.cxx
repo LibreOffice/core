@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-12 08:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,9 @@ void SwTxtFly::CtorInit( const SwCntntFrm *pFrm )
     pCurrFrm = pFrm;
     pMaster = pCurrFrm->IsFollow() ? NULL : pCurrFrm;
     pFlyList = NULL;
+#ifdef VERTICAL_LAYOUT
     pRotRectList = NULL;
+#endif
     // Wenn wir nicht von einem Frame ueberlappt werden, oder wenn
     // es gar keine FlyCollection gibt, dann schaltet wir uns fuer immer ab.
     // Aber es koennte sein, dass waehrend der Formatierung eine Zeile
@@ -1066,17 +1068,32 @@ void SwTxtFly::DrawFlyRect( OutputDevice *pOut, const SwRect &rRect,
  * einzusammeln.
  *************************************************************************/
 
-sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bFooter )
+sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
+                           const sal_Bool bInFooterOrHeader )
 {
     if( pNew != pCurrFly )
     {
-        if( bFooter && bTopRule )
+        if( ( bInFtn || bInFooterOrHeader ) && bTopRule )
         {
-            const SwFmtAnchor& rNewA =
-                ((SwContact*)GetUserCall(pNew))->GetFmt()->GetAnchor();
-            if( FLY_PAGE == rNewA.GetAnchorId() )
-                return sal_False; // Im Footer wird seitengeb. nicht ausgewichen
+            SwFrmFmt *pFmt = ((SwContact*)GetUserCall(pNew))->GetFmt();
+            const SwFmtAnchor& rNewA = pFmt->GetAnchor();
+
+            if ( FLY_PAGE == rNewA.GetAnchorId() )
+            {
+                if ( bInFtn )
+                    return sal_False;
+
+                if ( bInFooterOrHeader )
+                {
+                    SwFmtVertOrient aVert( pFmt->GetVertOrient() );
+                    BOOL bVertPrt = aVert.GetRelationOrient() == PRTAREA ||
+                            aVert.GetRelationOrient() == REL_PG_PRTAREA;
+                    if( bVertPrt )
+                        return sal_False;
+                }
+            }
         }
+
         sal_Bool bEvade = !pCurrFly  //Selbst nicht im Fly -> allen ausweichen.
                  //Den Lowern ist auszuweichen.
             || Is_Lower_Of(((SwVirtFlyDrawObj*)pCurrFly)->GetFlyFrm(), pNew);
@@ -1232,7 +1249,9 @@ SwFlyList *SwTxtFly::InitFlyList()
             if( nRight < aBound.Left() || aRect.Top() > aBound.Bottom() ||
                 nLeft > aBound.Right() )
                 continue;
-            if( GetTop( pO, bFooter ) )
+
+            if( GetTop( pO, pCurrFrm->IsInFtn(),
+                        0 != pCurrFrm->FindFooterOrHeader() ) )
             {
                 MSHORT nPos = pFlyList->Count();
                 while( nPos )

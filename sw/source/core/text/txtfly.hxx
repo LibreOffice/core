@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-12 08:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,8 @@ class SwTxtFly
     void CalcRightMargin( SwRect &rFly, MSHORT nPos, const SwRect &rLine ) const;
     void CalcLeftMargin( SwRect &rFly, MSHORT nPos, const SwRect &rLine ) const;
     MSHORT GetPos( const SdrObject *pObj ) const;
-    sal_Bool GetTop( const SdrObject *pNew, const sal_Bool bFooter );
+    sal_Bool GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
+                     const sal_Bool bInFooterOrHeader );
     SwTwips CalcMinBottom() const;
     const SwCntntFrm* _GetMaster();
 
@@ -273,6 +274,9 @@ inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/08/31 06:19:23  fme
+      New: Vertical text formatting
+
       Revision 1.1.1.1  2000/09/19 00:08:26  hr
       initial import
 
