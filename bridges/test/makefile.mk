@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
+#   last change: $Author: jbu $ $Date: 2001-03-20 13:15:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -252,6 +252,8 @@ APP4DEF=	$(MISC)$/$(APP4TARGET).def
 
 #.IF "$(depend)" == ""
 ALL : 	$(BIN)$/test.rdb	\
+    $(BIN)$/server.rdb	\
+    $(BIN)$/client.rdb	\
     $(GENJAVAFILES)		\
         ALLTAR 
 
@@ -262,9 +264,17 @@ ALL : 	$(BIN)$/test.rdb	\
 .INCLUDE :  target.mk
 
 $(BIN)$/test.rdb: $(ALLIDLFILES)
-    +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
+    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     touch $@
+
+$(BIN)$/client.rdb: $(BIN)$/test.rdb
+    +rm -f $(BIN)$/client.rdb
+    +regmerge $@ / $(BIN)$/test.rdb $(SOLARBINDIR)$/udkapi.rdb
+
+$(BIN)$/server.rdb: $(BIN)$/test.rdb
+    +rm -f $(BIN)$/client.rdb
+    +regmerge $@ / $(BIN)$/test.rdb $(SOLARBINDIR)$/udkapi.rdb
 
 # $(GENJAVAFILES) : $(RDB)
 # 	+javamaker -BUCR -O$(OUT) $(TYPES) $(UNOUCRRDB)
