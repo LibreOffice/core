@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:23:55 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ ModalDialog DLG_PARAMETERS
         Text[ czech ] = "Parametry";
         Text[ hebrew ] = "~Parameter";
         Text[ hindi ] = "~पैरामीटर";
+        Text[ slovak ] = "~Parametre";
     };
     ListBox LB_ALLPARAMS
     {
@@ -150,6 +151,7 @@ ModalDialog DLG_PARAMETERS
         Text[ czech ] = "Hodnota";
         Text[ hebrew ] = "~Wert";
         Text[ hindi ] = "~मूल्य";
+        Text[ slovak ] = "Hodno~ta";
     };
     Edit ET_PARAM
     {
@@ -189,6 +191,7 @@ ModalDialog DLG_PARAMETERS
         Text[ czech ] = "Další";
         Text[ hebrew ] = "‮הבא‬";
         Text[ hindi ] = "~आगे";
+        Text[ slovak ] = "Ď~alší";
     };
     OKButton BT_OK
     {
@@ -251,6 +254,7 @@ ModalDialog DLG_PARAMETERS
         Text[ czech ] = "Položka nemohla být převedena na platnou hodnotu sloupce \"$name$\".";
         Text[ hebrew ] = "Die Eingabe konnte nicht in einen gültigen Wert für die Spalte \"$name$\" umgewandelt werden";
         Text[ hindi ] = "प्रविष्टि को \"$name$\"स्तंभ केलिए मान्य मूल्य में बदल नहीं सकते है";
+        Text[ slovak ] = "Položka nemohla byť konvertovaná na platnú hodnotu v stĺpci \"$name$\"";
     };
     Text[ catalan ] = "Entrada de par�metres";
     Text[ finnish ] = "Parametrin sy�tt�";
@@ -258,11 +262,20 @@ ModalDialog DLG_PARAMETERS
     Text[ czech ] = "Vstup parametru";
     Text[ hebrew ] = "Parameter-Eingabe";
     Text[ hindi ] = "पैरामीटर इनपुट्";
+    Text[ slovak ] = "Vstup parametra";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27.24.1  2003/06/12 10:57:55  gh
+ *  final Merge RC
+ *
+ *  Revision 1.27  2003/04/29 17:23:55  hr
+ *  INTEGRATION: CWS mergem8 (1.26.8); FILE MERGED
+ *  2003/04/29 08:34:00 gh 1.26.8.2: final merge for Beta2
+ *  2003/04/14 15:04:06 gh 1.26.8.1: merging all languages
+ *
  *  Revision 1.26.8.2  2003/04/29 08:34:00  gh
  *  final merge for Beta2
  *
@@ -367,6 +380,8 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
+
 
 
 
