@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleauthenticationrequest.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-07-13 12:46:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _UCBHELPER_INTERATIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace ucbhelper {
 
@@ -90,7 +93,7 @@ namespace ucbhelper {
   * @see InteractionRetry
   * @see InteractionSupplyAuthentication
   */
-class SimpleAuthenticationRequest : public ucbhelper::InteractionRequest
+class UCBHELPER_DLLPUBLIC SimpleAuthenticationRequest : public ucbhelper::InteractionRequest
 {
     rtl::Reference<
         ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
