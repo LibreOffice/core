@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:23:23 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     void    MoveCrsr( FASTBOOL bWithSelect = FALSE );
 
     // Eingabefelder updaten
-    BOOL    StartInputFldDlg(SwField*, BOOL bNextButton, ByteString* pWindowState = 0);
+    BOOL    StartInputFldDlg(SwField*, BOOL bNextButton, Window* pParentWin = 0, ByteString* pWindowState = 0);
     // update DropDown fields
     BOOL    StartDropDownFldDlg(SwField*, BOOL bNextButton, ByteString* pWindowState = 0);
 
