@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectregistry.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:35 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef CONFIGMGR_API_OBJECTREGISTRY_HXX_
 #define CONFIGMGR_API_OBJECTREGISTRY_HXX_
 
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
 
 #include <osl/mutex.hxx>
 #include <vos/refernce.hxx>
