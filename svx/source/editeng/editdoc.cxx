@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-07 13:26:55 $
+ *  last change: $Author: mhu $ $Date: 2002-05-10 21:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
     return pNew;
 }
 
-
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditLine
 // -------------------------------------------------------------------------
 
@@ -474,9 +473,7 @@ EditLine* EditLine::Clone() const
     EditLine* pL = new EditLine;
     if ( aPositions.Count() )
     {
-        long* pData = new long[ aPositions.Count() ];
-        memcpy( pData, aPositions.GetData(), aPositions.Count()*sizeof(*aPositions.GetData()) );
-        pL->aPositions.InitData( pData, aPositions.Count() );
+        pL->aPositions.Insert (aPositions.GetData(), aPositions.Count(), 0);
     }
     pL->nStartPosX      = nStartPosX;
     pL->nStart          = nStart;
