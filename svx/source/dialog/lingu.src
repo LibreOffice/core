@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:15:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ String RID_SVXSTR_HMSTATUS_WRONG
     Text[ greek ] = "Η λέξη είναι άγνωστη.";
     Text[ korean ] = "μ• μ μ—†λ” λ‹¨μ–΄μ…λ‹λ‹¤.";
     Text[ turkish ] = "Sφzcόk bilinmiyor.";
-    Text[ language_user1 ] = "Der Punkt am Ende des Satzes sieht im Dialog nicht sehr schφn aus (jcm)";
+    Text[ language_user1 ] = "; Der Punkt am Ende des Satzes sieht im Dialog nicht sehr schφn aus (jcm)";
     Text[ catalan ] = "Paraula desconeguda.";
     Text[ thai ] = "ΰΈ„ΰΈ³ΰΈ—ΰΈµΰΉΰΉ„ΰΈ΅ΰΉΰΈ£ΰΈΉΰΉ‰ΰΈΰΈ±ΰΈ";
     Text[ czech ] = "NeznΓ΅mΓ© slovo.";
@@ -462,7 +462,7 @@ String RID_SVXSTR_HMERR_CHECKINSTALL
     TEXT[ japanese ] = "γ―γ‚Ήγƒγƒ«γƒγ‚§γƒƒγ‚―γ«δ½Ώη”¨γ§γγΎγ›γ‚“γ€‚\nγƒ—γƒ­γ‚°γƒ©γƒ γ®γ‚¤γƒ³γ‚ΉγƒγƒΌγƒ«γ‚’γƒγ‚§γƒƒγ‚―γ—γ¦\nεΏ…θ¦γªγ‚‰γ°γγ®θ¨€θªγ‚’γ‚¤γƒ³γ‚ΉγƒγƒΌγƒ«γ—γ¦γγ γ•γ„γ€‚";
     TEXT[ chinese_traditional ] = " η„΅ζ³•ζδΎ›ζ‹Όε―«ζªΆζ¥εθƒ½γ€‚\nθ«‹ζªΆζ¥ε®‰θ£η„η¨‹εΌοΉθ‹¥ζ‰εΏ…θ¦οΉ\nθ«‹ζ‚¨ε®‰θ£θ¦δ½Ώη”¨η„θªθ¨€η‰ζ¬γ€‚";
     TEXT[ arabic ] = "ΫνΡ γΚζέΡΙ ααΚΟήνή ΗαΕγαΗΖν. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ ζΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
-    TEXT[ greek ] = "δεν είναι διαθέσιμος για τον έλεγχο. \nΠαρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί, \nεκτελέστε την εγκατάσταση της γλώσσας που επιθυ? ";
+    TEXT[ greek ] = "δεν είναι διαθέσιμο για ορθογραφικό έλεγχο\nΕλέγξτε την εγκατάσταση και εγκαταστήστε τη γλώσσα που θέλετε\n";
     TEXT[ korean ] = " λ§μ¶¤λ²• κ²€μ‚¬λ¥Ό μ‚¬μ©ν•  μ μ—†μµλ‹λ‹¤. \n μ‚¬μ©μμ μ„¤μΉ μƒνƒλ¥Ό μ κ²€ν• λ‹¤μ\nν•„μ”ν•  κ²½μ° μ‚¬μ©ν•  μ–Έμ–΄λ¥Ό μ„¤μΉν•μ‹­μ‹μ¤.";
     TEXT[ turkish ] = "denetlenemiyor. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yόkleyin.";
     TEXT[ language_user1 ] = " ";
@@ -564,7 +564,7 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT[ japanese ] = "ιΈζγ—γθ¨€θªγ§ι΅θªθΎε…Έγ―δ½Ώη”¨γ§γγΎγ›γ‚“γ€‚\nγƒ—γƒ­γ‚°γƒ©γƒ γ®γ‚¤γƒ³γ‚ΉγƒγƒΌγƒ«γ‚’γƒγ‚§γƒƒγ‚―γ—γ¦γ€\nεΏ…θ¦γªγ‚‰γ°γ€εΈζ›γ®θ¨€θªγ‚’γ‚¤γƒ³γ‚ΉγƒγƒΌγƒ«γ—γ¦γγ γ•γ„γ€‚";
     TEXT[ chinese_traditional ] = "ζ‚¨θ¨­ε®η„θªθ¨€η‰ζ¬ζ²’ζ‰ι™„ε εηΎ©θ©θ©ε…Έεθƒ½γ€‚\nθ«‹ζ‚¨ζªΆζ¥ε®‰θ£η„η¨‹εΌγ€‚\nθ‹¥ζ‰εΏ…θ¦οΉθ«‹ζ‚¨ε®‰θ£θ¦δ½Ώη”¨η„θªθ¨€η‰ζ¬γ€‚";
     TEXT[ arabic ] = "αΗ νζΜΟ ήΗγζΣ γΡΗΟέΗΚ ααΫΙ ΗαΚν Κγ ΚΝΟνΟεΗ. \nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅\nΛγ ΗαήνΗγ ΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
-    TEXT[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί,\n εκτελέστε την εγκα ";
+    TEXT[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός για την επιλεγμένη γλώσσα. \nΕλέγξτε την εγκατάσταση και εγκαταστήστε τη γλώσσα που θέλετε\n";
     TEXT[ korean ] = "μ„¤μ •λ μ–Έμ–΄μ— λ€ν• λ™μμ–΄ μ‚¬μ „μ„ μ‚¬μ©ν•  μ μ—†μµλ‹λ‹¤. \nμ„¤μΉ μƒνƒλ¥Ό μ κ²€ν• λ‹¤μ \nν•„μ”ν•  κ²½μ° μ‚¬μ©ν•  μ–Έμ–΄λ¥Ό μ„¤μΉν•μ‹­μ‹μ¤.";
     TEXT[ turkish ] = "Ayarlanan dil iηin eώ anlamlύlar sφzlόπό mevcut deπil. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yόkleyin.";
     TEXT[ language_user1 ] = " ";
@@ -582,7 +582,7 @@ String RID_SVXSTR_DIC_ERR_UNKNOWN
     Text[ english_us ] = "Word cannot be added to dictionary\ndue to unknown reason.";
     Text[ portuguese ] = "Foi impossνvel adicionar a palavra ao\ndicionαrio por razυes desconhecidas.";
     Text[ russian ] = "Νεβξημξζνξ δξαΰβθςό β ρλξβΰπό \nοξ νεθηβερςνϋμ οπθχθνΰμ.";
-    Text[ greek ] = "Δεν ήταν δυνατόν να εισαχθεί η λέξη στο λεξικό\n for an unknown reason.";
+    Text[ greek ] = "Δεν είναι δυνατή η προσθήκη της λέξης\nστο λεξικό για άγνωστη αιτία.";
     Text[ dutch ] = "Om onbekende redenen kan het woord\nniet worden opgenomen in het woordenboek.";
     Text[ french ] = "Pour une raison inconnue,\n il a ιtι impossible d'insιrer le mot dans le dictionnaire.";
     Text[ spanish ] = "No se puede recoger en el diccionario la\npalabra debido a una razσn desconocida.";
@@ -667,6 +667,7 @@ String RID_SVXSTR_DIC_ERR_READONLY
 };
 
  // ********************************************************************** EOF
+
 
 
 
