@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:42:39 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 18:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,10 +161,10 @@ AccessibleOutlineView::AccessibleOutlineView (
             if( pOutlineView && pOutliner )
             {
                 mpTextHelper =
-                    ::std::auto_ptr< SvxAccessibleTextHelper >( new SvxAccessibleTextHelper(
-                                                                    this,
-                                                                    ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
-                                                                                                          *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) ) );
+                    ::std::auto_ptr< AccessibleTextHelper >( new AccessibleTextHelper(
+                                                                 this,
+                                                                 ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
+                                                                                                       *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) ) );
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-16 11:00:47 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 19:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ namespace accessibility
     /** Implementation of the SvxEditSource interface in the SdOutlineView
 
         This class connects the SdOutlineView and its EditEngine
-        outliner with the SvxAccessibleTextHelper, which provides all
+        outliner with the AccessibleTextHelper, which provides all
         necessary functionality to make the outliner text accessible
 
         @see SvxEditSource

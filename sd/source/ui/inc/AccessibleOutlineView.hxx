@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:43:38 $
+ *  last change: $Author: thb $ $Date: 2002-05-17 19:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace accessibility {
 
     Please see the documentation of the base class for further
     explanations of the individual methods. This class is a mere
-    wrapper around the SvxAccessibleTextHelper class; as basically the
+    wrapper around the AccessibleTextHelper class; as basically the
     Outline View is a big Outliner.
 */
 class AccessibleOutlineView
@@ -153,7 +153,7 @@ protected:
     AccessibleOutlineView& operator= ( const AccessibleOutlineView& );
 
     /// @dyn
-    ::std::auto_ptr< SvxAccessibleTextHelper > mpTextHelper;
+    ::std::auto_ptr< AccessibleTextHelper > mpTextHelper;
 
     /// Create an accessible name that contains the current view mode.
     virtual ::rtl::OUString
