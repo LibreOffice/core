@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:35:26 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,8 +258,15 @@ static OUString makeComponentPath(
     sal_Int32 nEnd = endsWith( rLibName, OUSTR(SAL_DLLEXTENSION) );
     if (nEnd < 0) // !endsWith
     {
+#if (OSL_DEBUG_LEVEL >= 2)
+        OSL_ENSURE(
+            !"### library name has no proper extension!",
+            OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+#endif
 #if defined SAL_DLLPREFIX
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
+        nEnd = endsWith( rLibName, OUSTR(".uno") );
+        if (nEnd < 0) // !endsWith
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
 #endif
         buf.append( rLibName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) );
