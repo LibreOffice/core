@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 07:25:26 $
+ *  last change: $Author: oj $ $Date: 2002-10-24 08:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,8 +781,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             ::rtl::OUString sName = m_sName;
             if(!sName.getLength())
             {
-                String aName = String(ModuleRes(m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE));
-                aName = aName.GetToken(0,' ');
+                String aName = String(ModuleRes(m_bCreateView ? STR_VIEWDESIGN : STR_QUERYDESIGN));
                 sName = ::dbtools::createUniqueName(getElements(),aName);
                 sName = aName + ::rtl::OUString::createFromAscii(": ") + sName;
             }
