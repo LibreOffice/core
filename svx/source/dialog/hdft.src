@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:54:35 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ TabPage RID_SVXPAGE_HEADER
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = 50 ;
+        Minimum = 10 ;
         Maximum = 9999 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
@@ -348,7 +348,7 @@ TabPage RID_SVXPAGE_FOOTER
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = 50 ;
+        Minimum = 10 ;
         Maximum = 9999 ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CM ;
