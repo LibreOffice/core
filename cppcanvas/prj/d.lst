@@ -1,0 +1,19 @@
+..\%__SRC%\bin\cppcanvas*.dll %_DEST%\bin%_EXT%\cppcanvas*.dll
+..\%__SRC%\lib\icppcanvas.lib %_DEST%\lib%_EXT%\icppcanvas.lib
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+
+mkdir: %_DEST%\inc%_EXT%\cppcanvas
+hedabu: ..\inc\cppcanvas\bitmap.hxx %_DEST%\inc%_EXT%\cppcanvas\bitmap.hxx
+hedabu: ..\inc\cppcanvas\bitmapcanvas.hxx %_DEST%\inc%_EXT%\cppcanvas\bitmapcanvas.hxx
+hedabu: ..\inc\cppcanvas\canvas.hxx %_DEST%\inc%_EXT%\cppcanvas\canvas.hxx
+hedabu: ..\inc\cppcanvas\canvasgraphic.hxx %_DEST%\inc%_EXT%\cppcanvas\canvasgraphic.hxx
+hedabu: ..\inc\cppcanvas\color.hxx %_DEST%\inc%_EXT%\cppcanvas\color.hxx
+hedabu: ..\inc\cppcanvas\customsprite.hxx %_DEST%\inc%_EXT%\cppcanvas\customsprite.hxx
+hedabu: ..\inc\cppcanvas\font.hxx %_DEST%\inc%_EXT%\cppcanvas\font.hxx
+hedabu: ..\inc\cppcanvas\polypolygon.hxx %_DEST%\inc%_EXT%\cppcanvas\polypolygon.hxx
+hedabu: ..\inc\cppcanvas\renderer.hxx %_DEST%\inc%_EXT%\cppcanvas\renderer.hxx
+hedabu: ..\inc\cppcanvas\sprite.hxx %_DEST%\inc%_EXT%\cppcanvas\sprite.hxx
+hedabu: ..\inc\cppcanvas\spritecanvas.hxx %_DEST%\inc%_EXT%\cppcanvas\spritecanvas.hxx
+hedabu: ..\inc\cppcanvas\text.hxx %_DEST%\inc%_EXT%\cppcanvas\text.hxx
+hedabu: ..\inc\cppcanvas\vclfactory.hxx %_DEST%\inc%_EXT%\cppcanvas\vclfactory.hxx
+hedabu: ..\inc\cppcanvas\basegfxfactory.hxx %_DEST%\inc%_EXT%\cppcanvas\basegfxfactory.hxx
