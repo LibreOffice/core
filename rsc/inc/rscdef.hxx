@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:49:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ public:
         RscDefine     * pDef;
         struct {
              short           nHi;
-             USHORT          nLo;
+             unsigned short  nLo;
         } aLong;
     } aExp;
     char cType;
@@ -98,7 +98,7 @@ public:
     BOOL IsNothing()   const { return( RSCEXP_NOTHING  == cType ); }
     void SetLong( INT32 lValue ){
             aExp.aLong.nHi = (short)(lValue >> 16);
-            aExp.aLong.nLo = (USHORT)lValue;
+            aExp.aLong.nLo = (unsigned short)lValue;
             cType = RSCEXP_LONG;
          }
     INT32 GetLong() const{
@@ -162,7 +162,7 @@ friend class RscDefTree;
 friend class RscExpression;
 friend class RscId;
     ULONG           lFileKey;   // zu welcher Datei gehoert das Define
-    USHORT          nRefCount;  // Wieviele Referenzen auf dieses Objekt
+    sal_uInt32          nRefCount;  // Wieviele Referenzen auf dieses Objekt
     INT32           lId;        // Identifier
     RscExpression * pExp;       // Ausdruck
 protected:
@@ -173,7 +173,7 @@ protected:
                        RscExpression * pExpression );
             ~RscDefine();
     void    IncRef(){ nRefCount++; }
-    USHORT  GetRefCount() const    { return nRefCount; }
+    sal_uInt32  GetRefCount() const    { return nRefCount; }
     void    DecRef();
     void    DefineToNumber();
     void    SetName( const ByteString & rNewName ){ aName = rNewName; }
