@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 09:51:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2086,7 +2086,9 @@ void SwFrm::AppendDrawObj( SwDrawContact *pNew )
         pNew->GetMaster()->SetAnchorPos( aTmpRect.Pos() );
     }
     else if( FLY_IN_CNTNT != rAnch.GetAnchorId() )
-        pNew->GetMaster()->SetAnchorPos( GetAnchorPos() );
+    {
+        pNew->GetMaster()->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pNew->GetMaster() ) ) );
+    }
 
     //Bei der Seite anmelden; kann sein, dass noch keine da ist - die
     //Anmeldung wird dann in SwPageFrm::PreparePage durch gefuehrt.
@@ -2201,7 +2203,7 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
                     FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     // change anchor position
-                    pO->SetAnchorPos( GetAnchorPos() );
+                    pO->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pO ) ) );
                     if ( GetValidPosFlag() )
                     {
                         SwPageFrm* pPage = FindPageFrm();
