@@ -10813,3 +10813,4 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?lcl_MoveControl@?%O:\SRC651\src\svtools\source\filepicker\iodlg.cxx37730985@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC651\src\svtools\source\filepicker\iodlg.cxx37730985@@YAEABVString@@AAV2@@Z
 ?lcl_DecoratedFilter@?%O:\SRC651\src\svtools\source\filepicker\iodlgimp.cxx116815226@@YA?AVString@@ABV2@@Z
+?getUserData@IMPL_TViewData@@QAE?AV?$Sequence@UNamedValue@beans@star@sun@com@@@uno@star@sun@com@@XZ
