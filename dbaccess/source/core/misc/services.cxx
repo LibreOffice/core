@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 16:45:54 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     }
     catch (InvalidRegistryException& )
     {
-        OSL_ASSERT("DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_ENSURE(sal_False, "DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;
