@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:00:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aMetricFT     ( this,   SW_RES( FT_METRIC   ) ),
     aTabFT        ( this,   SW_RES( FT_TAB      ) ),
     aTabMF        ( this,   SW_RES( MF_TAB      ) ),
+    aPrinterMetricsCB(this, ResId(CB_PRINTER_METRICS)),
     aMergeDistCB(this, ResId(CB_MERGE_PARA_DIST )),
     aMergeDistPageStartCB(this, ResId(CB_MERGE_PARA_DIST_PAGESTART  )),
     aTabAlignment(this, ResId(CB_TAB_ALIGNMENT  )),
@@ -264,6 +265,10 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     }
     if (pWrtShell)
     {
+        if(aPrinterMetricsCB.IsChecked() != aPrinterMetricsCB.GetSavedValue())
+        {
+            pWrtShell->SetUseVirtualDevice(!aPrinterMetricsCB.IsChecked());
+        }
         if(aMergeDistCB.IsChecked() != aMergeDistCB.GetSavedValue() ||
             aMergeDistPageStartCB.IsChecked() != aMergeDistPageStartCB.GetSavedValue())
         {
@@ -317,10 +322,12 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     {
         nFldFlags = pWrtShell->GetFldUpdateFlags(TRUE);
         nOldLinkMode = pWrtShell->GetLinkUpdMode(TRUE);
+        aPrinterMetricsCB.Check(!pWrtShell->IsUseVirtualDevice());
         aMergeDistCB.Check(pWrtShell->IsParaSpaceMax());
         aMergeDistPageStartCB.Check(pWrtShell->IsParaSpaceMaxAtPages());
         aTabAlignment.Check(pWrtShell->IsTabCompat());
 
+        aPrinterMetricsCB.SaveValue();
         aMergeDistCB.SaveValue();
         aMergeDistPageStartCB.SaveValue();
         aTabAlignment.SaveValue();
@@ -334,6 +341,7 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     aAutoUpdateCharts.Check(nFldFlags == AUTOUPD_FIELD_AND_CHARTS);
     aAutoUpdateCharts.Enable(nFldFlags != AUTOUPD_OFF);
 
+    aPrinterMetricsCB.Enable(pWrtShell != 0);
     aMergeDistCB.Enable(pWrtShell != 0);
     aMergeDistPageStartCB.Enable(pWrtShell != 0);
     aTabAlignment.Enable(pWrtShell != 0);
@@ -398,6 +406,7 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
             &aTabFT,
             &aTabMF,
             &aCompatFL,
+            &aPrinterMetricsCB,
             &aMergeDistCB,
             &aMergeDistPageStartCB,
             0};
