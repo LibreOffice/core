@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 16:15:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _FESH_HXX
 #define _FESH_HXX
 
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
@@ -79,16 +83,15 @@
 #include <svx/svdtypes.hxx>
 #endif
 
+#include <svtools/embedhlp.hxx>
+
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
 #endif
 
 class SwFlyFrm;
-class SvEmbeddedObject;
 class SwTabCols;
-class SvEmbeddedObjectRef;
-class SvInPlaceObject;
 class SvxBrushItem;
 class SvxFrameDirectionItem;
 class SwTableAutoFmt;
@@ -231,7 +234,7 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     BOOL bCheckForOLEInCaption;
 
     SW_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
-    SW_DLLPRIVATE SwFlyFrm *FindFlyFrm( const SvEmbeddedObject *pObj ) const;
+    SW_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
 
     //Actions fuer alle Shells beenden und ChangeLink rufen.
     SW_DLLPRIVATE void EndAllActionAndCall();
@@ -436,24 +439,25 @@ public:
     //als Rahmenattribute eingestellt. Wenn die Werte nicht erlaubt sind,
     //so wird von der Formatierung geclippt und eine Scalierung eingestellt.
     //siehe CalcAndSetScale().
-    void RequestObjectResize( const SwRect &rRect, SvEmbeddedObject *pIPObj );
+    void RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
 
     //Der Client fuer das OleObject muss bezueglich der Scalierung auf dem
     //neuesten Stand gehalten werden. Impl in der WrtShell.
     //Wird ein Pointer auf eine Size uebergeben, so ist diese die aktuelle
     //Core-Groesse des Objectes. Anderfalls wird die Groesse per GetCurFlyRect()
     //besorgt.
-    virtual void CalcAndSetScale( SvEmbeddedObjectRef xIPObj,
+    virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
                                   const SwRect *pFlyFrmRect = 0 ) = 0;
 
     //Objekte mit ActivateWhenVisible werden beim Paint Connected.
     //gerufen von notxtfrm::Paint, impl in wrtsh
-    virtual void ConnectObj( SvInPlaceObjectRef xIPObj, const SwRect &rPrt,
+    virtual void ConnectObj( svt::EmbeddedObjectRef&,
+                             const SwRect &rPrt,
                              const SwRect &rFrm ) = 0;
 
     //Sichbaren Bereich auf das Object setzen, wenn es noch nicht sichtbar ist.
-    void MakeObjVisible( const SvEmbeddedObject *pIPObj ) const;
+    void MakeObjVisible( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& ) const;
 
     // check resize of OLE-Object
     BOOL IsCheckForOLEInCaption() const         { return bCheckForOLEInCaption; }
@@ -602,7 +606,8 @@ public:
 
     const SwRect& GetAnyCurRect( CurRectType eType,
                                  const Point* pPt = 0,
-                                 const SvEmbeddedObject *pObj = 0 ) const;
+                                 const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& =
+                                 ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() ) const;
 
     //Seitennummer der Seite in der der Point liegt, 0 wenn keine
     //getroffen ist.
@@ -617,7 +622,7 @@ public:
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
 
-    void Insert(SvInPlaceObject *,
+    void InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
