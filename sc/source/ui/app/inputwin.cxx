@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:36:47 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1126,7 +1126,7 @@ IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, aNotify)
         //  while an InputHandler method is modifying the EditEngine content
 
         if ( pHdl && !pHdl->IsInOwnChange() )
-            pHdl->InputChanged( pEditView );
+            pHdl->InputChanged( pEditView, TRUE );  // #i20282# InputChanged must know if called from modify handler
     }
 
     return 0;
