@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:49:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ TabDialog DLG_CHAR
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "अक्षर";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betűkészlet";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -132,7 +134,7 @@ TabDialog DLG_CHAR
                 Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
-                Text [ danish ] = "Skrifteffekt" ;
+                Text [ danish ] = "Skrifteffekter" ;
                 Text [ french ] = "Effets de caract�res" ;
                 Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffecten" ;
@@ -156,6 +158,8 @@ TabDialog DLG_CHAR
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "अक्षर प्रभाव";
                 Text[ slovak ] = "Efekty pre písmo";
+                Text[ hungarian ] = "Betűhatások";
+                Text[ slovenian ] = "Učinki pisave";
             };
             PageItem
             {
@@ -188,6 +192,8 @@ TabDialog DLG_CHAR
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
                 Text[ slovak ] = "Umiestnenie";
+                Text[ hungarian ] = "Elhelyezés";
+                Text[ slovenian ] = "Položaj";
             };
             PageItem
             {
@@ -199,7 +205,7 @@ TabDialog DLG_CHAR
                 Text[ portuguese ] = "Configura��o asi�tica";
                 Text[ russian ] = "��������� ��������";
                 Text[ greek ] = "�������� �������";
-                Text[ dutch ] = "Aziatisch lay-out";
+                Text[ dutch ] = "Aziatische lay-out";
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "Dise�o asi�tico";
                 Text[ italian ] = "Layout asiatico";
@@ -220,6 +226,8 @@ TabDialog DLG_CHAR
                 Text[ hebrew ] = "Asiatisches Layout";
                 Text[ hindi ] = "ऐशियन अभिन्यास";
                 Text[ slovak ] = "Ázijské rozloženie";
+                Text[ hungarian ] = "Ázsiai tördelés";
+                Text[ slovenian ] = "Azijska postavitev";
             };
             PageItem
             {
@@ -253,6 +261,8 @@ TabDialog DLG_CHAR
                 Text[ hebrew ] = "Hyperlink";
                 Text[ hindi ] = "हाइपरलिंक";
                 Text[ slovak ] = "Hypertextový odkaz";
+                Text[ hungarian ] = "Hiperhivatkozás";
+                Text[ slovenian ] = "Hiperpovezava";
             };
             PageItem
             {
@@ -288,6 +298,8 @@ TabDialog DLG_CHAR
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
         };
     };
@@ -309,6 +321,8 @@ TabDialog DLG_CHAR
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
     Text[ slovak ] = "Znak";
+    Text[ hungarian ] = "Karakter";
+    Text[ slovenian ] = "Znak";
 };
 TabDialog DLG_DRAWCHAR
 {
@@ -368,6 +382,8 @@ TabDialog DLG_DRAWCHAR
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "अक्षर";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betűkészlet";
+                Text[ slovenian ] = "Pisava";
             };
         };
     };
@@ -388,6 +404,8 @@ TabDialog DLG_DRAWCHAR
     Text[ hebrew ] = "‮גופן‬";
     Text[ hindi ] = "अक्षर";
     Text[ slovak ] = "Písmo";
+    Text[ hungarian ] = "Betűkészlet";
+    Text[ slovenian ] = "Pisava";
 };
 TabPage TP_CHAR_URL
 {
@@ -428,6 +446,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "Hyperlink";
         Text[ hindi ] = "हाइपरलिंक";
         Text[ slovak ] = "Hypertextový odkaz";
+        Text[ hungarian ] = "Hiperhivatkozás";
+        Text[ slovenian ] = "Hiperpovezava";
     };
     FixedText FT_URL
     {
@@ -441,7 +461,7 @@ TabPage TP_CHAR_URL
         Text [ french ] = "URL" ;
         Text [ dutch ] = "U~RL" ;
         Text [ swedish ] = "U~RL" ;
-        Text [ danish ] = "URL" ;
+        Text [ danish ] = "~URL" ;
         Text [ portuguese_brazilian ] = "~URL" ;
         Text [ portuguese ] = "U~RL" ;
         Text[ chinese_simplified ] = "~URL";
@@ -462,6 +482,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "U~RL";
         Text[ hindi ] = "~URL";
         Text[ slovak ] = "~URL";
+        Text[ hungarian ] = "~URL";
+        Text[ slovenian ] = "~URL";
     };
     Edit ED_URL
     {
@@ -480,7 +502,7 @@ TabPage TP_CHAR_URL
         Text [ english_us ] = "~Browse..." ;
         Text [ portuguese_brazilian ] = "~Navegar..." ;
         Text [ swedish ] = "~V�lj ut..." ;
-        Text [ danish ] = "Gennemse..." ;
+        Text [ danish ] = "~Gennemse..." ;
         Text [ italian ] = "~Sfoglia..." ;
         Text [ spanish ] = "~Buscar..." ;
         Text [ french ] = "~S�lectionner..." ;
@@ -500,10 +522,12 @@ TabPage TP_CHAR_URL
         Text[ catalan ] = "~Selecciona...";
         Text[ finnish ] = "~Selaa...";
         Text[ thai ] = "เ~รียกดู...";
-        Text[ czech ] = "Listovat...";
+        Text[ czech ] = "Procházet...";
         Text[ hebrew ] = "‮עיון...‬";
         Text[ hindi ] = "~ब्रउज़...";
         Text[ slovak ] = "~Listovať...";
+        Text[ hungarian ] = "~Tallózás...";
+        Text[ slovenian ] = "Pre~brskaj...";
     };
     FixedText FT_TEXT
     {
@@ -536,6 +560,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
         Text[ slovak ] = "Te~xt";
+        Text[ hungarian ] = "Szö~veg";
+        Text[ slovenian ] = "Be~sedilo";
     };
     Edit ED_TEXT
     {
@@ -557,7 +583,7 @@ TabPage TP_CHAR_URL
         Text [ french ] = "Nom" ;
         Text [ dutch ] = "~Naam" ;
         Text [ swedish ] = "~Namn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "~Navn" ;
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ portuguese ] = "~Nome" ;
         Text[ chinese_simplified ] = "名称(~N)";
@@ -578,6 +604,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_NAME
     {
@@ -596,7 +624,7 @@ TabPage TP_CHAR_URL
         Text [ english_us ] = "~Target frame" ;
         Text [ portuguese_brazilian ] = "~Frame de destino" ;
         Text [ swedish ] = "Ra~m" ;
-        Text [ danish ] = "Frame" ;
+        Text [ danish ] = "~M�lramme" ;
         Text [ italian ] = "~Frame" ;
         Text [ spanish ] = "~Marco destino" ;
         Text [ french ] = "Cadre" ;
@@ -620,6 +648,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "~Frame";
         Text[ hindi ] = "~लक्ष्य फ्रेम ";
         Text[ slovak ] = "~Cieľový rámec";
+        Text[ hungarian ] = "~Célkeret";
+        Text[ slovenian ] = "~Ciljni okvir";
     };
     ComboBox LB_TARGET
     {
@@ -642,7 +672,7 @@ TabPage TP_CHAR_URL
         Text [ french ] = "~�v�nements..." ;
         Text [ dutch ] = "~Gebeurtenissen" ;
         Text [ swedish ] = "H�nd~elser..." ;
-        Text [ danish ] = "Begivenheder..." ;
+        Text [ danish ] = "~H�ndelser..." ;
         Text [ spanish ] = "~Acciones..." ;
         Text [ portuguese_brazilian ] = "~Eventos..." ;
         Text [ portuguese ] = "~Eventos..." ;
@@ -664,6 +694,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "~Ereignisse...";
         Text[ hindi ] = "~घटनें...";
         Text[ slovak ] = "~Udalosti";
+        Text[ hungarian ] = "~Események...";
+        Text[ slovenian ] = "~Dogodki...";
     };
     FixedLine FL_STYLE
     {
@@ -698,6 +730,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "Zeichenvorlagen";
         Text[ hindi ] = "अक्षर शैलियाँ";
         Text[ slovak ] = "Znakové štýly";
+        Text[ hungarian ] = "Karakterstílusok";
+        Text[ slovenian ] = "Znakovni slogi";
     };
     FixedText FT_VISITED
     {
@@ -732,6 +766,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "~Besuchter Link";
         Text[ hindi ] = "भें~ट की हुयी लिंक्स ";
         Text[ slovak ] = "~Navštívené odkazy";
+        Text[ hungarian ] = "~Látogatott hivatkozások";
+        Text[ slovenian ] = "~Obiskane povezave";
     };
     ListBox LB_VISITED
     {
@@ -776,6 +812,8 @@ TabPage TP_CHAR_URL
         Text[ hebrew ] = "~Unbesuchter Link";
         Text[ hindi ] = "भेंट ~न की हुयी लिंक्स ";
         Text[ slovak ] = "Nenavštívené ~odkazy";
+        Text[ hungarian ] = "S~zűz hivatkozások";
+        Text[ slovenian ] = "Neobiskane ~povezave";
     };
     ListBox LB_NOT_VISITED
     {
@@ -788,6 +826,8 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
+
 
 
 
