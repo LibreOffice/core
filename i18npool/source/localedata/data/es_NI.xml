@@ -38,14 +38,14 @@
 <TimePM>p.m.</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT ref="es_GT" replaceTo="[$$C-4C0A] "/>
+<LC_FORMAT ref="es_GT" replaceTo="[$C$-4C0A] "/>
 <LC_COLLATION ref="en_US"/>
 <LC_SEARCH ref="en_US"/>
 <LC_CALENDAR ref="es_AR"/>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>$C</CurrencyID>
-<CurrencySymbol>$C</CurrencySymbol>
+<CurrencyID>C$</CurrencyID>
+<CurrencySymbol>C$</CurrencySymbol>
 <BankSymbol>NIO</BankSymbol>
 <CurrencyName>Cordoba Oro</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
