@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:36:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,8 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
         // and, last but not least, SFX wants the ids to be sorted
         ::std::sort( aSlotIds.begin(), aSlotIds.end() - 1 );
 
-        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( aSlotIds.begin() );
+        sal_uInt16 *pSlotIds = aSlotIds.empty() ? 0 : &(aSlotIds[0]);
+        m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate( pSlotIds );
     }
 }
 
