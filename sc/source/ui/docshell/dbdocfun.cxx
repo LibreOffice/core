@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:33:09 $
+ *  last change: $Author: nn $ $Date: 2002-12-02 17:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,10 @@ BOOL ScDBDocFunc::Sort( USHORT nTab, const ScSortParam& rSortParam,
 
         rDocShell.GetDocFunc().MoveBlock( aSource, aDest, FALSE, FALSE, FALSE, TRUE );
     }
-    pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
+
+    // #105780# don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
+    if ( aLocalParam.bDoSort[0] )
+        pDoc->Sort( nTab, aLocalParam, bRepeatQuery );
 
     BOOL bSave = TRUE;
     if (bCopy)
