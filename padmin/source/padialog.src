@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-18 07:35:45 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 06:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1403,7 +1403,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ polish ] = "~Nowa nazwa %s (%d1 z %d2)";
         Text[ portuguese_brazilian ] = "~New font name (%d1 of %d2)";
         Text[ japanese ] = "%s(%d2 の %d1)の新しい名前(~N)";
-        Text[ korean ] = "새 글꼴 이름(%d1/%d2)(N)(~N)";
+        Text[ korean ] = "새 글꼴 이름(%d1/%d2)(~N)";
         Text[ chinese_simplified ] = "新的字体名称 %s (%d2 的 %d1)(~N)";
         Text[ chinese_traditional ] = "新的字型名稱 %s (%d2 的 %d1)(~N)";
         Text[ turkish ] = "~New font name (%d1 of %d2)";
@@ -1814,7 +1814,7 @@ ModelessDialog RID_PROGRESS_DLG
         Text[ portuguese ] = "Processed";
         Text[ russian ] = "��������������";
         Text[ greek ] = "Processed";
-        Text[ dutch ] = "Processed";
+        Text[ dutch ] = "Reeds bewerkt";
         Text[ french ] = "D�j� �dit�";
         Text[ spanish ] = "Ya modificado";
         Text[ finnish ] = "Processed";
@@ -3524,7 +3524,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ polish ] = "Sterownik Adobe Distiller(tm)";
         Text[ portuguese_brazilian ] = "the Adobe Distiller(tm) driver";
         Text[ japanese ] = "Adobe D~istiller(tm) ﾄﾞﾗｲﾊﾞ";
-        Text[ korean ] = "Adobe D~istiller(tm) 드라이버(I)";
+        Text[ korean ] = "Adobe D~istiller(tm) 드라이버";
         Text[ chinese_simplified ] = "Adobe D~istiller(tm) 驱动程序";
         Text[ chinese_traditional ] = "Adobe D~istiller(tm) 驅動程式";
         Text[ turkish ] = "the Adobe Distiller(tm) driver";
@@ -4028,6 +4028,7 @@ String RID_TXT_FONT_REGULAR
     Text[ arabic ] = "Regular";
     Text[ catalan ] = "Regular";
 };
+
 
 
 
