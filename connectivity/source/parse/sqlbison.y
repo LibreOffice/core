@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.17 2001-02-14 10:29:29 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.18 2001-02-23 14:53:08 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-02-14 10:29:29 $ $Revision: 1.17 $
+//	$Author: oj $ $Date: 2001-02-23 14:53:08 $ $Revision: 1.18 $
 //
 // Description:
 //
@@ -1072,7 +1072,7 @@ boolean_term:
 			$$->append($2);
 			$$->append($3);
 		}
-	|	row_value_constructor_elem '\n' /*[^')' ',']*/
+	|	row_value_constructor_elem  /*[^')' ',']*/
 		{
 			$$ = SQL_NEW_RULE;
 			sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$1);
@@ -2963,6 +2963,8 @@ IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_STRING_COMPARE, "The field can not
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_DATE_COMPARE, "The field can not be compared with a date!");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_REAL_COMPARE,	"The field can not be compared with a floating point number!");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_INT_COMPARE,	"The field can not be compared with a number!");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE,	"The table \"#\" is unknown in the database!");
+IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#\" is unknown in the table \"#\"!");
 
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
@@ -3016,6 +3018,8 @@ OParseContext::~OParseContext()
 		case ERROR_INVALID_STRING_COMPARE:	aMsg = ERROR_STR_INVALID_STRING_COMPARE; break;
 		case ERROR_INVALID_DATE_COMPARE:	aMsg = ERROR_STR_INVALID_DATE_COMPARE; break;
 		case ERROR_INVALID_REAL_COMPARE:	aMsg = ERROR_STR_INVALID_REAL_COMPARE; break;
+		case ERROR_INVALID_TABLE:			aMsg = ERROR_STR_INVALID_TABLE; break;
+		case ERROR_INVALID_COLUMN:			aMsg = ERROR_STR_INVALID_COLUMN; break;
 	}
 	return aMsg;
 }
@@ -3303,6 +3307,8 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 
 	// Guard the parsing
 	::osl::MutexGuard aGuard(s_aMutex);
+	// must be reset
+	xxx_pGLOBAL_SQLPARSER = this;
 
 	// reset the parser
 	if (!m_pLocale)
@@ -3330,13 +3336,17 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 			m_sFieldName = aString;
 
 			// get the field format key
-			m_xField->getPropertyValue(FIELD_STR_FORMATKEY) >>= m_nFormatKey;
+			if (m_xField->getPropertySetInfo()->hasPropertyByName(FIELD_STR_FORMATKEY))
+				m_xField->getPropertyValue(FIELD_STR_FORMATKEY) >>= m_nFormatKey;
+			else
+				m_nFormatKey = 0;
 
 			// get the field type
 			m_xField->getPropertyValue(FIELD_STR_TYPE) >>= nType;
 		}
-		catch ( ... )
+		catch ( Exception& )
 		{
+			OSL_ASSERT(0);
 		}
 
 		if (m_nFormatKey && m_xFormatter.is())
