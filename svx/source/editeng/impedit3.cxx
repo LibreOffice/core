@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-30 13:34:52 $
+ *  last change: $Author: mt $ $Date: 2001-07-30 15:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,7 +1026,8 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         USHORT nDecPos = aText.Search( aCurrentTab.aTabStop.GetDecimal() );
                     if ( nDecPos != STRING_NOTFOUND )
                     {
-                        nW = aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, nDecPos, NULL ).Width();
+                        nW -= pParaPortion->GetTextPortions().GetObject( nTmpPortion )->GetSize().Width();
+                        nW += aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, nDecPos, NULL ).Width();
                         aCurrentTab.bValid = FALSE;
                     }
                 }
