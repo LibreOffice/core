@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:46:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@ class   SalXLib;
 #endif
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
+#endif
+
+#ifndef _VCL_DLLAPI_H
+#include <dllapi.h>
 #endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -245,7 +249,7 @@ public:
 typedef int(*YieldFunc)(int fd, void* data);
 struct YieldEntry;
 
-class SalXLib
+class VCL_DLLPUBLIC SalXLib
 {
 protected:
     timeval         m_aTimeout;
@@ -312,7 +316,7 @@ extern "C" {
     struct SnLauncheeContext;
 };
 
-class SalDisplay
+class VCL_DLLPUBLIC SalDisplay
 {
 // -=-= UserEvent =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
     struct SalUserEvent
