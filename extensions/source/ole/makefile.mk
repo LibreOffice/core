@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2000-10-17 09:04:28 $
+#   last change: $Author: jl $ $Date: 2000-10-19 10:54:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,10 +154,8 @@ SLOFILES= \
             $(SLO)$/oleobjw.obj		\
             $(SLO)$/olethread.obj	\
             $(SLO)$/oledll.obj		\
-            $(SLO)$/StdAfx.obj		\
-            $(SLO)$/jscriptclasses.obj
+            $(SLO)$/jscriptclasses.obj	
 
-#            $(SLO)$/oleclassw.obj	\
 
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=\
