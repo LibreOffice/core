@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:47:58 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2001,26 +2001,32 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 
         case ID_BROWSER_UNDO:
         {
-            // restore the cursor state
-            Reference< XResultSetUpdate >  xCursor(getRowSet(), UNO_QUERY);
-            Reference< XPropertySet >  xSet(xCursor, UNO_QUERY);
-            Any aVal = xSet->getPropertyValue(PROPERTY_ISNEW);
-            if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
+            try
             {
-                xCursor->moveToInsertRow();
-                // no need to reset the grid model after we moved to the insert row, this is done implicitly by the
-                // form
-                // (and in some cases it may be deadly to do the reset explicitly after the form did it implicitly,
-                // cause the form's reset may be async, and this leads to some nice deadlock scenarios ....)
-            }
-            else
-            {
-                xCursor->cancelRowUpdates();
+                // restore the cursor state
+                Reference< XResultSetUpdate >  xCursor(getRowSet(), UNO_QUERY);
+                Reference< XPropertySet >  xSet(xCursor, UNO_QUERY);
+                Any aVal = xSet->getPropertyValue(PROPERTY_ISNEW);
+                if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
+                {
+                    xCursor->moveToInsertRow();
+                    // no need to reset the grid model after we moved to the insert row, this is done implicitly by the
+                    // form
+                    // (and in some cases it may be deadly to do the reset explicitly after the form did it implicitly,
+                    // cause the form's reset may be async, and this leads to some nice deadlock scenarios ....)
+                }
+                else
+                {
+                    xCursor->cancelRowUpdates();
 
-                // restore the grids state
-                Reference< ::com::sun::star::form::XReset >  xReset(getControlModel(), UNO_QUERY);
-                if (xReset.is())
-                    xReset->reset();
+                    // restore the grids state
+                    Reference< ::com::sun::star::form::XReset >  xReset(getControlModel(), UNO_QUERY);
+                    if (xReset.is())
+                        xReset->reset();
+                }
+            }
+            catch(SQLException&)
+            {
             }
 
             m_bCurrentlyModified = sal_False;
