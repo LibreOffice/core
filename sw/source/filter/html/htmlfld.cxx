@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ void SwHTMLParser::NewField()
                                           nSub, nNumFmt );
 
             if (nSub & FIXEDFLD)
-                ((SwDateTimeField *)pFld)->SetDateTime( nDate, nTime );
+                ((SwDateTimeField *)pFld)->SetDateTime( DateTime(Date(nDate), Time(nTime)) );
         }
         break;
 
