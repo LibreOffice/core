@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:27:29 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ String STR_QUERY_SAVE_DOCUMENT
     Text[ russian ] = "Äîêóìåíò '$(DOC)' èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
     Text[ polish ] = "Zmieniono dokument \"$(DOC)\".\nCzy zapisaæ zmiany?";
     Text[ japanese ] = "\"$(DOC)\" ÄŞ·­ÒİÄ‚Í•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
-    Text[ chinese_traditional ] = "³o­Ó¤å¥ó¡§$(DOC)¡¨¤w¸gÅÜ§ó¡C\n­nÀx¦s³o¨ÇÅÜ§ó¡H";
+    Text[ chinese_traditional ] = "³o­Ó¤å¥ó $(DOC) ¤w¸gÅÜ§ó¡C\n­nÀx¦s³o¨ÇÅÜ§ó¡H";
     Text[ arabic ] = "Êã ÊÛííÑ ÇáãÓÊäÏ \"$(DOC)\".\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
     Text[ dutch ] = "Het document \"$(DOC)\" is gewijzigd.\nWilt u uw wijzigingen opslaan?";
     Text[ chinese_simplified ] = "ÎÄµµ¡°$(DOC)¡±ÒÑ¾­±»ĞŞ¸Ä¡£\nÄúÒª´æÅÌÕâĞ©¸ü¸ÄÂğ£¿";
@@ -685,7 +685,7 @@ String STR_ERROR_MOVE_TEMPLATE
     Text[ russian ] = "Îøèáêà ïğè ïåğåìåùåíèè øàáëîíà \"$1\".";
     Text[ polish ] = "B³¹d przy przenoszeniu szablonu \"$1\".";
     Text[ japanese ] = "ÃİÌßÚ°Ä\"$1\"‚ÌˆÚ“®‚ÌÛ‚Ì´×°B";
-    Text[ chinese_traditional ] = "¦b²¾°Ê¼Ë¦¡ ¡§$1¡¨®Éµo¥Í¿ù»~ ¡C";
+    Text[ chinese_traditional ] = "¦b²¾°Ê¼Ë¦¡ $1 ®Éµo¥Í¿ù»~ ¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍÑíß ÇáŞÇáÈ \"$1\".";
     Text[ dutch ] = "Fout bij verplaatsen van sjabloon \"$1\".";
     Text[ chinese_simplified ] = "ÔÚÒÆ¶¯ÑùÊ½¡°$1¡±Ê±·¢Éú´íÎó";
@@ -891,7 +891,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT[ russian ] = "Âû õîòèòå, ÷òîáû øàáëîí \"$(TEXT)\" ñòàë ñòàíäàğòíûì?";
     TEXT[ polish ] = "Czy przekszta³ciæ \"$(TEXT)\" na szablon domyœlny?";
     TEXT[ japanese ] = "ÃİÌßÚ°Ä\"$(TEXT)\"‚ğ•W€½À²Ù‚É‚µ‚Ü‚·‚©?";
-    TEXT[ chinese_traditional ] = "­n±N³o­Ó¼Ë¦¡¡§$(TEXT)¡¨³]©w¦¨¼Ğ·Ç¼Ë¦¡¡H";
+    TEXT[ chinese_traditional ] = "­n±N³o­Ó¼Ë¦¡$(TEXT)³]©w¦¨¼Ğ·Ç¼Ë¦¡¡H";
     TEXT[ arabic ] = "åá ÊÑíÏ ÌÚá ÇáŞÇáÈ \"$(TEXT)\" ŞÇáÈÇğ ÇİÊÑÇÖíÇğ¿";
     TEXT[ dutch ] = "Moet de sjabloon \"$(TEKST)\" de standaardsjabloon worden?";
     TEXT[ chinese_simplified ] = "ÄúÒª½«ÑùÊ½¡°$(TEXT)¡±Éè¶¨³É±ê×¼ÑùÊ½Âğ£¿";
@@ -1318,7 +1318,7 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text[ russian ] = "Çàìåíèòü ñòèëü \"$(ARG1)\"?";
     Text[ polish ] = "Zast¹piæ styl \"$(ARG1)\"?";
     Text[ japanese ] = "½À²Ù\"$(ARG1)\"‚ğ’uŠ·‚µ‚Ü‚·‚©?";
-    Text[ chinese_traditional ] = "­n´À¥N¼Ë¦¡¡§$(ARG1)¡¨¡H";
+    Text[ chinese_traditional ] = "­n´À¥N¼Ë¦¡¡u$(ARG1)¡v¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÈÏÇá ÇáäãØ \"$(ARG1)\"¿";
     Text[ dutch ] = "Wilt u opmaakprofiel \"$(ARG1)\" vervangen?";
     Text[ chinese_simplified ] = "Òª¸üÌæÑùÊ½¡°$(ARG1)¡±£¿";
@@ -1340,14 +1340,14 @@ String STR_DOC_LOADING
     Text [ danish ] = "Indlæser dokument" ;
     Text [ portuguese_brazilian ] = "Dokument wird geladen" ;
     Text [ portuguese ] = "A carregar documento" ;
-    Text[ chinese_simplified ] = "ÕıÔÚ×°ÔØÎÄµµ";
+    Text[ chinese_simplified ] = "ÕıÔÚ×°ÈëÎÄµµ";
     Text[ russian ] = "Äîêóìåíò çàãğóæàåòñÿ";
     Text[ polish ] = "£adowanie dokumentu";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ“Ç‚İ‚ñ‚Å‚¢‚Ü‚·";
-    Text[ chinese_traditional ] = "¥¿¦b¸Ë¸ü¤å¥ó";
+    Text[ chinese_traditional ] = "¥¿¦b¸ü¤J¤å¥ó";
     Text[ arabic ] = "ÌÇÑí ÊÍãíá ÇáãÓÊäÏ";
     Text[ dutch ] = "Document wordt geladen";
-    Text[ chinese_simplified ] = "ÕıÔÚ×°ÔØÎÄµµ";
+    Text[ chinese_simplified ] = "ÕıÔÚ×°ÈëÎÄµµ";
     Text[ greek ] = "Öüñôùóç åããñÜöïõ";
     Text[ korean ] = "¹®¼­ ·Îµå Áß";
     Text[ turkish ] = "Belge yükleniyor";
@@ -1926,7 +1926,7 @@ String STR_PACKNGO_NOACCESS
     Text[ japanese ] = "ÄŞ×²ÌŞ‚É±¸¾½‚Å‚«‚Ü‚¹‚ñ";
     Text[ korean ] = "ÇöÀç µ¥ÀÌÅÍ ¸ÅÃ¼¿¡ ¾×¼¼½º°¡ ºÒ°¡´ÉÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡µ±Ç°µÄÈíÅÌ¡£";
-    Text[ chinese_traditional ] = "µLªkÅª¨ú·í«eªº¼ÆÕuºÏ¤ù¡C";
+    Text[ chinese_traditional ] = "µLªkÅª¨ú·í«eªº¼Æ¾Ú¸üÅé¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáæÕæá Åáì ÇáŞÑÕ ÇáÍÇáí.";
     Text[ turkish ] = "Kullanılan veri taşıyıcısına erişim sağlanamadı.";
 };
