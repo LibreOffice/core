@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:14:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
+#endif
+
+#ifndef _SVDPAGV_HXX
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _XMLSCRIPT_XML_HELPER_HXX_
@@ -615,7 +619,10 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
         }
     }
 
-    pDlgEdView->InitRedraw( pWindow, Region( aPaintRect ) );
+    // #114282# unbuffered paint
+    SdrPageView* pPgView = pDlgEdView->GetPageViewPvNum(0);
+    if ( pPgView )
+        pPgView->InitRedraw( 0, aPaintRect, pWindow );
 
     nInPaint = FALSE;
 
