@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-14 13:15:04 $
+ *  last change: $Author: oj $ $Date: 2001-01-15 09:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,6 +455,7 @@ void OFlatTable::fillColumns()
             nFlags |= ColumnSearch::CHAR;
         }
 
+        // check if the columname already exists
         String aAlias(aColumnName,pConnection->getTextEncoding());
         OSQLColumns::const_iterator aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
@@ -463,6 +464,7 @@ void OFlatTable::fillColumns()
             (aAlias = String(aColumnName,pConnection->getTextEncoding())) += String::CreateFromInt32(++nExprCnt);
             aFind = connectivity::find(m_aColumns->begin(),m_aColumns->end(),aAlias,aCase);
         }
+
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),
                                                 ColumnValue::NULLABLE,nPrecision,nScale,eType,sal_False,sal_False,sal_False,
                                                 getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
