@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: as $ $Date: 2001-10-29 14:59:15 $
+ *  last change: $Author: as $ $Date: 2001-11-08 12:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,6 +1318,11 @@ sal_uInt32 SfxFilterMatcher::GetFilter4Content(
         nErr = rList.GetObject( n )->GetFilter4Content(
             rMedium, &pFilter, nMust, nDont );
         CHECKERROR();
+        if( rMedium.GetError() != ERRCODE_NONE )
+        {
+            pFilter = 0;
+            return rMedium.GetError();
+        }
         if( nErr == ERRCODE_ABORT && bOnlyGoodOnes ) pFilter = 0;
         if( pFilter )
         {
