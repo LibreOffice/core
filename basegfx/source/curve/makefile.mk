@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2003-10-28 11:24:53 $
+#   last change: $Author: thb $ $Date: 2003-11-10 13:32:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,9 @@ TARGET=curve
 
 SLOFILES= \
                 $(SLO)$/b2dcubicbezier.obj		\
-                $(SLO)$/b2dquadraticbezier.obj
-            
+                $(SLO)$/b2dquadraticbezier.obj	\
+                $(SLO)$/b2dbeziertools.obj
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
