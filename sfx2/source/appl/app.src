@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:17:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message [ portuguese_brazilian ] = "O documento j� est� aberto e ativado." ;
     Message [ portuguese ] = "O documento j� se encontra aberto e foi activado." ;
     Message [ finnish ] = "Asiakirja on jo avattu." ;
-    Message [ danish ] = "Dokumentet var allerede indl�st og blev aktiveret." ;
+    Message [ danish ] = "Dokumentet er allerede �bent." ;
     Message [ french ] = "Document d�j� charg� et activ�." ;
     Message [ swedish ] = "Dokumentet var redan laddat och har aktiverats." ;
     Message [ dutch ] = "Document is reeds geladen en geactiveerd." ;
@@ -98,6 +98,8 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message[ hebrew ] = "‮המסמך כבר פתוח.‬";
     Message[ hindi ] = "लेखपत्र पहिले से ही खुला है ।";
     Message[ slovak ] = "Dokument je už otvorený.";
+    Message[ hungarian ] = "A dokumentum már nyitva van.";
+    Message[ slovenian ] = "Dokument je že odprt.";
 };
 
 ErrorBox RID_CANTLOADDOC_DLG
@@ -109,7 +111,7 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message [ portuguese_brazilian ] = "N�o � poss�vel abrir o documento." ;
     Message [ portuguese ] = "Imposs�vel abrir o documento." ;
     Message [ finnish ] = "Asiakirjan avaaminen ei onnistu." ;
-    Message [ danish ] = "Det er ikke muligt at indl�se dokumentet." ;
+    Message [ danish ] = "Kan ikke �bne dokument." ;
     Message [ french ] = "Impossible de charger le document." ;
     Message [ swedish ] = "Dokumentet kan inte laddas." ;
     Message [ dutch ] = "Het document kan niet worden geopend." ;
@@ -133,6 +135,8 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message[ hebrew ] = "‮לא ניתן לפתוח את המסמך.‬";
     Message[ hindi ] = "लेखपत्र को नहीं खोल सकते है ।";
     Message[ slovak ] = "Dokument nie je možné otvoriť";
+    Message[ hungarian ] = "Nem sikerült megnyitni a dokumentumot.";
+    Message[ slovenian ] = "Ni mogoče odpreti dokumenta.";
 };
 
 ErrorBox MSG_ERR_READ_CFG
@@ -146,7 +150,7 @@ ErrorBox MSG_ERR_READ_CFG
     Message [ portuguese_brazilian ] = "Ocorreu um erro ao ler o arquivo de configura��o." ;
     Message [ portuguese ] = "Erro durante a leitura do ficheiro de configura��o." ;
     Message [ finnish ] = "Kokoonpanotiedoston lukemisessa on ilmennyt virhe." ;
-    Message [ danish ] = "Fejl under l�sning af konfiguration." ;
+    Message [ danish ] = "Fejl under l�sning af konfigurationsfil." ;
     Message [ french ] = "Erreur de lecture de la configuration." ;
     Message [ swedish ] = "Fel vid l�sning av konfiguration." ;
     Message [ dutch ] = "Fout bij lezen van configuratiebestand." ;
@@ -170,6 +174,8 @@ ErrorBox MSG_ERR_READ_CFG
     Message[ hebrew ] = "‮ארעה שגיאה בעת קריאת קובץ התצורה.‬";
     Message[ hindi ] = "Error reading configuration file.";
     Message[ slovak ] = "Chyba pri čítaní­ z konfiguračné­ho súboru.";
+    Message[ hungarian ] = "Hiba történt a konfigurációs fájl olvasásakor.";
+    Message[ slovenian ] = "Napaka pri branju konfiguracijske datoteke.";
 };
 
 ErrorBox MSG_ERR_WRITE_CFG
@@ -183,7 +189,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message [ portuguese_brazilian ] = "Ocorreu um erro ao gravar o arquivo de configura��o." ;
     Message [ portuguese ] = "Erro ao gravar o ficheiro de configura��o." ;
     Message [ finnish ] = "Kokoonpanotiedostoon kirjoittamisessa on ilmennyt virhe." ;
-    Message [ danish ] = "Fejl under skrivning af konfiguration." ;
+    Message [ danish ] = "Fejl under skrivning af konfigurationsfil." ;
     Message [ french ] = "Erreur lors de l'�criture du fichier de configuration." ;
     Message [ swedish ] = "Fel vid skrivning av konfigurationsfil." ;
     Message [ dutch ] = "Fout bij schrijven van configuratiebestand." ;
@@ -207,6 +213,8 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message[ hebrew ] = "‮ארעה שגיאה בעת כתיבה לקובץ התצורה.‬";
     Message[ hindi ] = "रूप-रेखा फाइल को लिखने के समय गलती ।";
     Message[ slovak ] = "Chyba pri zápise do konfiguračného súboru.";
+    Message[ hungarian ] = "Hiba a konfigurációs fájl írása közben.";
+    Message[ slovenian ] = "Napaka pri pisanju konfiguracijske datoteke.";
 };
 
 ErrorBox MSG_ERR_OPEN_CFG
@@ -220,7 +228,7 @@ ErrorBox MSG_ERR_OPEN_CFG
     Message [ portuguese_brazilian ] = "Ocorreu um erro ao abrir o arquivo de configura��o." ;
     Message [ portuguese ] = "Erro ao abrir o ficheiro de configura��o." ;
     Message [ finnish ] = "Kokoonpanotiedoston avaamisessa on ilmennyt virhe." ;
-    Message [ danish ] = "Fejl ved �bning af konfiguration." ;
+    Message [ danish ] = "Fejl ved �bning af konfigurationsfil." ;
     Message [ french ] = "Erreur lors de l'ouverture du fichier de configuration." ;
     Message [ swedish ] = "Fel vid �ppning av konfiguration." ;
     Message [ dutch ] = "Fout bij openen van configuratiebestand." ;
@@ -244,6 +252,8 @@ ErrorBox MSG_ERR_OPEN_CFG
     Message[ hebrew ] = "‮שגיאה בעת פתיחת קובץ התצורה.‬";
     Message[ hindi ] = "रूप-रेखा फाइल को खोलने के समय गलती ।";
     Message[ slovak ] = "Chyba pri otváraní­ konfiguračného súboru.";
+    Message[ hungarian ] = "Hiba a konfigurációs fájl megnyitásakor.";
+    Message[ slovenian ] = "Napaka pri odpiranju konfiguracijske datoteke.";
 };
 
 ErrorBox MSG_ERR_FILETYPE_CFG
@@ -281,6 +291,8 @@ ErrorBox MSG_ERR_FILETYPE_CFG
     Message[ hebrew ] = "‮הקובץ אינו קובץ תצורה.‬";
     Message[ hindi ] = "फाइल रूप-रेखा फाइल नहीं है ।";
     Message[ slovak ] = "Súbor nie je konfiguračným súborom.";
+    Message[ hungarian ] = "A fájl nem konfigurációs fájl.";
+    Message[ slovenian ] = "Datoteka ni konfiguracijska datoteka.";
 };
 
 ErrorBox MSG_ERR_VERSION_CFG
@@ -294,7 +306,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message [ portuguese_brazilian ] = "Vers�o incorreta do arquivo de configura��o." ;
     Message [ portuguese ] = "Vers�o errada do ficheiro de configura��o." ;
     Message [ finnish ] = "Kokoonpanotiedostossa on v��r� versio." ;
-    Message [ danish ] = "Konfigurationsfilen indeholder forkert version." ;
+    Message [ danish ] = "Konfigurationsfilen indeholder en forkert version." ;
     Message [ french ] = "Version incorrecte du fichier de configuration." ;
     Message [ swedish ] = "Konfigurationsfil har fel version." ;
     Message [ dutch ] = "Foutieve versie van configuratiebestand." ;
@@ -318,6 +330,8 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message[ hebrew ] = "‮קובץ התצורה מכיל גרסה לא נכונה.‬";
     Message[ hindi ] = "रूप-रेखा फाइल में गलत अनुवाद है ।";
     Message[ slovak ] = "Konfiguračný súbor obsahuje špatnú verziu.";
+    Message[ hungarian ] = "A konfigurációs fájl helytelen verziószámot tartalmaz.";
+    Message[ slovenian ] = "Konfiguracijska datoteka vsebuje napačno različico.";
 };
 
 ErrorBox MSG_ERR_WRITE_SBL
@@ -331,7 +345,7 @@ ErrorBox MSG_ERR_WRITE_SBL
     Message [ portuguese_brazilian ] = "Ocorreu um erro ao gravar a biblioteca BASIC em \n'@'." ;
     Message [ portuguese ] = "Erro ao gravar a biblioteca BASIC em \n'@'." ;
     Message [ finnish ] = "On ilmennyt virhe tallennettaessa BASIC-kirjastoa kohteessa \n'@'." ;
-    Message [ danish ] = "Fejl under skrivning af BASIC-biblioteket til \n'@'." ;
+    Message [ danish ] = "Fejl under skrivning af BASIC-biblioteket til\n'@'." ;
     Message [ french ] = "Erreur lors de l'�criture de la biblioth�que BASIC dans \n'@'." ;
     Message [ swedish ] = "Fel vid skrivning av BASIC-bibliotek i\n'@'." ;
     Message [ dutch ] = "Fout bij schrijven van BASIC-bibliotheek in\n'@'." ;
@@ -355,6 +369,8 @@ ErrorBox MSG_ERR_WRITE_SBL
     Message[ hebrew ] = "‮שגואה בעת הקלטת ספרית הבייסיק ב \n'@'.‬";
     Message[ hindi ] = "'@'\n में BASIC को रेकोर्डिन्ग करने के समय गलती ।";
     Message[ slovak ] = "Chyba pri zaznamenávaní BASIC knižnice do\n'@'.";
+    Message[ hungarian ] = "Hiba történt a BASIC-programkönyvtár rögzítésekor itt: \n'@'.";
+    Message[ slovenian ] = "Napaka pri zapisovanju BASIC-ove knjižnice v\n'@'.";
 };
 
 ErrorBox MSG_SIGNAL
@@ -365,7 +381,7 @@ ErrorBox MSG_SIGNAL
     Message [ ENGLISH ] = "-" ;
     Message [ dutch ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de toepassing wordt be�indigd?" ;
     Message [ swedish ] = "Ett ov�ntat programfel har uppst�tt!\nDu kan nu p� eget bev�g f�rs�ka\nspara alla �ppna dokument!\n\nVill du f�rs�ka spara alla �ndringar i dokumenten innan programmet avslutas?" ;
-    Message [ danish ] = "Der opstod en uventet programfejl\nDu kan p� eget ansvar pr�ve p� at\ngemme alle �bne dokumenter!\n\nVil du pr�ve p� at gemme dine dokumenter, f�r programmet afsluttes?" ;
+    Message [ danish ] = "Der opstod en uventet programfejl.\n\nVil du pr�ve p� at gemme alle �bne dokumenter, f�r programmet afsluttes?" ;
     Message [ italian ] = "Nell'applicazione si � verificato un errore inatteso!\nAdesso potete provare, a proprio rischio, di\nsalvare tutti i documenti aperti!\n\nVolete che si provi a salvare il lavoro prima di chiudere l'applicazione?" ;
     Message [ spanish ] = "�Se ha producido un error inesperado de la aplicaci�n!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n�Desea guardar su trabajo antes de cerrar la aplicaci�n?" ;
     Message [ french ] = "Erreur d'application inattendue !\nVous pouvez tout de m�me essayer\nd'enregistrer les documents ouverts !\n\nEnregistrer votre travail avant fermeture de l'application ?" ;
@@ -391,6 +407,8 @@ ErrorBox MSG_SIGNAL
     Message[ hebrew ] = "‮ארעה שגיאה בלתי צפויה בתוכנית.\n\nהאם לנסות לשמור את השינוים בכל המסמכים הפתוחים לפני סגירת התוכנית?‬";
     Message[ hindi ] = "प्रोग्राम् में आकस्मिक गलती घटित हुआ ।\n\nआप प्रोग्राम् को अंत करने से पहिले सब खुला हुआ लेखपत्रों में परिवर्तनों को संचित करना चाहते है ?";
     Message[ slovak ] = "V programe nastala neočakávaná chyba.\n\n Prajete si skúsiť uložiť zmeny vo všetkých otvorených dokumentoch pred ukončením programu?";
+    Message[ hungarian ] = "Váratlan programhiba történt.\n\nA program bezárása előtt kívánja-e minden megnyitott dokumentum változásait elmenteni?";
+    Message[ slovenian ] = "Pojavila se je nepričakovana napaka v programu.\n\nAli želite poskusiti shraniti svoje spremembe v vseh odprtih dokumentih, preden bo program končan?";
 };
 
 ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
@@ -408,7 +426,7 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     Message[ spanish ] = "Se ha producido un error al iniciar el navegador web. Compruebe la configuraci�n de %PRODUCTNAME en 'Herramientas - Opciones - %PRODUCTNAME - Programas auxiliares' as� como la del navegador web. ";
     Message[ finnish ] = "Web-selaimen k�ynnistyksess� tapahtui virhe.\nTarkista %PRODUCTNAMEn ja Web-selaimen asetukset.";
     Message[ italian ] = "Si � verificato un errore durante l'avvio del browser Web. Verificate le impostazioni di %PRODUCTNAME al menu 'Strumenti - Opzioni - %PRODUCTNAME - Programmi ausiliari' e le impostazioni del browser Web.";
-    Message[ danish ] = "Fejl ved start af webbrowseren.\nKontroller indstillingerne for %PRODUCTNAME og for webbrowseren.";
+    Message[ danish ] = "Fejl ved start af webbrowseren. Kontroller venligst indstillingerne for %PRODUCTNAME og for webbrowseren.";
     Message[ swedish ] = "Det uppstod ett fel n�r webbl�saren skulle startas. Kontrollera inst�llningarna i %PRODUCTNAME under 'Verktyg - Alternativ - %PRODUCTNAME - Hj�lpprogram' och inst�llningarna i din webbl�sare.";
     Message[ polish ] = "Wyst�pi� b��d podczas uruchamiania przegl�darki stron WWW.\nSprawd� ustawienia programu %PRODUCTNAME i przegl�darki.";
     Message[ portuguese_brazilian ] = "Ocorreu um erro ao iniciar o navegador da web.\nPor favor, verifique as configura��es do %PRODUCTNAME em 'Ferramentas - Op��es - %PRODUCTNAME - Programas externos' o navegador da web.";
@@ -424,6 +442,8 @@ ErrorBox MSG_ERR_WEBBROWSER_NOT_STARTED
     Message[ hebrew ] = "‮ארעה שגיאה בעת איתחול הדפדפן. נא לבדוק הגדרות ב \"כלים\" > \"אפשרויות\" > %PRODUCTNAME > \"תוכניות חיצוניות\", וגם ההגדרות של הדפדפן עצמו.‬";
     Message[ hindi ] = "An error occurred in starting the web browser. Please check the %PRODUCTNAME settings under 'Tools - Options - %PRODUCTNAME - External Programs' and the settings for your web browser.";
     Message[ slovak ] = "Pri spúšťaní webového prehliadača nastala chyba.\nProsím skontrolujte nastavenia %PRODUCTNAME a webového prehliadača.";
+    Message[ hungarian ] = "Hiba történt a webböngésző indítása közben. Ellenőrizze az %PRODUCTNAME beállításait az 'Eszközök - Beállítások - %PRODUCTNAME - Külső programok' részben, továbbá a böngésző beállításait is.";
+    Message[ slovenian ] = "Pri zagonu spletnega brskalnika se je pojavila napaka. Preverite nastavitve programa %PRODUCTNAME v meniju 'Orodja - Možnosti - %PRODUCTNAME - Zunanji programi' ter nastavitve brskalnika.";
 };
 
 ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
@@ -441,7 +461,7 @@ ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
     Message[ spanish ] = "No se pudo encontrar ninguna aplicaci�n exterior correspondiente al tipo de archivo seleccionado.\nCompruebe la configuraci�n del %PRODUCTNAME.";
     Message[ finnish ] = "Annetulle tiedostotyypille ei l�ytynyt vastaavaa ulkoista sovellusta.\nTarkista %PRODUCTNAME-asetukset.";
     Message[ italian ] = "Impossibile trovare le applicazioni esterne per il tipo di file selezionato.\\Verificate le impostazioni di %PRODUCTNAME.";
-    Message[ danish ] = "Der kunne ikke findes nogen tilh�rende ekstern applikation til den valgte filtype.\nKontroller indstillingerne for %PRODUCTNAME.";
+    Message[ danish ] = "Der kunne ikke findes nogen tilh�rende ekstern applikation til den valgte filtype.\nKontroller venligst indstillingerne for %PRODUCTNAME.";
     Message[ swedish ] = "Det gick inte att hitta n�got tillh�rande externt program f�r den valda filtypen.\nKontrollera inst�llningarna i %PRODUCTNAME.";
     Message[ polish ] = "Nie znaleziono aplikacji zewn�trznej, odpowiadaj�cej podanemu typowi pliku.\nSprawd� ustawienia programu %PRODUCTNAME.";
     Message[ portuguese_brazilian ] = "N�o foi encontrado nenhuma aplica��o externa associada ao tipo de arquivo selecionado.\nPor favor, verifique a configura��o do %PRODUCTNAME.";
@@ -457,6 +477,8 @@ ErrorBox MSG_ERR_EXTERNAL_APP_NOT_FOUND
     Message[ hebrew ] = "‮לא ניתן לאתר יישום המתאים לסוג קובץ זה.\nנא לבדוק באפשרויות %PRODUCTNAME.‬";
     Message[ hindi ] = "No corresponding external application could be found for the given file type.\nPlease check the %PRODUCTNAME settings.";
     Message[ slovak ] = "Pre zadaný typ súboru nebola nájdená žiadna vhodná externá aplikácia.\nProsím skontrolujte nastavenie %PRODUCTNAME.";
+    Message[ hungarian ] = "A megadott fájltípushoz nincs megfelelő külső alkalmazás. \nEllenőrizze az %PRODUCTNAME beállításait.";
+    Message[ slovenian ] = "Za podano vrsto datoteke ni mogoče najti ustrezne zunanje aplikacije.\nProsimo, preverite nastavitve programa %PRODUCTNAME.";
 };
 
 Resource SID_UNKNOWN
@@ -540,7 +562,7 @@ WarningBox RID_WARN_POST_MAILTO
     Message [ english_us ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
     Message [ portuguese_brazilian ] = "Ser� enviado um formul�rio pelo e-mail.\nO seu endere�o de e-mail ser� fornecido ao destinat�rio." ;
     Message [ swedish ] = "Ett formul�r skall skickas per e-post.\nDetta inneb�r att mottagaren f�r reda p� din e-postadress." ;
-    Message [ danish ] = "Du vil sende en formular via e-mail.\nBem�rk at modtageren herved f�r din e-mail-adresse." ;
+    Message [ danish ] = "Du vil sende en formular via e-mail.\nBem�rk at modtageren herved kan se din e-mailadresse." ;
     Message [ italian ] = "Un formulario deve essere inviato via eMail.\nIn tal modo il destinatario verr� a conoscenza dell'indirizzo eMail dell'utente." ;
     Message [ spanish ] = "Se debe enviar un formulario por correo electr�nico.\nCon ello se dar� a conocer al destinatario su direcci�n electr�nica." ;
     Message [ french ] = "Vous voulez envoyer un formulaire par e-mail.\nVous communiquerez ainsi votre adresse e-mail au destinataire." ;
@@ -564,6 +586,8 @@ WarningBox RID_WARN_POST_MAILTO
     Message[ hebrew ] = "‮פעולה זו תחשף את כתובת הדואר של המשתמש.‬\n‮הטופס ישלח בדואר אלקטרוני.‬";
     Message[ hindi ] = "इ-मेइल द्वारा फ़ॉर्म् को भेजना है ।\nइसका अर्थ है कि प्रातिग्राहक आपका इ-मेइल पता देख सकता है ।";
     Message[ slovak ] = "Formulár bude odoslaný ako e-mail.\nTo znamená, že adresát sa dozvie vašu e-mail adresu.";
+    Message[ hungarian ] = "Levélben akar űrlapot küldeni.\nEzzel levélcíme a címzett számára is láthatóvá lesz.";
+    Message[ slovenian ] = "Po e-pošti bo poslan obrazec.\nTo pomeni, da bo prejemnik videl vaš e-poštni naslov.";
 };
 
 String STR_RECOVER_TITLE
@@ -573,7 +597,7 @@ String STR_RECOVER_TITLE
     Text [ english_us ] = "File Recovery" ;
     Text [ portuguese_brazilian ] = "Recupera��o de Arquivo" ;
     Text [ swedish ] = "�terst�lla fil" ;
-    Text [ danish ] = "Fil-gendannelse" ;
+    Text [ danish ] = "Filgendannelse" ;
     Text [ italian ] = "Recupero file" ;
     Text [ spanish ] = "Recuperar archivo" ;
     Text [ french ] = "Restauration de fichier" ;
@@ -598,6 +622,8 @@ String STR_RECOVER_TITLE
     Text[ hebrew ] = "‮שיחזור קבצים‬";
     Text[ hindi ] = "फाइल पुनः प्राप्ति";
     Text[ slovak ] = "Obnovenie súboru";
+    Text[ hungarian ] = "Fájl visszaállítása";
+    Text[ slovenian ] = "Obnovitev datoteke";
 };
 
 String STR_RECOVER_QUERY
@@ -632,6 +658,8 @@ String STR_RECOVER_QUERY
     Text[ hebrew ] = "‮האם לשחזר קובץ \"$1\"?‬";
     Text[ hindi ] = "\"$1\" फाइल को पूर्व अवस्था में पहुँचाना है?";
     Text[ slovak ] = "Má byť súbor \"$1\" obnovený?";
+    Text[ hungarian ] = "Kívánja visszaállítani a(z) \"$1\" fájlt?";
+    Text[ slovenian ] = "Ali želite obnoviti datoteko \"$1\"?";
 };
 
 String GID_INTERN
@@ -667,6 +695,8 @@ String GID_INTERN
     Text[ hebrew ] = "‮פנימי‬";
     Text[ hindi ] = "भीतरी";
     Text[ slovak ] = "Interný";
+    Text[ hungarian ] = "Belső";
+    Text[ slovenian ] = "Notranji";
 };
 
 String GID_APPLICATION
@@ -678,7 +708,7 @@ String GID_APPLICATION
     Text [ portuguese_brazilian ] = "Aplica��o" ;
     Text [ portuguese ] = "Aplica��o" ;
     Text [ finnish ] = "Sovellus" ;
-    Text [ danish ] = "Applikation" ;
+    Text [ danish ] = "Program" ;
     Text [ french ] = "Application" ;
     Text [ swedish ] = "Till�mpning" ;
     Text [ dutch ] = "Toepassing" ;
@@ -702,6 +732,8 @@ String GID_APPLICATION
     Text[ hebrew ] = "‮פעולה‬";
     Text[ hindi ] = "कार्यक्रम";
     Text[ slovak ] = "Aplikácia";
+    Text[ hungarian ] = "Alkalmazás";
+    Text[ slovenian ] = "Program";
 };
 
 String GID_VIEW
@@ -737,6 +769,8 @@ String GID_VIEW
     Text[ hebrew ] = "‮תצוגה‬";
     Text[ hindi ] = "पूर्वदृश्य";
     Text[ slovak ] = "~Zobraziť";
+    Text[ hungarian ] = "Nézet";
+    Text[ slovenian ] = "Pogled";
 };
 
 String GID_DOCUMENT
@@ -772,6 +806,8 @@ String GID_DOCUMENT
     Text[ hebrew ] = "‮מסמכים‬";
     Text[ hindi ] = "लेखपत्रें";
     Text[ slovak ] = "Dokumenty";
+    Text[ hungarian ] = "Dokumentumok";
+    Text[ slovenian ] = "Dokumenti";
 };
 
 String GID_EDIT
@@ -807,6 +843,8 @@ String GID_EDIT
     Text[ hebrew ] = "‮עריכה‬";
     Text[ hindi ] = "संपादन";
     Text[ slovak ] = "Upraviť";
+    Text[ hungarian ] = "Szerkesztés";
+    Text[ slovenian ] = "Uredi";
 };
 
 String GID_MACRO
@@ -841,6 +879,8 @@ String GID_MACRO
     Text[ hebrew ] = "‮בייסיק‬";
     Text[ hindi ] = "BASIC";
     Text[ slovak ] = "BASIC";
+    Text[ hungarian ] = "BASIC";
+    Text[ slovenian ] = "BASIC";
 };
 
 String GID_OPTIONS
@@ -852,7 +892,7 @@ String GID_OPTIONS
     Text [ portuguese_brazilian ] = "Op��es" ;
     Text [ portuguese ] = "Ferramentas" ;
     Text [ finnish ] = "Asetukset" ;
-    Text [ danish ] = "Funktioner" ;
+    Text [ danish ] = "Indstillinger" ;
     Text [ french ] = "Options" ;
     Text [ swedish ] = "Verktyg" ;
     Text [ dutch ] = "Extra" ;
@@ -876,6 +916,8 @@ String GID_OPTIONS
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = "विकल्प";
     Text[ slovak ] = "Nastavenia";
+    Text[ hungarian ] = "Lehetőségek";
+    Text[ slovenian ] = "Možnosti";
 };
 
 String GID_MATH
@@ -911,6 +953,8 @@ String GID_MATH
     Text[ hebrew ] = "‮נוסחאות‬";
     Text[ hindi ] = "गणित";
     Text[ slovak ] = "Matematika";
+    Text[ hungarian ] = "Math";
+    Text[ slovenian ] = "Math";
 };
 
 String GID_NAVIGATOR
@@ -945,6 +989,8 @@ String GID_NAVIGATOR
     Text[ hebrew ] = "‮ניווט‬";
     Text[ hindi ] = "नाविगेट";
     Text[ slovak ] = "Previesť";
+    Text[ hungarian ] = "Navigálás";
+    Text[ slovenian ] = "Krmari";
 };
 
 String GID_INSERT
@@ -979,6 +1025,8 @@ String GID_INSERT
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Vložiť";
+    Text[ hungarian ] = "Beszúrás";
+    Text[ slovenian ] = "Vstavi";
 };
 
 String GID_FORMAT
@@ -1013,6 +1061,8 @@ String GID_FORMAT
     Text[ hebrew ] = "‮עיצוב‬";
     Text[ hindi ] = "रचना";
     Text[ slovak ] = "Formát";
+    Text[ hungarian ] = "Formátum";
+    Text[ slovenian ] = "Oblika";
 };
 
 String GID_TEMPLATE
@@ -1047,6 +1097,8 @@ String GID_TEMPLATE
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
     Text[ slovak ] = "Šablóny";
+    Text[ hungarian ] = "Sablon";
+    Text[ slovenian ] = "Predloge";
 };
 
 String GID_TEXT
@@ -1081,6 +1133,8 @@ String GID_TEXT
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 
 String GID_FRAME
@@ -1115,6 +1169,8 @@ String GID_FRAME
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम्";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 
 String GID_GRAPHIC
@@ -1149,6 +1205,8 @@ String GID_GRAPHIC
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázok";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 
 String GID_TABLE
@@ -1183,6 +1241,8 @@ String GID_TABLE
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
     Text[ slovak ] = "Tabuľka";
+    Text[ hungarian ] = "Táblázat";
+    Text[ slovenian ] = "Tabela";
 };
 
 String GID_ENUMERATION
@@ -1217,6 +1277,8 @@ String GID_ENUMERATION
     Text[ hebrew ] = "‮מיספור‬";
     Text[ hindi ] = "संख्या देना";
     Text[ slovak ] = "Číslovanie";
+    Text[ hungarian ] = "Számozás";
+    Text[ slovenian ] = "Oštevilčevanje";
 };
 
 String GID_DATA
@@ -1251,6 +1313,8 @@ String GID_DATA
     Text[ hebrew ] = "‮נתונים‬";
     Text[ hindi ] = "ड़ॉटा";
     Text[ slovak ] = "Dáta";
+    Text[ hungarian ] = "Adatok";
+    Text[ slovenian ] = "Podatki";
 };
 
 String GID_SPECIAL
@@ -1285,6 +1349,8 @@ String GID_SPECIAL
     Text[ hebrew ] = "‮תפקודים מיוחדים‬";
     Text[ hindi ] = "विशेष फंक्शन्स";
     Text[ slovak ] = "Špeciálne funkcie";
+    Text[ hungarian ] = "Speciális funkciók";
+    Text[ slovenian ] = "Posebne funkcije";
 };
 
 String GID_IMAGE
@@ -1319,6 +1385,8 @@ String GID_IMAGE
     Text[ hebrew ] = "‮צלם‬";
     Text[ hindi ] = "चित्र";
     Text[ slovak ] = "Obrázok";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Podoba";
 };
 
 String GID_CHART
@@ -1353,6 +1421,8 @@ String GID_CHART
     Text[ hebrew ] = "‮תרשים‬";
     Text[ hindi ] = "चार्ट";
     Text[ slovak ] = "Graf";
+    Text[ hungarian ] = "Diagram";
+    Text[ slovenian ] = "Grafikon";
 };
 
 String GID_EXPLORER
@@ -1365,7 +1435,7 @@ String GID_EXPLORER
     Text [ french ] = "Explorer" ;
     Text [ dutch ] = "Explorer" ;
     Text [ swedish ] = "Explorer" ;
-    Text [ danish ] = "Explorer" ;
+    Text [ danish ] = "Oversigten" ;
     Text [ portuguese ] = "Explorer" ;
     Text [ portuguese_brazilian ] = "Explorer" ;
     Text[ chinese_simplified ] = "资源管理器";
@@ -1387,6 +1457,8 @@ String GID_EXPLORER
     Text[ hebrew ] = "‮סייר‬";
     Text[ hindi ] = "एक्सप्लोरर";
     Text[ slovak ] = "Prieskumník";
+    Text[ hungarian ] = "Aktakukac";
+    Text[ slovenian ] = "Raziskovalec";
 };
 
 String GID_CONNECTOR
@@ -1421,6 +1493,8 @@ String GID_CONNECTOR
     Text[ hebrew ] = "‮מחבר‬";
     Text[ hindi ] = "कनेक्टर";
     Text[ slovak ] = "Spojnica";
+    Text[ hungarian ] = "Összekötő";
+    Text[ slovenian ] = "Konektor";
 };
 
 String GID_MODIFY
@@ -1455,6 +1529,8 @@ String GID_MODIFY
     Text[ hebrew ] = "‮שינוי‬";
     Text[ hindi ] = "सुधारो";
     Text[ slovak ] = "Upraviť";
+    Text[ hungarian ] = "Módosítás";
+    Text[ slovenian ] = "Spremeni";
 };
 
 String GID_DRAWING
@@ -1465,7 +1541,7 @@ String GID_DRAWING
     Text [ english_us ] = "Drawing" ;
     Text [ portuguese_brazilian ] = "Desenho" ;
     Text [ swedish ] = "Rita" ;
-    Text [ danish ] = "Tegn" ;
+    Text [ danish ] = "Tegning" ;
     Text [ italian ] = "Disegna" ;
     Text [ spanish ] = "Dibujar" ;
     Text [ french ] = "Dessiner" ;
@@ -1489,6 +1565,8 @@ String GID_DRAWING
     Text[ hebrew ] = "‮סרטוט‬";
     Text[ hindi ] = "रेखाचित्र";
     Text[ slovak ] = "Kresba";
+    Text[ hungarian ] = "Rajz";
+    Text[ slovenian ] = "Risba";
 };
 
 String GID_CONTROLS
@@ -1523,6 +1601,8 @@ String GID_CONTROLS
     Text[ hebrew ] = "‮פקדים‬";
     Text[ hindi ] = "नियंत्रण";
     Text[ slovak ] = "Ovládacie prvky";
+    Text[ hungarian ] = "Vezérlők";
+    Text[ slovenian ] = "Kontrolniki";
 };
 
 TabDialog SID_OPTIONS
@@ -1587,6 +1667,8 @@ TabDialog SID_OPTIONS
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
                 Text[ slovak ] = "Všeobecný";
+                Text[ hungarian ] = "Általános";
+                Text[ slovenian ] = "Splošno";
             };
             PageItem
             {
@@ -1623,6 +1705,8 @@ TabDialog SID_OPTIONS
                 Text[ hebrew ] = "‮שמירה‬";
                 Text[ hindi ] = "संचित करो";
                 Text[ slovak ] = "Uložiť";
+                Text[ hungarian ] = "Mentés";
+                Text[ slovenian ] = "Shrani";
             };
             PageItem
             {
@@ -1659,6 +1743,8 @@ TabDialog SID_OPTIONS
                 Text[ hebrew ] = "‮מסלולים‬";
                 Text[ hindi ] = "मार्ग";
                 Text[ slovak ] = "Cesty";
+                Text[ hungarian ] = "Útvonalak";
+                Text[ slovenian ] = "Poti";
             };
             PageItem
             {
@@ -1695,6 +1781,8 @@ TabDialog SID_OPTIONS
                 Text[ hebrew ] = "‮בדיקת איות‬";
                 Text[ hindi ] = "अक्षर की जाँच";
                 Text[ slovak ] = "Kontrola pravopisu";
+                Text[ hungarian ] = "Helyesírás-ellenőrzés";
+                Text[ slovenian ] = "Preverjanje črkovanja";
             };
         };
     };
@@ -1716,6 +1804,8 @@ TabDialog SID_OPTIONS
     Text[ hebrew ] = "‮אפשרויות‬";
     Text[ hindi ] = "विकल्प";
     Text[ slovak ] = "Nastavenia";
+    Text[ hungarian ] = "Beállítások";
+    Text[ slovenian ] = "Možnosti";
 };
 
 InfoBox MSG_CANT_QUIT
@@ -1729,7 +1819,7 @@ InfoBox MSG_CANT_QUIT
     Message [ french ] = "Impossible de quitter l'application maintenant.\nVeuillez attendre la fin des activit�s d'impression et/ou des activations OLE\net fermez tous les dialogues." ;
     Message [ dutch ] = "De toepassing kan op dit moment niet worden be�indigd.\nWacht tot alle afdrukopdrachten en/of\nOLE-activiteiten zijn be�indigd en \nsluit alle dialoogvensters." ;
     Message [ spanish ] = "La aplicaci�n no se puede cerrar por el momento. \nPor favor espere hasta que finalice la impresi�n de\n todos los documentos y/o activaciones OLE\ny cierre todos los di�logos." ;
-    Message [ danish ] = "Det er for tiden ikke muligt at afslutte programmet.\nVent venligst til alle udskriftsjob og/eller \nOLE-handlinger er afslutte og luk s� alle dialoger." ;
+    Message [ danish ] = "Det er ikke muligt at afslutte programmet lige nu.\nVent venligst til alle udskriftsjob og/eller\nOLE-handlinger er afsluttet og luk s� alle dialoger." ;
     Message [ swedish ] = "Programmet kan inte avslutas f�r tillf�llet.\nV�nta tills alla utskriftsuppdrag och/eller\nOLE-aktiveringar �r utf�rda och st�ng alla dialoger." ;
     Message [ finnish ] = "Sovelluksen lopettaminen ei onnistu.\nOdota, ett� kaikki tulostusty�t ja/tai\nOLE-toiminnot ovat valmiit ja sulje kaikki valintaikkunat." ;
     Message [ english_us ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
@@ -1751,6 +1841,8 @@ InfoBox MSG_CANT_QUIT
     Message[ hebrew ] = "‮לא ניתן לסגור את היישום כעת.\nנא להמתין עד שכל משימות ההדפסה וה OLE יסתיימו ולסגור את כל תיבות הדו שיח.‬";
     Message[ hindi ] = "कार्यक्रम को क्षण मात्र में अंत नहीं कर सकते है ।\nकृपया सब छपाई कार्य और/अथवा\nOLE कार्य समाप्त होने तक ठहरिए और सब डयलॉगों को बन्द कीजिए ।";
     Message[ slovak ] = "Aplikácia nemôže byť práve teraz ukončená.\nProsím počkajte, až dobehnú všetky tlačové úlohy a/alebo \nOLE akcie, a zavrite všetky dialógové okná.";
+    Message[ hungarian ] = "Az alkalmazást pillanatnyilag nem lehet bezárni.\nVárja meg minden nyomtatási és/vagy OLE-művelet \nbefejeződését, majd zárjon be minden párbeszédablakot.";
+    Message[ slovenian ] = "V tem trenutku ni mogoče končati programa.\nPočakajte, da se končajo vsa tiskalna opravila in/ali\nOLE dejanja, in zaprite vsa pogovorna okna.";
 };
 
 QueryBox MSG_IS_SERVER
@@ -1764,7 +1856,7 @@ QueryBox MSG_IS_SERVER
     Message [ portuguese_brazilian ] = "Esta aplica��o ainda est� ativa como servidor de objeto ou da impressora.\nMesmo assim, deseja finalizar?" ;
     Message [ portuguese ] = "Esta aplica��o est� ainda activa como servidor de objecto ou da impressora.\nMesmo assim, finalizar?" ;
     Message [ finnish ] = "T�m� sovellus on aktiivinen objekti- tai tulostuspalvelin.\nHaluatko lopettaa sovelluksen?" ;
-    Message [ danish ] = "Denne applikation er stadig aktiv som objekt- eller printserver.\nSkal der lukkes alligevel?" ;
+    Message [ danish ] = "Dette program er stadig aktiv som objekt- eller printserver.\nSkal det lukkes alligevel?" ;
     Message [ french ] = "Cette application est encore active en tant que serveur d'objets ou d'imprimante.\nInterrompre malgr� tout ?" ;
     Message [ swedish ] = "Till�mpningen �r fortfarande aktiv antingen som objekt- eller skrivarserver.\nVill du �nd� st�nga den?" ;
     Message [ dutch ] = "Deze toepassing is nog actief als object- of afdrukserver.\nToch afsluiten?" ;
@@ -1788,6 +1880,8 @@ QueryBox MSG_IS_SERVER
     Message[ hebrew ] = "‮יישום זה פעיל בתור שרת הדפסות או שרת עצמים.\nהאם לסגור אותו בכל זאת?‬";
     Message[ hindi ] = "इस कार्यक्रम वस्तु की जैसे है अथवा छपाई सर्वर क्रियाशील है ।\nआप किसी तरह अंत करना चाहते है?";
     Message[ slovak ] = "Táto aplikácia práve pracuje s objektami alebo s tlačou.\nPrejete si ju i napriek tomu ukončiť?";
+    Message[ hungarian ] = "Ez az alkalmazás aktív, mint nyomtatókiszolgáló vagy objektum. \nMégis szeretné bezárni?";
+    Message[ slovenian ] = "Ta program je aktiven kot predmet ali tiskalni strežnik.\nAli želite vseeno končati?";
 };
 
 String STR_NODOUBLE
@@ -1822,6 +1916,8 @@ String STR_NODOUBLE
     Text[ hebrew ] = "‮לא ניתן להפעיל יותר ממופע אחד של %PRODUCTNAME בבת אחת.‬";
     Text[ hindi ] = "%PRODUCTNAME  को एक से अधिक बार प्रारंभ नहीं कर सकते है ।";
     Text[ slovak ] = "%PRODUCTNAME nemôže byť spustený viac ako raz.";
+    Text[ hungarian ] = "Az %PRODUCTNAME nem indítható el egynél többször.";
+    Text[ slovenian ] = "Programa %PRODUCTNAME ni mogoče zagnati več kot enkrat.";
 };
 
 String STR_NOPRINTER
@@ -1830,7 +1926,7 @@ String STR_NOPRINTER
     TEXT [ English ] = "Some StarOffice functions are not available without printer driver.\nPlease install a priter driver." ;
     Text [ english_us ] = "Some %PRODUCTNAME functions will not work properly without a printer driver.\nPlease install a printer driver." ;
     Text [ swedish ] = "N�gra %PRODUCTNAME-funktioner kan inte arbeta korrekt utan en skrivardrivrutin.\nVar v�nlig och installera en skrivardrivrutin." ;
-    Text [ danish ] = "Enkelte %PRODUCTNAME-funktioner kanl ikke arbejde korrekt uden en printerdriver.\nInstaller venligst en printerdriver." ;
+    Text [ danish ] = "Enkelte %PRODUCTNAME-funktioner fungerer ikke korrekt uden en printerdriver.\nInstaller venligst en printerdriver." ;
     Text [ italian ] = "Alcune funzioni %PRODUCTNAME non funzionano correttamente senza il driver stampante.\nInstallatene uno." ;
     Text [ spanish ] = "Algunas funciones de %PRODUCTNAME no pueden trabajar correctamente sin un controlador para la impresora.\nPor favor instale uno." ;
     Text [ french ] = "Certaines fonctions %PRODUCTNAME ne peuvent pas travailler correctement sans pilote d'imprimante.\nVeuillez installer un pilote d'imprimante." ;
@@ -1856,6 +1952,8 @@ String STR_NOPRINTER
     Text[ hebrew ] = "‮נא להתקין מנהל התקן למדפסת.\nאחדים מתפקודי %PRODUCTNAME לא יפעלו כראוי בלעדיו.‬";
     Text[ hindi ] = "Some %PRODUCTNAME functions will not work properly without a printer driver.\nPlease install a printer driver.";
     Text[ slovak ] = "Niektoré %PRODUCTNAME funkcie nemusia bez tlačového ovládača fungovať správne.\nProsím nainštalujte ovládače tlačiarne.";
+    Text[ hungarian ] = "Néhány %PRODUCTNAME funkció nem érhető el nyomtató-illesztőprogram nélkül. \nTelepítsen egy nyomtató-illesztőprogramot.";
+    Text[ slovenian ] = "Nekatere funkcije programa %PRODUCTNAME ne bodo pravilno delovale brez gonilnika za tiskalnik.\nProsimo, namestite gonilnik za tiskalnik.";
 };
 
 String STR_ISMODIFIED
@@ -1891,6 +1989,8 @@ String STR_ISMODIFIED
     TEXT[ hebrew ] = "‮האם לשמור את השינוים שנעשו ל %1?‬";
     TEXT[ hindi ] = "आप %1 में परिवर्तनों को संचित करना चाहते है?";
     TEXT[ slovak ] = "Prajete si zmeny uložiť do %1?";
+    TEXT[ hungarian ] = "Kívánja menteni a változásokat: %1?";
+    TEXT[ slovenian ] = "Ali želite shraniti spremembe v %1?";
 };
 
 String STR_AUTOSAVE
@@ -1926,6 +2026,8 @@ String STR_AUTOSAVE
     TEXT[ hebrew ] = "‮שמירה אוטומטית‬";
     TEXT[ hindi ] = "स्वचालित ढंग से संचित करो";
     TEXT[ slovak ] = "Automatické uloženie";
+    TEXT[ hungarian ] = "Automatikus mentés";
+    TEXT[ slovenian ] = "Samodejno shrani";
 };
 
 String STR_RESWARNING
@@ -1961,6 +2063,8 @@ String STR_RESWARNING
     TEXT[ hebrew ] = "‮משאבי מערכת מוגבלים. יש לסגור יישומים אחרים לפני ביצוע פעולות נוספות ביישום זה.‬";
     TEXT[ hindi ] = "सिस्टम साधन सीमित है । कृपया आगे जारी रखने से पहिले अन्य कार्यक्रमों को त्याग दीजिए अथवा कुछ विन्डों को बन्द कीजिए ।";
     TEXT[ slovak ] = "Vyčerpávajú sa systémové zdroje. Prosím ukončite iné aplikácie predtým, než budete pokračovať.";
+    TEXT[ hungarian ] = "Kevés erőforrás áll rendelkezésre. Lépjen ki néhány alkalmazásból, vagy zárjon be pár ablakot a folytatás előtt.";
+    TEXT[ slovenian ] = "Sistemska sredstva so omejena. Končajte ostale aplikacije ali zaprite nekaj oken, preden nadaljujete.";
 };
 String STR_RESEXCEPTION
 {
@@ -1971,7 +2075,7 @@ String STR_RESEXCEPTION
     TEXT [ portuguese_brazilian ] = "Est�o faltando arquivos. Verifique a configura��o do aplicativo." ;
     TEXT [ portuguese ] = "Faltam alguns ficheiros importantes. Por favor, verifique a configura��o do programa." ;
     TEXT [ finnish ] = "Tiedostoja puuttuu. Tarkista sovelluksen asennus." ;
-    TEXT [ danish ] = "Vigtige programdele blev ikke fundet. Kontroller venligst din installation." ;
+    TEXT [ danish ] = "Vigtige filer blev ikke fundet. Kontroller venligst din installation." ;
     TEXT [ french ] = "Certains fichiers sont manquants. Veuillez v�rifier le param�trage de l'application." ;
     TEXT [ swedish ] = "Viktiga programdelar hittades inte. Kontrollera din installation." ;
     TEXT [ dutch ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie correct is uitgevoerd." ;
@@ -1995,6 +2099,8 @@ String STR_RESEXCEPTION
     TEXT[ hebrew ] = "‮קבצים אחדים לא נמצאים. נא לבדוק את התקנת היישום.‬";
     TEXT[ hindi ] = "कुछ फाइलें अनुपस्थित है । कृपया कार्यक्रम सेटप की जाँच कीजिए ।";
     TEXT[ slovak ] = "Niektoré súbory nie je možné nájsť. Prosím skontrolujte nastavenie aplikácie.";
+    TEXT[ hungarian ] = "Néhány fájl hiányzik. Ellenőrizze a telepített alkalmazást.";
+    TEXT[ slovenian ] = "Manjka nekaj datotek. Preverite namestitev aplikacije.";
 };
 
 String STR_DOUBLEEXCEPTION
@@ -2004,7 +2110,7 @@ String STR_DOUBLEEXCEPTION
     TEXT[ italian ] = "Durante il backup di sicurezza si � verificato un altro errore di sistema.\nI dati salvati potrebbero essere incompleti.";
     TEXT[ portuguese_brazilian ] = "Ocorreu outro erro no sistema durante a recupera��o do arquivo\nProvavelmente, n�o foi poss�vel salvar todos os dados..";
     TEXT[ portuguese ] = "Surgiu mais um erro no sistema enquanto se executava o backup de seguran�a.\nProvavelmente, foi imposs�vel guardar os dados de forma completa.";
-    TEXT[ danish ] = "Der opstod en yderligere systemfejl ved alarmdatasikringen.\nAlle data er muligvis ikke gemt fuldst�ndigt.";
+    TEXT[ danish ] = "Der opstod en yderligere systemfejl.\nAlle data er muligvis ikke gemt fuldst�ndigt.";
     TEXT[ french ] = "Au cours de la sauvegarde, une nouvelle erreur syst�me s'est produite.\nIl n'est par certain que toutes les donn�es aient pas pu �tre enregistr�es correctement.";
     TEXT[ swedish ] = "Ytterligare ett systemfel uppstod n�r alarmdata sparades.\nEventuellt har inte alla data sparats fullst�ndigt.";
     TEXT[ dutch ] = "Tijdens het opslaan van alarmgegevens is nog een systeemfout opgetreden.\nDe gegevens zijn wellicht niet volledig opgeslagen.";
@@ -2029,6 +2135,8 @@ String STR_DOUBLEEXCEPTION
     TEXT[ hebrew ] = "‮שגיאה נוספת ארעה בעת השמירה לצורך שחזור.\nיתכן שלא כל הנתונים נשמרו.‬";
     TEXT[ hindi ] = "संचित की पुनः प्राप्ति के समय ओर एक गलती घटित हुआ ।\nशायद, ड़ॉटा को संपूर्ण रूप से नहीं संचित किया है ।";
     TEXT[ slovak ] = "Ďalšia chyba vznikla pri ukladaní.\nJe možné, že nie všetky dáta boli kompletne uložené.";
+    TEXT[ hungarian ] = "Újabb hiba lépett fel a mentés helyreállításakor.\nValószínűleg nem sikerült az adatokat teljes egészében menteni.";
+    TEXT[ slovenian ] = "Med obnovitvijo shranjevanja se je ponovno pojavila napaka.\nMožno je, da niso bili shranjeni vsi podatki.";
 };
 
 String STR_SYSRESEXCEPTION
@@ -2041,7 +2149,7 @@ String STR_SYSRESEXCEPTION
     Text [ french ] = "Les ressources du syst�me sont �puis�es. Veuillez relancer l'application ." ;
     Text [ dutch ] = "De systeemresources zijn verbruikt. Start de toepassing opnieuw." ;
     Text [ swedish ] = "Inte tillr�ckligt med systemresurser. Starta om programmet." ;
-    Text [ danish ] = "Systemressourcerne er opbrugt. Genstart venligst denne applikation." ;
+    Text [ danish ] = "Systemressourcerne er opbrugt. Genstart venligst applikationen." ;
     Text [ portuguese_brazilian ] = "Os recursos do sistema est�o esgotados. Por favor, reinicie a aplica��o." ;
     Text [ portuguese ] = "Recursos do sistema esgotados. Reinicie a aplica��o." ;
     Text[ chinese_simplified ] = "系统资源已经用完。请您重新启动应用程序。";
@@ -2063,6 +2171,8 @@ String STR_SYSRESEXCEPTION
     Text[ hebrew ] = "‮משאבי מערכת אזלו. יש לאתחל את היישום מחדש.‬";
     Text[ hindi ] = "सिस्टम साधन निश्शेषित है । कृपया कार्यक्रम को पुनः प्रारंभ कीजिए ।";
     Text[ slovak ] = "Systémové zdroje boli vyčerpané. Prosím spustite aplikáciu znova.";
+    Text[ hungarian ] = "A rendszer erőforrásai kimerültek. Indítsa újra az alkalmazást.";
+    Text[ slovenian ] = "Sistemska sredstva so izčrpana. Prosimo, da ponovno zaženete aplikacijo.";
 };
 
 ErrorBox MSG_ERR_SOINIT
@@ -2074,7 +2184,7 @@ ErrorBox MSG_ERR_SOINIT
     Message [ portuguese_brazilian ] = "Erro ao inicializar o sistema de objetos." ;
     Message [ portuguese ] = "Erro ao inicializar o sistema de objectos." ;
     Message [ finnish ] = "Objektij�rjestelm�n alustamisessa on ilmennyt virhe." ;
-    Message [ danish ] = "Fejl ved initialisering af objekt-systemet." ;
+    Message [ danish ] = "Fejl ved initialisering af objekt-system." ;
     Message [ french ] = "Erreur lors de l'initialisation du syst�me d'objets." ;
     Message [ swedish ] = "Fel vid initiering av objektsystem." ;
     Message [ dutch ] = "Fout bij initialisatie van objectsysteem." ;
@@ -2098,6 +2208,8 @@ ErrorBox MSG_ERR_SOINIT
     Message[ hebrew ] = "‮שגיאה בעת איתחול מערכת העצמים.‬";
     Message[ hindi ] = "वस्तु-सिस्टम को इनिश्यलैज़ करने के समय गलती ।";
     Message[ slovak ] = "Chyba v inicializácii objektového systému.";
+    Message[ hungarian ] = "Hiba történt az objektumrendszer inicializálása során.";
+    Message[ slovenian ] = "Napaka pri inicializaciji";
 };
 
 String MSG_IOERR_FILE_NOT_FOUND
@@ -2109,7 +2221,7 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text [ portuguese_brazilian ] = "O arquivo $(FILE) n�o existe." ;
     Text [ portuguese ] = "O ficheiro $(FILE) n�o existe." ;
     Text [ finnish ] = "Tiedostoa $(FILE) ei ole." ;
-    Text [ danish ] = "Filen $(FILE) eksisterer ikke." ;
+    Text [ danish ] = "Filen $(FILE) findes ikke." ;
     Text [ french ] = "Le fichier $(FILE) n'existe pas." ;
     Text [ swedish ] = "Filen $(FILE) finns inte." ;
     Text [ dutch ] = "Bestand $(FILE) bestaat niet." ;
@@ -2133,6 +2245,8 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text[ hebrew ] = "‮הקובץ $(FILE) אינו קיים.‬";
     Text[ hindi ] = "$(FILE) फाइल अस्तित्व में नहीं है ।";
     Text[ slovak ] = "Súbor $(FILE) neexistuje.";
+    Text[ hungarian ] = "A fájl nem létezik: $(FILE) ";
+    Text[ slovenian ] = "Datoteka $(FILE) ne obstaja.";
 };
 
 String MSG_IOERR_PATH_NOT_FOUND
@@ -2144,7 +2258,7 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text [ portuguese_brazilian ] = "O caminho do arquivo $(FILE) n�o existe." ;
     Text [ portuguese ] = "O atalho para o ficheiro $(FILE) n�o existe." ;
     Text [ finnish ] = "Polkua tiedostoon $(FILE) ei ole." ;
-    Text [ danish ] = "Stien til filen $(FILE) eksisterer ikke." ;
+    Text [ danish ] = "Stien til filen $(FILE) findes ikke." ;
     Text [ french ] = "Le chemin vers le fichier $(FILE) n'existe pas." ;
     Text [ swedish ] = "S�kv�gen till filen $(FILE) existerar inte." ;
     Text [ dutch ] = "Pad naar bestand $(FILE) bestaat niet." ;
@@ -2168,6 +2282,8 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text[ hebrew ] = "‮מסלול הספריות לקובץ $(FILE) אינו קיים.‬";
     Text[ hindi ] = "$(FILE) फाइल केलिए मार्ग अस्तित्व में नहीं है ।";
     Text[ slovak ] = "Cesta k súboru $(FILE) neexistuje.";
+    Text[ hungarian ] = "$(FILE) útvonala nem létezik";
+    Text[ slovenian ] = "Pot do datoteke $(FILE) ne obstaja.";
 };
 
 String MSG_IOERR_TOO_MANY_OPEN_FILES
@@ -2179,7 +2295,7 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text [ portuguese_brazilian ] = "N�o foi poss�vel abrir o arquivo $(FILE),pois existem muitos arquivos abertos.\nFeche alguns destes arquivos e tente novamente." ;
     Text [ portuguese ] = "Foi imposs�vel abrir o ficheiro $(FILE), j� que de\nmomento se encontram demasiados ficheiros abertos.\nFeche alguns destes ficheiros e tente novamente." ;
     Text [ finnish ] = "Tiedoston $(FILE) avaaminen ei onnistunut,\nkoska avoimia tiedostoja on liikaa.\nSulje tiedostoja ja yrit� uudelleen." ;
-    Text [ danish ] = "Det var ikke muligt at �bne filen $(FILE),\nda der for tiden er for mange �bne filer.\nLuk nogle filer og pr�v igen." ;
+    Text [ danish ] = "Det var ikke muligt at �bne filen $(FILE),\nda der for mange filer er �bne.\nLuk nogle filer og pr�v igen." ;
     Text [ french ] = "Impossible d'ouvrir le fichier $(FILE)\n� cause d'un trop grand nombre de fichiers ouverts\n.Fermez en quelques-uns avant de r�essayer." ;
     Text [ swedish ] = "Det gick inte att �ppna filen $(FILE)\neftersom f�r m�nga filer �r �ppna f�r tillf�llet.\nSt�ng n�gra filer och f�rs�k igen." ;
     Text [ dutch ] = "Bestand $(FILE) kan niet worden geopend \nomdat er te veel bestanden gelijktijdig geopend zijn.\nSluit enkele bestanden en probeer het opnieuw." ;
@@ -2203,6 +2319,8 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text[ hebrew ] = "‮לא ניתן לפתוח את הקובץ \n$(FILE)כי קבצים רבים מידי פתוחים.\nנא לסגור קבצים אחדים ולנסות שוב.‬";
     Text[ hindi ] = "$(FILE) फाइल को नहीं खोल सकते है ,\nक्यों कि बहुत संख्या में फाइल खुला हुआ है ।\nकृपया कुछ फाइलों को बन्द कीजिए और फ़िर से कोशिश कीजिए ।";
     Text[ slovak ] = "Súbor $(FILE) nemohol byť otvorený,\npretože už je otvorených príliš veľa súborov.\nProsím zavrite nejaké súbory a skúste to znovu.";
+    Text[ hungarian ] = " $(FILE) nem nyitható meg, \nmert túl sok fájl van nyitva. \nZárjon be néhány fájlt, és próbálja újra.";
+    Text[ slovenian ] = "Datoteke $(FILE) ni mogoče odpreti,\nker je odprtih preveč datotek.\nZaprite nekaj datotek in poskusite znova.";
 };
 
 String MSG_IOERR_ACCESS_DENIED
@@ -2214,7 +2332,7 @@ String MSG_IOERR_ACCESS_DENIED
     Text [ portuguese_brazilian ] = "N�o � poss�vel abrir o arquivo $(FILE) por falta de direitos de acesso." ;
     Text [ portuguese ] = "Imposs�vel o acesso ao ficheiro $(FILE) devido a direitos de acesso inexistentes." ;
     Text [ finnish ] = "Tiedoston $(FILE) avaaminen ei onnistunut, koska k�ytt�oikeudet eiv�t ole riitt�v�t." ;
-    Text [ danish ] = "Det var ikke muligt at �bne filen $(FILE) pga. manglende adgangsrettigheder." ;
+    Text [ danish ] = "Det var ikke muligt at �bne filen $(FILE) p� grund af manglende adgangsrettigheder." ;
     Text [ french ] = "Le fichier $(FILE) n'a pas pu �tre ouvert du fait de droits d'acc�s manquants." ;
     Text [ swedish ] = "Det gick inte att �ppna filen $(FILE) eftersom �tkomstr�ttigheter saknas." ;
     Text [ dutch ] = "Bestand $(FILE) kan niet worden geopend omdat toegangsrechten ontbreken." ;
@@ -2238,6 +2356,8 @@ String MSG_IOERR_ACCESS_DENIED
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ $(FILE) עקב חוסר הרשאות גישה.‬";
     Text[ hindi ] = "The file $(FILE) could not be opened due to missing access rights.";
     Text[ slovak ] = "Súbor $(FILE) nie je možné otvoriť kvôli chýbajúcim prístupovým právam.";
+    Text[ hungarian ] = "A következő fájl megnyitásához aktuális hozzáférési jogai nem elegendőek: $(FILE)";
+    Text[ slovenian ] = "Datoteke $(FILE) ni mogoče odpreti zaradi manjkajočih dostopnih pravic.";
 };
 
 String MSG_IOERR_INVALID_ACCESS
@@ -2273,6 +2393,8 @@ String MSG_IOERR_INVALID_ACCESS
     Text[ hebrew ] = "‮לא ניתן לגשת לקובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) फाइल को प्रवेश नहीं कर सकते है ।";
     Text[ slovak ] = "Nie je možné pristupovať k súboru $(FILE).";
+    Text[ hungarian ] = "A fájl nem hozzáférhető: $(FILE).";
+    Text[ slovenian ] = "Datoteka $(FILE) ni dostopna.";
 };
 
 String MSG_IOERR_INVALID_HANDLE
@@ -2284,7 +2406,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text [ portuguese_brazilian ] = "N�o � poss�vel abrir o arquivo $(FILE) devido a uma guia de arquivo incorreta." ;
     Text [ portuguese ] = "Foi imposs�vel abrir o ficheiro $(FILE) devido a uma guia de ficheiro incorrecta." ;
     Text [ finnish ] = "Tiedoston $(FILE) avaaminen ei onnistunut, koska tiedoston tunniste on virheellinen." ;
-    Text [ danish ] = "Det var ikke muligt at �bne filen $(FILE) pga. en ugyldig filhandle." ;
+    Text [ danish ] = "Det var ikke muligt at �bne filen $(FILE) p� grund af en ugyldig filhandle." ;
     Text [ french ] = "Le fichier $(FILE) n'a pas pu �tre ouvert suite � une erreur de num�risation." ;
     Text [ swedish ] = "Det gick inte att �ppna filen $(FILE) p� grund av en ogiltig fildescriptor." ;
     Text [ dutch ] = "Bestand $(FILE) kan niet worden geopend als gevolg van ongeldige bestand-descriptor." ;
@@ -2308,6 +2430,8 @@ String MSG_IOERR_INVALID_HANDLE
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ $(FILE) עקב פגית תוקפה של file handle.‬";
     Text[ hindi ] = "$(FILE) फाइल को अमान्य फाइल हान्डल् के कारण नहीं खोल सकते है ।";
     Text[ slovak ] = "Súbor $(FILE) nemôže byť otvorený z dôvodu neplatného príkazu na prácu so súborom.";
+    Text[ hungarian ] = "A fájl nem nyitható meg: $(FILE)";
+    Text[ slovenian ] = "Datoteke $(FILE) ni mogoče odpreti zaradi neveljavne kode za dostop.";
 };
 
 String MSG_IOERR_CANNOT_MAKE
@@ -2322,7 +2446,7 @@ String MSG_IOERR_CANNOT_MAKE
     Text [ danish ] = "Det var ikke muligt at oprette filen $(FILE)." ;
     Text [ french ] = "Le fichier $(FILE) n'a pas pu �tre cr��." ;
     Text [ swedish ] = "Det gick inte att skapa filen $(FILE)." ;
-    Text [ dutch ] = "Bestand $(FILE) kan niet worden gemaakt." ;
+    Text [ dutch ] = "Bestand $(FILE) kan niet worden aangemaakt." ;
     Text [ spanish ] = "No se pudo crear el archivo $(FILE)." ;
     Text [ english_us ] = "The file $(FILE) could not be created." ;
     Text[ chinese_simplified ] = "无法建立文件 $(FILE)。";
@@ -2331,7 +2455,7 @@ String MSG_IOERR_CANNOT_MAKE
     Text[ japanese ] = "ファイル$(FILE)は作成できませんでした。";
     Text[ chinese_traditional ] = "無法開啟新檔$(FILE)。";
     Text[ arabic ] = "���� ����� ����� $(FILE).";
-    Text[ dutch ] = "Bestand $(FILE) kan niet worden gemaakt.";
+    Text[ dutch ] = "Bestand $(FILE) kan niet worden aangemaakt.";
     Text[ chinese_simplified ] = "无法建立文件 $(FILE)。";
     Text[ greek ] = "��� ���� ������� �� ������������ �� ������ $(FILE).";
     Text[ korean ] = "파일 $(FILE)을(를）만들지 못했습니다.";
@@ -2343,6 +2467,8 @@ String MSG_IOERR_CANNOT_MAKE
     Text[ hebrew ] = "‮לא ניתן ליצור קובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) फाइल को उत्पन्न नहीं कर सकते है ।";
     Text[ slovak ] = "Nie je možné vytvoriť súbor $(FILE).";
+    Text[ hungarian ] = "A fájlt nem lehet létrehozni: $(FILE) ";
+    Text[ slovenian ] = "Datoteke $(FILE) ni mogoče ustvariti.";
 };
 
 String MSG_IOERR_SHARING
@@ -2354,7 +2480,7 @@ String MSG_IOERR_SHARING
     Text [ portuguese_brazilian ] = "Erro ao tentar acesso compartilhado ao arquivo $(FILE)." ;
     Text [ portuguese ] = "Erro ao tentar acesso partilhado ao ficheiro $(FILE)." ;
     Text [ finnish ] = "On ilmennyt virhe tiedoston $(FILE) yhteisk�yt�ss�." ;
-    Text [ danish ] = "Fejl under f�lles adgang til filen $(FILE)." ;
+    Text [ danish ] = "Fejl ved delt adgang til filen $(FILE)." ;
     Text [ french ] = "Erreur de partage d'acc�s au fichier $(FILE)." ;
     Text [ swedish ] = "Fel vid gemensam �tkomst till filen $(FILE)." ;
     Text [ dutch ] = "Fout bij gelijktijdige toegang tot $(FILE)." ;
@@ -2378,6 +2504,8 @@ String MSG_IOERR_SHARING
     Text[ hebrew ] = "‮שגיאת גישה משותפת לקובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) केलिए हिस्सा प्रवेश द्वारा गलती ।";
     Text[ slovak ] = "Chyba zdieľaným prístupu k súboru $(FILE).";
+    Text[ hungarian ] = "Megosztotthozzáférés-hiba: $(FILE).";
+    Text[ slovenian ] = "Napaka pri skupnem dostopu do $(FILE).";
 };
 
 String MSG_IOERR_INVALID_PARAMETER
@@ -2433,6 +2561,8 @@ String MSG_IOERR_GENERAL
     Text[ hebrew ] = "‮שגיאת קלט פלט בלתי מפורטת בעת גישה לקובץ $(FILE).‬";
     Text[ hindi ] = "$(FILE) को प्रवेश करने के समय सामान्य I/O गलती ।";
     Text[ slovak ] = "Všeobecná chyba I/O pri práci so súborom $(FILE).";
+    Text[ hungarian ] = "Általános I/O hiba a fájl elérése során: $(FILE)";
+    Text[ slovenian ] = "Splošna V/I napaka pri dostopu do $(FILE).";
 };
 
 String RID_FULLSCREENTOOLBOX
@@ -2494,7 +2624,7 @@ String STR_EVENT_STARTAPP
     Text [ portuguese_brazilian ] = "Iniciar programa" ;
     Text [ portuguese ] = "Iniciar programa" ;
     Text [ finnish ] = "Aloita sovellus" ;
-    Text [ danish ] = "Programstart" ;
+    Text [ danish ] = "Start programmet" ;
     Text [ french ] = "D�marrage du programme" ;
     Text [ swedish ] = "Programstart" ;
     Text [ dutch ] = "Programma starten" ;
@@ -2518,6 +2648,8 @@ String STR_EVENT_STARTAPP
     Text[ hebrew ] = "‮התחלת יישום‬";
     Text[ hindi ] = "कार्यक्रम प्रारंभ करो";
     Text[ slovak ] = "Spustiť aplikáciu";
+    Text[ hungarian ] = "Alkalmazás indítása";
+    Text[ slovenian ] = "Zaženi aplikacijo";
 };
 
 String STR_EVENT_CLOSEAPP
@@ -2553,6 +2685,8 @@ String STR_EVENT_CLOSEAPP
     Text[ hebrew ] = "‮יציאה מיישום‬";
     Text[ hindi ] = "कार्यक्रम बन्द करो";
     Text[ slovak ] = "Ukončiť aplikáciu";
+    Text[ hungarian ] = "Alkalmazás bezárása";
+    Text[ slovenian ] = "Zapri aplikacijo";
 };
 
 String STR_EVENT_CREATEDOC
@@ -2567,7 +2701,7 @@ String STR_EVENT_CREATEDOC
     Text [ danish ] = "Opret dokument" ;
     Text [ french ] = "Cr�er un document" ;
     Text [ swedish ] = "Skapa dokument" ;
-    Text [ dutch ] = "Document maken" ;
+    Text [ dutch ] = "Document aanmaken" ;
     Text [ spanish ] = "Crear documento" ;
     Text [ ENGLISH_US ] = "Create Document" ;
     Text[ chinese_simplified ] = "建立文档";
@@ -2576,7 +2710,7 @@ String STR_EVENT_CREATEDOC
     Text[ japanese ] = "ドキュメントの作成時";
     Text[ chinese_traditional ] = "製作文件";
     Text[ arabic ] = "����� �����";
-    Text[ dutch ] = "Document maken";
+    Text[ dutch ] = "Document aanmaken";
     Text[ chinese_simplified ] = "建立文档";
     Text[ greek ] = "���������� ��������";
     Text[ korean ] = "문서 만들기";
@@ -2588,6 +2722,8 @@ String STR_EVENT_CREATEDOC
     Text[ hebrew ] = "‮יצירת מסמך‬";
     Text[ hindi ] = "लेखपत्र उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť dokument";
+    Text[ hungarian ] = "Dokumentum létrehozása";
+    Text[ slovenian ] = "Ustvari dokument";
 };
 
 String STR_EVENT_CLOSEDOC
@@ -2597,11 +2733,11 @@ String STR_EVENT_CLOSEDOC
     Text [ ENGLISH_US ] = "Document is closing" ;
     Text [ portuguese_brazilian ] = "Fechar Documento" ;
     Text [ swedish ] = "Dokumentet st�ngs" ;
-    Text [ danish ] = "Programmet lukkes" ;
+    Text [ danish ] = "Dokumentet lukkes" ;
     Text [ italian ] = "Il documento viene chiuso" ;
     Text [ spanish ] = "El documento se va a cerrar." ;
     Text [ french ] = "Fermeture du document" ;
-    Text [ dutch ] = "Document sluiten" ;
+    Text [ dutch ] = "Document wordt gesloten" ;
     Text [ portuguese ] = "Fechar documento" ;
     Text[ chinese_simplified ] = "正在关闭文档";
     Text[ russian ] = "������� ��������";
@@ -2609,7 +2745,7 @@ String STR_EVENT_CLOSEDOC
     Text[ japanese ] = "ドキュメントを閉じる時";
     Text[ chinese_traditional ] = "正在關閉文件";
     Text[ arabic ] = "��� ��� ����� �������";
-    Text[ dutch ] = "Document sluiten";
+    Text[ dutch ] = "Document wordt gesloten";
     Text[ chinese_simplified ] = "正在关闭文档";
     Text[ greek ] = "�������� ��������";
     Text[ korean ] = "문서를 닫는 중";
@@ -2622,6 +2758,8 @@ String STR_EVENT_CLOSEDOC
     Text[ hebrew ] = "‮סגירת מסמך‬";
     Text[ hindi ] = "लेखपत्र बन्द करो";
     Text[ slovak ] = "Dokument sa zatvára";
+    Text[ hungarian ] = "A dokumentum bezáródik.";
+    Text[ slovenian ] = "Dokument se bo zaprl";
 };
 
 String STR_EVENT_PREPARECLOSEDOC
@@ -2657,6 +2795,8 @@ String STR_EVENT_PREPARECLOSEDOC
     Text[ hebrew ] = "‮סגירת מסמך‬";
     Text[ hindi ] = "लेखपत्र बन्द करो";
     Text[ slovak ] = "Zatvoriť dokument";
+    Text[ hungarian ] = "Dokumentum bezárása";
+    Text[ slovenian ] = "Zapri dokument";
 };
 
 String STR_EVENT_OPENDOC
@@ -2692,6 +2832,8 @@ String STR_EVENT_OPENDOC
     Text[ hebrew ] = "‮פתיחת מסך‬";
     Text[ hindi ] = "लेखपत्र खोलो";
     Text[ slovak ] = "Otvoriť dokument";
+    Text[ hungarian ] = "Dokumentum megnyitása";
+    Text[ slovenian ] = "Odpri dokument";
 };
 
 String STR_EVENT_SAVEDOC
@@ -2727,6 +2869,8 @@ String STR_EVENT_SAVEDOC
     Text[ hebrew ] = "‮שמירת מסמך‬";
     Text[ hindi ] = "लेखपत्र संचित करो";
     Text[ slovak ] = "Uložiť dokument";
+    Text[ hungarian ] = "Dokumentum mentése";
+    Text[ slovenian ] = "Shrani dokument";
 };
 
 String STR_EVENT_SAVEASDOC
@@ -2762,6 +2906,8 @@ String STR_EVENT_SAVEASDOC
     Text[ hebrew ] = "‮שמירת מסמך בשם‬";
     Text[ hindi ] = "लेखपत्र संचित करो जैसे";
     Text[ slovak ] = "Uložiť dokument ako";
+    Text[ hungarian ] = "Dokumentum mentése másként";
+    Text[ slovenian ] = "Shrani dokument kot";
 };
 
 String STR_EVENT_SAVEDOCDONE
@@ -2794,6 +2940,8 @@ String STR_EVENT_SAVEDOCDONE
     Text[ hebrew ] = "‮המסמך נשמר‬";
     Text[ hindi ] = "लेखपत्र को संचित किया";
     Text[ slovak ] = "Dokument bol uložený";
+    Text[ hungarian ] = "Dokumentum elmentve";
+    Text[ slovenian ] = "Dokument je bil shranjen";
 };
 
 String STR_EVENT_SAVEASDOCDONE
@@ -2826,6 +2974,8 @@ String STR_EVENT_SAVEASDOCDONE
     Text[ hebrew ] = "‮המסמך נשמר בשם‬";
     Text[ hindi ] = "लेखपत्र को संचित किया जैसे";
     Text[ slovak ] = "Dokument bol uložený ako";
+    Text[ hungarian ] = "A dokumentum ezen a néven lett mentve:";
+    Text[ slovenian ] = "Dokument je bil shranjen kot";
 };
 
 String STR_EVENT_ACTIVATEDOC
@@ -2861,6 +3011,8 @@ String STR_EVENT_ACTIVATEDOC
     Text[ hebrew ] = "‮מסמך פעיל‬";
     Text[ hindi ] = "लेखपत्र संचालित करो";
     Text[ slovak ] = "Aktivovať dokument";
+    Text[ hungarian ] = "Dokumentum aktiválása";
+    Text[ slovenian ] = "Aktiviraj dokument";
 };
 
 String STR_EVENT_DEACTIVATEDOC
@@ -2896,6 +3048,8 @@ String STR_EVENT_DEACTIVATEDOC
     Text[ hebrew ] = "‮מסמך לא פעיל‬";
     Text[ hindi ] = "लेखपत्र निष्क्रिय करो";
     Text[ slovak ] = "Dezaktivovať dokument";
+    Text[ hungarian ] = "Dokumentum deaktiválása";
+    Text[ slovenian ] = "Deaktiviraj dokument";
 };
 
 String STR_EVENT_PRINTDOC
@@ -2930,6 +3084,8 @@ String STR_EVENT_PRINTDOC
     Text[ hebrew ] = "‮הדפסת מסמך‬";
     Text[ hindi ] = "लेखपत्र छपाई";
     Text[ slovak ] = "Tlač dokumentu";
+    Text[ hungarian ] = "Dokumentum nyomtatása";
+    Text[ slovenian ] = "Natisni dokument";
 };
 
 String STR_EVENT_MODIFYCHANGED
@@ -2946,10 +3102,10 @@ String STR_EVENT_MODIFYCHANGED
     Text[ chinese_simplified ] = "状态'已更改'已经更改。";
     Text[ chinese_traditional ] = "狀態 [已變更] 已經變更。";
     Text[ greek ] = "'Modified' status was changed";
-    Text[ dutch ] = "'Modified' status was changed";
+    Text[ dutch ] = "'Gewijzigd' status veranderd";
     Text[ finnish ] = "'Modified' status was changed";
     Text[ czech ] = "Stav 'Modifikován' byl změněn";
-    Text[ danish ] = "'Modified' status was changed";
+    Text[ danish ] = "'�ndret' status blev �ndret";
     Text[ arabic ] = "'Modified' status was changed";
     Text[ hebrew ] = "'Modified' status was changed";
     Text[ catalan ] = "'Modified' status was changed";
@@ -2961,6 +3117,8 @@ String STR_EVENT_MODIFYCHANGED
     Text[ portuguese_brazilian ] = "'Modified' status was changed";
     Text[ turkish ] = "'Modified' status was changed";
     Text[ thai ] = "'Modified' status was changed";
+    Text[ hungarian ] = "A 'Módosítva' állapot megváltozott.";
+    Text[ slovenian ] = "Stanje 'Spremenjeno' je bilo spremenjeno";
 };
 
 String STR_ERR_NOTEMPLATE
@@ -2995,6 +3153,8 @@ String STR_ERR_NOTEMPLATE
     Text[ hebrew ] = "‮הצורה של התבנית שנבחרה אינה חוקית‬";
     Text[ hindi ] = "चुने हुए नमूने का रचना गलत है";
     Text[ slovak ] = "Vybraná šablóna má neplatný formát";
+    Text[ hungarian ] = "A választott sablon formátuma érvénytelen.";
+    Text[ slovenian ] = "Izbrana predloga ima napačno obliko zapisa.";
 };
 
 String STR_ERR_NOFILE
@@ -3029,6 +3189,8 @@ String STR_ERR_NOFILE
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ $.‬";
     Text[ hindi ] = "$ फाइल को नहीं खोल सकता है ।";
     Text[ slovak ] = "Nie je možné otvoriť súbor $.";
+    Text[ hungarian ] = "Nem lehet megnyitni a fájlt: $";
+    Text[ slovenian ] = "Ni mogoče odpreti datoteke $.";
 };
 
 
@@ -3042,7 +3204,7 @@ String STR_QUITAPP
     Text [ french ] = "~Quitter" ;
     Text [ dutch ] = "~Be�indigen" ;
     Text [ swedish ] = "A~vsluta" ;
-    Text [ danish ] = "Afslut" ;
+    Text [ danish ] = "~Afslut" ;
     Text [ portuguese_brazilian ] = "~Sair" ;
     Text [ portuguese ] = "~Sair" ;
     Text[ chinese_simplified ] = "结束(~X)";
@@ -3064,6 +3226,8 @@ String STR_QUITAPP
     Text[ hebrew ] = "‮יציאה‬";
     Text[ hindi ] = "नि~र्गम";
     Text[ slovak ] = "~Ukončiť";
+    Text[ hungarian ] = "~Kilépés";
+    Text[ slovenian ] = "Iz~hod";
 };
 
 String STR_EXITANDRETURN
@@ -3098,6 +3262,8 @@ String STR_EXITANDRETURN
     Text[ hebrew ] = "‮יציאה וחזרה אל ‬";
     Text[ hindi ] = "नि~र्गम और में वापस ";
     Text[ slovak ] = "~Koniec a návrat do ";
+    Text[ hungarian ] = "~Kilépés és visszatérés";
+    Text[ slovenian ] = "I~zhod & vrnitev na";
 };
 
 String STR_EXTHELPSTATUS
@@ -3110,7 +3276,7 @@ String STR_EXTHELPSTATUS
     Text [ french ] = "S�lectionnez une commande ou cliquez pour choisir une rubrique." ;
     Text [ dutch ] = "Kies een optie of klik om een onderwerp te kiezen." ;
     Text [ swedish ] = "V�lj ett kommando eller klicka f�r att v�lja ett tema." ;
-    Text [ danish ] = "V�lg en kommando eller klik for udv�lge et emne." ;
+    Text [ danish ] = "V�lg en kommando eller klik for v�lge et tema." ;
     Text [ portuguese_brazilian ] = "Selecione um comando ou clique para escolher um tema." ;
     Text [ portuguese ] = "Seleccione um comando ou clique para escolher um tema." ;
     Text[ chinese_simplified ] = "请您选择或者按击一个命令，选择一个主题。";
@@ -3132,6 +3298,8 @@ String STR_EXTHELPSTATUS
     Text[ hebrew ] = "‮ניתן לבחור פקודה או נושא.‬";
     Text[ hindi ] = "विषय को चुनने केलिए एक आज्ञा को चुनो अथवा क्लिक् करो ।";
     Text[ slovak ] = "Vyberte príkaz alebo zadajte tému kliknutím.";
+    Text[ hungarian ] = "Válasszon egy parancsot, vagy kattintson egy téma kiválasztásához.";
+    Text[ slovenian ] = "Izberi ukaz ali klikni na izbrano temo.";
 };
 
 String STR_MAIL
@@ -3143,7 +3311,7 @@ String STR_MAIL
     Text [ portuguese_brazilian ] = "Correio" ;
     Text [ portuguese ] = "Correio" ;
     Text [ finnish ] = "S�hk�posti" ;
-    Text [ danish ] = "Post" ;
+    Text [ danish ] = "Mail" ;
     Text [ french ] = "Courrier" ;
     Text [ swedish ] = "Post" ;
     Text [ dutch ] = "Post" ;
@@ -3167,6 +3335,8 @@ String STR_MAIL
     Text[ hebrew ] = "‮דואר‬";
     Text[ hindi ] = "मेइल";
     Text[ slovak ] = "Pošta";
+    Text[ hungarian ] = "Levél";
+    Text[ slovenian ] = "Pošta";
 };
 
 String STR_ADDRESS_NAME
@@ -3201,6 +3371,8 @@ String STR_ADDRESS_NAME
     Text[ hebrew ] = "‮כתובות‬";
     Text[ hindi ] = "पतें";
     Text[ slovak ] = "Adresy";
+    Text[ hungarian ] = "Címek";
+    Text[ slovenian ] = "Naslovi";
 };
 
 String RID_STR_HELP
@@ -3235,6 +3407,8 @@ String RID_STR_HELP
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "सहायता";
     Text[ slovak ] = "Pomocník";
+    Text[ hungarian ] = "Súgó";
+    Text[ slovenian ] = "Pomoč";
 };
 
 String RID_STR_NOAUTOSTARTHELPAGENT
@@ -3244,7 +3418,7 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text [ english_us ] = "No automatic start at 'XX'" ;
     Text [ portuguese_brazilian ] = "Sem in�cio autom�tico em 'XX'" ;
     Text [ swedish ] = "Ingen automatisk start vid 'XX'" ;
-    Text [ danish ] = "Start ikke automatisk ved ''XX''" ;
+    Text [ danish ] = "Start ikke automatisk ved 'XX'" ;
     Text [ italian ] = "Non avviare automaticamente con  'XX'" ;
     Text [ spanish ] = "No iniciar autom�ticamente con 'XX'" ;
     Text [ french ] = "Ne pas lancer automatiquement pour la fonction 'XX'" ;
@@ -3269,6 +3443,8 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text[ hebrew ] = "‮אין התחלה אוטומטי ב'XX'‬";
     Text[ hindi ] = "'XX' में कोई स्वचालित ढंग से प्रारंभ नहीं है ";
     Text[ slovak ] = "Nespúšťať 'XX' automaticky";
+    Text[ hungarian ] = "Nincs automatikus indítás: 'XX'";
+    Text[ slovenian ] = "Brez samodejnega zagona pri 'XX'";
 };
 
 String RID_STR_NOWELCOMESCREEN
@@ -3278,7 +3454,7 @@ String RID_STR_NOWELCOMESCREEN
     Text [ english_us ] = "Don't display tips" ;
     Text [ portuguese_brazilian ] = "N�o exibir dicas" ;
     Text [ swedish ] = "Visa inte tips mer" ;
-    Text [ danish ] = "Vis ikke flere tip" ;
+    Text [ danish ] = "Vis ikke tip" ;
     Text [ italian ] = "Non mostrare pi� i suggerimenti" ;
     Text [ spanish ] = "No mostrar m�s las sugerencias" ;
     Text [ french ] = "Ne plus afficher les astuces" ;
@@ -3303,6 +3479,8 @@ String RID_STR_NOWELCOMESCREEN
     Text[ hebrew ] = "‮לא להציג טיפים‬";
     Text[ hindi ] = "सुझावों को मत दिखाओ";
     Text[ slovak ] = "Nezobrazovať tipy";
+    Text[ hungarian ] = "Tippek elrejtése";
+    Text[ slovenian ] = "Ne prikaži nasvetov";
 };
 
 String RID_HELPBAR
@@ -3313,7 +3491,7 @@ String RID_HELPBAR
     Text [ english_us ] = "Help Bar" ;
     Text [ portuguese_brazilian ] = "Barra da Ajuda" ;
     Text [ swedish ] = "Hj�lplist" ;
-    Text [ danish ] = "Hj�lp-linje" ;
+    Text [ danish ] = "Hj�lpelinje" ;
     Text [ italian ] = "Barra della Guida" ;
     Text [ spanish ] = "Barra de ayuda" ;
     Text [ french ] = "Barre de l'aide" ;
@@ -3337,6 +3515,8 @@ String RID_HELPBAR
     Text[ hebrew ] = "‮סרגל עזרה‬";
     Text[ hindi ] = "सहायता पट्टी";
     Text[ slovak ] = "Panel pomocníka";
+    Text[ hungarian ] = "Súgó eszköztár";
+    Text[ slovenian ] = "Vrstica pomoči";
 };
 
 ToolBox RID_HELPBAR
@@ -3401,7 +3581,7 @@ String RID_STR_HLPFILENOTEXIST
     Text [ english_us ] = "The help file for this topic is not installed." ;
     Text [ portuguese_brazilian ] = "O arquivo de ajuda para este t�pico n�o est� instalado." ;
     Text [ swedish ] = "Det finns ingen hj�lp installerad f�r detta �mne." ;
-    Text [ danish ] = "Der er ikke installeret Hj�lp til dette emne." ;
+    Text [ danish ] = "Hj�lpefilen for dette emne er ikke installeret." ;
     Text [ italian ] = "La Guida relativa a questo argomento non � stata installata." ;
     Text [ spanish ] = "El archivo de ayuda para este tema no ha sido instalado." ;
     Text [ french ] = "Vous n'avez pas install� l'aide correspondant � ce sujet." ;
@@ -3426,6 +3606,8 @@ String RID_STR_HLPFILENOTEXIST
     Text[ hebrew ] = "‮קובץ העזרה לנושא זה אינו מותקן‬";
     Text[ hindi ] = "इस विषय केलिए सहायता फाइल को प्रतिष्ठापित नहीं किया है ।";
     Text[ slovak ] = "Pre túto tému nebol nainštalovaný príslušný súbor s pomocníkom.";
+    Text[ hungarian ] = "A szükséges súgófájl nincs telepítve.";
+    Text[ slovenian ] = "Datoteka pomoči za to temo ni nameščena.";
 };
 
 String RID_STR_HLPAPPNOTSTARTED
@@ -3438,7 +3620,7 @@ String RID_STR_HLPAPPNOTSTARTED
     Text [ spanish ] = "No se pudo iniciar la aplicaci�n de ayuda." ;
     Text [ french ] = "Impossible de lancer l'application d'aide" ;
     Text [ swedish ] = "Det gick inte att starta hj�lptill�mpningen" ;
-    Text [ danish ] = "Det var ikke muligt at starte Hj�lp-applikationen" ;
+    Text [ danish ] = "Det var ikke muligt at starte hj�lp" ;
     Text [ portuguese ] = "Foi imposs�vel iniciar o sistema de ajuda." ;
     Text [ portuguese_brazilian ] = "N�o foi poss�vel iniciar o sistema de ajuda." ;
     Text[ chinese_simplified ] = "无法启动帮助应用程序。";
@@ -3460,6 +3642,8 @@ String RID_STR_HLPAPPNOTSTARTED
     Text[ hebrew ] = "‮לא ניתן לאתחל את מערכת העזרה‬";
     Text[ hindi ] = "सहायता सिस्टम् को प्रारंभ नहीं कर सकते है ।";
     Text[ slovak ] = "Systém pomocníka nemôže byť spustený.";
+    Text[ hungarian ] = "A súgó nem tudott elindulni.";
+    Text[ slovenian ] = "Sistema pomoči ni možno zagnati";
 };
 
  //----------------------------------------------------------------------------
@@ -3496,6 +3680,8 @@ String RID_ENVTOOLBOX
     Text[ hebrew ] = "‮סרגל פעולות נפוצות‬";
     Text[ hindi ] = "फंक्शन् पट्टी";
     Text[ slovak ] = "Panel funkcií";
+    Text[ hungarian ] = "Műveletek eszköztár";
+    Text[ slovenian ] = "Funkcijska vrstica";
 };
 
 ToolBox RID_ENVTOOLBOX
@@ -3738,7 +3924,7 @@ String RID_SPECIALCONFIG_ERROR
     Text [ english_us ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
     Text [ portuguese_brazilian ] = "Ocorreu um erro na configura��o especial. Por favor, contacte o seu administrador." ;
     Text [ swedish ] = "Ett fel har uppt�ckts i specialkonfigurationen.\nKontakta din administrat�r!" ;
-    Text [ danish ] = "Der blev opdaget en fejl i specialkonfigurationen.\nHenvend dig venligst til din administrator!" ;
+    Text [ danish ] = "Der skete en fejl i specialkonfigurationen.\nKontakt din administrator." ;
     Text [ italian ] = "Nella configurazione speciale � stato trovato un errore.\nRivolgetevi al vostro amministratore!" ;
     Text [ spanish ] = "En la configuraci�n especial se ha detectado un error.\nP�ngase por favor en contacto con su administrador." ;
     Text [ french ] = "Une erreur a �t� d�tect�e dans la configuration sp�ciale.\nVeuillez consulter l'administrateur !" ;
@@ -3761,6 +3947,8 @@ String RID_SPECIALCONFIG_ERROR
     Text[ hebrew ] = "‮ארעה שגיאה בתצורה המיוחדת.\nנא להודיע למנהל המערכת.‬";
     Text[ hindi ] = "विशेष रूप-रेखा में एक गलती घटित हुआ ।\nकृपया आपका प्रशासक को संपर्क कीजिए ।";
     Text[ slovak ] = "Nastala chyba vo zvláštnej konfigurácii.\nProsím kontaktujte vašeho administrátora.";
+    Text[ hungarian ] = "Hiba történt a különleges beállítások során.\nÉrtesítse a rendszergazdát.";
+    Text[ slovenian ] = "V posebni konfiguraciji je nastala napaka.\nProsimo, povprašajte skrbnika.";
 };
 
 
@@ -3811,6 +3999,8 @@ String RID_PLUGIN
     Text[ hebrew ] = "‮לאפשר הפעלת תוספים (plug-ins)‬";
     Text[ hindi ] = "प्लग-इन को सक्षम करो";
     Text[ slovak ] = "Povoliť zásuvné moduly";
+    Text[ hungarian ] = "Bővítőmodulok engedélyezése";
+    Text[ slovenian ] = "Omogoči vtičnike";
 };
 
 String STR_CORRUPT_INSTALLATION
@@ -3826,7 +4016,7 @@ String STR_CORRUPT_INSTALLATION
     Text[ swedish ] = "Det gick inte att initiera viktiga programdelar korrekt.\nStarta setupprogrammet med alternativet /repair.";
     Text[ russian ] = "�� ������� ��������� ���������������� ������ ����������� ����������.\n��������� ��������� ��������� � ������ ��������������.";
     Text[ italian ] = "Impossibile inizializzare importanti componenti del programma.\nAvviate il setup con l'opzione /Riparazione.";
-    Text[ danish ] = "Det var ikke muligt at initialisere vigtige programdele korrekt.\nStart venligst installationsprogrammet (Setup) med alternativet / reparation.";
+    Text[ danish ] = "Det var ikke muligt at initialisere vigtige programkomponenter korrekt.\nStart venligst installationsprogrammet med indstillingen /Repair.";
     Text[ polish ] = "Nie mo�na prawid�owo zainicjowa� wa�nych komponent�w programu.\nUruchom program instalacyjny z opcj� /Repair";
     Text[ portuguese_brazilian ] = "Importantes componentes do programa n�o foram inicializados corretamente.\nInicie o programa de instala��o com a op��o /Repair.";
     Text[ japanese ] = "プログラムの大切な部分は正常に初期化されませんでした。\nセットアッププログラムをオプションの修復で開始してください。";
@@ -3842,6 +4032,8 @@ String STR_CORRUPT_INSTALLATION
     Text[ hebrew ] = "‮לא ניתן לתחל רכיבים חשובים כראוי.\nיש להפעיל את תוכנית ההתקנה עם /Repair.‬";
     Text[ hindi ] = "प्रधान प्रोग्राम कॉम्पोनेन्ट्स् को ठीक से इनिश्यलैज़ नहीं किया है ।\nकृपया सेटप प्रोग्राम को /मरम्मत विकल्प सहित प्रारंभ कीजिए ।";
     Text[ slovak ] = "Dôležité programové komponenty nemôžu byť inicializované korektne.\nProsím spustite program setup s voľbou /Opraviť.";
+    Text[ hungarian ] = "Nem sikerült egyes fontos rendszerösszetevőket inicializálni. \nIndítsa el a telepítőt a /Repair kapcsolóval.";
+    Text[ slovenian ] = "Pomembnih programskih komponent ni bilo mogoče pravilno inicializirati.\nProsimo, zaženite namestitveni program z možnostjo /Popravi.";
 };
 
 String IDS_SBERR_STOREREF
@@ -3850,7 +4042,7 @@ String IDS_SBERR_STOREREF
     Text [ italian ] = "Il riferimento non viene salvato: ";
     Text [ portuguese_brazilian ] = "A refer�ncia n�o ser� salva:";
     Text [ portuguese ] = "A refer�ncia n�o ser� guardada:  ";
-    Text [ danish ] = "Referencen bliver ikke gemt: ";
+    Text [ danish ] = "Referencen vil ikke blive gemt: ";
     Text [ french ] = "Impossible d'enregistrer la r�f�rence : ";
     Text [ swedish ] = "Referens sparas inte:  ";
     Text [ dutch ] = "Verwijzing wordt niet opgeslagen:";
@@ -3875,6 +4067,8 @@ String IDS_SBERR_STOREREF
     Text[ hebrew ] = "‮ההפניה לא ישמר: ‬";
     Text[ hindi ] = "रेफ़रेन्स को संचित नहीं कर सकते है: ";
     Text[ slovak ] = "Referencia nebude uložená: ";
+    Text[ hungarian ] = "A hivatkozás nem lesz elmentve:";
+    Text[ slovenian ] = "Sklic ne bo shranjen:";
 };
 
 String STR_KEY_CONFIG_DIR
@@ -3910,6 +4104,8 @@ String STR_KEY_CONFIG_DIR
     Text[ hebrew ] = "‮תצורה‬";
     Text[ hindi ] = "रूपरेखा";
     Text[ slovak ] = "Konfigurácia";
+    Text[ hungarian ] = "Konfiguráció";
+    Text[ slovenian ] = "Konfiguracija";
 };
 String STR_KEY_WORK_PATH
 {
@@ -3920,7 +4116,7 @@ String STR_KEY_WORK_PATH
     Text [ portuguese_brazilian ] = "Meus documentos" ;
     Text [ portuguese ] = "Pasta de trabalho" ;
     Text [ finnish ] = "Omat asiakirjat" ;
-    Text [ danish ] = "Arbejdsmappe" ;
+    Text [ danish ] = "Dokumenter" ;
     Text [ french ] = "Dossier de travail" ;
     Text [ swedish ] = "Arbetskatalog" ;
     Text [ dutch ] = "Werkmap" ;
@@ -3944,6 +4140,8 @@ String STR_KEY_WORK_PATH
     Text[ hebrew ] = "‮המסמכים שלי‬";
     Text[ hindi ] = "मेरा लेखपत्रें";
     Text[ slovak ] = "Moje dokumenty";
+    Text[ hungarian ] = "Dokumentumok";
+    Text[ slovenian ] = "Moji dokumenti";
 };
 String STR_KEY_GRAPHICS_PATH
 {
@@ -3978,6 +4176,8 @@ String STR_KEY_GRAPHICS_PATH
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Képek";
+    Text[ slovenian ] = "Grafika";
 };
 String STR_KEY_BITMAP_PATH
 {
@@ -3989,7 +4189,7 @@ String STR_KEY_BITMAP_PATH
     Text [ french ] = "Ic�nes" ;
     Text [ dutch ] = "Pictogrammen" ;
     Text [ swedish ] = "Ikoner" ;
-    Text [ danish ] = "Symboler" ;
+    Text [ danish ] = "Ikoner" ;
     Text [ portuguese ] = "�cones" ;
     Text [ portuguese_brazilian ] = "�cones" ;
     Text[ chinese_simplified ] = "图标";
@@ -4011,6 +4211,8 @@ String STR_KEY_BITMAP_PATH
     Text[ hebrew ] = "‮סמלים‬";
     Text[ hindi ] = "अइकॉन्स";
     Text[ slovak ] = "Ikony";
+    Text[ hungarian ] = "Ikonok";
+    Text[ slovenian ] = "Ikone";
 };
 String STR_KEY_BASIC_PATH
 {
@@ -4050,6 +4252,8 @@ String STR_KEY_PALETTE_PATH
     Text[ hebrew ] = "‮לוחות צבע‬";
     Text[ hindi ] = "पेलट्स";
     Text[ slovak ] = "Palety";
+    Text[ hungarian ] = "Paletták";
+    Text[ slovenian ] = "Palete";
 };
 String STR_KEY_BACKUP_PATH
 {
@@ -4084,6 +4288,8 @@ String STR_KEY_BACKUP_PATH
     Text[ hebrew ] = "‮גיבויים‬";
     Text[ hindi ] = "बैकप";
     Text[ slovak ] = "Zálohy";
+    Text[ hungarian ] = "Biztonsági mentések";
+    Text[ slovenian ] = "Varnostne kopije";
 };
 String STR_KEY_MODULES_PATH
 {
@@ -4118,6 +4324,8 @@ String STR_KEY_MODULES_PATH
     Text[ hebrew ] = "‮מודולים‬";
     Text[ hindi ] = "मोड्यूलें";
     Text[ slovak ] = "Moduly";
+    Text[ hungarian ] = "Modulok";
+    Text[ slovenian ] = "Moduli";
 };
 String STR_KEY_TEMPLATE_PATH
 {
@@ -4128,7 +4336,7 @@ String STR_KEY_TEMPLATE_PATH
     Text [ portuguese_brazilian ] = "Modelos de documentos" ;
     Text [ portuguese ] = "Modelos de documentos" ;
     Text [ finnish ] = "Mallit" ;
-    Text [ danish ] = "Dokumentskabeloner" ;
+    Text [ danish ] = "Skabeloner" ;
     Text [ french ] = "Mod�les de document" ;
     Text [ swedish ] = "Dokumentmallar" ;
     Text [ dutch ] = "Sjablonen" ;
@@ -4152,6 +4360,8 @@ String STR_KEY_TEMPLATE_PATH
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
     Text[ slovak ] = "Šablóny";
+    Text[ hungarian ] = "Sablonok";
+    Text[ slovenian ] = "Predloge";
 };
 String STR_KEY_GLOSSARY_PATH
 {
@@ -4182,6 +4392,8 @@ String STR_KEY_GLOSSARY_PATH
     Text[ hebrew ] = "‮טקסט אוטומטי‬";
     Text[ hindi ] = "स्वचालित ढंग से टेक्स्ट्";
     Text[ slovak ] = "Automatický text";
+    Text[ hungarian ] = "Szöveg-o-mata";
+    Text[ slovenian ] = "Samobesedilo";
 };
 String STR_KEY_DICTIONARY_PATH
 {
@@ -4216,6 +4428,8 @@ String STR_KEY_DICTIONARY_PATH
     Text[ hebrew ] = "‮מילונים‬";
     Text[ hindi ] = "शब्दकोश";
     Text[ slovak ] = "Slovníky";
+    Text[ hungarian ] = "Szótárak";
+    Text[ slovenian ] = "Slovarji";
 };
 String STR_KEY_HELP_DIR
 {
@@ -4227,7 +4441,7 @@ String STR_KEY_HELP_DIR
     Text [ french ] = "Fichiers d'aide" ;
     Text [ dutch ] = "Help-bestanden" ;
     Text [ swedish ] = "Hj�lpfiler" ;
-    Text [ danish ] = "Hj�lp-filer" ;
+    Text [ danish ] = "Hj�lp" ;
     Text [ portuguese ] = "Ficheiros de ajuda" ;
     Text [ portuguese_brazilian ] = "Ajuda" ;
     Text[ chinese_simplified ] = "帮助文件";
@@ -4249,6 +4463,8 @@ String STR_KEY_HELP_DIR
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "सहायता";
     Text[ slovak ] = "Pomocník";
+    Text[ hungarian ] = "Súgó";
+    Text[ slovenian ] = "Pomoč";
 };
 String STR_KEY_GALLERY_DIR
 {
@@ -4260,7 +4476,7 @@ String STR_KEY_GALLERY_DIR
     Text [ spanish ] = "Gallery" ;
     Text [ french ] = "Gallery" ;
     Text [ swedish ] = "Gallery" ;
-    Text [ danish ] = "Gallery" ;
+    Text [ danish ] = "Galleri" ;
     Text [ portuguese ] = "Gallery" ;
     Text [ portuguese_brazilian ] = "Galeria" ;
     Text[ chinese_simplified ] = "画廊";
@@ -4282,6 +4498,8 @@ String STR_KEY_GALLERY_DIR
     Text[ hebrew ] = "‮גלריה‬";
     Text[ hindi ] = "गेलरी";
     Text[ slovak ] = "Galérie";
+    Text[ hungarian ] = "Képtár";
+    Text[ slovenian ] = "Galerija";
 };
 
 String STR_KEY_STORAGE_DIR
@@ -4316,6 +4534,8 @@ String STR_KEY_STORAGE_DIR
     Text[ hebrew ] = "‮איחסון הודעות‬";
     Text[ hindi ] = "संदेश संग्रह";
     Text[ slovak ] = "Umiestnenie správ";
+    Text[ hungarian ] = "Üzenettároló";
+    Text[ slovenian ] = "Shramba sporočil";
 };
 String STR_KEY_TEMP_PATH
 {
@@ -4346,6 +4566,8 @@ String STR_KEY_TEMP_PATH
     Text[ hebrew ] = "‮קבצים זמניים‬";
     Text[ hindi ] = "अस्थायी फाइलें";
     Text[ slovak ] = "Dočasné súbory";
+    Text[ hungarian ] = "Átmeneti fájlok";
+    Text[ slovenian ] = "Začasne datoteke";
 };
 String STR_KEY_PLUGINS_PATH
 {
@@ -4358,7 +4580,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ french ] = "R�pertoire de Plug-ins";
     Text[ spanish ] = "Directorio de Plug-ins";
     Text[ italian ] = "Cartella plugin";
-    Text[ danish ] = "PlugIn-bibliotek";
+    Text[ danish ] = "PlugIns";
     Text[ swedish ] = "Plug-ins-katalog";
     Text[ polish ] = "Wtyczki plug-in";
     Text[ portuguese_brazilian ] = "Diret�rio de Plug-Ins";
@@ -4378,6 +4600,8 @@ String STR_KEY_PLUGINS_PATH
     Text[ hebrew ] = "‮תוספים (Plug-ins)‬";
     Text[ hindi ] = "प्लग-इन";
     Text[ slovak ] = "Zásuvné moduly";
+    Text[ hungarian ] = "Bővítőmodulok";
+    Text[ slovenian ] = "Vtičniki";
 };
 String STR_KEY_FAVORITES_DIR
 {
@@ -4409,6 +4633,8 @@ String STR_KEY_FAVORITES_DIR
     Text[ hebrew ] = "‮סימניות לתיקיות‬";
     Text[ hindi ] = "कोष्ठ पृष्ठसंकेत ";
     Text[ slovak ] = "Záložky pre zložku";
+    Text[ hungarian ] = "Mappa könyvjelzők";
+    Text[ slovenian ] = "Zaznamki mape";
 };
 String STR_KEY_FILTER_PATH
 {
@@ -4423,7 +4649,7 @@ String STR_KEY_FILTER_PATH
     Text[ swedish ] = "Filter";
     Text[ russian ] = "�������";
     Text[ italian ] = "Filtro";
-    Text[ danish ] = "Filter";
+    Text[ danish ] = "Filtre";
     Text[ polish ] = "Filtry";
     Text[ portuguese_brazilian ] = "Filtros";
     Text[ japanese ] = "フィルタ";
@@ -4440,6 +4666,8 @@ String STR_KEY_FILTER_PATH
     Text[ hebrew ] = "‮מסננים‬";
     Text[ hindi ] = "फिल्टरें";
     Text[ slovak ] = "Filtre";
+    Text[ hungarian ] = "Szűrők";
+    Text[ slovenian ] = "Filtri";
 };
 String STR_KEY_ADDINS_PATH
 {
@@ -4470,6 +4698,8 @@ String STR_KEY_ADDINS_PATH
     Text[ hebrew ] = "‮תוכניות נספחות‬";
     Text[ hindi ] = "Add-ins";
     Text[ slovak ] = "Moduly";
+    Text[ hungarian ] = "Kiegészítők";
+    Text[ slovenian ] = "Dodatki";
 };
 String STR_KEY_USERCONFIG_PATH
 {
@@ -4501,6 +4731,8 @@ String STR_KEY_USERCONFIG_PATH
     Text[ hebrew ] = "‮תצורת משתמשים‬";
     Text[ hindi ] = "उपभोक्ता रूपरेखा";
     Text[ slovak ] = "Užívateľská konfigurácia";
+    Text[ hungarian ] = "Felhasználói konfiguráció";
+    Text[ slovenian ] = "Konfiguracija uporabnika";
 };
 String STR_KEY_USERDICTIONARY_DIR
 {
@@ -4531,6 +4763,8 @@ String STR_KEY_USERDICTIONARY_DIR
     Text[ hebrew ] = "‮מילונים מוגדרים על ידי המשתמש‬";
     Text[ hindi ] = "उपभोक्ता शब्दकोश";
     Text[ slovak ] = "Užívateľské slovníky";
+    Text[ hungarian ] = "Egyéni szótárak";
+    Text[ slovenian ] = "Uporabniško določeni slovarji";
 };
 String STR_KEY_AUTOCORRECT_DIR
 {
@@ -4561,6 +4795,8 @@ String STR_KEY_AUTOCORRECT_DIR
     Text[ hebrew ] = "‮תיקון אוטומטי‬";
     Text[ hindi ] = "स्वयं ठीक करो";
     Text[ slovak ] = "Automatické opravy";
+    Text[ hungarian ] = "Automatikus javítás";
+    Text[ slovenian ] = "Samopopravki";
 };
 #if defined STR_KEY_LINGUISTIC_DIR
 String STR_KEY_LINGUISTIC_DIR
@@ -4575,7 +4811,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ french ] = "Linguistique";
     Text[ spanish ] = "Ling��stica";
     Text[ italian ] = "Linguistica";
-    Text[ danish ] = "Lingvistik";
+    Text[ danish ] = "Skrivehj�lp";
     Text[ swedish ] = "Lingvistik";
     Text[ polish ] = "Pisownia";
     Text[ portuguese_brazilian ] = "Ling��stica";
@@ -4592,6 +4828,8 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ hebrew ] = "‮עזרי כתיבה‬";
     Text[ hindi ] = "लेखन सहायक";
     Text[ slovak ] = "Pomôcky na písanie";
+    Text[ hungarian ] = "Írástámogatás";
+    Text[ slovenian ] = "Pripomočki za pisanje";
 };
 #endif // STR_KEY_LINGUISTIC_DIR
 
@@ -4624,6 +4862,8 @@ String STR_QUICKSTART_EXIT
     Text[ hebrew ] = "‮יציאה מהמדריך המזרז‬";
     Text[ hindi ] = "क्षिप्रप्रारंभ करनेवाला से निर्गम करो";
     Text[ slovak ] = "Ukončiť Quickstarter";
+    Text[ hungarian ] = "Kilépés a gyorsindítóból";
+    Text[ slovenian ] = "Izhod iz Quickstarterja";
 };
 String STR_QUICKSTART_TIP
 {
@@ -4654,6 +4894,8 @@ String STR_QUICKSTART_TIP
     Text[ hebrew ] = "‮המדריך המזרז ל %PRODUCTNAME %PRODUCTVERSION‬";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION क्षिप्रप्रारंभ करनेवाला";
     Text[ slovak ] = "Rýchle spustenie %PRODUCTNAME %PRODUCTVERSION";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION Gyorsindító";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter";
 };
 String STR_QUICKSTART_FILEOPEN
 {
@@ -4668,7 +4910,7 @@ String STR_QUICKSTART_FILEOPEN
     Text[ spanish ] = "Abrir documento";
     Text[ finnish ] = "Avaa tiedosto...";
     Text[ italian ] = "Apri documento";
-    Text[ danish ] = "�bn fil...";
+    Text[ danish ] = "�bn dokument";
     Text[ swedish ] = "�ppna dokument";
     Text[ polish ] = "Otw�rz plik...";
     Text[ portuguese_brazilian ] = "Abrir arquivo...";
@@ -4684,6 +4926,8 @@ String STR_QUICKSTART_FILEOPEN
     Text[ hebrew ] = "‮פתיחת קובץ...‬";
     Text[ hindi ] = "फाइल खोलो...";
     Text[ slovak ] = "Otvoriť súbor...";
+    Text[ hungarian ] = "Dokumentum megnyitása";
+    Text[ slovenian ] = "Odpri dokument";
 };
 String STR_QUICKSTART_FROMTEMPLATE
 {
@@ -4698,7 +4942,7 @@ String STR_QUICKSTART_FROMTEMPLATE
     Text[ spanish ] = "De plantilla";
     Text[ finnish ] = "Mallista...";
     Text[ italian ] = "Da modello";
-    Text[ danish ] = "Fra skabelon...";
+    Text[ danish ] = "Fra skabelon";
     Text[ swedish ] = "Fr�n mall";
     Text[ polish ] = "Na podstawie szablonu...";
     Text[ portuguese_brazilian ] = "A partir de modelo...";
@@ -4710,10 +4954,12 @@ String STR_QUICKSTART_FROMTEMPLATE
     Text[ arabic ] = "From template...";
     Text[ catalan ] = "De la plantilla...";
     Text[ thai ] = "จากแม่แบบ...";
-    Text[ czech ] = "Ze šablony...";
+    Text[ czech ] = "Otevřít šablonu...";
     Text[ hebrew ] = "‮מתבנית...‬";
     Text[ hindi ] = "नमूना से...";
     Text[ slovak ] = "Zo šablóny...";
+    Text[ hungarian ] = "Sablonból";
+    Text[ slovenian ] = "Iz predloge";
 };
 String STR_QUICKSTART_PRELAUNCH
 {
@@ -4744,6 +4990,8 @@ String STR_QUICKSTART_PRELAUNCH
     Text[ hebrew ] = "‮טעינת %PRODUCTNAME בזמן איתחול המערכת‬";
     Text[ hindi ] = "सिस्टम प्रारंभ होने के समय %PRODUCTNAME को लोड़ करो";
     Text[ slovak ] = "Načítať %PRODUCTNAME behom spúšťania systému";
+    Text[ hungarian ] = "%PRODUCTNAME betöltése a rendszerindításkor";
+    Text[ slovenian ] = "Naloži %PRODUCTNAME med zagonom sistema";
 };
 String STR_QUICKSTART_LNKNAME
 {
@@ -4774,6 +5022,8 @@ String STR_QUICKSTART_LNKNAME
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hindi ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 WarningBox RID_SECURITY_WARNING_HYPERLINK
@@ -4792,7 +5042,7 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
     Message[ spanish ] = "Este hiperenlace abrir� \"%s\". �Desea continuar?";
     Message[ finnish ] = "T�m� hyperlinkki avaa kohteen \"%s\". Haluatko jatkaa?";
     Message[ italian ] = "Questo hyperlink apre \"%s\". Volete procedere?";
-    Message[ danish ] = "\"Dette hyperlink �bner \"\"%s\"\". Vil du forts�tte?\"";
+    Message[ danish ] = "Dette hyperlink �bner \"%s\". Vil du forts�tte?";
     Message[ swedish ] = "Den h�r hyperl�nken kommer att �ppna \"%s\".  Vill du forts�tta?";
     Message[ polish ] = "U�ycie tego hiper��cza spowoduje otwarcie \"%s\". Czy chcesz kontynuowa�?";
     Message[ portuguese_brazilian ] = "Este hiperlink abrir� \"%s\". Deseja continuar?";
@@ -4808,6 +5058,8 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
     Message[ hebrew ] = "‮קישור זה פותח \"%s\". האם להמשיך?‬";
     Message[ hindi ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
     Message[ slovak ] = "Tento odkaz otvorí \"%s\". Chcete pokračovať?";
+    Message[ hungarian ] = "Ez a hiperhivatkozás a következőt nyitja meg: \"%s\". Folytatja?";
+    Message[ slovenian ] = "Ta hiperpovezava bo odprla \"%s\". Ali želite nadaljevati?";
 };
 
 String RID_SECURITY_WARNING_TITLE
@@ -4839,6 +5091,8 @@ String RID_SECURITY_WARNING_TITLE
     Text[ hebrew ] = "‮אזהרת בטחון‬";
     Text[ hindi ] = "Security Warning";
     Text[ slovak ] = "Bezpečnostné varovanie";
+    Text[ hungarian ] = "Biztonsági figyelmeztetés";
+    Text[ slovenian ] = "Varnostno opozorilo";
 };
 
 ErrorBox RID_INVALID_URL_MSG
@@ -4862,7 +5116,7 @@ ErrorBox RID_INVALID_URL_MSG
     Message[ dutch ] = "The URL is not valid.";
     Message[ french ] = "URL non valide";
     Message[ finnish ] = "The URL is not valid.";
-    Message[ danish ] = "The URL is not valid.";
+    Message[ danish ] = "Denne URL er ugyldig.";
     Message[ chinese_simplified ] = "这个 URL 无效。";
     Message[ chinese_traditional ] = "URL 無效。";
     Message[ arabic ] = "The URL is not valid.";
@@ -4871,6 +5125,8 @@ ErrorBox RID_INVALID_URL_MSG
     Message[ hebrew ] = "Der URL ist ungültig.";
     Message[ hindi ] = "The URL is not valid.";
     Message[ slovak ] = "URL je neplatné.";
+    Message[ hungarian ] = "Az URL nem érvényes.";
+    Message[ slovenian ] = "URL ni veljaven.";
 };
 
 String RID_INVALID_URL_TITLE
@@ -4902,7 +5158,18 @@ String RID_INVALID_URL_TITLE
     Text[ hebrew ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ hindi ] = "इशारा";
     Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION   ";
+    Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
+
+
+
+
+
+
+
+
+
 
 
 
