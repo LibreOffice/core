@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:57:27 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::clearAccessibleSelection() throw( Run
     DBG_ASSERT( sal_False, "SvxRectCtlAccessibleContext::clearAccessibleSelection() is not possible!" );
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::selectAllAccessible() throw( RuntimeException )
+void SAL_CALL SvxRectCtlAccessibleContext::selectAllAccessibleChildren() throw( RuntimeException )
 {
     // guard in selectAccessibleChild()!
 
