@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:11:56 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,9 @@
 #endif
 #ifndef _DBAUI_QUERYDESIGNACCESS_HXX_
 #include "querydesignaccess.hxx"
+#endif
+#ifndef _DBAUI_LISTVIEWITEMS_HXX_
+#include "listviewitems.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -1471,7 +1474,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
 
                 // get all needed properties for querydesign
                 ::rtl::OUString aDSName;
-                SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
                 if (pTextItem)
                     aDSName = static_cast<SvLBoxString*>(pTextItem)->GetText();
                 Reference<XConnection> xConnection;  // supports the service sdb::connection
@@ -1487,7 +1490,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                 if ((ID_TREE_QUERY_EDIT == nPos) && pEntry)
                 {
                     // get the name of the query
-                    SvLBoxItem* pQueryTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                    SvLBoxItem* pQueryTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
                     if (pQueryTextItem)
                         sCurrentQuery = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
 
@@ -1503,7 +1506,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                         if(xSup.is())
                             xNameAccess = xSup->getQueries();
 
-                        SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                        SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
                         if (pTextItem)
                             sCurrentQuery = static_cast<SvLBoxString*>(pTextItem)->GetText();
 
@@ -1533,7 +1536,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                     try
                     {
                         ::rtl::OUString aName;
-                        SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                        SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
                         if (pTextItem)
                             aName = static_cast<SvLBoxString*>(pTextItem)->GetText();
                         m_xDatabaseContext->getByName(aName) >>= xSet;
@@ -1547,7 +1550,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                         {
                             try
                             {
-                                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
                                 if (pTextItem)
                                     xNames->removeByName(static_cast<SvLBoxString*>(pTextItem)->GetText().GetBuffer());
                             }
@@ -1577,7 +1580,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 
     DBTreeListModel::DBTreeListUserData* pData = static_cast< DBTreeListModel::DBTreeListUserData* >(_pParent->GetUserData());
     OSL_ENSHURE(pData,"SbaTableQueryBrowser::OnExpandEntry: No user data!");
-    SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_DBTEXTITEM));
+    SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
     OSL_ENSHURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");
 
     if(pData->bTable)
@@ -1642,9 +1645,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 //------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
 {
-    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM) : NULL;
+    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
-        return static_cast<DSBrowserString*>(pTextItem)->isSelected();
+        return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
     else
         DBG_ERROR("SbaTableQueryBrowser::isSelected: invalid entry!");
     return sal_False;
@@ -1653,10 +1656,10 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
 //------------------------------------------------------------------------------
 void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
 {
-    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM) : NULL;
+    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
     {
-        static_cast<DSBrowserString*>(pTextItem)->Select(_bSelect);
+        static_cast<OBoldListboxString*>(pTextItem)->emphasize(_bSelect);
         m_pTreeModel->InvalidateEntry(_pEntry);
     }
     else
@@ -1688,7 +1691,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     Reference<XConnection> xOldConnection;
     xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xOldConnection;
     // the name of the table or query
-    SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+    SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
     OSL_ENSURE(pString,"There must be a string item!");
     ::rtl::OUString aName(pString->GetText().GetBuffer());
 
@@ -1735,7 +1738,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 
             if (pEntry)
             {
-                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
                 if (pTextItem)
                     sDataSourceName = static_cast<SvLBoxString*>(pTextItem)->GetText();
             }

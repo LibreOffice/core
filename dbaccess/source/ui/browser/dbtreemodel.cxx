@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,132 +59,5 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/XExecutableDialog.hpp>
-#endif
-#include <com/sun/star/beans/PropertyValue.hpp>
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
-#endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_DBTREEMODEL_HXX
-#include "dbtreemodel.hxx"
-#endif
-#ifndef _SVLBOXITM_HXX
-#include <svtools/svlbitm.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
 
-using namespace ::com::sun::star::ui;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::beans;
-using namespace ::dbtools;
-
-// .........................................................................
-namespace dbaui
-{
-// .........................................................................
-
-//========================================================================
-// class DSBrowserString
-//========================================================================
-//------------------------------------------------------------------------
-void DSBrowserString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData)
-{
-    SvLBoxString::InitViewData(pView,pEntry, _pViewData);
-    if (!_pViewData)
-        _pViewData = pView->GetViewDataItem( pEntry, this );
-
-    Font aOldFont( pView->GetFont());
-    Font aFont( aOldFont );
-    aFont.SetWeight(WEIGHT_BOLD);
-    pView->SetFont( aFont );
-
-    _pViewData->aSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
-    pView->SetFont( aOldFont );
-}
-
-//------------------------------------------------------------------------
-USHORT DSBrowserString::IsA()
-{
-    return SV_ITEM_ID_DBTEXTITEM;
-}
-
-//------------------------------------------------------------------------
-void DSBrowserString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
-{
-    if (m_bSelected)
-    {
-        Font aOldFont( rDev.GetFont());
-        Font aFont( aOldFont );
-        aFont.SetWeight(WEIGHT_BOLD);
-        rDev.SetFont( aFont );
-
-        Point aPos(rPos);
-        rDev.DrawText( aPos, GetText() );
-        rDev.SetFont( aOldFont );
-    }
-    else
-        SvLBoxString::Paint(rPos, rDev, nFlags, pEntry);
-}
-
-//========================================================================
-// class DBTreeListModel
-//========================================================================
-// -------------------------------------------------------------------------
-DBTreeListModel::DBTreeListModel()
-{
-}
-
-// .........................................................................
-}   // namespace dbaui
-// .........................................................................
+// this file is obsolete
