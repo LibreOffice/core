@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2000-10-18 18:26:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XARRAYFORMULARANGE_HPP_
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEDATA_HPP_
+#include <com/sun/star/sheet/XCellRangeData.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLSERIES_HPP_
 #include <com/sun/star/sheet/XCellSeries.hpp>
@@ -590,6 +593,7 @@ class ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::sheet::XCellRangeAddressable,
                        public com::sun::star::sheet::XSheetCellRange,
                        public com::sun::star::sheet::XArrayFormulaRange,
+                       public com::sun::star::sheet::XCellRangeData,
                        public com::sun::star::sheet::XMultipleOperation,
                        public com::sun::star::util::XMergeable,
                        public com::sun::star::sheet::XCellSeries,
@@ -638,6 +642,15 @@ public:
                             // XArrayFormulaRange
     virtual ::rtl::OUString SAL_CALL getArrayFormula() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setArrayFormula( const ::rtl::OUString& aFormula )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XCellRangeData
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<
+                            ::com::sun::star::uno::Any > > SAL_CALL getDataArray()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setDataArray( const ::com::sun::star::uno::Sequence<
+                                ::com::sun::star::uno::Sequence<
+                                    ::com::sun::star::uno::Any > >& aArray )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XMultipleOperation
