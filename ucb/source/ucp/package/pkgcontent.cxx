@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:39:27 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1752,7 +1752,8 @@ void Content::insert(
     }
 
     rtl::OUString aNewURL = m_aUri.getParentUri();
-    aNewURL += rtl::OUString::createFromAscii( "/" );
+    if (1 + aNewURL.lastIndexOf('/') != aNewURL.getLength())
+        aNewURL += rtl::OUString::createFromAscii( "/" );
     aNewURL += PackageUri::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
 
