@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:02:36 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ FontCharMap& FontCharMap::operator=( const FontCharMap& rMap )
 void FontCharMap::ImplSetRanges( ULONG nPairs, const sal_UCS4* pCodes )
 {
     if( mpRangeCodes && mpRangeCodes != pDefaultRangeCodes )
-        delete[] const_cast<ULONG*>( mpRangeCodes );
+        delete[] const_cast<sal_UCS4*>( mpRangeCodes );
 
     mnRangeCount = nPairs;
     mpRangeCodes = pCodes;
