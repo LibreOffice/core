@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 17:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,57 @@
 
 SFX_IMPL_DOCKINGWINDOW( SvxColorChildWindow, SID_COLOR_CONTROL )
 
+// ------------------------
+// - SvxColorValueSetData -
+// ------------------------
+
+class SvxColorValueSetData : public TransferableHelper
+{
+private:
+
+    XFillExchangeData       maData;
+
+protected:
+
+    virtual void            AddSupportedFormats();
+    virtual sal_Bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+
+public:
+
+                            SvxColorValueSetData( const XFillExchangeData& rData ) { maData = rData; }
+};
+
+// -----------------------------------------------------------------------------
+
+void SvxColorValueSetData::AddSupportedFormats()
+{
+    AddFormat( SOT_FORMATSTR_ID_XFA );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SvxColorValueSetData::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    sal_Bool bRet = sal_False;
+
+    if( SotExchange::GetFormat( rFlavor ) == SOT_FORMATSTR_ID_XFA )
+    {
+        SetObject( &maData, 0, rFlavor );
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    *rxOStm << maData;
+    return( rxOStm->GetError() == ERRCODE_NONE );
+}
+
 /*************************************************************************
 |*
 |* SvxColorValueSet: Ctor
@@ -100,9 +151,8 @@ SFX_IMPL_DOCKINGWINDOW( SvxColorChildWindow, SID_COLOR_CONTROL )
 \************************************************************************/
 
 SvxColorValueSet::SvxColorValueSet( Window* pParent, WinBits nWinStyle ) :
-
-    ValueSet( pParent, nWinStyle )
-
+    ValueSet( pParent, nWinStyle ),
+    DragSourceHelper( this )
 {
 }
 
@@ -113,9 +163,8 @@ SvxColorValueSet::SvxColorValueSet( Window* pParent, WinBits nWinStyle ) :
 \************************************************************************/
 
 SvxColorValueSet::SvxColorValueSet( Window* pParent, const ResId& rResId ) :
-
-    ValueSet( pParent, rResId )
-
+    ValueSet( pParent, rResId ),
+    DragSourceHelper( this )
 {
 }
 
@@ -172,8 +221,6 @@ void SvxColorValueSet::MouseButtonUp( const MouseEvent& rMEvt )
     SetNoSelection();
 }
 
-
-
 /*************************************************************************
 |*
 |* Command-Event
@@ -182,24 +229,21 @@ void SvxColorValueSet::MouseButtonUp( const MouseEvent& rMEvt )
 
 void SvxColorValueSet::Command(const CommandEvent& rCEvt)
 {
-    if (rCEvt.GetCommand() & COMMAND_STARTDRAG &&
-        SfxObjectShell::Current())
-    {
-        aDragPosPixel = rCEvt.GetMousePosPixel();
-
-        //  Aus dem ExecuteDrag heraus kann die Farbleiste geloescht werden
-        //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
-        //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
-        //  Deshalb Drag&Drop asynchron:
-        Application::PostUserEvent(STATIC_LINK(this, SvxColorValueSet, ExecDragHdl));
-    }
-    else
-    {
-        // Basisklasse
-        ValueSet::Command(rCEvt);
-    }
+    // Basisklasse
+    ValueSet::Command(rCEvt);
 }
 
+/*************************************************************************
+|*
+|* StartDrag
+|*
+\************************************************************************/
+
+void SvxColorValueSet::StartDrag( sal_Int8 nAction, const Point& rPtPixel )
+{
+    aDragPosPixel = rPtPixel;
+    Application::PostUserEvent(STATIC_LINK(this, SvxColorValueSet, ExecDragHdl));
+}
 
 /*************************************************************************
 |*
@@ -216,7 +260,7 @@ void SvxColorValueSet::DoDrag()
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         XFillAttrSetItem aXFillSetItem(&pDocSh->GetPool());
         SfxItemSet& rSet = aXFillSetItem.GetItemSet();
-        USHORT nItemId = GetItemId(aDragPosPixel);
+        USHORT nItemId = GetItemId(GetPointerPosPixel());
         rSet.Put(XFillColorItem(GetItemText( nItemId ), GetItemColor(nItemId)));
 
         if (nItemId == 1)
@@ -228,27 +272,17 @@ void SvxColorValueSet::DoDrag()
             rSet.Put(XFillStyleItem(XFILL_SOLID));
         }
 
-        XFillExchangeData aXFillExchangeData(aXFillSetItem);
+        XFillExchangeData aXFillExchangeData( aXFillSetItem );
 
-        SvData* pData = new SvData(XFillExchangeData::RegisterClipboardFormatName(),
-                                   MEDIUM_MEMORY | MEDIUM_STREAM);
-        pData->SetData(&aXFillExchangeData);
-        SvDataMemberObjectRef pDataObj = new SvDataMemberObject();
-        pDataObj->Append(pData);
-
-        // Drag starten
-        DropAction eAct = pDataObj->ExecuteDrag(this, POINTER_MOVEDATA,
-                                        POINTER_COPYDATA, POINTER_LINKDATA,
-                                        DRAG_COPYABLE);
-        DragServer::Clear();
+        EndSelection();
+        ( new SvxColorValueSetData( aXFillExchangeData ) )->StartDrag( this, DND_ACTION_COPY );
         ReleaseMouse();
     }
 }
 
-
 /*************************************************************************
 |*
-|* Command-Event
+|*
 |*
 \************************************************************************/
 
