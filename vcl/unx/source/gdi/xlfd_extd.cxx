@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:42:55 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ ScalableBitmapXlfd::ToString( ByteString &rString,
     rString += '-';
     rString += ByteString::CreateFromInt32( rInfo.mnResolutionY );
     rString += '-';
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-0";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
@@ -676,7 +676,7 @@ ScalableBitmapXlfd::ToString( ByteString &rString,
     sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-*";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
@@ -700,7 +700,7 @@ BitmapXlfd::ToString( ByteString &rString,
     sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-*";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
@@ -775,7 +775,7 @@ BitmapXlfd::ToString( ByteString &rString,
     rString += '-';
     rString += ByteString::CreateFromInt32( mnPixelSize );
     rString += "-*-*-*-";
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-*";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
@@ -817,7 +817,7 @@ ScalableXlfd::ToString( ByteString &rString,
     rString += '-';
     rString += ByteString::CreateFromInt32( nPixelSize );
     rString += "-0-0-0-";
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-0";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
@@ -841,7 +841,7 @@ ScalableXlfd::ToString( ByteString &rString,
     sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-*";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
@@ -999,7 +999,7 @@ VirtualXlfd::ToString( ByteString &rString, unsigned short nPixelSize,
     rString += '-';
     rString += ByteString::CreateFromInt32( nPixelSize );
     rString += "-0-0-0-";
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-0";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
@@ -1029,7 +1029,7 @@ VirtualXlfd::ToString( ByteString &rString, unsigned short nPixelSize,
     sprintf( pTmp, pMatricsString, nPixelSize, nPixelSize );
     rString += pTmp;
     rString += "-*-*-";
-    rString += rInfo.mcSpacing;
+    rString += static_cast< char >(rInfo.mcSpacing);
     rString += "-*";
 
     AppendAttribute( mpFactory->RetrieveCharset(rInfo.mnCharset), rString );
