@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:31:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XMultiServiceFa
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
+    Reference<XInterface> xInt = smgr->createInstance(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
     {
@@ -251,7 +251,7 @@ OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiS
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
+    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
     {
@@ -421,15 +421,16 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
                 // convert UNO any into variant
                 VARIANT* pVariant = (VARIANT*) CoTaskMemAlloc(sizeof(VARIANT));
                 VariantInit( pVariant);
-                if (! anyToVariant( pVariant, modelDepObject))
+                try
+                {
+                    anyToVariant( pVariant, modelDepObject);
+                }
+                catch(...)
                 {
                     CoTaskMemFree(pVariant);
                     throw IllegalArgumentException();
                 }
-                else
-                {
-                    ret.setValue((void*) &pVariant, getCppuType((sal_uInt32*)0));
-                }
+                ret.setValue((void*) &pVariant, getCppuType((sal_uInt32*)0));
             }
             else
                 throw IllegalArgumentException();
@@ -459,10 +460,14 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
             {
                 // convert variant into UNO any
                 VARIANT* pVariant = *(VARIANT**)modelDepObject.getValue();
-
-                if (!variantToAny(pVariant, ret))
+                try
                 {
-                    throw IllegalArgumentException();
+                    variantToAny(pVariant, ret);
+                }
+                catch (CannotConvertException & e)
+                {
+                    throw IllegalArgumentException(
+                        e.Message, 0, -1);
                 }
             }
             else
@@ -578,7 +583,7 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
         result = CoCreateInstance(
                       classId,              //Class identifier (CLSID) of the object
                       NULL,                 //Pointer to whether object is or isn't part of an aggregate
-                      CLSCTX_ALL,  //Context for running executable code
+                      CLSCTX_SERVER,  //Context for running executable code
                       IID_IUnknown,         //Reference to the identifier of the interface
                       (void**)&pUnknown);   //Address of output variable that receives
                                                   // the interface pointer requested in riid
@@ -587,9 +592,7 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
     if (pUnknown != NULL)
     {
         Any any;
-        VARIANT variant;
-
-        VariantInit(&variant);
+        CComVariant variant;
 
         V_VT(&variant) = VT_UNKNOWN;
         V_UNKNOWN(&variant) = pUnknown;
@@ -597,15 +600,11 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
         pUnknown->AddRef();
 
         // When the object is wrapped, then its refcount is increased
-        if (variantToAny(&variant, any))
+        variantToAny(&variant, any);
+        if (any.getValueTypeClass() == TypeClass_INTERFACE)
         {
-            if (any.getValueTypeClass() == TypeClass_INTERFACE)
-            {
-                ret = *(Reference<XInterface>*)any.getValue();
-            }
+            any >>= ret;
         }
-
-        VariantClear(&variant); // implicit Release
         pUnknown->Release(); // CoCreateInstance
     }
 
@@ -656,7 +655,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
 {
     //library unloading support
     globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
-    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.OleBridgeSupplier2");
+    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
 
     if (xInt.is())
     {
