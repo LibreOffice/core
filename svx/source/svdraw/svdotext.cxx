@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:30:10 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include "svdstr.hrc"   // Objektname
 #include "svdtxhdl.hxx"  // DrawTextToPath
 #include "writingmodeitem.hxx"
-
+#include "sdtfchim.hxx"
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
 #endif
@@ -1949,7 +1949,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
             rOutliner.SetControlWord(nStat);
         }
     }
-
+    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     TakeTextRect(rOutliner, rTextRect, FALSE, &rAnchorRect);
     rPaintRect = rTextRect;
 
