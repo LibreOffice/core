@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:08:22 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 13:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3282,7 +3282,7 @@ TabPage RID_TP_GENERIC {
         Text[ polish ] = "Range";
         Text[ portuguese_brazilian ] = "Bereich";
         Text[ japanese ] = "範囲";
-        Text[ korean ] = "범위";
+        Text[ korean ] = "영역";
         Text[ chinese_simplified ] = "Range";
         Text[ chinese_traditional ] = "Range";
         Text[ arabic ] = "Range";
@@ -4406,6 +4406,7 @@ FloatingWindow LOAD_CONF {
     Text[ catalan ] = "Leyendo archivos de configuraci�n";
     Text[ finnish ] = "Luetaan kokoonpanotiedostoja";
 };
+
 
 
 
