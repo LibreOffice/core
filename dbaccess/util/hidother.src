@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 15:12:44 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 06:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,13 @@ hidspecial HID_DSADMIN_PAGE_LDAP                        { HelpId = HID_DSADMIN_P
 hidspecial HID_DSADMIN_LDAP_HOSTNAME                    { HelpId = HID_DSADMIN_LDAP_HOSTNAME ; };
 hidspecial HID_DSADMIN_LDAP_BASEDN                      { HelpId = HID_DSADMIN_LDAP_BASEDN ; };
 hidspecial HID_DSADMIN_LDAP_PORTNUMBER                  { HelpId = HID_DSADMIN_LDAP_PORTNUMBER ; };
+
+hidspecial HID_TAB_PAGE_USERADMIN                       { HelpId = HID_TAB_PAGE_USERADMIN ; };
+hidspecial HID_TAB_PAGE_PBUSER                          { HelpId = HID_TAB_PAGE_PBUSER ; };
+hidspecial HID_TAB_PAGE_PBCHGPWD                        { HelpId = HID_TAB_PAGE_PBCHGPWD ; };
+hidspecial HID_TAB_PAGE_PBUSERDELETE                    { HelpId = HID_TAB_PAGE_PBUSERDELETE ; };
+hidspecial HID_TAB_PAGE_TBLGRANTS                       { HelpId = HID_TAB_PAGE_TBLGRANTS ; };
+hidspecial HID_TAB_PAGE_LBUSER                          { HelpId = HID_TAB_PAGE_LBUSER ; };
 hidspecial HID_DSBROWSER_BOOKMARKSELECTED               { HelpId = HID_DSBROWSER_BOOKMARKSELECTED ; };
 hidspecial HID_DSBROWSER_DISCONNECTING                  { HelpId = HID_DSBROWSER_DISCONNECTING ; };
 hidspecial HID_DSBROWSER_DIRECTSQL                      { HelpId = HID_DSBROWSER_DIRECTSQL   ; };
@@ -259,6 +266,9 @@ hidspecial HID_DSBROWSER_DIRECTSQL                      { HelpId = HID_DSBROWSER
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/06/18 15:12:44  fs
+ *  #88393# HID_DSBROWSER_DIRECTSQL
+ *
  *  Revision 1.27  2001/05/29 13:11:51  oj
  *  #87149# addressbook ui impl
  *
