@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:26:03 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1160,7 +1160,7 @@ String STR_SAVECOPYDOC
     Text[ russian ] = "Ñîõðàíèòü êîïèþ êàê...";
     Text[ polish ] = "Zapisz kopiê jako...";
     Text[ japanese ] = "ºËß°‚É–¼‘O‚ð•t‚¯‚Ä•Û‘¶(~A)...";
-    Text[ chinese_traditional ] = "´_¥ó¥t¦s·sÀÉ(~A)...";
+    Text[ chinese_traditional ] = "½Æ»s¥ó¥t¦s·sÀÉ(~A)...";
     Text[ arabic ] = "ÍÝÙ ÇáäÓÎÉ ÈÇÓã...";
     Text[ dutch ] = "~Kopie opslaan als...";
     Text[ chinese_simplified ] = "¸´¼þÁí´æÎª(~A)...";
@@ -1280,23 +1280,23 @@ String RID_STR_FILTBASIC
     Text = "%PRODUCTNAME Basic Bibliotheken" ;
     Text [ ENGLISH ] = "%PRODUCTNAME Basic Libraries" ;
     Text [ dutch ] = "%PRODUCTNAME Basic Bibliotheken" ;
-    Text [ english_us ] = "%PRODUCTNAME Basic Libraries" ;
+    Text [ english_us ] = "%PRODUCTNAME Basic libraries" ;
     Text [ italian ] = "Biblioteche di %PRODUCTNAME Basic" ;
     Text [ spanish ] = "Bibliotecas %PRODUCTNAME Basic" ;
     Text [ french ] = "Bibilothèques %PRODUCTNAME Basic" ;
-    Text [ swedish ] = "%PRODUCTNAME Basic Bibliotek" ;
+    Text [ swedish ] = "%PRODUCTNAME Basic-bibliotek" ;
     Text [ danish ] = "%PRODUCTNAME Basic biblioteker" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic Bibliotheken" ;
     Text [ portuguese ] = "Bibliotecas %PRODUCTNAME Basic" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME Basic ¿â";
     Text[ russian ] = "Áèáëèîòåêè %PRODUCTNAME Basic";
-    Text[ polish ] = "Biblioteki w %PRODUCTNAME Basic";
+    Text[ polish ] = "Biblioteki %PRODUCTNAME Basic";
     Text[ japanese ] = "%PRODUCTNAME Basic ×²ÌÞ×Ø";
     Text[ chinese_traditional ] = "%PRODUCTNAME Basic µ{¦¡®w";
     Text[ arabic ] = "ãßÊÈÇÊ %PRODUCTNAME Basic";
     Text[ dutch ] = "%PRODUCTNAME Basic Bibliotheken";
     Text[ chinese_simplified ] = "%PRODUCTNAME Basic ¿â";
-    Text[ greek ] = "ÂéâëéïèÞêåò %PRODUCTNAME Basic";
+    Text[ greek ] = "%PRODUCTNAME Basic ÂéâëéïèÞêåò";
     Text[ korean ] = "StarBasic ¶óÀÌºê·¯¸®";
     Text[ turkish ] = "%PRODUCTNAME Basic kitaplýklarý";
     Text[ language_user1 ] = " ";
@@ -1624,7 +1624,7 @@ String STR_FSET_FILTERNAME1
     Text[ russian ] = "%PRODUCTNAME Frame - Äîêóìåíò";
     Text[ polish ] = "Dokument %PRODUCTNAME Frame";
     Text[ japanese ] = "%PRODUCTNAME Frame ÄÞ·­ÒÝÄ";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Frame ¤å¥ó";
+    Text[ chinese_traditional ] = "%PRODUCTNAME °T®Ø¤å¥ó";
     Text[ arabic ] = "ãÓÊäÏ %PRODUCTNAME Frame";
     Text[ dutch ] = "%PRODUCTNAME Frame-document";
     Text[ chinese_simplified ] = "%PRODUCTNAME Frame ÎÄµµ";
