@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:35:12 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 16:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,13 @@
 
 #include <rtl/process.h>
 
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
+#endif
 
-#include <vos/module.hxx>
-#include <vos/thread.hxx>
-#include <vos/conditn.hxx>
-//#include <vos/profile.hxx>
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
 
 #include <uno/environment.h>
 
@@ -161,8 +163,8 @@ namespace stoc_javavm {
         JavaVirtualMachine_Impl * _pJavaVirtualMachine_Impl;
         JavaVM                  * _pJVM;
 
-        OCondition _start_Condition;
-        OCondition _wait_Condition;
+        Condition _start_Condition;
+        Condition _wait_Condition;
 
         JVM _jvm;
         RuntimeException _runtimeException;
@@ -187,7 +189,7 @@ namespace stoc_javavm {
 
         Reference<XMultiServiceFactory> _xSMgr;
 
-        OModule    _javaLib;
+        Module    _javaLib;
 
     public:
         OUString _error;
