@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:26:18 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,23 +99,27 @@
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef
 #endif
 
-namespace com { namespace sun { namespace star { namespace sdbc {
-    class XResultSet;
-    class XConnection;
-}}}}
+namespace com { namespace sun { namespace star {
 
-namespace com { namespace sun { namespace star { namespace frame {
-    class XModel;
-}}}}
+    namespace sdbc {
+        class XResultSet;
+        class XConnection;
+    }
+    namespace frame {
+        class XModel;
+    }
+    namespace lang {
+        class XMultiServiceFactory;
+    }
+    namespace text {
+        class XMailMergeListener;
+        struct MailMergeEvent;
+    }
+    namespace beans{
+        struct PropertyValue;
+    }
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-}}}}
-
-namespace com { namespace sun { namespace star { namespace text {
-    class XMailMergeListener;
-    struct MailMergeEvent;
-}}}}
+}}}
 
 namespace rtl {
     class OUString;
@@ -178,6 +182,26 @@ class SwXMailMerge :
     sal_Bool        bEscapeProcessing;
     sal_Bool        bSinglePrintJobs;
     sal_Bool        bFileNameFromColumn;
+
+
+    ::rtl::OUString                                         sInServerPassword;
+    ::rtl::OUString                                         sOutServerPassword;
+    ::rtl::OUString                                         sSubject;
+    ::rtl::OUString                                         sAddressFromColumn;
+    ::rtl::OUString                                         sMailBody;
+    ::rtl::OUString                                         sAttachmentName;
+    ::rtl::OUString                                         sAttachmentFilter;
+    com::sun::star::uno::Sequence< ::rtl::OUString >        aCopiesTo;
+    com::sun::star::uno::Sequence< ::rtl::OUString >        aBlindCopiesTo;
+    sal_Bool                                                bSendAsHTML;
+    sal_Bool                                                bSendAsAttachment;
+
+    com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aPrintSettings;
+
+    sal_Bool                                                bSaveAsSingleFile;
+    ::rtl::OUString                                         sSaveFilter;
+
+
 
     sal_Bool        bDisposing;
 
