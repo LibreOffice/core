@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-01 15:04:09 $
+ *  last change: $Author: aw $ $Date: 2002-11-26 15:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,8 +872,12 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
 
     if (pTEOutliner!=NULL) {
         BOOL bModified=pTEOutliner->IsModified();
-        if (pTEOutlinerView!=NULL) {
-            pTEOutlinerView->CompleteAutoCorrect(); // #43095#
+        if (pTEOutlinerView!=NULL)
+        {
+            // #102524# After long discussion ProdMan decided not to do a
+            // AutoCorrect when leaving Text edit mode. It's a feature, not
+            // a bug. I comment it out.
+            // pTEOutlinerView->CompleteAutoCorrect(); // #43095#
             pTEOutlinerView->HideCursor();
         }
         if (pTEObj!=NULL) {
