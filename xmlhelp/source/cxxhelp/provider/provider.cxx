@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-05 09:33:43 $
+ *  last change: $Author: kso $ $Date: 2002-08-02 15:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,11 +146,12 @@ ContentProvider::~ContentProvider()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_5( ContentProvider,
+XINTERFACE_IMPL_6( ContentProvider,
                    XTypeProvider,
                    XServiceInfo,
                    XContentProvider,
                    XComponent,
+                   XEventListener, /* base of XContainerListener */
                    XContainerListener);
 
 //=========================================================================
