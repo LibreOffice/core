@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:47 $
+ *  last change: $Author: cmc $ $Date: 2002-07-24 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1246,6 +1246,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_TxtForeColor(USHORT, const BYTE* pData, short nLen);
     void Read_TxtBackColor(USHORT, const BYTE* pData, short nLen);
     void Read_ParaBackColor(USHORT, const BYTE* pData, short nLen);
+    void Read_ParaBiDi(USHORT, const BYTE* pData, short nLen);
     static sal_uInt32 ExtractColour(const BYTE* &rpData, BYTE bVer67);
 
     long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,

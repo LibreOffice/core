@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:08 $
+ *  last change: $Author: cmc $ $Date: 2002-07-24 15:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,18 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
 //    aGrid.SetNoChars(nTextareaWidth/nRubyWidth);
 
     rFmt.SetAttr(aGrid);
+}
+
+void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
+{
+    if( nLen < 0 )
+        pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_FRAMEDIR);
+    else
+    {
+        SvxFrameDirection eDir =
+            *pData ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
+        NewAttr(SvxFrameDirectionItem(eDir));
+    }
 }
 
 BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
@@ -5440,7 +5452,7 @@ SprmReadInfo aSprmReadTab[] = {
     0xC63E, &SwWW8ImplReader::Read_ANLevelDesc, //"sprmPAnld" // pap.anld;;variable length;
     0xC63F, (FNReadRecord)0, //"sprmPPropRMark" // pap.fPropRMark;complex (see below);variable length;
     0x2640,  &SwWW8ImplReader::Read_POutLvl, //"sprmPOutLvl" // pap.lvl;has no effect if pap.istd is < 1 or is > 9;byte;
-    0x2441, (FNReadRecord)0, //"sprmPFBiDi" // ;;byte;
+    0x2441, &SwWW8ImplReader::Read_ParaBiDi, //"sprmPFBiDi" // ;;byte;
     0x2443, (FNReadRecord)0, //"sprmPFNumRMIns" // pap.fNumRMIns;1 or 0;bit;
     0x2444, (FNReadRecord)0, //"sprmPCrLf" // ;;byte;
     0xC645, (FNReadRecord)0, //"sprmPNumRM" // pap.numrm;;variable length;
@@ -5511,10 +5523,10 @@ SprmReadInfo aSprmReadTab[] = {
     0x2859, (FNReadRecord)0, //"sprmCSfxText" // chp.sfxtText;text animation;byte;
     0x085A, (FNReadRecord)0, //Read_BoldBiDiUsw, //"sprmCFBiDi", // ;;;
     0x085B, (FNReadRecord)0, //Read_BoldBiDiUsw, //"sprmCFDiacColor", // ;;;
-    0x085C, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFBoldBi"
-    0x085D, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFItalicBi"
-    0x4A5E, (FNReadRecord)&SwWW8ImplReader::Read_FontCode,
-    0x485F, (FNReadRecord)&SwWW8ImplReader::Read_Language, // "sprmCLidBi"
+    0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFBoldBi"
+    0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFItalicBi"
+    0x4A5E, &SwWW8ImplReader::Read_FontCode,
+    0x485F, &SwWW8ImplReader::Read_Language, // "sprmCLidBi"
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;
     0x4A61, &SwWW8ImplReader::Read_FontSize,    // "sprmCHpsBi", // ;;;
     0xCA62, (FNReadRecord)0, //"sprmCDispFldRMark" // chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;

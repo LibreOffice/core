@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:06 $
+ *  last change: $Author: cmc $ $Date: 2002-07-24 15:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2987,38 +2987,6 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
-{
-    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    if (rWrtWW8.bOutPageDescs && rWrtWW8.bWrtWW8)
-    {
-        const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
-        UINT16 nTextFlow=0;
-        BOOL bBiDi=FALSE;
-        switch (rItem.GetValue())
-        {
-            default:
-                ASSERT(0,"Unknown frame direction");
-            case FRMDIR_HORI_LEFT_TOP:
-                nTextFlow = 0;
-                break;
-            case FRMDIR_HORI_RIGHT_TOP:
-                nTextFlow = 0;
-                bBiDi=TRUE;
-                break;
-            case FRMDIR_VERT_TOP_LEFT:  //word doesn't have this
-            case FRMDIR_VERT_TOP_RIGHT:
-                nTextFlow = 1;
-                break;
-        }
-        rWrtWW8.InsUInt16(0x5033);
-        rWrtWW8.InsUInt16(nTextFlow);
-        rWrtWW8.InsUInt16(0x3228);
-        rWrtWW8.pO->Insert(bBiDi, rWrtWW8.pO->Count() );
-    }
-    return rWrt;
-}
-
 static Writer& OutWW8_SwTextGrid( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
@@ -3850,36 +3818,138 @@ static Writer& OutWW8_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
-static Writer& OutWW8_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
+static Writer& OutWW8_SvxAdjust(Writer& rWrt, const SfxPoolItem& rHt)
 {
 // sprmPJc
     const SvxAdjustItem& rAttr = (const SvxAdjustItem&)rHt;
     BYTE nAdj = 255;
-    switch( rAttr.GetAdjust() )
+    BYTE nAdjBiDi = 255;
+    switch(rAttr.GetAdjust())
     {
-    case SVX_ADJUST_LEFT:       nAdj = 0;   break;
-    case SVX_ADJUST_RIGHT:      nAdj = 2;   break;
-    case SVX_ADJUST_BLOCKLINE:
-    case SVX_ADJUST_BLOCK:      nAdj = 3;   break;
-    case SVX_ADJUST_CENTER:     nAdj = 1;   break;
-    default:                    return rWrt;    // kein gueltiges Attribut
+        case SVX_ADJUST_LEFT:
+            nAdj = 0;
+            nAdjBiDi = 2;
+            break;
+        case SVX_ADJUST_RIGHT:
+            nAdj = 2;
+            nAdjBiDi = 0;
+            break;
+        case SVX_ADJUST_BLOCKLINE:
+        case SVX_ADJUST_BLOCK:
+            nAdj = nAdjBiDi = 3;
+            break;
+        case SVX_ADJUST_CENTER:
+            nAdj = nAdjBiDi = 1;
+            break;
+        default:
+            return rWrt;    // not a supported Attribut
     }
 
-    if( 255 != nAdj )               // gueltiges Attribut?
+    if (255 != nAdj)        // supported Attribut?
     {
         SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-        if( rWrtWW8.bWrtWW8 )
+        if (rWrtWW8.bWrtWW8)
         {
-            rWrtWW8.InsUInt16( 0x2403 );
-            rWrtWW8.pO->Insert( nAdj, rWrtWW8.pO->Count() );
-            rWrtWW8.InsUInt16( 0x2461 ); //asian version ?
-            rWrtWW8.pO->Insert( nAdj, rWrtWW8.pO->Count() );
+            rWrtWW8.InsUInt16(0x2403);
+            rWrtWW8.pO->Insert(nAdj, rWrtWW8.pO->Count());
+
+            /*
+            Sadly for left to right paragraphs both these values are the same,
+            for right to left paragraphs the bidi one is the reverse of the
+            normal one.
+            */
+            rWrtWW8.InsUInt16(0x2461); //bidi version ?
+            bool bBiDiSwap=false;
+            if (rWrtWW8.pOutFmtNode)
+            {
+                const SvxFrameDirectionItem *pItem = 0;
+                if (rWrtWW8.pOutFmtNode->ISA(SwTxtNode))
+                {
+                    const SwCntntNode* pTxtNd =
+                        (const SwCntntNode*)rWrtWW8.pOutFmtNode;
+                    pItem = (const SvxFrameDirectionItem*)
+                        &(pTxtNd->GetAttr(RES_FRAMEDIR));
+                }
+                else if (rWrtWW8.pOutFmtNode->ISA(SwTxtFmtColl))
+                {
+                    const SwTxtFmtColl* pC =
+                        (const SwTxtFmtColl*)rWrtWW8.pOutFmtNode;
+                    pItem = (const SvxFrameDirectionItem*)
+                        &(pC->GetAttr(RES_FRAMEDIR));
+                }
+                if (pItem && pItem->GetValue() == FRMDIR_HORI_RIGHT_TOP)
+                    bBiDiSwap=true;
+            }
+
+            if (bBiDiSwap)
+                rWrtWW8.pO->Insert(nAdjBiDi, rWrtWW8.pO->Count());
+            else
+                rWrtWW8.pO->Insert(nAdj, rWrtWW8.pO->Count());
         }
         else
         {
-            rWrtWW8.pO->Insert( 5, rWrtWW8.pO->Count() );
-            rWrtWW8.pO->Insert( nAdj, rWrtWW8.pO->Count() );
+            rWrtWW8.pO->Insert(5, rWrtWW8.pO->Count());
+            rWrtWW8.pO->Insert(nAdj, rWrtWW8.pO->Count());
+        }
+    }
+    return rWrt;
+}
+
+static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if (!rWrtWW8.bWrtWW8)   //8+ only
+        return rWrt;
+
+      const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
+    UINT16 nTextFlow=0;
+    BOOL bBiDi=FALSE;
+    switch (rItem.GetValue())
+    {
+        default:
+            //Don't know about inheriting direction yet. A ToDo.
+            ASSERT(0,"Unknown frame direction");
+        case FRMDIR_HORI_LEFT_TOP:
+            nTextFlow = 0;
+            break;
+        case FRMDIR_HORI_RIGHT_TOP:
+            nTextFlow = 0;
+            bBiDi=TRUE;
+            break;
+        case FRMDIR_VERT_TOP_LEFT:  //word doesn't have this
+        case FRMDIR_VERT_TOP_RIGHT:
+            nTextFlow = 1;
+            break;
+    }
+
+    if (rWrtWW8.bOutPageDescs)
+    {
+        rWrtWW8.InsUInt16(0x5033);
+        rWrtWW8.InsUInt16(nTextFlow);
+        rWrtWW8.InsUInt16(0x3228);
+        rWrtWW8.pO->Insert(bBiDi, rWrtWW8.pO->Count() );
+    }
+    else if (!rWrtWW8.bOutFlyFrmAttrs)  //paragraph/style
+    {
+        rWrtWW8.InsUInt16(0x2441);
+        rWrtWW8.pO->Insert(bBiDi, rWrtWW8.pO->Count() );
+
+        if (rWrtWW8.pOutFmtNode &&
+            rWrtWW8.pOutFmtNode->ISA(SwTxtFmtColl))
+        {
+            const SwTxtFmtColl* pC =
+                (const SwTxtFmtColl*)rWrtWW8.pOutFmtNode;
+
+            /*
+            If we are setting the frame direction but
+            have not or will not set the adjust then we need
+            to force that to happen because the default thing
+            that word does when seeing rtl is to right align
+            those paragraphs, while we retain a default of
+            left align
+            */
+            if (SFX_ITEM_SET != pC->GetItemState(RES_PARATR_ADJUST, TRUE))
+                OutWW8_SvxAdjust(rWrt, pC->GetAttr(RES_PARATR_ADJUST));
         }
     }
     return rWrt;
