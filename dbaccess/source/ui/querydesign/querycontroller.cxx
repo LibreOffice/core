@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 13:38:35 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 13:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,7 +874,10 @@ void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
     _rxOut << (sal_Int32)m_vTableFieldDesc.size();
     ::std::vector<OTableFieldDesc*>::const_iterator aFieldIter = m_vTableFieldDesc.begin();
     for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
-        (*aFieldIter)->Save(_rxOut);
+    {
+        if(!(*aFieldIter)->IsEmpty())
+            (*aFieldIter)->Save(_rxOut);
+    }
 }
 // -----------------------------------------------------------------------------
 void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
@@ -1165,14 +1168,16 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                         //  create the output stream
                         m_pWindow->getView()->SaveUIConfig();
                         Sequence< sal_Int8 > aOutputSeq;
-                        Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
-                        Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
-                        Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
-                        Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
-                        Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
-                        OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
-                        xOutDataSource->setOutputStream(xMarkOutStream);
-                        Save(xOutStream);
+                        {
+                            Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
+                            Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
+                            Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
+                            Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
+                            Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
+                            OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
+                            xOutDataSource->setOutputStream(xMarkOutStream);
+                            Save(xOutStream);
+                        }
                         xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
                     }
 
@@ -1235,6 +1240,12 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        Reference<XFlushable> xFlush(xProp,UNO_QUERY);
+                        if(xFlush.is())
+                            xFlush->flush();
                     }
                     setModified(sal_False);
                 }
