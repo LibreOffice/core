@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 16:31:51 $
+ *  last change: $Author: mhu $ $Date: 2001-03-30 16:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,13 +450,13 @@ void SAL_CALL osl_destroyPipe(oslPipe pPipe)
 /*****************************************************************************/
 oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
-    int          s;
+    int     s, flags;
     oslPipe pAcceptedPipe;
-    OSL_ASSERT(pPipe);
 
+    OSL_ASSERT(pPipe);
     if ( pPipe == 0 )
     {
-        return 0;
+        return NULL;
     }
 
     OSL_ASSERT(strlen(pPipe->m_Name) > 0);
@@ -471,23 +471,18 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     pPipe->m_bIsAccepting = sal_False;
 #endif
 
-    if ( s < 0 )
+    if (s < 0)
     {
-#if defined(DEBUG)
-        fprintf(stderr,"osl_acceptPipe : accept error '%s'\n",strerror(errno));
-#endif
+        OSL_TRACE("osl_acceptPipe : accept error '%s'", strerror(errno));
         return NULL;
     }
 
 #if defined(LINUX)
     if ( pPipe->m_bIsInShutdown == sal_True )
     {
-        close(s);
         __osl_destroyPipeImpl(pPipe);
 
-#if defined(DEBUG)
-        fprintf(stderr,"osl_acceptPipe : destroying while accept\n");
-#endif /* DEBUG */
+        close(s);
         return NULL;
     }
 #endif /* LINUX */
@@ -497,9 +492,22 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         pAcceptedPipe= __osl_createPipeImpl();
 
         OSL_ASSERT(pAcceptedPipe);
-
         if(pAcceptedPipe==NULL)
+        {
+            close(s);
             return NULL;
+        }
+
+        /* set close-on-exec flag */
+        if (!((flags = fcntl(s, F_GETFD, 0)) < 0))
+        {
+            flags |= FD_CLOEXEC;
+            if (fcntl(s, F_SETFD, flags) < 0)
+            {
+                OSL_TRACE("osl_acceptPipe: error changing socket flags. "
+                          "Errno: %d; %s",errno,strerror(errno));
+            }
+        }
 
         pAcceptedPipe->m_Socket = s;
     }
