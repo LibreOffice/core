@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-12 11:30:55 $
+ *  last change: $Author: sj $ $Date: 2001-03-14 12:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,11 @@ struct PHLayout
 {
     sal_Int32   nLayout;
     sal_uInt8   nPlaceHolder[ 8 ];
+
+    sal_uInt8   nUsedObjectPlaceHolder;
+    sal_uInt8   nTypeOfTitle;
+    sal_uInt8   nTypeOfOutliner;
+
     BOOL    bTitlePossible;
     BOOL    bOutlinerPossible;
     BOOL    bSecOutlinerPossible;
@@ -285,31 +290,31 @@ struct PHLayout
 
 static PHLayout pPHLayout[] =
 {
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, TRUE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_BLANCSLIDE,            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, FALSE, FALSE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,      0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2ROWSANDTITLE,         0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_LEFTCOLUMN2ROWS,       0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TOPROW2COLUMN,         0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2ROWSANDTITLE,         0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_4OBJECTS,              0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_ONLYTITLE,             0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, FALSE, FALSE },
-    { EPP_LAYOUT_BLANCSLIDE,            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, FALSE, FALSE, FALSE },
-    { EPP_LAYOUT_TITLERIGHT2BODIESLEFT, 0x11, 0x12, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLERIGHTBODYLEFT,    0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE },
-    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, TRUE, TRUE, FALSE }
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, TRUE, TRUE, TRUE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_BLANCSLIDE,            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x16, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x14, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x15, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x16, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_RIGHTCOLUMN2ROWS,      0x0d, 0x0e, 0x13, 0x13, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2ROWSANDTITLE,         0x0d, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_LEFTCOLUMN2ROWS,       0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TOPROW2COLUMN,         0x0d, 0x13, 0x13, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2ROWSANDTITLE,         0x0d, 0x0e, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_4OBJECTS,              0x0d, 0x13, 0x13, 0x13, 0x13, 0x00, 0x00, 0x00, 0x13, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_ONLYTITLE,             0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, TRUE, FALSE, FALSE },
+    { EPP_LAYOUT_BLANCSLIDE,            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x0e, FALSE, FALSE, FALSE },
+    { EPP_LAYOUT_TITLERIGHT2BODIESLEFT, 0x11, 0x12, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x11, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLERIGHTBODYLEFT,    0x11, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x11, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_TITLEANDBODYSLIDE,     0x0d, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0d, 0x12, TRUE, TRUE, FALSE },
+    { EPP_LAYOUT_2COLUMNSANDTITLE,      0x0d, 0x16, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x0d, 0x12, TRUE, TRUE, FALSE }
 };
 
 struct SOParagraph
@@ -892,7 +897,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          mnPagesWritten;
         sal_uInt32          mnUniqueSlideIdentifier;
         sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????
-        sal_Int32           mnLayout;           // nur bei normaler Seite gueltig
         sal_uInt32          mnDiaMode;          // 0 -> manuell
                                                 // 1 -> halbautomatisch
                                                 // 2 -> automatisch
@@ -954,14 +958,20 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                 ::com::sun::star::presentation::AnimationEffect eTextEffect,
                                 sal_uInt16 nOrder );
         void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction );
-        void                ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool bDisableAutoGrowHeight = FALSE );
+        void                ImplWriteTextBundle( EscherPropertyContainer& rPropOpt,
+                                                    sal_Bool bDisableAutoGrowHeight = sal_False,
+                                                        sal_Bool bWriteEvenEmptyTextObjects = sal_False );
         sal_Bool            ImplGetMasterTitleAndBody();
         sal_Bool            ImplGetStyleSheets();
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj, sal_uInt32 nTextStyle );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                                             sal_uInt32 nAtomInstance, TextRuleEntry* pTextRule, SvStream& rExtBu );
-        void                ImplWritePage( EscherSolverContainer& rSolver, PageType ePageType, sal_Bool bMaster, int nPageNumber = 0 );
+        void                ImplWritePage( const PHLayout& rLayout,
+                                                EscherSolverContainer& rSolver,
+                                                    PageType ePageType,
+                                                        sal_Bool bMaster,
+                                                            int nPageNumber = 0 );
         sal_Bool            ImplIsAutoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                     sal_Bool bIsGroup, sal_Int32 nAngle, sal_uInt32& nNewShapeType, sal_uInt32& nReplace, List& rAdjustmentList,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-13 12:27:52 $
+ *  last change: $Author: sj $ $Date: 2001-03-14 12:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,9 +1236,9 @@ sal_Bool PPTWriter::ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool bDisableAutoGrowHeight )
+void PPTWriter::ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool bDisableAutoGrowHeight, sal_Bool bWriteEvenEmptyTextObjects )
 {
-    if ( ImplGetText() )
+    if ( ImplGetText() || bWriteEvenEmptyTextObjects )
     {
         ::com::sun::star::uno::Any aAny;
         ::com::sun::star::text::WritingMode             eWM( ::com::sun::star::text::WritingMode_LR_TB );
@@ -2292,9 +2292,14 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > aXCursorText;
                     ::com::sun::star::uno::Any aAny( aXTextPortionE->nextElement() );
-                    ;
                     if ( aAny >>= aXCursorText )
-                        Insert( new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection ), LIST_APPEND );
+                    {
+                        PortionObj* pPortionObj = new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection );
+                        if ( pPortionObj->Count() )
+                            Insert( pPortionObj, LIST_APPEND );
+                        else
+                            delete pPortionObj;
+                    }
                 }
             }
         }
@@ -4004,7 +4009,7 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
     ImplWriteTextBundle( aPropOpt );                            \
 }
 
-void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType ePageType, sal_Bool bMasterPage, int nPageNumber )
+void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& aSolverContainer, PageType ePageType, sal_Bool bMasterPage, int nPageNumber )
 {
     sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nGroupLevel, nOlePictureId;
     sal_uInt16  nEffectCount;
@@ -4025,10 +4030,6 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
 
     SvMemoryStream* pClientTextBox = NULL;
     SvMemoryStream* pClientData = NULL;
-
-    const PHLayout& rLayout =
-        ( ePageType == NORMAL ) ? pPHLayout[ mnLayout ]
-                                : ( ePageType == MASTER ) ? pPHLayout[ 0 ] : pPHLayout[ 20 ];
 
     while( GetNextGroupEntry() )
     {
@@ -4533,13 +4534,7 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                 // ein GraphicObject kann auch ein ClickMe Element sein
                 if ( mbEmptyPresObj && ( ePageType == NORMAL ) )
                 {
-                    nPlaceHolderAtom = 19;      // EPP_PLACEHOLDER_OBJECT;
-                    if ( mnLayout == 8 )
-                        nPlaceHolderAtom = 21;  // EPP_PLACEHOLDER_OBJECT_TABLE
-                    else if ( ( mnLayout == 2 ) || ( mnLayout == 4 ) || ( mnLayout == 7 ) )
-                        nPlaceHolderAtom = 20;  // EPP_PLACEHOLDER_GRAPH;
-                    else if ( ( mnLayout == 9 ) || ( mnLayout == 6 ) )
-                        nPlaceHolderAtom = 22;  // EPP_PLACEHOLDER_CLIPART
+                    nPlaceHolderAtom = rLayout.nUsedObjectPlaceHolder;
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );           // Flags: HaveAnchor | HaveMaster
                     aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
@@ -4609,11 +4604,11 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
 
                         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                         mnTextStyle = EPP_TEXTSTYLE_TITLE;
-                        nPlaceHolderAtom = EPP_PLACEHOLDER_TITLE;
+                        nPlaceHolderAtom = rLayout.nTypeOfTitle;
                         ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
                         aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
                         aPropOpt.CreateFillProperties( mXPropSet, sal_True );
-                        ImplWriteTextBundle( aPropOpt, sal_True );
+                        ImplWriteTextBundle( aPropOpt, sal_True, sal_True );
                         if ( mbEmptyPresObj )
                         {
                             sal_uInt32 nNoLineDrawDash = 0;
@@ -4645,35 +4640,23 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                             nPrevTextStyle = EPP_TEXTSTYLE_TITLE;
                             continue;
                         }
-                        sal_uInt32 nOutlCount = 0;
-                        for ( sal_uInt32 nI = 0; nI < 8; nI++ )
+                        mnTextStyle = EPP_TEXTSTYLE_BODY;
+                        nPlaceHolderAtom = rLayout.nTypeOfOutliner;
+                        mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                        ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
+                        aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                        aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                        ImplWriteTextBundle( aPropOpt, sal_True, sal_True );
+                        if ( mbEmptyPresObj )
                         {
-                            sal_uInt8 nC = pPHLayout[ mnLayout ].nPlaceHolder[ nI ];
-                            if ( !nC )
-                                break;
-                            if ( nC == 0xe )
-                                nOutlCount++;
+                            sal_uInt32 nNoLineDrawDash = 0;
+                            aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
+                            nNoLineDrawDash |= 0x10001;
+                            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
                         }
-                        if ( nOutlCount >= nOutlinerCount )
-                        {
-                            mnTextStyle = EPP_TEXTSTYLE_BODY;
-                            nPlaceHolderAtom = EPP_PLACEHOLDER_BODY;
-                            mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                            ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );          // Flags: HaveAnchor | HaveMaster
-                            aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
-                            aPropOpt.CreateFillProperties( mXPropSet, sal_True );
-                            ImplWriteTextBundle( aPropOpt, sal_True );
-                            if ( mbEmptyPresObj )
-                            {
-                                sal_uInt32 nNoLineDrawDash = 0;
-                                aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
-                                nNoLineDrawDash |= 0x10001;
-                                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nNoLineDrawDash );
-                            }
-                        }
-                        else mbPresObj = FALSE;
                     }
-                    else mbPresObj = FALSE;
+                    else
+                        mbPresObj = FALSE;
                 }
                 if ( !mbPresObj )
                 {
@@ -4703,13 +4686,7 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 if ( mbEmptyPresObj && ( ePageType == NORMAL ) )
                 {
-                    nPlaceHolderAtom = 19;      // EPP_PLACEHOLDER_OBJECT;
-                    if ( mnLayout == 8 )
-                        nPlaceHolderAtom = 21;  // EPP_PLACEHOLDER_OBJECT_TABLE
-                    else if ( ( mnLayout == 2 ) || ( mnLayout == 4 ) || ( mnLayout == 7 ) )
-                        nPlaceHolderAtom = 20;  // EPP_PLACEHOLDER_GRAPH;
-                    else if ( ( mnLayout == 9 ) || ( mnLayout == 6 ) )
-                        nPlaceHolderAtom = 22;  // EPP_PLACEHOLDER_CLIPART
+                    nPlaceHolderAtom = rLayout.nUsedObjectPlaceHolder;
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );              // Flags: HaveAnchor | HaveMaster
                     aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
                     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
@@ -4857,9 +4834,9 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
 
                     *pClientData << (sal_uInt32)( EPP_OEPlaceholderAtom << 16 ) << (sal_uInt32)8
                                  << nPlacementID                // PlacementID
-                                 << (sal_uInt8)nPlaceHolderAtom     // PlaceHolderID
-                                 << (sal_uInt8)0                        // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
-                                 << (sal_uInt16)0;                  // padword
+                                 << (sal_uInt8)nPlaceHolderAtom // PlaceHolderID
+                                 << (sal_uInt8)0                // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
+                                 << (sal_uInt16)0;              // padword
                 }
                 if ( nOlePictureId )
                 {
@@ -4885,44 +4862,44 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                     ImplWriteClickAction( *pClientData, eCa );
                 }
             }
-            if ( mnTextSize )
+            if ( ( mnTextStyle == EPP_TEXTSTYLE_TITLE ) || ( mnTextStyle == EPP_TEXTSTYLE_BODY ) )
             {
-                if ( ( mnTextStyle == EPP_TEXTSTYLE_TITLE ) || ( mnTextStyle == EPP_TEXTSTYLE_BODY ) )
+                if ( !pClientTextBox )
+                    pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
+
+                *pClientTextBox << (sal_uInt32)( EPP_OutlineTextRefAtom << 16 ) << (sal_uInt32)4
+                                << nPlacementID;
+
+                if ( mbEmptyPresObj == FALSE )
                 {
-                    if ( !pClientTextBox )
-                        pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
-
-                    *pClientTextBox << (sal_uInt32)( EPP_OutlineTextRefAtom << 16 ) << (sal_uInt32)4
-                                    << nPlacementID;
-
-                    if ( mbEmptyPresObj == FALSE )
-                    {
-                        if ( ( ePageType == NORMAL ) && ( bMasterPage == FALSE ) )
-                        {   // try to allocate the textruleratom
-                            TextRuleEntry*  pTextRule = (TextRuleEntry*)maTextRuleList.GetCurObject();
-                            while ( pTextRule )
+                    if ( ( ePageType == NORMAL ) && ( bMasterPage == FALSE ) )
+                    {   // try to allocate the textruleratom
+                        TextRuleEntry*  pTextRule = (TextRuleEntry*)maTextRuleList.GetCurObject();
+                        while ( pTextRule )
+                        {
+                            int nRulePage = pTextRule->nPageNumber;
+                            if ( nRulePage > nPageNumber )
+                                break;
+                            else if ( nRulePage < nPageNumber )
+                                pTextRule = (TextRuleEntry*)maTextRuleList.Next();
+                            else
                             {
-                                int nRulePage = pTextRule->nPageNumber;
-                                if ( nRulePage > nPageNumber )
-                                    break;
-                                else if ( nRulePage < nPageNumber )
-                                    pTextRule = (TextRuleEntry*)maTextRuleList.Next();
-                                else
+                                SvMemoryStream* pOut = pTextRule->pOut;
+                                if ( pOut )
                                 {
-                                    SvMemoryStream* pOut = pTextRule->pOut;
-                                    if ( pOut )
-                                    {
-                                        pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
-                                        delete pOut, pTextRule->pOut = NULL;
-                                    }
-                                    maTextRuleList.Next();
-                                    break;
+                                    pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
+                                    delete pOut, pTextRule->pOut = NULL;
                                 }
+                                maTextRuleList.Next();
+                                break;
                             }
                         }
                     }
                 }
-                else
+            }
+            else
+            {
+                if ( mnTextSize || ( nPlaceHolderAtom == EPP_PLACEHOLDER_MASTERDATE ) || ( nPlaceHolderAtom == EPP_PLACEHOLDER_NOTESBODY ) )
                 {
                     int nInstance;
                     if ( ( nPlaceHolderAtom == EPP_PLACEHOLDER_MASTERDATE ) || ( nPlaceHolderAtom == EPP_PLACEHOLDER_NOTESBODY ) )
@@ -4942,16 +4919,15 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
                         ImplProgTagContainer( pClientData, &aExtBu );
                     }
                 }
-            }
-            else if ( nPlaceHolderAtom >= 19 )
-            {
-                if ( !pClientTextBox )
-                    pClientTextBox = new SvMemoryStream( 12 );
+                else if ( nPlaceHolderAtom >= 19 )
+                {
+                    if ( !pClientTextBox )
+                        pClientTextBox = new SvMemoryStream( 12 );
 
-                *pClientTextBox << (sal_uInt32)( EPP_TextHeaderAtom << 16 ) << (sal_uInt32)4
-                                << (sal_uInt32)7;
+                    *pClientTextBox << (sal_uInt32)( EPP_TextHeaderAtom << 16 ) << (sal_uInt32)4
+                                    << (sal_uInt32)7;
+                }
             }
-
             if ( pClientData )
             {
                 *mpStrm << (sal_uInt32)( ( ESCHER_ClientData << 16 ) | 0xf )

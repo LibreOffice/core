@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-12 11:31:03 $
+ *  last change: $Author: sj $ $Date: 2001-03-14 12:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,7 +1187,7 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup();
 
-    ImplWritePage( aSolverContainer, MASTER, TRUE );    // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( pPHLayout[ 0 ], aSolverContainer, MASTER, TRUE );    // Die Shapes der Seite werden im PPT Dok. erzeugt
 
 //*******************************
 //** DEFAULT MASTER TITLE AREA **
@@ -1207,16 +1207,19 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
             mnShapeMasterTitle = mpPptEscherEx->GetShapeID();
             mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterTitle );// Flags: HaveAnchor | HasSpt
             EscherPropertyContainer aPropOpt;
-            aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x10001 );
+            aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
             aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
             aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
             aPropOpt.AddOpt( ESCHER_Prop_fillColor, mnFillColor );
             aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, mnFillBackColor );
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
             aPropOpt.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
-            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
             aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
             aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+            sal_uInt32 nLineFlags = 0x90001;
+            if ( aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
+                nLineFlags |= 0x10001;  // draw dashed line if no line
+            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
             ImplWriteTextBundle( aPropOpt );
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
@@ -1264,7 +1267,7 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
             mnShapeMasterBody = mpPptEscherEx->GetShapeID();
             mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterBody );  // Flags: HaveAnchor | HasSpt
             EscherPropertyContainer aPropOpt;
-            aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x10001 );
+            aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
             aPropOpt.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
             aPropOpt.AddOpt( ESCHER_Prop_fillColor, mnFillColor );
             aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, mnFillBackColor );
@@ -1273,6 +1276,10 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
             aPropOpt.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
             aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+            sal_uInt32 nLineFlags = 0x90001;
+            if ( aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags ) )
+                nLineFlags |= 0x10001;  // draw dashed line if no line
+            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
             ImplWriteTextBundle( aPropOpt );
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
@@ -1370,7 +1377,7 @@ sal_Bool PPTWriter::ImplCreateMainNotes()
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup();
 
-    ImplWritePage( aSolverContainer, NOTICE, TRUE );
+    ImplWritePage( pPHLayout[ 20 ], aSolverContainer, NOTICE, TRUE );
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -1426,7 +1433,7 @@ sal_Bool PPTWriter::ImplCreateTitleMasterPage( int nPageNum )
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup();
 
-    ImplWritePage( aSolverContainer, MASTER, TRUE );            // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( pPHLayout[ 0 ], aSolverContainer, MASTER, TRUE );    // Die Shapes der Seite werden im PPT Dok. erzeugt
 
     mpPptEscherEx->LeaveGroup();
 
@@ -1464,11 +1471,10 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
         nMode |= 4;
 
     const PHLayout& rLayout = ImplGetLayout( mXPagePropSet );
-    mnLayout = rLayout.nLayout;
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Slide | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Slide );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    *mpStrm << mnLayout;
+    *mpStrm << rLayout.nLayout;
     mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs ( 8Stueck )
     *mpStrm << (sal_uInt32)nMasterID                // master ID ( ist gleich 0x80000000 bei einer masterpage   )
             << (sal_uInt32)nPageNum + 0x100         // notes ID ( ist gleich null wenn keine notizen vorhanden )
@@ -1646,7 +1652,7 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
     mpPptEscherEx->OpenContainer( EPP_PPDrawing );
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup();
-    ImplWritePage( aSolverContainer, NORMAL, FALSE, nPageNum );             // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( rLayout, aSolverContainer, NORMAL, FALSE, nPageNum );    // Die Shapes der Seite werden im PPT Dok. erzeugt
     mpPptEscherEx->LeaveGroup();
 
     if ( bHasBackground )
@@ -1698,7 +1704,7 @@ sal_Bool PPTWriter::ImplCreateNotes( int nPageNum )
     mpPptEscherEx->OpenContainer( ESCHER_DgContainer );
     mpPptEscherEx->EnterGroup();
 
-    ImplWritePage( aSolverContainer, NOTICE, FALSE );   // Die Shapes der Seite werden im PPT Dok. erzeugt
+    ImplWritePage( pPHLayout[ 20 ], aSolverContainer, NOTICE, FALSE );  // Die Shapes der Seite werden im PPT Dok. erzeugt
 
     mpPptEscherEx->LeaveGroup();
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
