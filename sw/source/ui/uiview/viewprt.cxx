@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,23 +359,28 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
                 aOpts.bPrintSelection = 0 != bPrintSelection;
 
             SfxViewShell::Print(*pProgress);
-            if( bPrtPros )
+            if ( !pProgress->IsAborted() )
             {
-                bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
-                if( bStartJob )
-                    pSh->PrintProspect( aOpts, *pProgress );
+                if( bPrtPros )
+                {
+                    bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
+                    if( bStartJob )
+                        pSh->PrintProspect( aOpts, *pProgress );
+                }
+                else
+                    bStartJob = pSh->Prt( aOpts, *pProgress );
+
+                if ( bBrowse )
+                {
+                    aBrowse.SetValue( TRUE );
+                    aSet.Put( aBrowse, aBrowse.Which() );
+                    SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
+                    GetDocShell()->Execute( aReq );
+                    pSh->UnlockPaint();
+                }
             }
             else
-                bStartJob = pSh->Prt( aOpts, *pProgress );
-
-            if ( bBrowse )
-            {
-                aBrowse.SetValue( TRUE );
-                aSet.Put( aBrowse, aBrowse.Which() );
-                SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
-                GetDocShell()->Execute( aReq );
-                pSh->UnlockPaint();
-            }
+                bStartJob = FALSE;
 
             pSh->LockView( bLockedView );
         }
