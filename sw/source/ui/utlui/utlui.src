@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:27:32 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Odstranit prázdné odstavce";
         Text[ hebrew ] = "Leere Absätze entfernen";
         Text[ hindi ] = "खाली परिच्छेदों को हटाओ ";
+        Text[ slovak ] = "Odstrániť prázdne odstavce";
     };
     String STR_AUTOFMTREDL_USE_REPLACE+1
     {
@@ -126,6 +127,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Použít tabulku náhrad";
         Text[ hebrew ] = "Ersetzungstabelle anwenden";
         Text[ hindi ] = "प्रतिस्थापना सारणी का उपयोग करो";
+        Text[ slovak ] = "Použiť tabuľku náhrad";
     };
     String STR_AUTOFMTREDL_CPTL_STT_WORD+1
     {
@@ -158,6 +160,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Opravit první DVě VElká PÍsmena";
         Text[ hebrew ] = "ZWei Großbuchstaben am WOrtanfang korrigieren";
         Text[ hindi ] = "पहिले का दो बड़े अक्षर को ठीक करो";
+        Text[ slovak ] = "Opraviť prvé DVe VEľké písmená";
     };
     String STR_AUTOFMTREDL_CPTL_STT_SENT+1
     {
@@ -190,6 +193,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Začínat každou větu velkým písmenem";
         Text[ hebrew ] = "Jeden Satz mit einem Großbuchstaben beginnen";
         Text[ hindi ] = "वाक्य का पहिला अक्षर को बड़े अक्षर में बदलो";
+        Text[ slovak ] = "Začínať každú vetu veľkým písmenom";
     };
     String STR_AUTOFMTREDL_TYPO+1
     {
@@ -220,6 +224,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nahradit \"standardní\" uvozovky %1vlastními%2";
         Text[ hebrew ] = "\"Gerade\" Anführungszeichen durch %1typografische%2 ersetzen";
         Text[ hindi ] = "\"स्टान्डर्ड\" क्वोट्स को %1custom%2 क्वोट्स से प्रतिस्थापित करो";
+        Text[ slovak ] = "Nahradiť \"štandardné\" úvodzovky %1vlastnými%2";
     };
     String STR_AUTOFMTREDL_USER_STYLE+1
     {
@@ -250,6 +255,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nahradit vlastní styly";
         Text[ hebrew ] = "Benutzervorlagen ersetzen";
         Text[ hindi ] = "व्यवस्था शैलियाँ प्रतिस्थापित करो";
+        Text[ slovak ] = "Nahradiť vlastné štýly";
     };
     String STR_AUTOFMTREDL_BULLET+1
     {
@@ -280,6 +286,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Odrážky nahrazeny";
         Text[ hebrew ] = "Bulletzeichen ersetzt";
         Text[ hindi ] = "पर्तिस्थापित बुल्लेट्स";
+        Text[ slovak ] = "Odrážky nahradené";
     };
     String STR_AUTOFMTREDL_UNDER+1
     {
@@ -310,6 +317,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Automatické _podtrhávání_";
         Text[ hebrew ] = "Automatisch _unterstrichen_";
         Text[ hindi ] = "स्वचालित _रेखांकित_";
+        Text[ slovak ] = "Automatické _podčiarkovanie_";
     };
     String STR_AUTOFMTREDL_BOLD+1
     {
@@ -340,6 +348,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Automatické *tučné*";
         Text[ hebrew ] = "Automatisch *fett*";
         Text[ hindi ] = "स्वचालित *मोटा*";
+        Text[ slovak ] = "Automaticky *tučné*";
     };
     String STR_AUTOFMTREDL_FRACTION+1
     {
@@ -370,6 +379,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nahradit 1/2 ... za ½ ...";
         Text[ hebrew ] = "1/2 ... durch ½ ... ersetzen";
         Text[ hindi ] = "1/2 ... को Â½ ... से प्रतिस्थापित करो";
+        Text[ slovak ] = "Nahradiť 1/2 ... za ½ ...";
     };
     String STR_AUTOFMTREDL_DETECT_URL+1
     {
@@ -400,6 +410,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Rozpoznání URL";
         Text[ hebrew ] = "URL erkennen";
         Text[ hindi ] = "URL पहचान";
+        Text[ slovak ] = "Rozpoznanie URL";
     };
     String STR_AUTOFMTREDL_DASH+1
     {
@@ -430,6 +441,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nahradit pomlčky";
         Text[ hebrew ] = "Gedankenstriche ersetzen";
         Text[ hindi ] = "डॉशों को प्रतिस्थापित करो";
+        Text[ slovak ] = "Nahradiť pomlčky";
     };
     String STR_AUTOFMTREDL_ORDINAL+1
     {
@@ -460,6 +472,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nahradit 1st... za 1^st...";
         Text[ hebrew ] = "1st ... durch 1^st ... ersetzen";
         Text[ hindi ] = "1st... को 1^st... से प्रतिस्थापित करो";
+        Text[ slovak ] = "Nahradiť 1st... za 1^st...";
     };
     String STR_AUTOFMTREDL_RIGHT_MARGIN+1
     {
@@ -490,6 +503,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Porovnat jednotlivé řádky odstavců";
         Text[ hebrew ] = "Zusammenfassen von einzeiligen Absätzen";
         Text[ hindi ] = "अकेला रेखा परिच्छेदों को मिलाओ";
+        Text[ slovak ] = "Porovnať jednotlivé riadky odstavcov";
     };
 
     String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
@@ -521,6 +535,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nastavit styl \"Tělo textu\"";
         Text[ hebrew ] = "Setze Vorlage \"Textkörper\"";
         Text[ hindi ] = "\"टेक्स्ट् का मुख्य भाग\" शैली को सेट्ट करो";
+        Text[ slovak ] = "Nastaviť štýl\"Telo textu\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
     {
@@ -551,6 +566,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nastavit styl \"Odsazení těla textu\"";
         Text[ hebrew ] = "Setze Vorlage \"Textkörper Einzug\"";
         Text[ hindi ] = "\"टेक्स्ट् का मुख्य भाग इन्डेन्ट\" शैली को सेट्ट करो";
+        Text[ slovak ] = "Nastaviť štýl \"Odsadenie tela textu\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
     {
@@ -581,6 +597,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nastavit styl \"Předsazení prvního řádku\"";
         Text[ hebrew ] = "Setze Vorlage \"Textkörper Einzug negativ\"";
         Text[ hindi ] = "\"हांगिंग इन्डेन्ट\" शैली को सेट्ट करो";
+        Text[ slovak ] = "Nastaviť štýl\"Odsadenie prvého riadku\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
     {
@@ -611,6 +628,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nastavit styl \"Odsazení těla textu\"";
         Text[ hebrew ] = "Setze Vorlage \"Textkörper Einrückung\"";
         Text[ hindi ] = "\"टेक्स्ट् का मुख्य भाग इन्डेन्ट\" शैली को सेट्ट करो";
+        Text[ slovak ] = "Nastaviť štýl \"Odsadenie tela textu\"";
     };
     String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
     {
@@ -641,6 +659,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nastavit styl \"Nadpisu $(ARG1)\"";
         Text[ hebrew ] = "Setze Vorlage \"Überschrift $(ARG1)\"";
         Text[ hindi ] = "\"शीर्षक $(ARG1)\" शैली को सेट्ट करो";
+        Text[ slovak ] = "Nastaviť štýl \"Nadpisu $(ARG1)\"";
     };
     String STR_AUTOFMTREDL_SET_NUMBULET +1
     {
@@ -671,6 +690,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Nastavit styl \"Odrážek\" nebo \"Číslování\"";
         Text[ hebrew ] = "Setze Vorlage \"Aufzählung\" oder \"Nummerierung\"";
         Text[ hindi ] = "\"बुल्लेट्\" अथवा \"संख्या देना\" शैली को सेट्ट करो";
+        Text[ slovak ] = "Nastaviť štýl \"odrážok\" alebo \"číslovanie\"";
     };
 
     String STR_AUTOFMTREDL_DEL_MORELINES +1
@@ -702,6 +722,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ czech ] = "Srovnání odstavců";
         Text[ hebrew ] = "Zusammenfassen von Absätzen";
         Text[ hindi ] = "परिच्छेदों को मिलाओ";
+        Text[ slovak ] = "Zarovnanie odstavcov";
     };
 
 };
@@ -738,6 +759,7 @@ String STR_EVENT_OBJECT_SELECT
     Text[ czech ] = "Kliknutí na objekt";
     Text[ hebrew ] = "Objekt anklicken";
     Text[ hindi ] = "वस्तु में क्लिक करो";
+    Text[ slovak ] = "Kliknúť na objekt";
 };
 String STR_EVENT_START_INS_GLOSSARY
 {
@@ -769,6 +791,7 @@ String STR_EVENT_START_INS_GLOSSARY
     TEXT[ czech ] = "Před vložením automatického textu";
     TEXT[ hebrew ] = "Vor Einfügen des AutoTextes";
     TEXT[ hindi ] = "स्वचालित टेक्स्ट् को जोड़ने से पहिले";
+    TEXT[ slovak ] = "Pred vložením automatického textu";
 };
 String STR_EVENT_END_INS_GLOSSARY
 {
@@ -800,6 +823,7 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ czech ] = "Po vložení automatického textu";
     TEXT[ hebrew ] = "Nach Einfügen des AutoTextes";
     TEXT[ hindi ] = "स्वचालित टेक्स्ट् जोड़ने के पश्चात्";
+    TEXT[ slovak ] = "Po vložení automatického textu";
 };
 String STR_EVENT_MOUSEOVER_OBJECT
 {
@@ -831,6 +855,7 @@ String STR_EVENT_MOUSEOVER_OBJECT
     Text[ czech ] = "Myš na objektu";
     Text[ hebrew ] = "Maus über Objekt";
     Text[ hindi ] = "मौस वस्तु के ऊपर";
+    Text[ slovak ] = "Myš na objekte";
 };
 String STR_EVENT_MOUSECLICK_OBJECT
 {
@@ -862,6 +887,7 @@ String STR_EVENT_MOUSECLICK_OBJECT
     Text[ czech ] = "Provést hyper. odkaz";
     Text[ hebrew ] = "Hyperlink auslösen";
     Text[ hindi ] = "ट्रिग्गर हाइपरलिंक";
+    Text[ slovak ] = "Previesť hypertextový odkaz";
 };
 String STR_EVENT_MOUSEOUT_OBJECT
 {
@@ -893,6 +919,7 @@ String STR_EVENT_MOUSEOUT_OBJECT
     Text[ czech ] = "Myš opouští objekt";
     Text[ hebrew ] = "Maus verlässt Objekt";
     Text[ hindi ] = "मौस वस्तु से बाहर";
+    Text[ slovak ] = "Myš opúšťa objekt";
 };
 String STR_EVENT_IMAGE_LOAD
 {
@@ -923,6 +950,7 @@ String STR_EVENT_IMAGE_LOAD
     Text[ czech ] = "Obrázek byl úspěšně načten";
     Text[ hebrew ] = "Grafik laden erfolgreich";
     Text[ hindi ] = "सुचित्र का लोड़ सफल हुआ";
+    Text[ slovak ] = "Obrázok bol úspešne načítaný";
 };
 String STR_EVENT_IMAGE_ABORT
 {
@@ -953,6 +981,7 @@ String STR_EVENT_IMAGE_ABORT
     Text[ czech ] = "Načítání obrázku ukončeno";
     Text[ hebrew ] = "Grafik laden abgebrochen";
     Text[ hindi ] = "सुचित्र का लोड़ समाप्त हुआ";
+    Text[ slovak ] = "Načítanie obrázku ukončené";
 };
 String STR_EVENT_IMAGE_ERROR
 {
@@ -983,6 +1012,7 @@ String STR_EVENT_IMAGE_ERROR
     Text[ czech ] = "Obrázek nebylo možné načíst";
     Text[ hebrew ] = "Grafik laden fehlerhaft";
     Text[ hindi ] = "दोषयुक्त सुचित्र का लोड़";
+    Text[ slovak ] = "Obrázok nebolo možné načítať";
 };
 String STR_EVENT_FRM_KEYINPUT_A
 {
@@ -1013,6 +1043,7 @@ String STR_EVENT_FRM_KEYINPUT_A
     Text[ czech ] = "Vkládání alfanumerických znaků";
     Text[ hebrew ] = "Eingabe von Alphazeichen";
     Text[ hindi ] = "अल्फान्यूमरिक अक्षरों की इनपुट्";
+    Text[ slovak ] = "Vkladanie alfanumerických znakov";
 };
 String STR_EVENT_FRM_KEYINPUT_NOA
 {
@@ -1043,6 +1074,7 @@ String STR_EVENT_FRM_KEYINPUT_NOA
     Text[ czech ] = "Vkládání jiných než alfanumerických znaků";
     Text[ hebrew ] = "Eingabe von Nicht-Alphazeichen";
     Text[ hindi ] = "बिना-अल्फान्यूमरिक अक्षरों की इनपुट्";
+    Text[ slovak ] = "Vkladanie iných ako alfanumerických znakov";
 };
 String STR_EVENT_FRM_RESIZE
 {
@@ -1074,6 +1106,7 @@ String STR_EVENT_FRM_RESIZE
     Text[ czech ] = "Změnit velikost rámce";
     Text[ hebrew ] = "Rahmengröße verändern";
     Text[ hindi ] = "फ्रेम को पुनःपरिमाण दो";
+    Text[ slovak ] = "Zmeniť veľkosť rámca";
 };
 String STR_EVENT_FRM_MOVE
 {
@@ -1104,6 +1137,7 @@ String STR_EVENT_FRM_MOVE
     Text[ czech ] = "Přesunout rámec";
     Text[ hebrew ] = "Rahmen verschieben";
     Text[ hindi ] = "फ्रेम का स्थान परिवर्तन करो";
+    Text[ slovak ] = "Presunúť rámec";
 };
 String STR_CONTENT_TYPE_OUTLINE
 {
@@ -1135,6 +1169,7 @@ String STR_CONTENT_TYPE_OUTLINE
     Text[ czech ] = "Nadpisy";
     Text[ hebrew ] = "Überschriften";
     Text[ hindi ] = "शीर्षकें";
+    Text[ slovak ] = "Nadpisy";
 };
 String STR_CONTENT_TYPE_TABLE
 {
@@ -1165,6 +1200,7 @@ String STR_CONTENT_TYPE_TABLE
     Text[ czech ] = "Tabulky";
     Text[ hebrew ] = "‮טבלאות‬";
     Text[ hindi ] = "सारणी";
+    Text[ slovak ] = "Tabuľky";
 };
 String STR_CONTENT_TYPE_FRAME
 {
@@ -1195,6 +1231,7 @@ String STR_CONTENT_TYPE_FRAME
     Text[ czech ] = "Textový rámec";
     Text[ hebrew ] = "Textrahmen";
     Text[ hindi ] = "टेक्स्ट् फ्रेम";
+    Text[ slovak ] = "Ohraničenie textu";
 };
 String STR_CONTENT_TYPE_GRAPHIC
 {
@@ -1225,6 +1262,7 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text[ czech ] = "Obrázky";
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
+    Text[ slovak ] = "Obrázky";
 };
 String STR_CONTENT_TYPE_OLE
 {
@@ -1255,6 +1293,7 @@ String STR_CONTENT_TYPE_OLE
     Text[ czech ] = "Objekty OLE";
     Text[ hebrew ] = "OLE-Objekte";
     Text[ hindi ] = "OLE वस्तु";
+    Text[ slovak ] = "Objekty OLE";
 };
 String STR_CONTENT_TYPE_BOOKMARK
 {
@@ -1285,6 +1324,7 @@ String STR_CONTENT_TYPE_BOOKMARK
     Text[ czech ] = "Záložky";
     Text[ hebrew ] = "Textmarken";
     Text[ hindi ] = "पृष्ठसंकेतें";
+    Text[ slovak ] = "Záložky";
 };
 String STR_CONTENT_TYPE_REGION
 {
@@ -1315,6 +1355,7 @@ String STR_CONTENT_TYPE_REGION
     Text[ czech ] = "Sekce";
     Text[ hebrew ] = "‮חלקי מסמך‬";
     Text[ hindi ] = "विभाग";
+    Text[ slovak ] = "Sekcie";
 };
 String STR_CONTENT_TYPE_URLFIELD
 {
@@ -1345,6 +1386,7 @@ String STR_CONTENT_TYPE_URLFIELD
     Text[ czech ] = "Hypertextové odkazy";
     Text[ hebrew ] = "Hyperlinks";
     Text[ hindi ] = "हाइपरलिंक";
+    Text[ slovak ] = "Hypertextové odkazy";
 };
 String STR_CONTENT_TYPE_REFERENCE
 {
@@ -1375,6 +1417,7 @@ String STR_CONTENT_TYPE_REFERENCE
     Text[ czech ] = "Odkazy";
     Text[ hebrew ] = "Referenzen";
     Text[ hindi ] = "रेफरेन्स ";
+    Text[ slovak ] = "Odkazy";
 };
 String STR_CONTENT_TYPE_INDEX
 {
@@ -1405,6 +1448,7 @@ String STR_CONTENT_TYPE_INDEX
     Text[ czech ] = "Rejstříky";
     Text[ hebrew ] = "Verzeichnisse";
     Text[ hindi ] = "अनुक्रमणिका";
+    Text[ slovak ] = "Obsahy";
 };
 String STR_CONTENT_TYPE_DRAWOBJECT
 {
@@ -1435,6 +1479,7 @@ String STR_CONTENT_TYPE_DRAWOBJECT
     Text[ czech ] = "Kresby";
     Text[ hebrew ] = "Zeichenobjekte";
     Text[ hindi ] = "वस्तुओं को खींचना";
+    Text[ slovak ] = "Kresby";
 };
 String STR_CONTENT_TYPE_POSTIT
 {
@@ -1465,6 +1510,7 @@ String STR_CONTENT_TYPE_POSTIT
     Text[ czech ] = "Poznámky";
     Text[ hebrew ] = "‮הערות‬";
     Text[ hindi ] = "सूचना";
+    Text[ slovak ] = "Poznámky";
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
@@ -1496,6 +1542,7 @@ String STR_CONTENT_TYPE_SINGLE_OUTLINE
     Text[ czech ] = "Nadpis";
     Text[ hebrew ] = "Überschrift";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Nadpis";
 };
 String STR_CONTENT_TYPE_SINGLE_TABLE
 {
@@ -1526,6 +1573,7 @@ String STR_CONTENT_TYPE_SINGLE_TABLE
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
+    Text[ slovak ] = "Tabuľka";
 };
 String STR_CONTENT_TYPE_SINGLE_FRAME
 {
@@ -1556,6 +1604,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text[ czech ] = "Textový rámec";
     Text[ hebrew ] = "Textrahmen";
     Text[ hindi ] = "टेक्स्ट् फ्रेम";
+    Text[ slovak ] = "Ohraničenie textu";
 };
 String STR_CONTENT_TYPE_SINGLE_GRAPHIC
 {
@@ -1586,6 +1635,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text[ czech ] = "Obrázky";
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र ";
+    Text[ slovak ] = "Obrázky";
 };
 String STR_CONTENT_TYPE_SINGLE_OLE
 {
@@ -1616,6 +1666,7 @@ String STR_CONTENT_TYPE_SINGLE_OLE
     Text[ czech ] = "Objekt OLE";
     Text[ hebrew ] = "OLE‮אוביקט ‬";
     Text[ hindi ] = "OLE वस्तु";
+    Text[ slovak ] = "Objekt OLE";
 };
 String STR_CONTENT_TYPE_SINGLE_BOOKMARK
 {
@@ -1646,6 +1697,7 @@ String STR_CONTENT_TYPE_SINGLE_BOOKMARK
     Text[ czech ] = "Záložka";
     Text[ hebrew ] = "‮סימניה‬";
     Text[ hindi ] = "पृष्ठसंकेत ";
+    Text[ slovak ] = "Záložka";
 };
 String STR_CONTENT_TYPE_SINGLE_REGION
 {
@@ -1676,6 +1728,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     Text[ czech ] = "Sekce";
     Text[ hebrew ] = "‮מיקטע‬";
     Text[ hindi ] = "विभाग";
+    Text[ slovak ] = "Sekcia";
 };
 String STR_CONTENT_TYPE_SINGLE_URLFIELD
 {
@@ -1706,6 +1759,7 @@ String STR_CONTENT_TYPE_SINGLE_URLFIELD
     Text[ czech ] = "Hypertextový odkaz";
     Text[ hebrew ] = "‮היפר לינק‬";
     Text[ hindi ] = "हाइपरलिंक ";
+    Text[ slovak ] = "Hypertextový odkaz";
 };
 String STR_CONTENT_TYPE_SINGLE_REFERENCE
 {
@@ -1736,6 +1790,7 @@ String STR_CONTENT_TYPE_SINGLE_REFERENCE
     Text[ czech ] = "Odkaz";
     Text[ hebrew ] = "‮הפניה‬";
     Text[ hindi ] = "रेफरेन्स";
+    Text[ slovak ] = "Odkaz";
 };
 String STR_CONTENT_TYPE_SINGLE_INDEX
 {
@@ -1766,6 +1821,7 @@ String STR_CONTENT_TYPE_SINGLE_INDEX
     Text[ czech ] = "Rejstřík";
     Text[ hebrew ] = "‮אינדקס‬";
     Text[ hindi ] = "अनुक्रमणिका";
+    Text[ slovak ] = "Obsah";
 };
 String STR_CONTENT_TYPE_SINGLE_POSTIT
 {
@@ -1796,6 +1852,7 @@ String STR_CONTENT_TYPE_SINGLE_POSTIT
     Text[ czech ] = "Poznámka";
     Text[ hebrew ] = "‮הערה‬";
     Text[ hindi ] = "टिप्पणी ";
+    Text[ slovak ] = "Poznámka";
 };
 String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
 {
@@ -1826,6 +1883,7 @@ String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
     Text[ czech ] = "Kresba";
     Text[ hebrew ] = "‮אוביקט ‪Draw‬";
     Text[ hindi ] = "वस्तु खींचो";
+    Text[ slovak ] = "Kresba ";
 };
 String STR_DEFINE_NUMBERFORMAT
 {
@@ -1856,6 +1914,7 @@ String STR_DEFINE_NUMBERFORMAT
     Text[ czech ] = "Další formáty...";
     Text[ hebrew ] = "Weitere Formate...";
     Text[ hindi ] = "अधिकतरा रचना...";
+    Text[ slovak ] = "Ďalšie formáty...";
 };
 String RID_STR_SYSTEM
 {
@@ -1885,6 +1944,7 @@ String RID_STR_SYSTEM
     Text[ czech ] = "[Systém]";
     Text[ hebrew ] = "[System]";
     Text[ hindi ] = "[सिस्टम]";
+    Text[ slovak ] = "[Systém]";
 };
 String STR_MULT_INTERACT_SPELL_WARN
 {
@@ -1914,6 +1974,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ czech ] = "Interaktivní kontrola pravopisu již je spuštěna v jiném dokumentu";
     Text[ hebrew ] = "Die Interaktive Rechschreibprüfung ist\nbereits in anderem Dokument aktiv";
     Text[ hindi ] = "इन्टराक्टिव अक्षर की जाँच पहिले से ही\\अलग लेखपत्र में क्रियाशील है";
+    Text[ slovak ] = "Interaktívna kontrola pravopisu je už spustená v inom dokumente";
 };
 String STR_MULT_INTERACT_HYPH_WARN
 {
@@ -1943,6 +2004,7 @@ String STR_MULT_INTERACT_HYPH_WARN
     Text[ czech ] = "Interaktivní dělení slov již je spuštěno v jiném dokumentu";
     Text[ hebrew ] = "Die Interaktive Silbentrennung ist\nbereits in anderem Dokument aktiv";
     Text[ hindi ] = "इन्टराक्टिव हाइफनेशन पहिले से ही\\अलग लेखपत्र में क्रियाशील है";
+    Text[ slovak ] = "Interaktívne delenie slov je už spustené v inom dokumente";
 };
 String STR_SPELL_TITLE
 {
@@ -1972,6 +2034,7 @@ String STR_SPELL_TITLE
     Text[ czech ] = "Kontrola pravopisu";
     Text[ hebrew ] = "‮בדיקת איות‬";
     Text[ hindi ] = "अक्षर की जाँच";
+    Text[ slovak ] = "Kontrola pravopisu";
 };
 String STR_HYPH_TITLE
 {
@@ -2001,6 +2064,7 @@ String STR_HYPH_TITLE
     Text[ czech ] = "Dělení slov";
     Text[ hebrew ] = "‮שבירת מלים‬";
     Text[ hindi ] = "हाइफनेशन";
+    Text[ slovak ] = "Delenie slov";
 };
 
 #define IMGLIST_IDS\
@@ -2090,6 +2154,7 @@ String STR_HYPERCTRL_SEL
     Text[ czech ] = "SEL";
     Text[ hebrew ] = "SEL";
     Text[ hindi ] = "SEL";
+    Text[ slovak ] = "SEL";
 };
 String STR_HYPERCTRL_HYP
 {
@@ -2118,7 +2183,10 @@ String STR_HYPERCTRL_HYP
     Text[ czech ] = "HYP";
     Text[ hebrew ] = "HYP";
     Text[ hindi ] = "HYP";
+    Text[ slovak ] = "HYP";
 };
+
+
 
 
 
