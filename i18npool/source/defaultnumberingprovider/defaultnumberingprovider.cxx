@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:39:13 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 17:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,9 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
       case CHARS_THAI:
           lcl_formatChars(table_Alphabet_th, sizeof(table_Alphabet_th) / sizeof(sal_Unicode), number - 1, result);
           break;
+      case CHARS_HEBREW:
+          lcl_formatChars(table_Alphabet_he, sizeof(table_Alphabet_he) / sizeof(sal_Unicode), number - 1, result);
+          break;
 
           default:
                assert(0);
@@ -514,6 +517,7 @@ static const Supported_NumberingType aSupportedTypes[] =
     {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,  NULL, LANG_CJK},
     {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
     {style::NumberingType::CHARS_THAI,  NULL, LANG_CTL},
+    {style::NumberingType::CHARS_HEBREW,    NULL, LANG_CTL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
