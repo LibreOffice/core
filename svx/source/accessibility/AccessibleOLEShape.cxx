@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-12-04 15:14:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ using namespace accessibility;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -192,7 +192,7 @@ void SAL_CALL
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
     static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
-        "drafts.com.sun.star.drawing.AccessibleOLEShape"));
+        "com.sun.star.drawing.AccessibleOLEShape"));
     aServiceNames[nCount] = sAdditionalServiceName;
 
     return aServiceNames;
