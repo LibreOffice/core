@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterfaceMethodTypeDescription.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 /** Reflects an interface method type.
     The type class of this type is TypeClass_INTERFACE_METHOD.
 */
-interface XInterfaceMethodTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
+published interface XInterfaceMethodTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
 {
     /** Returns the method's return type.
 
