@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:38:08 $
+#   last change: $Author: vg $ $Date: 2003-12-17 17:09:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,11 +87,26 @@ SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = export.map
+
+#-------------------------------------------------------------------
+
+SHL2OBJS=$(SLO)$/test_cpy_wrt_file.obj
+SHL2TARGET=tcwf
+SHL2STDLIBS=$(SALLIB)
+.IF "$(GUI)"=="WNT"
+SHL2STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
+.ENDIF
+.IF "$(GUI)" == "UNX"
+SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+.ENDIF
+SHL2IMPLIB=i$(SHL2TARGET)
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+SHL2VERSIONMAP = export.map
+DEF2NAME    =$(SHL2TARGET)
+
 
 # END --------------------------------------------------------------
 
