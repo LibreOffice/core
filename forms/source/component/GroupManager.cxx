@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 17:59:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-10 08:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,7 @@ void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
         ////////////////////////////////////////////////////////////////
         // Gruppen loeschen
         m_aGroupArr.erase(m_aGroupArr.begin(), m_aGroupArr.end());
+        m_xContainer.clear();
     }
 }
 
