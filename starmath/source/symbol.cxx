@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 09:48:32 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,17 @@
 
 #pragma hdrstop
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_RESARY_HXX
+#include <vcl/resary.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
@@ -79,6 +85,7 @@
 #include "utility.hxx"
 #include "dialog.hxx"
 #include "config.hxx"
+#include "cfgitem.hxx"
 #include "smmod.hxx"
 #include "starmath.hrc"
 
@@ -104,6 +111,8 @@ using namespace ::rtl;
 #define SF_IDENT     0x30334D53L
 
 
+SV_IMPL_PTRARR( SymbolArray, SmSym * );
+
 /**************************************************************************/
 /*
 **
@@ -112,6 +121,74 @@ using namespace ::rtl;
 **/
 
 long                SF_Ident = SF_IDENT;
+
+/**************************************************************************/
+
+class SmMathConfigResource : public Resource
+{
+    ResStringArray      aUiSymbolNamesAry;
+    ResStringArray      aExportSymbolNamesAry;
+
+public:
+    SmMathConfigResource();
+
+    ResStringArray& GetUiSymbolNamesArray()     { return aUiSymbolNamesAry; }
+    ResStringArray& GetExportSymbolNamesArray() { return aExportSymbolNamesAry; }
+};
+
+
+SmMathConfigResource::SmMathConfigResource() :
+    Resource( SmResId(RID_LOCALIZED_SYMBOL_NAMES) ),
+    aUiSymbolNamesAry       ( ResId(RID_UI_SYMBOL_NAMES) ),
+    aExportSymbolNamesAry   ( ResId(RID_EXPORT_SYMBOL_NAMES) )
+{
+    FreeResource();
+}
+
+/**************************************************************************/
+
+String GetExportSymbolName( const String &rUiSymbolName )
+{
+    String aRes;
+
+    SmMathConfigResource aCfgRes;
+    ResStringArray &rUiNames = aCfgRes.GetUiSymbolNamesArray();
+    ResStringArray &rExportNames = aCfgRes.GetExportSymbolNamesArray();
+    USHORT nCount = rUiNames.Count();
+
+    for (USHORT i = 0;  i < nCount;  ++i)
+    {
+        if (rUiSymbolName == rUiNames.GetString(i))
+        {
+            aRes = rExportNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
+
+
+String GetUiSymbolName( const String &rExportSymbolName )
+{
+    String aRes;
+
+    SmMathConfigResource aCfgRes;
+    ResStringArray &rUiNames = aCfgRes.GetUiSymbolNamesArray();
+    ResStringArray &rExportNames = aCfgRes.GetExportSymbolNamesArray();
+    USHORT nCount = rExportNames.Count();
+
+    for (USHORT i = 0;  i < nCount;  ++i)
+    {
+        if (rExportSymbolName == rExportNames.GetString(i))
+        {
+            aRes = rUiNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
 
 
 /**************************************************************************/
@@ -125,26 +202,40 @@ SmSym::SmSym() :
     Name(C2S("unknown")),
     Character('\0'),
     pHashNext(0),
-    pSymSetManager(0)
+    pSymSetManager(0),
+    bPredefined(FALSE),
+    bDocSymbol(FALSE),
+    aSetName(C2S("unknown"))
 {
+    aExportName = Name;
     Face.SetTransparent(TRUE);
 }
 
+
 SmSym::SmSym(const SmSym& rSymbol)
 {
-    Name      = rSymbol.Name;
-    Face      = rSymbol.Face;
-    Character = rSymbol.Character;
+    Name        = rSymbol.Name;
+    Face        = rSymbol.Face;
+    Character   = rSymbol.Character;
+    aSetName    = rSymbol.aSetName;
+    bPredefined = rSymbol.bPredefined;
+    bDocSymbol  = rSymbol.bDocSymbol;
+    aExportName = rSymbol.aExportName;
 
     pHashNext      = 0;
     pSymSetManager = 0;
 }
 
-SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar)
+
+SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar,
+             const String& rSet, BOOL bIsPredefined)
 {
-    Name      = rName;
-    Face      = rFont;
-    Character = aChar;
+    Name        = aExportName   = rName;
+    Face        = rFont;
+    Character   = aChar;
+    aSetName    = rSet;
+    bPredefined = bIsPredefined;
+    bDocSymbol  = FALSE;
 
     pHashNext      = 0;
     pSymSetManager = 0;
@@ -153,9 +244,13 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_Unicode aChar)
 
 SmSym& SmSym::operator = (const SmSym& rSymbol)
 {
-    Name      = rSymbol.Name;
-    Face      = rSymbol.Face;
-    Character = rSymbol.Character;
+    Name        = rSymbol.Name;
+    Face        = rSymbol.Face;
+    Character   = rSymbol.Character;
+    aSetName    = rSymbol.aSetName;
+    bPredefined = rSymbol.bPredefined;
+    bDocSymbol  = rSymbol.bDocSymbol;
+    aExportName = rSymbol.aExportName;
 
     pHashNext = 0;
 
@@ -360,20 +455,19 @@ SvStream& operator >> (SvStream& rStream, SmSymSet& rSymbolSet)
 
 /**************************************************************************/
 
+
+static osl::Mutex & lcl_GetSymSetMgrMutex()
+{
+    static osl::Mutex   aMutex;
+    return aMutex;
+}
+
+
 void SmSymSetManager::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                               const SfxHint& rHint, const TypeId& rHintType)
 {
-    if (((SfxSimpleHint&)rHint).GetId() == HINT_CONFIGCHANGED)
-    {
-        SmViewShell *pViewSh = SmGetActiveView();
-        if (pViewSh)
-        {
-            SfxDispatcher &rDis = *pViewSh->GetViewFrame()->GetDispatcher();
-            rDis.Execute(SID_SAVESYMBOLS);
-            rDis.Execute(SID_LOADSYMBOLS);
-        }
-    }
 }
+
 
 UINT32 SmSymSetManager::GetHashIndex(const String& rSymbolName)
 {
@@ -381,19 +475,20 @@ UINT32 SmSymSetManager::GetHashIndex(const String& rSymbolName)
     for (xub_StrLen i = 0; i < rSymbolName.Len(); i++)
         x += x * rSymbolName.GetChar(i);
 
-    return x % NoHashEntries;
+    return x % pImpl->NoHashEntries;
 }
+
 
 void SmSymSetManager::EnterHashTable(SmSymSet& rSymbolSet)
 {
     for (int i = 0; i < rSymbolSet.GetCount(); i++)
     {
         int j = GetHashIndex(rSymbolSet.GetSymbol(i).GetName());
-        if (HashEntries[j] == 0)
-            HashEntries[j] = rSymbolSet.SymbolList.GetObject(i);
+        if (pImpl->HashEntries[j] == 0)
+            pImpl->HashEntries[j] = rSymbolSet.SymbolList.GetObject(i);
         else
         {
-            SmSym *p = HashEntries[j];
+            SmSym *p = pImpl->HashEntries[j];
             while (p->pHashNext)
                 p = p->pHashNext;
             p->pHashNext = rSymbolSet.SymbolList.GetObject(i);
@@ -404,12 +499,12 @@ void SmSymSetManager::EnterHashTable(SmSymSet& rSymbolSet)
 
 void SmSymSetManager::FillHashTable()
 {
-    if (HashEntries)
+    if (pImpl->HashEntries)
     {
-        memset(HashEntries, 0, NoHashEntries * sizeof(SmSym *));
+        memset( pImpl->HashEntries, 0, pImpl->NoHashEntries * sizeof(SmSym *) );
 
-        for (int i = 0; i < NoSymbolSets; i++)
-            EnterHashTable(*GetSymbolSet(i));
+        for (UINT32 i = 0; i < pImpl->NoSymbolSets; i++)
+            EnterHashTable( *GetSymbolSet( (USHORT) i ) );
     }
 }
 
@@ -419,67 +514,53 @@ void SmSymSetManager::Init()
     StartListening(*pp->GetConfig());
 }
 
+
 void SmSymSetManager::Exit()
 {
     SmModule *pp = SM_MOD1();
     EndListening(*pp->GetConfig());
 }
 
-SmSymSetManager::SmSymSetManager(UINT32 HashTableSize)
+
+SmSymSetManager::SmSymSetManager(USHORT HashTableSize)
 {
-    SymbolSets.Clear();
-    NoSymbolSets = 0;
-    NoHashEntries = HashTableSize;
-    HashEntries = new SmSym *[NoHashEntries];
-    memset(HashEntries, 0, sizeof(SmSym *) * NoHashEntries);
-    Modified = FALSE;
+    pImpl = new SmSymSetManager_Impl;
+    pImpl->SymbolSets.Clear();
+    pImpl->NoSymbolSets = 0;
+    pImpl->NoHashEntries = HashTableSize;
+    pImpl->HashEntries = new SmSym *[pImpl->NoHashEntries];
+    memset( pImpl->HashEntries, 0, sizeof(SmSym *) * pImpl->NoHashEntries );
+    pImpl->Modified = FALSE;
 }
 
 SmSymSetManager::SmSymSetManager(const SmSymSetManager& rSymbolSetManager)
 {
-    SymbolSets.Clear();
-    NoSymbolSets = 0;
-    NoHashEntries = rSymbolSetManager.NoHashEntries;
-    HashEntries = new SmSym *[NoHashEntries];
-    memset(HashEntries, 0, sizeof(SmSym *) * NoHashEntries);
-
-    for (int i = 0; i < rSymbolSetManager.GetCount(); i++)
-        AddSymbolSet(new SmSymSet(*rSymbolSetManager.GetSymbolSet(i)));
-
-    Modified = rSymbolSetManager.Modified;
 }
 
 SmSymSetManager::~SmSymSetManager()
 {
-    for (int i = 0; i< NoSymbolSets; i++)
-        delete SymbolSets.Get(i);
+    USHORT i;
+    for (i = 0; i< pImpl->NoSymbolSets; i++)
+        delete pImpl->SymbolSets.Get(i);
+    delete pImpl->HashEntries;
 
-    delete HashEntries;
+    delete pImpl;
+    pImpl = 0;
 }
+
 
 SmSymSetManager& SmSymSetManager::operator = (const SmSymSetManager& rSymbolSetManager)
 {
-    int i;
-    for (i = 0; i< NoSymbolSets; i++)
-        delete SymbolSets.Get(i);
-
-    SymbolSets.Clear();
-    NoSymbolSets = 0;
-
-    for (i = 0; i < rSymbolSetManager.GetCount(); i++)
-        AddSymbolSet(new SmSymSet(*rSymbolSetManager.GetSymbolSet(i)));
-
-    Modified = rSymbolSetManager.Modified;
-
     return *this;
 }
 
+
 USHORT SmSymSetManager::AddSymbolSet(SmSymSet* pSymbolSet)
 {
-    if (NoSymbolSets >= SymbolSets.GetSize())
-        SymbolSets.SetSize(NoSymbolSets + 1);
+    if (pImpl->NoSymbolSets >= pImpl->SymbolSets.GetSize())
+        pImpl->SymbolSets.SetSize(pImpl->NoSymbolSets + 1);
 
-    SymbolSets.Put(NoSymbolSets++, pSymbolSet);
+    pImpl->SymbolSets.Put(pImpl->NoSymbolSets++, pSymbolSet);
 
     pSymbolSet->pSymSetManager = this;
 
@@ -487,9 +568,9 @@ USHORT SmSymSetManager::AddSymbolSet(SmSymSet* pSymbolSet)
         pSymbolSet->SymbolList.GetObject(i)->pSymSetManager = this;
 
     FillHashTable();
-    Modified = TRUE;
+    pImpl->Modified = TRUE;
 
-    return NoSymbolSets - 1;
+    return (USHORT) (pImpl->NoSymbolSets - 1);
 }
 
 void SmSymSetManager::ChangeSymbolSet(SmSymSet* pSymbolSet)
@@ -497,155 +578,181 @@ void SmSymSetManager::ChangeSymbolSet(SmSymSet* pSymbolSet)
     if (pSymbolSet)
     {
         FillHashTable();
-        Modified = TRUE;
+        pImpl->Modified = TRUE;
     }
 }
 
 void SmSymSetManager::DeleteSymbolSet(USHORT SymbolSetNo)
 {
-    delete SymbolSets.Get(SymbolSetNo);
-    NoSymbolSets--;
+    delete pImpl->SymbolSets.Get(SymbolSetNo);
+    pImpl->NoSymbolSets--;
 
-    for (int i = SymbolSetNo; i < NoSymbolSets; i++)
-        SymbolSets.Put(i, SymbolSets.Get(i + 1));
+    for (UINT32 i = SymbolSetNo; i < pImpl->NoSymbolSets; i++)
+        pImpl->SymbolSets.Put(i, pImpl->SymbolSets.Get(i + 1));
 
     FillHashTable();
 
-    Modified = TRUE;
+    pImpl->Modified = TRUE;
 }
 
 
 USHORT SmSymSetManager::GetSymbolSetPos(const String& rSymbolSetName) const
 {
-    for (USHORT i = 0; i < NoSymbolSets; i++)
-        if (SymbolSets.Get(i)->GetName() == rSymbolSetName)
+    for (USHORT i = 0; i < pImpl->NoSymbolSets; i++)
+        if (pImpl->SymbolSets.Get(i)->GetName() == rSymbolSetName)
             return (i);
 
     return SYMBOLSET_NONE;
 }
 
-
 SmSym *SmSymSetManager::GetSymbol(const String& rSymbolName)
 {
-    SmSym *p = HashEntries[GetHashIndex(rSymbolName)];
-    while (p)
+    SmSym *pSym = pImpl->HashEntries[GetHashIndex(rSymbolName)];
+    while (pSym)
     {
-        if (p->Name == rSymbolName)
+        if (pSym->Name == rSymbolName)
             break;
-        p = p->pHashNext;
+        pSym = pSym->pHashNext;
     }
-    return p;
+
+    return pSym;
 }
 
-void SmSymSetManager::Load( const String &rURL )
+
+void SmSymSetManager::AddReplaceSymbol( const SmSym &rSymbol )
 {
-    if( aStreamName != rURL )
+    SmSym *pSym = GetSymbol( rSymbol.GetName() );
+    if (pSym)
     {
-        for (int i = 0; i< NoSymbolSets; i++)
-            delete SymbolSets.Get(i);
-
-        SymbolSets.Clear();
-        NoSymbolSets = 0;
-
-        aStreamName = rURL;
-
-        // get stream to use
-        SfxMedium aMedium( aStreamName,
-                STREAM_READ | STREAM_SHARE_DENYWRITE, FALSE );
-        aMedium.SetTransferPriority( SFX_TFPRIO_SYNCHRON );
-        SvStream *pStream = aMedium.GetInStream();
-
-        if( pStream && !pStream->GetError() )
+        *pSym = rSymbol;
+    }
+    else
+    {
+        USHORT nPos = GetSymbolSetPos( rSymbol.GetSetName() );
+        if (SYMBOLSET_NONE == nPos)
         {
-            *pStream >> *this;
-            Modified = FALSE;
+            AddSymbolSet( new SmSymSet( rSymbol.GetSetName() ) );
+            nPos = GetSymbolSetPos( rSymbol.GetSetName() );
         }
+        DBG_ASSERT( nPos != SYMBOLSET_NONE, "SymbolSet not found");
+        GetSymbolSet( nPos )->AddSymbol( new SmSym( rSymbol ) );
+    }
+    SetModified( TRUE );
+}
+
+
+USHORT SmSymSetManager::GetSymbolCount() const
+{
+    USHORT nRes = 0;
+    USHORT nSets = GetSymbolSetCount();
+    for (USHORT i = 0;  i < nSets;  ++i)
+        nRes += GetSymbolSet(i)->GetCount();
+    return nRes;
+}
+
+
+const SmSym * SmSymSetManager::GetSymbol( USHORT nPos ) const
+{
+    const SmSym *pRes = 0;
+
+    INT16 nIdx = 0;
+    USHORT nSets = GetSymbolSetCount();
+    USHORT i = 0;
+    while (i < nSets  &&  !pRes)
+    {
+        USHORT nEntries = GetSymbolSet(i)->GetCount();
+        if (nPos < nIdx + nEntries)
+            pRes = &GetSymbolSet(i)->GetSymbol( nPos - nIdx );
         else
+            nIdx += nEntries;
+        ++i;
+    }
+
+    return pRes;
+}
+
+
+void SmSymSetManager::Load()
+{
+    SmMathConfig &rCfg = *SM_MOD1()->GetConfig();
+
+    USHORT nCount = rCfg.GetSymbolCount();
+    USHORT i;
+    for (i = 0;  i < nCount;  ++i)
+    {
+        const SmSym *pSym = rCfg.GetSymbol(i);
+        if (pSym)
         {
-            SmModule *pp = SM_MOD1();
-
-            if ( pp->GetConfig()->IsWarnNoSymbols() )
+            const String &rSetName = pSym->GetSetName();
+            if (SYMBOLSET_NONE == GetSymbolSetPos( rSetName ))
+                AddSymbolSet( new SmSymSet( rSetName ) );
+            USHORT nSetPos = GetSymbolSetPos( rSetName );
+            SmSymSet *pSymSet = GetSymbolSet( nSetPos );
+            if (pSymSet)
             {
-                ErrorBox aErrorBox( NULL, SmResId( RID_READSYMBOLERROR ) );
-                String aString( aErrorBox.GetMessText() );
-                aString.SearchAndReplaceAscii( "%FILE%", aStreamName );
-                aErrorBox.SetMessText( aString );
-                aErrorBox.Execute();
-
-                Modified = FALSE;
-                pp->GetConfig()->SetWarnNoSymbols(FALSE);
+                pSymSet->AddSymbol( new SmSym( *pSym ) );
             }
+        }
+    }
+    // build HashTables
+    nCount = GetSymbolSetCount();
+    for (i = 0;  i < nCount;  ++i)
+        ChangeSymbolSet( GetSymbolSet( i ) );
+
+
+    if (0 == nCount)
+    {
+        SmModule *pp = SM_MOD1();
+        if ( pp->GetConfig()->IsNoSymbolsWarning() )
+        {
+            ErrorBox aErrorBox( NULL, SmResId( RID_READSYMBOLERROR ) );
+            String aString( aErrorBox.GetMessText() );
+            aString.SearchAndReplaceAscii( "%FILE%", pImpl->aStreamName );
+            aErrorBox.SetMessText( aString );
+            aErrorBox.Execute();
+
+            pImpl->Modified = FALSE;
+            pp->GetConfig()->SetNoSymbolsWarning(FALSE);
         }
     }
 }
 
 void SmSymSetManager::Save()
 {
-    if (Modified)
+    SmMathConfig &rCfg = *SM_MOD1()->GetConfig();
+
+    // get number of Symbols
+    USHORT nSymbolCount = 0;
+    USHORT nSetCount = GetSymbolSetCount();
+    USHORT i;
+    for (i = 0;  i < nSetCount;  ++i)
+        nSymbolCount += GetSymbolSet( i )->GetCount();
+
+    if (nSymbolCount)
     {
-        SfxMedium   aMedium( aStreamName,
-                STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYALL, FALSE );
-        SvStream *pStream = aMedium.GetOutStream();
-
-        if( pStream && !pStream->GetError() )
+        USHORT nSaveSymbolCnt = 0;
+        const SmSym **pSymbols = new const SmSym* [ nSymbolCount ];
+        const SmSym **pSym = pSymbols;
+        for (i = 0;  i < nSetCount;  ++i)
         {
-            *pStream << *this;
-            Modified = FALSE;
+            const SmSymSet *pSymSet = GetSymbolSet( i );
+            USHORT n = pSymSet->GetCount();
+            for (USHORT j = 0;  j < n;  ++j)
+            {
+                const SmSym &rSym = pSymSet->GetSymbol( j );
+                if (!rSym.IsDocSymbol())
+                {
+                    *pSym++ = &rSym;
+                    ++nSaveSymbolCnt;
+                }
+            }
         }
-        else
-        {
-            ErrorBox aErrorBox( NULL, SmResId(RID_WRITESYMBOLERROR));
-            String   aString (aErrorBox.GetMessText());
-            USHORT   nPos = aString.SearchAscii("%FILE%");
-
-            aString.Erase(nPos, 6);
-            aString.Insert(aStreamName, nPos);
-            aErrorBox.SetMessText(aString);
-            aErrorBox.Execute();
-        }
-        aMedium.Commit();
+        DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
+        rCfg.ReplaceSymbols( pSymbols, nSaveSymbolCnt );
+        delete pSymbols;
     }
 }
 
-
-SvStream& operator << (SvStream& rStream, SmSymSetManager& rSymbolSetManager)
-{
-    rStream << (long)SF_IDENT << (USHORT) rSymbolSetManager.NoSymbolSets;
-
-    for (int i = 0; i < rSymbolSetManager.NoSymbolSets; i++)
-        rStream << *rSymbolSetManager.GetSymbolSet(i);
-
-    return rStream;
-}
-
-SvStream& operator >> (SvStream& rStream, SmSymSetManager& rSymbolSetManager)
-{
-    rStream >> SF_Ident;
-    if (SF_Ident == SF_IDENT  ||  SF_Ident == SF_SM20IDENT)
-    {
-        USHORT n;
-        rStream >> n;
-
-        if (rSymbolSetManager.HashEntries)
-            memset(rSymbolSetManager.HashEntries, 0,
-                   rSymbolSetManager.NoHashEntries * sizeof(SmSym *));
-
-        for (int i = 0; i < n; i++)
-        {
-            SmSymSet *pSymbolSet;
-
-            if ((pSymbolSet = new SmSymSet) == 0)
-                break;
-
-            rStream >> *pSymbolSet;
-            rSymbolSetManager.AddSymbolSet(pSymbolSet);
-        }
-    }
-
-    SF_Ident = SF_IDENT;
-
-    return rStream;
-}
 
 void ReadSM20SymSet(SvStream *pStream, SmSymSet *pSymbolSet)
 {

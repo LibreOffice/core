@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ public:
 
     const SmFace &  GetFont(USHORT nIdent) const { return vFont[nIdent]; }
     SmFace &        Font   (USHORT nIdent)       { return vFont[nIdent]; }
-    void            SetFont(USHORT nIdent, const SmFace &rFont) { vFont[nIdent] = rFont; }
+    void            SetFont(USHORT nIdent, const SmFace &rFont);
 
     USHORT          GetRelSize(USHORT nIdent) const         { return vSize[nIdent]; }
     void            SetRelSize(USHORT nIdent, USHORT nVal)  { vSize[nIdent] = nVal;}
@@ -186,6 +186,9 @@ public:
 
     SmFormat &      operator = (const SmFormat &rFormat);
 
+    BOOL            operator == (const SmFormat &rFormat) const;
+    inline BOOL     operator != (const SmFormat &rFormat) const;
+
     void RequestApplyChanges() const
     {
         ((SmFormat *) this)->Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
@@ -198,6 +201,11 @@ public:
     friend SvStream & operator << (SvStream &rStream, const SmFormat &rFormat);
     friend SvStream & operator >> (SvStream &rStream, SmFormat &rFormat);
 };
+
+inline BOOL    SmFormat::operator != (const SmFormat &rFormat) const
+{
+    return !(*this == rFormat);
+}
 
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-08 09:27:43 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,7 +1055,7 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
     }
 
     // output text on bottom
-    if (pp->GetConfig()->IsPrintText())
+    if (pp->GetConfig()->IsPrintFormulaText())
     {
 //        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
         Font aFont;
@@ -1116,7 +1116,7 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
         case PRINT_SIZE_ZOOMED:
         {
             SmModule *pp = SM_MOD1();
-            Fraction aFraction (pp->GetConfig()->GetPrintZoom(), 100);
+            Fraction aFraction (pp->GetConfig()->GetPrintZoomFactor(), 100);
 
             OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             break;

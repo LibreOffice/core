@@ -5,8 +5,8 @@
 #*
 #*    Beschreibung      Starmath IDL-File
 #*
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:57:26 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: tl $ $Date: 2001-05-02 16:58:48 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/starmath/sdi/smslots.sdv  $
 #*
@@ -16,7 +16,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/starmath/sdi/smslots.sdi,v 1.1.1.1 2000-09-18 16:57:26 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/starmath/sdi/smslots.sdi,v 1.2 2001-05-02 16:58:48 tl Exp $
 
 *************************************************************************/
 
@@ -66,11 +66,6 @@ interface FormulaDocument : OfficeDocument
         Export = FALSE ;
     ]
     SID_SYMBOLS_CATALOGUE //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    SID_SYMBOLS_LOAD //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -323,6 +318,9 @@ shell SmViewShell : SfxViewShell
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 16:57:26  hr
+      initial import
+
       Revision 1.61  1999/07/02 10:22:24  TL
       #67357# SID_MARKERROR deleted.
 

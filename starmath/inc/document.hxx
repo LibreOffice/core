@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-19 14:44:29 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #endif
 
 class SmNode;
+class SmSymSetManager;
 class SfxPrinter;
 class Printer;
 

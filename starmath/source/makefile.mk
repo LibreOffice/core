@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: as $ $Date: 2001-03-19 13:02:50 $
+#   last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,14 +91,16 @@ SMDLL=TRUE
 
 SRS2NAME =smres
 SRC2FILES = smres.src   \
+            symbol.src	\
             commands.src
 
 SLOFILES =  \
-                $(SLO)$/register.obj \
-                $(SLO)$/typemap.obj \
+        $(SLO)$/register.obj \
+        $(SLO)$/typemap.obj \
         $(SLO)$/symbol.obj \
         $(SLO)$/toolbox.obj \
         $(SLO)$/action.obj \
+        $(SLO)$/cfgitem.obj \
         $(SLO)$/config.obj \
         $(SLO)$/dialog.obj \
         $(SLO)$/document.obj \
@@ -109,7 +111,7 @@ SLOFILES =  \
         $(SLO)$/parse.obj \
         $(SLO)$/utility.obj \
         $(SLO)$/smdll.obj \
-                $(SLO)$/smmod.obj \
+        $(SLO)$/smmod.obj \
         $(SLO)$/view.obj \
         $(SLO)$/edit.obj \
         $(SLO)$/rect.obj \
@@ -117,7 +119,7 @@ SLOFILES =  \
         $(SLO)$/xchar.obj
 
 EXCEPTIONSFILES =   \
-                $(SLO)$/register.obj  \
+        $(SLO)$/register.obj  \
         $(SLO)$/mathml.obj \
         $(SLO)$/unomodel.obj
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 14:55:58 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef SYMBOL_HXX
 #define SYMBOL_HXX
 
+#ifndef _VOS_REFERNCE_HXX_
+#include <vos/refernce.hxx>
+#endif
 #ifndef _FONT_HXX //autogen
 #include <vcl/font.hxx>
 #endif
@@ -70,12 +73,16 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+#ifndef _DYNARY_HXX
+#include <tools/dynary.hxx>
+#endif
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-#ifndef _DYNARY_HXX //autogen
-#include <tools/dynary.hxx>
+#ifndef _SVARRAY_HXX
+#include <svtools/svarray.hxx>
 #endif
+
 #ifndef UTILITY_HXX
 #include "utility.hxx"
 #endif
@@ -88,25 +95,38 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+String GetExportSymbolName( const String &rUiSymbolName );
+String GetUiSymbolName( const String &rExportSymbolName );
+
+////////////////////////////////////////////////////////////////////////////////
+
 class SmSym
 {
     friend class SmSymSetManager;
 
+    friend SvStream& operator << (SvStream& rStream, const SmSym& rSymbol);
+    friend SvStream& operator >> (SvStream& rStream, SmSym& rSymbol);
+
     SmFace               Face;
     String               Name;
+    String               aExportName;
+    String               aSetName;
     SmSym               *pHashNext;
     SmSymSetManager     *pSymSetManager;
     sal_Unicode          Character;
     BYTE                 Attribut;
+    BOOL                 bPredefined;
+    BOOL                 bDocSymbol;
 
 public:
     SmSym();
     SmSym(const SmSym& rSymbol);
-    SmSym(const String& rName, const Font& rFont, sal_Unicode aChar);
+    SmSym(const String& rName, const Font& rFont, sal_Unicode cChar,
+          const String& rSet, BOOL bIsPredefined = FALSE);
 
     SmSym&      operator = (const SmSym& rSymbol);
 
-    void        SetSymbolName(const String& rName);
+    void            SetSymbolName(const String& rName);
 
     const Font&     GetFace() const { return Face; }
     sal_Unicode     GetCharacter() const { return Character; }
@@ -116,17 +136,26 @@ public:
     sal_Unicode&    GetCharacter() { return Character; }
     String&         GetName() { return Name; }
 
-    friend SvStream& operator << (SvStream& rStream, const SmSym& rSymbol);
-    friend SvStream& operator >> (SvStream& rStream, SmSym& rSymbol);
+    BOOL            IsPredefined() const    { return bPredefined; }
+    const String &  GetSetName() const      { return aSetName; }
+    const String &  GetExportName() const   { return aExportName; }
+    void            SetExportName( const String &rName )    { aExportName = rName; }
+
+    BOOL            IsDocSymbol() const         { return bDocSymbol; }
+    void            SetDocSymbol( BOOL bVal )   { bDocSymbol = bVal; }
 };
 
 DECLARE_LIST(SmListSym, SmSym *);
+SV_DECL_PTRARR( SymbolArray, SmSym *, 32, 32 );
 
 /**************************************************************************/
 
 class SmSymSet
 {
     friend class SmSymSetManager;
+
+    friend SvStream& operator << (SvStream& rStream, const SmSymSet& rSymbolSet);
+    friend SvStream& operator >> (SvStream& rStream, SmSymSet& rSymbolSet);
 
     SmListSym            SymbolList;
     String               Name;
@@ -156,9 +185,6 @@ public:
     void        ReplaceSymbol(USHORT SymbolNo, SmSym& rSymbol);
     SmSym *     RemoveSymbol(USHORT SymbolNo);
     USHORT      GetSymbolPos(const String& rName);
-
-    friend SvStream& operator << (SvStream& rStream, const SmSymSet& rSymbolSet);
-    friend SvStream& operator >> (SvStream& rStream, SmSymSet& rSymbolSet);
 };
 
 DECLARE_DYNARRAY(SmArraySymSet, SmSymSet *)
@@ -167,14 +193,21 @@ DECLARE_DYNARRAY(SmArraySymSet, SmSymSet *)
 
 class SmSymbolDialog;
 
+
+struct SmSymSetManager_Impl
+{
+    SmArraySymSet   SymbolSets;
+    String          aStreamName;
+    SmSym**         HashEntries;
+    USHORT          NoSymbolSets;
+    USHORT          NoHashEntries;
+    BOOL            Modified;
+};
+
+
 class SmSymSetManager : public SfxListener
 {
-    SmArraySymSet  SymbolSets;
-    String          aStreamName;
-    SmSym          **HashEntries;
-    UINT32         NoSymbolSets;
-    UINT32         NoHashEntries;
-    BOOL           Modified;
+    SmSymSetManager_Impl *pImpl;
 
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                         const SfxHint& rHint, const TypeId& rHintType);
@@ -182,24 +215,25 @@ class SmSymSetManager : public SfxListener
     UINT32      GetHashIndex(const String& rSymbolName);
     void        EnterHashTable(SmSymSet& rSymbolSet);
     void        FillHashTable();
-
-public:
     void        Init();
     void        Exit();
 
-                SmSymSetManager(UINT32 HashTableSize = 137);
-                SmSymSetManager(const SmSymSetManager& rSymbolSetManager);
-                ~SmSymSetManager();
+public:
+    SmSymSetManager(USHORT HashTableSize = 137);
+    SmSymSetManager(const SmSymSetManager& rSymbolSetManager);
+    ~SmSymSetManager();
 
     SmSymSetManager&   operator = (const SmSymSetManager& rSymbolSetManager);
-
-    UINT32      GetCount() const { return NoSymbolSets; }
-    SmSymSet   *GetSymbolSet(USHORT SymbolSetNo) const { return SymbolSets.Get(SymbolSetNo);}
 
     USHORT      AddSymbolSet(SmSymSet* pSymbolSet);
     void        ChangeSymbolSet(SmSymSet* pSymbolSet);
     void        DeleteSymbolSet(USHORT SymbolSetNo);
     USHORT      GetSymbolSetPos(const String& rSymbolSetName) const;
+    USHORT      GetSymbolSetCount() const { return pImpl->NoSymbolSets; }
+    SmSymSet   *GetSymbolSet(USHORT SymbolSetNo) const
+    {
+        return pImpl->SymbolSets.Get(SymbolSetNo);
+    }
 
     SmSym       *   GetSymbol(const String& rSymbolName);
     const SmSym *   GetSymbol(const String& rSymbolName) const
@@ -207,18 +241,15 @@ public:
         return ((SmSymSetManager *) this)->GetSymbol(rSymbolName);
     }
 
-    void        AppendExtraSymbolSet(SmSymSet* pSymbolSet) {}
-    void        ResetAccessedSymbols() {}
-    SmSymSet    GetAccessedSymbols() { return SmSymSet(); }
+    void            AddReplaceSymbol( const SmSym & rSymbol );
+    USHORT          GetSymbolCount() const;
+    const SmSym *   GetSymbol( USHORT nPos ) const;
 
-    BOOL        IsModified() const { return (Modified); }
-    void        SetModified(BOOL Modify) { Modified = Modify; }
+    BOOL        IsModified() const { return pImpl->Modified; }
+    void        SetModified(BOOL Modify) { pImpl->Modified = Modify; }
 
-    void        Load(const String& rURL);
+    void        Load();
     void        Save();
-
-    friend SvStream& operator << (SvStream& rStream, SmSymSetManager& rSymbolSetManager);
-    friend SvStream& operator >> (SvStream& rStream, SmSymSetManager& rSymbolSetManager);
 };
 
 #endif

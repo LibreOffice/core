@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:09:28 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,42 +172,6 @@ public:
 
     SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions);
 };
-
-
-#ifdef NEVER
-class SmGeneralTabPage : public SvxGeneralTabPage
-{
-public :
-    static SfxTabPage* Create(Window* pWindow, const SfxItemSet& rSet);
-
-    SmGeneralTabPage (Window *pParent, const SfxItemSet &rAttrSet) :
-        SvxGeneralTabPage (pParent, rAttrSet)
-    {
-    }
-};
-#endif //NEVER
-
-/**************************************************************************/
-
-#ifdef NEVER
-class SmExtraOptionsTabPage : public SfxTabPage
-{
-    CheckBox   aAutoRedraw;
-    FixedText  aFixedText1;
-    SmInfoText aSymbolFile;
-    PushButton aBrowseButton;
-
-    DECL_LINK(SymClickHdl, PushButton*);
-
-    virtual BOOL FillItemSet(SfxItemSet& rOutSet);
-    virtual void Reset(const SfxItemSet& rOutSet);
-
-public:
-    SmExtraOptionsTabPage(const SfxItemSet& rInSet, Window *pParent, BOOL bFreeRes = TRUE);
-
-    static SfxTabPage* Create(Window* pWindow, const SfxItemSet& rSet);
-};
-#endif //NEVER
 
 /**************************************************************************/
 
@@ -482,6 +446,7 @@ class SmSymbolDialog : public ModalDialog
 
 public:
     SmSymbolDialog(Window * pParent, SmSymSetManager &rSymSetMgr, BOOL bFreeRes = TRUE);
+    virtual ~SmSymbolDialog();
 
     BOOL    SelectSymbolSet(const XubString &rSymbolSetName);
     void    SelectSymbol(USHORT nSymbolNo);

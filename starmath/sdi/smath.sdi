@@ -534,29 +534,6 @@ SfxVoidItem ChangeFontSize SID_FONTSIZE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SymbolsLoad SID_SYMBOLS_LOAD
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem SaveSymbols SID_SAVESYMBOLS
 ()
 [

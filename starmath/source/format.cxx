@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-02 15:07:16 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,13 @@ SmFormat::SmFormat()
 }
 
 
+void SmFormat::SetFont(USHORT nIdent, const SmFace &rFont)
+{
+    vFont[nIdent] = rFont;
+    vFont[nIdent].SetTransparent( TRUE );
+    vFont[nIdent].SetAlign( ALIGN_BASELINE );
+}
+
 SmFormat & SmFormat::operator = (const SmFormat &rFormat)
 {
     SetBaseSize(rFormat.GetBaseSize());
@@ -146,6 +153,34 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
         SetDistance(i, rFormat.GetDistance(i));
 
     return *this;
+}
+
+
+BOOL SmFormat::operator == (const SmFormat &rFormat) const
+{
+    BOOL bRes = aBaseSize == rFormat.aBaseSize  &&
+                eHorAlign == rFormat.eHorAlign  &&
+                bIsTextmode == rFormat.bIsTextmode  &&
+                bScaleNormalBrackets  == rFormat.bScaleNormalBrackets;
+
+    USHORT i;
+    for (i = 0;  i <= SIZ_END && bRes;  ++i)
+    {
+        if (vSize[i] != rFormat.vSize[i])
+            bRes = FALSE;
+    }
+    for (i = 0;  i <= DIS_END && bRes;  ++i)
+    {
+        if (vDist[i] != rFormat.vDist[i])
+            bRes = FALSE;
+    }
+    for (i = 0;  i <= FNT_END && bRes;  ++i)
+    {
+        if (vFont[i] != rFormat.vFont[i])
+            bRes = FALSE;
+    }
+
+    return bRes;
 }
 
 

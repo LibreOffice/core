@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 16:02:19 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,193 +106,59 @@
 #include "starmath.hrc"
 #endif
 
-#define DEFSYMFILE      "starmath$(lang).sms"
-#define CONFIGVERSION   (INT16)0x0001;
+/////////////////////////////////////////////////////////////////
 
-
-SmConfig::SmConfig() :
-    SfxConfigItem(SMCONFIGITEM)
+SmConfig::SmConfig()
 {
-    UseDefault();
-    StartListening(aStandardFormat);
 }
 
 
 SmConfig::~SmConfig()
 {
-    EndListening(aStandardFormat);
 }
 
-
-void SmConfig::SFX_NOTIFY(SfxBroadcaster &, const TypeId &,
-                          const SfxHint &rHint, const TypeId &)
-{
-    switch (((SfxSimpleHint &) rHint).GetId())
-    {
-        case HINT_FORMATCHANGED:
-            SetModified(TRUE);
-            SetDefault (FALSE);
-            break;
-    }
-}
-
-
-void SmConfig::ConfigChangedAction()
-{
-    SetModified(TRUE);
-    SetDefault(FALSE);
-    //Broadcast(SfxSimpleHint(HINT_CONFIGCHANGED));
-}
-
-
-void SmConfig::SetValueIfNE(BOOL &rItem, const BOOL bVal)
-    // "Set 'Modified' and 'Value' if not equal"
-{
-    if (rItem != bVal)
-    {   rItem = bVal;
-        ConfigChangedAction();
-    }
-}
-
-
-void SmConfig::SetSymbolFile(const String &rText)
-{
-    if (aSymbolFile != rText)
-    {
-        aSymbolFile = rText;
-        ConfigChangedAction();
-    }
-}
-
-
-int SmConfig::Load(SvStream &rStream)
-{
-    // Da die Fileformat Version in ConfigItems nur einen Defaultwert hat setzen
-    // wir diesen hier auf die aktuelle Version, damit beim folgenden (impliziten)
-    // einlesen des 'SmFormat' Objekts aus dem Stream dieses entsprechend
-    // reagieren kann.
-    rStream.SetVersion(SOFFICE_FILEFORMAT_50);
-
-    rStream >> *this;
-    SetDefault(FALSE);
-    return SfxConfigItem::ERR_OK;
-}
-
-
-BOOL SmConfig::Store(SvStream &rStream)
-{
-    rStream << *this;
-    return TRUE;
-}
-
-/**************************************************************************/
-
-void SmConfig::UseDefault()
-{
-    SfxConfigItem::UseDefault();    // this implicitly calls 'SetDefault(TRUE)'
-
-    bToolBoxVisible = bCmdBoxWindow = bAutoRedraw = bFormulaCursor =
-    bPrintTitle = bPrintText = bPrintFrame = bWarnNoSymbols =
-    bNoRightSpaces = TRUE;
-
-    aSymbolFile = C2S(DEFSYMFILE);
-    SvtPathOptions aOpt;
-    aOpt.SearchFile( aSymbolFile, SvtPathOptions::PATH_USERCONFIG );
-
-    ePrintSize  = PRINT_SIZE_NORMAL;
-    nPrintZoom  = 100;
-}
-
-/**************************************************************************/
-
-String SmConfig::GetName() const
-{
-    return C2S("StarMath");
-}
-
-/**************************************************************************/
 
 void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
 {
     const SfxPoolItem *pItem     = NULL;
-    BOOL               bModified = FALSE;
-    String             aSymbolFile;
-
-    if (rSet.GetItemState(SID_SYMBOLFILE, TRUE, &pItem) == SFX_ITEM_SET)
-    {   aSymbolFile = ((const SfxStringItem *) pItem)->GetValue();
-        DBG_ASSERT(aSymbolFile.Len() > 0, "Symboldatei nicht angegeben !");
-
-        if (aSymbolFile != aSymbolFile)
-        {
-            SfxModule *p = SM_MOD1();
-            SmModule *pp = (SmModule *) p;
-
-            pp->GetConfig()->SetWarnNoSymbols(TRUE);
-            aSymbolFile = aSymbolFile;
-
-            bModified = TRUE;
-        }
-    }
 
     UINT16 nU16;
+    BOOL bVal;
     if (rSet.GetItemState(SID_PRINTSIZE, TRUE, &pItem) == SFX_ITEM_SET)
     {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
-        if (ePrintSize != nU16)
-        {   ePrintSize = (SmPrintSize) nU16;
-            bModified = TRUE;
-        }
+        SetPrintSize( (SmPrintSize) nU16 );
     }
     if (rSet.GetItemState(SID_PRINTZOOM, TRUE, &pItem) == SFX_ITEM_SET)
     {   nU16 = ((const SfxUInt16Item *) pItem)->GetValue();
-        if (nPrintZoom != nU16)
-        {   nPrintZoom = (USHORT) nU16;
-            bModified = TRUE;
-        }
+        SetPrintZoomFactor( nU16 );
     }
-
-    BOOL bVal;
     if (rSet.GetItemState(SID_PRINTTITLE, TRUE, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
-        if (bPrintTitle != bVal)
-        {   bPrintTitle = bVal;
-            bModified = TRUE;
-        }
+        SetPrintTitle( bVal );
     }
     if (rSet.GetItemState(SID_PRINTTEXT, TRUE, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
-        if (bPrintText != bVal)
-        {   bPrintText = bVal;
-            bModified = TRUE;
-        }
+        SetPrintFormulaText( bVal );
     }
     if (rSet.GetItemState(SID_PRINTFRAME, TRUE, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
-        if (bPrintFrame != bVal)
-        {   bPrintFrame = bVal;
-            bModified = TRUE;
-        }
+        SetPrintFrame( bVal );
     }
     if (rSet.GetItemState(SID_AUTOREDRAW, TRUE, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
-        if (bAutoRedraw != bVal)
-        {   bAutoRedraw = bVal;
-            bModified = TRUE;
-        }
+        SetAutoRedraw( bVal );
     }
     if (rSet.GetItemState(SID_NO_RIGHT_SPACES, TRUE, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
-        if (bNoRightSpaces != bVal)
-        {   bNoRightSpaces = bVal;
-            bModified = TRUE;
+        if (IsIgnoreSpacesRight() != bVal)
+        {
+            SetIgnoreSpacesRight( bVal );
 
             // (angezeigte) Formeln müssen entsprechen neu formatiert werden.
             // Das erreichen wir mit:
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
     }
-
-    if (bModified)
-        ConfigChangedAction();
 }
 
 
@@ -300,85 +166,19 @@ void SmConfig::ConfigToItemSet(SfxItemSet &rSet) const
 {
     const SfxItemPool *pPool = rSet.GetPool();
 
-    rSet.Put(SfxStringItem(pPool->GetWhich(SID_SYMBOLFILE),
-                           aSymbolFile));
-
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTSIZE),
-                           (UINT16) ePrintSize));
+                           (UINT16) GetPrintSize()));
     rSet.Put(SfxUInt16Item(pPool->GetWhich(SID_PRINTZOOM),
-                           (UINT16) nPrintZoom));
+                           (UINT16) GetPrintZoomFactor()));
 
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), bPrintTitle));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  bPrintText));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTFRAME), bPrintFrame));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTOREDRAW), bAutoRedraw));
-    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), bNoRightSpaces));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTITLE), IsPrintTitle()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTTEXT),  IsPrintFormulaText()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTFRAME), IsPrintFrame()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTOREDRAW), IsAutoRedraw()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
 }
 
 
-/**************************************************************************/
-
-
-SvStream & operator << (SvStream &rStream, const SmConfig &rConfig)
-{
-    rStream << CONFIGVERSION;
-
-    UINT16  nFlags = rConfig.bPrintTitle
-        | (rConfig.bPrintText      << 1)
-        | (rConfig.bPrintFrame     << 2)
-        | (rConfig.bWarnNoSymbols  << 3)
-        | (rConfig.bToolBoxVisible << 4)
-        | (rConfig.bCmdBoxWindow   << 5)
-        | (rConfig.bAutoRedraw     << 6)
-        | (rConfig.bFormulaCursor  << 7)
-        | (rConfig.bNoRightSpaces  << 8);
-
-    rStream << nFlags;
-
-    rStream << (INT16) rConfig.ePrintSize;
-    rStream << (INT16) rConfig.nPrintZoom;
-
-    rStream.WriteByteString(rConfig.aSymbolFile, gsl_getSystemTextEncoding());
-    rStream << rConfig.aStandardFormat;
-
-    for (int i = 0;  i < 7;  i++)
-        rStream << rConfig.vFontPickList[i];
-
-    return rStream;
-}
-
-
-SvStream & operator >> (SvStream &rStream, SmConfig &rConfig)
-{
-    INT16  nVer;
-    rStream >> nVer;
-
-    UINT16 nFlags;
-    rStream >> nFlags;
-
-    rConfig.bPrintTitle     = nFlags & 0x01;
-    rConfig.bPrintText      = (nFlags >> 1) & 0x01;
-    rConfig.bPrintFrame     = (nFlags >> 2) & 0x01;
-    rConfig.bWarnNoSymbols  = (nFlags >> 3) & 0x01;
-    rConfig.bToolBoxVisible = (nFlags >> 4) & 0x01;
-    rConfig.bCmdBoxWindow   = (nFlags >> 5) & 0x01;
-    rConfig.bAutoRedraw     = (nFlags >> 6) & 0x01;
-    rConfig.bFormulaCursor  = (nFlags >> 7) & 0x01;
-    rConfig.bNoRightSpaces  = (nFlags >> 8) & 0x01;
-
-    INT16  nI16;
-    rStream >> nI16;
-    rConfig.ePrintSize = (SmPrintSize) nI16;
-    rStream >> nI16;
-    rConfig.nPrintZoom = (USHORT) nI16;
-
-    rStream.ReadByteString(rConfig.aSymbolFile, gsl_getSystemTextEncoding());
-    rStream >> rConfig.aStandardFormat;
-
-    for (int i = 0;  i < 7;  i++)
-        rStream >> rConfig.vFontPickList[i];
-
-    return rStream;
-}
+/////////////////////////////////////////////////////////////////
 
 

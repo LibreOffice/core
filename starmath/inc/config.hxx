@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,7 @@
 #include "format.hxx"
 #endif
 
-#define HINT_CONFIGCHANGED      10002
-#define SMCONFIGITEM            (SID_SMA_START+1)
+#include "cfgitem.hxx"
 
 
 class SmPreferenceDialog;
@@ -84,76 +83,18 @@ class SmPrintDialog;
 class SmPrintOptionDialog;
 class SfxItemSet;
 
-enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
-
-class SmConfig : public SfxBroadcaster, public SfxListener, public SfxConfigItem
+class SmConfig : public SmMathConfig, public SfxBroadcaster
 {
-    String          aSymbolFile;
-    SmFormat        aStandardFormat;
     SmFontPickList  vFontPickList[7];
-
-    SmPrintSize     ePrintSize;
-    USHORT          nPrintZoom;
-
-    BOOL            bPrintTitle,
-                    bPrintText,
-                    bPrintFrame,
-                    bWarnNoSymbols,
-                    bToolBoxVisible,
-                    bCmdBoxWindow,
-                    bAutoRedraw,
-                    bFormulaCursor,
-                    bNoRightSpaces;     // ignorieren von ~ und ` am Zeilenende
-
-    virtual void SFX_NOTIFY(SfxBroadcaster &rBC, const TypeId &rBCType,
-                            const SfxHint &rHint, const TypeId &rHintType);
-
-    void        ConfigChangedAction();
-    void        SetValueIfNE(BOOL &rItem, const BOOL bVal);
 
 public:
     SmConfig();
     virtual ~SmConfig();
 
-    virtual int     Load (SvStream &rStream);
-    virtual BOOL    Store(SvStream &rStream);
-
-    virtual void    UseDefault();
-    virtual String  GetName() const;
-
-    SmFormat &       GetFormat() { return aStandardFormat; }
     SmFontPickList & GetFontPickList(USHORT nIdent) { return vFontPickList[nIdent]; }
-
-    const String &  GetSymbolFile() const { return aSymbolFile; }
-    void            SetSymbolFile(const String &rText);
-
-    SmPrintSize     GetPrintSize() const { return ePrintSize; }
-    USHORT          GetPrintZoom() const { return nPrintZoom; }
-
-    BOOL IsCmdBoxWindowEnabled() const { return bCmdBoxWindow; }
-
-    BOOL IsPrintTitle() const    { return bPrintTitle; }
-    BOOL IsPrintText()  const    { return bPrintText; }
-    BOOL IsPrintFrame() const    { return bPrintFrame; }
-    BOOL IsNoRightSpaces() const { return bNoRightSpaces; }
-
-    BOOL IsToolBoxVisible() const     { return bToolBoxVisible; }
-    void SetToolBoxVisible(BOOL bVal) { SetValueIfNE(bToolBoxVisible, bVal); }
-
-    BOOL IsAutoRedraw() const         { return bAutoRedraw; }
-    void SetAutoRedraw(BOOL bVal)     { SetValueIfNE(bAutoRedraw, bVal); }
-
-    BOOL IsWarnNoSymbols() const      { return bWarnNoSymbols; }
-    void SetWarnNoSymbols(BOOL bVal)  { SetValueIfNE(bWarnNoSymbols, bVal); }
-
-    BOOL IsShowFormulaCursor() const      { return bFormulaCursor; }
-    void SetShowFormulaCursor(BOOL bVal)  { SetValueIfNE(bFormulaCursor, bVal); }
 
     void ItemSetToConfig(const SfxItemSet &rSet);
     void ConfigToItemSet(SfxItemSet &rSet) const;
-
-    friend SvStream & operator << (SvStream &rStream, const SmConfig &rConfig);
-    friend SvStream & operator >> (SvStream &rStream, SmConfig &rConfig);
 };
 
 #endif

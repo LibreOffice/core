@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,24 +124,31 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
     SFX_STATUSBAR_REGISTRATION(SmResId(RID_STATUSBAR));
 }
 
+
 SmModule::SmModule(SvFactory* pObjFact) :
     SmModuleDummy(SFX_APP()->CreateResManager("sm"), FALSE, pObjFact)
 {
     SetName( C2S("StarMath" ));
 
-    pConfig = new SmConfig;
-    pConfig->Initialize();
-
-    pSymSetManager = new SmSymSetManager;
-    pRectCache     = new SmRectCache;
+    pConfig     = 0;
+    pRectCache  = new SmRectCache;
 }
+
 
 SmModule::~SmModule()
 {
     delete pConfig;
-    delete pSymSetManager;
     delete pRectCache;
 }
+
+
+SmConfig * SmModule::GetConfig()
+{
+    if(!pConfig)
+        pConfig = new SmConfig;
+    return pConfig;
+}
+
 
 void SmModule::GetState(SfxItemSet &rSet)
 {
@@ -171,12 +178,6 @@ SfxModule *SmModule::Load()
 void SmModule::Free()
 {
 }
-
-void SmModule::InitManager()
-{
-    pSymSetManager->Init();
-}
-
 
 
 SfxModule *SmModuleDummy::Load()

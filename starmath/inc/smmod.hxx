@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@ class SvxErrorHandler;
 class SvFactory;
 
 class SmConfig;
-class SmSymSetManager;
 class SmModule;
 
 /*************************************************************************
@@ -92,7 +91,6 @@ class SmRectCache;
 class SmModule : public SmModuleDummy
 {
     SmConfig            *pConfig;
-    SmSymSetManager     *pSymSetManager;
     SmRectCache         *pRectCache;
 
     virtual void FillStatusBar(StatusBar &rBar);
@@ -107,12 +105,10 @@ public:
     virtual SfxModule * Load();
     virtual void        Free();
 
-    SmConfig *          GetConfig()        { return pConfig; }
-    SmSymSetManager *   GetSymSetManager() { return pSymSetManager; }
+    SmConfig *          GetConfig();
     SmRectCache *       GetRectCache()     { return pRectCache; }
 
     void GetState(SfxItemSet&);
-    void InitManager();
 
     //virtuelle Methoden fuer den Optionendialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-25 15:13:15 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,10 @@ void SmParser::NextToken()
                         CurToken.nRow       = Row;
                         CurToken.nCol       = nTmpStart - ColOff + 1;
 
-                        rnEndPos = aTmpRes.EndPos;
+                        if (aTmpRes.EndPos > rnEndPos)
+                            rnEndPos = aTmpRes.EndPos;
+                        else
+                            ++rnEndPos;
                     }
                     break;
                 case '[':
@@ -1314,7 +1317,7 @@ void SmParser::Blank()
 
     // Blanks am Zeilenende ignorieren wenn die entsprechende Option gesetzt ist
     if (CurToken.eType == TNEWLINE  ||  CurToken.eType == TEND
-        &&  SM_MOD1()->GetConfig()->IsNoRightSpaces())
+        &&  SM_MOD1()->GetConfig()->IsIgnoreSpacesRight())
         pBlankNode->Clear();
 
     NodeStack.Push(pBlankNode);

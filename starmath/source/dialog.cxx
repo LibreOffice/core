@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-07 12:46:52 $
+ *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,75 +294,6 @@ SfxTabPage* SmPrintOptionsTabPage::Create(Window* pWindow, const SfxItemSet& rSe
 /**************************************************************************/
 
 
-#ifdef NEVER
-SmExtraOptionsTabPage::SmExtraOptionsTabPage(const SfxItemSet& rInSet, Window * pParent, BOOL bFreeRes)
-    : SfxTabPage(pParent, SmResId(RID_EXTRAOPTIONPAGE), rInSet),
-    aAutoRedraw   (this, ResId(1)),
-    aFixedText1   (this, ResId(1)),
-    aSymbolFile   (this, ResId(2), 32),
-    aBrowseButton (this, ResId(1))
-{
-    if (bFreeRes)
-        FreeResource();
-
-    aBrowseButton.SetClickHdl(LINK(this, SmExtraOptionsTabPage, SymClickHdl));
-}
-
-
-IMPL_LINK( SmExtraOptionsTabPage, SymClickHdl, PushButton *, pPushButton )
-{
-    SfxSimpleFileDialog  *pFileDialog =
-            new SfxSimpleFileDialog(this, WinBits(WB_OPEN | WB_3DLOOK));
-
-#ifdef MAC
-    pFileDialog->AddFilter(SmResId(RID_SYMBOLFILESSTR), SmResId(RID_FILESYMTYP));
-    pFileDialog->AddFilter(SmResId(RID_ALLFILESSTR), "****");
-
-    pFileDialog->SetCurFilter(SmResId(RID_SYMBOLFILESSTR));
-#else
-    pFileDialog->AddFilter(SmResId(RID_SYMBOLFILESSTR), C2S("*.sms"));
-    pFileDialog->AddFilter(SmResId(RID_ALLFILESSTR), C2S("*.*"));
-
-    pFileDialog->SetCurFilter(SmResId(RID_SYMBOLFILESSTR));
-
-    pFileDialog->SetDefaultExt(C2S("*.sms"));
-#endif
-
-    pFileDialog->SetPath(aSymbolFile.GetText());
-
-    if (pFileDialog->Execute() == RET_OK)
-        aSymbolFile.SetText(pFileDialog->GetPath());
-
-    delete pFileDialog;
-    return 0;
-}
-
-
-BOOL SmExtraOptionsTabPage::FillItemSet(SfxItemSet& rOutSet)
-{
-    rOutSet.Put(SfxBoolItem(GetWhich(SID_AUTOREDRAW), aAutoRedraw.IsChecked()));
-    rOutSet.Put(SfxStringItem(GetWhich(SID_SYMBOLFILE), aSymbolFile.GetText()));
-
-    return (TRUE);
-}
-
-
-void SmExtraOptionsTabPage::Reset(const SfxItemSet& rOutSet)
-{
-    aAutoRedraw.Check(((const SfxBoolItem&)rOutSet.Get(GetWhich(SID_AUTOREDRAW))).GetValue());
-    aSymbolFile.SetText(((const SfxStringItem&)rOutSet.Get(GetWhich(SID_SYMBOLFILE))).GetValue());
-}
-
-
-SfxTabPage* SmExtraOptionsTabPage::Create(Window* pWindow, const SfxItemSet& rSet)
-{
-    return (new SmExtraOptionsTabPage(rSet, pWindow));
-}
-#endif //NEVER
-
-/**************************************************************************/
-
-
 void SmShowFont::Paint(const Rectangle&)
 {
     XubString   Text (GetFont().GetName());
@@ -494,7 +425,9 @@ IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, pButton )
     if (pQueryBox->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD1();
-        WriteTo(pp->GetConfig()->GetFormat());
+        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        WriteTo( aFmt );
+        pp->GetConfig()->SetStandardFormat( aFmt );
     }
 
     delete pQueryBox;
@@ -598,7 +531,9 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButt
     if (pQueryBox->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD1();
-        WriteTo(pp->GetConfig()->GetFormat());
+        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        WriteTo( aFmt );
+        pp->GetConfig()->SetStandardFormat( aFmt );
     }
 
     delete pQueryBox;
@@ -801,7 +736,9 @@ IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, pButton )
     if (pQueryBox->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD1();
-        WriteTo(pp->GetConfig()->GetFormat());
+        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        WriteTo( aFmt );
+        pp->GetConfig()->SetStandardFormat( aFmt );
     }
     delete pQueryBox;
     return 0;
@@ -1093,7 +1030,9 @@ IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, pButton )
     if (pQueryBox->Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD1();
-        WriteTo(pp->GetConfig()->GetFormat());
+        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        WriteTo( aFmt );
+        pp->GetConfig()->SetStandardFormat( aFmt );
     }
 
     delete pQueryBox;
@@ -1390,7 +1329,7 @@ void SmSymbolDialog::FillSymbolSets(BOOL bDeleteText)
     if (bDeleteText)
         aSymbolSets.SetNoSelection();
 
-    USHORT nNumSymSets = rSymSetMgr.GetCount();
+    USHORT nNumSymSets = rSymSetMgr.GetSymbolSetCount();
     for (USHORT i = 0;  i < nNumSymSets;  i++)
         aSymbolSets.InsertEntry(rSymSetMgr.GetSymbolSet(i)->GetName());
 }
@@ -1518,6 +1457,12 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFre
     aCloseBtn        .SetClickHdl   (LINK(this, SmSymbolDialog, CloseClickHdl));
     aEditBtn         .SetClickHdl   (LINK(this, SmSymbolDialog, EditClickHdl));
     aGetBtn          .SetClickHdl   (LINK(this, SmSymbolDialog, GetClickHdl));
+}
+
+
+SmSymbolDialog::~SmSymbolDialog()
+{
+    rSymSetMgr.Save();
 }
 
 
@@ -1764,7 +1709,7 @@ void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, BOOL bDeleteText)
     if (bDeleteText)
         rComboBox.SetText(XubString());
 
-    USHORT nNumSymSets = aSymSetMgrCopy.GetCount();
+    USHORT nNumSymSets = aSymSetMgrCopy.GetSymbolSetCount();
     for (USHORT i = 0;  i < nNumSymSets;  i++)
         rComboBox.InsertEntry(aSymSetMgrCopy.GetSymbolSet(i)->GetName());
 }
@@ -1919,7 +1864,8 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, pButton )
 
     // Symbol ins SymbolSet einfügen
     SmSym *pSym = new SmSym(aSymbols.GetText(), aCharsetDisplay.GetFont(),
-                            aCharsetDisplay.GetSelectChar());
+                            aCharsetDisplay.GetSelectChar(),
+                            aSymbolSets.GetText());
     pSymSet->AddSymbol(pSym);
 
     // update der Hash Tabelle erzwingen (damit aAddBtn disabled wird).
@@ -2156,7 +2102,7 @@ short SmSymDefineDialog::Execute()
         // leere SymbolSets aus dem Ergebnis entfernen.
         // Dabei von hinten durch das array iterieren, da beim löschen die
         // Elemente aufrücken.
-        USHORT  nSymbolSets = aSymSetMgrCopy.GetCount();
+        USHORT  nSymbolSets = aSymSetMgrCopy.GetSymbolSetCount();
         for (int i = nSymbolSets - 1;  i >= 0;  i--)
             if (aSymSetMgrCopy.GetSymbolSet(i)->GetCount() == 0)
                 aSymSetMgrCopy.DeleteSymbolSet(i);
@@ -2409,13 +2355,4 @@ void SmSymDefineDialog::SelectChar(xub_Unicode cChar)
 
 
 /**************************************************************************/
-
-#ifdef NEVER
-SfxTabPage* SmGeneralTabPage::Create(Window* pWindow, const SfxItemSet& rSet)
-{
-    return new SmGeneralTabPage(pWindow, rSet);
-}
-#endif NEVER
-
-
 
