@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-02 10:20:48 $
+#   last change: $Author: obo $ $Date: 2004-11-15 15:38:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -280,7 +280,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.6 $ ';
+$id_str = ' $Revision: 1.7 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -438,7 +438,7 @@ sub doTest {
     $userinstallpath = $userinstallpath_without . $PathSeparator;
     $userpath = "$userinstallpath" . "user$PathSeparator";
     $basicpath = $userpath . "basic$PathSeparator";
-    $standardbasicpath = "$basedir" . "user$PathSeparator" . "basic$PathSeparator";
+    $standardbasicpath = "$basedir" . "presets$PathSeparator" . "basic$PathSeparator";
     $LOGPATH="$userinstallpath" . "user" . $PathSeparator . "temp";
 
     if ($gui eq "UNX") {
