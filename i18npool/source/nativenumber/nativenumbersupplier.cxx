@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-13 22:47:20 $
+ *  last change: $Author: khong $ $Date: 2002-08-22 19:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 static Number natnum4[4] = {
         { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh], 0,
                 ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh], 0,
+        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh_TW], 0,
                 ExponentCount_CJK, MultiplierExponent_CJK },
         { NumberChar_Modern_ja, MultiplierChar_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
                 ExponentCount_CJK, MultiplierExponent_CJK },
@@ -364,7 +364,7 @@ static Number natnum5[4] = {
 static Number natnum6[4] = {
         { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Lower_zh], 0,
                 ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Lower_zh], 0,
+        { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Lower_zh_TW], 0,
                 ExponentCount_CJK, MultiplierExponent_CJK },
         { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
                 ExponentCount_CJK, MultiplierExponent_CJK },
@@ -375,7 +375,7 @@ static Number natnum6[4] = {
 static Number natnum7[4] = {
         { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh], NUMBER_OMIT_ALL,
                 ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh], NUMBER_OMIT_ALL,
+        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh_TW], NUMBER_OMIT_ALL,
                 ExponentCount_CJK, MultiplierExponent_CJK },
         { NumberChar_Modern_ja, MultiplierChar_short_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
                 ExponentCount_short_CJK, MultiplierExponent_short_CJK },
