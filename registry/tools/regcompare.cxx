@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:46:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,21 +904,6 @@ static sal_uInt32 checkField(const OUString& keyName,
         }
         nError++;
     }
-    if ( options.fullCheck() &&
-         (reader1.getFieldFileName(index1) != reader2.getFieldFileName(index2)) )
-    {
-        if ( options.forceOutput() && !options.unoTypeCheck() )
-        {
-            if ( bDump )
-            {
-                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
-                bDump = sal_False;
-            }
-            fprintf(stdout, "  Field %d: FileName1 = %s  !=  FileName2 = %s\n", index1,
-                    U2S(reader1.getFieldFileName(index1)), U2S(reader2.getFieldFileName(index2)));
-        }
-        nError++;
-    }
     return nError;
 }
 
@@ -1639,19 +1624,6 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
             }
             fprintf(stdout, "    Doku1 = %s\n    Doku2 = %s\n",
                     U2S(reader1.getDocumentation()), U2S(reader2.getDocumentation()));
-        }
-        nError++;
-    }
-    if ( options.fullCheck() && (reader1.getFileName() != reader2.getFileName()) )
-    {
-        if ( options.forceOutput() )
-        {
-            if ( bDump )
-            {
-                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
-            }
-            fprintf(stdout, "    FileName1 = %s  !=  FileName2 = %s\n",
-                    U2S(reader1.getFileName()), U2S(reader2.getFileName()));
         }
         nError++;
     }
