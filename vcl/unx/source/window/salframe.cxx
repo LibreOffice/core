@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-31 13:21:46 $
+ *  last change: $Author: pl $ $Date: 2001-07-31 16:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,6 +386,8 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
                    ( pFrame->maFrameData.mpParent
                      || pFrame->maFrameData.IsOverrideRedirect()
                      || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+                     || ! pFrame->maFrameData.aPosSize_.GetWidth()
+                     || ! pFrame->maFrameData.aPosSize_.GetHeight()
                      )
                    )
                 pFrame = pFrame->maFrameData.pNextFrame_;
