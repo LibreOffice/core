@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:15:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,8 @@ ModalDialog DLG_PARAMETERS
         Text[ portuguese_brazilian ] = "The given input could no be converted into a valid value for column \"$value$\".";
         Text[ japanese ] = "“ü—Í’l‚Í <$name$> —ñ‚Å—LŒø‚È’l‚É•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ korean ] = "ÀÔ·ÂÀº ¿­\"$name$\"ÀÇ À¯È¿ÇÑ °ªÀ¸·Î º¯È¯µÉ ¼ö ¾ø¾ú½À´Ï´Ù.";
-        Text[ chinese_simplified ] = "ÊäÈëµÄÄÚÈİÎŞ·¨×ª»»³ÉÒ»¸öÓÃÓÚÁĞ\"$value$\"µÄÓĞĞ§ÊıÖµ¡£";
-        Text[ chinese_traditional ] = "³o­Ó¿é¤J­ÈµLªkÂà´«¦¨Äæ ?$name$? ªº¦³®Ä­È¡C";
+        Text[ chinese_simplified ] = "ÊäÈëµÄÄÚÈİÎŞ·¨×ª»»³ÉÒ»¸öÓÃÓÚÁĞ\"$name$\"µÄÓĞĞ§ÊıÖµ¡£";
+        Text[ chinese_traditional ] = "³o­Ó¿é¤J­ÈµLªkÂà´«¦¨Äæ\"$name$\"ªº¦³®Ä­È¡C";
         Text[ arabic ] = "ÊÚĞÑ ÊÍæíá ÇáÅÏÎÇá Åáì ŞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
         Text[ turkish ] = "Giriş, \"$name$\" sütunu için geçerli bir değere dönüştürülemedi.";
         Text[ catalan ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
@@ -243,6 +243,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/06/29 02:15:11  kz
+ *  Merge SRC633: 29.06.01 - 04:14:48
+ *
  *  Revision 1.14  2001/06/21 21:47:52  kz
  *  Merge SRC633: 21.06.01 - 23:47:15
  *
@@ -288,6 +291,7 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
 
 
 
