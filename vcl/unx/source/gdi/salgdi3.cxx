@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:20:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <alloca.h>
 #endif
 
+#ifdef USE_BUILTIN_RASTERIZER
+#include <gcach_xpeer.hxx>
+#endif // USE_BUILTIN_RASTERIZER
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -144,9 +148,6 @@
 #include "salcvt.hxx"
 #endif
 
-#ifdef USE_BUILTIN_RASTERIZER
-#include <gcach_xpeer.hxx>
-#endif // USE_BUILTIN_RASTERIZER
 
 #ifdef MACOSX
 #include <hash_set>
