@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:39:09 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 06:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,12 +252,10 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aSchema.SetMaxTextLen(nLength);
                 m_aCatalog.SetMaxTextLen(nLength);
 
-                if ( _xConnection.is() && isSQL92CheckEnabled(_xConnection) )
-                {
-                    m_aTitle.setCheck(sal_True); // enable non valid sql chars as well
-                    m_aSchema.setCheck(sal_True); // enable non valid sql chars as well
-                    m_aCatalog.setCheck(sal_True); // enable non valid sql chars as well
-                }
+                sal_Bool bCheck = _xConnection.is() && isSQL92CheckEnabled(_xConnection);
+                m_aTitle.setCheck(bCheck); // enable non valid sql chars as well
+                m_aSchema.setCheck(bCheck); // enable non valid sql chars as well
+                m_aCatalog.setCheck(bCheck); // enable non valid sql chars as well
 
 
                 Size aSize = GetSizePixel();
