@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:20:55 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,7 @@ QueryBox IDS_ASKSAVEERROR {
     MESSAGE[ swedish ] = "Error saving files! Run anyway?";
     MESSAGE[ polish ] = "Error saving files! Run anyway? ";
     MESSAGE[ portuguese_brazilian ] = "Fehler beim Speichern der Dateien! Trotzdem ausführen?";
-    MESSAGE[ japanese ] = "Ì§²Ù‚Ì•Û‘¶‚ÌÛ‚Ì´×°! ‚»‚ê‚Å‚àÀs‚µ‚Ü‚·‚©?";
+    MESSAGE[ japanese ] = "Ì§²Ù‚Ì•Û‘¶‚Ì´×°‚Å‚·B‚»‚ê‚Å‚àÀs‚µ‚Ü‚·‚©B";
     MESSAGE[ korean ] = "ÆÄÀÏ ÀúÀå ½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù! °è¼Ó ½ÇÇàÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "Error saving files! Run anyway?";
     MESSAGE[ chinese_traditional ] = "Error saving files! Run anyway?";
@@ -834,7 +834,7 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ swedish ] = "StarBasic";
     Title[ polish ] = "StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic";
-    Title[ japanese ] = "StarBasic";
+    Title[ japanese ] = "StarBasic!";
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "StarBasic";
     Title[ chinese_traditional ] = "StarBasic";
@@ -859,7 +859,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     MESSAGE[ swedish ] = "File has been changed. Save?";
     MESSAGE[ polish ] = "File has been changed. Save? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist geändert worden. Abspeichern?";
-    MESSAGE[ japanese ] = "Ì§²Ù‚ª•ÏX‚µ‚Ä‚¢‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©?";
+    MESSAGE[ japanese ] = "Ì§²Ù‚É•ÏX‚ª‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©B";
     MESSAGE[ korean ] = "ÆÄÀÏÀÌ ¹Ù²î¾ú½À´Ï´Ù. ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed. Save?";
     MESSAGE[ chinese_traditional ] = "File has been changed. Save?";
@@ -875,7 +875,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ swedish ] = "StarBasic";
     Title[ polish ] = "StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic";
-    Title[ japanese ] = "StarBasic";
+    Title[ japanese ] = "StarBasic!";
     Title[ korean ] = "StarBasic";
     Title[ chinese_simplified ] = "StarBasic";
     Title[ chinese_traditional ] = "StarBasic";
