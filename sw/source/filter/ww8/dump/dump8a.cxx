@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dump8a.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
+ *  last change: $Author: cmc $ $Date: 2002-12-06 16:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2877,26 +2877,6 @@ void DStyle::Dump()
 
 int PrepareConvert( String& rName, String& rOutName, String& rMess )
 {
-#if 0
-    if( argc < 2 ) {
-        rMess += "Aufruf: Dump8 InFile [OutFile [StorFile] ] ";
-        return 1;
-    }else{
-        strncpy( cName, *++argv, sizeof( cName )-5 );
-    }
-    if( !strchr( cName, '.' ) )
-        strcat( cName, ".DOC" );
-
-    if( argc >= 3 ){
-        strncpy( cOutName, *++argv, sizeof( cOutName ) );
-    }else{
-        strncpy( cOutName, cName, sizeof( cOutName ) );
-        char* p = strchr( cOutName, '.' );
-        *p = 0;
-        strcat( cOutName, ".DMP" );
-    }
-#endif
-
     pxStor = new SvStorageRef( new SvStorage( rName, STREAM_STD_READ ) );
     xStrm = (*pxStor)->OpenStream( String::CreateFromAscii( "WordDocument" ),
                                         STREAM_STD_READ );
