@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-01 08:54:05 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ String RID_SVXITEMS_EXTRAS_CHARCOLOR
     Text[ russian ] = "���� ������";
     Text[ polish ] = "Kolor czcionki";
     Text[ japanese ] = "ﾌｫﾝﾄの色";
-    Text[ chinese_traditional ] = "字型顔色";
+    Text[ chinese_traditional ] = "字型顏色";
     Text[ arabic ] = "��� ����";
     Text[ greek ] = "����� ��������������";
     Text[ korean ] = "글꼴 색상";
@@ -1065,7 +1065,7 @@ String RID_SVXITEMS_COLOR
     Text[ russian ] = "���� ";
     Text[ polish ] = "Kolor ";
     Text[ japanese ] = "色 ";
-    Text[ chinese_traditional ] = "顔色 ";
+    Text[ chinese_traditional ] = "顏色 ";
     Text[ arabic ] = "����� ";
     Text[ greek ] = "����� ";
     Text[ korean ] = "색상 ";
@@ -3358,11 +3358,11 @@ String RID_ATTR_CHAR_POSTURE
     Text [ dutch ] = "Letterpositie" ;
     Text [ spanish ] = "Posici�n de la fuente" ;
     Text [ english_us ] = "Font Posture" ;
-    Text[ chinese_simplified ] = "设定字体";
+    Text[ chinese_simplified ] = "字体位置";
     Text[ russian ] = "��������� ������";
     Text[ polish ] = "Pozycja czcionki";
     Text[ japanese ] = "ﾌｫﾝﾄの形態";
-    Text[ chinese_traditional ] = "設定字型";
+    Text[ chinese_traditional ] = "字型位置";
     Text[ arabic ] = "��� ����";
     Text[ greek ] = "���� ��������������";
     Text[ korean ] = "글꼴 위치";
@@ -3543,7 +3543,7 @@ String RID_ATTR_CHAR_FONTHEIGHT
     Text [ finnish ] = "Fontin korkeus" ;
     Text [ danish ] = "Skrifth�jde" ;
     Text [ french ] = "Hauteur des caract�res" ;
-    Text [ swedish ] = "Teckenh�jd" ;
+    Text [ swedish ] = "Teckenstorlek" ;
     Text [ dutch ] = "Letterhoogte" ;
     Text [ spanish ] = "Altura de la fuente" ;
     Text [ english_us ] = "Font Height" ;
@@ -3577,7 +3577,7 @@ String RID_ATTR_CHAR_PROPSIZE
     Text[ chinese_simplified ] = "标准字体大小";
     Text[ russian ] = "������ �������.";
     Text[ polish ] = "Wzgl�dna wielko�� czcionki";
-    Text[ japanese ] = "相対的 ﾌｫﾝﾄのｻｲｽﾞ";
+    Text[ japanese ] = "相対ﾌｫﾝﾄｻｲｽﾞ";
     Text[ chinese_traditional ] = "標準字型大小";
     Text[ arabic ] = "����� ������ ����";
     Text[ greek ] = "����. ������� ��������������";
@@ -3605,7 +3605,7 @@ String RID_ATTR_CHAR_COLOR
     Text[ russian ] = "���� ������";
     Text[ polish ] = "Kolor czcionki";
     Text[ japanese ] = "ﾌｫﾝﾄの色";
-    Text[ chinese_traditional ] = "字型顔色";
+    Text[ chinese_traditional ] = "字型顏色";
     Text[ arabic ] = "��� ����";
     Text[ greek ] = "����� ��������������";
     Text[ korean ] = "글꼴 색";
@@ -3770,7 +3770,7 @@ String RID_ATTR_CHAR_CHARSETCOLOR
     Text[ japanese ] = "文字列の色";
     Text[ korean ] = "문자집합 색상";
     Text[ chinese_simplified ] = "字符集颜色";
-    Text[ chinese_traditional ] = "字型顔色";
+    Text[ chinese_traditional ] = "字型顏色";
     Text[ arabic ] = "��� ������ ������";
     Text[ turkish ] = "Karakter k�mesi rengi";
     Text[ catalan ] = "Color de car�cter";
@@ -4301,111 +4301,529 @@ String RID_ATTR_FLASH
 {
     Text = "Blinkend" ;
     Text [ english_us ] = "Blinking" ;
+    Text[ portuguese ] = "Blinking";
+    Text[ russian ] = "Blinking";
+    Text[ greek ] = "Blinking";
+    Text[ dutch ] = "Blinking";
+    Text[ french ] = "Blinking";
+    Text[ spanish ] = "Blinking";
+    Text[ finnish ] = "Blinking";
+    Text[ italian ] = "Blinking";
+    Text[ danish ] = "Blinking";
+    Text[ swedish ] = "Blinkande";
+    Text[ polish ] = "Blinking";
+    Text[ portuguese_brazilian ] = "Blinking";
+    Text[ japanese ] = "点滅";
+    Text[ korean ] = "Blinking";
+    Text[ chinese_simplified ] = "闪动的";
+    Text[ chinese_traditional ] = "閃動";
+    Text[ turkish ] = "Blinking";
+    Text[ arabic ] = "Blinking";
+    Text[ catalan ] = "Blinking";
 };
 String RID_ATTR_PARA_REGISTER
 {
     Text = "Registerhaltigkeit" ;
     Text [ english_us ] = "Register-true" ;
+    Text[ portuguese ] = "Register-true";
+    Text[ russian ] = "Register-true";
+    Text[ greek ] = "Register-true";
+    Text[ dutch ] = "Register-true";
+    Text[ french ] = "Register-true";
+    Text[ spanish ] = "Register-true";
+    Text[ finnish ] = "Register-true";
+    Text[ italian ] = "Register-true";
+    Text[ danish ] = "Register-true";
+    Text[ swedish ] = "Register";
+    Text[ polish ] = "Register-true";
+    Text[ portuguese_brazilian ] = "Register-true";
+    Text[ japanese ] = "印刷見当を合わせる";
+    Text[ korean ] = "Register-true";
+    Text[ chinese_simplified ] = "正反页的行距相等";
+    Text[ chinese_traditional ] = "正反頁的行距相等";
+    Text[ turkish ] = "Register-true";
+    Text[ arabic ] = "Register-true";
+    Text[ catalan ] = "Register-true";
 };
 String RID_ATTR_BRUSH_CHAR
 {
     Text = "Zeichenhintergrund" ;
     Text[ english_us ] = "Character Background";
+    Text[ portuguese ] = "Character Background";
+    Text[ russian ] = "Character Background";
+    Text[ greek ] = "Character Background";
+    Text[ dutch ] = "Character Background";
+    Text[ french ] = "Character Background";
+    Text[ spanish ] = "Character Background";
+    Text[ finnish ] = "Character Background";
+    Text[ italian ] = "Character Background";
+    Text[ danish ] = "Character Background";
+    Text[ swedish ] = "Teckenbakgrund";
+    Text[ polish ] = "Character Background";
+    Text[ portuguese_brazilian ] = "Character Background";
+    Text[ japanese ] = "文字の背景";
+    Text[ korean ] = "Character Background";
+    Text[ chinese_simplified ] = "字符背景";
+    Text[ chinese_traditional ] = "字元背景";
+    Text[ turkish ] = "Character Background";
+    Text[ arabic ] = "Character Background";
+    Text[ catalan ] = "Character Background";
 };
 String RID_ATTR_CHAR_CJK_FONT
 {
     Text = "Asiatische Schrift" ;
     Text [ english_us ] = "Asian Font" ;
+    Text[ portuguese ] = "Asian Font";
+    Text[ russian ] = "Asian Font";
+    Text[ greek ] = "Asian Font";
+    Text[ dutch ] = "Asian Font";
+    Text[ french ] = "Asian Font";
+    Text[ spanish ] = "Asian Font";
+    Text[ finnish ] = "Asian Font";
+    Text[ italian ] = "Asian Font";
+    Text[ danish ] = "Asian Font";
+    Text[ swedish ] = "Asiatiskt teckensnitt";
+    Text[ polish ] = "Asian Font";
+    Text[ portuguese_brazilian ] = "Asian Font";
+    Text[ japanese ] = "日本語用ﾌｫﾝﾄ";
+    Text[ korean ] = "Asian Font";
+    Text[ chinese_simplified ] = "中日韩文字";
+    Text[ chinese_traditional ] = "中日韓文字";
+    Text[ turkish ] = "Asian Font";
+    Text[ arabic ] = "Asian Font";
+    Text[ catalan ] = "Asian Font";
 };
 String RID_ATTR_CHAR_CJK_FONTHEIGHT
 {
     Text = "Schriftgrad asiatische Schrift" ;
     Text [ english_us ] = "Size asian font" ;
+    Text[ portuguese ] = "Size asian font";
+    Text[ russian ] = "Size asian font";
+    Text[ greek ] = "Size asian font";
+    Text[ dutch ] = "Size asian font";
+    Text[ french ] = "Size asian font";
+    Text[ spanish ] = "Size asian font";
+    Text[ finnish ] = "Size asian font";
+    Text[ italian ] = "Size asian font";
+    Text[ danish ] = "Size asian font";
+    Text[ swedish ] = "Teckenstorlek asiatiskt teckensnitt";
+    Text[ polish ] = "Size asian font";
+    Text[ portuguese_brazilian ] = "Size asian font";
+    Text[ japanese ] = "ﾌｫﾝﾄの縦 日本語用ﾌｫﾝﾄ";
+    Text[ korean ] = "Size asian font";
+    Text[ chinese_simplified ] = "中日韩文字的字体高度";
+    Text[ chinese_traditional ] = "中日韓文字的字型高度";
+    Text[ turkish ] = "Size asian font";
+    Text[ arabic ] = "Size asian font";
+    Text[ catalan ] = "Size asian font";
 };
 String RID_ATTR_CHAR_CJK_LANGUAGE
 {
     Text = "Sprache asiatische Schrift" ;
     Text [ english_us ] = "Language asian font" ;
+    Text[ portuguese ] = "Language asian font";
+    Text[ russian ] = "Language asian font";
+    Text[ greek ] = "Language asian font";
+    Text[ dutch ] = "Language asian font";
+    Text[ french ] = "Language asian font";
+    Text[ spanish ] = "Language asian font";
+    Text[ finnish ] = "Language asian font";
+    Text[ italian ] = "Language asian font";
+    Text[ danish ] = "Language asian font";
+    Text[ swedish ] = "Spr�k asiatiskt teckensnitt";
+    Text[ polish ] = "Language asian font";
+    Text[ portuguese_brazilian ] = "Language asian font";
+    Text[ japanese ] = "言語 日本語用ﾌｫﾝﾄ";
+    Text[ korean ] = "Language asian font";
+    Text[ chinese_simplified ] = "中日韩文字语言";
+    Text[ chinese_traditional ] = "中日韓文字語言";
+    Text[ turkish ] = "Language asian font";
+    Text[ arabic ] = "Language asian font";
+    Text[ catalan ] = "Language asian font";
 };
 String RID_ATTR_CHAR_CJK_POSTURE
 {
     Text = "Schriftstellung asiatische Schrift" ;
     Text [ english_us ] = "Posture asian font" ;
+    Text[ portuguese ] = "Posture asian font";
+    Text[ russian ] = "Posture asian font";
+    Text[ greek ] = "Posture asian font";
+    Text[ dutch ] = "Posture asian font";
+    Text[ french ] = "Posture asian font";
+    Text[ spanish ] = "Posture asian font";
+    Text[ finnish ] = "Posture asian font";
+    Text[ italian ] = "Posture asian font";
+    Text[ danish ] = "Posture asian font";
+    Text[ swedish ] = "Posture asian font";
+    Text[ polish ] = "Posture asian font";
+    Text[ portuguese_brazilian ] = "Posture asian font";
+    Text[ japanese ] = "ﾌｫﾝﾄの形態 日本語用ﾌｫﾝﾄ";
+    Text[ korean ] = "Posture asian font";
+    Text[ chinese_simplified ] = "中日韩文字的字体高度";
+    Text[ chinese_traditional ] = "中日韓文字字型的位置";
+    Text[ turkish ] = "Posture asian font";
+    Text[ arabic ] = "Posture asian font";
+    Text[ catalan ] = "Posture asian font";
 };
 String RID_ATTR_CHAR_CJK_WEIGHT
 {
     Text = "Schriftst�rke asiatische Schrift" ;
     Text [ english_us ] = "Weight asian font" ;
+    Text[ portuguese ] = "Weight asian font";
+    Text[ russian ] = "Weight asian font";
+    Text[ greek ] = "Weight asian font";
+    Text[ dutch ] = "Weight asian font";
+    Text[ french ] = "Weight asian font";
+    Text[ spanish ] = "Weight asian font";
+    Text[ finnish ] = "Weight asian font";
+    Text[ italian ] = "Weight asian font";
+    Text[ danish ] = "Weight asian font";
+    Text[ swedish ] = "Weight asian font";
+    Text[ polish ] = "Weight asian font";
+    Text[ portuguese_brazilian ] = "Weight asian font";
+    Text[ japanese ] = "ﾌｫﾝﾄの太さ 日本語用ﾌｫﾝﾄ";
+    Text[ korean ] = "Weight asian font";
+    Text[ chinese_simplified ] = "中日韩文字的字体粗细";
+    Text[ chinese_traditional ] = "中日韓文字字型的粗細";
+    Text[ turkish ] = "Weight asian font";
+    Text[ arabic ] = "Weight asian font";
+    Text[ catalan ] = "Weight asian font";
 };
 String RID_ATTR_CHAR_CTL_FONT
 {
     Text = "Komplexe Skripte" ;
     Text [ english_us ] = "Complex scripts" ;
+    Text[ portuguese ] = "Complex scripts";
+    Text[ russian ] = "Complex scripts";
+    Text[ greek ] = "Complex scripts";
+    Text[ dutch ] = "Complex scripts";
+    Text[ french ] = "Complex scripts";
+    Text[ spanish ] = "Complex scripts";
+    Text[ finnish ] = "Complex scripts";
+    Text[ italian ] = "Complex scripts";
+    Text[ danish ] = "Complex scripts";
+    Text[ swedish ] = "Komplexa skript";
+    Text[ polish ] = "Complex scripts";
+    Text[ portuguese_brazilian ] = "Complex scripts";
+    Text[ japanese ] = "混在文章";
+    Text[ korean ] = "Complex scripts";
+    Text[ chinese_simplified ] = "复杂的文字";
+    Text[ chinese_traditional ] = "複雜的文字";
+    Text[ turkish ] = "Complex scripts";
+    Text[ arabic ] = "Complex scripts";
+    Text[ catalan ] = "Complex scripts";
 };
 String RID_ATTR_CHAR_CTL_FONTHEIGHT
 {
     Text = "Schriftgrad komplexe Skripte" ;
     Text [ english_us ] = "Size complex scripts" ;
+    Text[ portuguese ] = "Size complex scripts";
+    Text[ russian ] = "Size complex scripts";
+    Text[ greek ] = "Size complex scripts";
+    Text[ dutch ] = "Size complex scripts";
+    Text[ french ] = "Size complex scripts";
+    Text[ spanish ] = "Size complex scripts";
+    Text[ finnish ] = "Size complex scripts";
+    Text[ italian ] = "Size complex scripts";
+    Text[ danish ] = "Size complex scripts";
+    Text[ swedish ] = "Teckenstorlek komplexa teckensnitt";
+    Text[ polish ] = "Size complex scripts";
+    Text[ portuguese_brazilian ] = "Size complex scripts";
+    Text[ japanese ] = "ﾌｫﾝﾄの縦 混在文章";
+    Text[ korean ] = "Size complex scripts";
+    Text[ chinese_simplified ] = "复杂的文字的字体高度";
+    Text[ chinese_traditional ] = "複雜的文字的字型高度";
+    Text[ turkish ] = "Size complex scripts";
+    Text[ arabic ] = "Size complex scripts";
+    Text[ catalan ] = "Size complex scripts";
 };
 String RID_ATTR_CHAR_CTL_LANGUAGE
 {
     Text = "Sprache komplexe Skripte" ;
     Text [ english_us ] = "Language complex scripts" ;
+    Text[ portuguese ] = "Language complex scripts";
+    Text[ russian ] = "Language complex scripts";
+    Text[ greek ] = "Language complex scripts";
+    Text[ dutch ] = "Language complex scripts";
+    Text[ french ] = "Language complex scripts";
+    Text[ spanish ] = "Language complex scripts";
+    Text[ finnish ] = "Language complex scripts";
+    Text[ italian ] = "Language complex scripts";
+    Text[ danish ] = "Language complex scripts";
+    Text[ swedish ] = "Spr�k komplexa skript";
+    Text[ polish ] = "Language complex scripts";
+    Text[ portuguese_brazilian ] = "Language complex scripts";
+    Text[ japanese ] = "言語 混在文章";
+    Text[ korean ] = "Language complex scripts";
+    Text[ chinese_simplified ] = "复杂的文字语言";
+    Text[ chinese_traditional ] = "複雜的文字語言";
+    Text[ turkish ] = "Language complex scripts";
+    Text[ arabic ] = "Language complex scripts";
+    Text[ catalan ] = "Language complex scripts";
 };
 String RID_ATTR_CHAR_CTL_POSTURE
 {
     Text = "Schriftstellung komplexe Skripte" ;
     Text [ english_us ] = "Posture complex scripts" ;
+    Text[ portuguese ] = "Posture complex scripts";
+    Text[ russian ] = "Posture complex scripts";
+    Text[ greek ] = "Posture complex scripts";
+    Text[ dutch ] = "Posture complex scripts";
+    Text[ french ] = "Posture complex scripts";
+    Text[ spanish ] = "Posture complex scripts";
+    Text[ finnish ] = "Posture complex scripts";
+    Text[ italian ] = "Posture complex scripts";
+    Text[ danish ] = "Posture complex scripts";
+    Text[ swedish ] = "Teckensnittsst�llning komplexa skript";
+    Text[ polish ] = "Posture complex scripts";
+    Text[ portuguese_brazilian ] = "Posture complex scripts";
+    Text[ japanese ] = "ﾌｫﾝﾄの形態 混在文章";
+    Text[ korean ] = "Posture complex scripts";
+    Text[ chinese_simplified ] = "复杂的文字的字体位置";
+    Text[ chinese_traditional ] = "複雜的文字的字型位置";
+    Text[ turkish ] = "Posture complex scripts";
+    Text[ arabic ] = "Posture complex scripts";
+    Text[ catalan ] = "Posture complex scripts";
 };
 String RID_ATTR_CHAR_CTL_WEIGHT
 {
     Text = "Schriftst�rke komplexe Skripte" ;
     Text [ english_us ] = "Weight complex scripts" ;
+    Text[ portuguese ] = "Weight complex scripts";
+    Text[ russian ] = "Weight complex scripts";
+    Text[ greek ] = "Weight complex scripts";
+    Text[ dutch ] = "Weight complex scripts";
+    Text[ french ] = "Weight complex scripts";
+    Text[ spanish ] = "Weight complex scripts";
+    Text[ finnish ] = "Weight complex scripts";
+    Text[ italian ] = "Weight complex scripts";
+    Text[ danish ] = "Weight complex scripts";
+    Text[ swedish ] = "Weight complex scripts";
+    Text[ polish ] = "Weight complex scripts";
+    Text[ portuguese_brazilian ] = "Weight complex scripts";
+    Text[ japanese ] = "ﾌｫﾝﾄの太さ 混在文章";
+    Text[ korean ] = "Weight complex scripts";
+    Text[ chinese_simplified ] = "复杂的文字的字体粗细";
+    Text[ chinese_traditional ] = "複雜的文字的字型粗細";
+    Text[ turkish ] = "Weight complex scripts";
+    Text[ arabic ] = "Weight complex scripts";
+    Text[ catalan ] = "Weight complex scripts";
 };
 String RID_ATTR_CHAR_TWO_LINES
 {
     Text = "Doppelzeilig";
     Text [ english_us ] = "Double lined" ;
+    Text[ portuguese ] = "Double lined";
+    Text[ russian ] = "Double lined";
+    Text[ greek ] = "Double lined";
+    Text[ dutch ] = "Double lined";
+    Text[ french ] = "Double lined";
+    Text[ spanish ] = "Double lined";
+    Text[ finnish ] = "Double lined";
+    Text[ italian ] = "Double lined";
+    Text[ danish ] = "Double lined";
+    Text[ swedish ] = "Dubbla rader";
+    Text[ polish ] = "Double lined";
+    Text[ portuguese_brazilian ] = "Double lined";
+    Text[ japanese ] = "2行使い";
+    Text[ korean ] = "Double lined";
+    Text[ chinese_simplified ] = "双行";
+    Text[ chinese_traditional ] = "雙行";
+    Text[ turkish ] = "Double lined";
+    Text[ arabic ] = "Double lined";
+    Text[ catalan ] = "Double lined";
 };
 String RID_ATTR_CHAR_EMPHASISMARK
 {
     Text = "Betonungszeichen";
     Text [ english_us ] = "Emphasis mark" ;
+    Text[ portuguese ] = "Emphasis mark";
+    Text[ russian ] = "Emphasis mark";
+    Text[ greek ] = "Emphasis mark";
+    Text[ dutch ] = "Emphasis mark";
+    Text[ french ] = "Emphasis mark";
+    Text[ spanish ] = "Emphasis mark";
+    Text[ finnish ] = "Emphasis mark";
+    Text[ italian ] = "Emphasis mark";
+    Text[ danish ] = "Emphasis mark";
+    Text[ swedish ] = "Betoningstecken";
+    Text[ polish ] = "Emphasis mark";
+    Text[ portuguese_brazilian ] = "Emphasis mark";
+    Text[ japanese ] = "強調に用いる記号";
+    Text[ korean ] = "Emphasis mark";
+    Text[ chinese_simplified ] = "重音符号";
+    Text[ chinese_traditional ] = "重音符號";
+    Text[ turkish ] = "Emphasis mark";
+    Text[ arabic ] = "Emphasis mark";
+    Text[ catalan ] = "Emphasis mark";
 };
 String RID_ATTR_PARA_SCRIPTSPACE
 {
     Text = "Text Abstand" ;
     Text[ english_us ] = "Text spacing";
+    Text[ portuguese ] = "Text spacing";
+    Text[ russian ] = "Text spacing";
+    Text[ greek ] = "Text spacing";
+    Text[ dutch ] = "Text spacing";
+    Text[ french ] = "Text spacing";
+    Text[ spanish ] = "Text spacing";
+    Text[ finnish ] = "Text spacing";
+    Text[ italian ] = "Text spacing";
+    Text[ danish ] = "Text spacing";
+    Text[ swedish ] = "Textavst�nd";
+    Text[ polish ] = "Text spacing";
+    Text[ portuguese_brazilian ] = "Text spacing";
+    Text[ japanese ] = "文字間隔";
+    Text[ korean ] = "Text spacing";
+    Text[ chinese_simplified ] = "文字的间隔";
+    Text[ chinese_traditional ] = "文字的間隔";
+    Text[ turkish ] = "Text spacing";
+    Text[ arabic ] = "Text spacing";
+    Text[ catalan ] = "Text spacing";
 };
 String RID_ATTR_PARA_HANGPUNCTUATION
 {
     Text = "H�ngende Interpunktion" ;
     Text[ english_us ] = "Hanging punctuation";
+    Text[ portuguese ] = "Hanging punctuation";
+    Text[ russian ] = "Hanging punctuation";
+    Text[ greek ] = "Hanging punctuation";
+    Text[ dutch ] = "Hanging punctuation";
+    Text[ french ] = "Hanging punctuation";
+    Text[ spanish ] = "Hanging punctuation";
+    Text[ finnish ] = "Hanging punctuation";
+    Text[ italian ] = "Hanging punctuation";
+    Text[ danish ] = "Hanging punctuation";
+    Text[ swedish ] = "H�ngande interpunktion";
+    Text[ polish ] = "Hanging punctuation";
+    Text[ portuguese_brazilian ] = "Hanging punctuation";
+    Text[ japanese ] = "句読点のぶらさげを行う";
+    Text[ korean ] = "Hanging punctuation";
+    Text[ chinese_simplified ] = "行末附加标点符号";
+    Text[ chinese_traditional ] = "行末附加標點符號";
+    Text[ turkish ] = "Hanging punctuation";
+    Text[ arabic ] = "Hanging punctuation";
+    Text[ catalan ] = "Hanging punctuation";
 };
 String RID_ATTR_PARA_FORBIDDEN_RULES
 {
     Text = "Verbotene Zeichen" ;
     Text[ english_us ] = "Forbidden characters";
+    Text[ portuguese ] = "Forbidden characters";
+    Text[ russian ] = "Forbidden characters";
+    Text[ greek ] = "Forbidden characters";
+    Text[ dutch ] = "Forbidden characters";
+    Text[ french ] = "Forbidden characters";
+    Text[ spanish ] = "Forbidden characters";
+    Text[ finnish ] = "Forbidden characters";
+    Text[ italian ] = "Forbidden characters";
+    Text[ danish ] = "Forbidden characters";
+    Text[ swedish ] = "F�rbjudna tecken";
+    Text[ polish ] = "Forbidden characters";
+    Text[ portuguese_brazilian ] = "Forbidden characters";
+    Text[ japanese ] = "禁則文字";
+    Text[ korean ] = "Forbidden characters";
+    Text[ chinese_simplified ] = "禁止使用的字符";
+    Text[ chinese_traditional ] = "禁止使用的字元";
+    Text[ turkish ] = "Forbidden characters";
+    Text[ arabic ] = "Forbidden characters";
+    Text[ catalan ] = "Forbidden characters";
 };
 String RID_ATTR_CHAR_ROTATED
 {
     Text = "Rotation";
     Text [ english_us ] = "Rotation" ;
+    Text[ portuguese ] = "Rota��o";
+    Text[ russian ] = "��������";
+    Text[ greek ] = "����������";
+    Text[ dutch ] = "Draaien";
+    Text[ french ] = "Rotation";
+    Text[ spanish ] = "Rotaci�n";
+    Text[ finnish ] = "Kierto";
+    Text[ italian ] = "Ruota";
+    Text[ danish ] = "Rotation";
+    Text[ swedish ] = "Rotation";
+    Text[ polish ] = "Rotation";
+    Text[ portuguese_brazilian ] = "Rotation";
+    Text[ japanese ] = "回転";
+    Text[ korean ] = "회전";
+    Text[ chinese_simplified ] = "旋转";
+    Text[ chinese_traditional ] = "旋轉";
+    Text[ turkish ] = "D�nd�r";
+    Text[ arabic ] = "�������";
+    Text[ catalan ] = "Rotation";
 };
 String RID_ATTR_CHAR_SCALEWIDTH
 {
     Text = "Skalierung";
     Text [ english_us ] = "Scaling" ;
+    Text[ portuguese ] = "Scaling";
+    Text[ russian ] = "Scaling";
+    Text[ greek ] = "Scaling";
+    Text[ dutch ] = "Scaling";
+    Text[ french ] = "Scaling";
+    Text[ spanish ] = "Scaling";
+    Text[ finnish ] = "Scaling";
+    Text[ italian ] = "Scaling";
+    Text[ danish ] = "Scaling";
+    Text[ swedish ] = "Skalning";
+    Text[ polish ] = "Scaling";
+    Text[ portuguese_brazilian ] = "Scaling";
+    Text[ japanese ] = "倍率";
+    Text[ korean ] = "Scaling";
+    Text[ chinese_simplified ] = "显示比例";
+    Text[ chinese_traditional ] = "顯示比例";
+    Text[ turkish ] = "Scaling";
+    Text[ arabic ] = "Scaling";
+    Text[ catalan ] = "Scaling";
 };
 String RID_ATTR_CHAR_RELIEF
 {
     Text = "Relief" ;
     Text[ english_us ] = "Relief";
+    Text[ portuguese ] = "Relevo";
+    Text[ russian ] = "������";
+    Text[ greek ] = "A�������";
+    Text[ dutch ] = "Reli�f";
+    Text[ french ] = "Relief";
+    Text[ spanish ] = "Relieve";
+    Text[ finnish ] = "Korkokuva";
+    Text[ italian ] = "Rilievo";
+    Text[ danish ] = "Relief";
+    Text[ swedish ] = "Relief";
+    Text[ polish ] = "Uwypuklenie";
+    Text[ portuguese_brazilian ] = "Relief";
+    Text[ japanese ] = "浮き彫り";
+    Text[ korean ] = "양각";
+    Text[ chinese_simplified ] = "浮雕";
+    Text[ chinese_traditional ] = "浮雕";
+    Text[ turkish ] = "R�lyef";
+    Text[ arabic ] = "���";
+    Text[ catalan ] = "Relief";
 };
 String RID_PARA_VERTALIGN
 {
     Text = "Vertikale Textausrichtung" ;
     Text[ english_us ] = "Vertical text alignment";
+    Text[ portuguese ] = "Vertical text alignment";
+    Text[ russian ] = "Vertical text alignment";
+    Text[ greek ] = "Vertical text alignment";
+    Text[ dutch ] = "Vertical text alignment";
+    Text[ french ] = "Vertical text alignment";
+    Text[ spanish ] = "Vertical text alignment";
+    Text[ finnish ] = "Vertical text alignment";
+    Text[ italian ] = "Vertical text alignment";
+    Text[ danish ] = "Vertical text alignment";
+    Text[ swedish ] = "Vertikal textjustering";
+    Text[ polish ] = "Vertical text alignment";
+    Text[ portuguese_brazilian ] = "Vertical text alignment";
+    Text[ japanese ] = "縦書き";
+    Text[ korean ] = "Vertical text alignment";
+    Text[ chinese_simplified ] = "直式文字对齐";
+    Text[ chinese_traditional ] = "直式文字對齊";
+    Text[ turkish ] = "Vertical text alignment";
+    Text[ arabic ] = "Vertical text alignment";
+    Text[ catalan ] = "Vertical text alignment";
 };
 String RID_SINGLE_LINE0
 {
@@ -7442,7 +7860,7 @@ String RID_SVXITEMS_BACKGROUND_COLOR
     Text[ russian ] = "���� ����: ";
     Text[ polish ] = "Kolor t�a: ";
     Text[ japanese ] = "背景色: ";
-    Text[ chinese_traditional ] = "背景顔色： ";
+    Text[ chinese_traditional ] = "背景顏色： ";
     Text[ arabic ] = "��� �������:";
     Text[ greek ] = "����� ������: ";
     Text[ korean ] = "배경색: ";
@@ -8243,6 +8661,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
 
