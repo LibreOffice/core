@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 15:12:31 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 11:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,12 @@ namespace dbaui
         DECL_LINK( OnAsyncDrop, void* );
 
         void implRemoveStatusListeners();
+
+        void insertRows(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& xSrcRs,
+                       const ::std::vector<sal_Int32>& _rvColumns,
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+                       sal_Bool bIsAutoIncrement) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 
 // .........................................................................

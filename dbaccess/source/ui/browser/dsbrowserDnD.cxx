@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:58:35 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 11:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
+#include <com/sun/star/sdbc/XParameters.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
@@ -117,6 +120,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
@@ -465,104 +471,11 @@ namespace dbaui
                                         if(!xSrcRs.is() || !xRow.is())
                                             break;
 
-                                        Reference<XResultSet> xDestSet = Reference< XResultSet >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.RowSet")),UNO_QUERY);
-                                        Reference<XPropertySet > xProp(xDestSet,UNO_QUERY);
-                                        if(xProp.is())
-                                        {
-                                            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xDestConnection));
-                                            xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(CommandType::TABLE));
-                                            xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
-                                            xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
-                                            Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
-                                            xRowSet->execute();
-                                        }
-                                        Reference< XResultSetUpdate> xDestRsUpd(xDestSet,UNO_QUERY);
-                                        Reference< XRowUpdate>       xDestRowUpd(xDestSet,UNO_QUERY);
-
-                                        Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
-                                        Reference< XResultSetMetaData> xMeta = xSrcMetaSup->getMetaData();
-                                        sal_Int32 nCount = xMeta->getColumnCount();
-
                                         sal_Bool bIsAutoIncrement           = aWizard.SetAutoincrement();
                                         ::std::vector<sal_Int32> vColumns   = aWizard.GetColumnPositions();
-                                        OSL_ENSURE(sal_Int32(vColumns.size()) == nCount,"Column count isn't correct!");
-
-                                        sal_Int32 nRowCount = 0;
-                                        while(xSrcRs->next())
-                                        {
-                                            ++nRowCount;
-                                            xDestRsUpd->moveToInsertRow();
-                                            for(sal_Int32 i=1;i<=nCount;++i)
-                                            {
-                                                sal_Int32 nPos = vColumns[i-1];
-                                                if(nPos == CONTAINER_ENTRY_NOTFOUND)
-                                                    continue;
-                                                if(i == 1 && bIsAutoIncrement)
-                                                {
-                                                    xDestRowUpd->updateInt(1,nRowCount);
-                                                    continue;
-                                                }
-
-                                                switch(xMeta->getColumnType(i))
-                                                {
-                                                    case DataType::CHAR:
-                                                    case DataType::VARCHAR:
-                                                        xDestRowUpd->updateString(vColumns[i-1],xRow->getString(i));
-                                                        break;
-                                                    case DataType::DECIMAL:
-                                                    case DataType::NUMERIC:
-                                                    case DataType::BIGINT:
-                                                        xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
-                                                        break;
-                                                    case DataType::FLOAT:
-                                                        xDestRowUpd->updateFloat(vColumns[i-1],xRow->getFloat(i));
-                                                        break;
-                                                    case DataType::DOUBLE:
-                                                        xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
-                                                        break;
-                                                    case DataType::LONGVARCHAR:
-                                                        xDestRowUpd->updateString(vColumns[i-1],xRow->getString(i));
-                                                        break;
-                                                    case DataType::LONGVARBINARY:
-                                                        xDestRowUpd->updateBytes(vColumns[i-1],xRow->getBytes(i));
-                                                        break;
-                                                    case DataType::DATE:
-                                                        xDestRowUpd->updateDate(vColumns[i-1],xRow->getDate(i));
-                                                        break;
-                                                    case DataType::TIME:
-                                                        xDestRowUpd->updateTime(vColumns[i-1],xRow->getTime(i));
-                                                        break;
-                                                    case DataType::TIMESTAMP:
-                                                        xDestRowUpd->updateTimestamp(vColumns[i-1],xRow->getTimestamp(i));
-                                                        break;
-                                                    case DataType::BIT:
-                                                        xDestRowUpd->updateBoolean(vColumns[i-1],xRow->getBoolean(i));
-                                                        break;
-                                                    case DataType::TINYINT:
-                                                        xDestRowUpd->updateByte(vColumns[i-1],xRow->getByte(i));
-                                                        break;
-                                                    case DataType::SMALLINT:
-                                                        xDestRowUpd->updateShort(vColumns[i-1],xRow->getShort(i));
-                                                        break;
-                                                    case DataType::INTEGER:
-                                                        xDestRowUpd->updateInt(vColumns[i-1],xRow->getInt(i));
-                                                        break;
-                                                    case DataType::REAL:
-                                                        xDestRowUpd->updateDouble(vColumns[i-1],xRow->getDouble(i));
-                                                        break;
-                                                    case DataType::BINARY:
-                                                    case DataType::VARBINARY:
-                                                        xDestRowUpd->updateBytes(vColumns[i-1],xRow->getBytes(i));
-                                                        break;
-                                                    default:
-                                                        OSL_ENSURE(0,"Unknown type");
-                                                }
-                                                if(xRow->wasNull())
-                                                    xDestRowUpd->updateNull(vColumns[i-1]);
-                                            }
-                                            xDestRsUpd->insertRow();
-                                        }
-                                        ::comphelper::disposeComponent(xDestRsUpd);
+                                        // now insert the rows into the new table
+                                        // we couldn't use the rowset here because it could happen that we haven't a primary key
+                                        insertRows(xSrcRs,vColumns,xTable,xDestConnection->getMetaData(),bIsAutoIncrement);
                                     }
                                     break;
                                 case OCopyTableWizard::WIZARD_DEF_VIEW:
@@ -804,6 +717,133 @@ namespace dbaui
 
         return bTableFormat;
     }
+    // -----------------------------------------------------------------------------
+    void SbaTableQueryBrowser::insertRows(const Reference<XResultSet>& xSrcRs,
+                                                   const ::std::vector<sal_Int32>& _rvColumns,
+                                                   const Reference<XPropertySet>& _xTable,
+                                                   const Reference<XDatabaseMetaData>& _xMetaData,
+                                                   sal_Bool bIsAutoIncrement) throw(SQLException, RuntimeException)
+    {
+        Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
+        Reference<XRow> xRow(xSrcRs,UNO_QUERY);
+        if(!xSrcRs.is() || !xRow.is())
+            return;
+
+        Reference< XResultSetMetaData> xMeta = xSrcMetaSup->getMetaData();
+        sal_Int32 nCount = xMeta->getColumnCount();
+
+
+        ::rtl::OUString aSql(::rtl::OUString::createFromAscii("INSERT INTO "));
+        ::rtl::OUString sComposedTableName;
+        ::dbaui::composeTableName(_xMetaData,_xTable,sComposedTableName,sal_True);
+
+        aSql += sComposedTableName;
+        aSql += ::rtl::OUString::createFromAscii(" ( ");
+        // set values and column names
+        ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
+        static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
+        static ::rtl::OUString aQuote = _xMetaData->getIdentifierQuoteString();
+        static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
+
+        Reference<XColumnsSupplier> xColsSup(_xTable,UNO_QUERY);
+        OSL_ENSURE(xColsSup.is(),"SbaTableQueryBrowser::insertRows: No columnsSupplier!");
+        if(!xColsSup.is())
+            return;
+        Reference<XNameAccess> xNameAccess = xColsSup->getColumns();
+        Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
+        const ::rtl::OUString* pBegin = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+        for(;pBegin != pEnd;++pBegin)
+        {
+            aSql += ::dbtools::quoteName( aQuote,*pBegin);
+            aSql += aComma;
+            aValues += aPara;
+        }
+
+        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+        aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+
+        aSql += aValues;
+        // now create,fill and execute the prepared statement
+        Reference< XPreparedStatement > xPrep(_xMetaData->getConnection()->prepareStatement(aSql));
+        Reference< XParameters > xParameter(xPrep,UNO_QUERY);
+
+        sal_Int32 nRowCount = 0;
+        while(xSrcRs->next())
+        {
+            ++nRowCount;
+            ::std::vector<sal_Int32>::const_iterator aPosIter = _rvColumns.begin();
+            for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter,++i)
+            {
+                sal_Int32 nPos = *aPosIter;
+                if(nPos == CONTAINER_ENTRY_NOTFOUND)
+                    continue;
+                if(i == 1 && bIsAutoIncrement)
+                {
+                    xParameter->setInt(1,nRowCount);
+                    continue;
+                }
+                sal_Int32 nType = xMeta->getColumnType(i);
+                switch(nType)
+                {
+                    case DataType::CHAR:
+                    case DataType::VARCHAR:
+                        xParameter->setString(nPos,xRow->getString(i));
+                        break;
+                    case DataType::DECIMAL:
+                    case DataType::NUMERIC:
+                    case DataType::BIGINT:
+                        xParameter->setDouble(nPos,xRow->getDouble(i));
+                        break;
+                    case DataType::FLOAT:
+                        xParameter->setFloat(nPos,xRow->getFloat(i));
+                        break;
+                    case DataType::DOUBLE:
+                        xParameter->setDouble(nPos,xRow->getDouble(i));
+                        break;
+                    case DataType::LONGVARCHAR:
+                        xParameter->setString(nPos,xRow->getString(i));
+                        break;
+                    case DataType::LONGVARBINARY:
+                        xParameter->setBytes(nPos,xRow->getBytes(i));
+                        break;
+                    case DataType::DATE:
+                        xParameter->setDate(nPos,xRow->getDate(i));
+                        break;
+                    case DataType::TIME:
+                        xParameter->setTime(nPos,xRow->getTime(i));
+                        break;
+                    case DataType::TIMESTAMP:
+                        xParameter->setTimestamp(nPos,xRow->getTimestamp(i));
+                        break;
+                    case DataType::BIT:
+                        xParameter->setBoolean(nPos,xRow->getBoolean(i));
+                        break;
+                    case DataType::TINYINT:
+                        xParameter->setByte(nPos,xRow->getByte(i));
+                        break;
+                    case DataType::SMALLINT:
+                        xParameter->setShort(nPos,xRow->getShort(i));
+                        break;
+                    case DataType::INTEGER:
+                        xParameter->setInt(nPos,xRow->getInt(i));
+                        break;
+                    case DataType::REAL:
+                        xParameter->setDouble(nPos,xRow->getDouble(i));
+                        break;
+                    case DataType::BINARY:
+                    case DataType::VARBINARY:
+                        xParameter->setBytes(nPos,xRow->getBytes(i));
+                        break;
+                    default:
+                        OSL_ENSURE(0,"Unknown type");
+                }
+                if(xRow->wasNull())
+                    xParameter->setNull(nPos,nType);
+            }
+            xPrep->executeUpdate();
+        }
+    }
 
 // .........................................................................
 }   // namespace dbaui
@@ -812,6 +852,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/05/14 11:58:35  oj
+ *  #86744# some changes for entries and views
+ *
  *  Revision 1.11  2001/05/10 12:24:47  fs
  *  the clipboard changes are SUPD-dependent
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:03 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 11:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,10 +993,19 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
     if(xAppend.is())
         xAppend->appendByDescriptor(m_xDestObject);
 
-    m_xDestObject = NULL;
+    //  m_xDestObject = NULL;
     // we need to reget the table because after appending it it is no longer valid
     if(xTables->hasByName(m_sName))
         xTables->getByName(m_sName) >>= m_xDestObject;
+    else
+    {
+        ::rtl::OUString sComposedName;
+        ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xDestObject,sComposedName,sal_False);
+        if(xTables->hasByName(sComposedName))
+            xTables->getByName(sComposedName) >>= m_xDestObject;
+        else
+            m_xDestObject = NULL;
+    }
 
     return m_xDestObject;
 }
