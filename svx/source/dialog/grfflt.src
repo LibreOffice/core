@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:47:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -157,6 +158,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ chinese_traditional ] = "°Ñ¼Æ";
         Text[ turkish ] = "Parameter";
         Text[ arabic ] = "ÇáãÚáãÇÊ";
+        Text[ catalan ] = "Parámetros";
     };
     FixedText DLG_FILTERMOSAIC_FT_WIDTH
     {
@@ -185,6 +187,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField DLG_FILTERMOSAIC_MTR_WIDTH
     {
@@ -230,6 +233,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ korean ] = "³ôÀÌ(~E)";
         Text[ turkish ] = "Yüksek.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
     {
@@ -273,6 +277,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ chinese_traditional ] = "¬ð¥XÅã¥ÜÃä¨¤(~N)";
         Text[ turkish ] = "~Enhance edges";
         Text[ arabic ] = "ÅÈÑÇÒ ÇáÍæÇÝ";
+        Text[ catalan ] = "~Resaltar aristas";
     };
     OKButton BTN_OK
     {
@@ -293,6 +298,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
+    Text[ catalan ] = "Mosaico";
 };
 
 // ----------------------
@@ -356,6 +362,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -386,6 +393,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ chinese_traditional ] = "°Ñ¼Æ";
         Text[ turkish ] = "Parameter";
         Text[ arabic ] = "ÇáãÚáãÇÊ";
+        Text[ catalan ] = "Parámetros";
     };
     FixedText DLG_FILTERSOLARIZE_FT_THRESHOLD
     {
@@ -414,6 +422,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ korean ] = "ÀÓ°è°ª(~V)";
         Text[ turkish ] = "Eþik deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor ~umbral";
     };
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
     {
@@ -458,6 +467,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ korean ] = "¹ÝÀü(~I)";
         Text[ turkish ] = "Tersine çevir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~nvertir";
     };
     OKButton BTN_OK
     {
@@ -478,6 +488,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
+    Text[ catalan ] = "Solarización";
 };
 
 // ----------------------
@@ -542,6 +553,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -572,6 +584,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ chinese_traditional ] = "°Ñ¼Æ";
         Text[ turkish ] = "Parameter";
         Text[ arabic ] = "ÇáãÚáãÉ";
+        Text[ catalan ] = "Parámetros";
     };
     FixedText DLG_FILTERSEPIA_FT_SEPIA
     {
@@ -601,6 +614,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ greek ] = "Âáèìüò ãÞñáíóçò";
         Text[ korean ] = "³°À½È¿°ú Á¤µµ";
         Text[ turkish ] = "Eskitme derecesi";
+        Text[ catalan ] = "Grado de envejecim.";
     };
     MetricField DLG_FILTERSEPIA_MTR_SEPIA
     {
@@ -639,6 +653,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
+    Text[ catalan ] = "Envejecimiento";
 };
 
 // --------------------
@@ -701,6 +716,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -731,6 +747,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ chinese_traditional ] = "°Ñ¼Æ";
         Text[ turkish ] = "Parameter";
         Text[ arabic ] = "ÇáãÚáãÉ";
+        Text[ catalan ] = "Parámetros";
     };
     FixedText DLG_FILTERPOSTER_FT_POSTER
     {
@@ -758,6 +775,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ greek ] = "×ñþìáôá áößóáò";
         Text[ korean ] = "Æ÷½ºÅÍ »ö»ó";
         Text[ turkish ] = "Afiþ renkleri";
+        Text[ catalan ] = "Colores del póster";
     };
     NumericField DLG_FILTERPOSTER_NUM_POSTER
     {
@@ -793,6 +811,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
+    Text[ catalan ] = "Póster";
 };
 
 // --------------------
@@ -862,6 +881,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -892,6 +912,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ chinese_traditional ] = "°Ñ¼Æ";
         Text[ turkish ] = "Parameter";
         Text[ arabic ] = "ÇáãÚáãÉ";
+        Text[ catalan ] = "Parámetros";
     };
     FixedText DLG_FILTEREMBOSS_FT_LIGHT
     {
@@ -919,6 +940,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ greek ] = "ÐñïÝëåõóç öùôüò";
         Text[ korean ] = "±¤¿ø";
         Text[ turkish ] = "Iþýk kaynaðý";
+        Text[ catalan ] = "Fuente de luz";
     };
     Control DLG_FILTEREMBOSS_CTL_LIGHT
     {
@@ -946,4 +968,5 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Size = MAP_APPFONT ( 50, 14 ) ;
         TabStop = TRUE ;
     };
+    Text[ catalan ] = "Relieve";
 };
