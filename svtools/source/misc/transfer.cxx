@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-09 14:59:05 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 15:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,6 +1310,19 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
     }
 
     return xRet;
+}
+
+// -----------------------------------------------------------------------------
+
+Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
+{
+    Any aReturn;
+
+    DataFlavor aFlavor;
+    if ( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) )
+        aReturn = GetAny( aFlavor );
+
+    return aReturn;
 }
 
 // -----------------------------------------------------------------------------
