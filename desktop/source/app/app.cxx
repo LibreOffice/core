@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-08 15:24:59 $
+ *  last change: $Author: dg $ $Date: 2001-02-12 16:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,12 +94,13 @@ using namespace ::com::sun::star::lang;
 void PreloadConfigTrees()
 {
     // these tree are preloaded to get a faster startup for the office
-    Sequence <rtl::OUString> aPreloadPathList(5);
+    Sequence <rtl::OUString> aPreloadPathList(6);
     aPreloadPathList[0] =  rtl::OUString::createFromAscii("org.openoffice.Office.Common");
-    aPreloadPathList[1] =  rtl::OUString::createFromAscii("org.openoffice.Office.Writer");
-    aPreloadPathList[2] =  rtl::OUString::createFromAscii("org.openoffice.Office.WriterWeb");
-    aPreloadPathList[3] =  rtl::OUString::createFromAscii("org.openoffice.Office.Calc");
-    aPreloadPathList[4] =  rtl::OUString::createFromAscii("org.openoffice.Office.Impress");
+    aPreloadPathList[1] =  rtl::OUString::createFromAscii("org.openoffice.ucb.Configuration/ContentProviders/Office/SecondaryKeys/Local/ProviderData");
+    aPreloadPathList[2] =  rtl::OUString::createFromAscii("org.openoffice.Office.Writer");
+    aPreloadPathList[3] =  rtl::OUString::createFromAscii("org.openoffice.Office.WriterWeb");
+    aPreloadPathList[4] =  rtl::OUString::createFromAscii("org.openoffice.Office.Calc");
+    aPreloadPathList[5] =  rtl::OUString::createFromAscii("org.openoffice.Office.Impress");
 
     Reference< XMultiServiceFactory > xProvider(
             ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
