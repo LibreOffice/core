@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polypolyaction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:26:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,28 +62,19 @@
 #ifndef _CPPCANVAS_POLYPOLYACTION_HXX
 #define _CPPCANVAS_POLYPOLYACTION_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_TEXTURE_HPP_
-#include <com/sun/star/rendering/Texture.hpp>
-#endif
-
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
 class PolyPolygon;
-class Color;
 
-/* Definition of internal::PolyPolyAction class */
+namespace com { namespace sun { namespace star { namespace rendering
+{
+    struct Texture;
+    struct StrokeAttributes;
+} } } }
+
+
+/* Definition of internal::PolyPolyActionFactory class */
 
 namespace cppcanvas
 {
@@ -91,51 +82,50 @@ namespace cppcanvas
     {
         struct OutDevState;
 
-        class PolyPolyAction : public Action
+        /** Creates encapsulated converters between GDIMetaFile and
+            XCanvas. The Canvas argument is deliberately placed at the
+            constructor, to force reconstruction of this object for a
+            new canvas. This considerably eases internal state
+            handling, since a lot of the internal state (e.g. fonts,
+            text layout) is Canvas-dependent.
+         */
+        class PolyPolyActionFactory
         {
         public:
-            enum Mode
-            {
-                /// regardless of the state, only stroke polygon (if line color is set, that is)
-                strokeOnly
-            };
+            /// Create polygon, fill/stroke according to state
+            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+                                                         const CanvasSharedPtr&,
+                                                         const OutDevState&     );
 
-            PolyPolyAction( const ::PolyPolygon&,
-                            const CanvasSharedPtr&,
-                            const OutDevState&  );
-            PolyPolyAction( const ::PolyPolygon&,
-                            const CanvasSharedPtr&,
-                            const OutDevState&,
-                            const ::com::sun::star::rendering::Texture& );
-            PolyPolyAction( const ::PolyPolygon&,
-                            const CanvasSharedPtr&,
-                            const OutDevState&,
-                            Mode                );
+            /// Create texture-filled polygon
+            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+                                                         const CanvasSharedPtr&,
+                                                         const OutDevState&,
+                                                         const ::com::sun::star::rendering::Texture& );
+
+            /// Create line polygon (always stroked, not filled)
+            static ActionSharedPtr createLinePolyPolyAction( const ::PolyPolygon&,
+                                                             const CanvasSharedPtr&,
+                                                             const OutDevState& );
+
+            /// Create stroked polygon
+            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+                                                         const CanvasSharedPtr&,
+                                                         const OutDevState&,
+                                                         const ::com::sun::star::rendering::StrokeAttributes& );
+
             /// For transparent painting of the given polygon (normally, we take the colors always opaque)
-            PolyPolyAction( const ::PolyPolygon&,
-                            const CanvasSharedPtr&,
-                            const OutDevState&,
-                            int                 nTransparency );
-            virtual ~PolyPolyAction();
-
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+            static ActionSharedPtr createPolyPolyAction( const ::PolyPolygon&,
+                                                         const CanvasSharedPtr&,
+                                                         const OutDevState&,
+                                                         int nTransparency );
 
         private:
-            // default: disabled copy/assignment
-            PolyPolyAction(const PolyPolyAction&);
-            PolyPolyAction& operator = ( const PolyPolyAction& );
-
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XPolyPolygon2D >   mxPolyPoly;
-            CanvasSharedPtr                                             mpCanvas;
-            ::com::sun::star::rendering::RenderState            maState;
-
-            ::com::sun::star::rendering::Texture                maTexture;
-
-            ::com::sun::star::uno::Sequence< double >                   maFillColor;
-            ::com::sun::star::uno::Sequence< double >                   maStrokeColor;
-            bool                                                        mbFill;
-            bool                                                        mbStroke;
+            // static factory, disable big four
+            PolyPolyActionFactory();
+            ~PolyPolyActionFactory();
+            PolyPolyActionFactory(const PolyPolyActionFactory&);
+            PolyPolyActionFactory& operator=( const PolyPolyActionFactory& );
         };
     }
 }

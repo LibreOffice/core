@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pointaction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:25:52 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,14 @@
 #ifndef _CPPCANVAS_POINTACTION_HXX
 #define _CPPCANVAS_POINTACTION_HXX
 
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-
-#ifndef _SV_GEN_HXX
-#include <tools/gen.hxx>
-#endif
-
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 
+class Point;
 class Color;
 
-/* Definition of internal::PointAction class */
+
+/* Definition of internal::PointActionFactory class */
 
 namespace cppcanvas
 {
@@ -83,28 +77,33 @@ namespace cppcanvas
     {
         struct OutDevState;
 
-        class PointAction : public Action
+        /** Creates encapsulated converters between GDIMetaFile and
+            XCanvas. The Canvas argument is deliberately placed at the
+            constructor, to force reconstruction of this object for a
+            new canvas. This considerably eases internal state
+            handling, since a lot of the internal state (e.g. fonts,
+            text layout) is Canvas-dependent.
+         */
+        class PointActionFactory
         {
         public:
-            PointAction( const ::Point&,
-                         const CanvasSharedPtr&,
-                         const OutDevState& );
-            PointAction( const ::Point&,
-                         const CanvasSharedPtr&,
-                         const OutDevState&,
-                         const ::Color&     );
-            virtual ~PointAction();
+            /// Point in current color
+            static ActionSharedPtr createPointAction( const ::Point&,
+                                                      const CanvasSharedPtr&,
+                                                      const OutDevState& );
 
-            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+            /// Point in given color
+            static ActionSharedPtr createPointAction( const ::Point&,
+                                                      const CanvasSharedPtr&,
+                                                      const OutDevState&,
+                                                      const ::Color&        );
 
         private:
-            // default: disabled copy/assignment
-            PointAction(const PointAction&);
-            PointAction& operator = ( const PointAction& );
-
-            ::Point                                             maPoint;
-            CanvasSharedPtr                                     mpCanvas;
-            ::com::sun::star::rendering::RenderState    maState;
+            // static factory, disable big four
+            PointActionFactory();
+            ~PointActionFactory();
+            PointActionFactory(const PointActionFactory&);
+            PointActionFactory& operator=( const PointActionFactory& );
         };
     }
 }

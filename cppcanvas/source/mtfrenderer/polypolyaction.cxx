@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polypolyaction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:26:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@
 #include <canvas/canvastools.hxx>
 #endif
 
+#include <boost/utility.hpp>
+
 #include <mtftools.hxx>
 
 
@@ -96,120 +98,215 @@ namespace cppcanvas
 {
     namespace internal
     {
-        PolyPolyAction::PolyPolyAction( const ::PolyPolygon&    rPolyPoly,
-                                        const CanvasSharedPtr&  rCanvas,
-                                        const OutDevState&      rState ) :
-            mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                      rPolyPoly ) ),
-            mpCanvas( rCanvas ),
-            maState(),
-            maTexture(),
-            maFillColor(),
-            maStrokeColor(),
-            mbFill( rState.isFillColorSet ),
-            mbStroke( rState.isLineColorSet )
+        namespace
         {
-            tools::initRenderState(maState,rState);
+            class PolyPolyAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                PolyPolyAction( const ::PolyPolygon&,
+                                const CanvasSharedPtr&,
+                                const OutDevState&,
+                                bool bFill,
+                                bool bStroke );
+                PolyPolyAction( const ::PolyPolygon&,
+                                const CanvasSharedPtr&,
+                                const OutDevState&,
+                                bool bFill,
+                                bool bStroke,
+                                int nTransparency );
 
-            if( mbFill )
-                maFillColor = rState.fillColor;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
 
-            if( mbStroke )
-                maStrokeColor = rState.lineColor;
-        }
+                virtual sal_Int32 getActionCount() const;
 
-        PolyPolyAction::PolyPolyAction( const ::PolyPolygon&        rPolyPoly,
+            private:
+                const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
+                const CanvasSharedPtr                               mpCanvas;
+
+                // stroke color is now implicit: the maState.DeviceColor member
+                rendering::RenderState                              maState;
+
+                uno::Sequence< double >                             maFillColor;
+            };
+
+            PolyPolyAction::PolyPolyAction( const ::PolyPolygon&    rPolyPoly,
+                                            const CanvasSharedPtr&  rCanvas,
+                                            const OutDevState&      rState,
+                                            bool                    bFill,
+                                            bool                    bStroke ) :
+                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
+                                                                          rPolyPoly ) ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maFillColor()
+            {
+                tools::initRenderState(maState,rState);
+
+                if( bFill )
+                    maFillColor = rState.fillColor;
+
+                if( bStroke )
+                    maState.DeviceColor = rState.lineColor;
+            }
+
+            PolyPolyAction::PolyPolyAction( const ::PolyPolygon&    rPolyPoly,
+                                            const CanvasSharedPtr&  rCanvas,
+                                            const OutDevState&      rState,
+                                            bool                    bFill,
+                                            bool                    bStroke,
+                                            int                     nTransparency ) :
+                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
+                                                                          rPolyPoly ) ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maFillColor()
+            {
+                tools::initRenderState(maState,rState);
+
+                if( bFill )
+                {
+                    maFillColor = rState.fillColor;
+
+                    if( maFillColor.getLength() < 4 )
+                        maFillColor.realloc( 4 );
+
+                    // TODO(F1): Color management
+                    // adapt fill color transparency
+                    maFillColor[3] = 1.0 - nTransparency / 100.0;
+                }
+
+                if( bStroke )
+                {
+                    maState.DeviceColor = rState.lineColor;
+
+                    if( maState.DeviceColor.getLength() < 4 )
+                        maState.DeviceColor.realloc( 4 );
+
+                    // TODO(F1): Color management
+                    // adapt fill color transparency
+                    maState.DeviceColor[3] = 1.0 - nTransparency / 100.0;
+                }
+            }
+
+            bool PolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+#ifdef SPECIAL_DEBUG
+                aLocalState.Clip.clear();
+                aLocalState.DeviceColor =
+                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
+                                                            ::Color( 0x80FF0000 ) );
+
+                if( maState.Clip.is() )
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+
+                aLocalState.DeviceColor = maState.DeviceColor;
+#endif
+
+                if( maFillColor.getLength() )
+                {
+                    // TODO(E3): Use DBO's finalizer here,
+                    // fillPolyPolygon() might throw
+                    const uno::Sequence< double > aTmpColor( aLocalState.DeviceColor );
+                    aLocalState.DeviceColor = maFillColor;
+
+                    // TODO(P1): implement caching
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+
+                    aLocalState.DeviceColor = aTmpColor;
+                }
+
+                if( aLocalState.DeviceColor.getLength() )
+                {
+                    // TODO(P1): implement caching
+                    mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+                }
+
+                return true;
+            }
+
+            bool PolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                         const Subset&                  rSubset ) const
+            {
+                // TODO(F1): Split up poly-polygon into polygons, or even
+                // line segments, when subsets are requested.
+
+                // polygon only contains a single action, fail if subset
+                // requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return false;
+
+                return render( rTransformation );
+            }
+
+            sal_Int32 PolyPolyAction::getActionCount() const
+            {
+                // TODO(F1): Split up poly-polygon into polygons, or even
+                // line segments, when subsets are requested.
+                return 1;
+            }
+
+
+            // -------------------------------------------------------------------------------
+
+            class TexturedPolyPolyAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                TexturedPolyPolyAction( const ::PolyPolygon&        rPoly,
                                         const CanvasSharedPtr&      rCanvas,
                                         const OutDevState&          rState,
-                                        const rendering::Texture&   rTexture    ) :
-            mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                      rPolyPoly ) ),
-            mpCanvas( rCanvas ),
-            maState(),
-            maTexture( rTexture ),
-            maFillColor(),
-            maStrokeColor(),
-            mbFill( rState.isFillColorSet ),
-            mbStroke( rState.isLineColorSet )
-        {
-            tools::initRenderState(maState,rState);
+                                        const rendering::Texture&   rTexture );
 
-            if( mbFill )
-                maFillColor = rState.fillColor;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
 
-            if( mbStroke )
-                maStrokeColor = rState.lineColor;
-        }
+                virtual sal_Int32 getActionCount() const;
 
-        PolyPolyAction::PolyPolyAction( const ::PolyPolygon&    rPolyPoly,
-                                        const CanvasSharedPtr&  rCanvas,
-                                        const OutDevState&      rState,
-                                        Mode                    mode        ) :
-            mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                      rPolyPoly ) ),
-            mpCanvas( rCanvas ),
-            maState(),
-            maTexture(),
-            maFillColor(),
-            maStrokeColor(),
-            mbFill( false ),
-            mbStroke( rState.isLineColorSet )
-        {
-            tools::initRenderState(maState,rState);
+            private:
+                const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
+                const CanvasSharedPtr                               mpCanvas;
 
-            if( mbStroke )
-                maStrokeColor = rState.lineColor;
-        }
+                // stroke color is now implicit: the maState.DeviceColor member
+                rendering::RenderState                              maState;
+                const rendering::Texture                            maTexture;
+            };
 
-        PolyPolyAction::PolyPolyAction( const ::PolyPolygon&    rPolyPoly,
-                                        const CanvasSharedPtr&  rCanvas,
-                                        const OutDevState&      rState,
-                                        int                     nTransparency ) :
-            mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
-                                                                      rPolyPoly ) ),
-            mpCanvas( rCanvas ),
-            maState(),
-            maTexture(),
-            maFillColor(),
-            maStrokeColor(),
-            mbFill( rState.isFillColorSet ),
-            mbStroke( rState.isLineColorSet )
-        {
-            tools::initRenderState(maState,rState);
-
-            if( mbFill )
+            TexturedPolyPolyAction::TexturedPolyPolyAction( const ::PolyPolygon&        rPolyPoly,
+                                                            const CanvasSharedPtr&      rCanvas,
+                                                            const OutDevState&          rState,
+                                                            const rendering::Texture&   rTexture ) :
+                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
+                                                                          rPolyPoly ) ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maTexture( rTexture )
             {
-                maFillColor = rState.fillColor;
-
-                // TODO(F1): Color management
-                // adapt fill color transparency
-                maFillColor[3] = 1.0 - nTransparency / 100.0;
+                tools::initRenderState(maState,rState);
             }
 
-            if( mbStroke )
+            bool TexturedPolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                maStrokeColor = rState.lineColor;
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
 
-                // TODO(F1): Color management
-                // adapt fill color transparency
-                maStrokeColor[3] = 1.0 - nTransparency / 100.0;
-            }
-        }
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-        PolyPolyAction::~PolyPolyAction()
-        {
-        }
-
-        bool PolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
-
-            rendering::RenderState aLocalState( maState );
-            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-
-            if( maTexture.Gradient.is() )
-            {
                 uno::Sequence< rendering::Texture > aSeq(1);
                 aSeq[0] = maTexture;
 
@@ -217,31 +314,158 @@ namespace cppcanvas
                                                                    mpCanvas->getViewState(),
                                                                    aLocalState,
                                                                    aSeq );
+                return true;
             }
-            else
+
+            bool TexturedPolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                                 const Subset&                  rSubset ) const
             {
-                if( mbFill )
-                {
-                    aLocalState.DeviceColor = maFillColor;
+                // TODO(F1): Split up poly-polygon into polygons, or even
+                // line segments, when subsets are requested.
 
-                    // TODO(P1): implement caching
-                    mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
-                }
+                // polygon only contains a single action, fail if subset
+                // requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return false;
 
-                if( mbStroke )
-                {
-                    aLocalState.DeviceColor = maStrokeColor;
-
-                    // TODO(P1): implement caching
-                    mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
-                }
+                return render( rTransformation );
             }
 
-            return true;
+            sal_Int32 TexturedPolyPolyAction::getActionCount() const
+            {
+                // TODO(F1): Split up poly-polygon into polygons, or even
+                // line segments, when subsets are requested.
+                return 1;
+            }
+
+            // -------------------------------------------------------------------------------
+
+            class StrokedPolyPolyAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                StrokedPolyPolyAction( const ::PolyPolygon&                 rPoly,
+                                       const CanvasSharedPtr&               rCanvas,
+                                       const OutDevState&                   rState,
+                                       const rendering::StrokeAttributes&   rStrokeAttributes );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
+                const CanvasSharedPtr                               mpCanvas;
+                rendering::RenderState                              maState;
+                const rendering::StrokeAttributes                   maStrokeAttributes;
+            };
+
+            StrokedPolyPolyAction::StrokedPolyPolyAction( const ::PolyPolygon&                  rPolyPoly,
+                                                          const CanvasSharedPtr&                rCanvas,
+                                                          const OutDevState&                    rState,
+                                                          const rendering::StrokeAttributes&    rStrokeAttributes ) :
+                mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
+                                                                          rPolyPoly ) ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maStrokeAttributes( rStrokeAttributes )
+            {
+                tools::initRenderState(maState,rState);
+                maState.DeviceColor = rState.lineColor;
+            }
+
+            bool StrokedPolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
+                                                             mpCanvas->getViewState(),
+                                                             aLocalState,
+                                                             maStrokeAttributes );
+                return true;
+            }
+
+            bool StrokedPolyPolyAction::render( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                                const Subset&                   rSubset ) const
+            {
+                // TODO(F1): Split up poly-polygon into polygons, or even
+                // line segments, when subsets are requested.
+
+                // polygon only contains a single action, fail if subset
+                // requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return false;
+
+                return render( rTransformation );
+            }
+
+            sal_Int32 StrokedPolyPolyAction::getActionCount() const
+            {
+                // TODO(F1): Split up poly-polygon into polygons, or even
+                // line segments, when subsets are requested.
+                return 1;
+            }
+        }
+
+        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::PolyPolygon&   rPoly,
+                                                                     const CanvasSharedPtr& rCanvas,
+                                                                     const OutDevState&     rState  )
+        {
+            OSL_ENSURE( rState.isLineColorSet || rState.isFillColorSet,
+                        "PolyPolyActionFactory::createPolyPolyAction() with empty line and fill color" );
+            return ActionSharedPtr( new PolyPolyAction( rPoly, rCanvas, rState,
+                                                        rState.isFillColorSet,
+                                                        rState.isLineColorSet ) );
+        }
+
+        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::PolyPolygon&       rPoly,
+                                                                     const CanvasSharedPtr&     rCanvas,
+                                                                     const OutDevState&         rState,
+                                                                     const rendering::Texture&  rTexture )
+        {
+            return ActionSharedPtr( new TexturedPolyPolyAction( rPoly, rCanvas, rState, rTexture ) );
+        }
+
+        ActionSharedPtr PolyPolyActionFactory::createLinePolyPolyAction( const ::PolyPolygon&   rPoly,
+                                                                         const CanvasSharedPtr& rCanvas,
+                                                                         const OutDevState&     rState )
+        {
+            OSL_ENSURE( rState.isLineColorSet,
+                        "PolyPolyActionFactory::createLinePolyPolyAction() called with empty line color" );
+
+            return ActionSharedPtr( new PolyPolyAction( rPoly, rCanvas, rState,
+                                                        false,
+                                                        rState.isLineColorSet ) );
+        }
+
+        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::PolyPolygon&               rPoly,
+                                                                     const CanvasSharedPtr&             rCanvas,
+                                                                     const OutDevState&                 rState,
+                                                                     const rendering::StrokeAttributes& rStrokeAttributes )
+        {
+            OSL_ENSURE( rState.isLineColorSet,
+                        "PolyPolyActionFactory::createPolyPolyAction() for strokes called with empty line color" );
+            return ActionSharedPtr( new StrokedPolyPolyAction( rPoly, rCanvas, rState, rStrokeAttributes ) );
+        }
+
+        ActionSharedPtr PolyPolyActionFactory::createPolyPolyAction( const ::PolyPolygon&   rPoly,
+                                                                     const CanvasSharedPtr& rCanvas,
+                                                                     const OutDevState&     rState,
+                                                                     int                    nTransparency   )
+        {
+            OSL_ENSURE( rState.isLineColorSet || rState.isFillColorSet,
+                        "PolyPolyActionFactory::createPolyPolyAction() with empty line and fill color" );
+            return ActionSharedPtr( new PolyPolyAction( rPoly, rCanvas, rState,
+                                                        rState.isFillColorSet,
+                                                        rState.isLineColorSet,
+                                                        nTransparency ) );
         }
 
     }
