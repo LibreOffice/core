@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:19:34 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
 
     xFrame = rFrame;
 
-    // Achtung: beim Abräumen der Objekte kann die SfxApp destruiert werden, vorher noch Deinitialize_Impl rufen
+    // Achtung: beim Abrï¿½umen der Objekte kann die SfxApp destruiert werden, vorher noch Deinitialize_Impl rufen
     SfxApplication* pApp = SFX_APP();
 
     // Attention! Because lDescriptor is a copy of rArgs
@@ -405,7 +405,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
                 if ( pDocumentTitleItem )
                     aReq.AppendItem( *pDocumentTitleItem );
 
-                const SfxPoolItem* pRet = pApp->ExecuteSlot( aReq );
+                const SfxPoolItem* pRet = pApp->NewDocDirectExec_ImplOld(aReq);
                 if (pRet)
                 {
                     // default must be set to true, because some return values
