@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,11 @@ TabPage TP_FLD_DB
         Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ(~T)";
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
+        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇüÅÂ(~T)";
+        Text[ korean ] = "ÇÊµåÀ¯Çü";
         Text[ turkish ] = "Alan tipi";
     };
     ListBox LB_DBTYPE
@@ -140,7 +140,7 @@ TabPage TP_FLD_DB
         TEXT[ chinese_traditional ] = "±ø¥ó(~C)";
         TEXT[ arabic ] = "ÇáÔÑØ";
         TEXT[ greek ] = "¼ñïò";
-        TEXT[ korean ] = "Á¶°Ç(~C)";
+        TEXT[ korean ] = "Á¶°Ç)";
         TEXT[ turkish ] = "Koşul";
     };
     Edit ED_DBCONDITION
@@ -173,7 +173,7 @@ TabPage TP_FLD_DB
         TEXT[ russian ] = "Íîìåğ çàïèñè";
         TEXT[ polish ] = "Numer rekordu";
         TEXT[ japanese ] = "Úº°ÄŞ”Ô†";
-        TEXT[ chinese_traditional ] = "¶µ¥Ø¸¹½X";
+        TEXT[ chinese_traditional ] = "±ø¥Ø¸¹½X";
         TEXT[ arabic ] = "ÑŞã ÇáÓÌá";
         TEXT[ greek ] = "Áñéèìüò åããñáöŞò";
         TEXT[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå  ¹øÈ£";
@@ -210,7 +210,7 @@ TabPage TP_FLD_DB
         Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ®w(~E)";
         Text[ arabic ] = "ÇÎÊíÇÑ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ÅğéëïãŞ âÜóçò äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼±ÅÃ(~E)";
+        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼±ÅÃ";
         Text[ turkish ] = "Veritabanı seçimi";
     };
     Control TLB_DBLIST
