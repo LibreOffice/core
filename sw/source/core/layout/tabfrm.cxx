@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 13:14:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,10 @@
 #include "htmltbl.hxx"
 #include "frmsh.hxx"
 #include "sectfrm.hxx"  //SwSectionFrm
+// OD 30.09.2003 #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
 
 extern void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage );
@@ -3183,7 +3187,14 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                 if ( pO->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                    if( !pFly->IsFlyInCntFrm() && pFly->Frm().Top()!=WEIT_WECH )
+                    // OD 30.09.2003 #i18732# - only objects, which follow
+                    // the text flow have to be considered.
+                    const SwFrmFmt* pFrmFmt = static_cast<const SwVirtFlyDrawObj*>(pO)->GetFmt();
+                    const bool bConsiderFly =
+                            !pFly->IsFlyInCntFrm() &&
+                            pFly->Frm().Top() != WEIT_WECH &&
+                            pFrmFmt->GetFollowTextFlow().GetValue();
+                    if ( bConsiderFly )
                     {
                         const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
                         if( !rSz.GetHeightPercent() )
