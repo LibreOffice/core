@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 12:58:41 $
+#   last change: $Author: rt $ $Date: 2004-09-17 14:15:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,11 +118,12 @@ SRC1FILES =  \
         prtqry.src \
         ruler.src \
         rubydialog.src\
+        SpellDialog.src \
+        spldlg.src \
         swframeposstrings.src \
         swpossizetabpage.src \
         scriptdlg.src \
         selector.src \
-        spldlg.src \
         srchdlg.src \
         srchxtra.src \
         tabstpge.src \
@@ -223,6 +224,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/optjava.obj
 
 SLOFILES=\
+        $(SLO)$/SpellDialogChildWindow.obj \
     $(EXCEPTIONSFILES)	\
     $(SLO)$/internationaloptions.obj	\
     $(SLO)$/optHeaderTabListbox.obj		\
@@ -333,6 +335,8 @@ SLOFILES=\
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/optctl.obj	\
     $(SLO)$/svxgrahicitem.obj \
+    $(SLO)$/SpellAttrib.obj  \
+    $(SLO)$/SpellDialog.obj  \
     $(SLO)$/swframeposstrings.obj\
     $(SLO)$/swframeexample.obj \
     $(SLO)$/svxbmpnumvalueset.obj	\
@@ -404,8 +408,9 @@ LIB1OBJFILES= \
     $(SLO)$/grfflt.obj \
     $(SLO)$/frmdirlbox.obj \
     $(SLO)$/commonlingui.obj \
+    $(SLO)$/SpellDialogChildWindow.obj \
+    $(SLO)$/svxbmpnumvalueset.obj	\
     $(SLO)$/dialmgr.obj	\
-    $(SLO)$/svxbmpnumvalueset.obj   \
     $(SLO)$/svxgrahicitem.obj \
     $(SLO)$/swframeexample.obj \
     $(SLO)$/swframeposstrings.obj \
@@ -487,6 +492,8 @@ LIB2OBJFILES= \
     $(SLO)$/tphatch.obj \
     $(SLO)$/tplneend.obj \
     $(SLO)$/tplnedef.obj \
+    $(SLO)$/SpellAttrib.obj  \
+    $(SLO)$/SpellDialog.obj  \
     $(SLO)$/numpages.obj \
     $(SLO)$/paragrph.obj \
     $(SLO)$/tabstpge.obj \
@@ -505,7 +512,6 @@ SLOFILES+=$(SLO)$/winpluginlib.obj
 LIB2OBJFILES+=$(SLO)$/winpluginlib.obj
 .ENDIF
     
-
 
 # --- Targets -------------------------------------------------------
 
