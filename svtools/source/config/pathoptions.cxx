@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:08:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ using namespace com::sun::star::lang;
 #define SUBSTITUTE_PROGURL              "$(progurl)"
 #define SUBSTITUTE_USERURL              "$(userurl)"
 #define SUBSTITUTE_PATH                 "$(path)"
-#define SUBSTITUTE_LANG                 "$(lang)"
+//#define   SUBSTITUTE_LANG                 "$(lang)"
 #define SUBSTITUTE_LANGID               "$(langid)"
 #define SUBSTITUTE_VLANG                "$(vlang)"
 #define SUBSTITUTE_WORKDIRURL           "$(workdirurl)"
@@ -206,7 +206,7 @@ class SvtPathOptions_Impl
         mutable EnumToHandleMap             m_aMapEnumToPropHandle;
         VarNameToEnumMap                    m_aMapVarNamesToEnum;
 
-        LanguageType                        m_eLanguageType;
+        ::com::sun::star::lang::Locale                      m_aLocale;
         String                              m_aEmptyString;
         mutable ::osl::Mutex                m_aMutex;
 
@@ -270,7 +270,7 @@ class SvtPathOptions_Impl
         rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
         rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
 
-        LanguageType    GetLanguageType() const { return m_eLanguageType; }
+        const ::com::sun::star::lang::Locale    GetLocale() const { return m_aLocale; }
 
         BOOL            IsPathReadonly(SvtPathOptions::Pathes ePath)const;
 };
@@ -591,14 +591,21 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     }
 
     // Set language type!
-    m_eLanguageType = LANGUAGE_ENGLISH_US;
     Any aLocale = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
     OUString aLocaleStr;
     if ( aLocale >>= aLocaleStr )
-        m_eLanguageType = ConvertIsoStringToLanguage( aLocaleStr );
+    {
+        sal_Int32 nIndex = 0;
+        m_aLocale.Language = aLocaleStr.getToken(0, '-', nIndex );
+        m_aLocale.Country = aLocaleStr.getToken(0, '-', nIndex );
+        m_aLocale.Variant = aLocaleStr.getToken(0, '-', nIndex );
+    }
     else
     {
         DBG_ERRORFILE( "wrong any type" );
+        m_aLocale.Language = OStringToOUString(OString("en"), RTL_TEXTENCODING_UTF8);
+        m_aLocale.Country =  OStringToOUString(OString("US"), RTL_TEXTENCODING_UTF8);
+        m_aLocale.Variant =  OStringToOUString(OString(""), RTL_TEXTENCODING_UTF8);
     }
 }
 
@@ -1077,9 +1084,9 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
 
 // -----------------------------------------------------------------------
 
-LanguageType SvtPathOptions::GetLanguageType() const
+const ::com::sun::star::lang::Locale SvtPathOptions::GetLocale() const
 {
-    return pImp->GetLanguageType();
+    return pImp->GetLocale();
 }
 // -----------------------------------------------------------------------
 BOOL SvtPathOptions::IsPathReadonly(Pathes ePath)const
