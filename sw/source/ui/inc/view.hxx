@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:23:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,9 @@ enum ShellModes
     SEL_LIST_TEXT,
     SEL_TABLE_TEXT,
     SEL_TABLE_LIST_TEXT,
-    SEL_MEDIA
+    SEL_MEDIA,
+    SEL_EXTRUDED_CUSTOMSHAPE,
+    SEL_FONTWORK
 };
 
 /*--------------------------------------------------------------------
