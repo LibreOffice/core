@@ -21229,3 +21229,15 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?getImplementationId@?$WeakImplHelper1@VXHyphenator@linguistic2@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
 ?getImplementationId@?$WeakImplHelper1@VXSpellChecker1@linguistic2@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
 ?getImplementationId@?$WeakImplHelper1@VXThesaurus@linguistic2@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?__default_constructed@_STL@@YA?AVAny@uno@star@sun@com@@PAV23456@@Z
+?__default_constructed_aux@_STL@@YA?AVAny@uno@star@sun@com@@PAV23456@ABU__false_type@1@@Z
+?__default_constructed@_STL@@YA?AUPropertySetInfo@@PAU2@@Z
+?__default_constructed_aux@_STL@@YA?AUPropertySetInfo@@PAU2@ABU__false_type@1@@Z
+?__default_constructed@_STL@@YA?AV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@PAV23456@@Z
+?__default_constructed@_STL@@YA?AVOUString@rtl@@PAV23@@Z
+?__default_constructed_aux@_STL@@YA?AV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@PAV23456@ABU__false_type@1@@Z
+?__default_constructed_aux@_STL@@YA?AVOUString@rtl@@PAV23@ABU__false_type@1@@Z
+?__default_constructed@_STL@@YA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@PAV23456@@Z
+?__default_constructed@_STL@@YA?AV?$vector@PAVFmFormNavigationDispatcher@@V?$allocator@PAVFmFormNavigationDispatcher@@@_STL@@@1@PAV21@@Z
+?__default_constructed_aux@_STL@@YA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@PAV23456@ABU__false_type@1@@Z
+?__default_constructed_aux@_STL@@YA?AV?$vector@PAVFmFormNavigationDispatcher@@V?$allocator@PAVFmFormNavigationDispatcher@@@_STL@@@1@PAV21@ABU__false_type@1@@Z
