@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+#   last change: $Author: jl $ $Date: 2000-10-05 14:34:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ INCPRE+=	$(OUT)$/inc$/comprehensive
 CPPUMAKERFLAGS += -C
 .ELSE
 UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/3rdparty$/atl
+INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
 .ENDIF
 
 UNOTYPES= com.sun.star.bridge.ModelDependent \
