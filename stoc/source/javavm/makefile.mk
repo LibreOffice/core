@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-13 16:51:12 $
+#   last change: $Author: rt $ $Date: 2000-11-13 17:34:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ SLOFILES= \
         $(SLO)$/jvmargs.obj	
                 
 
-SHL1DESCRIPTIONOBJ=$(SLO)$/jen_desc.obj
 SHL1TARGET= $(TARGET)
 
 SHL1STDLIBS= \
