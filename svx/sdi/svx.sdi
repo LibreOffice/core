@@ -1271,7 +1271,7 @@ SfxVoidItem ChangeCaseToHiragana SID_TRANSLITERATE_HIRAGANA
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ChangeCaseToKatagana SID_TRANSLITERATE_KATAGANA
+SfxVoidItem ChangeCaseToKatakana SID_TRANSLITERATE_KATAGANA
 ()
 [
     /* flags: */
