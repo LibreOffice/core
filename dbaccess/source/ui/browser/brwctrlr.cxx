@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-19 09:28:35 $
+ *  last change: $Author: fs $ $Date: 2002-11-22 12:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,6 +1115,9 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 // -----------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    if ( rBHelper.bDisposed )
+        throw DisposedException( ::rtl::OUString(), *this );
+
 //  m_bSuspending = sal_True;
 //
     // have a pending open operation ?

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-19 09:29:25 $
+ *  last change: $Author: fs $ $Date: 2002-11-22 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,6 +945,9 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
 // -----------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
+    if ( rBHelper.bDisposed )
+        throw DisposedException( ::rtl::OUString(), *this );
+
     if (!SbaXDataBrowserController::suspend(bSuspend))
         return sal_False;
 
