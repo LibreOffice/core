@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:17:10 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "fuinsert.hxx"
 
 #include <tools/urlobj.hxx>
 
@@ -133,19 +135,32 @@
 #include "app.hrc"
 #include "misc.hxx"
 #include "sdresid.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "app.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "drviewsh.hxx"
-#include "fuinsert.hxx"
-#include "docshell.hxx"
-#include "grdocsh.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
 #include "strings.hrc"
 #include "graphpro.hxx"
 #include "drawdoc.hxx"
 #include "sdgrffilter.hxx"
 #include "sdxfer.hxx"
+
+namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -170,9 +185,13 @@ TYPEINIT1( FuInsertOLE, FuPoor );
 #pragma optimize ( "", off )
 #endif
 
-FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuInsertGraphic::FuInsertGraphic (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
 
@@ -183,7 +202,7 @@ FuInsertGraphic::FuInsertGraphic(SdViewShell* pViewSh, SdWindow* pWin, SdView* p
 
         if( (nError=aDlg.GetGraphic(aGraphic)) == GRFILTER_OK )
         {
-            if( pViewSh->ISA(SdDrawViewShell) )
+            if( pViewSh->ISA(DrawViewShell))
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
                 SdrGrafObj* pEmptyGrafObj = NULL;
@@ -252,9 +271,13 @@ FuInsertGraphic::~FuInsertGraphic()
 |*
 \************************************************************************/
 
-FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuInsertClipboard::FuInsertClipboard (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
     SvPasteObjectDialog*                        pDlg = new SvPasteObjectDialog();
@@ -290,9 +313,9 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
         if( !pView->InsertData( aDataHelper,
                                 pWindow->PixelToLogic( Rectangle( Point(), pWindow->GetOutputSizePixel() ).Center() ),
                                 nAction, FALSE, nFormatId ) &&
-            ( pViewShell && pViewShell->ISA( SdDrawViewShell ) ) )
+            ( pViewShell && pViewShell->ISA( DrawViewShell ) ) )
         {
-            SdDrawViewShell*    pDrViewSh = (SdDrawViewShell*) pViewShell;
+            DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
             String              aEmptyStr;
             INetBookmark        aINetBookmark( aEmptyStr, aEmptyStr );
 
@@ -327,8 +350,12 @@ FuInsertClipboard::~FuInsertClipboard()
 |*
 \************************************************************************/
 
-FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                         SdDrawDocument* pDoc, SfxRequest& rReq)
+FuInsertOLE::FuInsertOLE (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     String aEmptyStr;
@@ -493,11 +520,11 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 // Eigenen Eintrag loeschen
                 if (pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW)
                 {
-                    aServerLst.Remove( *SdGraphicDocShell::ClassFactory() );
+                    aServerLst.Remove( *GraphicDocShell::ClassFactory() );
                 }
                 else
                 {
-                    aServerLst.Remove( *SdDrawDocShell::ClassFactory() );
+                    aServerLst.Remove( *DrawDocShell::ClassFactory() );
                 }
 
                 SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
@@ -708,3 +735,5 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 FuInsertOLE::~FuInsertOLE()
 {
 }
+
+} // end of namespace sd
