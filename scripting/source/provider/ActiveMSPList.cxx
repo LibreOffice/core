@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:27:20 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
+#include <util/MiscUtils.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -77,6 +78,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace drafts::com::sun::star::script;
+using namespace sf_misc;
 
 namespace func_provider
 {
@@ -84,28 +86,145 @@ namespace func_provider
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
 {
     OSL_TRACE("ActiveMSPList::ActiveMSPList) - ctor");
-    // needs some exception handling
-    Any aAny = m_xContext->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.util.theMacroExpander" ) );
-    Reference< util::XMacroExpander > xME;
-    if ( sal_False == ( aAny >>= xME ) )
-    {
-        OSL_TRACE("Couln't locate user or share directories");
-    }
-    else
-    {
-        ::rtl::OUString base = ::rtl::OUString::createFromAscii(
-             SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
-        ::rtl::OUString user = ::rtl::OUString::createFromAscii( "::UserInstallation}/user"  );
-        ::rtl::OUString share = ::rtl::OUString::createFromAscii( "::BaseInstallation}/share" );
-        userDirString = xME->expandMacros( base.concat( user ) );
-        shareDirString = xME->expandMacros( base.concat( share ) );
-    }
-
+    userDirString = ::rtl::OUString::createFromAscii("user");
+    shareDirString =  ::rtl::OUString::createFromAscii("share");
 }
 
 ActiveMSPList::~ActiveMSPList()
 {
     OSL_TRACE("ActiveMSPList::ActiveMSPList) - dtor");
+}
+
+Reference< provider::XScriptProvider >
+ActiveMSPList::createNewMSP( const ::rtl::OUString& context ) throw( RuntimeException )
+{
+    OSL_TRACE("ActiveMSPList::createNewMSP() context [%s]",
+        ::rtl::OUStringToOString( context , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.MasterScriptProvider");
+    Sequence< Any > args(1);
+    args[ 0 ] <<= context;
+
+    Reference< provider::XScriptProvider > msp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
+    return msp;
+}
+
+Sequence < Reference< provider::XScriptProvider > >
+ActiveMSPList::getActiveProviders()
+{
+    ::osl::MutexGuard guard( m_mutex );
+
+    sal_Int32 numChildNodes = m_hMsps.size() + m_mModels.size();
+    // get providers for application
+    Msp_hash::iterator h_itEnd =  m_hMsps.end();
+    Sequence< Reference< provider::XScriptProvider > > children( numChildNodes );
+    sal_Int32 count = 0;
+
+
+    for ( Msp_hash::iterator h_it = m_hMsps.begin(); h_it != h_itEnd; ++h_it )
+    {
+        OSL_TRACE("Adding application browsenode index [ %d ]", count );
+        children[ count++ ] =  h_it->second;
+    }
+
+    // get providers for active documents
+    Model_map::iterator m_itEnd =  m_mModels.end();
+
+    for ( Model_map::iterator m_it = m_mModels.begin(); m_it != m_itEnd; ++m_it )
+    {
+        OSL_TRACE("Adding document browsenode index [ %d ]", count  );
+        children[ count++ ] = m_it->second;
+    }
+    return children;
+}
+
+
+Reference< provider::XScriptProvider >
+ActiveMSPList::createMSP( const Any& aContext )
+            throw ( RuntimeException )
+{
+    Reference< provider::XScriptProvider > msp;
+    if (  aContext.getValueType() == ::getCppuType((const Reference< frame::XModel >* ) NULL ) )
+
+    {
+        OSL_TRACE("ActiveMSPList::createMSP() for model");
+        Reference< frame::XModel> xModel( aContext, UNO_QUERY );
+        if ( xModel.is() )
+        {
+            ::rtl::OUString sContext = MiscUtils::xModelToTdocUrl( xModel );
+            msp = createMSP( sContext );
+        }
+        else
+        {
+            ::rtl::OUString message =
+                OUSTR( "Failed to extract XModel from context, could not create MasterScriptProvider" );
+            throw RuntimeException( message, Reference< XInterface >() );
+        }
+
+    }
+    else
+    {
+        ::rtl::OUString sContext;
+        aContext >>= sContext;
+        msp = createMSP( sContext );
+    }
+    return msp;
+}
+
+Reference< provider::XScriptProvider >
+ActiveMSPList::createMSP( const ::rtl::OUString& context )
+            throw ( RuntimeException )
+{
+    Reference< provider::XScriptProvider > msp;
+    if ( context.indexOf( OUSTR( "vnd.sun.star.tdoc" ) ) == 0 )
+    {
+        Reference< frame::XModel > xModel( MiscUtils::tDocUrlToModel( context ), UNO_QUERY );
+        if ( !xModel.is() )
+        {
+            ::rtl::OUStringBuffer buf( 80 );
+            buf.append( OUSTR("Failed to create MasterScriptProvider for " ) );
+            buf.append( context);
+            ::rtl::OUString message = buf.makeStringAndClear();
+            throw RuntimeException( message, Reference< XInterface >() );
+        }
+        ::osl::MutexGuard guard( m_mutex );
+        Model_map::const_iterator itr = m_mModels.find( xModel );
+        if ( itr == m_mModels.end() )
+        {
+            msp = createNewMSP( context );
+            addActiveMSP( xModel, msp );
+        }
+        else
+        {
+            msp = itr->second;
+        }
+    }
+    else
+    {
+        ::osl::MutexGuard guard( m_mutex );
+        Msp_hash::iterator h_itEnd =  m_hMsps.end();
+        Msp_hash::const_iterator itr = m_hMsps.find( context );
+        if ( itr ==  h_itEnd )
+        {
+            try
+            {
+                msp = createNewMSP( context );
+            }
+            catch ( RuntimeException& e )
+            {
+                ::rtl::OUStringBuffer buf( 80 );
+                buf.append( OUSTR("Failed to create MasterScriptProvider for " ) );
+                buf.append( context);
+                ::rtl::OUString message = buf.makeStringAndClear();
+                throw RuntimeException( message, Reference< XInterface >() );
+            }
+            m_hMsps[ context ] = msp;
+        }
+        else
+        {
+            msp = m_hMsps[ context ];
+        }
+    }
+    return msp;
 }
 
 void
@@ -119,9 +238,7 @@ ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
     Model_map::const_iterator itr = m_mModels.find( xModel );
     if ( itr == m_mModels.end() )
     {
-        MspInst theMsp;
-        theMsp.provider = msp;
-        m_mModels[ xModel ] = theMsp;
+        m_mModels[ xModel ] = msp;
 
         // add self as listener for document dispose
         // should probably throw from this method!!, reexamine
@@ -145,117 +262,6 @@ ActiveMSPList::addActiveMSP( const Reference< frame::XModel >& xModel,
     {
         OSL_TRACE("ActiveMSPList::addActiveMSP() model for document exists already in map" );
     }
-}
-Reference< provider::XScriptProvider >
-ActiveMSPList::createMSP( const Any& aContext )
-            throw ( RuntimeException )
-{
-    Reference< provider::XScriptProvider > msp;
-    if (  aContext.getValueType() == ::getCppuType((const Reference< frame::XModel >* ) NULL ) )
-
-    {
-        OSL_TRACE("ActiveMSPList::createMSP() for model");
-        Reference< frame::XModel> xModel( aContext, UNO_QUERY );
-        if ( xModel.is() )
-        {
-            msp = createMSP( xModel );
-        }
-        else
-        {
-            ::rtl::OUString message =
-                OUSTR( "Failed to extract XModel from context, could not create MasterScriptProvider" );
-            throw RuntimeException( message, Reference< XInterface >() );
-        }
-
-    }
-    else
-    {
-        ::rtl::OUString sContext;
-        aContext >>= sContext;
-        OSL_TRACE("ActiveMSPList::createMSP() for user/share %s",
-            ::rtl::OUStringToOString( sContext,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        msp = createMSP( sContext );
-    }
-    return msp;
-}
-
-
-Reference< provider::XScriptProvider >
-ActiveMSPList::createMSP( const ::rtl::OUString& context )
-            throw ( RuntimeException )
-{
-    Reference< provider::XScriptProvider > msp;
-    ::osl::MutexGuard guard( m_mutex );
-    Msp_hash::const_iterator itr = m_hMsps.find( context );
-    if ( itr == m_hMsps.end() )
-    {
-        OSL_TRACE("ActiveMSPList::createMSP( user/share ) no msp in cache for %s",
-            ::rtl::OUStringToOString( context,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        Any aCtx;
-        if ( context.equals( OUSTR("user") ) )
-        {
-            aCtx = makeAny( userDirString );
-        }
-        else if ( context.equals( OUSTR("share") ) )
-        {
-            aCtx = makeAny( shareDirString );
-        }
-        else
-        {
-            ::rtl::OUString message = OUSTR("ActiveMSPList::createMSP create for MSP failed, invalid context ");
-            message.concat( context );
-            // We will allow a MSP to be created with a default context
-            // such an msp should be capable of handling getScript() for
-            // non document scripts
-            //throw RuntimeException( message, Reference< XInterface > () );
-        }
-        msp = createNewMSP( aCtx );
-        MspInst mspEntry;
-        mspEntry.provider = msp;
-        m_hMsps[ context ] = mspEntry;
-    }
-    else
-    {
-        msp = itr->second.provider;
-    }
-    return msp;
-}
-
-Reference< provider::XScriptProvider >
-ActiveMSPList::createMSP( const Reference< frame::XModel >& xModel )
-            throw ( RuntimeException )
-{
-    Reference< provider::XScriptProvider > msp;
-    ::osl::MutexGuard guard( m_mutex );
-    Model_map::const_iterator itr = m_mModels.find( xModel );
-    if ( itr == m_mModels.end() )
-    {
-
-        Any aCtx = makeAny( xModel );
-        msp = createNewMSP( aCtx );
-        addActiveMSP( xModel, msp ); // will update map
-    }
-    else
-    {
-        msp = itr->second.provider;
-    }
-    return msp;
-}
-
-Reference< provider::XScriptProvider >
-ActiveMSPList::createNewMSP( const Any& context )
-            throw ( RuntimeException )
-{
-    OSL_TRACE("ActiveMSPList::createNewMSP( ANY )");
-
-    ::rtl::OUString serviceName = ::rtl::OUString::createFromAscii("drafts.com.sun.star.script.provider.MasterScriptProvider");
-    Sequence< Any > args(1);
-    args[ 0 ] = context;
-
-    Reference< provider::XScriptProvider > msp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-    return msp;
 }
 
 //*************************************************************************
@@ -344,20 +350,17 @@ ActiveMSPList::createNonDocMSPs()
         args[ 0 ] <<= userDirString;
         Reference< provider::XScriptProvider > userMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
         // should check if provider reference is valid
-        MspInst userInstance;
-        userInstance.provider = userMsp;
-        m_hMsps[ OUSTR("user") ] = userInstance;
+        m_hMsps[ userDirString ] = userMsp;
 
         args[ 0 ] <<= shareDirString;
         Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-        MspInst shareInstance;
-        shareInstance.provider = shareMsp;
         // should check if provider reference is valid
-        m_hMsps[ OUSTR("share") ] = shareInstance;
+        m_hMsps[ shareDirString ] = shareMsp;
         created = true;
     }
 
 }
+
 
 } // namespace func_provider
 
