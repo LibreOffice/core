@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonHeadRequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:13 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ public:
         NeonHeadRequest( HttpSession* inSession,
                          const rtl::OUString & inPath,
                          const std::vector< ::rtl::OUString > & inHeaderNames,
-                         std::vector< DAVResource > & ioResources,
+                         DAVResource & ioResource,
                          int & nError );
         ~NeonHeadRequest();
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:14 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += rtl::OUString::createFromAscii( "/" );
 
-        rtl::OUString aTitle;
-        props.queryEscapedTitle( aTitle );
-        aId += aTitle;
+        aId += props.getEscapedTitle();
 
         if ( props.isTrailingSlash() )
             aId += rtl::OUString::createFromAscii( "/" );
@@ -486,25 +484,31 @@ sal_Bool DataSupplier::getData()
             {
                 case com::sun::star::ucb::OpenMode::FOLDERS:
                 {
-                    sal_Bool bFolder;
-                    if ( !( pContentProperties->queryIsFolder( bFolder )
-                                && bFolder ) )
-                    {
-                        // Entry is not a folder.
+                    sal_Bool bFolder = sal_False;
+
+                    const uno::Any & rValue
+                        = pContentProperties->getValue(
+                            rtl::OUString::createFromAscii( "IsFolder" ) );
+                    rValue >>= bFolder;
+
+                    if ( !bFolder )
                         continue;
-                    }
+
                     break;
                 }
 
                 case com::sun::star::ucb::OpenMode::DOCUMENTS:
                 {
-                    sal_Bool bDocument;
-                    if ( !( pContentProperties->queryIsDocument( bDocument )
-                                && bDocument ) )
-                    {
-                        // Entry is not a document.
+                    sal_Bool bDocument = sal_False;
+
+                    const uno::Any & rValue
+                        = pContentProperties->getValue(
+                            rtl::OUString::createFromAscii( "IsDocument" ) );
+                    rValue >>= bDocument;
+
+                    if ( !bDocument )
                         continue;
-                    }
+
                     break;
                 }
 

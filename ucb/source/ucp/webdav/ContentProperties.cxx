@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:11 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
 #ifndef _NEONURI_HXX_
 #include "NeonUri.hxx"
 #endif
@@ -80,6 +84,9 @@
 #endif
 #ifndef _WEBDAV_DATETIME_HELPER_HXX
 #include "DateTimeHelper.hxx"
+#endif
+#ifndef _WEBDAV_UCP_PROVIDER_HXX
+#include "webdavprovider.hxx"
 #endif
 
 #ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
@@ -120,7 +127,7 @@ a response header )
 
 =============================================================================
 
-Important: HTTP headers with not be mapped to DAV properties; only to UCB
+Important: HTTP headers will not be mapped to DAV properties; only to UCB
            properties. (Content-Length,Content-Type,Last-Modified)
 */
 
@@ -132,34 +139,22 @@ Important: HTTP headers with not be mapped to DAV properties; only to UCB
 //=========================================================================
 //=========================================================================
 
+// static member!
+uno::Any ContentProperties::m_aEmptyAny;
+
 ContentProperties::ContentProperties( const DAVResource& rResource )
-: bTrailingSlash( sal_False ),
-  pIsDocument( 0 ),
-  pIsFolder( 0 ),
-  pSize( 0 ),
-  pDateCreated( 0 ),
-  pDateModified( 0 ),
-  pMediaType( 0 ),
-  pgetcontenttype( 0 ),
-  pcreationdate( 0 ),
-  pdisplayname( 0 ),
-  pgetcontentlanguage( 0 ),
-  pgetcontentlength( 0 ),
-  pgetetag( 0 ),
-  pgetlastmodified( 0 ),
-  plockdiscovery( 0 ),
-  presourcetype( 0 ),
-  psource( 0 ),
-  psupportedlock( 0 ),
-  pOtherProps( 0 )
+: m_xProps( new PropertyValueMap ),
+  m_bTrailingSlash( false )
 {
     OSL_ENSURE( rResource.uri.getLength(),
-                "ContentProperties::ContentProperties - Empty URL!" );
+                "ContentProperties ctor - Empty resource URI!" );
 
-    // title
+    // Title
       NeonUri aURI( rResource.uri );
-      aTitle        = aURI.GetPathBaseNameUnescaped();
-      aEscapedTitle = aURI.GetPathBaseName();
+    m_aEscapedTitle = aURI.GetPathBaseName();
+
+    (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
+                = uno::makeAny( aURI.GetPathBaseNameUnescaped() );
 
     std::vector< beans::PropertyValue >::const_iterator it
         = rResource.properties.begin();
@@ -172,158 +167,122 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 
         if ( aProp.Name.equals( DAVProperties::CREATIONDATE ) )
         {
-            pcreationdate = new rtl::OUString;
-              aProp.Value >>= *pcreationdate;
+            // Map DAV:creationdate to UCP:DateCreated
+            rtl::OUString aValue;
+            aProp.Value >>= aValue;
+            util::DateTime aDate;
+            DateTimeHelper::convert( aValue, aDate );
 
-              // Map the DAV:creationdate to UCP:DateCreated
-            pDateCreated = new util::DateTime;
-            DateTimeHelper::convert( *pcreationdate, *pDateCreated );
+            (*m_xProps)[ rtl::OUString::createFromAscii( "DateCreated" ) ]
+                = uno::makeAny( aDate );
         }
-        else if ( aProp.Name.equals( DAVProperties::DISPLAYNAME ) )
-        {
-            pdisplayname = new rtl::OUString;
-              aProp.Value >>= *pdisplayname;
-        }
-        else if ( aProp.Name.equals( DAVProperties::GETCONTENTLANGUAGE ) )
-        {
-            pgetcontentlanguage = new rtl::OUString;
-              aProp.Value >>= *pgetcontentlanguage;
-        }
+//      else if ( aProp.Name.equals( DAVProperties::DISPLAYNAME ) )
+//      {
+//      }
+//      else if ( aProp.Name.equals( DAVProperties::GETCONTENTLANGUAGE ) )
+//      {
+//      }
         else if ( aProp.Name.equals( DAVProperties::GETCONTENTLENGTH ) )
         {
-            pgetcontentlength = new rtl::OUString;
-              aProp.Value >>= *pgetcontentlength;
+            // Map DAV:getcontentlength to UCP:Size
+            rtl::OUString aValue;
+            aProp.Value >>= aValue;
 
-              // Map the DAV:getcontentlength to UCP:Size
-            if ( !pSize )
-                pSize = new sal_Int64;
-
-              *pSize = pgetcontentlength->toInt64();
+            (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
+                = uno::makeAny( aValue.toInt64() );
         }
         else if ( aProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
         {
-            // Do not map Content-Lenght entity header to DAV:getcontentlength!
+            // Do NOT map Content-Lenght entity header to DAV:getcontentlength!
+            // Only DAV resources have this property.
 
-            // No extra member for this. Store with "other" props.
-            if ( !pOtherProps )
-                pOtherProps = new PropertyValueMap;
-
+            // Map Content-Length entity header to UCP:Size
             rtl::OUString aValue;
             aProp.Value >>= aValue;
-            (*pOtherProps)[ aProp.Name ] = aProp.Value;
 
-            // Map the Content-Length entity header to UCP:Size
-            if ( !pSize )
-                pSize = new sal_Int64;
-
-            *pSize = aValue.toInt64();
+            (*m_xProps)[ rtl::OUString::createFromAscii( "Size" ) ]
+                = uno::makeAny( aValue.toInt64() );
         }
         else if ( aProp.Name.equals( DAVProperties::GETCONTENTTYPE ) )
         {
-            pgetcontenttype = new rtl::OUString;
-              aProp.Value >>= *pgetcontenttype;
-
-            // Map the DAV:getcontenttype to UCP:MediaType
-            if ( !pMediaType )
-                pMediaType = new rtl::OUString;
-
-            *pMediaType = *pgetcontenttype;
+            // Map DAV:getcontenttype to UCP:MediaType (1:1)
+            (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
+                = aProp.Value;
         }
         else if ( aProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Content-Type" ) ) )
         {
-            // Do not map Content-Type entity header to DAV:getcontenttype!
+            // Do NOT map Content-Type entity header to DAV:getcontenttype!
+            // Only DAV resources have this property.
 
-            // No extra member for this. Store with "other" props.
-            if ( !pOtherProps )
-                pOtherProps = new PropertyValueMap;
-
-            (*pOtherProps)[ aProp.Name ] = aProp.Value;
-
-            // Map the Content-Type entity header to UCP:Size
-            rtl::OUString aValue;
-            aProp.Value >>= aValue;
-
-            if ( !pMediaType )
-                pMediaType = new rtl::OUString;
-
-            *pMediaType = aValue;
+            // Map DAV:getcontenttype to UCP:MediaType (1:1)
+            (*m_xProps)[ rtl::OUString::createFromAscii( "MediaType" ) ]
+                = aProp.Value;
         }
-        else if ( aProp.Name.equals( DAVProperties::GETETAG ) )
-        {
-            pgetetag = new rtl::OUString;
-              aProp.Value >>= *pgetetag;
-        }
+//      else if ( aProp.Name.equals( DAVProperties::GETETAG ) )
+//      {
+//      }
         else if ( aProp.Name.equals( DAVProperties::GETLASTMODIFIED ) )
         {
-            pgetlastmodified = new rtl::OUString;
-              aProp.Value >>= *pgetlastmodified;
+            // Map the DAV:getlastmodified entity header to UCP:DateModified
+            rtl::OUString aValue;
+            aProp.Value >>= aValue;
+            util::DateTime aDate;
+            DateTimeHelper::convert( aValue, aDate );
 
-              // Map the DAV:getlastmodified to UCP:DateModified
-            if ( !pDateModified )
-                pDateModified = new util::DateTime;
-
-            DateTimeHelper::convert( *pgetlastmodified, *pDateModified );
+            (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
+                = uno::makeAny( aDate );
         }
         else if ( aProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "Last-Modified" ) ) )
         {
             // Do not map Last-Modified entity header to DAV:getlastmodified!
+            // Only DAV resources have this property.
 
-            // No extra member for this. Store with "other" props.
-            if ( !pOtherProps )
-                pOtherProps = new PropertyValueMap;
-
+            // Map the Last-Modified entity header to UCP:DateModified
             rtl::OUString aValue;
             aProp.Value >>= aValue;
-            (*pOtherProps)[ aProp.Name ] = aProp.Value;
+            util::DateTime aDate;
+            DateTimeHelper::convert( aValue, aDate );
 
-            // Map the Content-Length entity header to UCP:Size
-            if ( !pDateModified )
-                pDateModified = new util::DateTime;
-
-            DateTimeHelper::convert( aValue, *pDateModified );
+            (*m_xProps)[ rtl::OUString::createFromAscii( "DateModified" ) ]
+                = uno::makeAny( aDate );
         }
-
-        else if ( aProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
-        {
-            plockdiscovery = new uno::Sequence< ucb::Lock >;
-              aProp.Value >>= *plockdiscovery;
-        }
+//      else if ( aProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
+//      {
+//      }
         else if ( aProp.Name.equals( DAVProperties::RESOURCETYPE ) )
         {
-            presourcetype = new rtl::OUString;
-              aProp.Value >>= *presourcetype;
+            rtl::OUString aValue;
+            aProp.Value >>= aValue;
 
-            pIsFolder   = new sal_Bool( sal_False );
-            pIsDocument = new sal_Bool( sal_True );
+            // Map DAV:resourceype to UCP:IsFolder, UCP:IsDocument, UCP:ContentType
+            sal_Bool bFolder =
+                aValue.equalsIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "collection" ) );
 
-              // Map the DAV:resourceype to UCP:IsFolder, UCP:IsDocument
-              if ( presourcetype->equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "collection" ) ) )
-            {
-                *pIsDocument =  sal_False;
-                *pIsFolder   =  sal_True;
-              }
+            (*m_xProps)[ rtl::OUString::createFromAscii( "IsFolder" ) ]
+                = uno::makeAny( bFolder );
+            (*m_xProps)[ rtl::OUString::createFromAscii( "IsDocument" ) ]
+                = uno::makeAny( sal_Bool( !bFolder ) );
+            (*m_xProps)[ rtl::OUString::createFromAscii( "ContentType" ) ]
+                    = uno::makeAny( bFolder
+                        ? rtl::OUString::createFromAscii(
+                            WEBDAV_COLLECTION_TYPE )
+                        : rtl::OUString::createFromAscii(
+                            WEBDAV_CONTENT_TYPE ) );
         }
-        else if ( aProp.Name.equals( DAVProperties::SOURCE ) )
-        {
-            psource = new uno::Sequence< ucb::Link >;
-              aProp.Value >>= *psource;
-        }
-        else if ( aProp.Name.equals( DAVProperties::SUPPORTEDLOCK ) )
-        {
-            psupportedlock = new uno::Sequence< ucb::LockEntry >;
-              aProp.Value >>= *psupportedlock;
-        }
-        else
-        {
-            if ( !pOtherProps )
-                pOtherProps = new PropertyValueMap;
+//      else if ( aProp.Name.equals( DAVProperties::SOURCE ) )
+//      {
+//      }
+//      else if ( aProp.Name.equals( DAVProperties::SUPPORTEDLOCK ) )
+//      {
+//      }
 
-            (*pOtherProps)[ aProp.Name ] = aProp.Value;
-        }
+        // Save property.
+        (*m_xProps)[ aProp.Name ] = aProp.Value;
+
         ++it;
       }
 
@@ -331,59 +290,57 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         == sal_Unicode( '/' ) )
     {
 //        if ( pIsFolder && *pIsFolder )
-            bTrailingSlash = sal_True;
+            m_bTrailingSlash = sal_True;
     }
 }
 
 //=========================================================================
 ContentProperties::ContentProperties(
                         const rtl::OUString & rTitle, sal_Bool bFolder )
-: aTitle( rTitle ),
-  bTrailingSlash( sal_False ),
-  pIsDocument( new sal_Bool( !bFolder ) ),
-  pIsFolder( new sal_Bool( bFolder ) ),
-  pSize( 0 ),
-  pDateCreated( 0 ),
-  pDateModified( 0 ),
-  pMediaType( 0 ),
-  pgetcontenttype( 0 ),
-  pcreationdate( 0 ),
-  pdisplayname( 0 ),
-  pgetcontentlanguage( 0 ),
-  pgetcontentlength( 0 ),
-  pgetetag( 0 ),
-  pgetlastmodified( 0 ),
-  plockdiscovery( 0 ),
-  presourcetype( 0 ),
-  psource( 0 ),
-  psupportedlock( 0 ),
-  pOtherProps( 0 )
+: m_xProps( new PropertyValueMap ),
+  m_bTrailingSlash( sal_False )
 {
+    (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
+        = uno::makeAny( rTitle );
+    (*m_xProps)[ rtl::OUString::createFromAscii( "IsFolder" ) ]
+        = uno::makeAny( bFolder );
+    (*m_xProps)[ rtl::OUString::createFromAscii( "IsDocument" ) ]
+        = uno::makeAny( sal_Bool( !bFolder ) );
 }
 
 //=========================================================================
 ContentProperties::ContentProperties( const rtl::OUString & rTitle )
-: aTitle( rTitle ),
-  bTrailingSlash( sal_False ),
-  pIsDocument( 0 ),
-  pIsFolder( 0 ),
-  pSize( 0 ),
-  pDateCreated( 0 ),
-  pDateModified( 0 ),
-  pMediaType( 0 ),
-  pgetcontenttype( 0 ),
-  pcreationdate( 0 ),
-  pdisplayname( 0 ),
-  pgetcontentlanguage( 0 ),
-  pgetcontentlength( 0 ),
-  pgetetag( 0 ),
-  pgetlastmodified( 0 ),
-  plockdiscovery( 0 ),
-  presourcetype( 0 ),
-  psource( 0 ),
-  psupportedlock( 0 ),
-  pOtherProps( 0 )
+: m_xProps( new PropertyValueMap ),
+  m_bTrailingSlash( sal_False )
 {
+    (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
+        = uno::makeAny( rTitle );
+}
+
+//=========================================================================
+ContentProperties::ContentProperties( const ContentProperties & rOther )
+: m_aEscapedTitle( rOther.m_aEscapedTitle ),
+  m_bTrailingSlash( rOther.m_bTrailingSlash )
+{
+    if ( rOther.m_xProps.get() )
+        m_xProps.reset( new PropertyValueMap( *rOther.m_xProps ) );
+}
+
+//=========================================================================
+bool ContentProperties::contains( const rtl::OUString & rName ) const
+{
+    return ( m_xProps->find( rName ) != m_xProps->end() );
+}
+
+//=========================================================================
+const uno::Any & ContentProperties::getValue(
+                                    const rtl::OUString & rName ) const
+{
+    PropertyValueMap::const_iterator it = m_xProps->find( rName );
+    if ( it != m_xProps->end() )
+        return (*it).second;
+
+    return m_aEmptyAny;
 }
 
 //=========================================================================
@@ -541,5 +498,64 @@ void ContentProperties::UCBNamesToHTTPNames(
                 propertyNames.push_back( rProp.Name );
         }
     }
-
 }
+
+//=========================================================================
+// static
+void ContentProperties::getMappableHTTPHeaders(
+                            std::vector< rtl::OUString > & rHeaderNames )
+{
+    rHeaderNames.push_back(
+        rtl::OUString::createFromAscii( "Last-Modified" ) );
+    rHeaderNames.push_back(
+        rtl::OUString::createFromAscii( "Content-Type" ) );
+    rHeaderNames.push_back(
+        rtl::OUString::createFromAscii( "Content-Length" ) );
+}
+
+//=========================================================================
+bool ContentProperties::containsAllNames(
+                            const uno::Sequence< beans::Property >& rProps,
+                            std::vector< rtl::OUString > & rNamesNotContained )
+{
+    rNamesNotContained.clear();
+
+    sal_Int32 nCount = rProps.getLength();
+    for ( sal_Int32 n = 0; n < nCount; ++n )
+    {
+        const rtl::OUString & rName = rProps[ n ].Name;
+        if ( !contains( rName ) )
+        {
+            // Not found.
+            rNamesNotContained.push_back( rName );
+        }
+    }
+
+    return ( rNamesNotContained.size() == 0 );
+}
+
+//=========================================================================
+void ContentProperties::add( const std::vector< rtl::OUString > & rProps,
+                             const ContentProperties & rContentProps )
+{
+    std::vector< rtl::OUString >::const_iterator it  = rProps.begin();
+    std::vector< rtl::OUString >::const_iterator end = rProps.end();
+
+    while ( it != end )
+    {
+        const rtl::OUString & rName = (*it);
+
+        if ( !contains( rName ) ) // ignore duplicates
+        {
+            const uno::Any & rValue = rContentProps.getValue( rName );
+            if ( rValue.hasValue() )
+            {
+                // Add it.
+                (*m_xProps)[ rName ] = rValue;
+            }
+        }
+
+        ++it;
+    }
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-03 13:06:53 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,35 @@ static sal_uInt16 makeStatusCode( const rtl::OUString & rStatusText )
     return sal_uInt16( rStatusText.copy( 0, nPos ).toInt32() );
 }
 
+// -------------------------------------------------------------------
+struct NeonRequestContext
+{
+    uno::Reference< io::XOutputStream >    xOutputStream;
+    rtl::Reference< NeonInputStream >      xInputStream;
+    const std::vector< ::rtl::OUString > * pHeaderNames;
+    DAVResource *                          pResource;
+
+    NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm )
+    : xOutputStream( xOutStrm ), xInputStream( 0 ),
+      pHeaderNames( 0 ), pResource( 0 ) {}
+
+    NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm )
+    : xOutputStream( 0 ), xInputStream( xInStrm ),
+      pHeaderNames( 0 ), pResource( 0 ) {}
+
+    NeonRequestContext( uno::Reference< io::XOutputStream > & xOutStrm,
+                        const std::vector< ::rtl::OUString > & inHeaderNames,
+                        DAVResource & ioResource )
+    : xOutputStream( xOutStrm ), xInputStream( 0 ),
+      pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
+
+    NeonRequestContext( const rtl::Reference< NeonInputStream > & xInStrm,
+                        const std::vector< ::rtl::OUString > & inHeaderNames,
+                        DAVResource & ioResource )
+    : xOutputStream( 0 ), xInputStream( xInStrm ),
+      pHeaderNames( &inHeaderNames ), pResource( &ioResource ) {}
+};
+
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 //
@@ -203,9 +232,12 @@ extern "C" void NeonSession_ResponseBlockReader( void *       inUserData,
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
     {
-        NeonInputStream * theInputStream
-            = static_cast< NeonInputStream *>( inUserData );
-        theInputStream->AddToStream( inBuf, inLen );
+        NeonRequestContext * pCtx
+            = static_cast< NeonRequestContext * >( inUserData );
+        rtl::Reference< NeonInputStream > xInputStream = pCtx->xInputStream;
+
+        if ( xInputStream.is() )
+            xInputStream->AddToStream( inBuf, inLen );
     }
 }
 
@@ -220,15 +252,15 @@ extern "C" void NeonSession_ResponseBlockWriter( void *       inUserData,
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
     {
-        uno::Reference< io::XOutputStream > * theOutputStreamPtr
-            = static_cast< uno::Reference< io::XOutputStream > * >(
-                inUserData );
-        uno::Reference< io::XOutputStream > theOutputStream
-            = *theOutputStreamPtr;
+        NeonRequestContext * pCtx
+            = static_cast< NeonRequestContext * >( inUserData );
+        uno::Reference< io::XOutputStream > xOutputStream = pCtx->xOutputStream;
 
-        const uno::Sequence< sal_Int8 > theSequence(
-            (sal_Int8 *)inBuf, inLen );
-        theOutputStream->writeBytes( theSequence );
+        if ( xOutputStream.is() )
+        {
+            const uno::Sequence< sal_Int8 > aSeq( (sal_Int8 *)inBuf, inLen );
+            xOutputStream->writeBytes( aSeq );
+        }
     }
 }
 
@@ -355,6 +387,59 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
                                     aReferer.getStr(), EOL, NULL );
                 }
             }
+        }
+    }
+}
+
+extern "C" void NeonSession_ResponseHeaderCatcher( void * userdata,
+                                                   const char * value )
+{
+    rtl::OUString aHeader( rtl::OUString::createFromAscii( value ) );
+    sal_Int32 nPos = aHeader.indexOf( ':' );
+
+    if ( nPos != -1 )
+    {
+        rtl::OUString aHeaderName( aHeader.copy( 0, nPos ) );
+
+        NeonRequestContext * pCtx
+            = static_cast< NeonRequestContext * >( userdata );
+
+        // Note: Empty vector means that all headers are requested.
+        bool bIncludeIt = ( pCtx->pHeaderNames->size() == 0 );
+
+        if ( !bIncludeIt )
+        {
+            // Check whether this header was requested.
+            std::vector< ::rtl::OUString >::const_iterator it(
+                pCtx->pHeaderNames->begin() );
+            const std::vector< ::rtl::OUString >::const_iterator end(
+                pCtx->pHeaderNames->end() );
+
+            while ( it != end )
+            {
+                if ( (*it) == aHeaderName )
+                    break;
+
+                ++it;
+            }
+
+            if ( it != end )
+                bIncludeIt = true;
+        }
+
+        if ( bIncludeIt )
+        {
+            // Create & set the PropertyValue
+            beans::PropertyValue thePropertyValue;
+            thePropertyValue.Handle = -1;
+            thePropertyValue.Name   = aHeaderName;
+            thePropertyValue.State  = beans::PropertyState_DIRECT_VALUE;
+
+            if ( nPos < aHeader.getLength() )
+                thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
+
+            // Add the newly created PropertyValue
+            pCtx->pResource->properties.push_back( thePropertyValue );
         }
     }
 }
@@ -690,7 +775,7 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
 // -------------------------------------------------------------------
 void NeonSession::HEAD( const ::rtl::OUString &  inPath,
                         const std::vector< ::rtl::OUString > & inHeaderNames,
-                        std::vector< DAVResource > & ioResources,
+                        DAVResource & ioResource,
                         const uno::Reference<
                             ucb::XCommandEnvironment >& inEnv )
     throw( DAVException )
@@ -703,7 +788,7 @@ void NeonSession::HEAD( const ::rtl::OUString &  inPath,
     NeonHeadRequest theRequest( m_pHttpSession,
                                 inPath,
                                 inHeaderNames,
-                                ioResources,
+                                ioResource,
                                 theRetVal );
     HandleError( theRetVal );
 }
@@ -721,14 +806,16 @@ uno::Reference< io::XInputStream > NeonSession::GET(
 
     m_xEnv = inEnv;
 
-    NeonInputStream * theInputStream = new NeonInputStream;
+    rtl::Reference< NeonInputStream > xInputStream( new NeonInputStream );
+    NeonRequestContext aCtx( xInputStream );
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
                          NeonSession_ResponseBlockReader,
-                         theInputStream );
+                         0,
+                         &aCtx );
     HandleError( theRetVal );
-    return theInputStream;
+    return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
 // -------------------------------------------------------------------
@@ -744,11 +831,70 @@ void NeonSession::GET( const rtl::OUString &                 inPath,
 
     m_xEnv = inEnv;
 
+    NeonRequestContext aCtx( ioOutputStream );
     int theRetVal = GET( m_pHttpSession,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
                          NeonSession_ResponseBlockWriter,
-                         &ioOutputStream );
+                         0,
+                         &aCtx );
+    HandleError( theRetVal );
+}
+
+// -------------------------------------------------------------------
+// GET
+// -------------------------------------------------------------------
+uno::Reference< io::XInputStream > NeonSession::GET(
+                    const rtl::OUString & inPath,
+                    const std::vector< ::rtl::OUString > & inHeaderNames,
+                    DAVResource & ioResource,
+                    const uno::Reference< ucb::XCommandEnvironment > & inEnv )
+    throw ( DAVException )
+{
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
+    m_xEnv = inEnv;
+
+    ioResource.uri = inPath;
+    ioResource.properties.clear();
+
+    rtl::Reference< NeonInputStream > xInputStream( new NeonInputStream );
+    NeonRequestContext aCtx( xInputStream, inHeaderNames, ioResource );
+    int theRetVal = GET( m_pHttpSession,
+                         rtl::OUStringToOString(
+                             inPath, RTL_TEXTENCODING_UTF8 ),
+                         NeonSession_ResponseBlockReader,
+                         NeonSession_ResponseHeaderCatcher,
+                         &aCtx );
+    HandleError( theRetVal );
+    return uno::Reference< io::XInputStream >( xInputStream.get() );
+}
+
+// -------------------------------------------------------------------
+// GET
+// -------------------------------------------------------------------
+void NeonSession::GET(
+                    const rtl::OUString & inPath,
+                    uno::Reference< io::XOutputStream > & ioOutputStream,
+                    const std::vector< ::rtl::OUString > & inHeaderNames,
+                    DAVResource & ioResource,
+                    const uno::Reference< ucb::XCommandEnvironment > & inEnv )
+    throw ( DAVException )
+{
+    osl::Guard< osl::Mutex > theGuard( m_aMutex );
+
+    m_xEnv = inEnv;
+
+    ioResource.uri = inPath;
+    ioResource.properties.clear();
+
+    NeonRequestContext aCtx( ioOutputStream, inHeaderNames, ioResource );
+    int theRetVal = GET( m_pHttpSession,
+                         rtl::OUStringToOString(
+                             inPath, RTL_TEXTENCODING_UTF8 ),
+                         NeonSession_ResponseBlockWriter,
+                         NeonSession_ResponseHeaderCatcher,
+                         &aCtx );
     HandleError( theRetVal );
 }
 
@@ -804,19 +950,20 @@ uno::Reference< io::XInputStream > NeonSession::POST(
 
     m_xEnv = inEnv;
 
-    NeonInputStream * theInputStream = new NeonInputStream;
+    rtl::Reference< NeonInputStream > xInputStream( new NeonInputStream );
+    NeonRequestContext aCtx( xInputStream );
     int theRetVal = POST( m_pHttpSession,
                           rtl::OUStringToOString(
                             inPath, RTL_TEXTENCODING_UTF8 ),
                           reinterpret_cast< const char * >(
                               aDataToSend.getConstArray() ),
                           NeonSession_ResponseBlockReader,
-                          theInputStream,
+                          &aCtx,
                           rContentType,
                           rReferer );
 
     HandleError( theRetVal );
-    return theInputStream;
+    return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
 // -------------------------------------------------------------------
@@ -840,13 +987,14 @@ void NeonSession::POST( const rtl::OUString & inPath,
 
     m_xEnv = inEnv;
 
+    NeonRequestContext aCtx( oOutputStream );
     int theRetVal = POST( m_pHttpSession,
                           rtl::OUStringToOString(
                             inPath, RTL_TEXTENCODING_UTF8 ),
                           reinterpret_cast< const char * >(
                               aDataToSend.getConstArray() ),
                           NeonSession_ResponseBlockWriter,
-                          &oOutputStream,
+                          &aCtx,
                           rContentType,
                           rReferer );
 
@@ -1240,16 +1388,14 @@ void NeonSession::Lockit( const Lock & inLock, bool inLockit )
 int NeonSession::GET( ne_session * sess,
                       const char * uri,
                       ne_block_reader reader,
+                      ne_header_handler handler,
                       void * userdata )
 {
     //struct get_context ctx;
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
 
-    ///* Read the value of the Content-Length header into ctx.total */
-    //ne_add_response_header_handler( req, "Content-Length",
-    //                                ne_handle_numeric_header,
-    //                                &ctx.total);
+    ne_add_response_header_catcher( req, handler, userdata );
 
     ne_add_response_body_reader( req, ne_accept_2xx, reader, userdata );
 

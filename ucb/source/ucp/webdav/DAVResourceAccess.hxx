@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,21 +174,37 @@ public:
 
     void
     HEAD( const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
-          std::vector< DAVResource > & rResources,
+          DAVResource & rResource,
           const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw( DAVException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-    GET(      const com::sun::star::uno::Reference<
-                   com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    GET( const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( DAVException );
 
     void
-    GET(      com::sun::star::uno::Reference<
-                com::sun::star::io::XOutputStream > & rStream,
-              const com::sun::star::uno::Reference<
-                  com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    GET( com::sun::star::uno::Reference<
+            com::sun::star::io::XOutputStream > & rStream,
+         const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( DAVException );
+
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+    GET( const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+         DAVResource & rResource,
+         const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( DAVException );
+
+    void
+    GET( com::sun::star::uno::Reference<
+            com::sun::star::io::XOutputStream > & rStream,
+         const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+         DAVResource & rResource,
+         const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( DAVException );
 
     void

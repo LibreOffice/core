@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ class Content : public ::ucb::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
     std::auto_ptr< DAVResourceAccess > m_xResAccess;
+    std::auto_ptr< ContentProperties > m_xCachedProps; // locally cached props
     rtl::OUString     m_aEscapedTitle;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
       sal_Bool        m_bTransient;
@@ -147,6 +148,7 @@ private:
                            ::com::sun::star::beans::Property >& rProperties,
                           const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
+
      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
      setPropertyValues(
                      const ::com::sun::star::uno::Sequence<

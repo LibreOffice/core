@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-30 13:24:40 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void DAVResourceAccess::PROPPATCH( const std::vector< ProppatchValue >& rValues,
 
 //=========================================================================
 void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
-                              std::vector< DAVResource > & rResources,
+                              DAVResource & rResource,
                               const uno::Reference<
                                 ucb::XCommandEnvironment >& xEnv )
     throw( DAVException )
@@ -312,7 +312,7 @@ void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
         bRetry = sal_False;
         try
         {
-            m_xSession->HEAD( m_aPath, rHeaderNames, rResources, xEnv );
+            m_xSession->HEAD( m_aPath, rHeaderNames, rResource, xEnv );
         }
         catch ( DAVException & e )
         {
@@ -367,6 +367,64 @@ void DAVResourceAccess::GET( uno::Reference< io::XOutputStream > & rStream,
         try
         {
             m_xSession->GET( m_aPath, rStream, xEnv );
+        }
+        catch ( DAVException & e )
+        {
+            bRetry = handleException( e );
+            if ( !bRetry )
+                throw;
+        }
+    }
+    while ( bRetry );
+}
+
+//=========================================================================
+uno::Reference< io::XInputStream > DAVResourceAccess::GET(
+                const std::vector< rtl::OUString > & rHeaderNames,
+                DAVResource & rResource,
+                const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw( DAVException )
+{
+    initialize();
+
+    uno::Reference< io::XInputStream > xStream;
+    sal_Bool bRetry;
+    do
+    {
+        bRetry = sal_False;
+        try
+        {
+            xStream = m_xSession->GET( m_aPath, rHeaderNames, rResource, xEnv );
+        }
+        catch ( DAVException & e )
+        {
+            bRetry = handleException( e );
+            if ( !bRetry )
+                throw;
+        }
+    }
+    while ( bRetry );
+
+    return xStream;
+}
+
+//=========================================================================
+void DAVResourceAccess::GET(
+                    uno::Reference< io::XOutputStream > & rStream,
+                    const std::vector< rtl::OUString > & rHeaderNames,
+                    DAVResource & rResource,
+                    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    throw( DAVException )
+{
+    initialize();
+
+    sal_Bool bRetry;
+    do
+    {
+        bRetry = sal_False;
+        try
+        {
+            m_xSession->GET( m_aPath, rStream, rHeaderNames, rResource, xEnv );
         }
         catch ( DAVException & e )
         {

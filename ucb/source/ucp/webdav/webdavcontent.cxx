@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:13 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#define CACHE_RESPONSE_HEADERS 1
 
 /**************************************************************************
                                 TODO
@@ -555,7 +557,23 @@ uno::Any SAL_CALL Content::execute(
                 // PUSH: write data
                 try
                 {
+#ifdef CACHE_RESPONSE_HEADERS
+                    // throw away previously cached headers.
+                    m_xCachedProps.reset();
+
+                    DAVResource aResource;
+                    std::vector< rtl::OUString > aHeaders;
+//                    // Obtain list containing all HTTP headers that can
+//                    // be mapped to UCB properties.
+//                    ContentProperties::getMappableHTTPHeaders( aHeaders );
+
+                    m_xResAccess->GET( xOut, aHeaders, aResource, Environment );
+
+                    // cache headers.
+                    m_xCachedProps.reset( new ContentProperties( aResource ) );
+#else
                     m_xResAccess->GET( xOut, Environment );
+#endif
                 }
                 catch ( DAVException const & e )
                 {
@@ -573,8 +591,27 @@ uno::Any SAL_CALL Content::execute(
                     // PULL: wait for client read
                     try
                     {
+#ifdef CACHE_RESPONSE_HEADERS
+                        // throw away previously cached headers.
+                        m_xCachedProps.reset();
+
+                        DAVResource aResource;
+                        std::vector< rtl::OUString > aHeaders;
+//                        // Obtain list containing all HTTP headers that can
+//                        // be mapped to UCB properties.
+//                        ContentProperties::getMappableHTTPHeaders( aHeaders );
+
+                        uno::Reference< io::XInputStream > xIn
+                            = m_xResAccess->GET(
+                                aHeaders, aResource, Environment );
+
+                        // cache headers.
+                        m_xCachedProps.reset(
+                            new ContentProperties( aResource ) );
+#else
                         uno::Reference< io::XInputStream > xIn
                             = m_xResAccess->GET( Environment );
+#endif
                         xDataSink->setInputStream( xIn );
                     }
                     catch ( DAVException const & e )
@@ -1159,384 +1196,57 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             const beans::Property& rProp = pProps[ n ];
 
-              // Process Core properties.
-
-              if ( rProp.Name.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
-               {
-                sal_Bool bFolder, bDocument;
-                if ( rData.queryIsFolder( bFolder ) && bFolder )
-                    xRow->appendString( rProp, rtl::OUString::createFromAscii(
-                                                    WEBDAV_COLLECTION_TYPE ) );
-                else if ( rData.queryIsDocument( bDocument ) && bDocument )
-                    xRow->appendString( rProp, rtl::OUString::createFromAscii(
-                                                    WEBDAV_CONTENT_TYPE ) );
-                else
-                    xRow->appendVoid( rProp );
+            // Process standard UCB, DAV and HTTP properties.
+            const uno::Any & rValue = rData.getValue( rProp.Name );
+            if ( rValue.hasValue() )
+            {
+                xRow->appendObject( rProp, rValue );
             }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
-            {
-                rtl::OUString aTitle;
-                if ( rData.queryTitle( aTitle ) )
-                    xRow->appendString ( rProp, aTitle );
-                else
-                    xRow->appendVoid( rProp );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
-            {
-                sal_Bool bDocument;
-                if ( rData.queryIsDocument( bDocument ) )
-                    xRow->appendBoolean( rProp, bDocument );
-                else
-                    xRow->appendVoid( rProp );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
-            {
-                sal_Bool bFolder;
-                if ( rData.queryIsFolder( bFolder ) )
-                    xRow->appendBoolean( rProp, bFolder );
-                else
-                    xRow->appendVoid( rProp );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
-              {
-                sal_Int64 nSize;
-                if ( rData.querySize( nSize) )
-                    xRow->appendLong( rProp, nSize );
-                else
-                    xRow->appendVoid( rProp );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
-              {
-                util::DateTime aDateCreated;
-                if ( rData.queryDateCreated( aDateCreated ) )
-                    xRow->appendTimestamp( rProp, aDateCreated );
-                else
-                    xRow->appendVoid( rProp );
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
-              {
-                util::DateTime aDateModified;
-                if ( rData.queryDateModified( aDateModified ) )
-                    xRow->appendTimestamp( rProp, aDateModified );
-                else
-                    xRow->appendVoid( rProp );
-
-            }
-              else if ( rProp.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
-            {
-                rtl::OUString aType;
-                if ( rData.queryMediaType( aType ) )
-                    xRow->appendString( rProp, aType );
-                else
-                    xRow->appendVoid( rProp );
-            }
-              else if ( rProp.Name.equals( DAVProperties::CREATIONDATE ) )
-            {
-                rtl::OUString aCreateionDate;
-                if ( rData.queryDAVCreationDate( aCreateionDate ) )
-                    xRow->appendString( rProp, aCreateionDate );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::DISPLAYNAME ) )
-            {
-                rtl::OUString aDisplayName;
-                if ( rData.queryDAVDisplayName( aDisplayName ) )
-                    xRow->appendString( rProp, aDisplayName );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::GETCONTENTLANGUAGE ) )
-            {
-                rtl::OUString aLanguage;
-                if ( rData.queryDAVContentLanguage( aLanguage ) )
-                    xRow->appendString( rProp, aLanguage );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::GETCONTENTLENGTH ) )
-            {
-                rtl::OUString aLength;
-                if ( rData.queryDAVContentLength( aLength ) )
-                    xRow->appendString( rProp, aLength );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::GETCONTENTTYPE ) )
-            {
-                rtl::OUString aType;
-                if ( rData.queryDAVContentType( aType ) )
-                    xRow->appendString( rProp, aType );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::GETETAG ) )
-            {
-                rtl::OUString aTag;
-                if ( rData.queryDAVETag( aTag ) )
-                    xRow->appendString( rProp, aTag );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::GETLASTMODIFIED ) )
-            {
-                rtl::OUString aDate;
-                if ( rData.queryDAVLastModified( aDate ) )
-                    xRow->appendString( rProp, aDate );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::LOCKDISCOVERY ) )
-            {
-                uno::Sequence< star::ucb::Lock > aLocks;
-                if ( rData.queryDAVLockDiscovery( aLocks ) )
-                    xRow->appendObject( rProp, uno::makeAny( aLocks ) );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::RESOURCETYPE ) )
-            {
-                rtl::OUString aType;
-                if ( rData.queryDAVResourceType( aType ) )
-                    xRow->appendString( rProp, aType );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::SOURCE ) )
-            {
-                uno::Sequence< star::ucb::Link > aSource;
-                if ( rData.queryDAVSource( aSource ) )
-                    xRow->appendObject( rProp, uno::makeAny( aSource ) );
-                else
-                    xRow->appendVoid( rProp );
-              }
-              else if ( rProp.Name.equals( DAVProperties::SUPPORTEDLOCK ) )
-            {
-                uno::Sequence< star::ucb::LockEntry > aLockEntries;
-                if ( rData.queryDAVSupportedLock( aLockEntries ) )
-                    xRow->appendObject( rProp,
-                                        uno::makeAny( aLockEntries ) );
-                else
-                    xRow->appendVoid( rProp );
-              }
             else
             {
-                sal_Bool bAppended = sal_False;
-
-                const PropertyValueMap * pOtherProps
-                    = rData.getOtherProperties();
-                if ( pOtherProps )
+                // Process local Additional Properties.
+                if ( !bTriedToGetAdditonalPropSet && !xAdditionalPropSet.is() )
                 {
-                    // Process additional properties (DAV "dead" properties).
-                    const PropertyValueMap::const_iterator it
-                        = pOtherProps->find( rProp.Name );
-                    if ( it != pOtherProps->end() )
-                    {
-                        xRow->appendObject( rProp, (*it).second );
-                        bAppended = sal_True;
-                    }
+                    xAdditionalPropSet
+                        = uno::Reference< beans::XPropertySet >(
+                            rProvider->getAdditionalPropertySet( rContentId,
+                                                                 sal_False ),
+                            uno::UNO_QUERY );
+                    bTriedToGetAdditonalPropSet = sal_True;
                 }
 
-                if ( !bAppended )
+                if ( !xAdditionalPropSet.is() ||
+                     !xRow->appendPropertySetValue(
+                                            xAdditionalPropSet, rProp ) )
                 {
-                    // Process local additional properties.
-                      if ( !bTriedToGetAdditonalPropSet
-                           && !xAdditionalPropSet.is() )
-                    {
-                          xAdditionalPropSet
-                            = uno::Reference< beans::XPropertySet >(
-                                rProvider->getAdditionalPropertySet(
-                                    rContentId, sal_False ),
-                                uno::UNO_QUERY );
-                          bTriedToGetAdditonalPropSet = sal_True;
-                    }
-
-                      if ( xAdditionalPropSet.is() )
-                    {
-                          if ( xRow->appendPropertySetValue(
-                                         xAdditionalPropSet, rProp ) )
-                            bAppended = sal_True;
-                    }
-                }
-
-                if ( !bAppended )
-                {
-                      // Append empty entry.
-                      xRow->appendVoid( rProp );
+                    // Append empty entry.
+                    xRow->appendVoid( rProp );
                 }
             }
         }
     }
     else
     {
-        // Append all Core Properties.
+        // Append all standard UCB, DAV and HTTP properties.
+
+        const std::auto_ptr< PropertyValueMap > xProps = rData.getProperties();
+
+        PropertyValueMap::const_iterator it  = xProps->begin();
+        PropertyValueMap::const_iterator end = xProps->end();
+
         ContentProvider * pProvider
             = static_cast< ContentProvider * >( rProvider.get() );
         beans::Property aProp;
 
-        rtl::OUString aString;
-        if ( rData.queryTitle( aString ) )
+        while ( it != end )
         {
-            pProvider->getProperty(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        sal_Bool bBool;
-        if ( rData.queryIsDocument( bBool ) && bBool )
-        {
-            pProvider->getProperty(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
-            xRow->appendString( aProp, rtl::OUString::createFromAscii(
-                                                    WEBDAV_CONTENT_TYPE ) );
-            pProvider->getProperty(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ), aProp );
-            xRow->appendBoolean( aProp, bBool );
-        }
-
-        if ( rData.queryIsFolder( bBool ) && bBool )
-        {
-            pProvider->getProperty(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
-            xRow->appendString( aProp, rtl::OUString::createFromAscii(
-                                                    WEBDAV_COLLECTION_TYPE ) );
-            pProvider->getProperty(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ), aProp );
-            xRow->appendBoolean( aProp, bBool );
-        }
-
-        sal_Int64 nInt64;
-        if ( rData.querySize( nInt64 ) )
-        {
-            pProvider->getProperty(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ), aProp );
-            xRow->appendLong( aProp, nInt64 );
-        }
-
-        util::DateTime aDateTime;
-        if ( rData.queryDateCreated( aDateTime ) )
-        {
-            pProvider->getProperty(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ),
-                aProp );
-            xRow->appendTimestamp( aProp, aDateTime );
-        }
-
-        if ( rData.queryDateModified( aDateTime ) )
-        {
-            pProvider->getProperty(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
-                aProp );
-            xRow->appendTimestamp( aProp, aDateTime );
-        }
-
-        if ( rData.queryMediaType( aString ) )
-        {
-            pProvider->getProperty(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        if ( rData.queryDAVCreationDate( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::CREATIONDATE, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        if ( rData.queryDAVDisplayName( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::DISPLAYNAME, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        if ( rData.queryDAVContentLanguage( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::GETCONTENTLANGUAGE, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        if ( rData.queryDAVContentLength( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::GETCONTENTLENGTH, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        if ( rData.queryDAVContentType( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::GETCONTENTTYPE, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        if ( rData.queryDAVETag( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::GETETAG, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        if ( rData.queryDAVLastModified( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::GETLASTMODIFIED, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        uno::Sequence< star::ucb::Lock > aLocks;
-        if ( rData.queryDAVLockDiscovery( aLocks ) )
-        {
-            pProvider->getProperty( DAVProperties::LOCKDISCOVERY, aProp );
-            xRow->appendObject( aProp, uno::makeAny( aLocks ) );
-        }
-
-        if ( rData.queryDAVResourceType( aString ) )
-        {
-            pProvider->getProperty( DAVProperties::RESOURCETYPE, aProp );
-            xRow->appendString( aProp, aString );
-        }
-
-        uno::Sequence< star::ucb::Link > aLinks;
-        if ( rData.queryDAVSource( aLinks ) )
-        {
-            pProvider->getProperty( DAVProperties::SOURCE, aProp );
-            xRow->appendObject( aProp, uno::makeAny( aLinks ) );
-        }
-
-        uno::Sequence< star::ucb::LockEntry > aLockEntries;
-        if ( rData.queryDAVSupportedLock( aLockEntries ) )
-        {
-            pProvider->getProperty( DAVProperties::SUPPORTEDLOCK, aProp );
-            xRow->appendObject( aProp, uno::makeAny( aLockEntries ) );
-        }
-
-        // Process additional properties (DAV "dead" properties).
-        const PropertyValueMap * pOtherProps = rData.getOtherProperties();
-        if ( pOtherProps )
-        {
-            PropertyValueMap::const_iterator it  = pOtherProps->begin();
-            PropertyValueMap::const_iterator end = pOtherProps->end();
-
-            beans::Property aProp;
-            while ( it != end )
-            {
-                pProvider->getProperty( (*it).first, aProp );
+            if ( pProvider->getProperty( (*it).first, aProp ) )
                 xRow->appendObject( aProp, (*it).second );
-                it++;
-            }
+
+            ++it;
         }
 
-        // Append all local Additional Core Properties.
+        // Append all local Additional Properties.
         uno::Reference< beans::XPropertySet > xSet(
                  rProvider->getAdditionalPropertySet( rContentId, sal_False ),
                  uno::UNO_QUERY );
@@ -1553,122 +1263,145 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( m_bTransient )
-    {
-        // No PROPFIND, but minimal local props.
-        return getPropertyValues( m_xSMgr,
-                                      rProperties,
-                                        ContentProperties(
-                                      NeonUri::unescape( m_aEscapedTitle ),
-                                         m_bCollection ),
-                                  rtl::Reference<
-                                    ::ucb::ContentProviderImplHelper >(
-                                        m_xProvider.getBodyPtr() ),
-                                        m_xIdentifier->getContentIdentifier() );
-    }
+    std::auto_ptr< ContentProperties > xProps;
+    bool bHasAll = false;
 
-    // Only title requested? No PROPFIND necessary.
-    if ( ( rProperties.getLength() == 1 )
-         &&
-         rProperties[ 0 ].Name.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+    // First, ask cache...
+    if ( m_xCachedProps.get() )
     {
-        return getPropertyValues( m_xSMgr,
-                                      rProperties,
-                                        ContentProperties(
-                                      NeonUri::unescape( m_aEscapedTitle ),
-                                         m_bCollection ),
-                                  rtl::Reference<
-                                    ::ucb::ContentProviderImplHelper >(
-                                        m_xProvider.getBodyPtr() ),
-                                        m_xIdentifier->getContentIdentifier() );
-    }
-
-    bool bSuccess = true;
-    std::vector< rtl::OUString > aPropNames;
-    ContentProperties::UCBNamesToDAVNames( rProperties, aPropNames );
-
-    std::vector< DAVResource > resources;
-    if ( aPropNames.size() > 0 )
-    {
-        try
+        std::vector< rtl::OUString > aMissingProps;
+        if ( m_xCachedProps->containsAllNames( rProperties, aMissingProps ) )
         {
-            m_xResAccess->PROPFIND( ZERO, aPropNames, resources, xEnv );
-        }
-        catch ( DAVException const & e )
-        {
-            if ( ( e.getStatus() == 404 /* not found */ ) ||
-                 ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) )
-            {
-                // PROPFIND failed, only Title prop available.
-                return getPropertyValues( m_xSMgr,
-                                          rProperties,
-                                          ContentProperties(
-                                            NeonUri::unescape(
-                                                m_aEscapedTitle ) ),
-                                          rtl::Reference<
-                                            ::ucb::ContentProviderImplHelper >(
-                                                m_xProvider.getBodyPtr() ),
-                                          m_xIdentifier
-                                            ->getContentIdentifier() );
-            }
-
-              bSuccess = false;
+            // All requested properties are already in cache! No server
+            // access needed.
+            bHasAll = true;
+            xProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
         }
     }
 
-    if ( !bSuccess )
+    if ( !xProps.get() )
     {
-        // PROPFIND failed. Try a HEAD request; possibly the requested
-        // properties can by obtained this way.
+        // No server access for just created (not yet committed) objects.
+        // Only a minimal set of properties supported at this stage.
+        if ( m_bTransient )
+            xProps.reset( new ContentProperties( NeonUri::unescape(
+                                                    m_aEscapedTitle ),
+                                                 m_bCollection ) );
+    }
 
-        // Note: I set bIncludeUnmatched to false, because I want to avoid
-        // every HEAD request not really needed.
+    if ( !xProps.get() )
+    {
+        // No server access if only Title property is requested because
+        // it's always calculated from Content's URI.
+        if ( ( rProperties.getLength() == 1 ) &&
+             rProperties[ 0 ].Name.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            xProps.reset( new ContentProperties( NeonUri::unescape(
+                                                    m_aEscapedTitle ) ) );
+    }
 
-        std::vector< rtl::OUString > aHeaderNames;
-        ContentProperties::UCBNamesToHTTPNames( rProperties,
-                                                aHeaderNames,
-                                                false /* bIncludeUnmatched */ );
-        if ( aHeaderNames.size() > 0 )
+    if ( !xProps.get() )
+    {
+        // Obtain values from server...
+
+        bool bNetAccessSucceeded = false;
+        std::vector< DAVResource > resources;
+
+        std::vector< rtl::OUString > aPropNames;
+        ContentProperties::UCBNamesToDAVNames( rProperties, aPropNames );
+
+        if ( aPropNames.size() > 0 )
         {
             try
             {
-                resources.clear();
-                m_xResAccess->HEAD( aHeaderNames, resources, xEnv );
-                bSuccess = true;
+                m_xResAccess->PROPFIND( ZERO, aPropNames, resources, xEnv );
+                bNetAccessSucceeded = true;
             }
-            catch ( DAVException const & )
+            catch ( DAVException const & e )
             {
-                bSuccess = false;
+                if ( ( e.getStatus() == 404 /* not found */ ) ||
+                     ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) )
+                {
+                    // PROPFIND failed, only Title prop available.
+                    xProps.reset( new ContentProperties(
+                                    NeonUri::unescape( m_aEscapedTitle ) ) );
+                }
             }
+        }
+        else
+        {
+            bNetAccessSucceeded = true;
+        }
+
+        if ( !bNetAccessSucceeded )
+        {
+            // PROPFIND failed. Try a HEAD request; possibly the requested
+            // properties can by obtained this way.
+
+            std::vector< rtl::OUString > aHeaderNames;
+            ContentProperties::UCBNamesToHTTPNames(
+                rProperties, aHeaderNames, false /* bIncludeUnmatched */ );
+
+            // Note: Setting bIncludeUnmatched to true would provide support for
+            // obtaining arbitrary header values, but will result in additional
+            // network traffic (HEAD requests). For the moment it is okay only
+            // to support the header values which can be mapped to UCB
+            // properties (like "Content-Length" header <-> "Size" property)
+
+            if ( aHeaderNames.size() > 0 )
+            {
+                try
+                {
+                    resources.clear();
+
+                    DAVResource resource;
+                    m_xResAccess->HEAD( aHeaderNames, resource, xEnv );
+
+                    resources.push_back( resource );
+                    bNetAccessSucceeded = true;
+                }
+                catch ( DAVException const & )
+                {
+                    bNetAccessSucceeded = false;
+                }
+            }
+        }
+
+        bNetAccessSucceeded &= ( resources.size() == 1 );
+
+        if ( bNetAccessSucceeded )
+        {
+            xProps.reset( new ContentProperties( resources[ 0 ] ) );
+        }
+        else
+        {
+            xProps.reset( new ContentProperties(
+                                NeonUri::unescape( m_aEscapedTitle ) ) );
         }
     }
 
-    bSuccess &= ( resources.size() == 1 );
+    OSL_ENSURE( xProps.get(), "Content::getPropertyValues - no properties!" );
 
-    if ( bSuccess )
+    // All values obtained? If not, is there something valueable in the local
+    // cache?
+
+    if ( !bHasAll && m_xCachedProps.get() )
     {
-        return getPropertyValues( m_xSMgr,
-                                      rProperties,
-                                        ContentProperties( resources[ 0 ] ),
-                                  rtl::Reference<
-                                    ::ucb::ContentProviderImplHelper >(
-                                        m_xProvider.getBodyPtr() ),
-                                        m_xIdentifier->getContentIdentifier() );
+        std::vector< rtl::OUString > aMissingProps;
+        if ( !xProps->containsAllNames( rProperties, aMissingProps ) )
+        {
+            // Add props contained in cache...
+            xProps->add( aMissingProps, *m_xCachedProps );
+        }
     }
-    else
-    {
-        // PROPFIND failed, but minimal local props "available".
-        return getPropertyValues( m_xSMgr,
-                                      rProperties,
-                                        ContentProperties(
-                                      NeonUri::unescape( m_aEscapedTitle ),
-                                         sal_False /* no collection */ ),
-                                  rtl::Reference<
-                                    ::ucb::ContentProviderImplHelper >(
-                                        m_xProvider.getBodyPtr() ),
-                                        m_xIdentifier->getContentIdentifier() );
-    }
+
+    return getPropertyValues( m_xSMgr,
+                              rProperties,
+                              *xProps,
+                              rtl::Reference<
+                                ::ucb::ContentProviderImplHelper >(
+                                    m_xProvider.getBodyPtr() ),
+                              m_xIdentifier->getContentIdentifier() );
 }
 
 //=========================================================================
@@ -1711,9 +1444,10 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
       for ( sal_Int32 n = 0; n < nCount; ++n )
       {
         const beans::PropertyValue& rValue = pValues[ n ];
+        const rtl::OUString & rName = rValue.Name;
 
         beans::Property aTmpProp;
-        m_pProvider->getProperty( rValue.Name, aTmpProp );
+        m_pProvider->getProperty( rName, aTmpProp );
 
         if ( aTmpProp.Attributes & beans::PropertyAttribute::READONLY )
         {
@@ -1729,8 +1463,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         // Mandatory props.
         //////////////////////////////////////////////////////////////////
 
-        if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+        if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1738,8 +1471,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        else if ( rName.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1747,8 +1480,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        else if ( rName.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1756,8 +1489,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                 "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
-        else if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
         {
             rtl::OUString aNewValue;
             if ( rValue.Value >>= aNewValue )
@@ -1809,7 +1541,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 xInfo = getPropertySetInfo( xEnv,
                                             sal_False /* don't cache data */ );
 
-            if ( !xInfo->hasPropertyByName( rValue.Name ) )
+            if ( !xInfo->hasPropertyByName( rName ) )
             {
                 // Check, whether property exists. Skip otherwise.
                 // PROPPATCH::set would add the property automatically, which
@@ -1821,8 +1553,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 continue;
             }
 
-            if ( rValue.Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+            if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
@@ -1830,7 +1561,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            else if ( rValue.Name.equalsAsciiL(
+            else if ( rName.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
             {
                 // Read-only property!
@@ -1839,7 +1570,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            else if ( rValue.Name.equalsAsciiL(
+            else if ( rName.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
             {
                 // Read-only property!
@@ -1848,7 +1579,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                     "Property is read-only!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
-            else if ( rValue.Name.equalsAsciiL(
+            else if ( rName.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
             {
                 // Read-only property!
@@ -1879,7 +1610,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 if ( bDAV )
                 {
                     // Property value will be set on server.
-                    ProppatchValue aValue( PROPSET, rValue.Name, rValue.Value );
+                    ProppatchValue aValue( PROPSET, rName, rValue.Value );
                     aProppatchValues.push_back( aValue );
 
                     // remember position within sequence of values (for
@@ -1902,14 +1633,13 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         try
                         {
                             uno::Any aOldValue
-                                = xAdditionalPropSet->getPropertyValue(
-                                                                rValue.Name );
+                                = xAdditionalPropSet->getPropertyValue( rName );
                             if ( aOldValue != rValue.Value )
                             {
                                 xAdditionalPropSet->setPropertyValue(
-                                                rValue.Name, rValue.Value );
+                                                        rName, rValue.Value );
 
-                                aEvent.PropertyName = rValue.Name;
+                                aEvent.PropertyName = rName;
                                 aEvent.OldValue     = aOldValue;
                                 aEvent.NewValue     = rValue.Value;
 
@@ -2625,8 +2355,12 @@ sal_Bool Content::isFolder(
             return sal_False;
 
         ContentProperties aContentProperties( resources[ 0 ] );
-        sal_Bool bFolder;
-        return ( aContentProperties.queryIsFolder( bFolder ) && bFolder );
+        const uno::Any & rValue
+            = aContentProperties.getValue(
+                rtl::OUString::createFromAscii( "IsFolder" ) );
+        sal_Bool bFolder = sal_False;
+        rValue >>= bFolder;
+        return bFolder;
     }
 }
 

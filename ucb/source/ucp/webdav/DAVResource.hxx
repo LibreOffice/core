@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResource.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ struct DAVResource
     ::rtl::OUString uri;
     std::vector < com::sun::star::beans::PropertyValue > properties;
 
+    DAVResource() {}
     DAVResource( const ::rtl::OUString & inUri ) : uri( inUri ) {}
 };
 

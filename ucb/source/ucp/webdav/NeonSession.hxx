@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-03 13:06:53 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,101 +150,132 @@ class NeonSession : public DAVSession
         void setUserName( const rtl::OUString & rUserName );
         void setPassWord( const rtl::OUString & rPassWord );
 
-        virtual void OPTIONS( const ::rtl::OUString &  inPath,
-                              DAVCapabilities & outCapabilities,
-                              const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        OPTIONS( const ::rtl::OUString &  inPath,
+                 DAVCapabilities & outCapabilities,
+                 const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
         // allprop & named
-        virtual void PROPFIND( const ::rtl::OUString &                inPath,
-                                  const Depth                             inDepth,
-                                  const std::vector< ::rtl::OUString > & inPropNames,
-                                  std::vector< DAVResource > &            ioResources,
-                               const com::sun::star::uno::Reference<
-                                com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        PROPFIND( const ::rtl::OUString & inPath,
+                  const Depth inDepth,
+                  const std::vector< ::rtl::OUString > & inPropNames,
+                  std::vector< DAVResource > & ioResources,
+                  const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
         // propnames
-        virtual void PROPFIND( const ::rtl::OUString &         inPath,
-                               const Depth                     inDepth,
-                               std::vector< DAVResourceInfo >& ioResInfo,
-                               const com::sun::star::uno::Reference<
-                                 com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        PROPFIND( const ::rtl::OUString & inPath,
+                  const Depth inDepth,
+                  std::vector< DAVResourceInfo >& ioResInfo,
+                  const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
-        virtual void PROPPATCH( const ::rtl::OUString &               inPath,
-                                 const std::vector< ProppatchValue > & inValues,
-                                   const com::sun::star::uno::Reference<
-                                     com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        PROPPATCH( const ::rtl::OUString & inPath,
+                   const std::vector< ProppatchValue > & inValues,
+                   const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & inEnv )
         throw( DAVException );
 
-        virtual void HEAD( const ::rtl::OUString &  inPath,
-                           const std::vector< ::rtl::OUString > & inHeaderNames,
-                           std::vector< DAVResource > & ioResources,
-                           const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        HEAD( const ::rtl::OUString &  inPath,
+              const std::vector< ::rtl::OUString > & inHeaderNames,
+              DAVResource & ioResource,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw( DAVException );
 
-        virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-                        GET( const ::rtl::OUString & inPath,
-                             const com::sun::star::uno::Reference<
-                              com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual com::sun::star::uno::Reference<
+            com::sun::star::io::XInputStream >
+        GET( const ::rtl::OUString & inPath,
+             const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
-        virtual void GET( const ::rtl::OUString &               inPath,
-                         com::sun::star::uno::Reference<
-                          com::sun::star::io::XOutputStream > & ioOutputStream,
-                         const com::sun::star::uno::Reference<
-                         com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        GET( const ::rtl::OUString & inPath,
+             com::sun::star::uno::Reference<
+                com::sun::star::io::XOutputStream > &  ioOutputStream,
+             const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
-
-        virtual void PUT( const ::rtl::OUString &               inPath,
-                          const com::sun::star::uno::Reference<
-                         com::sun::star::io::XInputStream > &   inInputStream,
-                        const com::sun::star::uno::Reference<
-                         com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual com::sun::star::uno::Reference<
+            com::sun::star::io::XInputStream >
+        GET( const ::rtl::OUString & inPath,
+             const std::vector< ::rtl::OUString > & inHeaderNames,
+             DAVResource & ioResource,
+             const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
-        virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-                        POST( const rtl::OUString & inPath,
-                           const rtl::OUString & rContentType,
-                           const rtl::OUString & rReferer,
-                           const com::sun::star::uno::Reference<
-                            com::sun::star::io::XInputStream > & inInputStream,
-                        const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        GET( const ::rtl::OUString & inPath,
+             com::sun::star::uno::Reference<
+                com::sun::star::io::XOutputStream > & ioOutputStream,
+             const std::vector< ::rtl::OUString > & inHeaderNames,
+             DAVResource & ioResource,
+             const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
-        virtual void POST( const rtl::OUString & inPath,
-                           const rtl::OUString & rContentType,
-                           const rtl::OUString & rReferer,
-                           const com::sun::star::uno::Reference<
-                            com::sun::star::io::XInputStream > & inInputStream,
-                           com::sun::star::uno::Reference<
-                            com::sun::star::io::XOutputStream > & oOutputStream,
-                           const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual void
+        PUT( const ::rtl::OUString & inPath,
+             const com::sun::star::uno::Reference<
+                com::sun::star::io::XInputStream > & inInputStream,
+             const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
-        virtual void MKCOL( const ::rtl::OUString & inPath,
-                            const com::sun::star::uno::Reference<
-                             com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        virtual com::sun::star::uno::Reference<
+            com::sun::star::io::XInputStream >
+        POST( const rtl::OUString & inPath,
+              const rtl::OUString & rContentType,
+              const rtl::OUString & rReferer,
+              const com::sun::star::uno::Reference<
+                com::sun::star::io::XInputStream > & inInputStream,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& inEnv )
             throw ( DAVException );
 
-        virtual void COPY( const ::rtl::OUString &  inSourceURL,
-                              const ::rtl::OUString &   inDestinationURL,
-                           const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv,
-                              sal_Bool                  inOverWrite )
+        virtual void
+        POST( const rtl::OUString & inPath,
+              const rtl::OUString & rContentType,
+              const rtl::OUString & rReferer,
+              const com::sun::star::uno::Reference<
+                com::sun::star::io::XInputStream > & inInputStream,
+              com::sun::star::uno::Reference<
+                com::sun::star::io::XOutputStream > & oOutputStream,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
             throw ( DAVException );
 
-        virtual void MOVE( const ::rtl::OUString &  inSourceURL,
-                              const ::rtl::OUString &   inDestinationURL,
-                           const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment >& inEnv,
-                              sal_Bool                  inOverWrite )
+        virtual void
+        MKCOL( const ::rtl::OUString & inPath,
+               const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment > & inEnv )
+            throw ( DAVException );
+
+        virtual void
+        COPY( const ::rtl::OUString & inSourceURL,
+              const ::rtl::OUString & inDestinationURL,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& inEnv,
+              sal_Bool inOverWrite )
+            throw ( DAVException );
+
+        virtual void
+        MOVE( const ::rtl::OUString & inSourceURL,
+              const ::rtl::OUString & inDestinationURL,
+              const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& inEnv,
+              sal_Bool inOverWrite )
             throw ( DAVException );
 
         virtual void DESTROY( const ::rtl::OUString & inPath,
@@ -274,12 +305,12 @@ class NeonSession : public DAVSession
             throw ( DAVException );
 
         // Create a Neon session for server at supplied host & port
-        HttpSession *   CreateSession( const ::rtl::OUString & inScheme,
-                                       const ::rtl::OUString & inHostName,
-                                       int inPort,
-                                       const ::rtl::OUString & inProxyName,
-                                       int inProxyPort,
-                                       const ::rtl::OUString & inUserInfo )
+        HttpSession * CreateSession( const ::rtl::OUString & inScheme,
+                                     const ::rtl::OUString & inHostName,
+                                     int inPort,
+                                     const ::rtl::OUString & inProxyName,
+                                     int inProxyPort,
+                                     const ::rtl::OUString & inUserInfo )
             throw( DAVException );
 
         // Note: Uncomment the following if locking support is required
@@ -291,6 +322,7 @@ class NeonSession : public DAVSession
         static int GET( ne_session * sess,
                         const char * uri,
                         ne_block_reader reader,
+                        ne_header_handler handler,
                         void * userdata );
 
         // Buffer-based PUT implementation. Neon only has file descriptor-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ public:
 
     virtual void HEAD( const ::rtl::OUString &  inPath,
                        const std::vector< ::rtl::OUString > & inHeaderNames,
-                       std::vector< DAVResource > & ioResources,
+                       DAVResource & ioResource,
                        const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment >& inEnv )
         throw( DAVException ) = 0;
@@ -170,6 +170,22 @@ public:
 
     virtual void    GET( const ::rtl::OUString & inPath,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& o,
+        const com::sun::star::uno::Reference<
+         com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        throw( DAVException ) = 0;
+
+    virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
+                    GET( const ::rtl::OUString & inPath,
+                         const std::vector< ::rtl::OUString > & inHeaderNames,
+                         DAVResource & ioResource,
+                         const com::sun::star::uno::Reference<
+                          com::sun::star::ucb::XCommandEnvironment >& inEnv )
+        throw( DAVException ) = 0;
+
+    virtual void    GET( const ::rtl::OUString & inPath,
+        com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& o,
+        const std::vector< ::rtl::OUString > & inHeaderNames,
+        DAVResource & ioResource,
         const com::sun::star::uno::Reference<
          com::sun::star::ucb::XCommandEnvironment >& inEnv )
         throw( DAVException ) = 0;

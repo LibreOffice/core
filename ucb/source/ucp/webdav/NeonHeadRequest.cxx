@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonHeadRequest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,12 +149,11 @@ NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
                                   const rtl::OUString & inPath,
                                   const std::vector< ::rtl::OUString > &
                                     inHeaderNames,
-                                  std::vector< DAVResource >& ioResources,
+                                  DAVResource & ioResource,
                                   int & nError )
 {
-    // Add own entry to resources list.
-    ioResources.clear();
-    ioResources.push_back( DAVResource( inPath ) );
+    ioResource.uri = inPath;
+    ioResource.properties.clear();
 
     // Create and dispatch HEAD request. Install catcher for all response
     // header fields.
@@ -164,7 +163,7 @@ NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
                                             inPath,
                                             RTL_TEXTENCODING_UTF8 ) );
 
-    NeonHeadRequestContext aCtx( &ioResources.back(), &inHeaderNames );
+    NeonHeadRequestContext aCtx( &ioResource, &inHeaderNames );
     ne_add_response_header_catcher( req, NHR_ResponseHeaderCatcher, &aCtx );
 
     nError = ne_request_dispatch( req );
@@ -173,10 +172,6 @@ NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
         nError = NE_ERROR;
 
     ne_request_destroy( req );
-
-    // #87585# - Sometimes neon lies (because some servers lie).
-    if ( ( nError == NE_OK ) && ioResources.empty() )
-        nError = NE_ERROR;
 }
 
 // -------------------------------------------------------------------

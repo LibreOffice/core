@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
+ *  last change: $Author: kso $ $Date: 2002-09-16 14:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,28 +62,29 @@
 #ifndef _WEBDAV_UCP_CONTENTPROPERTIES_HXX
 #define _WEBDAV_UCP_CONTENTPROPERTIES_HXX
 
+#include <memory>
 #include <vector>
 #include <hash_map>
 
-#ifndef _COM_SUN_STAR_UCB_LINK_HPP_
-#include <com/sun/star/ucb/Link.hpp>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UCB_LOCK_HPP_
-#include <com/sun/star/ucb/Lock.hpp>
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UCB_LOCKENTRY_HPP_
-#include <com/sun/star/ucb/LockEntry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
+    struct PropertyValue;
 } } } }
 
 namespace webdav_ucp
 {
+
+struct DAVResource;
 
 //=========================================================================
 
@@ -131,7 +132,12 @@ public:
     // Micro props for non-existing contents.
     ContentProperties( const rtl::OUString & rTitle );
 
-    inline ~ContentProperties();
+    ContentProperties( const ContentProperties & rOther );
+
+    bool contains( const rtl::OUString & rName ) const;
+
+    const com::sun::star::uno::Any &
+    getValue( const rtl::OUString & rName ) const;
 
     // Maps the UCB property names contained in rProps with their DAV property
     // counterparts, if possible. All unmappable properties will be included
@@ -159,197 +165,40 @@ public:
                                     std::vector< rtl::OUString > & resources,
                                     bool bIncludeUnmatched = true );
 
-    sal_Bool isTrailingSlash() const { return bTrailingSlash; }
+    // Returns a list of HTTP header names that can be mapped to UCB property
+    // names.
+    static void getMappableHTTPHeaders(
+         std::vector< rtl::OUString > & rHeaderNames );
 
-    /////////////////////////////////////////////////////////////////////////
-    // UCB properties
-    /////////////////////////////////////////////////////////////////////////
-    sal_Bool queryTitle( rtl::OUString & rTitle ) const
-    {
-        rTitle = aTitle;
-        return true;
-    }
+    // return true, if all properties contained in rProps are contained in
+    // this ContentProperties instance. Otherwiese, false will be returned.
+    // rNamesNotContained contain the missing names.
+    bool containsAllNames( const com::sun::star::uno::Sequence<
+                            com::sun::star::beans::Property >& rProps,
+                           std::vector< rtl::OUString > & rNamesNotContained );
 
-    sal_Bool queryEscapedTitle( rtl::OUString & rTitle ) const
-    {
-        rTitle = aEscapedTitle;
-        return true;
-    }
+    // adds all properties described by rProps that are actually contained in
+    // rContentProps to this instance. In case of duplicates the value
+    // already contained in this will left anchanged.
+    void add( const std::vector< rtl::OUString > & rProps,
+              const ContentProperties & rContentProps );
 
-    sal_Bool queryIsFolder( sal_Bool & rbFolder ) const
-    {
-        if ( pIsFolder ) rbFolder = *pIsFolder;
-        return !!pIsFolder;
-    }
+    bool isTrailingSlash() const { return m_bTrailingSlash; }
 
-    sal_Bool queryIsDocument( sal_Bool & rbDocument ) const
-    {
-        if ( pIsDocument ) rbDocument = *pIsDocument;
-        return !!pIsDocument;
-    }
+    const rtl::OUString & getEscapedTitle() const { return m_aEscapedTitle; }
 
-    sal_Bool querySize( sal_Int64 & rSize ) const
-    {
-        if ( pSize ) rSize = *pSize;
-        return !!pSize;
-    }
-
-    sal_Bool queryDateCreated( ::com::sun::star::util::DateTime & rDate ) const
-    {
-        if ( pDateCreated ) rDate = *pDateCreated;
-        return !!pDateCreated;
-    }
-
-    sal_Bool queryDateModified( ::com::sun::star::util::DateTime & rDate ) const
-    {
-        if ( pDateModified ) rDate = *pDateModified;
-        return !!pDateModified;
-    }
-
-    sal_Bool queryMediaType( rtl::OUString & rType ) const
-    {
-        if ( pMediaType ) rType = *pMediaType;
-        return !!pMediaType;
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    // DAV properties
-    /////////////////////////////////////////////////////////////////////////
-
-    sal_Bool queryDAVCreationDate( rtl::OUString & rDate ) const
-    {
-        if ( pcreationdate ) rDate = *pcreationdate;
-        return !!pcreationdate;
-    }
-
-    sal_Bool queryDAVDisplayName( rtl::OUString & rName ) const
-    {
-        if ( pdisplayname ) rName = *pdisplayname;
-        return !!pdisplayname;
-    }
-
-    sal_Bool queryDAVContentType( rtl::OUString & rType ) const
-    {
-        if ( pgetcontenttype ) rType = *pgetcontenttype;
-        return !!pgetcontenttype;
-    }
-
-    sal_Bool queryDAVContentLanguage( rtl::OUString & rLang ) const
-    {
-        if ( pgetcontentlanguage ) rLang = *pgetcontentlanguage;
-        return !!pgetcontentlanguage;
-    }
-
-    sal_Bool queryDAVContentLength( rtl::OUString & rLen ) const
-    {
-        if ( pgetcontentlength ) rLen = *pgetcontentlength;
-        return !!pgetcontentlength;
-    }
-
-    sal_Bool queryDAVETag( rtl::OUString & rTag ) const
-    {
-        if ( pgetetag ) rTag = *pgetetag;
-        return !!pgetetag;
-    }
-
-    sal_Bool queryDAVLastModified( rtl::OUString & rDate ) const
-    {
-        if ( pgetlastmodified ) rDate = *pgetlastmodified;
-        return !!pgetlastmodified;
-    }
-
-    sal_Bool queryDAVLockDiscovery(
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::ucb::Lock >& rLocks ) const
-    {
-        if ( plockdiscovery ) rLocks = *plockdiscovery;
-        return !!plockdiscovery;
-    }
-
-    sal_Bool queryDAVResourceType( rtl::OUString & rType ) const
-    {
-        if ( presourcetype ) rType = *presourcetype;
-        return !!presourcetype;
-    }
-
-    sal_Bool queryDAVSource(
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::ucb::Link >& rLinks ) const
-    {
-        if ( psource ) rLinks = *psource;
-        return !!psource;
-    }
-
-    sal_Bool queryDAVSupportedLock(
-        ::com::sun::star::uno::Sequence<
-            ::com::sun::star::ucb::LockEntry >& rEntries ) const
-    {
-        if ( psource ) rEntries = *psupportedlock;
-        return !!psupportedlock;
-    }
-
-    /////////////////////////////////////////////////////////////////////////
-    // Other properties (i.e. HTTP entity headers, DAV dead properties)
-    /////////////////////////////////////////////////////////////////////////
-
-    const PropertyValueMap * getOtherProperties() const { return pOtherProps; }
+    const std::auto_ptr< PropertyValueMap > getProperties() const
+    { return m_xProps; }
 
 private:
-    // Mandatory UCB props.
-    ::rtl::OUString aTitle;           // Title
-    ::rtl::OUString aEscapedTitle;    // escaped Title
-    sal_Bool bTrailingSlash;
+    ::rtl::OUString m_aEscapedTitle;  // escaped Title
+    std::auto_ptr< PropertyValueMap > m_xProps;
+    bool m_bTrailingSlash;
 
-    sal_Bool * pIsFolder;
-    sal_Bool * pIsDocument;
+    static com::sun::star::uno::Any m_aEmptyAny;
 
-    // Optional UCB props.
-    sal_Int64 *                        pSize;         // Size <- getcontentlength
-    ::com::sun::star::util::DateTime * pDateCreated;  // DateCreated <- creationdate
-    ::com::sun::star::util::DateTime * pDateModified; // DateModified <- getlastmodified
-
-    ::rtl::OUString * pMediaType;
-
-    // DAV props.
-    ::rtl::OUString * pgetcontenttype;
-    ::rtl::OUString * pcreationdate;
-    ::rtl::OUString * pdisplayname;
-    ::rtl::OUString * pgetcontentlanguage;
-    ::rtl::OUString * pgetcontentlength;
-    ::rtl::OUString * pgetetag;
-    ::rtl::OUString * pgetlastmodified;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::ucb::Lock > * plockdiscovery;
-    ::rtl::OUString * presourcetype;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::ucb::Link > * psource;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::ucb::LockEntry > * psupportedlock;
-
-    PropertyValueMap * pOtherProps;
+    ContentProperties & operator=( const ContentProperties & ); // n.i.
 };
-
-inline ContentProperties::~ContentProperties()
-{
-    delete pIsFolder;
-    delete pIsDocument;
-      delete pSize;
-      delete pDateCreated;
-      delete pDateModified;
-    delete pMediaType;
-      delete pgetcontenttype;
-      delete pcreationdate;
-      delete pdisplayname;
-      delete pgetcontentlanguage;
-      delete pgetcontentlength;
-      delete pgetetag;
-      delete pgetlastmodified;
-    delete plockdiscovery;
-      delete presourcetype;
-    delete psource;
-    delete psupportedlock;
-    delete pOtherProps;
-}
 
 };
 
