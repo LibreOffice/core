@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:57:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 13:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,13 @@ void FatalError(OUString const & aMessage)
     aBootstrapFailedBox.Execute();
 }
 
+static bool ShouldSuppressUI(CommandLineArgs* pCmdLine)
+{
+    return  pCmdLine->IsInvisible() ||
+            pCmdLine->IsHeadless() ||
+            pCmdLine->IsQuickstart();
+}
+
 CommandLineArgs* Desktop::GetCommandLineArgs()
 {
     static CommandLineArgs* pArgs = 0;
@@ -621,6 +628,7 @@ void Desktop::Init()
     }
 
     ::comphelper::setProcessServiceFactory( rSMgr );
+
     // prepare language
     LanguageSelection::prepareLanguage();
 
@@ -1288,6 +1296,11 @@ void Desktop::Main()
         // Startup screen
         OpenSplashScreen();
 
+        // Use a temporary error handler during user install.
+        ConfigurationErrorHandler aConfigErrHandler;
+        if (!ShouldSuppressUI(GetCommandLineArgs()))
+            aConfigErrHandler.activate();
+
         UserInstall::UserInstallError instErr_lang = UserInstall::configureLanguage();
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
         if ( instErr_lang != UserInstall::E_None || instErr_fin != UserInstall::E_None)
@@ -1345,6 +1358,10 @@ void Desktop::Main()
 
         com::sun::star::uno::setCurrentContext(
             new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
+
+        ConfigurationErrorHandler aConfigErrHandler;
+        if (!ShouldSuppressUI(pCmdLineArgs))
+            aConfigErrHandler.activate();
 
         // check if accessibility is enabled but not working and allow to quit
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
@@ -1618,7 +1635,10 @@ void Desktop::Main()
     // Post event to enable acceptors
     Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
 
-    // Acquire solar mutex just before we enter our message loop
+    // The configuration error handler currently is only for startup
+    aConfigErrHandler.deactivate();
+
+   // Acquire solar mutex just before we enter our message loop
     if ( nAcquireCount )
         Application::AcquireSolarMutex( nAcquireCount );
 
