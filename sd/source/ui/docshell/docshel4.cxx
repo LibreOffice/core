@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-28 12:34:45 $
+ *  last change: $Author: cl $ $Date: 2001-11-05 15:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,6 +936,9 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
 |* SaveAsOwnFormat: wenn es eine Dokumentvorlage werden soll,
 |*
 \************************************************************************/
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 BOOL SdDrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
@@ -951,16 +954,24 @@ BOOL SdDrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
         // alle Textobjekte der betroffenen Standard-, Notiz- und
         // Masterpages werden ueber die Namensaenderung informiert
 
+        String aLayoutName;
+
         SfxStringItem* pLayoutItem;
         if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, FALSE, (const SfxPoolItem**) & pLayoutItem ) == SFX_ITEM_SET )
         {
-            String aLayoutName( pLayoutItem->GetValue() );
-            String aOldPageLayoutName = pDoc->GetSdPage(0, PK_STANDARD)->GetLayoutName();
-            pDoc->RenameLayoutTemplate(aOldPageLayoutName, aLayoutName);
+            aLayoutName = pLayoutItem->GetValue();
         }
         else
         {
-            DBG_ERROR( "No SID_TEMPLATENAME Item for SaveAsOwnFormat as own template format" );
+            INetURLObject aURL( rMedium.GetName() );
+            aURL.removeExtension();
+            aLayoutName = aURL.getName();
+        }
+
+        if( aLayoutName.Len() )
+        {
+            String aOldPageLayoutName = pDoc->GetSdPage(0, PK_STANDARD)->GetLayoutName();
+            pDoc->RenameLayoutTemplate(aOldPageLayoutName, aLayoutName);
         }
     }
 
