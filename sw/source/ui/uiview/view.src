@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:34:18 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ QueryBox DLG_WRAP
     MESSAGE [ finnish ] = "Jatketaanko tarkistamista asiakirjan alusta?" ;
     MESSAGE [ danish ] = "Vil du fortsætte kontrollen fra dokumentets start?" ;
     MESSAGE [ french ] = "Voulez-vous continuer la vérification depuis le début du document?" ;
-    MESSAGE [ swedish ] = "Vill Du fortsätta kontrollen i början på dokumentetet?" ;
+    MESSAGE [ swedish ] = "Vill Du fortsätta kontrollen i början på dokumentet?" ;
     MESSAGE [ dutch ] = "Wilt u dat de spellingcontrole wordt voortgezet bij het begin van het document?" ;
     MESSAGE [ spanish ] = "¿Desea continuar la revisión desde el comienzo del documento?" ;
     MESSAGE [ english_us ] = "Do you want to continue checking at the beginning of the document?" ;
@@ -180,7 +180,7 @@ QueryBox DLG_SPECIAL
     MESSAGE [ finnish ] = "Haluatko tarkistaa erikoisalueet?" ;
     MESSAGE [ danish ] = "Vil du kontrollere særområderne?" ;
     MESSAGE [ french ] = "Voulez-vous vérifier les zones spéciales?" ;
-    MESSAGE [ swedish ] = "Vill Du kontrollera specialområdena?" ;
+    MESSAGE [ swedish ] = "Vill Du kontrollera specialområden?" ;
     MESSAGE [ dutch ] = "Wilt u de speciale bereiken controleren?" ;
     MESSAGE [ spanish ] = "¿Desea verificar las áreas especiales?" ;
     MESSAGE [ english_us ] = "Do you want check the special regions?" ;
@@ -236,7 +236,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE [ finnish ] = "Erikoisalueiden tarkistus ei ole käytössä. Korjausluetaanko silti?" ;
     MESSAGE [ danish ] = "Stavekontrol af særområder er slået fra, skal der kontrolleres alligevel?" ;
     MESSAGE [ french ] = "La vérification dans les zones spéciales est désactivée. Vérifier tout de même ?" ;
-    MESSAGE [ swedish ] = "Kontroll av specialområden är avstängd. Korrekturläs ändå?" ;
+    MESSAGE [ swedish ] = "Kontroll av specialområden är avstängd. Kontrollera ändå?" ;
     MESSAGE [ dutch ] = "De functie 'Speciale bereiken controleren' is uitgeschakeld. Controle toch uitvoeren?" ;
     MESSAGE [ spanish ] = "La verificación de las áreas especiales está desactivada, ¿Desea de todas maneras verificar?" ;
     MESSAGE [ english_us ] = "Check special regions is deactivated. Check anyway?" ;
@@ -466,7 +466,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message [ danish ] = "Kilden er ikke specifiseret." ;
     Message [ italian ] = "Sorgente non specificata." ;
     Message [ spanish ] = "No se especificó la fuente." ;
-    Message [ french ] = "Source non configurée." ;
+    Message [ french ] = "Source non définie." ;
     Message [ dutch ] = "Bron niet aangegeven." ;
     Message [ portuguese_brazilian ] = "Quelle nicht gesetzt." ;
     Message [ portuguese ] = "Fonte não especificada." ;
@@ -574,7 +574,7 @@ String STR_ERROR_NOLANG
     TEXT [ finnish ] = "No language choosed in checked region." ;
     TEXT [ danish ] = "Der er ikke angivet et sprog i det kontrollerede område." ;
     TEXT [ french ] = "Aucune langue choisie pour région définie." ;
-    TEXT [ swedish ] = "Inget språk inställt i det stavningskontrollerade området." ;
+    TEXT [ swedish ] = "Inget språk är inställt i det kontrollerade området." ;
     TEXT [ dutch ] = "In gecontroleerd bereik geen taal vastgelegd." ;
     TEXT [ spanish ] = "No se ha seleccionado ningún idioma en el área revisada." ;
     TEXT [ english_us ] = "No language is selected in the proofed section." ;
