@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-20 10:41:36 $
+ *  last change: $Author: tl $ $Date: 2002-09-19 08:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,50 +924,32 @@ SvxAlternativeSpelling SvxGetAltSpelling(
     if (rHyphWord.is() && rHyphWord->isAlternativeSpelling())
     {
         OUString aWord( rHyphWord->getWord() ),
-                 aHyphenatedWord( rHyphWord->getHyphenatedWord() );
+                 aAltWord( rHyphWord->getHyphenatedWord() );
         INT16   nHyphenationPos     = rHyphWord->getHyphenationPos(),
                 nHyphenPos          = rHyphWord->getHyphenPos();
+        INT16   nLen    = aWord.getLength();
+        INT16   nAltLen = aAltWord.getLength();
         const sal_Unicode *pWord    = aWord.getStr(),
-                          *pAltWord = aHyphenatedWord.getStr();
+                          *pAltWord = aAltWord.getStr();
 
-        // at least char changes directly left or right to the hyphen
-        // should(!) be handled properly...
-        //! nHyphenationPos and nHyphenPos differ at most by 1 (see above)
-        //! Beware: eg "Schiffahrt" in German (pre spelling reform)
-        //! proves to be a bit nasty (nChgPosLeft and nChgPosRight overlap
-        //! to an extend.)
+        // count number of chars from the left to the
+        // hyphenation pos / hyphen pos that are equal
+        INT16 nL = 0;
+        while (nL <= nHyphenationPos && nL <= nHyphenPos
+               && pWord[ nL ] == pAltWord[ nL ])
+            ++nL;
+        // count number of chars from the right to the
+        // hyphenation pos / hyphen pos that are equal
+        INT16 nR = 0;
+        INT32 nIdx    = nLen - 1;
+        INT32 nAltIdx = nAltLen - 1;
+        while (nIdx > nHyphenationPos && nAltIdx > nHyphenPos
+               && pWord[ nIdx-- ] == pAltWord[ nAltIdx-- ])
+            ++nR;
 
-        // find first different char from left
-        sal_Int32   nPosL    = 0,
-                    nAltPosL = 0;
-        for (INT16 i = 0 ;  pWord[ nPosL ] == pAltWord[ nAltPosL ];  nPosL++, nAltPosL++, i++)
-        {
-            // restrict changes area beginning to the right to
-            // the char immediately following the hyphen.
-            //! serves to insert the additional "f" in "Schiffahrt" at
-            //! position 5 rather than position 6.
-            if (i >= nHyphenationPos + 1)
-                break;
-        }
-
-        // find first different char from right
-        sal_Int32   nPosR    = aWord.getLength() - 1,
-                    nAltPosR = aHyphenatedWord.getLength() - 1;
-        for ( ;  nPosR >= nPosL  &&  nAltPosR >= nAltPosL
-                    &&  pWord[ nPosR ] == pAltWord[ nAltPosR ];
-              nPosR--, nAltPosR--)
-            ;
-
-        INT16   nChgLen = nPosR - nPosL + 1;
-        DBG_ASSERT( nChgLen >= 0, "nChgLen < 0");
-
-        sal_Int32 nTxtStart = nPosL;
-        sal_Int32 nTxtLen   = nAltPosL - nPosL + 1;
-        OUString aRplc( aHyphenatedWord.copy( nTxtStart, nTxtLen ) );
-
-        aRes.aReplacement       = aRplc;
-        aRes.nChangedPos        = (INT16) nPosL;
-        aRes.nChangedLength     = nChgLen;
+        aRes.aReplacement       = OUString( aAltWord.copy( nL, nAltLen - nL - nR ) );
+        aRes.nChangedPos        = (INT16) nL;
+        aRes.nChangedLength     = nLen - nL - nR;
         aRes.bIsAltSpelling     = TRUE;
         aRes.xHyphWord          = rHyphWord;
     }
