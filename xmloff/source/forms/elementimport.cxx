@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ namespace xmloff
             return;
 
         // set all the properties we collected
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         // check if the object has all the properties
         // (We do this in the non-pro version only. Doing it all the time would be much to expensive)
         Reference< XPropertySetInfo > xPropInfo = m_xElement->getPropertySetInfo();
@@ -602,7 +602,7 @@ namespace xmloff
         Property aProp = _rxPropInfo->getPropertyByName(_rPropValue.Name);
         // the untranslated string value as read in handleAttribute
         ::rtl::OUString sValue;
-    #ifdef _DEBUG
+    #if OSL_DEBUG_LEVEL > 0
         sal_Bool bSuccess =
     #endif
         _rPropValue.Value >>= sValue;
