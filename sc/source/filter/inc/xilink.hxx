@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:03:54 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@ enum XclImpExtNameType
 class XclImpExtName
 {
 private:
+    typedef ::std::auto_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
+
+    XclImpCachedMatrixPtr       mpDdeMatrix;        /// Cached results of the DDE link.
     String                      maName;             /// The name of the external name.
     String                      maAddInName;        /// The converted Calc add-in function name.
     sal_uInt32                  mnStorageId;        /// Storage ID for OLE object storages.
@@ -134,6 +137,11 @@ private:
 public:
     /** Reads the external name from the stream. */
     explicit                    XclImpExtName( XclImpStream& rStrm );
+
+    /** Create and apply the cached list of this DDE Link to the document. */
+    void                        CreateDdeData( ScDocument& rDoc,
+                                    const String& rApplc,
+                                    const String& rExtDoc) const;
 
     inline XclImpExtNameType    GetType() const         { return meType; }
     inline const String&        GetName() const         { return maName; }
@@ -158,10 +166,6 @@ public:
 /** Contains the address and value of an external referenced cell. */
 class XclImpCrn : public XclImpCachedValue
 {
-private:
-    sal_uInt16                  mnCol;          /// Column index of the external cell.
-    sal_uInt16                  mnRow;          /// Row index of the external cell.
-
 public:
     /** Reads a cached value and stores it with its cell address. */
     explicit                    XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow );
