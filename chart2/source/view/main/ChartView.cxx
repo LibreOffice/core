@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-14 15:25:54 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 16:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@ using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
 
+ChartView::~ChartView()
+{
+}
+
 //static
 ChartView* ChartView::createView(
                   const uno::Reference< uno::XComponentContext >& xCC
@@ -136,6 +140,7 @@ ChartViewImpl::ChartViewImpl(
     , m_xChartModel(xChartModel)
     , m_xShapeFactory(NULL)
     , m_xDrawPage(NULL)
+    , m_xDrawPages(NULL)
     , m_pNumberFormatterWrapper( pNumberFormatterWrapper )
     , m_pVDiagram(NULL)
     , m_pVLegend(NULL)
@@ -146,12 +151,13 @@ ChartViewImpl::ChartViewImpl(
     m_xShapeFactory = uno::Reference<lang::XMultiServiceFactory>( xDrawPagesSuplier, uno::UNO_QUERY );
 
     //create draw page:
-    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSuplier->getDrawPages ();
-    m_xDrawPage = xDrawPages->insertNewByIndex ( 0 );
+    m_xDrawPages = xDrawPagesSuplier->getDrawPages ();
+    m_xDrawPage = m_xDrawPages->insertNewByIndex ( 0 );
 }
 
 ChartViewImpl::~ChartViewImpl()
 {
+    m_xDrawPages->remove( m_xDrawPage );
     m_xDrawPage = NULL;
 }
 
