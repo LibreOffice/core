@@ -87,7 +87,7 @@ fi
 if [ -x /bin/rpm ]
 then
   GNOMERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-gnome*" -print`
-  /bin/rpm -i --test $GNOMERPM $CORERPM 2>/dev/null || GNOMERPM=""
+  /bin/rpm -i --test $GNOMERPM $CORERPM01 2>/dev/null || GNOMERPM=""
 fi
 
 echo "Packages found:"
