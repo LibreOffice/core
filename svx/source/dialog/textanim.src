@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 08:01:24 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
             < "Kein Effekt" ; Default ; > ;
             < "Blinken" ; Default ; > ;
             < "Durchlaufen" ; Default ; > ;
-            < "Hin- und zurücklaufen" ; Default ; > ;
+            < "Hin- und zur?klaufen" ; Default ; > ;
             < "Reinlaufen" ; Default ; > ;
         };
         stringlist [ swedish ] =
@@ -295,7 +295,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ russian ] = "Ââåğõ";
         QuickHelpText[ greek ] = "Ğñïò ôá ğÜíù";
         QuickHelpText[ polish ] = "W górê";
-        QuickHelpText[ japanese ] = "ã‚Ö";
+        QuickHelpText[ japanese ] = "ã‚Ö!";
         QuickHelpText[ korean ] = "À§·Î!";
         QuickHelpText[ chinese_simplified ] = "ÏòÉÏ";
         QuickHelpText[ chinese_traditional ] = "¦V¤W";
@@ -325,7 +325,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ russian ] = "Âëåâî";
         QuickHelpText[ greek ] = "Ğñïò ôá áñéóôåñÜ";
         QuickHelpText[ polish ] = "W lewo";
-        QuickHelpText[ japanese ] = "¶‚Ö";
+        QuickHelpText[ japanese ] = "¶‚Ö!";
         QuickHelpText[ korean ] = "¿ŞÂÊÀ¸·Î!";
         QuickHelpText[ chinese_simplified ] = "Ïò×ó";
         QuickHelpText[ chinese_traditional ] = "¦V¥ª";
@@ -355,7 +355,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ russian ] = "Âïğàâî";
         QuickHelpText[ greek ] = "Ğñïò ôá äåîéÜ";
         QuickHelpText[ polish ] = "W prawo";
-        QuickHelpText[ japanese ] = "‰E‚Ö";
+        QuickHelpText[ japanese ] = "‰E‚Ö!";
         QuickHelpText[ korean ] = "¿À¸¥ÂÊÀ¸·Î!";
         QuickHelpText[ chinese_simplified ] = "ÏòÓÒ";
         QuickHelpText[ chinese_traditional ] = "¦V¥k";
@@ -385,7 +385,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ russian ] = "Âíèç";
         QuickHelpText[ greek ] = "Ğñïò ôá êÜôù";
         QuickHelpText[ polish ] = "W dó³";
-        QuickHelpText[ japanese ] = "‰º‚Ö";
+        QuickHelpText[ japanese ] = "‰º‚Ö!";
         QuickHelpText[ korean ] = "¾Æ·¡·Î!";
         QuickHelpText[ chinese_simplified ] = "ÏòÏÂ";
         QuickHelpText[ chinese_traditional ] = "¦V¤U";
@@ -682,11 +682,11 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ dutch ] = "Vertraging" ;
         Text [ swedish ] = "Fördröjning" ;
         Text [ danish ] = "Forsinkelse" ;
-        Text [ portuguese_brazilian ] = "Verzögerung" ;
+        Text [ portuguese_brazilian ] = "Verz?erung" ;
         Text [ portuguese ] = "Atraso" ;
         Text[ chinese_simplified ] = "ÑÓ³Ù";
         Text[ russian ] = "Çàäåğæêà";
-        Text[ polish ] = "OpóŸnienie";
+        Text[ polish ] = "Opó?nienie";
         Text[ japanese ] = "’x‚­‚·‚é";
         Text[ chinese_traditional ] = "©µ¿ğ";
         Text[ greek ] = "Êáèõóôİñçóç";
