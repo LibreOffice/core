@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2003-11-12 17:13:32 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,6 @@
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
-
-#include <vcl/system.hxx>
 
 #ifndef _SV_TASKPANELIST_HXX
 #include <vcl/taskpanelist.hxx>
