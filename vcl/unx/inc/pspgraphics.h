@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:57:38 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,6 @@ public:
               m_bFontVertical( false )
     { for( int i = 0; i < MAX_FALLBACK; i++ ) m_pServerFont[i] = 0; }
     virtual ~PspGraphics();
-
-    String            FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop ) const;
 
     // helper methods for sharing with X11SalGraphics
     static bool DoCreateFontSubset( const rtl::OUString& rToFile,
