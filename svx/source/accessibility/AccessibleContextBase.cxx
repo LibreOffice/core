@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: af $ $Date: 2002-06-27 11:59:53 $
+ *  last change: $Author: af $ $Date: 2002-06-28 14:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,9 +546,13 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
-    const OUString sServiceName (
-        RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.accessibility.AccessibleContext"));
-    return uno::Sequence<OUString> (&sServiceName, 1);
+    static const OUString sServiceNames[2] = {
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "drafts.com.sun.star.accessibility.Accessible")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "drafts.com.sun.star.accessibility.AccessibleContext"))
+    };
+    return uno::Sequence<OUString> (sServiceNames, 2);
 }
 
 
@@ -561,23 +565,10 @@ uno::Sequence< ::com::sun::star::uno::Type>
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
-    // Get list of types from parent class.
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>
-        aTypeSequence (BaseClass::getTypes());
-    sal_Int32 nTypeCount = aTypeSequence.getLength();
 
-    // Add the interfaces supported by this class.
-    static const ::com::sun::star::uno::Type aTypeList[] = {
-        ::getCppuType((const uno::Reference<XAccessible>*)0),
-        ::getCppuType((const uno::Reference<XAccessibleContext>*)0),
-        ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0),
-        ::getCppuType((const uno::Reference<lang::XServiceInfo>*)0)
-        };
-    aTypeSequence.realloc (nTypeCount + 4);
-    for (int i=0; i<5; i++)
-        aTypeSequence[nTypeCount + i] = aTypeList[i];
-
-    return aTypeSequence;
+    // This class supports no interfaces on its own.  Just return those
+    // supported by the base class.
+    return BaseClass::getTypes();
 }
 
 
