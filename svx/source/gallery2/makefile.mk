@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:38:31 $
+#   last change: $Author: hr $ $Date: 2004-02-03 19:17:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,6 @@ SRC1FILES =	\
 
 SLOFILES =	\
             $(SLO)$/galexpl.obj		\
-            $(SLO)$/galdlg.obj		\
             $(SLO)$/galctrl.obj		\
             $(SLO)$/gallery1.obj	\
             $(SLO)$/galtheme.obj	\
@@ -89,7 +88,6 @@ SLOFILES =	\
             $(SLO)$/galbrws2.obj		
 
 EXCEPTIONSFILES =	\
-                    $(SLO)$/galdlg.obj		\
                     $(SLO)$/gallery1.obj	\
                     $(SLO)$/galtheme.obj	\
                     $(SLO)$/galmisc.obj		\
