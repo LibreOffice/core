@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 14:21:24 $
+ *  last change: $Author: os $ $Date: 2002-06-26 08:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,15 @@
 #ifndef _RTL_TEXTENC_H //autogen wg. rtl_TextEncoding
 #include <rtl/textenc.h>
 #endif
-
-
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#ifndef _FONTCFG_HXX
+#include <fontcfg.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
@@ -227,9 +234,10 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             }
         }
 
+        SwDoc* pDoc = rDocSh.GetDoc();
         {
             BOOL bDelPrinter = FALSE;
-            SfxPrinter* pPrt = rDocSh.GetDoc() ? rDocSh.GetDoc()->GetPrt() : 0;
+            SfxPrinter* pPrt = pDoc ? pDoc->GetPrt() : 0;
             if( !pPrt )
             {
                 SfxItemSet* pSet = new SfxItemSet( rDocSh.GetPool(),
@@ -248,8 +256,17 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             }
 
             if( !aOpt.GetFontName().Len() )
-                aOpt.SetFontName( ((SvxFontItem&)rDocSh.GetDoc()->GetDefault(
+            {
+                if(pDoc)
+                {
+                    aOpt.SetFontName( ((SvxFontItem&)pDoc->GetDefault(
                                     RES_CHRATR_FONT )).GetFamilyName() );
+                }
+                else
+                {
+                    aOpt.SetFontName(SW_MOD()->GetStdFontConfig()->GetFontFor(FONT_STANDARD));
+                }
+            }
             aFontLB.SelectEntry( aOpt.GetFontName() );
 
             if( bDelPrinter )
@@ -260,10 +277,19 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         {
             if( !aOpt.GetLanguage() )
             {
-                USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                GetScriptTypeOfLanguage( GetAppLanguage() ));
-                aOpt.SetLanguage( ((SvxLanguageItem&)rDocSh.GetDoc()->
-                            GetDefault( nWhich )).GetLanguage());
+                if(pDoc)
+                {
+                    USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                                    GetScriptTypeOfLanguage( GetAppLanguage() ));
+                    aOpt.SetLanguage( ((SvxLanguageItem&)pDoc->
+                                GetDefault( nWhich )).GetLanguage());
+                }
+                else
+                {
+                    SvtLinguOptions aLinguOpt;
+                    SvtLinguConfig().GetOptions( aLinguOpt );
+                    aOpt.SetLanguage(aLinguOpt.nDefaultLanguage);
+                }
             }
 
             aLanguageLB.SetLanguageList( LANG_LIST_ALL, TRUE, FALSE );
@@ -528,6 +554,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2002/06/21 14:21:24  os
+      #99863# text encoded filter of writer: Option dialog called via service
+
       Revision 1.7  2001/07/25 15:25:31  fme
       Fix #90247#: Size of ASCII Filter Options dialog too small
 
