@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:41:34 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 18:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@
         ID_BROWSER_FILTERCRIT;\
         ID_BROWSER_AUTOFILTER;\
         ID_BROWSER_COUNTALL;\
-        ID_BROWSER_INSERT;\
-        ID_BROWSER_UPDATE;\
-        ID_BROWSER_MERGE;\
+        ID_BROWSER_INSERTCOLUMNS;\
+        ID_BROWSER_INSERTCONTENT;\
+        ID_BROWSER_FORMLETTER;\
         ID_BROWSER_SQL;\
         ID_BROWSER_ADDTABLE;\
         ID_BROWSER_DESIGN;\
@@ -342,9 +342,9 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ turkish ] = "Standart filtre ...";    \
     Text[ language_user1 ] = " ";
 
-#define MID_SBA_BRW_UPDATE \
+#define MID_BROWSER_INSERTCONTENT \
     Hide = TRUE ; \
-    Identifier = ID_BROWSER_UPDATE ; \
+    Identifier = ID_BROWSER_INSERTCONTENT ; \
     Text = "Daten in Felder"; \
     Text [ ENGLISH ] = "Daten in Felder"; \
     Text[ english_us ] = "Data to Fields"; \
@@ -369,8 +369,8 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ turkish ] = "Alan verileri";  \
     Text[ language_user1 ] = " ";
 
-#define MID_SBA_BRW_INSERT \
-    Identifier = ID_BROWSER_INSERT ; \
+#define MID_BROWSER_INSERTCOLUMNS \
+    Identifier = ID_BROWSER_INSERTCOLUMNS ; \
     Hide = TRUE ; \
     Text = "Daten in Text ..."; \
     Text [ ENGLISH ] = "Daten in Text ..."; \
@@ -396,8 +396,8 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ turkish ] = "Metin verileri ..."; \
     Text[ language_user1 ] = " ";
 
-#define MID_SBA_BRW_MERGE \
-    Identifier = ID_BROWSER_MERGE ; \
+#define MID_BROWSER_FORMLETTER \
+    Identifier = ID_BROWSER_FORMLETTER ; \
     Hide = TRUE ; \
     Text = "Serienbrief ..."; \
     Text [ ENGLISH ] = "Serienbrief ..."; \
@@ -718,18 +718,18 @@ ToolBox RID_BRW_QRY_TOOLBOX
     CUR_SEPARATOR ;
     CUR_ITEM
     {
-        MID_SBA_BRW_INSERT
-        HelpId = ID_BROWSER_INSERT ;
+        MID_BROWSER_INSERTCOLUMNS
+        HelpId = ID_BROWSER_INSERTCOLUMNS ;
     };
     CUR_ITEM
     {
-        MID_SBA_BRW_UPDATE
-        HelpId = ID_BROWSER_UPDATE ;
+        MID_BROWSER_INSERTCONTENT
+        HelpId = ID_BROWSER_INSERTCONTENT ;
     };
     CUR_ITEM
     {
-        MID_SBA_BRW_MERGE
-        HelpId = ID_BROWSER_MERGE ;
+        MID_BROWSER_FORMLETTER
+        HelpId = ID_BROWSER_FORMLETTER ;
     };
     };
 };
@@ -798,18 +798,18 @@ ToolBox RID_BRW_TAB_TOOLBOX
     CUR_SEPARATOR ;
     CUR_ITEM
     {
-        MID_SBA_BRW_INSERT
-        HelpId = ID_BROWSER_INSERT ;
+        MID_BROWSER_INSERTCOLUMNS
+        HelpId = ID_BROWSER_INSERTCOLUMNS ;
     };
     CUR_ITEM
     {
-        MID_SBA_BRW_UPDATE
-        HelpId = ID_BROWSER_UPDATE ;
+        MID_BROWSER_INSERTCONTENT
+        HelpId = ID_BROWSER_INSERTCONTENT ;
     };
     CUR_ITEM
     {
-        MID_SBA_BRW_MERGE
-        HelpId = ID_BROWSER_MERGE ;
+        MID_BROWSER_FORMLETTER
+        HelpId = ID_BROWSER_FORMLETTER ;
     };
     };
 };

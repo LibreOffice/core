@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:45:36 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 18:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,8 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
@@ -2230,9 +2232,9 @@ void SbaXDataBrowserController::ColumnChanged()
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::SelectionChanged()
 {
-    InvalidateFeature(ID_BROWSER_INSERT);
-    InvalidateFeature(ID_BROWSER_UPDATE);
-    InvalidateFeature(ID_BROWSER_MERGE);
+    InvalidateFeature(ID_BROWSER_INSERTCOLUMNS);
+    InvalidateFeature(ID_BROWSER_INSERTCONTENT);
+    InvalidateFeature(ID_BROWSER_FORMLETTER);
 }
 
 //------------------------------------------------------------------------------
@@ -2555,6 +2557,24 @@ void SbaXDataBrowserController::leaveFormAction()
 }
 
 // -------------------------------------------------------------------------
+URL SbaXDataBrowserController::getURLForId(sal_Int32 _nId) const
+{
+    URL aReturn;
+    for (   ConstSupportedFeaturesIterator aLoop = m_aSupportedFeatures.begin();
+            aLoop != m_aSupportedFeatures.end();
+            ++aLoop
+        )
+        if (aLoop->second == _nId)
+        {
+            aReturn.Complete = aLoop->first;
+            break;
+        }
+
+    // TODO: maybe let an URLTransformer analyze the URL
+    return aReturn;
+}
+
+// -------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::isValidCursor() const
 {
     Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(m_xRowSet, UNO_QUERY);
@@ -2565,6 +2585,7 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
         return sal_False;
     return !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ;
 }
+
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* SbaXDataBrowserController::createArrayHelper( ) const
 {
@@ -2572,6 +2593,7 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
     describeProperties(aProps);
     return new cppu::OPropertyArrayHelper(aProps);
 }
+
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & SbaXDataBrowserController::getInfoHelper()
 {
