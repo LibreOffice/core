@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:11:24 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 13:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,10 +259,12 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XMultiServiceFactory >& Ser
 // ----------------------------------------------------------------------------------------
 
 void SAL_CALL CFormatRegistrar::RegisterFormats(
-    const Sequence< DataFlavor >& aFlavorList, CFormatEtcContainer& aFormatEtcContainer )
+    const Reference< XTransferable >& aXTransferable, CFormatEtcContainer& aFormatEtcContainer )
 {
-    sal_Int32  nFlavors = aFlavorList.getLength( );
-    sal_Bool   bSuccess = sal_False;
+    Sequence< DataFlavor > aFlavorList = aXTransferable->getTransferDataFlavors( );
+    sal_Int32  nFlavors                = aFlavorList.getLength( );
+    sal_Bool   bSuccess                = sal_False;
+    sal_Bool   bUnicodeRegistered      = sal_False;
     DataFlavor aFlavor;
 
     for( sal_Int32 i = 0; i < nFlavors; i++ )
@@ -270,45 +272,58 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
         aFlavor = aFlavorList[i];
         CFormatEtc fetc = dataFlavorToFormatEtc( aFlavor );
 
-        if ( needsToSynthesizeAccompanyFormats( fetc ) )
-        {
-            // we don't validate if the operation succeded
-            // because an accompany format might have be
-            // registered so that it's no problem if the
-            // operation fails because of a duplicate format
-            // e.g. text was already registered we have also
-            // registered unicode text, if we later try to
-            // register unicode text it will fail
+        if ( !needsToSynthesizeAccompanyFormats( fetc ) )
             aFormatEtcContainer.addFormatEtc( fetc );
-
-            synthesizeAndRegisterAccompanyFormats(
-                fetc, aFlavor, aFormatEtcContainer );
-        }
         else
-            aFormatEtcContainer.addFormatEtc( fetc );
+        {
+            // if we haven't registered any text format up to now
+            if ( isTextFormat( fetc.getClipformat() ) && !bUnicodeRegistered )
+            {
+                // if the transferable supports unicode text we ignore
+                // any further text format the transferable offers
+                // because we can create it from Unicode text in addition
+                // we register CF_TEXT for non unicode clients
+                if ( isUnicodeTextFormat( fetc.getClipformat() ) )
+                {
+                    aFormatEtcContainer.addFormatEtc( fetc ); // add CF_UNICODE
+                    aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_TEXT ) ); // add CF_TEXT
+                    bUnicodeRegistered = sal_True;
+                }
+                else if ( !hasUnicodeFlavor( aXTransferable ) )
+                {
+                    // we try to investigate the charset and make a valid
+                    // windows codepage from this charset the default
+                    // return value is the result of GetACP( )
+                    OUString charset = getCharsetFromDataFlavor( aFlavor );
+                    sal_uInt32 txtCP = getWinCPFromMimeCharset( charset );
+
+                    // we try to get a Locale appropriate for this codepage
+                    if ( findLocaleForTextCodePage( ) )
+                    {
+                        m_TxtCodePage = txtCP;
+
+                        aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_UNICODETEXT ) );
+
+                        if ( !IsOEMCP( m_TxtCodePage ) )
+                            aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_TEXT ) );
+                        else
+                            aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_OEMTEXT ) );
+
+                        aFormatEtcContainer.addFormatEtc( getFormatEtcForClipformat( CF_LOCALE ) );
+
+                        // we save the flavor so it's easier when
+                        // queried for it in XTDataObject::GetData(...)
+                        m_RegisteredTextFlavor  = aFlavor;
+                        m_bHasSynthesizedLocale = sal_True;
+                    }
+                }
+            }
+            else // Html (Hyper Text...)
+            {
+            }
+        }
     }
 }
-
-/*
-    For all Flavors from Transferable
-        if not is TextFlavor
-            add Format to FormatList
-        else if not UnicodeTextRegistred
-            if isUnicodeText or Transferable Has Unicodetext
-                add Unicode Format to FormatList
-                add Text to FormatList
-                UnicodeTextRegistered = true
-            else
-                if findLocaleForTextCharset successful
-                    add Unicode Format to FormatList
-                    add Text or OemText to FormatList
-                    add Locale to FormatList
-                    HasSynthesizedLocale = true
-                    save the TextFlavor so that access is easier in GetData
-                end if
-            end if
-        end if
-*/
 
 //------------------------------------------------------------------------
 //
@@ -326,6 +341,15 @@ sal_Bool SAL_CALL CFormatRegistrar::hasSynthesizedLocale( ) const
 LCID SAL_CALL CFormatRegistrar::getSynthesizedLocale( ) const
 {
     return m_TxtLocale;
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_uInt32 SAL_CALL CFormatRegistrar::getRegisteredTextCodePage( ) const
+{
+    return m_TxtCodePage;
 }
 
 //------------------------------------------------------------------------
@@ -383,64 +407,6 @@ sal_Bool SAL_CALL CFormatRegistrar::needsToSynthesizeAccompanyFormats( const CFo
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFormatRegistrar::synthesizeAndRegisterAccompanyFormats(
-    CFormatEtc& aFormatEtc, const DataFlavor& aFlavor, CFormatEtcContainer& aFormatEtcContainer )
-{
-    CLIPFORMAT cf = aFormatEtc.getClipformat();
-    OSL_ASSERT( isOemOrAnsiTextFormat(cf) || isUnicodeTextFormat(cf) );
-
-    CFormatEtc fetc;
-
-    if ( isOemOrAnsiTextFormat( cf ) )
-    {
-        OUString charset = getCharsetFromDataFlavor( aFlavor );
-        if ( charset.getLength( ) )
-            m_TxtCodePage = getWinCPFromMimeCharset( charset );
-        else
-            m_TxtCodePage = GetACP( );
-
-        OSL_ASSERT( IsValidCodePage( m_TxtCodePage ) );
-
-        if ( !isEqualCurrentSystemCodePage( m_TxtCodePage ) )
-        {
-            fetc = getFormatEtcForClipformat( CF_LOCALE );
-
-            if ( findLocaleForTextCodePage( ) )
-            {
-                aFormatEtcContainer.addFormatEtc( fetc );
-                m_bHasSynthesizedLocale = sal_True;
-            }
-            else // could not find a locale for this charset
-            {
-                // remove the locale if there is one
-                // already registered
-                aFormatEtcContainer.removeFormatEtc( fetc );
-                m_bHasSynthesizedLocale = sal_False;
-            }
-        }
-
-        // register may fail if we have already
-        // registered CF_UNICODETEXT but
-        // then it doesn't matter because in this
-        // case CF_TEXT is already registered
-        fetc = getFormatEtcForClipformat( CF_UNICODETEXT );
-        aFormatEtcContainer.addFormatEtc( fetc );
-    }
-    else // CF_UNICODETEXT
-    {
-        // register may fail if we have already
-        // registered CF_TEXT or CF_OEMTEXT but
-        // then it doesn't matter because in this
-        // case CF_UNICODETEXT is already registered
-        fetc = getFormatEtcForClipformat( CF_TEXT );
-        aFormatEtcContainer.addFormatEtc( fetc );
-    }
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& aFlavor )
 {
     OUString charset;
@@ -480,6 +446,20 @@ inline
 CFormatEtc SAL_CALL CFormatRegistrar::getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const
 {
     return m_DataFormatTranslator.getFormatEtcForClipformat( aClipformat );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+sal_Bool SAL_CALL CFormatRegistrar::hasUnicodeFlavor( const Reference< XTransferable >& aXTransferable ) const
+{
+    CFormatEtc fetc( CF_UNICODETEXT );
+
+    DataFlavor aFlavor =
+        m_DataFormatTranslator.getDataFlavorFromFormatEtc( aXTransferable, fetc );
+
+    return aXTransferable->isDataFlavorSupported( aFlavor );
 }
 
 //------------------------------------------------------------------------

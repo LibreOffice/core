@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-16 16:31:24 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 13:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ CXTDataObject::CXTDataObject( const Reference< XMultiServiceFactory >& aServiceM
     m_DataFormatTranslator( aServiceManager ),
     m_FormatRegistrar( m_SrvMgr, m_DataFormatTranslator )
 {
-    m_FormatRegistrar.RegisterFormats( m_XTransferable->getTransferDataFlavors( ),
+    m_FormatRegistrar.RegisterFormats( m_XTransferable,
                                        m_FormatEtcContainer );
 }
 
@@ -208,13 +208,13 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
     }
     catch(UnsupportedFlavorException&)
     {
-        if ( isSynthesizeableFormat( pFormatetc ) )
-        {
-            // synthesize format
-            return S_OK;
-        }
+        HRESULT hr = DV_E_FORMATETC;
 
-        return DV_E_FORMATETC;
+        if ( isSynthesizeableFormat( pFormatetc ) )
+            hr = renderSynthesizedFormatAndSetupStgMedium(
+                *pFormatetc, *pmedium );
+
+        return hr;
     }
     catch( CInvalidFormatEtcException& ex )
     {
@@ -402,6 +402,77 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
             nRequiredMemSize,
             clipDataStream.getLength( ),
             stgmedium );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+{
+    HRESULT hr = S_OK;
+
+    try
+    {
+        if ( CF_UNICODETEXT == fetc.cfFormat )
+            // the transferable seems to have only text
+            renderSynthesizedUnicodeAndSetupStgMedium( fetc, stgmedium );
+        else if ( isOemOrAnsiTextFormat( fetc.cfFormat ) )
+            // the transferable seems to have only unicode text
+            renderSynthesizedTextAndSetupStgMedium( fetc, stgmedium );
+        else
+            // the transferable seems to have only text/html
+            renderSynthesizedHtmlAndSetupStgMedium( fetc, stgmedium );
+    }
+    catch(UnsupportedFlavorException&)
+    {
+        hr = DV_E_FORMATETC;
+    }
+    catch( CInvalidFormatEtcException& ex )
+    {
+        OSL_ENSURE( sal_False, "Unexpected exception" );
+    }
+    catch( CStgTransferException& ex )
+    {
+        return translateStgExceptionCode( ex.m_hr );
+    }
+    catch(...)
+    {
+        hr = E_UNEXPECTED;
+    }
+
+    return hr;
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+{
+    OSL_ASSERT( CF_UNICODETEXT == fetc.cfFormat );
+
+    //m_FormatRegistrar.getRegisteredTextCodePage( );
+
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+{
+    OSL_ASSERT( isOemOrAnsiTextFormat( fetc.cfFormat ) );
+
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+{
+
 }
 
 //------------------------------------------------------------------------

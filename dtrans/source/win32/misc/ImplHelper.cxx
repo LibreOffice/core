@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:12:05 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 13:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,24 +108,28 @@ using ::rtl::OString;
 
 sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
 {
-    OString osCharset(
-        charset.getStr( ), charset.getLength( ), RTL_TEXTENCODING_ASCII_US );
-
-    rtl_TextEncoding txtEnc =
-        rtl_getTextEncodingFromMimeCharset( osCharset.getStr( ) );
-
-    sal_uInt32 winChrs = rtl_getBestWindowsCharsetFromTextEncoding( txtEnc );
-
-    CHARSETINFO chrsInf;
-    sal_Bool bRet = TranslateCharsetInfo(
-        (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET );
-
-    // if one of the above functions fails
-    // we will return the current ANSI codepage
-    // of this thread
     sal_uInt32 winCP = GetACP( );
-    if ( bRet )
-        winCP = chrsInf.ciACP;
+
+    if ( charset.getLength( ) )
+    {
+        OString osCharset(
+            charset.getStr( ), charset.getLength( ), RTL_TEXTENCODING_ASCII_US );
+
+        rtl_TextEncoding txtEnc =
+            rtl_getTextEncodingFromMimeCharset( osCharset.getStr( ) );
+
+        sal_uInt32 winChrs = rtl_getBestWindowsCharsetFromTextEncoding( txtEnc );
+
+        CHARSETINFO chrsInf;
+        sal_Bool bRet = TranslateCharsetInfo(
+            (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET );
+
+        // if one of the above functions fails
+        // we will return the current ANSI codepage
+        // of this thread
+        if ( bRet )
+            winCP = chrsInf.ciACP;
+    }
 
     return winCP;
 }

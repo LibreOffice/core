@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:12:22 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 13:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using osl::Condition;
 //  defines
 //----------------------------------------------------------------
 
-#define HIDDEN_CB_WNDCLS_NAME L"MtaOleReqWnd_920896680C9449"
+#define HIDDEN_CB_WNDCLS_NAME "MtaOleReqWnd_920896680C9449"
 #define CLIPSERVICE_DLL_NAME "sysdtrans.dll"
 
 //--------------------------------------------------------
@@ -633,8 +633,9 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 
 void CMtaOleClipboard::createMtaOleReqWnd( )
 {
-    WNDCLASSEXW  wcex;
-    sal_Unicode szWndClsName[] = HIDDEN_CB_WNDCLS_NAME;
+    WNDCLASSEXA  wcex;
+    //sal_Unicode szWndClsName[] = HIDDEN_CB_WNDCLS_NAME;
+    char szWndClsName[] = HIDDEN_CB_WNDCLS_NAME;
 
     HINSTANCE hInst = GetModuleHandleA( CLIPSERVICE_DLL_NAME );
     OSL_ENSURE( NULL != hInst, "The name of the clipboard service dll must have changed" );
@@ -646,10 +647,10 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
     wcex.hInstance     = hInst;
     wcex.lpszClassName = szWndClsName;
 
-    ATOM atom = RegisterClassExW( &wcex );
+    ATOM atom = RegisterClassExA( &wcex );
     if ( 0 != atom )
-        m_hwndMtaOleReqWnd = CreateWindowExW(
-            0, szWndClsName, TEXT(""), 0, 0, 0, 0, 0, NULL, NULL, hInst, NULL );
+        m_hwndMtaOleReqWnd = CreateWindowExA(
+            0, szWndClsName,"", 0, 0, 0, 0, 0, NULL, NULL, hInst, NULL );
 }
 
 //--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-19 09:11:24 $
+ *  last change: $Author: tra $ $Date: 2001-03-19 13:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <cppuhelper/servicefactory.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
-#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
 
 #ifndef _FETC_HXX_
@@ -151,10 +151,13 @@ public:
     CFormatRegistrar( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager,
                       const CDataFormatTranslator& aDataFormatTranslator );
 
-    void SAL_CALL RegisterFormats( const com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor >& aFlavorList,
+    void SAL_CALL RegisterFormats( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable,
                                    CFormatEtcContainer& aFormatEtcContainer );
-    sal_Bool SAL_CALL hasSynthesizedLocale( ) const;
-    LCID     SAL_CALL getSynthesizedLocale( ) const;
+
+    sal_Bool   SAL_CALL hasSynthesizedLocale( ) const;
+    LCID       SAL_CALL getSynthesizedLocale( ) const;
+    sal_uInt32 SAL_CALL getRegisteredTextCodePage( ) const;
+    com::sun::star::datatransfer::DataFlavor SAL_CALL getRegisteredTextFlavor( ) const;
 
 private:
     sal_Bool  SAL_CALL isOemOrAnsiTextFormat( CLIPFORMAT cf ) const;
@@ -162,12 +165,12 @@ private:
     sal_Bool  SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
     CFormatEtc SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
     sal_Bool  SAL_CALL needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const;
-    void      SAL_CALL synthesizeAndRegisterAccompanyFormats( CFormatEtc& aFormatEtc,
-                                                     const com::sun::star::datatransfer::DataFlavor& aFlavor,
-                                                     CFormatEtcContainer& aFormatEtcContainer );
+
     sal_Bool SAL_CALL isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const;
     rtl::OUString SAL_CALL getCharsetFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
     CFormatEtc SAL_CALL getFormatEtcForClipformat( CLIPFORMAT aClipformat ) const;
+
+    sal_Bool SAL_CALL hasUnicodeFlavor( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable ) const;
 
     sal_Bool SAL_CALL findLocaleForTextCodePage( );
 
@@ -178,8 +181,9 @@ private:
     static BOOL CALLBACK EnumLocalesProc( LPSTR lpLocaleStr );
 
 private:
-    const CDataFormatTranslator& m_DataFormatTranslator;
-    sal_Bool                     m_bHasSynthesizedLocale;
+    const CDataFormatTranslator&             m_DataFormatTranslator;
+    sal_Bool                                 m_bHasSynthesizedLocale;
+    com::sun::star::datatransfer::DataFlavor m_RegisteredTextFlavor;
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
 
