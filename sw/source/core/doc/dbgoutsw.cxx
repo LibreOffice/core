@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:10:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,7 +734,7 @@ const char * dbg_out(const SwUndos & rUndos)
     return dbg_out(lcl_dbg_out(rUndos));
 }
 
-const String lcl_dbg_out(const SwRewriter & rRewriter)
+String lcl_dbg_out(const SwRewriter & rRewriter)
 {
     String aResult;
 
@@ -747,5 +747,103 @@ const char * dbg_out(const SwRewriter & rRewriter)
 {
     return dbg_out(lcl_dbg_out(rRewriter));
 }
+
+String lcl_dbg_out(const SwNumRuleTbl & rTbl)
+{
+    String aResult("[", RTL_TEXTENCODING_ASCII_US);
+
+    for (int n = 0; n < rTbl.Count(); n++)
+    {
+        if (n > 0)
+            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+
+        aResult += rTbl[n]->GetName();
+
+        char sBuffer[256];
+        sprintf(sBuffer, "(%p)", rTbl[n]);
+        aResult += String(sBuffer, RTL_TEXTENCODING_ASCII_US);
+    }
+
+    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
+const char * dbg_out(const SwNumRuleTbl & rTbl)
+{
+    return dbg_out(lcl_dbg_out(rTbl));
+}
+
+static String lcl_TokenType2Str(FormTokenType nType)
+{
+    switch(nType)
+    {
+    case TOKEN_ENTRY_NO:
+        return String("NO", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_ENTRY_TEXT:
+        return String("ENTRY_TEXT", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_ENTRY:
+        return String("ENTRY", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_TAB_STOP:
+        return String("TAB_STOP", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_TEXT:
+        return String("TOKEN_TEXT", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_PAGE_NUMS:
+        return String("NUMS", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_CHAPTER_INFO:
+        return String("CHAPTER_INFO", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_LINK_START:
+        return String("LINK_START", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_LINK_END:
+        return String("LINK_END", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_AUTHORITY:
+        return String("AUTHORITY", RTL_TEXTENCODING_ASCII_US);
+    case TOKEN_END:
+        return String("END", RTL_TEXTENCODING_ASCII_US);
+    default:
+        return String("??", RTL_TEXTENCODING_ASCII_US);
+    }
+
+    ASSERT(false, "should not be reached");
+
+    return  String("??", RTL_TEXTENCODING_ASCII_US);
+}
+
+String lcl_dbg_out(const SwFormToken & rToken)
+{
+    return rToken.GetString();
+}
+
+const char * dbg_out(const SwFormToken & rToken)
+{
+    return dbg_out(lcl_dbg_out(rToken));
+}
+
+String lcl_dbg_out(const SwFormTokens & rTokens)
+{
+    String aStr("[", RTL_TEXTENCODING_ASCII_US);
+
+    SwFormTokens::const_iterator aIt;
+
+    for (aIt = rTokens.begin(); aIt != rTokens.end(); aIt++)
+    {
+        if (aIt != rTokens.begin())
+            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
+
+        aStr += lcl_TokenType2Str(aIt->eTokenType);
+        aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
+        aStr += lcl_dbg_out(*aIt);
+    }
+
+    aStr += String("]" , RTL_TEXTENCODING_ASCII_US);
+
+    return aStr;
+}
+
+const char * dbg_out(const SwFormTokens & rTokens)
+{
+    return dbg_out(lcl_dbg_out(rTokens));
+}
+
 #endif // DEBUG
 
