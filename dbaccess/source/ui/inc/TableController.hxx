@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-02 08:05:32 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,18 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
-        ::rtl::OUString m_sCatalogName;     // catalog for update data
-        ::rtl::OUString m_sSchemaName;      // schema for update data
-        ::rtl::OUString m_sName;            // table for update data
-        String          m_sTypeNames;       // these type names are the ones out of the resource file
-        OTypeInfo*      m_pTypeInfo;        // fall back when type is unkown because database driver has a failure
+        ::rtl::OUString m_sCatalogName;         // catalog for update data
+        ::rtl::OUString m_sSchemaName;          // schema for update data
+        ::rtl::OUString m_sName;                // table for update data
+        ::rtl::OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
+        String          m_sTypeNames;           // these type names are the ones out of the resource file
+        OTypeInfo*      m_pTypeInfo;            // fall back when type is unkown because database driver has a failure
 
+        sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
         sal_Bool        m_bEditable : 1;        // is the control readonly or not
         sal_Bool        m_bModified : 1;        // is the data modified
         sal_Bool        m_bNew : 1;             // is true when we create a new table
+
 
         void reSyncRows();
         void assignTable();                 // set the table if a name is given
@@ -166,6 +169,9 @@ namespace dbaui
         sal_Bool isAlterAllowed()   const;
         sal_Bool isReadOnly()       const { return !m_bEditable; }
         sal_Bool isModified()       const { return m_bModified; }
+
+        inline sal_Bool                 isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
+        inline const ::rtl::OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
         void     setModified(sal_Bool _bModified=sal_True);
 
