@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 13:05:32 $
+ *  last change: $Author: dr $ $Date: 2001-01-17 15:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2366,10 +2366,15 @@ ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& 
     nIfnt = nFont;
     nIfmt = nForm;
 
-    nOffs8 = 0x0001;
-
     if( pPattAttr )
     {
+        nOffs8 = 0x0000;
+        const ScProtectionAttr& rProtAttr = (const ScProtectionAttr&) pPattAttr->GetItem( ATTR_PROTECTION );
+        if( rProtAttr.GetProtection() )
+            nOffs8 |= EXC_XF_LOCKED;
+        if( rProtAttr.GetHideFormula() || rProtAttr.GetHideCell() )
+            nOffs8 |= EXC_XF_HIDDEN;
+
         switch( ( SvxCellHorJustify )
             ((const SvxHorJustifyItem&)pPattAttr->GetItem( ATTR_HOR_JUSTIFY )).GetValue() )
         {
@@ -2458,6 +2463,7 @@ ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& 
     }
     else
     {
+        nOffs8 = EXC_XF_LOCKED;
         eAlc = EHA_General;
         eAlcV = EVA_Bottom;
         eOri = ETO_NoRot;
