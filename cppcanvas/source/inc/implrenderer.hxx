@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:53:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,11 @@ namespace cppcanvas
                                  const ::basegfx::B2DPolyPolygon&   rClipPoly,
                                  const CanvasSharedPtr&             rCanvas,
                                  bool                               bIntersect );
+
+            void updateClipping( VectorOfOutDevStates&  rStates,
+                                 const ::Rectangle&     rClipRect,
+                                 const CanvasSharedPtr& rCanvas,
+                                 bool                   bIntersect );
 
             ::com::sun::star::uno::Reference<
                 ::drafts::com::sun::star::rendering::XCanvasFont > createFont( ::basegfx::B2DHomMatrix&     o_rFontMatrix,
