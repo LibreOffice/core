@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 14:16:03 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 09:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "sfxsids.hrc"
+#include "request.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -485,15 +486,30 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             }
         }
 
-        if ( aSet.Count() )
-            pDispatcher->Execute( GetId(), nCall, aSet );
-        else
-            // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-            pDispatcher->Execute( GetId(), nCall );
-
-        if ( !pDispatcher->GetBindings() )
+        if ( pDispatcher->GetBindings() )
         {
-            // no bindings, no invalidate!
+            // execute using bindings, enables support for toggle/enum etc.
+            if ( pDispatcher->IsLocked( GetId() ) )
+                return;
+
+            SfxShell *pShell = 0;
+            const SfxSlot *pSlot = 0;
+            if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
+                    SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
+            {
+                SfxRequest aReq( GetId(), nCall, aSet );
+                pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+            }
+        }
+        else
+        {
+            if ( aSet.Count() )
+                pDispatcher->Execute( GetId(), nCall, aSet );
+            else
+                // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
+                pDispatcher->Execute( GetId(), nCall );
+
+            // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
             const SfxPoolItem* pState=0;
             SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
             StateChanged( GetId(), eState, pState );

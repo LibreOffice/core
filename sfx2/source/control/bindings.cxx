@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 13:56:35 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 09:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,15 +1559,33 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
         aReq.SetInternalArgs_Impl( aSet );
     }
 
+    Execute_Impl( aReq, pSlot, pShell );
+
+    const SfxPoolItem* pRet = aReq.GetReturnValue();
+    if ( !pRet )
+    {
+        SfxPoolItem *pVoid = new SfxVoidItem( nId );
+        DeleteItemOnIdle( pVoid );
+        pRet = pVoid;
+    }
+
+    if ( bDeleteCache )
+        delete pCache;
+
+    return pRet;
+}
+
+void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell* pShell )
+{
+    SfxItemPool &rPool = pShell->GetPool();
     if ( SFX_KIND_ENUM == pSlot->GetKind() )
     {
         // bei Enum-Slots muss der Master mit dem Wert des Enums executet werden
         const SfxSlot *pRealSlot = pShell->GetInterface()->GetRealSlot(pSlot);
         const sal_uInt16 nSlotId = pRealSlot->GetSlotId();
         aReq.SetSlot( nSlotId );
-        aReq.AppendItem( SfxAllEnumItem( rPool.GetWhich(nSlotId),
-                                         pSlot->GetValue() ) );
-        rDispatcher._Execute( *pShell, *pRealSlot, aReq, nCallMode | SFX_CALLMODE_RECORD );
+        aReq.AppendItem( SfxAllEnumItem( rPool.GetWhich(nSlotId), pSlot->GetValue() ) );
+        pDispatcher->_Execute( *pShell, *pRealSlot, aReq, aReq.GetCallMode() );
     }
     else if ( SFX_KIND_ATTR == pSlot->GetKind() )
     {
@@ -1638,23 +1656,10 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
                 DBG_ERROR( "suspicious Toggle-Slot" );
         }
 
-        rDispatcher._Execute( *pShell, *pSlot, aReq, nCallMode | SFX_CALLMODE_RECORD );
+        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() );
     }
     else
-        rDispatcher._Execute( *pShell, *pSlot, aReq, nCallMode | SFX_CALLMODE_RECORD );
-
-    const SfxPoolItem* pRet = aReq.GetReturnValue();
-    if ( !pRet )
-    {
-        SfxPoolItem *pVoid = new SfxVoidItem( nId );
-        DeleteItemOnIdle( pVoid );
-        pRet = pVoid;
-    }
-
-    if ( bDeleteCache )
-        delete pCache;
-
-    return pRet;
+        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() );
 }
 
 //--------------------------------------------------------------------
