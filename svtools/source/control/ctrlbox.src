@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-16 20:11:02 $
+ *  last change: $Author: fme $ $Date: 2002-08-23 08:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,20 +409,69 @@ String STR_SVT_COLLATE_PHONEBOOK
     Text[ arabic ] = "Phone book";
 };
 
+String STR_SVT_COLLATE_PHONETIC_F
+{
+    Text = "Phonetic (alphanumeric first)";
+};
 
+String STR_SVT_COLLATE_PHONETIC_L
+{
+    Text = "Phonetic (alphanumeric last)";
+};
 
+String STR_SVT_INDEXENTRY_ALPHANUMERIC
+{
+    /* alphanumeric indexentry algorithm */
+    Text = "Alphanumerisch" ;
+};
 
+String STR_SVT_INDEXENTRY_DICTIONARY
+{
+    /* korean dictionary indexentry algorithm */
+    Text = "Wörterbuch" ;
+};
 
+String STR_SVT_INDEXENTRY_PINYIN
+{
+    /* chinese sorting algorithm */
+    Text = "Pinyin" ;
+};
 
+String STR_SVT_INDEXENTRY_RADICAL
+{
+    /* chinese indexentry algorithm */
+    Text = "Radical" ;
+};
 
+String STR_SVT_INDEXENTRY_STROKE
+{
+    /* chinese indexentry algorithm */
+    Text = "Stroke" ;
+};
 
+String STR_SVT_INDEXENTRY_ZHUYIN
+{
+    /* chinese indexentry algorithm */
+    Text = "Zhuyin" ;
+};
 
+String STR_SVT_INDEXENTRY_PHONETIC_FS
+{
+    Text = "Phonetic (alphanumeric first) (grouped by syllable)";
+};
 
+String STR_SVT_INDEXENTRY_PHONETIC_FC
+{
+    Text = "Phonetic (alphanumeric first) (grouped by consonant)";
+};
 
+String STR_SVT_INDEXENTRY_PHONETIC_LS
+{
+    Text = "Phonetic (alphanumeric last) (grouped by syllable)";
+};
 
-
-
-
-
-
+String STR_SVT_INDEXENTRY_PHONETIC_LC
+{
+    Text = "Phonetic (alphanumeric last) (grouped by consonant)";
+};
 

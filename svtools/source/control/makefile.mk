@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2002-03-05 15:58:31 $
+#   last change: $Author: fme $ $Date: 2002-08-23 08:43:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/scrwin.obj	 \
             $(SLO)$/reginfo.obj	\
             $(SLO)$/collatorres.obj \
+            $(SLO)$/indexentryres.obj \
             $(SLO)$/fmtfield.obj \
             $(SLO)$/scriptedtext.obj
 

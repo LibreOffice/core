@@ -15,38 +15,27 @@
 class CollatorRessourceData
 {
     friend class CollatorRessource;
-
     private: /* data */
-
         String          ma_Name;
         String          ma_Translation;
-
     private: /* member functions */
-
-                        CollatorRessourceData ()
-                            {}
+        CollatorRessourceData () {}
     public:
-                        CollatorRessourceData (
-                            const String &r_Algorithm, const String &r_Translation)
-                                 : ma_Name (r_Algorithm), ma_Translation (r_Translation)
-                            {}
+        CollatorRessourceData ( const String &r_Algorithm, const String &r_Translation)
+                    : ma_Name (r_Algorithm), ma_Translation (r_Translation) {}
 
-        const String&   GetAlgorithm () const
-                            { return ma_Name; }
+        const String&   GetAlgorithm () const { return ma_Name; }
 
-        const String&   GetTranslation () const
-                            { return ma_Translation; }
+        const String&   GetTranslation () const { return ma_Translation; }
 
-                        ~CollatorRessourceData ()
-                            {}
+        ~CollatorRessourceData () {}
 
-        CollatorRessourceData&
-                        operator= (const CollatorRessourceData& r_From)
-                            {
-                                ma_Name         = r_From.GetAlgorithm();
-                                ma_Translation  = r_From.GetTranslation();
-                                return *this;
-                            }
+        CollatorRessourceData& operator= (const CollatorRessourceData& r_From)
+        {
+            ma_Name         = r_From.GetAlgorithm();
+            ma_Translation  = r_From.GetTranslation();
+            return *this;
+        }
 };
 
 // -------------------------------------------------------------------------
@@ -55,7 +44,7 @@ class CollatorRessourceData
 //
 // -------------------------------------------------------------------------
 
-#define COLLATOR_RESSOURCE_COUNT 10
+#define COLLATOR_RESSOURCE_COUNT (STR_SVT_COLLATE_END - STR_SVT_COLLATE_START + 1)
 
 CollatorRessource::CollatorRessource()
 {
@@ -65,26 +54,18 @@ CollatorRessource::CollatorRessource()
     #define RESSTR(rid) String(SvtResId(rid))
 
 
-    mp_Data[0] = CollatorRessourceData (ASCSTR("alphanumeric"),
-                                             RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
-    mp_Data[1] = CollatorRessourceData (ASCSTR("charset"),
-                                             RESSTR(STR_SVT_COLLATE_CHARSET));
-    mp_Data[2] = CollatorRessourceData (ASCSTR("dict"),
-                                             RESSTR(STR_SVT_COLLATE_DICTIONARY));
-    mp_Data[3] = CollatorRessourceData (ASCSTR("normal"),
-                                             RESSTR(STR_SVT_COLLATE_NORMAL));
-    mp_Data[4] = CollatorRessourceData (ASCSTR("pinyin"),
-                                             RESSTR(STR_SVT_COLLATE_PINYIN));
-    mp_Data[5] = CollatorRessourceData (ASCSTR("radical"),
-                                             RESSTR(STR_SVT_COLLATE_RADICAL));
-    mp_Data[6] = CollatorRessourceData (ASCSTR("stroke"),
-                                             RESSTR(STR_SVT_COLLATE_STROKE));
-    mp_Data[7] = CollatorRessourceData (ASCSTR("unicode"),
-                                             RESSTR(STR_SVT_COLLATE_UNICODE));
-    mp_Data[8] = CollatorRessourceData (ASCSTR("zhuyin"),
-                                             RESSTR(STR_SVT_COLLATE_ZHUYIN));
-    mp_Data[9] = CollatorRessourceData (ASCSTR("phonebook"),
-                                             RESSTR(STR_SVT_COLLATE_PHONEBOOK));
+    mp_Data[0] = CollatorRessourceData (ASCSTR("alphanumeric"), RESSTR(STR_SVT_COLLATE_ALPHANUMERIC));
+    mp_Data[1] = CollatorRessourceData (ASCSTR("charset"), RESSTR(STR_SVT_COLLATE_CHARSET));
+    mp_Data[2] = CollatorRessourceData (ASCSTR("dict"), RESSTR(STR_SVT_COLLATE_DICTIONARY));
+    mp_Data[3] = CollatorRessourceData (ASCSTR("normal"), RESSTR(STR_SVT_COLLATE_NORMAL));
+    mp_Data[4] = CollatorRessourceData (ASCSTR("pinyin"), RESSTR(STR_SVT_COLLATE_PINYIN));
+    mp_Data[5] = CollatorRessourceData (ASCSTR("radical"), RESSTR(STR_SVT_COLLATE_RADICAL));
+    mp_Data[6] = CollatorRessourceData (ASCSTR("stroke"), RESSTR(STR_SVT_COLLATE_STROKE));
+    mp_Data[7] = CollatorRessourceData (ASCSTR("unicode"), RESSTR(STR_SVT_COLLATE_UNICODE));
+    mp_Data[8] = CollatorRessourceData (ASCSTR("zhuyin"), RESSTR(STR_SVT_COLLATE_ZHUYIN));
+    mp_Data[9] = CollatorRessourceData (ASCSTR("phonebook"), RESSTR(STR_SVT_COLLATE_PHONEBOOK));
+    mp_Data[10] = CollatorRessourceData (ASCSTR("phonetic (alphanumeric first)"), RESSTR(STR_SVT_COLLATE_PHONETIC_F));
+    mp_Data[11] = CollatorRessourceData (ASCSTR("phonetic (alphanumeric last)"), RESSTR(STR_SVT_COLLATE_PHONETIC_L));
 }
 
 CollatorRessource::~CollatorRessource()
