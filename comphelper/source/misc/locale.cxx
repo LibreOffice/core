@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 15:58:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,6 +360,15 @@ const Locale Locale::X_TRANSLATE()
 }
 
 //-----------------------------------------------
+const Locale Locale::X_NOTRANSLATE()
+{
+    static Locale aLocale(
+                    ::rtl::OUString::createFromAscii("x"),
+                    ::rtl::OUString::createFromAscii("notranslate"));
+    return aLocale;
+}
+
+//-----------------------------------------------
 const Locale Locale::ZH_CN()
 {
     static Locale aLocale(
@@ -396,14 +405,17 @@ Locale::Locale(const ::rtl::OUString& sLanguage,
 }
 
 //-----------------------------------------------
+Locale::Locale()
+{
+    // Initialize instance ... otherwhise user will
+    // may be get exceptions if he e.g. copy this instance ...
+    (*this) = X_NOTRANSLATE();
+}
+
+//-----------------------------------------------
 Locale::Locale(const Locale& aCopy)
 {
-    // Take over these values without checking ...
-    // They was already checked if the copy was constructed
-    // and must be valid now!
-    m_sLanguage = aCopy.m_sLanguage;
-    m_sCountry  = aCopy.m_sCountry;
-    m_sVariant  = aCopy.m_sVariant;
+    (*this) = aCopy; // recycle assign operator
 }
 
 //-----------------------------------------------
@@ -597,6 +609,58 @@ sal_Bool Locale::similar(const Locale& aComparable) const
         return pEN;
 
     return lISOList.end();
+}
+
+//-----------------------------------------------
+sal_Bool Locale::getFallback(Locale& aLocale)
+{
+    // a) remove country from incoming locale
+    //    e.g. "de-DE" => "de" or "en-US" => "en"!
+    if (aLocale.getCountry().getLength())
+    {
+        aLocale.setCountry(::rtl::OUString());
+        return sal_True;
+    }
+
+    // b) "en-US" possible?
+    if (!aLocale.equals(EN_US()))
+    {
+        aLocale = EN_US();
+        return sal_True;
+    }
+
+    // c) locale = "en-US"
+    //    but "en-US" => "en" was already handled by a)!
+
+    // d) locale = "en"
+    //    next possible fallback is "x-default"
+    if (!aLocale.equals(X_DEFAULT()))
+    {
+        aLocale = X_DEFAULT();
+        return sal_True;
+    }
+
+    // e) locale = "x-default"
+    //    next possible fallback is "x-notranslate"
+    if (!aLocale.equals(X_NOTRANSLATE()))
+    {
+        aLocale = X_NOTRANSLATE();
+        return sal_True;
+    }
+
+    // f) no more fallbacks
+    return sal_False;
+}
+
+//-----------------------------------------------
+void  Locale::operator=(const Locale& rCopy)
+{
+    // Take over these values without checking ...
+    // They was already checked if the copy was constructed
+    // and must be valid now!
+    m_sLanguage = rCopy.m_sLanguage;
+    m_sCountry  = rCopy.m_sCountry;
+    m_sVariant  = rCopy.m_sVariant;
 }
 
 //-----------------------------------------------
