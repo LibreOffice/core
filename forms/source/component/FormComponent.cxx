@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:37:39 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@
 namespace frm
 {
 //.........................................................................
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -363,22 +364,10 @@ InterfaceRef SAL_CALL OControl::getContext() throw (RuntimeException)
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::createPeer(const Reference<XToolkit>& Toolkit, const Reference<XWindowPeer>& Parent) throw (RuntimeException)
+void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const Reference<XWindowPeer>& _rxParent) throw (RuntimeException)
 {
-    if (m_xControl.is())
-    {
-        m_xControl->createPeer(Toolkit, Parent);
-        try
-        {
-            Reference< XVclWindowPeer > xPeer( m_xControl->getPeer(), UNO_QUERY );
-            if ( xPeer.is() )
-                xPeer->setProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NativeWidgetLook" ) ), makeAny( (sal_Bool)sal_False ) );
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "OControl::createPeer: caught an exception while initializing the peer!" );
-        }
-    }
+    if ( m_xControl.is() )
+        m_xControl->createPeer( _rxToolkit, _rxParent );
 }
 
 //------------------------------------------------------------------------------
@@ -621,6 +610,10 @@ OControlModel::OControlModel(
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
     ,m_xServiceFactory(_rxFactory)
+    ,m_bNativeLook( sal_False )
+        // form controls are usually embedded into documents, not dialogs, and in documents
+        // the native look is ugly ....
+        // #i37342# / 2004-11-19 / frank.schoenheit@sun.com
 {
     DBG_CTOR(OControlModel, NULL);
     if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
@@ -631,8 +624,18 @@ OControlModel::OControlModel(
             m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), UNO_QUERY);
             setAggregation(m_xAggregate);
 
-            if (m_xAggregateSet.is() && rDefault.getLength())
-                m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, makeAny(rDefault));
+            if ( m_xAggregateSet.is() )
+            {
+                try
+                {
+                    if ( rDefault.getLength() )
+                        m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( rDefault ) );
+                }
+                catch( const Exception& )
+                {
+                    OSL_ENSURE( sal_False, "OControlModel::OControlModel: caught an exception!" );
+                }
+            }
         }
 
         if (_bSetDelegator)
@@ -1090,6 +1093,10 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
         case PROPERTY_ID_TABINDEX:
             aReturn <<= (sal_Int16)FRM_DEFAULT_TABINDEX;
             break;
+
+        case PROPERTY_ID_NATIVE_LOOK:
+            aReturn <<= (sal_Bool)sal_True;
+            break;
     }
     return aReturn;
 }
@@ -1110,6 +1117,9 @@ void OControlModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             break;
         case PROPERTY_ID_TABINDEX:
             rValue <<= m_nTabIndex;
+            break;
+        case PROPERTY_ID_NATIVE_LOOK:
+            rValue <<= (sal_Bool)m_bNativeLook;
             break;
         default:
             OPropertySetAggregationHelper::getFastPropertyValue(rValue, nHandle);
@@ -1132,6 +1142,9 @@ sal_Bool OControlModel::convertFastPropertyValue(
             break;
         case PROPERTY_ID_TABINDEX:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_nTabIndex);
+            break;
+        case PROPERTY_ID_NATIVE_LOOK:
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bNativeLook);
             break;
     }
     return bModified;
@@ -1158,16 +1171,20 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
                 "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
             _rValue >>= m_nTabIndex;
             break;
+        case PROPERTY_ID_NATIVE_LOOK:
+            OSL_VERIFY( _rValue >>= m_bNativeLook );
+            break;
     }
 }
 
 //------------------------------------------------------------------------------
 void OControlModel::fillProperties( Sequence< Property >& /* [out] */ _rProps, Sequence< Property >& /* [out] */ _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( 3, m_xAggregateSet )
-        DECL_PROP2(CLASSID, sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP1(NAME,    ::rtl::OUString,    BOUND);
-        DECL_PROP1(TAG,     ::rtl::OUString,    BOUND);
+    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( 4, m_xAggregateSet )
+        DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
+        DECL_PROP1      (NAME,        ::rtl::OUString,  BOUND);
+        DECL_BOOL_PROP2 (NATIVE_LOOK,                   BOUND, TRANSIENT);
+        DECL_PROP1      (TAG,         ::rtl::OUString,  BOUND);
     END_DESCRIBE_PROPERTIES()
 }
 
@@ -2286,14 +2303,31 @@ void OBoundControlModel::reset() throw (RuntimeException)
     sal_Bool bIsNewRecord = sal_False;
     Reference<XPropertySet> xSet( m_xCursor, UNO_QUERY );
     if ( xSet.is() )
-        xSet->getPropertyValue( PROPERTY_ISNEW ) >>= bIsNewRecord;
+    {
+        try
+        {
+            xSet->getPropertyValue( PROPERTY_ISNEW ) >>= bIsNewRecord;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OBoundControlModel::reset: caught an exception!" );
+        }
+    }
 
     // cursor on an invalid row?
-    sal_Bool bInvalidCursorPosition =  m_xCursor.is()
-                                    && (  m_xCursor->isAfterLast()
-                                       || m_xCursor->isBeforeFirst()
-                                       )
-                                    && !bIsNewRecord;
+    sal_Bool bInvalidCursorPosition = sal_True;
+    try
+    {
+        bInvalidCursorPosition =    m_xCursor.is()
+                                &&  (  m_xCursor->isAfterLast()
+                                    || m_xCursor->isBeforeFirst()
+                                    )
+                                &&  !bIsNewRecord;
+    }
+    catch( const SQLException& )
+    {
+        OSL_ENSURE( sal_False, "OBoundControlModel::reset: caught an SQL exception!" );
+    }
     // don't count the insert row as "invalid"
     // @since  #i24495#
     // @date   2004-05-14
