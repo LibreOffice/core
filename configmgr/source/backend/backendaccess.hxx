@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:03:25 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
 #define CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
 
+#ifndef CONFIGMGR_BACKEND_BACKENDNOTIFIER_HXX
+#include "backendnotifier.hxx"
+#endif // CONFIGMGR_BACKEND_BACKENDNOTIFIER_HXX
+
 #ifndef CONFIGMGR_BACKEND_MERGEDDATAPROVIDER_HXX
 #include "mergeddataprovider.hxx"
 #endif // CONFIGMGR_BACKEND_MERGEDDATAPROVIDER_HXX
@@ -92,6 +96,10 @@
 #ifndef CONFIGMGR_BINARYCACHE_HXX
 #include "binarycache.hxx"
 #endif //CONFIGMGR_BINARYWRITER_HXX
+
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDCHANGESNOTIFIER_HPP_
+#include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
+#endif
 
 
 namespace configmgr { namespace backend {
@@ -124,8 +132,9 @@ class BackendAccess : public IMergedDataProvider {
                                             ITemplateDataProvider* aTemplateProvider,
                                             INodeDataListener *aListener = NULL)
             CFG_UNO_THROW_ALL() ;
-        virtual void removeRequestListener(INodeDataListener *aListener)
-            CFG_NOTHROW() {}
+        virtual void removeRequestListener(INodeDataListener *aListener,
+                                           const ComponentRequest& aRequest)
+            CFG_NOTHROW();
         virtual void updateNodeData(const UpdateRequest& aUpdate)
             CFG_UNO_THROW_ALL() ;
         virtual NodeResult getDefaultData(const NodeRequest& aRequest)
@@ -174,6 +183,11 @@ class BackendAccess : public IMergedDataProvider {
         uno::Reference<backenduno::XBackend> mBackend ;
         /** Binary cache of default data */
         BinaryCache mBinaryCache;
+        /** Manages Nofification from the Backends */
+        uno::Reference<backenduno::XBackendChangesListener>  mXNotifier;
+
+        BackendChangeNotifier * mNotifier;
+
 } ;
 
 } } // configmgr.backend
