@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 12:21:19 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:00:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,7 +119,6 @@ SLOFILES = \
     $(SLO)$/multipro.obj	\
     $(SLO)$/fmurl.obj		\
     $(SLO)$/filtnav.obj		\
-    $(SLO)$/fmimplids.obj   \
     $(SLO)$/fmtools.obj     \
     $(SLO)$/fmshimp.obj     \
     $(SLO)$/fmshell.obj     \
@@ -127,7 +126,9 @@ SLOFILES = \
     $(SLO)$/fmsrcimp.obj	\
     $(SLO)$/fmview.obj		\
     $(SLO)$/siimport.obj	\
-    $(SLO)$/sdbdatacolumn.obj
+    $(SLO)$/sdbdatacolumn.obj \
+    $(SLO)$/formcontrolling.obj \
+    $(SLO)$/fmdispatch.obj
 
 .IF "$(OS)$(CPU)"=="SOLARISI" 
 NOOPTFILES=$(SLO)$/fmprop.obj
