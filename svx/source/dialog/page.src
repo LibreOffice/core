@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:16:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ japanese ] = "ι«γ•(~H)";
         Text[ chinese_traditional ] = "ι«εΊ¦(~H)";
         Text[ arabic ] = "ΗαΗΡΚέΗΪ";
-        Text[ greek ] = "Ύψος";
+        Text[ greek ] = "Ύ~ψος";
         Text[ korean ] = "λ†’μ΄(~H)";
         Text[ turkish ] = "Yόkseklik";
         Text[ language_user1 ] = " ";
@@ -253,7 +253,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ english_us ] = "Orientation";
         Text[ portuguese ] = "Orientaηγo";
         Text[ russian ] = "Ξπθενςΰφθÿ";
-        Text[ greek ] = "Στοίχιση";
+        Text[ greek ] = "Κατεύθυνση";
         Text[ dutch ] = "Uitlijning";
         Text[ french ] = "Orientation";
         Text[ spanish ] = "Orientaciσn";
@@ -300,7 +300,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ japanese ] = "ηΈ¦(~P)";
         Text[ chinese_traditional ] = "η›΄ε‘(~P)";
         Text[ arabic ] = "ΘΗαΨζα";
-        Text[ greek ] = "~Κατακόρυφα";
+        Text[ greek ] = "Κατακόρυ~φα";
         Text[ korean ] = "μ„Έλ΅(~P)";
         Text[ turkish ] = "Dikey";
         Text[ language_user1 ] = " ";
@@ -360,7 +360,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ english_us ] = "~Text direction";
         Text[ portuguese ] = "~Text flow";
         Text[ russian ] = "Νΰοπΰβλενθε ςεκρςΰ";
-        Text[ greek ] = "~Text flow";
+        Text[ greek ] = "~Κατεύθυνση κειμένου";
         Text[ dutch ] = "~Tekstverloop";
         Text[ french ] = "Orientation du texte";
         Text[ spanish ] = "~Direcciσn de escritura";
@@ -371,8 +371,8 @@ TabPage RID_SVXPAGE_PAGE
         Text[ polish ] = "Kierunek ~tekstu";
         Text[ portuguese_brazilian ] = "~Orientaηγo do texto";
         Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
-        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥";
-        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘";
+        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥(~T)";
+        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
         Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘(~T)";
         Text[ turkish ] = "~Metin yφnό";
         Text[ arabic ] = "~Text flow";
@@ -402,7 +402,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ english_us ] = "Paper ~tray";
         Text[ portuguese ] = "~Origem do papel";
         Text[ russian ] = "Οξδΰχΰ ασμΰγθ";
-        Text[ greek ] = "Δί~σκος χαρτιού";
+        Text[ greek ] = "~Θήκη χαρτιού";
         Text[ dutch ] = "~Papierlade";
         Text[ french ] = "Source du papier";
         Text[ spanish ] = "~Bandeja";
@@ -675,7 +675,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ english_us ] = "Layout settings";
         Text[ portuguese ] = "Parβmetros da configuraηγo";
         Text[ russian ] = "Νΰρςπξικθ πΰημεςκθ";
-        Text[ greek ] = "Layout settings";
+        Text[ greek ] = "Ρυθμίσεις διάταξης";
         Text[ dutch ] = "Lay-out-instellingen";
         Text[ french ] = "Paramθtres de mise en page";
         Text[ spanish ] = "Configuraciσn del diseρo";
@@ -1252,7 +1252,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ english_us ] = "Table alignment";
         Text[ portuguese ] = "Alinhamento da tabela";
         Text[ russian ] = "Βϋπΰβνθβΰνθε ςΰαλθφϋ";
-        Text[ greek ] = "Table alignment";
+        Text[ greek ] = "Ευθυγράμμιση πίνακα";
         Text[ dutch ] = "Uitlijning tabel";
         Text[ french ] = "Alignement de la table";
         Text[ spanish ] = "Orientaciσn de la hoja";
@@ -1350,13 +1350,13 @@ TabPage RID_SVXPAGE_PAGE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113 , 133 ) ;
         Size = MAP_APPFONT ( 135 , 10 ) ;
-        Text[ language_user1 ] = "pb: changed from 'Seitenformat' to 'Papierformat'";
+        Text[ language_user1 ] = "; pb: changed from 'Seitenformat' to 'Papierformat'";
         Text = "Objekt ~an Papierformat anpassen" ;
         Text [ ENGLISH ] = "Fit ob~ject to paper format" ;
         Text[ english_us ] = "~Fit object to paper format";
         Text[ portuguese ] = "~Ajustar objecto ao formato do papel";
         Text[ russian ] = "Ρξγλΰρξβΰςό ξαϊεκς ρ τξπμΰςξμ ασμΰγθ";
-        Text[ greek ] = "Προσαρμογή σε μέγεθος";
+        Text[ greek ] = "Π~ροσαρμογή αντικειμένου στη μορφή χαρτιού";
         Text[ dutch ] = "~Object aanpassen aan papierformaat";
         Text[ french ] = "Adapter l'objet au format de papier";
         Text[ spanish ] = "~Ajustar objeto al tamaρo de papel";
@@ -1402,7 +1402,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ japanese ] = "ε°ε·θ¦‹ε½“γ‚’εγ‚γ›γ‚‹";
         Text[ chinese_traditional ] = "ζ­£ει η„θ΅θ·η›Έη­‰";
         Text[ arabic ] = "ΚΤΫνα";
-        Text[ greek ] = "~Ενεργοποίηση";
+        Text[ greek ] = "Επι~βεβαίωση εγγραφής";
         Text[ korean ] = "μΈμ‡„ν•  λ• κ°€λ  λ§μ¶¤ ";
         Text[ turkish ] = "Ηalύώtύr";
         Text[ language_user1 ] = " ";
@@ -1436,7 +1436,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ japanese ] = "ι©η”¨ζ®µθ½γ‚Ήγ‚Ώγ‚¤γƒ«(~S)";
         Text[ chinese_traditional ] = "εƒη…§ζ–‡ζ®µθ½ζ¨£εΌ(~S)";
         Text[ arabic ] = "δγΨ έήΡΙ γΡΜΪν";
-        Text[ greek ] = "Πρό~τυπο παραγράφου αναφοράς";
+        Text[ greek ] = "Πρό~τυπο παραγράφου παραπομπής";
         Text[ korean ] = "μ°Έμ΅° μ¤νƒ€μΌ(~S)";
         Text[ turkish ] = "Referans paragraf biηimi";
         Text[ language_user1 ] = " ";
@@ -1862,33 +1862,33 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
     };
     ItemList [ language_user1 ] =
     {
-             < "A3" ; PAPERSIZE_A3 ; > ;
-        < "A4" ; PAPERSIZE_A4 ; > ;
-        < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "Letter" ; PAPERSIZE_LETTER ; > ;
-        < "Legal" ; PAPERSIZE_LEGAL ; > ;
-        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "Benutzer" ; PAPERSIZE_USER ; > ;
-        < "C4" ; PAPERSIZE_C4 ; > ;
-        < "C5" ; PAPERSIZE_C5 ; > ;
-        < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C65" ; PAPERSIZE_C65 ; > ;
-        < "DL" ; PAPERSIZE_DL ; > ;
-        < "Env. #6Ύ" ; PAPERSIZE_COM675; > ;
-        < "Env. Monarch" ; PAPERSIZE_MONARCH; > ;
-        < "Env. #9" ; PAPERSIZE_COM9; > ;
-        < "Env. #10" ; PAPERSIZE_COM10; > ;
-        < "Env. #11" ; PAPERSIZE_COM11; > ;
-        < "Env. #12" ; PAPERSIZE_COM12; > ;
-        < "16 kai" ; PAPERSIZE_KAI16; > ;
-        < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groί" ; PAPERSIZE_KAI32BIG; > ;
+             < "; A3" ; PAPERSIZE_A3 ; > ;
+        < "; A4" ; PAPERSIZE_A4 ; > ;
+        < "; A5" ; PAPERSIZE_A5 ; > ;
+        < "; B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "; B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "; B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "; B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "; B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "; B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "; Letter" ; PAPERSIZE_LETTER ; > ;
+        < "; Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "; Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "; Benutzer" ; PAPERSIZE_USER ; > ;
+        < "; C4" ; PAPERSIZE_C4 ; > ;
+        < "; C5" ; PAPERSIZE_C5 ; > ;
+        < "; C6" ; PAPERSIZE_C6 ; > ;
+        < "; C65" ; PAPERSIZE_C65 ; > ;
+        < "; DL" ; PAPERSIZE_DL ; > ;
+        < "; Env. #6Ύ" ; PAPERSIZE_COM675; > ;
+        < "; Env. Monarch" ; PAPERSIZE_MONARCH; > ;
+        < "; Env. #9" ; PAPERSIZE_COM9; > ;
+        < "; Env. #10" ; PAPERSIZE_COM10; > ;
+        < "; Env. #11" ; PAPERSIZE_COM11; > ;
+        < "; Env. #12" ; PAPERSIZE_COM12; > ;
+        < "; 16 kai" ; PAPERSIZE_KAI16; > ;
+        < "; 32 kai" ; PAPERSIZE_KAI32; > ;
+        < "; 32 kai groί" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ english_us ] =
     {
@@ -1982,33 +1982,33 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
     };
     ItemList [ greek ] =
     {
-             < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
-        < "B5 176 x 250 χιλ" ; PAPERSIZE_B5 ; > ;
-        < "Επιστολή 8.5 x 11 ιντσ." ; PAPERSIZE_B6 ; > ;
-        < "Legal 8.5 x 14 ιντσ." ; PAPERSIZE_B4_JIS ; > ;
-        < "Δισκίο" ; PAPERSIZE_B5_JIS ; > ;
-        < "Χρήστης" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6 125 x 176 χιλ" ; PAPERSIZE_LETTER ; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_LEGAL ; > ;
-        < "C5 162 x 229 χιλ" ; PAPERSIZE_TABLOID ; > ;
-        < "C6 114 x 162 χιλ" ; PAPERSIZE_USER ; > ;
-        < "C65 114 x 227 χιλ" ; PAPERSIZE_C4 ; > ;
-        < "DL 110 x 220 χιλ" ; PAPERSIZE_C5 ; > ;
-        < "Φακ. #6Ύ 3,625 x 6,5 ιντσ." ; PAPERSIZE_C6 ; > ;
-        < "Φακ. Monarch 3,875 x 7,5 ίντσες" ; PAPERSIZE_C65 ; > ;
-        < "Φακ. #9 3,875 x 8,875 ιντσ." ; PAPERSIZE_DL ; > ;
-        < "Φακ. #10 4,125 x 9,5 ιντσ." ; PAPERSIZE_COM675; > ;
-        < "Φακ. #11 4,5 x 10,375 ιντσ." ; PAPERSIZE_MONARCH; > ;
-        < "Φακ.. #12 4,75 x 11 ιντσ." ; PAPERSIZE_COM9; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_COM10; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_COM11; > ;
-        < "32 kai groί 140 x 203 mm" ; PAPERSIZE_COM12; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groί 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+             < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Προσαρμοσμένο μέγεθος" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Φάκελος #6ΒΎ" ; PAPERSIZE_COM675; > ;
+        < "Φάκελος Monarch" ; PAPERSIZE_MONARCH; > ;
+        < "Φάκελος #9" ; PAPERSIZE_COM9; > ;
+        < "Φάκελος #10" ; PAPERSIZE_COM10; > ;
+        < "Φάκελος #11" ; PAPERSIZE_COM11; > ;
+        < "Φάκελος #12" ; PAPERSIZE_COM12; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ dutch ] =
     {
@@ -2703,32 +2703,32 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
     };
     ItemList [ language_user1 ] =
     {
-             < "A0" ; PAPERSIZE_A0 ; > ;
-        < "A1" ; PAPERSIZE_A1 ; > ;
-        < "A2" ; PAPERSIZE_A2 ; > ;
-        < "A3" ; PAPERSIZE_A3 ; > ;
-        < "A4" ; PAPERSIZE_A4 ; > ;
-        < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "Letter" ; PAPERSIZE_LETTER ; > ;
-        < "Legal" ; PAPERSIZE_LEGAL ; > ;
-        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "Benutzer" ; PAPERSIZE_USER ; > ;
-        < "C4" ; PAPERSIZE_C4 ; > ;
-        < "C5" ; PAPERSIZE_C5 ; > ;
-        < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C65" ; PAPERSIZE_C65 ; > ;
-        < "DL" ; PAPERSIZE_DL ; > ;
-        < "Dia" ; PAPERSIZE_DIA ; > ;
-        < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
-        < "16 kai" ; PAPERSIZE_KAI16; > ;
-        < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groί" ; PAPERSIZE_KAI32BIG; > ;
+             < "; A0" ; PAPERSIZE_A0 ; > ;
+        < "; A1" ; PAPERSIZE_A1 ; > ;
+        < "; A2" ; PAPERSIZE_A2 ; > ;
+        < "; A3" ; PAPERSIZE_A3 ; > ;
+        < "; A4" ; PAPERSIZE_A4 ; > ;
+        < "; A5" ; PAPERSIZE_A5 ; > ;
+        < "; B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "; B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "; B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "; B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "; B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "; B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "; Letter" ; PAPERSIZE_LETTER ; > ;
+        < "; Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "; Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "; Benutzer" ; PAPERSIZE_USER ; > ;
+        < "; C4" ; PAPERSIZE_C4 ; > ;
+        < "; C5" ; PAPERSIZE_C5 ; > ;
+        < "; C6" ; PAPERSIZE_C6 ; > ;
+        < "; C65" ; PAPERSIZE_C65 ; > ;
+        < "; DL" ; PAPERSIZE_DL ; > ;
+        < "; Dia" ; PAPERSIZE_DIA ; > ;
+        < "; Bildschirm" ; PAPERSIZE_SCREEN ; > ;
+        < "; 16 kai" ; PAPERSIZE_KAI16; > ;
+        < "; 32 kai" ; PAPERSIZE_KAI32; > ;
+        < "; 32 kai groί" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ english_us ] =
     {
@@ -2819,32 +2819,32 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
     };
     ItemList [ greek ] =
     {
-             < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
-        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
-        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
-        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
-        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
-        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
-        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
-        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
-        < "Letter 8,5 x 11 in" ; PAPERSIZE_B6 ; > ;
-        < "Legal 8.5 x 14 in" ; PAPERSIZE_B4_JIS ; > ;
-        < "Tabloid" ; PAPERSIZE_B5_JIS ; > ;
-        < "Χρήστης" ; PAPERSIZE_B6_JIS ; > ;
-        < "B6 125 x 176 mm" ; PAPERSIZE_LETTER ; > ;
-        < "C4 229 x 324 mm" ; PAPERSIZE_LEGAL ; > ;
-        < "C5 162 x 229 mm" ; PAPERSIZE_TABLOID ; > ;
-        < "C6 114 x 162 mm" ; PAPERSIZE_USER ; > ;
-        < "C65 114 x 227 mm" ; PAPERSIZE_C4 ; > ;
-        < "DL 110 x 220 mm" ; PAPERSIZE_C5 ; > ;
-        < "Διαφάνεια" ; PAPERSIZE_C6 ; > ;
-        < "Οθόνη" ; PAPERSIZE_C65 ; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_DL ; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_DIA ; > ;
-        < "32 kai groί 140 x 203 mm" ; PAPERSIZE_SCREEN ; > ;
-        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
-        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groί 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+             < "A0" ; PAPERSIZE_A0 ; > ;
+        < "A1" ; PAPERSIZE_A1 ; > ;
+        < "A2" ; PAPERSIZE_A2 ; > ;
+        < "A3" ; PAPERSIZE_A3 ; > ;
+        < "A4" ; PAPERSIZE_A4 ; > ;
+        < "A5" ; PAPERSIZE_A5 ; > ;
+        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
+        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
+        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
+        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
+        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
+        < "Letter" ; PAPERSIZE_LETTER ; > ;
+        < "Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Προσαρμοσμένο μέγεθος" ; PAPERSIZE_USER ; > ;
+        < "C4" ; PAPERSIZE_C4 ; > ;
+        < "C5" ; PAPERSIZE_C5 ; > ;
+        < "C6" ; PAPERSIZE_C6 ; > ;
+        < "C65" ; PAPERSIZE_C65 ; > ;
+        < "DL" ; PAPERSIZE_DL ; > ;
+        < "Διαφάνεια" ; PAPERSIZE_DIA ; > ;
+        < "Οθόνη" ; PAPERSIZE_SCREEN ; > ;
+        < "16 kai" ; PAPERSIZE_KAI16; > ;
+        < "32 kai" ; PAPERSIZE_KAI32; > ;
+        < "32 kai large" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ dutch ] =
     {
@@ -3504,6 +3504,7 @@ String RID_SVXSTR_PAPERBIN_SETTINGS
     Text[ slovak ] = "[Z nastavenia tlaΔiarne]";
 };
  // ********************************************************************** EOF
+
 
 
 
