@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:04:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,23 +621,31 @@ void Desktop::Init()
 
     // create service factory...
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
-    if( ! rSMgr.is() )
+    if( rSMgr.is() )
+    {
+        ::comphelper::setProcessServiceFactory( rSMgr );
+    }
+    else
     {
         SetBootstrapError( BE_UNO_SERVICEMANAGER );
     }
 
-    ::comphelper::setProcessServiceFactory( rSMgr );
-
-    // prepare language
-    LanguageSelection::prepareLanguage();
-
-    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
-#ifdef UNX
-    //  check whether we need to print cmdline help
-    if ( pCmdLineArgs->IsHelp() ) {
-        displayCmdlineHelp();
-        _exit(0);
+    if ( GetBootstrapError() == BE_OK )
+    {
+        // prepare language
+        if ( !LanguageSelection::prepareLanguage() )
+            SetBootstrapError( BE_LANGUAGE_MISSING );
     }
+
+    if ( GetBootstrapError() == BE_OK )
+    {
+        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+#ifdef UNX
+        //  check whether we need to print cmdline help
+        if ( pCmdLineArgs->IsHelp() ) {
+            displayCmdlineHelp();
+            _exit(0);
+        }
 #endif
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
@@ -657,7 +665,7 @@ void Desktop::Init()
             OfficeIPCThread::DisableOfficeIPCThread();
         }
         pSignalHandler = new SalMainPipeExchangeSignalHandler;
-
+    }
 }
 
 void Desktop::DeInit()
@@ -1036,18 +1044,31 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
     }
     else if ( aBootstrapError == BE_USERINSTALL_FAILED )
     {
-            OUString aMessage;
-            OUStringBuffer aDiagnosticMessage( 100 );
-            OUString aErrorMsg;
-            aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "User installation could not be completed" )) );
-            aDiagnosticMessage.append( aErrorMsg );
-            aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
-            FatalError(aMessage);
+        OUString aMessage;
+        OUStringBuffer aDiagnosticMessage( 100 );
+        OUString aErrorMsg;
+        aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_INTERNAL,
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "User installation could not be completed" )) );
+        aDiagnosticMessage.append( aErrorMsg );
+        aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
+        FatalError(aMessage);
     }
-    return;
-    // leave scope at catch...
-    // _exit( 333 );
+    else if ( aBootstrapError == BE_LANGUAGE_MISSING )
+    {
+        OUString aMessage;
+        OUStringBuffer aDiagnosticMessage( 100 );
+        OUString aErrorMsg;
+        aErrorMsg = GetMsgString(
+            //@@@ FIXME: should use an own resource string => #i36213#
+            STR_BOOTSTRAP_ERR_INTERNAL,
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "Language could not be determined." )) );
+        aDiagnosticMessage.append( aErrorMsg );
+        aMessage = MakeStartupErrorMessage(
+            aDiagnosticMessage.makeStringAndClear() );
+        FatalError(aMessage);
+     }
+     return;
 }
 
 /*
@@ -1294,7 +1315,8 @@ void Desktop::Main()
     com::sun::star::uno::ContextLayer layer(
         com::sun::star::uno::getCurrentContext() );
 
-    if ( m_aBootstrapError == BE_OK )
+    BootstrapError eError = GetBootstrapError();
+    if ( eError == BE_OK )
     {
         // Detect desktop environment - need to do this as early as possible
         com::sun::star::uno::setCurrentContext(
@@ -1322,7 +1344,7 @@ void Desktop::Main()
     }
     else
     {
-        HandleBootstrapErrors( m_aBootstrapError );
+        HandleBootstrapErrors( eError );
         return;
     }
 
@@ -1447,7 +1469,6 @@ void Desktop::Main()
 
         AllSettings aSettings( Application::GetSettings() );
 
-        LanguageSelection langselect;
         OUString aUILocaleString = LanguageSelection::getLanguageString();
         sal_Int32 nIndex = 0;
         OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
