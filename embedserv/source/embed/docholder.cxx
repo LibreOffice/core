@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-19 08:35:37 $
+ *  last change: $Author: mav $ $Date: 2003-03-26 10:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,15 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc )
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xDocument, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
         xBroadcaster->addCloseListener( (util::XCloseListener*)this );
+
+    if ( m_xDocument.is() )
+    {
+        // set the document mode to embedded
+        uno::Sequence< beans::PropertyValue > aSeq( 1 );
+        aSeq[0].Name = ::rtl::OUString::createFromAscii( "SetEmbedded" );
+        aSeq[0].Value <<= sal_True;
+        m_xDocument->attachResource( ::rtl::OUString(), aSeq );
+    }
 }
 
 void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject& aSource )
