@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:38 $
+ *  last change: $Author: oj $ $Date: 2000-11-29 09:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,14 +123,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openCatalogs();
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
@@ -143,39 +136,21 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openSchemas();
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openColumnPrivileges(catalog,schema,table,columnNamePattern);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openColumns(catalog,schemaPattern,tableNamePattern,columnNamePattern);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
@@ -295,38 +270,20 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
         const Any& catalog, const ::rtl::OUString& schemaPattern,
         const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openProcedureColumns(catalog,schemaPattern,procedureNamePattern,columnNamePattern);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
         const Any& catalog, const ::rtl::OUString& schemaPattern,
         const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openProcedures(catalog,schemaPattern,procedureNamePattern);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openVersionColumns(catalog,schema,table);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
@@ -416,76 +373,39 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLExceptio
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openExportedKeys(catalog,schema,table);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openImportedKeys(catalog,schema,table);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openPrimaryKeys(catalog,schema,table);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
         sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openIndexInfo(catalog,schema,table,unique,approximate);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
         const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
         sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openBestRowIdentifier(catalog,schema,table,scope,nullable);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openTablePrivileges(catalog,schemaPattern,tableNamePattern);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
@@ -493,14 +413,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
         const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
         const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openForeignKeys(primaryCatalog,primarySchema.toChar() == '%' ? &primarySchema : NULL,&primaryTable,
-//      foreignCatalog, foreignSchema.toChar() == '%' ? &foreignSchema : NULL,&foreignTable);
-//  return xRef;
-        return Reference< XResultSet >();
+    throw SQLException(::rtl::OUString::createFromAscii("not supported!"),*this,::rtl::OUString(),0,Any());
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
