@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 15:43:16 $
+ *  last change: $Author: jb $ $Date: 2001-07-10 11:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,10 @@
  *
  ************************************************************************/
 
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
+
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include <unotools/configpathes.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -392,6 +394,8 @@ namespace utl
     //------------------------------------------------------------------------
     sal_Bool OConfigurationNode::setNodeValue(const ::rtl::OUString& _rPath, const Any& _rValue) const throw()
     {
+        sal_Bool bResult = false;
+
         OSL_ENSURE(m_xReplaceAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         if (m_xReplaceAccess.is())
         {
@@ -402,7 +406,7 @@ namespace utl
                 if (m_xReplaceAccess->hasByName(sNormalizedName))
                 {
                     m_xReplaceAccess->replaceByName(sNormalizedName, _rValue);
-                    return sal_True;
+                    bResult = true;
                 }
 
                 // check if the name refers to a indirect descendant
@@ -410,60 +414,19 @@ namespace utl
                 {
                     OSL_ASSERT(_rPath.getLength());
 
-                    sal_Int32 nStart,nEnd;
+                    ::rtl::OUString sParentPath, sLocalName;
 
-                    sal_Int32 nPos = _rPath.getLength()-1;
-                    if (_rPath[ nPos ] == sal_Unicode(']'))
+                    if ( splitLastFromConfigurationPath(_rPath, sParentPath, sLocalName) )
                     {
-                        OSL_ASSERT(nPos > 0);
-
-                        sal_Unicode chQuote = _rPath[--nPos];
-
-                        if (chQuote == '\'' || chQuote == '\"')
-                        {
-                            nEnd = nPos;
-                            nPos = _rPath.lastIndexOf(chQuote,nEnd);
-                            nStart = nPos + 1;
-                            --nPos;
-                        }
-                        else
-                        {
-                            nEnd = nPos + 1;
-                            nPos = _rPath.lastIndexOf('[',nEnd);
-                            nStart = nPos + 1;
-                        }
-                        OSL_ASSERT(nPos >= 0 && _rPath[nPos] == '[');
-
-                        nPos =  _rPath.lastIndexOf('/',nPos);
-                    }
-                    else
-                    {
-                        nEnd = nPos;
-                        nPos = _rPath.lastIndexOf('/',nEnd);
-                        nStart = nPos + 1;
-                    }
-                    OSL_ASSERT( -1 <= nPos &&
-                                nPos < nStart &&
-                                nStart < nEnd &&
-                                nEnd <= _rPath.getLength() );
-
-                    OSL_ASSERT(nPos == -1 || _rPath[nPos] == '/');
-
-                    sal_Bool bResult = false;
-                    if (-1 != nPos)
-                    {
-                        OConfigurationNode aParentAccess = openNode(_rPath.copy(0, nPos));
+                        OConfigurationNode aParentAccess = openNode(sParentPath);
                         if (aParentAccess.isValid())
-                            bResult = aParentAccess.setNodeValue(_rPath.copy(nPos+1), _rValue);
+                            bResult = aParentAccess.setNodeValue(sLocalName, _rValue);
                     }
                     else
                     {
-                        ::rtl::OUString sLocalName = _rPath.copy(nStart,nEnd-nStart);
-
                         m_xReplaceAccess->replaceByName(sLocalName, _rValue);
                         bResult = true;
                     }
-                    return bResult;
                 }
 
             }
@@ -486,7 +449,7 @@ namespace utl
 
 
         }
-        return sal_False;
+        return bResult;
     }
 
     //------------------------------------------------------------------------
@@ -719,6 +682,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/07/05 15:43:16  jb
+ *  #87904# Adjusted to new configuration path format
+ *
  *  Revision 1.1  2001/06/13 16:27:29  fs
  *  initial checkin - non-UNO wrapper for configuration nodes
  *
