@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:32:56 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 00:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,10 +1483,10 @@ Text[ english_us ] = "Document is read-only!";
     Text[ portuguese ] = "O documento é só de leitura!";
     Text[ russian ] = "Äîêóìåíò ïîëüêî äëÿ ÷òåíèÿ!";
     Text[ greek ] = "Ôï İããñáöï åßíáé ìüíï ãéá áíÜãíùóç!";
-    Text[ dutch ] = "Document is Read Only!";
+    Text[ dutch ] = "Document is schrijfbeveiligd!";
     Text[ french ] = "Le document est en lecture seule !";
     Text[ spanish ] = "¡El documento es de sólo lectura!";
-    Text[ italian ] = "Document is Read Only!";
+    Text[ italian ] = "Il documento è protetto.";
     Text[ danish ] = "Document is Read Only!";
     Text[ swedish ] = "Dokument är skrivskyddat!";
     Text[ polish ] = "Dokument jest tylko do odczytu!";
@@ -1796,11 +1796,11 @@ Text[ english_us ] = "Greek Drachma";
     Text[ portuguese ] = "A moeda definida para o documento não é uma moeda pertencente à zona do Euro!";
     Text[ russian ] = "Ãğå÷åñêàÿ äğàõìà";
     Text[ greek ] = "Äñá÷ìŞ ÅëëÜäïò";
-    Text[ dutch ] = "De voor het document ingestelde valuta is geen Euro!";
+    Text[ dutch ] = "Griekse drachme";
     Text[ french ] = "Drachme Grecque";
     Text[ spanish ] = "Dracma griego";
     Text[ finnish ] = "Asiakirjaan määritetty valuutta ei ole Euro-alueen valuutta.";
-    Text[ italian ] = "La valuta impostata per il documento non fa parte dell'Euro.";
+    Text[ italian ] = "Dracma greca";
     Text[ danish ] = "Den valuta, der er indstillet for dette dokument, er ingen Euro-valuta!";
     Text[ swedish ] = "Grekisk drakma";
     Text[ polish ] = "Drachma grecka";
@@ -1822,10 +1822,10 @@ Text[ english_us ] = "The currency set for the document is not a European curren
     Text[ portuguese ] = "A língua que definiu para o seu sistema operativo não faz parte das línguas da união monetária europeia!";
     Text[ russian ] = "Óñòàíîâëåííàÿ äëÿ ıòîãî äîêóìåíòà âàëşòà íå ÿâëÿåòñÿ Åâğî!";
     Text[ greek ] = "Ôï íüìéóìá ğïõ åğéëİîáôå ãéá ôï İããñáöï äåí åßíáé íüìéóìá ôçò åõñùğáúêŞò æşíçò!";
-    Text[ dutch ] = "De voor uw besturingssysteem ingestelde taal is geen taal van de Europese Monetaire Unie!";
+    Text[ dutch ] = "De voor dit document ingestelde valuta is geen Euro-valuta!";
     Text[ french ] = "La monnaie définie pour le document n'est pas une monnaie européenne !";
     Text[ spanish ] = "¡La moneda determinada para el documento no pertenece a la zona del Euro!";
-    Text[ italian ] = "La lingua impostata nel vostro sistema operativo non fa parte dell'Unione Monetaria Europea!";
+    Text[ italian ] = "La lingua impostata nel vostro sistema operativo non è parte dell'Euro.";
     Text[ danish ] = "Det sprog, som er indstillet for dit operativsystem, er ikke et sprog som tilhører EU's monetære union!";
     Text[ swedish ] = "Valutan som är inställd för ditt dokument är ingen euro-valuta!";
     Text[ polish ] = "Waluta wybrana do zastosowania w dokumencie nie jest walut¹ Euro.";
@@ -1997,6 +1997,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protección de hoja";
 };
+
 
 
 
