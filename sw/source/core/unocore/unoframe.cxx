@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:13:38 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,9 +291,6 @@
 #endif
 
 #include <toolkit/helper/vclunohelper.hxx>
-
-// from fefly1.cxx
-extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 // from fefly1.cxx
 extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
@@ -1282,23 +1279,32 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             {
                 UnoActionContext aAction(pFmt->GetDoc());
 
-                // see SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocPos )
-                SwFlyFrm *pFly = 0;
-                const SwFrmFmt* pFmtXX = pFmt;
-                if (PTR_CAST(SwFlyFrmFmt, pFmtXX))
-                    pFly = ((SwFlyFrmFmt*)pFmtXX)->GetFrm();
                 SfxItemSet* pSet = 0;
-                if (pFly)
+                // --> OD 2004-08-13 #i31771#, #i25798# - No adjustment of
+                // anchor ( no call of method <::lcl_ChkAndSetNewAnchor(..)> ),
+                // if document is currently in reading mode.
+                if ( !pFmt->GetDoc()->IsInReading() )
                 {
-                    const SfxPoolItem* pItem;
-                    if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_ANCHOR, sal_False, &pItem ))
+                    // see SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocPos )
+                    SwFlyFrm *pFly = 0;
                     {
-                        pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrmFmtSetRange );
-                        pSet->Put( *pItem );
-                        if( !::lcl_ChkAndSetNewAnchor( *pFly, *pSet ))
-                            delete pSet, pSet = 0;
+                        const SwFrmFmt* pFmtXX = pFmt;
+                        if (PTR_CAST(SwFlyFrmFmt, pFmtXX))
+                            pFly = ((SwFlyFrmFmt*)pFmtXX)->GetFrm();
+                    }
+                    if ( pFly )
+                    {
+                        const SfxPoolItem* pItem;
+                        if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_ANCHOR, sal_False, &pItem ))
+                        {
+                            pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrmFmtSetRange );
+                            pSet->Put( *pItem );
+                            if ( !::lcl_ChkAndSetNewAnchor( *pFly, *pSet ) )
+                                delete pSet, pSet = 0;
+                        }
                     }
                 }
+                // <--
 
                 pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt, pSet, FALSE );
                 delete pSet;
@@ -1479,19 +1485,26 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     aSet.Put(aAnchor);
                 }
 
-                // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
-                SwFlyFrm *pFly = 0;
-                if (PTR_CAST(SwFlyFrmFmt, pFmt))
-                    pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
-                if (pFly)
+                // --> OD 2004-08-13 #i31771#, #i25798# - No adjustment of
+                // anchor ( no call of method <::lcl_ChkAndSetNewAnchor(..)> ),
+                // if document is currently in reading mode.
+                if ( !pFmt->GetDoc()->IsInReading() )
                 {
-                    const SfxPoolItem* pItem;
-                    if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, sal_False, &pItem ))
+                    // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
+                    SwFlyFrm *pFly = 0;
+                    if (PTR_CAST(SwFlyFrmFmt, pFmt))
+                        pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
+                    if (pFly)
                     {
-                        aSet.Put( *pItem );
-                        ::lcl_ChkAndSetNewAnchor( *pFly, aSet );
+                        const SfxPoolItem* pItem;
+                        if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, sal_False, &pItem ))
+                        {
+                            aSet.Put( *pItem );
+                            ::lcl_ChkAndSetNewAnchor( *pFly, aSet );
+                        }
                     }
                 }
+                // <--
 
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             }
