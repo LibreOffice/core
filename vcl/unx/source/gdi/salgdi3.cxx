@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-01 16:04:02 $
+ *  last change: $Author: hdu $ $Date: 2001-11-02 13:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,6 +848,7 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
             {
                 GlyphCache::GetInstance().UncacheFont( *mpServerSideFont );
                 mpServerSideFont = mpSrvFallbackFont;
+                mpSrvFallbackFont = NULL;
             }
 
             if( !mpServerSideFont )
