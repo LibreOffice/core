@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-29 12:51:16 $
+ *  last change: $Author: sj $ $Date: 2002-05-31 11:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,9 +231,9 @@ EscherPropertyContainer::~EscherPropertyContainer()
     if ( bHasComplexData )
     {
         while ( nSortCount-- )
-            delete( pSortStruct[ nSortCount ].pBuf );
+            delete[] pSortStruct[ nSortCount ].pBuf;
     }
-    delete  pSortStruct;
+    delete pSortStruct;
 };
 
 void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_uInt32 nPropValue, sal_Bool bBlib )
@@ -257,7 +257,7 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uI
             if ( pSortStruct[ i ].pBuf )
             {
                 nCountSize -= pSortStruct[ i ].nPropSize;
-                delete pSortStruct[ i ].pBuf;
+                delete[] pSortStruct[ i ].pBuf;
             }
             pSortStruct[ i ].pBuf = pProp;
             pSortStruct[ i ].nPropSize = nPropSize;
@@ -1766,7 +1766,7 @@ EscherGraphicProvider::EscherGraphicProvider( sal_uInt32 nFlags ) :
 EscherGraphicProvider::~EscherGraphicProvider()
 {
     for ( UINT32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] );
-    delete mpBlibEntrys;
+    delete[] mpBlibEntrys;
 }
 
 void EscherGraphicProvider::SetNewBlipStreamOffset( sal_Int32 nOffset )
@@ -1788,7 +1788,7 @@ UINT32 EscherGraphicProvider::ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry
         {
             pTemp[ i ] = mpBlibEntrys[ i ];
         }
-        delete mpBlibEntrys;
+        delete[] mpBlibEntrys;
         mpBlibEntrys = pTemp;
     }
     mpBlibEntrys[ mnBlibEntrys++ ] = p_EscherBlibEntry;
@@ -1853,7 +1853,7 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                     nBlipSize -= nBytes;
                 }
             }
-            delete [] pBuf;
+            delete[] pBuf;
             pMergePicStreamBSE->Seek( nOldPos );
         }
         else
@@ -2484,7 +2484,7 @@ void EscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bContainer )
         mpOutStrm->Seek( nSource + nBytes );
         mpOutStrm->Write( pBuf, nBufSize );
     }
-    delete pBuf;
+    delete[] pBuf;
     mpOutStrm->Seek( nCurPos );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-30 13:42:38 $
+ *  last change: $Author: sj $ $Date: 2002-05-31 11:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4438,13 +4438,13 @@ class SvxMSDffAdjustmentHandle
 SvxMSDffAutoShape::~SvxMSDffAutoShape()
 {
     if ( bVertAlloc )
-        delete pVertData;
+        delete[] pVertData;
     if ( bSegAlloc )
-        delete pSegData;
+        delete[] pSegData;
     if ( bTextRectAlloc )
-        delete pTextRectData;
+        delete[] pTextRectData;
     if ( bCalcAlloc )
-        delete pCalculationData;
+        delete[] pCalculationData;
     delete[] pAdjustmentHandles;
 }
 
