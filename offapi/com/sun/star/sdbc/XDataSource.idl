@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataSource.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XConnection;
+ published interface XConnection;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XDataSource
@@ -79,7 +79,7 @@ interface XConnection;
     by its name. A DataSource object is typically registered by a naming service
     provider.
  */
-interface XDataSource: com::sun::star::uno::XInterface
+published interface XDataSource: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
