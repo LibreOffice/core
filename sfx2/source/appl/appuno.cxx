@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-15 08:48:46 $
+ *  last change: $Author: dv $ $Date: 2001-06-19 15:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,6 @@ using namespace ::rtl;
 #include "sfxbasic.hxx"
 #include "objsh.hxx"
 #include "objuno.hxx"
-#include "filepicker.hxx"
-#include "folderpicker.hxx"
 #include "unoctitm.hxx"
 #include "dispatch.hxx"
 #include "doctemplates.hxx"
@@ -999,22 +997,6 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DocumentTemplates") );
 
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxFilePicker::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker") );
-
-    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-    aImpl += SfxFolderPicker::impl_getStaticImplementationName();
-
-    aTempStr = aImpl;
-    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-    xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FolderPicker") );
-
 #if 0
     if (pRegistryKey)
     {
@@ -1066,8 +1048,6 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
         IF_NAME_CREATECOMPONENTFACTORY( SfxAppDispatchProvider )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxFilePicker )
-        IF_NAME_CREATECOMPONENTFACTORY( SfxFolderPicker )
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
