@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.22 2001-01-03 09:55:08 mib Exp $
+	$Id: office.mod,v 1.23 2001-01-05 10:23:08 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -110,9 +110,10 @@
 
 <!ELEMENT office:font-decls (style:font-decl)*>
 
-<!ENTITY % styles "(style:style|text:list-style|number:number-style|
-		number:currency-style|number:percentage-style|number:date-style|
-		number:time-style|number:boolean-style|number:text-style|
+<!ENTITY % styles "(style:default-style|style:style|text:list-style|
+		number:number-style|number:currency-style|number:percentage-style|
+		number:date-style|number:time-style|number:boolean-style|
+		number:text-style|
 		draw:gradient|draw:hatch|draw:fill-image|draw:marker|draw:stroke-dash|
 		style:presentation-page-layout|draw:transparency)">
 

@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.22 2001-01-03 16:18:51 fs Exp $
+	$Id: style.mod,v 1.23 2001-01-05 10:23:08 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -73,6 +73,7 @@
 <!ATTLIST style:style style:family %styleFamily; #REQUIRED>
 
 <!ATTLIST style:style style:parent-style-name %styleName; #IMPLIED>
+<!ATTLIST style:style style:master-page-name %styleName; #IMPLIED>
 <!ATTLIST style:style style:next-style-name %styleName; #IMPLIED>
 <!ATTLIST style:style style:list-style-name %styleName; #IMPLIED>
 <!ATTLIST style:style style:data-style-name %styleName; #IMPLIED>
@@ -81,6 +82,8 @@
 
 <!ATTLIST style:style style:class %string; #IMPLIED>
 
+<!ELEMENT style:default-style (style:properties?)>
+<!ATTLIST style:default-style style:family %styleFamily; #REQUIRED>
 
 <!ELEMENT style:map EMPTY>
 
@@ -228,11 +231,12 @@
 						   #IMPLIED>
 <!ATTLIST style:properties fo:hyphenation-ladder-count
 						   %noLimitOrPositiveInteger;  #IMPLIED>
+<!ATTLIST style:properties style:page-number %positiveInteger; #IMPLIED>
 
 <!ELEMENT style:tab-stops (style:tab-stop)*>
 <!ELEMENT style:tab-stop EMPTY>
 <!ATTLIST style:tab-stop style:position %nonNegativeLength; #REQUIRED>
-<!ATTLIST style:tab-stop style:type (left|center|right|char) "left">
+<!ATTLIST style:tab-stop style:type (left|center|right|char|default) "left">
 <!ATTLIST style:tab-stop style:char %character; #IMPLIED>
 <!ATTLIST style:tab-stop style:leader-char %character; " ">
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 10:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
         GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family,
                                          pXMLFamily );
 
-
+#if 0
     // style:list-style-name="..." (SW paragarph styles only)
     if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
@@ -327,10 +327,11 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
                                           sXML_list_style_name, sListName );
         }
     }
+#endif
 
     // style:pool-id="..." is not required any longer since we use
     // english style names only
-    exportStyleAttributes( rStyle );
+//  exportStyleAttributes( rStyle );
 
     {
         // <style:style>
@@ -344,7 +345,7 @@ sal_Bool XMLStyleExport::exportDefaultStyle(
                                   GetExport().GetMM100UnitConverter(),
                                      GetExport().GetNamespaceMap(),
                                      XML_EXPORT_FLAG_IGN_WS );
-        exportStyleContent( rStyle );
+//      exportStyleContent( rStyle );
     }
     return sal_True;
 }
