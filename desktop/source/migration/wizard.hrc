@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ *  $RCSfile: wizard.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:49:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "../app/desktop.hrc"
+#include "../inc/helpid.hrc"
+
+#define TP_WIDTH 220
+#define TP_HEIGHT 205
+
+#define DLG_FIRSTSTART_WIZARD   RID_FIRSTSTSTART_START+1
+#define STR_FIRSTSTART_TITLE    RID_FIRSTSTSTART_START+2
+#define TP_WELCOME              RID_FIRSTSTSTART_START+3
+#define TP_REGISTRATION         RID_FIRSTSTSTART_START+4
+#define TP_MIGRATION            RID_FIRSTSTSTART_START+5
+#define TP_USER                 RID_FIRSTSTSTART_START+6
+#define TP_LICENSE              RID_FIRSTSTSTART_START+7
+#define ERRBOX_REG_NOSYSBROWSER RID_FIRSTSTSTART_START+29
+#define QB_ASK_DECLINE          RID_FIRSTSTSTART_START+30
+
+// local resIDs
+
+#define FT_WELCOME_HEADER       1
+#define FT_WELCOME_BODY         2
+#define FT_LICENSE_HEADER       1
+#define FT_LICENSE_BODY_1       2
+#define FT_LICENSE_BODY_1_TXT   3
+#define FT_LICENSE_BODY_2       4
+#define FT_LICENSE_BODY_2_TXT   5
+#define ML_LICENSE              6
+#define PB_LICENSE_DOWN         7
+#define FT_MIGRATION_HEADER     1
+#define FT_MIGRATION_BODY       2
+#define CB_MIGRATION            3
+#define FT_REGISTRATION_HEADER  1
+#define FT_REGISTRATION_BODY    2
+#define FL_REGISTRATION         3
+#define FT_REGISTRATION_END     4
+#define RB_REGISTRATION_NOW     5
+#define RB_REGISTRATION_LATER   6
+#define RB_REGISTRATION_NEVER   7
+#define RB_REGISTRATION_REG     8
+#define IMG_REGISTRATION        9
+#define FT_USER_HEADER          10
+#define FT_USER_BODY            11
+#define FT_USER_FIRST           12
+#define FT_USER_LAST            13
+#define FT_USER_FATHER          14
+#define FT_USER_INITIALS        15
+#define ED_USER_FIRST           16
+#define ED_USER_LAST            17
+#define ED_USER_FATHER          18
+#define ED_USER_INITIALS        19
+
+// global strings
+#define STR_STATE_WELCOME       RID_FIRSTSTSTART_START+100
+#define STR_STATE_LICENSE       RID_FIRSTSTSTART_START+101
+#define STR_STATE_MIGRATION     RID_FIRSTSTSTART_START+102
+#define STR_STATE_REGISTRATION  RID_FIRSTSTSTART_START+103
+#define STR_WELCOME_MIGRATION   RID_FIRSTSTSTART_START+104
+#define STR_WELCOME_OEM         RID_FIRSTSTSTART_START+105
+#define STR_WELCOME_OEM_EXT     RID_FIRSTSTSTART_START+106
+#define STR_LICENSE_ACCEPT      RID_FIRSTSTSTART_START+107
+#define STR_LICENSE_DECLINE     RID_FIRSTSTSTART_START+108
+#define STR_FINISH              RID_FIRSTSTSTART_START+109
+#define STR_STATE_USER          RID_FIRSTSTSTART_START+110
+#define STR_WELCOME_EVAL        RID_FIRSTSTSTART_START+111
+
+
