@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:35:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1550,6 +1550,10 @@ BOOL SfxDockingWindow::IsPinned_Impl() const
         return pImp->pSplitWin->IsPinned();
     else
         return TRUE;
+}
+void SfxDockingWindow::AutoShow( BOOL bShow )
+{
+    AutoShow_Impl(bShow);
 }
 
 void SfxDockingWindow::AutoShow_Impl( BOOL bShow )
