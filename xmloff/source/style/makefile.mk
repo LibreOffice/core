@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cl $ $Date: 2001-01-30 13:59:24 $
+#   last change: $Author: ganaya $ $Date: 2001-01-31 18:21:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        durationhdl.cxx	\
         adjushdl.cxx	\
         backhdl.cxx		\
         bordrhdl.cxx	\
@@ -160,7 +159,6 @@ CXXFILES = \
 
 
 SLOFILES =	\
-        $(SLO)$/durationhdl.obj \
         $(SLO)$/adjushdl.obj	\
         $(SLO)$/backhdl.obj		\
         $(SLO)$/bordrhdl.obj	\
@@ -239,6 +237,13 @@ SLOFILES =	\
         $(SLO)$/XMLBitmapRepeatOffsetPropertyHandler.obj \
         $(SLO)$/XMLFillBitmapSizePropertyHandler.obj	\
         $(SLO)$/XMLBitmapLogicalSizePropertyHandler.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbstyle.obj
+.ENDIF
 
 
 # --- Tagets -------------------------------------------------------
