@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:30:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,13 @@
 #include "ui_pch.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 #pragma hdrstop
 
+using namespace ::com::sun::star;
 
 // INCLUDE ---------------------------------------------------------------
 #if STLPORT_VERSION>=321
@@ -857,7 +862,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
 
                     ScDocShell* pOtherDocSh = new ScDocShell;
-                    SvEmbeddedObjectRef aDocShTablesRef = pOtherDocSh;
+                    SfxObjectShellRef aDocShTablesRef = pOtherDocSh;
                     pOtherDocSh->DoLoad( pMed );
                     ULONG nErr = pOtherDocSh->GetErrorCode();
                     if (nErr)
@@ -2058,7 +2063,7 @@ void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & rSetup, USH
     }
     else
     {
-        Rectangle aBoundRect = SfxInPlaceObject::GetVisArea();
+        Rectangle aBoundRect = SfxObjectShell::GetVisArea();
         ScViewData aTmpData( this, NULL );
         aTmpData.SetTabNo(nVisTab);
         aDocument.SnapVisArea( aBoundRect );
@@ -2111,11 +2116,12 @@ Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
             nStartRow = nEndRow;
         Rectangle aNewArea = ((ScDocument&)aDocument)
                                 .GetMMRect( nStartCol,nStartRow, nEndCol,nEndRow, nVisTab );
-        ((ScDocShell*)this)->SvEmbeddedObject::SetVisArea( aNewArea );
+        //TODO/LATER: different methods for setting VisArea?!
+        ((ScDocShell*)this)->SfxObjectShell::SetVisArea( aNewArea );
         return aNewArea;
     }
     else
-        return SfxInPlaceObject::GetVisArea( nAspect );
+        return SfxObjectShell::GetVisArea( nAspect );
 }
 
 void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
@@ -2240,7 +2246,7 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
     return 0;
 }
 
-::so3::SvLinkSource* __EXPORT ScDocShell::DdeCreateLinkSource( const String& rItem )
+::sfx2::SvLinkSource* __EXPORT ScDocShell::DdeCreateLinkSource( const String& rItem )
 {
     //  only check for valid item string - range is parsed again in ScServerObject ctor
 
@@ -2362,12 +2368,12 @@ IMPL_LINK( ScDocShell, ChartSelectionHdl, ChartSelectionInfo*, pInfo )
         {
             ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
             SfxInPlaceClient* pClient = pViewSh->GetIPClient();
-            if ( pClient && pClient->IsInPlaceActive() )
+            if ( pClient && pClient->IsObjectInPlaceActive() )
             {
-                SvInPlaceObjectRef xIPObj = pClient->GetIPObj();
-                if (xIPObj.Is())
+                uno::Reference < embed::XEmbeddedObject > xObj = pClient->GetObject();
+                if ( xObj.is() )
                 {
-                    SchMemChart* pMemChart = SchDLL::GetChartData(xIPObj);
+                    SchMemChart* pMemChart = SchDLL::GetChartData( xObj );
                     if (pMemChart)
                         return pViewSh->DoChartSelection( *pInfo, *pMemChart );
                 }
