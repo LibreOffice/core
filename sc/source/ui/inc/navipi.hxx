@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-02 14:15:44 $
+ *  last change: $Author: nn $ $Date: 2001-12-10 18:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,6 @@ private:
     Size                    aInitSize;
     ScArea*                 pMarkArea;
     ScViewData*             pViewData;
-    ScNavigatorSettings*    pSettings;
 
     long            nBorderOffset;
     long            nListModeHeight;

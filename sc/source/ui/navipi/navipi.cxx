@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-02 14:17:24 $
+ *  last change: $Author: nn $ $Date: 2001-12-10 18:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         nListModeHeight( 0 ),
         nInitListHeight( 0 ),
         pViewData   ( NULL ),
-        pSettings   ( NULL ),
         pMarkArea   ( NULL ),
         nCurCol     ( 0 ),
         nCurRow     ( 0 ),
@@ -1160,12 +1159,13 @@ ScTabViewShell* ScNavigatorDlg::GetTabViewShell() const
 
 ScNavigatorSettings* ScNavigatorDlg::GetSettings()
 {
-    if( !pSettings )
-    {
-        ScTabViewShell* pViewSh = GetTabViewShell();
-        pSettings = pViewSh ? pViewSh->GetNavigatorSettings() : NULL;
-    }
-    return pSettings;
+    //  #95791# Don't store the settings pointer here, because the settings belong to
+    //  the view, and the view may be closed while the navigator is open (reload).
+    //  If the pointer is cached here again later for performance reasons, it has to
+    //  be forgotten when the view is closed.
+
+    ScTabViewShell* pViewSh = GetTabViewShell();
+    return pViewSh ? pViewSh->GetNavigatorSettings() : NULL;
 }
 
 //------------------------------------------------------------------------
