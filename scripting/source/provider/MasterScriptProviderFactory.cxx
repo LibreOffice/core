@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProviderFactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:32:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 13:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,13 @@ MasterScriptProviderFactory::MasterScriptProviderFactory(
 
 MasterScriptProviderFactory::~MasterScriptProviderFactory()
 {
-    if (m_MSPList) delete m_MSPList;
+    // by setting m_MSPListHolder to an empty reference the existing
+    // Reference to the ActiveMSPList object will get released causing
+    // the ActiveMSPList to get destructed
+    if (m_MSPListHolder.is())
+    {
+        m_MSPListHolder = Reference< lang::XEventListener >();
+    }
 }
 
 
