@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-21 12:22:43 $
+*  last change: $Author: svesik $ $Date: 2004-04-21 13:38:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -58,7 +58,6 @@
 *
 *
 ************************************************************************/
-
 #include "macros.inc"
 
 STD_UNO_LIB_FILE( gid_File_Lib_Abp, abp)
@@ -1235,7 +1234,9 @@ STD_SETUPZIP_LIB_FILE( gid_File_Lib_Vclplug_Gen, vclplug_gen )
 #endif
 
 #ifdef UNX
+#ifndef MACOSX
 STD_SETUPZIP_LIB_FILE( gid_File_Lib_Vclplug_Gtk, vclplug_gtk )
+#endif
 #endif
 
 File gid_File_Lib_Rdbtdp
@@ -1340,7 +1341,11 @@ STD_UNO_LIB_FILE( gid_File_Lib_Scn, scn)
 File gid_File_Lib_Scriptframe
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = "libscriptframe.so";
+    #ifdef MACOSX
+       Name = "libscriptframe.dylib";
+    #else
+       Name = "libscriptframe.so";
+    #endif
   #else
     Name = "scriptframe.dll";
   #endif
@@ -1472,8 +1477,6 @@ File gid_File_Lib_Stlport
   #if defined(_gcc3) || defined(_GCC)
   #ifdef IRIX
     Name = STRING(CONCAT3(libstlport_,gcc,.so.4.5));
-  #elif defined(MACOSX)
-    Name = STRING(CONCAT4(libstlport_,gcc,UNXSUFFIX,.4.5));
   #else
     Name = STRING(CONCAT3(libstlport_,gcc,UNXSUFFIX));
   #endif
@@ -1652,7 +1655,11 @@ File gid_File_Lib_Myspell
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = "libmyspell.so";
+    #ifdef MACOSX
+       Name = "libmyspell.dylib";
+    #else
+       Name = "libmyspell.so";
+    #endif
   #else
     Name = "myspell.dll";
   #endif
