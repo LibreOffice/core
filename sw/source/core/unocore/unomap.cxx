@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:24 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 21:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1862,6 +1862,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     {SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT),    0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
                     {SW_PROP_NAME(UNO_NAME_REDLINE_TYPE),       0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
                     {SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA),  0, &::getCppuType((Sequence<PropertyValue>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    {SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER), 0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},
                     {SW_PROP_NAME(UNO_NAME_TEXT_PORTION_TYPE),  0, &::getCppuType((OUString*)0),                        PropertyAttribute::READONLY,    0},
                     {0,0,0,0}
                 };

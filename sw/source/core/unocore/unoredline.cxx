@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-08 11:48:58 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 21:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #include <rtl/uuid.h>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -111,6 +114,73 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
+
+/* -----------------------------19.12.00 11:36--------------------------------
+
+ ---------------------------------------------------------------------------*/
+
+SwXRedlineText::SwXRedlineText(SwDoc* pDoc, SwNodeIndex aIndex) :
+    SwXText(pDoc, CURSOR_REDLINE),
+    aNodeIndex(aIndex)
+{
+}
+
+Any SwXRedlineText::queryInterface( const Type& rType )
+    throw(RuntimeException)
+{
+    // deledate to SwXText and OWeakObject
+    Any aRet = SwXText::queryInterface(rType);
+    if(!aRet.hasValue())
+    {
+        aRet = OWeakObject::queryInterface(rType);
+    }
+    return aRet;
+}
+
+Sequence<Type> SwXRedlineText::getTypes()
+    throw(RuntimeException)
+{
+    // merge getTypes() from superclasses
+
+    // SwXText::getTypes()
+    uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
+
+    return aTypes;
+}
+
+Sequence<sal_Int8> SwXRedlineText::getImplementationId()
+    throw(RuntimeException)
+{
+    static uno::Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = FALSE;
+    if(!bInit)
+        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    return aId;
+}
+
+Reference<XTextCursor> SwXRedlineText::createTextCursor(void)
+    throw( RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwPosition aPos(aNodeIndex);
+    SwXTextCursor* pCrsr = new SwXTextCursor(this, aPos, CURSOR_REDLINE,
+                                             GetDoc());
+    SwUnoCrsr* pUnoCursor = pCrsr->GetCrsr();
+    pUnoCursor->Move(fnMoveForward, fnGoNode);
+    return (XWordCursor*)pCrsr;
+}
+
+Reference<XTextCursor> SwXRedlineText::createTextCursorByRange(
+    const Reference<XTextRange> & aTextRange)
+        throw( RuntimeException )
+{
+    Reference<XTextCursor> xCursor = createTextCursor();
+    xCursor->gotoRange(aTextRange->getStart(), sal_False);
+    xCursor->gotoRange(aTextRange->getEnd(), sal_True);
+    return xCursor;
+}
+
 /* -----------------------------19.12.00 11:36--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -119,6 +189,7 @@ SwXRedlinePortion::SwXRedlinePortion(   const SwRedline* pRed,
                         Reference< XText >  xParent, BOOL bStart) :
     SwXTextPortion(pPortionCrsr, xParent, bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END),
     SwXText(pPortionCrsr->GetDoc(), CURSOR_REDLINE),
+//  SwXRedlineText(pPortionCrsr->GetDoc(), *pRed->GetContentIdx()),
     pRedline(pRed)
 {
     SetCollapsed(!pRedline->HasMark());
@@ -274,6 +345,17 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
             pValues[3].Name = C2U(UNO_NAME_REDLINE_TYPE);
             pValues[3].Value <<= lcl_RedlineTypeToOUString(pNext->GetType());
             aRet <<= aValues;
+        }
+    }
+    else if (rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_IDENTIFIER.pName,
+                                        UNO_NAME_REDLINE_IDENTIFIER.nNameLen))
+    {
+        // create identifier from SwRedline address (if available)
+        if (NULL != pRedline)
+        {
+            OUStringBuffer sBuf;
+            sBuf.append((sal_Int64)pRedline);
+            aRet <<= sBuf.makeStringAndClear();
         }
     }
     else

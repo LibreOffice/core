@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:17:15 $
+ *  last change: $Author: dvo $ $Date: 2001-01-10 21:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,34 @@
 /* -----------------------------19.12.00 11:35--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+/**
+ * SwXRedlineText provides an XText which may be used to write
+ * directly into a redline node. It got implemented to enable XML
+ * import of redlines and should not be used directly via the API.
+ */
+class SwXRedlineText :
+    public SwXText,
+    public cppu::OWeakObject
+{
+    SwNodeIndex aNodeIndex;
+
+public:
+    SwXRedlineText(SwDoc* pDoc, SwNodeIndex aNodeIndex);
+
+    virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw(){OWeakObject::acquire();}
+    virtual void SAL_CALL release(  ) throw(){OWeakObject::release();}
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XText
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >  SAL_CALL createTextCursor(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >  SAL_CALL createTextCursorByRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & aTextPosition) throw( ::com::sun::star::uno::RuntimeException );
+
+};
+
 class SwXRedlinePortion : public SwXTextPortion,
     public SwXText,
     public  ::com::sun::star::container::XEnumerationAccess
