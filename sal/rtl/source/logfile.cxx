@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-09 14:06:40 $
+ *  last change: $Author: jbu $ $Date: 2001-08-10 08:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdarg>
+#include <cstdio>
 
 #include <rtl/logfile.h>
 
@@ -94,6 +94,7 @@
 
 
 using namespace osl;
+using namespace std;
 
 namespace rtl
 {
