@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-08-30 08:52:04 $
+ *  last change: $Author: od $ $Date: 2002-09-03 08:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,21 @@ public:
      ::std::vector< String > & aThisPageVec,
      ::std::vector< String > & aNextPageVec,
      ::std::vector< String > & aRestVec);
+
+    /** SwFEShell::GetShapeBackgrd
+
+        OD 02.09.2002 for #102450#:
+        method determines background color of the page the selected drawing
+        object is on and returns this color.
+        If no color is found, because no drawing object is selected or ...,
+        color COL_BLACK (default color on constructing object of class Color)
+        is returned.
+
+        @author OD
+
+        @returns an object of class Color
+    */
+    const Color GetShapeBackgrd() const;
 };
 
 #endif
