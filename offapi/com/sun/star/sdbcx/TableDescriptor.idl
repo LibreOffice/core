@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-interface XColumnsSupplier;
-interface XKeysSupplier;
+ published interface XColumnsSupplier;
+ published interface XKeysSupplier;
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::TableDescriptor
@@ -84,7 +84,7 @@ interface XKeysSupplier;
     </p>
     @see com::sun::star::sdbcx::Table
  */
-service TableDescriptor
+published service TableDescriptor
 {
 
     // DocMerge from xml: service com::sun::star::sdbcx::TableDescriptor: interface com::sun::star::sdbcx::XColumnsSupplier
