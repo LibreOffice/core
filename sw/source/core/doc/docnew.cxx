@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:38:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,7 +918,12 @@ void SwDoc::ClearDoc()
     // loesche der Nodes geloescht werden.
     pBookmarkTbl->DeleteAndDestroy( 0, pBookmarkTbl->Count() );
     pTOXTypes->DeleteAndDestroy( 0, pTOXTypes->Count() );
+    pOutlineRule = NULL;
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
+    pOutlineRule = new SwNumRule( String::CreateFromAscii(
+                                      SwNumRule::GetOutlineRuleName() ),
+                                  OUTLINE_RULE );
+    pNumRuleTbl->Insert( pOutlineRule, pNumRuleTbl->Count() );
 
     // create a dummy pagedesc for the layout
     sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
