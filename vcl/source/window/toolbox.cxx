@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 07:05:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include <string.h>
 #include <vector>
 #include <math.h>
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -572,18 +571,19 @@ static void ImplDrawGradient( ToolBox* pThis, const Rectangle &rRect )
 
     if( !pWrapper )
     {
-        // no gradient for ordinary toolbars (not dockable)
-        BOOL bFillColor = pThis->IsFillColor();
-        BOOL bLineColor = pThis->IsLineColor();
-        Color aOldFillCol = pThis->GetFillColor();
-        Color aOldLineCol = pThis->GetLineColor();
-        pThis->SetFillColor( aColor );
-        pThis->SetLineColor();
-        pThis->DrawRect( rRect );
-        if( bFillColor )
-            pThis->SetFillColor( aOldFillCol );
-        if( bLineColor )
-            pThis->SetLineColor( aOldLineCol );
+        if( !pThis->IsBackground() && pThis->GetParent() )
+        {
+            const bool      bOldPaintLock = pThis->mpData->mbIsPaintLocked;
+            const Rectangle aParentRect( pThis->GetParent()->ScreenToOutputPixel( pThis->OutputToScreenPixel( rRect.TopLeft() ) ),
+                                          rRect.GetSize() );
+
+            pThis->mpData->mbIsPaintLocked = true;
+            pThis->GetParent()->Invalidate( aParentRect, INVALIDATE_BACKGROUND | INVALIDATE_UPDATE );
+            pThis->mpData->mbIsPaintLocked = bOldPaintLock;
+        }
+        else
+            pThis->DrawWallpaper( rRect, Wallpaper( aColor ) );
+
         return;
     }
 
@@ -4568,6 +4568,8 @@ void ToolBox::Tracking( const TrackingEvent& rTEvt )
 
 void ToolBox::Paint( const Rectangle& rPaintRect )
 {
+    if( mpData->mbIsPaintLocked )
+        return;
     if ( rPaintRect == Rectangle( 0, 0, mnDX-1, mnDY-1 ) )
         mbFullPaint = TRUE;
     ImplFormat();
