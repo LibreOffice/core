@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:27:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,9 @@ private:
     struct XclExpDefRowXFEntry
     {
         sal_uInt32                  mnXFId;
-        sal_uInt16                  mnRow;
+        SCROW                       mnRow;
         inline explicit             XclExpDefRowXFEntry() : mnXFId( 0 ), mnRow( 0 ) {}
-        inline explicit             XclExpDefRowXFEntry( sal_uInt32 nXFId, sal_uInt16 nRow ) :
+        inline explicit             XclExpDefRowXFEntry( sal_uInt32 nXFId, SCROW nRow ) :
                                         mnXFId( nXFId ), mnRow( nRow ) {}
     };
 
@@ -148,17 +148,17 @@ private:
 
     XclExpDefRowXFVec           maXFList;
     UINT32                      nLastList;
-    UINT16                      nLastRow;
+    SCROW                       nLastRow;
 
 public:
                                 DefRowXFs( void );
 
-    inline void                 Append( sal_uInt16 nRow, sal_uInt32 nXFId );
+    inline void                 Append( SCROW nRow, sal_uInt32 nXFId );
 
-    BOOL                        ChangeXF( sal_uInt16 nRow, sal_uInt32& rnXFId );
+    BOOL                        ChangeXF( SCROW nRow, sal_uInt32& rnXFId );
 };
 
-inline void DefRowXFs::Append( sal_uInt16 nRow, sal_uInt32 nXFId )
+inline void DefRowXFs::Append( SCROW nRow, sal_uInt32 nXFId )
 {
     maXFList.push_back( XclExpDefRowXFEntry( nXFId, nRow ) );
 }
@@ -170,7 +170,7 @@ class ExcTable : public XclExpRecordBase, public ExcRoot
 {
 private:
     XclExpRecordList<>          aRecList;
-    UINT16                      nScTab;     // table number SC document
+    SCTAB                       nScTab;     // table number SC document
     UINT16                      nExcTab;    // table number Excel document
     UINT16                      nAktRow;    // fuer'n Iterator
     UINT16                      nAktCol;
@@ -188,14 +188,14 @@ private:
 
 public:
                                 ExcTable( RootData* pRD );
-                                ExcTable( RootData* pRD, UINT16 nScTable );
+                                ExcTable( RootData* pRD, SCTAB nScTable );
                                 ~ExcTable();
 
     void                        FillAsHeader( ExcRecordListRefs& rBundleSheetRecList );
     void                        FillAsTable( void );
 
-    void                        SetDefRowXF( sal_uInt16 nRowNum, sal_uInt32 nXFId );
-    BOOL                        ModifyToDefaultRowXF( sal_uInt16 nRowNum, sal_uInt32& rnXFId );
+    void                        SetDefRowXF( SCROW nRowNum, sal_uInt32 nXFId );
+    BOOL                        ModifyToDefaultRowXF( SCROW nRowNum, sal_uInt32& rnXFId );
 
     void                        Write( XclExpStream& );
 };
