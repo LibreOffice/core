@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.16 $
- *  last change: $Author: kz $ $Date: 2004-06-11 12:20:22 $
+ *  $Revision: 1.17 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1936,14 +1936,16 @@ BOOL DirEntry::ImpToRel( String aCurStr )
     aThis.ToAbs();
     String aThisStr( aThis.GetFull( FSYS_STYLE_HPFS ) );
 
+    // #109512 preserve case of path even if caseinsensitive
+    String aThisCompareStr( aThisStr ), aCurCompareStr( aCurStr );
     if ( ! IsCaseSensitive() )
     {
-        aThisStr = String( aThisStr ).ToLowerAscii();
-        aCurStr = String( aCurStr ).ToLowerAscii();
+        aThisCompareStr.ToLowerAscii();
+        aCurCompareStr.ToLowerAscii();
     }
 
     // "Ubereinstimmung pr"ufen
-    USHORT nPos = aThisStr.Match( aCurStr );
+    USHORT nPos = aThisCompareStr.Match( aCurCompareStr );
     if ( nPos == STRING_MATCH && aThisStr.Len() != aCurStr.Len() )
         nPos = Min( aThisStr.Len(), aCurStr.Len() );
 
