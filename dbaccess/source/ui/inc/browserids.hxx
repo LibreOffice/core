@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:55:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,9 +114,9 @@
 #define ID_TABLE_DESIGN_NO_CONNECTION        8
 #define ID_OPEN_DOCUMENT                     9
 #define ID_EDIT_DOCUMENT                    10
-#define ID_NEW_LINK                         11
-#define ID_EDIT_LINK                        12
-#define ID_DROP_LINK                        13
+// free
+// free
+// free
 #define ID_CREATE_NEW_DOC                   14
 #define ID_FORM_NEW_TEXT                    15
 #define ID_FORM_NEW_CALC                    16
@@ -142,9 +142,30 @@
 #define ID_INDEX_RESET                      40
 #define ID_DOCUMENT_CREATE_REPWIZ           41
 #define ID_BROWSER_SQL                      42
-#define ID_NEW_QUERY_WIZARD                 43
+#define ID_APP_NEW_FORM                     43
+#define ID_APP_NEW_QUERY_AUTO_PILOT         44
+#define ID_NEW_TABLE_DESIGN_AUTO_PILOT      45
+#define ID_NEW_VIEW_DESIGN_AUTO_PILOT       46
+#define ID_NEW_VIEW_SQL                     47
+#define ID_DOCUMENT_CREATE_REPWIZ_PRE_SEL   48
+#define ID_FORM_NEW_PILOT_PRE_SEL           49
+#define ID_APP_NEW_FOLDER                   50
 
 
+// image ids
+#define SID_DB_FORM_DELETE                  65
+#define SID_DB_FORM_RENAME                  66
+#define SID_DB_FORM_EDIT                    67
+#define SID_DB_FORM_OPEN                    68
+#define SID_DB_REPORT_DELETE                69
+#define SID_DB_REPORT_RENAME                70
+#define SID_DB_REPORT_EDIT                  71
+#define SID_DB_REPORT_OPEN                  72
+#define SID_DB_QUERY_OPEN                   73
+#define SID_DB_TABLE_OPEN                   74
+#define SID_DB_QUERY_EDIT                   75
+
+// other
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 #define ID_BROWSER_CLEAR_QUERY              SID_SBA_CLEAR_QUERY
 #define ID_RELATION_ADD_RELATION            SID_SBA_ADD_RELATION
