@@ -20,18 +20,21 @@ ul	unoil\com\sun\star\i18n					nmake	-	all	ul_i18n ul_linguistic2 NULL
 ul	unoil\com\sun\star\installation			nmake	-	all	ul_installation NULL
 ul	unoil\com\sun\star\linguistic2			nmake	-	all	ul_linguistic2 NULL
 ul	unoil\com\sun\star\mozilla				nmake	-	all	ul_mozilla NULL
+ul	unoil\com\sun\star\packages				nmake	-	all	ul_packages NULL
 ul	unoil\com\sun\star\pgp					nmake	-	all	ul_pgp NULL
 ul	unoil\com\sun\star\plugin				nmake	-	all	ul_plugin ul_awt NULL
 ul	unoil\com\sun\star\presentation			nmake	-	all	ul_presentation ul_drawing NULL
 ul	unoil\com\sun\star\resource				nmake	-	all	ul_resource NULL
 ul	unoil\com\sun\star\scanner				nmake	-	all	ul_scanner ul_awt NULL
 ul	unoil\com\sun\star\setup				nmake	-	all	ul_setup ul_cssutil NULL
+ul	unoil\com\sun\star\svg					nmake	-	all	ul_svg NULL
 ul	unoil\com\sun\star\table				nmake	-	all	ul_table ul_awt NULL
 ul	unoil\com\sun\star\text					nmake	-	all	ul_text ul_frame ul_linguistic2 ul_table NULL
 ul	unoil\com\sun\star\sheet				nmake	-	all	ul_sheet ul_text NULL
 ul	unoil\com\sun\star\style				nmake	-	all	ul_style NULL
 ul	unoil\com\sun\star\ucb					nmake	-	all	ul_ucb ul_cssutil ul_sdbc ul_task NULL
 ul	unoil\com\sun\star\sync					nmake	-	all	ul_sync ul_ucb NULL
+ul	unoil\com\sun\star\ui					nmake	-	all	ul_ui NULL
 ul	unoil\com\sun\star\view					nmake	-	all	ul_view ul_awt NULL
 ul	unoil\com\sun\star\xml					nmake	-	all	ul_xml NULL
 ul	unoil\com\sun\star\xml\sax				nmake	-	all	ul_xml_sax ul_xml NULL
