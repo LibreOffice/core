@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:26:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-20 14:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ float SwRect::GetDistance( const Point &rPOINT, Point rClosest ) const {
         }
     }
 
-    return sqrtf(fSqrDistance);
+    return sqrt(fSqrDistance);
 }
 
 
