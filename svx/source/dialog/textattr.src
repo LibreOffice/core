@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2001-02-06 15:21:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ chinese_traditional ] = "©M½ü¹ø¹ï»ô(~A)";
         Text[ arabic ] = "ãáÇÁãÉ ááÎØ ÇáßİÇİí";
         Text[ greek ] = "ÑïŞ ğåñé~ãñÜììáôïò";
-        Text[ korean ] = "À±°û¿¡ ¸ÂÃã(~A)";
+        Text[ korean ] = "À±°û¡¡Èå¸§(~A)";
         Text[ turkish ] = "~Kontur akışı";
         Text[ language_user1 ] = " ";
     };
@@ -208,7 +208,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text [ danish ] = "Tekst" ;
         Text [ portuguese_brazilian ] = "Text" ;
         Text [ portuguese ] = "Texto" ;
-        Text[ chinese_simplified ] = "ÕıÎÄ";
+        Text[ chinese_simplified ] = "ÎÄ×Ö";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
         Text[ japanese ] = "•¶š—ñ";
@@ -478,7 +478,7 @@ TabPage RID_SVXPAGE_TEXTATTR
         Text[ turkish ] = "Metin sabitleme";
         Text[ language_user1 ] = " ";
     };
-    Text[ chinese_simplified ] = "ÕıÎÄ";
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
     Text[ russian ] = "Òåêñò";
     Text[ polish ] = "Tekst";
     Text[ japanese ] = "Ã·½Ä";
