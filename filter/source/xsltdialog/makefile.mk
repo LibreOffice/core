@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nf $ $Date: 2003-04-08 15:06:38 $
+#   last change: $Author: vg $ $Date: 2003-07-09 10:15:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ TARGET=xsltdlg
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-GEN_HID=TRUE
+#GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 
 # --- Settings ----------------------------------
