@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
+ *  last change: $Author: jsc $ $Date: 2001-07-27 09:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,8 @@ void SAL_CALL main( int argc, char** argv )
                 files[i].getStr(), options.prepareVersion().getStr());
     } else
     {
-        fprintf(stdout, "%s: returned with %d errors%s",
-                options.getProgramName().getStr(), nErrors,
+        fprintf(stdout, "%s: returned successful%s",
+                options.getProgramName().getStr(),
                 options.prepareVersion().getStr());
     }
     exit(nErrors);
