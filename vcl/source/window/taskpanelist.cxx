@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:19:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,16 @@ TaskPaneList::~TaskPaneList()
 
 void TaskPaneList::AddWindow( Window *pWindow )
 {
+#if OSL_DEBUG_LEVEL > 0
     bool bDockingWindow=false;
     bool bToolbox=false;
     bool bDialog=false;
     bool bUnknown=false;
+#endif
 
     if( pWindow )
     {
+#if OSL_DEBUG_LEVEL > 0
         if( pWindow->GetType() == RSC_DOCKINGWINDOW )
             bDockingWindow = true;
         else if( pWindow->GetType() == RSC_TOOLBOX )
@@ -159,13 +162,40 @@ void TaskPaneList::AddWindow( Window *pWindow )
             bDialog = true;
         else
             bUnknown = true;
+#endif
 
-        ::std::vector< Window* >::iterator p;
-        p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
+        ::std::vector< Window* >::iterator insertionPos = mTaskPanes.end();
+        for ( ::std::vector< Window* >::iterator p = mTaskPanes.begin();
+              p != mTaskPanes.end();
+              ++p
+            )
+        {
+            if ( *p == pWindow )
+                // avoid duplicates
+                return;
 
-        // avoid duplicates
-        if( p == mTaskPanes.end() ) // not found
-            mTaskPanes.push_back( pWindow );
+            // If the new window is the child of an existing pane window, or vice versa,
+            // ensure that in our pane list, *first* the child window appears, *then*
+            // the ancestor window.
+            // This is necessary for HandleKeyEvent: There, the list is traveled from the
+            // beginning, until the first window is found which has the ChildPathFocus. Now
+            // if this would be the ancestor window of another pane window, this would fudge
+            // the result
+            // 2004-09-27 - fs@openoffice.org, while fixing #i33573#, which included replacing
+            // the original fix for #98916# with this one here.
+            if ( pWindow->IsWindowOrChild( *p ) )
+            {
+                insertionPos = p + 1;
+                break;
+            }
+            if ( (*p)->IsWindowOrChild( pWindow ) )
+            {
+                insertionPos = p;
+                break;
+            }
+        }
+
+        mTaskPanes.insert( insertionPos, pWindow );
     }
 }
 
