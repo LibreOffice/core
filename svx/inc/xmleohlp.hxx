@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $
+ *  last change: $Author: mib $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _XMLEOHLP_HXX
 #define _XMLEOHLP_HXX
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -71,12 +71,15 @@
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef __SGI_STL_VECTOR
-#include <vector>
+#ifndef __SGI_STL_MAP
+#include <map>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
 // -----------------------------
@@ -95,39 +98,38 @@ enum SvXMLEmbeddedObjectHelperMode
 
 class SvPersist;
 class SvGlobalName;
+struct OUStringLess;
+class OutputStorageWrapper_Impl;
 
-class SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper1<  ::com::sun::star::document::XEmbeddedObjectResolver >
+class SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImplHelper2<
+    ::com::sun::star::document::XEmbeddedObjectResolver,
+    ::com::sun::star::container::XNameAccess >
 {
+    typedef ::_STL::map< ::rtl::OUString, OutputStorageWrapper_Impl*,
+                         OUStringLess > SvXMLEmbeddedObjectHelper_Impl;
 private:
-
-    typedef ::_STL::vector< ::rtl::OUString >                       URLVector;
 
     ::osl::Mutex                maMutex;
 
     const ::rtl::OUString       maDefaultContainerStorageName;
     ::rtl::OUString             maCurContainerStorageName;
 
-    URLVector                   maEmbeddedObjectURLs;
 
     SvStorage*                  mpRootStorage;  // package
     SvPersist*                  mpDocPersist;
     SvStorageRef                mxContainerStorage; // container sub package for
                                                 // objects
-    SvGlobalName**              mpGlobalNameMap;
-
 
     SvXMLEmbeddedObjectHelperMode       meCreateMode;
-    void*                       mpDummy1;
+    SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
     void*                       mpDummy2;
-    BOOL                        mbDirect : 1;
 
     sal_Bool                    ImplGetStorageNames(
                                     const ::rtl::OUString& rURLStr,
                                     ::rtl::OUString& rContainerStorageName,
                                     ::rtl::OUString& rObjectStorageName,
                                     sal_Bool bInternalToExternal ) const;
-    sal_uInt16                  ImplGetFlags(
-                                    const SvGlobalName& rClassId ) const;
+
     SvStorageRef                ImplGetContainerStorage(
                                     const ::rtl::OUString& rStorageName );
     SvStorageRef                ImplGetObjectStorage(
@@ -138,11 +140,10 @@ private:
                                                      const sal_Char* p ) const;
     sal_Bool                    ImplReadObject(
                                     const ::rtl::OUString& rContainerStorageName,
-                                    const ::rtl::OUString& rObjName,
-                                    const SvGlobalName *pClassId );
-    sal_Bool                    ImplWriteObject(
-                                    const ::rtl::OUString& rContainerStorageName,
-                                    const ::rtl::OUString& rObjName );
+                                    ::rtl::OUString& rObjName,
+                                    const SvGlobalName *pClassId,
+                                    SvStorage *pTempStor );
+
     ::rtl::OUString             ImplInsertEmbeddedObjectURL(
                                     const ::rtl::OUString& rURLStr );
 
@@ -150,10 +151,9 @@ protected:
 
                                 SvXMLEmbeddedObjectHelper();
                                 ~SvXMLEmbeddedObjectHelper();
-    void                        Init( SvStorage& rRootStorage,
+    void                        Init( SvStorage *pRootStorage,
                                       SvPersist& rDocPersist,
-                                      SvXMLEmbeddedObjectHelperMode eCreateMode,
-                                      sal_Bool bDirect );
+                                      SvXMLEmbeddedObjectHelperMode eCreateMode );
 
 public:
 
@@ -162,12 +162,24 @@ public:
                                     SvPersist& rDocPersist,
                                     SvXMLEmbeddedObjectHelperMode eCreateMode,
                                     sal_Bool bDirect = sal_True );
+    static SvXMLEmbeddedObjectHelper*   Create(
+                                    SvPersist& rDocPersist,
+                                    SvXMLEmbeddedObjectHelperMode eCreateMode );
     static void                 Destroy( SvXMLEmbeddedObjectHelper* pSvXMLEmbeddedObjectHelper );
 
     void                        Flush();
 
     // XEmbeddedObjectResolver
     virtual ::rtl::OUString SAL_CALL resolveEmbeddedObjectURL( const ::rtl::OUString& aURL ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XNameAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
  *  last change: $Author: mib $
  *
@@ -64,6 +64,12 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
+#endif
 
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
@@ -78,6 +84,10 @@
 #include <so3/embobj.hxx>
 #endif
 
+#ifndef __SGI_STL_MAP
+#include <map>
+#endif
+
 #ifndef _XMLEOHLP_HXX
 #include "xmleohlp.hxx"
 #endif
@@ -89,68 +99,209 @@
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
+using namespace ::utl;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
 
 #define XML_CONTAINERSTORAGE_NAME       "Objects"
 #define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
 
-#define EO_FLAG_STAR_OBJECT            0x0001
-#define EO_FLAG_UCB_STORAGE            0x0002
-#define EO_FLAG_NEEDS_CONVERSION       0x0004
+// -----------------------------------------------------------------------------
 
-struct ClassNameInfo
+class InputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<stario::XInputStream>
 {
-    struct GUIDDummy
+    ::osl::Mutex    maMutex;
+    SvStorageRef xStor;
+    Reference < XInputStream > xIn;
+    TempFile aTempFile;
+
+public:
+    InputStorageWrapper_Impl( SvPersist *pPersist );
+    virtual ~InputStorageWrapper_Impl();
+
+    virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual sal_Int32   SAL_CALL    readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
+    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
+};
+
+
+InputStorageWrapper_Impl::InputStorageWrapper_Impl(
+        SvPersist *pPersist )
+{
+    SvStream *pStream = 0;
+    aTempFile.EnableKillingFile();
+    pStream = aTempFile.GetStream( STREAM_READWRITE );
+    SvStorageRef aTempStor = new SvStorage( sal_False, *pStream );
+    if( pPersist->DoSaveAs( aTempStor ) )
     {
-        sal_uInt32 n1;
-        sal_uInt16 n2, n3;
-        sal_uInt8 n4, n5, n6, n7, n8, n9, n10, n11;
-    } aGUID;
-    sal_uInt16 nFlags;
-};
+        aTempStor->Commit();
+    }
+    else
+    {
+        aTempStor.Clear();
+        pStream = 0;
+    }
 
-typedef SvGlobalName *SvGlobalNamePtr;
+    if( pStream )
+    {
+        pStream->Seek( 0 );
+        xIn = new OInputStreamWrapper( *pStream );
+    }
+}
 
-static ClassNameInfo aFlagsMap[] =
+InputStorageWrapper_Impl::~InputStorageWrapper_Impl()
 {
-    { SO3_SM_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SCH_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SIM_CLASSID_50 , EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SDRAW_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SIMPRESS_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SC_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SW_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SWWEB_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SWGLOB_CLASSID_50, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
+    xIn = 0;
+    xStor = 0;
+}
 
-    { SO3_SM_CLASSID_40, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SCH_CLASSID_40, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SIM_CLASSID_40 , EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SIMPRESS_CLASSID_40, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SC_CLASSID_40, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SW_CLASSID_40, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SWWEB_CLASSID_40, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SWGLOB_CLASSID_40, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
+sal_Int32 SAL_CALL InputStorageWrapper_Impl::readBytes(
+        Sequence< sal_Int8 >& aData,
+        sal_Int32 nBytesToRead)
+    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    return xIn->readBytes( aData, nBytesToRead );
+}
 
-    { SO3_SM_CLASSID_30, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SCH_CLASSID_30, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SIM_CLASSID_30 , EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SIMPRESS_CLASSID_30, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SC_CLASSID_30, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION },
-    { SO3_SW_CLASSID_30, EO_FLAG_STAR_OBJECT|EO_FLAG_NEEDS_CONVERSION }
+sal_Int32 SAL_CALL InputStorageWrapper_Impl::readSomeBytes(
+        Sequence< sal_Int8 >& aData,
+        sal_Int32 nMaxBytesToRead)
+    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    return xIn->readSomeBytes( aData, nMaxBytesToRead );
+}
+
+void SAL_CALL InputStorageWrapper_Impl::skipBytes( sal_Int32 nBytesToSkip )
+    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    xIn->skipBytes( nBytesToSkip );
+}
+
+sal_Int32 SAL_CALL InputStorageWrapper_Impl::available()
+    throw(NotConnectedException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    return xIn->available();
+}
+
+void SAL_CALL InputStorageWrapper_Impl::closeInput()
+    throw(NotConnectedException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    xIn->closeInput();
+    xIn = 0;
+    xStor = 0;
+}
+
+// -----------------------------------------------------------------------------
+
+class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<XOutputStream>
+{
+    ::osl::Mutex    maMutex;
+    SvStorageRef xStor;
+    Reference < XOutputStream > xOut;
+    TempFile aTempFile;
+    sal_Bool bStreamClosed : 1;
+    sal_Bool bCreateStorageFailed : 1;
+
+public:
+    OutputStorageWrapper_Impl();
+    virtual ~OutputStorageWrapper_Impl();
+
+// stario::XOutputStream
+    virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual void SAL_CALL flush() throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual void SAL_CALL closeOutput() throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+
+    SvStorage *GetStorage();
 };
+
+OutputStorageWrapper_Impl::OutputStorageWrapper_Impl() :
+    bStreamClosed( sal_False ),
+    bCreateStorageFailed( sal_False )
+{
+    aTempFile.EnableKillingFile();
+    SvStream *pStream = aTempFile.GetStream( STREAM_READWRITE );
+    xOut = new OOutputStreamWrapper( *pStream );
+}
+
+OutputStorageWrapper_Impl::~OutputStorageWrapper_Impl()
+{
+    xStor = 0;
+    xOut = 0;
+}
+
+SvStorage *OutputStorageWrapper_Impl::GetStorage()
+{
+    if( !xStor )
+    {
+        if( bStreamClosed && !bCreateStorageFailed )
+        {
+            xStor = new SvStorage( *aTempFile.GetStream( STREAM_READWRITE ) );
+            if( xStor->GetError() != 0 )
+            {
+                xStor = 0;
+                bCreateStorageFailed = sal_True;
+            }
+        }
+    }
+
+    return xStor;
+}
+
+void SAL_CALL OutputStorageWrapper_Impl::writeBytes(
+        const Sequence< sal_Int8 >& aData)
+    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    xOut->writeBytes( aData );
+}
+
+void SAL_CALL OutputStorageWrapper_Impl::flush()
+    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    xOut->flush();
+}
+
+void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
+    throw(NotConnectedException, BufferSizeExceededException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    xOut->closeOutput();
+    bStreamClosed = sal_True;
+}
+
+// -----------------------------------------------------------------------------
+
+struct OUStringLess
+{
+    bool operator() ( const ::rtl::OUString& r1, const ::rtl::OUString& r2 ) const
+    {
+        return (r1 < r2) != sal_False;
+    }
+};
+
+// -----------------------------------------------------------------------------
 
 // -----------------------------
 // - SvXMLEmbeddedObjectHelper -
 // -----------------------------
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
-    WeakComponentImplHelper1< XEmbeddedObjectResolver >( maMutex ),
+    WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
     maDefaultContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
     mpRootStorage( 0 ),
     mpDocPersist( 0 ),
-    mpGlobalNameMap( 0 ),
+    mpStreamMap( 0 ),
     meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ )
 {
 }
@@ -159,14 +310,18 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 
 SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
 {
-    if( mpGlobalNameMap )
+    if( mpStreamMap )
     {
-        size_t nCount = sizeof(aFlagsMap)/sizeof(ClassNameInfo);
-        SvGlobalNamePtr *p = mpGlobalNameMap;
-        while( nCount-- )
-            delete *p++;
-
-        delete mpGlobalNameMap;
+        SvXMLEmbeddedObjectHelper_Impl::iterator aIter = mpStreamMap->begin();
+        SvXMLEmbeddedObjectHelper_Impl::iterator aEnd = mpStreamMap->end();
+        for( aIter; aIter != aEnd; aIter++ )
+        {
+            if( aIter->second )
+            {
+                aIter->second->release();
+                aIter->second = 0;
+            }
+        }
     }
 }
 
@@ -245,45 +400,6 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 SvXMLEmbeddedObjectHelper::ImplGetFlags(
-        const SvGlobalName& rClassId ) const
-{
-    size_t nCount = sizeof(aFlagsMap)/sizeof(ClassNameInfo);
-
-    if( !mpGlobalNameMap )
-    {
-        ((SvXMLEmbeddedObjectHelper *)this)->mpGlobalNameMap =
-            new SvGlobalNamePtr[nCount];
-        size_t i = nCount;
-        SvGlobalNamePtr *p = (SvGlobalNamePtr *)mpGlobalNameMap;
-        while( i-- )
-            *p++ = 0;
-    }
-
-    sal_uInt16 nFlags = 0;
-    SvGlobalNamePtr *pNames = (SvGlobalNamePtr *)mpGlobalNameMap;
-    const ClassNameInfo *pInfo = aFlagsMap;
-    while( nCount-- )
-    {
-        if( !*pNames )
-            *pNames = new SvGlobalName( pInfo->aGUID.n1, pInfo->aGUID.n2,
-                                        pInfo->aGUID.n3, pInfo->aGUID.n4,
-                                        pInfo->aGUID.n5, pInfo->aGUID.n6,
-                                        pInfo->aGUID.n7, pInfo->aGUID.n8,
-                                        pInfo->aGUID.n9, pInfo->aGUID.n10,
-                                        pInfo->aGUID.n11 );
-        if( **pNames == rClassId )
-        {
-            nFlags = pInfo->nFlags;
-            break;
-        }
-        pNames++;
-        pInfo++;
-    }
-
-    return nFlags;
-}
-
 SvStorageRef SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
         const OUString& rStorageName )
 {
@@ -298,7 +414,7 @@ SvStorageRef SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
             EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode )
             mxContainerStorage->Commit();
 
-        if( rStorageName.getLength() > 0 )
+        if( rStorageName.getLength() > 0 && mpRootStorage )
         {
             StreamMode eMode = EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode
                                     ? STREAM_STD_READWRITE
@@ -360,18 +476,19 @@ String SvXMLEmbeddedObjectHelper::ImplGetUniqueName( SvStorage* pStg,
 
 sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         const OUString& rContainerStorageName,
-        const OUString& rObjName,
-        const SvGlobalName *pClassId )
+        OUString& rObjName,
+        const SvGlobalName *pClassId,
+        SvStorage *pTempStor )
 {
     SvStorageRef xDocStor( mpDocPersist->GetStorage() );
     SvStorageRef xCntnrStor( ImplGetContainerStorage(
                                         rContainerStorageName ) );
-    if( !xCntnrStor.Is() )
+
+    if( !xCntnrStor.Is() && !pTempStor )
         return sal_False;
 
-    String aObjName( rObjName );
-    String aSrcObjName( aObjName );
-    if( xDocStor != xCntnrStor )
+    String aSrcObjName( rObjName );
+    if( xDocStor != xCntnrStor || pTempStor )
     {
 
         // Is the object name unique?
@@ -382,17 +499,27 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
             {
                 SvInfoObject* pTst = mpDocPersist->GetObjectList()->GetObject(i);
                 // TODO: unicode: is this correct?
-                if( aObjName.EqualsIgnoreCaseAscii( pTst->GetObjName() ) ||
-                    aObjName.EqualsIgnoreCaseAscii( pTst->GetStorageName() ) )
+                if( rObjName.equalsIgnoreCase( pTst->GetObjName() ) ||
+                    rObjName.equalsIgnoreCase( pTst->GetStorageName() ) )
                 {
-                    aObjName = ImplGetUniqueName( xDocStor, "Obj" );
+                    rObjName = ImplGetUniqueName( xDocStor, "Obj" );
                     break;
                 }
             }
         }
 
-        if( !xCntnrStor->CopyTo( aSrcObjName, xDocStor, aObjName ) )
-            return sal_False;
+        if( pTempStor )
+        {
+            SvStorageRef xDstStor = xDocStor->OpenStorage( rObjName );
+            if( !pTempStor->CopyTo( xDstStor ) )
+                return sal_False;
+            xDstStor->Commit();
+        }
+        else
+        {
+            if( !xCntnrStor->CopyTo( aSrcObjName, xDocStor, rObjName ) )
+                return sal_False;
+        }
     }
 
     SvGlobalName aClassId;
@@ -408,9 +535,15 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         // is stored in the packages manifest and the manifest is read when
         // the stoage is opened. Therfor, the class id is available without
         // realy accessing the storage.
-        SvStorageRef xObjStor( ImplGetObjectStorage( rContainerStorageName,
-                                                     aSrcObjName, sal_False ) );
-        aClassId = xObjStor->GetClassName();
+        SvStorageRef xObjStor;
+        if( xDocStor == xCntnrStor )
+            xObjStor = ImplGetObjectStorage( rContainerStorageName,
+                                             rObjName, sal_False );
+        else
+            xObjStor = xDocStor->OpenStorage( rObjName, STREAM_STD_READ );
+        DBG_ASSERT( xObjStor.Is(), "Couldn't open object storage" );
+        if( xObjStor.Is() )
+            aClassId = xObjStor->GetClassName();
     }
 
     // For all unkown class id, the OLE object has to be wrapped by an
@@ -421,65 +554,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
           !SvFactory::IsIntern( aClassId, 0 ) ) )
         aClassId = SvGlobalName( aOutClassId );
 
-    SvInfoObjectRef xInfo = new SvEmbeddedInfoObject( aObjName, aClassId );
+    SvInfoObjectRef xInfo = new SvEmbeddedInfoObject( rObjName, aClassId );
     mpDocPersist->Insert( xInfo );
-
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SvXMLEmbeddedObjectHelper::ImplWriteObject(
-        const OUString& rContainerStorageName,
-        const OUString& rObjName )
-{
-    SvInfoObject *pInfo = mpDocPersist->Find( rObjName );
-    DBG_ASSERT( pInfo, "OLE object not found" );
-
-    if( !pInfo )
-        return sal_False;
-
-    // Get object type
-    sal_uInt16 nFlags = ImplGetFlags( pInfo->GetClassName() );
-
-    // If the objects needs a conversion it has to be loaded and stored
-    // again later. The same would apply if the save into an old format.
-    if( (nFlags & EO_FLAG_NEEDS_CONVERSION) != 0 )
-        mpDocPersist->GetObject( rObjName );
-
-
-    if( pInfo->GetPersist() )
-    {
-        // The object is loaded either because it is stored within the
-        // wrong file format or it has been modified
-        // Create either an UCB or an OLE storage, based on object's type
-        SvStorageRef xObjStor( ImplGetObjectStorage(
-                            rContainerStorageName,
-                            rObjName,
-                            (nFlags&EO_FLAG_UCB_STORAGE) != 0 ) );
-        if( !xObjStor.Is() )
-            return sal_False;
-
-        // Save file (again)
-        xObjStor->SetVersion( mpRootStorage->GetVersion() );
-        if( !pInfo->GetPersist()->DoSaveAs( xObjStor ) )
-            return sal_False;
-
-        // Commit changes
-        if( !xObjStor->Commit() )
-            return sal_False;
-    }
-    else
-    {
-        SvStorageRef xCntnrStor( ImplGetContainerStorage(
-                                            rContainerStorageName ) );
-        if( !xCntnrStor.Is() )
-            return sal_False;
-
-        if( !mpDocPersist->GetStorage()->CopyTo( pInfo->GetStorageName(),
-                                             xCntnrStor, rObjName ) )
-            return sal_False;
-    }
 
     return sal_True;
 }
@@ -499,6 +575,16 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
 
     if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
     {
+        OutputStorageWrapper_Impl *pOut = 0;
+        SvXMLEmbeddedObjectHelper_Impl::iterator aIter;
+
+        if( mpStreamMap )
+        {
+            aIter = mpStreamMap->find( rURLStr );
+            if( aIter != mpStreamMap->end() && aIter->second )
+                pOut = aIter->second;
+        }
+
         SvGlobalName aClassId, *pClassId = 0;
         sal_Int32 nPos = aObjectStorageName.lastIndexOf( '!' );
         if( -1 != nPos && aClassId.MakeId( aObjectStorageName.copy( nPos+1 ) ) )
@@ -506,17 +592,20 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
             aObjectStorageName = aObjectStorageName.copy( 0, nPos );
             pClassId = &aClassId;
         }
-        ImplReadObject( aContainerStorageName, aObjectStorageName, pClassId );
+        ImplReadObject( aContainerStorageName, aObjectStorageName, pClassId,
+                         pOut ? pOut->GetStorage() : 0 );
         sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_EMBEDDEDOBJECT_URL_BASE     ) );
         sRetURL += aObjectStorageName;
+
+        if( pOut )
+        {
+            mpStreamMap->erase( aIter );
+            pOut->release();
+        }
     }
     else
     {
         // Objects are written using SfxObjectShell::SaveAs
-//      if( mbDirect )
-//          ImplWriteObject( aContainerStorageName, aObjectStorageName );
-//      else
-//          maEmbeddedObjectURLs.push_back( rURLStr );
         sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM("#./") );
         if( aContainerStorageName.getLength() )
         {
@@ -532,15 +621,13 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
 // -----------------------------------------------------------------------------
 
 void SvXMLEmbeddedObjectHelper::Init(
-        SvStorage& rRootStorage,
+        SvStorage *pRootStorage,
         SvPersist& rPersist,
-        SvXMLEmbeddedObjectHelperMode eCreateMode,
-        sal_Bool bDirect )
+        SvXMLEmbeddedObjectHelperMode eCreateMode )
 {
-    mpRootStorage = &rRootStorage;
+    mpRootStorage = pRootStorage;
     mpDocPersist = &rPersist;
     meCreateMode = eCreateMode;
-    mbDirect = bDirect;
 }
 
 // -----------------------------------------------------------------------------
@@ -554,7 +641,19 @@ SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
     SvXMLEmbeddedObjectHelper* pThis = new SvXMLEmbeddedObjectHelper;
 
     pThis->acquire();
-    pThis->Init( rRootStorage, rDocPersist, eCreateMode, bDirect );
+    pThis->Init( &rRootStorage, rDocPersist, eCreateMode );
+
+    return pThis;
+}
+
+SvXMLEmbeddedObjectHelper* SvXMLEmbeddedObjectHelper::Create(
+        SvPersist& rDocPersist,
+        SvXMLEmbeddedObjectHelperMode eCreateMode )
+{
+    SvXMLEmbeddedObjectHelper* pThis = new SvXMLEmbeddedObjectHelper;
+
+    pThis->acquire();
+    pThis->Init( 0, rDocPersist, eCreateMode );
 
     return pThis;
 }
@@ -575,24 +674,6 @@ void SvXMLEmbeddedObjectHelper::Destroy(
 
 void SvXMLEmbeddedObjectHelper::Flush()
 {
-    if( ( EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode ) && !mbDirect )
-    {
-        OUString    aContainerStorageName, aObjectStorageName;
-        URLVector::iterator aIter( maEmbeddedObjectURLs.begin() );
-        URLVector::iterator aEnd( maEmbeddedObjectURLs.end() );
-
-        while( aIter != aEnd )
-        {
-            if( ImplGetStorageNames( *aIter, aContainerStorageName,
-                                       aObjectStorageName, sal_True ) )
-                ImplWriteObject( aContainerStorageName, aObjectStorageName );
-            aIter++;
-        }
-    }
-
-    if( EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode &&
-        mxContainerStorage.Is() )
-        mxContainerStorage->Commit();
 }
 
 // XGraphicObjectResolver
@@ -602,4 +683,105 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL( const OUS
     MutexGuard          aGuard( maMutex );
 
     return ImplInsertEmbeddedObjectURL( aURL );
+}
+
+// XNameAccess
+Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
+        const OUString& rURLStr )
+    throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    Any aRet;
+    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    {
+        Reference < XOutputStream > xStrm;
+        if( mpStreamMap )
+        {
+            SvXMLEmbeddedObjectHelper_Impl::iterator aIter =
+                mpStreamMap->find( rURLStr );
+            if( aIter != mpStreamMap->end() && aIter->second )
+                xStrm = aIter->second;
+        }
+        if( !xStrm.is() )
+        {
+            OutputStorageWrapper_Impl *pOut = new OutputStorageWrapper_Impl;
+            pOut->acquire();
+            if( !mpStreamMap )
+                mpStreamMap = new SvXMLEmbeddedObjectHelper_Impl;
+            (*mpStreamMap)[rURLStr] = pOut;
+            xStrm = pOut;
+        }
+
+        aRet <<= xStrm;
+    }
+    else
+    {
+        Reference < XInputStream > xStrm;
+        OUString aContainerStorageName, aObjectStorageName;
+        if( ImplGetStorageNames( rURLStr, aContainerStorageName,
+                                 aObjectStorageName,
+                                 sal_True ) )
+        {
+            SvPersistRef xObj = mpDocPersist->GetObject( aObjectStorageName );
+            if( xObj.Is() )
+                xStrm = new InputStorageWrapper_Impl( xObj );
+        }
+        aRet <<= xStrm;
+    }
+
+    return aRet;
+}
+
+Sequence< OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
+    throw (RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    return Sequence< OUString >(0);
+}
+
+sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
+    throw (RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    {
+        return sal_True;
+    }
+    else
+    {
+        OUString    aContainerStorageName, aObjectStorageName;
+        if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
+                                  aObjectStorageName,
+                                  sal_True ) )
+            return sal_False;
+
+        return aObjectStorageName.getLength() > 0 &&
+               mpDocPersist->Find( aObjectStorageName );
+    }
+}
+
+// XNameAccess
+Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
+    throw (RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+        return ::getCppuType((const Reference<XOutputStream>*)0);
+    else
+        return ::getCppuType((const Reference<XInputStream>*)0);
+}
+
+sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasElements()
+    throw (RuntimeException)
+{
+    MutexGuard          aGuard( maMutex );
+    if( EMBEDDEDOBJECTHELPER_MODE_READ == meCreateMode )
+    {
+        return sal_True;
+    }
+    else
+    {
+        return mpDocPersist->GetObjectList() != 0 &&
+               mpDocPersist->GetObjectList()->Count() > 0;
+    }
 }
