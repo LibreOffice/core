@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-17 08:41:43 $
+ *  last change: $Author: dvo $ $Date: 2002-06-07 13:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,14 +1247,38 @@ SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
 
 // ---------------------------------------------------------------------
 
-class StringIntHasher
+class TableBoxIndex
 {
 public:
-    size_t operator() (const pair<OUString,sal_Int32> & rArg) const
+    OUString msName;
+    sal_Int32 mnWidth;
+    sal_Bool mbProtected;
+
+    TableBoxIndex( const OUString& rName, sal_Int32 nWidth,
+                   sal_Bool bProtected ) :
+        msName( rName ),
+        mnWidth( nWidth ),
+        mbProtected( bProtected )
+    { }
+
+    bool operator== ( const TableBoxIndex& rArg ) const
     {
-        return rArg.second + rArg.first.hashCode();
+        return (rArg.mnWidth == mnWidth) &&
+            (rArg.mbProtected == mbProtected) &&
+            (rArg.msName == msName);
     }
 };
+
+class TableBoxIndexHasher
+{
+public:
+    size_t operator() (const TableBoxIndex& rArg) const
+    {
+        return rArg.msName.hashCode() + rArg.mnWidth + rArg.mbProtected;
+    }
+};
+
+
 
 
 typedef SwXMLTableRow_Impl* SwXMLTableRowPtr;
@@ -1849,6 +1873,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
     SwTableBox* pBox,
     const OUString& rStyleName,
     sal_Int32 nColumnWidth,
+    sal_Bool bProtected,
     sal_Bool bMayShare,
     sal_Bool& bNew,
     sal_Bool* pModifyLocked )
@@ -1858,7 +1883,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
 
     SwTableBoxFmt* pBoxFmt;
 
-    pair<OUString,sal_Int32> aKey( rStyleName, nColumnWidth );
+    TableBoxIndex aKey( rStyleName, nColumnWidth, bProtected );
     map_BoxFmt::iterator aIter = pSharedBoxFormats->find( aKey );
     if ( aIter == pSharedBoxFormats->end() )
     {
@@ -2021,7 +2046,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     sal_Bool bModifyLocked;
     sal_Bool bNew;
     SwTableBoxFmt *pBoxFmt = GetSharedBoxFormat(
-        pBox, sStyleName, nColWidth,
+        pBox, sStyleName, nColWidth, pCell->IsProtected(),
         pCell->GetStartNode() && pCell->GetFormula().getLength() == 0 &&
             ! pCell->HasValue(),
         bNew, &bModifyLocked  );
@@ -2061,10 +2086,6 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         pBox->ChgByLanguageSystem();
     }
 
-    // restore old modify-lock state
-    if (! bModifyLocked)
-        pBoxFmt->UnlockModify();
-
     // table cell protection
     if( pCell->IsProtected() )
     {
@@ -2072,6 +2093,10 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         aProtectItem.SetCntntProtect( sal_True );
         pBoxFmt->SetAttr( aProtectItem );
     }
+
+    // restore old modify-lock state
+    if (! bModifyLocked)
+        pBoxFmt->UnlockModify();
 
     pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
