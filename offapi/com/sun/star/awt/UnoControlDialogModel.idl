@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialogModel.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-17 15:14:46 $
+ *  last change: $Author: mt $ $Date: 2001-12-14 10:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,19 +89,6 @@ service UnoControlDialogModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the border style of the dialog.
-
-
-        <pre>
-        0: No border
-        1: 3D border
-        2: simple border
-        </pre>
-     */
-    [property] short Border;
-
-    //-------------------------------------------------------------------------
-
     /** specifies the service name of the default control for this model.
      */
     [property] string DefaultControl;
@@ -145,6 +132,9 @@ service UnoControlDialogModel
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/05/17 15:14:46  mt
+    #86320# new idl...
+
 
 =============================================================================*/
 #endif
