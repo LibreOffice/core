@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:59:30 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _XMLOFF_FORMENUMS_HXX_
 #include "formenums.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -109,6 +112,9 @@
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_IMAGEPOSITION_HPP_
+#include <com/sun/star/awt/ImagePosition.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
@@ -122,7 +128,9 @@ namespace xmloff
 {
 //.........................................................................
 
+    using namespace ::xmloff::token;
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
@@ -471,30 +479,21 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        // the control id
-        static const ::rtl::OUString s_sControlIdAttribute = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CONTROL_ID));
-
-        // the value attributes
-        static const ::rtl::OUString s_sValueAttribute          = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_VALUE));
-        static const ::rtl::OUString s_sCurrentValueAttribute   = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CURRENT_VALUE));
-        static const ::rtl::OUString s_sMinValueAttribute       = ::rtl::OUString::createFromAscii(getSpecialAttributeName(SCA_MIN_VALUE));
-        static const ::rtl::OUString s_sMaxValueAttribute       = ::rtl::OUString::createFromAscii(getSpecialAttributeName(SCA_MAX_VALUE));
-
-        if (!m_sControlId.getLength() && (_rLocalName == s_sControlIdAttribute))
+        if ( !m_sControlId.getLength() && _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_CONTROL_ID ) ) )
         {   // it's the control id
             m_sControlId = _rValue;
         }
         else if ( _rLocalName.equalsAscii( getBindingAttributeName( BA_LINKED_CELL ) ) )
-        {
+        {   // it's the address of a spreadsheet cell
             m_sBoundCellAddress = _rValue;
         }
         else
         {
             sal_Int32 nHandle;
-            if  (   ((_rLocalName == s_sValueAttribute) && (nHandle = PROPID_VALUE))
-                ||  ((_rLocalName == s_sCurrentValueAttribute) && (nHandle = PROPID_CURRENT_VALUE))
-                ||  ((_rLocalName == s_sMinValueAttribute) && (nHandle = PROPID_MIN_VALUE))
-                ||  ((_rLocalName == s_sMaxValueAttribute) && (nHandle = PROPID_MAX_VALUE))
+            if  (   ( _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_VALUE ) ) && ( nHandle = PROPID_VALUE ) )
+                ||  ( _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_CURRENT_VALUE ) ) && ( nHandle = PROPID_CURRENT_VALUE ) )
+                ||  ( _rLocalName.equalsAscii( getSpecialAttributeName( SCA_MIN_VALUE ) ) && ( nHandle = PROPID_MIN_VALUE ) )
+                ||  ( _rLocalName.equalsAscii( getSpecialAttributeName( SCA_MAX_VALUE ) ) && ( nHandle = PROPID_MAX_VALUE ) )
                 // it's no == in the second part, it's an assignment!!!!!
                 )
             {
@@ -763,6 +762,66 @@ namespace xmloff
         }
         return xPropSet;
     }
+
+    //=====================================================================
+    //= OImagePositionImport
+    //=====================================================================
+    //---------------------------------------------------------------------
+    OImagePositionImport::OImagePositionImport( IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager,
+        sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const Reference< XNameContainer >& _rxParentContainer,
+        OControlElement::ElementType _eType )
+        :OControlImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
+        ,m_nImagePosition( -1 )
+        ,m_nImageAlign( 0 )
+        ,m_bHaveImagePosition( sal_False )
+    {
+    }
+
+    //---------------------------------------------------------------------
+    void OImagePositionImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
+        const ::rtl::OUString& _rValue )
+    {
+        if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
+        {
+            OSL_VERIFY( convertString(
+                m_rContext.getGlobalContext(), ::getCppuType( &m_nImagePosition ),
+                _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImagePosition )
+            ) >>= m_nImagePosition );
+            m_bHaveImagePosition = sal_True;
+        }
+        else if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
+        {
+            OSL_VERIFY( convertString(
+                m_rContext.getGlobalContext(), ::getCppuType( &m_nImageAlign ),
+                _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImageAlign )
+            ) >>= m_nImageAlign );
+        }
+        else
+            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+    }
+
+    //---------------------------------------------------------------------
+    void OImagePositionImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        OControlImport::StartElement( _rxAttrList );
+
+        if ( m_bHaveImagePosition )
+        {
+            sal_Int16 nUnoImagePosition = ImagePosition::Centered;
+            if ( m_nImagePosition >= 0 )
+            {
+                OSL_ENSURE( ( m_nImagePosition <= 3 ) && ( m_nImageAlign >= 0 ) && ( m_nImageAlign < 3 ),
+                    "OImagePositionImport::StartElement: unknown image align and/or position!" );
+                nUnoImagePosition = m_nImagePosition * 3 + m_nImageAlign;
+            }
+
+            PropertyValue aImagePosition;
+            aImagePosition.Name = PROPERTY_IMAGE_POSITION;
+            aImagePosition.Value <<= nUnoImagePosition;
+            implPushBackPropertyValue( aImagePosition );
+        }
+    }
+
     //=====================================================================
     //= OReferredControlImport
     //=====================================================================
@@ -833,7 +892,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     ORadioImport::ORadioImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
-        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+        :OImagePositionImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
     {
     }
 
@@ -842,9 +901,9 @@ namespace xmloff
     {
         // need special handling for the State & CurrentState properties:
         // they're stored as booleans, but expected to be int16 properties
-        static const ::rtl::OUString s_sCurrentSelected = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CURRENT_SELECTED));
-        static const ::rtl::OUString s_sSelected = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_SELECTED));
-        if ((_rLocalName == s_sCurrentSelected) || (_rLocalName == s_sSelected))
+        if  (  _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_CURRENT_SELECTED ) )
+            || _rLocalName.equalsAscii( getCommonControlAttributeName( CCA_SELECTED ) )
+            )
         {
             const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
             OSL_ENSURE(pProperty, "ORadioImport::handleAttribute: invalid property map!");
@@ -861,7 +920,7 @@ namespace xmloff
             }
         }
         else
-            OControlImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+            OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //=====================================================================
@@ -870,7 +929,7 @@ namespace xmloff
     OURLReferenceImport::OURLReferenceImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
-        :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
+        :OImagePositionImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     {
     }
 
@@ -895,10 +954,10 @@ namespace xmloff
         {
             // make a global URL out of the local one
             ::rtl::OUString sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
-            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
+            OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
         }
         else
-            OControlImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
+            OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, _rValue );
     }
 
     //=====================================================================
@@ -1541,6 +1600,9 @@ namespace xmloff
 
             case OControlElement::RADIO:
                 return new ORadioImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
+
+            case OControlElement::CHECKBOX:
+                return new OImagePositionImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
 
             case OControlElement::PASSWORD:
                 return new OPasswordImport(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType);
