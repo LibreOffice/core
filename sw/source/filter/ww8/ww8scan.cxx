@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:56:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#include "ww8scan.hxx"
+
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -104,8 +106,8 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _WW8SCAN_HXX
-#include "ww8scan.hxx"
+#ifndef _LANG_HXX
+#include "tools/lang.hxx"
 #endif
 
 #define ASSERT_RET_ON_FAIL( aCon, aError, aRet ) \
