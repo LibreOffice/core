@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:27:52 $
+ *  last change: $Author: abi $ $Date: 2003-05-08 09:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5298,13 +5298,18 @@ static star::uno::Any GetCasePreservedURL(INetURLObject& aObj)
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
+        star::uno::Any aVoidArgument;
         ucb::Content aCnt(
             aObj.GetMainURL(INetURLObject::NO_DECODE),
             star::uno::Reference<
             star::ucb::XCommandEnvironment > () );
 
-        return aCnt.getPropertyValue(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL")));
+        return aCnt.executeCommand(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCasePreservingURL")),
+            aVoidArgument);
+
+//     return aCnt.getPropertyValue(
+//     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL")));
     }
     catch( star::uno::Exception& )
     {
