@@ -2,9 +2,9 @@
  *
  *  $RCSfile: precomp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:29:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 
 // For en/disabling csv_assertions:
-#ifndef DEBUG
+#if OSL_DEBUG_LEVEL == 0
 #define CSV_NO_ASSERTIONS
 #else
 #define CSV_USE_CSV_ASSERTIONS
