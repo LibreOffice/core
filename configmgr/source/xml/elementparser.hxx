@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementparser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:43:45 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include "elementinfo.hxx"
 #endif
 
+#ifndef CONFIGMGR_LOGGER_HXX
+#include "logger.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
@@ -84,11 +88,16 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         class ElementParser
         {
+            Logger mLogger;
         public:
             typedef uno::Reference< sax::XAttributeList > SaxAttributeList;
         public:
-            ElementParser()
+            explicit
+            ElementParser(Logger const & xLogger)
+            : mLogger(xLogger)
             {}
+
+            Logger const & logger() const { return mLogger; }
 
             /// reset the parser for a new document
             void reset()
