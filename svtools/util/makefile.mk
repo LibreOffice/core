@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.44 $
+#*  $Revision: 1.45 $
 #*
-#*  last change: $Author: vg $ $Date: 2003-04-15 13:41:33 $
+#*  last change: $Author: hjs $ $Date: 2003-08-18 14:55:11 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -177,8 +177,10 @@ RESLIB2SRSFILES=\
 SHL1TARGET= svt$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= _svt
 
+.IF "$(OS)"!="MACOSX"
 # static libraries
 SHL1STDLIBS+= $(JPEG3RDLIB)
+.ENDIF
 
 # dynamic libraries
 SHL1STDLIBS+= \
@@ -195,6 +197,11 @@ SHL1STDLIBS+= \
         $(VOSLIB)			\
         $(SALLIB)			\
         $(ICUUCLIB)
+
+.IF "$(OS)"=="MACOSX"
+# static libraries go at end
+SHL1STDLIBS+= $(JPEG3RDLIB)
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
