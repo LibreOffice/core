@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:10:29 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ portuguese ] = "Marcas" ;
                 Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ";
                 Text[ russian ] = "Ìàğêåğû";
-                Text[ polish ] = "Wypunktowanie";
+                Text[ polish ] = "Znaki wypunktowania";
                 Text[ japanese ] = "‰Óğ‘‚«";
                 Text[ chinese_traditional ] = "¶µ¥Ø²Å¸¹";
                 Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
