@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-02 12:10:34 $
+ *  last change: $Author: svesik $ $Date: 2001-11-12 12:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include <stl/list>
+#include <list>
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
