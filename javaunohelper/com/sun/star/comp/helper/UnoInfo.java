@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoInfo.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:15:51 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,31 +82,33 @@ public final class UnoInfo {
      */
     public static URL[] getJars() {
 
-        final String JUHJAR = "juh.jar";
+        final String JUHJAR = "/juh.jar";
 
         String[] jarFileNames = new String[] {
             "jurt.jar",
             "unoil.jar",
             "ridl.jar",
-            "juh.jar",
-            "unoinfo.jar" };
+            "juh.jar" };
 
         URL[] jars = new URL[jarFileNames.length];
         URLClassLoader cl = (URLClassLoader) UnoInfo.class.getClassLoader();
         URL[] urls = cl.getURLs();
         for ( int i = 0; i < urls.length; i++ ) {
             String url = urls[i].toString();
-            int index = url.indexOf( JUHJAR );
-            if ( index >= 0 ) {
-                String base = url.substring( 0, index );
-                for ( int j = 0; j < jarFileNames.length; j++ ) {
-                    try {
-                        jars[j] = new URL( base + jarFileNames[j] );
-                    } catch ( MalformedURLException e ) {
-                        return null;
+            if ( url.endsWith( JUHJAR ) )
+            {
+                int index = url.lastIndexOf( JUHJAR );
+                if ( index >= 0 ) {
+                    String base = url.substring( 0, index + 1 );
+                    for ( int j = 0; j < jarFileNames.length; j++ ) {
+                        try {
+                            jars[j] = new URL( base + jarFileNames[j] );
+                        } catch ( MalformedURLException e ) {
+                            return null;
+                        }
                     }
+                    break;
                 }
-                break;
             }
         }
 
