@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:03:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@
 #include "LayerTabBar.hxx"
 #include "fupoor.hxx"
 #include "Window.hxx"
+#include "fuediglu.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -485,9 +486,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     if (!pDrView->IsFrameDragSingles())
-    {
         rSet.Put(SfxBoolItem(SID_BEZIER_EDIT, TRUE));
-    }
+    else
+        rSet.Put(SfxBoolItem(SID_BEZIER_EDIT, FALSE));
+
+    if (pFuActual!=NULL && pFuActual->ISA(FuEditGluePoints))
+        rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, TRUE));
+    else
+        rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, FALSE));
 
     if( !pDrView->IsMirrorAllowed( TRUE, TRUE ) )
     {
