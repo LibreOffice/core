@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:29:08 $
+ *  last change: $Author: gh $ $Date: 2002-11-27 12:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,16 +273,23 @@ pfunc_osl_printDebugMessage StatementCommand::pOriginal_osl_DebugMessageFunc = N
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 StatementFlow::StatementFlow( StatementList *pAfterThis, USHORT nArtP )
-: bBool1(FALSE)
-, nArt(nArtP)
+: nArt(nArtP)
 , nParams(0)
+, nSNr1(0)
+, nLNr1(0)
 , aString1()
+, bBool1(FALSE)
 {
     QueStatement( pAfterThis );
 }
 
 StatementFlow::StatementFlow( ULONG nServiceId, SCmdStream *pCmdIn, ImplRemoteControl *pRC )
-: bBool1(FALSE)
+: nArt(0)
+, nParams(0)
+, nSNr1(0)
+, nLNr1(0)
+, aString1()
+, bBool1(FALSE)
 {
     QueStatement( NULL );
     bUseIPC = (nServiceId == SI_IPCCommandBlock);
@@ -572,7 +579,7 @@ StatementSlot::~StatementSlot()
         {
             for (USHORT i = 0 ; i+1 < nAnzahl ; i++)
                 delete pItemArr[i];
-            __DELETE(nAnzahl) pItemArr;
+            delete[] pItemArr;
         }
 
         aArgs.realloc( 0 );
@@ -620,7 +627,7 @@ void SAL_CALL SlotStatusListener::statusChanged( const ::com::sun::star::frame::
 }
 
 // XEventListener
-void SAL_CALL SlotStatusListener::disposing( const ::com::sun::star::lang::EventObject& Source )
+void SAL_CALL SlotStatusListener::disposing( const ::com::sun::star::lang::EventObject& )
 {
     bDisposed = TRUE;
 }
@@ -654,7 +661,7 @@ BOOL StatementSlot::Execute()
         if ( ( nAnzahl == 0 && !getenv("OLDSLOTHANDLING") ) || aArgs.hasElements() )
         {   // trying to call slots via uno
             URL aTargetURL;
-            aTargetURL.Complete = CUniString("slot:").Append( String::CreateFromInt64( nFunctionId ) );
+            aTargetURL.Complete = CUniString("slot:").Append( String::CreateFromInt32( nFunctionId ) );
             Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( CUniString("com.sun.star.frame.Desktop") ), UNO_QUERY );
             Reference < XFrame > xFrame;
 
@@ -718,7 +725,7 @@ BOOL StatementSlot::Execute()
                 {
                     Reference < XStatusListener > xListener = ( XStatusListener* )new SlotStatusListener;
                     xDisp->addStatusListener( xListener, aTargetURL );
-                    if ( ((SlotStatusListener*)xListener.get())->bEnabled )
+                    if ( static_cast< SlotStatusListener* >(xListener.get())->bEnabled )
                         xDisp->dispatch( aTargetURL, aArgs );
                     else
                         ReportError( GEN_RES_STR1( S_UNO_URL_EXECUTE_FAILED_DISABLED, aTargetURL.Complete ) );
@@ -863,9 +870,17 @@ BOOL StatementUnoSlot::Execute()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 StatementCommand::StatementCommand( SCmdStream *pCmdIn )
-: bBool1(FALSE)
-, bBool2(FALSE)
+: nMethodId(0)
+, nParams(0)
+, nNr1(0)
+, nNr2(0)
+, nNr3(0)
+, nNr4(0)
 , nLNr1(0)
+, aString1()
+, aString2()
+, bBool1(FALSE)
+, bBool2(FALSE)
 {
     QueStatement( NULL );
     pCmdIn->Read( nMethodId );
@@ -1016,7 +1031,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
             if ( pBase->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
             {
                 ToolBox *pTB = ((ToolBox*)pBase);
-                int i;
+                USHORT i;
                 for ( i = 0; i < pTB->GetItemCount() ; i++ )
                 {
                     aName = String();
@@ -3757,6 +3772,13 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
 
                 if ( !bBool1 )          // Altes Verhalten
                     pControl->GrabFocus();
+                else    // If focus is not inside given control we grab it once.
+                {
+                    Window *pFocus = GetpApp()->GetFocusWindow();
+                    if ( !pFocus || !pControl->IsWindowOrChild( pFocus, TRUE ) )
+                        pControl->GrabFocus();
+                }
+
 
                 if ( pControl->GetType() == WINDOW_COMBOBOX )
                 {   // Bei COMBOBOX an das Edit direkt liefern
@@ -3798,12 +3820,47 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                                 case 7: nVal = 0;
                                         break;
                             }
-                            aEvent = KeyEvent(0,KeyCode(nVal & 0xFFF,nVal & 0xF000));
+                            // #105672#
+                            // find out the keycode
+                            USHORT nKeygroup = nVal & KEYGROUP_TYPE;
+                            USHORT nKeyCode = nVal & KEY_CODE;
+                            sal_Unicode aCh;
+                            switch (nKeygroup)
+                            {
+                                case KEYGROUP_NUM:
+                                    aCh = nKeyCode - KEY_0 + '0';
+                                    break;
+                                case KEYGROUP_ALPHA:
+                                    aCh = nKeyCode - KEY_A;
+                                    if ( nVal & KEY_MOD1 )
+                                    {}
+                                    else if ( nVal & KEY_SHIFT )
+                                        aCh += 'A';
+                                    else
+                                        aCh += 'a';
+                                break;
+                                case KEYGROUP_MISC:
+                                    {                           //  CR  ESC TAB BACK
+                                        ByteString aPrintableMisc("\x0d\x1b\x09\x08 **+-*/.,<>=",16);
+                                        if ( nKeyCode-KEY_RETURN < aPrintableMisc.Len()
+                                            && nKeyCode != KEY_INSERT && nKeyCode != KEY_DELETE )
+                                            aCh = aPrintableMisc.GetChar( nKeyCode-KEY_RETURN );
+                                        else
+                                            aCh = 0;
+                                    }
+                                    break;
+                                case KEYGROUP_CURSOR:
+                                case KEYGROUP_FKEYS:
+                                default:
+                                    aCh = 0;
+                            }
+                            aEvent = KeyEvent(aCh,KeyCode(nVal & 0xFFF,nVal & 0xF000));
                         }
                         else
                         {
+                                                            //   CR  ESC TAB BACK
+                            String aPrintableMisc = CUniString("\x0d\x1b\x09\x08 xx+-*/.,<>=");
                             sal_Unicode aCh = aString1.GetChar(i);
-                            String aPrintableMisc = CUniString("xxxx xx+-*/.,<>=");
                             if ( aCh >= 'a' && aCh <= 'z' )
                                 aEvent = KeyEvent(aCh, KeyCode(KEYGROUP_ALPHA + aCh-'a', 0));
                             else if ( aCh >= 'A' && aCh <= 'Z' )
