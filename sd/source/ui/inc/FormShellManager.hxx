@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormShellManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:53:11 $
+ *  last change: $Author: rt $ $Date: 2004-06-03 07:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,13 @@ public:
 
 private:
     const ViewShellBase& mrBase;
+
+    enum StackPosition {SP_BELOW_VIEW_SHELL, SP_ABOVE_VIEW_SHELL, SP_UNKNOWN};
+    /** Remember whether the form shell is currently at the top of the shell
+        stack or below the view shell.  Until one of the event handlers is
+        called the stack position is unknown.
+    */
+    StackPosition meStackPosition;
 
     /** This call back is called by the application window (among others)
         when the window gets the focus.  In this case the form shell is
