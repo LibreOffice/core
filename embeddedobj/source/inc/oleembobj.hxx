@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:53:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ namespace cppu {
 }
 
 class OleComponent;
+class OwnView_Impl;
 class OleEmbeddedObject : public ::cppu::WeakImplHelper3
                         < ::com::sun::star::embed::XEmbeddedObject
                         , ::com::sun::star::embed::XEmbedPersist
@@ -164,6 +165,9 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
 
     // link related stuff
     ::rtl::OUString m_aLinkURL; // ???
+
+    // points to own view provider if the the object has no server
+    OwnView_Impl*   m_pOwnView;
 
 protected:
 
