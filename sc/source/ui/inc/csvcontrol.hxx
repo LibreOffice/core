@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@
 
 
 class ScAccessibleCsvControl;
-namespace drafts { namespace com { namespace sun { namespace star { namespace accessibility {
+namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
-} } } } }
+} } } }
 
 
 // ============================================================================
@@ -303,7 +303,7 @@ protected:
     typedef ::std::vector< StringVec >  StringVecVec;
 
     typedef ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > XAccessibleRef;
+        ::com::sun::star::accessibility::XAccessible > XAccessibleRef;
 
 private:
     Link                        maCmdHdl;           /// External command handler.
