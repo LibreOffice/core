@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-05-04 16:31:14 $
+ *  last change: $Author: er $ $Date: 2001-07-06 16:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <tools/string.hxx>
 #endif
 
-class International;
 class Date;
 class SvNumberformat;
 class SvNumberFormatter;
