@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:41:39 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,7 +1388,7 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "´óĞ¡Ğ´(~S)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Ma³e i du¿e litery";
+        Text[ polish ] = "Wielkie i ma³e litery";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~S)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¤j¤p¼g(~S)";
@@ -1832,7 +1832,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "´óĞ¡Ğ´(~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Ma³e i du¿e litery";
+        Text[ polish ] = "Wielkie i ma³e litery";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¤j¤p¼g(~C)";
@@ -3286,7 +3286,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´(~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Ma³e i du¿e litery";
+        Text[ polish ] = "Wielkie i ma³e litery";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¤j¤p¼g(~C)";
