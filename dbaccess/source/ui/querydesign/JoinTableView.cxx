@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 07:46:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1731,7 +1731,7 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
 {
     if ( _bAddData )
     {
-#if _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         ::std::vector< OTableConnectionData*>* pTabConnDataList = m_pView->getController()->getTableConnectionData();
         OSL_ENSURE( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),_pConnection->GetData()) == pTabConnDataList->end(),"Data already in vector!");
 #endif
