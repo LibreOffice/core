@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framelistanalyzer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:14:26 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include <properties.h>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
+#endif
+
 //_______________________________________________
 //  interface includes
 
@@ -87,8 +91,20 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
+
 //_______________________________________________
 //  includes of other projects
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -197,13 +213,17 @@ void FrameListAnalyzer::impl_analyze()
 
     // check, if the reference frame includes the backing component.
     // But look, if this analyze step is realy needed.
-    if (
-        ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT) &&
-        (xSet.is()                                                 )
-       )
+    if ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT)
     {
-        css::uno::Any aValue = xSet->getPropertyValue(FRAME_PROPNAME_ISBACKINGMODE);
-        aValue >>= m_bReferenceIsBacking;
+        try
+        {
+            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
+            css::uno::Reference< dcss::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
+            ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
+            m_bReferenceIsBacking = (sModule.equals(SERVICENAME_STARTMODULE));
+        }
+        catch(const css::uno::Exception&)
+            {}
     }
 
     // check, if the reference frame includes the help module.
@@ -265,18 +285,19 @@ void FrameListAnalyzer::impl_analyze()
             //    Our user mst know it to decide right.
             if ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT)
             {
-                xSet = css::uno::Reference< css::beans::XPropertySet >(xFrame, css::uno::UNO_QUERY);
-                sal_Bool bIsBacking;
-
-                if (
-                    (xSet.is()                                                        ) &&
-                    (xSet->getPropertyValue(FRAME_PROPNAME_ISBACKINGMODE)>>=bIsBacking) &&
-                    (bIsBacking                                                       )
-                   )
+                try
                 {
-                    m_xBackingComponent = xFrame;
-                    continue;
+                    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::utl::getProcessServiceFactory();
+                    css::uno::Reference< dcss::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
+                    ::rtl::OUString sModule = xModuleMgr->identify(xFrame);
+                    if (sModule.equals(SERVICENAME_STARTMODULE))
+                    {
+                        m_xBackingComponent = xFrame;
+                        continue;
+                    }
                 }
+                catch(const css::uno::Exception&)
+                    {}
             }
 
             // -------------------------------------------------
