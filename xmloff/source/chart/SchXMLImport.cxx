@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-04 15:25:15 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 17:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,10 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const rtl::OUSt
 
     // accept <office:document>
     if( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_document )))
+        ( 0 == rLocalName.compareToAscii(sXML_document) ||
+          0 == rLocalName.compareToAscii(sXML_document_meta) ||
+          0 == rLocalName.compareToAscii(sXML_document_styles) ||
+          0 == rLocalName.compareToAscii(sXML_document_content) ))
     {
         pContext = new SchXMLDocContext( maImportHelper, *this, nPrefix, rLocalName );
     }

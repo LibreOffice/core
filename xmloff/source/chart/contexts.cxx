@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-04 12:29:49 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 17:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,10 @@ SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
         mrImportHelper( rImpHelper )
 {
     DBG_ASSERT( XML_NAMESPACE_OFFICE == nPrefix &&
-                rLName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_document )),
+        ( 0 == rLName.compareToAscii(sXML_document) ||
+          0 == rLName.compareToAscii(sXML_document_meta) ||
+          0 == rLName.compareToAscii(sXML_document_styles) ||
+          0 == rLName.compareToAscii(sXML_document_content) ),
                 "SchXMLDocContext instanciated with no <office:document> element" );
 }
 
