@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:43:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,19 @@
 #include "propacc.hxx"
 
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/i18n/XCalendar.hpp>
+
+using namespace comphelper;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::i18n;
+
+
 #if defined (OS2) && defined (__BORLANDC__)
 #pragma option -w-par
 #endif
@@ -135,6 +148,44 @@ static BOOL Convert (SbxDataType eType,
 {
     return TRUE;
 }
+
+
+static Reference< XCalendar > getLocaleCalendar( void )
+{
+    static Reference< XCalendar > xCalendar;
+    if( !xCalendar.is() )
+    {
+        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+        if( xSMgr.is() )
+        {
+            xCalendar = Reference< XCalendar >( xSMgr->createInstance
+                ( OUString::createFromAscii( "com.sun.star.i18n.LocaleCalendar" ) ), UNO_QUERY );
+        }
+    }
+
+    static com::sun::star::lang::Locale aLastLocale;
+    static bool bNeedsInit = true;
+
+    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetLocale();
+    bool bNeedsReload = false;
+    if( bNeedsInit )
+    {
+        bNeedsInit = false;
+        bNeedsReload = true;
+    }
+    else if( aLocale.Language != aLastLocale.Language ||
+             aLocale.Country  != aLastLocale.Country )
+    {
+        bNeedsReload = true;
+    }
+    if( bNeedsReload )
+    {
+        aLastLocale = aLocale;
+        xCalendar->loadDefaultCalendar( aLocale );
+    }
+    return xCalendar;
+}
+
 
 RTLFUNC(CBool) // JSM
 {
@@ -346,10 +397,18 @@ RTLFUNC(CVar)  // JSM
     rPar.Get(0)->Put( aVals );
 }
 
-RTLFUNC(CVErr) // JSM
+RTLFUNC(CVErr)
 {
-    rPar.Get(0)->PutEmpty();
-    StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
+    INT16 nErrCode = 0;
+    if ( rPar.Count() == 2 )
+    {
+        SbxVariable *pSbxVariable = rPar.Get(1);
+        nErrCode = pSbxVariable->GetInteger();
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+
+    rPar.Get(0)->PutErr( nErrCode );
 }
 
 RTLFUNC(Iif) // JSM
@@ -512,19 +571,6 @@ RTLFUNC(Trim)
         rPar.Get(0)->PutString( aStr );
     }
 }
-
-RTLFUNC(DateAdd)
-{
-}
-
-RTLFUNC(DateDiff)
-{
-}
-
-RTLFUNC(DatePart)
-{
-}
-
 
 RTLFUNC(GetSolarVersion)
 {
@@ -1473,6 +1519,743 @@ RTLFUNC(Split)
     refVar->SetParameters( NULL );
 }
 
+// MonthName(month[, abbreviate])
+RTLFUNC(MonthName)
+{
+    USHORT nParCount = rPar.Count();
+    if( nParCount != 2 && nParCount != 3 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    Reference< XCalendar > xCalendar = getLocaleCalendar();
+    if( !xCalendar.is() )
+    {
+        StarBASIC::Error( SbERR_INTERNAL_ERROR );
+        return;
+    }
+    Sequence< CalendarItem > aMonthSeq = xCalendar->getMonths();
+    sal_Int32 nMonthCount = aMonthSeq.getLength();
+
+    INT16 nVal = rPar.Get(1)->GetInteger();
+    if( nVal < 1 || nVal > nMonthCount )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    BOOL bAbbreviate = false;
+    if( nParCount == 3 )
+        bAbbreviate = rPar.Get(2)->GetBool();
+
+    const CalendarItem* pCalendarItems = aMonthSeq.getConstArray();
+    const CalendarItem& rItem = pCalendarItems[nVal - 1];
+
+    OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
+    rPar.Get(0)->PutString( String(aRetStr) );
+}
+
+// WeekdayName(weekday, abbreviate, firstdayofweek)
+RTLFUNC(WeekdayName)
+{
+    USHORT nParCount = rPar.Count();
+    if( nParCount < 2 || nParCount > 4 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    Reference< XCalendar > xCalendar = getLocaleCalendar();
+    if( !xCalendar.is() )
+    {
+        StarBASIC::Error( SbERR_INTERNAL_ERROR );
+        return;
+    }
+
+    Sequence< CalendarItem > aDaySeq = xCalendar->getDays();
+    INT16 nDayCount = (INT16)aDaySeq.getLength();
+    INT16 nDay = rPar.Get(1)->GetInteger();
+    INT16 nFirstDay = 0;
+    if( nParCount == 4 )
+    {
+        nFirstDay = rPar.Get(3)->GetInteger();
+        if( nFirstDay < 0 || nFirstDay > 7 )
+        {
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+            return;
+        }
+    }
+    if( nFirstDay == 0 )
+        nFirstDay = INT16( xCalendar->getFirstDayOfWeek() + 1 );
+
+    nDay = 1 + (nDay + nDayCount + nFirstDay - 2) % nDayCount;
+    if( nDay < 1 || nDay > nDayCount )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    BOOL bAbbreviate = false;
+    if( nParCount >= 3 )
+    {
+        SbxVariable* pPar2 = rPar.Get(2);
+        if( !pPar2->IsErr() )
+            bAbbreviate = pPar2->GetBool();
+    }
+
+    const CalendarItem* pCalendarItems = aDaySeq.getConstArray();
+    const CalendarItem& rItem = pCalendarItems[nDay - 1];
+
+    OUString aRetStr = ( bAbbreviate ? rItem.AbbrevName : rItem.FullName );
+    rPar.Get(0)->PutString( String(aRetStr) );
+}
+
+INT16 implGetWeekDay( double aDate, bool bFirstDayParam = false, INT16 nFirstDay = 0 )
+{
+    Date aRefDate( 1,1,1900 );
+    long nDays = (long) aDate;
+    nDays -= 2; // normieren: 1.1.1900 => 0
+    aRefDate += nDays;
+    DayOfWeek aDay = aRefDate.GetDayOfWeek();
+    INT16 nDay;
+    if ( aDay != SUNDAY )
+        nDay = (INT16)aDay + 2;
+    else
+        nDay = 1;   // 1==Sonntag
+
+    // #117253 Optional 2. parameter "firstdayofweek"
+    if( bFirstDayParam )
+    {
+        if( nFirstDay < 0 || nFirstDay > 7 )
+        {
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+            return 0;
+        }
+        if( nFirstDay == 0 )
+        {
+            Reference< XCalendar > xCalendar = getLocaleCalendar();
+            if( !xCalendar.is() )
+            {
+                StarBASIC::Error( SbERR_INTERNAL_ERROR );
+                return 0;
+            }
+            nFirstDay = INT16( xCalendar->getFirstDayOfWeek() + 1 );
+        }
+        nDay = 1 + (nDay + 7 - nFirstDay) % 7;
+    }
+    return nDay;
+}
+
+RTLFUNC(Weekday)
+{
+    USHORT nParCount = rPar.Count();
+    if ( nParCount < 2 )
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    else
+    {
+        double aDate = rPar.Get(1)->GetDate();
+
+        bool bFirstDay = false;
+        INT16 nFirstDay = 0;
+        if ( nParCount > 2 )
+        {
+            nFirstDay = rPar.Get(2)->GetInteger();
+            bFirstDay = true;
+        }
+        INT16 nDay = implGetWeekDay( aDate, bFirstDay, nFirstDay );
+        rPar.Get(0)->PutInteger( nDay );
+    }
+}
+
+
+enum Interval
+{
+    INTERVAL_NONE,
+    INTERVAL_YYYY,
+    INTERVAL_Q,
+    INTERVAL_M,
+    INTERVAL_Y,
+    INTERVAL_D,
+    INTERVAL_W,
+    INTERVAL_WW,
+    INTERVAL_H,
+    INTERVAL_N,
+    INTERVAL_S,
+};
+
+struct IntervalInfo
+{
+    Interval    meInterval;
+    const char* mpStringCode;
+    double      mdValue;
+    bool        mbSimple;
+
+    IntervalInfo( Interval eInterval, const char* pStringCode, double dValue, bool bSimple )
+        : meInterval( eInterval )
+        , mpStringCode( pStringCode )
+        , mdValue( dValue )
+        , mbSimple( bSimple )
+    {}
+};
+
+static IntervalInfo pIntervalTable[] =
+{
+    IntervalInfo( INTERVAL_YYYY,    "yyyy",      0.0,               false ),    // Year
+    IntervalInfo( INTERVAL_Q,       "q",         0.0,               false ),    // Quarter
+    IntervalInfo( INTERVAL_M,       "m",         0.0,               false ),    // Month
+    IntervalInfo( INTERVAL_Y,       "y",         1.0,               true ),     // Day of year
+    IntervalInfo( INTERVAL_D,       "d",         1.0,               true ),     // Day
+    IntervalInfo( INTERVAL_W,       "w",         1.0,               true ),     // Weekday
+    IntervalInfo( INTERVAL_WW,      "ww",        7.0,               true ),     // Week
+    IntervalInfo( INTERVAL_H,       "h",        (1.0 /    24.0),    true ),     // Hour
+    IntervalInfo( INTERVAL_N,       "n",        (1.0 /  1440.0),    true),      // Minute
+    IntervalInfo( INTERVAL_S,       "s",        (1.0 / 86400.0),    true ),     // Second
+    IntervalInfo( INTERVAL_NONE, NULL, 0.0, false )
+};
+
+IntervalInfo* getIntervalInfo( const String& rStringCode )
+{
+    IntervalInfo* pInfo = NULL;
+    INT16 i = 0;
+    while( (pInfo = pIntervalTable + i) != NULL )
+    {
+        if( rStringCode.EqualsIgnoreCaseAscii( pInfo->mpStringCode ) )
+            break;
+        i++;
+    }
+    return pInfo;
+}
+
+// From methods.cxx
+BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet );
+INT16 implGetDateDay( double aDate );
+INT16 implGetDateMonth( double aDate );
+INT16 implGetDateYear( double aDate );
+
+INT16 implGetHour( double dDate );
+INT16 implGetMinute( double dDate );
+INT16 implGetSecond( double dDate );
+
+
+inline void implGetDayMonthYear( INT16& rnYear, INT16& rnMonth, INT16& rnDay, double dDate )
+{
+    rnDay   = implGetDateDay( dDate );
+    rnMonth = implGetDateMonth( dDate );
+    rnYear  = implGetDateYear( dDate );
+}
+
+inline INT16 limitToINT16( INT32 n32 )
+{
+    if( n32 > 32767 )
+        n32 = 32767;
+    else if( n32 < -32768 )
+        n32 = -32768;
+    return (INT16)n32;
+}
+
+RTLFUNC(DateAdd)
+{
+    USHORT nParCount = rPar.Count();
+    if( nParCount != 4 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    String aStringCode = rPar.Get(1)->GetString();
+    IntervalInfo* pInfo = getIntervalInfo( aStringCode );
+    if( !pInfo )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    INT32 lNumber = rPar.Get(2)->GetLong();
+    double dDate = rPar.Get(3)->GetDate();
+    double dNewDate;
+    if( pInfo->mbSimple )
+    {
+        double dAdd = pInfo->mdValue * lNumber;
+        dNewDate = dDate + dAdd;
+    }
+    else
+    {
+        // Keep hours, minutes, seconds
+        double dHoursMinutesSeconds = dDate - floor( dDate );
+
+        BOOL bOk = TRUE;
+        INT16 nYear, nMonth, nDay;
+        INT16 nTargetYear16, nTargetMonth;
+        implGetDayMonthYear( nYear, nMonth, nDay, dDate );
+        switch( pInfo->meInterval )
+        {
+            case INTERVAL_YYYY:
+            {
+                INT32 nTargetYear = lNumber + nYear;
+                nTargetYear16 = limitToINT16( nTargetYear );
+                nTargetMonth = nMonth;
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, dNewDate );
+                break;
+            }
+            case INTERVAL_Q:
+            case INTERVAL_M:
+            {
+                bool bNeg = (lNumber < 0);
+                if( bNeg )
+                    lNumber = -lNumber;
+                INT32 nYearsAdd;
+                INT16 nMonthAdd;
+                if( pInfo->meInterval == INTERVAL_Q )
+                {
+                    nYearsAdd = lNumber / 4;
+                    nMonthAdd = (INT16)( 3 * (lNumber % 4) );
+                }
+                else
+                {
+                    nYearsAdd = lNumber / 12;
+                    nMonthAdd = (INT16)( lNumber % 12 );
+                }
+
+                INT32 nTargetYear;
+                if( bNeg )
+                {
+                    nTargetMonth = nMonth - nMonthAdd;
+                    if( nTargetMonth <= 0 )
+                    {
+                        nTargetMonth += 12;
+                        nYearsAdd++;
+                    }
+                    nTargetYear = (INT32)nYear - nYearsAdd;
+                }
+                else
+                {
+                    nTargetMonth = nMonth + nMonthAdd;
+                    if( nTargetMonth > 12 )
+                    {
+                        nTargetMonth -= 12;
+                        nYearsAdd++;
+                    }
+                    nTargetYear = (INT32)nYear + nYearsAdd;
+                }
+                nTargetYear16 = limitToINT16( nTargetYear );
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, dNewDate );
+                break;
+            }
+        }
+
+        if( bOk )
+        {
+            // Overflow?
+            INT16 nNewYear, nNewMonth, nNewDay;
+            implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
+            if( nNewYear > 9999 || nNewYear < 100 )
+            {
+                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                return;
+            }
+            int nCorrectionDay = nDay;
+            while( nNewMonth > nTargetMonth )
+            {
+                nCorrectionDay--;
+                implDateSerial( nTargetYear16, nTargetMonth, nCorrectionDay, dNewDate );
+                implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
+            }
+            dNewDate += dHoursMinutesSeconds;
+        }
+    }
+
+    rPar.Get(0)->PutDate( dNewDate );
+}
+
+inline double RoundImpl( double d )
+{
+    return ( d >= 0 ) ? floor( d + 0.5 ) : -floor( -d + 0.5 );
+}
+
+RTLFUNC(DateDiff)
+{
+    // DateDiff(interval, date1, date2[, firstdayofweek[, firstweekofyear]])
+
+    USHORT nParCount = rPar.Count();
+    if( nParCount < 4 || nParCount > 6 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    String aStringCode = rPar.Get(1)->GetString();
+    IntervalInfo* pInfo = getIntervalInfo( aStringCode );
+    if( !pInfo )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    double dDate1 = rPar.Get(2)->GetDate();
+    double dDate2 = rPar.Get(3)->GetDate();
+
+    double dRet = 0.0;
+    switch( pInfo->meInterval )
+    {
+        case INTERVAL_YYYY:
+        {
+            INT16 nYear1 = implGetDateYear( dDate1 );
+            INT16 nYear2 = implGetDateYear( dDate2 );
+            dRet = nYear2 - nYear1;
+            break;
+        }
+        case INTERVAL_Q:
+        {
+            INT16 nYear1 = implGetDateYear( dDate1 );
+            INT16 nYear2 = implGetDateYear( dDate2 );
+            INT16 nQ1 = 1 + (implGetDateMonth( dDate1 ) - 1) / 3;
+            INT16 nQ2 = 1 + (implGetDateMonth( dDate2 ) - 1) / 3;
+            INT16 nQGes1 = 4 * nYear1 + nQ1;
+            INT16 nQGes2 = 4 * nYear2 + nQ2;
+            dRet = nQGes2 - nQGes1;
+            break;
+        }
+        case INTERVAL_M:
+        {
+            INT16 nYear1 = implGetDateYear( dDate1 );
+            INT16 nYear2 = implGetDateYear( dDate2 );
+            INT16 nMonth1 = implGetDateMonth( dDate1 );
+            INT16 nMonth2 = implGetDateMonth( dDate2 );
+            INT16 nMonthGes1 = 12 * nYear1 + nMonth1;
+            INT16 nMonthGes2 = 12 * nYear2 + nMonth2;
+            dRet = nMonthGes2 - nMonthGes1;
+            break;
+        }
+        case INTERVAL_Y:
+        case INTERVAL_D:
+        {
+            double dDays1 = floor( dDate1 );
+            double dDays2 = floor( dDate2 );
+            dRet = dDays2 - dDays1;
+            break;
+        }
+        case INTERVAL_W:
+        case INTERVAL_WW:
+        {
+            double dDays1 = floor( dDate1 );
+            double dDays2 = floor( dDate2 );
+            if( pInfo->meInterval == INTERVAL_WW )
+            {
+                INT16 nFirstDay = 1;    // Default
+                if( nParCount >= 5 )
+                {
+                    nFirstDay = rPar.Get(4)->GetInteger();
+                    if( nFirstDay < 0 || nFirstDay > 7 )
+                    {
+                        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                        return;
+                    }
+                    if( nFirstDay == 0 )
+                    {
+                        Reference< XCalendar > xCalendar = getLocaleCalendar();
+                        if( !xCalendar.is() )
+                        {
+                            StarBASIC::Error( SbERR_INTERNAL_ERROR );
+                            return;
+                        }
+                        nFirstDay = INT16( xCalendar->getFirstDayOfWeek() + 1 );
+                    }
+                }
+                INT16 nDay1 = implGetWeekDay( dDate1 );
+                INT16 nDay1_Diff = nDay1 - nFirstDay;
+                if( nDay1_Diff < 0 )
+                    nDay1_Diff += 7;
+                dDays1 -= nDay1_Diff;
+
+                INT16 nDay2 = implGetWeekDay( dDate2 );
+                INT16 nDay2_Diff = nDay2 - nFirstDay;
+                if( nDay2_Diff < 0 )
+                    nDay2_Diff += 7;
+                dDays2 -= nDay2_Diff;
+            }
+
+            double dDiff = dDays2 - dDays1;
+            dRet = ( dDiff >= 0 ) ? floor( dDiff / 7.0 ) : -floor( -dDiff / 7.0 );
+            break;
+        }
+        case INTERVAL_H:
+        {
+            double dFactor = 24.0;
+            dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
+            break;
+        }
+        case INTERVAL_N:
+        {
+            double dFactor =1440.0;
+            dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
+            break;
+        }
+        case INTERVAL_S:
+        {
+            double dFactor = 86400.0;
+            dRet = RoundImpl( dFactor * (dDate2 - dDate1) );
+            break;
+        }
+    }
+    rPar.Get(0)->PutDouble( dRet );
+}
+
+double implGetDateOfFirstDayInFirstWeek
+    ( INT16 nYear, INT16& nFirstDay, INT16& nFirstWeek, bool* pbError = NULL )
+{
+    SbError nError = 0;
+    if( nFirstDay < 0 || nFirstDay > 7 )
+        nError = SbERR_BAD_ARGUMENT;
+
+    if( nFirstWeek < 0 || nFirstWeek > 3 )
+        nError = SbERR_BAD_ARGUMENT;
+
+    Reference< XCalendar > xCalendar;
+    if( nFirstDay == 0 || nFirstWeek == 0 )
+    {
+        xCalendar = getLocaleCalendar();
+        if( !xCalendar.is() )
+            nError = SbERR_BAD_ARGUMENT;
+    }
+
+    if( nError != 0 )
+    {
+        StarBASIC::Error( nError );
+        if( pbError )
+            *pbError = true;
+        return 0.0;
+    }
+
+    if( nFirstDay == 0 )
+        nFirstDay = INT16( xCalendar->getFirstDayOfWeek() + 1 );
+
+    INT16 nFirstWeekMinDays = 0;    // Not used for vbFirstJan1 = default
+    if( nFirstWeek == 0 )
+    {
+        nFirstWeekMinDays = xCalendar->getMinimumNumberOfDaysForFirstWeek();
+        if( nFirstWeekMinDays == 1 )
+        {
+            nFirstWeekMinDays = 0;
+            nFirstWeek = 1;
+        }
+        else if( nFirstWeekMinDays == 4 )
+            nFirstWeek = 2;
+        else if( nFirstWeekMinDays == 7 )
+            nFirstWeek = 3;
+    }
+    else if( nFirstWeek == 2 )
+        nFirstWeekMinDays = 4;      // vbFirstFourDays
+    else if( nFirstWeek == 3 )
+        nFirstWeekMinDays = 7;      // vbFirstFourDays
+
+    double dBaseDate;
+    implDateSerial( nYear, 1, 1, dBaseDate );
+    double dRetDate = dBaseDate;
+
+    INT16 nWeekDay0101 = implGetWeekDay( dBaseDate );
+    INT16 nDayDiff = nWeekDay0101 - nFirstDay;
+    if( nDayDiff < 0 )
+        nDayDiff += 7;
+
+    if( nFirstWeekMinDays )
+    {
+        INT16 nThisWeeksDaysInYearCount = 7 - nDayDiff;
+        if( nThisWeeksDaysInYearCount < nFirstWeekMinDays )
+            nDayDiff -= 7;
+    }
+    dRetDate = dBaseDate - nDayDiff;
+    return dRetDate;
+}
+
+RTLFUNC(DatePart)
+{
+    // DatePart(interval, date[,firstdayofweek[, firstweekofyear]])
+
+    USHORT nParCount = rPar.Count();
+    if( nParCount < 3 || nParCount > 5 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    String aStringCode = rPar.Get(1)->GetString();
+    IntervalInfo* pInfo = getIntervalInfo( aStringCode );
+    if( !pInfo )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    double dDate = rPar.Get(2)->GetDate();
+
+    INT32 nRet = 0;
+    switch( pInfo->meInterval )
+    {
+        case INTERVAL_YYYY:
+        {
+            nRet = implGetDateYear( dDate );
+            break;
+        }
+        case INTERVAL_Q:
+        {
+            nRet = 1 + (implGetDateMonth( dDate ) - 1) / 3;
+            break;
+        }
+        case INTERVAL_M:
+        {
+            nRet = implGetDateMonth( dDate );
+            break;
+        }
+        case INTERVAL_Y:
+        {
+            INT16 nYear = implGetDateYear( dDate );
+            double dBaseDate;
+            implDateSerial( nYear, 1, 1, dBaseDate );
+            nRet = 1 + INT32( dDate - dBaseDate );
+            break;
+        }
+        case INTERVAL_D:
+        {
+            nRet = implGetDateDay( dDate );
+            break;
+        }
+        case INTERVAL_W:
+        {
+            bool bFirstDay = false;
+            INT16 nFirstDay = 1;    // Default
+            if( nParCount >= 4 )
+            {
+                nFirstDay = rPar.Get(3)->GetInteger();
+                bFirstDay = true;
+            }
+            nRet = implGetWeekDay( dDate, bFirstDay, nFirstDay );
+            break;
+        }
+        case INTERVAL_WW:
+        {
+            INT16 nFirstDay = 1;    // Default
+            if( nParCount >= 4 )
+                nFirstDay = rPar.Get(3)->GetInteger();
+
+            INT16 nFirstWeek = 1;   // Default
+            if( nParCount == 5 )
+                nFirstWeek = rPar.Get(4)->GetInteger();
+
+            INT16 nYear = implGetDateYear( dDate );
+            bool bError = false;
+            double dYearFirstDay = implGetDateOfFirstDayInFirstWeek( nYear, nFirstDay, nFirstWeek, &bError );
+            if( !bError )
+            {
+                if( dYearFirstDay > dDate )
+                {
+                    // Date belongs to last year's week
+                    dYearFirstDay = implGetDateOfFirstDayInFirstWeek( nYear - 1, nFirstDay, nFirstWeek );
+                }
+                else if( nFirstWeek != 1 )
+                {
+                    // Check if date belongs to next year
+                    double dNextYearFirstDay = implGetDateOfFirstDayInFirstWeek( nYear + 1, nFirstDay, nFirstWeek );
+                    if( dDate >= dNextYearFirstDay )
+                        dYearFirstDay = dNextYearFirstDay;
+                }
+
+                // Calculate week
+                double dDiff = dDate - dYearFirstDay;
+                nRet = 1 + INT32( dDiff / 7 );
+            }
+            break;
+        }
+        case INTERVAL_H:
+        {
+            nRet = implGetHour( dDate );
+            break;
+        }
+        case INTERVAL_N:
+        {
+            nRet = implGetMinute( dDate );
+            break;
+        }
+        case INTERVAL_S:
+        {
+            nRet = implGetSecond( dDate );
+            break;
+        }
+    }
+    rPar.Get(0)->PutLong( nRet );
+}
+
+
+RTLFUNC(Round)
+{
+    USHORT nParCount = rPar.Count();
+    if( nParCount != 2 && nParCount != 3 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    SbxVariable *pSbxVariable = rPar.Get(1);
+    double dVal = pSbxVariable->GetDouble();
+    double dRes = 0.0;
+    if( dVal != 0.0 )
+    {
+        bool bNeg = false;
+        if( dVal < 0.0 )
+        {
+            bNeg = true;
+            dVal = -dVal;
+        }
+
+        INT16 numdecimalplaces = 0;
+        if( nParCount == 3 )
+        {
+            numdecimalplaces = rPar.Get(2)->GetInteger();
+            if( numdecimalplaces < 0 || numdecimalplaces > 22 )
+            {
+                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                return;
+            }
+        }
+
+        if( numdecimalplaces == 0 )
+        {
+            dRes = floor( dVal + 0.5 );
+        }
+        else
+        {
+            double dFactor = pow( 10.0, numdecimalplaces );
+            dVal *= dFactor;
+            dRes = floor( dVal + 0.5 );
+            dRes /= dFactor;
+        }
+
+        if( bNeg )
+            dRes = -dRes;
+    }
+    rPar.Get(0)->PutDouble( dRes );
+}
+
+RTLFUNC(StrReverse)
+{
+    if ( rPar.Count() != 2 )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    SbxVariable *pSbxVariable = rPar.Get(1);
+    if( pSbxVariable->IsNull() )
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return;
+    }
+
+    String aStr = pSbxVariable->GetString();
+    aStr.Reverse();
+    rPar.Get(0)->PutString( aStr );
+}
+
 RTLFUNC(CompatibilityMode)
 {
     rPar.Get(0)->PutEmpty();
@@ -1480,5 +2263,21 @@ RTLFUNC(CompatibilityMode)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     if( pINST )
         pINST->EnableCompatibility( rPar.Get(1)->GetBool() );
+}
+
+// #115824
+RTLFUNC(Me)
+{
+    SbModule* pActiveModule = pINST->GetActiveModule();
+    SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
+    if( pClassModuleObject == NULL )
+    {
+        StarBASIC::Error( SbERR_INVALID_USAGE_OBJECT );
+    }
+    else
+    {
+        SbxVariableRef refVar = rPar.Get(0);
+        refVar->PutObject( pClassModuleObject );
+    }
 }
 
