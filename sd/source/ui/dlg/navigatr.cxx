@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:44:29 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,41 +102,54 @@
 
 #include "pres.hxx"
 #include "navigatr.hxx"
-#include "navichld.hxx"
+//#include "navichld.hxx"
 #include "navigatr.hrc"
 #include "pgjump.hxx"
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "drawdoc.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "sdresid.hxx"
-#include "viewshel.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_SUB_SHELL_MANAGER_HXX
+#include "SubShellManager.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "helpids.h"
 
 
-SFX_IMPL_CHILDWINDOWCONTEXT( SdNavigatorChildWindow, SID_NAVIGATOR )
 
 /*************************************************************************
 |*  SdNavigatorWin - FloatingWindow
 \************************************************************************/
 
-SdNavigatorWin::SdNavigatorWin( Window* pParent,
-                SdNavigatorChildWindow* pChWinCtxt,
-                const SdResId& rSdResId, SfxBindings* pInBindings ) :
-        Window          ( pParent, rSdResId ),
-        aToolbox        ( this, SdResId( 1 ) ),
-        aTlbObjects     ( this, SdResId( TLB_OBJECTS ), TRUE ),
-        aLbDocs         ( this, SdResId( LB_DOCS ) ),
-        pBindings       ( pInBindings ),
-        pChildWinContext( pChWinCtxt ),
-        maImageList     ( SdResId( IL_NAVIGATR ) ),
-        maImageListH    ( SdResId( ILH_NAVIGATR ) ),
-        // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
-        eDragType       ( NAVIGATOR_DRAGTYPE_EMBEDDED ),
-        bDocImported    ( FALSE )
+SdNavigatorWin::SdNavigatorWin(
+    ::Window* pParent,
+    ::sd::NavigatorChildWindow* pChWinCtxt,
+    const SdResId& rSdResId,
+    SfxBindings* pInBindings )
+    : ::Window          ( pParent, rSdResId ),
+    aToolbox        ( this, SdResId( 1 ) ),
+    aTlbObjects     ( this, SdResId( TLB_OBJECTS ), TRUE ),
+    aLbDocs         ( this, SdResId( LB_DOCS ) ),
+    pBindings       ( pInBindings ),
+    pChildWinContext( pChWinCtxt ),
+    maImageList     ( SdResId( IL_NAVIGATR ) ),
+    maImageListH    ( SdResId( ILH_NAVIGATR ) ),
+    // Bei Aenderung des DragTypes: SelectionMode der TLB anpassen!
+    eDragType       ( NAVIGATOR_DRAGTYPE_EMBEDDED ),
+    bDocImported    ( FALSE )
 {
     aTlbObjects.SetViewFrame( pBindings->GetDispatcher()->GetFrame() );
 
@@ -198,7 +211,7 @@ SdNavigatorWin::~SdNavigatorWin()
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 {
     SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
-    SdDrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     String aDocShName( pDocShell->GetName() );
 
     if( !aTlbObjects.IsEqualToDoc( pDoc ) )
@@ -223,7 +236,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         }
     }
 
-    SdViewShell* pViewShell = pDocShell->GetViewShell();
+    ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
     ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() )->
         GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, TRUE);
@@ -402,7 +415,7 @@ IMPL_LINK( SdNavigatorWin, SelectDocumentHdl, void *, p )
     String aStrLb = aLbDocs.GetSelectEntry();
     long   nPos = aLbDocs.GetSelectEntryPos();
     BOOL   bFound = FALSE;
-    SdDrawDocShell* pDocShell = NULL;
+    ::sd::DrawDocShell* pDocShell = NULL;
     NavDocInfo* pInfo = GetDocInfo();
 
     // Handelt es sich um ein gedragtes Objekt?
@@ -429,7 +442,7 @@ IMPL_LINK( SdNavigatorWin, SelectDocumentHdl, void *, p )
         if( !aTlbObjects.IsEqualToDoc( pDoc ) )
         {
             SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
-            SdDrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
+            ::sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
             String aDocName = pDocShell->GetMedium()->GetName();
             aTlbObjects.Clear();
             aTlbObjects.Fill( pDoc, (BOOL) FALSE, aDocName ); // Nur normale Seiten
@@ -638,11 +651,12 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
         if( bDocImported )
             aLbDocs.InsertEntry( aStr, 0 );
 
-        SdDrawDocShell* pCurrentDocShell = PTR_CAST( SdDrawDocShell, SfxObjectShell::Current() );
+        ::sd::DrawDocShell* pCurrentDocShell =
+              PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
         SfxObjectShell* pSfxDocShell = SfxObjectShell::GetFirst(0, FALSE);
         while( pSfxDocShell )
         {
-            SdDrawDocShell* pDocShell = PTR_CAST( SdDrawDocShell, pSfxDocShell );
+            ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, pSfxDocShell );
             if( pDocShell  && !pDocShell->IsInDestruction() && ( pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) )
             {
                 NavDocInfo* pInfo = new NavDocInfo();
@@ -735,13 +749,18 @@ long SdNavigatorWin::Notify(NotifyEvent& rNEvt)
             }
             else
             {
-                SdViewShell* pViewShell = (SdViewShell*) pBindings->GetDispatcher()->GetFrame()->GetViewShell();
+                ::sd::ViewShellBase* pBase =
+                      static_cast< ::sd::ViewShellBase*>(
+                          pBindings->GetDispatcher()->GetFrame()
+                          ->GetViewShell());
+                ::sd::ViewShell* pViewShell =
+                      pBase->GetSubShellManager().GetMainSubShell();
 
-                if( pViewShell )
+                if (pViewShell != NULL)
                 {
-                    FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
-
-                    if( pFuSlideShow )
+                    ::sd::FuSlideShow* pFuSlideShow =
+                          pViewShell->GetSlideShow();
+                    if (pFuSlideShow != NULL)
                     {
                         nOK = TRUE;
                         pFuSlideShow->Terminate();
@@ -777,11 +796,14 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
         }
         else
         {
-            SdViewShell* pViewShell = (SdViewShell*) pBindings->GetDispatcher()->GetFrame()->GetViewShell();
-
-            if (pViewShell)
+            ::sd::ViewShellBase* pBase =
+                  static_cast< ::sd::ViewShellBase*>(
+                      pBindings->GetDispatcher()->GetFrame()->GetViewShell());
+            ::sd::ViewShell* pViewShell =
+                  pBase->GetSubShellManager().GetMainSubShell();
+            if (pViewShell != NULL)
             {
-                FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+                ::sd::FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
 
                 if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
                 {
@@ -822,27 +844,6 @@ void SdNavigatorWin::ApplyImageList()
 }
 
 
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindowContext als "Behaelter" fuer Animator
-|*
-\************************************************************************/
-
-SdNavigatorChildWindow::SdNavigatorChildWindow( Window* pParent,
-                                                         USHORT nId,
-                                                         SfxBindings* pBindings,
-                                                         SfxChildWinInfo* pInfo ) :
-    SfxChildWindowContext( nId )
-{
-    SdNavigatorWin* pNavWin = new SdNavigatorWin( pParent, this,
-                                        SdResId( FLT_NAVIGATOR ), pBindings );
-
-    SetWindow( pNavWin );
-    //pWindow = pNavWin;
-
-    //eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    //pNavWin->Initialize( pInfo );
-}
 
 /*************************************************************************
 |*
@@ -985,6 +986,3 @@ void SdPageNameControllerItem::StateChanged( USHORT nSId,
         }
     }
 }
-
-
-
