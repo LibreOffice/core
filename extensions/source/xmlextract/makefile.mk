@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:57:56 $
+#   last change: $Author: kz $ $Date: 2004-10-04 18:00:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,12 +88,12 @@ UNOTYPES=\
     com.sun.star.registry.XImplementationRegistration			\
     com.sun.star.registry.XRegistryKey							\
     com.sun.star.registry.XSimpleRegistry						\
-    com.sun.star.io.XXMLExtractor								
+    com.sun.star.io.XXMLExtractor
 
 # --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/xmxuno.obj									\
-            $(SLO)$/xmxtrct.obj									
+            $(SLO)$/xmxtrct.obj
 
 # --- Library -----------------------------------
 
@@ -105,7 +105,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS=\
-    $(SO2LIB)			\
+        $(SOTLIB)                       \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(CPPUHELPERLIB)	\
