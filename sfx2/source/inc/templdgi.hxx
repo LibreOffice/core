@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 11:58:25 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ protected:
     virtual void        InsertFamilyItem( USHORT nId, const SfxStyleFamilyItem* pIten ) = 0;
     virtual void        EnableFamilyItem( USHORT nId, BOOL bEnabled = TRUE ) = 0;
     virtual void        ClearFamilyList() = 0;
+    virtual void        ReplaceUpdateButtonByMenu();
 
     void                NewHdl( void* );
     void                EditHdl( void* );
@@ -330,6 +331,8 @@ private:
 
     DECL_LINK( ToolBoxLSelect, ToolBox * );
     DECL_LINK( ToolBoxRSelect, ToolBox * );
+    DECL_LINK( ToolBoxRClick, ToolBox * );
+    DECL_LINK( MenuSelectHdl, Menu* );
 
 protected:
     virtual void    Command( const CommandEvent& rMEvt );
@@ -341,6 +344,7 @@ protected:
     virtual void    InsertFamilyItem( USHORT nId, const SfxStyleFamilyItem* pIten );
     virtual void    EnableFamilyItem( USHORT nId, BOOL bEnabled = TRUE );
     virtual void    ClearFamilyList();
+    virtual void    ReplaceUpdateButtonByMenu();
 
     void            Resize();
     Size            GetMinOutputSizePixel();
