@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.19 $
+*  $Revision: 1.20 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-02-12 14:59:01 $
+*  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -294,8 +294,9 @@ throw( RuntimeException )
 }
 
 //*******************************************************************
-sal_Int32
-ScriptStorageManager::getScriptStorageID( const OUString & origURI )
+sal_Int32 SAL_CALL
+ScriptStorageManager::getScriptStorageID( const ::rtl::OUString& origURI )
+        throw (::com::sun::star::uno::RuntimeException)
 {
     StorageId_hash::const_iterator it = m_StorageIdOrigURIHash.find( origURI );
 
@@ -345,8 +346,9 @@ throw( RuntimeException )
 
     sal_Int32 storageID = getScriptStorageID( stringURI );
 
-    if ( storageID = -1 )
+    if ( storageID == -1 )
     {
+        OSL_TRACE( "** id was -1, no storage");
         // Refreshing noexistent storage - just return
         return;
     }
@@ -472,6 +474,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
     removeScriptDocURIHashEntry( docURI );
 }
+
 
 //*************************************************************************
 static Reference< XInterface > SAL_CALL

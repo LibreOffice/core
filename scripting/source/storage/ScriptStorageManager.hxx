@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-12 14:59:01 $
+ *  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,28 @@ public:
         sal_Int32 scriptStorageID )
         throw ( css::uno::RuntimeException );
 
+    /**
+        get a ScriptStorage ID using storage URI
+
+        @param scriptStorageURI
+        the file URL for the document will retrieve storage id for the document,        special treatment is reserved for the strings "USER"and "SHARE" which
+        retrieve storage id for application/user application/share areas respectively.
+
+
+        @returns as long ScriptStorage ID (-1 if no storage exists), which can be used in getScriptStorage method.
+
+    */
+
+    virtual sal_Int32 SAL_CALL getScriptStorageID( const ::rtl::OUString& scriptStorageURI )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /**
+        refresh a storage component using its URI
+
+        @param StringURI
+        URI of storage area, for documents, url to document eg, file:///home/user/ADocument.sxw To refresh the storage for user or share area, use USER or SHARE respectively instead or a url.
+
+    */
 
     virtual void SAL_CALL refreshScriptStorage(const ::rtl::OUString & stringURI)
     throw ( css::uno::RuntimeException );
@@ -206,7 +228,6 @@ private:
     ScriptStorageManager( const ScriptStorageManager & );
     ScriptStorageManager& operator= ( const ScriptStorageManager & );
 
-    sal_Int32 getScriptStorageID( const ::rtl::OUString & origURI);
     void removeScriptDocURIHashEntry( const ::rtl::OUString & origURI );
 
     // to obtain other services if needed

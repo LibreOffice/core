@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lkovacs $ $Date: 2002-11-01 13:58:32 $
+ *  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,17 @@ public:
             const ::rtl::OUString& queryURI )
         throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
+    //=========================================================================
+    /**
+     * Get all script implementations
+     *
+     *
+     * @return sequence < XScriptInfo >
+     *      script implementations
+     */
+    virtual css::uno::Sequence< css::uno::Reference< dcsssf::storage::XScriptInfo > >
+        SAL_CALL getAllImplementations()
+        throw ( css::uno::RuntimeException );
 
     //=========================================================================
 

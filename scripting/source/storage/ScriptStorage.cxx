@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.15 $
-*  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:25 $
+*  $Revision: 1.16 $
+*  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -649,6 +649,43 @@ throw ( lang::IllegalArgumentException,
     return results;
 }
 
+//*************************************************************************
+Sequence< Reference< storage::XScriptInfo > > SAL_CALL
+ScriptStorage::getAllImplementations() throw ( RuntimeException )
+{
+    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
+    Sequence< Reference< storage::XScriptInfo > > results;
+    ScriptInfo_hash::iterator h_itEnd =  mh_implementations.end();
+    ScriptInfo_hash::iterator h_it = mh_implementations.begin();
+    if ( h_it == h_itEnd )
+    {
+        OSL_TRACE( "ScriptStorage::getImplementations: EMPTY STORAGE" );
+        return results;
+    }
+
+
+    //iterater through each logical name and gather each implementation
+    //for that name
+    for ( sal_Int32 count = 0; h_it !=  h_itEnd; ++h_it )
+    {
+        results.realloc( h_it->second.size() + count );
+        OSL_TRACE( "Adding implementations for %s",
+            ::rtl::OUStringToOString( h_it->first,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        Datas_vec::const_iterator it_datas = h_it->second.begin();
+        Datas_vec::const_iterator it_datas_end = h_it->second.end();
+        OSL_TRACE( "Adding %d to sequence of impls ", h_it->second.size() );
+        for ( ; it_datas != it_datas_end ; ++it_datas )
+        {
+            Reference< storage::XScriptInfo > xScriptInfo = new ScriptInfo (
+            *it_datas, m_scriptStorageID );
+
+            results[ count++ ] = xScriptInfo;
+        }
+    }
+    return results;
+
+}
 
 //*************************************************************************
 OUString SAL_CALL ScriptStorage::getImplementationName( )
