@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlClass.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module reflection {
+module com {  module sun {  module star {  module reflection {
 
 interface XIdlField;
 interface XIdlMethod;
@@ -83,211 +83,160 @@ interface XIdlArray;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XIdlClass
-/** provides information about a type or module in an UNO environment.
-
-
-    Every array also belongs to a type that is reflected as an
-    <type>XIdlClass</type> object that is shared by all arrays with the
-    same element type and number of dimensions. Finally, any of the
-    primitive IDL types are also represented as <type>XIdlClass</type>
-    objects. These include "void, any, boolean, char, float, double, octet,
-    short, long, hypher, unsigned octet, unsigned short, unsigned long, and
-    unsigned hypher".
- */
+/** Provides information reflecting an UNO type.
+*/
 interface XIdlClass: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getClasses
-    /** @returns
-                    all types and modules which are declared in this class.
-     */
+    /** Deprecated.  Do not call.
+        @deprecated
+    */
     sequence<XIdlClass> getClasses();
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getClass
-    /** @returns
-                a type or module with the given name that is declared in this
-                class.
-     */
+    /** Deprecated.  Do not call.
+        @deprecated
+    */
     XIdlClass getClass( [in] string aName );
 
-    //-------------------------------------------------------------------------
+    /** Tests whether two reflecting objects reflect the same type.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::equals
-    /** @returns
-                <TRUE/> if the instances describe the same type,
-                otherwise <FALSE/>.
-     */
+        @returns
+                true, if the objects reflect the same type, false otherwise.
+    */
     boolean equals( [in] XIdlClass Type );
 
-    //-------------------------------------------------------------------------
+    /** Tests whether values of this reflected type are assignable from values
+        of a second one (<code>xType</code>).
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlClass::isAssignableFrom
-    /** tests if the parameter <var>xType</var> is a subclass of this
-        class.
-     */
+        @param xType
+               another reflected type
+        @return
+                true, if values of this reflected type are assignable
+                from values of <code>xType</code>.
+    */
     boolean isAssignableFrom( [in] XIdlClass xType );
 
-    //-------------------------------------------------------------------------
+    /** Returns the <type scope="com::sun::star::uno">TypeClass</type>
+        of the reflected type.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getTypeClass
-    /** @returns
-                the type that this instance represents.
-     */
+        @returns
+                  type class of the reflected type.
+    */
     com::sun::star::uno::TypeClass getTypeClass();
 
-    //-------------------------------------------------------------------------
+    /** Returns the fully-qualified name of the reflected type.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getName
-    /** @returns
-                    the fully-qualified name of the type of object
-                    (class, interface, array, sequence, struct, union, enum, or
-                    primitive) represented by this <type>XIdlClass</type>.
-     */
+        @returns
+                  the fully-qualified name of the type
+    */
     string getName();
 
-    //-------------------------------------------------------------------------
+    /** Deprecated.  Do not call.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getUik
-    /** @returns
-                the UIK from this type. If the type has no UIK, then the
-                returned UIK is zero.
-     */
+        @deprecated
+    */
     com::sun::star::uno::Uik getUik();
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlClass::getSuperclasses
+    /** If the reflected type is an interface, then the returned
+        sequence of <type>XIdlClass</type> reflect the base interfaces.
+        <br>
+        If the reflected type is not an interface or an interface that is
+        not derived from another, then an empty sequence is returned.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getSuperclasses
-    /** If this object represents an interface or a class,
-         then the objects that represents the superclasses or superinterfaces
-         of that class are returned.
-         <p>
-         If this object is the one that represents the topmost class
-         or interface, an empty sequence is returned.
-
-         @return  the superclass or interface of the type represented by this object.
-     */
+        @return
+                all base interfaces of an interface type or an empty sequence.
+    */
     sequence<XIdlClass> getSuperclasses();
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlClass::getInterfaces
-
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getInterfaces
-    /** Determines the interfaces implemented by the class or interface
-         represented by this object.
-         <p>
-         If the class or interface implements no interfaces, the method
-         returns a sequence of length 0.
-
-         @return  a sequence of interfaces implemented by this class.
-     */
+    /** Deprecated.  Do not call.
+        @deprecated
+    */
     sequence<XIdlClass> getInterfaces();
 
-    //-------------------------------------------------------------------------
+    /** If the reflected type is an array or sequence, then this method
+        returns a <type>XIdlClass</type> interface reflecting
+        the element.
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlClass::getComponentType
-    /** If this class represents an array or sequence type, this method
-        returns the <type>XIdlClass</type> object representing the
-        component type of the array or sequence; otherwise, it returns
-        <NULL/>.
-     */
+        @return
+                reflection interface of the element type of an array or
+                sequence type (null-reference otherwise).
+    */
     XIdlClass getComponentType();
 
-    //-------------------------------------------------------------------------
+    /** If the reflected type is an interface, struct or union, then you
+        get a <type>XIdlField</type> interface reflecting the demanded
+        field (/interface attribute) by name.
+        <br>
+        If the reflected type is not an interface, struct or union or the
+        interace, struct or union does not have a field (/interface attribute)
+        with the demanded name, then a null-reference is returned.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getField
-    /** @returns
-                an <type>XIdlField</type> that reflects the specified member
-                field of the class, interface, struct, union, enum, or
-                exception represented by this <type>XIdlClass</type> object.
-                If a field with the specified name is not found, 0 is returned.
-
-                <p>The field to be reflected is located by searching all the
-                member fields of the class, interface, struct, union, enum, or
-                exception represented by this <type>XIdlClass</type> object
-                for a field with the specified name or for NULL, if a field
-                with the specified name is not found.
-
-                @param aName
-                specifies the simple name of the desired field.
-     */
+        @param aName
+               name of the demanded field reflection
+        @return
+                demanded field (/interface attribute) reflection (or null-reference)
+    */
     XIdlField getField( [in] string aName );
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlClass::getFields
+    /** If the reflected type is an interface, struct or union, then you
+        get a sequence of <type>XIdlField</type> interfaces reflecting all fields
+        (/interface attributes).  This also includes all inherited
+        fields (/interface attributes) of the interface, struct of union.
+        <br>
+        If the reflected type is not an interface, struct or union or the
+        interface, struct or union does not have any field (/interface attribute),
+        then an empty sequence is returned.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getFields
-    /** Returns a sequence containing Field objects reflecting all the
-         accessible fields of the class, interface, struct, union, or enum represented
-         by this XIdlClass object. Returns a sequence of length 0 if the
-         class or interface has no accessible fields, or if it
-         represents an array, a sequence, or a primitive type.
-
-         <p>Specifically, if this XIdlClass object represents a class,
-         returns the fields of this class and of all its
-         superclasses. If this XIdlClass object represents an interface,
-         returns the fields of this interface and of all its
-         superinterfaces. If this XIdlClass object represents an array,
-         sequence or primitive type, returns a sequence of length 0.
-     */
+        @return
+                all field (/interface attribute) reflections (or empty sequence)
+    */
     sequence<XIdlField> getFields();
 
-    //-------------------------------------------------------------------------
+    /** If the reflected type is an interface, then you get
+        a <type>XIdlMethod</type> interface reflecting the demanded method by name.
+        <br>
+        If the reflected type is not an interface or the interface does not have
+        a method with the demanded name (including inherited methods),
+        then a null-reference is returned.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getMethod
-    /** @returns
-                an <type>XIdlMethod</type> that reflects the specified
-                member method of the interface represented by this
-                <type>XIdlClass</type> object. If a method with the specified
-                name is not found, "0" is returned.
-
-                <p>The method to be reflected is located by searching all the
-                member methods of the interface represented by this
-                <type>XIdlClass</type> object for a method with the specified
-                name.
-
-                @param aName
-                specifies the simple name of the desired method.
-     */
+        @param aName
+               name of demanded method reflection
+        @return
+                demanded method reflection (or null-reference)
+    */
     XIdlMethod getMethod( [in] string aName );
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlClass::getMethods
+    /** If the reflected type is an interface, then you get
+        a sequence of <type>XIdlMethod</type> interfaces reflecting all methods
+        of the interface.  This also includes the inherited methods of the interface.
+        <br>
+        If the reflected type is not an interface or the interface
+        does not have any methods, then a null-reference is returned.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getMethods
-    /** Returns a sequence containing XIdlMethod objects reflecting all the
-             <em>member</em> methods of the class or interface
-             represented by this XIdlClass object, including those declared by
-             the class or interface and and those inherited from
-             superclasses and superinterfaces. Returns a sequence of length 0
-             if the class or interface has no member methods.
-
-     */
+        @return
+                all method reflections (or empty sequence)
+    */
     sequence<XIdlMethod> getMethods();
 
-    //-------------------------------------------------------------------------
+    /** If the reflected type is an array, then you get
+        a <type>XIdlArray</type> interface to modify instances of the array type.
+        <br>
+        If the reflected type is not an array, then a null-reference is returned.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClass::getArray
-    /** @returns
-                the <type>XIdlArray</type> interface to get and set the
-                elements by index if the represented type is an array or
-                sequence.
-     */
+        @return
+                inteface to modify array instances (or null-reference)
+    */
     XIdlArray getArray();
 
-    //-------------------------------------------------------------------------
+    /** This method creates instances of the reflected type.
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlClass::createObject
-    /** creates an instance of the type represented by this
-        <type>XIdlClass</type> object if the represented type is a
-        basic type, struct, enum, or sequence.
-     */
+        @attention
+        Instances of type <code>any</code> can not be passed using an <code>any</code>, because
+        anys cannot be nested.  So if the reflected type is an <code>any</code>, then the
+        returned value is empty.
+
+        @param obj
+               pure out parameter to pass the created instance
+    */
     void createObject( [out] any obj );
-
 };
 
 //=============================================================================
@@ -297,6 +246,9 @@ interface XIdlClass: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

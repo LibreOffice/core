@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Converter.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,69 +72,59 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::script::Converter
-/** This service provide a widening converter. This means it can convert
-    from one type to another, if possible.
+/** This service provides a widening converter converting from one type to another,
+    if possible.<br>
 
-    What is possible?<br>
-    byte: byte, (short *1), (long *1), (hyper *1), (float *1), (double *1), (enum *2), (any *3),
-    boolean, (char *4), (string *5)<br>
-    short: byte, short, (long *1), (hyper *1), (float *7), (double *7), (enum *2), (any *3),
-    boolean, char, (string *5)<br>
-    long: byte, short, long, (hyper *1), (float *7), (double *7), enum, (any *3),
-    boolean, char, (string *5)<br>
-    hyper: byte, short, long, hyper, (float *7), (double *7), enum, (any *3),
-    boolean, char, (string *5)<br>
-    float: byte, short, long, hyper, float, (double *7), (enum *8), (any *3),
-    boolean, char, (string *5)<br>
-    double: byte, short, long, hyper, float, double, enum, (any *3),
-    boolean, char, (string *5)<br>
-    enum: (byte *9), (short *9), (long *9), (hyper *9), (float *9), (double *9), (enum *10), (any *3),
-    (string *11)<br>
-    void: ok for all types.
-    any: ok for all types.
-    boolean: byte, short, long, hyper, float, double, (any *3),
-    boolean, char, (string *12). 0 -&amp;gt; false, != 0 -&amp;gt; true<br>
-    char: byte, short, (long *1), (hyper *1), (float *7), (double *7), enum, (any *3),
-    boolean, char, (string *13)<br>
-    string: byte, short, long, hyper, float, double, enum, (any *3),
-    boolean, char, string<br>
-    struct: (any *3), (struct *14)
-    interface: (any *3), (struct *14)
-    exception: (any *3), (exception *14)
-    union: (any *3), (union *14)
-    sequence: (any *3), (sequence *15)
+    What is possible?
+    <ul>
+    <li>byte: byte, (short *1), (long *1), (hyper *1), (float *1), (double *1), (enum *2), (any *3), boolean, (char *4), (string *5)</li>
+    <li>short: byte, short, (long *1), (hyper *1), (float *7), (double *7), (enum *2), (any *3), boolean, char, (string *5)</li>
+    <li>long: byte, short, long, (hyper *1), (float *7), (double *7), enum, (any *3), boolean, char, (string *5)</li>
+    <li>hyper: byte, short, long, hyper, (float *7), (double *7), enum, (any *3), boolean, char, (string *5)</li>
+    <li>float: byte, short, long, hyper, float, (double *7), (enum *8), (any *3), boolean, char, (string *5)</li>
+    <li>double: byte, short, long, hyper, float, double, enum, (any *3), boolean, char, (string *5)</li>
+    <li>enum: (byte *9), (short *9), (long *9), (hyper *9), (float *9), (double *9), (enum *10), (any *3), (string *11)</li>
+    <li>void: ok for all types</li>
+    <li>any: ok for all types</li>
+    <li>boolean: byte, short, long, hyper, float, double, (any *3), boolean, char, (string *12). 0 => false, != 0 => true</li>
+    <li>char: byte, short, (long *1), (hyper *1), (float *7), (double *7), enum, (any *3), boolean, char, (string *13)</li>
+    <li>string: byte, short, long, hyper, float, double, enum, (any *3), boolean, char, string</li>
+    <li>struct: (any *3), (struct *14)</li>
+    <li>interface: (any *3), (struct *14)</li>
+    <li>exception: (any *3), (exception *14)</li>
+    <li>union: (any *3), (union *14)</li>
+    <li>sequence: (any *3), (sequence *15)</li>
+    </ul>
 
-
-    short: byte, short, (long *1), (hyper *1), (float *1), (double *1), (enum *2), (any *3),
-    boolean, (char *4), (string *5), (interface *6)<br>
-
-    1: only convert if the value is in the range of the target type.<br>
-    2: only convert if the value, not the position, of the enum is in the range of the target type.<br>
-    3: get value until it is not an any. Then convert it with the other rules.<br>
-    4: only convert if the value of the character is between 0 - 255.<br>
-    5: only convert if the value represents a decimal, hexadecimal (0x...) or a floating point number.
-    Examples: 10, 0x10, 10.045, 10,555, +10, +10.6e10, -10.6e-10, .16.
-    6: only convert if the interface supplies the  <!-- jrh: missing object of sentence. -->
-    7: only convert if the value is in the range of the target type.
-    The value is rounded to an integer.<br>
-    8: only converted if the float can be converted back to the same enum value.
-    9: only converted if the number is one of the enumeration type values. Normally you need
-    core reflection information of the enum type.
-    10: only converted if it is the same enumeration type.
-    11: only converted if the string contains the name of an enumeration type value. Normally you need
-    core reflection information of the enum type.
-    12: only converted if the value of the string is "1", "true" or "0", "false". The comparision
-    is case insensitive.
-    13: only converted if the length of the string is 1 or 0.
-    14: only converted if the types are equal or the source type is derived from the destination
-    type.
-    15: only converted if each element of the source sequence can be converted to an element
-    of the destination sequence.
- */
+    rules:
+    <ul>
+    <li>1: only converts if the value is in the range of the target type.</li>
+    <li>2: only converts if the value, not the position, of the enum is in the range of the target type.</li>
+    <li>3: get value until it is not an any. Then convert it with the other rules.</li>
+    <li>4: only converts if the value of the character is between 0 - 255.</li>
+    <li>5: only converts if the value represents a decimal, hexadecimal (0x...) or a floating point number.
+    Examples: 10, 0x10, 10.045, 10,555, +10, +10.6e10, -10.6e-10, .16.</li>
+    <li>7: only converts if the value is in the range of the target type.
+    The value is rounded to an integer.</li>
+    <li>8: only converts if the float can be converted back to the same enum value.</li>
+    <li>9: only converts if the number is one of the enumeration type values. Normally you need
+    reflection information of the enum type.</li>
+    <li>10: only converts if it is the same enumeration type.</li>
+    <li>11: only converts if the string contains the name of an enumeration type value. Normally you need
+    core reflection information of the enum type.</li>
+    <li>12: only converts if the value of the string is "1", "true" or "0", "false". The comparision
+    is case insensitive.</li>
+    <li>13: only converts if the length of the string is 1 or 0.</li>
+    <li>14: only converts if the types are equal or the source type is derived from the destination
+    type.</li>
+    <li>15: only converts if each element of the source sequence can be converted to an element
+    of the destination sequence.</li>
+    </ul>
+*/
 service Converter
 {
-    // DocMerge: empty anyway
+    /** Conversion interface.
+    */
     interface com::sun::star::script::XTypeConverter;
 
 };
@@ -146,6 +136,9 @@ service Converter
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/11/16 15:09:06  mi
+    proofing by Richard Holt
+
     Revision 1.4  2000/11/08 12:28:52  mi
     moved from api
 

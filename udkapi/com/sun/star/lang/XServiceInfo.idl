@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceInfo.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 15:34:15 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,48 +72,35 @@ module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-/** provides information regarding which services are implemented.
-
-    <p> This interface is in general provided by a concrete instance of an
-    implementation and by the <type>XSingleServiceFactory</type> or
-    <type>XSingleComponentFactory</type> - factories, which instantiate a
-    concrete implementation.
- */
+/** Provides information regarding the implementation, i.e. which services
+    are implemented and the name of the implementation.
+*/
 interface XServiceInfo: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** returns an implementation-identifier.
-
-        <p>This string must uniquely identify a concrete implementation.
-        Therefor this should be a fully qualified name like
-        "com.sun.star.comp.office.writer.SwTextDocument". The <em>comp</em> (
-        short for component) should appear in the name to distinguish it from servicenames.
+    /** Provides the implementation name of the service implementation.
 
         @returns
-            an identifier for the implementation of this object.
-     */
+                 unique name of the implementation
+    */
     string getImplementationName();
 
-    //-------------------------------------------------------------------------
+    /** Tests whether the specified service is supported, i.e. implemented
+        by the implementation.
 
-    /** asks whether a service is supported or not.
-        @returns true in case the service is supported, false otherwise.
-     */
+        @param ServiceName
+               name of service to be tested
+        @return
+                true, if service is supported, false otherwise
+    */
     boolean supportsService( [in] string ServiceName );
 
-    //-------------------------------------------------------------------------
+    /** Provides the supported service names of the implementation, including
+        also indirect service names.
 
-    // DocMerge from idl: method com::sun::star::lang::XServiceInfo::getSupportedServiceNames
-    /** returns the names of the services supported by this implementation.
-
-        <p>
-
-         @returns
-            a sequence of the names of all supported services.
-
-     */
+        @return
+                sequence of service names that are supported
+    */
     sequence<string> getSupportedServiceNames();
-
 };
 
 //=============================================================================
@@ -123,6 +110,9 @@ interface XServiceInfo: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2002/01/18 15:34:15  jbu
+    #96701# API review
+
     Revision 1.6  2001/03/16 15:10:37  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiServiceFactory.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,39 +79,35 @@ module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::lang::MultiServiceFactory
-/** provides a collection of implementations for services.
+/** Provides a collection of implementations of services.
 
-    <p>The factories for instantiating objects from the implemetations
-    are accessed with a service name.  </p>
+    <p>The factories for instantiating objects of implemetations
+    are accessed via a service name.</p>
 
     <p>The <type scope="com::sun::star::container">XContentEnumerationAccess</type>
-    interface can be supported optionally. If it is suported, it is possible to
-    enumerate all implementations that support the service specified with the
-    argument of <member scope="com::sun::star::container">XContentEnumerationAccess::createContentEnumeration</member>.
+    interface can be supported optionally.
+    If it is suported, it is possible to  enumerate all implementations that
+    support the service specified with the argument of
+    <member scope="com::sun::star::container">XContentEnumerationAccess::createContentEnumeration</member>.
     The enumerator returns interfaces. The type of the interface is not specified.
-    Normally these are <type>XSingleServiceFactory</type>.  </p>
- */
+    Commonly this is <type>XSingleComponentFactory</type>.</p>
+*/
 service MultiServiceFactory
 {
-    // DocMerge from xml: service com::sun::star::lang::MultiServiceFactory: interface com::sun::star::lang::XMultiServiceFactory
-    /** uses a service name with this interface to instantiate a
-                component which supports the specified service.
-     */
+    /** This interface uses a service name to instantiate a component
+        which supports the specified service.
+    */
     interface com::sun::star::lang::XMultiServiceFactory;
 
-    /** uses a service name and context with this interface to instantiate a
-        component which supports the specified service.
-    interface com::sun::star::lang::XMultiComponentFactory;
+    /** This interface uses a service name and a component context to instantiate
+        a component which supports the specified service.
     */
+    interface com::sun::star::lang::XMultiComponentFactory;
 
-    // DocMerge from xml: service com::sun::star::lang::MultiServiceFactory: interface com::sun::star::lang::XServiceInfo
-    /** A factory, as well as all other services, should always support
-                this interface. At minimum the service
-                "com.sun.star.lang.MultiServiceFactory" must be supported.
-     */
+    /** Factories, as well as all other services, should always support
+        this interface.
+    */
     interface com::sun::star::lang::XServiceInfo;
-
 };
 
 //=============================================================================
@@ -121,6 +117,9 @@ service MultiServiceFactory
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/11/16 14:57:39  mi
+    proofing by Richard Holt
+
     Revision 1.7  2001/05/04 14:32:20  dbo
     prepared service descr of service manager for XMultiComponentFactory
 

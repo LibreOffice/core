@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCurrentContext.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-20 10:20:42 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,19 @@
 
 module com {  module sun {  module star {  module uno {
 
-/** Task local execution context for UNO.
+/** Task (e.g. thread) local execution context for UNO.
     Arbitrary values can be retrieved from the context.
-
-    Use UNO runtime functions to obtain the current context in your language.
+    <p>
+    You have to use UNO runtime functions to obtain the current context
+    in your target language.
+    </p>
+    @attention
+    In general, do not spread the current context across different tasks.
+    Values of the current context are destined for that task only.
 */
 interface XCurrentContext : XInterface
 {
     /** Gets a value from the context.
-        You should carefully use the obtained value, because the current context
-        (value container) lives only for the running task (i.e., often the
-        executing thread) only!
 
         @param Name
                name of value

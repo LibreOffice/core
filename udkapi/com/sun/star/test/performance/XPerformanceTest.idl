@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPerformanceTest.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:43 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,8 @@ module test
 module performance
 {
 
-/**
- * struct of simple types to be carried.
- */
+/** struct of simple types to be carried
+*/
 struct SimpleTypes
 {
     boolean                    Bool;
@@ -93,9 +92,8 @@ struct SimpleTypes
     float                      Float;
     double                     Double;
 };
-/**
- * struct ComplexTypes adding Sequence, String, Interface, Any to SimpleTypes.
- */
+/** struct ComplexTypes adding Sequence, String, Interface, Any to SimpleTypes
+*/
 struct ComplexTypes : SimpleTypes
 {
     sequence< long >           Sequence;
@@ -104,20 +102,21 @@ struct ComplexTypes : SimpleTypes
     any                        Any;
 };
 
-/**
- * A performance test object has to be implemented in a special way, that:<BR>
- * <li>queryInterface() execution times remain (nearly) static</li>
- * <li>functions kept simple, thus there is (nearly) no execution time of the function itself</li>
- * <li>no dynamic data is ever returned except of createObject(), so return 0, empty strings etc.</li>
- *
- * The interface is divided into three sections:<BR>
- * <li>measuring asynchron/ synchron calls</li>
- * <li>complex data calls with/out return value; in/out parameters</li>
- * <li>single data types like long, float, string etc.</li>
- * <li>method calls versa attribute calls</li>
- * <li>raising RuntimeException</li>
- *<BR>
- */
+/** A performance test object has to be implemented in a special way, that:
+    <ul>
+    <li>queryInterface() execution times remain (nearly) static</li>
+    <li>functions kept simple, thus there is (nearly) no execution time of the function itself</li>
+    <li>no dynamic data is ever returned except of createObject(), so return 0, empty strings etc.</li>
+    </ul>
+    The interface is divided into three sections:
+    <ul>
+    <li>measuring asynchron/ synchron calls</li>
+    <li>complex data calls with/out return value; in/out parameters</li>
+    <li>single data types like long, float, string etc.</li>
+    <li>method calls versa attribute calls</li>
+    <li>raising RuntimeException</li>
+    </ul>
+*/
 interface XPerformanceTest : com::sun::star::uno::XInterface
 {
     [oneway] void async();

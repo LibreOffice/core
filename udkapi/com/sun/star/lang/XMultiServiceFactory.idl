@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiServiceFactory.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,69 +76,49 @@ module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::lang::XMultiServiceFactory
-/** Factory objects support this interface for creating components
-    by a specifying string, for example, the service name.
+/** Factories support this interface creating instances giving a name,
+    e.g. a service name.
 
-    <p>This specifying string is not necessarily a service name.  </p>
-
-    @example
-
-    <ol>
-        <li>You want to load data from a location specified with a URL
-            (file://..., http://..., ...).  </li>
-
-        <li>You get the factory that can create loader components.  </li>
-
-        <li>You call the <member>XMultiServiceFactory::createInstance()</member>
-            method with arguments like "file", "http" or something else.  </li>
-
-        <li>The factory knows something about this string and specifies that
-            <ul>
-                <li>"file" means for example the service "com::sun::star::url::File" </li>
-                <li>"http" means for example the service "com::sun::star::url::Http" </li>
-                <li>"javascript" means for example the service "com::netscape::url::.JavaScript" </li>
-            </ul>
-            or something else.  </li>
-
-        <li>Finally you start the download with <code>start( URL )</code>
-            at the newly created component.  </li>
-         </ol>
-
-        @see XInitialization
-        @see XSingleServiceFactory
- */
+    <p>
+    Note:
+    Although this interface deals with the notion of "services", this is not
+    generally be meant.  In general this interface can be used for all kinds
+    of factories for all kinds of instances, indeed not only UNO services.
+    </p>
+*/
 interface XMultiServiceFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
+    /** Creates an instance classified by the specified name.
 
-    // DocMerge from xml: method com::sun::star::lang::XMultiServiceFactory::createInstance
-    /** creates an instance of a component which supports the
-        services specified by the factory.
-     */
+        @param aServiceSpecifier
+               classified name of instance
+        @return
+                instance
+    */
     com::sun::star::uno::XInterface createInstance( [in] string aServiceSpecifier )
-            raises( com::sun::star::uno::Exception );
+        raises( com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
+    /** Creates an instance classified by the specified name and passes the arguments
+        to that instance.
 
-    // DocMerge from xml: method com::sun::star::lang::XMultiServiceFactory::createInstanceWithArguments
-    /** creates an instance of a component which supports the
-        services specified by the factory, and initializes the new object with given arguments.
+        @param ServiceSpecifier
+               classified name of instance
+        @param Arguments
+               arguments passed to the instance
+        @return
+                instance
+    */
+    com::sun::star::uno::XInterface createInstanceWithArguments(
+        [in] string ServiceSpecifier,
+        [in] sequence<any> Arguments )
+        raises( com::sun::star::uno::Exception );
 
-        @see XInitialization::init
-     */
-    com::sun::star::uno::XInterface createInstanceWithArguments( [in] string ServiceSpecifier,
-             [in] sequence<any> Arguments )
-            raises( com::sun::star::uno::Exception );
+    /** Provides the available names of the factory to be used to create instances.
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::lang::XMultiServiceFactory::getAvailableServiceNames
-    /** @returns
-                a sequence of all service identifiers which can be instantiated.
-     */
+        @returns
+                 sequence of all names
+    */
     sequence<string> getAvailableServiceNames();
-
 };
 
 //=============================================================================
@@ -148,6 +128,9 @@ interface XMultiServiceFactory: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 14:57:39  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:37  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

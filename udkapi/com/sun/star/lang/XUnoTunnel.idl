@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnoTunnel.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,23 +73,35 @@ module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::lang::XUnoTunnel
-/** the interface to tunnel UNO. This means providing access to data
-    or something else, which is not specified in the UNO-IDL.<br>
- */
+/** An interface to tunnel UNO. This means providing access to data or
+    something else, which is not specified by UNO-IDL.
+
+    @attention
+    Restrictive useage.  Use only, if there is no better possibility left.
+    It is definitely a hack.
+
+    <p>
+    Common usage:
+    Getting a C++ object pointer in the same process, thus to use an
+    implementation directly, most often because of a design flaw.
+    </p>
+*/
 interface XUnoTunnel: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
+    /** Call this method to get something which is not specified in UNO, e.g.
+        an address to some C++ object.
 
-    // DocMerge from xml: method com::sun::star::lang::XUnoTunnel::getSomething
-    /** call this method to get something which is not specified in UNO.
+        @attention
+        The identifier specifies how the return value is to be reinterpreted.
+        The identifier must be globally unique, because it is unknown where
+        the implementation resides.
 
-        <p>The identifier specifies how the return is specified. The identifier
-        must be globally unique, because it is unknown where the implementation
-        lies.</p>
-     */
+        @param aIdentifier
+               identifier
+        @return
+                something
+    */
     hyper getSomething( [in] sequence< byte > aIdentifier );
-
 };
 
 //=============================================================================
@@ -99,6 +111,9 @@ interface XUnoTunnel: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 14:57:39  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:37  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

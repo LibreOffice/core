@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvocationAdapterFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/script/XInvocationAdapterFactory.idl>
 #endif
 
+#ifndef __com_sun_star_script_XInvocationAdapterFactory2_idl__
+#include <com/sun/star/script/XInvocationAdapterFactory2.idl>
+#endif
+
 
 //=============================================================================
 
@@ -72,16 +76,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::script::InvocationAdapterFactory
-/** allows you to create adapter interfaces of any given type for an invocation
-    interface.
-    <p>You can do this via an adapter factory instance.</p>
-    <br>
- */
+/** Service to create adapter objects giving types to be supported and a
+    an invocation interface incoming calls are delegated to.
+*/
 service InvocationAdapterFactory
 {
-    // DocMerge: empty anyway
+    /** Interface for creating adapter objects.
+        This interface is deprecated.  Use <type>XInvocationAdapterFactory2</type>.
+        @deprecated
+    */
     interface com::sun::star::script::XInvocationAdapterFactory;
+    /** Interface for creating adapter objects.
+    */
+    interface com::sun::star::script::XInvocationAdapterFactory2;
 };
 
 //=============================================================================
@@ -91,6 +98,9 @@ service InvocationAdapterFactory
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:35  hjs
     initial import
 

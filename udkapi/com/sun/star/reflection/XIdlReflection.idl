@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlReflection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,43 +76,35 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XIdlReflection
-/** offers access to the repository of all known IDL types.
+/** Interface to reflect types.
 
-    <p>The core reflection service has the name "uno.CoreReflection".
-    You can get this service from the global service manager.
-    The implementation of this interface must also look in the
-    global service manager (<code>getGlobalServiceManager()</code>) to
-    get the <type>XIdlClass</type> from a service provider.
-
-    </p>
-    <p>For information about the concept see <a>href=service.html&amp;gt;Global Service Manager</a>.
-
-    </p>
- */
+    @see CoreReflection
+    @see XIdlClass
+*/
 interface XIdlReflection: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
+    /** Obtaining a reflection interface for a type.  You specify the type by
+        its name.
+        If the given type name can not be reflected, then a null-reference
+        is returned.
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlReflection::forName
-    /** @example The following code fragment returns the run-time
-        descriptor for the interface named <code>XInterface</code>:
-
-        <listing>
-        IdlClass = xIdlReflection.forName("XInterface")
-        </listing>
-     */
+        @param aTypeName
+               the type's name
+        @return
+                reflection interface for the demanded type (or null)
+    */
     com::sun::star::reflection::XIdlClass forName( [in] string aTypeName );
 
-    //-------------------------------------------------------------------------
+    /** Obtaining a reflection interface for an object.  This method takes
+        the type of the object the any contains into account.  If the any
+        contains no object, then a null-reference is returned.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlReflection::getType
-    /** @returns
-                the <type>XIdlClass</type> that represents the type of
-                passed object.
-     */
+        @param aObj
+               an object
+        @return
+                reflection interface of the type of the demanded object (or null)
+    */
     com::sun::star::reflection::XIdlClass getType( [in] any aObj );
-
 };
 
 //=============================================================================
@@ -122,6 +114,9 @@ interface XIdlReflection: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

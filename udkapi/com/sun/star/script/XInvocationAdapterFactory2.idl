@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocationAdapterFactory2.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_XInvocationAdapterFactory_idl__
-#define __com_sun_star_script_XInvocationAdapterFactory_idl__
+#ifndef __com_sun_star_script_XInvocationAdapterFactory2_idl__
+#define __com_sun_star_script_XInvocationAdapterFactory2_idl__
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
@@ -72,32 +72,28 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module script {
+module com {  module sun {  module star {  module script {
 
-//=============================================================================
-/**
-   You can create adapter object of given types for an invocation
-   interface by using this adapter factory interface.
-
-   @author Daniel Boelzle
-   @version 1.0 08/22/00
+/** Interface to create adapter objects giving types to be supported and a
+    an invocation interface incoming calls are delegated to.
 */
 interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /**
-     Creates an adapter object of given types for calling the given
-     XInvocation interface.
-     <BR>
-     @param Invocation
-            invocation interface being called on incoming adapter calls
-     @param aTypes
-            types of adapter
-     @return        adapter;
-            this interface can be queried for given types
-     */
+    /** Creates an adapter interface of given types for calling the given
+        <type>XInvocation</type> interface.
+
+        @param Invocation
+               invocation interface being called on incoming adapter calls
+        @param aType
+               supported types of adapter
+
+        @returns
+                 adapter interface; this interface can be queried for
+                 XInterface and given types
+    */
     com::sun::star::uno::XInterface createAdapter(
-        [in] XInvocation Invocation, [in] sequence< type > aTypes );
+        [in] XInvocation Invocation,
+        [in] sequence< type > aTypes );
 };
 
 //=============================================================================
@@ -107,6 +103,9 @@ interface XInvocationAdapterFactory2 : com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 15:09:06  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:40  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

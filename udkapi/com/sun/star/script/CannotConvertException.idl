@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CannotConvertException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:52 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,34 +76,24 @@
 
 //=============================================================================
 
-// DocMerge from xml: exception com::sun::star::script::CannotConvertException
-/** is thrown to indicate that a type conversion can not be performed.
- */
+/** This exception is thrown to indicate that a type conversion can not be performed.
+*/
 exception CannotConvertException: com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::CannotConvertException::DestinationTypeClass
-    /** contains the class of the type to which the value should be
+    /** This member contains the class of the type to which the value should be
         converted.
-     */
+    */
     com::sun::star::uno::TypeClass DestinationTypeClass;
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::CannotConvertException::Reason
-    /** contains the reason that the conversion failed.
-     */
+    /** This member contains the reason that the conversion failed.
+        Have a look at <type>FailReason</type>.
+    */
     long Reason;
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::script::CannotConvertException::ArgumentIndex
     /** If the conversion of a method argument fails, this is the index
         of the value in the "IN" argument list. [optional]
-     */
+    */
     long ArgumentIndex;
-
 };
 
 //=============================================================================
@@ -113,6 +103,9 @@ exception CannotConvertException: com::sun::star::uno::Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:52  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:35  hjs
     initial import
 

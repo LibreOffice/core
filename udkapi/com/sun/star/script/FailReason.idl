@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FailReason.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:10:40 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,91 +68,51 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::script::FailReason
-/** these values are used to specify the reason why a type conversion failed.
- */
+/** These values specify the reason why a type conversion failed.
+*/
 constants FailReason
 {
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::1
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::OUT_OF_RANGE
     /** The given value does not fit in the range of the destination type.
-     */
+    */
     const long OUT_OF_RANGE = 1;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::2
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::IS_NOT_NUMBER
     /** The given value cannot be converted to a number.
-     */
+    */
     const long IS_NOT_NUMBER = 2;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::3
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::IS_NOT_ENUM
     /** The given value cannot be converted to an enumeration.
-     */
+    */
     const long IS_NOT_ENUM = 3;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::4
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::IS_NOT_BOOL
     /** The given value cannot be converted to a boolean.
-     */
+    */
     const long IS_NOT_BOOL = 4;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::5
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::NO_SUCH_INTERFACE
     /** The given value is not an interface or cannot queried to the right interface.
-     */
+    */
     const long NO_SUCH_INTERFACE = 5;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::6
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::SOURCE_IS_NO_DERIVED_TYPE
     /** The given value cannot be converted to right structure or exception type.
-     */
+    */
     const long SOURCE_IS_NO_DERIVED_TYPE = 6;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::7
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::TYPE_NOT_SUPPORTED
     /** The type class of the given value is not supported.
-     */
+    */
     const long TYPE_NOT_SUPPORTED = 7;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::8
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::INVALID
     /** The given value cannot be converted and none of the other reasons match.
-     */
+    */
     const long INVALID = 8;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::9
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::NO_DEFAULT_AVAILABLE
-    /** @deprecated
-     */
+    /** This value is deprecated.  Do not use.
+        @deprecated
+    */
     const long NO_DEFAULT_AVAILABLE = 9;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR constants::10
-
-    // DocMerge from idl: value com::sun::star::script::FailReason::UNKNOWN
-    /** @deprecated
-     */
+    /** This value is deprecated.  Do not use.
+        @deprecated
+    */
     const long UNKNOWN = 10;
-
 };
 
 //=============================================================================
@@ -162,6 +122,9 @@ constants FailReason
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:10:40  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/11/16 15:09:06  mi
     proofing by Richard Holt
 

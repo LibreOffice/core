@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CoreReflection.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-23 11:27:48 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,13 @@
 
 //=============================================================================
 
-/** This service is the implementation of the interface XIdlReflection.
+/** This service is the implementation of the API reflection.
+    You can obtain information about types and call on objects.
 */
 service CoreReflection
 {
+    /** Interface to reflect types.
+    */
     interface com::sun::star::reflection::XIdlReflection;
 };
 
@@ -86,6 +89,9 @@ service CoreReflection
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/11/23 11:27:48  dbo
+    #80612# XIdlClassProvider deprecated, XIdlReflection to be supported
+
     Revision 1.4  2000/11/08 12:28:46  mi
     moved from api
 

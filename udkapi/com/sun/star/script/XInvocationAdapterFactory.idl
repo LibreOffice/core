@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInvocationAdapterFactory.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:40 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,31 +76,29 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::script::XInvocationAdapterFactory
-/** creates adapter interfaces of any given type for an invocation
-    interface by using this adapter factory interface.
-    <br>
- */
+/** Interface to create adapter objects giving a type to be supported and a
+    an invocation interface incoming calls are delegated to.
+
+    This interface is deprecated.  Use <type>XInvocationAdapterFactory2</type>.
+    @deprecated
+*/
 interface XInvocationAdapterFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::script::XInvocationAdapterFactory::createAdapter
     /** Creates an adapter interface of given type for calling the given
-        XInvocation interface.
+        <type>XInvocation</type> interface.
 
         @param Invocation
-            invocation interface being called on incoming adapter calls
-
+               invocation interface being called on incoming adapter calls
         @param aType
-            type of adapter interface given back
+               supported type of adapter
 
         @returns
-            adapter interface; this interface can be queried for
-            XInterface and given type
-     */
-    com::sun::star::uno::XInterface createAdapter( [in]XInvocation Invocation,
-                                                   [in]type aType );
+                 adapter interface; this interface can be queried for
+                 XInterface and given type
+    */
+    com::sun::star::uno::XInterface createAdapter(
+        [in]XInvocation Invocation,
+        [in]type aType );
 };
 
 //=============================================================================
@@ -110,6 +108,9 @@ interface XInvocationAdapterFactory: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:40  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2001/01/31 09:45:41  mi
     TYPE_XIDLCLASS is now 'type'
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Uik.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:29:00 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,50 +66,32 @@
 
  module com {  module sun {  module star {  module uno {
 
-//=============================================================================
+/** Specifies an universal interface key (globally unique).
 
-// DocMerge from xml: struct com::sun::star::uno::Uik
-/** specifies a universal interface key.
-
-
-
-    <p>An UIK is an unambiguous 16-byte value for every interface.</p>
- */
+    This struct is deprecated.  Uiks are not used anymore.
+    @deprecated
+*/
 struct Uik
 {
-    // DocMerge from xml: field com::sun::star::uno::Uik::m_Data1
     /** specifies a 4 byte data block.
      */
     unsigned long m_Data1;
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::uno::Uik::m_Data2
     /** specifies a 2 byte data block.
      */
     unsigned short m_Data2;
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::uno::Uik::m_Data3
     /** specifies a 2 byte data block.
      */
     unsigned short m_Data3;
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::uno::Uik::m_Data4
     /** specifies a 4 byte data block.
      */
     unsigned long m_Data4;
 
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: field com::sun::star::uno::Uik::m_Data5
     /** specifies a 4 byte data block.
      */
     unsigned long m_Data5;
-
 };
 
 //=============================================================================
@@ -119,6 +101,9 @@ struct Uik
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:29:00  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:18  hjs
     initial import
 

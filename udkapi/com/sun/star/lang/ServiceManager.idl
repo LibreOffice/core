@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,110 +89,80 @@
 #include <com/sun/star/lang/XServiceInfo.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::lang::ServiceManager
-/** provides a collection of implementations for services.
+/** Provides a collection of implementations for services.  This is a singleton
+    you commonly find in your component context under key
+    <code>/singletons/com.sun.star.lang.theServiceManager</code>.
 
-    <p>The factories are accessed with a service name. It is possible to
+    <p>
+    The factories are accessed with a service name. It is possible to
     access the factories with their implementation names, but you should
-    avoid this.  </p>
+    avoid this.
+    </p>
 
-    <p>The interfaces added through the <type scope="com::sun::star::container">XSet</type>
-    interfaces should support the following interfaces: </p>
+    <p>Service factories added via <type scope="com::sun::star::container">XSet</type>
+    should support the following interfaces: </p>
 
     <dl>
-        <dt> <type>XServiceInfo</type> </dt>
-        <dd>is used to support access through the implementation with
-            service names.
-        </dd>
+    <dt><type>XServiceInfo</type></dt>
+    <dd>supported interfaces/ implementation name</dd>
 
-        <dt> <type>XSingleServiceFactory</type> (optional) </dt>
-        <dd>is used to instantiate components from the implementation.
-        </dd>
+    <dt><type>XSingleComponentFactory</type>(optional)</dt>
+    <dd>is used to create instances of the implementation.</dd>
 
-        <dt> <type scope="com::sun::star::beans">XPropertySet</type> (optional) </dt>
-        <dd>offers additional information on the implementation.
-        </dd>
-
-        <dt> <type>XComponent</type> (optional) </dt>
-        <dd>The service manager calls the method
-            <member scope="com::sun::star::lang">XComponent::dispose</member>
-            on the registered factories. The service manager adds a
-            listener to this factory. The factory is automatically
-            revoked when the disposing listener is notified.
-        </dd>
+    <dt><type>XComponent</type> (optional)</dt>
+    <dd>The service manager calls the method
+    <member scope="com::sun::star::lang">XComponent::dispose</member>
+    on the factory when going down (i.e. it is commonly disposed by the component context).</dd>
     </dl>
- */
+
+    @see com::sun::star::uno::XComponentContext
+*/
 service ServiceManager
 {
+    /** This is a derived MultiServiceFactory service.
+    */
     service com::sun::star::lang::MultiServiceFactory;
 
-    // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XComponent
-    /** Normally you should call the method
-        <member scope="com::sun::star::util">XComponent::dispose</member>
-        at the service manager just before the application terminates.
-
-        <p>First, the service manager broadcasts the
-        <member scope="com::sun::star::util">XEventListener::disposing()</member>
-        message to all registered listeners. In this state you can still get all
-        factories from the service manager, but it is not possible to
-        add disposing listeners. Second, the service manager calls
-        <member scope="com::sun::star::util">XComponent::dispose</member>
-        at all registered factories that implement <type>XComponent</type>.
-        In this second state the service manager does not provide any factory.
-        This is called a two-phase shut down. </p>
-     */
+    /** Disposing of service manager.
+        <p>
+        The component context disposes its service manager singleton when going down
+        (i.e. when the component context is disposed).
+        </p>
+    */
     interface com::sun::star::lang::XComponent;
 
-
-    // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::container::XSet
-    /** The implementations are managed with this interface.
-        The supported services (<type>XServiceInfo</type> is used)
-        are registered automatically.
-     */
+    /** Management of service factories.
+    */
     interface com::sun::star::container::XSet;
 
-
-    // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::container::XContentEnumerationAccess
-    /** It is possible to enumerate all implementations that support the
+    /** Enumeration of all service factories.
+        <p>
+        It is possible to enumerate all implementations that support the
         service specified with the argument of the
         <member>XContentEnumerationAccess::createContentEnumeration</member> method.
-
-        <p>The enumerator returns interfaces. The type of interfaces
-        are not specified. Normally these are
-        <type>XSingleServiceFactory</type>.
-     */
+        The enumerator commonly returns <type>XSingleComponentFactory</type>
+        interfaces.
+        </p>
+    */
     interface com::sun::star::container::XContentEnumerationAccess;
 
-
-    // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XMultiServiceFactory
-    /** Use a service name or an implementation name to instantiate a
-        component with this interface.
-
-        <p>First the service manager gets the factory registered
-        under the service name. Then
-        <member>XMultiServiceFactory::createInstance</type> or
-        <member>XMultiServiceFactory::createInstanceWithArguments</member>
-        of this factory is called.
-     */
-    interface com::sun::star::lang::XMultiServiceFactory;
-
-    /** Use this interface to raise services giving a <type>com.sun.star.uno.XComponentContext</type>.
-     */
-    interface com::sun::star::lang::XMultiComponentFactory;
-
-    // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XServiceInfo
-    /** Services should always support this interface. For a
-        <type>RegistryServiceManager</type>, at least the service
-        "com.sun.star.lang.RegistryServiceManager" must be supported.
-     */
-    interface com::sun::star::lang::XServiceInfo;
-
+    /** Property access.
+    */
+    [optional] interface com::sun::star::beans::XPropertySet;
+    /** specifies the default component context to be used, if instanciating services
+        via <type>XMultiServiceFactory</type>
+    */
+    [optional, property] com::sun::star::uno::XComponentContext DefaultContext;
 };
 
 //=============================================================================
@@ -202,6 +172,9 @@ service ServiceManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/11/16 14:57:39  mi
+    proofing by Richard Holt
+
     Revision 1.7  2001/06/13 10:44:10  dbo
     #87233# ServiceManager has to export lang.XMultiComponentFactory
 

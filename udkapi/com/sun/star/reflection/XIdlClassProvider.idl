@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlClassProvider.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,24 +76,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XIdlClassProvider
-/** makes it possible to access the <type>XIdlClass</type> interfaces of the
-    implementation.
- */
+/** Deprecated interface.  Do not use anymore.
+
+    @deprecated
+*/
 interface XIdlClassProvider: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlClassProvider::getIdlClasses
-
-    // DocMerge from idl: method com::sun::star::reflection::XIdlClassProvider::getIdlClasses
-    /** Returns the sequence of the XIdlClasses, that represents the type of the implementation.
-        If the object does not aggregate other objects, then the length of the sequence is 1.
-        If the object aggregates other objects, then all XIdlClasses from these objects
-        are appended to the sequence.
-
-     */
     sequence<com::sun::star::reflection::XIdlClass> getIdlClasses();
-
 };
 
 //=============================================================================
@@ -103,6 +92,9 @@ interface XIdlClassProvider: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

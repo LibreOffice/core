@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMain.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,20 @@ module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::lang::XMain
-/** Executable components implement this interface.
- */
+/** Executing interface for executable components run by the uno executable
+    loader.  This is an application to run components passing the command
+    line arguments.
+*/
 interface XMain: com::sun::star::uno::XInterface
 {
-
-    // DocMerge from xml: method com::sun::star::lang::XMain::run
     /** This method is called to run the component.
-     */
+
+        @param aArguments
+               arguments passed to the component,
+               i.e. the command line arguments
+        @return
+               return value passed to be returned by main()
+    */
     long run( [in] sequence< string > aArguments );
 };
 
@@ -95,6 +100,9 @@ interface XMain: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:37  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/13 15:47:01  mi
     symtactical documentation and minor semantic documentation flaws fixed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:57:39 $
+ *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,84 +88,40 @@ module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::lang::RegistryServiceManager
-/** provides a collection of and a registry for implementations for services.
+/** Provides a collection of implementations for services reading from a
+    persistent registry storage.
 
-    <p>The factories are accessed with a service name. It is possible to
-    access the factories with their implementation name, but that should be
-    avoided.  </p>
+    For usage of the service manager have a look at service description
+    of <type>ServiceManager</type>.
 
-    <p>The first argument of the <member>XInitialization::initialization</member>
-    method may be a reference to a simple registry (<type scope="com::sun::star::registry">XSimpleRegistry</type>).
-    If it is not initialized with a registry, then the default registry
-    "com::sun::star::registry::DefaultRegistry" is used. If this registry is not
-    found, then the manager works without a registry.  </p>
-
-    <p>You can get the current registry with
-    <member scope="com::sun::star:beans">XPropertySet::getPropertyValue</member>.  </p>
-
-    <p>The interfaces added through the <type scope="com::sun::star::container">XSet</type>
-    interfaces should support the following interfaces: </p>
-
-    <dl>
-        <dt> <type>XServiceInfo</type> </dt>
-        <dd>is used to support access through the implementation with
-            service names.
-        </dd>
-
-        <dt> <type>XSingleServiceFactory</type> </dt>
-        <dd>is used to instantiate components from the implementation.
-        </dd>
-
-        <dt> <type scope="com::sun::star::beans">XPropertySet</type> (optional) </dt>
-        <dd>provides additional information on the implementation.
-        </dd>
-
-        <dt> <type>XComponent</type> (optional) </dt>
-        <dd>The service manager calls dispose on the registered
-            factories. The service manager adds a listener to this
-            factory. The factory is automatically revoked if the
-            disposing listener is notified.
-        </dd>
-    </dl>
-
-    @suspicious
- */
+    @see ServiceManager
+*/
 service RegistryServiceManager
 {
-    // DocMerge: empty anyway
+    /** This is a derived ServiceManager service.
+    */
     service com::sun::star::lang::ServiceManager;
 
-    // DocMerge: empty anyway
-    service com::sun::star::lang::MultiServiceFactory;
-
-
-    // DocMerge from xml: service com::sun::star::lang::RegistryServiceManager: interface com::sun::star::lang::XInitialization
-    /** The first argument of the intitialization method of this
-                interface may be a reference to a simple registry
-                (<type scope="com::sun::star::registry">XSimpleRegistry</type>).
-     */
+    /** The first two arguments of the intitialization arguments reference:
+        <ol>
+        <li>a simple registry
+        (<type scope="com::sun::star::registry">XSimpleRegistry</type>),
+        i.e. the registry to be read from</li>
+        <li>a component context
+        (<type scope="com::sun::star::uno">XComponentContext</type>)
+        to be installed as "DefaultContext" property of the
+        <type>ServiceManager</type> which is the context to be used
+        using the <type>XMultiServiceFactory</type> interface.</li>
+        </ol>
+    */
     interface com::sun::star::lang::XInitialization;
 
-
-    // DocMerge from xml: service com::sun::star::lang::RegistryServiceManager: interface com::sun::star::beans::XPropertySet
-    /** The method <member>getPropertyValue</member> must be implemented
-                to get the read-only property <member>Registry</member>. All
-                other methods are optional.
-     */
+    /** Property access.
+    */
     interface com::sun::star::beans::XPropertySet;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::lang::RegistryServiceManager::Registry
-    /** specifies the current registry.
-
-        <p>This property will be initialized by
-        <type>XInitialization</type> or the default registry.
-        </p>
-     */
+    /** Specifies the current registry to be read from.
+    */
     [readonly, property] com::sun::star::registry::XSimpleRegistry Registry;
-
 };
 
 //=============================================================================
@@ -175,6 +131,9 @@ service RegistryServiceManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 14:57:39  mi
+    proofing by Richard Holt
+
     Revision 1.6  2000/12/19 15:32:24  mi
     documentation syntax fixed
 
