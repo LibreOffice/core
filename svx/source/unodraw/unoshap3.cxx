@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
+ *  last change: $Author: aw $ $Date: 2001-08-15 15:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,16 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
 
             // set at scene
             pScene->SetCamera(aCam);
+
+            // #91047# use imported VRP, VPN and VUP (if used)
+            sal_Bool bVRPUsed(aVRP != Vector3D(0.0, 0.0, 1.0));
+            sal_Bool bVPNUsed(aVPN != Vector3D(0.0, 0.0, 1.0));
+            sal_Bool bVUPUsed(aVUP != Vector3D(0.0, 1.0, 0.0));
+
+            if(bVRPUsed || bVPNUsed || bVUPUsed)
+            {
+                pScene->GetCameraSet().SetViewportValues(aVRP, aVPN, aVUP);
+            }
 
             // set object transformations again at objects
             aIter.Reset();
