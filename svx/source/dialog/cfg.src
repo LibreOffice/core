@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:27:24 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,7 @@ ModalDialog MD_MENU_ORGANISER
     Text [ en-US ] = "New Menu" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
+    HelpId = HID_SVX_CONFIG_MENU_ORGANIZER;
     FixedText TXT_MENU_NAME
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
@@ -645,6 +646,7 @@ ModalDialog MD_ICONSELECTOR
     Text [ de ] = "Symbole Austauschen" ;
     Text [ en-US ] = "Change Icon" ;
     Moveable = TRUE ;
+    HelpId = HID_SVX_CONFIG_ICON_SELECTOR;
     FixedText FT_SYMBOLS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
