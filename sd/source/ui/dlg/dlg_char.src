@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:09:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,10 @@ TabDialog TAB_CHAR
     Text[ hindi ] = "अक्षर";
     Text[ slovak ] = "Znak";
 };
+
+
+
+
 
 
 
