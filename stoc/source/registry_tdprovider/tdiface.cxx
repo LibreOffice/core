@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:36:44 $
+ *  last change: $Author: dbo $ $Date: 2001-05-16 08:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,11 @@ namespace stoc_rdbtdp
 //==================================================================================================
 class MethodParameterImpl : public WeakImplHelper1< XMethodParameter >
 {
+    Mutex                           _aMutex;
     Reference< XHierarchicalNameAccess > _xTDMgr;
 
     OUString                        _aName;
     OUString                        _aTypeName;
-    Mutex                           _aTypeMutex;
     Reference< XTypeDescription >   _xType;
 
     sal_Bool                        _bIn;
@@ -124,20 +124,24 @@ Reference<XTypeDescription > MethodParameterImpl::getType()
 {
     if (!_xType.is() && _aTypeName.getLength())
     {
-        MutexGuard aGuard( _aTypeMutex );
-        if (!_xType.is() && _aTypeName.getLength())
+        try
         {
-            try
+            Reference< XTypeDescription > xType;
+            if (_xTDMgr->getByHierarchicalName( _aTypeName ) >>= xType)
             {
-                if (_xTDMgr->getByHierarchicalName( _aTypeName ) >>= _xType)
-                    return _xType;
+                MutexGuard aGuard( _aMutex );
+                if (! _xType.is())
+                {
+                    _xType = xType;
+                }
+                return _xType;
             }
-            catch (NoSuchElementException &)
-            {
-            }
-            // never try again, if no td was found
-            _aTypeName = OUString();
         }
+        catch (NoSuchElementException &)
+        {
+        }
+        // never try again, if no td was found
+        _aTypeName = OUString();
     }
     return _xType;
 }
@@ -169,20 +173,18 @@ sal_Int32 MethodParameterImpl::getPosition()
 //==================================================================================================
 class InterfaceMethodImpl : public WeakImplHelper1< XInterfaceMethodTypeDescription >
 {
+    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
 
     OUString                              _aTypeName;
     OUString                              _aMemberName;
 
     OUString                              _aReturnType;
-    Mutex                                 _aReturnTypeMutex;
     Reference< XTypeDescription >         _xReturnTD;
 
     Sequence< sal_Int8 >                  _aBytes;
     sal_uInt16                            _nMethodIndex;
-    Mutex                                 _aParamsMutex;
     Sequence< Reference< XMethodParameter > > * _pParams;
-    Mutex                                 _aExcMutex;
     Sequence< Reference< XTypeDescription > > * _pExceptions;
 
     sal_Bool                              _bIsOneWay;
@@ -266,20 +268,24 @@ Reference<XTypeDescription > InterfaceMethodImpl::getReturnType()
 {
     if (!_xReturnTD.is() && _aReturnType.getLength())
     {
-        MutexGuard aGuard( _aReturnTypeMutex );
-        if (!_xReturnTD.is() && _aReturnType.getLength())
+        try
         {
-            try
+            Reference< XTypeDescription > xReturnTD;
+            if (_xTDMgr->getByHierarchicalName( _aReturnType ) >>= xReturnTD)
             {
-                if (_xTDMgr->getByHierarchicalName( _aReturnType ) >>= _xReturnTD)
-                    return _xReturnTD;
+                MutexGuard aGuard( _aMutex );
+                if (! _xReturnTD.is())
+                {
+                    _xReturnTD = xReturnTD;
+                }
+                return _xReturnTD;
             }
-            catch (NoSuchElementException &)
-            {
-            }
-            // never try again, if no td was found
-            _aReturnType = OUString();
         }
+        catch (NoSuchElementException &)
+        {
+        }
+        // never try again, if no td was found
+        _aReturnType = OUString();
     }
     return _xReturnTD;
 }
@@ -295,31 +301,37 @@ Sequence<Reference<XMethodParameter > > InterfaceMethodImpl::getParameters()
 {
     if (! _pParams)
     {
-        MutexGuard aGuard( _aParamsMutex );
-        if (! _pParams)
+        RegistryTypeReaderLoader aLoader;
+        RegistryTypeReader aReader(
+            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
+            _aBytes.getLength(), sal_False );
+
+        sal_uInt16 nParams = (sal_uInt16)aReader.getMethodParamCount( _nMethodIndex );
+        Sequence< Reference< XMethodParameter > > * pTempParams =
+            new Sequence< Reference< XMethodParameter > >( nParams );
+        Reference< XMethodParameter > * pParams = pTempParams->getArray();
+
+        while (nParams--)
         {
-            RegistryTypeReaderLoader aLoader;
-            RegistryTypeReader aReader( aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-                                        _aBytes.getLength(), sal_False );
+            RTParamMode eMode = aReader.getMethodParamMode( _nMethodIndex, nParams );
 
-            sal_uInt16 nParams = (sal_uInt16)aReader.getMethodParamCount( _nMethodIndex );
-            Sequence< Reference< XMethodParameter > > * pTempParams =
-                new Sequence< Reference< XMethodParameter > >( nParams );
-            Reference< XMethodParameter > * pParams = pTempParams->getArray();
+            pParams[nParams] = new MethodParameterImpl(
+                _xTDMgr,
+                aReader.getMethodParamName( _nMethodIndex, nParams ),
+                aReader.getMethodParamType( _nMethodIndex, nParams ).replace( '/', '.' ),
+                (eMode == RT_PARAM_IN || eMode == RT_PARAM_INOUT),
+                (eMode == RT_PARAM_OUT || eMode == RT_PARAM_INOUT),
+                nParams );
+        }
 
-            while (nParams--)
-            {
-                RTParamMode eMode = aReader.getMethodParamMode( _nMethodIndex, nParams );
-
-                pParams[nParams] = new MethodParameterImpl(
-                    _xTDMgr,
-                    aReader.getMethodParamName( _nMethodIndex, nParams ),
-                    aReader.getMethodParamType( _nMethodIndex, nParams ).replace( '/', '.' ),
-                    (eMode == RT_PARAM_IN || eMode == RT_PARAM_INOUT),
-                    (eMode == RT_PARAM_OUT || eMode == RT_PARAM_INOUT),
-                    nParams );
-            }
-
+        ClearableMutexGuard aGuard( _aMutex );
+        if (_pParams)
+        {
+            aGuard.clear();
+            delete pTempParams;
+        }
+        else
+        {
             _pParams = pTempParams;
         }
     }
@@ -331,32 +343,38 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
 {
     if (! _pExceptions)
     {
-        MutexGuard aGuard( _aExcMutex );
-        if (! _pExceptions)
+        RegistryTypeReaderLoader aLoader;
+        RegistryTypeReader aReader(
+            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
+            _aBytes.getLength(), sal_False );
+
+        sal_uInt16 nExc = (sal_uInt16)aReader.getMethodExcCount( _nMethodIndex );
+        Sequence< Reference< XTypeDescription > > * pExceptions =
+            new Sequence< Reference< XTypeDescription > >( nExc );
+        Reference< XTypeDescription > * pExc = pExceptions->getArray();
+
+        while (nExc--)
         {
-            RegistryTypeReaderLoader aLoader;
-            RegistryTypeReader aReader( aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-                                        _aBytes.getLength(), sal_False );
-
-            sal_uInt16 nExc = (sal_uInt16)aReader.getMethodExcCount( _nMethodIndex );
-            Sequence< Reference< XTypeDescription > > * pExceptions =
-                new Sequence< Reference< XTypeDescription > >( nExc );
-            Reference< XTypeDescription > * pExc = pExceptions->getArray();
-
-            while (nExc--)
+            try
             {
-                try
-                {
-                    OUString aMethodExcName( aReader.getMethodExcType( _nMethodIndex, nExc ) );
-                    _xTDMgr->getByHierarchicalName( aMethodExcName.replace( '/', '.' ) )
-                        >>= pExc[ nExc ];
-                }
-                catch (NoSuchElementException &)
-                {
-                }
-                OSL_ENSURE( pExc[nExc].is(), "### exception type unknown!" );
+                OUString aMethodExcName( aReader.getMethodExcType( _nMethodIndex, nExc ) );
+                _xTDMgr->getByHierarchicalName( aMethodExcName.replace( '/', '.' ) )
+                    >>= pExc[ nExc ];
             }
+            catch (NoSuchElementException &)
+            {
+            }
+            OSL_ENSURE( pExc[nExc].is(), "### exception type unknown!" );
+        }
 
+        ClearableMutexGuard aGuard( _aMutex );
+        if (_pExceptions)
+        {
+            aGuard.clear();
+            delete pExceptions;
+        }
+        else
+        {
             _pExceptions = pExceptions;
         }
     }
@@ -372,13 +390,13 @@ Sequence<Reference<XTypeDescription > > InterfaceMethodImpl::getExceptions()
 //==================================================================================================
 class InterfaceAttributeImpl : public WeakImplHelper1< XInterfaceAttributeTypeDescription >
 {
+    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
 
     OUString                              _aTypeName;
     OUString                              _aMemberName;
 
     OUString                              _aMemberTypeName;
-    Mutex                                 _aMemberTypeMutex;
     Reference< XTypeDescription >         _xMemberTD;
 
     sal_Bool                              _bReadOnly;
@@ -453,20 +471,24 @@ Reference<XTypeDescription > InterfaceAttributeImpl::getType()
 {
     if (!_xMemberTD.is() && _aMemberTypeName.getLength())
     {
-        MutexGuard aGuard( _aMemberTypeMutex );
-        if (!_xMemberTD.is() && _aMemberTypeName.getLength())
+        try
         {
-            try
+            Reference< XTypeDescription > xMemberTD;
+            if (_xTDMgr->getByHierarchicalName( _aMemberTypeName ) >>= xMemberTD)
             {
-                if (_xTDMgr->getByHierarchicalName( _aMemberTypeName ) >>= _xMemberTD)
-                    return _xMemberTD;
+                MutexGuard aGuard( _aMutex );
+                if (! _xMemberTD.is())
+                {
+                    _xMemberTD = xMemberTD;
+                }
+                return _xMemberTD;
             }
-            catch (NoSuchElementException &)
-            {
-            }
-            // never try again, if no td was found
-            _aMemberTypeName = OUString();
         }
+        catch (NoSuchElementException &)
+        {
+        }
+        // never try again, if no td was found
+        _aMemberTypeName = OUString();
     }
     return _xMemberTD;
 }
@@ -524,20 +546,24 @@ Reference< XTypeDescription > InterfaceTypeDescriptionImpl::getBaseType()
 {
     if (!_xBaseTD.is() && _aBaseType.getLength())
     {
-        MutexGuard aGuard( _aBaseTypeMutex );
-        if (!_xBaseTD.is() && _aBaseType.getLength())
+        try
         {
-            try
+            Reference< XTypeDescription > xBaseTD;
+            if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= xBaseTD)
             {
-                if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= _xBaseTD)
-                    return _xBaseTD;
+                MutexGuard aGuard( _aMutex );
+                if (! _xBaseTD.is())
+                {
+                    _xBaseTD = xBaseTD;
+                }
+                return _xBaseTD;
             }
-            catch (NoSuchElementException &)
-            {
-            }
-            // never try again, if no base td was found
-            _aBaseType = OUString();
         }
+        catch (NoSuchElementException &)
+        {
+        }
+        // never try again, if no base td was found
+        _aBaseType = OUString();
     }
     return _xBaseTD;
 }
@@ -553,72 +579,81 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
 {
     if (! _pMethods)
     {
-        MutexGuard aGuard( _aMembersMutex );
-        if (! _pMethods)
+        RegistryTypeReaderLoader aLoader;
+        RegistryTypeReader aReader(
+            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
+            _aBytes.getLength(), sal_False );
+
+        sal_uInt16 nMethods = (sal_uInt16)aReader.getMethodCount();
+        sal_uInt16 nFields  = (sal_uInt16)aReader.getFieldCount();
+
+        vector< AttributeInit > * pAttributes = new vector< AttributeInit >( nFields );
+        vector< MethodInit > * pMethods       = new vector< MethodInit >( nMethods );
+
+        OUString aInterfaceName( getName() );
+
+        // base offsets
+        sal_Int32 nBaseOffset = 0;
+
+        Reference< XTypeDescription > xBase( getBaseType(), UNO_QUERY );
+        while (xBase.is())
         {
-            RegistryTypeReaderLoader aLoader;
-            RegistryTypeReader aReader( aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-                                        _aBytes.getLength(), sal_False );
-            sal_uInt16 nMethods = (sal_uInt16)aReader.getMethodCount();
-            sal_uInt16 nFields  = (sal_uInt16)aReader.getFieldCount();
-
-            vector< AttributeInit > * pAttributes = new vector< AttributeInit >( nFields );
-            vector< MethodInit > * pMethods       = new vector< MethodInit >( nMethods );
-
-            OUString aInterfaceName( getName() );
-
-            // base offsets
-            _nBaseOffset = 0;
-
-            Reference< XTypeDescription > xBase( getBaseType(), UNO_QUERY );
-            while (xBase.is())
+            Reference< XInterfaceTypeDescription > xBaseInterface( xBase, UNO_QUERY );
+            Sequence< Reference< XInterfaceMemberTypeDescription > > aBaseMembers( xBaseInterface->getMembers() );
+            if (aBaseMembers.getLength())
             {
-                Reference< XInterfaceTypeDescription > xBaseInterface( xBase, UNO_QUERY );
-                Sequence< Reference< XInterfaceMemberTypeDescription > > aBaseMembers( xBaseInterface->getMembers() );
-                if (aBaseMembers.getLength())
-                {
-                    _nBaseOffset = aBaseMembers[aBaseMembers.getLength()-1]->getPosition() +1;
-                    break;
-                }
-                xBase = xBaseInterface->getBaseType();
+                nBaseOffset = aBaseMembers[aBaseMembers.getLength()-1]->getPosition() +1;
+                break;
             }
+            xBase = xBaseInterface->getBaseType();
+        }
 
-            // all methods
-            while (nMethods--)
-            {
-                OUString aMemberName( aReader.getMethodName( nMethods ) );
-                OUStringBuffer aTypeName( aInterfaceName );
-                aTypeName.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
-                aTypeName.append( aMemberName );
+        // all methods
+        while (nMethods--)
+        {
+            OUString aMemberName( aReader.getMethodName( nMethods ) );
+            OUStringBuffer aTypeName( aInterfaceName );
+            aTypeName.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
+            aTypeName.append( aMemberName );
 
-                RTMethodMode eMode = aReader.getMethodMode( nMethods );
+            RTMethodMode eMode = aReader.getMethodMode( nMethods );
 
-                MethodInit & rInit = pMethods->operator[]( nMethods );
+            MethodInit & rInit = pMethods->operator[]( nMethods );
 
-                rInit.aTypeName    = aTypeName.makeStringAndClear();
-                rInit.aMemberName  = aMemberName;
-                rInit.aReturnTypeName = aReader.getMethodReturnType( nMethods ).replace( '/', '.' );
-                rInit.nMethodIndex = nMethods;
-                rInit.bOneWay      = (eMode == RT_MODE_ONEWAY || eMode == RT_MODE_ONEWAY_CONST);
-            }
+            rInit.aTypeName    = aTypeName.makeStringAndClear();
+            rInit.aMemberName  = aMemberName;
+            rInit.aReturnTypeName = aReader.getMethodReturnType( nMethods ).replace( '/', '.' );
+            rInit.nMethodIndex = nMethods;
+            rInit.bOneWay      = (eMode == RT_MODE_ONEWAY || eMode == RT_MODE_ONEWAY_CONST);
+        }
 
-            // all fields
-            while (nFields--)
-            {
-                OUString aMemberName( aReader.getFieldName( nFields ) );
-                OUString aMemberType( aReader.getFieldType( nFields ).replace( '/', '.' ) );
-                OUStringBuffer aTypeName( aInterfaceName );
-                aTypeName.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
-                aTypeName.append( aMemberName );
+        // all fields
+        while (nFields--)
+        {
+            OUString aMemberName( aReader.getFieldName( nFields ) );
+            OUString aMemberType( aReader.getFieldType( nFields ).replace( '/', '.' ) );
+            OUStringBuffer aTypeName( aInterfaceName );
+            aTypeName.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
+            aTypeName.append( aMemberName );
 
-                AttributeInit & rInit = pAttributes->operator[]( nFields );
+            AttributeInit & rInit = pAttributes->operator[]( nFields );
 
-                rInit.aTypeName       = aTypeName.makeStringAndClear();
-                rInit.aMemberName     = aMemberName;
-                rInit.aMemberTypeName = aMemberType;
-                rInit.bReadOnly       = (aReader.getFieldAccess( nFields ) == RT_ACCESS_READONLY);
-            }
+            rInit.aTypeName       = aTypeName.makeStringAndClear();
+            rInit.aMemberName     = aMemberName;
+            rInit.aMemberTypeName = aMemberType;
+            rInit.bReadOnly       = (aReader.getFieldAccess( nFields ) == RT_ACCESS_READONLY);
+        }
 
+        ClearableMutexGuard aGuard( _aMutex );
+        if (_pMethods)
+        {
+            aGuard.clear();
+            delete pAttributes;
+            delete pMethods;
+        }
+        else
+        {
+            _nBaseOffset = nBaseOffset;
             _pAttributes = pAttributes;
             _pMethods    = pMethods;
         }
@@ -633,24 +668,18 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
 
     while (nMethods--)
     {
-        MethodInit & rInit = _pMethods->operator[]( nMethods );
-/*      if (! (pMembers[nAttributes+nMethods] = rInit.wxMember).is())
-        {
-            rInit.wxMember = */pMembers[nAttributes+nMethods] = new InterfaceMethodImpl(
-                _xTDMgr, rInit.aTypeName, rInit.aMemberName,
-                rInit.aReturnTypeName, _aBytes, rInit.nMethodIndex,
-                rInit.bOneWay, _nBaseOffset+nAttributes+nMethods );
-//      }
+        MethodInit const & rInit = _pMethods->operator[]( nMethods );
+        pMembers[nAttributes+nMethods] = new InterfaceMethodImpl(
+            _xTDMgr, rInit.aTypeName, rInit.aMemberName,
+            rInit.aReturnTypeName, _aBytes, rInit.nMethodIndex,
+            rInit.bOneWay, _nBaseOffset+nAttributes+nMethods );
     }
     while (nAttributes--)
     {
-        AttributeInit & rInit = _pAttributes->operator[]( nAttributes );
-/*      if (! (pMembers[nAttributes] = rInit.wxMember).is())
-        {
-            rInit.wxMember = */pMembers[nAttributes] = new InterfaceAttributeImpl(
-                _xTDMgr, rInit.aTypeName, rInit.aMemberName, rInit.aMemberTypeName,
-                rInit.bReadOnly, _nBaseOffset+nAttributes );
-//      }
+        AttributeInit const & rInit = _pAttributes->operator[]( nAttributes );
+        pMembers[nAttributes] = new InterfaceAttributeImpl(
+            _xTDMgr, rInit.aTypeName, rInit.aMemberName, rInit.aMemberTypeName,
+            rInit.bReadOnly, _nBaseOffset+nAttributes );
     }
 
     return aMembers;

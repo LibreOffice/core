@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:46:47 $
+ *  last change: $Author: dbo $ $Date: 2001-05-16 08:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,6 @@ inline Any getRTValue( const RTConstValue & rVal )
 //==================================================================================================
 struct MethodInit
 {
-//      WeakReference< XInterfaceMemberTypeDescription > wxMember;
-    //
     OUString    aTypeName;
     OUString    aMemberName;
     OUString    aReturnTypeName;
@@ -169,8 +167,6 @@ struct MethodInit
 //==================================================================================================
 struct AttributeInit
 {
-//      WeakReference< XInterfaceMemberTypeDescription > wxMember;
-    //
     OUString    aTypeName;
     OUString    aMemberName;
     OUString    aMemberTypeName;
@@ -197,6 +193,7 @@ public:
 //==================================================================================================
 class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescription >
 {
+    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     Sequence< sal_Int8 >                  _aBytes;
 
@@ -204,10 +201,8 @@ class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescr
     Uik                                   _aUik;
 
     OUString                              _aBaseType;
-    Mutex                                 _aBaseTypeMutex;
     Reference< XTypeDescription >         _xBaseTD;
 
-    Mutex                                 _aMembersMutex;
     sal_Int32                             _nBaseOffset;
     vector< AttributeInit > *             _pAttributes;
     vector< MethodInit > *                _pMethods;
@@ -231,19 +226,16 @@ public:
 //==================================================================================================
 class CompoundTypeDescriptionImpl : public WeakImplHelper1< XCompoundTypeDescription >
 {
+    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     TypeClass                             _eTypeClass;
     Sequence< sal_Int8 >                  _aBytes;
     OUString                              _aName;
 
     OUString                              _aBaseType;
-    Mutex                                 _aBaseTypeMutex;
     Reference< XTypeDescription >         _xBaseTD;
 
-    Mutex                                 _aMembersMutex;
     Sequence< Reference< XTypeDescription > > * _pMembers;
-
-    Mutex                                 _aMemberNamesMutex;
     Sequence< OUString > *                _pMemberNames;
 
 public:
@@ -274,28 +266,22 @@ public:
 //==================================================================================================
 class UnionTypeDescriptionImpl : public WeakImplHelper1< XUnionTypeDescription >
 {
+    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     TypeClass                             _eTypeClass;
     Sequence< sal_Int8 >                  _aBytes;
     OUString                              _aName;
 
     OUString                              _aDiscriminantType;
-    Mutex                                 _aDiscrimantTypeMutex;
     Reference< XTypeDescription >         _xDiscriminantTD;
 
     sal_Bool                              _bInit;
-//  Mutex                                 _aDefaultTypeMutex;
     Any                                   _aDefautDisciminant;
     Reference< XTypeDescription >         _xDefaultTD;
     OUString                              _aDefaultName;
 
-//  Mutex                                 _aMemberDiscriminantsMutex;
     Sequence< Any > *                     _pMemberDiscriminants;
-
-    Mutex                                 _aMembersMutex;
     Sequence< Reference< XTypeDescription > > * _pMembers;
-
-//  Mutex                                 _aMemberNamesMutex;
     Sequence< OUString > *                _pMemberNames;
 
     void    initMembers() throw(::com::sun::star::uno::RuntimeException);
@@ -332,15 +318,14 @@ public:
 //==================================================================================================
 class EnumTypeDescriptionImpl : public WeakImplHelper1< XEnumTypeDescription >
 {
+    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     Sequence< sal_Int8 >                  _aBytes;
 
     OUString                              _aName;
     sal_Int32                             _nDefaultValue;
 
-    Mutex                                 _aEnumNamesMutex;
     Sequence< OUString > *                _pEnumNames;
-    Mutex                                 _aEnumValuesMutex;
     Sequence< sal_Int32 > *               _pEnumValues;
 
 public:
@@ -369,10 +354,10 @@ public:
 //==================================================================================================
 class TypedefTypeDescriptionImpl : public WeakImplHelper1< XIndirectTypeDescription >
 {
+    Mutex                                 _aMutex;
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     OUString                              _aName;
 
-    Mutex                                 _aRefTDMutex;
     OUString                              _aRefName;
     Reference< XTypeDescription >         _xRefTD;
 

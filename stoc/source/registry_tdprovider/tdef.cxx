@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdef.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-07 14:48:04 $
+ *  last change: $Author: dbo $ $Date: 2001-05-16 08:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,20 +85,24 @@ Reference< XTypeDescription > TypedefTypeDescriptionImpl::getReferencedType()
 {
     if (!_xRefTD.is() && _aRefName.getLength())
     {
-        MutexGuard aGuard( _aRefTDMutex );
-        if (!_xRefTD.is() && _aRefName.getLength())
+        try
         {
-            try
+            Reference< XTypeDescription > xRefTD;
+            if (_xTDMgr->getByHierarchicalName( _aRefName ) >>= xRefTD)
             {
-                if (_xTDMgr->getByHierarchicalName( _aRefName ) >>= _xRefTD)
-                    return _xRefTD;
+                MutexGuard aGuard( _aMutex );
+                if (! _xRefTD.is())
+                {
+                    _xRefTD = xRefTD;
+                }
+                return _xRefTD;
             }
-            catch (NoSuchElementException &)
-            {
-            }
-            // never try again, if no base td was found
-            _aRefName = OUString();
         }
+        catch (NoSuchElementException &)
+        {
+        }
+        // never try again, if no base td was found
+        _aRefName = OUString();
     }
     return _xRefTD;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdenum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2001-05-16 08:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,22 +98,28 @@ Sequence< OUString > EnumTypeDescriptionImpl::getEnumNames()
 {
     if (! _pEnumNames)
     {
-        MutexGuard aGuard( _aEnumNamesMutex );
-        if (! _pEnumNames)
+        RegistryTypeReaderLoader aLoader;
+        RegistryTypeReader aReader(
+            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
+            _aBytes.getLength(), sal_False );
+
+        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        Sequence< OUString > * pTempEnumNames = new Sequence< OUString >( nFields );
+        OUString * pEnumNames = pTempEnumNames->getArray();
+
+        while (nFields--)
         {
-            RegistryTypeReaderLoader aLoader;
-            RegistryTypeReader aReader( aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-                                        _aBytes.getLength(), sal_False );
+            pEnumNames[nFields] = aReader.getFieldName( nFields );
+        }
 
-            sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
-            Sequence< OUString > * pTempEnumNames = new Sequence< OUString >( nFields );
-            OUString * pEnumNames = pTempEnumNames->getArray();
-
-            while (nFields--)
-            {
-                pEnumNames[nFields] = aReader.getFieldName( nFields );
-            }
-
+        ClearableMutexGuard aGuard( _aMutex );
+        if (_pEnumNames)
+        {
+            aGuard.clear();
+            delete pTempEnumNames;
+        }
+        else
+        {
             _pEnumNames = pTempEnumNames;
         }
     }
@@ -125,22 +131,28 @@ Sequence< sal_Int32 > EnumTypeDescriptionImpl::getEnumValues()
 {
     if (! _pEnumValues)
     {
-        MutexGuard aGuard( _aEnumValuesMutex );
-        if (! _pEnumValues)
+        RegistryTypeReaderLoader aLoader;
+        RegistryTypeReader aReader(
+            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
+            _aBytes.getLength(), sal_False );
+
+        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        Sequence< sal_Int32 > * pTempEnumValues = new Sequence< sal_Int32 >( nFields );
+        sal_Int32 * pEnumValues = pTempEnumValues->getArray();
+
+        while (nFields--)
         {
-            RegistryTypeReaderLoader aLoader;
-            RegistryTypeReader aReader( aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-                                        _aBytes.getLength(), sal_False );
+            pEnumValues[nFields] = getRTValueAsInt32( aReader.getFieldConstValue( nFields ) );
+        }
 
-            sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
-            Sequence< sal_Int32 > * pTempEnumValues = new Sequence< sal_Int32 >( nFields );
-            sal_Int32 * pEnumValues = pTempEnumValues->getArray();
-
-            while (nFields--)
-            {
-                pEnumValues[nFields] = getRTValueAsInt32( aReader.getFieldConstValue( nFields ) );
-            }
-
+        ClearableMutexGuard aGuard( _aMutex );
+        if (_pEnumValues)
+        {
+            aGuard.clear();
+            delete pTempEnumValues;
+        }
+        else
+        {
             _pEnumValues = pTempEnumValues;
         }
     }

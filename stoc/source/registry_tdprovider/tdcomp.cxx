@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdcomp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:36:44 $
+ *  last change: $Author: dbo $ $Date: 2001-05-16 08:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,20 +92,24 @@ Reference< XTypeDescription > CompoundTypeDescriptionImpl::getBaseType()
 {
     if (!_xBaseTD.is() && _aBaseType.getLength())
     {
-        MutexGuard aGuard( _aBaseTypeMutex );
-        if (!_xBaseTD.is() && _aBaseType.getLength())
+        try
         {
-            try
+            Reference< XTypeDescription > xBaseTD;
+            if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= xBaseTD)
             {
-                if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= _xBaseTD)
-                    return _xBaseTD;
+                MutexGuard aGuard( _aMutex );
+                if (! _xBaseTD.is())
+                {
+                    _xBaseTD = xBaseTD;
+                }
+                return _xBaseTD;
             }
-            catch (NoSuchElementException &)
-            {
-            }
-            // never try again, if no base td was found
-            _aBaseType = OUString();
         }
+        catch (NoSuchElementException &)
+        {
+        }
+        // never try again, if no base td was found
+        _aBaseType = OUString();
     }
     return _xBaseTD;
 }
@@ -115,35 +119,41 @@ Sequence< Reference< XTypeDescription > > CompoundTypeDescriptionImpl::getMember
 {
     if (! _pMembers)
     {
-        MutexGuard aGuard( _aMembersMutex );
-        if (! _pMembers)
+        RegistryTypeReaderLoader aLoader;
+        RegistryTypeReader aReader(
+            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
+            _aBytes.getLength(), sal_False );
+
+        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        Sequence< Reference< XTypeDescription > > * pTempMembers =
+            new Sequence< Reference< XTypeDescription > >( nFields );
+        Reference< XTypeDescription > * pMembers = pTempMembers->getArray();
+
+        while (nFields--)
         {
-            RegistryTypeReaderLoader aLoader;
-            RegistryTypeReader aReader( aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-                                        _aBytes.getLength(), sal_False );
-
-            sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
-            Sequence< Reference< XTypeDescription > > * pTempMembers =
-                new Sequence< Reference< XTypeDescription > >( nFields );
-            Reference< XTypeDescription > * pMembers = pTempMembers->getArray();
-
-            while (nFields--)
+            try
             {
-                try
-                {
-                    _xTDMgr->getByHierarchicalName(
-                        aReader.getFieldType( nFields ).replace( '/', '.' ) )
-                            >>= pMembers[nFields];
-                }
-                catch (NoSuchElementException &)
-                {
-                }
-                OSL_ENSURE( pMembers[nFields].is(), "### compound member unknown!" );
+                _xTDMgr->getByHierarchicalName(
+                    aReader.getFieldType( nFields ).replace( '/', '.' ) ) >>= pMembers[nFields];
             }
+            catch (NoSuchElementException &)
+            {
+            }
+            OSL_ENSURE( pMembers[nFields].is(), "### compound member unknown!" );
+        }
 
+        ClearableMutexGuard aGuard( _aMutex );
+        if (_pMembers)
+        {
+            aGuard.clear();
+            delete pTempMembers;
+        }
+        else
+        {
             _pMembers = pTempMembers;
         }
     }
+
     return *_pMembers;
 }
 //__________________________________________________________________________________________________
@@ -152,22 +162,28 @@ Sequence< OUString > CompoundTypeDescriptionImpl::getMemberNames()
 {
     if (! _pMemberNames)
     {
-        MutexGuard aGuard( _aMemberNamesMutex );
-        if (! _pMemberNames)
+        RegistryTypeReaderLoader aLoader;
+        RegistryTypeReader aReader(
+            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
+            _aBytes.getLength(), sal_False );
+
+        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+        Sequence< OUString > * pTempMemberNames = new Sequence< OUString >( nFields );
+        OUString * pMemberNames = pTempMemberNames->getArray();
+
+        while (nFields--)
         {
-            RegistryTypeReaderLoader aLoader;
-            RegistryTypeReader aReader( aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-                                        _aBytes.getLength(), sal_False );
+            pMemberNames[nFields] = aReader.getFieldName( nFields );
+        }
 
-            sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
-            Sequence< OUString > * pTempMemberNames = new Sequence< OUString >( nFields );
-            OUString * pMemberNames = pTempMemberNames->getArray();
-
-            while (nFields--)
-            {
-                pMemberNames[nFields] = aReader.getFieldName( nFields );
-            }
-
+        ClearableMutexGuard aGuard( _aMutex );
+        if (_pMemberNames)
+        {
+            aGuard.clear();
+            delete pTempMemberNames;
+        }
+        else
+        {
             _pMemberNames = pTempMemberNames;
         }
     }
