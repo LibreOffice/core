@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: sb $ $Date: 2002-07-09 08:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <limits>
 
 #pragma hdrstop
 #include <vcl/sound.hxx>
@@ -76,29 +77,27 @@
 #endif
 #include <sfx2/viewfrm.hxx>
 
+// FIXME  Why does BreakPointDialog allow only USHORT for break-point line
+// numbers, whereas BreakPoint supports ULONG?
 
-/**************************
- Soll-Aufbau des Strings:
- # <LineNr>
-**************************/
-
-BOOL lcl_ParseText( String aText, USHORT& rLineNr )
+bool lcl_ParseText( String aText, USHORT& rLineNr )
 {
-    // Blanks ?
-    aText.EraseLeadingChars( ' ' );
-    if ( !aText.Len() )
-        return FALSE;
-    if ( aText.GetChar( 0 ) != '#' )
-        return FALSE;
-    aText.EraseLeadingChars( ' ' );
-    if ( !aText.Len() )
-        return FALSE;
-
-    rLineNr = (USHORT) aText.ToInt32();
-    return TRUE;
+    // aText should look like "# n" where
+    // n > 0 && n < std::numeric_limits< USHORT >::max().
+    // All spaces are ignored, so there can even be spaces within the
+    // number n.  (Maybe it would be better to ignore all whitespace instead
+    // of just spaces.)
+    aText.EraseAllChars(' ');
+    if (aText.GetChar(0) != '#')
+        return false;
+    aText.Erase(0, 1);
+    // XXX Assumes that USHORT is contained within sal_Int32:
+    sal_Int32 n = aText.ToInt32();
+    if (n <= 0 || n > std::numeric_limits< USHORT >::max())
+        return false;
+    rLineNr = static_cast< USHORT >(n);
+    return true;
 }
-
-
 
 BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList ) :
         ModalDialog( pParent, IDEResId( RID_BASICIDE_BREAKPOINTDLG ) ),
