@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measureproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:11:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <svx/sdr/properties/measureproperties.hxx>
 #endif
 
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
@@ -115,12 +119,12 @@ namespace sdr
             return *(new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
-                SDRATTR_START, SDRATTRSET_SHADOW,
-                SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+                SDRATTR_START, SDRATTR_SHADOW_LAST,
+                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // range from SdrMeasureObj
-                SDRATTR_MEASURE_FIRST, SDRATTRSET_MEASURE,
+                SDRATTR_MEASURE_FIRST, SDRATTR_MEASURE_LAST,
 
                 // range from SdrTextObj
                 EE_ITEMS_START, EE_ITEMS_END,
@@ -170,35 +174,35 @@ namespace sdr
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
         }
 
-        void MeasureProperties::PreProcessSave()
-        {
-            // call parent
-            TextProperties::PreProcessSave();
+//BFS01     void MeasureProperties::PreProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         TextProperties::PreProcessSave();
+//BFS01
+//BFS01         // force ItemSet
+//BFS01         GetObjectItemSet();
+//BFS01
+//BFS01         // prepare SetItems for storage
+//BFS01         const SfxItemSet& rSet = *mpItemSet;
+//BFS01         const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
+//BFS01
+//BFS01         SdrMeasureSetItem aMeasAttr(rSet.GetPool());
+//BFS01         aMeasAttr.GetItemSet().Put(rSet);
+//BFS01         aMeasAttr.GetItemSet().SetParent(pParent);
+//BFS01         mpItemSet->Put(aMeasAttr);
+//BFS01     }
 
-            // force ItemSet
-            GetObjectItemSet();
-
-            // prepare SetItems for storage
-            const SfxItemSet& rSet = *mpItemSet;
-            const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
-
-            SdrMeasureSetItem aMeasAttr(rSet.GetPool());
-            aMeasAttr.GetItemSet().Put(rSet);
-            aMeasAttr.GetItemSet().SetParent(pParent);
-            mpItemSet->Put(aMeasAttr);
-        }
-
-        void MeasureProperties::PostProcessSave()
-        {
-            // call parent
-            TextProperties::PostProcessSave();
-
-            // remove SetItems from local itemset
-            if(mpItemSet)
-            {
-                mpItemSet->ClearItem(SDRATTRSET_MEASURE);
-            }
-        }
+//BFS01     void MeasureProperties::PostProcessSave()
+//BFS01     {
+//BFS01         // call parent
+//BFS01         TextProperties::PostProcessSave();
+//BFS01
+//BFS01         // remove SetItems from local itemset
+//BFS01         if(mpItemSet)
+//BFS01         {
+//BFS01             mpItemSet->ClearItem(SDRATTRSET_MEASURE);
+//BFS01         }
+//BFS01     }
 
         void MeasureProperties::ForceDefaultAttributes()
         {
