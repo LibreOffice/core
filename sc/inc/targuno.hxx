@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XLINKTARGETSUPPLIER_HPP_
