@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:27:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ String HelpTextWindow::GetText() const
 
 // -----------------------------------------------------------------------
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > HelpTextWindow::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > HelpTextWindow::CreateAccessible()
 {
     return FloatingWindow::CreateAccessible();
 }
