@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 12:39:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,11 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
-
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc> //CHINA001
+#endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 //............................................................................
 namespace pcr
 {
@@ -301,9 +305,10 @@ namespace pcr
         :SfxTabDialog(_pParent, ModuleRes(RID_TABDLG_FONTDIALOG), &_rCoreSet)
     {
         FreeResource();
-
-        AddTabPage(TABPAGE_CHARACTERS, SvxCharNamePage::Create, 0);
-        AddTabPage(TABPAGE_CHARACTERS_EXT, SvxCharEffectsPage::Create, 0);
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create(); //CHINA001
+        DBG_ASSERT(pFact, "CreateFactory fail!");
+        AddTabPage(TABPAGE_CHARACTERS, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0 );//CHINA001 AddTabPage(TABPAGE_CHARACTERS, SvxCharNamePage::Create, 0);
+        AddTabPage(TABPAGE_CHARACTERS_EXT, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );//CHINA001 AddTabPage(TABPAGE_CHARACTERS_EXT, SvxCharEffectsPage::Create, 0);
     }
 
     //------------------------------------------------------------------------
@@ -685,13 +690,22 @@ namespace pcr
     //------------------------------------------------------------------------
     void ControlCharacterDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         switch ( _nId )
         {
             case TABPAGE_CHARACTERS:
-                static_cast<SvxCharNamePage&>(_rPage).SetFontList(
-                    static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))
-                );
-                static_cast<SvxCharNamePage&>(_rPage).DisableControls( DISABLE_HIDE_LANGUAGE );
+//CHINA001              static_cast<SvxCharNamePage&>(_rPage).SetFontList(
+//CHINA001              static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))
+//CHINA001              );
+//CHINA001              static_cast<SvxCharNamePage&>(_rPage).DisableControls( DISABLE_HIDE_LANGUAGE );
+
+//CHINA001              SvxFontListItem aFontListItem( static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST) ));
+//CHINA001              aSet.Put ( SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+
+//              aSet.Put (SfxUInt16Item(SID_CFID_FONTLIST,CFID_FONTLIST));
+                aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
+                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
+                _rPage.PageCreated(aSet);
                 break;
         }
     }
