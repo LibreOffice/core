@@ -1,0 +1,14 @@
+    <node oor:name="calc8_template" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>calc8_template</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Open Spreadsheet Template</value>
+            <value xml:lang="de">Offene Tabellendokument Vorlage</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN</value></prop>
+    </node>
