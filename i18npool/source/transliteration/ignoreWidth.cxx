@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreWidth.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:04:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #define TRANSLITERATION_halfwidthToFullwidth
 #include <transliteration_OneToOne.hxx>
 
-using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
