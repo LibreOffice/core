@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:16:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,70 +698,85 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     SwTwips nX;
     if ( bTab )
     {
+        //
+        // pStart or pCnt is inside a table. nX will be used for travelling:
+        //
         SwRect aRect( pStart->Frm() );
         pStart->GetCharRect( aRect, *pPam->GetPoint() );
         Point aCenter = aRect.Center();
         nX = bVert ? aCenter.Y() : aCenter.X();
 
-        const SwTabFrm *pTab = pCnt ? pCnt->FindTabFrm() : 0;
-        if ( !pTab )
-            pTab = pStTab;
-        pTable = pTab;
+        pTable = pCnt ? pCnt->FindTabFrm() : 0;
+        if ( !pTable )
+            pTable = pStTab;
 
-        const sal_Bool bRTL = pTable->IsRightToLeft();
-
-        if ( pStTab )
+        if ( pStTab &&
+            !pStTab->GetUpper()->IsInTab() &&
+            !pTable->GetUpper()->IsInTab() )
         {
-            //Der Fluss fuehrt von einer Tabelle in die nachste. Der X-Wert
-            //muss ausgehend von der Mitte der Startzelle um die Verschiebung
-            //der Tabellen korrigiert werden.
             const SwFrm *pCell = pStart->GetUpper();
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
             ASSERT( pCell, "Zelle nicht gefunden." );
             nX =  (pCell->Frm().*fnRect->fnGetLeft)() +
                   (pCell->Frm().*fnRect->fnGetWidth)() / 2;
-            nX += (pTab->Frm().*fnRect->fnGetLeft)() -
-                  (pStTab->Frm().*fnRect->fnGetLeft)();
+
+            //Der Fluss fuehrt von einer Tabelle in die nachste. Der X-Wert
+            //muss ausgehend von der Mitte der Startzelle um die Verschiebung
+            //der Tabellen korrigiert werden.
+            if ( pStTab != pTable )
+            {
+                nX += (pTable->Frm().*fnRect->fnGetLeft)() -
+                      (pStTab->Frm().*fnRect->fnGetLeft)();
+            }
         }
 
         //
         // Restrict nX to the left and right borders of pTab:
         // (is this really necessary?)
         //
-        const long nPrtLeft = bRTL ?
-                              (pTab->*fnRect->fnGetPrtRight)() :
-                              (pTab->*fnRect->fnGetPrtLeft)();
-        if ( bRTL != nX < nPrtLeft )
-            nX = nPrtLeft;
-        else
+        if ( !pTable->GetUpper()->IsInTab() )
         {
-               const long nPrtRight = bRTL ?
-                                   (pTab->*fnRect->fnGetPrtLeft)() :
-                                   (pTab->*fnRect->fnGetPrtRight)();
-            if ( bRTL != nX > nPrtRight )
-                nX = nPrtRight;
+            const sal_Bool bRTL = pTable->IsRightToLeft();
+            const long nPrtLeft = bRTL ?
+                                (pTable->*fnRect->fnGetPrtRight)() :
+                                (pTable->*fnRect->fnGetPrtLeft)();
+            if ( bRTL != nX < nPrtLeft )
+                nX = nPrtLeft;
+            else
+            {
+                   const long nPrtRight = bRTL ?
+                                    (pTable->*fnRect->fnGetPrtLeft)() :
+                                    (pTable->*fnRect->fnGetPrtRight)();
+                if ( bRTL != nX > nPrtRight )
+                    nX = nPrtRight;
+            }
         }
     }
+
     do
     {
         //Wenn ich im DokumentBody bin, so will ich da auch bleiben
         if ( pStart->IsInDocBody() )
+        {
             while ( pCnt && (!pCnt->IsInDocBody() ||
                              (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
             }
+        }
 
         //Wenn ich im Fussnotenbereich bin, so versuche ich notfalls den naechsten
         //Fussnotenbereich zu erreichen.
         else if ( pStart->IsInFtn() )
+        {
             while ( pCnt && !pCnt->IsInFtn() )
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, TRUE, bInReadOnly, bTblSel );
             }
+        }
 
         //In Flys kann es Blind weitergehen solange ein Cntnt
         //gefunden wird.
@@ -804,14 +819,17 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                 else
                 {
                     if ( pTab != pTable )
-                    {   //Der Fluss fuehrt von einer Tabelle in die nachste. Der
+                    {
+                        //Der Fluss fuehrt von einer Tabelle in die nachste. Der
                         //X-Wert muss um die Verschiebung der Tabellen korrigiert
                         //werden.
-                        if ( pTable )
+                         if ( pTable &&
+                              !pTab->GetUpper()->IsInTab() &&
+                            !pTable->GetUpper()->IsInTab() )
                             nX += pTab->Frm().Left() - pTable->Frm().Left();
                         pTable = pTab;
                     }
-                    const SwLayoutFrm *pCell = pTab ? pCnt->GetUpper() : 0;
+                    const SwLayoutFrm *pCell = pTable ? pCnt->GetUpper() : 0;
                     while ( pCell && !pCell->IsCellFrm() )
                         pCell = pCell->GetUpper();
 
@@ -847,7 +865,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                         bEnd = TRUE;
                         //Jetzt noch schnell den richtigen Cntnt in der Zelle
                         //greifen.
-                        if ( ! pCnt->Frm().IsInside( aInsideCnt ) )
+                        if ( !pCnt->Frm().IsInside( aInsideCnt ) )
                         {
                             pCnt = pCell->ContainsCntnt();
                             if ( fnNxtPrv == lcl_GetPrvCnt )
