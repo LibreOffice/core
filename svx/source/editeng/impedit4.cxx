@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-04 16:35:16 $
+ *  last change: $Author: mt $ $Date: 2001-04-19 14:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,10 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     SvxColorItem* pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem( EE_CHAR_COLOR, i );
     while ( pColorItem )
     {
-        aColorList.Insert( new SvxColorItem( *pColorItem ), (sal_uInt32)i );
+        USHORT nPos = i;
+        if ( pColorItem->GetValue() == COL_AUTO )
+            nPos = 0;
+        aColorList.Insert( new SvxColorItem( *pColorItem ), nPos );
         pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem( EE_CHAR_COLOR, ++i );
     }
     aColorList.Insert( new SvxColorItem( (const SvxColorItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_COLOR) ), (sal_uInt32)i );
@@ -466,12 +469,15 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     for ( j = 0; j < aColorList.Count(); j++ )
     {
         pColorItem = aColorList.GetObject( j );
-        rOutput << sRTF_RED;
-        rOutput.WriteNumber( pColorItem->GetValue().GetRed() );
-        rOutput << sRTF_GREEN;
-        rOutput.WriteNumber( pColorItem->GetValue().GetGreen() );
-        rOutput << sRTF_BLUE;
-        rOutput.WriteNumber( pColorItem->GetValue().GetBlue() );
+        if ( !j || ( pColorItem->GetValue() != COL_AUTO ) )
+        {
+            rOutput << sRTF_RED;
+            rOutput.WriteNumber( pColorItem->GetValue().GetRed() );
+            rOutput << sRTF_GREEN;
+            rOutput.WriteNumber( pColorItem->GetValue().GetGreen() );
+            rOutput << sRTF_BLUE;
+            rOutput.WriteNumber( pColorItem->GetValue().GetBlue() );
+        }
         rOutput << ';';
     }
     rOutput << '}';
