@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:57:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,10 +205,6 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
