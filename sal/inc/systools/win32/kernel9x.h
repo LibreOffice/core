@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+ *  last change: $Author: hro $ $Date: 2000-09-27 09:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@ extern "C" {
 #   undef CreateFileW
 #endif
 
+#ifdef RemoveDirectoryW
+#   undef RemoveDirectoryW
+#endif
+
 //BOOL WINAPI RegisterServiceProcess( DWORD dwProcessID, BOOL fRegister );
 
 extern HMODULE (WINAPI *lpfnLoadLibraryExW) (
@@ -178,6 +182,10 @@ extern HANDLE (WINAPI *lpfnCreateFileW) (
     HANDLE  hTemplateFile
 );
 
+extern BOOL (WINAPI *lpfnRemoveDirectoryW) (
+    LPCWSTR lpPathName          // directory name
+);
+
 #ifdef UNICODE
 #define GetCanonicalPath    GetCanonicalPathW
 #else
@@ -194,6 +202,7 @@ extern HANDLE (WINAPI *lpfnCreateFileW) (
 #define MoveFileW                   lpfnMoveFileW
 #define MoveFileExW                 lpfnMoveFileExW
 #define CreateFileW                 lpfnCreateFileW
+#define RemoveDirectoryW            lpfnRemoveDirectoryW
 
 extern void Kernel9xInit(LPOSVERSIONINFO lpVersionInfo);
 extern void Kernel9xDeInit();
