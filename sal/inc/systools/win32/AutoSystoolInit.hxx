@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AutoSystoolInit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2000-11-22 13:39:52 $
+ *  last change: $Author: tra $ $Date: 2000-12-11 16:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,18 @@ class OAutoSystoolInit
     typedef void ( WINAPI *LPFNDEINIT_T )( );
 
 public:
-    OAutoSystoolInit( LPFNINIT_T lpfnInit, LPFNDEINIT_T lpfnDeInit );
-    ~OAutoSystoolInit( );
+    OAutoSystoolInit( LPFNINIT_T lpfnInit, LPFNDEINIT_T lpfnDeInit ) :
+        m_lpfnDeInit( lpfnDeInit )
+    {
+        if ( NULL != lpfnInit )
+            lpfnInit( );
+    }
+
+    ~OAutoSystoolInit( )
+    {
+        if ( NULL != m_lpfnDeInit )
+            m_lpfnDeInit( );
+    }
 
 private:
     LPFNDEINIT_T m_lpfnDeInit; // address of the deinit function

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell9x.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2000-11-22 13:55:24 $
+ *  last change: $Author: tra $ $Date: 2000-12-11 16:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,21 +96,7 @@ extern "C"{
 // else sal exports the function pointers from a dll and we use __declspec
 //------------------------------------------------------------------------
 
-#if defined(SAL_EXPORT_SYSTOOLS) || defined(USE_SAL_STATIC)
-    #define SHELL9X_API extern
-#else
-    #define SHELL9X_API __declspec( dllimport )
-#endif
-
-//------------------------------------------------------------------------
-// the Shell9xInit and Shell9xDeInit functions will be used only by
-// sal itself and will not be exported
-//------------------------------------------------------------------------
-
-#if defined(SAL_EXPORT_SYSTOOLS)
-    extern void WINAPI Shell9xInit( );
-    extern void WINAPI Shell9xDeInit( );
-#endif
+#define SHELL9X_API extern
 
 //------------------------------------------------------------------------
 // declare function pointers to the appropriate shell functions
