@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.46 $
- *  last change: $Author: hdu $ $Date: 2001-06-12 10:34:23 $
+ *  $Revision: 1.47 $
+ *  last change: $Author: hdu $ $Date: 2001-06-22 12:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,6 +443,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
     if( nSin != 0 && nCos != 0 )        // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
+        mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
 #if (FTVERSION < 203) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
