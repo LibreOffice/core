@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:04:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1453,7 +1453,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             if ( pWork && pWork->ISA(AppBasEd) && ((AppBasEd*)pWork)->GetModule()->SetBP(pWork->GetLineNr()) )
             {
                 SbModule *pModule = ((AppBasEd*)pWork)->GetModule();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 USHORT x;
                 x = pWork->GetLineNr();
                 x = ((AppBasEd*)pWork)->GetModule()->GetBPCount();
