@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-26 21:58:59 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:38:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,9 +66,7 @@ TARGET=setup
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- setup script -------------------------------------------------------
 # SCPFLAGS= -w
