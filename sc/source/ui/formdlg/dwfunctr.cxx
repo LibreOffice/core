@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:54:44 $
+ *  last change: $Author: nn $ $Date: 2001-11-28 20:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1171,15 +1171,17 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
     if ( aStr.Len())
     {
         aSplitterInitPos=aPrivatSplit.GetPosPixel();
-
         aSplitterInitPos.Y()=(USHORT) aStr.ToInt32();
         xub_StrLen n1 = aStr.Search(';');
         aStr.Erase(0, n1+1);
         USHORT nSelPos=aStr.ToInt32();
         aCatBox.SelectEntryPos(nSelPos);
         SelHdl(&aCatBox);
-        StateChanged(STATE_CHANGE_VISIBLE);
 
+        //  if the window has already been shown (from SfxDockingWindow::Initialize if docked),
+        //  set the splitter position now, otherwise it is set in StateChanged with type INITSHOW
+
+        UseSplitterInitPos();
     }
 }
 
@@ -1196,17 +1198,22 @@ void ScFunctionDockWin::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aExtraString += ')';
 }
 
+void ScFunctionDockWin::UseSplitterInitPos()
+{
+    if ( IsVisible() && aPrivatSplit.IsEnabled() && aSplitterInitPos != Point() )
+    {
+        aPrivatSplit.MoveSplitTo(aSplitterInitPos);
+        aSplitterInitPos = Point();     // use only once
+    }
+}
+
 void ScFunctionDockWin::StateChanged( StateChangedType nStateChange )
 {
     SfxDockingWindow::StateChanged( nStateChange );
 
-    if(nStateChange == STATE_CHANGE_VISIBLE)
+    if (nStateChange == STATE_CHANGE_INITSHOW)
     {
-        if(IsVisible() && aPrivatSplit.IsEnabled() &&
-            aSplitterInitPos != Point())
-        {
-            aPrivatSplit.MoveSplitTo(aSplitterInitPos);
-        }
+        UseSplitterInitPos();           //  set initial splitter position if necessary
     }
 }
 
