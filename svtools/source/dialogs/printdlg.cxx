@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-15 13:02:32 $
+ *  last change: $Author: pl $ $Date: 2001-06-12 08:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@
 
 PrintDialog::PrintDialog( Window* pWindow ) :
     ModalDialog     ( pWindow, SvtResId( DLG_SVT_PRNDLG_PRINTDLG ) ),
-    maGrpPrinter    ( this, SvtResId( GRP_PRINTER ) ),
+    maFlPrinter     ( this, SvtResId( FL_PRINTER ) ),
     maFtName        ( this, SvtResId( FT_NAME ) ),
     maLbName        ( this, SvtResId( LB_NAMES ) ),
     maBtnProperties ( this, SvtResId( BTN_PROPERTIES ) ),
@@ -107,12 +107,12 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maCbxFilePrint  ( this, SvtResId( CBX_FILEPRINT ) ),
     maFiPrintFile   ( this, SvtResId( FI_PRINTFILE ) ),
     maBtnBrowse     ( this, SvtResId( BTN_BROWSE ) ),
-    maGrpPrintRange ( this, SvtResId( GRP_PRINTRANGE ) ),
+    maFlPrintRange  ( this, SvtResId( FL_PRINTRANGE ) ),
     maRbtAll        ( this, SvtResId( RBT_ALL ) ),
     maRbtPages      ( this, SvtResId( RBT_PAGES ) ),
     maRbtSelection  ( this, SvtResId( RBT_SELECTION ) ),
     maEdtPages      ( this, SvtResId( EDT_PAGES ) ),
-    maGrpCopies     ( this, SvtResId( GRP_COPIES ) ),
+    maFlCopies      ( this, SvtResId( FL_COPIES ) ),
     maFtCopies      ( this, SvtResId( FT_COPIES ) ),
     maNumCopies     ( this, SvtResId( NUM_COPIES ) ),
     maImgCollate    ( this, SvtResId( IMG_COLLATE ) ),
@@ -123,7 +123,9 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maBtnOK         ( this, SvtResId( BTN_OK ) ),
     maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
     maFiFaxNo       ( this, SvtResId( FI_FAXNO ) ),
-    maEdtFaxNo      ( this, SvtResId( EDT_FAXNO ) )
+    maEdtFaxNo      ( this, SvtResId( EDT_FAXNO ) ),
+    maFlSepCopiesRange( this, SvtResId( FL_SEPCOPIESRANGE ) ),
+    maFlSepButtonLine( this, SvtResId( FL_SEPBUTTONLINE ) )
 {
     FreeResource();
 

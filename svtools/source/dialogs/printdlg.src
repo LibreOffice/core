@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 21:45:28 $
+ *  last change: $Author: pl $ $Date: 2001-06-12 08:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text [ french ] = "Impression" ;
     Text [ dutch ] = "Afdrukken" ;
     Text [ portuguese ] = "Imprimir" ;
-    GroupBox GRP_PRINTER
+    FixedLine FL_PRINTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 90 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Drucker" ;
         Text [ ENGLISH ] = "Printer" ;
         Text [ english_us ] = "Printer" ;
@@ -378,10 +378,10 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~..." ;
     };
-    GroupBox GRP_PRINTRANGE
+    FixedLine FL_PRINTRANGE
     {
         Pos = MAP_APPFONT ( 6 , 96 ) ;
-        Size = MAP_APPFONT ( 117 , 47 ) ;
+        Size = MAP_APPFONT ( 117 , 8 ) ;
         Text = "Druckbereich" ;
         Text [ ENGLISH ] = "Print range" ;
         Text [ english_us ] = "Print range" ;
@@ -496,10 +496,21 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Pos = MAP_APPFONT ( 60 , 116 ) ;
         Size = MAP_APPFONT ( 57 , 12 ) ;
     };
-    GroupBox GRP_COPIES
+    FixedLine FL_SEPCOPIESRANGE
+    {
+        Pos = MAP_APPFONT( 126, 105 );
+        Size = MAP_APPFONT( 1, 35 );
+        Vert = TRUE;
+    };
+    FixedLine FL_SEPBUTTONLINE
+    {
+        Pos = MAP_APPFONT( 0, 140 );
+        Size = MAP_APPFONT( 260, 8 );
+    };
+    FixedLine FL_COPIES
     {
         Pos = MAP_APPFONT ( 129 , 96 ) ;
-        Size = MAP_APPFONT ( 125 , 47 ) ;
+        Size = MAP_APPFONT ( 125 , 8 ) ;
         Text = "Kopien" ;
         Text [ ENGLISH ] = "Copies" ;
         Text [ english_us ] = "Copies" ;
