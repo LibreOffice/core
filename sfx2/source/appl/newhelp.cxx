@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-28 15:20:12 $
+ *  last change: $Author: mba $ $Date: 2001-10-01 09:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1638,7 +1638,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     aToolBox        ( this, 0 ),
     pHelpWin        ( pParent ),
-    pTextWin        ( new Window( this, 0 ) ),
+    pTextWin        ( new DockingWindow( this, 0 ) ),
     bIsDebug        ( sal_False ),
     bIsInClose      ( sal_False ),
     aIndexOnText    ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
