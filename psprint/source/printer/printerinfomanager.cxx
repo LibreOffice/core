@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:56:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1241,7 +1241,8 @@ void SystemQueueInfo::run()
 {
     char pBuffer[1024];
     ByteString aPrtQueueCmd, aForeToken, aAftToken, aString;
-    int nForeTokenCount, i;
+    int nForeTokenCount = 0;
+    int i;
     FILE *pPipe;
     bool bSuccess = false;
     std::list< ByteString > aLines;
