@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emptylayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-11-29 14:06:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef CONFIGMGR_BACKEND_EMPTYLAYER_HXX
 #define CONFIGMGR_BACKEND_EMPTYLAYER_HXX
 
-#include <drafts/com/sun/star/configuration/backend/XLayer.hpp>
+#include <com/sun/star/configuration/backend/XLayer.hpp>
 
 // -----------------------------------------------------------------------------
 namespace configmgr
@@ -72,7 +72,7 @@ namespace configmgr
     {
         // -----------------------------------------------------------------------------
         namespace uno           = ::com::sun::star::uno;
-        namespace backenduno    = drafts::com::sun::star::configuration::backend;
+        namespace backenduno    = ::com::sun::star::configuration::backend;
 
         // -----------------------------------------------------------------------------
         uno::Reference< backenduno::XLayer > createEmptyLayer();
