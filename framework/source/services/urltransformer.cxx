@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-15 06:09:35 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,9 +474,8 @@ OUString SAL_CALL URLTransformer::getPresentation(  const   URL&        aURL    
         }
 
         // Convert internal URLs to "praesentation"-URLs!
-        UniString   sPraesentationURL;
-        UniString   sURL = aTestURL.Complete;
-        INetURLObject::translateToExternal( sURL, sPraesentationURL, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
+        rtl::OUString sPraesentationURL;
+        INetURLObject::translateToExternal( aTestURL.Complete, sPraesentationURL, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
 
         return sPraesentationURL;
     }
