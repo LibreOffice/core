@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup_help.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 12:40:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #ifdef UNICODE
 #else
- #define SetupDlgProcX   SetupDlgProcA
  #define LanguageDataX   LanguageDataA
 #endif
 
