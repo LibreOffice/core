@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-09 04:33:56 $
+ *  last change: $Author: mfe $ $Date: 2001-03-09 10:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,14 +291,6 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
     if (hModule)
     {
 #ifndef NO_DL_FUNCTIONS
-/* mfe : isn't needed anymore, is it? */
-#ifndef GCC
-        /*  gcc (2.9.1 (egcs), 295) registers atexit handlers for
-         *  static destructors which obviously cannot
-         *  be called after dlclose. A compiler "feature". The workaround for now
-         *  is not to dlclose libraries. Since most of them are closed at shutdown
-         *  this does not make that much a difference
-         */
         int nRet = 0;
 
         nRet = dlclose(hModule);
@@ -308,8 +300,6 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
             fprintf( stderr, "osl_getsymbol: cannot close lib for reason: %s\n", dlerror() );
         }
 #endif /* if DEBUG */
-
-#endif /* ifndef GCC */
 #endif /* ifndef NO_DL_FUNCTIONS */
     }
 
