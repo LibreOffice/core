@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2001-04-19 16:20:05 $
+#   last change: $Author: hr $ $Date: 2001-04-25 13:26:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 
 #
-# deliver - copy from module output tree to solver
+# deliver.pl - copy from module output tree to solver
 #
 
 use Cwd;
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.3 $ ';
+$id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -92,7 +92,6 @@ print "$script_name -- version: $script_rev\n";
                         'copy',
                         'dos',
                         'hedabu',
-                        'ln',
                         'mkdir',
                         'touch'
                         );
@@ -102,10 +101,11 @@ $is_debug           = 0;
 $module             = 0;            # module name
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
-$dir_mode           = 0755;         # default directory creation mode
+$umask              = 22;           # default file/directory creation mask
 
 @action_data        = ();           # LoL with all action data
 @macros             = ();           # d.lst macros
+@hedabu_list        = ();           # files which have to be filtered through hedabu
 
 $files_copied       = 0;            # statistics
 $files_unchanged    = 0;            # statistics
@@ -126,6 +126,7 @@ init_globals();
 push_default_actions();
 parse_dlst();
 walk_action_data();
+walk_hedabu_list();
 print_stats();
 
 exit(0);
@@ -137,37 +138,44 @@ sub do_copy {
     # and once from the common output tree, in this order
     my ($dependent, $common, $from, $to, $file_list);
     my $line = shift;
+    my $touch = 0;
 
     $dependent = expand_macros($line);
     ($from, $to) = split(' ', $dependent);
     print "copy dependant: from: $from, to: $to\n" if $is_debug;
-    glob_and_copy($from, $to);
+    glob_and_copy($from, $to, $touch);
 
     $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
     $common = expand_macros($line);
     ($from, $to) = split(' ', $common);
     print "copy common: from: $from, to: $to\n" if $is_debug;
-    glob_and_copy($from, $to);
+    glob_and_copy($from, $to, $touch);
 }
 
 sub do_dos {
     my $line = shift;
-    # no macro expansion, no slash conversion
+
+    expand_macros($line);
     if ( $opt_check ) {
         print "DOS: $line\n";
     }
     else {
+        $line =~ s#/#\\#g if $^O eq 'MSWin32';
         system($line);
     }
 }
 
 sub do_hedabu {
-#   do_copy(shift);
-    print_error("action 'hedabu' not yet implemented");
-}
+    # just collect all hedabu files, actual filtering is done later
+    my ($from, $to);
+    my $line = shift;
 
-sub do_ln {
-    print_error("action 'ln' not yet implemented");
+    $line = expand_macros($line);
+    if ( $line =~ /[\*\?\[\]]/ ) {
+        print_error("can't use wildcards with hedabu: $line", 0, 0);
+    }
+    ($from, $to) = split(' ', $line);
+    push( @hedabu_list, [ $from, $to ]);
 }
 
 sub do_mkdir {
@@ -176,14 +184,19 @@ sub do_mkdir {
         print "MKDIR: $path\n";
     }
     else {
-        mkpath($path, 0, $dir_mode);
+        mkpath($path, 0, 0777-$umask);
     }
 }
 
 sub do_touch {
+    my ($from, $to);
     my $line = shift;
+    my $touch = 1;
 
-    print_error("action 'touch' not yet implemented");
+    $line = expand_macros($line);
+    ($from, $to) = split(' ', $line);
+    print "touch: $from, to: $to\n" if $is_debug;
+    glob_and_copy($from, $to, $touch);
 }
 
 #### subroutines #####
@@ -201,13 +214,13 @@ sub parse_options {
 
 sub init_globals {
     my ($dllsuffix, $gui, $inpath, $offenv, $outpath, $solarversion, $updminor);
-    my ($ext, $umask);
+    my $ext;
     ($module, $base_dir, $dlst_file) =  get_base();
     print "Module=$module, Base_Diri=$base_dir, d.lst=$dlst_file\n" if $is_debug;
 
     $umask = umask();
-    if ( defined($umask) ) {
-        $dir_mode = 0777 - $umask;
+    if ( !defined($umask) ) {
+        $umask = 22;
     }
 
     $common_outdir  = $ENV{COMMON_OUTDIR};
@@ -217,13 +230,13 @@ sub init_globals {
     $offenv         = $ENV{OFFENV_PATH};
     $outpath        = $ENV{OUTPATH};
     $solarversion   = $ENV{SOLARVERSION};
-    $updminor       = $ENV{UPDMINOR} ? $ENV{UPDMINOR} : $ENV{DMAKE_MINOR};
+    $updminor       = $ENV{UPDMINOR};
 
     # product build?
     $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
 
     $ext = "";
-    if ( $opt_minor ) {
+    if ( $opt_minor || $updminor ) {
         if ( $updminor ) {
             $ext = ".$updminor";
         }
@@ -336,6 +349,7 @@ sub walk_action_data {
 sub glob_and_copy {
     my $from = shift;
     my $to = shift;
+    my $touch = shift;
     my $to_dir;
     my $replace = 0;
 
@@ -355,12 +369,14 @@ sub glob_and_copy {
         foreach $file ( @file_list ) {
             my ($fname, $dir) = fileparse($file);
             my $copy = ($replace) ? $to_dir . $fname : $to . '/' . $fname;
-            copy_if_newer($file, $copy) ? $files_copied++ : $files_unchanged++;
+            copy_if_newer($file, $copy, $touch)
+                    ? $files_copied++ : $files_unchanged++;
         }
     }
     else {
         # no globbing but renaming possible
-        copy_if_newer($from, $to) ? $files_copied++ : $files_unchanged++;
+        copy_if_newer($from, $to, $touch)
+                    ? $files_copied++ : $files_unchanged++;
     }
 }
 
@@ -369,19 +385,27 @@ sub copy_if_newer {
     # return 1 if file has been copied
     my $from = shift;
     my $to = shift;
-    my $new_time;
+    my $touch = shift;
+    my $from_stat_ref;
 
     print "testing $from, $to\n" if $is_debug;
-    return 0 unless ($new_time = is_newer($from, $to));
+    return 0 unless ($from_stat_ref = is_newer($from, $to, $touch));
 
-    print "COPY: $from -> $to\n";
+    if ( $touch ) {
+        print "TOUCH: $from -> $to\n";
+    }
+    else {
+        print "COPY: $from -> $to\n";
+    }
+
     if ( $opt_check ) {
         return 1;
     }
     else {
         my $rc = copy($from, $to);
         if ( $rc) {
-            utime($new_time, $new_time, $to);
+            utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
+            fix_file_permissions($$from_stat_ref[2], $to);
             return 1;
         }
         else {
@@ -391,14 +415,18 @@ sub copy_if_newer {
 }
 
 sub is_newer {
-        # returns new time if newer or zero if older
+        # returns whole stat buffer if newer
         my $from = shift;
         my $to = shift;
+        my $touch = shift;
         my (@from_stat, @to_stat);
 
         @from_stat = stat($from);
         return 0 unless -f _;
 
+        if ( $touch ) {
+            $from_stat[9] = time();
+        }
         # adjust timestamps to even seconds
         # this is necessary since NT platforms have a
         # 2s modified time granularity while the timestamps
@@ -407,14 +435,27 @@ sub is_newer {
         $from_stat[9]-- if $from_stat[9] % 2;
 
         @to_stat = stat($to);
-        return $from_stat[9] unless -f _;
+        return \@from_stat unless -f _;
 
         if ( $opt_force ) {
-            return $from_stat[9];
+            return \@from_stat;
         }
         else {
-            return ($from_stat[9] > $to_stat[9]) ? $from_stat[9] : 0;
+            return ($from_stat[9] > $to_stat[9]) ? \@from_stat : 0;
         }
+}
+
+sub fix_file_permissions {
+    my $mode = shift;
+    my $file = shift;
+
+    if ( $mode%2 == 1 ) {
+        $mode = 0777 - $umask;
+    }
+    else {
+        $mode = 0666 - $umask;
+    }
+    chmod($mode, $file);
 }
 
 sub push_default_actions {
@@ -438,6 +479,75 @@ sub push_default_actions {
         push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
     }
 }
+
+sub walk_hedabu_list {
+    my ($i, @hedabu_headers);
+    return if $#hedabu_list == -1;
+
+    # create hash with all hedabu header names
+    for ($i = 0; $i <= $#hedabu_list; $i++) {
+        my @field = split('/', $hedabu_list[$i][0]);
+        push (@hedabu_headers, $field[-1]);
+    }
+
+    # now stream all hedabu headers through hedabu filter
+    for ($i = 0; $i <= $#hedabu_list; $i++) {
+        hedabu_if_newer($hedabu_list[$i][0], $hedabu_list[$i][1], \@hedabu_headers)
+                ? $files_copied++ : $files_unchanged++;
+    }
+}
+
+sub hedabu_if_newer {
+    my $from = shift;
+    my $to = shift;
+    my $hedabu_headers_ref = shift;
+    my ($from_stat_ref, $header);
+
+    if ( $from_stat_ref = is_newer($from, $to) ) {
+        print "HEDABU: $from -> $to\n";
+
+        return 1 if $opt_check;
+
+        my $save = $/;
+        undef $/;
+        open(FROM, "<$from");
+        # slurp whole file in one big string
+        my $content = <FROM>;
+        close(FROM);
+        $/ = $save;
+
+        # strip any carriage returns
+        $content =~ tr/\r//d;
+$^W=0;  # Win32 perl issues undefined warning on next regexp ($2)
+        # strip C and C++ comments, to bad I didn't invent this regexp :-)
+        # see perlfaq6 "How do I use a regular expression to strip C style comments from a file?"
+        $content =~ s#/\*[^*]*\*+([^/*][^*]*\*+)*/|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)#$2#gs;
+$^W=1;
+        # squeeze lines with white space only
+        $content =~ s/\n\s+\n/\n\n/sg;
+        # squeeze multiple blank lines
+        $content =~ s/\n{3,}/\n\n/sg;
+        # squeeze leading spaces into tabs
+        $content =~ s/^\s{4}/\t/mg;
+
+        foreach $header (@$hedabu_headers_ref) {
+            $content =~ s/#include [<"]$header[>"]/#include <$module\/$header>/g;
+        }
+
+        # __SOLAR_PRIVATE hack
+        $content =~ s/#if _SOLAR__PRIVATE/#if 0 \/\/ _SOLAR__PRIVATE/g;
+
+        open(TO, ">$to");
+        print TO $content;
+        close(TO);
+
+        utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
+        fix_file_permissions($$from_stat_ref[2], $to);
+        return 1;
+    }
+    return 0;
+}
+
 
 sub print_error {
     my $message = shift;
