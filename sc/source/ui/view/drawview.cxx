@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-06 14:48:34 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 08:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include "client.hxx"
 #include "scmod.hxx"
 #include "drwlayer.hxx"
+#include "docsh.hxx"
 
 #include "sc.hrc"
 
@@ -349,6 +350,8 @@ void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
         }
 
         //  Paint passiert beim SetLayer
+
+        pViewData->GetDocShell()->SetDrawModified();
 
         //  #84073# check mark list now instead of later in a timer
         CheckMarked();
