@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:56:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,9 @@ TYPEINIT1(SwAnchoredDrawObject,SwAnchoredObject);
 SwAnchoredDrawObject::SwAnchoredDrawObject() :
     SwAnchoredObject(),
     mbValidPos( false ),
-    maLastObjRect(),
+    // --> OD 2004-09-29 #i34748#
+    mpLastObjRect( 0L ),
+    // <--
     mbNotYetAttachedToAnchorFrame( true ),
     // --> OD 2004-08-09 #i28749#
     mbNotYetPositioned( true )
@@ -306,14 +308,20 @@ void SwAnchoredDrawObject::MakeObjPos()
 
     // --> OD 2004-08-09 #i28749# - if anchored drawing object hasn't been yet
     // positioned, convert its positioning attributes, if its positioning
-    // attributes are given in horizontal left-to-right layout
+    // attributes are given in horizontal left-to-right layout.
+    // --> OD 2004-10-25 #i36010# - Note: horizontal left-to-right layout is made
+    // the default layout direction for <SwDrawFrmFmt> instances. Thus, it has
+    // to be adjusted manually, if no adjustment of the positioning attributes
+    // have to be performed here.
     if ( mbNotYetPositioned )
     {
         mbNotYetPositioned = false;
         if ( GetFrmFmt().GetPositionLayoutDir() ==
                     com::sun::star::text::PositionLayoutDir::PositionInHoriL2R )
         {
-            _ConvertPositioningAttr();
+            // --> OD 2004-10-19 #i35798# - set positioning attributes
+            _SetPositioningAttr();
+            // <--
         }
     }
     // <--
@@ -358,7 +366,9 @@ void SwAnchoredDrawObject::MakeObjPos()
     }
 
     // keep, current object rectangle
-    LastObjRect() = GetObjRect().SVRect();
+    // --> OD 2004-09-29 #i34748# - use new method <SetLastObjRect(..)>
+    SetLastObjRect( GetObjRect().SVRect() );
+    // <--
 
     // Assure for 'master' drawing object, that it's registered at the correct page.
     // Perform check not for as-character anchored drawing objects and only if
@@ -634,15 +644,24 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
     GetFrmFmt().SetAttr( SwFmtVertOrient( nVertRelPos, VERT_NONE, FRAME ) );
 }
 
-const Rectangle& SwAnchoredDrawObject::GetLastObjRect() const
+// --> OD 2004-09-29 #i34748# - change return type
+const Rectangle* SwAnchoredDrawObject::GetLastObjRect() const
 {
-    return maLastObjRect;
+    return mpLastObjRect;
 }
+// <--
 
-Rectangle& SwAnchoredDrawObject::LastObjRect()
+// --> OD 2004-09-29 #i34748# - change return type.
+// If member <mpLastObjRect> is NULL, create one.
+void SwAnchoredDrawObject::SetLastObjRect( const Rectangle& _rNewLastRect )
 {
-    return maLastObjRect;
+    if ( !mpLastObjRect )
+    {
+        mpLastObjRect = new Rectangle;
+    }
+    *(mpLastObjRect) = _rNewLastRect;
 }
+// <--
 
 void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
 {
@@ -656,7 +675,18 @@ void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
     }
 }
 
-void SwAnchoredDrawObject::_ConvertPositioningAttr()
+/** method to set positioning attributes (not for as-character anchored)
+
+    OD 2004-10-20 #i35798#
+    During load the positioning attributes aren't set.
+    Thus, the positioning attributes are set by the current object geometry.
+    This method is also used for the conversion for drawing objects
+    (not anchored as-character) imported from OpenOffice.org file format
+    once and directly before the first positioning.
+
+    @author OD
+*/
+void SwAnchoredDrawObject::_SetPositioningAttr()
 {
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(GetUserCall( GetDrawObj() ));
@@ -689,7 +719,7 @@ void SwAnchoredDrawObject::_ConvertPositioningAttr()
             default:
             {
                 ASSERT( false,
-                        "<SwAnchoredDrawObject::_ConvertPositioningAttr()> - unsupported layout direction" );
+                        "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
             }
         }
 
@@ -707,6 +737,11 @@ void SwAnchoredDrawObject::_ConvertPositioningAttr()
         GetFrmFmt().SetAttr( SwFmtVertOrient( nVertPos,
                                               rVert.GetVertOrient(),
                                               rVert.GetRelationOrient() ) );
+
+        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        GetFrmFmt().SetPositionLayoutDir(
+            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+        // <--
     }
 }
 
