@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 09:19:47 $
+ *  last change: $Author: ab $ $Date: 2001-05-31 15:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 
                 SbxDataType eSbxElementType = unoToSbxType( aElementType.getTypeClass() );
                 xArray = new SbxDimArray( eSbxElementType );
-                xArray->unoAddDim( 0, 1 );
+                xArray->unoAddDim( 0, -1 );
             }
 
             // Array zurueckliefern
