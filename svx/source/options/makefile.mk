@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: pb $ $Date: 2001-06-26 07:52:33 $
+#   last change: $Author: os $ $Date: 2002-04-02 07:16:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,8 +91,10 @@ CFLAGS+=-DDG_DLL
 
 CXXFILES = \
         asiancfg.cxx		\
+        colorcfg.cxx        \
         optasian.cxx		\
-        optpath.cxx		\
+        optcolor.cxx        \
+        optpath.cxx     \
         optdict.cxx		\
         optitems.cxx	\
         optgenrl.cxx	\
@@ -109,7 +111,8 @@ CXXFILES = \
 
 SRCFILES =  \
         optasian.src	\
-        optjsearch.src	\
+        optcolor.src    \
+        optjsearch.src  \
         optgenrl.src	\
         optdict.src		\
         optsave.src		\
@@ -122,8 +125,10 @@ SRCFILES =  \
 
 SLOFILES=	\
         $(SLO)$/asiancfg.obj	\
-        $(SLO)$/optasian.obj	\
-        $(SLO)$/optjsearch.obj	\
+        $(SLO)$/colorcfg.obj    \
+        $(SLO)$/optasian.obj    \
+        $(SLO)$/optcolor.obj    \
+        $(SLO)$/optjsearch.obj  \
         $(SLO)$/optpath.obj	\
         $(SLO)$/optdict.obj	\
         $(SLO)$/optitems.obj	\
