@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageSelector.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:57:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SD_SLIDESORTER_PAGE_SELECTOR_HXX
 #define SD_SLIDESORTER_PAGE_SELECTOR_HXX
 
@@ -127,6 +126,7 @@ public:
         given descriptor.  Its selection is not modified.
     */
     void SetCurrentPage (model::PageDescriptor& rDescriptor);
+    void SetCurrentPage (const SdPage* pPage);
     void SetCurrentPage (int nPageIndex);
 
     /** This convenience method returns the same number of pages that
