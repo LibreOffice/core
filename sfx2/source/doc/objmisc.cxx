@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 16:29:22 $
+ *  last change: $Author: pb $ $Date: 2000-10-26 16:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,19 +707,21 @@ String SfxObjectShell::GetTitle
     {
         String aName( aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName() );
 
-//        if ( nMaxLength > SFX_TITLE_MAXLEN )
-//            return X( DirEntry( aName ).GetFull( FSYS_STYLE_HOST, sal_False, nMaxLength ) );
-      /*  else*/ if ( nMaxLength == SFX_TITLE_FULLNAME )
+//      if ( nMaxLength > SFX_TITLE_MAXLEN )
+//          return X( DirEntry( aName ).GetFull( FSYS_STYLE_HOST, sal_False, nMaxLength ) );
+//      else
+        if ( nMaxLength == SFX_TITLE_FULLNAME )
             return X( aName );
 
         if ( !pImp->aTitle.Len() )
         {
-            INetURLObject aPath( aName, INET_PROT_FILE );
             if ( nMaxLength == SFX_TITLE_FILENAME )
-                return X( aPath.GetName() );
+                return X( aURL.getName( INetURLObject::LAST_SEGMENT,
+                                        true, INetURLObject::DECODE_WITH_CHARSET ) );
 
             // sonst Titel aus Dateiname generieren
-            pImp->aTitle = aPath.GetBase();
+            pImp->aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT,
+                                         true, INetURLObject::DECODE_WITH_CHARSET );
         }
     }
     else
