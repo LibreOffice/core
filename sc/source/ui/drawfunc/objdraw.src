@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 18:27:42 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,6 +1127,24 @@ String RID_GRAPHIC_OBJECTBAR
 {
     Text = "Grafikobjektleiste" ;
     Text [ ENGLISH ] = "Toolbar for graphic objects" ;
+    Text[ english_us ] = "Graphics Object Bar";
+    Text[ portuguese ] = "Toolbar for graphic objects";
+    Text[ russian ] = "Toolbar for graphic objects";
+    Text[ greek ] = "ÃñáììÞ åñãáëåßùí ãéá áíôéêåßìåíá ãñáöéêþí";
+    Text[ dutch ] = "Toolbar for graphic objects";
+    Text[ french ] = "Barre d'objets graphiques";
+    Text[ spanish ] = "Barra de objetos gráficos";
+    Text[ italian ] = "Toolbar for graphic objects";
+    Text[ danish ] = "Toolbar for graphic objects";
+    Text[ swedish ] = "Grafikobjektlist";
+    Text[ polish ] = "Pasek obiektów graficznych";
+    Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
+    Text[ japanese ] = "Toolbar for graphic objects";
+    Text[ korean ] = "Toolbar for graphic objects";
+    Text[ chinese_simplified ] = "Í¼ÐÎ¶ÔÏóÀ¸";
+    Text[ chinese_traditional ] = "¹Ï¤ùª«¥ó¦C";
+    Text[ turkish ] = "Toolbar for graphic objects";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
 {
@@ -1350,7 +1368,7 @@ String RID_POPUP_DRAW
     Text [ italian ] = "Barra degli strumenti per disegnare gli oggetti" ;
     Text [ portuguese_brazilian ] = "Barra de Ferramentas para desenhar objetos" ;
     Text [ portuguese ] = "Menu instantâneo para objectos de desenho" ;
-    Text [ french ] = "Menu Pop-Up pour les objets de dessin" ;
+    Text [ french ] = "Menu Pop-up pour les objets de dessin" ;
     Text [ dutch ] = "PopUp-menu voor tekenobjecten" ;
     Text [ spanish ] = "Menú emergente para objetos de dibujo" ;
     Text [ danish ] = "Popup-menu for tegneobjekter" ;
@@ -1540,7 +1558,7 @@ String RID_POPUP_DRAWTEXT
     Text [ english_us ] = "Pop-up menu for text objects" ;
     Text [ italian ] = "Menu popup per gli oggetti di testo" ;
     Text [ spanish ] = "Menú emergente para objetos de texto" ;
-    Text [ french ] = "Menu Pop-Up pour les objets de texte" ;
+    Text [ french ] = "Menu Pop-up pour les objets de texte" ;
     Text [ dutch ] = "PopUp-menu voor tekstobjecten" ;
     Text [ swedish ] = "Popup-meny för textobjekt" ;
     Text [ danish ] = "Popup-menu for tekstobjekter" ;
