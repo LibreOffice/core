@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:24:46 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
+#endif
+
+#ifndef SC_ADDINCOL_HXX
+#include "addincol.hxx"
 #endif
 
 #ifndef SC_XELINK_HXX
@@ -159,6 +163,14 @@ XclExpTabIdBuffer& XclExpRoot::GetTabIdBuffer() const
 XclExpLinkManager& XclExpRoot::GetLinkManager() const
 {
     return *mrExpData.mpLinkManager;
+}
+
+String XclExpRoot::GetXclAddInName( const String& rScName ) const
+{
+    String aXclName;
+    if( ScGlobal::GetAddInCollection()->GetExcelName( rScName, GetUILanguage(), aXclName ) )
+        return aXclName;
+    return rScName;
 }
 
 bool XclExpRoot::CheckCellAddress( const ScAddress& rPos ) const
