@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:58:36 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+
+#ifndef _COMPHELPER_BASIC_IO_HXX_
+#include <comphelper/basicio.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_MOUSEBUTTON_HPP_
@@ -150,16 +154,13 @@ void OImageButtonModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(8)
-        DECL_PROP2(CLASSID,         sal_Int16,                  READONLY, TRANSIENT);
-        DECL_PROP1(BUTTONTYPE,      FormButtonType,             BOUND);
-        DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,               BOUND);
-        DECL_PROP1(TARGET_URL,      ::rtl::OUString,            BOUND);
-        DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,            BOUND);
-        DECL_PROP1(NAME,            ::rtl::OUString,            BOUND);
-        DECL_PROP1(TAG,             ::rtl::OUString,            BOUND);
-        DECL_PROP1(TABINDEX,        sal_Int16,                  BOUND);
-    FRM_END_PROP_HELPER();
+    BEGIN_DESCRIBE_PROPERTIES( 5, OImageModel )
+        DECL_PROP1(BUTTONTYPE,          FormButtonType,     BOUND);
+        DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,           BOUND);
+        DECL_PROP1(TARGET_URL,          ::rtl::OUString,    BOUND);
+        DECL_PROP1(TARGET_FRAME,        ::rtl::OUString,    BOUND);
+        DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
