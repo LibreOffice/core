@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:15:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         Client* pIPClient = static_cast<Client*>(
                             pViewShell->GetViewShell()->GetIPClient());
 
-                        if (pIPClient && pIPClient->IsInPlaceActive())
+                        if (pIPClient && pIPClient->IsObjectInPlaceActive())
                         {
                             // OLE-Objekt wird im nachfolgenden UnmarkAll() deaktiviert
                             bDeactivateOLE = TRUE;
