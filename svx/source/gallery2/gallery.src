@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-25 14:47:55 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     };
     Text[ english_us ] = "Gallery";
     Text[ portuguese ] = "Gallery";
-    Text[ russian ] = "Gallery";
-    Text[ greek ] = "Gallery";
+    Text[ russian ] = "Ãàëåğåÿ";
+    Text[ greek ] = "Ãêáëåñß";
     Text[ dutch ] = "Gallery";
     Text[ french ] = "Gallery";
     Text[ spanish ] = "Gallery";
@@ -131,13 +131,13 @@ TabDialog RID_SVXTABDLG_GALLERY
     SVLook = TRUE ;
     Text = "Eigenschaften von " ;
     Text [ ENGLISH ] = "Settings of " ;
-    Text [ dutch ] = "Eigenschappen van  " ;
-    Text [ english_us ] = "Properties of" ;
+    Text [ dutch ] = "Eigenschappen van   " ;
+    Text [ english_us ] = "Properties of " ;
     Text [ italian ] = "Proprietà di " ;
-    Text [ spanish ] = "Propiedades de" ;
+    Text [ spanish ] = "Propiedades de " ;
     Text [ french ] = "Propriétés de " ;
     Text [ swedish ] = "Egenskaper för   " ;
-    Text [ danish ] = "Egenskaber af" ;
+    Text [ danish ] = "Egenskaber af " ;
     Text [ portuguese ] = "Propriedades de  " ;
     Text [ portuguese_brazilian ] = "Eigenschaften von " ;
     Moveable = TRUE ;
@@ -175,15 +175,15 @@ TabDialog RID_SVXTABDLG_GALLERY
             };
         };
     };
-    Text[ chinese_simplified ] = "ÊôĞÔ£º";
+    Text[ chinese_simplified ] = "ÊôĞÔ£º ";
     Text[ russian ] = "Ñâîéñòâà ";
-    Text[ polish ] = "W³aœciwoœci  ";
-    Text[ japanese ] = "‘®«";
-    Text[ chinese_traditional ] = "Äİ©Ê¡G";
+    Text[ polish ] = "W³aœciwoœci ";
+    Text[ japanese ] = "‘®« ";
+    Text[ chinese_traditional ] = "Äİ©Ê¡G ";
     Text[ arabic ] = "ÎÕÇÆÕ";
-    Text[ dutch ] = "Eigenschappen van  ";
-    Text[ chinese_simplified ] = "ÊôĞÔ£º";
-    Text[ greek ] = "Éäéüôçôåò ôïõ";
+    Text[ dutch ] = "Eigenschappen van   ";
+    Text[ chinese_simplified ] = "ÊôĞÔ£º ";
+    Text[ greek ] = "Éäéüôçôåò ôïõ ";
     Text[ korean ] = "µî·ÏÁ¤º¸ ";
     Text[ turkish ] = "Özellikler: ";
     Text[ language_user1 ] = " ";
@@ -197,13 +197,13 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     SVLook = TRUE ;
     Text = "Eigenschaften von " ;
     Text [ ENGLISH ] = "Settings of " ;
-    Text [ dutch ] = "Eigenschappen van  " ;
-    Text [ english_us ] = "Properties of" ;
+    Text [ dutch ] = "Eigenschappen van   " ;
+    Text [ english_us ] = "Properties of " ;
     Text [ italian ] = "Proprietà di " ;
-    Text [ spanish ] = "Propiedades de" ;
+    Text [ spanish ] = "Propiedades de " ;
     Text [ french ] = "Propriétés de " ;
     Text [ swedish ] = "Egenskaper för   " ;
-    Text [ danish ] = "Egenskaber af" ;
+    Text [ danish ] = "Egenskaber af " ;
     Text [ portuguese ] = "Propriedades de  " ;
     Text [ portuguese_brazilian ] = "Eigenschaften von " ;
     Moveable = TRUE ;
@@ -268,15 +268,15 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
             };
         };
     };
-    Text[ chinese_simplified ] = "ÊôĞÔ£º";
+    Text[ chinese_simplified ] = "ÊôĞÔ£º ";
     Text[ russian ] = "Ñâîéñòâà ";
-    Text[ polish ] = "W³aœciwoœci  ";
-    Text[ japanese ] = "‘®«";
-    Text[ chinese_traditional ] = "Äİ©Ê¡G";
+    Text[ polish ] = "W³aœciwoœci ";
+    Text[ japanese ] = "‘®« ";
+    Text[ chinese_traditional ] = "Äİ©Ê¡G ";
     Text[ arabic ] = "ÎÕÇÆÕ";
-    Text[ dutch ] = "Eigenschappen van  ";
-    Text[ chinese_simplified ] = "ÊôĞÔ£º";
-    Text[ greek ] = "Éäéüôçôåò ôïõ";
+    Text[ dutch ] = "Eigenschappen van   ";
+    Text[ chinese_simplified ] = "ÊôĞÔ£º ";
+    Text[ greek ] = "Éäéüôçôåò ôïõ ";
     Text[ korean ] = "µî·ÏÁ¤º¸ ";
     Text[ turkish ] = "Özellikler: ";
     Text[ language_user1 ] = " ";
@@ -1547,22 +1547,22 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text [ ENGLISH ] = "This file can not be opened.\nDo you want to set a new search path?" ;
     Text [ english_us ] = "This file cannot be opened.\nDo you want to enter a different search path? " ;
     Text [ italian ] = "Questo file non può essere aperto.\nDigitare un nuovo percorso di ricerca?  " ;
-    Text [ spanish ] = "No se puede abrir este archivo.\n¿Desea indicar otra ruta de búsqueda?" ;
-    Text [ french ] = "Impossible d'ouvrir ce fichier.\nSouhaitez-vous indiquer un nouveau chemin de recherche ?  " ;
-    Text [ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad aangeven??  " ;
+    Text [ spanish ] = "No se puede abrir este archivo.\n¿Desea indicar otra ruta de búsqueda? " ;
+    Text [ french ] = "Impossible d'ouvrir ce fichier.\nVoulez-vous indiquer un autre chemin de recherche ? " ;
+    Text [ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad aangeven??   " ;
     Text [ swedish ] = "Den här filen kan inte öppnas.\nVill Du ange en annan sökväg?  " ;
-    Text [ danish ] = "Det er ikke muligt at åbne denne fil.\nVil du angive en ny søgesti?" ;
+    Text [ danish ] = "Det er ikke muligt at åbne denne fil.\nVil du angive en ny søgesti? " ;
     Text [ portuguese ] = "Impossível abrir este ficheiro.\nDeseja indicar outro atalho de localização?  " ;
     Text [ portuguese_brazilian ] = "Diese Datei kann nicht geöffnet werden. \nMöchten Sie einen anderen Suchpfad angeben? " ;
-    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£\nÄúÒªÖ¸¶¨ÁíÒ»¸öÂ·¾¶£¿";
-    Text[ russian ] = "Îòêğûòü ıòîò ôàéë íå óäàåòñÿ.\nÂû õîòèòå çàäàòü äğóãîé ïóòü ïîèñêà?  ";
-    Text[ polish ] = "Tego pliku nie mo¿na otworzyæ.\nCzy chcesz podaæ inn¹ œcie¿kê wyszukiwania?   ";
-    Text[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍŠJ‚¯‚Ü‚¹‚ñB\n•Ê‚ÌŒŸõÊß½–¼‚ğ“ü—Í‚µ‚Ü‚·‚©B";
-    Text[ chinese_traditional ] = "µLªk¶}±Ò³o­ÓÀÉ®×¡C\n±z­n¿é¤J¤@­Ó¨ä¥L¸ô®|¡S";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£\nÄúÒªÖ¸¶¨ÁíÒ»¸öÂ·¾¶£¿ ";
+    Text[ russian ] = "Îòêğûòü ıòîò ôàéë íå óäàåòñÿ.\nÂû õîòèòå çàäàòü äğóãîé ïóòü ïîèñêà? ";
+    Text[ polish ] = "Pliku tego nie mo¿na otworzyæ.\nCzy chcesz podaæ inn¹ œcie¿kê wyszukiwania? ";
+    Text[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍŠJ‚¯‚Ü‚¹‚ñB\n•Ê‚ÌŒŸõÊß½–¼‚ğ“ü—Í‚µ‚Ü‚·‚©B ";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò³o­ÓÀÉ®×¡C\n±z­n¿é¤J¤@­Ó¨ä¥L¸ô®|¡S ";
     Text[ arabic ] = "áÇ íãßä İÊÍ åĞÇ Çáãáİ.\nåá ÊÑíÏ ÅÏÎÇá ãÓÇÑ ÈÍË ÂÎÑ¿ ";
-    Text[ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad aangeven??  ";
-    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£\nÄúÒªÖ¸¶¨ÁíÒ»¸öÂ·¾¶£¿";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß áõôü ôï áñ÷åßï.\nÈİëåôå íá åéóÜãåôå ìéá äéáöïñåôéêŞ äéáäñïìŞ áíáæŞôçóçò;";
+    Text[ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad aangeven??   ";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£\nÄúÒªÖ¸¶¨ÁíÒ»¸öÂ·¾¶£¿ ";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß áõôü ôï áñ÷åßï.\nÈİëåôå íá åéóÜãåôå êÜğïéá Üëëç äéáäñïìŞ áíáæŞôçóçò; ";
     Text[ korean ] = "ÀÌ ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù. \n´Ù¸¥ °Ë»ö°æ·Î¸¦ ÀÔ·ÂÇÏ½Ã°Ú½À´Ï±î? ";
     Text[ turkish ] = "Bu dosya açılamıyor.\nBaşka bir veri yolu girmek istiyor musunuz? ";
     Text[ language_user1 ] = " ";
@@ -1765,14 +1765,14 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text [ portuguese ] = "Novo tema..." ;
     Text [ portuguese_brazilian ] = "Neues Thema" ;
     Text[ chinese_simplified ] = "ĞÂ½¨Ö÷Ìâ...";
-    Text[ russian ] = "Íîâàÿ òåìà";
-    Text[ polish ] = "Nowy temat";
+    Text[ russian ] = "Íîâàÿ òåìà...";
+    Text[ polish ] = "Nowy temat...";
     Text[ japanese ] = "V‚µ‚¢Ã°Ï...";
     Text[ chinese_traditional ] = "·s«Ø¥DÃD...";
     Text[ arabic ] = "...ãæÖæÚ ÌÏíÏ";
     Text[ dutch ] = "Nieuw onderwerp...";
     Text[ chinese_simplified ] = "ĞÂ½¨Ö÷Ìâ...";
-    Text[ greek ] = "Íİï èİìá...";
+    Text[ greek ] = "Äçìéïõñãßá èİìáôïò...";
     Text[ korean ] = "»õ ÁÖÁ¦...";
     Text[ turkish ] = "Yeni konu...";
     Text[ language_user1 ] = " ";
@@ -2087,12 +2087,12 @@ Menu RID_SVXMN_GALLERY1
             Text[ swedish ] = "Tilldela ~ID";
             Text[ polish ] = "Przypisz ~identyfikator";
             Text[ portuguese_brazilian ] = "Assign ~ID";
-            Text[ japanese ] = "~ID ‚ÌŠ„‚è“–‚Ä";
-            Text[ chinese_simplified ] = "·ÖÅä ~ID";
+            Text[ japanese ] = "~ID Š„‚è“–‚Ä";
+            Text[ chinese_simplified ] = "Ö¸¶¨ ~ID";
             Text[ chinese_traditional ] = "¤À°t ~ID";
             Text[ arabic ] = "ÊÚííä ÇáÊÚÑíİ";
             Text[ dutch ] = "~ID bezet";
-            Text[ chinese_simplified ] = "·ÖÅä ~ID";
+            Text[ chinese_simplified ] = "Ö¸¶¨ ~ID";
             Text[ greek ] = "ÁğïíïìŞ ôáõôüôçôáò (~ID)";
             Text[ korean ] = "~ID ÁöÁ¤";
             Text[ turkish ] = "Tanıtıcı ata";
@@ -2314,7 +2314,7 @@ Menu RID_SVXMN_GALLERY2
             Text [ danish ] = "Eksempel" ;
             Text [ portuguese_brazilian ] = "~Vorschau" ;
             Text [ portuguese ] = "~Previsualizar" ;
-            Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
+            Text[ russian ] = "Ïğåäâ. ïğîñìîòğ";
     Text[ polish ] = "Podgl¹~d";
     Text[ japanese ] = "ÌßÚËŞ­°(~P)";
     Text[ chinese_simplified ] = "Ô¤ÊÓ(~P)";
