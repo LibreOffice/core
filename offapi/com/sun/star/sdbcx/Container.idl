@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Container.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,20 @@
 #define __com_sun_star_sdbcx_Container_idl__
 
  module com {  module sun {  module star {  module container {
-interface XNameAccess;
-interface XIndexAccess;
-interface XEnumerationAccess;
+ published interface XNameAccess;
+ published interface XIndexAccess;
+ published interface XEnumerationAccess;
 };};};};
 
  module com {  module sun {  module star {  module util {
-interface XRefreshable;
+ published interface XRefreshable;
 };};};};
 
  module com {  module sun {  module star {  module sdbcx {
 
-interface XDataDescriptorFactory;
-interface XAppend;
-interface XDrop;
+ published interface XDataDescriptorFactory;
+ published interface XAppend;
+ published interface XDrop;
 
 
 // DocMerge from xml: service com::sun::star::container::com::sun::star::util::com::sun::star::sdbcx::Container
@@ -96,7 +96,7 @@ interface XDrop;
     properties of the new element.
     </p>
  */
-service Container
+published service Container
 {
     // gives access to the elements by name.
     interface com::sun::star::container::XNameAccess;
