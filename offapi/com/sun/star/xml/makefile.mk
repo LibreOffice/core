@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: bm $ $Date: 2002-10-15 12:04:51 $
+#   last change: $Author: bm $ $Date: 2002-11-19 10:40:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,12 +73,16 @@ PACKAGE=com$/sun$/star$/xml
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AttributeContainer.idl \
     AttributeData.idl \
-    XMLImportFilter.idl \
-    XMLExportFilter.idl \
+    ExportFilter.idl \
+    ImportFilter.idl \
+    NamespaceContainer.idl \
+    UserDefinedAttributeSupplier.idl \
     XExportFilter.idl \
     XImportFilter.idl \
-    AttributeContainer.idl
+    XMLExportFilter.idl \
+    XMLImportFilter.idl
 
 # ------------------------------------------------------------------
 
