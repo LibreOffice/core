@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:19:35 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,19 +140,9 @@ public:
 
 // Header/footer conversion ===================================================
 
-/** Enumeration to specify a portion of a header or footer. */
-enum XclHFPortion
-{
-    xlHFLeft = 0,               /// Left portion.
-    xlHFCenter = 1,             /// Centered portion.
-    xlHFRight = 2               /// Right portion.
-};
-
-
-// ----------------------------------------------------------------------------
-
 class EditEngine;
 class EditTextObject;
+class SfxItemSet;
 class SvxFieldItem;
 struct XclFontData;
 
@@ -192,33 +182,34 @@ private:
     typedef ::std::auto_ptr< XclFontData >      XclFontDataPtr;
 
     EditEngine&                 mrEE;           /// The header/footer edit engine.
-    XclHFPortion                meCurrObj;      /// The current portion.
     EditTextObjectPtr           mppObjs[ 3 ];   /// Edit engine text objects for all portions.
     ESelection                  mpSels[ 3 ];    /// Edit engine selections for all portions.
     String                      maCurrText;     /// Current text to insert into edit engine.
     XclFontDataPtr              mpFontData;     /// Font data of current text.
+    sal_uInt16                  mnCurrObj;      /// The current portion.
 
 public:
     explicit                    XclImpHFConverter( const XclImpRoot& rRoot );
+                                ~XclImpHFConverter();
 
     /** Parses the passed string and creates three new edit engine text objects. */
     void                        ParseString( const String& rHFString );
 
-    /** Returns a pointer to the specified edit engine text object.
-        @descr  This parser remains owner of the text object. */
-    inline const EditTextObject* GetTextObject( XclHFPortion ePortion ) const
-                                    { return mppObjs[ ePortion ].get(); }
+    /** Creates a ScPageHFItem and inserts it into the passed item set. */
+    void                        FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId );
 
 private:
     /** Returns the current edit engine text object. */
-    inline EditTextObjectPtr&   GetCurrObj() { return mppObjs[ meCurrObj ]; }
+    inline EditTextObjectPtr&   GetCurrObj() { return mppObjs[ mnCurrObj ]; }
     /** Returns the current selection. */
-    inline ESelection&          GetCurrSel() { return mpSels[ meCurrObj ]; }
+    inline ESelection&          GetCurrSel() { return mpSels[ mnCurrObj ]; }
 
     /** Sets the font attributes at the current selection.
         @descr  After that, the start position of the current selection object is
         adjusted to the end of the selection. */
     void                        SetAttribs();
+    /** Resets font data to application default font. */
+    void                        ResetFontData();
 
     /** Inserts maCurrText into edit engine and adjusts the current selection object.
         @descr  The text shall not contain a newline character.
@@ -233,7 +224,7 @@ private:
     void                        CreateCurrObject();
     /** Changes current header/footer portion to eNew.
         @descr  Creates text object of current portion and reinitializes edit engine. */
-    void                        SetNewPortion( XclHFPortion eNew );
+    void                        SetNewPortion( sal_uInt16 nNew );
 };
 
 
@@ -245,17 +236,33 @@ private:
 class XclImpUrlHelper : ScfNoInstance
 {
 public:
-    /** Reads and decodes an encoded external document URL.
+    /** Decodes an encoded external document URL with optional sheet name.
         @param rUrl  Returns the decoded file name incl. path.
-        @param rTable  Returns the decoded sheet name.
+        @param rTabName  Returns the decoded sheet name.
         @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
         @param rEncodedUrl   An encoded URL from Excel. */
     static void                 DecodeUrl(
                                     String& rUrl,
-                                    String& rTable,
+                                    String& rTabName,
                                     bool& rbSameWb,
                                     const XclImpRoot& rRoot,
                                     const String& rEncodedUrl );
+
+    /** Decodes an encoded external document URL without sheet name.
+        @param rUrl  Returns the decoded file name incl. path.
+        @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
+        @param rEncodedUrl   An encoded URL from Excel. */
+    static void                 DecodeUrl(
+                                    String& rUrl,
+                                    bool& rbSameWb,
+                                    const XclImpRoot& rRoot,
+                                    const String& rEncodedUrl );
+
+    /** Decodes the passed URL to OLE or DDE link components.
+        @descr  For DDE links: Decodes to application name and topic.
+        For OLE object links: Decodes to class name and document URL.
+        @return  true = decoding was successful, returned strings are valid (not empty). */
+    static bool                 DecodeLink( String& rApplic, String& rTopic, const String rEncUrl );
 };
 
 
