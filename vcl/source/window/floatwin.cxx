@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-12 10:56:47 $
+ *  last change: $Author: ssa $ $Date: 2002-12-09 11:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
         FLOATWIN_POPUPMODE_NOFOCUSCLOSE     |
 //        FLOATWIN_POPUPMODE_NOMOUSECLOSE       |
         FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE |
-        FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE |
+//        FLOATWIN_POPUPMODE_NOMOUSERECTCLOSE   |   // #105968# floating toolboxes should close when clicked in (parent's) float rect
         FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE   |
         FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 /*
