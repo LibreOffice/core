@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-19 12:59:37 $
+ *  last change: $Author: sj $ $Date: 2002-11-19 17:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,14 +446,16 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         if( ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("IsFontwork") ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
-            rObj.GetType().EqualsAscii( "drawing.Measure" ))
+            rObj.GetType().EqualsAscii( "drawing.Measure" ) || rObj.GetType().EqualsAscii( "drawing.Caption" ) )
         {
+/*
             if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("BoundRect") ) )
             {
-                Rectangle aRect( *(Rectangle*)rObj.GetUsrAny().getValue() );
-                rObj.SetRect( ImplMapPoint( aRect.TopLeft() ),
-                              ImplMapSize( aRect.GetSize() ) );
+                ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)rObj.GetUsrAny().getValue() );
+                rObj.SetRect( ImplMapPoint( Point( aRect.X, aRect.Y ) ),
+                                ImplMapSize( Size( aRect.Width, aRect.Height ) ) );
             }
+*/
             rObj.SetType( String( RTL_CONSTASCII_STRINGPARAM(
                                 "drawing.dontknow" ),
                                 RTL_TEXTENCODING_MS_1252 ));
