@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:18:09 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #include <svtools/asynclink.hxx>
 #endif
 
+#include <svtools/printoptions.hxx>
+
 #pragma hdrstop
 
 #include "prnmon.hxx"
@@ -117,6 +119,8 @@ struct SfxPrintProgress_Impl
     BOOL                    bShow;
     BOOL                    bCallbacks;
     BOOL                    bOldEnablePrintFile;
+    BOOL                    bOldFlag;
+    BOOL                    bRestoreFlag;
     svtools::AsynchronLink  aDeleteLink;
 
 private:
@@ -169,6 +173,8 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
     bCancel             ( FALSE ),
     bCallbacks          ( FALSE ),
     bOldEnablePrintFile ( FALSE ),
+    bOldFlag            ( TRUE ),
+    bRestoreFlag        ( FALSE ),
     nLastPage           ( 0 ),
     aDeleteLink         ( STATIC_LINK( this, SfxPrintProgress_Impl, DeleteHdl ) )
 
@@ -241,6 +247,13 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
     pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(TRUE);
     pImp->bShow = bShow;
     Lock();
+    if ( !SvtPrinterOptions().IsModifyDocumentOnPrintingAllowed() )
+    {
+        pImp->bRestoreFlag = TRUE;
+        pImp->bOldFlag = pViewSh->GetObjectShell()->IsEnableSetModified();
+        if ( pImp->bOldFlag )
+            pViewSh->GetObjectShell()->EnableSetModified( FALSE );
+    }
 }
 
 //--------------------------------------------------------------------
@@ -311,6 +324,8 @@ IMPL_LINK_INLINE_START( SfxPrintProgress, PrintErrorNotify, void *, pvoid )
     pImp->pPrinter->AbortJob();
     InfoBox( pImp->GetViewShell()->GetWindow(),
              String( SfxResId(STR_ERROR_PRINT) ) ).Execute();
+    if ( pImp->bRestoreFlag && pImp->pViewShell->GetObjectShell()->IsEnableSetModified() != pImp->bOldFlag )
+        pImp->pViewShell->GetObjectShell()->EnableSetModified( pImp->bOldFlag );
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxPrintProgress, PrintErrorNotify, void *, pvoid )
@@ -367,6 +382,8 @@ IMPL_LINK( SfxPrintProgress, EndPrintNotify, void *, pvoid )
         pImp->bRunning = FALSE;
     }
 
+    if ( pImp->bRestoreFlag && pImp->pViewShell->GetObjectShell()->IsEnableSetModified() != pImp->bOldFlag )
+        pImp->pViewShell->GetObjectShell()->EnableSetModified( TRUE );
     return 0;
 }
 

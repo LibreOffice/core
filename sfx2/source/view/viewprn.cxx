@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-20 13:35:46 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <app.hxx>
 #endif
 #include <svtools/useroptions.hxx>
+#include <svtools/printoptions.hxx>
 #pragma hdrstop
 
 #include "viewsh.hxx"
@@ -676,13 +677,28 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         if ( !pInfo->IsUseUserData() )
             aUserName.Erase();
 
+        BOOL bOldFlag = pObjSh->IsEnableSetModified();
+        BOOL bDontModifyDoc = !SvtPrinterOptions().IsModifyDocumentOnPrintingAllowed();
+        if ( bDontModifyDoc && bOldFlag )
+            pObjSh->EnableSetModified( FALSE );
+
         pInfo->SetPrinted( aUserName );
         pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
+
+        if ( bDontModifyDoc && bOldFlag != pObjSh->IsEnableSetModified() )
+            pObjSh->EnableSetModified( bOldFlag );
 
         ErrCode nError = DoPrint( pPrinter, pPrintDlg, bSilent );
         if ( nError == PRINTER_OK )
         {
+            bOldFlag = pObjSh->IsEnableSetModified();
+            if ( bDontModifyDoc && bOldFlag )
+                pObjSh->EnableSetModified( FALSE );
+
             pObjSh->FlushDocInfo();
+
+            if ( bDontModifyDoc && bOldFlag != pObjSh->IsEnableSetModified() )
+                pObjSh->EnableSetModified( bOldFlag );
 
             Invalidate( SID_PRINTDOC );
             Invalidate( SID_PRINTDOCDIRECT );
@@ -697,8 +713,15 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         }
         else
         {
+            bOldFlag = pObjSh->IsEnableSetModified();
+            if ( bDontModifyDoc && bOldFlag )
+                pObjSh->EnableSetModified( FALSE );
+
             pInfo->SetPrinted(aOldStamp);
             pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
+
+            if ( bDontModifyDoc && bOldFlag != pObjSh->IsEnableSetModified() )
+                pObjSh->EnableSetModified( bOldFlag );
 
             if ( nError != PRINTER_ABORT )
             {
