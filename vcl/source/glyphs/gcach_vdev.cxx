@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-11 10:31:51 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 15:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,13 @@ bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
 bool     VirtDevServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const
 {
     return false;
+}
+
+// -----------------------------------------------------------------------
+
+int VirtDevServerFont::GetGlyphKernValue( int, int ) const
+{
+    return 0;
 }
 
 // -----------------------------------------------------------------------

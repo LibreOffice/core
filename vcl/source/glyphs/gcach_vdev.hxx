@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-30 12:20:56 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 15:58:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ friend GlyphCache;
     static VirtDevServerFont*   CreateFont( const ImplFontSelectData& );
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
+    virtual int                 GetGlyphKernValue( int, int ) const;
 
     virtual int                 GetGlyphIndex( sal_Unicode ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
