@@ -1,0 +1,123 @@
+: # -*- perl -*-
+#*************************************************************************
+#
+#   $RCSfile: component-conf.gen,v $
+#
+#   $Revision: 1.1 $
+#
+#   last change: $Author: dg $ $Date: 2002-05-23 18:20:09 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+
+# generates of the component schema list an ldap schema in slapd format
+
+eval 'exec perl -wS $0 ${1+"$@"}'
+	if 0;
+
+#creating the output file
+open(OUTFILE, ">$ARGV[0]") or die "can't open >$ARGV[0]";
+
+#open the makefile
+open(INFILE, "makefile.mk") or die "can't open makefile.mk";
+
+$inxcs=0;
+
+#search all schemas in the makefile except userprofile and format them as e.g org.openoffice.Inet
+while(<INFILE>) {
+	tr/\r\n//d;
+	
+	if (/^\s*XCSFILES/) {
+		$inxcs++;
+	}
+	next unless $inxcs;
+
+	if ($inxcs) {
+		
+		$inxcs=0 unless /\\$/;
+
+		next if (/^\s*XCSFILES/);
+		next if (/UserProfile/);
+
+		s/^\s+//;
+		s/\s*\\$//;
+		s/\.xcs.*$//;		
+		s#\$/#.#g;
+
+		push(@comp_names, $_);
+	}	
+}
+close(INFILE);
+
+# generate the schema in slapd format
+
+foreach (@comp_names) {	
+		
+	s#org.openoffice.#oo-#g;
+	s#\.#-#g;
+
+	$myLdapName=lc $_;	
+
+	print OUTFILE "attribute $myLdapName-attr $myLdapName-attr-oid cis single\n";
+	print OUTFILE "objectclass $myLdapName-class\n";
+	print OUTFILE "\toid\n";
+	print OUTFILE "\t\t$myLdapName-class-oid\n";
+	print OUTFILE "\tsuperior top\n";
+	print OUTFILE "\tallows\n";
+	print OUTFILE "\t$myLdapName-attr\n";
+}
+
+close(OUTFILE);
+
+exit 0;
