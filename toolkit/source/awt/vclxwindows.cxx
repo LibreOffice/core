@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-03 12:44:15 $
+ *  last change: $Author: ssa $ $Date: 2002-07-19 11:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2004,7 +2004,7 @@ void VCLXScrollBar::setValue( sal_Int32 n ) throw(::com::sun::star::uno::Runtime
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
-        pScrollBar->SetThumbPos( n );
+        pScrollBar->DoScroll( n );
 }
 
 void VCLXScrollBar::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException)
@@ -2014,9 +2014,9 @@ void VCLXScrollBar::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 n
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
     {
-        pScrollBar->SetThumbPos( nValue );
         pScrollBar->SetVisibleSize( nVisible );
         pScrollBar->SetRangeMax( nMax );
+        pScrollBar->DoScroll( nValue );
     }
 }
 
