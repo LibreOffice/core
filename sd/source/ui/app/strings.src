@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-26 14:21:52 $
+ *  last change: $Author: ka $ $Date: 2002-02-28 09:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5152,28 +5152,28 @@ String STR_INSERT_AS_TEXTOBJECT
 };
 String STR_ALL_FILES
 {
-    Text = "<Alle>" ;
-    Text [ ENGLISH ] = "<All>" ;
-    Text [ english_us ] = "<All>" ;
+    Text = "Alle Dateien (*.*)" ;
+    Text [ english ] = "All files (*.*)" ;
+    Text [ english_us ] = "All files (*.*)" ;
     Text[ portuguese ] = "<Todos>";
-    Text[ russian ] = "<Βρε>";
+    Text[ russian ] = "Βρε τΰιλϋ (*.*)";
     Text[ greek ] = "<Όλα>";
     Text[ dutch ] = "<Alle>";
-    Text[ french ] = "<Tous>";
-    Text[ spanish ] = "<Todos>";
-    Text[ italian ] = "<Tutti>";
-    Text[ danish ] = "<Alle>";
-    Text[ swedish ] = "<Alla>";
-    Text[ polish ] = "<Wszystkie>";
-    Text[ portuguese_brazilian ] = "Todos os arquivos";
-    Text[ japanese ] = "<γ™γΉγ¦>";
-    Text[ korean ] = "<λª¨λ‘>";
-    Text[ chinese_simplified ] = "<ε…¨ιƒ¨ζ–‡δ»¶>";
-    Text[ chinese_traditional ] = "<ε…¨ιƒ¨ζª”ζ΅>";
-    Text[ arabic ] = "<Ηαία>";
-    Text[ turkish ] = "Tόm dosyalar";
-    Text[ catalan ] = "<Tots>";
+    Text[ french ] = "Tous les fichiers (*.*)";
+    Text[ spanish ] = "Todos los archivos (*.*)";
     Text[ finnish ] = "<Kaikki>";
+    Text[ italian ] = "Tutti i file (*.*)";
+    Text[ danish ] = "<Alle>";
+    Text[ swedish ] = "Alla filer (*.*)";
+    Text[ polish ] = "Wszystkie pliki (*.*)";
+    Text[ portuguese_brazilian ] = "<Tudo>";
+    Text[ japanese ] = "γ™γΉγ¦γ®οΎο½§ο½²οΎ™ (*.*)";
+    Text[ korean ] = "<λª¨λ‘>";
+    Text[ chinese_simplified ] = "ε…¨ιƒ¨ζ–‡δ»¶ (*.*)";
+    Text[ chinese_traditional ] = "ε…¨ιƒ¨η„ζª”ζ΅(*.*)";
+    Text[ turkish ] = "<Tόmό>";
+    Text[ arabic ] = "<Ηαία>";
+    Text[ catalan ] = "<Todos>";
 };
 String STR_UNDO_INSERT_TEXTFRAME
 {
