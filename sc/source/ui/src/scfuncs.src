@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:19:18 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2715,7 +2715,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt de variantie m.b.t. de hele populatie van alle cellen van een gegevensbereik, waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "ΌΖΛγÒ»ΈφΚύΎέΗψΣςΔΪ·ϋΊΟΛΡΡ°ΜυΌώµΔΛωΣΠµ¥ΤªΈρΦΠΚύΎέµΔΧάΜε·½²ξ΅£";
             Text[ greek ] = "Υπολογίζει τη διακύμανση του πληθυσμού με βάση όλα τα κελιά της περιοχής δεδομένων, των οποίων τα περιεχόμενα επαληθεύουν τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "³»ΏλΐΜ °Λ»φ ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ Έπµη ΌΏΏ΅Ό­  ΐόΓΌΏΝ °ό·Γ, Ί―Ηόΐ» °αΑ¤.";
+            Text[ korean ] = "³»ΏλΐΜ °Λ»φ ±βΑΨΏ΅ ΐΟΔ΅ΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ Έπµη ΌΏΐΗ ΈπΑύ΄άΏ΅ °ό·ΓµΘ ΊΠ»κΐ» °αΑ¤ΗΡ΄Ω.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin popόlasyonu ile ilgili varyansύ belirler.";
             Text[ language_user1 ] = " ";
         };
@@ -3353,7 +3353,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "Serieel getal van de datum." ;
-            Text [ spanish ] = "Es el cσdigo de fecha y hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Nϊmero interno de la fecha" ;
             Text [ english_us ] = "The internal number for the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΠςΚύ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι δΰςϋ θ βπεμενθ.";
@@ -3693,7 +3693,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de l'heure." ;
             Text [ swedish ] = "Internt tidsvδrde." ;
             Text [ dutch ] = "Tijdswaarde als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Valor interno de hora" ;
             Text [ english_us ] = "Internal time value" ;
             Text[ chinese_simplified ] = "ΟµΝ³ΔΪ²ΏΚ±ΌδΦµ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -3799,7 +3799,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de l'heure." ;
             Text [ swedish ] = "Internt tidsvδrde." ;
             Text [ dutch ] = "Tijdswaarde als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Valor interno de hora" ;
             Text [ english_us ] = "Internal time value." ;
             Text[ chinese_simplified ] = "ΟµΝ³ΔΪ²ΏΚ±ΌδΦµ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -3905,7 +3905,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "Datum als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Nϊmero interno de la fecha." ;
             Text [ english_us ] = "The internal number of the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΠςΚύ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -4053,7 +4053,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de l'heure." ;
             Text [ swedish ] = "Internt tidsvδrde." ;
             Text [ dutch ] = "Tijdswaarde als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Valor interno de hora" ;
             Text [ english_us ] = "The internal time value." ;
             Text[ chinese_simplified ] = "ΟµΝ³ΔΪ²ΏΚ±ΌδΦµ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -4547,7 +4547,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "Serieel getal van de datum." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Nϊmero interno de la fecha." ;
             Text [ english_us ] = "The internal number for the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΚύΧΦ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -4717,7 +4717,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "De datum als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Nϊmero interno de la fecha" ;
             Text [ english_us ] = "Internal number of the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΚύΧΦ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -20042,7 +20042,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Als aangegeven en niet gelijk aan nul, dan wordt bij een negatief getal en stapgrootte naar boven afgerond..";
             Text[ chinese_simplified ] = "ΘηΉϋΙθ¶¨²»µΘΣΪΑγ£¬ΤΪΈΊΚύΊΝΈΊ»ωΚύµΔΗιΏφΟΒΡΨ\nΎψ¶ΤΦµΤφ΄σµΔ·½ΟςΙαΘλ΅£";
             Text[ greek ] = "Αν ορίζεται και είναι διάφορο του μηδενός, τότε στη περίπτωση αρνητικού αριθμού και βήματος γίνεται στρογγυλοποίηση προς τα πάνω αναλογικά προς το ποσό.";
-            Text[ korean ] = "Ό³Α¤µΗΎξ ΐΦ°ν,   0ΐΜ ΎΖ΄Ò °ζΏμ Έ¶ΐΜ³Κ½Ί ΌύΐΪΏΝ ΐ―ΘΏΌύΐΪΐΗ °ζΏμ  °ªΏ΅ µϋ¶σ ΉέΏΓΈ²µΛ΄Ο΄Ω.";
+            Text[ korean ] = "Ό³Α¤µΗΎξ ΐΦ°ν,   0ΐΜ ΎΖ΄Ò °ζΏμ ΐ½ΌφΏΝ ΐ―ΘΏΌύΐΪΐΗ °ζΏμ  °ªΏ΅ µϋ¶σ ΉέΏΓΈ²µΛ΄Ο΄Ω.";
             Text[ turkish ] = "Belirtildiπinde ve sύfύra eώit olmadύπύnda, negatif sayύlar ve adύmlar iηin meblaπa gφre yukarύ yuvarlama yapύlύr.";
             Text[ language_user1 ] = " ";
         };
@@ -20265,7 +20265,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Indfien aangegeven en niet gelijk aan nul dan wordt bij een negatief getal en bij negatieve stapgrootte afgerond.";
             Text[ chinese_simplified ] = "ΘηΉϋΙθ¶¨²»µΘΣΪΑγ£¬ΤΪΈΊΚύΊΝΈΊ»ωΚύµΔΗιΏφΟΒΡΨ\nΎψ¶ΤΦµΌυΠ΅µΔ·½ΟςΘ¥Ξ²ΙαΘλ΅£";
             Text[ greek ] = "Αν ορίζεται και είναι διάφορο του μηδέν, τότε στη περίπτωση αρνητικού αριθμού και βήματος γίνεται στρογγυλοποίηση προς τα κάτω αναλογικά προς το ποσό.";
-            Text[ korean ] = "Ό³Α¤µΗΎξ ΐΦ°ν, 0ΐΜ ΎΖ΄Ò °ζΏμ, Έ¶ΐΜ³Κ½ΊΌφΏΝ ΐ―ΘΏΌύΐΪΐΗ °ζΏμ ±έΎΧΏ΅ µϋ¶σ ΉέΏΓΈ²µΛ΄Ο΄Ω.";
+            Text[ korean ] = "Ό³Α¤µΗΎξ ΐΦ°ν, 0ΐΜ ΎΖ΄Ò °ζΏμ, ΐ½ΌφΏΝ ΐ―ΘΏΌύΐΪΐΗ °ζΏμ °ªΏ΅ µϋ¶σ ΉέΏΓΈ²µΛ΄Ο΄Ω.";
             Text[ turkish ] = "Belirtildiπinde ve sύfύra eώit olmadύπύnda, negatif sayύ ve adύm iηin meblaπa gφre aώaπύ yuvarlanύr.";
             Text[ language_user1 ] = " ";
         };
@@ -33682,7 +33682,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent het aantal variaties van elementen zonder herhaling.";
             Text[ chinese_simplified ] = "ΤΪΈψ¶¨ΤªΛΨΧάΚύµΔΗιΏφΟΒΌΖΛγΡ΅Θ΅ΘτΈΙΤªΛΨµΔ\nΕΕΑΠΚύ(²»ΤΚΠνΦΨΈ΄ΕΕΑΠ)΅£";
             Text[ greek ] = "Υπολογίζει το πλήθος μεταθέσεων στοιχείων χωρίς επανάληψη.";
-            Text[ korean ] = "ΏδΌÒΐΗ Ί―Ηό ΌφΈ¦ °θ»κ (ΉέΊΉΎψΐΜ).";
+            Text[ korean ] = "ΑΦΎξΑψ ΏδΌÒΐΗ °³ΌφΏ΅ ΄λΗΡ ΌψΏ­ΐΗ °³ΌφΈ¦ ΉέΊΉµΗΑφ ΎΚ°Τ °θ»κ.";
             Text[ turkish ] = "Yinelenmeyen φπeler varyasyonlarύ sayύsύnύ hesaplar.";
             Text[ language_user1 ] = " ";
         };
@@ -39279,7 +39279,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De verwijzing (de cel) van waaruit de verschuiving wordt bepaald.";
             Text[ chinese_simplified ] = "ΣΓΣΪΌΖΛγÒΖ¶―µΔΦΈ¶¨»ωµγ(µ¥ΤªΈρ)΅£";
             Text[ greek ] = "Η αναφορά (το κελί) από την οποία ορίζεται η μετακίνηση.";
-            Text[ korean ] = "ΐΜµΏΐΗ ±βΓΚ°΅ µΗ΄Β ΒόΑ¶ (ΌΏ)";
+            Text[ korean ] = "ΐΜµΏΐΜ °αΑ¤µΗ΄Β ±βΑΨ (ΌΏ)";
             Text[ turkish ] = "Taώύnmanύn belirlenmeye baώlanacaπύ referans (hόcre).";
             Text[ language_user1 ] = " ";
         };
