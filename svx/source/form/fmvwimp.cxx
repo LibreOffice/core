@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:33:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1713,7 +1713,7 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
 {
     if ( m_pView )
     {
-        m_aMark = m_pView->GetMarkList();
+        m_aMark = m_pView->GetMarkedObjectList();
         if ( _bSmartUnmark )
         {
             sal_uInt32 nCount = m_aMark.GetMarkCount( );
@@ -1774,7 +1774,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 
     _rRestoredMarkList.Clear();
 
-    const SdrMarkList& rCurrentList = m_pView->GetMarkList();
+    const SdrMarkList& rCurrentList = m_pView->GetMarkedObjectList();
     FmFormPage* pPage = GetFormShell() ? GetFormShell()->GetCurPage() : NULL;
     if (pPage)
     {
