@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-19 12:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,6 @@ ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
     pCellsItr(NULL),
     bHasRowHeader(sal_False),
     bRowHeaderOpen(sal_False),
-    bShapeStyles (sal_False),
     pDetectiveObjContainer(NULL),
     pChangeTrackingExportHelper(NULL),
     aXShapesVec()
@@ -567,7 +566,6 @@ void ScXMLExport::CollectShapesAutoStyles(uno::Reference<sheet::XSpreadsheet>& x
                                     if (pSdrObj)
                                     {
                                         GetShapeExport()->collectShapeAutoStyles(xShape);
-                                        bShapeStyles = sal_True;
                                         if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
                                         {
                                             if (pDoc)
@@ -1730,17 +1728,15 @@ void ScXMLExport::_ExportAutoStyles()
                     GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
                 GetTextParagraphExport()->exportTextAutoStyles();
 
-                if (bShapeStyles)
-                {
-                    GetShapeExport()->exportAutoStyles();
-                    GetChartExport()->exportAutoStyles();
-                }
+                GetShapeExport()->exportAutoStyles();
 
                 //GetFormExport()->exportAutoStyles();
 
                 pSharedData->nProgressValue = pSharedData->nOldProgressValue + pSharedData->nProgressObjects;
                 GetProgressBarHelper()->SetValue(pSharedData->nProgressValue);
             }
+            if (getExportFlags() & EXPORT_ALL)
+                GetChartExport()->exportAutoStyles();
             if (getExportFlags() & EXPORT_MASTERSTYLES)
             {
                 GetPageExport()->collectAutoStyles(sal_True);

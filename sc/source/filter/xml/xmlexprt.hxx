@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-09 05:56:35 $
+ *  last change: $Author: sab $ $Date: 2001-03-19 12:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,6 @@ class ScXMLExport : public SvXMLExport
     sal_Bool                    bHasRowHeader : 1;
     sal_Bool                    bRowHeaderOpen : 1;
     sal_Bool                    mbShowProgress : 1;
-    sal_Bool                    bShapeStyles : 1;
 
 
     void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount);
