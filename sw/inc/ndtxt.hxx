@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:03:22 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _NDTXT_HXX
 #define _NDTXT_HXX
-
 #ifndef _NODE_HXX
 #include <node.hxx>
 #endif
@@ -93,6 +92,7 @@ class SwWrongList;      // fuer OnlineSpelling
 class SwNodeNum;
 class OutputDevice;
 class SwScriptInfo;
+struct SwDocStat;
 
 // Konstanten fuer das Text-Insert:
 #define INS_DEFAULT         0x0000 // keine Extras
@@ -388,6 +388,9 @@ public:
     void TransliterateText( utl::TransliterationWrapper& rTrans,
                             xub_StrLen nStart, xub_StrLen nEnd,
                             SwUndoTransliterate* pUndo = 0 );
+
+    // count words in given range
+    void CountWords( SwDocStat& rStat, xub_StrLen nStart, xub_StrLen nEnd ) const;
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
