@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:52:45 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 11:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,16 +81,15 @@ inline void _assignInterface(
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
-    void * pDest = *ppDest;
     _acquire( pSource, acquire );
     _release( *ppDest, release );
     *ppDest = pSource;
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool _queryAndAssignInterface(
-    void ** ppDest, void * pSource,
+inline void * _queryInterface(
+    void * pSource,
     typelib_TypeDescriptionReference * pDestType,
-    uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
+    uno_QueryInterfaceFunc queryInterface )
     SAL_THROW( () )
 {
     if (pSource)
@@ -99,9 +98,7 @@ inline sal_Bool _queryAndAssignInterface(
             queryInterface = binuno_queryInterface;
         pSource = (*queryInterface)( pSource, pDestType );
     }
-    _release( *ppDest, release );
-    *ppDest = pSource;
-    return (pSource != 0);
+    return pSource;
 }
 //==================================================================================================
 sal_Bool assignStruct(
@@ -620,9 +617,16 @@ inline sal_Bool _assignData(
             _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
             return sal_True;
         }
+        else if (*static_cast< void ** >(pSource) == 0)
+        {
+            // A null reference of any interface type can be converted to a null
+            // reference of any other interface type:
+            _release(*static_cast< void ** >(pDest), release);
+            *static_cast< void ** >(pDest) = 0;
+            return true;
+        }
         else
         {
-            sal_Bool bRet;
             if (pSourceTypeDescr)
             {
                 typelib_TypeDescription * pTD = pSourceTypeDescr;
@@ -634,30 +638,19 @@ inline sal_Bool _assignData(
                 if (pTD) // is base of dest
                 {
                     _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
-                    bRet = sal_True;
-                }
-                else
-                {
-                    // query for interface
-                    bRet = _queryAndAssignInterface(
-                        (void **)pDest, *(void **)pSource, pDestType, queryInterface, release );
+                    return true;
                 }
             }
-            else
-            {
-                if (_type_equals( pSourceType, pDestType ))
-                {
-                    _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
-                    bRet = sal_True;
-                }
-                else
-                {
-                    // query for interface
-                    bRet = _queryAndAssignInterface(
-                        (void **)pDest, *(void **)pSource, pDestType, queryInterface, release );
-                }
+
+            // query for interface:
+            void * pQueried = _queryInterface(
+                *reinterpret_cast<void **>(pSource),
+                pDestType, queryInterface );
+            if (pQueried != 0) {
+                _release( *reinterpret_cast<void **>(pDest), release );
+                *reinterpret_cast<void **>(pDest) = pQueried;
             }
-            return bRet;
+            return (pQueried != 0);
         }
     }
     return sal_False;
