@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:42:31 $
+ *  last change: $Author: fs $ $Date: 2001-05-07 13:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3160,49 +3160,15 @@ String RID_STR_EVT_BEFOREUPDATE
 };
 String RID_STR_EVT_APPROVEROWCHANGE
 {
-    Text = "Vor der Datensatzänderung" ;
+    Text = "Vor der Datensatzaktion" ;
     Text [ English ] = "Before record action" ;
     Text [ english_us ] = "Before record action" ;
-    Text[ portuguese ] = "Antes de modificar registo de dados";
-    Text[ russian ] = "Ïåğåä èçìåíåíèåì çàïèñè";
-    Text[ greek ] = "Ğñéí ôçí áëëáãŞ ôçò åããñáöŞò";
-    Text[ dutch ] = "Voor het veranderen van de record";
-    Text[ french ] = "Avant la modification de l'enregistrement";
-    Text[ spanish ] = "Antes de la modificación del registro de datos";
-    Text[ italian ] = "Prima della modifica dei record di dati";
-    Text[ danish ] = "Inden datapostændring";
-    Text[ swedish ] = "Före datapoständring";
-    Text[ polish ] = "Przed zmodyfikowaniem rekordów";
-    Text[ portuguese_brazilian ] = "Before row change";
-    Text[ japanese ] = "Úº°ÄŞ‚ğ•ÏX‚·‚é‘O";
-    Text[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå º¯°æ Àü¿¡";
-    Text[ chinese_simplified ] = "ÔÚ¸ü¸ÄÊı¾İÌõÄ¿Ö®Ç°";
-    Text[ chinese_traditional ] = "¸ê®Æ¶µ¥ØÅÜ§ó¤§«e";
-    Text[ arabic ] = "ŞÈá ÊÛííÑ ÇáÓÌá";
-    Text[ turkish ] = "Veri kümesi değişikliğinden önce";
 };
 String RID_STR_EVT_ROWCHANGE
 {
-    Text = "Nach der Datensatzänderung" ;
+    Text = "Nach der Datensatzaktion" ;
     Text [ English ] = "After row change" ;
     Text [ english_us ] = "After record change" ;
-    Text[ portuguese ] = "Depois de modificar registo de dados";
-    Text[ russian ] = "Ïîñëå èçìåíåíèÿ çàïèñè";
-    Text[ greek ] = "ÌåôÜ ôçí áëëáãŞ ôçò åããñáöŞò";
-    Text[ dutch ] = "Na het veranderen van de record";
-    Text[ french ] = "Après la modification de l'enregistrement";
-    Text[ spanish ] = "Después de la modificación del registro de datos";
-    Text[ italian ] = "Dopo la modifica dei record di dati";
-    Text[ danish ] = "Efter datapostændring";
-    Text[ swedish ] = "Efter datapoständring";
-    Text[ polish ] = "Po zmodyfikowaniu rekordów";
-    Text[ portuguese_brazilian ] = "After row change";
-    Text[ japanese ] = "Úº°ÄŞ•ÏXŒã";
-    Text[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå º¯°æ ÈÄ¿¡";
-    Text[ chinese_simplified ] = "ÔÚ¸ü¸ÄÊı¾İÌõÄ¿Ö®ºó";
-    Text[ chinese_traditional ] = "¸ê®Æ¶µ¥ØÅÜ§ó¤§«á";
-    Text[ arabic ] = "ÈÚÏ ÊÛííÑ ÇáÓÌá";
-    Text[ turkish ] = "Veri kümesi değişikliğinden sonra";
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
@@ -4109,6 +4075,9 @@ String RID_STR_ENUM_ORIENTATION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/05/02 12:42:31  tbe
+ *  added scrollbar properties
+ *
  *  Revision 1.15  2001/04/26 09:16:13  tbe
  *  added progressbar properties
  *
