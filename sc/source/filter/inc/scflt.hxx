@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:57:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@
 #define tf_HMS_Short        2
 #define tf_HM_Short         3
 
-// Attribute für FormatVorlage
+// Attribute fuer FormatVorlage
 #define pfValue             0x01
 #define pfFont              0x02
 #define pfJustify           0x04
@@ -198,12 +198,12 @@
 #define pfRaster            0x10
 #define pfProtection        0x20
 
-// Displayflags für die Tabelle
+// Displayflags fuer die Tabelle
 #define dfFormula           0x0001      // Formeln
 #define dfZerro             0x0002      // Nullwerte
 #define dfGrid              0x0004      // Gitternetz
 #define dfPageBreak         0x0008      // Seitenumbruch
-#define dfColRowBar         0x0010      // Zeilen/Spalten Köpfe (Dummy)
+#define dfColRowBar         0x0010      // Zeilen/Spalten Koepfe (Dummy)
 #define dfSyntax            0x0020      // Syntax Highlighting
 #define dfPrintPage         0x0040      // Druckbildansicht (Dummy)
 #define dfObjectAll         0x0080      // Objekte anzeigen
@@ -315,7 +315,7 @@ struct Sc10DataBaseRec
     double          QueryValue2;
 };
 
-// Kopf/Fußzeilen-Beschreibung
+// Kopf/Fusszeilen-Beschreibung
 struct Sc10HeadFootLine
 {
     sal_Char        Title[128];
@@ -481,7 +481,7 @@ struct Sc10GraphHeader
 // ImageHeader
 struct Sc10ImageHeader
 {
-    sal_Char    FileName[128];  // Dateiname des urspruenglich eingefügten Bildes
+    sal_Char    FileName[128];  // Dateiname des urspruenglich eingefuegten Bildes
     INT16   Typ;                // Typ der Grafik (Bitmap oder Metafile)
     BYTE    Linked;             // Kann nicht vorkommen
     INT16   x1;                 // Urspruengliche Groesse der Grafik (nur fuer Metafiles)
