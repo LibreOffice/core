@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,13 @@
 #include <tools/solar.h>
 #endif
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 
 class SfxObjectShell;
 
-/* Construct with the root storage of the office document, with bImportCode
- * set the visual basic code will be imported into the stardocument when Import  * is called, with bCopyStorage set, the visual basic storage tree will be
+/* Construct with the root storage of the MS document, with bImportCode
+ * set the visual basic code will be imported into the stardocument when Import
+ * is called, with bCopyStorage set, the visual basic storage tree will be
  * copied completely into staroffice, so that any future export to a msoffice
  * format will retain the vba code, allowing a lossless roundtrip from
  * msoffice to staroffice and back.
@@ -89,7 +88,7 @@ class SfxObjectShell;
 class SvxImportMSVBasic
 {
 public:
-    SvxImportMSVBasic( SfxObjectShell &rDocS, SvStorage &rRoot,
+    SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot,
                         BOOL bImportCode = TRUE, BOOL bCopyStorage = TRUE )
         :   xRoot(&rRoot), rDocSh(rDocS),
             bImport(bImportCode), bCopy(bCopyStorage)
@@ -113,7 +112,7 @@ public:
 
     static String GetMSBasicStorageName();
 private:
-    SvStorageRef xRoot;
+    SotStorageRef xRoot;
     SfxObjectShell &rDocSh;
     BOOL bImport;
     BOOL bCopy;
