@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentContainer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:31:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,17 +82,24 @@
  module com {  module sun {  module star {  module sdb {
 
 
-/** describes a container which provides access to database related definitions like
-    forms, and reports.
+/** describes a container which provides access to documents embedded into a database document,
+    usually forms and reports.
 
-    <p>
-    The <method scope="com.sun.star.lang">XMultiServiceFactory::createInstanceWithArguments()</method>
-    should be used to create sub document container or form, or report objects.
+    <p>The <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+    should be used to create sub document container or form, or report objects.</p>
+
+    <p>The embedded documents do not support any particular database related service, instead, they're
+    usual <type scope="com::sun::star::document">OfficeDocument</type>s.<br/>
+    The only thing worth mentioning here is that they support the
+    <type scope="com::sun::star::container">XChild</type> interface, whose
+    <member scope="com::sun::star::container">XChild::getParent</member> method can be used to
+    obtain the database document which the embedded document belongs to.
     </p>
 
-    @see com::sun::star::sdb::DocumentDefinition
+    @see DocumentDefinition
+    @see OfficeDatabaseDocument
  */
-published service DocumentContainer
+service DocumentContainer
 {
     service DefinitionContainer;
 
@@ -102,13 +109,15 @@ published service DocumentContainer
         TargetFrameName: isn't used.
         SearchFlags: isn't used.
         Arguments:
-            1. PropertyValue
+        <ol>
+            <li>PropertyValue</li>
                 Name = ActiveConnection
                 Value = The connection which should be used when opening the text document.
-            2. PropertyValue
+            <li>PropertyValue</li>
                 Name = OpenMode
                 Value = string, "open" if the document should be opened in live mode (editing is not possible),
                                 "openDesign" if the document should be open in design mode (editing is possible)
+        </ol>
         @see com::sun::star::sdbc::XConnection
         </p>
     */
