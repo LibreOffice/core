@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-29 18:43:37 $
+ *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,9 +742,10 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
             }
         }
 
+        Color aRefColor( rColorCfg.GetColorValue(svx::CALCREFERENCE).nColor );
         aOutputData.DrawRefMark( pViewData->GetRefStartX(), pViewData->GetRefStartY(),
                                  pViewData->GetRefEndX(), pViewData->GetRefEndY(),
-                                 Color(COL_LIGHTRED), FALSE );
+                                 aRefColor, FALSE );
     }
 
         //  Range-Finder

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-05 19:17:19 $
+ *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/colorcfg.hxx>
 #include <svx/editview.hxx>
 #include <svx/editstat.hxx>
 #include <svx/outliner.hxx>
@@ -954,8 +955,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
     if ( aBackCol.GetTransparency() > 0 || IsSyntaxMode())
     {
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        aBackCol = rStyleSettings.GetWindowColor();
+        aBackCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-05 19:21:05 $
+ *  last change: $Author: nn $ $Date: 2002-05-03 11:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/algitem.hxx>
+#include <svx/colorcfg.hxx>
 #include <svx/editview.hxx>
 #include <svx/editstat.hxx>
 #include <svx/escpitem.hxx>
@@ -81,6 +82,7 @@
 #include <vcl/system.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <svtools/inethist.hxx>
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
@@ -769,6 +771,8 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 
         if (aType == TYPE(SvxURLField))
         {
+            String aURL = ((const SvxURLField*)pFieldData)->GetURL();
+
             switch ( ((const SvxURLField*)pFieldData)->GetFormat() )
             {
                 case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
@@ -777,10 +781,13 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                     break;
 
                 case SVXURLFORMAT_URL:
-                    aRet = ((const SvxURLField*)pFieldData)->GetURL();
+                    aRet = aURL;
                     break;
             }
-            rTxtColor = new Color( COL_LIGHTBLUE ); //!!! woher nehmen???
+
+            svx::ColorConfigEntry eEntry =
+                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svx::LINKSVISITED : svx::LINKS;
+            rTxtColor = new Color( SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor );
         }
         else
         {

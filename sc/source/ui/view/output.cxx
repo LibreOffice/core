@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-29 18:43:37 $
+ *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,8 +790,8 @@ void ScOutputData::DrawBackground()
 {
     FindRotated();              //! von aussen ?
 
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
+    // used only if bSolidBackground is set (only for ScGridWindow):
+    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
 
     Rectangle aRect;
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
@@ -1115,9 +1115,8 @@ void ScOutputData::DrawClear()
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
 
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
-
+    // (called only for ScGridWindow)
+    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
 
     if (bMetaFile)
         nOneX = nOneY = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 13:35:43 $
+ *  last change: $Author: nn $ $Date: 2002-05-03 11:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2037,10 +2037,9 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
                 break;
             }
 
-            if ( INetURLHistory::GetOrCreate()->QueryUrl( aURL ) )
-                pInfo->SetTxtColor( Color(COL_LIGHTRED) );
-            else
-                pInfo->SetTxtColor( Color(COL_LIGHTBLUE) );
+            svx::ColorConfigEntry eEntry =
+                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svx::LINKSVISITED : svx::LINKS;
+            pInfo->SetTxtColor( GetColorConfig().GetColorValue(eEntry).nColor );
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-05 10:53:22 $
+ *  last change: $Author: nn $ $Date: 2002-05-03 11:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include <svx/colritem.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/scripttypeitem.hxx>
+#include <svx/colorcfg.hxx>
 
 #include "formatsh.hxx"
 #include "sc.hrc"
@@ -1503,7 +1504,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
             {
                 Color aColor;
                 if ( nTrans == 255 )
-                    aColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+                    aColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
                 else
                     aColor = rBrushItem.GetColor();
                 rSet.Put( SvxColorItem( aColor, SID_BACKGROUND_COLOR ) );

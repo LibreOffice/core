@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 14:45:47 $
+ *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/adjitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/colorcfg.hxx>
 #include <svx/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
 #include <svx/fmview.hxx>
 #include <svx/lrspitem.hxx>
@@ -128,6 +129,7 @@
 #include "pagedata.hxx"
 #include "printopt.hxx"
 #include "prevloc.hxx"
+#include "scmod.hxx"
 
 #define _PRINTFUN_CXX
 #include "printfun.hxx"
@@ -1911,7 +1913,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
         Color aBackgroundColor( COL_WHITE );
         if ( bUseStyleColor )
-            aBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+            aBackgroundColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
@@ -1974,7 +1976,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
 
         Color aBackgroundColor( COL_WHITE );
         if ( bUseStyleColor )
-            aBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+            aBackgroundColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
