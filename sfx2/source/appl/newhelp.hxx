@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 12:37:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,6 @@ private:
     Link                aKeywordLink;
 
     String              sFactory;
-    String              sSharedFactory;
     String              sKeyword;
 
     long                nMinWidth;
@@ -400,6 +399,7 @@ public:
     inline String       GetFactory() const { return pIPage->GetFactory(); }
     String              GetSelectEntry() const;
     void                AddBookmarks( const String& rTitle, const String& rURL );
+    bool                IsValidFactory( const String& _rFactory );
     inline String       GetActiveFactoryTitle() const { return aActiveLB.GetSelectEntry(); }
     inline void         UpdateTabControl() { aTabCtrl.Invalidate(); }
     void                ClearSearchPage();
