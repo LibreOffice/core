@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:12:14 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Favoris" ;
         QuickHelpText [ dutch ] = "Favorieten" ;
     QuickHelpText[ russian ] = "Èçáğàííûå";
-        QuickHelpText[ polish ] = "Ulubione";
+        QuickHelpText[ polish ] = "Ulubione!";
         QuickHelpText[ japanese ] = "‚¨‹C‚É“ü‚è!";
         QuickHelpText[ chinese_simplified ] = "ÊÕ²Ø";
         QuickHelpText[ chinese_traditional ] = "§Úªº³Ì·R";
@@ -154,7 +154,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Géométrie" ;
         QuickHelpText [ dutch ] = "Geometrie" ;
     QuickHelpText[ russian ] = "Ãåîìåòğèÿ";
-        QuickHelpText[ polish ] = "Geometria";
+        QuickHelpText[ polish ] = "Geometria!";
         QuickHelpText[ japanese ] = "Šô‰½Šw!";
         QuickHelpText[ chinese_simplified ] = "¼¸ºÎ";
         QuickHelpText[ chinese_traditional ] = "¤L¦ó";
@@ -189,7 +189,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Représentation" ;
         QuickHelpText [ dutch ] = "Weergave" ;
     QuickHelpText[ russian ] = "Ïğåäñòàâëåíèå";
-        QuickHelpText[ polish ] = "Przedstawienie";
+        QuickHelpText[ polish ] = "Przedstawienie!";
         QuickHelpText[ japanese ] = "•\\¦!";
         QuickHelpText[ chinese_simplified ] = "ÏÔÊ¾";
         QuickHelpText[ chinese_traditional ] = "Åã¥Ü";
@@ -224,7 +224,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Eclairage" ;
         QuickHelpText [ dutch ] = "Belichting" ;
     QuickHelpText[ russian ] = "Îñâåùåíèå";
-        QuickHelpText[ polish ] = "O?wietlenie";
+        QuickHelpText[ polish ] = "Oœwietlenie!";
         QuickHelpText[ japanese ] = "Æ–¾!";
         QuickHelpText[ chinese_simplified ] = "ÕÕÃ÷";
         QuickHelpText[ chinese_traditional ] = "·Ó©ú";
@@ -259,7 +259,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Textures" ;
         QuickHelpText [ dutch ] = "Texturen" ;
     QuickHelpText[ russian ] = "Òåêñòóğû";
-        QuickHelpText[ polish ] = "Tekstury";
+        QuickHelpText[ polish ] = "Tekstury!";
         QuickHelpText[ japanese ] = "Ã¸½Á­±!";
         QuickHelpText[ chinese_simplified ] = "ÎÆÀí";
         QuickHelpText[ chinese_traditional ] = "¤å²z";
@@ -294,7 +294,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Matériau" ;
         QuickHelpText [ dutch ] = "Materiaal" ;
     QuickHelpText[ russian ] = "Ìàòåğèàë";
-        QuickHelpText[ polish ] = "Materia³";
+        QuickHelpText[ polish ] = "Materia³!";
         QuickHelpText[ japanese ] = "‘fŞ!";
         QuickHelpText[ chinese_simplified ] = "²ÄÁÏ";
         QuickHelpText[ chinese_traditional ] = "§÷®Æ";
@@ -329,7 +329,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Actualiser" ;
         QuickHelpText [ dutch ] = "Actualiseren" ;
     QuickHelpText[ russian ] = "Îáíîâèòü";
-        QuickHelpText[ polish ] = "Aktualizuj";
+        QuickHelpText[ polish ] = "Aktualizuj!";
         QuickHelpText[ japanese ] = "XV!";
         QuickHelpText[ chinese_simplified ] = "¸üĞÂ";
         QuickHelpText[ chinese_traditional ] = "§ó·s";
@@ -364,7 +364,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Assigner" ;
         QuickHelpText [ dutch ] = "Toewijzen" ;
     QuickHelpText[ russian ] = "Ïğèñâîèòü";
-        QuickHelpText[ polish ] = "Przypisz";
+        QuickHelpText[ polish ] = "Przypisz!";
         QuickHelpText[ japanese ] = "Š„‚è“–‚Ä‚é!";
         QuickHelpText[ chinese_simplified ] = "Ö¸¶¨";
         QuickHelpText[ chinese_traditional ] = "«ü©w";
@@ -401,7 +401,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Convertir en 3 D" ;
         QuickHelpText [ dutch ] = "Converteren naar 3D" ;
     QuickHelpText[ russian ] = "Ïğåîáğàçîâàòü â 3-Ì";
-        QuickHelpText[ polish ] = "Konwertuj na 3-W";
+        QuickHelpText[ polish ] = "Konwertuj na 3-W!";
         QuickHelpText[ japanese ] = "3D‚É•ÏŠ·!";
         QuickHelpText[ chinese_simplified ] = "×ª»»³É 3 Î¬";
         QuickHelpText[ chinese_traditional ] = "ÂàÅÜ¦¨ 3 ºû";
@@ -437,7 +437,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Convertir en corps de révolution" ;
         QuickHelpText [ dutch ] = "Veranderen in rotatieobjecten" ;
     QuickHelpText[ russian ] = "Ïğåîáğàçîâàòü â òåëî âğàùåíèÿ";
-        QuickHelpText[ polish ] = "Konwertuj na obiekt obrotowy";
+        QuickHelpText[ polish ] = "Konwertuj na obiekt obrotowy!";
         QuickHelpText[ japanese ] = "‰ñ“]‘Ì‚É•ÏŠ·!";
         QuickHelpText[ chinese_simplified ] = "×ª»»³ÉĞı×ªÌå";
         QuickHelpText[ chinese_traditional ] = "ÂàÅÜ¦¨±ÛÂàÅé";
@@ -473,7 +473,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Activer/désactiver la perspective" ;
         QuickHelpText [ dutch ] = "Perspectief in-/uitschakelen" ;
     QuickHelpText[ russian ] = "Âêë./âûêë. ïåğñïåêòèâó";
-        QuickHelpText[ polish ] = "W³¹cz/Wy³¹cz perspektywê";
+        QuickHelpText[ polish ] = "W³¹cz/Wy³¹cz perspektywê!";
         QuickHelpText[ japanese ] = "‰“‹ß–@ µİ/µÌ!";
         QuickHelpText[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈëÍ¸ÊÓ";
         QuickHelpText[ chinese_traditional ] = "Åã¥Ü/Áô¤J³zµø";
@@ -590,7 +590,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Assigner uniquement les attributs 3 D" ;
         QuickHelpText [ dutch ] = "Alleen 3D-attributen toewijzen" ;
     QuickHelpText[ russian ] = "Ïğèìåíèòü òîëüêî àòğèáóòû 3-Ì";
-        QuickHelpText[ polish ] = "Przypisz tylko atrybuty 3-W";
+        QuickHelpText[ polish ] = "Przypisz tylko atrybuty 3-W!";
         QuickHelpText[ japanese ] = "3D‚Ì‘®«‚Ì‚İŠ„‚è“–‚Ä!";
         QuickHelpText[ chinese_simplified ] = "Ö»Ö¸¶¨ 3 Î¬ÊôĞÔ";
         QuickHelpText[ chinese_traditional ] = "¥u«ü©w 3 ºûÄİ©Ê";
@@ -625,7 +625,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Appliquer tous les attributs" ;
         QuickHelpText [ dutch ] = "Alle attributen toewijzen" ;
     QuickHelpText[ russian ] = "Ïğèñâîèòü âñå àòğèáóòû";
-        QuickHelpText[ polish ] = "Przypisz wszystkie atrybuty";
+        QuickHelpText[ polish ] = "Przypisz wszystkie atrybuty!";
         QuickHelpText[ japanese ] = "‚·‚×‚Ä‚Ì‘®«‚ğŠ„‚è“–‚Ä‚é!";
         QuickHelpText[ chinese_simplified ] = "·ÖÅäËùÓĞÊôĞÔ";
         QuickHelpText[ chinese_traditional ] = "«ü©w©Ò¦³ªºÄİ©Ê";
@@ -979,7 +979,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Spécifique à l'objet" ;
         QuickHelpText [ dutch ] = "Objectspezifiek" ;
     QuickHelpText[ russian ] = "Â çàâèñèìîñòè îò îáúåêòà";
-        QuickHelpText[ polish ] = "Specyficzny dla obiektu";
+        QuickHelpText[ polish ] = "Specyficzny dla obiektu!";
         QuickHelpText[ japanese ] = "µÌŞ¼Şª¸Ä“Á—L«!";
         QuickHelpText[ chinese_simplified ] = "ÌØÊâ¶ÔÏó";
         QuickHelpText[ chinese_traditional ] = "¯S®íª«¥ó";
@@ -1014,7 +1014,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Plat" ;
         QuickHelpText [ dutch ] = "Vlak" ;
     QuickHelpText[ russian ] = "Ïëîñêèé";
-        QuickHelpText[ polish ] = "P³aski";
+        QuickHelpText[ polish ] = "P³aski!";
         QuickHelpText[ japanese ] = "•½–Ê!";
         QuickHelpText[ chinese_simplified ] = "Æ½Ì¹";
         QuickHelpText[ chinese_traditional ] = "¥­©Z";
@@ -1049,7 +1049,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Sphérique" ;
         QuickHelpText [ dutch ] = "Bolvormig" ;
     QuickHelpText[ russian ] = "Øàğîîáğàçíûé";
-        QuickHelpText[ polish ] = "W kszta³cie kuli";
+        QuickHelpText[ polish ] = "W kszta³cie kuli!";
         QuickHelpText[ japanese ] = "‹…ó!";
         QuickHelpText[ chinese_simplified ] = "ÇòÌå";
         QuickHelpText[ chinese_traditional ] = "²yÅé";
@@ -1084,7 +1084,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Inverser les verticales" ;
         QuickHelpText [ dutch ] = "Normalen omkeren" ;
     QuickHelpText[ russian ] = "Ïîâîğîò îòíîñ. îñâåùåíèÿ";
-        QuickHelpText[ polish ] = "Odwróæ normalne";
+        QuickHelpText[ polish ] = "Odwróæ normalne!";
         QuickHelpText[ japanese ] = "–@ü‚ğ‹t“]‚³‚¹‚é!";
         QuickHelpText[ chinese_simplified ] = "·´ÖÃ·¨Ïß";
         QuickHelpText[ chinese_traditional ] = "¤Ï¸mªk½u";
@@ -1119,7 +1119,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Eclairage des deux côtés" ;
         QuickHelpText [ dutch ] = "Dubbelzijdige belichting" ;
     QuickHelpText[ russian ] = "Äâóñòîğîííåå îñâåùåíèå";
-        QuickHelpText[ polish ] = "Dwustronne o?wietlenie";
+        QuickHelpText[ polish ] = "Dwustronne oœwietlenie!";
         QuickHelpText[ japanese ] = "2–Ê‚©‚ç‚ÌÆ–¾!";
         QuickHelpText[ chinese_simplified ] = "Á½ÃæÕÕÃ÷";
         QuickHelpText[ chinese_traditional ] = "Âù­±·Ó©ú";
@@ -1183,7 +1183,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Double-face" ;
         QuickHelpText [ dutch ] = "Dubbelzijdig" ;
     QuickHelpText[ russian ] = "Ñ äâóõ ñòîğîí";
-        QuickHelpText[ polish ] = "Dwustronny";
+        QuickHelpText[ polish ] = "Dwustronny!";
         QuickHelpText[ japanese ] = "—¼–Ê!";
         QuickHelpText[ chinese_simplified ] = "Ë«Ãæ";
         QuickHelpText[ chinese_traditional ] = "Âù­±";
@@ -1401,7 +1401,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Activer/désactiver l'ombre 3 D" ;
         QuickHelpText [ dutch ] = "3D-schaduw in/-uitschakelen" ;
     QuickHelpText[ russian ] = "Âêë./âûêë. òåíü 3-Ì";
-        QuickHelpText[ polish ] = "W³¹cz/Wy³¹cz cieñ 3-W";
+        QuickHelpText[ polish ] = "W³¹cz/Wy³¹cz cieñ 3-W!";
         QuickHelpText[ japanese ] = "3D‚Ì‰e@µİ/µÌ!";
         QuickHelpText[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë 3 Î¬ÒõÓ°";
         QuickHelpText[ chinese_traditional ] = "Åã¥Ü/Áô¤J 3 ºû³±¼v";
@@ -1505,7 +1505,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Distância" ;
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ russian ] = "Ğàññòîÿíèå";
-        Text[ polish ] = "Odleg³o?æ";
+        Text[ polish ] = "Odleg³oœæ";
         Text[ japanese ] = "ŠÔŠu";
         Text[ chinese_traditional ] = "¶¡¹j";
         Text[ arabic ] = "ÇáÊÈÇÚÏ";
@@ -1621,12 +1621,12 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ danish ] = "Visning" ;
         Text [ italian ] = "Rappresentazione" ;
         Text [ spanish ] = "Representación" ;
-        Text [ french ] = "Affichage" ;
+        Text [ french ] = "Représentation" ;
         Text [ dutch ] = "Weergave" ;
         Text [ portuguese ] = "Destacar" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾";
         Text[ russian ] = "Äåìîíñòğàöèÿ";
-        Text[ polish ] = "Wy?wietlenie";
+        Text[ polish ] = "Wyœwietlenie";
         Text[ japanese ] = "•\\¦";
         Text[ chinese_traditional ] = "Åã¥Ü";
         Text[ arabic ] = "ÇáÚÑÖ";
@@ -1652,7 +1652,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 1" ;
-        QuickHelpText [ english_us ] = "Light source 1" ;
+        QuickHelpText [ english_us ] = "Light Source 1!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 1" ;
         QuickHelpText [ swedish ] = "Ljuskälla 1" ;
         QuickHelpText [ danish ] = "Lyskilde 1" ;
@@ -1661,7 +1661,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 1" ;
         QuickHelpText [ dutch ] = "Lichtbron 1" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 1";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 1";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 1!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 1!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 1";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 1";
@@ -1687,7 +1687,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 2" ;
-        QuickHelpText [ english_us ] = "Light source 2" ;
+        QuickHelpText [ english_us ] = "Light Source 2!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 2" ;
         QuickHelpText [ swedish ] = "Ljuskälla 2" ;
         QuickHelpText [ danish ] = "Lyskilde 2" ;
@@ -1696,7 +1696,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 2" ;
         QuickHelpText [ dutch ] = "Lichtbron 2" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 2";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 2";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 2!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 2!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 2";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 2";
@@ -1722,7 +1722,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 3" ;
-        QuickHelpText [ english_us ] = "Light source 3" ;
+        QuickHelpText [ english_us ] = "Light Source 3!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 3" ;
         QuickHelpText [ swedish ] = "Ljuskälla 3" ;
         QuickHelpText [ danish ] = "Lyskilde 3" ;
@@ -1731,7 +1731,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 3" ;
         QuickHelpText [ dutch ] = "Lichtbron 3" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 3";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 3";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 3!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 3!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 3";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 3";
@@ -1757,7 +1757,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 4" ;
-        QuickHelpText [ english_us ] = "Light source 4" ;
+        QuickHelpText [ english_us ] = "Light Source 4!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 4" ;
         QuickHelpText [ swedish ] = "Ljuskälla 4" ;
         QuickHelpText [ danish ] = "Lyskilde 4" ;
@@ -1766,7 +1766,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 4" ;
         QuickHelpText [ dutch ] = "Lichtbron 4" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 4";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 4";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 4!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 4!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 4";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 4";
@@ -1792,7 +1792,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 5" ;
-        QuickHelpText [ english_us ] = "Light source 5" ;
+        QuickHelpText [ english_us ] = "Light Source 5!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 5" ;
         QuickHelpText [ swedish ] = "Ljuskälla 5" ;
         QuickHelpText [ danish ] = "Lyskilde 5" ;
@@ -1801,7 +1801,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 5" ;
         QuickHelpText [ dutch ] = "Lichtbron 5" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 5";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 5";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 5!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 5!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 5";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 5";
@@ -1827,7 +1827,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 6" ;
-        QuickHelpText [ english_us ] = "Light source 6" ;
+        QuickHelpText [ english_us ] = "Light Source 6!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 6" ;
         QuickHelpText [ swedish ] = "Ljuskälla 6" ;
         QuickHelpText [ danish ] = "Lyskilde 6" ;
@@ -1836,7 +1836,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 6" ;
         QuickHelpText [ dutch ] = "Lichtbron 6" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 6";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 6";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 6!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 6!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 6";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 6";
@@ -1862,7 +1862,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 7" ;
-        QuickHelpText [ english_us ] = "Light source 7" ;
+        QuickHelpText [ english_us ] = "Light Source 7!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 7" ;
         QuickHelpText [ swedish ] = "Ljuskälla 7" ;
         QuickHelpText [ danish ] = "Lyskilde 7" ;
@@ -1871,7 +1871,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 7" ;
         QuickHelpText [ dutch ] = "Lichtbron 7" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 7";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 7";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 7!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 7!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 7";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 7";
@@ -1897,7 +1897,7 @@ DockingWindow RID_SVXFLOAT_3D
         };
         TabStop = TRUE ;
         QuickHelpText [ portuguese ] = "Fonte de luz 8" ;
-        QuickHelpText [ english_us ] = "Light source 8" ;
+        QuickHelpText [ english_us ] = "Light Source 8!" ;
         QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 8" ;
         QuickHelpText [ swedish ] = "Ljuskälla 8" ;
         QuickHelpText [ danish ] = "Lyskilde 8" ;
@@ -1906,7 +1906,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Source de lumière 8" ;
         QuickHelpText [ dutch ] = "Lichtbron 8" ;
     QuickHelpText[ russian ] = "Èñòî÷íèê ñâåòà 8";
-        QuickHelpText[ polish ] = "?ród³o ?wiat³a 8";
+        QuickHelpText[ polish ] = "ród³o œwiat³a 8!";
         QuickHelpText[ japanese ] = "ŒõŒ¹ 8!";
         QuickHelpText[ chinese_simplified ] = "¹âÔ´ 8";
         QuickHelpText[ chinese_traditional ] = "¥ú·½ 8";
@@ -2005,7 +2005,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurdialoog kiezen" ;
     QuickHelpText[ russian ] = "Âûáğàòü öâåò â äèàëîãå";
-        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów!";
         QuickHelpText[ japanese ] = "F‚ÌÀŞ²±Û¸Ş‚ğ‘I‘ğ‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "ÑÕÉ«¶Ô»°À¸";
         QuickHelpText[ chinese_traditional ] = "³z¹LÃC¦â¤è¶ô¿ï¾ÜÃC¦â";
@@ -2035,7 +2035,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ dutch ] = "Lichtbron" ;
         Text[ chinese_simplified ] = "¹âÔ´";
         Text[ russian ] = "Èñòî÷íèê ñâåòà";
-        Text[ polish ] = "?ród³o ?wiat³a";
+        Text[ polish ] = "ród³o œwiat³a";
         Text[ japanese ] = "ŒõŒ¹";
         Text[ chinese_traditional ] = "¥ú·½";
         Text[ arabic ] = "ãÕÏÑ ÇáÖæÁ";
@@ -2077,7 +2077,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur uit catalogus kiezen" ;
     QuickHelpText[ russian ] = "Äèàëîãîâîå îêíî öâåòîâ";
-        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów!";
         QuickHelpText[ japanese ] = "F‚ÌÀŞ²±Û¸Ş‚ÅF‚ğ‘I‘ğ‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "½èÖúÑÕÉ«¶Ô»°À¸Ñ¡ÔñÑÕÉ«";
         QuickHelpText[ chinese_traditional ] = "³z¹LÃC¦â¹ï¸Ü¤è¶ô¿ï¾ÜÃC¦â";
@@ -2107,7 +2107,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Luz ambiente" ;
         Text[ chinese_simplified ] = "ÖÜÎ§¹âÏß";
         Text[ russian ] = "Îêğóæàşùèé ñâåò";
-        Text[ polish ] = "?wiat³o otaczaj¹ce";
+        Text[ polish ] = "Œwiat³o otaczaj¹ce";
         Text[ japanese ] = "üˆÍ‚Ì–¾‚é‚³‰ÁŒ¸";
         Text[ chinese_traditional ] = "¶g³ò¥ú½u";
         Text[ arabic ] = "áæä ÅÖÇÁÉ ÇáÈíÆÉ ÇáãÍíØÉ";
@@ -2136,7 +2136,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Iluminação" ;
         Text[ chinese_simplified ] = "ÕÕÃ÷";
         Text[ russian ] = "Îñâåùåíèå";
-        Text[ polish ] = "O?wietlenie";
+        Text[ polish ] = "Oœwietlenie";
         Text[ japanese ] = "Æ‚è‰f‚¦";
         Text[ chinese_traditional ] = "·Ó©ú";
         Text[ arabic ] = "ÇáÅÖÇÁÉ";
@@ -2183,7 +2183,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Direcção da luz" ;
         Text[ chinese_simplified ] = "¹âÔ´·½Ïò";
         Text[ russian ] = "Íàïğàâëåíèå ñâåòà";
-        Text[ polish ] = "Kierunek ?wiat³a";
+        Text[ polish ] = "Kierunek œwiat³a";
         Text[ japanese ] = "Œõ‚Ì•ûŒü";
         Text[ chinese_traditional ] = "¥ú·½¤è¦V";
         Text[ arabic ] = "ÇÊÌÇå ÇáÖæÁ";
@@ -2247,7 +2247,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Noir et blanc" ;
         QuickHelpText [ dutch ] = "Zwart-wit" ;
     QuickHelpText[ russian ] = "×åğíî-áåëîå";
-        QuickHelpText[ polish ] = "Czarno-bia³y";
+        QuickHelpText[ polish ] = "Czarno-bia³y!";
         QuickHelpText[ japanese ] = "”’•!";
         QuickHelpText[ chinese_simplified ] = "ºÚ°×";
         QuickHelpText[ chinese_traditional ] = "¶Â¥Õ";
@@ -2282,7 +2282,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Couleur" ;
         QuickHelpText [ dutch ] = "Kleur" ;
     QuickHelpText[ russian ] = "Öâåò";
-        QuickHelpText[ polish ] = "Kolor";
+        QuickHelpText[ polish ] = "Kolor!";
         QuickHelpText[ japanese ] = "F!";
         QuickHelpText[ chinese_simplified ] = "ÑÕÉ«";
         QuickHelpText[ chinese_traditional ] = "ÃC¦â";
@@ -2346,7 +2346,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Uniquement la texture" ;
         QuickHelpText [ dutch ] = "Alleen textuur" ;
     QuickHelpText[ russian ] = "Òîëüêî òåêñòóğà";
-        QuickHelpText[ polish ] = "Tylko tekstura";
+        QuickHelpText[ polish ] = "Tylko tekstura!";
         QuickHelpText[ japanese ] = "Ã¸½Á­±‚Ì‚İ!";
         QuickHelpText[ chinese_simplified ] = "Ö»ÊÇÎÆÀí";
         QuickHelpText[ chinese_traditional ] = "¥u¬O¯¾²z";
@@ -2381,7 +2381,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Texture et ombre" ;
         QuickHelpText [ dutch ] = "Textuur en schaduw" ;
     QuickHelpText[ russian ] = "Òåêñòóğà è òåíü";
-        QuickHelpText[ polish ] = "Tekstura i cieniowanie";
+        QuickHelpText[ polish ] = "Tekstura i cieniowanie!";
         QuickHelpText[ japanese ] = "Ã¸½Á­±‚Æ‰e•t‚«!";
         QuickHelpText[ chinese_simplified ] = "ÎÆÀíºÍÒõÓ°";
         QuickHelpText[ chinese_traditional ] = "¯¾²z©M³±¼v";
@@ -2416,7 +2416,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Texture, ombre et couleur" ;
         QuickHelpText [ dutch ] = "Textuur, schaduw en kleur" ;
     QuickHelpText[ russian ] = "Òåêñòóğà, òåíü, öâåò";
-        QuickHelpText[ polish ] = "Tekstura, Cieniowanie i Kolor";
+        QuickHelpText[ polish ] = "Tekstura, Cieniowanie i Kolor!";
         QuickHelpText[ japanese ] = "Ã¸½Á­±, ‰e•t‚«‹y‚ÑF!";
         QuickHelpText[ chinese_simplified ] = "ÎÆÀí£¬ÒõÓ°ºÍÑÕÉ«";
         QuickHelpText[ chinese_traditional ] = "¯¾²z¡A³±¼v©MÃC¦â";
@@ -2480,7 +2480,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Spécifique à l'objet" ;
         QuickHelpText [ dutch ] = "Passend bij object" ;
     QuickHelpText[ russian ] = "Â çàâèñèìîñòè îò îáúåêòà";
-        QuickHelpText[ polish ] = "Specyficzny dla obiektu";
+        QuickHelpText[ polish ] = "Specyficzny dla obiektu!";
         QuickHelpText[ japanese ] = "µ¼Ş­ÍŞ¸Ä‚Ì“Áê«!";
         QuickHelpText[ chinese_simplified ] = "ÌØÊâ¶ÔÏó";
         QuickHelpText[ chinese_traditional ] = "¯S®íª«¥ó";
@@ -2515,7 +2515,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Parallèle" ;
         QuickHelpText [ dutch ] = "Parallel" ;
     QuickHelpText[ russian ] = "Ïàğàëëåëüíî";
-        QuickHelpText[ polish ] = "Równolegle";
+        QuickHelpText[ polish ] = "Równolegle!";
         QuickHelpText[ japanese ] = "•½s!";
         QuickHelpText[ chinese_simplified ] = "Æ½ĞĞ";
         QuickHelpText[ chinese_traditional ] = "¥­¦æ";
@@ -2550,7 +2550,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Circulaire" ;
         QuickHelpText [ dutch ] = "Cirkelvormig" ;
     QuickHelpText[ russian ] = "Êğóãîîáğàçíûé";
-        QuickHelpText[ polish ] = "W kszta³cie ko³a";
+        QuickHelpText[ polish ] = "W kszta³cie ko³a!";
         QuickHelpText[ japanese ] = "‰~Œ`ó!";
         QuickHelpText[ chinese_simplified ] = "Ô²ĞÎ";
         QuickHelpText[ chinese_traditional ] = "¶ê§Î";
@@ -2614,7 +2614,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Spécifique à l'objet" ;
         QuickHelpText [ dutch ] = "Passend bij object" ;
     QuickHelpText[ russian ] = "Â çàâèñèìîñòè îò îáúåêòà";
-        QuickHelpText[ polish ] = "Specyficzny dla obiektu";
+        QuickHelpText[ polish ] = "Specyficzny dla obiektu!";
         QuickHelpText[ japanese ] = "µÌŞ¼Ş­¸Ä‚Ì“Áê«!";
         QuickHelpText[ chinese_simplified ] = "ÌØÊâ¶ÔÏó";
         QuickHelpText[ chinese_traditional ] = "¯S®íª«¥ó";
@@ -2649,7 +2649,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Parallèle" ;
         QuickHelpText [ dutch ] = "Parallel" ;
     QuickHelpText[ russian ] = "Ïàğàëëåëüíî";
-        QuickHelpText[ polish ] = "Równolegle";
+        QuickHelpText[ polish ] = "Równolegle!";
         QuickHelpText[ japanese ] = "•½s!";
         QuickHelpText[ chinese_simplified ] = "Æ½ĞĞ";
         QuickHelpText[ chinese_traditional ] = "¥­¦æ";
@@ -2684,7 +2684,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Circulaire" ;
         QuickHelpText [ dutch ] = "Cirkelvormig" ;
     QuickHelpText[ russian ] = "Êğóãîîáğàçíûé";
-        QuickHelpText[ polish ] = "W kszta³cie ko³a";
+        QuickHelpText[ polish ] = "W kszta³cie ko³a!";
         QuickHelpText[ japanese ] = "‰~Œ`ó!";
         QuickHelpText[ chinese_simplified ] = "Ô²ĞÎ";
         QuickHelpText[ chinese_traditional ] = "¶ê§Î";
@@ -2748,7 +2748,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Activer/désactiver le filtre" ;
         QuickHelpText [ dutch ] = "Filteren aan/uit" ;
     QuickHelpText[ russian ] = "Âêë./âûêë. ôèëüòğû";
-        QuickHelpText[ polish ] = "W³¹cz/Wy³¹cz filtrowanie";
+        QuickHelpText[ polish ] = "W³¹cz/Wy³¹cz filtrowanie!";
         QuickHelpText[ japanese ] = "Ì¨ÙÀ µİ/µÌ!";
         QuickHelpText[ chinese_simplified ] = "¼¤»î/Ê§»î¹ıÂË";
         QuickHelpText[ chinese_traditional ] = "¿E¬¡/¥¢¬¡¹LÂo¾¹";
@@ -3123,7 +3123,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurendialoog kiezen" ;
     QuickHelpText[ russian ] = "Âûáğàòü öâåò â äèàëîãå";
-        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów!";
         QuickHelpText[ japanese ] = "F‚ÌÀŞ²±Û¸Ş‚ÌF‚ğ‘I‘ğ‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "ÑÕÉ«¶Ô»°À¸";
         QuickHelpText[ chinese_traditional ] = "³z¹LÃC¦â¤è¶ô¿ï¾ÜÃC¦â";
@@ -3153,7 +3153,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Cor de iluminação" ;
         Text[ chinese_simplified ] = "ÕÕÃ÷ÑÕÉ«";
         Text[ russian ] = "Öâåò îñâåùåíèÿ";
-        Text[ polish ] = "Kolor o?wietlenia";
+        Text[ polish ] = "Kolor oœwietlenia";
         Text[ japanese ] = "Æ‚ç‚·F";
         Text[ chinese_traditional ] = "·Ó©úÃC¦â";
         Text[ arabic ] = "áæä ÇáÅÖÇÁÉ";
@@ -3195,7 +3195,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurdialoog kiezen" ;
     QuickHelpText[ russian ] = "Äèàëîãîâîå îêíî öâåòîâ";
-        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów!";
         QuickHelpText[ japanese ] = "F‚ÌÀŞ²±Û¸Ş‚ÌF‚ğ‘I‘ğ‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "½èÖúÑÕÉ«¶Ô»°À¸Ñ¡ÔñÑÕÉ«";
         QuickHelpText[ chinese_traditional ] = "³z¹LÃC¦â¤è¶ô¿ï¾ÜÃC¦â";
@@ -3267,7 +3267,7 @@ DockingWindow RID_SVXFLOAT_3D
         QuickHelpText [ french ] = "Sélectionner la couleur à partir de la boîte de dialogue de couleurs" ;
         QuickHelpText [ dutch ] = "Kleur via kleurendialoog kiezen" ;
     QuickHelpText[ russian ] = "Âûáğàòü öâåò â äèàëîãå";
-        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorów!";
         QuickHelpText[ japanese ] = "F‚ÌÀŞ²±Û¸Ş‚ÌF‚ğ‘I‘ğ‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "½èÖúÑÕÉ«¶Ô»°À¸Ñ¡ÔñÑÕÉ«";
         QuickHelpText[ chinese_traditional ] = "³z¹LÃC¦â¤è¶ô¿ï¾ÜÃC¦â";
@@ -3297,7 +3297,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ portuguese ] = "Intensidade" ;
         Text[ chinese_simplified ] = "Ç¿¶È";
         Text[ russian ] = "Èíòåíòñèâíîñòü";
-        Text[ polish ] = "Intensywno?æ";
+        Text[ polish ] = "Intensywnoœæ";
         Text[ japanese ] = "–¾ˆÃ“x";
         Text[ chinese_traditional ] = "±j«×";
         Text[ arabic ] = "ÇáÔÏÉ";
@@ -3625,4 +3625,5 @@ String RID_SVXFLOAT3D_FIX_B
     Text[ catalan ] = "A:";
     Text[ finnish ] = "B:";
 };
+
 
