@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 19:12:07 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class SdrEditView;
 class ScNoteMarker;
 class FloatingWindow;
 class SdrHdlList;
+class ScTransferObj;
 
         //  Maus-Status (nMouseStatus)
 
@@ -255,6 +256,8 @@ private:
 
     sal_Int8        AcceptPrivateDrop( const AcceptDropEvent& rEvt );
     sal_Int8        ExecutePrivateDrop( const ExecuteDropEvent& rEvt );
+    sal_Int8        DropTransferObj( ScTransferObj* pTransObj, USHORT nDestPosX, USHORT nDestPosY,
+                                    const Point& rLogicPos, sal_Int8 nDndAction );
 
     BOOL            DrawMouseButtonDown(const MouseEvent& rMEvt);
     BOOL            DrawMouseButtonUp(const MouseEvent& rMEvt);
@@ -297,6 +300,8 @@ private:
 #ifdef AUTOFILTER_POPUP
     void            DoAutoFilterPopup( USHORT nCol, USHORT nRow, BOOL bDataSelect );
 #endif
+
+    void            PasteSelection( const Point& rPosPixel );
 
 protected:
     virtual void    Resize( const Size& rSize );

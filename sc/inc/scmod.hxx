@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:31:58 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ class ScNavipiCfg;
 class ScFormEditData;
 class ScTransferObj;
 class ScDrawTransferObj;
+class ScSelectionTransferObj;
 
 //==================================================================
 
@@ -154,6 +155,7 @@ class ScModule: public ScModuleDummy, public SfxListener
     Timer               aSpellTimer;
     ScDragData          aDragData;
     ScClipData          aClipData;
+    ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
     //  globalen InputHandler gibt's nicht mehr, jede View hat einen
     ScInputHandler*     pRefInputHandler;
@@ -209,6 +211,10 @@ public:
     void                SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
 
     ScDocument*         GetClipDoc();       // called from document - should be removed later
+
+    //  X selection:
+    ScSelectionTransferObj* GetSelectionTransfer() const    { return pSelTransfer; }
+    void                SetSelectionTransfer( ScSelectionTransferObj* pNew );
 
     void                SetWaterCan( BOOL bNew )    { bIsWaterCan = bNew; }
     BOOL                GetIsWaterCan() const       { return bIsWaterCan; }

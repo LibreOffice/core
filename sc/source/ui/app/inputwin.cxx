@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:33:17 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,16 @@ void __EXPORT ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if (pEditView)
         if (pEditView->MouseButtonUp( rMEvt ))
-            SC_MOD()->InputSelection( pEditView );
+        {
+            if ( rMEvt.IsMiddle() &&
+                     GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION )
+            {
+                //  EditView may have pasted from selection
+                SC_MOD()->InputChanged( pEditView );
+            }
+            else
+                SC_MOD()->InputSelection( pEditView );
+        }
 }
 
 void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )

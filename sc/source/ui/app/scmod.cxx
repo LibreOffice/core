@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-13 16:23:11 $
+ *  last change: $Author: nn $ $Date: 2001-10-02 18:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     ScModuleDummy( SFX_APP()->CreateResManager( "sc" ), FALSE, pFact ),
     bIsWaterCan( FALSE ),
     bIsInEditCommand( FALSE ),
+    pSelTransfer( NULL ),
     pRefInputHandler( NULL ),
     pViewCfg( NULL ),
     pDocCfg( NULL ),
@@ -200,6 +201,8 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
 ScModule::~ScModule()
 {
+    DBG_ASSERT( !pSelTransfer, "Selection Transfer object not deleted" );
+
     //  InputHandler braucht nicht mehr geloescht zu werden (gibt keinen an der App mehr)
 
     DELETEZ( pMessagePool );
@@ -650,6 +653,13 @@ ScDocument* ScModule::GetClipDoc()
         return pObj->GetDocument();
 
     return NULL;
+}
+
+//------------------------------------------------------------------
+
+void ScModule::SetSelectionTransfer( ScSelectionTransferObj* pNew )
+{
+    pSelTransfer = pNew;
 }
 
 //------------------------------------------------------------------
