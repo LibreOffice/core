@@ -2,9 +2,9 @@
  *
  *  $RCSfile: user9x.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+ *  last change: $Author: tra $ $Date: 2000-09-25 07:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ extern BOOL ( WINAPI * lpfnUnregisterClassW ) (
 #define SendMessageW       lpfnSendMessageW
 #define CreateWindowExW    lpfnCreateWindowExW
 #define RegisterClassExW   lpfnRegisterClassExW
-#define UnregisterClassW   lpfnUnregisterClassExW
+#define UnregisterClassW   lpfnUnregisterClassW
 
 void User9xInit(LPOSVERSIONINFO lpVersionInfo);
 void User9xDeInit();
