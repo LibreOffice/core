@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2005-02-24 17:20:48 $
+ *  last change: $Date: 2005-03-29 11:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,12 +440,15 @@ public class GraphicalTestArguments
 
     public static void checkIfMSWindowsConformPath(String _sPath)
         {
-            if (_sPath.charAt(1) == ':')
+            if (_sPath != null  && _sPath.length() > 1)
             {
-                if (_sPath.charAt(2) != '\\')
+                if (_sPath.charAt(1) == ':')
                 {
-                    System.out.println("This is not a Microsoft Windows conform path: '" + _sPath + "' please fix.");
-                    System.exit(1);
+                    if (_sPath.charAt(2) != '\\')
+                    {
+                        System.out.println("This is not a Microsoft Windows conform path: '" + _sPath + "' please fix.");
+                        System.exit(1);
+                    }
                 }
             }
         }
