@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-27 12:26:23 $
+ *  last change: $Author: mba $ $Date: 2001-07-18 17:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,7 @@ sal_Bool SvtSecurityOptions_Impl::IsExecutePlugins() const
 void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
 {
     m_bExecutePlugins =  bSet;
+    SetModified();
 }
 
 //*****************************************************************************************************************
