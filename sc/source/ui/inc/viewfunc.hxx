@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: nn $ $Date: 2000-11-16 13:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,8 @@ public:
 
     void            SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges,
                                         ScSizeMode eMode, USHORT nSizeTwips,
-                                        BOOL bRecord = TRUE, BOOL bPaint = TRUE );
+                                        BOOL bRecord = TRUE, BOOL bPaint = TRUE,
+                                        ScMarkData* pMarkData = NULL );
     void            SetMarkedWidthOrHeight( BOOL bWidth, ScSizeMode eMode, USHORT nSizeTwips,
                                         BOOL bRecord = TRUE, BOOL bPaint = TRUE );
     void            ShowMarkedColumns( BOOL bShow, BOOL bRecord = TRUE );
