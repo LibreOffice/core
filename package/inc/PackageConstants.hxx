@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageConstants.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #endif
 
 const sal_Int32 n_ConstBufferSize = 32768;
-const sal_Int32 n_ConstNonSpannableBufferSize = 128;
 const sal_Int32 n_ConstMaxMemoryStreamSize = 20480;
 
 #endif
