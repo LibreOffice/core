@@ -8082,3 +8082,14 @@ _real@40c3880000000000
 ?_M_allocate_and_copy@?$vector@HV?$allocator@H@_STL@@@_STL@@IAEPAHIPAH0@Z
 ?reserve@?$vector@HV?$allocator@H@_STL@@@_STL@@QAEXI@Z
 _real@3fd3333333333333
+?GetOutOffXPixel@OutputDevice@@QBEJXZ
+?GetOutputWidthPixel@OutputDevice@@QBEJXZ
+??0Menu@@QAE@E@Z
+?GetSystemMenuData@Menu@@QBEEPAUSystemMenuData@@@Z
+?HandleMenuActivateEvent@MenuBar@@QBEEPAVMenu@@@Z
+?HandleMenuCommandEvent@MenuBar@@QBEEPAVMenu@@G@Z
+?HandleMenuDeActivateEvent@MenuBar@@QBEEPAVMenu@@@Z
+?HandleMenuHighlightEvent@MenuBar@@QBEEPAVMenu@@G@Z
+?IsDisplayable@MenuBar@@QBEEXZ
+?SetDisplayable@MenuBar@@QAEXE@Z
+??0WinImeStatus@@QAE@XZ
