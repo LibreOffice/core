@@ -8,9 +8,7 @@ End Sub
 
 
 Function CalEasterTable&amp;(byval Year%)
-
-	Dim   B,C,D,E,F,G,H,I,K,L,M,N,O, nMonth, nDay As Integer
-
+Dim B%,C%,D%,E%,F%,G%,H%,I%,K%,L%,M%,N%,O%, nMonth%, nDay%
        N = Year% mod 19
        B = int(Year% / 100)
        C = Year% mod 100
@@ -26,20 +24,17 @@ Function CalEasterTable&amp;(byval Year%)
        O = H + L - 7 * M + 114
        nDay = O mod 31 + 1
        nMonth = int(O / 31)
-	   CalEasterTable&amp; = DateSerial(Year%, nMonth,nDay)
+	   CalEasterTable&amp; = DateSerial(Year, nMonth,nDay)
 End Function
-
 
 
 Sub CalInitGlobalVariablesDate()
 Dim i as Integer
-
 	For i = 1 To 374
 		CalBankholidayName$(i) = &quot;&quot;
 		CalTypeOfBankHoliday%(i) = cHolidayType_None
 	Next
 End Sub
-
 
 
 Sub CalInsertBankholiday(byval CurDate as Long, byval EventName as String, ByVal iLevel as Integer)

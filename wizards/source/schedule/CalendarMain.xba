@@ -35,8 +35,6 @@ Public cCalStyleWorkday$, cCalStyleWeekend$
 &apos; German only
 &apos; Variablen, die zur Verwaltung der Eingabe der Bundesländer dienen
 Public CalChoosenLand as Integer
-&apos; LandWhenClick%,  MouseClicked%,
-Public LastMousePosX, LastMousePosY As Single
 
 Public oDocument as Object
 Public oSheets as Object
@@ -70,7 +68,7 @@ Dim BitmapDir as String
 Dim iThisMonth as Integer
 &apos; On Error Goto ErrorHandler
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	bDoSelect = True
+	bSelectByMouseMove = True
 	&apos; HauptRoutine zur Erstellung des Kalenders
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oStatusline = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
@@ -79,44 +77,40 @@ Dim iThisMonth as Integer
 	DlgCalendar = LoadDialog(&quot;Schedule&quot;, &quot;DlgCalendar&quot;)
 	DlgCalModel = DlgCalendar.Model
     LoadLanguage(sCurLangLocale)
-	&apos; Da modulübergreifende Variablen unsicher sind,
-	&apos; wird ihre Initialisierung noch einmal explizit
-	&apos; angegeben.
 	CalInitGlobalVariablesDate()
 	BitmapDir = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/bitmap&quot;)
 	DlgCalModel.imgCountry.ImageURL = BitmapDir &amp; sBitmapFilename
 	CalChoosenLand = -2
-&apos;	MouseClicked% = False
-
-	&apos; Die Daten für die eigenen Ereignisdaten werden geladen.
+	CurOwnMonth = -1
 	CalLoadOwnData()
-
 	With DlgCalModel
-&apos; Todo: In der DocAssigndatenbank festhalten, dass der Font der Listbox lstOwnEvents für die asiatischen
-&apos; Sprachen von Hand von Cumberland umgesetzt werden muss
 		.cmdDelete.Enabled = False
-&apos;		.lstMonth.Tag = DlgCalModel.txtMonth.Text
 		.lstMonth.StringItemList() = cCalShortMonthNames()
+		Select Case sCurLangLocale
+			Case &quot;ja&quot;
+				.DlgCalModel.lstOwnData.FontName = &quot;HG Mincho Light J&quot;
+			Case &quot;zh&quot;
+				If oDocument.CharLocale.Country = &quot;CN&quot; Then
+					.DlgCalModel.lstOwnData.FontName = &quot;HG MSung Light SC&quot;
+				Else
+					.DlgCalModel.lstOwnData.FontName = &quot;HG MSung Light TC&quot;
+				End If
+			Case &quot;ko&quot;
+				.DlgCalModel.lstOwnData.FontName = &quot;HG MyeongJo Light K&quot;
+		End Select
 		.lstOwnEventMonth.StringItemList() = cCalShortMonthNames()
 		.optYear.State = 1
-		.txtYear.Text = Year(Now())
-		.txtYear.Tag = DlgCalModel.txtYear.Text
+		.txtYear.Value = Year(Now())
+		.txtYear.Tag = .txtYear.Value
 		.Step = 1
 	End With
 	CalChooseCalendar()  &apos; month
 	iThisMonth = Month(Now)
 	DlgCalendar.GetControl(&quot;lstMonth&quot;).SelectItemPos(iThisMonth-1, True)
 	DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(0,True)
-
-&apos;	bCancelTask = False
 	ToggleWindow(True)
 	DlgCalendar.Execute()
 	DlgCalendar.Dispose()
-&apos;	Do
-&apos;		If Not bCancelTask Then
-&apos;			DlgCalendar.Visible = True
-&apos;		End If
-&apos;	Loop Until bCancelTask
 	Exit Sub
 
 ErrorHandler:
@@ -151,7 +145,7 @@ Dim SelYear as String
 	Call CalSaveOwnData()
 	UnprotectSheets(oSheets)
 	oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
-	iSelYear = Val(DlgCalModel.txtYear.Text)
+	iSelYear = DlgCalModel.txtYear.Value
 	Select Case sCurLangLocale
 		Case cLANGUAGE_GERMAN
 			If Ubound(DlgCalModel.lstHolidays.SelectedItems()) &gt; -1 Then

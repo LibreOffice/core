@@ -3,43 +3,13 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DlgControl" script:language="StarBasic">Option Explicit
 
 Dim CalBitmap As Object
-Public bDoSelect as Boolean
+Public bSelectByMouseMove as Boolean
 
 &apos; Todo: Adjustmentlistener an der Scrollbar anmelden
 
 Sub Main()
 	Call CalAutopilotTable()
 End Sub
-
-
-Sub CalSaveTextValues()
-	txtYear.Tag = txtYear.Text
-	txtMonth.Tag = txtMonth.Text
-End Sub
-
-
-Sub CalRestoreOldValues()
-	Beep
-	&apos; Start of the Gregorian Calendar
-	If int(Val(txtyear.Text)) &lt; 1583 then
-		txtYear.Text = &quot;1583&quot;
-	Else
-		&apos; last year where the easter Routin works
-		txtYear.Text = &quot;9956&quot;
-	End If
-	txtMonth.Text = txtMonth.Tag
-End Sub
-
-
-
-Sub CalChangeYear()
-	Dim ValNewYear&amp;
-	ValNewYear&amp; = Val(txtYear.Text)
-	If (1583 &gt; ValNewYear&amp;) Or (9956 &lt; ValNewYear&amp;) Then
-		Call CalRestoreOldValues()
-	End If          
-End Sub
-
 
 
 Sub CalcmdDeleteSelect()
@@ -59,38 +29,38 @@ End Sub
 
 Sub CalSaveOwnEventControls()
 	With DlgCalModel
-		.txtOwnEventDay.Tag = .txtOwnEventDay.Text
+		.txtOwnEventDay.Tag = .txtOwnEventDay.Value
 		.txtOwnEventMonth.Tag = .txtOwnEventMonth.Text
-		.DlgCalModel.txtOwnEventYear.Tag = .DlgCalModel.txtOwnEventYear.Text
+		.DlgCalModel.txtOwnEventYear.Tag = DlgCalModel.txtOwnEventYear.Value
 	End With
 End Sub
 
 
 
-Sub ModIntTextBox (txtYear As Object, ByVal nMax%, ByVal nMin%, ByVal sDefault$, IncFactor as Integer)
-	Dim nActVal&amp;
-	nActVal&amp; = Val(txtYear.Text)
-	If ((0 = nActVal&amp;) Or (nMax% &lt; nActVal&amp;) Or (nMin% &gt; nActVal&amp;)) Then 
-		Beep
-		txtYear.Text = sDefault$
-		Exit Sub
-	End If
-	If IncFactor = 1 Then
-		If nMax% &gt; nActVal&amp; Then
-			txtYear.Text = Trim(Str(nActVal&amp; + 1))
-		Else
-			Beep
-			txtYear.Text = nMax%
-		End if
-	ElseIf IncFactor = -1 Then
-		If nMin% &lt; nActVal&amp; Then
-			txtYear.Text = Trim(Str(nActVal&amp; - 1))
-		Else
-			Beep
-			txtYear.Text = nMin%
-		End if
-	End If
-End Sub
+&apos;Sub ModIntTextBox (txtYear As Object, ByVal nMax%, ByVal nMin%, ByVal sDefault$, IncFactor as Integer)
+&apos;	Dim nActVal&amp;
+&apos;	nActVal&amp; = Val(txtYear.Text)
+&apos;	If ((0 = nActVal&amp;) Or (nMax% &lt; nActVal&amp;) Or (nMin% &gt; nActVal&amp;)) Then 
+&apos;		Beep
+&apos;		txtYear.Text = sDefault$
+&apos;		Exit Sub
+&apos;	End If
+&apos;	If IncFactor = 1 Then
+&apos;		If nMax% &gt; nActVal&amp; Then
+&apos;			txtYear.Text = Trim(Str(nActVal&amp; + 1))
+&apos;		Else
+&apos;			Beep
+&apos;			txtYear.Text = nMax%
+&apos;		End if
+&apos;	ElseIf IncFactor = -1 Then
+&apos;		If nMin% &lt; nActVal&amp; Then
+&apos;			txtYear.Text = Trim(Str(nActVal&amp; - 1))
+&apos;		Else
+&apos;			Beep
+&apos;			txtYear.Text = nMin%
+&apos;		End if
+&apos;	End If
+&apos;End Sub
 
 
 
@@ -101,8 +71,8 @@ Sub ToggleYearBox()
 	With DlgCalModel
 		.txtOwnEventYear.Enabled  = .chkEventOnce.State = 1
 		.lblEventYear.Enabled  = .chkEventOnce.State = 1
-		If .txtOwnEventYear.Text = &quot;&quot; And .lblEventYear.Enabled Then
-			.txtOwnEventYear.Text = Trim$(Str$(Year(Now())))
+		If .txtOwnEventYear.Value = 0 And .lblEventYear.Enabled Then
+			.txtOwnEventYear.Value = Year(Now)
 		End If
 	End With
 End Sub
@@ -110,47 +80,51 @@ End Sub
 
 Sub CalMouseMoved(aEvent as object)
 Dim ListIndex as Integer
-	&apos; Nimmt Mousemoves ueber dem Bitmap entgegen, und wertet sie je nach Land aus.
 	Select Case sCurLangLocale
 		Case  cLANGUAGE_GERMAN
-		&apos; Ermittelt das Land auf dem sich der MausCursor befindet, und aktualisiert
-		&apos; die Textbox mit der Bundeslandbezeichnung, falls ein Mausklick stattfandt.
-			oStatusline.SetText(aEvent.ClickCount)
-			If bDoSelect Then
+			If bSelectByMouseMove Then
 				ListIndex = CalGetGermanLandAtMousePos(aEvent.X, aEvent.Y, Land$)
 				DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
-				If aEvent.ClickCount = 1 Then
-					bDoSelect = False
-				End If
 			End If
-	End Select
-	
-	LastMousePosX = aEvent.X
-	LastMousePosY = aEvent.Y
+	End Select	
 End Sub
 
 
-Sub CalChangeGeneralMonth()
-
-	Dim MonthToCheck$
-	Dim ValMonthToCheck%
-
-	MonthToCheck$ = DlgCalModel.txtMonth.Text
-	ValMonthToCheck% = Val(MonthToCheck$)
-
-	If (ValMonthToCheck% &gt;= 1) And (ValMonthToCheck% &lt;=12) Then
-		DlgCalModel.txtMonth.Text = cCalShortMonthNames$(ValMonthToCheck%)
-		Exit Sub
+Sub SelectState(aEvent as Object)
+Dim ListIndex as Integer
+	If aEvent.ClickCount &gt;= 1 Then
+		ListIndex = CalGetGermanLandAtMousePos(aEvent.X, aEvent.Y, Land$)
+		DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
+		bSelectByMouseMove = False
 	End If
-
-	If CalGetIntOfShortMonthName%(Trim(Left(MonthToCheck$, 3))) = 0 Then
-		Beep
-		DlgCalModel.txtMonth.Text = DlgCalModel.txtMonth.Tag
-	Else
-		DlgCalModel.txtMonth.Text = Trim(Left(MonthToCheck, 3))
-	End If
-
 End Sub
+
+Sub MouseLeavesImage
+	bSelectbyMouseMove = True
+End Sub
+
+
+&apos;Sub CalChangeGeneralMonth()
+&apos;
+&apos;	Dim MonthToCheck$
+&apos;	Dim ValMonthToCheck%
+&apos;
+&apos;	MonthToCheck$ = DlgCalModel.txtMonth.Text
+&apos;	ValMonthToCheck% = Val(MonthToCheck$)
+&apos;
+&apos;	If (ValMonthToCheck% &gt;= 1) And (ValMonthToCheck% &lt;=12) Then
+&apos;		DlgCalModel.txtMonth.Text = cCalShortMonthNames$(ValMonthToCheck%)
+&apos;		Exit Sub
+&apos;	End If
+&apos;
+&apos;	If CalGetIntOfShortMonthName%(Trim(Left(MonthToCheck$, 3))) = 0 Then
+&apos;		Beep
+&apos;		DlgCalModel.txtMonth.Text = DlgCalModel.txtMonth.Tag
+&apos;	Else
+&apos;		DlgCalModel.txtMonth.Text = Trim(Left(MonthToCheck, 3))
+&apos;	End If
+&apos;
+&apos;End Sub
 
 
 
@@ -161,13 +135,15 @@ Dim NullList() as String
 		.chkEventOnce.State = 0
 		.lblEventYear.Enabled = False
 		.txtOwnEventYear.Enabled = False
-		.txtOwnEventYear.Text = &quot;&quot;
+		.txtOwnEventYear.SetPropertyToDefault(&quot;Value&quot;)
 		.txtEvent.Text = &quot;&quot;
-		.txtOwnEventDay.Text = &quot;&quot;
+		.txtOwnEventDay.SetPropertyToDefault(&quot;Value&quot;)
+		.cmdInsert.Enabled = False
 &apos; Todo: Wie kriegt man den Focus auf dieses  verdammte Control?		
 &apos;		.txtEvent.DefaultButton = True
 	End With
-	DlgCalModel.lstOwnEventMonth.SelectedItems() = Nulllist()
+	DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItemPos(0,True)
+	CurOwnMonth = 1
 End Sub
 
 
@@ -191,24 +167,6 @@ Sub ToggleInsertButton()
 End Sub
 
 
-&apos;Sub CalModMonthTextBox(txtMonth As Object,IncFactor as Integer)
-&apos;	Dim nActVal&amp;
-&apos;	nActVal&amp; = Val(txtMonth.Text)
-&apos;	If (1 &lt;= nActVal&amp; And 12 &gt;= nActVal) Then
-&apos;		txtMonth.Text = cCalShortMonthNames$(nActVal&amp;)
-&apos;	End If
-&apos;	nActVal&amp; = CalGetIntOfShortMonthName%(txtMonth.Text)
-&apos;	If 0 = nActVal&amp; Then
-&apos;		Beep
-&apos;		txtMonth.Text = cCalShortMonthNames$(1)
-&apos;	ElseIf (1 &lt; nActVal&amp;) AND (IncFactor = -1) Then
-&apos;		txtMonth.Text = cCalShortMonthNames$(nActVal&amp; + IncFactor)
-&apos;	ElseIf (12 &gt; nActVal&amp;)AND (IncFactor = 1) Then
-&apos;		txtMonth.Text = cCalShortMonthNames$(nActVal&amp; + IncFactor)
-&apos;	End If
-&apos;End Sub
-
-
 Sub CalUpdateNewEventFrame()
 Dim bDoEnable as Boolean
 Dim sSelectedItem
@@ -221,20 +179,25 @@ Dim iMonth as Integer
 		If MaxSelIndex &gt; -1 Then
 			ListIndex = .lstOwnData.SelectedItems(MaxSelIndex)
 			.txtEvent.Text = CalGetNameofEvent(ListIndex)
-			.txtOwnEventDay.Text = CalGetDayOfEvent(ListIndex)
+			.txtOwnEventDay.Value = CalGetDayOfEvent(ListIndex)
 			iMonth = CalGetMonthOfEvent(ListIndex)
-			DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItemPos(iMonth, True)
-			.txtOwnEventYear.Text = CalGetYearofEvent(ListIndex)
-			bDoEnable = DlgCalModel.txtOwnEventYear.Text = &quot;&quot;
+			DlgCalendar.GetControl(&quot;lstOwnEventMonth&quot;).SelectItemPos(iMonth-1, True)
+			CurOwnMonth = DlgCalModel.lstOwnEventMonth.SelectedItems(0) + 1
+			If CalGetYearofEvent(ListIndex) &lt;&gt; 0 Then
+				.txtOwnEventYear.Value = CalGetYearofEvent(ListIndex)
+				bDoEnable = True
+			Else
+				bDoEnable = False
+				DlgCalModel.txtOwnEventYear.SetPropertyToDefault(&quot;Value&quot;)
+			End If
 			.chkEventOnce.State = Abs(bDoEnable)
 			.lblEventYear.Enabled = bDoEnable
 			.txtOwnEventYear.Enabled = bDoEnable
 			.cmdDelete.Enabled = True
+			.cmdInsert.Enabled = True
 		Else
 			Call CalClearInputMask()
 			.cmdDelete.Enabled = False
 		End If
 	End With
-End Sub
-
-</script:module>
+End Sub</script:module>
