@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:27:22 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     nDragHandleX( 0 ),
     nDragHandleY( 0 ),
     nDragSourceFlags( 0 ),
-    bDragWasInternal( FALSE )
+    bDragWasInternal( FALSE ),
+    bUsedForLink( FALSE )
 {
     DBG_ASSERT(pDoc->IsClipboard(), "wrong document");
 
@@ -321,8 +322,16 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         }
         else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SOT_FORMAT_RTF )
         {
+            //  if this transfer object was used to create a DDE link, filtered rows
+            //  have to be included for subsequent calls (to be consistent with link data)
+            if ( nFormat == SOT_FORMATSTR_ID_LINK )
+                bUsedForLink = TRUE;
+
+            BOOL bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
+
             ScImportExport aObj( pDoc, aBlock );
             aObj.SetFormulas( pDoc->GetViewOptions().GetOption( VOPT_FORMULAS ) );
+            aObj.SetIncludeFiltered( bIncludeFiltered );
 
             //  DataType depends on format type:
 

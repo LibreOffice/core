@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-04 11:35:12 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 12:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,16 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
 {
     TransferableDataHelper aDataHelper( rxTransferable );
 
+    //  get link data from transferable before string data,
+    //  so the source knows it will be used for a link
+
+    uno::Sequence<sal_Int8> aSequence;
+    if ( !aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aSequence ) )
+    {
+        DBG_ERROR("DDE Data not found.");
+        return FALSE;
+    }
+
     //  check size (only if string is available in transferable)
 
     USHORT nCols = 1;
@@ -584,12 +594,6 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
 
     //  create formula
 
-    uno::Sequence<sal_Int8> aSequence;
-    if ( !aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aSequence ) )
-    {
-        DBG_ERROR("DDE Data not found.");
-        return FALSE;
-    }
     long nSeqLen = aSequence.getLength();
     sal_Char* pData = (sal_Char*)aSequence.getConstArray();
 

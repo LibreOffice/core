@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-10-02 12:52:56 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 12:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ class StarBASIC;
 ScImportExport::ScImportExport( ScDocument* p )
     : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
       nSizeLimit( 0 ), bSingle( TRUE ), bAll( TRUE ), bUndo( FALSE ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bOverflow( FALSE )
+      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bOverflow( FALSE )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -148,7 +149,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
     : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
       aRange( rPt ),
       nSizeLimit( 0 ), bSingle( TRUE ), bAll( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bOverflow( FALSE )
+      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bOverflow( FALSE )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -162,7 +164,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
     : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
       aRange( r ),
       nSizeLimit( 0 ), bSingle( FALSE ), bAll( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bOverflow( FALSE )
+      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bOverflow( FALSE )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -177,7 +180,8 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
     : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
       nSizeLimit( 0 ), bSingle( TRUE ), bAll( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bOverflow( FALSE )
+      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bOverflow( FALSE )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -1135,23 +1139,44 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
-        for (nCol = nStartCol; nCol <= nEndCol; nCol++)
+        if (bIncludeFiltered || !pDoc->IsFiltered( nRow, aRange.aStart.Tab() ))
         {
-            CellType eType;
-            pDoc->GetCellType( nCol, nRow, aRange.aStart.Tab(), eType );
-            switch (eType)
+            for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             {
-                case CELLTYPE_FORMULA:
+                CellType eType;
+                pDoc->GetCellType( nCol, nRow, aRange.aStart.Tab(), eType );
+                switch (eType)
                 {
-                    if (bFormulas)
+                    case CELLTYPE_FORMULA:
                     {
-                        pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCell, TRUE );
-                        if( aCell.Search( cSep ) != STRING_NOTFOUND )
-                            lcl_WriteString( rStrm, aCell, cStr );
+                        if (bFormulas)
+                        {
+                            pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCell, TRUE );
+                            if( aCell.Search( cSep ) != STRING_NOTFOUND )
+                                lcl_WriteString( rStrm, aCell, cStr );
+                            else
+                                lcl_WriteSimpleString( rStrm, aCell );
+                        }
                         else
-                            lcl_WriteSimpleString( rStrm, aCell );
+                        {
+                            pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                            if( aCell.Search( cSep ) != STRING_NOTFOUND )
+                                lcl_WriteString( rStrm, aCell, cStr );
+                            else
+                                lcl_WriteSimpleString( rStrm, aCell );
+                        }
                     }
-                    else
+                    break;
+                    case CELLTYPE_VALUE:
+                    {
+                        pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                        lcl_WriteSimpleString( rStrm, aCell );
+                    }
+                    break;
+                    case CELLTYPE_NOTE:
+                    case CELLTYPE_NONE:
+                    break;
+                    default:
                     {
                         pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
                         if( aCell.Search( cSep ) != STRING_NOTFOUND )
@@ -1160,34 +1185,16 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
                             lcl_WriteSimpleString( rStrm, aCell );
                     }
                 }
-                break;
-                case CELLTYPE_VALUE:
-                {
-                    pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
-                    lcl_WriteSimpleString( rStrm, aCell );
-                }
-                break;
-                case CELLTYPE_NOTE:
-                case CELLTYPE_NONE:
-                break;
-                default:
-                {
-                    pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
-                    if( aCell.Search( cSep ) != STRING_NOTFOUND )
-                        lcl_WriteString( rStrm, aCell, cStr );
-                    else
-                        lcl_WriteSimpleString( rStrm, aCell );
-                }
+                if( nCol < nEndCol )
+                    lcl_WriteSimpleString( rStrm, String(cSep) );
             }
-            if( nCol < nEndCol )
-                lcl_WriteSimpleString( rStrm, String(cSep) );
+//          if( nRow < nEndRow )
+                WriteUnicodeOrByteEndl( rStrm );
+            if( rStrm.GetError() != SVSTREAM_OK )
+                break;
+            if( nSizeLimit && rStrm.Tell() > nSizeLimit )
+                break;
         }
-//      if( nRow < nEndRow )
-            WriteUnicodeOrByteEndl( rStrm );
-        if( rStrm.GetError() != SVSTREAM_OK )
-            break;
-        if( nSizeLimit && rStrm.Tell() > nSizeLimit )
-            break;
     }
 
     return BOOL( rStrm.GetError() == SVSTREAM_OK );

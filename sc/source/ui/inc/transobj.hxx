@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:29:11 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 12:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ private:
     USHORT                          nVisibleTab;
     USHORT                          nDragSourceFlags;
     BOOL                            bDragWasInternal;
+    BOOL                            bUsedForLink;
 
     void        InitDocShell();
     static void StripRefs( ScDocument* pDoc, USHORT nStartX, USHORT nStartY,

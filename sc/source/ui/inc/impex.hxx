@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-09-07 19:36:41 $
+ *  last change: $Author: nn $ $Date: 2001-10-19 12:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class ScImportExport
     sal_Unicode cSep;                   // Separator
     sal_Unicode cStr;                   // String Delimiter
     BOOL        bFormulas;              // Formeln im Text?
+    BOOL        bIncludeFiltered;       // include filtered rows? (default true)
     BOOL        bAll;                   // keine Selektion
     BOOL        bSingle;                // Einfachselektion
     BOOL        bUndo;                  // Mit Undo?
@@ -144,6 +145,8 @@ public:
     void SetDelimiter( sal_Unicode c ) { cStr = c; }
     BOOL IsFormulas() const { return bFormulas; }
     void SetFormulas( BOOL b ) { bFormulas = b; }
+    BOOL IsIncludeFiltered() const { return bIncludeFiltered; }
+    void SetIncludeFiltered( BOOL b ) { bIncludeFiltered = b; }
 
     void SetSizeLimit( ULONG nNew ) { nSizeLimit = nNew; }  // momentan nur fuer Ascii
 
