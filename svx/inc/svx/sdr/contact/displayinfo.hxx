@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:03:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 // predeclarations
 
 class SdrPageView;
-class ExtOutputDevice;
+class XOutputDevice;
 class SdrPaintInfoRec;
 class OutputDevice;
 class SdrPage;
@@ -140,7 +140,7 @@ namespace sdr
             svtools::ColorConfig                            maColorConfig;
 
             // old stuff, for first compatible tests
-            ExtOutputDevice*                                mpExtOutputDevice;
+            XOutputDevice*                              mpExtOutputDevice;
             SdrPaintInfoRec*                                mpPaintInfoRec;
 
             // The root ViewObjectContact of the current visualisation. Set from
@@ -214,8 +214,8 @@ namespace sdr
             const SetOfByte& GetProcessLayers() const;
 
             // access to ExtendedOutputDevice
-            void SetExtendedOutputDevice(ExtOutputDevice* pExtOut);
-            ExtOutputDevice* GetExtendedOutputDevice() const;
+            void SetExtendedOutputDevice(XOutputDevice* pExtOut);
+            XOutputDevice* GetExtendedOutputDevice() const;
 
             // access to PaintInfoRec
             void SetPaintInfoRec(SdrPaintInfoRec* pInfoRec);
