@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-25 13:25:20 $
+ *  last change: $Author: mba $ $Date: 2000-11-07 16:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,7 +858,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI )
         if ( pBindings )
         {
             pBindings->SetDispatcher(this);
-            pBindings->SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
+            pBindings->SetActiveFrame( pImp->pFrame->GetFrame()->GetFrameInterface() );
         }
     }
     else
