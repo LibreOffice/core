@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 17:31:58 $
+ *  last change: $Author: fs $ $Date: 2002-10-18 08:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,7 +788,6 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 60, 232 );
         Size = MAP_APPFONT( 30, 10 );
         UniqueId = UID_SEARCH_RECORDSTATUS;
-        TabStop = TRUE;
     };
     FixedText FT_HINT
     {
