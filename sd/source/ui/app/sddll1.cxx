@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:47:26 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef SD_GRAPHIC_OBJECT_BAR_HXX
 #include "GraphicObjectBar.hxx"
+#endif
+#ifndef SD_MEDIA_OBJECT_BAR_HXX
+#include "MediaObjectBar.hxx"
 #endif
 #ifndef SD_DRAW_OBJECT_BAR_HXX
 #include "DrawObjectBar.hxx"
@@ -223,6 +226,9 @@ void SdDLL::RegisterInterfaces()
 
     // Draw ObjectShell
     ::sd::DrawObjectBar::RegisterInterface(pMod);
+
+    // Media ObjectShell
+    ::sd::MediaObjectBar::RegisterInterface(pMod);
 
     // View shells for the side panes.
     ::sd::slidesorter::SlideSorterViewShell::RegisterInterface (pMod);
