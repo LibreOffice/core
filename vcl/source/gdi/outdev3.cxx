@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-14 09:30:57 $
+ *  last change: $Author: th $ $Date: 2001-05-16 11:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2947,7 +2947,11 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
 // returns asian kerning values in quarter of character width units
 // to enable automatic halfwidth substitution for fullwidth punctuation
 // return value is negative for l, positive for r, zero for neutral
-static inline int CalcAsianKerning( sal_Unicode c, bool bLeft )
+
+// If the range doesn't match in 0x3000 and 0x30FB, please change
+// also ImplCalcKerning.
+
+static int CalcAsianKerning( sal_Unicode c, bool bLeft )
 {
     // http://www.asahi-net.or.jp/~sd5a-ucd/freetexts/jis/x4051/1995/appendix.html
     static signed char nTable[0x30] =
@@ -2971,6 +2975,8 @@ static inline int CalcAsianKerning( sal_Unicode c, bool bLeft )
     }
     return nResult;
 }
+
+// -----------------------------------------------------------------------
 
 long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
                                     long* pDXAry, xub_StrLen nAryLen ) const
@@ -3036,25 +3042,29 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
         }
     }
 
-    if( maFont.GetKerning() & KERNING_ASIAN
-    && ImplGetCharWidth(0x3001)==ImplGetCharWidth(0x3007))    // monospaced font?
+    if ( (maFont.GetKerning() & KERNING_ASIAN) &&
+         (ImplGetCharWidth(0x3001) == ImplGetCharWidth(0x3007)) )  // monospaced font?
     {
         for( i = 0; i < nLen-1; ++i )
         {
             sal_Unicode nFirst = pStr[i];
             sal_Unicode nNext  = pStr[i+1];
 
-            long nKernFirst = +CalcAsianKerning( nFirst, true );
-            long nKernNext  = -CalcAsianKerning( nNext, false );
-
-            long nAmount = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
-            if( nAmount<0 && nKernFirst!=0 && nKernNext!=0 )
+            if ( (nFirst >= 0x3000) && (nNext >= 0x3000) &&
+                 (nFirst <= 0x30FB) && (nNext <= 0x30FB) )
             {
-                nAmount *= ImplGetCharWidth( nFirst );
-                nAmount /= 4 * mpFontEntry->mnWidthFactor;
-                nWidth += nAmount;
-                for( USHORT n = i; n < nAryLen; ++n )
-                    pDXAry[n] += nAmount;
+                long nKernFirst = +CalcAsianKerning( nFirst, true );
+                long nKernNext  = -CalcAsianKerning( nNext, false );
+
+                long nAmount = (nKernFirst < nKernNext) ? nKernFirst : nKernNext;
+                if( nAmount<0 && nKernFirst!=0 && nKernNext!=0 )
+                {
+                    nAmount *= ImplGetCharWidth( nFirst );
+                    nAmount /= 4 * mpFontEntry->mnWidthFactor;
+                    nWidth += nAmount;
+                    for( xub_StrLen n = i; n < nAryLen; ++n )
+                        pDXAry[n] += nAmount;
+                }
             }
         }
     }
@@ -4256,8 +4266,6 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
                 Rectangle aBoundRect = aTemp.GetBoundRect();
                 rWidth = aBoundRect.GetWidth();
                 nDotSize = aBoundRect.GetHeight();
-                if ( nOrient )
-                    aTemp.Rotate( Point( 0, 0 ), nOrient );
                 rPolyPoly.Insert( aTemp );
             }
             break;
@@ -4330,6 +4338,8 @@ void OutputDevice::ImplDrawEmphasisMarks( long nX, long nY,
     long                nEmphasisYOff;
     long                nEmphasisWidth;
     long                nEmphasisHeight;
+    long                nEmphasisWidth2;
+    long                nEmphasisHeight2;
     BOOL                bPolyLine;
 
     if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
@@ -4363,16 +4373,23 @@ void OutputDevice::ImplDrawEmphasisMarks( long nX, long nY,
         nOffY += mpFontEntry->maMetric.mnDescent+nEmphasisYOff;
     else
         nOffY -= mpFontEntry->maMetric.mnAscent+nEmphasisYOff;
+
+    nEmphasisWidth2     = nEmphasisWidth / 2;
+    nEmphasisHeight2    = nEmphasisHeight / 2;
+    nOffY += nEmphasisHeight2;
+
     while ( i < nLen )
     {
         if ( ImplIsLineCharacter( *(pStr+i) ) )
         {
             long nStartX = ImplGetTextWidth( pStr, i, pDXAry );
             long nEndX = ImplGetTextWidth( pStr, i+1, pDXAry );
-            long nOutX = nOffX + nStartX + ((nEndX-nStartX-nEmphasisWidth)/2);
+            long nOutX = nOffX + nStartX + ((nEndX-nStartX-nEmphasisWidth)/2) + nEmphasisWidth2;
             long nOutY = nOffY;
             if ( mpFontEntry->mnOrientation )
                 ImplRotatePos( nBaseX, nBaseY, nOutX, nOutY, mpFontEntry->mnOrientation );
+            nOutX -= nEmphasisWidth2;
+            nOutY -= nEmphasisHeight2;
             ImplDrawEmphasisMark( nOutX, nOutY,
                                   aPolyPoly, bPolyLine,
                                   aRect1, aRect2 );
