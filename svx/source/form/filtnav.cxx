@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:29:45 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 11:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,12 +1014,12 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
     Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xController->getModel(), UNO_QUERY)));
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
     Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
-        xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
+    xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
-    ::rtl::OUString aErr,aTxt;
+    ::rtl::OUString aErr, aTxt(rText);
     OSQLParseNode* pParseNode = const_cast< OSQLParser*>(&m_aParser)->predicateTree(aErr, aTxt, xFormatter, xField);
-    rErrorMsg = aErr.getStr();
-    rText = aTxt.getStr();
+    rErrorMsg = aErr;
+    rText = aTxt;
     if (pParseNode)
     {
         ::rtl::OUString aPreparedText;
@@ -1344,7 +1344,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
     UniString aText(rNewText);
     aText.EraseTrailingChars();
     aText.EraseLeadingChars();
-    if (aText.Len() != 0)
+    if (aText.Len() == 0)
     {
         // deleting the entry asynchron
         sal_uInt32 nEvent;
