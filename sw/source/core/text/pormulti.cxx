@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 11:56:52 $
+ *  last change: $Author: fme $ $Date: 2002-03-26 08:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,32 +994,24 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         nCurrLevel = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
 
     // check if there is a field at rPos:
-    BYTE nNextLevel;
+    BYTE nNextLevel = nCurrLevel;
     sal_Bool bFldBidi = sal_False;
-    xub_Unicode aChar = GetChar( rPos );
 
-    if ( CH_TXTATR_BREAKWORD == aChar || CH_TXTATR_INWORD == aChar )
+    if ( CH_TXTATR_BREAKWORD == GetChar( rPos ) )
     {
-        SwAttrIter aIter( *(SwTxtNode*)GetTxtFrm()->GetTxtNode(), rSI );
-        SwTxtAttr* pHint = aIter.GetAttr( rPos );
-        if ( pHint && RES_TXTATR_FIELD == pHint->Which() )
+        // examining the script of the field text should be sufficient
+        // for 99% of all cases
+        XubString aTxt = GetTxtFrm()->GetTxtNode()->GetExpandTxt( rPos, 1 );
+
+        if ( pBreakIt->xBreak.is() && aTxt.Len() )
         {
-            SwField* pFld = (SwField*)pHint->GetFld().GetFld();
-            const String aTxt = pFld->GetCntnt( FALSE );
-            // examining the script of the field text should be sufficient
-            // for 99% of all cases
-            if ( pBreakIt->xBreak.is() )
+            sal_Bool bFldDir = ( ::com::sun::star::i18n::ScriptType::COMPLEX ==
+                                 pBreakIt->GetRealScriptOfText( aTxt, 0 ) );
+            sal_Bool bCurrDir = ( 0 != ( nCurrLevel % 2 ) );
+            if ( bFldDir != bCurrDir )
             {
-                sal_Bool bFldDir = ( ::com::sun::star::i18n::ScriptType::COMPLEX ==
-                                     pBreakIt->GetRealScriptOfText( aTxt, 0 ) );
-                sal_Bool bCurrDir = ( 0 != ( nCurrLevel % 2 ) );
-                if ( bFldDir != bCurrDir )
-                {
-                    nNextLevel = nCurrLevel + 1;
-                    bFldBidi = sal_True;
-                }
-                else
-                    nNextLevel = nCurrLevel;
+                nNextLevel = nCurrLevel + 1;
+                bFldBidi = sal_True;
             }
         }
     }
