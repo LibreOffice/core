@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-11-02 11:06:57 $
+ *  last change:$Date: 2004-12-10 16:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,6 @@ public class java_complex implements TestBase{
         DynamicClassLoader dcl = new DynamicClassLoader();
         ComplexTestCase testClass = null;
         boolean returnVal = true;
-
-        param.put("TimeOut", new Integer(0));
 
         for (int i=0; i<entries.length; i++) {
 
