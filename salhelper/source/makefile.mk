@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-19 15:36:36 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 13:24:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,13 +74,7 @@ USE_DEFFILE=	TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
-.INCLUDE :  ..$/version.mk
-
 # --- Files --------------------------------------------------------
-
-# LIB1TARGET=	$(LB)$/a$(TARGET).lib
-# LIB1ARCHIV=	$(LB)$/lib$(TARGET)$(SALHELPER_MAJOR)$(COM).a
-# LIB1FILES=	$(LB)$/$(TARGET).lib
 
 #RTTI on
 .IF "$(OS)" == "WNT"
@@ -93,10 +87,9 @@ SLOFILES=	\
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmb.obj
-#OBJFILES+=$(OBJ)$/staticmb.obj
 .ENDIF
 
-SHL1TARGET=	$(TARGET)$(SALHELPER_MAJOR)$(COM)
+SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COM)
 
 SHL1STDLIBS= \
         $(SALLIB)
