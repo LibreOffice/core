@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-19 13:13:03 $
+#   last change: $Author: vg $ $Date: 2003-10-06 13:36:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,16 @@ APP2STDLIBS=$(SALLIB)
 
 APP2DEPN= 
 APP2LIBS= 
+
+# ------------------------------------------------------------------
+APP3TARGET= $(TARGET)_timeout
+APP3OBJS= 	$(OBJ)$/getopt.obj $(OBJ)$/filehelper.obj $(OBJ)$/terminate.obj
+
+APP3STDLIBS=$(SALLIB)
+
+APP3DEPN= 
+APP3LIBS= 
+
 
 # --- Targets ------------------------------------------------------
 
