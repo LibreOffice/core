@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:52:51 $
+ *  last change: $Author: os $ $Date: 2002-05-21 14:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ TabPage TP_TEXTGRID_PAGE
     CheckBox        CB_DISPLAY
     {
         Pos = MAP_APPFONT ( 12 , 126 ) ;
-        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
         Text = "Raster anzeigen" ;
         Text [ english_us ] = "Display grid" ;
         Text[ portuguese ] = "Display grid";
@@ -491,7 +491,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     FixedText       FT_COLOR
     {
-        Pos = MAP_APPFONT ( 133 , 141 ) ;
+        Pos = MAP_APPFONT ( 133 , 126 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Text = "Rasterfarbe" ;
         Text [ english_us ] = "Grid color" ;
@@ -518,7 +518,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     ListBox         LB_COLOR
     {
-        Pos = MAP_APPFONT ( 191 , 139 ) ;
+        Pos = MAP_APPFONT ( 191 , 124 ) ;
         Size = MAP_APPFONT ( 60 , 50 ) ;
         TabStop = TRUE;
         Border = TRUE;
