@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-11 16:58:36 $
+ *  last change: $Author: mtg $ $Date: 2001-01-16 17:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,11 +354,19 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             ManifestEntry *pMan = new ManifestEntry;
             pMan->sShortName = (*aCI).first;
 
+            uno::Any aAny = pStream->getPropertyValue(OUString::createFromAscii("Compress"));
+            sal_Bool bToBeCompressed;
+            aAny >>= bToBeCompressed;
+
             // Copy current info to pMan...
             ZipPackageFolder::copyZipEntry(pMan->aEntry, pStream->aEntry);
             pMan->aEntry.sName = rPath + pMan->sShortName;
 
-            if (pStream->bPackageMember)
+            // If the entry is already stored in the zip file in the format we
+            // want for this write...copy it raw
+            if (pStream->bPackageMember &&
+                ( (pStream->aEntry.nMethod == DEFLATED && bToBeCompressed) ||
+                  (pStream->aEntry.nMethod == STORED && !bToBeCompressed) ) )
             {
                 try
                 {
@@ -397,6 +405,12 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
                 pMan->aEntry.nCrc = -1;
                 pMan->aEntry.nSize = -1;
                 pMan->aEntry.nCompressedSize = -1;
+
+                if (bToBeCompressed)
+                    pMan->aEntry.nMethod = DEFLATED;
+                else
+                    pMan->aEntry.nMethod = STORED;
+
                 if (xSeek.is())
                 {
                     xSeek->seek(0);

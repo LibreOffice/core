@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-11 15:05:48 $
+ *  last change: $Author: mtg $ $Date: 2001-01-16 17:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@ using namespace com::sun::star::package::ZipConstants;
 using namespace rtl;
 
 ZipPackageEntry::ZipPackageEntry (void)
-: bPackageMember ( sal_False )
+: bPackageMember  ( sal_False )
+, bToBeCompressed ( sal_True )
 {
 }
 
@@ -147,31 +148,15 @@ void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropert
     {
         aValue >>= sMediaType;
 
-        // If this ZipPackageEntry is a new entry to the package, set it's
-        // compression method based on mime type. Obviously, if it's an existing
-        // member, we can't change the compression type without Bad Things
-        // Happening (tm)
-        if ( !bPackageMember && sMediaType.getLength() > 0 )
-        {
-            if ( sMediaType.indexOf (OUString::createFromAscii("text")) != -1)
-                aEntry.nMethod = DEFLATED;
-            else
-                aEntry.nMethod = STORED;
-        }
+        if ( sMediaType.indexOf (OUString::createFromAscii("text")) != -1)
+            bToBeCompressed = sal_True;
+        else
+            bToBeCompressed = sal_False;
     }
     else if (aPropertyName == OUString::createFromAscii("Size"))
         aValue >>= aEntry.nSize;
     else if (aPropertyName == OUString::createFromAscii("Compress"))
-    {
-        if (bPackageMember)
-            return;
-        sal_Bool bCompress;
-        aValue >>= bCompress;
-        if (bCompress)
-            aEntry.nMethod = DEFLATED;
-        else
-            aEntry.nMethod = STORED;
-    }
+        aValue >>= bToBeCompressed;
     else
         throw beans::UnknownPropertyException();
 }
@@ -191,12 +176,7 @@ uno::Any SAL_CALL ZipPackageEntry::getPropertyValue( const ::rtl::OUString& Prop
     }
     else if (PropertyName == OUString::createFromAscii("Compress"))
     {
-        sal_Bool bCompress = sal_False;
-
-        if (aEntry.nMethod == DEFLATED)
-            bCompress = sal_True;
-
-        aAny <<= bCompress;
+        aAny <<= bToBeCompressed;
         return aAny;
     }
     else
