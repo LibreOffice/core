@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,9 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
 #ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = ( 0 != pGrid );
+    const sal_Bool bHasGrid = pGrid &&
+                              GRID_LINES_CHARS == pGrid->GetGridType();
+
     const USHORT nGridWidth = bHasGrid ?
                               pGrid->GetBaseHeight() : 0;
 
@@ -1094,7 +1096,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         if ( ! pPor && ! pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
-            if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+            if ( pGrid )
                 pPor = new SwKernPortion( *pCurr );
         }
 #endif
@@ -1151,7 +1153,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         if ( ! pPor && ! pCurr->GetPortion() )
         {
             GETGRID( GetTxtFrm()->FindPageFrm() )
-            if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
+            if ( pGrid )
                 pPor = new SwKernPortion( *pCurr );
         }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1755,7 +1755,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
 #ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = ( 0 != pGrid );
+    const sal_Bool bHasGrid = pGrid &&
+                              GRID_LINES_CHARS == pGrid->GetGridType();
+
     USHORT nGridWidth = 0;
     USHORT nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;

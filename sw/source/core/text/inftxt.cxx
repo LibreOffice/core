@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-21 08:30:44 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,10 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const USHORT nComp ) const
 {
     SwDrawTextInfo aDrawInf( pVsh, *pOutDev, pSI, rTxt, nIdx, nLen );
+#ifdef VERTICAL_LAYOUT
+    aDrawInf.SetFrm( pFrm );
+    aDrawInf.SetFont( pFnt );
+#endif
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
     return aSize;
