@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 14:37:36 $
+ *  last change: $Author: mba $ $Date: 2002-11-25 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,11 +188,16 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
         case FN_END_OF_DOCUMENT:    bRet = rSh.EndDoc( FN_END_OF_DOCUMENT_SEL == nSlot );
         break;
 
-        case FN_SELECT_WORD:            rSh.SelNearestWrd();    break;
+        case FN_SELECT_WORD:            bRet = rSh.SelNearestWrd(); break;
 
-        case SID_SELECTALL:             rSh.SelAll();           break;
+        case SID_SELECTALL:             bRet = rSh.SelAll();            break;
         default:                    ASSERT(FALSE, falscher Dispatcher); return;
     }
+
+    if ( bRet )
+        rReq.Done();
+    else
+        rReq.Ignore();
 }
 
 void SwTextShell::ExecMovePage(SfxRequest &rReq)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-22 10:32:15 $
+ *  last change: $Author: mba $ $Date: 2002-11-25 11:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,6 +1259,7 @@ MOVEPAGE:
                     rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), nRet == 0));
 
                 bRefresh = 0 != nRet;
+                rReq.Done();
             }
             break;
 
