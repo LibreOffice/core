@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableColumnSeparator.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::text::TableColumnSeparator
 /** The width of the cells of a text table is defined by the position
     of the separator between neighboring cells.
 
-
-
     <p>If cells of the table are merged, this separator is not removed, but
     it is hidden.
-
     </p>
+
     <p>A text table or a text table row provides the separators in a
     sequence of <type>TableColumnSeparator</type>s. If the table only
     consists of one column, then this sequence is empty.
@@ -87,44 +84,26 @@
     number of text columns at the table's position, alignment, and left and
     right margins).  For that reason, the table column separator does not
     contain metric values for the column widths. The values are relative
-    to the value of the property <member>TableColumnSeparator::TableColumnRelativeSum</member>.
+    to the value of the property <member>TextTable::TableColumnRelativeSum</member>.
 
     </p>
     <p>A table provides this property only if all rows have the same structure.
-    If the table does not provide the property, then it cannot be set using
-
-
-
-
-
-    .
-
+    If the table does not provide the property, then it cannot be set using.
     </p>
-    <p>The state of <member>TableColumnSeparator::IsVisible</member> and the count of the sequence
-    must be the same in
 
-
-
-
-    as it was in
-
-
-
-
-
-    . Hidden separators cannot be moved
-    and they cannot be overtaken by visible separators.</p>
+    <p>The state of <member>TableColumnSeparator::IsVisible</member> and the
+    count of the sequence must be the same in as it was in.
+    Hidden separators cannot be moved and they cannot be overtaken by visible
+    separators.</p>
  */
 struct TableColumnSeparator
 {
-    // DocMerge from xml: field com::sun::star::text::TableColumnSeparator::Position
     /** contains the position of the separator.
      */
     short Position;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::text::TableColumnSeparator::IsVisible
     /** determines if the separator is visible.
      */
     boolean IsVisible;
