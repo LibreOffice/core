@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:39:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,13 +875,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTDataFieldInfo& rInfo )
 // Pivot table settings =======================================================
 
 XclPTInfo::XclPTInfo() :
-    mnFirstRow( 0 ),
-    mnLastRow( 0 ),
-    mnFirstCol( 0 ),
-    mnLastCol( 0 ),
     mnFirstHeadRow( 0 ),
-    mnFirstDataRow( 0 ),
-    mnFirstDataCol( 0 ),
     mnCacheIdx( 0xFFFF ),
     mnDataAxis( EXC_SXVD_AXIS_NONE ),
     mnDataPos( EXC_SXVIEW_DATALAST ),
@@ -901,10 +895,9 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTInfo& rInfo )
 {
     sal_uInt16 nTabLen, nDataLen;
 
-    rStrm   >> rInfo.mnFirstRow >> rInfo.mnLastRow
-            >> rInfo.mnFirstCol >> rInfo.mnLastCol
+    rStrm   >> rInfo.maOutXclRange
             >> rInfo.mnFirstHeadRow
-            >> rInfo.mnFirstDataRow >> rInfo.mnFirstDataCol
+            >> rInfo.maDataXclPos
             >> rInfo.mnCacheIdx;
     rStrm.Ignore( 2 );
     rStrm   >> rInfo.mnDataAxis >> rInfo.mnDataPos
@@ -925,10 +918,9 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTInfo& rInfo )
     XclExpString aXclTableName( rInfo.maTableName );
     XclExpString aXclDataName( rInfo.maDataName );
 
-    rStrm   << rInfo.mnFirstRow << rInfo.mnLastRow
-            << rInfo.mnFirstCol << rInfo.mnLastCol
+    rStrm   << rInfo.maOutXclRange
             << rInfo.mnFirstHeadRow
-            << rInfo.mnFirstDataRow << rInfo.mnFirstDataCol
+            << rInfo.maDataXclPos
             << rInfo.mnCacheIdx
             << sal_uInt16( 0 )
             << rInfo.mnDataAxis << rInfo.mnDataPos
