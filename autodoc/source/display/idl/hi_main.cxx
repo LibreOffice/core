@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_main.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:31:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ using       ::ary::idl::Type_id;
 using       ::ary::idl::ifc_ce::Dyn_CeIterator;
 
 
+
+extern const String C_sCssFilename_Idl("idl.css");
+
 /*
 typedef     ::ary::Dyn_StdConstIterator< ::ary::idl::CommentedRelation>
             Dyn_ComRefIterator;
@@ -193,7 +196,16 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
 
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
-    rClient.SetTitle( StreamLock(100)() << i_titlePrefix << " " << i_ce.LocalName() << c_str );
+    rClient.SetTitle( StreamLock(100)()
+                            << i_titlePrefix
+                            << " "
+                            << i_ce.LocalName()
+                            << c_str );
+    rClient.SetRelativeCssPath(
+                      StreamLock(300)()
+                            << io_env.CurPosition().LinkToRoot()
+                            << C_sCssFilename_Idl
+                            << c_str );
 
     io_env.Set_CurPageCe(&i_ce);
 }
@@ -214,6 +226,11 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
     rClient.SetTitle( StreamLock(100)() << i_titlePrefix << " " << i_fileName << c_str );
+    rClient.SetRelativeCssPath(
+                      StreamLock(300)()
+                            << io_env.CurPosition().LinkToRoot()
+                            << C_sCssFilename_Idl
+                            << c_str );
 
     io_env.Set_CurPageCe(0);
 }
@@ -231,6 +248,11 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
     rClient.SetTitle( StreamLock(100)() << "Module " << io_env.CurPosition().Name() << c_str );
+    rClient.SetRelativeCssPath(
+                      StreamLock(300)()
+                            << io_env.CurPosition().LinkToRoot()
+                            << C_sCssFilename_Idl
+                            << c_str );
 
     io_env.Set_CurPageCe(&i_ce);
 }
@@ -257,6 +279,11 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
                                                 ?   char(i_letter-'a'+'A')
                                                 :   '_' )
                                         << c_str );
+    rClient.SetRelativeCssPath(
+                      StreamLock(300)()
+                            << "../"
+                            << C_sCssFilename_Idl
+                            << c_str );
 }
 
 Guard_CurFile::~Guard_CurFile()
@@ -276,7 +303,7 @@ MainDisplay_Idl::MainDisplay_Idl( HtmlEnvironment_Idl & io_rEnv )
         pMyFile(new DocuFile_Html),
         pCurFactory(0)
 {
-    pMyFile->SetStyle( Env().Layout().CssStyle() );
+//  pMyFile->SetStyle( Env().Layout().CssStyle() );
     pMyFile->SetCopyright( Env().Layout().CopyrightText() );
 }
 
