@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:03:05 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,25 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+
+#include <svtools/embedtransfer.hxx>
+#include <svtools/insdlg.hxx>
+#include <unotools/tempfile.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <sot/filelist.hxx>
+#include <svx/svxdlg.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
 #endif
@@ -72,13 +91,10 @@
 #include <sot/formats.hxx>
 #endif
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _PASTEDLG_HXX
-#include <so3/pastedlg.hxx>
 #endif
 #ifndef _WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -95,9 +111,7 @@
 #ifndef _IMAP_HXX
 #include <svtools/imap.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
@@ -158,11 +172,9 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
-#ifndef _FILELIST_HXX
-#include <so3/filelist.hxx>
-#endif
+//#include <sfx2/filelist.hxx>
 #ifndef _LINKSRC_HXX
-#include <so3/linksrc.hxx>
+#include <sfx2/linksrc.hxx>
 #endif
 #ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
@@ -335,6 +347,7 @@ extern BOOL bExecuteDrag;
 
 using namespace ::svx;
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
 
@@ -364,10 +377,10 @@ struct OleObjectDescriptor
         sal_uInt32      dwSrcOfCopy;
 };
 
-class SwTrnsfrDdeLink : public ::so3::SvBaseLink
+class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
 {
     String sName;
-    ::so3::SvLinkSourceRef refObj;
+    ::sfx2::SvLinkSourceRef refObj;
     SwTransferable& rTrnsfr;
     SwDocShell* pDocShell;
     ULONG nOldTimeOut;
@@ -473,7 +486,7 @@ SwTransferable::~SwTransferable()
     //              so das die DocShell auch tatsaechlich geloescht wird!
     if( aDocShellRef.Is() )
     {
-        SvEmbeddedObject * pObj = aDocShellRef;
+        SfxObjectShell * pObj = aDocShellRef;
         SwDocShell* pDocSh = (SwDocShell*)pObj;
         pDocSh->DoClose();
     }
@@ -529,21 +542,21 @@ void SwTransferable::AddSupportedFormats()
 
 // -----------------------------------------------------------------------
 
-void SwTransferable::InitOle( SvEmbeddedObjectRef rRef, SwDoc& rDoc )
+void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
 {
     //OleVisArea einstellen. Linke obere Ecke der Seite und Groesse
     //der RealSize in Twips.
     const Size aSz( OLESIZE );
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
-    rRef->SetVisArea( aVis.SVRect() );
+    pDoc->SetVisArea( aVis.SVRect() );
     rDoc.SetBrowseMode( TRUE );
 }
 
 // -----------------------------------------------------------------------
 
-SvEmbeddedObject* SwTransferable::FindOLEObj() const
+com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > SwTransferable::FindOLEObj() const
 {
-    SvEmbeddedObject* pRet = 0;
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj;
     if( pClpDocFac )
     {
         SwClientIter aIter( *(SwModify*)pClpDocFac->GetDoc()->
@@ -552,11 +565,11 @@ SvEmbeddedObject* SwTransferable::FindOLEObj() const
                 pNd; pNd = (SwCntntNode*)aIter.Next() )
             if( ND_OLENODE == pNd->GetNodeType() )
             {
-                pRet = &((SwOLENode*)pNd)->GetOLEObj().GetOleRef();
+                xObj = ((SwOLENode*)pNd)->GetOLEObj().GetOleRef();
                 break;
             }
     }
-    return pRet;
+    return xObj;
 }
 
 // -----------------------------------------------------------------------
@@ -610,7 +623,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         if (pInfo)
             pTmpDoc->SetInfo(*pInfo);
 
-        pTmpDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -655,12 +668,13 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
     sal_Bool    bOK = sal_False;
     if( TRNSFR_OLE == eBufferType )
     {
+        //TODO/MBA: testing - is this the "single OLE object" case?!
         // aus dem ClipDoc das OLE-Object besorgen und von dem die Daten
         // besorgen.
-        SvEmbeddedObject* pObj = FindOLEObj();
-        if( pObj )
+        com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj = FindOLEObj();
+        if( xObj.is() )
         {
-            TransferableDataHelper aD( pObj->CreateTransferableSnapshot() );
+            TransferableDataHelper aD( new SvEmbedTransferHelper( xObj ) );
             ::com::sun::star::uno::Any aAny( aD.GetAny( rFlavor ));
             if( aAny.hasValue() )
                 bOK = SetAny( aAny, rFlavor );
@@ -819,19 +833,41 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
     case SWTRANSFER_OBJECTTYPE_SWOLE:
         {
-            SvEmbeddedObject* pEmbObj = (SvEmbeddedObject*) pObject;
-            SvStorageRef xWorkStore( new SvStorage( TRUE, *xStream ) );
+            SfxObjectShell*   pEmbObj = (SfxObjectShell*) pObject;
+            try
+            {
+                ::utl::TempFile     aTempFile;
+                aTempFile.EnableKillingFile();
+                uno::Reference< embed::XStorage > xWorkStore =
+                    ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
-            xStream->SetBufferSize( 0xff00 );
+                // write document storage
+                pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
+                bRet = pEmbObj->DoSaveAs( xWorkStore );
+                pEmbObj->DoSaveCompleted();
 
-            // write document storage
-            pEmbObj->SetupStorage( xWorkStore );
-            bRet = pEmbObj->DoSaveAs( xWorkStore );
-            pEmbObj->DoSaveCompleted();
-            xWorkStore->Commit();
-            xStream->Commit();
+                uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
+                if ( xTransact.is() )
+                    xTransact->commit();
 
-            bRet = ERRCODE_NONE == xStream->GetError();
+                SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
+                if( pSrcStm )
+                {
+                    xStream->SetBufferSize( 0xff00 );
+                    *xStream << *pSrcStm;
+                    delete pSrcStm;
+                }
+
+                bRet = TRUE;
+
+                xWorkStore->dispose();
+                xWorkStore = uno::Reference < embed::XStorage >();
+                xStream->Commit();
+            }
+            catch ( uno::Exception& )
+            {}
+
+            bRet = ( xStream->GetError() == ERRCODE_NONE );
         }
         break;
 
@@ -991,7 +1027,7 @@ int SwTransferable::Copy( BOOL bIsCut )
         if (pInfo)
             pTmpDoc->SetInfo(*pInfo);
 
-        pTmpDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -1158,7 +1194,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->SetRefForDocShell( (SvEmbeddedObjectRef*)&(long&)aDocShellRef );
+    pCDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
     pCDoc->LockExpFlds();   // nie die Felder updaten - Text so belassen
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
@@ -1808,9 +1844,11 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
 {
     int nRet = 0;
     TransferableObjectDescriptor aObjDesc;
-    SotStorageStreamRef xStrm;
-    SvStorageRef xStore;
+    uno::Reference < io::XInputStream > xStrm;
+    uno::Reference < embed::XStorage > xStore;
     Reader* pRead = 0;
+
+    // Get the preferred format
     SotFormatStringId nId;
     if( rData.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) )
         nId = SOT_FORMATSTR_ID_EMBEDDED_OBJ;
@@ -1820,92 +1858,84 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     else
         nId = 0;
 
-    if( nId && rData.GetSotStorageStream( nId, xStrm ) && xStrm.Is() )
+    if( nId && rData.GetInputStream( nId, xStrm ) && xStrm.is() )
     {
-        USHORT nFileVersion;
-        xStore = new SvStorage( *xStrm );
-        switch( xStore->GetFormat() )
+        // if there is an embedded object, first try if it's a writer object
+        // this will be inserted into the document by using a Reader
+        try
         {
-        case SOT_FORMATSTR_ID_STARWRITER_50:
-        case SOT_FORMATSTR_ID_STARWRITERWEB_50:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
-            nFileVersion = SOFFICE_FILEFORMAT_50;
-            goto PASTEOLE_SETREADSW3;
+            xStore = comphelper::OStorageHelper::GetStorageFromInputStream( xStrm );
+            switch( SotStorage::GetFormatID( xStore ) )
+            {
+                case SOT_FORMATSTR_ID_STARWRITER_60:
+                case SOT_FORMATSTR_ID_STARWRITERWEB_60:
+                case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
+                case SOT_FORMATSTR_ID_STARWRITER_8:
+                case SOT_FORMATSTR_ID_STARWRITERWEB_8:
+                case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
+                    pRead = ReadXML;
+                    break;
+                default:
+                    try
+                    {
+                        uno::Reference < lang::XComponent > xComp( xStore, uno::UNO_QUERY );
+                        xComp->dispose();
+                        xStore = 0;
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
 
-        case SOT_FORMATSTR_ID_STARWRITER_40:
-        case SOT_FORMATSTR_ID_STARWRITERWEB_40:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
-            nFileVersion = SOFFICE_FILEFORMAT_40;
-            goto PASTEOLE_SETREADSW3;
-
-        case SOT_FORMATSTR_ID_STARWRITER_30:
-            nFileVersion = SOFFICE_FILEFORMAT_31;
-            goto PASTEOLE_SETREADSW3;
-
-PASTEOLE_SETREADSW3:
-            pRead = ReadSw3;
-            xStore->SetVersion( nFileVersion );
-            break;
-
-        case SOT_FORMATSTR_ID_STARWRITER_60:
-        case SOT_FORMATSTR_ID_STARWRITERWEB_60:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
-            xStore->SetVersion( SOFFICE_FILEFORMAT_60 );
-        case SOT_FORMATSTR_ID_STARWRITER_8:
-        case SOT_FORMATSTR_ID_STARWRITERWEB_8:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
-            pRead = ReadXML;
-            break;
+                    break;
+            }
         }
+        catch ( uno::Exception& )
+        {
+            // it wasn't a storage, but maybe it's a useful stream
+        }
+
+        nFmt = nId;
+    }
+    else
+    {
+        // try other formats
+        if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ) )
+            if ( !rData.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStrm ) )
+                rData.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStrm );
     }
 
     if( pRead )
     {
-        SwReader aReader( *xStore, aEmptyStr, *rSh.GetCrsr() );
-        if( !IsError( aReader.Read( *pRead )) )
-            nRet = 1;
-        else if( bMsg )
-            InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
+        //SwReader aReader( xStore, aEmptyStr, *rSh.GetCrsr() );
+        //if( !IsError( aReader.Read( *pRead )) )
+        //    nRet = 1;
+        //else if( bMsg )
+        //    InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
     }
-    else if( (  rData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
-                rData.GetTransferableObjectDescriptor(
-                        SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-              ( nFmt == nId ? xStore.Is()
-                            : ( xStore.Clear(),
-                                  rData.GetSotStorageStream( nFmt, xStrm )) ))
-            || ( rData.HasFormat(
-                    ( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE )) &&
-                 rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ))
-            )
+    else if ( xStrm.is() )
     {
-        SvInPlaceObjectRef xIPObj;
-        if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE == nFmt )
-        {
-            xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-            xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
-                        ->CreateAndInit(  rData.GetXTransferable(), xStore);
-        }
-        else
-        {
-            if( !xStore.Is() )
-                xStore = new SvStorage( *xStrm );
-            xIPObj = &( (SvFactory*)SvInPlaceObject::
-                                ClassFactory() )->CreateAndLoad( xStore );
-        }
-
-        if( xIPObj.Is() )
+        // temporary storage until the object is inserted
+        comphelper::EmbeddedObjectContainer aCnt;
+        com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj;
+        ::rtl::OUString aName;
+        xObj = aCnt.InsertEmbeddedObject( xStrm, aName );
+        if( xObj.is() )
         {
             //Size einstellen. Ist ein Hack wg. Auslieferung, die Size sollte
             //an das InsertOle uebergeben werden!!!!!!!!!!
-            const Size aSize( aObjDesc.maSize );    //immer 100TH_MM
+            Size aSize( aObjDesc.maSize );    //immer 100TH_MM
             if( aSize.Width() && aSize.Height() )
             {
-                xIPObj->SetVisAreaSize( OutputDevice::LogicToLogic( aSize,
-                                    MAP_100TH_MM, xIPObj->GetMapUnit() ) );
+                MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
+                aSize = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
+                awt::Size aSz;
+                aSz.Width = aSize.Width();
+                aSz.Height = aSize.Height();
+                xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
             }
             //Ende mit Hack!
 
-            rSh.InsertOle( xIPObj );
+            rSh.InsertOleObject( xObj );
             nRet = 1;
 
             if( nRet && ( nActionFlags &
@@ -2063,7 +2093,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     }
 
     String aCmd;
-    so3::MakeLnkName( aCmd, &aApp, aTopic, aItem );
+    sfx2::MakeLnkName( aCmd, &aApp, aTopic, aItem );
 
     // wollen wir jetzt eine Grafik einlesen ?
     ULONG nFormat;
@@ -2104,7 +2134,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             {
                 String sTmp( ((SwDDEFieldType*)pTyp)->GetCmd() );
                 if( rColl.isEqual( sTmp, aCmd ) &&
-                    so3::LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
+                    sfx2::LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
                 {
                     aName = pTyp->GetName();
                     bDoublePaste = TRUE;
@@ -2126,7 +2156,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
 
     if( !bDoublePaste )
     {
-        SwDDEFieldType aType( aName, aCmd, so3::LINKUPDATE_ALWAYS );
+        SwDDEFieldType aType( aName, aCmd, sfx2::LINKUPDATE_ALWAYS );
         pTyp = rWrtShell.InsertFldType( aType );
     }
 
@@ -2863,7 +2893,8 @@ static USHORT aPasteSpecialIds[] =
 int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, ULONG& rFormatUsed )
 {
     int nRet = 0;
-    SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() );
 
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;
@@ -2922,8 +2953,7 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
             pDlg->Insert( *pIds, aEmptyStr );
 
-    ULONG nFormat = pDlg->Execute( &rSh.GetView().GetEditWin(), aFormats,
-                                    aDesc, rData );
+    ULONG nFormat = pDlg->GetFormat( rData.GetTransferable() );
 
     if( nFormat )
         nRet = SwTransferable::PasteFormat( rSh, rData, nFormat );
@@ -2975,7 +3005,7 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
         if ( rData.HasFormat(nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE) || rData.HasFormat(nFormat = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE) )
         {
             String sName,sSource;
-            if ( SvPasteObjectDialog::GetEmbeddedName(rData,sName,sSource,nFormat) )
+            if ( SvPasteObjectHelper::GetEmbeddedName(rData,sName,sSource,nFormat) )
                 rToFill.AddClipbrdFormat( nFormat, sName );
         }
     }
