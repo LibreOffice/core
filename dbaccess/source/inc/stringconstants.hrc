@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:49:37 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 13:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,18 @@
 
 #ifndef _DBASHARED_STRINGCONSTANTS_HRC_
 #define _DBASHARED_STRINGCONSTANTS_HRC_
-
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-namespace dbaccess
+//============================================================
+//= a helper for static ascii pseudo-unicode strings
+//============================================================
+// string constants
+struct _ConstAsciiString_
 {
-    //============================================================
-    //= a helper for static ascii pseudo-unicode strings
-    //============================================================
-    // string constants
-    struct _ConstAsciiString_
-    {
-        sal_Int32 length;
-        sal_Char  const* str;
+    sal_Int32 length;
+    sal_Char  const* str;
 
-        operator ::rtl::OUString () const { return ::rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
-        operator const sal_Char* () const { return str; }
-    };
+    operator ::rtl::OUString () const { return ::rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
+    operator const sal_Char* () const { return str; }
+};
 
 #define DECLARE_CONSTASCII_USTRING( name ) \
     extern _ConstAsciiString_ const name
@@ -180,7 +173,8 @@ namespace dbaccess
 #define PROPERTY_ID_REFERENCEDCOLUMN        89
 #define PROPERTY_ID_PARENTWINDOW            90
 #define PROPERTY_ID_SQLEXCEPTION            91
-#define PROPERTY_ID_SUPPRESSVERSIONCL       92
+#define PROPERTY_ID_ISHIDDEN                92
+#define PROPERTY_ID_SUPPRESSVERSIONCL       93
 
 //============================================================
 //= property names
@@ -260,6 +254,7 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_TEXTCOLOR);
 DECLARE_CONSTASCII_USTRING(PROPERTY_BOUNDFIELD);
 DECLARE_CONSTASCII_USTRING(PROPERTY_CONTROLSOURCE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_REALNAME);
+DECLARE_CONSTASCII_USTRING(PROPERTY_ISHIDDEN);
 DECLARE_CONSTASCII_USTRING(PROPERTY_HIDDEN);
 DECLARE_CONSTASCII_USTRING(PROPERTY_TABLETYPEFILTER);
 DECLARE_CONSTASCII_USTRING(PROPERTY_DOCUMENTLOCATION);
@@ -279,6 +274,10 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_REFERENCEDTABLE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_REFERENCEDCOLUMN);
 DECLARE_CONSTASCII_USTRING(PROPERTY_PARENTWINDOW);
 DECLARE_CONSTASCII_USTRING(PROPERTY_SQLEXCEPTION);
+DECLARE_CONSTASCII_USTRING(PROPERTY_BORDER);
+DECLARE_CONSTASCII_USTRING(PROPERTY_THREADSAFE);
+DECLARE_CONSTASCII_USTRING(PROPERTY_HELPTEXT);
+DECLARE_CONSTASCII_USTRING(PROPERTY_DEFAULTSTATE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_SUPPRESSVERSIONCL);
 
 //============================================================
@@ -380,15 +379,7 @@ DECLARE_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HIDDEN);
 //= SQLSTATE
 //============================================================
 DECLARE_CONSTASCII_USTRING(SQLSTATE_GENERAL);
-DECLARE_CONSTASCII_USTRING(SQLSTATE_SEQUENCE);
 
-
-//============================================================
-//= error messages
-//============================================================
-DECLARE_CONSTASCII_USTRING(ERRORMSG_SEQUENCE);
-
-}   // dbaccess
 
 #endif // _DBASHARED_STRINGCONSTANTS_HRC_
 

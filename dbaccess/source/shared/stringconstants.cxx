@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:50:51 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 13:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-#include "stringconstants.hrc"
-
-namespace dbaccess
-{
 //============================================================
 //= property names
 //============================================================
@@ -141,7 +137,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TEXTCOLOR, "TextColor");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BOUNDFIELD, "BoundField");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLSOURCE, "DataField");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REALNAME, "RealName");
-IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HIDDEN, "IsHidden");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ISHIDDEN, "IsHidden");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DOCUMENTLOCATION, "DocumentLocation");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_UPDATE_TABLENAME, "UpdateTableName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_UPDATE_SCHEMANAME, "UpdateSchemaName");
@@ -159,6 +155,11 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REFERENCEDTABLE, "ReferencedTable");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REFERENCEDCOLUMN, "ReferencedColumn");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PARENTWINDOW, "ParentWindow");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SQLEXCEPTION, "SQLException");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_BORDER, "Border");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_THREADSAFE, "ThreadSafe");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HELPTEXT  ,"HelpText");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HIDDEN    ,"Hidden");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTSTATE  ,"DefaultState");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SUPPRESSVERSIONCL, "SuppressVersionColumns");
 
 //============================================================
@@ -258,12 +259,8 @@ IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HIDDEN, "Hidden");
 //= SQLSTATE
 //============================================================
 IMPLEMENT_CONSTASCII_USTRING(SQLSTATE_GENERAL, "01000");
-IMPLEMENT_CONSTASCII_USTRING(SQLSTATE_SEQUENCE, "HY010");
 
 
-//============================================================
-//= error messages
-//============================================================
-IMPLEMENT_CONSTASCII_USTRING(ERRORMSG_SEQUENCE, "Function sequence error");
-}
+
+
 
