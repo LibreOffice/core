@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-07 13:32:03 $
+ *  last change: $Author: dv $ $Date: 2000-12-07 17:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,8 +251,9 @@ public:
                         RegionData_Impl( const OUString& rTitle );
                         ~RegionData_Impl();
 
-    EntryData_Impl*     GetEntry( const OUString& rName ) const;
     EntryData_Impl*     GetEntry( ULONG nIndex ) const;
+    EntryData_Impl*     GetEntry( const OUString& rName ) const;
+    EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
     const OUString&     GetTargetURL() const { return maTargetURL; }
@@ -2293,6 +2294,23 @@ EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
 }
 
 // -----------------------------------------------------------------------
+EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName ) const
+{
+    EntryData_Impl *pEntry;
+
+    ULONG nCount = maEntries.Count();
+
+    for ( ULONG i=0; i<nCount; i++ )
+    {
+        pEntry = maEntries.GetObject( i );
+        if ( pEntry && ( pEntry->GetTargetURL() == rName ) )
+            return pEntry;
+    }
+
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
 EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
 {
     return maEntries.GetObject( nIndex );
@@ -2935,18 +2953,25 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
             {
                 OUString aTitle( xRow->getString(1) );
                 OUString aId = xContentAccess->queryContentIdentifierString();
-                OUString aFullTitle = GetTitleFromURL( aId );
 
-                if ( aFullTitle.len() )
-                    aTitle = aFullTitle;
+                EntryData_Impl* pEntry = pRegion->GetByTargetURL( aId );
 
-                EntryData_Impl* pEntry;
-                pEntry = pRegion->AddEntry( rParentFolder, aTitle, aId );
-
-                if ( pEntry && pEntry->IsNew() )
+                if ( pEntry )
+                    pEntry->SetInUse( sal_True );
+                else
                 {
-                    OUString aType = GetTypeFromURL( aId );
-                    pEntry->SetType( aType );
+                    OUString aFullTitle = GetTitleFromURL( aId );
+
+                    if ( aFullTitle.len() )
+                        aTitle = aFullTitle;
+
+                    pEntry = pRegion->AddEntry( rParentFolder, aTitle, aId );
+
+                    if ( pEntry && pEntry->IsNew() )
+                    {
+                        OUString aType = GetTypeFromURL( aId );
+                        pEntry->SetType( aType );
+                    }
                 }
             }
         }
