@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 23:15:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,8 +357,12 @@ namespace desktop {
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
             hpset->setHierarchicalPropertyValue(OUString::createFromAscii("L10N/ooLocale"), makeAny(aUserLanguage));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
-
-        } catch (Exception const & e)
+        }
+        catch ( PropertyVetoException& )
+        {
+            // we are not allowed to change this
+        }
+        catch (Exception const & e)
         {
             OString msg(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
             OSL_ENSURE(sal_False, msg.getStr());
@@ -405,6 +409,10 @@ namespace desktop {
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
             hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstCompleted"), makeAny(sal_True));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
+        }
+        catch ( PropertyVetoException& )
+        {
+            // we are not allowed to change this
         }
         catch (Exception& e)
         {
