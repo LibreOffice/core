@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:59:21 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,14 @@ TabPage TP_MANAGE_STYLES
         Text [ danish ] = "Navn" ;
         Text [ portuguese ] = "~Nome" ;
         Text [ portuguese_brazilian ] = "~Name" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_simplified ] = "åç§°(~N)";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~N)";
-        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ japanese ] = "åå‰(~N)";
+        Text[ chinese_traditional ] = "åç¨±(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ korean ] = "ì´ë¦„(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
@@ -120,14 +120,14 @@ TabPage TP_MANAGE_STYLES
         Text [ french ] = "Actualisation ~automatique" ;
         Text [ dutch ] = "~Autom. actualiseren" ;
         Text [ portuguese ] = "Actualizar ~automaticamente" ;
-        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂ(~A)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ–°(~A)";
         Text[ russian ] = "Àâòîì. îáíîâëåíèå";
         Text[ polish ] = "~Aktualizuj automatycznie";
-        Text[ japanese ] = "©“®“I‚ÉXV(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê§ó·s(~A)";
+        Text[ japanese ] = "è‡ªå‹•çš„ã«æ›´æ–°(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•æ›´æ–°(~A)";
         Text[ arabic ] = "ÊÍÏíË ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôç åíçìİñùóç";
-        Text[ korean ] = "ÀÚµ¿ »õ·Î°íÄ§(~A)";
+        Text[ korean ] = "ìë™ ìƒˆë¡œê³ ì¹¨(~A)";
         Text[ turkish ] = "~Otomatik güncelleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualizar automáticamente";
@@ -150,14 +150,14 @@ TabPage TP_MANAGE_STYLES
         Text [ dutch ] = "~Volgend profiel" ;
         Text [ spanish ] = "~Estilo siguiente" ;
         Text [ english_us ] = "Ne~xt Style" ;
-        Text[ chinese_simplified ] = "ÏÂÒ»¸öÑùÊ½(~X)";
+        Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªæ ·å¼(~X)";
         Text[ russian ] = "Ñëåäóşùèé ñòèëü";
         Text[ polish ] = "Nastêpny styl";
-        Text[ japanese ] = "Ÿ‚É‘±‚­½À²Ù(~X)";
-        Text[ chinese_traditional ] = "¤U¤@­Ó¼Ë¦¡(~X)";
+        Text[ japanese ] = "æ¬¡ã«ç¶šãï½½ï¾€ï½²ï¾™(~X)";
+        Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹æ¨£å¼(~X)";
         Text[ arabic ] = "äãØ ÊÇáí";
         Text[ greek ] = "Åğüìåíï ğñüôõğï";
-        Text[ korean ] = "´ÙÀ½ ¼­½Ä ÆÄÀÏ(~X)";
+        Text[ korean ] = "ë‹¤ìŒ ì„œì‹ íŒŒì¼(~X)";
         Text[ turkish ] = "Sonraki biçim";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "~Estilo siguiente";
@@ -189,14 +189,14 @@ TabPage TP_MANAGE_STYLES
         Text [ dutch ] = "~Gebaseerd op" ;
         Text [ spanish ] = "~Vinculado con" ;
         Text [ english_us ] = "~Based on" ;
-        Text[ chinese_simplified ] = "Á´½Óµ½(~B)";
+        Text[ chinese_simplified ] = "é“¾æ¥åˆ°(~B)";
         Text[ russian ] = "Ñâÿçàí ñ";
         Text[ polish ] = "Po³¹czony z";
-        Text[ japanese ] = "Øİ¸æ(~B)";
-        Text[ chinese_traditional ] = "³sµ²¨ì(~B)";
+        Text[ japanese ] = "ï¾˜ï¾ï½¸å…ˆ(~B)";
+        Text[ chinese_traditional ] = "é€£çµåˆ°(~B)";
         Text[ arabic ] = "ãÑÊÈØ ÈÜ";
         Text[ greek ] = "~Óıíäåóç ìå";
-        Text[ korean ] = "·Î ¸µÅ©(~B)";
+        Text[ korean ] = "ë¡œ ë§í¬(~B)";
         Text[ turkish ] = "~Bağlanılan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vinculado con";
@@ -226,14 +226,14 @@ TabPage TP_MANAGE_STYLES
         Text [ dutch ] = "~Bereik" ;
         Text [ spanish ] = "~Área" ;
         Text [ english_us ] = "~Category" ;
-        Text[ chinese_simplified ] = "·ÖÀà(~C)";
+        Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
         Text[ russian ] = "Êàòåãîğèÿ";
         Text[ polish ] = "Kategoria";
-        Text[ japanese ] = "”ÍˆÍ(~C)";
-        Text[ chinese_traditional ] = "¤ÀÃş(~C)";
+        Text[ japanese ] = "ç¯„å›²(~C)";
+        Text[ chinese_traditional ] = "åˆ†é¡(~C)";
         Text[ arabic ] = "ÇáäØÇŞ";
         Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "±¸¿ª(~C)";
+        Text[ korean ] = "êµ¬ì—­(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área";
@@ -275,20 +275,21 @@ TabPage TP_MANAGE_STYLES
         Text [ dutch ] = "Bevat" ;
         Text [ spanish ] = "Contiene" ;
         Text [ english_us ] = "Contains" ;
-        Text[ chinese_simplified ] = "º¬ÓĞ";
+        Text[ chinese_simplified ] = "å«æœ‰";
         Text[ russian ] = "Ñîäåğæèò";
         Text[ polish ] = "Zawiera";
-        Text[ japanese ] = "à–¾";
-        Text[ chinese_traditional ] = "§t¦³";
+        Text[ japanese ] = "èª¬æ˜";
+        Text[ chinese_traditional ] = "å«æœ‰";
         Text[ arabic ] = "íÍÊæí Úáì";
         Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "Æ÷ÇÔ";
+        Text[ korean ] = "í¬í•¨";
         Text[ turkish ] = "İçerik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contiene";
     };
 };
  // ********************************************************************** EOF
+
 
 
 
