@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-03 14:34:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,10 @@ protected:
             The media descriptor
     */
     void store(const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments );
+    /** stores the embedded storage ("database")
+        @return <TRUE/> if the storage could be commited, otherwise <FALSE/>
+    */
+    sal_Bool commitEmbeddedStorage();
 
     /** dispose all frames for registered controllers
     */
