@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 11:52:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,11 @@ typedef enum
     <p>
     The function has parameters which determines which versions of the respective
     JREs are supported. A JRE which does not meet the version requirements will
-    be ignored.</p>
+    be ignored. When no vendor is specified, then the version arguments must not
+    be specified as well. That is, if  <code>sVendor</code> is an empty string then
+    <code>sMinVersion</code>,<code>sMaxVersion</code> must also be empty,
+    <code>arExcludeList</code> must have the size null and <code>nSizeExcludeList</code>
+    must also be null</p>
     The JavaInfo structures returned in <code>parJavaInfo</code> should be ordered
     according to their version. The one, representing a JRE with the highest
     version should be the first in the array. </p>
