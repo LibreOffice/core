@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:26:49 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ String RID_STR_FORMS
     Text[ hebrew ] = "Formulare";
     Text[ hindi ] = "फ़ॉर्म";
     Text[ slovak ] = "Formuláre";
+    Text[ hungarian ] = "Űrlapok";
+    Text[ slovenian ] = "Obrazci";
 };
 
 ModalDialog RID_DLG_SELECTLABELCONTROL
@@ -116,7 +118,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ english_us ] = "These are control fields that can be used as label fields for the $control_class$ $control_name$.";
         Text[ portuguese ] = "Estes s�o todos os campos de controlo que podem ser atribu�dos a $control_class$ $control_name$ como campos de r�tulos.";
         Text[ russian ] = "�������� ����������, ������� ����� ���� ������� ��� $control_class$ $control_name$ � �������� ��������.";
-        Text[ greek ] = "���� ����� ��� �� ����� ������� �� ����� ������� �� ��������������� �� ����� ����������� ��� �� $control_class$ $control_name$.";
+        Text[ greek ] = "���� ����� ����� ������� �� ����� ������� �� ��������������� �� ����� ����������� ��� �� $control_class$ $control_name$.";
         Text[ dutch ] = "Dit zijn controlevelden die als titelveld kunnen worden toegewezen aan $control_class$ $control_name$.";
         Text[ french ] = "Voici tous les champs de contr�le qui peuvent �tre assign�s comme champ d'�tiquette � $control_class$ $control_name$.";
         Text[ spanish ] = "Estos son todos los campos de control que pueden asignarse al $control_class$ $control_name$ como campo de etiqueta.";
@@ -139,6 +141,8 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ hebrew ] = "Dies sind alle Kontrollfelder, die dem $control_class$ $control_name$ als Beschriftungsfeld zugeordnet werden können.";
         Text[ hindi ] = "इन नियंत्रण क्षेत्रों को $control_class$ $control_name$ केलिए लेबिल क्षेत्र जैसे उपयोग कर सकते है ।";
         Text[ slovak ] = "Toto sú ovládacie polia, ktoré môžu byť použité ako polia popiskov pre $control_class$ $control_name$.";
+        Text[ hungarian ] = "Ezen vezérlőmezők címkeként is használhatóak a következőkhöz: $control_class$ $control_name$";
+        Text[ slovenian ] = "To so kontrolna polja, ki jih lahko uporabite kot nalepke za $control_class$ $control_name$.";
     };
     Control 1
     {
@@ -178,6 +182,8 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ hebrew ] = "~keine Zuordnung";
         Text[ hindi ] = "~कोई निर्दिष्ट नहीं";
         Text[ slovak ] = "Žiad~ne priradenie";
+        Text[ hungarian ] = "~Nincs hozzárendelés";
+        Text[ slovenian ] = "~Brez dodelitve";
     };
     FixedLine 1
     {
@@ -222,6 +228,8 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
     Text[ hebrew ] = "Auswahl Beschriftungsfeld";
     Text[ hindi ] = "लेबिल क्षेत्र चुनाव";
     Text[ slovak ] = "Výber popisného poľa";
+    Text[ hungarian ] = "Címkemező kiválasztása";
+    Text[ slovenian ] = "Izbor nalepk";
 };
 
 ImageList RID_IL_FORMEXPLORER
@@ -269,6 +277,8 @@ String RID_STR_PROPTITLE_PUSHBUTTON
     Text[ hebrew ] = "Schaltfläche";
     Text[ hindi ] = "बटन";
     Text[ slovak ] = "Klávesa";
+    Text[ hungarian ] = "Gomb";
+    Text[ slovenian ] = "Gumb";
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
@@ -278,7 +288,7 @@ String RID_STR_PROPTITLE_RADIOBUTTON
     Text [ english_us ] = "Option Button" ;
     Text [ portuguese_brazilian ] = "Bot�o de Sele��o" ;
     Text [ swedish ] = "Alternativf�lt" ;
-    Text [ danish ] = "Alternativfelt" ;
+    Text [ danish ] = "Indstillingsknap" ;
     Text [ italian ] = "Pulsante di scelta" ;
     Text [ spanish ] = "Campo de opci�n" ;
     Text [ french ] = "Bouton radio" ;
@@ -300,6 +310,8 @@ String RID_STR_PROPTITLE_RADIOBUTTON
     Text[ hebrew ] = "‮כפתור בחירה‬";
     Text[ hindi ] = "विकल्प बटन";
     Text[ slovak ] = "Tlačidlo nastavení";
+    Text[ hungarian ] = "Rádiógomb";
+    Text[ slovenian ] = "Izbirni gumb";
 };
 String RID_STR_PROPTITLE_CHECKBOX
 {
@@ -331,6 +343,8 @@ String RID_STR_PROPTITLE_CHECKBOX
     Text[ hebrew ] = "‮תיבת סימון‬";
     Text[ hindi ] = "चेक बॉक्स";
     Text[ slovak ] = "Zaškrtávacie políčko";
+    Text[ hungarian ] = "Jelölőnégyzet";
+    Text[ slovenian ] = "Potrditveno polje";
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
@@ -362,6 +376,8 @@ String RID_STR_PROPTITLE_FIXEDTEXT
     Text[ hebrew ] = "‮שדה טקסט‬";
     Text[ hindi ] = "लेबिल क्षेत्र";
     Text[ slovak ] = "Označenie";
+    Text[ hungarian ] = "Címkemező";
+    Text[ slovenian ] = "Nalepka";
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {
@@ -393,6 +409,8 @@ String RID_STR_PROPTITLE_GROUPBOX
     Text[ hebrew ] = "‮תיבת קבוצה‬";
     Text[ hindi ] = "समूह बॉक्स";
     Text[ slovak ] = "Zoskupenie";
+    Text[ hungarian ] = "Csoportpanel";
+    Text[ slovenian ] = "Skupinsko okno";
 };
 String RID_STR_PROPTITLE_EDIT
 {
@@ -424,6 +442,8 @@ String RID_STR_PROPTITLE_EDIT
     Text[ hebrew ] = "‮תיבת טקסט‬";
     Text[ hindi ] = "टेक्स्ट् बॉक्स";
     Text[ slovak ] = "Textové pole";
+    Text[ hungarian ] = "Szövegdoboz";
+    Text[ slovenian ] = "Polje z besedilom";
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
@@ -455,6 +475,8 @@ String RID_STR_PROPTITLE_FORMATTED
     Text[ hebrew ] = "‮שדה צעוצב‬";
     Text[ hindi ] = "रचना की हुयी क्षेत्र";
     Text[ slovak ] = "Formátované pole";
+    Text[ hungarian ] = "Formázott mező";
+    Text[ slovenian ] = "Oblikovano polje";
 };
 String RID_STR_PROPTITLE_LISTBOX
 {
@@ -486,6 +508,8 @@ String RID_STR_PROPTITLE_LISTBOX
     Text[ hebrew ] = "‮תיבת רשימה‬";
     Text[ hindi ] = "सूची बॉक्स";
     Text[ slovak ] = "Pole zoznamu";
+    Text[ hungarian ] = "Listapanel";
+    Text[ slovenian ] = "Seznamsko polje";
 };
 String RID_STR_PROPTITLE_COMBOBOX
 {
@@ -517,6 +541,8 @@ String RID_STR_PROPTITLE_COMBOBOX
     Text[ hebrew ] = "Kombinationsfeld";
     Text[ hindi ] = "कॉम्बो बॉक्स";
     Text[ slovak ] = "Combo Box (pole)";
+    Text[ hungarian ] = "Kombinált lista";
+    Text[ slovenian ] = "Kombinirano polje";
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
@@ -548,6 +574,8 @@ String RID_STR_PROPTITLE_IMAGEBUTTON
     Text[ hebrew ] = "Grafische Schaltfläche";
     Text[ hindi ] = "चित्र बटन";
     Text[ slovak ] = "Obrázkové tlačítko";
+    Text[ hungarian ] = "Képgomb";
+    Text[ slovenian ] = "Gumb z grafiko";
 };
 String RID_STR_PROPTITLE_HIDDENCONTROL
 {
@@ -578,6 +606,8 @@ String RID_STR_PROPTITLE_HIDDENCONTROL
     Text[ hebrew ] = "verstecktes Kontrollfeld";
     Text[ hindi ] = "छिपा हुआ नियंत्रण";
     Text[ slovak ] = "Skrytý ovládací prvok";
+    Text[ hungarian ] = "Rejtett vezérlő";
+    Text[ slovenian ] = "Skriti kontrolnik";
 };
 String RID_STR_PROPTITLE_UNKNOWNCONTROL
 {
@@ -608,6 +638,8 @@ String RID_STR_PROPTITLE_UNKNOWNCONTROL
     Text[ hebrew ] = "Kontrollfeld (unbekannter Typ)";
     Text[ hindi ] = "नियंत्रण (अज्ञात वर्ग)";
     Text[ slovak ] = "Ovládací prvok";
+    Text[ hungarian ] = "Vezérlő (ismeretlen típus)";
+    Text[ slovenian ] = "Kontrolnik (neznana vrsta)";
 };
 String RID_STR_PROPTITLE_IMAGECONTROL
 {
@@ -639,6 +671,8 @@ String RID_STR_PROPTITLE_IMAGECONTROL
     Text[ hebrew ] = "Grafisches Kontrollfeld";
     Text[ hindi ] = "चित्र नियंत्रण";
     Text[ slovak ] = "Ovládacie pole obrázku";
+    Text[ hungarian ] = "Kép vezérlőelem";
+    Text[ slovenian ] = "Grafični kontrolnik";
 };
 String RID_STR_PROPTITLE_FILECONTROL
 {
@@ -648,7 +682,7 @@ String RID_STR_PROPTITLE_FILECONTROL
     Text [ english_us ] = "File Selection" ;
     Text [ portuguese_brazilian ] = "Sele��o de Arquivo" ;
     Text [ swedish ] = "Filurval" ;
-    Text [ danish ] = "Filudvalg" ;
+    Text [ danish ] = "Filvalg" ;
     Text [ italian ] = "Scelta file" ;
     Text [ spanish ] = "Selecci�n de archivo" ;
     Text [ french ] = "S�lection de fichier" ;
@@ -670,6 +704,8 @@ String RID_STR_PROPTITLE_FILECONTROL
     Text[ hebrew ] = "‮בחירת קובץ‬";
     Text[ hindi ] = "फाइल चुनाव";
     Text[ slovak ] = "Výber súboru";
+    Text[ hungarian ] = "Fájlválasztás";
+    Text[ slovenian ] = "Izbor datoteke";
 };
 String RID_STR_PROPTITLE_DATEFIELD
 {
@@ -701,6 +737,8 @@ String RID_STR_PROPTITLE_DATEFIELD
     Text[ hebrew ] = "‮שדה תאריך‬";
     Text[ hindi ] = "दिनांक क्षेत्र";
     Text[ slovak ] = "Pole pre dátum";
+    Text[ hungarian ] = "Dátummező";
+    Text[ slovenian ] = "Datumsko polje";
 };
 String RID_STR_PROPTITLE_TIMEFIELD
 {
@@ -732,6 +770,8 @@ String RID_STR_PROPTITLE_TIMEFIELD
     Text[ hebrew ] = "‮שדה שעה‬";
     Text[ hindi ] = "समय क्षेत्र";
     Text[ slovak ] = "Časové pole";
+    Text[ hungarian ] = "Időmező";
+    Text[ slovenian ] = "Časovno polje";
 };
 String RID_STR_PROPTITLE_NUMERICFIELD
 {
@@ -763,6 +803,8 @@ String RID_STR_PROPTITLE_NUMERICFIELD
     Text[ hebrew ] = "Numerisches Feld";
     Text[ hindi ] = "संख्या क्षेत्र";
     Text[ slovak ] = "Číselné pole";
+    Text[ hungarian ] = "Számmező";
+    Text[ slovenian ] = "Številsko polje";
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
@@ -794,6 +836,8 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text[ hebrew ] = "‮שדה מטבע‬";
     Text[ hindi ] = "मुद्रा क्षेत्र";
     Text[ slovak ] = "Menové pole";
+    Text[ hungarian ] = "Pénzmennyiség-mező";
+    Text[ slovenian ] = "Valutno polje";
 };
 String RID_STR_PROPTITLE_PATTERNFIELD
 {
@@ -803,7 +847,7 @@ String RID_STR_PROPTITLE_PATTERNFIELD
     Text [ english_us ] = "Pattern Field" ;
     Text [ portuguese_brazilian ] = "Campo Padr�o" ;
     Text [ swedish ] = "Maskerat f�lt" ;
-    Text [ danish ] = "Maskeret felt" ;
+    Text [ danish ] = "Felt med m�nster" ;
     Text [ italian ] = "Campo a maschera" ;
     Text [ spanish ] = "Campo enmascarado" ;
     Text [ french ] = "Champ masqu�" ;
@@ -825,6 +869,8 @@ String RID_STR_PROPTITLE_PATTERNFIELD
     Text[ hebrew ] = "‮שדה תבנית‬";
     Text[ hindi ] = "नमूना क्षेत्र";
     Text[ slovak ] = "Pole vzorky";
+    Text[ hungarian ] = "Maszkolt mező";
+    Text[ slovenian ] = "Vzorčno polje";
 };
 String RID_STR_PROPTITLE_DBGRID
 {
@@ -856,6 +902,8 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ hebrew ] = "‮בפתור שליטה בטבלה ‬";
     Text[ hindi ] = "सारणी नियंत्रण";
     Text[ slovak ] = "Tabuľka ";
+    Text[ hungarian ] = "Táblázat";
+    Text[ slovenian ] = "Kontrolnik tabele";
 };
 String RID_STR_EDITMASK
 {
@@ -887,6 +935,8 @@ String RID_STR_EDITMASK
     Text[ hebrew ] = "Eingabemaske";
     Text[ hindi ] = "मास्क का संपादन";
     Text[ slovak ] = "Upraviť masku";
+    Text[ hungarian ] = "Maszk szerkesztése";
+    Text[ slovenian ] = "Uredi masko";
 };
 String RID_STR_LITERALMASK
 {
@@ -918,6 +968,8 @@ String RID_STR_LITERALMASK
     Text[ hebrew ] = "Zeichenmaske";
     Text[ hindi ] = "लिटरल मास्क";
     Text[ slovak ] = "Znaková maska";
+    Text[ hungarian ] = "Kifejezésmaszk";
+    Text[ slovenian ] = "Maska znakov";
 };
 String RID_STR_READONLY
 {
@@ -927,7 +979,7 @@ String RID_STR_READONLY
     Text [ english_us ] = "Read-only" ;
     Text [ portuguese_brazilian ] = "Somente leitura" ;
     Text [ swedish ] = "Bara l�sning" ;
-    Text [ danish ] = "Kun l�se" ;
+    Text [ danish ] = "Skrivebeskyttet" ;
     Text [ italian ] = "Solo lettura" ;
     Text [ spanish ] = "S�lo lectura" ;
     Text [ french ] = "En lecture seule" ;
@@ -949,6 +1001,8 @@ String RID_STR_READONLY
     Text[ hebrew ] = "‮קריאה בלבד‬";
     Text[ hindi ] = "केवल-पढ़ने केलिए";
     Text[ slovak ] = "Iba na čítanie";
+    Text[ hungarian ] = "Csak olvasásra";
+    Text[ slovenian ] = "Samo za branje";
 };
 String RID_STR_ENABLED
 {
@@ -980,6 +1034,8 @@ String RID_STR_ENABLED
     Text[ hebrew ] = "Aktiviert";
     Text[ hindi ] = "सक्षम किया";
     Text[ slovak ] = "Zapnuté";
+    Text[ hungarian ] = "Engedélyezett";
+    Text[ slovenian ] = "Omogočeno";
 };
 String RID_STR_AUTOCOMPLETE
 {
@@ -1011,6 +1067,8 @@ String RID_STR_AUTOCOMPLETE
     Text[ hebrew ] = "Automatisch füllen";
     Text[ hindi ] = "स्वचालित ढंग से भरना";
     Text[ slovak ] = "Automatické vyplňovanie";
+    Text[ hungarian ] = "Automatikus kitöltés";
+    Text[ slovenian ] = "Samozapolni";
 };
 String RID_STR_LINECOUNT
 {
@@ -1020,7 +1078,7 @@ String RID_STR_LINECOUNT
     Text [ english_us ] = "Line count" ;
     Text [ portuguese_brazilian ] = "Contagem de linhas" ;
     Text [ swedish ] = "Antal rader" ;
-    Text [ danish ] = "Antal linjer" ;
+    Text [ danish ] = "Linjeantal" ;
     Text [ italian ] = "Numero delle righe" ;
     Text [ spanish ] = "N�mero de l�neas" ;
     Text [ french ] = "Nombre de lignes" ;
@@ -1042,6 +1100,8 @@ String RID_STR_LINECOUNT
     Text[ hebrew ] = "Anzahl der Zeilen";
     Text[ hindi ] = "रेखा गिनना";
     Text[ slovak ] = "Počet riadkov";
+    Text[ hungarian ] = "Sorok száma";
+    Text[ slovenian ] = "Število vrstic";
 };
 String RID_STR_MAXTEXTLEN
 {
@@ -1073,6 +1133,8 @@ String RID_STR_MAXTEXTLEN
     Text[ hebrew ] = "Max. Textlänge";
     Text[ hindi ] = "टेक्स्ट् का अधिकतम विस्तार";
     Text[ slovak ] = "Maximálna dĺžka textu";
+    Text[ hungarian ] = "Maximális szöveg hossz";
+    Text[ slovenian ] = "Največja dolžina besedila";
 };
 String RID_STR_SPIN
 {
@@ -1104,6 +1166,8 @@ String RID_STR_SPIN
     Text[ hebrew ] = "Drehfeld";
     Text[ hindi ] = "स्पिन बटन";
     Text[ slovak ] = "Rolovacie tlačítko";
+    Text[ hungarian ] = "Léptetőgomb";
+    Text[ slovenian ] = "Pomikalnik";
 };
 String RID_STR_STRICTFORMAT
 {
@@ -1135,6 +1199,8 @@ String RID_STR_STRICTFORMAT
     Text[ hebrew ] = "Formatüberprüfung";
     Text[ hindi ] = "कडा रचना";
     Text[ slovak ] = "Presný formát";
+    Text[ hungarian ] = "Kötött formátum";
+    Text[ slovenian ] = "Dosledna oblika";
 };
 String RID_STR_SHOWTHOUSANDSEP
 {
@@ -1144,7 +1210,7 @@ String RID_STR_SHOWTHOUSANDSEP
     Text [ english_us ] = "Thousands separator" ;
     Text [ portuguese_brazilian ] = "Separador de milhares" ;
     Text [ swedish ] = "Tusentalsavgr�nsare" ;
-    Text [ danish ] = "Tusindtalssep." ;
+    Text [ danish ] = "Tusindtalsseparator" ;
     Text [ italian ] = "Car. di separz. migliaia" ;
     Text [ spanish ] = "Separador de miles" ;
     Text [ french ] = "S�parateur de milliers" ;
@@ -1166,6 +1232,8 @@ String RID_STR_SHOWTHOUSANDSEP
     Text[ hebrew ] = "Tausender-Trennz.";
     Text[ hindi ] = "हजार अलगानेवाला";
     Text[ slovak ] = "Oddeľovač tisícok";
+    Text[ hungarian ] = "Ezreselválasztó";
+    Text[ slovenian ] = "Ločilo tisočic";
 };
 String RID_STR_PRINTABLE
 {
@@ -1197,6 +1265,8 @@ String RID_STR_PRINTABLE
     Text[ hebrew ] = "‮הדפסה‬";
     Text[ hindi ] = "छपाई";
     Text[ slovak ] = "Tlač";
+    Text[ hungarian ] = "Nyomtatás";
+    Text[ slovenian ] = "Natisni";
 };
 String RID_STR_TARGET_URL
 {
@@ -1228,6 +1298,8 @@ String RID_STR_TARGET_URL
     Text[ thai ] = "URL";
     Text[ hindi ] = "URL";
     Text[ slovak ] = "URL";
+    Text[ hungarian ] = "URL";
+    Text[ slovenian ] = "URL";
 };
 String RID_STR_TARGET_FRAME
 {
@@ -1259,6 +1331,8 @@ String RID_STR_TARGET_FRAME
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 String RID_STR_HELPTEXT
 {
@@ -1271,7 +1345,7 @@ String RID_STR_HELPTEXT
     Text[ french ] = "Texte d'aide";
     Text[ spanish ] = "Texto de ayuda";
     Text[ italian ] = "Testo della Guida";
-    Text[ danish ] = "Hj�lp-tekst";
+    Text[ danish ] = "Hj�lpetekst";
     Text[ swedish ] = "Hj�lptext";
     Text[ polish ] = "Tekst pomocy";
     Text[ portuguese_brazilian ] = "Texto de ajuda";
@@ -1290,6 +1364,8 @@ String RID_STR_HELPTEXT
     Text[ hebrew ] = "Hilfetext";
     Text[ hindi ] = "सहायता टेक्स्ट्";
     Text[ slovak ] = "Pomocný text";
+    Text[ hungarian ] = "Súgó szövege";
+    Text[ slovenian ] = "Besedilo pomoči";
 };
 String RID_STR_HELPURL
 {
@@ -1302,7 +1378,7 @@ String RID_STR_HELPURL
     Text[ french ] = "URL de l'aide";
     Text[ spanish ] = "URL de la Ayuda";
     Text[ italian ] = "URL della Guida";
-    Text[ danish ] = "Hj�lp til URL";
+    Text[ danish ] = "Hj�lp-URL";
     Text[ swedish ] = "Hj�lp-URL";
     Text[ polish ] = "Adres URL pomocy";
     Text[ portuguese_brazilian ] = "URL da Ajuda";
@@ -1321,6 +1397,8 @@ String RID_STR_HELPURL
     Text[ hebrew ] = "Hilfe URL";
     Text[ hindi ] = "सहायता URL";
     Text[ slovak ] = "URL pomocníka";
+    Text[ hungarian ] = "Súgó URL";
+    Text[ slovenian ] = "URL pomoči";
 };
 String RID_STR_TAG
 {
@@ -1352,6 +1430,8 @@ String RID_STR_TAG
     Text[ hebrew ] = "Zusatzinformation";
     Text[ hindi ] = "अतिरिक्त सूचना";
     Text[ slovak ] = "Ďalšie informácie";
+    Text[ hungarian ] = "Kiegészítő információ";
+    Text[ slovenian ] = "Dodatne informacije";
 };
 String RID_STR_ECHO_CHAR
 {
@@ -1383,6 +1463,8 @@ String RID_STR_ECHO_CHAR
     Text[ hebrew ] = "Zeichen für Passwörter";
     Text[ hindi ] = "कूटशब्द अक्षरें";
     Text[ slovak ] = "Znaky hesla";
+    Text[ hungarian ] = "Jelszókarakterek";
+    Text[ slovenian ] = "Skriti znaki";
 };
 String RID_STR_TRISTATE
 {
@@ -1414,6 +1496,8 @@ String RID_STR_TRISTATE
     Text[ hebrew ] = "Dreifacher Status";
     Text[ hindi ] = "तिगुना";
     Text[ slovak ] = "Trojstav";
+    Text[ hungarian ] = "Háromállapotú";
+    Text[ slovenian ] = "Trojno stanje";
 };
 String RID_STR_EMPTY_IS_NULL
 {
@@ -1427,7 +1511,7 @@ String RID_STR_EMPTY_IS_NULL
     Text [ french ] = "Espace vide �gale NULL" ;
     Text [ dutch ] = "Opvullen met NUL" ;
     Text[ portuguese_brazilian ] = "String vazio � NULL";
-    Text[ danish ] = "Tom tegnsekvens er NUL";
+    Text[ danish ] = "Tom streng er NULL";
     Text[ chinese_simplified ] = "空缺字符是 NULL";
     Text[ russian ] = "������ ������ - NULL";
     Text[ polish ] = "Pusty ci�g znak�w jest ZEREM";
@@ -1445,6 +1529,8 @@ String RID_STR_EMPTY_IS_NULL
     Text[ hebrew ] = "Leere Zeichenfolge ist NULL";
     Text[ hindi ] = "खाली स्ट्रिंग NULL है";
     Text[ slovak ] = "Prázdny reťazec je NULL";
+    Text[ hungarian ] = "Üres szöveg = NULL";
+    Text[ slovenian ] = "Prazen niz je NULL";
 };
 String RID_STR_DECIMAL_ACCURACY
 {
@@ -1476,6 +1562,8 @@ String RID_STR_DECIMAL_ACCURACY
     Text[ hebrew ] = "Nachkommastellen";
     Text[ hindi ] = "दशांश शुद्धता";
     Text[ slovak ] = "Desatinná presnosť";
+    Text[ hungarian ] = "Tizedes pontosság";
+    Text[ slovenian ] = "Decimalna natančnost";
 };
 String RID_STR_IMAGE_URL
 {
@@ -1507,6 +1595,8 @@ String RID_STR_IMAGE_URL
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 String RID_STR_DEFAULT_SELECT_SEQ
 {
@@ -1538,6 +1628,8 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text[ hebrew ] = "Standardselektion";
     Text[ hindi ] = "अनुपस्थिति चुनाव";
     Text[ slovak ] = "Východzí výber";
+    Text[ hungarian ] = "Alapértelmezett kijelölés";
+    Text[ slovenian ] = "Privzeti izbor";
 };
 String RID_STR_DEFAULT_BUTTON
 {
@@ -1569,6 +1661,8 @@ String RID_STR_DEFAULT_BUTTON
     Text[ hebrew ] = "Standardschaltfläche";
     Text[ hindi ] = "अनुपस्थिति बटन";
     Text[ slovak ] = "Východzie tlačítko";
+    Text[ hungarian ] = "Alapértelmezett gomb";
+    Text[ slovenian ] = "Privzeti gumb";
 };
 String RID_STR_LABELCONTROL
 {
@@ -1599,6 +1693,8 @@ String RID_STR_LABELCONTROL
     Text[ hebrew ] = "‮שדה טקסט‬";
     Text[ hindi ] = "लेबिल क्षेत्र";
     Text[ slovak ] = "Označenie";
+    Text[ hungarian ] = "Címkemező";
+    Text[ slovenian ] = "Nalepka";
 };
 String RID_STR_LABEL
 {
@@ -1608,7 +1704,7 @@ String RID_STR_LABEL
     Text [ english_us ] = "Label" ;
     Text [ portuguese_brazilian ] = "R�tulo" ;
     Text [ swedish ] = "Etikett" ;
-    Text [ danish ] = "Titel" ;
+    Text [ danish ] = "Etiket" ;
     Text [ italian ] = "Titolo" ;
     Text [ spanish ] = "T�tulo" ;
     Text [ french ] = "Titre" ;
@@ -1630,6 +1726,8 @@ String RID_STR_LABEL
     Text[ hebrew ] = "Titel";
     Text[ hindi ] = "लेबिल";
     Text[ slovak ] = "Označenie";
+    Text[ hungarian ] = "Címke";
+    Text[ slovenian ] = "Oznaka";
 };
 String RID_STR_ALIGN
 {
@@ -1661,6 +1759,8 @@ String RID_STR_ALIGN
     Text[ hebrew ] = "‮ישור‬";
     Text[ hindi ] = "पंक्तिकरण";
     Text[ slovak ] = "Zarovnanie";
+    Text[ hungarian ] = "Igazítás";
+    Text[ slovenian ] = "Poravnava";
 };
 String RID_STR_FONT
 {
@@ -1692,6 +1792,8 @@ String RID_STR_FONT
     Text[ hebrew ] = "Zeichensatz";
     Text[ hindi ] = "अक्षर समूह";
     Text[ slovak ] = "Znaková sada";
+    Text[ hungarian ] = "Karakterkészlet";
+    Text[ slovenian ] = "Nabor znakov";
 };
 String RID_STR_BACKGROUNDCOLOR
 {
@@ -1723,6 +1825,8 @@ String RID_STR_BACKGROUNDCOLOR
     Text[ hebrew ] = "‮צבע רקע‬";
     Text[ hindi ] = "पृष्ठभाग रंग";
     Text[ slovak ] = "Farba pozadia";
+    Text[ hungarian ] = "Háttérszín";
+    Text[ slovenian ] = "Barva ozadja";
 };
 String RID_STR_BORDER
 {
@@ -1732,7 +1836,7 @@ String RID_STR_BORDER
     Text [ english_us ] = "Border" ;
     Text [ portuguese_brazilian ] = "Borda" ;
     Text [ swedish ] = "Ram" ;
-    Text [ danish ] = "Ramme" ;
+    Text [ danish ] = "Kant" ;
     Text [ italian ] = "Cornice" ;
     Text [ spanish ] = "Borde" ;
     Text [ french ] = "Cadre" ;
@@ -1754,6 +1858,8 @@ String RID_STR_BORDER
     Text[ hebrew ] = "Rahmen";
     Text[ hindi ] = "किनारा";
     Text[ slovak ] = "Okraj";
+    Text[ hungarian ] = "Szegély";
+    Text[ slovenian ] = "Obroba";
 };
 String RID_STR_HSCROLL
 {
@@ -1763,7 +1869,7 @@ String RID_STR_HSCROLL
     Text [ english_us ] = "Horizontal scroll bar" ;
     Text [ portuguese_brazilian ] = "Barra de rolagem horizontal" ;
     Text [ swedish ] = "Horisontal rullningslist" ;
-    Text [ danish ] = "Vandret rullepanel" ;
+    Text [ danish ] = "Vandret rullebj�lke" ;
     Text [ italian ] = "Barra di scorrimento orizzontale" ;
     Text [ spanish ] = "Barra de deplazamiento horizontal" ;
     Text [ french ] = "Barre de d�filement horizontale" ;
@@ -1785,6 +1891,8 @@ String RID_STR_HSCROLL
     Text[ hebrew ] = "Horizontaler Scrollbar";
     Text[ hindi ] = "समतल स्क्रॉल पट्टी";
     Text[ slovak ] = "Vodorovný posuvník";
+    Text[ hungarian ] = "Vízszintes görgetősáv";
+    Text[ slovenian ] = "Vodoravni drsni trak";
 };
 String RID_STR_VSCROLL
 {
@@ -1794,7 +1902,7 @@ String RID_STR_VSCROLL
     Text [ english_us ] = "Vertical scroll bar" ;
     Text [ portuguese_brazilian ] = "Barra de rolagem vertical" ;
     Text [ swedish ] = "Vertikal rullningslist" ;
-    Text [ danish ] = "Lodret rullepanel" ;
+    Text [ danish ] = "Lodret rullebj�lke" ;
     Text [ italian ] = "Barra di scorrimento verticale" ;
     Text [ spanish ] = "Barra de desplazamiento vertical" ;
     Text [ french ] = "Barre de d�filement verticale" ;
@@ -1816,6 +1924,8 @@ String RID_STR_VSCROLL
     Text[ hebrew ] = "Vertikaler Scrollbar";
     Text[ hindi ] = "लंबरूप स्क्रॉल पट्टी";
     Text[ slovak ] = "Zvislý posuvník";
+    Text[ hungarian ] = "Függőleges görgetősáv";
+    Text[ slovenian ] = "Navpični drsni trak";
 };
 String RID_STR_MULTILINE
 {
@@ -1847,6 +1957,8 @@ String RID_STR_MULTILINE
     Text[ hebrew ] = "Mehrzeilig";
     Text[ hindi ] = "अनेक रेखाओं का इनपुट्";
     Text[ slovak ] = "Viacriadkový vstup";
+    Text[ hungarian ] = "Többsoros bevitel";
+    Text[ slovenian ] = "Večvrstični vnos";
 };
 String RID_STR_MULTISELECTION
 {
@@ -1878,6 +1990,8 @@ String RID_STR_MULTISELECTION
     Text[ hebrew ] = "‮בחירה מרובה‬";
     Text[ hindi ] = "बहुमुखी चुनाव";
     Text[ slovak ] = "Viacnásobný výber";
+    Text[ hungarian ] = "Többszörös kijelölés";
+    Text[ slovenian ] = "Večkratni izbor";
 };
 String RID_STR_NAME
 {
@@ -1909,6 +2023,8 @@ String RID_STR_NAME
     Text[ hebrew ] = "Name";
     Text[ hindi ] = "नाम्";
     Text[ slovak ] = "Názov";
+    Text[ hungarian ] = "Név";
+    Text[ slovenian ] = "Ime";
 };
 String RID_STR_TABINDEX
 {
@@ -1940,6 +2056,8 @@ String RID_STR_TABINDEX
     Text[ hebrew ] = "Reihenfolge";
     Text[ hindi ] = "क्रम";
     Text[ slovak ] = "Poradie";
+    Text[ hungarian ] = "Sorrend";
+    Text[ slovenian ] = "Razvrsti";
 };
 String RID_STR_FILTER_CRITERIA
 {
@@ -1971,6 +2089,8 @@ String RID_STR_FILTER_CRITERIA
     Text[ hebrew ] = "‮סינון‬";
     Text[ hindi ] = "फिल्टर";
     Text[ slovak ] = "Filter";
+    Text[ hungarian ] = "Szűrő";
+    Text[ slovenian ] = "Filter";
 };
 String RID_STR_SORT_CRITERIA
 {
@@ -1980,7 +2100,7 @@ String RID_STR_SORT_CRITERIA
     Text[ italian ] = "Ordina";
     Text[ portuguese_brazilian ] = "Ordenar";
     Text[ portuguese ] = "Ordenar";
-    Text[ danish ] = "Sortering";
+    Text[ danish ] = "Sorter";
     Text[ french ] = "Tri";
     Text[ swedish ] = "Sortering";
     Text[ dutch ] = "Sortering";
@@ -2002,6 +2122,8 @@ String RID_STR_SORT_CRITERIA
     Text[ hebrew ] = "‮מיון‬";
     Text[ hindi ] = "सोर्ट";
     Text[ slovak ] = "Zoradiť";
+    Text[ hungarian ] = "Rendezés";
+    Text[ slovenian ] = "Razvrsti";
 };
 String RID_STR_RECORDMARKER
 {
@@ -2032,6 +2154,8 @@ String RID_STR_RECORDMARKER
     Text[ hebrew ] = "Datensatzmarkierer";
     Text[ hindi ] = "अभिलेख मार्कर";
     Text[ slovak ] = "Označenie záznamu";
+    Text[ hungarian ] = "Rekordjelölő";
+    Text[ slovenian ] = "Označevalnik zapisov";
 };
 String RID_STR_FILTERPROPOSAL
 {
@@ -2063,6 +2187,8 @@ String RID_STR_FILTERPROPOSAL
     Text[ hebrew ] = "Filtervorschlag";
     Text[ hindi ] = "फिल्टर प्रस्ताव";
     Text[ slovak ] = "Návrh filtra";
+    Text[ hungarian ] = "Szűrőjavaslat";
+    Text[ slovenian ] = "Predlog filtra";
 };
 String RID_STR_NAVIGATION
 {
@@ -2094,6 +2220,8 @@ String RID_STR_NAVIGATION
     Text[ hebrew ] = "Navigationsleiste";
     Text[ hindi ] = "नाविगेशन् पट्टी";
     Text[ slovak ] = "Navigačný panel";
+    Text[ hungarian ] = "Navigációs panel";
+    Text[ slovenian ] = "Vrstica za krmarjenje";
 };
 String RID_STR_CYCLE
 {
@@ -2125,6 +2253,8 @@ String RID_STR_CYCLE
     Text[ hebrew ] = "Zyklus";
     Text[ hindi ] = "पूर्तिकाल";
     Text[ slovak ] = "Cyklus";
+    Text[ hungarian ] = "Körforgás";
+    Text[ slovenian ] = "Krožno";
 };
 String RID_STR_TABSTOP
 {
@@ -2134,7 +2264,7 @@ String RID_STR_TABSTOP
     Text [ english_us ] = "Tabstop" ;
     Text [ portuguese_brazilian ] = "Tabstop" ;
     Text [ swedish ] = "Tabbstopp" ;
-    Text [ danish ] = "Tabstop" ;
+    Text [ danish ] = "Tabulatorstop" ;
     Text [ italian ] = "Tabstop" ;
     Text [ spanish ] = "Tabstop" ;
     Text [ french ] = "Tabstop" ;
@@ -2156,6 +2286,8 @@ String RID_STR_TABSTOP
     Text[ hebrew ] = "Tabstop";
     Text[ hindi ] = "टॉबरुकावट";
     Text[ slovak ] = "Krok tabulátora";
+    Text[ hungarian ] = "Tabulátorpozíció";
+    Text[ slovenian ] = "Tabulatorsko mesto";
 };
 String RID_STR_CONTROLSOURCE
 {
@@ -2187,6 +2319,8 @@ String RID_STR_CONTROLSOURCE
     Text[ hebrew ] = "Datenfeld";
     Text[ hindi ] = "ड़ॉटा क्षेत्र";
     Text[ slovak ] = "Dátové pole";
+    Text[ hungarian ] = "Adatmező";
+    Text[ slovenian ] = "Podatkovno polje";
 };
 String RID_STR_DROPDOWN
 {
@@ -2196,7 +2330,7 @@ String RID_STR_DROPDOWN
     Text [ english_us ] = "Dropdown" ;
     Text [ portuguese_brazilian ] = "Desdobr�vel" ;
     Text [ swedish ] = "�ppningsbar" ;
-    Text [ danish ] = "Udklappelig" ;
+    Text [ danish ] = "Rullegardin" ;
     Text [ italian ] = "Apribile" ;
     Text [ spanish ] = "Desplegable" ;
     Text [ french ] = "D�roulante" ;
@@ -2218,6 +2352,8 @@ String RID_STR_DROPDOWN
     Text[ hebrew ] = "Aufklappbar";
     Text[ hindi ] = "नीचे गिराओ";
     Text[ slovak ] = "Stránkovanie dole";
+    Text[ hungarian ] = "Legördülő";
+    Text[ slovenian ] = "Spustno polje";
 };
 String RID_STR_BOUNDCOLUMN
 {
@@ -2249,6 +2385,8 @@ String RID_STR_BOUNDCOLUMN
     Text[ hebrew ] = "Gebundenes Feld";
     Text[ hindi ] = "परिमित की हुयी क्षेत्र";
     Text[ slovak ] = "Zviazané pole";
+    Text[ hungarian ] = "Kapcsolt mező";
+    Text[ slovenian ] = "Vezano polje";
 };
 String RID_STR_LISTSOURCE
 {
@@ -2280,6 +2418,8 @@ String RID_STR_LISTSOURCE
     Text[ hebrew ] = "Listeninhalt";
     Text[ hindi ] = "सूची विषय";
     Text[ slovak ] = "Obsah zoznamu";
+    Text[ hungarian ] = "Lista tartalma";
+    Text[ slovenian ] = "Vsebina seznama";
 };
 String RID_STR_LISTSOURCETYPE
 {
@@ -2311,6 +2451,8 @@ String RID_STR_LISTSOURCETYPE
     Text[ hebrew ] = "Art des Listeninhalts";
     Text[ hindi ] = "सूची का विषय वर्ग";
     Text[ slovak ] = "Druh obsahu zoznamu";
+    Text[ hungarian ] = "Lista tartalmának típusa";
+    Text[ slovenian ] = "Vrsta vsebine seznama";
 };
 String RID_STR_CURSORSOURCE
 {
@@ -2341,6 +2483,8 @@ String RID_STR_CURSORSOURCE
     Text[ hebrew ] = "Inhalt";
     Text[ hindi ] = "विषय";
     Text[ slovak ] = "Obsah";
+    Text[ hungarian ] = "Tartalom";
+    Text[ slovenian ] = "Vsebina";
 };
 String RID_STR_CURSORSOURCETYPE
 {
@@ -2371,6 +2515,8 @@ String RID_STR_CURSORSOURCETYPE
     Text[ hebrew ] = "Art des Inhaltes";
     Text[ hindi ] = "विषय वर्ग";
     Text[ slovak ] = "Obsah";
+    Text[ hungarian ] = "Tartalom típusa";
+    Text[ slovenian ] = "Vrsta vsebine";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -2380,7 +2526,7 @@ String RID_STR_ALLOW_ADDITIONS
     Text [ english_us ] = "Allow additions" ;
     Text [ portuguese_brazilian ] = "Permitir adi��es" ;
     Text [ swedish ] = "L�gg till data" ;
-    Text [ danish ] = "Tilf�j data" ;
+    Text [ danish ] = "Tillad tilf�jelser" ;
     Text [ italian ] = "Aggiungi dati" ;
     Text [ spanish ] = "A�adir datos" ;
     Text [ french ] = "Ajouter des donn�es" ;
@@ -2402,6 +2548,8 @@ String RID_STR_ALLOW_ADDITIONS
     Text[ hebrew ] = "Daten hinzufügen";
     Text[ hindi ] = "जोड़ना स्वीकृत";
     Text[ slovak ] = "Povoliť pridávanie";
+    Text[ hungarian ] = "Kiegészítések engedélyezése";
+    Text[ slovenian ] = "Dovoli dodajanja";
 };
 String RID_STR_ALLOW_DELETIONS
 {
@@ -2433,6 +2581,8 @@ String RID_STR_ALLOW_DELETIONS
     Text[ hebrew ] = "Daten löschen";
     Text[ hindi ] = "ड़ॉटा मिटाओ";
     Text[ slovak ] = "Odstrániť dáta";
+    Text[ hungarian ] = "Adat törlése";
+    Text[ slovenian ] = "Brisanje podatkov";
 };
 String RID_STR_ALLOW_EDITS
 {
@@ -2442,7 +2592,7 @@ String RID_STR_ALLOW_EDITS
     Text [ english_us ] = "Allow modifications" ;
     Text [ portuguese_brazilian ] = "Permitir modifica��es" ;
     Text [ swedish ] = "�ndra data" ;
-    Text [ danish ] = "Modificer data" ;
+    Text [ danish ] = "Tillad �ndringer" ;
     Text [ italian ] = "Modifica dati" ;
     Text [ spanish ] = "Permitir modificaciones" ;
     Text [ french ] = "Modifier les donn�es" ;
@@ -2464,6 +2614,8 @@ String RID_STR_ALLOW_EDITS
     Text[ hebrew ] = "Daten ändern";
     Text[ hindi ] = "परिवर्तन स्वीकृत";
     Text[ slovak ] = "Povoliť zmeny";
+    Text[ hungarian ] = "Módosítások engedélyezése";
+    Text[ slovenian ] = "Dovoli spreminjanje";
 };
 String RID_STR_DATAENTRY
 {
@@ -2495,6 +2647,8 @@ String RID_STR_DATAENTRY
     Text[ hebrew ] = "Nur Daten hinzufügen";
     Text[ hindi ] = "केवल ड़ॉटा जोड़ो";
     Text[ slovak ] = "Pridať len dáta";
+    Text[ hungarian ] = "Csak adatok hozzáadása engedélyezett";
+    Text[ slovenian ] = "Dodaj samo podatke";
 };
 String RID_STR_DATASOURCE
 {
@@ -2525,6 +2679,8 @@ String RID_STR_DATASOURCE
     Text[ hebrew ] = "‮מקור הנתונים‬";
     Text[ hindi ] = "ड़ॉटा मूल";
     Text[ slovak ] = "Zdroj dát";
+    Text[ hungarian ] = "Adatforrás";
+    Text[ slovenian ] = "Vir podatkov";
 };
 String RID_STR_MASTERFIELDS
 {
@@ -2534,7 +2690,7 @@ String RID_STR_MASTERFIELDS
     Text [ english_us ] = "Link master fields" ;
     Text [ portuguese_brazilian ] = "Conectar campos mestre" ;
     Text [ swedish ] = "L�nka fr�n" ;
-    Text [ danish ] = "K�de fra" ;
+    Text [ danish ] = "Referer hovedfelter" ;
     Text [ italian ] = "Collega da" ;
     Text [ spanish ] = "Vinculaci�n de" ;
     Text [ french ] = "�tablir un lien depuis" ;
@@ -2556,6 +2712,8 @@ String RID_STR_MASTERFIELDS
     Text[ hebrew ] = "Verknüpfen von";
     Text[ hindi ] = "प्रधान क्षेत्रों को लिंक करो";
     Text[ slovak ] = "Odkaz";
+    Text[ hungarian ] = "Főmezőre hivatkozás";
+    Text[ slovenian ] = "Poveži nadrejena polja";
 };
 String RID_STR_SLAVEFIELDS
 {
@@ -2565,7 +2723,7 @@ String RID_STR_SLAVEFIELDS
     Text [ english_us ] = "Link slave fields" ;
     Text [ portuguese_brazilian ] = "Conectar campos escravo" ;
     Text [ swedish ] = "L�nka till" ;
-    Text [ danish ] = "K�de til" ;
+    Text [ danish ] = "Felter der refereres til" ;
     Text [ italian ] = "Collega per" ;
     Text [ spanish ] = "Vincular con" ;
     Text [ french ] = "�tablir un lien avec" ;
@@ -2587,6 +2745,8 @@ String RID_STR_SLAVEFIELDS
     Text[ hebrew ] = "Verknüpfen nach";
     Text[ hindi ] = "अधीन क्षेत्रों को लिंक करो";
     Text[ slovak ] = "Odkaz";
+    Text[ hungarian ] = "Függő mezők csatolása";
+    Text[ slovenian ] = "Poveži podrejena polja";
 };
 String RID_STR_VALUEMIN
 {
@@ -2618,6 +2778,8 @@ String RID_STR_VALUEMIN
     Text[ hebrew ] = "Min. Wert";
     Text[ hindi ] = "न्यूनतम मूल्य";
     Text[ slovak ] = "Min. hodnota";
+    Text[ hungarian ] = "Legkisebb érték";
+    Text[ slovenian ] = "Vrednost min.";
 };
 String RID_STR_VALUEMAX
 {
@@ -2649,6 +2811,8 @@ String RID_STR_VALUEMAX
     Text[ hebrew ] = "Max. Wert";
     Text[ hindi ] = "अधिकतम मूल्य";
     Text[ slovak ] = "Max. hodnota";
+    Text[ hungarian ] = "Legnagyobb érték";
+    Text[ slovenian ] = "Vrednost maks.";
 };
 String RID_STR_VALUESTEP
 {
@@ -2680,6 +2844,8 @@ String RID_STR_VALUESTEP
     Text[ hebrew ] = "Intervall";
     Text[ hindi ] = "मूल्य बढ़ाओ/घटाओ";
     Text[ slovak ] = "Zvýšiť/znížiť hodnotu";
+    Text[ hungarian ] = "Érték növelése/csökkentése";
+    Text[ slovenian ] = "Povečaj/zmanjšaj vrednost";
 };
 String RID_STR_CURRENCYSYMBOL
 {
@@ -2711,6 +2877,8 @@ String RID_STR_CURRENCYSYMBOL
     Text[ hebrew ] = "Währungssymbol";
     Text[ hindi ] = "मुद्रा संकेत";
     Text[ slovak ] = "Symbol meny";
+    Text[ hungarian ] = "Pénznem szimbóluma";
+    Text[ slovenian ] = "Valutni simbol";
 };
 String RID_STR_DATEMIN
 {
@@ -2742,6 +2910,8 @@ String RID_STR_DATEMIN
     Text[ hebrew ] = "Min. Datum";
     Text[ hindi ] = "न्यूनतम दिनांक";
     Text[ slovak ] = "Min. dátum";
+    Text[ hungarian ] = "Legkorábbi dátum";
+    Text[ slovenian ] = "Datum min.";
 };
 String RID_STR_DATEMAX
 {
@@ -2773,6 +2943,8 @@ String RID_STR_DATEMAX
     Text[ hebrew ] = "Max. Datum";
     Text[ hindi ] = "अधिकतम दिनांक";
     Text[ slovak ] = "Max. dátum";
+    Text[ hungarian ] = "Legkésőbbi dátum";
+    Text[ slovenian ] = "Datum maks.";
 };
 String RID_STR_DATEFORMAT
 {
@@ -2804,6 +2976,8 @@ String RID_STR_DATEFORMAT
     Text[ hebrew ] = "Datumsformat";
     Text[ hindi ] = "दिनांक रचना";
     Text[ slovak ] = "Formát dátumu";
+    Text[ hungarian ] = "Dátumformátum";
+    Text[ slovenian ] = "Oblika zapisa datuma";
 };
 String RID_STR_SELECTEDITEMS
 {
@@ -2841,6 +3015,8 @@ String RID_STR_TIMEMIN
     Text[ hebrew ] = "Min. Zeit";
     Text[ hindi ] = "न्यूनतम समय";
     Text[ slovak ] = "Min. čas";
+    Text[ hungarian ] = "Min. idő";
+    Text[ slovenian ] = "Čas min.";
 };
 String RID_STR_TIMEMAX
 {
@@ -2872,6 +3048,8 @@ String RID_STR_TIMEMAX
     Text[ hebrew ] = "Max. Zeit";
     Text[ hindi ] = "अधिकतम समय";
     Text[ slovak ] = "Max. čas";
+    Text[ hungarian ] = "Max. idő";
+    Text[ slovenian ] = "Čas maks.";
 };
 String RID_STR_TIMEFORMAT
 {
@@ -2903,6 +3081,8 @@ String RID_STR_TIMEFORMAT
     Text[ hebrew ] = "Zeitformat";
     Text[ hindi ] = "समय रचना";
     Text[ slovak ] = "Čas";
+    Text[ hungarian ] = "Idő formátum";
+    Text[ slovenian ] = "Oblika zapisa časa";
 };
 String RID_STR_CURRSYM_POSITION
 {
@@ -2934,6 +3114,8 @@ String RID_STR_CURRSYM_POSITION
     Text[ hebrew ] = "Symbol voranstellen";
     Text[ hindi ] = "उपसर्ग संकेत";
     Text[ slovak ] = "Symbol pre predponu";
+    Text[ hungarian ] = "Előtagjel";
+    Text[ slovenian ] = "Valutni simbol";
 };
 String RID_STR_VALUE
 {
@@ -2965,6 +3147,8 @@ String RID_STR_VALUE
     Text[ hebrew ] = "Wert";
     Text[ hindi ] = "मूल्य";
     Text[ slovak ] = "Hodnota";
+    Text[ hungarian ] = "Érték";
+    Text[ slovenian ] = "Vrednost";
 };
 String RID_STR_FORMATKEY
 {
@@ -2996,6 +3180,8 @@ String RID_STR_FORMATKEY
     Text[ hebrew ] = "Formatierung";
     Text[ hindi ] = "रचना करना";
     Text[ slovak ] = "Formátovanie";
+    Text[ hungarian ] = "Formázás";
+    Text[ slovenian ] = "Oblikovanje";
 };
 String RID_STR_CLASSID
 {
@@ -3027,6 +3213,8 @@ String RID_STR_CLASSID
     Text[ hebrew ] = "Klassenindex";
     Text[ hindi ] = "वर्ग ID";
     Text[ slovak ] = "ID skupiny";
+    Text[ hungarian ] = "Osztályazonosító";
+    Text[ slovenian ] = "ID razreda";
 };
 String RID_STR_HEIGHT
 {
@@ -3058,6 +3246,8 @@ String RID_STR_HEIGHT
     Text[ hebrew ] = "‮גובה‬";
     Text[ hindi ] = "ऊँचाई";
     Text[ slovak ] = "Výška";
+    Text[ hungarian ] = "Magasság";
+    Text[ slovenian ] = "Višina";
 };
 String RID_STR_WIDTH
 {
@@ -3089,6 +3279,8 @@ String RID_STR_WIDTH
     Text[ hebrew ] = "‮רוחב‬";
     Text[ hindi ] = "चौड़ाई";
     Text[ slovak ] = "Šírka";
+    Text[ hungarian ] = "Szélesség";
+    Text[ slovenian ] = "Širina";
 };
 String RID_STR_LISTINDEX
 {
@@ -3120,6 +3312,8 @@ String RID_STR_LISTINDEX
     Text[ hebrew ] = "ListIndex";
     Text[ hindi ] = "सूची अनुक्रमणी";
     Text[ slovak ] = "Zoznam";
+    Text[ hungarian ] = "Listaindex";
+    Text[ slovenian ] = "Kazalo seznama";
 };
 String RID_STR_ROWHEIGHT
 {
@@ -3151,6 +3345,8 @@ String RID_STR_ROWHEIGHT
     Text[ hebrew ] = "Zeilenhöhe";
     Text[ hindi ] = "पंक्ति ऊँचाई";
     Text[ slovak ] = "Výška riadku";
+    Text[ hungarian ] = "Sor magasság";
+    Text[ slovenian ] = "Višina vrstice";
 };
 String RID_STR_FILLCOLOR
 {
@@ -3182,6 +3378,8 @@ String RID_STR_FILLCOLOR
     Text[ hebrew ] = "Füllfarbe";
     Text[ hindi ] = "रंग भरो";
     Text[ slovak ] = "Farba výplne";
+    Text[ hungarian ] = "Kitöltőszín";
+    Text[ slovenian ] = "Barva polnila";
 };
 String RID_STR_LINECOLOR
 {
@@ -3213,6 +3411,8 @@ String RID_STR_LINECOLOR
     Text[ hebrew ] = "Linienfarbe";
     Text[ hindi ] = "रेखा की रंग";
     Text[ slovak ] = "Farba čiary";
+    Text[ hungarian ] = "Sor színe";
+    Text[ slovenian ] = "Barva črte";
 };
 String RID_STR_REFVALUE
 {
@@ -3244,6 +3444,8 @@ String RID_STR_REFVALUE
     Text[ hebrew ] = "Referenzwert";
     Text[ hindi ] = "रेफरेन्स मूल्य";
     Text[ slovak ] = "Referenčná hodnota";
+    Text[ hungarian ] = "Referenciaérték";
+    Text[ slovenian ] = "Sklicna vrednost";
 };
 String RID_STR_STRINGITEMLIST
 {
@@ -3253,7 +3455,7 @@ String RID_STR_STRINGITEMLIST
     Text [ english_us ] = "List entries" ;
     Text [ portuguese_brazilian ] = "Entradas de lista" ;
     Text [ swedish ] = "Listposter" ;
-    Text [ danish ] = "Liste-elementer" ;
+    Text [ danish ] = "Listeelementer" ;
     Text [ italian ] = "Voci dell'elenco" ;
     Text [ spanish ] = "Entradas de la lista" ;
     Text [ french ] = "Entr�es de liste" ;
@@ -3275,6 +3477,8 @@ String RID_STR_STRINGITEMLIST
     Text[ hebrew ] = "Listen-Einträge";
     Text[ hindi ] = "सूची प्रविष्टि";
     Text[ slovak ] = "Zoznam záznamov";
+    Text[ hungarian ] = "Lista bejegyzései";
+    Text[ slovenian ] = "Vnosi na seznam";
 };
 String RID_STR_BUTTONTYPE
 {
@@ -3306,6 +3510,8 @@ String RID_STR_BUTTONTYPE
     Text[ hebrew ] = "Art der Schaltfläche";
     Text[ hindi ] = "बटन वर्ग";
     Text[ slovak ] = "Typ klávesy";
+    Text[ hungarian ] = "Gomb típusa";
+    Text[ slovenian ] = "Vrsta gumba";
 };
 String RID_STR_SUBMIT_ACTION
 {
@@ -3337,6 +3543,8 @@ String RID_STR_SUBMIT_ACTION
     Text[ thai ] = "URL";
     Text[ hindi ] = "URL";
     Text[ slovak ] = "URL";
+    Text[ hungarian ] = "URL";
+    Text[ slovenian ] = "URL";
 };
 String RID_STR_SUBMIT_METHOD
 {
@@ -3346,7 +3554,7 @@ String RID_STR_SUBMIT_METHOD
     Text [ english_us ] = "Type of submission" ;
     Text [ portuguese_brazilian ] = "Tipo de submiss�o" ;
     Text [ swedish ] = "S�ndningstyp" ;
-    Text [ danish ] = "Sendetype" ;
+    Text [ danish ] = "Fremsendelsestype" ;
     Text [ italian ] = "Tipo di submission" ;
     Text [ spanish ] = "Tipo de submit" ;
     Text [ french ] = "Type d'envoi" ;
@@ -3368,6 +3576,8 @@ String RID_STR_SUBMIT_METHOD
     Text[ hebrew ] = "Art des Submits";
     Text[ hindi ] = "उपस्थापन वर्ग";
     Text[ slovak ] = "Typ preposlania";
+    Text[ hungarian ] = "Küldés típusa";
+    Text[ slovenian ] = "Vrsta pošiljanja";
 };
 String RID_STR_DEFAULT_CHECKED
 {
@@ -3399,6 +3609,8 @@ String RID_STR_DEFAULT_CHECKED
     Text[ hebrew ] = "Standardstatus";
     Text[ hindi ] = "अनुपस्थिति वस्तुस्थिति";
     Text[ slovak ] = "Východzí stav";
+    Text[ hungarian ] = "Alapértelmezett státusz";
+    Text[ slovenian ] = "Privzeto stanje";
 };
 String RID_STR_SUBMIT_ENCODING
 {
@@ -3430,6 +3642,8 @@ String RID_STR_SUBMIT_ENCODING
     Text[ hebrew ] = "Kodierung beim Submit";
     Text[ hindi ] = "अधिनता ऐनकोडिंग";
     Text[ slovak ] = "Kódovanie pre odoslanie";
+    Text[ hungarian ] = "Küldés kódolása";
+    Text[ slovenian ] = "Kodiranje pošiljanja";
 };
 String RID_STR_DEFAULTVALUE
 {
@@ -3461,6 +3675,8 @@ String RID_STR_DEFAULTVALUE
     Text[ hebrew ] = "Standardwert";
     Text[ hindi ] = "अनुपस्थिति मूल्य";
     Text[ slovak ] = "Východzia hodnota";
+    Text[ hungarian ] = "Alapértelmezett érték";
+    Text[ slovenian ] = "Privzeta vrednost";
 };
 String RID_STR_SUBMIT_TARGET
 {
@@ -3492,6 +3708,8 @@ String RID_STR_SUBMIT_TARGET
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम";
     Text[ slovak ] = "Rámček";
+    Text[ hungarian ] = "Keret";
+    Text[ slovenian ] = "Okvir";
 };
 String RID_STR_BORDER_TYPE
 {
@@ -3523,6 +3741,8 @@ String RID_STR_BORDER_TYPE
     Text[ hebrew ] = "Ohne Rahmen;3D-Look;Flach";
     Text[ hindi ] = "फ़्रेम रहित;3D रूप;समतल";
     Text[ slovak ] = "Bez ohraničenia;3D vzhľad;Plochý";
+    Text[ hungarian ] = "Keret nélküli;Térhatású;Sima";
+    Text[ slovenian ] = "Brez okvira;3D-izgled;Plosko";
 };
 String RID_STR_COMMAND_TYPE
 {
@@ -3553,6 +3773,8 @@ String RID_STR_COMMAND_TYPE
     Text[ hebrew ] = "Tabelle;Abfrage;SQL-Befehl";
     Text[ hindi ] = "सारणी;जानकारी;SQL आज्ञा";
     Text[ slovak ] = "Tabuľka;Dotaz;SQL príkaz";
+    Text[ hungarian ] = "Tábla;Lekérdezés;SQL-parancs";
+    Text[ slovenian ] = "Tabela;Poizvedba;SQL ukaz";
 };
 String RID_STR_LISTSOURCE_TYPE
 {
@@ -3583,6 +3805,8 @@ String RID_STR_LISTSOURCE_TYPE
     Text[ hebrew ] = "Werteliste;Tabelle;Abfrage;Sql;Sql [Native];Tabellenfelder";
     Text[ hindi ] = "मूल्यसूची;सारणी;जानकारी;Sql;Sql [Native];सारणीक्षेत्रें";
     Text[ slovak ] = "Zoznam hodnôt;Tabuľka;Dotaz;Sql;Sql [Native];Polia tabuľky";
+    Text[ hungarian ] = "Értéklista;Tábla;Lekérdezés;Sql;Sql [Natív];Táblamezők";
+    Text[ slovenian ] = "Seznam vrednosti;Tabela;Poizvedba;Sql;Sql [Izvirni];Polja tabele";
 };
 String RID_STR_ALIGNMENT
 {
@@ -3614,6 +3838,8 @@ String RID_STR_ALIGNMENT
     Text[ hebrew ] = "Links;Zentriert;Rechts";
     Text[ hindi ] = "बायाँ;मध्यभाग;दाहिना";
     Text[ slovak ] = "Vľavo;Na stred;Vpravo";
+    Text[ hungarian ] = "Bal;Közép;Jobb";
+    Text[ slovenian ] = "Levo;Sredina;Desno";
 };
 String RID_STR_ENUM_SIDE_ALIGN
 {
@@ -3628,7 +3854,7 @@ String RID_STR_ENUM_SIDE_ALIGN
     Text[ spanish ] = "Izquierda;Arriba;Derecha;Abajo";
     Text[ finnish ] = "Vasen;Yl�reuna;Oikea;Alareuna";
     Text[ italian ] = "A sinistra;in alto;a destra;in basso";
-    Text[ danish ] = "Venstre;�verst;H�jre;Nederst";
+    Text[ danish ] = "Venstre;Top;H�jre;Bund";
     Text[ swedish ] = "V�nster;Uppe;H�ger;Nere";
     Text[ polish ] = "Z lewej;U g�ry;Z prawej;Na dole";
     Text[ portuguese_brazilian ] = "Esquerda;Topo;Direita;Base";
@@ -3644,6 +3870,8 @@ String RID_STR_ENUM_SIDE_ALIGN
     Text[ hebrew ] = "Links;Oben;Rechts;Unten";
     Text[ hindi ] = "बायाँ;ऊपर;दाहिना;नीचे";
     Text[ slovak ] = "Vľavo Navrchu Vpravo";
+    Text[ hungarian ] = "Bal;Felső;Jobb;Alsó";
+    Text[ slovenian ] = "Levo;Zgoraj;Desno;Spodaj";
 };
 String RID_STR_ENUM_BUTTONTYPE
 {
@@ -3653,7 +3881,7 @@ String RID_STR_ENUM_BUTTONTYPE
     Text [ english_us ] = "Push;Submit;Reset;Url" ;
     Text [ portuguese_brazilian ] = "Pressionar;Submeter;Restaurar;URL" ;
     Text [ swedish ] = "Push;Submit;Reset;Url" ;
-    Text [ danish ] = "Push;Send;Nulstil;Url" ;
+    Text [ danish ] = "Tryk;Send;Nulstil;Url" ;
     Text [ italian ] = "Push;Submit;Reset;Url" ;
     Text [ spanish ] = "Push;Submit;Reset;Url" ;
     Text [ french ] = "Push;Submit;Reset;Url" ;
@@ -3675,6 +3903,8 @@ String RID_STR_ENUM_BUTTONTYPE
     Text[ hebrew ] = "Push;Submit;Reset;Url";
     Text[ hindi ] = "दबाओ;मान लेना;रिसेट्ट;Url";
     Text[ slovak ] = "Stlačiť;Poslať;Obnoviť;URL";
+    Text[ hungarian ] = "Push;Submit;Reset;Url";
+    Text[ slovenian ] = "Pritisni;Pošlji;Ponastavi;Url";
 };
 String RID_STR_ENUM_SUBMIT_METHOD
 {
@@ -3684,7 +3914,7 @@ String RID_STR_ENUM_SUBMIT_METHOD
     Text [ english_us ] = "Get;Post" ;
     Text [ portuguese_brazilian ] = "Obter;Postar" ;
     Text [ swedish ] = "Get;Post" ;
-    Text [ danish ] = "Hent;Send" ;
+    Text [ danish ] = "Get;Post" ;
     Text [ italian ] = "Get;Post" ;
     Text [ spanish ] = "Get;Post" ;
     Text [ french ] = "Get;Post" ;
@@ -3706,6 +3936,8 @@ String RID_STR_ENUM_SUBMIT_METHOD
     Text[ hebrew ] = "Get;Post";
     Text[ hindi ] = "Get;Post";
     Text[ slovak ] = "Get;Post";
+    Text[ hungarian ] = "Get;Post";
+    Text[ slovenian ] = "Prejmi;Odpošlji";
 };
 String RID_STR_ENUM_SUBMIT_ENCODING
 {
@@ -3737,6 +3969,8 @@ String RID_STR_ENUM_SUBMIT_ENCODING
     Text[ hebrew ] = "URL;Multipart;Text";
     Text[ hindi ] = "URL;अनेकभाग;टेक्स्ट्";
     Text[ slovak ] = "URL;Multipart;Text";
+    Text[ hungarian ] = "URL;Többrészes;Szöveg";
+    Text[ slovenian ] = "URL;Večdelno;Besedilo";
 };
 String RID_STR_DATEFORMAT_LIST
 {
@@ -3768,6 +4002,8 @@ String RID_STR_DATEFORMAT_LIST
     Text[ hebrew ] = "Standard (kurz);Standard (kurz JJ);Standard (kurz JJJJ);Standard (lang);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
     Text[ hindi ] = "स्टान्डर्ड (छोटा);स्टान्डर्ड (छोटा YY);स्टान्डर्ड (छोटा YYYY);स्टान्डर्ड (बड़ा);DD/MM/YY;MM/DD/YY;YY/MM/DD;DD/MM/YYYY;MM/DD/YYYY;YYYY/MM/DD;YY-MM-DD;YYYY-MM-DD";
     Text[ slovak ] = "Štandardný Štandardný Štandardný Štandardný";
+    Text[ hungarian ] = " Szabványos (rövid);Szabványos (rövid ÉÉ);Szabványos (rövid ÉÉÉÉ);Szabványos (hosszú);NN/HH/ÉÉ;HH/NN/ÉÉ;ÉÉ/HH/NN;NN/HH/ÉÉÉÉ;HH/NN/ÉÉÉÉ;ÉÉÉÉ/HH/NN;ÉÉ-HH-NN;ÉÉÉÉ-HH-NN";
+    Text[ slovenian ] = "Standardno (kratko);Standardno (kratko LL);Standardno (kratko LLLL);Standardno (dolgo);DD/MM/LL;MM/DD/LL;LL/MM/DD;DD/MM/LLLL;MM/DD/LLLL;LLLL/MM/DD;LL-MM-DD;LLLL-MM-DD";
 };
 String RID_STR_TIMEFORMAT_LIST
 {
@@ -3799,6 +4035,8 @@ String RID_STR_TIMEFORMAT_LIST
     Text[ thai ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
     Text[ hindi ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
     Text[ slovak ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
+    Text[ hungarian ] = "13:45;13:45:00;01:45 DU;01:45:00 DU";
+    Text[ slovenian ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
 };
 String RID_STR_ENUM_CHECKED
 {
@@ -3830,6 +4068,8 @@ String RID_STR_ENUM_CHECKED
     Text[ hebrew ] = "Nicht ausgewählt;Ausgewählt;Unbestimmt";
     Text[ hindi ] = "चुना नहीं;चुना;परिभाषित नहीं";
     Text[ slovak ] = "Nevybrané;Vybrané;Neurčené";
+    Text[ hungarian ] = "Nincs kijelölve;Kijelölve;Definiálatlan";
+    Text[ slovenian ] = "Ni izbrano;Izbrano;Ni definirano";
 };
 String RID_STR_ENUM_CYCLE
 {
@@ -3861,6 +4101,8 @@ String RID_STR_ENUM_CYCLE
     Text[ hebrew ] = "Alle Datensätze;Aktueller Datensatz;Aktuelle Seite";
     Text[ hindi ] = "सब अभिलेख;क्रियाशील अभिलेख;वर्तमान पृष्ठ";
     Text[ slovak ] = "Všetky záznamy;Aktívny záznam;Súčasná stránka";
+    Text[ hungarian ] = "Összes rekord;Aktív rekord;Aktuális oldal";
+    Text[ slovenian ] = "Vsi zapisi;Aktivni zapis;Trenutna stran";
 };
 String RID_STR_ENUM_NAVIGATION
 {
@@ -3892,6 +4134,8 @@ String RID_STR_ENUM_NAVIGATION
     Text[ hebrew ] = "Nein;Ja;Übergeordnetes Formular";
     Text[ hindi ] = "नहीं;हाँ;जन्महेतु फ़ॉर्म्";
     Text[ slovak ] = "Ne;Áno;Zdrojový formulár";
+    Text[ hungarian ] = "Nem;Igen;Szülő űrlap";
+    Text[ slovenian ] = "Ne;Da;Nadrejeni obrazec";
 };
 String RID_STR_ENUM_SUBMIT_TARGET
 {
@@ -3909,7 +4153,7 @@ String RID_STR_EVT_APPROVEPARAMETER
     Text[ french ] = "Remplir les param�tres";
     Text[ spanish ] = "Rellenar par�metros";
     Text[ italian ] = "Compila parametri";
-    Text[ danish ] = "Udfyld parameter";
+    Text[ danish ] = "Fyld parametre";
     Text[ swedish ] = "Fyll parametrar";
     Text[ polish ] = "Wype�nij parametry";
     Text[ portuguese_brazilian ] = "Preencher par�metros";
@@ -3927,6 +4171,8 @@ String RID_STR_EVT_APPROVEPARAMETER
     Text[ hebrew ] = "Parameter füllen";
     Text[ hindi ] = "पैरामीटर भरो";
     Text[ slovak ] = "Vyplniť parametre";
+    Text[ hungarian ] = "Paraméterek kitöltése";
+    Text[ slovenian ] = "Izpolnitev parametrov";
 };
 String RID_STR_EVT_ACTIONPERFORMED
 {
@@ -3958,6 +4204,8 @@ String RID_STR_EVT_ACTIONPERFORMED
     Text[ hebrew ] = "Beim Auslösen";
     Text[ hindi ] = "जब आरंभ करने के समय";
     Text[ slovak ] = "Pri inicializácii";
+    Text[ hungarian ] = "Inicializáláskor";
+    Text[ slovenian ] = "Na začetku";
 };
 String RID_STR_EVT_AFTERUPDATE
 {
@@ -3989,6 +4237,8 @@ String RID_STR_EVT_AFTERUPDATE
     Text[ hebrew ] = "Nach dem Aktualisieren";
     Text[ hindi ] = "अपडेट् करने के पश्चात्";
     Text[ slovak ] = "Po aktualizácii";
+    Text[ hungarian ] = "Frissítés után";
+    Text[ slovenian ] = "Po posodobitvi";
 };
 String RID_STR_EVT_BEFOREUPDATE
 {
@@ -4020,6 +4270,8 @@ String RID_STR_EVT_BEFOREUPDATE
     Text[ hebrew ] = "Vor dem Aktualisieren";
     Text[ hindi ] = "अपडेट् होने से पहिले";
     Text[ slovak ] = "Pred aktualizáciou";
+    Text[ hungarian ] = "Frissítés előtt";
+    Text[ slovenian ] = "Pred posodobitvijo";
 };
 String RID_STR_EVT_APPROVEROWCHANGE
 {
@@ -4050,6 +4302,8 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ hebrew ] = "Vor der Datensatzaktion";
     Text[ hindi ] = "अभिलेख क्रिया से पहिले";
     Text[ slovak ] = "Pred zaznamenaním";
+    Text[ hungarian ] = "Rekordművelet előtt";
+    Text[ slovenian ] = "Pred zapisom";
 };
 String RID_STR_EVT_ROWCHANGE
 {
@@ -4080,6 +4334,8 @@ String RID_STR_EVT_ROWCHANGE
     Text[ hebrew ] = "Nach der Datensatzaktion";
     Text[ hindi ] = "अभिलेख क्रिया के पश्चात्";
     Text[ slovak ] = "Po zaznamenaní";
+    Text[ hungarian ] = "Rekordművelet után";
+    Text[ slovenian ] = "Po zapisu";
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
@@ -4110,7 +4366,9 @@ String RID_STR_EVT_CONFIRMDELETE
     Text[ czech ] = "Potvrdit smazání";
     Text[ hebrew ] = "Löschen bestätigen";
     Text[ hindi ] = "मिटाना दृढ करो";
-    Text[ slovak ] = "Potvrdiť";
+    Text[ slovak ] = "Potvrdiť zmazanie";
+    Text[ hungarian ] = "Törlés megerősítése";
+    Text[ slovenian ] = "Potrditev brisanja";
 };
 String RID_STR_EVT_ERROROCCURED
 {
@@ -4142,6 +4400,8 @@ String RID_STR_EVT_ERROROCCURED
     Text[ hebrew ] = "Fehler aufgetreten";
     Text[ hindi ] = "गलती घटित हुआ";
     Text[ slovak ] = "Došlo k chybe";
+    Text[ hungarian ] = "Hiba történt";
+    Text[ slovenian ] = "Nastala je napaka";
 };
 String RID_STR_EVT_FOCUSGAINED
 {
@@ -4173,6 +4433,8 @@ String RID_STR_EVT_FOCUSGAINED
     Text[ hebrew ] = "Bei Fokuserhalt";
     Text[ hindi ] = "फोकस प्राप्त करने के समय";
     Text[ slovak ] = "Pri zameraní";
+    Text[ hungarian ] = "Amikor a fókuszt megkapja";
+    Text[ slovenian ] = "Ob dobljenem fokusu";
 };
 String RID_STR_EVT_FOCUSLOST
 {
@@ -4204,6 +4466,8 @@ String RID_STR_EVT_FOCUSLOST
     Text[ hebrew ] = "Bei Fokusverlust";
     Text[ hindi ] = "फोकस नष्ट होने के समय";
     Text[ slovak ] = "Pri strate zamerania";
+    Text[ hungarian ] = "Amikor a fókuszt elveszti";
+    Text[ slovenian ] = "Ob izgubljenem fokusu";
 };
 String RID_STR_EVT_ITEMSTATECHANGED
 {
@@ -4235,6 +4499,8 @@ String RID_STR_EVT_ITEMSTATECHANGED
     Text[ hebrew ] = "Status geändert";
     Text[ hindi ] = "अइटम वस्तुस्थिति बदल गया";
     Text[ slovak ] = "Zmena stavu položky";
+    Text[ hungarian ] = "Elem állapota változott";
+    Text[ slovenian ] = "Stanje elementa spremenjeno";
 };
 String RID_STR_EVT_KEYTYPED
 {
@@ -4244,7 +4510,7 @@ String RID_STR_EVT_KEYTYPED
     Text [ english_us ] = "Key pressed" ;
     Text [ portuguese_brazilian ] = "Tecla pressionada" ;
     Text [ swedish ] = "Tangent tryckt" ;
-    Text [ danish ] = "Taste aktiveret" ;
+    Text [ danish ] = "Tast trykket" ;
     Text [ italian ] = "Tasto premuto" ;
     Text [ spanish ] = "Tecla pulsada" ;
     Text [ french ] = "Touche enfonc�e" ;
@@ -4266,6 +4532,8 @@ String RID_STR_EVT_KEYTYPED
     Text[ hebrew ] = "Taste gedrückt";
     Text[ hindi ] = "की दबाया";
     Text[ slovak ] = "Klávesa stlačená";
+    Text[ hungarian ] = "Billentyű lenyomva";
+    Text[ slovenian ] = "Tipka pritisnjena";
 };
 String RID_STR_EVT_KEYUP
 {
@@ -4275,7 +4543,7 @@ String RID_STR_EVT_KEYUP
     Text [ english_us ] = "Key released" ;
     Text [ portuguese_brazilian ] = "Tecla liberada" ;
     Text [ swedish ] = "Efter tangenttryck" ;
-    Text [ danish ] = "Taste sluppet" ;
+    Text [ danish ] = "Tast sluppet" ;
     Text [ italian ] = "Dopo aver premuto il tasto" ;
     Text [ spanish ] = "Despu�s de haber pulsado la tecla" ;
     Text [ french ] = "Apr�s avoir l�ch� la touche" ;
@@ -4297,6 +4565,8 @@ String RID_STR_EVT_KEYUP
     Text[ hebrew ] = "Taste losgelassen";
     Text[ hindi ] = "की मुक्त करना";
     Text[ slovak ] = "Klávesa uvoľnená";
+    Text[ hungarian ] = "Billentyű felengedve";
+    Text[ slovenian ] = "Tipka spuščena";
 };
 String RID_STR_EVT_LOADED
 {
@@ -4328,6 +4598,8 @@ String RID_STR_EVT_LOADED
     Text[ hebrew ] = "Beim Laden";
     Text[ hindi ] = "लोड करने के समय";
     Text[ slovak ] = "Pri načítaní";
+    Text[ hungarian ] = "Töltés közben";
+    Text[ slovenian ] = "Ob nalaganju";
 };
 String RID_STR_EVT_RELOADING
 {
@@ -4341,7 +4613,7 @@ String RID_STR_EVT_RELOADING
     Text[ french ] = "Avant le rechargement";
     Text[ spanish ] = "Antes de recargar";
     Text[ italian ] = "Prima del ricaricamento";
-    Text[ danish ] = "F�r ny indl�sning";
+    Text[ danish ] = "F�r genindl�sning";
     Text[ swedish ] = "F�re omladdning";
     Text[ polish ] = "Przed ponownym za�adowaniem";
     Text[ portuguese_brazilian ] = "Antes de recarregar";
@@ -4358,6 +4630,8 @@ String RID_STR_EVT_RELOADING
     Text[ hebrew ] = "Vor dem erneuten Laden";
     Text[ hindi ] = "पुनः लोड़ होने से पहिले";
     Text[ slovak ] = "Pred opätovným nahratím";
+    Text[ hungarian ] = "Újratöltés előtt";
+    Text[ slovenian ] = "Pred ponovnim nalaganjem";
 };
 String RID_STR_EVT_RELOADED
 {
@@ -4371,7 +4645,7 @@ String RID_STR_EVT_RELOADED
     Text[ french ] = "Lors du rechargement";
     Text[ spanish ] = "Al recargar";
     Text[ italian ] = "Durante il ricaricamento";
-    Text[ danish ] = "Ved ny indl�sning";
+    Text[ danish ] = "Ved genindl�sning";
     Text[ swedish ] = "Vid omladdning";
     Text[ polish ] = "Podczas ponownego �adowania";
     Text[ portuguese_brazilian ] = "Ao recarregar";
@@ -4388,6 +4662,8 @@ String RID_STR_EVT_RELOADED
     Text[ hebrew ] = "Beim erneuten Laden";
     Text[ hindi ] = "पुनः लोड करने के समय";
     Text[ slovak ] = "Pri opätovnom nahraní";
+    Text[ hungarian ] = "Újratöltéskor";
+    Text[ slovenian ] = "Ob ponovnem nalaganju";
 };
 String RID_STR_EVT_MOUSEDRAGGED
 {
@@ -4419,6 +4695,8 @@ String RID_STR_EVT_MOUSEDRAGGED
     Text[ hebrew ] = "Mausbewegung bei Tastendruck";
     Text[ hindi ] = "की दबाने के समय मौस की स्थानान्तर किया";
     Text[ slovak ] = "Myš sa pohla spolu so stlačenou klávesou";
+    Text[ hungarian ] = "Egér mozgott a billentyű lenyomása alatt";
+    Text[ slovenian ] = "Premik miške ob pritisnjeni tipki";
 };
 String RID_STR_EVT_MOUSEENTERED
 {
@@ -4450,6 +4728,8 @@ String RID_STR_EVT_MOUSEENTERED
     Text[ hebrew ] = "Maus innerhalb";
     Text[ hindi ] = "मौस भीतरी ओर";
     Text[ slovak ] = "Myš vnútri";
+    Text[ hungarian ] = "Egér belül";
+    Text[ slovenian ] = "Miškin kazalec znotraj";
 };
 String RID_STR_EVT_MOUSEEXITED
 {
@@ -4481,6 +4761,8 @@ String RID_STR_EVT_MOUSEEXITED
     Text[ hebrew ] = "Maus ausserhalb";
     Text[ hindi ] = "मौस बाहरी ओर";
     Text[ slovak ] = "Myš von";
+    Text[ hungarian ] = "Egér kívül";
+    Text[ slovenian ] = "Miškin kazalec zunaj";
 };
 String RID_STR_EVT_MOUSEMOVED
 {
@@ -4490,7 +4772,7 @@ String RID_STR_EVT_MOUSEMOVED
     Text [ english_us ] = "Mouse moved" ;
     Text [ portuguese_brazilian ] = "Mover mouse" ;
     Text [ swedish ] = "Musr�relse" ;
-    Text [ danish ] = "Musbev�gelse" ;
+    Text [ danish ] = "Mus flyttet" ;
     Text [ italian ] = "Movimento del mouse" ;
     Text [ spanish ] = "Movimiento de rat�n" ;
     Text [ french ] = "D�placement de la souris" ;
@@ -4512,6 +4794,8 @@ String RID_STR_EVT_MOUSEMOVED
     Text[ hebrew ] = "Mausbewegung";
     Text[ hindi ] = "मौस का स्थान परिवर्तन किया";
     Text[ slovak ] = "Posun myši";
+    Text[ hungarian ] = "Egér mozdult";
+    Text[ slovenian ] = "Miška premaknjena";
 };
 String RID_STR_EVT_MOUSEPRESSED
 {
@@ -4521,7 +4805,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text [ english_us ] = "Mouse button pressed" ;
     Text [ portuguese_brazilian ] = "Pressionar bot�o do mouse" ;
     Text [ swedish ] = "Musknapp nedtryckt" ;
-    Text [ danish ] = "Mustaste trykket" ;
+    Text [ danish ] = "Museknap trykket" ;
     Text [ italian ] = "Tasto del mouse premuto" ;
     Text [ spanish ] = "Bot�n del rat�n pulsado" ;
     Text [ french ] = "Bouton de souris enfonc�" ;
@@ -4543,6 +4827,8 @@ String RID_STR_EVT_MOUSEPRESSED
     Text[ hebrew ] = "Maustaste gedrückt";
     Text[ hindi ] = "मौस बटन दबाया";
     Text[ slovak ] = "Stlačené tlačítko myši";
+    Text[ hungarian ] = "Egérgomb lenyomása";
+    Text[ slovenian ] = "Miškin gumb pritisnjen";
 };
 String RID_STR_EVT_MOUSERELEASED
 {
@@ -4552,7 +4838,7 @@ String RID_STR_EVT_MOUSERELEASED
     Text [ english_us ] = "Mouse button released" ;
     Text [ portuguese_brazilian ] = "Soltar bot�o do mouse" ;
     Text [ swedish ] = "Musknapp uppsl�ppt" ;
-    Text [ danish ] = "Mustaste sluppet" ;
+    Text [ danish ] = "Museknap sluppet" ;
     Text [ italian ] = "Tasto del mouse rilasciato" ;
     Text [ spanish ] = "Bot�n del rat�n soltado" ;
     Text [ french ] = "Bouton de souris rel�ch�" ;
@@ -4574,6 +4860,8 @@ String RID_STR_EVT_MOUSERELEASED
     Text[ hebrew ] = "Maustaste losgelassen";
     Text[ hindi ] = "मौस बटन मुक्त किया";
     Text[ slovak ] = "Uvoľnené tlačítko myši";
+    Text[ hungarian ] = "Egérgomb elengedése";
+    Text[ slovenian ] = "Miškin gumb spuščen";
 };
 String RID_STR_EVT_POSITIONING
 {
@@ -4604,6 +4892,8 @@ String RID_STR_EVT_POSITIONING
     Text[ hebrew ] = "Vor dem Datensatzwechsel";
     Text[ hindi ] = "अभिलेख परिवर्तन से पहिले";
     Text[ slovak ] = "Pred zmenou záznamu";
+    Text[ hungarian ] = "Rekordváltozás előtt";
+    Text[ slovenian ] = "Pred spremembo zapisa";
 };
 String RID_STR_EVT_POSITIONED
 {
@@ -4635,6 +4925,8 @@ String RID_STR_EVT_POSITIONED
     Text[ hebrew ] = "Nach dem Datensatzwechsel";
     Text[ hindi ] = "अभिलेख परिवर्तन के पश्चात";
     Text[ slovak ] = "Po zmene záznamu";
+    Text[ hungarian ] = "Rekordváltozás után";
+    Text[ slovenian ] = "Po spremembi zapisa";
 };
 String RID_STR_EVT_RESETTED
 {
@@ -4666,6 +4958,8 @@ String RID_STR_EVT_RESETTED
     Text[ hebrew ] = "Nach dem Zurücksetzen";
     Text[ hindi ] = "पुनः स्थापित करने के पश्चात";
     Text[ slovak ] = "Po zmene nastavenia";
+    Text[ hungarian ] = "Alaphelyzetbe állítás után";
+    Text[ slovenian ] = "Po ponastavitvi";
 };
 String RID_STR_EVT_APPROVERESETTED
 {
@@ -4697,6 +4991,8 @@ String RID_STR_EVT_APPROVERESETTED
     Text[ hebrew ] = "Vor dem Zurücksetzen";
     Text[ hindi ] = "पुनः स्थापित करने से पहिले";
     Text[ slovak ] = "Pred vynulovaním ";
+    Text[ hungarian ] = "Alaphelyzetbe állítás előtt";
+    Text[ slovenian ] = "Pred ponastavljanjem";
 };
 String RID_STR_EVT_APPROVEACTIONPERFORMED
 {
@@ -4728,6 +5024,8 @@ String RID_STR_EVT_APPROVEACTIONPERFORMED
     Text[ hebrew ] = "Vor dem Auslösen";
     Text[ hindi ] = "आरंभ करने से पहिले";
     Text[ slovak ] = "Pred spustením";
+    Text[ hungarian ] = "Mielőtt elkezdődik";
+    Text[ slovenian ] = "Pred začetkom";
 };
 String RID_STR_EVT_SUBMITTED
 {
@@ -4759,6 +5057,8 @@ String RID_STR_EVT_SUBMITTED
     Text[ hebrew ] = "Vor dem Submit";
     Text[ hindi ] = "अनुरोध करने से पहिले";
     Text[ slovak ] = "Pred odoslaním";
+    Text[ hungarian ] = "Elküldés előtt";
+    Text[ slovenian ] = "Pred pošiljanjem";
 };
 String RID_STR_EVT_TEXTCHANGED
 {
@@ -4790,6 +5090,8 @@ String RID_STR_EVT_TEXTCHANGED
     Text[ hebrew ] = "Text modifiziert";
     Text[ hindi ] = "टेक्स्ट् बदल हुआ";
     Text[ slovak ] = "Text bol zmenený";
+    Text[ hungarian ] = "Szöveg módosítva";
+    Text[ slovenian ] = "Besedilo spremenjeno";
 };
 String RID_STR_EVT_UNLOADING
 {
@@ -4820,6 +5122,8 @@ String RID_STR_EVT_UNLOADING
     Text[ hebrew ] = "Vor dem Entladen";
     Text[ hindi ] = "अनलोड़ होने से पहिले";
     Text[ slovak ] = "Pred vyprázdnením";
+    Text[ hungarian ] = "Kilépés előtt";
+    Text[ slovenian ] = "Pred zapiranjem";
 };
 String RID_STR_EVT_UNLOADED
 {
@@ -4851,6 +5155,8 @@ String RID_STR_EVT_UNLOADED
     Text[ hebrew ] = "Beim Entladen";
     Text[ hindi ] = "अन लोड करने के समय";
     Text[ slovak ] = "Počas vyprázdňovania";
+    Text[ hungarian ] = "Kilépéskor";
+    Text[ slovenian ] = "Ob zapiranju";
 };
 String RID_STR_EVT_CHANGED
 {
@@ -4860,7 +5166,7 @@ String RID_STR_EVT_CHANGED
     Text [ english_us ] = "Changed" ;
     Text [ portuguese_brazilian ] = "Alterado" ;
     Text [ swedish ] = "Modifierad" ;
-    Text [ danish ] = "Modificeret" ;
+    Text [ danish ] = "�ndret" ;
     Text [ italian ] = "Modificato" ;
     Text [ spanish ] = "Modificado" ;
     Text [ french ] = "Modifi�(es)" ;
@@ -4882,6 +5188,8 @@ String RID_STR_EVT_CHANGED
     Text[ hebrew ] = "Modifiziert";
     Text[ hindi ] = "बदला किया";
     Text[ slovak ] = "Zmenené";
+    Text[ hungarian ] = "Változott";
+    Text[ slovenian ] = "Spremenjeno";
 };
 String RID_STR_EVENTS
 {
@@ -4913,6 +5221,8 @@ String RID_STR_EVENTS
     Text[ hebrew ] = "Ereignisse";
     Text[ hindi ] = "घटना";
     Text[ slovak ] = "Udalosti";
+    Text[ hungarian ] = "Események";
+    Text[ slovenian ] = "Dogodki";
 };
 String RID_STR_ESCAPE_PROCESSING
 {
@@ -4943,6 +5253,8 @@ String RID_STR_ESCAPE_PROCESSING
     Text[ hebrew ] = "SQL-Befehl analysieren";
     Text[ hindi ] = "SQL निर्देश का विश्लेषण";
     Text[ slovak ] = "Analyzovať SQL príkaz";
+    Text[ hungarian ] = "SQL-parancs kiértékelése";
+    Text[ slovenian ] = "Analiziraj SQL-ukaz";
 };
 String RID_STR_POSITIONX
 {
@@ -4973,6 +5285,8 @@ String RID_STR_POSITIONX
     Text[ hebrew ] = "PositionX";
     Text[ hindi ] = "स्थानX";
     Text[ slovak ] = "PozíciaX";
+    Text[ hungarian ] = "X pozíció";
+    Text[ slovenian ] = "PoložajX";
 };
 String RID_STR_POSITIONY
 {
@@ -5003,6 +5317,8 @@ String RID_STR_POSITIONY
     Text[ hebrew ] = "PositionY";
     Text[ hindi ] = "स्थानY";
     Text[ slovak ] = "PozíciaY";
+    Text[ hungarian ] = "Y pozíció";
+    Text[ slovenian ] = "PoložajY";
 };
 String RID_STR_TITLE
 {
@@ -5033,6 +5349,8 @@ String RID_STR_TITLE
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
     Text[ slovak ] = "Nadpis";
+    Text[ hungarian ] = "Cím";
+    Text[ slovenian ] = "Naslov";
 };
 String RID_STR_STEP
 {
@@ -5063,6 +5381,8 @@ String RID_STR_STEP
     Text[ hebrew ] = "Seite (Step)";
     Text[ hindi ] = "पृष्ठ (स्तर)";
     Text[ slovak ] = "Stránka";
+    Text[ hungarian ] = "Oldal (fázis)";
+    Text[ slovenian ] = "Stran (korak)";
 };
 TabDialog RID_TABDLG_FONTDIALOG
 {
@@ -5121,6 +5441,8 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
                 Text[ slovak ] = "Písmo";
+                Text[ hungarian ] = "Betűkészlet";
+                Text[ slovenian ] = "Pisava";
             };
             PageItem
             {
@@ -5134,7 +5456,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ portuguese_brazilian ] = "Efeitos de fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
-                Text [ danish ] = "Skrifteffekt" ;
+                Text [ danish ] = "Skrifteffekter" ;
                 Text [ french ] = "Effets de caract�res" ;
                 Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffect" ;
@@ -5156,6 +5478,8 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text[ hebrew ] = "‮אפקטים לגופן‬";
                 Text[ hindi ] = "फ़ॉन्ट प्रभाव";
                 Text[ slovak ] = "Efekty pre písmo";
+                Text[ hungarian ] = "Betűhatások";
+                Text[ slovenian ] = "Učinki pisave";
             };
         };
     };
@@ -5174,6 +5498,8 @@ TabDialog RID_TABDLG_FONTDIALOG
     Text[ hebrew ] = "Zeichen";
     Text[ hindi ] = "अक्षर";
     Text[ slovak ] = "Znak";
+    Text[ hungarian ] = "Karakter";
+    Text[ slovenian ] = "Znak";
 };
 String RID_STR_PROGRESSVALUE
 {
@@ -5204,6 +5530,8 @@ String RID_STR_PROGRESSVALUE
     Text[ hebrew ] = "Fortschrittswert";
     Text[ hindi ] = "प्रगति मूल्य";
     Text[ slovak ] = "Priebeh";
+    Text[ hungarian ] = "Folyamatérték";
+    Text[ slovenian ] = "Vrednost napredka";
 };
 String RID_STR_PROGRESSVALUE_MIN
 {
@@ -5234,6 +5562,8 @@ String RID_STR_PROGRESSVALUE_MIN
     Text[ hebrew ] = "Min. Fortschrittswert";
     Text[ hindi ] = "न्यूनतम प्रगति मूल्य";
     Text[ slovak ] = "Priebeh hodnota.";
+    Text[ hungarian ] = "Legkisebb folyamatérték";
+    Text[ slovenian ] = "Vrednost napredka min.";
 };
 String RID_STR_PROGRESSVALUE_MAX
 {
@@ -5264,6 +5594,8 @@ String RID_STR_PROGRESSVALUE_MAX
     Text[ hebrew ] = "Max. Fortschrittswert";
     Text[ hindi ] = "अधिकतम प्रगति मूल्य";
     Text[ slovak ] = "Priebeh hodnota.";
+    Text[ hungarian ] = "Legnagyobb folyamatérték";
+    Text[ slovenian ] = "Vrednost napredka maks.";
 };
 String RID_STR_SCROLLVALUE
 {
@@ -5294,6 +5626,8 @@ String RID_STR_SCROLLVALUE
     Text[ hebrew ] = "Bildlaufwert";
     Text[ hindi ] = "स्क्रॉल मूल्य";
     Text[ slovak ] = "Hodnota posunu";
+    Text[ hungarian ] = "Görgetési érték";
+    Text[ slovenian ] = "Drsna vrednost";
 };
 String RID_STR_SCROLLVALUE_MAX
 {
@@ -5324,6 +5658,8 @@ String RID_STR_SCROLLVALUE_MAX
     Text[ hebrew ] = "Max. Bildlaufwert";
     Text[ hindi ] = "अधिकतम स्क्रॉल मूल्य";
     Text[ slovak ] = "Max. hodnota posunu.";
+    Text[ hungarian ] = "Maximális görgetési érték";
+    Text[ slovenian ] = "Drsna vrednost maks.";
 };
 String RID_STR_SCROLLVALUE_MIN
 {
@@ -5390,6 +5726,8 @@ String RID_STR_VISIBLESIZE
     Text[ hebrew ] = "Sichtbare Größe";
     Text[ hindi ] = "दृष्टिगोचर परिमाण";
     Text[ slovak ] = "Viditeľné";
+    Text[ hungarian ] = "Látható méret";
+    Text[ slovenian ] = "Vidna velikost";
 };
 String RID_STR_ORIENTATION
 {
@@ -5403,7 +5741,7 @@ String RID_STR_ORIENTATION
     Text[ french ] = "Orientation";
     Text[ spanish ] = "Orientaci�n";
     Text[ italian ] = "Orientamento";
-    Text[ danish ] = "Papirretning";
+    Text[ danish ] = "Retning";
     Text[ swedish ] = "Orientering";
     Text[ polish ] = "Orientacja";
     Text[ portuguese_brazilian ] = "Orienta��o";
@@ -5420,6 +5758,8 @@ String RID_STR_ORIENTATION
     Text[ hebrew ] = "‮כיוון‬";
     Text[ hindi ] = "अनुस्थापन";
     Text[ slovak ] = "Orientácia";
+    Text[ hungarian ] = "Irány";
+    Text[ slovenian ] = "Usmerjenost";
 };
 String RID_STR_ENUM_ORIENTATION
 {
@@ -5450,6 +5790,8 @@ String RID_STR_ENUM_ORIENTATION
     Text[ hebrew ] = "Horizontal;Vertikal";
     Text[ hindi ] = "समतल;लंबरूप";
     Text[ slovak ] = "Vodorovne;Zvisle";
+    Text[ hungarian ] = "Vízszintes;Függőleges";
+    Text[ slovenian ] = "Vodoravno;Navpično";
 };
 String RID_STR_EVT_ADJUSTMENTVALUECHANGED
 {
@@ -5481,6 +5823,8 @@ String RID_STR_EVT_ADJUSTMENTVALUECHANGED
     Text[ thai ] = "While adjusting";
     Text[ hindi ] = "क्रम में रखने के समय";
     Text[ slovak ] = "Pri úprave";
+    Text[ hungarian ] = "Beállítás során";
+    Text[ slovenian ] = "Med prilagajanjem";
 };
 String RID_STR_DATE
 {
@@ -5511,6 +5855,8 @@ String RID_STR_DATE
     Text[ thai ] = "Date";
     Text[ hindi ] = "दिनांक";
     Text[ slovak ] = "Dátum";
+    Text[ hungarian ] = "Dátum";
+    Text[ slovenian ] = "Datum";
 };
 String RID_STR_STATE
 {
@@ -5525,7 +5871,7 @@ String RID_STR_STATE
     Text[ spanish ] = "Estado";
     Text[ finnish ] = "Tila";
     Text[ italian ] = "Stato";
-    Text[ danish ] = "Status";
+    Text[ danish ] = "Tilstand";
     Text[ swedish ] = "Status";
     Text[ polish ] = "Stan";
     Text[ portuguese_brazilian ] = "Estado";
@@ -5541,6 +5887,8 @@ String RID_STR_STATE
     Text[ thai ] = "State";
     Text[ hindi ] = "राज्य";
     Text[ slovak ] = "Štát";
+    Text[ hungarian ] = "Állapot";
+    Text[ slovenian ] = "Stanje";
 };
 String RID_STR_TIME
 {
@@ -5571,6 +5919,8 @@ String RID_STR_TIME
     Text[ thai ] = "Time";
     Text[ hindi ] = "समय";
     Text[ slovak ] = "Čas";
+    Text[ hungarian ] = "Idő";
+    Text[ slovenian ] = "Čas";
 };
 String RID_STR_SCALEIMAGE
 {
@@ -5601,6 +5951,8 @@ String RID_STR_SCALEIMAGE
     Text[ hebrew ] = "‮התאמת גודל‬";
     Text[ hindi ] = "नापना";
     Text[ slovak ] = "Pravítko";
+    Text[ hungarian ] = "Skála";
+    Text[ slovenian ] = "Merilo";
 };
 String RID_STR_PUSHBUTTONTYPE
 {
@@ -5631,6 +5983,8 @@ String RID_STR_PUSHBUTTONTYPE
     Text[ hebrew ] = "Art der Schaltfläche";
     Text[ hindi ] = "बटन वर्ग";
     Text[ slovak ] = "Typ klávesy";
+    Text[ hungarian ] = "Gomb típus";
+    Text[ slovenian ] = "Vrsta gumba";
 };
 String RID_STR_ENUM_PUSHBUTTONTYPE
 {
@@ -5645,7 +5999,7 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
     Text[ spanish ] = "Predeterminado;Aceptar;Cancelar;Ayuda";
     Text[ finnish ] = "Oletus;OK;Peruuta;Ohje";
     Text[ italian ] = "Standard;OK;Annulla;?";
-    Text[ danish ] = "\"Standard;OK;Annuller;Hj�lp\"";
+    Text[ danish ] = "Standard;OK;Annuller;Hj�lp";
     Text[ swedish ] = "Standard;OK;Avbryt;Hj�lp";
     Text[ polish ] = "Domy�lnie;OK;Anuluj;Pomoc";
     Text[ portuguese_brazilian ] = "Padr�o;OK;Cancelar;Ajuda";
@@ -5661,6 +6015,8 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
     Text[ thai ] = "Default;OK;Cancel;Help";
     Text[ hindi ] = "स्टान्डर्ड;ठीक है;रद्द करो;सहायता";
     Text[ slovak ] = "Východzie;OK;Zrušiť;Pomocník";
+    Text[ hungarian ] = "Alapértelmezett;OK;Mégsem;Súgó";
+    Text[ slovenian ] = "Privzeto;V redu;Prekliči;Pomoč";
 };
 String RID_STR_UNABLETOCONNECT
 {
@@ -5675,7 +6031,7 @@ String RID_STR_UNABLETOCONNECT
     Text[ spanish ] = "No se pudo establecer la conexi�n a la fuente de datos \"$name$\" ";
     Text[ finnish ] = "Yhteytt� tietol�hteeseen $name$ ei voitu muodostaa.";
     Text[ italian ] = "Impossibile creare il collegamento alla sorgente dati \"$name$\".";
-    Text[ danish ] = "\"Der kunne ikke oprettes forbindelse til datakilden \"\"$name$\"\".\"";
+    Text[ danish ] = "Der kunne ikke oprettes forbindelse til datakilden \"$name$\".";
     Text[ swedish ] = "Det gick inte att ansluta till datak�llan \"$name$\".";
     Text[ polish ] = "Nie uda�o si� nawi�za� po��czenia ze �r�d�em danych \"$name$\"";
     Text[ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o com a fonte de dados \"$name$\".";
@@ -5691,6 +6047,8 @@ String RID_STR_UNABLETOCONNECT
     Text[ thai ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ hindi ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ slovak ] = "Spojenie so zdrojom dát \"$name\" nebolo nadviazané.";
+    Text[ hungarian ] = "A kapcsolat a \"$name$\" adatforrással nem jött létre.";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave z virom podatkov \"$name$\".";
 };
 String RID_STR_TEXT
 {
@@ -5721,6 +6079,8 @@ String RID_STR_TEXT
     Text[ thai ] = "Text";
     Text[ hindi ] = "Text";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 
 String RID_STR_BOUND_CELL
