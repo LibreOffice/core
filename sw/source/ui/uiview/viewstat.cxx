@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:17:04 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -360,14 +362,7 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
         case FN_REDLINE_ON:
-            if( !pWrtShell->GetDoc()->GetRedlinePasswd().getLength() &&
-                pWrtShell->IsInsMode() )
-            {
-                rSet.Put( SfxBoolItem( nWhich,
-                    (pWrtShell->GetRedlineMode() & REDLINE_ON) != 0));
-            }
-            else
-                rSet.DisableItem( nWhich );
+            rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & REDLINE_ON) != 0 ) );
             break;
         case FN_REDLINE_PROTECT :
         {
