@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotesTContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:54:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,23 +62,23 @@
 #ifndef _XMLOFF_NOTESTCONTEXT_HXX
 #define _XMLOFF_NOTESTCONTEXT_HXX
 
-#ifndef _XMLOFF_TRANSFORMERCONTEXT_HXX
-#include "TransformerContext.hxx"
+#ifndef _XMLOFF_DEEPTCONTEXT_HXX
+#include "DeepTContext.hxx"
 #endif
 
-class XMLNotesTransformerContext : public XMLTransformerContext
+class XMLNotesTransformerContext : public XMLPersElemContentTContext
 {
-    ::rtl::OUString m_aElemQName;
-
-    sal_Bool m_bConfiguration;
     sal_Bool m_bEndNote;
+    sal_Bool m_bPersistent;
+    ::xmloff::token::XMLTokenEnum m_eTypeToken;
 
 public:
     TYPEINFO();
 
     XMLNotesTransformerContext( XMLTransformerBase& rTransformer,
                            const ::rtl::OUString& rQName,
-                              sal_Bool bConfiguration );
+                              ::xmloff::token::XMLTokenEnum m_eToken,
+                              sal_Bool bPersistent  );
 
     virtual ~XMLNotesTransformerContext();
 
@@ -89,6 +89,8 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
+
+    virtual sal_Bool IsPersistent() const;
 };
 
 #endif  //  _XMLOFF_NOTESTCONTEXT_HXX
