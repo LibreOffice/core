@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:37:13 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ public:
 protected:
     sal_Int16 SAL_CALL getFocused( );
 
-    virtual sal_Bool SAL_CALL preModal( );
+    virtual bool SAL_CALL preModal( );
     virtual void SAL_CALL postModal( sal_Int16 nDialogResult );
 
     virtual sal_uInt32 SAL_CALL onFileOk();

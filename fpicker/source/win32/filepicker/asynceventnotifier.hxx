@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:35:14 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 #include <osl/conditn.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERLISTENER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
-#endif
-
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
@@ -99,6 +95,7 @@ class CAsyncEventNotifier
 {
 public:
     CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper);
+    ~CAsyncEventNotifier();
 
     bool SAL_CALL start();
     void SAL_CALL stop();

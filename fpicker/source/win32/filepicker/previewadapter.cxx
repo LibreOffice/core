@@ -2,9 +2,9 @@
  *
  *  $RCSfile: previewadapter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:11:50 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,11 @@ public:
     // parent notification handler
     //-------------------------------------
 
-    virtual void SAL_CALL notifyParentShow(sal_Bool bShow);
+    virtual void SAL_CALL notifyParentShow(bool bShow);
 
     virtual void SAL_CALL notifyParentSizeChanged();
 
-    virtual void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
+    virtual void SAL_CALL notifyParentWindowPosChanged(bool bIsVisible);
 
 protected:
     virtual void SAL_CALL calcRightMargin();
@@ -280,7 +280,7 @@ void SAL_CALL CPreviewAdapterImpl::calcRightMargin()
 //
 //-----------------------------------------
 
-void SAL_CALL CPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
+void SAL_CALL CPreviewAdapterImpl::notifyParentShow(bool bShow)
 {
 }
 
@@ -297,7 +297,7 @@ void SAL_CALL CPreviewAdapterImpl::notifyParentSizeChanged()
 //
 //-----------------------------------------
 
-void SAL_CALL CPreviewAdapterImpl::notifyParentWindowPosChanged(sal_Bool bIsVisible)
+void SAL_CALL CPreviewAdapterImpl::notifyParentWindowPosChanged(bool bIsVisible)
 {
 }
 
@@ -453,7 +453,7 @@ class CWin98PreviewAdapterImpl : public CPreviewAdapterImpl
 public:
     CWin98PreviewAdapterImpl(HINSTANCE instance);
 
-    virtual void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
+    virtual void SAL_CALL notifyParentWindowPosChanged(bool bIsVisible);
 
 protected:
     virtual void SAL_CALL rearrangeLayout();
@@ -486,7 +486,7 @@ CWin98PreviewAdapterImpl::CWin98PreviewAdapterImpl(HINSTANCE instance) :
 //
 //--------------------------------------------
 
-void SAL_CALL CWin98PreviewAdapterImpl::notifyParentWindowPosChanged(sal_Bool bIsVisible)
+void SAL_CALL CWin98PreviewAdapterImpl::notifyParentWindowPosChanged(bool bIsVisible)
 {
     try
     {
@@ -593,7 +593,7 @@ class CWin95NTPreviewAdapterImpl : public CPreviewAdapterImpl
 public:
     CWin95NTPreviewAdapterImpl(HINSTANCE instance);
 
-    virtual void SAL_CALL notifyParentShow(sal_Bool bShow);
+    virtual void SAL_CALL notifyParentShow(bool bShow);
 };
 
 //--------------------------------------------
@@ -609,7 +609,7 @@ CWin95NTPreviewAdapterImpl::CWin95NTPreviewAdapterImpl(HINSTANCE instance) :
 //
 //--------------------------------------------
 
-void SAL_CALL CWin95NTPreviewAdapterImpl::notifyParentShow(sal_Bool bShow)
+void SAL_CALL CWin95NTPreviewAdapterImpl::notifyParentShow(bool bShow)
 {
     try
     {
@@ -727,7 +727,7 @@ void SAL_CALL CPreviewAdapter::setParent(HWND parent)
 //
 //-------------------------------
 
-void SAL_CALL CPreviewAdapter::notifyParentShow(sal_Bool bShow)
+void SAL_CALL CPreviewAdapter::notifyParentShow(bool bShow)
 {
     m_pImpl->notifyParentShow(bShow);
 }
@@ -745,7 +745,7 @@ void SAL_CALL CPreviewAdapter::notifyParentSizeChanged()
 //
 //-------------------------------
 
-void SAL_CALL CPreviewAdapter::notifyParentWindowPosChanged(sal_Bool bIsVisible)
+void SAL_CALL CPreviewAdapter::notifyParentWindowPosChanged(bool bIsVisible)
 {
     m_pImpl->notifyParentWindowPosChanged(bIsVisible);
 }

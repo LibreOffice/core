@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-04 11:10:45 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,9 @@
 #include <rtl/ustring>
 #endif
 
-#ifndef _AUTO_BUFFER_HXX_
-#include "..\misc\AutoBuffer.hxx"
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
-
-#include <memory>
 
 #include <windows.h>
 
@@ -117,10 +115,6 @@ typedef struct _tagOFNW {
    LPARAM       lCustData;
    LPOFNHOOKPROC lpfnHook;
    LPCWSTR      lpTemplateName;
-#ifdef _MAC
-   LPEDITMENU   lpEditInfo;
-   LPCSTR       lpstrPrompt;
-#endif
 #if (_WIN32_WINNT >= 0x0500)
    void *       pvReserved;
    DWORD        dwReserved;
@@ -142,10 +136,6 @@ typedef struct _tagOFNW {
 class CFileOpenDialog
 {
 public:
-    typedef sal_Unicode* POSITION;
-
-public:
-
     // ctor
     // bFileOpenDialog idicates if we want a FileOpen or FileSave
     // dialog
@@ -155,92 +145,63 @@ public:
     // which provides the custom template, unused if dwTemplateId
     // is 0
     CFileOpenDialog(
-        sal_Bool bFileOpenDialog = sal_True,
+        bool bFileOpenDialog = sal_True,
         sal_uInt32 dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
         sal_uInt32 dwTemplateId = 0,
-        HINSTANCE hInstance = 0 );
+        HINSTANCE hInstance = 0);
 
-    virtual ~CFileOpenDialog( );
+    virtual ~CFileOpenDialog();
 
-    virtual void SAL_CALL setTitle( const rtl::OUString& aTitle );
+    virtual void SAL_CALL setTitle(const rtl::OUString& aTitle);
 
     // to set a filter string using the M$ format
     // e.g. FltName\0*.txt;*.rtf\0...\0\0
-    void SAL_CALL setFilter( const rtl::OUString& aFilter );
+    void SAL_CALL setFilter(const rtl::OUString& aFilter);
 
     // set the index of the current filter when the
     // dialog is about to shown, the index starts with 1
     // the function succeeded if the given filter index
     // is greater than zero and is a valid position
     // within filter string that was previously set
-    sal_Bool SAL_CALL setFilterIndex( sal_uInt32 aIndex );
+    bool SAL_CALL setFilterIndex(sal_uInt32 aIndex);
 
     // get the index of the currently selected filter
     // the index of the returned filter starts with 1
-    sal_uInt32 SAL_CALL getSelectedFilterIndex( ) const;
+    sal_uInt32 SAL_CALL getSelectedFilterIndex() const;
 
     // set the name and optional the path of the
     // file that will be initially be shown when
     // the dialog will be displayed
-    virtual void SAL_CALL setDefaultName( const rtl::OUString& aName );
+    virtual void SAL_CALL setDefaultName(const rtl::OUString& aName);
 
     // set the initial directory
-    virtual void SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory );
+    virtual void SAL_CALL setDisplayDirectory(const rtl::OUString& aDirectory);
 
     // returns only the path of the selected file
-    virtual rtl::OUString SAL_CALL getLastDisplayDirectory( ) const;
+    virtual rtl::OUString SAL_CALL getLastDisplayDirectory() const;
 
     // returns the full file name including drive letter, path
     // file name and file extension
-    virtual rtl::OUString SAL_CALL getFullFileName( ) const;
+    virtual rtl::OUString SAL_CALL getFullFileName() const;
 
     // returns the file name and the file extension without
     // drive letter and path
-    rtl::OUString SAL_CALL getFileName( ) const;
+    rtl::OUString SAL_CALL getFileName() const;
 
     // returns the file extension of the selected file
-    rtl::OUString SAL_CALL getFileExtension( );
+    rtl::OUString SAL_CALL getFileExtension();
 
     // set a default extension, only the first three letters of
     // the given extension will be used; the given extension
     // should not contain a '.'
-    void SAL_CALL setDefaultFileExtension( const rtl::OUString& aExtension );
+    void SAL_CALL setDefaultFileExtension(const rtl::OUString& aExtension);
 
     // enables or disables the multiselection mode for
     // the FileOpen/FileSave dialog
-    void SAL_CALL setMultiSelectionMode( sal_Bool bMode );
+    void SAL_CALL setMultiSelectionMode(bool bMode);
 
     // returns whether multi-selection mode is enabled or not
-    sal_Bool SAL_CALL getMultiSelectionMode( ) const;
-
-    // sets the label of the specified control
-    // returns true on success or false if the control id
-    // is invalid or another error occured
-    sal_Bool SAL_CALL setControlLabel( sal_Int16 ElementID, const rtl::OUString& aLabel );
-
-    // enables or disables the specified control
-    virtual void SAL_CALL enableControl( sal_Int16 ElementID, sal_Bool bEnabled );
-
-    // shows or hides a control ( bShow = true shows the control
-    // and bShow = false hides the control )
-    // returns true on success and false if the control id
-    // is invalid or another error occured
-    sal_Bool SAL_CALL showControl( sal_Int16 ElementID, sal_Bool bShow );
-
-    // starts enumerating the selected file names if
-    // the multiselection mode is enabled
-    POSITION SAL_CALL beginEnumFileNames( );
-
-    // returns true if multiselection mode is enabled and
-    // another file name was copied to aNextFileName
-    // else returns false
-    // on success the function returns the complete
-    // file name including drive letter and path
-    // pos is an in-out parameter and receives the next
-    // position when there are further file names or
-    // 0 if there aren't
-    sal_Bool SAL_CALL getNextFileName(
-        /*in|out*/ POSITION& pos, rtl::OUString& aNextFileName );
+    bool SAL_CALL getMultiSelectionMode() const;
 
     // shows the dialog, calls preModal before
     // showing the dialog and postModal after
@@ -249,23 +210,23 @@ public:
     //  0 - when the dialog was canceled by the user
     //  1 - when the dialog was closed with ok
     // -1 - when an error occured
-    sal_Int16 SAL_CALL doModal( );
+    sal_Int16 SAL_CALL doModal();
 
     // returns the last dialog error that occured
-    sal_uInt32 SAL_CALL getLastDialogError( ) const;
+    sal_uInt32 SAL_CALL getLastDialogError() const;
 
     // retrievs the currently selected file
     // including path and drive information
     // can be called only if the dialog is
     // already displayed
-    rtl::OUString SAL_CALL getCurrentFilePath( ) const;
+    rtl::OUString SAL_CALL getCurrentFilePath() const;
 
     // retrievs the currently selected folder
-    rtl::OUString SAL_CALL getCurrentFolderPath( ) const;
+    rtl::OUString SAL_CALL getCurrentFolderPath() const;
 
     // retrievs the currently selected file name
     // without drive and path
-    rtl::OUString SAL_CALL getCurrentFileName( ) const;
+    rtl::OUString SAL_CALL getCurrentFileName() const;
 
 protected:
     // have to be overwritten when subclasses
@@ -275,34 +236,34 @@ protected:
     // if preModal return true processing will
     // continue else doModal exit without showing
     // a dialog and returns -1
-    virtual sal_Bool SAL_CALL preModal( );
+    virtual bool SAL_CALL preModal();
 
     // post modal processing
     // the function should accept only values returned from
     // doModal and act appropriately
-    virtual void SAL_CALL postModal( sal_Int16 nDialogResult );
+    virtual void SAL_CALL postModal(sal_Int16 nDialogResult);
 
     // message handler, to be overwritten by subclasses
-    virtual sal_uInt32 SAL_CALL onShareViolation( const rtl::OUString& aPathName );
+    virtual sal_uInt32 SAL_CALL onShareViolation(const rtl::OUString& aPathName);
     virtual sal_uInt32 SAL_CALL onFileOk();
-    virtual void SAL_CALL onSelChanged( HWND hwndListBox );
-    virtual void SAL_CALL onHelp( );
+    virtual void SAL_CALL onSelChanged(HWND hwndListBox);
+    virtual void SAL_CALL onHelp();
 
     // only called back if OFN_EXPLORER is set
     virtual void SAL_CALL onInitDone();
     virtual void SAL_CALL onFolderChanged();
-    virtual void SAL_CALL onTypeChanged( sal_uInt32 nFilterIndex );
+    virtual void SAL_CALL onTypeChanged(sal_uInt32 nFilterIndex);
 
     // call base class method first when overloading
-    virtual void SAL_CALL onInitDialog( HWND hwndDlg, HWND hwndChild );
+    virtual void SAL_CALL onInitDialog(HWND hwndDlg, HWND hwndChild);
 
-    virtual sal_uInt32 SAL_CALL onCtrlCommand( HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode );
+    virtual sal_uInt32 SAL_CALL onCtrlCommand(HWND hwndDlg, sal_uInt16 ctrlId, sal_uInt16 notifyCode);
 
-    sal_uInt32 SAL_CALL onWMNotify( HWND hwndChild, LPOFNOTIFYW lpOfNotify );
+    sal_uInt32 SAL_CALL onWMNotify(HWND hwndChild, LPOFNOTIFYW lpOfNotify);
 
     // we use non-virtual functions to do necessary work before
     // calling the virtual funtions (see Gamma: Template method)
-    void SAL_CALL handleInitDialog( HWND hwndDlg, HWND hwndChild );
+    void SAL_CALL handleInitDialog(HWND hwndDlg, HWND hwndChild);
 
 protected:
 
@@ -319,23 +280,23 @@ protected:
     // we connect the instance with the dialog window using
     // SetProp, with this function we can reconnect from
     // callback functions to this instance
-    static CFileOpenDialog* SAL_CALL getCurrentInstance( HWND hwnd );
+    static CFileOpenDialog* SAL_CALL getCurrentInstance(HWND hwnd);
 
-    void SAL_CALL centerPositionToParent( ) const;
+    void SAL_CALL centerPositionToParent() const;
 
 private:
     // FileOpen or FileSaveDialog
-    BOOL            m_bFileOpenDialog;
+    bool            m_bFileOpenDialog;
     rtl::OUString   m_dialogTitle;
     rtl::OUString   m_displayDirectory;
     rtl::OUString   m_defaultExtension;
 
-    CAutoUnicodeBuffer  m_filterBuffer;
-    CAutoUnicodeBuffer  m_fileNameBuffer;
-    CAutoUnicodeBuffer  m_fileTitleBuffer;
-    CAutoUnicodeBuffer  m_helperBuffer;
+    mutable rtl::OUStringBuffer m_filterBuffer;
+    mutable rtl::OUStringBuffer m_fileTitleBuffer;
+    mutable rtl::OUStringBuffer m_helperBuffer;
+    mutable rtl::OUStringBuffer m_fileNameBuffer;
 
-    ::std::auto_ptr< CGetFileNameWrapper > m_GetFileNameWrapper;
+    CGetFileNameWrapper m_GetFileNameWrapper;
 
     DLGPROC             m_pfnBaseDlgProc;
 
@@ -355,10 +316,9 @@ private:
         HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam );
 
 private:
-
     // avoid copy and assignment
-    CFileOpenDialog( const CFileOpenDialog& );
-    CFileOpenDialog& operator=( const CFileOpenDialog& );
+    CFileOpenDialog(const CFileOpenDialog&);
+    CFileOpenDialog& operator=(const CFileOpenDialog&);
 };
 
 #endif

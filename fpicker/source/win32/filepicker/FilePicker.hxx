@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:33:32 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,6 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #endif
 
-#ifndef _WINFILEOPENIMPL_HXX_
-#include "WinFileOpenImpl.hxx"
-#endif
-
 #ifndef _ASYNCEVENTNOTIFIER_HXX_
 #include "asynceventnotifier.hxx"
 #endif
@@ -129,8 +125,7 @@
 // forward declarations
 //----------------------------------------------------------
 
-//class OFPImplBase;
-class CFPImplFactory;
+class CWinFileOpenImpl;
 
 //----------------------------------------------------------
 // class declaration
@@ -305,9 +300,9 @@ private:
     CFilePicker& operator=( const CFilePicker& );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;   // to instanciate own services
-    std::auto_ptr< CWinFileOpenImpl  >                                               m_pImpl;
-    CAsyncEventNotifier                                                              m_aAsyncEventNotifier;
+    ::com::sun::star::uno::Reference<::com::sun::star::lang::XMultiServiceFactory> m_xServiceMgr;   // to instanciate own services
+    CAsyncEventNotifier                                                            m_aAsyncEventNotifier;
+    std::auto_ptr<CWinFileOpenImpl>                                                m_pImpl;
 };
 
 #endif

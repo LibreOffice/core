@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:32:14 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,6 @@
 #include <systools/win32/user9x.h>
 
 //------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
-
-using rtl::OUString;
-
-//------------------------------------------------------------------------
 // constants
 //------------------------------------------------------------------------
 
@@ -112,18 +106,18 @@ namespace /* private */
 //------------------------------------------------------------------------
 
 CFileOpenDialog::CFileOpenDialog(
-    sal_Bool bFileOpenDialog,
+    bool bFileOpenDialog,
     sal_uInt32 dwFlags,
     sal_uInt32 dwTemplateId,
-    HINSTANCE hInstance ) :
-    m_filterBuffer( MAX_FILTER_BUFF_SIZE, sal_True ),
-    m_fileNameBuffer( MAX_FILENAME_BUFF_SIZE ),
-    m_fileTitleBuffer( MAX_FILETITLE_BUFF_SIZE ),
-    m_helperBuffer( MAX_FILENAME_BUFF_SIZE ),
-    m_hwndFileOpenDlg( 0 ),
-    m_hwndFileOpenDlgChild( 0 ),
-    m_bFileOpenDialog( bFileOpenDialog ),
-    m_GetFileNameWrapper( CGetFileNameWrapper::create( ) )
+    HINSTANCE hInstance) :
+    m_hwndFileOpenDlg(0),
+    m_hwndFileOpenDlgChild(0),
+    m_bFileOpenDialog(bFileOpenDialog),
+    m_filterBuffer(MAX_FILTER_BUFF_SIZE),
+    m_fileTitleBuffer(MAX_FILETITLE_BUFF_SIZE),
+    m_helperBuffer(MAX_FILENAME_BUFF_SIZE),
+    m_fileNameBuffer(MAX_FILENAME_BUFF_SIZE),
+    m_pfnBaseDlgProc(0)
 {
     // initialize the OPENFILENAME struct
     if (IsWindows2000Platform())
@@ -152,36 +146,33 @@ CFileOpenDialog::CFileOpenDialog(
     // we get a parent window (using a vcl window?)
     m_ofn.hwndOwner = GetForegroundWindow( );
 
-    // we don't use custom filters
-    m_ofn.lpstrCustomFilter = 0;
+    m_ofn.lpstrFile = const_cast<sal_Unicode*>(m_fileNameBuffer.getStr());
+    m_ofn.nMaxFile  = m_fileNameBuffer.getCapacity();
 
-    m_ofn.lpstrFile = m_fileNameBuffer;
-    m_ofn.nMaxFile  = m_fileNameBuffer.size( );
-
-    m_ofn.lpstrFileTitle = m_fileTitleBuffer;
-    m_ofn.nMaxFileTitle  = m_fileTitleBuffer.size( );
+    m_ofn.lpstrFileTitle = const_cast<sal_Unicode*>(m_fileTitleBuffer.getStr());
+    m_ofn.nMaxFileTitle  = m_fileTitleBuffer.getCapacity();
 
     m_ofn.lpfnHook = CFileOpenDialog::ofnHookProc;
 
     // set a custom template
-    if ( dwTemplateId )
+    if (dwTemplateId)
     {
-        OSL_ASSERT( hInstance );
+        OSL_ASSERT(hInstance);
 
         m_ofn.Flags |= OFN_ENABLETEMPLATE;
-        m_ofn.lpTemplateName = MAKEINTRESOURCEW( dwTemplateId );
+        m_ofn.lpTemplateName = MAKEINTRESOURCEW(dwTemplateId);
         m_ofn.hInstance = hInstance;
     }
 
     // set a pointer to myself as ofn parameter
-    m_ofn.lCustData = reinterpret_cast< long > ( this );
+    m_ofn.lCustData = reinterpret_cast<long>(this);
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-CFileOpenDialog::~CFileOpenDialog( )
+CFileOpenDialog::~CFileOpenDialog()
 {
 }
 
@@ -189,30 +180,31 @@ CFileOpenDialog::~CFileOpenDialog( )
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::setTitle( const OUString& aTitle )
+void SAL_CALL CFileOpenDialog::setTitle(const rtl::OUString& aTitle)
 {
-    m_dialogTitle = aTitle.getStr( );
-    m_ofn.lpstrTitle = m_dialogTitle.getStr( );
+    m_dialogTitle = aTitle;
+    m_ofn.lpstrTitle = m_dialogTitle.getStr();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void CFileOpenDialog::setFilter( const OUString& aFilter )
+void CFileOpenDialog::setFilter(const rtl::OUString& aFilter)
 {
-    m_filterBuffer.resize( aFilter.getLength( ) + 1 );
-    m_filterBuffer.fill( aFilter.getStr( ), aFilter.getLength( ) );
-    m_ofn.lpstrFilter = m_filterBuffer;
+    m_filterBuffer.ensureCapacity(aFilter.getLength());
+    m_filterBuffer.setLength(0);
+    m_filterBuffer.append(aFilter);
+    m_ofn.lpstrFilter = m_filterBuffer.getStr();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-sal_Bool CFileOpenDialog::setFilterIndex( sal_uInt32 aIndex )
+bool CFileOpenDialog::setFilterIndex(sal_uInt32 aIndex)
 {
-    OSL_ASSERT( aIndex > 0 );
+    OSL_ASSERT(aIndex > 0);
     m_ofn.nFilterIndex = aIndex;
     return sal_True;
 }
@@ -221,7 +213,7 @@ sal_Bool CFileOpenDialog::setFilterIndex( sal_uInt32 aIndex )
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 CFileOpenDialog::getSelectedFilterIndex( ) const
+sal_uInt32 CFileOpenDialog::getSelectedFilterIndex() const
 {
     return m_ofn.nFilterIndex;
 }
@@ -230,18 +222,18 @@ sal_uInt32 CFileOpenDialog::getSelectedFilterIndex( ) const
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::setDefaultName( const OUString& aName )
+void SAL_CALL CFileOpenDialog::setDefaultName(const rtl::OUString& aName)
 {
-    m_fileNameBuffer.empty( );
-    m_fileNameBuffer.fill( aName.getStr( ), aName.getLength( ) );
-    m_ofn.lpstrFile = m_fileNameBuffer;
+    m_fileNameBuffer.setLength(0);
+    m_fileNameBuffer.append(aName);
+    m_ofn.lpstrFile = const_cast<sal_Unicode*>(m_fileNameBuffer.getStr());
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::setDisplayDirectory( const OUString& aDirectory )
+void SAL_CALL CFileOpenDialog::setDisplayDirectory(const rtl::OUString& aDirectory)
 {
     m_displayDirectory = aDirectory;
     m_ofn.lpstrInitialDir = m_displayDirectory;
@@ -251,7 +243,7 @@ void SAL_CALL CFileOpenDialog::setDisplayDirectory( const OUString& aDirectory )
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory( ) const
+rtl::OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory() const
 {
     return m_displayDirectory;
 }
@@ -260,141 +252,92 @@ rtl::OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory( ) const
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getFullFileName( ) const
+rtl::OUString SAL_CALL CFileOpenDialog::getFullFileName() const
 {
-    return OUString( &m_fileNameBuffer, _wcslenex( &m_fileNameBuffer ) );
+    return rtl::OUString(m_fileNameBuffer.getStr(),
+        _wcslenex(m_fileNameBuffer.getStr()));
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getFileName( ) const
+rtl::OUString SAL_CALL CFileOpenDialog::getFileName() const
 {
-    return OUString( &m_fileTitleBuffer, wcslen( &m_fileTitleBuffer ) + 1 );
+    return rtl::OUString(m_fileTitleBuffer);
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-rtl::OUString CFileOpenDialog::getFileExtension( )
+rtl::OUString CFileOpenDialog::getFileExtension()
 {
-    OUString fileExt;
+    if (m_ofn.nFileExtension)
+        return rtl::OUString(m_fileNameBuffer.getStr() + m_ofn.nFileExtension,
+            wcslen(m_fileNameBuffer.getStr() + m_ofn.nFileExtension));
 
-    if ( m_ofn.nFileExtension )
-        fileExt = OUString( m_fileNameBuffer + m_ofn.nFileExtension,
-            wcslen( m_fileNameBuffer + m_ofn.nFileExtension ) );
-
-    return fileExt;
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void CFileOpenDialog::setDefaultFileExtension( const OUString& aExtension )
+void CFileOpenDialog::setDefaultFileExtension(const rtl::OUString& aExtension)
 {
     m_defaultExtension = aExtension;
-    m_ofn.lpstrDefExt = m_defaultExtension.getStr( );
+    m_ofn.lpstrDefExt  = m_defaultExtension.getStr();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::setMultiSelectionMode( sal_Bool bMode )
+void SAL_CALL CFileOpenDialog::setMultiSelectionMode(bool bMode)
 {
-    if ( bMode )
+    if (bMode)
         m_ofn.Flags |= OFN_ALLOWMULTISELECT;
-    else if ( m_ofn.Flags & OFN_ALLOWMULTISELECT )
-        m_ofn.Flags ^= OFN_ALLOWMULTISELECT;
+    else
+        m_ofn.Flags &= ~OFN_ALLOWMULTISELECT;
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CFileOpenDialog::getMultiSelectionMode( ) const
+bool SAL_CALL CFileOpenDialog::getMultiSelectionMode() const
 {
-    return ( m_ofn.Flags & OFN_ALLOWMULTISELECT );
+    return ((m_ofn.Flags & OFN_ALLOWMULTISELECT) > 0);
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-sal_Bool CFileOpenDialog::setControlLabel( sal_Int16 ElementID, const OUString& aLabel )
-{
-    return sal_True;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-void SAL_CALL CFileOpenDialog::enableControl( sal_Int16 ElementID, sal_Bool bEnabled )
-{
-
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-sal_Bool CFileOpenDialog::showControl( sal_Int16 ElementID, sal_Bool bShow )
-{
-    return sal_True;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-CFileOpenDialog::POSITION SAL_CALL CFileOpenDialog::beginEnumFileNames( )
-{
-    return 0;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-sal_Bool SAL_CALL CFileOpenDialog::getNextFileName(
-    POSITION& pos, OUString& aNextFileName )
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-sal_Int16 SAL_CALL CFileOpenDialog::doModal( )
+sal_Int16 SAL_CALL CFileOpenDialog::doModal()
 {
     sal_Int16 nRC = -1;
 
     // pre-processing
-    if ( preModal( ) )
+    if (preModal())
     {
-        sal_Bool bRet;
+        bool bRet;
 
-        OSL_ASSERT( m_GetFileNameWrapper.get( ) );
+        if (m_bFileOpenDialog)
+            bRet = m_GetFileNameWrapper.getOpenFileName(
+                reinterpret_cast<LPOPENFILENAMEW>(&m_ofn));
+        else
+            bRet = m_GetFileNameWrapper.getSaveFileName(
+                reinterpret_cast<LPOPENFILENAMEW>(&m_ofn));
 
-        if ( m_GetFileNameWrapper.get( ) )
-        {
-            if ( m_bFileOpenDialog )
-                bRet = m_GetFileNameWrapper->getOpenFileName( (LPOPENFILENAMEW)&m_ofn );
-            else
-                bRet = m_GetFileNameWrapper->getSaveFileName( (LPOPENFILENAMEW)&m_ofn );
+        nRC = 1;
 
-            nRC = 1;
-            if ( !bRet )
-                nRC = (0 == m_GetFileNameWrapper->commDlgExtendedError( )) ? 0 : -1;
-        }
+        if (!bRet)
+            nRC = (0 == m_GetFileNameWrapper.commDlgExtendedError()) ? 0 : -1;
 
         // post-processing
-        postModal( nRC );
+        postModal(nRC);
     }
 
     return nRC;
@@ -404,16 +347,16 @@ sal_Int16 SAL_CALL CFileOpenDialog::doModal( )
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CFileOpenDialog::getLastDialogError( ) const
+sal_uInt32 SAL_CALL CFileOpenDialog::getLastDialogError() const
 {
-    return CommDlgExtendedError( );
+    return CommDlgExtendedError();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CFileOpenDialog::preModal( )
+bool SAL_CALL CFileOpenDialog::preModal()
 {
     return sal_True;
 }
@@ -422,20 +365,16 @@ sal_Bool SAL_CALL CFileOpenDialog::preModal( )
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::postModal( sal_Int16 nDialogResult )
+void SAL_CALL CFileOpenDialog::postModal(sal_Int16 nDialogResult)
 {
-    OSL_ASSERT( (-1 <= nDialogResult) && (nDialogResult <= 1) );
+    OSL_ASSERT((-1 <= nDialogResult) && (nDialogResult <= 1));
 
-    if ( m_ofn.lpstrFile )
+    if (1 == nDialogResult)
     {
-        OUString lastDir;
-        sal_Unicode* pLastDirChar = m_ofn.lpstrFile + m_ofn.nFileOffset - 1;
-        if ( m_ofn.nFileOffset && 0 == *pLastDirChar )
-            lastDir = OUString( m_ofn.lpstrFile, m_ofn.nFileOffset - 1 );
-        else if ( m_ofn.nFileOffset )
-            lastDir = OUString( m_ofn.lpstrFile, m_ofn.nFileOffset );
-
-        m_displayDirectory = lastDir;
+        // Attention: assuming that nFileOffset is always greater 0 because under
+        // Windows there is always a drive letter or a server in a complete path
+        // the OPENFILENAME docu never says that nFileOffset can be 0
+        m_displayDirectory = rtl::OUString(m_ofn.lpstrFile,m_ofn.nFileOffset);
     }
 }
 
@@ -443,53 +382,55 @@ void SAL_CALL CFileOpenDialog::postModal( sal_Int16 nDialogResult )
 //
 //------------------------------------------------------------------------
 
-OUString SAL_CALL CFileOpenDialog::getCurrentFilePath( ) const
+rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
 {
-    OSL_ASSERT( IsWindow( m_hwndFileOpenDlg ) );
+    OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
     LPARAM nLen = SendMessageW(
         m_hwndFileOpenDlg,
         CDM_GETFILEPATH,
-        m_helperBuffer.size( ),
-        reinterpret_cast< LPARAM >( &m_helperBuffer ) );
+        m_helperBuffer.getCapacity(),
+        reinterpret_cast<LPARAM>(m_helperBuffer.getStr()));
 
-    OUString filePath;
+    if (nLen > 0)
+    {
+        m_helperBuffer.setLength(nLen - 1);
+        return rtl::OUString(m_helperBuffer);
+    }
 
-    if ( nLen > 0 )
-        filePath = OUString( &m_helperBuffer, (nLen - 1) );
-
-    return filePath;
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath( ) const
+rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
 {
-    OSL_ASSERT( IsWindow( m_hwndFileOpenDlg ) );
+    OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
     LPARAM nLen = SendMessageW(
         m_hwndFileOpenDlg,
         CDM_GETFOLDERPATH,
-        m_helperBuffer.size( ),
-        reinterpret_cast< LPARAM >( &m_helperBuffer ) );
+        m_helperBuffer.getCapacity(),
+        reinterpret_cast<LPARAM>(m_helperBuffer.getStr()));
 
-    OUString folderPath;
+    if (nLen > 0)
+    {
+        m_helperBuffer.setLength(nLen - 1);
+        return rtl::OUString(m_helperBuffer);
+    }
 
-    if ( nLen > 0 )
-        folderPath = OUString( &m_helperBuffer, (nLen -1) );
-
-    return folderPath;
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-OUString SAL_CALL CFileOpenDialog::getCurrentFileName( ) const
+rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
 {
-    OSL_ASSERT( IsWindow( m_hwndFileOpenDlg ) );
+    OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
     // this is an ugly hack because beause
     // CDM_GETSPEC and BFFM_SETSTATUSTEXT
@@ -499,32 +440,33 @@ OUString SAL_CALL CFileOpenDialog::getCurrentFileName( ) const
 
     OSVERSIONINFO   OSVerInfo;
 
-    OSVerInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
+    OSVerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx( &OSVerInfo );
 
     // if windows 95/98
-    if ( VER_PLATFORM_WIN32_WINDOWS == OSVerInfo.dwPlatformId )
+    if (VER_PLATFORM_WIN32_WINDOWS == OSVerInfo.dwPlatformId)
         MsgId = CDM_GETSPEC + 100;
 
     LPARAM nLen = SendMessageW(
         m_hwndFileOpenDlg,
         MsgId,
-        m_helperBuffer.size( ),
-        reinterpret_cast< LPARAM >( &m_helperBuffer ) );
+        m_helperBuffer.getCapacity(),
+        reinterpret_cast<LPARAM>(m_helperBuffer.getStr()));
 
-    OUString fileName;
+    if (nLen > 0)
+    {
+        m_helperBuffer.setLength(nLen - 1);
+        return rtl::OUString(m_helperBuffer);
+    }
 
-    if ( nLen > 0 )
-        fileName = OUString( &m_helperBuffer, (nLen - 1) );
-
-    return fileName;
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation( const OUString& aPathName)
+sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation(const rtl::OUString& aPathName)
 {
     return 0;
 }
@@ -542,7 +484,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onFileOk()
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::onSelChanged( HWND hwndListBox )
+void SAL_CALL CFileOpenDialog::onSelChanged(HWND hwndListBox)
 {
 }
 
@@ -550,7 +492,7 @@ void SAL_CALL CFileOpenDialog::onSelChanged( HWND hwndListBox )
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::onHelp( )
+void SAL_CALL CFileOpenDialog::onHelp()
 {
 }
 
@@ -560,7 +502,7 @@ void SAL_CALL CFileOpenDialog::onHelp( )
 
 void SAL_CALL CFileOpenDialog::onInitDone()
 {
-    centerPositionToParent( );
+    centerPositionToParent();
 }
 
 //------------------------------------------------------------------------
@@ -575,7 +517,7 @@ void SAL_CALL CFileOpenDialog::onFolderChanged()
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::onTypeChanged( sal_uInt32 nFilterIndex )
+void SAL_CALL CFileOpenDialog::onTypeChanged(sal_uInt32 nFilterIndex)
 {
 }
 
@@ -583,7 +525,7 @@ void SAL_CALL CFileOpenDialog::onTypeChanged( sal_uInt32 nFilterIndex )
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::onInitDialog( HWND hwndDlg, HWND hwndChild )
+void SAL_CALL CFileOpenDialog::onInitDialog(HWND hwndDlg, HWND hwndChild)
 {
 }
 
@@ -592,7 +534,7 @@ void SAL_CALL CFileOpenDialog::onInitDialog( HWND hwndDlg, HWND hwndChild )
 //------------------------------------------------------------------------
 
 sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(
-    HWND hwndChild, sal_uInt16 ctrlId, sal_uInt16 notifyCode )
+    HWND hwndChild, sal_uInt16 ctrlId, sal_uInt16 notifyCode)
 {
     return 0;
 }
@@ -601,35 +543,35 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onCtrlCommand(
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND hwndChild, LPOFNOTIFYW lpOfNotify )
+sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify(HWND hwndChild, LPOFNOTIFYW lpOfNotify)
 {
-    switch( lpOfNotify->hdr.code )
+    switch(lpOfNotify->hdr.code)
     {
     case CDN_SHAREVIOLATION:
-        return onShareViolation( lpOfNotify->pszFile );
+        return onShareViolation(lpOfNotify->pszFile);
 
     case CDN_FILEOK:
-        return onFileOk( );
+        return onFileOk();
 
     case CDN_SELCHANGE:
-        onSelChanged( lpOfNotify->hdr.hwndFrom );
+        onSelChanged(lpOfNotify->hdr.hwndFrom);
         break;
 
     case CDN_HELP:
-        onHelp( );
+        onHelp();
         break;
 
     case CDN_INITDONE:
-        onInitDone( );
+        onInitDone();
         break;
 
     case CDN_FOLDERCHANGE:
-        onFolderChanged( );
+        onFolderChanged();
         break;
 
     case CDN_TYPECHANGE:
         m_ofn.nFilterIndex = lpOfNotify->lpOFN->nFilterIndex;
-        onTypeChanged( lpOfNotify->lpOFN->nFilterIndex );
+        onTypeChanged(lpOfNotify->lpOFN->nFilterIndex);
         break;
     }
 
@@ -640,16 +582,16 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND hwndChild, LPOFNOTIFYW lpO
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::handleInitDialog( HWND hwndDlg, HWND hwndChild )
+void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
 {
     m_hwndFileOpenDlg      = hwndDlg;
     m_hwndFileOpenDlgChild = hwndChild;
 
-    OSL_ASSERT( GetParent( hwndChild ) == hwndDlg );
+    OSL_ASSERT(GetParent(hwndChild) == hwndDlg);
 
     // calling virtual function which the
     // client can overload
-    onInitDialog( hwndDlg, hwndChild );
+    onInitDialog(hwndDlg, hwndChild);
 }
 
 //------------------------------------------------------------------------
@@ -657,7 +599,7 @@ void SAL_CALL CFileOpenDialog::handleInitDialog( HWND hwndDlg, HWND hwndChild )
 //------------------------------------------------------------------------
 
 unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
-    HWND hChildDlg, unsigned int uiMsg, WPARAM wParam, LPARAM lParam )
+    HWND hChildDlg, unsigned int uiMsg, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndDlg = GetParent( hChildDlg );
     CFileOpenDialog* pImpl = NULL;
@@ -666,38 +608,38 @@ unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
     {
     case WM_INITDIALOG:
         {
-            _OPENFILENAMEW* lpofn = reinterpret_cast< _OPENFILENAMEW* >( lParam );
-            pImpl = reinterpret_cast< CFileOpenDialog* >( lpofn->lCustData );
-            OSL_ASSERT( pImpl );
+            _OPENFILENAMEW* lpofn = reinterpret_cast<_OPENFILENAMEW*>(lParam);
+            pImpl = reinterpret_cast<CFileOpenDialog*>(lpofn->lCustData);
+            OSL_ASSERT(pImpl);
 
             // subclass the base dialog for WM_NCDESTROY processing
             pImpl->m_pfnBaseDlgProc =
                 reinterpret_cast< DLGPROC >(
                     SetWindowLong( hwndDlg,
                     DWL_DLGPROC,
-                    reinterpret_cast< DWORD >( CFileOpenDialog::BaseDlgProc ) ) );
+                    reinterpret_cast<DWORD>(CFileOpenDialog::BaseDlgProc)));
 
             // connect the instance handle to the window
-            SetPropA( hwndDlg, CURRENT_INSTANCE, pImpl );
+            SetPropA(hwndDlg, CURRENT_INSTANCE, pImpl);
 
-            pImpl->handleInitDialog( hwndDlg, hChildDlg );
+            pImpl->handleInitDialog(hwndDlg, hChildDlg);
         }
         return 0;
 
     case WM_NOTIFY:
         {
-            pImpl = getCurrentInstance( hwndDlg );
+            pImpl = getCurrentInstance(hwndDlg);
             return pImpl->onWMNotify(
-                hChildDlg, reinterpret_cast< LPOFNOTIFYW >( lParam ) );
+                hChildDlg, reinterpret_cast<LPOFNOTIFYW>(lParam));
         }
 
     case WM_COMMAND:
         {
-            pImpl = getCurrentInstance( hwndDlg );
-            OSL_ASSERT( pImpl );
+            pImpl = getCurrentInstance(hwndDlg);
+            OSL_ASSERT(pImpl);
 
             return pImpl->onCtrlCommand(
-                hChildDlg, LOWORD( wParam ), HIWORD( lParam ) );
+                hChildDlg, LOWORD(wParam), HIWORD(lParam));
         }
     }
 
@@ -709,111 +651,88 @@ unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
 //------------------------------------------------------------------------
 
 unsigned int CALLBACK CFileOpenDialog::BaseDlgProc(
-    HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam )
+    HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam)
 {
-    unsigned int lResult   = 0;
-    CFileOpenDialog* pImpl = NULL;
+    CFileOpenDialog* pImpl = 0;
 
-    switch( wMessage )
+    if (WM_NCDESTROY == wMessage)
     {
-    case WM_NCDESTROY:
+        pImpl = reinterpret_cast<CFileOpenDialog*>(
+            RemovePropA(hWnd,CURRENT_INSTANCE));
 
-        // RemoveProp returns the saved value on success
-        pImpl = reinterpret_cast< CFileOpenDialog* >(
-            RemovePropA( hWnd, CURRENT_INSTANCE ) );
-        OSL_ASSERT( pImpl );
+        SetWindowLong(hWnd, DWL_DLGPROC,
+            reinterpret_cast<DWORD>(pImpl->m_pfnBaseDlgProc));
+    }
+    else
+    {
+        pImpl = getCurrentInstance(hWnd);
+    }
 
-        // fall through in order to call the
-        // base dlg proc
-    default:
-        if ( !pImpl )
-        {
-            pImpl = getCurrentInstance( hWnd );
-            OSL_ASSERT( pImpl );
-        }
+    OSL_ASSERT(pImpl);
 
-        // !!! we use CallWindowProcA
-        lResult = CallWindowProcA(
-            reinterpret_cast< WNDPROC >( pImpl->m_pfnBaseDlgProc ),
-            hWnd, wMessage, wParam, lParam );
-
-    break;
-
-    } // switch
-
-    return lResult;
-
+    return CallWindowProcA(
+        reinterpret_cast<WNDPROC>(pImpl->m_pfnBaseDlgProc),
+        hWnd,wMessage,wParam,lParam);
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-CFileOpenDialog* SAL_CALL CFileOpenDialog::getCurrentInstance( HWND hwnd )
+CFileOpenDialog* SAL_CALL CFileOpenDialog::getCurrentInstance(HWND hwnd)
 {
-    OSL_ASSERT( IsWindow( hwnd ) );
-    return reinterpret_cast< CFileOpenDialog* >(
-        GetPropA( hwnd, CURRENT_INSTANCE ) );
+    OSL_ASSERT(IsWindow(hwnd));
+
+    return reinterpret_cast<CFileOpenDialog*>(
+        GetPropA(hwnd, CURRENT_INSTANCE));
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::centerPositionToParent( ) const
+void SAL_CALL CFileOpenDialog::centerPositionToParent() const
 {
-    OSL_PRECOND( IsWindow( m_hwndFileOpenDlg ), "no dialog window, call method only after or in onInitDone" );
-
-    HDC hdc = GetDC( m_hwndFileOpenDlg );
+    OSL_PRECOND(IsWindow(m_hwndFileOpenDlg), "no dialog window, call method only after or in onInitDone");
 
     HWND hwndParent = m_ofn.hwndOwner;
 
-    if ( !IsWindow( hwndParent ) )
-        hwndParent = GetDesktopWindow( );
+    if (!IsWindow(hwndParent))
+        hwndParent = GetDesktopWindow();
 
-    OSL_ASSERT( IsWindow( hwndParent ) );
+    OSL_ASSERT(IsWindow(hwndParent));
 
-    RECT rcParent;
-    GetWindowRect( hwndParent, &rcParent );
+    RECT rcPar;
+    GetWindowRect(hwndParent, &rcPar);
 
-    RECT rcDialog;
-    GetWindowRect( m_hwndFileOpenDlg, &rcDialog );
+    RECT rcDlg;
+    GetWindowRect(m_hwndFileOpenDlg, &rcDlg);
 
-    LONG lParentWidth  = rcParent.right  - rcParent.left;
-    LONG lParentHeight = rcParent.bottom - rcParent.top;
+    int lDlgW = rcDlg.right  - rcDlg.left;
+    int lDlgH = rcDlg.bottom - rcDlg.top;
 
-    LONG lDialogWidth  = rcDialog.right  - rcDialog.left;
-    LONG lDialogHeight = rcDialog.bottom - rcDialog.top;
+    int x = (rcPar.left + rcPar.right  - lDlgW) / 2;
+    int y = (rcPar.top  + rcPar.bottom - lDlgH) / 2;
 
-    int xParentMid = rcParent.left + (lParentWidth  / 2);
-    int yParentMid = rcParent.top  + (lParentHeight / 2);
+    HDC hdc = GetDC(m_hwndFileOpenDlg);
 
-    int x = xParentMid - (lDialogWidth  / 2);
-    int y = yParentMid - (lDialogHeight / 2);
+    int hResol = GetDeviceCaps(hdc, HORZRES);
+    int vResol = GetDeviceCaps(hdc, VERTRES);
 
-    int xScreen = GetDeviceCaps( hdc, HORZRES );
-    int yScreen = GetDeviceCaps( hdc, VERTRES );
+    ReleaseDC(m_hwndFileOpenDlg, hdc);
 
-    if ( x < 0 )
+    if (x < 0)
         x = 0;
+    else if ((x + lDlgW) > hResol)
+        x = hResol - lDlgW;
 
-    if ( y < 0 )
+    if (y < 0)
         y = 0;
-
-    if ( (x + lDialogWidth) > xScreen )
-        x = xScreen - lDialogWidth;
-
-    if ( (y + lDialogHeight) > yScreen )
-        y = yScreen - lDialogHeight;
+    else if ((y + lDlgH) > vResol)
+        y = vResol - lDlgH;
 
     SetWindowPos(
         m_hwndFileOpenDlg,
-        NULL,
-        x,
-        y,
-        0,
-        0,
+        NULL, x, y, 0, 0,
         SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE );
-
-    ReleaseDC( m_hwndFileOpenDlg, hdc );
 }

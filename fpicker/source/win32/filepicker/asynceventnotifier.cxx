@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:35:14 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,25 +75,19 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERLISTENER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #endif
 
 #include <process.h>
-#include <windows.h>
 #include <memory>
 
 //------------------------------------------------
 //
 //------------------------------------------------
 
-using namespace osl;
-using namespace com::sun::star::uno;
-using ::com::sun::star::uno::Reference;
+using namespace com::sun::star;
 using ::com::sun::star::ui::dialogs::XFilePickerListener;
-using ::com::sun::star::ui::dialogs::XFilePickerNotifier;
-using ::com::sun::star::ui::dialogs::FilePickerEvent;
-using ::cppu::OBroadcastHelper;
 
 //------------------------------------------------
 //
@@ -111,16 +105,25 @@ CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelpe
 //
 //------------------------------------------------
 
+CAsyncEventNotifier::~CAsyncEventNotifier()
+{
+    OSL_ENSURE(0 == m_hThread,"Thread not stopped, destroying this instance leads to desaster");
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
 bool SAL_CALL CAsyncEventNotifier::start()
 {
-    MutexGuard aGuard(m_Mutex);
+    osl::MutexGuard aGuard(m_Mutex);
 
     // m_bRun may already be false because of a
     // call to stop but the thread did not yet
     // terminate so m_hEventNotifierThread is
     // yet a valid thread handle that should
     // not be overwritten
-    if ( !m_bRun && 0==m_hThread )
+    if (!m_bRun)
     {
         m_hThread = (HANDLE)_beginthreadex(
             NULL, 0, CAsyncEventNotifier::ThreadProc, this, 0, &m_ThreadId);
@@ -144,7 +147,7 @@ void SAL_CALL CAsyncEventNotifier::stop()
 {
     OSL_PRECOND(GetCurrentThreadId() != m_ThreadId, "Method called in wrong thread context!");
 
-    ResettableMutexGuard aGuard(m_Mutex);
+    osl::ResettableMutexGuard aGuard(m_Mutex);
 
     OSL_PRECOND(m_bRun,"Event notifier does not run!");
 
@@ -176,7 +179,7 @@ void SAL_CALL CAsyncEventNotifier::stop()
 
 void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotification)
 {
-    MutexGuard aGuard(m_Mutex);
+    osl::MutexGuard aGuard(m_Mutex);
 
     OSL_ENSURE(m_bRun,"Event notifier is not running!");
 
@@ -193,7 +196,7 @@ void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotifica
 
 size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
 {
-    MutexGuard aGuard(m_Mutex);
+    osl::MutexGuard aGuard(m_Mutex);
     return m_EventList.size();
 }
 
@@ -203,7 +206,7 @@ size_t SAL_CALL CAsyncEventNotifier::getEventListSize()
 
 void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 {
-    MutexGuard aGuard(m_Mutex);
+    osl::MutexGuard aGuard(m_Mutex);
     if (0 == m_EventList.size())
         m_NotifyEvent.reset();
 }
@@ -214,7 +217,7 @@ void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 
 CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 {
-    MutexGuard aGuard(m_Mutex);
+    osl::MutexGuard aGuard(m_Mutex);
     return m_EventList.front();
 }
 
@@ -224,7 +227,7 @@ CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 
 void SAL_CALL CAsyncEventNotifier::removeNextEventRecord()
 {
-    MutexGuard aGuard(m_Mutex);
+    osl::MutexGuard aGuard(m_Mutex);
     m_EventList.pop_front();
 }
 
@@ -246,7 +249,7 @@ void SAL_CALL CAsyncEventNotifier::run()
                 removeNextEventRecord();
 
                 ::cppu::OInterfaceContainerHelper* pICHelper =
-                    m_rBroadcastHelper.getContainer(getCppuType((Reference<XFilePickerListener>*)0));
+                    m_rBroadcastHelper.getContainer(getCppuType((uno::Reference<XFilePickerListener>*)0));
 
                 if (pICHelper)
                 {
@@ -258,7 +261,7 @@ void SAL_CALL CAsyncEventNotifier::run()
                         {
                             EventNotification->notifyEventListener(iter.next());
                         }
-                        catch(RuntimeException&)
+                        catch(uno::RuntimeException&)
                         {
                             OSL_ENSURE(sal_False,"RuntimeException during event dispatching");
                         }

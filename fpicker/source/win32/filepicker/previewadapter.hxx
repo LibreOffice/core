@@ -2,9 +2,9 @@
  *
  *  $RCSfile: previewadapter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-21 07:11:58 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,11 +128,11 @@ public:
     // notification from parent
     //--------------------------------------
 
-    void SAL_CALL notifyParentShow(sal_Bool bShow);
+    void SAL_CALL notifyParentShow(bool bShow);
 
     void SAL_CALL notifyParentSizeChanged();
 
-    void SAL_CALL notifyParentWindowPosChanged(sal_Bool bIsVisible);
+    void SAL_CALL notifyParentWindowPosChanged(bool bIsVisible);
 
 private:
     // hide implementation details using the

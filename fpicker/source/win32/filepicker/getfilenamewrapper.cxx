@@ -2,9 +2,9 @@
  *
  *  $RCSfile: getfilenamewrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-04 11:08:11 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,188 +67,162 @@
 #include <osl/diagnose.h>
 #endif
 
-
 #ifndef _GETFILENAMEWRAPPER_HXX_
 #include "getfilenamewrapper.hxx"
 #endif
 
-
 #include <process.h>
 
-//-----------------------------------------------
-// Simple struct for automatically init/deinit
-// of a STA
-//-----------------------------------------------
 
-struct STAInit
+namespace /* private */
 {
-    STAInit( )  { CoInitialize( NULL ); }
-    ~STAInit( ) { CoUninitialize( ); }
-};
+
+    //-----------------------------------------------
+    //
+    //-----------------------------------------------
+
+    struct GetFileNameParam
+    {
+        GetFileNameParam(bool bOpen, LPOPENFILENAMEW lpofn) :
+            m_bOpen(bOpen),
+            m_lpofn(lpofn),
+            m_bRet(false),
+            m_ExtErr(0)
+        {}
+
+        bool            m_bOpen;
+        LPOPENFILENAMEW m_lpofn;
+        bool            m_bRet;
+        int             m_ExtErr;
+    };
+
+    //-----------------------------------------------
+    //
+    //-----------------------------------------------
+
+    unsigned __stdcall ThreadProc(void* pParam)
+    {
+        GetFileNameParam* lpgfnp =
+            reinterpret_cast<GetFileNameParam*>(pParam);
+
+        if (lpgfnp->m_bOpen)
+            lpgfnp->m_bRet = GetOpenFileNameW(lpgfnp->m_lpofn);
+        else
+            lpgfnp->m_bRet = GetSaveFileNameW(lpgfnp->m_lpofn);
+
+        lpgfnp->m_ExtErr = CommDlgExtendedError();
+
+        return 0;
+    }
+
+    //-----------------------------------------------
+    // exceutes GetOpenFileName/GetSaveFileName in
+    // a separat thread
+    //-----------------------------------------------
+
+    bool ThreadExecGetFileName(LPOPENFILENAMEW lpofn, bool bOpen, /*out*/ int& ExtErr)
+    {
+        GetFileNameParam gfnp(bOpen,lpofn);
+        unsigned         id;
+
+        HANDLE hThread = reinterpret_cast<HANDLE>(
+            _beginthreadex(0, 0, ThreadProc, &gfnp, 0, &id));
+
+        OSL_POSTCOND(hThread, "could not create STA thread");
+
+        WaitForSingleObject(hThread, INFINITE);
+        CloseHandle(hThread);
+
+        ExtErr = gfnp.m_ExtErr;
+
+        return gfnp.m_bRet;
+    }
+
+    //-----------------------------------------------
+    // This function returns true if the calling
+    // thread belongs to a Multithreaded Appartment
+    // (MTA)
+    //-----------------------------------------------
+
+    bool IsMTA()
+    {
+        HRESULT hr = CoInitialize(NULL);
+
+        if (RPC_E_CHANGED_MODE == hr)
+            return true;
+
+        if(SUCCEEDED(hr))
+            CoUninitialize();
+
+        return false;
+    }
+
+} // namespace private
+
 
 //-----------------------------------------------
-// This function returns true if either the
-// calling thread belongs to an STA or to no
-// apartment at all
+//
 //-----------------------------------------------
 
-bool IsThreadContextSTA( )
+CGetFileNameWrapper::CGetFileNameWrapper() :
+    m_ExtendedDialogError(0)
 {
-    HRESULT hr = CoInitialize( NULL );
+}
+
+//-----------------------------------------------
+//
+//-----------------------------------------------
+
+bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAMEW lpofn)
+{
+    OSL_PRECOND(lpofn,"invalid parameter");
+
     bool bRet = false;
 
-    if ( SUCCEEDED( hr ) )
+    if (IsMTA())
     {
-        bRet = true;
-        CoUninitialize( );
+        bRet = ThreadExecGetFileName(
+            lpofn, true, m_ExtendedDialogError);
+    }
+    else
+    {
+        bRet = GetOpenFileNameW(lpofn);
+        m_ExtendedDialogError = CommDlgExtendedError();
     }
 
     return bRet;
 }
 
 //-----------------------------------------------
-// Someone may extend this method on demand and
-// even create the appropriate instance depending
-// on the OS version etc.
-//-----------------------------------------------
-
-CGetFileNameWrapper* CGetFileNameWrapper::create( )
-{
-    CGetFileNameWrapper* pGetFileNameWrapper = new CSTAGetFileNameWrapper( );
-
-    OSL_POSTCOND( pGetFileNameWrapper, "can't create instance, not enough memory" );
-
-    return pGetFileNameWrapper;
-}
-
-
-//###############################################
-
-
-//-----------------------------------------------
 //
 //-----------------------------------------------
 
-CSTAGetFileNameWrapper::CSTAGetFileNameWrapper( )
+bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAMEW lpofn)
 {
-}
+    OSL_PRECOND(lpofn,"invalid parameter");
 
-//-----------------------------------------------
-//
-//-----------------------------------------------
+    bool bRet = false;
 
-CSTAGetFileNameWrapper::~CSTAGetFileNameWrapper( )
-{
-}
-
-//-----------------------------------------------
-//
-//-----------------------------------------------
-
-BOOL SAL_CALL CSTAGetFileNameWrapper::getOpenFileName( LPOPENFILENAMEW lpofn )
-{
-    executeGetFileName( true, lpofn );
-    return m_bResult;
-}
-
-//-----------------------------------------------
-//
-//-----------------------------------------------
-
-BOOL SAL_CALL CSTAGetFileNameWrapper::getSaveFileName( LPOPENFILENAMEW lpofn )
-{
-    executeGetFileName( false, lpofn );
-    return m_bResult;
-}
-
-//-----------------------------------------------
-//
-//-----------------------------------------------
-
-DWORD SAL_CALL CSTAGetFileNameWrapper::commDlgExtendedError( )
-{
-    return m_LastError;
-}
-
-//-----------------------------------------------
-//
-//-----------------------------------------------
-
-void SAL_CALL CSTAGetFileNameWrapper::executeGetFileName( )
-{
-    if ( m_bFileOpenDialog )
-        m_bResult = CGetFileNameWrapper::getOpenFileName( m_lpofn );
-    else
-        m_bResult = CGetFileNameWrapper::getSaveFileName( m_lpofn );
-
-    if ( !m_bResult )
-        m_LastError = CGetFileNameWrapper::commDlgExtendedError( );
-}
-
-//-----------------------------------------------
-//
-//-----------------------------------------------
-
-void SAL_CALL CSTAGetFileNameWrapper::executeGetFileName( BOOL bFileOpenDialog, LPOPENFILENAMEW lpofn )
-{
-    m_bFileOpenDialog = bFileOpenDialog;
-    m_lpofn           = lpofn;
-    m_bResult         = false;
-
-    if ( !IsThreadContextSTA( ) && threadExecuteGetFileName( ) )
+    if (IsMTA())
     {
-        return;
+        bRet = ThreadExecGetFileName(
+            lpofn, false, m_ExtendedDialogError);
     }
     else
     {
-        // execute in the context of the calling thread
-        // if it lives in an STA or the execution in a
-        // separat thread failed
-        executeGetFileName( );
+        bRet = GetSaveFileNameW(lpofn);
+        m_ExtendedDialogError = CommDlgExtendedError();
     }
+
+    return bRet;
 }
 
 //-----------------------------------------------
 //
 //-----------------------------------------------
 
-bool SAL_CALL CSTAGetFileNameWrapper::threadExecuteGetFileName( )
+int CGetFileNameWrapper::commDlgExtendedError( )
 {
-    unsigned ThreadId;
-    bool bSuccess = false;
-
-    HANDLE hThread = reinterpret_cast< HANDLE >(
-        _beginthreadex( 0, 0, CSTAGetFileNameWrapper::threadProc, this, 0, &ThreadId ) );
-
-    OSL_POSTCOND( hThread, "could not create STA thread" );
-
-    if ( hThread )
-    {
-        // stop the calling thread until the sta thread
-        // has ended
-        WaitForSingleObject( hThread, INFINITE );
-        CloseHandle( hThread );
-        bSuccess = true;
-    }
-
-    return bSuccess;
+    return m_ExtendedDialogError;
 }
 
-//-----------------------------------------------
-//
-//-----------------------------------------------
-
-unsigned __stdcall CSTAGetFileNameWrapper::threadProc( void* pParam )
-{
-    CSTAGetFileNameWrapper* pImpl =
-        reinterpret_cast< CSTAGetFileNameWrapper* >( pParam );
-
-    OSL_ASSERT( pImpl );
-
-    // setup a STA environment
-    STAInit staInit;
-
-    pImpl->executeGetFileName( );
-
-    return 0;
-}

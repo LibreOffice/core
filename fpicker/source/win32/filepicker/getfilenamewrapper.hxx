@@ -2,9 +2,9 @@
  *
  *  $RCSfile: getfilenamewrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-04 11:08:05 $
+ *  last change: $Author: tra $ $Date: 2002-03-28 08:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #ifndef _GETFILENAMEWRAPPER_HXX_
 #define _GETFILENAMEWRAPPER_HXX_
 
@@ -67,97 +66,25 @@
 // includes
 //------------------------------------------------------------------------
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-
 #include <systools/win32/comdlg9x.h>
 
 /*
     A simple wrapper around the GetOpenFileName/GetSaveFileName API.
-    This wrapper serves as base class because currently the Win32
-    API functions GetOpenFileName/GetSaveFileName work only properly
-    in an STA. If this changes in the future we simply use the base
-    class else we use an derived class which calls the API functions
-    from within an STA.
+    Because currently the Win32 API functions GetOpenFileName/GetSaveFileName
+    work only properly in an Single Threaded Appartment.
 */
 
 class CGetFileNameWrapper
 {
 public:
-    virtual ~CGetFileNameWrapper( ) { };
+    CGetFileNameWrapper();
 
-    virtual BOOL SAL_CALL getOpenFileName( LPOPENFILENAMEW lpofn )
-    {
-        return ::GetOpenFileNameW( lpofn );
-    }
-
-    virtual BOOL SAL_CALL getSaveFileName( LPOPENFILENAMEW lpofn )
-    {
-        return ::GetSaveFileNameW( lpofn );
-    }
-
-    virtual DWORD SAL_CALL commDlgExtendedError( )
-    {
-        return ::CommDlgExtendedError( );
-    }
-
-    // a factory method, so it's possible to create
-    // different instances of this class depending
-    // on the apartment model of the calling thread,
-    // the OS version etc.
-    // the client owns the returned instance and
-    // should destroy it using delete
-    static CGetFileNameWrapper* create( );
-
-protected:
-
-    // let instances only be created through
-    // the create method
-    CGetFileNameWrapper( ) { };
-};
-
-/*
-    The wrapper always calls the GetOpenFileName/GetSaveFileName in
-    a STA thread because a lot of features of the system file dialogs
-    are disabled when the calling thread is an MTA thread
-    (this is a MS Bug at least that they don't document this).
-    This class is not thread-safe.
-*/
-
-class CSTAGetFileNameWrapper : public CGetFileNameWrapper
-{
-public:
-    virtual ~CSTAGetFileNameWrapper( );
-
-    virtual BOOL SAL_CALL getOpenFileName( LPOPENFILENAMEW lpofn );
-
-    virtual BOOL SAL_CALL getSaveFileName( LPOPENFILENAMEW lpofn );
-
-    virtual DWORD SAL_CALL commDlgExtendedError( );
-
-protected:
-    CSTAGetFileNameWrapper( );
+    bool getOpenFileName(LPOPENFILENAMEW lpofn);
+    bool getSaveFileName(LPOPENFILENAMEW lpofn);
+    int  commDlgExtendedError();
 
 private:
-    void SAL_CALL executeGetFileName( );
-    void SAL_CALL executeGetFileName( BOOL bFileOpenDialog, LPOPENFILENAMEW lpofn );
-    bool SAL_CALL threadExecuteGetFileName( );
-
-    static unsigned __stdcall threadProc( void * pParam );
-
-private:
-    DWORD           m_LastError;
-    BOOL            m_bFileOpenDialog;
-    BOOL            m_bResult;
-    LPOPENFILENAMEW m_lpofn;
-
-// prevent copy/assignment
-private:
-    CSTAGetFileNameWrapper( const CSTAGetFileNameWrapper& );
-    CSTAGetFileNameWrapper& operator=( const CSTAGetFileNameWrapper& );
-
-    friend class CGetFileNameWrapper;
+    int m_ExtendedDialogError;
 };
 
 #endif
