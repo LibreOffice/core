@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dv $ $Date: 2001-02-09 11:27:31 $
+#   last change: $Author: obo $ $Date: 2001-02-13 10:57:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,8 @@ SLOFILES =	\
         $(SLO)$/hintpost.obj \
         $(SLO)$/linkhdl.obj
 
+EXCEPTIONSFILES =	\
+        $(SLO)$/eventsupplier.obj \
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
