@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:59:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include <cppcanvas/canvas.hxx>
 #endif
 
-#include "canvasgraphichelper.hxx"
-#include "action.hxx"
+#include <canvasgraphichelper.hxx>
+#include <action.hxx>
 
 #include <vector>
 
@@ -102,9 +102,11 @@ namespace cppcanvas
         {
         public:
             ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const GDIMetaFile&        rMtf );
+                          const GDIMetaFile&        rMtf,
+                          const Parameters&         rParms );
             ImplRenderer( const CanvasSharedPtr&    rCanvas,
-                          const BitmapEx&           rBmpEx );
+                          const BitmapEx&           rBmpEx,
+                          const Parameters&         rParms );
 
             virtual ~ImplRenderer();
 
@@ -132,10 +134,23 @@ namespace cppcanvas
             ImplRenderer(const ImplRenderer&);
             ImplRenderer& operator=( const ImplRenderer& );
 
-            bool createActions( const CanvasSharedPtr&  rCanvas,
-                                VirtualDevice&          rVDev,
-                                GDIMetaFile&            rMtf,
-                                VectorOfOutDevStates&   rStates );
+            void updateClipping( VectorOfOutDevStates&              rStates,
+                                 const ::basegfx::B2DPolyPolygon&   rClipPoly,
+                                 const CanvasSharedPtr&             rCanvas,
+                                 bool                               bIntersect );
+
+            ::com::sun::star::uno::Reference<
+                ::drafts::com::sun::star::rendering::XCanvasFont > createFont( ::basegfx::B2DHomMatrix&     o_rFontMatrix,
+                                                                               const ::Font&                rFont,
+                                                                               const CanvasSharedPtr&       rCanvas,
+                                                                               const ::VirtualDevice&       rVDev,
+                                                                               const Parameters&            rParms ) const;
+            bool            createActions( const CanvasSharedPtr&   rCanvas,
+                                           VirtualDevice&           rVDev,
+                                           GDIMetaFile&             rMtf,
+                                           VectorOfOutDevStates&    rStates,
+                                           const Parameters&        rParms,
+                                           int&                     io_rCurrActionIndex );
             bool            createFillAndStroke( const ::PolyPolygon&       rPolyPoly,
                                                  const CanvasSharedPtr&     rCanvas,
                                                  int                        rActionIndex,
@@ -143,16 +158,55 @@ namespace cppcanvas
             void            skipContent( GDIMetaFile&   rMtf,
                                          const char&    rCommentString ) const;
 
-            void            createGradientAction( const Rectangle&          rRect,
-                                                  const Gradient&           rGradient,
-                                                  VirtualDevice&            rVDev,
+            void            createGradientAction( const ::PolyPolygon&      rPoly,
+                                                  const ::Gradient&         rGradient,
+                                                  ::VirtualDevice&          rVDev,
                                                   const CanvasSharedPtr&    rCanvas,
-                                                  VectorOfOutDevStates&     rStates );
+                                                  VectorOfOutDevStates&     rStates,
+                                                  const Parameters&         rParms,
+                                                  int&                      io_rCurrActionIndex,
+                                                  bool                      bIsPolygonRectangle );
+
+            // create text effects such as shadow/relief/embossed
+            void            createTextWithEffectsAction(
+                                                const Point&            rStartPoint,
+                                                const String            rString,
+                                                int                     nIndex,
+                                                int                     nLength,
+                                                const long*             pCharWidths,
+                                                VirtualDevice&          rVDev,
+                                                const CanvasSharedPtr&  rCanvas,
+                                                VectorOfOutDevStates&   rStates,
+                                                const Parameters&       rParms,
+                                                int                     nCurrActionIndex );
+
+            // create text draw actions and add text lines
+            void            createTextWithLinesAction(
+                                                const Point&            rStartPoint,
+                                                const String            rString,
+                                                int                     nIndex,
+                                                int                     nLength,
+                                                const long*             pCharWidths,
+                                                VirtualDevice&          rVDev,
+                                                const CanvasSharedPtr&  rCanvas,
+                                                VectorOfOutDevStates&   rStates,
+                                                const Parameters&       rParms,
+                                                int                     nCurrActionIndex );
+
+            // create text lines such as underline and strikeout
+            void            createJustTextLinesAction(
+                                                const Point&            rStartPoint,
+                                                long                    nLineWidth,
+                                                VirtualDevice&          rVDev,
+                                                const CanvasSharedPtr&  rCanvas,
+                                                VectorOfOutDevStates&   rStates,
+                                                const Parameters&       rParms,
+                                                int                     nCurrActionIndex );
 
             // prefetched and prepared canvas actions
             // (externally not visible)
-            typedef ::std::vector< MtfAction >                                                      ActionVector;
-            ActionVector                                                                            maActions;
+            typedef ::std::vector< MtfAction >      ActionVector;
+            ActionVector                            maActions;
         };
     }
 }
