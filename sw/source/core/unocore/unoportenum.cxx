@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
+ *  last change: $Author: os $ $Date: 2001-06-29 11:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,7 @@ void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortionArr&
     for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
     {
         const SwRedline* pRedline = rRedTbl[nRed];
-        const SwPosition* pRedStart = pRedline->GetPoint();
+        const SwPosition* pRedStart = pRedline->Start();
         const SwNodeIndex nRedNode = pRedStart->nNode;
         SwRedlineType nType = pRedline->GetType();
         if(nOwnNode == nRedNode)
@@ -689,7 +689,7 @@ void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortionArr&
             SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, TRUE);
             rRedArr.Insert(pToInsert);
         }
-        if(pRedline->HasMark() && pRedline->GetMark()->nNode == nOwnNode)
+        if(pRedline->HasMark() && pRedline->End()->nNode == nOwnNode)
         {
             SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, FALSE);
             rRedArr.Insert(pToInsert);
@@ -703,25 +703,17 @@ void lcl_ExportRedline(
     SwXRedlinePortionArr& rRedlineArr, ULONG nIndex,
     SwUnoCrsr* pUnoCrsr, Reference<XText> xParent, XTextRangeArr& rPortionArr)
 {
-    if(!rRedlineArr.Count())
-        return;
     SwXRedlinePortion_ImplPtr pPtr;
     while(rRedlineArr.Count() &&  0 != (pPtr = rRedlineArr.GetObject(0)) &&
-        ((pPtr->bStart && nIndex == pPtr->pRedline->Start()->nContent.GetIndex())||
-            (!pPtr->bStart && nIndex == pPtr->pRedline->End()->nContent.GetIndex())))
+        ((pPtr->bStart && (nIndex == pPtr->pRedline->Start()->nContent.GetIndex()))||
+            (!pPtr->bStart && (nIndex == pPtr->pRedline->End()->nContent.GetIndex()))))
     {
         SwXTextPortion* pPortion;
-
-// ?????
-//      if(pPtr->bStart )
-//      {
-            rPortionArr.Insert(
-                new Reference< XTextRange >(pPortion = new SwXRedlinePortion(
-                            pPtr->pRedline, *pUnoCrsr, xParent,
-                            pPtr->bStart)),
-                rPortionArr.Count());
-
-//      }
+        rPortionArr.Insert(
+            new Reference< XTextRange >(pPortion = new SwXRedlinePortion(
+                        pPtr->pRedline, *pUnoCrsr, xParent,
+                        pPtr->bStart)),
+            rPortionArr.Count());
         rRedlineArr.Remove((USHORT)0);
         delete pPtr;
     }
