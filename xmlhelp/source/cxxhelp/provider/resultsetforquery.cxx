@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetforquery.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-25 09:48:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::ucb;
 
 
-
 ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceFactory >&  xMSF,
                                       const uno::Reference< XContentProvider >&  xProvider,
                                       sal_Int32 nOpenMode,
@@ -133,7 +132,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
     if( inf )
     {
         if( scope.compareToAscii( "Heading" ) == 0 )
-            scope = inf->get_heading();
+            scope = rtl::OUString::createFromAscii("title"); // inf->get_heading();
         else
             scope = inf->get_fulltext();
     }
