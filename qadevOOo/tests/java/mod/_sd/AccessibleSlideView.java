@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSlideView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 19:34:20 $
+ *  last change:$Date: 2004-11-02 12:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ public class AccessibleSlideView extends TestCase {
                                 (XMultiServiceFactory)Param.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
