@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-08 13:20:43 $
+ *  last change: $Author: tl $ $Date: 2001-05-10 14:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,31 +160,47 @@ using namespace ::rtl;
 
 util::Language lcl_CheckLanguage( const OUString &rWord, Reference< XSpellChecker1 >  xSpell )
 {
-    // andere Sprachen automatisch pr"ufen
-    // auch wenn beliebiger Schwachsinn rauskommt
-    // NUR: wenn Sprache KEINE oder die neue die Alte ist oder die Sprache
-    // nicht vorhanden ist
-
-     util::Language nLang = LANGUAGE_NONE;
+    util::Language nLang = LANGUAGE_NONE;
 
     Reference< XSpellAlternatives >     xAlt;
     Sequence< util::Language >  aLangs;
     if (xSpell.is())
         aLangs = xSpell->getLanguages();
     const util::Language *pLang = aLangs.getConstArray();
-    sal_Int16   nCount = aLangs.getLength();
+    INT32   nCount = aLangs.getLength();
 
-    for (sal_Int16 i = 0;  i < nCount;  i++)
+    //! due to dieckmann (new german) spellchecker excepting many english
+    //! (and other?) words as correct
+    //! GERMAN and GERMAN_SWISS should be checked last.
+    //! Otherwise e.g. english words might be reported as being german words!
+    for (INT32 i = 0;  i < nCount;  i++)
     {
-        if (pLang[i] != LANGUAGE_NONE)
+        INT16 nTmpLang = pLang[i];
+        if (nTmpLang != LANGUAGE_NONE  &&
+            nTmpLang != LANGUAGE_GERMAN  &&
+            nTmpLang != LANGUAGE_GERMAN_SWISS)
         {
-            if (xSpell->isValid( rWord, pLang[i], Sequence< PropertyValue >() ))
+            if (xSpell->isValid( rWord, nTmpLang, Sequence< PropertyValue >() ) &&
+                xSpell->hasLanguage( nTmpLang ))
             {
-                nLang = pLang[i];
+                nLang = nTmpLang;
                 break;
             }
         }
     }
+    if (nLang == LANGUAGE_NONE  &&
+        xSpell->isValid( rWord, LANGUAGE_GERMAN, Sequence< PropertyValue >() ) &&
+        xSpell->hasLanguage( LANGUAGE_GERMAN ))
+    {
+        nLang = LANGUAGE_GERMAN;
+    }
+    if (nLang == LANGUAGE_NONE  &&
+        xSpell->isValid( rWord, LANGUAGE_GERMAN_SWISS, Sequence< PropertyValue >() ) &&
+        xSpell->hasLanguage( LANGUAGE_GERMAN_SWISS ))
+    {
+        nLang = LANGUAGE_GERMAN_SWISS;
+    }
+
     return nLang;
 }
 
