@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:43:32 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,20 +433,41 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
     if ( xNameAcc.is() )
     {
-           Sequence< OUString > aNames = xNameAcc->getElementNames();
-           const OUString* pNames = aNames.getConstArray();
-        sal_uInt32 nCtrls = aNames.getLength();
+        // get sequence of control names
+        Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
+        const ::rtl::OUString* pNames = aNames.getConstArray();
+        sal_Int32 nCtrls = aNames.getLength();
 
-        for( sal_uInt32 n = 0; n < nCtrls; n++ )
+        // create a map of tab indices and control names, sorted by tab index
+        IndexToNameMap aIndexToNameMap;
+        for ( sal_Int32 i = 0; i < nCtrls; ++i )
         {
-               Any aA = xNameAcc->getByName( pNames[n] );
+            // get name
+            ::rtl::OUString aName( pNames[i] );
+
+            // get tab index
+            sal_Int16 nTabIndex = -1;
+            Any aCtrl = xNameAcc->getByName( aName );
+            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+               aCtrl >>= xPSet;
+            if ( xPSet.is() )
+                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= nTabIndex;
+
+            // insert into map
+            aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
+        }
+
+        // create controls and insert them into drawing page
+        for ( IndexToNameMap::iterator aIt = aIndexToNameMap.begin(); aIt != aIndexToNameMap.end(); ++aIt )
+        {
+            Any aCtrl = xNameAcc->getByName( aIt->second );
             Reference< ::com::sun::star::awt::XControlModel > xCtrlModel;
-               aA >>= xCtrlModel;
+            aCtrl >>= xCtrlModel;
             DlgEdObj* pCtrlObj = new DlgEdObj();
             pCtrlObj->SetUnoControlModel( xCtrlModel );
-            pCtrlObj->SetDlgEdForm(pDlgEdForm);
-            pDlgEdForm->AddChild(pCtrlObj);                     // add child to parent form
-            pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );  // insert object into drawing page
+            pCtrlObj->SetDlgEdForm( pDlgEdForm );
+            pDlgEdForm->AddChild( pCtrlObj );
+            pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
             pCtrlObj->SetRectFromProps();
             pCtrlObj->UpdateStep();
             pCtrlObj->StartListening();
@@ -881,6 +902,7 @@ void DlgEditor::Paste()
                         pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
                         pCtrlObj->SetRectFromProps();
                         pCtrlObj->UpdateStep();
+                        pDlgEdForm->UpdateTabOrderAndGroups();              // #110559#
                         pCtrlObj->StartListening();                         // start listening
 
                         // mark object
