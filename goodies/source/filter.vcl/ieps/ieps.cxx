@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:44:11 $
+ *  last change: $Author: sj $ $Date: 2001-10-24 16:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,12 +397,12 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                     aVDev.SetFillColor();
 
                                     aFont.SetColor( COL_LIGHTRED );
-                                    aFont.SetSize( Size( 0, nHeight / 5 ) );
+//                                  aFont.SetSize( Size( 0, 32 ) );
 
                                     aVDev.Push( PUSH_FONT );
                                     aVDev.SetFont( aFont );
 
-                                    Rectangle aRect( Point( 0, 0 ), Size( nWidth, nHeight ) );
+                                    Rectangle aRect( Point( 1, 1 ), Size( nWidth - 2, nHeight - 2 ) );
                                     aVDev.DrawRect( aRect );
 
                                     String aString;
@@ -413,11 +413,13 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                         pDest += 8;
                                         if ( *pDest == ' ' )
                                             pDest++;
-                                        nLen = ImplGetLen( pBuf, 32 );
+                                        nLen = ImplGetLen( pDest, 32 );
                                         pDest[ nLen ] = 0;
                                         if ( strcmp( (const char*)pDest, "none" ) != 0 )
                                         {
+                                            aString.AppendAscii( " Title:" );
                                             aString.AppendAscii( (char*)pDest );
+                                            aString.AppendAscii( "\n" );
                                         }
                                     }
                                     pDest = ImplSearchEntry( pBuf, (BYTE*)"%%Creator:", nBytesRead - 32, 10 );
@@ -428,8 +430,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                             pDest++;
                                         nLen = ImplGetLen( pDest, 32 );
                                         pDest[ nLen ] = 0;
-                                        aString.AppendAscii( "\n" );
+                                        aString.AppendAscii( " Creator:" );
                                         aString.AppendAscii( (char*)pDest );
+                                        aString.AppendAscii( "\n" );
                                     }
                                     pDest = ImplSearchEntry( pBuf, (BYTE*)"%%CreationDate:", nBytesRead - 32, 15 );
                                     if ( pDest )
@@ -441,8 +444,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                         pDest[ nLen ] = 0;
                                         if ( strcmp( (const char*)pDest, "none" ) != 0 )
                                         {
-                                            aString.AppendAscii( "\n" );
+                                            aString.AppendAscii( " CreationDate:" );
                                             aString.AppendAscii( (char*)pDest );
+                                            aString.AppendAscii( "\n" );
                                         }
                                     }
                                     pDest = ImplSearchEntry( pBuf, (BYTE*)"%%LanguageLevel:", nBytesRead - 4, 16 );
@@ -453,11 +457,11 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                                         long nNumber = ImplGetNumber( &pDest, nCount );
                                         if ( nCount && ( (UINT32)nNumber < 10 ) )
                                         {
-                                            aString.AppendAscii( "\nLevel:" );
+                                            aString.AppendAscii( " LanguageLevel:" );
                                             aString.Append( UniString::CreateFromInt32( nNumber ) );
                                         }
                                     }
-                                    aVDev.DrawText( Rectangle( aRect ), aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+                                    aVDev.DrawText( aRect, aString, TEXT_DRAW_CLIP | TEXT_DRAW_MULTILINE );
                                     aVDev.Pop();
                                     aMtf2.Stop();
                                     aMtf2.WindStart();
