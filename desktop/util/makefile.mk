@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-23 11:03:54 $
+#   last change: $Author: rt $ $Date: 2003-04-24 13:43:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,6 +129,7 @@ APP1STDLIBS=			\
     $(VOSLIB)			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
+    $(TKLIB)            \
     $(SALLIB)
 
 #	$(APP1_STDPRE)		\
@@ -228,6 +229,7 @@ APP5STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
+    $(TKLIB)            \
     $(SVTOOLLIB)
 
 #	$(APP1_STDPRE)		\
@@ -282,8 +284,8 @@ ALLTAR: $(BIN)$/$(TARGET).exe.manifest
 # create a manifest file with the same name as the
 # office executable file soffice.exe.manifest
 $(BIN)$/$(TARGET).exe.manifest: template.manifest
-   +$(COPY) $< $@ 
-   
+   +$(COPY) $< $@
+
 $(MISCX)$/$(APP1TARGET).def : makefile.mk
     echo  NAME			soffice								>$@
     echo  DESCRIPTION   'StarDesktop Version 5'           >>$@
