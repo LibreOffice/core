@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:24:10 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SVX_HANGUL_HANJA_DLG_HXX
 #include "hangulhanjadlg.hxx"
 #endif
@@ -79,9 +78,40 @@
 
 #include <algorithm>
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <vcl/controllayout.hxx>
 #endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUPROPS_HXX_
+#include <svtools/linguprops.hxx>
+#endif
+//#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+//#include <com/sun/star/frame/XStorable.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONDICTIONARYTYPE_HPP_
+#include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONDIRECTION_HDL_
+#include <com/sun/star/linguistic2/ConversionDirection.hdl>
+#endif
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HDL_
+#include <com/sun/star/i18n/TextConversionOption.hdl>
+#endif
+
+#include <comphelper/processfactory.hxx>
+//#include <ucbhelper/content.hxx>
+
 
 #define HHC HangulHanjaConversion
 
@@ -98,7 +128,12 @@ namespace svx
     using HangulHanjaConversion::eRubyHangulAbove;
     using HangulHanjaConversion::eRubyHangulBelow;
 */
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::linguistic2;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::container;
+    using namespace ::rtl;
 
     //-------------------------------------------------------------------------
     namespace
@@ -417,6 +452,11 @@ namespace svx
         m_pPlayground->GetWordInputControl().SetModifyHdl( LINK( this,  HangulHanjaConversionDialog, OnSuggestionModified ) );
         m_aSuggestions.SetSelectHdl( LINK( this,  HangulHanjaConversionDialog, OnSuggestionSelected ) );
 
+        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eOptions,
+                                        LINK( this, HangulHanjaConversionDialog, OnOption ) );
+        m_pPlayground->GetButton( SvxCommonLinguisticControl::eOptions )->Show();
+//      m_pPlayground->EnableButton( SvxCommonLinguisticControl::eOptions, true );
+
         if ( HangulHanjaConversion::eHangulToHanja == _ePrimaryDirection )
         {
             m_aHanjaOnly.Enable( sal_False );
@@ -440,6 +480,7 @@ namespace svx
         m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnoreAll )->SetHelpId(HID_HANGULDLG_BUTTON_IGNOREALL);
         m_pPlayground->GetButton(SvxCommonLinguisticControl::eChange    )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGE   );
         m_pPlayground->GetButton(SvxCommonLinguisticControl::eChangeAll )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGEALL);
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eOptions   )->SetHelpId(HID_HANGULDLG_BUTTON_OPTIONS  );
         m_pPlayground->GetWordInputControl().SetHelpId(HID_HANGULDLG_EDIT_NEWWORD);
 
         FreeResource();
@@ -497,6 +538,12 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
+    void HangulHanjaConversionDialog::SetOptionsHdl( const Link& _rHdl )
+    {
+        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eOptions, _rHdl );
+    }
+
+    //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetFindHdl( const Link& _rHdl )
     {
         m_aFind.SetClickHdl( _rHdl );
@@ -544,6 +591,13 @@ namespace svx
     IMPL_LINK( HangulHanjaConversionDialog, OnClose, void*, NOTINTERESTEDIN )
     {
         Close();
+        return 0L;
+    }
+
+    IMPL_LINK( HangulHanjaConversionDialog, OnOption, void*, NOTINTERESTEDIN )
+    {
+        HangulHanjaOptionsDialog        aOptDlg( this );
+        aOptDlg.Execute();
         return 0L;
     }
 
@@ -684,6 +738,1125 @@ namespace svx
 
         DBG_ERROR( "HangulHanjaConversionDialog::GetConversionFormat: no radio checked?" )
         return HHC::eSimpleConversion;
+    }
+
+    //-------------------------------------------------------------------------
+    void HangulHanjaConversionDialog::EnableRubySupport( sal_Bool bVal )
+    {
+        m_pHanjaAbove->Enable( bVal );
+        m_pHanjaBelow->Enable( bVal );
+        m_pHangulAbove->Enable( bVal );
+        m_pHangulBelow->Enable( bVal );
+    }
+
+
+    //=========================================================================
+    //= HangulHanjaOptionsDialog
+    //=========================================================================
+    //-------------------------------------------------------------------------
+
+    namespace
+    {
+        static Reference< XConversionDictionaryList >   xConvDictList;
+
+        Reference< XConversionDictionaryList > GetXConversionDictionaryList()
+        {
+            Reference< XMultiServiceFactory >   xMgr( ::comphelper::getProcessServiceFactory() );
+            if( xMgr.is() && !xConvDictList.is() )
+            {
+                xConvDictList = Reference< XConversionDictionaryList > ( xMgr->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList")) ),
+                    UNO_QUERY );
+            }
+
+            return xConvDictList;
+        }
+    }
+
+
+    HHDictList::HHDictList( void )
+        :m_aList    ( 32 )
+        ,m_nNew     ( 0 )
+    {
+    }
+
+    HHDictList::~HHDictList()
+    {
+    }
+
+    void HHDictList::Clear( void )
+    {
+        m_aList = Sequence< Reference< XConversionDictionary > >( 32 );
+        m_nNew = 0;
+    }
+
+    void HHDictList::Add( Reference< XConversionDictionary > _xDict )
+    {
+        if( _xDict.is() )
+        {
+            if( m_nNew >= sal_uInt32( m_aList.getLength() ) )
+                m_aList.realloc( m_aList.getLength() * 2 );
+
+            *( m_aList.getArray() + m_nNew ) = _xDict;
+            ++m_nNew;
+        }
+    }
+
+    sal_uInt32 HHDictList::Count( void ) const
+    {
+        return m_nNew;
+    }
+
+    Reference< XConversionDictionary > HHDictList::Get( sal_uInt32 _nInd )
+    {
+        Reference< XConversionDictionary >  x;
+
+        if( _nInd < m_nNew )
+            x = *( m_aList.getArray() + _nInd );
+        return x;
+    }
+
+    String HHDictList::GetName( sal_uInt32 _nInd )
+    {
+        String                              s;
+        Reference< XConversionDictionary >  x = Get( _nInd );
+        if( x.is() )
+            s = x->getName();
+
+        return s;
+    }
+
+    bool HHDictList::GetIsActive( sal_uInt32 _nInd )
+    {
+        bool                                b;
+        Reference< XConversionDictionary >  x = Get( _nInd );
+        if( x.is() )
+            b = x->isActive();
+        else
+            b = false;
+
+        return b;
+    }
+
+    void HangulHanjaOptionsDialog::Init( void )
+    {
+        Reference< XConversionDictionaryList >  xDicList( GetXConversionDictionaryList() );
+        m_aDictList.Clear();
+        if( xDicList.is() )
+        {
+            Reference< XNameContainer > xNameCont = xDicList->getDictionaryContainer();
+            Reference< XNameAccess >    xNameAccess = Reference< XNameAccess >( xNameCont, UNO_QUERY );
+            if( xNameAccess.is() )
+            {
+                Sequence< ::rtl::OUString >     aDictNames( xNameAccess->getElementNames() );
+
+                const ::rtl::OUString*          pDic = aDictNames.getConstArray();
+                sal_Int32                       nCount = aDictNames.getLength();
+
+                sal_Int32                       i;
+                for( i = 0 ; i < nCount ; ++i )
+                {
+                    Any                                 aAny( xNameAccess->getByName( pDic[ i ] ) );
+                    Reference< XConversionDictionary >  xDic;
+                    if( ( aAny >>= xDic ) && xDic.is() )
+                        m_aDictList.Add( xDic );
+                }
+            }
+        }
+
+        m_aDictsLB.Clear();
+        sal_uInt32      nNumOfDicts = m_aDictList.Count();
+        for( sal_uInt32 n = 0 ; n < nNumOfDicts ; ++n )
+            AddDict( m_aDictList.GetName( n ), m_aDictList.GetIsActive( n ) );
+    }
+
+    IMPL_LINK( HangulHanjaOptionsDialog, OkHdl, void*, NOTINTERESTEDIN )
+    {
+        sal_uInt32              nCnt = m_aDictList.Count();
+        sal_uInt32              n = 0;
+        sal_uInt32              nActiveDics = 0;
+        Sequence< OUString >    aActiveDics;
+
+        aActiveDics.realloc( nCnt );
+        OUString*               pActActiveDic = aActiveDics.getArray();
+
+        while( nCnt )
+        {
+            Reference< XConversionDictionary >  xDict = m_aDictList.Get( n );
+            SvLBoxEntry*                        pEntry = m_aDictsLB.SvTreeListBox::GetEntry( n );
+
+            DBG_ASSERT( xDict.is(), "-HangulHanjaOptionsDialog::OkHdl(): someone is evaporated..." );
+            DBG_ASSERT( pEntry, "-HangulHanjaOptionsDialog::OkHdl(): no one there in list?" );
+
+            bool    bActive = m_aDictsLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
+            xDict->setActive( bActive );
+            if( bActive )
+            {
+                pActActiveDic[ nActiveDics ] = xDict->getName();
+                ++nActiveDics;
+            }
+
+            ++n;
+            --nCnt;
+        }
+
+        // save configuration
+        aActiveDics.realloc( nActiveDics );
+        Any             aTmp;
+        SvtLinguConfig  aLngCfg;
+        aTmp <<= aActiveDics;
+        aLngCfg.SetProperty( UPH_ACTIVE_CONVERSION_DICTIONARIES, aTmp );
+
+        aTmp <<= bool( m_aIgnorepostCB.IsChecked() );
+        aLngCfg.SetProperty( UPH_IS_IGNORE_POST_POSITIONAL_WORD, aTmp );
+
+        aTmp <<= bool( m_aAutocloseCB.IsChecked() );
+        aLngCfg.SetProperty( UPH_IS_AUTO_CLOSE_DIALOG, aTmp );
+
+        aTmp <<= bool( m_aShowrecentlyfirstCB.IsChecked() );
+        aLngCfg.SetProperty( UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST, aTmp );
+
+        aTmp <<= bool( m_aAutoreplaceuniqueCB.IsChecked() );
+        aLngCfg.SetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES, aTmp );
+
+        EndDialog( RET_OK );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaOptionsDialog, DictsLB_SelectHdl, void*, NOTINTERESTEDIN )
+    {
+        bool    bSel = m_aDictsLB.FirstSelected() != NULL;
+
+        m_aEditPB.Enable( bSel );
+        m_aDeletePB.Enable( bSel );
+
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaOptionsDialog, NewDictHdl, void*, NOTINTERESTEDIN )
+    {
+        String                      aName;
+        HangulHanjaNewDictDialog    aNewDlg( this );
+        aNewDlg.Execute();
+        if( aNewDlg.GetName( aName ) )
+        {
+            Reference< XConversionDictionaryList >  xDicList( GetXConversionDictionaryList() );
+            if( xDicList.is() )
+            {
+                try
+                {
+                    xDicList->addNewDictionary( aName, SvxCreateLocale( LANGUAGE_KOREAN ), ConversionDictionaryType::HANGUL_HANJA );
+                    Init();         //build new list
+                }
+                catch( const ElementExistException& )
+                {
+                }
+                catch( const NoSupportException& )
+                {
+                }
+            }
+        }
+
+        return 0L;
+    }
+
+    IMPL_LINK( HangulHanjaOptionsDialog, EditDictHdl, void*, NOTINTERESTEDIN )
+    {
+        SvLBoxEntry*    pEntry = m_aDictsLB.FirstSelected();
+        DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
+        if( pEntry )
+        {
+            HangulHanjaEditDictDialog   aEdDlg( this, m_aDictList, m_aDictsLB.GetSelectEntryPos() );
+            aEdDlg.Execute();
+        }
+        return 0L;
+    }
+
+    IMPL_LINK( HangulHanjaOptionsDialog, DeleteDictHdl, void*, NOTINTERESTEDIN )
+    {
+        SvLBoxEntry*    pEntry = m_aDictsLB.FirstSelected();
+        if( pEntry )
+        {
+            Reference< XConversionDictionaryList >  xDicList( GetXConversionDictionaryList() );
+            if( xDicList.is() )
+            {
+                Reference< XNameContainer >     xNameCont = xDicList->getDictionaryContainer();
+                if( xNameCont.is() )
+                {
+                    try
+                    {
+                        xNameCont->removeByName( OUString( *((const String*)pEntry->GetUserData()) ) );
+                        Init();         //build new list
+                    }
+                    catch( const ElementExistException& )
+                    {
+                    }
+                    catch( const NoSupportException& )
+                    {
+                    }
+                }
+            }
+        }
+
+        return 0L;
+    }
+
+    HangulHanjaOptionsDialog::HangulHanjaOptionsDialog( Window* _pParent )
+        :ModalDialog            ( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA_OPT ) )
+        ,m_aUserdefdictFT       ( this, ResId( FT_USERDEFDICT ) )
+        ,m_aDictsLB             ( this, ResId( LB_DICTS ) )
+        ,m_aOptionsFL           ( this, ResId( FL_OPTIONS ) )
+        ,m_aIgnorepostCB        ( this, ResId( CB_IGNOREPOST ) )
+        ,m_aAutocloseCB         ( this, ResId( CB_AUTOCLOSE ) )
+        ,m_aShowrecentlyfirstCB ( this, ResId( CB_SHOWRECENTLYFIRST ) )
+        ,m_aAutoreplaceuniqueCB ( this, ResId( CB_AUTOREPLACEUNIQUE ) )
+        ,m_aNewPB               ( this, ResId( PB_HHO_NEW ) )
+        ,m_aEditPB              ( this, ResId( PB_HHO_EDIT ) )
+        ,m_aDeletePB            ( this, ResId( PB_HHO_DELETE ) )
+        ,m_aOkPB                ( this, ResId( PB_HHO_OK ) )
+        ,m_aCancelPB            ( this, ResId( PB_HHO_CANCEL ) )
+        ,m_aHelpPB              ( this, ResId( PB_HHO_HELP ) )
+
+        ,m_pCheckButtonData     ( NULL )
+    {
+        m_aDictsLB.SetWindowBits( WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+        m_aDictsLB.SetSelectionMode( SINGLE_SELECTION );
+        m_aDictsLB.SetHighlightRange();
+//      m_aDictsLB.SetHelpId( xxx );
+        m_aDictsLB.SetSelectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
+        m_aDictsLB.SetDeselectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
+
+        m_aOkPB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, OkHdl ) );
+        m_aNewPB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, NewDictHdl ) );
+        m_aEditPB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, EditDictHdl ) );
+        m_aDeletePB.SetClickHdl( LINK( this, HangulHanjaOptionsDialog, DeleteDictHdl ) );
+
+        FreeResource();
+
+        SvtLinguConfig  aLngCfg;
+        Any             aTmp;
+        bool            bVal;
+        aTmp = aLngCfg.GetProperty( UPH_IS_IGNORE_POST_POSITIONAL_WORD );
+        if( aTmp >>= bVal )
+            m_aIgnorepostCB.Check( bVal );
+
+        aTmp = aLngCfg.GetProperty( UPH_IS_AUTO_CLOSE_DIALOG );
+        if( aTmp >>= bVal )
+            m_aAutocloseCB.Check( bVal );
+
+        aTmp = aLngCfg.GetProperty( UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST );
+        if( aTmp >>= bVal )
+            m_aShowrecentlyfirstCB.Check( bVal );
+
+        aTmp = aLngCfg.GetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES );
+        if( aTmp >>= bVal )
+            m_aAutoreplaceuniqueCB.Check( bVal );
+
+        Init();
+    }
+
+    HangulHanjaOptionsDialog::~HangulHanjaOptionsDialog()
+    {
+        SvLBoxEntry*    pEntry = m_aDictsLB.First();
+        String*         pDel;
+        while( pEntry )
+        {
+            pDel = ( String* ) pEntry->GetUserData();
+            if( pDel )
+                delete pDel;
+            pEntry = m_aDictsLB.Next( pEntry );
+        }
+
+        if( m_pCheckButtonData )
+            delete m_pCheckButtonData;
+    }
+
+    void HangulHanjaOptionsDialog::AddDict( const String& _rName, bool _bChecked )
+    {
+        SvLBoxEntry*    pEntry = m_aDictsLB.SvTreeListBox::InsertEntry( _rName );
+        m_aDictsLB.SetCheckButtonState( pEntry, _bChecked? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
+        pEntry->SetUserData( new String( _rName ) );
+    }
+
+    //=========================================================================
+    //= HangulHanjaNewDictDialog
+    //=========================================================================
+    //-------------------------------------------------------------------------
+
+    IMPL_LINK( HangulHanjaNewDictDialog, OKHdl, void*, NOTINTERESTEDIN )
+    {
+        String  aName( m_aDictNameED.GetText() );
+
+        aName.EraseTrailingChars();
+        m_bEntered = aName.Len() > 0;
+        if( m_bEntered )
+            m_aDictNameED.SetText( aName );     // do this in case of trailing chars have been deleted
+
+        EndDialog( RET_OK );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaNewDictDialog, ModifyHdl, void*, NOTINTERESTEDIN )
+    {
+        String  aName( m_aDictNameED.GetText() );
+
+        aName.EraseTrailingChars();
+        m_aOkBtn.Enable( aName.Len() > 0 );
+
+        return 0;
+    }
+
+    HangulHanjaNewDictDialog::HangulHanjaNewDictDialog( Window* _pParent )
+        :ModalDialog    ( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA_NEWDICT ) )
+        ,m_aNewDictFL   ( this, ResId( FL_NEWDICT ) )
+        ,m_aDictNameFT  ( this, ResId( FT_DICTNAME ) )
+        ,m_aDictNameED  ( this, ResId( ED_DICTNAME ) )
+        ,m_aOkBtn       ( this, ResId( PB_NEWDICT_OK ) )
+        ,m_aCancelBtn   ( this, ResId( PB_NEWDICT_ESC ) )
+        ,m_aHelpBtn     ( this, ResId( PB_NEWDICT_HLP ) )
+
+        ,m_bEntered     ( false )
+    {
+        m_aOkBtn.SetClickHdl( LINK( this, HangulHanjaNewDictDialog, OKHdl ) );
+
+        m_aDictNameED.SetModifyHdl( LINK( this, HangulHanjaNewDictDialog, ModifyHdl ) );
+
+        FreeResource();
+    }
+
+    HangulHanjaNewDictDialog::~HangulHanjaNewDictDialog()
+    {
+    }
+
+    bool HangulHanjaNewDictDialog::GetName( String& _rRetName ) const
+    {
+        if( m_bEntered )
+        {
+            _rRetName = m_aDictNameED.GetText();
+            _rRetName.EraseTrailingChars();
+        }
+
+        return m_bEntered;
+    }
+
+    //=========================================================================
+    //= HangulHanjaEditDictDialog
+    //=========================================================================
+    //-------------------------------------------------------------------------
+
+    class SuggestionList
+    {
+    private:
+    protected:
+        sal_uInt16          m_nSize;
+        String**            m_ppElements;
+        sal_uInt16          m_nNumOfEntries;
+        sal_uInt16          m_nAct;
+
+        const String*       _Next( void );
+    public:
+                            SuggestionList( sal_uInt16 _nNumOfElements );
+        virtual             ~SuggestionList();
+
+        bool                Set( const String& _rElement, sal_uInt16 _nNumOfElement );
+        bool                Reset( sal_uInt16 _nNumOfElement );
+        const String*       Get( sal_uInt16 _nNumOfElement ) const;
+        void                Clear( void );
+
+        const String*       First( void );
+        const String*       Next( void );
+
+        inline sal_uInt16   GetCount( void ) const;
+    };
+
+    inline sal_uInt16 SuggestionList::GetCount( void ) const
+    {
+        return m_nNumOfEntries;
+    }
+
+    SuggestionList::SuggestionList( sal_uInt16 _nNumOfElements )
+    {
+        if( !_nNumOfElements )
+            _nNumOfElements = 1;
+
+        m_nSize = _nNumOfElements;
+
+        m_ppElements = new String*[ m_nSize ];
+        m_nAct = m_nNumOfEntries = 0;
+
+        String**    ppNull = m_ppElements;
+        sal_uInt16  n = _nNumOfElements;
+        while( n )
+        {
+            *ppNull = NULL;
+            ++ppNull;
+            --n;
+        }
+    }
+
+    SuggestionList::~SuggestionList()
+    {
+        Clear();
+    }
+
+    bool SuggestionList::Set( const String& _rElement, sal_uInt16 _nNumOfElement )
+    {
+        bool    bRet = _nNumOfElement < m_nSize;
+        if( bRet )
+        {
+            String**    ppElem = m_ppElements + _nNumOfElement;
+            if( *ppElem )
+                **ppElem = _rElement;
+            else
+            {
+                *ppElem = new String( _rElement );
+                ++m_nNumOfEntries;
+            }
+        }
+
+        return bRet;
+    }
+
+    bool SuggestionList::Reset( sal_uInt16 _nNumOfElement )
+    {
+        bool    bRet = _nNumOfElement < m_nSize;
+        if( bRet )
+        {
+            String**    ppElem = m_ppElements + _nNumOfElement;
+            if( *ppElem )
+            {
+                delete *ppElem;
+                *ppElem = NULL;
+                --m_nNumOfEntries;
+            }
+        }
+
+        return bRet;
+    }
+
+    const String* SuggestionList::Get( sal_uInt16 _nNumOfElement ) const
+    {
+        const String*   pRet;
+
+        if( _nNumOfElement < m_nSize )
+            pRet = m_ppElements[ _nNumOfElement ];
+        else
+            pRet = NULL;
+
+        return pRet;
+    }
+
+    void SuggestionList::Clear( void )
+    {
+        if( m_nNumOfEntries )
+        {
+            String**    ppDel = m_ppElements;
+            sal_uInt16  nCnt = m_nSize;
+            while( nCnt )
+            {
+                if( *ppDel )
+                {
+                    delete *ppDel;
+                    *ppDel = NULL;
+                }
+
+                ++ppDel;
+                --nCnt;
+            }
+
+            m_nNumOfEntries = m_nAct = 0;
+        }
+    }
+
+    const String* SuggestionList::_Next( void )
+    {
+        const String*   pRet = NULL;
+        while( m_nAct < m_nNumOfEntries && !pRet )
+        {
+            pRet = m_ppElements[ m_nAct ];
+            if( !pRet )
+                ++m_nAct;
+        }
+
+        return pRet;
+    }
+
+    const String* SuggestionList::First( void )
+    {
+        m_nAct = 0;
+        return _Next();
+    }
+
+    const String* SuggestionList::Next( void )
+    {
+        const String*   pRet;
+
+        if( m_nAct < m_nNumOfEntries )
+        {
+            ++m_nAct;
+            pRet = _Next();
+        }
+        else
+            pRet = NULL;
+
+        return pRet;
+    }
+
+
+    bool SuggestionEdit::ShouldScroll( bool _bUp ) const
+    {
+        bool    bRet = false;
+
+        if( _bUp )
+        {
+            if( !m_pPrev )
+                bRet = m_rScrollBar.GetThumbPos() > m_rScrollBar.GetRangeMin();
+        }
+        else
+        {
+            if( !m_pNext )
+                bRet = m_rScrollBar.GetThumbPos() < ( m_rScrollBar.GetRangeMax() - 4 );
+        }
+
+        return bRet;
+    }
+
+    void SuggestionEdit::DoJump( bool _bUp )
+    {
+        const Link&     rLoseFocusHdl = GetLoseFocusHdl();
+        if( rLoseFocusHdl.IsSet() )
+            rLoseFocusHdl.Call( this );
+        m_rScrollBar.SetThumbPos( m_rScrollBar.GetThumbPos() + ( _bUp? -1 : 1 ) );
+
+        ( static_cast< HangulHanjaEditDictDialog* >( GetParent() ) )->UpdateScrollbar();
+    }
+
+    SuggestionEdit::SuggestionEdit( Window* pParent, const ResId& rResId,
+        ScrollBar& _rScrollBar, SuggestionEdit* _pPrev, SuggestionEdit* _pNext  )
+        :Edit( pParent, rResId )
+        ,m_rScrollBar( _rScrollBar )
+        ,m_pPrev( _pPrev )
+        ,m_pNext( _pNext )
+    {
+    }
+
+    SuggestionEdit::~SuggestionEdit()
+    {
+    }
+
+    long SuggestionEdit::PreNotify( NotifyEvent& rNEvt )
+    {
+        long    nHandled = 0;
+        if( rNEvt.GetType() == EVENT_KEYINPUT )
+        {
+            const KeyEvent*             pKEvt = rNEvt.GetKeyEvent();
+            const KeyCode&              rKeyCode = pKEvt->GetKeyCode();
+            USHORT                      nMod = rKeyCode.GetModifier();
+            USHORT                      nCode = rKeyCode.GetCode();
+            HangulHanjaEditDictDialog*  pDlg = static_cast< HangulHanjaEditDictDialog* >( GetParent() );
+            if( nCode == KEY_TAB && ( !nMod || KEY_SHIFT == nMod ) )
+            {
+                bool        bUp = KEY_SHIFT == nMod;
+                if( ShouldScroll( bUp ) )
+                {
+                    DoJump( bUp );
+                    SetSelection( Selection( 0, SELECTION_MAX ) );
+                        // Tab-travel doesn't really happen, so emulate it by setting a selection manually
+                    nHandled = 1;
+                }
+            }
+            else if( KEY_UP == nCode || KEY_DOWN == nCode )
+            {
+                bool        bUp = KEY_UP == nCode;
+                if( ShouldScroll( bUp ) )
+                {
+                    DoJump( bUp );
+                    nHandled = 1;
+                }
+                else if( bUp )
+                {
+                    if( m_pPrev )
+                    {
+                        m_pPrev->GrabFocus();
+                        nHandled = 1;
+                    }
+                }
+                else if( m_pNext )
+                {
+                    m_pNext->GrabFocus();
+                    nHandled = 1;
+                }
+            }
+        }
+
+        if( !nHandled )
+            nHandled = Edit::PreNotify( rNEvt );
+        return nHandled;
+    }
+
+
+    namespace
+    {
+        bool GetConversions(    Reference< XConversionDictionary >  _xDict,
+                                const OUString& _rOrg,
+                                Sequence< OUString >& _rEntries )
+        {
+            bool    bRet = false;
+            if( _xDict.is() )
+            {
+                try
+                {
+                    _rEntries = _xDict->getConversions( _rOrg,
+                                                        0,
+                                                        _rOrg.getLength(),
+                                                        ConversionDirection_FROM_LEFT,
+                                                        ::com::sun::star::i18n::TextConversionOption::NONE );
+                    bRet = _rEntries.getLength() > 0;
+                }
+                catch( const IllegalArgumentException& )
+                {
+                }
+            }
+
+            return bRet;
+        }
+    }
+
+
+    IMPL_LINK( HangulHanjaEditDictDialog, ScrollHdl, void*, NOTINTERESTEDIN )
+    {
+        UpdateScrollbar();
+
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, OriginalModifyHdl, void*, NOTINTERESTEDIN )
+    {
+        String  aOrg( m_aOriginalLB.GetText() );
+        aOrg.EraseTrailingChars();
+        if( aOrg.Len() == 0 )
+        {
+            m_aOriginal.Erase();
+            CheckNewState();
+
+            m_aDeletePB.Enable( false );
+        }
+        else
+        {
+            m_aOriginal = aOrg;
+            Sequence< OUString >    aEntries;
+            bool                    bFound = GetConversions( m_rDictList.Get( m_nCurrentDict ), aOrg, aEntries );
+            m_aDeletePB.Enable( bFound );
+            if( bFound )
+            {
+                UpdateSuggestions( aEntries );
+                m_bNew = false;
+            }
+            else if( !m_bNew )
+            {
+                m_bNew = m_pSuggestions && m_pSuggestions->GetCount();
+                if( m_bNew )
+                    m_aNewPB.Enable( m_bNew );
+            }
+        }
+
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, OriginalFocusLostHdl, void*, NOTINTERESTEDIN )
+    {
+        m_aOriginal = m_aOriginalLB.GetText();
+        m_aOriginal.EraseTrailingChars();
+        CheckNewState();
+
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl1, Edit*, pEdit )
+    {
+        EditModify( pEdit, 0 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl2, Edit*, pEdit )
+    {
+        EditModify( pEdit, 1 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl3, Edit*, pEdit )
+    {
+        EditModify( pEdit, 2 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditModifyHdl4, Edit*, pEdit )
+    {
+        EditModify( pEdit, 3 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditFocusLostHdl1, Edit*, pEdit )
+    {
+        EditFocusLost( pEdit, 0 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditFocusLostHdl2, Edit*, pEdit )
+    {
+        EditFocusLost( pEdit, 1 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditFocusLostHdl3, Edit*, pEdit )
+    {
+        EditFocusLost( pEdit, 2 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, EditFocusLostHdl4, Edit*, pEdit )
+    {
+        EditFocusLost( pEdit, 3 );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, BookLBSelectHdl, void*, NOTINTERESTEDIN )
+    {
+        Init( m_aBookLB.GetSelectEntryPos() );
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, OriginalLBSelectHdl, void*, NOTINTERESTEDIN )
+    {
+        m_aOriginal = m_aOriginalLB.GetText();
+        UpdateSuggestions();
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, NewPBPushHdl, void*, NOTINTERESTEDIN )
+    {
+        DBG_ASSERT( m_pSuggestions, "-HangulHanjaEditDictDialog::NewPBPushHdl(): no suggestions... search in hell..." );
+        Reference< XConversionDictionary >  xDict = m_rDictList.Get( m_nCurrentDict );
+        if( xDict.is() )
+        {
+            OUString                aLeft( m_aOriginal );
+            const String*           pRight = m_pSuggestions->First();
+            bool                    bAdded = false;
+            while( pRight )
+            {
+                //addEntry( const ::rtl::OUString& aLeftText, const ::rtl::OUString& aRightText )
+                //throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException) = 0;
+                try
+                {
+                    xDict->addEntry( aLeft, *pRight );
+                    bAdded = true;
+                }
+                catch( const IllegalArgumentException& )
+                {
+                }
+                catch( const ElementExistException& )
+                {
+                }
+
+                pRight = m_pSuggestions->Next();
+            }
+
+            if( bAdded )
+            {
+//              m_aOriginalLB.InsertEntry( m_aOriginal );   // append "history"
+                m_aOriginal.Erase();
+                m_pSuggestions->Clear();
+                Init( m_nCurrentDict );
+            }
+        }
+        else
+        {
+            DBG_WARNING( "+HangulHanjaEditDictDialog::NewPBPushHdl(): dictionary faded away..." );
+        }
+        return 0;
+    }
+
+    IMPL_LINK( HangulHanjaEditDictDialog, DeletePBPushHdl, void*, NOTINTERESTEDIN )
+    {
+        Reference< XConversionDictionary >  xDict = m_rDictList.Get( m_nCurrentDict );
+        if( xDict.is() )
+        {
+            String                  a_Org( m_aOriginalLB.GetText() );
+            a_Org.EraseTrailingChars();
+            OUString                aOrg( a_Org );
+            Sequence< OUString >    aEntries;
+
+            try
+            {
+                aEntries = xDict->getConversions(   aOrg,
+                                                    0,
+                                                    aOrg.getLength(),
+                                                    ConversionDirection_FROM_LEFT,
+                                                    ::com::sun::star::i18n::TextConversionOption::NONE );
+            }
+            catch( const IllegalArgumentException& )
+            {
+            }
+
+
+            sal_uInt32  n = aEntries.getLength();
+            OUString*   pEntry = aEntries.getArray();
+            while( n )
+            {
+                try
+                {
+                    xDict->removeEntry( aOrg, *pEntry );
+//                  m_aOriginalLB.InsertEntry( m_aOriginal );   // append "history"
+                    m_aOriginal.Erase();
+                }
+                catch( const NoSuchElementException& )
+                {   // can not be...
+                }
+
+                ++pEntry;
+                --n;
+            }
+
+            Init( m_nCurrentDict );
+        }
+        return 0;
+    }
+
+    void HangulHanjaEditDictDialog::Init( sal_uInt32 _nSelDict )
+    {
+        if( m_pSuggestions )
+            m_pSuggestions->Clear();
+
+        if( m_nCurrentDict != _nSelDict )
+        {
+            m_nCurrentDict = _nSelDict;
+            m_aOriginal.Erase();
+        }
+
+        UpdateOriginalLB();
+
+        m_aOriginalLB.SetText( m_aOriginal.Len()? m_aOriginal : m_aEditHintText, Selection( 0, SELECTION_MAX ) );
+        m_aOriginalLB.GrabFocus();
+
+        m_aScrollSB.SetThumbPos( 0 );
+
+        UpdateScrollbar();
+
+        CheckNewState();
+    }
+
+    void HangulHanjaEditDictDialog::UpdateOriginalLB( void )
+    {
+        m_aOriginalLB.Clear();
+        Reference< XConversionDictionary >  xDict = m_rDictList.Get( m_nCurrentDict );
+        if( xDict.is() )
+        {
+            Sequence< OUString >    aEntries = xDict->getConversionEntries( ConversionDirection_FROM_LEFT );
+            sal_uInt32              n = aEntries.getLength();
+            OUString*               pEntry = aEntries.getArray();
+            while( n )
+            {
+                m_aOriginalLB.InsertEntry( *pEntry );
+
+                ++pEntry;
+                --n;
+            }
+
+            UpdateSuggestions();
+        }
+        else
+        {
+            DBG_WARNING( "+HangulHanjaEditDictDialog::UpdateOriginalLB(): dictionary faded away..." );
+        }
+    }
+
+    void HangulHanjaEditDictDialog::UpdateSuggestions( void )
+    {
+        if( m_pSuggestions )
+            m_pSuggestions->Clear();
+
+        m_aScrollSB.SetThumbPos( 0 );
+        UpdateScrollbar();              // will force edits to be filled new
+    }
+
+    void HangulHanjaEditDictDialog::UpdateSuggestions( const Sequence< OUString >& _rSuggestions )
+    {
+        if( m_pSuggestions )
+            m_pSuggestions->Clear();
+
+        sal_uInt32          nCnt = _rSuggestions.getLength();
+        sal_uInt32          n = 0;
+        if( nCnt )
+        {
+            if( !m_pSuggestions )
+                m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
+
+            const OUString*     pSugg = _rSuggestions.getConstArray();
+            while( nCnt )
+            {
+                m_pSuggestions->Set( pSugg[ n ], sal_uInt16( n ) );
+                ++n;
+                --nCnt;
+            }
+        }
+
+        m_aScrollSB.SetThumbPos( 0 );
+        UpdateScrollbar();              // will force edits to be filled new
+    }
+
+    void HangulHanjaEditDictDialog::Leave( void )
+    {
+    }
+
+    void HangulHanjaEditDictDialog::CheckNewState( void )
+    {
+        String  aOrg( m_aOriginalLB.GetText() );
+        aOrg.EraseTrailingChars();
+        m_bNew = aOrg.Len() && aOrg != m_aEditHintText && m_pSuggestions && m_pSuggestions->GetCount() > 0;
+        m_aNewPB.Enable( m_bNew );
+    }
+
+    void HangulHanjaEditDictDialog::SetSuggestion( const String& _rText, sal_uInt16 _nEntryNum )
+    {
+        if( !m_pSuggestions )
+            m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
+
+        m_pSuggestions->Set( _rText, _nEntryNum );
+    }
+
+    void HangulHanjaEditDictDialog::ResetSuggestion( sal_uInt16 _nEntryNum )
+    {
+        if( !m_pSuggestions )
+            m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
+
+        m_pSuggestions->Reset( _nEntryNum );
+    }
+
+    void HangulHanjaEditDictDialog::SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum )
+    {
+        String  aStr;
+        if( m_pSuggestions )
+        {
+            const String*   p = m_pSuggestions->Get( _nEntryNum );
+            if( p )
+                aStr = *p;
+        }
+
+        _rEdit.SetText( aStr );
+    }
+
+    void HangulHanjaEditDictDialog::EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset )
+    {
+        if( _pEdit->GetText().Len() == 0 )
+        {   // empty string -> clear suggestion and check "new"-button state
+            m_pSuggestions->Reset( m_nTopPos + _nEntryOffset );
+            CheckNewState();
+        }
+        else if( !m_bNew )
+        {
+            String  aOrg( m_aOriginalLB.GetText() );
+            m_bNew = aOrg.Len() && aOrg != m_aEditHintText;
+            if( m_bNew )
+                m_aNewPB.Enable( m_bNew );
+        }
+    }
+
+    void HangulHanjaEditDictDialog::EditFocusLost( Edit* _pEdit, sal_uInt8 _nEntryOffset )
+    {
+        String  aTxt( _pEdit->GetText() );
+        if( aTxt.Len() == 0 )
+            ResetSuggestion( m_nTopPos + _nEntryOffset );
+        else
+            SetSuggestion( aTxt, m_nTopPos + _nEntryOffset );
+
+        CheckNewState();
+    }
+
+    HangulHanjaEditDictDialog::HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict )
+        :ModalDialog            ( _pParent, SVX_RES( RID_SVX_MDLG_HANGULHANJA_EDIT ) )
+        ,m_eState               ( ES_NIL )
+        ,m_rDictList            ( _rDictList )
+        ,m_nCurrentDict         ( 0xFFFFFFFF )
+        ,m_aEditHintText        ( ResId( STR_EDITHINT ) )
+        ,m_pSuggestions         ( NULL )
+        ,m_aBookFT              ( this, ResId( FT_BOOK ) )
+        ,m_aBookLB              ( this, ResId( LB_BOOK ) )
+        ,m_aOriginalFT          ( this, ResId( FT_ORIGINAL ) )
+        ,m_aOriginalLB          ( this, ResId( LB_ORIGINAL ) )
+        ,m_aReplacebycharCB     ( this, ResId( CB_REPLACEBYCHAR ) )
+        ,m_aSuggestionsFT       ( this, ResId( FT_SUGGESTIONS ) )
+        ,m_aEdit1               ( this, ResId( ED_1 ), m_aScrollSB, NULL, &m_aEdit2 )
+        ,m_aEdit2               ( this, ResId( ED_2 ), m_aScrollSB, &m_aEdit1, &m_aEdit3 )
+        ,m_aEdit3               ( this, ResId( ED_3 ), m_aScrollSB, &m_aEdit2, &m_aEdit4 )
+        ,m_aEdit4               ( this, ResId( ED_4 ), m_aScrollSB, &m_aEdit3, NULL )
+        ,m_aScrollSB            ( this, ResId( SB_SCROLL ) )
+        ,m_aNewPB               ( this, ResId( PB_HHE_NEW ) )
+        ,m_aDeletePB            ( this, ResId( PB_HHE_DELETE ) )
+        ,m_aHelpPB              ( this, ResId( PB_HHE_HELP ) )
+        ,m_aClosePB             ( this, ResId( PB_HHE_CLOSE ) )
+
+        ,m_nTopPos              ( 0 )
+        ,m_bModified            ( false )
+        ,m_bNew                 ( false )
+    {
+        m_aOriginalLB.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, OriginalModifyHdl ) );
+        m_aOriginalLB.SetLoseFocusHdl( LINK( this, HangulHanjaEditDictDialog, OriginalFocusLostHdl ) );
+        m_aOriginalLB.SetSelectHdl( LINK( this, HangulHanjaEditDictDialog, OriginalLBSelectHdl ) );
+
+        m_aNewPB.SetClickHdl( LINK( this, HangulHanjaEditDictDialog, NewPBPushHdl ) );
+        m_aNewPB.Enable( false );
+
+        m_aDeletePB.SetClickHdl( LINK( this, HangulHanjaEditDictDialog, DeletePBPushHdl ) );
+
+        m_aDeletePB.Enable( false );
+
+    #if( MAXNUM_SUGGESTIONS <= 4 )
+        #error number of suggestions should not under-run the value of 5
+    #endif
+
+        Link    aScrLk( LINK( this, HangulHanjaEditDictDialog, ScrollHdl ) );
+        m_aScrollSB.SetScrollHdl( aScrLk );
+        m_aScrollSB.SetEndScrollHdl( aScrLk );
+        m_aScrollSB.SetRangeMin( 0 );
+        m_aScrollSB.SetRangeMax( MAXNUM_SUGGESTIONS );
+        m_aScrollSB.SetPageSize( 4 );       // because we have 4 edits / page
+        m_aScrollSB.SetVisibleSize( 4 );
+
+        m_aEdit1.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl1 ) );
+        m_aEdit2.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl2 ) );
+        m_aEdit3.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl3 ) );
+        m_aEdit4.SetModifyHdl( LINK( this, HangulHanjaEditDictDialog, EditModifyHdl4 ) );
+        m_aEdit1.SetLoseFocusHdl( LINK( this, HangulHanjaEditDictDialog, EditFocusLostHdl1 ) );
+        m_aEdit2.SetLoseFocusHdl( LINK( this, HangulHanjaEditDictDialog, EditFocusLostHdl2 ) );
+        m_aEdit3.SetLoseFocusHdl( LINK( this, HangulHanjaEditDictDialog, EditFocusLostHdl3 ) );
+        m_aEdit4.SetLoseFocusHdl( LINK( this, HangulHanjaEditDictDialog, EditFocusLostHdl4 ) );
+
+        m_aBookLB.SetSelectHdl( LINK( this, HangulHanjaEditDictDialog, BookLBSelectHdl ) );
+        sal_uInt32  nDictCnt = m_rDictList.Count();
+        for( sal_uInt32 n = 0 ; n < nDictCnt ; ++n )
+            m_aBookLB.InsertEntry( m_rDictList.GetName( n ) );
+        m_aBookLB.SelectEntryPos( USHORT( _nSelDict ) );
+
+        FreeResource();
+
+        Init( _nSelDict );
+    }
+
+    HangulHanjaEditDictDialog::~HangulHanjaEditDictDialog()
+    {
+        if( m_pSuggestions )
+            delete m_pSuggestions;
+    }
+
+    void HangulHanjaEditDictDialog::UpdateScrollbar( void )
+    {
+        sal_uInt16  nPos = sal_uInt16( m_aScrollSB.GetThumbPos() );
+        m_nTopPos = nPos;
+
+        SetEditText( m_aEdit1, nPos++ );
+        SetEditText( m_aEdit2, nPos++ );
+        SetEditText( m_aEdit3, nPos++ );
+        SetEditText( m_aEdit4, nPos );
     }
 
 //.............................................................................
