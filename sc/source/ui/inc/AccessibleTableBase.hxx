@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#endif
 
 class ScTabViewShell;
 
@@ -82,6 +85,7 @@ class ScTabViewShell;
 */
 class ScAccessibleTableBase
     :   public  ::drafts::com::sun::star::accessibility::XAccessibleTable,
+        public  ::drafts::com::sun::star::accessibility::XAccessibleSelection,
         public  ScAccessibleContextBase
 {
 public:
@@ -258,7 +262,42 @@ public:
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///=====  XServiceInfo  ====================================================
+    ///=====  XAccessibleSelection  ===========================================
+
+    virtual void SAL_CALL
+        selectAccessibleChild( sal_Int32 nChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL
+        isAccessibleChildSelected( sal_Int32 nChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        clearAccessibleSelection(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        selectAllAccessible(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL
+        getSelectedAccessibleChildCount(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    ///=====  XServiceInfo  ===================================================
 
     /** Returns an identifier for the implementation of this object.
     */

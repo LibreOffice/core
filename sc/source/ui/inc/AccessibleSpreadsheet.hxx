@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,24 @@
 #ifndef SC_VIEWDATA_HXX
 #include "viewdata.hxx"
 #endif
+
+#include <vector>
+
+class ScMyAddress : public ScAddress
+{
+public:
+    ScMyAddress() : ScAddress() {}
+    ScMyAddress(sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nTab) : ScAddress(nCol, nRow, nTab) {}
+    ScMyAddress(const ScAddress& rAddress) : ScAddress(rAddress) {}
+
+    sal_Bool operator< ( const ScMyAddress& rAddress ) const
+    {
+        if( Row() != rAddress.Row() )
+            return (Row() < rAddress.Row());
+        else
+            return (Col() < rAddress.Col());
+    }
+};
 
 class ScTabViewShell;
 
@@ -145,6 +163,36 @@ public:
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    ///=====  XAccessibleSelection  ===========================================
+
+    virtual void SAL_CALL
+        selectAccessibleChild( sal_Int32 nChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        clearAccessibleSelection(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        selectAllAccessible(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL
+        getSelectedAccessibleChildCount(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL
+        getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+        deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException,
+        ::com::sun::star::uno::RuntimeException);
+
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -177,8 +225,11 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 private:
     ScTabViewShell* mpViewShell;
+    ScRangeList*    mpMarkedRanges;
+    std::vector<ScMyAddress>* mpSortedMarkedCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
+    sal_Bool        mbHasSelection;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
@@ -189,6 +240,10 @@ private:
     sal_Bool IsCompleteSheetSelected(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+
+    void SelectCell(sal_Int32 nRow, sal_Int32 nCol);
+    void CreateSortedMarkedCells();
+    void AddMarkedRange(const ScRange& rRange);
 
     ScDocument* GetDocument(ScTabViewShell* mpViewShell);
 };
