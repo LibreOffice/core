@@ -145,7 +145,8 @@ void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& 
 {
     ::rtl::OUString aTarget;
 
-        com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
+    // last parameter must be set to true -> it's a comment
+        com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_True );
     m_aStatements.push_back( aStatement );
 }
 
@@ -369,7 +370,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     if(nValidArgs>0)
     {
         if(bAsComment)
-            aArgumentBuffer.appendAscii("rem ");
+            aScriptBuffer.appendAscii("rem ");
         aScriptBuffer.appendAscii("dim ");
         aScriptBuffer.append     (sArrayName);
         aScriptBuffer.appendAscii("(");
@@ -381,20 +382,20 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
 
     // add code for parsing urls
     if(bAsComment)
-        aArgumentBuffer.appendAscii("rem ");
+        aScriptBuffer.appendAscii("rem ");
     aScriptBuffer.appendAscii("url.Complete = \"");
     aScriptBuffer.append     (aURL);
     aScriptBuffer.appendAscii("\"\n");
     if(bAsComment)
-        aArgumentBuffer.appendAscii("rem ");
+        aScriptBuffer.appendAscii("rem ");
     aScriptBuffer.appendAscii("parser.parseStrict(url)\n");
 
     // add code for dispatches
     if(bAsComment)
-        aArgumentBuffer.appendAscii("rem ");
+        aScriptBuffer.appendAscii("rem ");
     aScriptBuffer.appendAscii("disp = document.queryDispatch(url,\"\",0)\n");
     if(bAsComment)
-        aArgumentBuffer.appendAscii("rem ");
+        aScriptBuffer.appendAscii("rem ");
     if(nValidArgs<1)
         aScriptBuffer.appendAscii("disp.dispatch(url,noargs())\n");
     else
