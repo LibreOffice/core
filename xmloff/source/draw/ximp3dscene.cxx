@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: cl $ $Date: 2001-08-15 10:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     if( mxShape.is() )
     {
         mxChilds = uno::Reference< drawing::XShapes >::query( mxShape );
+        if( mxChilds.is() )
+            GetImport().GetShapeImport()->pushGroupForSorting( mxChilds );
 
         SetLayer();
 
@@ -207,6 +209,9 @@ void SdXML3DSceneShapeContext::EndElement()
         {
             setSceneAttributes( xPropSet );
         }
+
+        if( mxChilds.is() )
+            GetImport().GetShapeImport()->popGroupAndSort();
 
         // call parent
         SdXMLShapeContext::EndElement();
