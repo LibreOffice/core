@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:28:22 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:16:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ The following parameter are needed:
 -msitemplate: Source of the msi file templates (Windows compiler only)
 -msilanguage: Source of the msi file templates (Windows compiler only)
 -msifiles: Source of the msifiles instmsia.exe, instmsiw.exe (Windows only)
+-javafiles: Source of the Java installer files  (opt., non-Windows only)
 -buildid: Current BuildID (optional)
 -pro: Product version
 -dontunzip: do not unzip all files with flag ARCHIVE
@@ -100,6 +101,9 @@ The following parameter are needed:
 -ispatchedepm : Usage of a patched (non-standard) epm (opt., non-Windows only)
 -packagelist : file, containing a list of module gids (opt., non-Windows only)
 -copyproject : is set for projects that are only used for copying (optional)
+-languagepack : do create a languagepack, no product pack (optional)
+-winshipdrive : update pack drive for Windows (optional)
+-unixshipdrive : update pack drive for non-Windows (optional)
 -log : Logging all available information (optional)
 -debug : Collecting debug information
 
@@ -131,7 +135,7 @@ sub saveparameter
 
     my $include = "";
 
-    installer::logger::globallog("Comand line arguments:");
+    installer::logger::globallog("Command line arguments:");
 
     for ( my $i = 0; $i <= $#ARGV; $i++ )
     {
@@ -169,16 +173,20 @@ sub getparameter
         elsif ($param eq "-pro") { $installer::globals::pro = 1; }
         elsif ($param eq "-log") { $installer::globals::globallogging = 1; }
         elsif ($param eq "-debug") { $installer::globals::debug = 1; }
-        elsif ($param eq "-ispatchedepm") { $installer::globals::is_special_epm = 1; }
         elsif ($param eq "-u") { $installer::globals::unpackpath = shift(@ARGV); }
         elsif ($param eq "-i") { $installer::globals::rootpath = shift(@ARGV); }
         elsif ($param eq "-dontcallepm") { $installer::globals::call_epm = 0; }
         elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
         elsif ($param eq "-msifiles") { $installer::globals::msifilespath = shift(@ARGV); }
+        elsif ($param eq "-javafiles") { $installer::globals::javafilespath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-packagelist") { $installer::globals::packagelist = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
+        elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
+        elsif ($param eq "-winshipdrive") { $installer::globals::winshipdrive = shift(@ARGV); }
+        elsif ($param eq "-unixshipdrive") { $installer::globals::unixshipdrive = shift(@ARGV); }
+        elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
         else
         {
             print("\n*************************************\n");
@@ -320,6 +328,22 @@ sub setglobalvariables
     {
         installer::systemactions::create_directory($installer::globals::unpackpath);
     }
+
+    # The following setting has to be removed, after removal of old setup and changes in scp projects
+    # No binary file custom actions for Ada products and language packs
+    # Typical scp definition, files with flag: BINARYTABLE or SELFREG
+
+    if (( $installer::globals::languagepack ) || ($installer::globals::product =~ /ada/i ))
+    {
+        @installer::globals::binarytablefiles = ();
+        @installer::globals::selfreglibraries = ();
+    }
+
+    if ($installer::globals::product =~ /OpenOffice/i )
+    {
+        push(@installer::globals::binarytablefiles, "gid_File_Pythonmsi_Dll");  # to be removed after scp changes, see parameter.pm
+    }
+
 }
 
 ############################################
@@ -432,6 +456,7 @@ sub control_required_parameter
             $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $installer::globals::codefilename;
             installer::files::check_file($installer::globals::codefilename);
         }
+
     }
 
     #######################################
@@ -460,7 +485,7 @@ sub outputparameter
     my @output = ();
 
     push(@output, "\n########################################################\n");
-    push(@output, "This is $installer::globals::prog, version 1.0\n");
+    push(@output, "$installer::globals::prog, version 1.0\n");
     if (!($installer::globals::use_default_ziplist))
     {
         push(@output, "Product list file: $installer::globals::ziplistname\n");
@@ -482,7 +507,8 @@ sub outputparameter
     push(@output, "Product: $installer::globals::product\n");
     push(@output, "BuildID: $installer::globals::buildid\n");
     push(@output, "Build: $installer::globals::build\n");
-    push(@output, "Minor: $installer::globals::minor\n");
+    if ( $installer::globals::minor ) { push(@output, "Minor: $installer::globals::minor\n"); }
+    else  { push(@output, "No minor set\n"); }
     if ( $installer::globals::pro ) { push(@output, "Product version\n"); }
     else  { push(@output, "Non-Product version\n"); }
     if ( $installer::globals::rootpath eq "" ) { push(@output, "Using default installpath\n"); }
@@ -497,8 +523,9 @@ sub outputparameter
     if ((!($installer::globals::msifilespath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi files path will be ignored for non Windows builds!\n"); }
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
-    if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::is_special_epm )) { push(@output, "Usage of patched epm\n"); }
-    if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::is_special_epm ))) { push(@output, "Usage of standard epm\n"); }
+    if (!($installer::globals::javafilespath eq "")) { push(@output, "Java installer files path: $installer::globals::javafilespath\n"); }
+    if ((!($installer::globals::javafilespath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java files path will be ignored for Windows builds!\n"); }
+    if (($installer::globals::iswindowsbuild) && ($installer::globals::addchildprojects )) { push(@output, "Adding child projects into installation set\n"); }
     if ( $installer::globals::globallogging ) { push(@output, "Complete logging activated\n"); }
     if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
     if ( $installer::globals::dounzip ) { push(@output, "Unzip ARCHIVE files\n"); }
@@ -515,6 +542,9 @@ sub outputparameter
         push(@output, "Languages defined in $installer::globals::ziplistname\n");
     }
     if ( $installer::globals::is_copy_only_project ) { push(@output, "This is a copy only project!\n"); }
+    if ( $installer::globals::languagepack ) { push(@output, "Creating language pack!\n"); }
+    if ((!($installer::globals::winshipdrive eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Ship drive: $installer::globals::winshipdrive\n"); }
+    if ((!($installer::globals::unixshipdrive eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "Ship drive: $installer::globals::unixshipdrive\n"); }
     push(@output, "########################################################\n");
 
     # output into shell and into logfile
