@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-02 16:51:59 $
+ *  last change: $Author: fs $ $Date: 2001-10-04 10:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1633,10 +1633,12 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             {
                 try
                 {
-                    Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
                     sal_Bool bSelectFilter = sal_False;
-
-                    aValue >>= bSelectFilter;
+                    if ( bAllowOptions )
+                    {
+                        Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
+                        aValue >>= bSelectFilter;
+                    }
                     pParams->Put( SfxBoolItem( SID_USE_FILTEROPTIONS, bSelectFilter ) );
                 }
                 catch( IllegalArgumentException ){}
