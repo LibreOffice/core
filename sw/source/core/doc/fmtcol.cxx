@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:52:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,9 @@ const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
                         const SwCollCondition& rCond ) const
 {
     const SwCollCondition* pFnd = 0;
-    for( USHORT n = 0; n < aCondColls.Count(); ++n )
+    USHORT n;
+
+    for( n = 0; n < aCondColls.Count(); ++n )
         if( *( pFnd = aCondColls[ n ]) == rCond )
             break;
 
