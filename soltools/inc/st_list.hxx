@@ -2,9 +2,9 @@
  *
  *  $RCSfile: st_list.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2001-06-11 16:05:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ template <class XY>
 DynamicList<XY>::DynamicList( const DynamicList<XY> & i_rList )
     :   ST_List< XY* >(i_rList)
 {
-    for ( iterator it = begin();
+    for ( typename DynamicList<XY>::iterator it = begin();
           it != end();
           ++it )
     {
@@ -324,7 +324,7 @@ template <class XY>
 DynamicList<XY> &
 DynamicList<XY>::operator=( const DynamicList<XY> & i_rList )
 {
-    for ( const_iterator it = i_rList.begin();
+    for ( typename DynamicList<XY>::const_iterator it = i_rList.begin();
           it != i_rList.end();
           ++it )
     {
