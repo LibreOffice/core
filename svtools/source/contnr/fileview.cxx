@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-20 11:19:02 $
+ *  last change: $Author: dv $ $Date: 2001-07-25 10:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,10 +157,17 @@ using namespace ::ucb;
 
 #define ALL_FILES_FILTER    "*.*"
 
-#define COLUMN_TITLE    1
-#define COLUMN_TYPE     2
-#define COLUMN_SIZE     3
-#define COLUMN_DATE     4
+#define COLUMN_TITLE        1
+#define COLUMN_TYPE         2
+#define COLUMN_SIZE         3
+#define COLUMN_DATE         4
+
+#define ROW_TITLE           1
+#define ROW_SIZE            2
+#define ROW_DATE_MOD        3
+#define ROW_DATE_CREATE     4
+#define ROW_IS_FOLDER       5
+#define ROW_TARGET_URL      6
 
 DECLARE_LIST( StringList_Impl, OUString* );
 
@@ -1164,13 +1171,14 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
                       new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
         Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(5);
+        Sequence< OUString > aProps(6);
 
         aProps[0] = OUString::createFromAscii( "Title" );
         aProps[1] = OUString::createFromAscii( "Size" );
         aProps[2] = OUString::createFromAscii( "DateModified" );
-        aProps[3] = OUString::createFromAscii( "IsFolder" );
-        aProps[4] = OUString::createFromAscii( "TargetURL" );
+        aProps[3] = OUString::createFromAscii( "DateCreated" );
+        aProps[4] = OUString::createFromAscii( "IsFolder" );
+        aProps[5] = OUString::createFromAscii( "TargetURL" );
 
         try
         {
@@ -1199,15 +1207,18 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                 {
                     pData = new SortingData_Impl;
 
-                    ::com::sun::star::util::DateTime aDT = xRow->getTimestamp( 3 );
+                    ::com::sun::star::util::DateTime aDT = xRow->getTimestamp( ROW_DATE_MOD );
+                    if ( xRow->wasNull() )
+                        aDT = xRow->getTimestamp( ROW_DATE_CREATE );
+
                     OUString aContentURL = xContentAccess->queryContentIdentifierString();
-                    OUString aTargetURL = xRow->getString( 5 );
+                    OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
                     sal_Bool bTarget = aTargetURL.getLength() > 0;
 
-                    pData->maTitle    = xRow->getString(1);
+                    pData->maTitle    = xRow->getString( ROW_TITLE );
                     pData->maLowerTitle = pData->maTitle.toAsciiLowerCase();
-                    pData->maSize     = xRow->getLong(2);
-                    pData->mbIsFolder = xRow->getBoolean(4);
+                    pData->maSize     = xRow->getLong( ROW_SIZE );
+                    pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
 
                     if ( bTarget &&
                          INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
