@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-07-16 08:27:08 $
+ *  last change: $Author: as $ $Date: 2001-07-20 08:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #ifndef __FRAMEWORK_DISPATCH_BLANKDISPATCHER_HXX_
 #include <dispatch/blankdispatcher.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_CREATEDISPATCHER_HXX_
+#include <dispatch/createdispatcher.hxx>
 #endif
 
 #ifndef __FRAMEWORK_DISPATCH_SELFDISPATCHER_HXX_
@@ -289,12 +293,11 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                                     }
                                                 }
                                             }
-                                        }
-
-                                        // We should be last chance for user :-)
-                                        if( xReturn.is() == sal_False )
-                                        {
-                                            xReturn = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER );
+                                            // We should be last chance for user :-)
+                                            if( xReturn.is() == sal_False )
+                                            {
+                                                xReturn = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER );
+                                            }
                                         }
                                     }
                                     break;
@@ -335,6 +338,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         xReturn = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER );
                                     }
                                     break;
+            case E_TASKS         :
             case E_DEEP_DOWN     :
             case E_FLAT_DOWN     :
             case E_DEEP_BOTH     :
@@ -349,7 +353,9 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
                                         else
                                         if( aInfo.bCreationAllowed == sal_True )
                                         {
-                                            xReturn = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER );
+                                            css::uno::Any aParameter;
+                                            aParameter <<= sTargetFrameName;
+                                            xReturn = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, aParameter );
                                         }
                                     }
                                     break;
@@ -513,7 +519,6 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         m_xMenuDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xMailToDispatcher     = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xHelpAgentDispatcher  = css::uno::Reference< css::frame::XDispatch >()          ;
-        m_xCreateDispatcher     = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xBlankDispatcher      = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xSelfDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xAppDispatchProvider  = css::uno::Reference< css::frame::XDispatchProvider >()  ;
@@ -559,7 +564,7 @@ css::uno::Reference< css::frame::XDispatchProvider > DispatchProvider::implts_ge
 }
 
 //*****************************************************************************************************************
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper eHelper )
+css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper eHelper, const css::uno::Any& aParameters )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register operation as transaction and reject wrong calls!
@@ -603,7 +608,12 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                                             }
                                             break;
             case E_CREATEDISPATCHER     :   {
-                                                LOG_WARNING( "DispatchProvider::implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER )", "Not implemented yet!" )
+                                                // Don't hold these dispatch helper! Create it on demand for every given target name.
+                                                // They could handle one target frame at one time only!
+                                                ::rtl::OUString sTargetName;
+                                                aParameters >>= sTargetName;
+                                                CreateDispatcher* pDispatcher = new CreateDispatcher( m_xFactory, xOwner, sTargetName );
+                                                xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                                             }
                                             break;
             case E_BLANKDISPATCHER      :   {
