@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-19 08:35:38 $
+ *  last change: $Author: tra $ $Date: 2002-11-12 15:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,7 +855,6 @@ oslFileError SAL_CALL osl_createDirectory( rtl_uString* strPath );
 
 oslFileError SAL_CALL osl_removeDirectory( rtl_uString* strPath );
 
-
 /** Removes (erases) a regular file.
 
     @param  strPath [in] Full qualified UNC path of the directory.
@@ -1133,6 +1132,44 @@ oslFileError SAL_CALL osl_setFileTime( rtl_uString *filePath,   const TimeValue 
 
 oslFileError SAL_CALL osl_getTempDirURL( rtl_uString **pustrTempDirURL );
 
+/** Creates a temporary file in the directory provided by the caller or the
+    directory returned by osl_getTempDirURL.
+    Under UNIX Operating Systems the file will be created with read and write
+    access for the user exclusively.
+    The caller is responsible for closing and removing the created file on
+    success.<br><br>
+
+    @param  pustrDirectoryURL [in] specifies the full qualified UNC path where
+            the temporary file should be created.
+            If pustrDirectoryURL is 0 the path returned by osl_getTempDirURL
+            will be used.
+
+    @param  pHandle [out] on success receives a handle to the open file.
+            If pHandle is 0 the file will be closed on return and only the
+            file name will be returned.
+
+    @param  ppustrTempFileURL [out] on success receives the URL of the
+            temporary file.
+            ppustrTempFileURL must not be 0
+            *ppustrTempFileURL must be 0 or must point to a valid rtl_uString
+
+    @return osl_File_E_None   on success or one of the following error codes:<p>
+            osl_File_E_INVAL  the format of the parameter is invalid
+            osl_File_E_NOMEM  not enough memory for allocating structures <br>
+            osl_File_E_ACCES  Permission denied<br>
+            osl_File_E_NOENT  No such file or directory<br>
+            osl_File_E_NOTDIR Not a directory<br>
+            osl_File_E_ROFS   Read-only file system<br>
+            osl_File_E_NOSPC  No space left on device<br>
+            osl_File_E_DQUOT  Quota exceeded<p>
+
+    @see    osl_getTempDirURL
+*/
+
+oslFileError SAL_CALL osl_createTempFile(
+    rtl_uString*   pustrDirectoryURL,
+    oslFileHandle* pHandle,
+    rtl_uString**  ppustrTempFileURL);
 
 #ifdef __cplusplus
 }
