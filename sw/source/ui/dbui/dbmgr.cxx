@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:20:29 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
+#include <com/sun/star/lang/XEventListener.hpp>
 #ifndef _COM_SUN_STAR_UTIL_iXNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
@@ -92,6 +93,21 @@
 #ifndef _COM_SUN_STAR_TEXT_MAILMERGEEVENT_
 #include <com/sun/star/text/MailMergeEvent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
+#include <com/sun/star/uno/XNamingService.hpp>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
@@ -106,6 +122,9 @@
 #endif
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -302,6 +321,7 @@
 #include "dbui.hrc" //CHINA001
 #include <envelp.hrc> //CHINA001
 
+// using namespace ::rtl;
 using namespace svx;
 using namespace ::com::sun::star;
 using namespace com::sun::star::text;
@@ -315,6 +335,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::task;
+using namespace com::sun::star::ui::dialogs;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
 #define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
@@ -359,7 +380,7 @@ struct SwNewDBMgr_Impl
 {
     SwDSParam*          pMergeData;
     AbstractMailMergeDlg*     pMergeDialog;
-    Reference<XEventListener> xDisposeListener;
+    uno::Reference<com::sun::star::lang::XEventListener > xDisposeListener;
 
     SwNewDBMgr_Impl(SwNewDBMgr& rDBMgr)
        :pMergeData(0)
@@ -470,7 +491,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
     Sequence<Any> aSelection;
     Reference< XConnection> xConnection;
 
-    _rDescriptor[daDataSource]  >>= aData.sDataSource;
+    aData.sDataSource = _rDescriptor.getDataSource();
     _rDescriptor[daCommand]     >>= aData.sCommand;
     _rDescriptor[daCommandType] >>= aData.nCommandType;
 
@@ -1601,31 +1622,20 @@ Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSourc
                                                     Reference<XDataSource>& rxSource)
 {
     Reference< sdbc::XConnection> xConnection;
-    Reference<XNameAccess> xDBContext;
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( xMgr.is() )
+    try
     {
-        Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
-        xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
-    }
-    DBG_ASSERT(xDBContext.is(), "com.sun.star.sdb.DataBaseContext: service not available")
-    if(xDBContext.is())
-    {
-        try
+        Reference<XCompletedConnection> xComplConnection(SwNewDBMgr::GetDbtoolsClient().getDataSource(rDataSource, xMgr),UNO_QUERY);
+        if ( xComplConnection.is() )
         {
-            if(xDBContext->hasByName(rDataSource))
-            {
-                Reference<XCompletedConnection> xComplConnection;
-                xDBContext->getByName(rDataSource) >>= xComplConnection;
-                rxSource = Reference<XDataSource>(xComplConnection, UNO_QUERY);
-
-                Reference< XInteractionHandler > xHandler(
+            rxSource.set(xComplConnection,UNO_QUERY);
+            Reference< XInteractionHandler > xHandler(
                     xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
                 xConnection = xComplConnection->connectWithCompletion( xHandler );
-            }
         }
-        catch(Exception&) {}
     }
+    catch(Exception&) {}
+
     return xConnection;
 }
 /* -----------------------------03.07.00 17:12--------------------------------
@@ -2282,6 +2292,163 @@ Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
     }
     return Sequence<rtl::OUString>();
 }
+/*-- 26.05.2004 14:33:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+String SwNewDBMgr::LoadAndRegisterDataSource()
+{
+    sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
+    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+
+    String sHomePath(SvtPathOptions().GetWorkPath());
+    aDlgHelper.SetDisplayDirectory( sHomePath );
+
+    Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+
+    String sFilterAll(SW_RES(STR_FILTER_ALL));
+    String sFilterAllData(SW_RES(STR_FILTER_ALL_DATA));
+    String sFilterSXB(SW_RES(STR_FILTER_SXB));
+    String sFilterSXC(SW_RES(STR_FILTER_SXC));
+    String sFilterDBF(SW_RES(STR_FILTER_DBF));
+    String sFilterXLS(SW_RES(STR_FILTER_XLS));
+    String sFilterTXT(SW_RES(STR_FILTER_TXT));
+    String sFilterCSV(SW_RES(STR_FILTER_CSV));
+
+    xFltMgr->appendFilter( sFilterAll, C2U("*") );
+    xFltMgr->appendFilter( sFilterAllData, C2U("*.sxc;*.dbf;*.xls;*.txt;*.csv"));
+
+    xFltMgr->appendFilter( sFilterSXB, C2U("*.odb") );
+    xFltMgr->appendFilter( sFilterSXC, C2U("*.sxc") );
+    xFltMgr->appendFilter( sFilterDBF, C2U("*.dbf") );
+    xFltMgr->appendFilter( sFilterXLS, C2U("*.xls") );
+    xFltMgr->appendFilter( sFilterTXT, C2U("*.txt") );
+    xFltMgr->appendFilter( sFilterCSV, C2U("*.csv") );
+
+    xFltMgr->setCurrentFilter( sFilterAll ) ;
+    String sFind;
+    if( ERRCODE_NONE == aDlgHelper.Execute() )
+    {
+        String sURL = xFP->getFiles().getConstArray()[0];
+        //data sources have to be registered depending on their extensions
+        INetURLObject aURL( sURL );
+        String sExt( aURL.GetExtension() );
+        Any aURLAny;
+        Any aTableFilterAny;
+        Any aInfoAny;
+        INetURLObject aTempURL(aURL);
+        bool bStore = true;
+        if(sExt.EqualsAscii("oob"))
+        {
+            bStore = false;
+        }
+        else if(sExt.EqualsAscii("sxc") || sExt.EqualsAscii("xls"))
+        {
+            rtl::OUString sDBURL(C2U("sdbc:calc:"));
+            sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
+            aURLAny <<= sDBURL;
+        }
+        else if(sExt.EqualsAscii("dbf"))
+        {
+            aTempURL.removeSegment();
+            aTempURL.removeFinalSlash();
+            rtl::OUString sDBURL(C2U("sdbc:dbase:"));
+            sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
+            aURLAny <<= sDBURL;
+            //set the filter to the file name without extension
+            Sequence<rtl::OUString> aFilters(1);
+            rtl::OUString sTmp(aURL.getBase());
+            aFilters[0] = aURL.getBase();
+            aTableFilterAny <<= aFilters;
+        }
+        else if(sExt.EqualsAscii("csv") || sExt.EqualsAscii("txt"))
+        {
+            aTempURL.removeSegment();
+            aTempURL.removeFinalSlash();
+            rtl::OUString sDBURL(C2U("sdbc:flat:"));
+            //only the 'path' has to be added
+            sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
+            aURLAny <<= sDBURL;
+
+            //set the filter to the file name without extension
+            Sequence<rtl::OUString> aFilters(1);
+            rtl::OUString sTmp(aURL.getBase());
+            aFilters[0] = aURL.getBase();
+            aTableFilterAny <<= aFilters;
+
+            Sequence<PropertyValue> aInfo(5);
+            PropertyValue* pInfo = aInfo.getArray();
+            pInfo[0].Name = C2U("FieldDelimiter");
+            pInfo[0].Value <<= rtl::OUString(String(','));
+            pInfo[1].Name = C2U("ThousandDelimiter");
+            pInfo[1].Value <<= rtl::OUString(String('.'));
+            pInfo[2].Name = C2U("StringDelimiter");
+            pInfo[2].Value <<= rtl::OUString('"');
+            pInfo[3].Name = C2U("Extension");
+            pInfo[3].Value <<= rtl::OUString(sExt);
+            pInfo[4].Name = C2U("CharSet");
+            pInfo[4].Value <<= sal_Int32(gsl_getSystemTextEncoding());
+            aInfoAny <<= aInfo;
+        }
+        try
+        {
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
+            Reference<XNameAccess> xDBContext(xInstance, UNO_QUERY_THROW);
+            Reference<XSingleServiceFactory> xFact( xDBContext, UNO_QUERY);
+
+            String sNewName = aURL.getName();
+            xub_StrLen nExtLen = aURL.GetExtension().Len();
+            sNewName.Erase( sNewName.Len() - nExtLen - 1, nExtLen + 1 );
+
+            //find a unique name if sNewName already exists
+            sFind = sNewName;
+            sal_Int32 nIndex = 0;
+            while(xDBContext->hasByName(sFind))
+            {
+                sFind = sNewName;
+                sFind += String::CreateFromInt32(++nIndex);
+            }
+
+            Reference<XInterface> xNewInstance;
+            if(!bStore)
+            {
+                //oob-file
+                Any aDataSource = xDBContext->getByName(aTempURL.GetMainURL(INetURLObject::NO_DECODE));
+                aDataSource >>= xNewInstance;
+            }
+            else
+            {
+                xNewInstance = xFact->createInstance();
+                Reference<XPropertySet> xDataProperties(xNewInstance, UNO_QUERY);
+
+                if(aURLAny.hasValue())
+                    xDataProperties->setPropertyValue(C2U("URL"), aURLAny);
+                if(aTableFilterAny.hasValue())
+                    xDataProperties->setPropertyValue(C2U("TableFilter"), aTableFilterAny);
+                if(aInfoAny.hasValue())
+                    xDataProperties->setPropertyValue(C2U("Info"), aInfoAny);
+
+                Reference<XStorable> xStore(xNewInstance, UNO_QUERY_THROW);
+                String sExt = String::CreateFromAscii(".oob");
+                String sTmpName;
+                {
+                    utl::TempFile aTempFile(sNewName , &sExt, &sHomePath);
+                    aTempFile.EnableKillingFile(sal_True);
+                    sTmpName = aTempFile.GetURL();
+                }
+                xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
+            }
+            Reference<XNamingService> xNaming(xDBContext, UNO_QUERY);
+            xNaming->registerObject( sFind, xNewInstance );
+
+        }
+        catch(Exception& rEx)
+        {
+        }
+    }
+    return sFind;
+
+}
 /* -----------------------------10.11.00 17:10--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2301,7 +2468,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     Reference< XConnection> xConnection;
 
     ODataAccessDescriptor aDescriptor(rProperties);
-    aDescriptor[daDataSource]   >>= sDataSource;
+    sDataSource = aDescriptor.getDataSource();
     aDescriptor[daCommand]      >>= sDataTableOrQuery;
     aDescriptor[daCommandType]  >>= nCmdType;
 
