@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:35:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ private:
     DECL_LINK(          ProtectRecordsPBHdl, void* );
 
     void                CheckRecordChangesState( void );
+    void                InitControls();
 
                 SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual     ~SvxSecurityTabPage();
