@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:58:28 $
+ *  last change: $Author: tl $ $Date: 2001-03-28 10:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
         if( bHyph )
         {
             xHyph = ::GetHyphenator();
-            aHyphOpt = LineBreakHyphenationOptions( xHyph, nHyphPos );
+            aHyphOpt = LineBreakHyphenationOptions( xHyph,
+                            Sequence< PropertyValue >(), nHyphPos );
         }
 
         LanguageType aLang = rInf.GetFont()->GetLanguage();
