@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBookmarkInsertTool.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 // DocMerge from xml: interface com::sun::star::text::XBookmarkInsertTool
 /** offers an easy way to insert bookmarks by name.@see Text
  */
-interface XBookmarkInsertTool: com::sun::star::uno::XInterface
+published interface XBookmarkInsertTool: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
