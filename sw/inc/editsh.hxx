@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-09 14:50:08 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,8 @@ class SwEndNoteInfo;
 class SwLineNumberInfo;
 class SwAttrSet;
 class SwAuthEntry;
-class SwHHCWrapper;
 class SwRewriter;
+struct SwConversionArgs;
 
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -747,12 +747,12 @@ public:
 
     // Selektionen sichern
     void SpellStart( SwDocPositions eStart, SwDocPositions eEnde,
-                     SwDocPositions eCurr, SwHHCWrapper *pConvWrapper = 0 );
+                     SwDocPositions eCurr, SwConversionArgs *pConvArgs = 0 );
     // Selektionen wiederherstellen
-    void SpellEnd( SwHHCWrapper *pConvWrapper = 0 );
+    void SpellEnd( SwConversionArgs *pConvArgs = 0 );
     ::com::sun::star::uno::Any SpellContinue(
                     USHORT* pPageCnt, USHORT* pPageSt,
-                    SwHHCWrapper *pConvWrapper = 0 );
+                    SwConversionArgs *pConvArgs = 0 );
 
     // spells on a sentence basis - the SpellPortions are needed
     // returns false if no error could be found
