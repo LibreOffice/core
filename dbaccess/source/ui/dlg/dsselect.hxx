@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:13:53 $
+ *  last change: $Author: fs $ $Date: 2001-06-20 13:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ public:
     ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType);
 
     inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}
+    void            Select( const String& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
 
 protected:
     DECL_LINK( ListDblClickHdl, ListBox * );
@@ -124,6 +125,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/24 12:13:53  fs
+ *  initial checkin - dialog for selecting system datasources
+ *
  *
  *  Revision 1.0 24.10.00 09:21:20  fs
  ************************************************************************/
