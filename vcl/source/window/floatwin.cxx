@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-24 10:24:19 $
+ *  last change: $Author: ssa $ $Date: 2002-11-12 10:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,16 +283,9 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
     Rectangle devRectRTL( devRect );
     if( bRTL )
-    {
-        Point p = normRect.TopLeft();
-        long w = rRect.getWidth();
-        p.X() = p.X() - pW->GetPosPixel().X();
-        p.X() = pW->GetPosPixel().X() + pW->GetSizePixel().Width() - w - p.X();
-        Point p2 = normRect.BottomRight();
-        p2.X() = p.X()+w;
-        devRectRTL = Rectangle( pW->OutputToAbsoluteScreenPixel( p ),
-                             pW->OutputToAbsoluteScreenPixel( p2 ));
-    }
+        // create a rect that can be compared to desktop coordinates
+        devRectRTL = pW->ImplOutputToUnmirroredAbsoluteScreenPixel( normRect );
+
 
     USHORT      nArrangeAry[5];
     USHORT      nArrangeIndex;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: hr $ $Date: 2002-10-23 16:37:34 $
+ *  last change: $Author: ssa $ $Date: 2002-11-12 10:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6716,6 +6716,26 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
     p.Y() -= g.nY;
     return p;
 }
+
+// -----------------------------------------------------------------------
+
+Rectangle Window::ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle &rRect ) const
+{
+    // this method creates unmirrored screen coordinates to be compared with the desktop
+    // and is used for positioning of RTL popup windows correctly on the screen
+    SalFrameGeometry g = mpFrame->GetUnmirroredGeometry();
+
+    Point p1 = OutputToScreenPixel( rRect.TopRight() );
+    p1.X() = g.nX+g.nWidth-p1.X();
+    p1.Y() += g.nY;
+
+    Point p2 = OutputToScreenPixel( rRect.BottomLeft() );
+    p2.X() = g.nX+g.nWidth-p2.X();
+    p2.Y() += g.nY;
+
+    return Rectangle( p1, p2 );
+}
+
 
 // -----------------------------------------------------------------------
 
