@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:06:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
+
+#include <math.h>
 
 #ifndef _FRAMEWORK_SERVICES_LAYOUTMANAGER_HXX_
 #include <services/layoutmanager.hxx>
@@ -159,6 +161,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_XUIFUNCTIONLISTENER_HPP_
+#include <com/sun/star/ui/XUIFunctionListener.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -173,11 +178,11 @@
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
+#ifndef _SV_DOCKINGAREA_HXX
+#include <vcl/dockingarea.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WALL_HXX
-#include <vcl/wall.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -383,6 +388,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_pAddonOptions( 0 )
         ,   m_aCustomTbxPrefix( RTL_CONSTASCII_USTRINGPARAM( "custom_" ))
         ,   m_aStatusBarAlias( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ))
+        ,   m_eDockOperation( DOCKOP_ON_COLROW )
 {
     // Initialize statusbar member
     m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
@@ -1123,7 +1129,7 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
         try
         {
             sal_Bool bValue( sal_False );
-            Sequence< PropertyValue > aWindowState( 8 );
+            Sequence< PropertyValue > aWindowState( 7 );
 
             aWindowState[0].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_DOCKED ));
             aWindowState[0].Value   = makeAny( sal_Bool( !rElementData.m_bFloating ));
@@ -1149,10 +1155,8 @@ void LayoutManager::implts_writeWindowStateData( const rtl::OUString& aName, con
             aSize.Height = rElementData.m_aFloatingData.m_aSize.Height();
             aWindowState[5].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_SIZE ));
             aWindowState[5].Value   = makeAny( aSize );
-            aWindowState[6].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_STYLE ));
-            aWindowState[6].Value   = makeAny( sal_Int32( rElementData.m_nStyle ));
-            aWindowState[7].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ));
-            aWindowState[7].Value   = makeAny( sal_Bool( rElementData.m_aDockedData.m_bLocked ));
+            aWindowState[6].Name    = OUString( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ));
+            aWindowState[6].Value   = makeAny( sal_Bool( rElementData.m_aDockedData.m_bLocked ));
 
             if ( xPersistentWindowState->hasByName( aName ))
             {
@@ -1536,11 +1540,6 @@ void LayoutManager::implts_sortUIElements()
     aWriteLock.unlock();
 }
 
-::Point LayoutManager::implts_convertVirtualToPhysicalPos( DockingArea eDockingArea, const ::Point& aPoint ) const
-{
-    return aPoint;
-}
-
 void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea, std::vector< SingleRowColumnWindowData >& rRowColumnsWindowData )
 {
     std::vector< UIElement > aWindowVector;
@@ -1549,8 +1548,11 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
         ( eDockingArea > DockingArea_DOCKINGAREA_RIGHT ))
         eDockingArea = DockingArea_DOCKINGAREA_TOP;
 
+    Reference< css::awt::XWindow > xDockAreaWindow;
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
+    xDockAreaWindow = m_xDockAreaWindows[eDockingArea];
     UIElementVector::iterator   pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
@@ -1588,6 +1590,17 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
     sal_Int32 nIndex( 0 );
     sal_Int32 nLastPos( 0 );
     sal_Int32 nCurrPos( -1 );
+    sal_Int32 nLastRowColPixelPos( 0 );
+    css::awt::Rectangle aDockAreaRect( xDockAreaWindow->getPosSize() );
+
+    if ( eDockingArea == DockingArea_DOCKINGAREA_TOP )
+        nLastRowColPixelPos = 0;
+    else if ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM )
+        nLastRowColPixelPos = aDockAreaRect.Height;
+    else if ( eDockingArea == DockingArea_DOCKINGAREA_LEFT )
+        nLastRowColPixelPos = 0;
+    else
+        nLastRowColPixelPos = aDockAreaRect.Width;
 
     for ( j = 0; j < sal_Int32( aWindowVector.size()); j++ )
     {
@@ -1628,6 +1641,10 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
             sal_Int32 nSpace( 0 );
             if ( rElement.m_aDockedData.m_aPos.Y() != nCurrPos )
             {
+                if ( eDockingArea == DockingArea_DOCKINGAREA_TOP )
+                    nLastRowColPixelPos += rRowColumnsWindowData[nIndex].nStaticSize;
+                else
+                    nLastRowColPixelPos -= rRowColumnsWindowData[nIndex].nStaticSize;
                 ++nIndex;
                 nLastPos = 0;
                 nCurrPos = rElement.m_aDockedData.m_aPos.Y();
@@ -1638,12 +1655,17 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
 
             // Calc space before an element and store it
             nSpace = ( rElement.m_aDockedData.m_aPos.X() - nLastPos );
-            if ( rElement.m_aDockedData.m_aPos.X() > nLastPos )
+            if ( rElement.m_aDockedData.m_aPos.X() >= nLastPos )
+            {
                 rRowColumnsWindowData[nIndex].nSpace += nSpace;
+                nLastPos = rElement.m_aDockedData.m_aPos.X() + aPosSize.Width;
+            }
             else
+            {
                 nSpace = 0;
+                nLastPos += aPosSize.Width;
+            }
             rRowColumnsWindowData[nIndex].aRowColumnSpace.push_back( nSpace );
-            nLastPos = rElement.m_aDockedData.m_aPos.X() + aPosSize.Width;
 
             rRowColumnsWindowData[nIndex].aRowColumnWindows.push_back( xWindow );
             rRowColumnsWindowData[nIndex].aUIElementNames.push_back( rElement.m_aName );
@@ -1654,6 +1676,12 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
                                      aPosSize.Height ));
             if ( rRowColumnsWindowData[nIndex].nStaticSize < aPosSize.Height )
                 rRowColumnsWindowData[nIndex].nStaticSize = aPosSize.Height;
+            if ( eDockingArea == DockingArea_DOCKINGAREA_TOP )
+                rRowColumnsWindowData[nIndex].aRowColumnRect = css::awt::Rectangle( 0, nLastRowColPixelPos,
+                                                                                    aDockAreaRect.Width, aPosSize.Height );
+            else
+                rRowColumnsWindowData[nIndex].aRowColumnRect = css::awt::Rectangle( 0, ( nLastRowColPixelPos - aPosSize.Height ),
+                                                                                    aDockAreaRect.Width, aPosSize.Height );
             rRowColumnsWindowData[nIndex].nVarSize += aPosSize.Width + nSpace;
         }
         else
@@ -1671,6 +1699,10 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
             sal_Int32 nSpace( 0 );
             if ( rElement.m_aDockedData.m_aPos.X() != nCurrPos )
             {
+                if ( eDockingArea == DockingArea_DOCKINGAREA_LEFT )
+                    nLastRowColPixelPos += rRowColumnsWindowData[nIndex].nStaticSize;
+                else
+                    nLastRowColPixelPos -= rRowColumnsWindowData[nIndex].nStaticSize;
                 ++nIndex;
                 nLastPos = 0;
                 nCurrPos = rElement.m_aDockedData.m_aPos.X();
@@ -1682,11 +1714,16 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
             // Calc space before an element and store it
             nSpace = ( rElement.m_aDockedData.m_aPos.Y() - nLastPos );
             if ( rElement.m_aDockedData.m_aPos.Y() > nLastPos )
+            {
                 rRowColumnsWindowData[nIndex].nSpace += nSpace;
+                nLastPos = rElement.m_aDockedData.m_aPos.Y() + aPosSize.Height;
+            }
             else
+            {
                 nSpace = 0;
+                nLastPos += aPosSize.Height;
+            }
             rRowColumnsWindowData[nIndex].aRowColumnSpace.push_back( nSpace );
-            nLastPos = rElement.m_aDockedData.m_aPos.Y() + aPosSize.Height;
 
             rRowColumnsWindowData[nIndex].aRowColumnWindows.push_back( xWindow );
             rRowColumnsWindowData[nIndex].aUIElementNames.push_back( rElement.m_aName );
@@ -1697,14 +1734,401 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
                                      aPosSize.Height ));
             if ( rRowColumnsWindowData[nIndex].nStaticSize < aPosSize.Width )
                 rRowColumnsWindowData[nIndex].nStaticSize = aPosSize.Width;
+            if ( eDockingArea == DockingArea_DOCKINGAREA_LEFT )
+                rRowColumnsWindowData[nIndex].aRowColumnRect = css::awt::Rectangle( nLastRowColPixelPos, 0,
+                                                                                    aPosSize.Width, aDockAreaRect.Height );
+            else
+                rRowColumnsWindowData[nIndex].aRowColumnRect = css::awt::Rectangle( ( nLastRowColPixelPos - aPosSize.Width ), 0,
+                                                                                    aPosSize.Width, aDockAreaRect.Height );
             rRowColumnsWindowData[nIndex].nVarSize += aPosSize.Height + nSpace;
         }
     }
 }
 
-::Rectangle LayoutManager::implts_calcDockingPosSize( UIElement&           rUIElement,
-                                                      const ::Rectangle&   rTrackingRect,
-                                                      const ::Point&       rMousePos )
+void LayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( DockingArea eDockingArea, sal_Int32 nRowCol, SingleRowColumnWindowData& rRowColumnWindowData )
+{
+    std::vector< UIElement > aWindowVector;
+
+    if (( eDockingArea < DockingArea_DOCKINGAREA_TOP ) ||
+        ( eDockingArea > DockingArea_DOCKINGAREA_RIGHT ))
+        eDockingArea = DockingArea_DOCKINGAREA_TOP;
+
+    sal_Bool bHorzDockArea = (( eDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
+                              ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ));
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    UIElementVector::iterator   pIter;
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    {
+        if ( pIter->m_aDockedData.m_nDockedArea == eDockingArea )
+        {
+            sal_Bool                bSameRowCol = bHorzDockArea ?
+                                                   ( pIter->m_aDockedData.m_aPos.Y() == nRowCol ) :
+                                                   ( pIter->m_aDockedData.m_aPos.X() == nRowCol );
+            Reference< XUIElement > xUIElement( pIter->m_xUIElement );
+
+            if ( bSameRowCol && xUIElement.is() )
+            {
+                Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
+                if ( xWindow.is() )
+                {
+                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
+                    if ( pWindow && pIter->m_bVisible && xDockWindow.is() && !pIter->m_bFloating )
+                    {
+                        // docked windows
+                        const UIElement& rElement = *pIter;
+                        aWindowVector.push_back( *pIter );
+                    }
+                }
+            }
+        }
+    }
+    aReadLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    // Initialize structure
+    rRowColumnWindowData.aUIElementNames.clear();
+    rRowColumnWindowData.aRowColumnWindows.clear();
+    rRowColumnWindowData.aRowColumnWindowSizes.clear();
+    rRowColumnWindowData.aRowColumnSpace.clear();
+    rRowColumnWindowData.nVarSize = 0;
+    rRowColumnWindowData.nStaticSize = 0;
+    rRowColumnWindowData.nSpace = 0;
+    rRowColumnWindowData.nRowColumn = nRowCol;
+
+    // Collect data from windows that are on the same row/column
+    sal_Int32 j;
+    sal_Int32 nIndex( 0 );
+    sal_Int32 nLastPos( 0 );
+
+    for ( j = 0; j < sal_Int32( aWindowVector.size()); j++ )
+    {
+        const UIElement& rElement = aWindowVector[j];
+        Reference< css::awt::XWindow > xWindow;
+        Reference< XUIElement > xUIElement( rElement.m_xUIElement );
+        css::awt::Rectangle aPosSize;
+        if ( xUIElement.is() )
+        {
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            xWindow = Reference< css::awt::XWindow >( xUIElement->getRealInterface(), UNO_QUERY );
+            aPosSize = xWindow->getPosSize();
+
+            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            if ( pWindow->GetType() == WINDOW_TOOLBOX )
+            {
+                ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
+                aPosSize.Width = aSize.Width();
+                aPosSize.Height = aSize.Height();
+            }
+        }
+        else
+            continue;
+
+        if (( eDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
+            ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
+        {
+            sal_Int32 nSpace( rElement.m_aDockedData.m_aPos.X() - nLastPos );
+
+            // Calc space before an element and store it
+            if ( rElement.m_aDockedData.m_aPos.X() > nLastPos )
+                rRowColumnWindowData.nSpace += nSpace;
+            else
+                nSpace = 0;
+
+            rRowColumnWindowData.aRowColumnSpace.push_back( nSpace );
+            nLastPos = rElement.m_aDockedData.m_aPos.X() + aPosSize.Width;
+
+            rRowColumnWindowData.aRowColumnWindows.push_back( xWindow );
+            rRowColumnWindowData.aUIElementNames.push_back( rElement.m_aName );
+            rRowColumnWindowData.aRowColumnWindowSizes.push_back(
+                css::awt::Rectangle( rElement.m_aDockedData.m_aPos.X(),
+                                     rElement.m_aDockedData.m_aPos.Y(),
+                                     aPosSize.Width,
+                                     aPosSize.Height ));
+            if ( rRowColumnWindowData.nStaticSize < aPosSize.Height )
+                rRowColumnWindowData.nStaticSize = aPosSize.Height;
+            rRowColumnWindowData.nVarSize += aPosSize.Width + nSpace;
+        }
+        else
+        {
+            // Calc space before an element and store it
+            sal_Int32 nSpace( rElement.m_aDockedData.m_aPos.Y() - nLastPos );
+            if ( rElement.m_aDockedData.m_aPos.Y() > nLastPos )
+                rRowColumnWindowData.nSpace += nSpace;
+            else
+                nSpace = 0;
+            rRowColumnWindowData.aRowColumnSpace.push_back( nSpace );
+            nLastPos = rElement.m_aDockedData.m_aPos.Y() + aPosSize.Height;
+
+            rRowColumnWindowData.aRowColumnWindows.push_back( xWindow );
+            rRowColumnWindowData.aUIElementNames.push_back( rElement.m_aName );
+            rRowColumnWindowData.aRowColumnWindowSizes.push_back(
+                css::awt::Rectangle( rElement.m_aDockedData.m_aPos.X(),
+                                     rElement.m_aDockedData.m_aPos.Y(),
+                                     aPosSize.Width,
+                                     aPosSize.Height ));
+            if ( rRowColumnWindowData.nStaticSize < aPosSize.Width )
+                rRowColumnWindowData.nStaticSize = aPosSize.Width;
+            rRowColumnWindowData.nVarSize += aPosSize.Height + nSpace;
+        }
+    }
+}
+
+::Rectangle LayoutManager::implts_determineFrontDockingRect(
+    DockingArea            eDockingArea,
+    sal_Int32              nRowCol,
+    const ::Rectangle&     rDockedElementRect,
+    const ::rtl::OUString& rMovedElementName,
+    const ::Rectangle&     rMovedElementRect )
+{
+    SingleRowColumnWindowData aRowColumnWindowData;
+
+    sal_Bool bHorzDockArea = (( eDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
+                              ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ));
+
+    implts_getDockingAreaElementInfoOnSingleRowCol( eDockingArea, nRowCol, aRowColumnWindowData );
+    if ( aRowColumnWindowData.aRowColumnWindows.size() == 0 )
+        return rMovedElementRect;
+    else
+    {
+        sal_Int32 nSpace( 0 );
+        ::Rectangle aFrontDockingRect( rMovedElementRect );
+        for ( sal_uInt32 i = 0; i < aRowColumnWindowData.aRowColumnWindows.size(); i++ )
+        {
+            if ( bHorzDockArea )
+            {
+                if ( aRowColumnWindowData.aRowColumnWindowSizes[i].X >= rDockedElementRect.Left() )
+                {
+                    nSpace += aRowColumnWindowData.aRowColumnSpace[i];
+                    break;
+                }
+                else if ( aRowColumnWindowData.aUIElementNames[i] == rMovedElementName )
+                    nSpace += aRowColumnWindowData.aRowColumnWindowSizes[i].Width +
+                              aRowColumnWindowData.aRowColumnSpace[i];
+                else
+                    nSpace = 0;
+            }
+            else
+            {
+                if ( aRowColumnWindowData.aRowColumnWindowSizes[i].Y >= rDockedElementRect.Top() )
+                {
+                    nSpace += aRowColumnWindowData.aRowColumnSpace[i];
+                    break;
+                }
+                else if ( aRowColumnWindowData.aUIElementNames[i] == rMovedElementName )
+                    nSpace += aRowColumnWindowData.aRowColumnWindowSizes[i].Height +
+                              aRowColumnWindowData.aRowColumnSpace[i];
+                else
+                    nSpace = 0;
+            }
+        }
+
+        if ( nSpace > 0 )
+        {
+            sal_Int32 nMove = std::min( nSpace, aFrontDockingRect.getWidth() );
+            if ( bHorzDockArea )
+                aFrontDockingRect.Move( -nMove, 0 );
+            else
+                aFrontDockingRect.Move( 0, -nMove );
+        }
+
+        return aFrontDockingRect;
+    }
+}
+
+::Rectangle LayoutManager::implts_getWindowRectFromRowColumn(
+    drafts::com::sun::star::ui::DockingArea DockingArea,
+    const SingleRowColumnWindowData& rRowColumnWindowData,
+    const ::Point& rMousePos,
+    const rtl::OUString& rExcludeElementName )
+{
+    ::Rectangle aWinRect;
+
+    if (( DockingArea < DockingArea_DOCKINGAREA_TOP ) ||
+        ( DockingArea > DockingArea_DOCKINGAREA_RIGHT ))
+        DockingArea = DockingArea_DOCKINGAREA_TOP;
+
+    if ( rRowColumnWindowData.aRowColumnWindows.size() == 0 )
+        return aWinRect;
+    else
+    {
+        ReadGuard aReadLock( m_aLock );
+        Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
+        Reference< css::awt::XWindow > xDockingAreaWindow = m_xDockAreaWindows[DockingArea];
+        aReadLock.unlock();
+
+        // Calc correct position of the column/row rectangle to be able to compare it with mouse pos/tracking rect
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        // Retrieve output size from container Window
+        Window* pContainerWindow( VCLUnoHelper::GetWindow( xContainerWindow ));
+        Window* pDockingAreaWindow( VCLUnoHelper::GetWindow( xDockingAreaWindow ));
+        if ( pDockingAreaWindow && pContainerWindow )
+        {
+            for ( sal_uInt32 i = 0; i < rRowColumnWindowData.aRowColumnWindows.size(); i++ )
+            {
+                css::awt::Rectangle aWindowRect = rRowColumnWindowData.aRowColumnWindows[i]->getPosSize();
+                ::Rectangle aRect( aWindowRect.X, aWindowRect.Y, aWindowRect.X+aWindowRect.Width, aWindowRect.Y+aWindowRect.Height );
+                aRect.SetPos( pContainerWindow->ScreenToOutputPixel( pDockingAreaWindow->OutputToScreenPixel( aRect.TopLeft() )));
+                if ( aRect.IsInside( rMousePos ))
+                {
+                    // Check if we have found the excluded element. If yes, we have to provide an empty rectangle.
+                    // We prevent that a toolbar cannot be moved when the mouse pointer is inside its own rectangle!
+                    if ( rExcludeElementName != rRowColumnWindowData.aUIElementNames[i] )
+                        return aRect;
+                    else
+                        break;
+                }
+            }
+        }
+    }
+
+    return aWinRect;
+}
+
+framework::LayoutManager::DockingOperation
+LayoutManager::implts_determineDockingOperation(
+    ::drafts::com::sun::star::ui::DockingArea DockingArea,
+    const ::Rectangle&                        rRowColRect,
+    const Point&                              rMousePos )
+{
+    const sal_Int32 nHorzVerticalRegionSize        = 6;
+    const sal_Int32 nHorzVerticalMoveRegion        = 4;
+    const sal_Int32 nHorzVerticalBeforeAfterRegion = 1;
+
+    if ( rRowColRect.IsInside( rMousePos ))
+    {
+        if (( DockingArea == DockingArea_DOCKINGAREA_TOP ) ||
+            ( DockingArea == DockingArea_DOCKINGAREA_BOTTOM ))
+        {
+            sal_Int32 nRegion = rRowColRect.getHeight() / nHorzVerticalRegionSize;
+            sal_Int32 nPosY   = rRowColRect.Top() + nRegion;
+
+            if ( rMousePos.Y() < nPosY )
+                return ( DockingArea == DockingArea_DOCKINGAREA_TOP ) ? DOCKOP_BEFORE_COLROW : DOCKOP_AFTER_COLROW;
+            else if ( rMousePos.Y() < ( nPosY + nRegion*nHorzVerticalMoveRegion ))
+                return DOCKOP_ON_COLROW;
+            else
+                return ( DockingArea == DockingArea_DOCKINGAREA_TOP ) ? DOCKOP_AFTER_COLROW : DOCKOP_BEFORE_COLROW;
+        }
+        else
+        {
+            sal_Int32 nRegion = rRowColRect.getWidth() / nHorzVerticalRegionSize;
+            sal_Int32 nPosX   = rRowColRect.Left() + nRegion;
+
+            if ( rMousePos.X() < nPosX )
+                return ( DockingArea == DockingArea_DOCKINGAREA_LEFT ) ? DOCKOP_BEFORE_COLROW : DOCKOP_AFTER_COLROW;
+            else if ( rMousePos.X() < ( nPosX + nRegion*nHorzVerticalMoveRegion ))
+                return DOCKOP_ON_COLROW;
+            else
+                return ( DockingArea == DockingArea_DOCKINGAREA_LEFT ) ? DOCKOP_AFTER_COLROW : DOCKOP_BEFORE_COLROW;
+        }
+    }
+    else
+        return DOCKOP_ON_COLROW;
+}
+
+::Rectangle LayoutManager::implts_calcTrackingAndElementRect(
+    ::drafts::com::sun::star::ui::DockingArea eDockingArea,
+    sal_Int32 nRowCol,
+    UIElement& rUIElement,
+    const ::Rectangle& rTrackingRect,
+    const ::Rectangle& rRowColumnRect,
+    const ::Size& rContainerWinSize )
+{
+    sal_Bool bHorizontalDockArea( ( eDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
+                                  ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ));
+
+    sal_Int32 nTopDockingAreaSize( implts_getTopBottomDockingAreaSizes().Width() );
+    sal_Int32 nBottomDockingAreaSize( implts_getTopBottomDockingAreaSizes().Height() );
+
+    ::Size  aStatusBarSize( implts_getStatusBarSize() );
+    sal_Int32 nMaxLeftRightDockAreaSize = rContainerWinSize.Height() -
+                                          nTopDockingAreaSize -
+                                          nBottomDockingAreaSize -
+                                          aStatusBarSize.Height();
+
+    ::Rectangle aTrackingRect( rTrackingRect );
+    if ( bHorizontalDockArea )
+    {
+        sal_Int32 nPosX( std::max( sal_Int32( rTrackingRect.Left()), sal_Int32( 0 )));
+        if (( nPosX + rTrackingRect.getWidth()) > rContainerWinSize.Width() )
+            nPosX = std::min( nPosX,
+                                std::max( sal_Int32( rContainerWinSize.Width() - rTrackingRect.getWidth() ),
+                                          sal_Int32( 0 )));
+
+        sal_Int32 nSize = std::min( rContainerWinSize.Width(), rTrackingRect.getWidth() );
+
+        aTrackingRect.SetPos( ::Point( nPosX, rRowColumnRect.Top() ));
+        aTrackingRect.setWidth( nSize );
+        aTrackingRect.setHeight( rRowColumnRect.getHeight() );
+
+        // Set virtual position
+        rUIElement.m_aDockedData.m_aPos.X() = nPosX;
+        rUIElement.m_aDockedData.m_aPos.Y() = nRowCol;
+    }
+    else
+    {
+        sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
+                                                    sal_Int32( nMaxLeftRightDockAreaSize ));
+
+        sal_Int32 nPosY( std::max( sal_Int32( aTrackingRect.Top()), sal_Int32( nTopDockingAreaSize )));
+        if (( nPosY + aTrackingRect.getHeight()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
+            nPosY = std::min( nPosY,
+                                std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aTrackingRect.getHeight() )),
+                                        sal_Int32( nTopDockingAreaSize )));
+
+        sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aTrackingRect.getHeight() );
+
+        aTrackingRect.SetPos( ::Point( rRowColumnRect.Left(), nPosY ));
+        aTrackingRect.setWidth( rRowColumnRect.getWidth() );
+        aTrackingRect.setHeight( nSize );
+
+        ReadGuard aReadLock( m_aLock );
+        Reference< css::awt::XWindow > xDockingAreaWindow = m_xDockAreaWindows[eDockingArea];
+        Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
+        aReadLock.unlock();
+
+        sal_Int32 nDockPosY( 0 );
+        Window* pDockingAreaWindow( 0 );
+        Window* pContainerWindow( 0 );
+        {
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow );
+            pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+            nDockPosY = pDockingAreaWindow->ScreenToOutputPixel(
+                                pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
+        }
+
+        // Set virtual position
+        rUIElement.m_aDockedData.m_aPos.X() = nRowCol;
+        rUIElement.m_aDockedData.m_aPos.Y() = nDockPosY;
+    }
+
+    return aTrackingRect;
+}
+
+void implts_setTrackingRect( DockingArea eDockingArea, const Point& rMousePos, ::Rectangle& rTrackingRect )
+{
+    sal_Bool bHorizontalDockArea( ( eDockingArea == DockingArea_DOCKINGAREA_TOP ) ||
+                                  ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ));
+
+    ::Point aPoint = rTrackingRect.TopLeft();
+    if ( bHorizontalDockArea )
+        aPoint.X() = rMousePos.X();
+    else
+        aPoint.Y() = rMousePos.Y();
+    rTrackingRect.SetPos( aPoint );
+}
+
+void LayoutManager::implts_calcDockingPosSize(
+    UIElement&          rUIElement,
+    DockingOperation&   rDockingOperation,
+    ::Rectangle&        rTrackingRect,
+    const Point&        rMousePos )
 {
     ReadGuard aReadLock( m_aLock );
     Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
@@ -1720,27 +2144,31 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
     }
 
     if ( !rUIElement.m_xUIElement.is() )
-        return ::Rectangle();
+    {
+        rTrackingRect = ::Rectangle();
+        return;
+    }
 
-    Window*                        pDockWindow( 0 );
-    Window*                        pDockingAreaWindow( 0 );
-    ToolBox*                       pToolBox( 0 );
-    Reference< css::awt::XWindow > xWindow( rUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
-    Reference< css::awt::XWindow > xDockingAreaWindow;
-    ::Rectangle                    aTrackingRect( rTrackingRect );
-    sal_Int16                      nDockedArea( rUIElement.m_aDockedData.m_nDockedArea );
-    sal_Int32                      nTopDockingAreaSize( implts_getTopBottomDockingAreaSizes().Width() );
-    sal_Int32                      nBottomDockingAreaSize( implts_getTopBottomDockingAreaSizes().Height() );
-    sal_Bool                       bHorizontalDockArea( ( rUIElement.m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_TOP ) ||
-                                                        ( rUIElement.m_aDockedData.m_nDockedArea == DockingArea_DOCKINGAREA_BOTTOM ));
-    ::Size                         aStatusBarSize( implts_getStatusBarSize() );
-    sal_Int32                      nMaxLeftRightDockAreaSize = aContainerWinSize.Height() -
-                                                               nTopDockingAreaSize -
-                                                               nBottomDockingAreaSize -
-                                                               aStatusBarSize.Height();
+    Window*                                 pDockWindow( 0 );
+    Window*                                 pDockingAreaWindow( 0 );
+    ToolBox*                                pToolBox( 0 );
+    Reference< css::awt::XWindow >          xWindow( rUIElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+    Reference< css::awt::XWindow >          xDockingAreaWindow;
+    ::Rectangle                             aTrackingRect( rTrackingRect );
+    drafts::com::sun::star::ui::DockingArea eDockedArea( (drafts::com::sun::star::ui::DockingArea)rUIElement.m_aDockedData.m_nDockedArea );
+    sal_Int32                               nTopDockingAreaSize( implts_getTopBottomDockingAreaSizes().Width() );
+    sal_Int32                               nBottomDockingAreaSize( implts_getTopBottomDockingAreaSizes().Height() );
+    sal_Bool                                bHorizontalDockArea( ( eDockedArea == DockingArea_DOCKINGAREA_TOP ) ||
+                                                                 ( eDockedArea == DockingArea_DOCKINGAREA_BOTTOM ));
+    ::Size                                  aStatusBarSize( implts_getStatusBarSize() );
+    sal_Int32                               nMaxLeftRightDockAreaSize = aContainerWinSize.Height() -
+                                                                        nTopDockingAreaSize -
+                                                                        nBottomDockingAreaSize -
+                                                                        aStatusBarSize.Height();
+    ::Rectangle                             aDockingAreaRect;
 
     aReadLock.lock();
-    xDockingAreaWindow = m_xDockAreaWindows[nDockedArea];
+    xDockingAreaWindow = m_xDockAreaWindows[eDockedArea];
     aReadLock.unlock();
 
     {
@@ -1750,418 +2178,413 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
         if ( pDockWindow && pDockWindow->GetType() == WINDOW_TOOLBOX )
             pToolBox = (ToolBox *)pDockWindow;
 
+        aDockingAreaRect = ::Rectangle( pDockingAreaWindow->GetPosPixel(), pDockingAreaWindow->GetSizePixel() );
         if ( pToolBox )
         {
             // docked toolbars always have one line
-            ::Size aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( nDockedArea ) );
+            ::Size aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( eDockedArea ) );
             aTrackingRect.SetSize( ::Size( aSize.Width(), aSize.Height() ));
         }
     }
 
-    ::Rectangle aUIElementRect;
-    sal_Int32 nDockLine( -1 );
-    sal_Bool  bInsertBefore( sal_False );
-    std::vector< sal_Int32 > aDockAreaLinePos;
-    std::vector< sal_Int32 > aDockAreaLineSize;
-    std::vector< sal_Int32 > aDockAreaLinePixelPos;
-    UIElementVector::iterator pIter;
+    // default docking operation, dock on the given row/column
+    sal_Bool                                 bOpOutsideOfDockingArea( !aDockingAreaRect.IsInside( rMousePos ));
+    std::vector< SingleRowColumnWindowData > aRowColumnsWindowData;
 
-    sal_Int32 nCurrLinePos( -1 );
-    aReadLock.lock();
-    sal_Int32 j( 0 );
+    rDockingOperation = DOCKOP_ON_COLROW;
+    implts_getDockingAreaElementInfos( eDockedArea, aRowColumnsWindowData );
 
-    sal_Int32 nRowColPixelPos( 0 );
-    if ( nDockedArea == DockingArea_DOCKINGAREA_BOTTOM )
-        nRowColPixelPos = aContainerWinSize.Height() - aStatusBarSize.Height();
-    else if ( nDockedArea == DockingArea_DOCKINGAREA_RIGHT )
-        nRowColPixelPos = aContainerWinSize.Width();
-
-    aReadLock.lock();
-    UIElementVector::iterator pFoundIter = m_aUIElements.end();
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    // determine current first row/column and last row/column
+    sal_Int32 nMaxRowCol( -1 );
+    sal_Int32 nMinRowCol( LONG_MAX );
+    for ( sal_uInt32 i = 0; i < aRowColumnsWindowData.size(); i++ )
     {
-        sal_Int32 nCurrDockedArea( pIter->m_aDockedData.m_nDockedArea );
+        if ( aRowColumnsWindowData[i].nRowColumn > nMaxRowCol )
+            nMaxRowCol = aRowColumnsWindowData[i].nRowColumn;
+        if ( aRowColumnsWindowData[i].nRowColumn < nMinRowCol )
+            nMinRowCol = aRowColumnsWindowData[i].nRowColumn;
+    }
 
-        if (( nCurrDockedArea == nDockedArea ) &&
-              pIter->m_xUIElement.is() &&
-              !pIter->m_bFloating &&
-              pIter->m_bVisible )
+    if ( !bOpOutsideOfDockingArea )
+    {
+        // docking inside our docking area
+        sal_Int32   nIndex( -1 );
+        sal_Int32   nRowCol( -1 );
+        ::Rectangle aWindowRect;
+        ::Rectangle aRowColumnRect;
+
+        for ( sal_uInt32 i = 0; i < aRowColumnsWindowData.size(); i++ )
         {
-            css::awt::Rectangle             aWinRect;
-            sal_Int32                       nDockedArea( rUIElement.m_aDockedData.m_nDockedArea );
-            Reference< css::awt::XWindow >  xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
+            ::Rectangle aRect( aRowColumnsWindowData[i].aRowColumnRect.X,
+                               aRowColumnsWindowData[i].aRowColumnRect.Y,
+                               aRowColumnsWindowData[i].aRowColumnRect.X + aRowColumnsWindowData[i].aRowColumnRect.Width,
+                               aRowColumnsWindowData[i].aRowColumnRect.Y + aRowColumnsWindowData[i].aRowColumnRect.Height );
 
-            if ( xWindow.is() )
             {
+                // Calc correct position of the column/row rectangle to be able to compare it with mouse pos/tracking rect
                 vos::OGuard aGuard( Application::GetSolarMutex() );
-
-                aWinRect = xWindow->getPosSize();
-                ::Rectangle aRect( aWinRect.X, aWinRect.Y,
-                                   aWinRect.X + aWinRect.Width, aWinRect.Y + aWinRect.Height );
-
-                // Calc correct position of the window rectangle to be able to compare it with mouse pos/tracking rect
                 aRect.SetPos( pContainerWindow->ScreenToOutputPixel( pDockingAreaWindow->OutputToScreenPixel( aRect.TopLeft() )));
+            }
 
-                sal_Bool bIsInside( sal_False );
-                bIsInside = aRect.IsInside( rMousePos );
+            sal_Bool bIsInsideRowCol( aRect.IsInside( rMousePos ) );
+            if ( bIsInsideRowCol )
+            {
+                nIndex            = i;
+                nRowCol           = aRowColumnsWindowData[i].nRowColumn;
+                rDockingOperation = implts_determineDockingOperation( eDockedArea, aRect, rMousePos );
+                aWindowRect       = implts_getWindowRectFromRowColumn( eDockedArea, aRowColumnsWindowData[i], rMousePos, rUIElement.m_aName );
+                aRowColumnRect    = aRect;
+                break;
+            }
+        }
 
-                if ( bIsInside )
+        OSL_ENSURE( ( nIndex >= 0 ) && ( nRowCol >= 0 ), "Impossible case - no row/column found but mouse pointer is inside our docking area" );
+        if (( nIndex >= 0 ) && ( nRowCol >= 0 ))
+        {
+            if ( rDockingOperation == DOCKOP_ON_COLROW )
+            {
+                if ( !aWindowRect.IsEmpty())
                 {
-                    pFoundIter = pIter;
-                    sal_Int32  nMiddle( bHorizontalDockArea ? ( aRect.Left() + aRect.getWidth() / 2 ) :
-                                                              ( aRect.Top() + aRect.getHeight() / 2 ));
-                    bInsertBefore = bHorizontalDockArea ? ( rMousePos.X() < nMiddle ) : ( rMousePos.Y() < nMiddle );
+                    // Tracking rect is on a row/column and mouse is over a docked toolbar.
+                    // Determine if the tracking rect must be located before/after the docked toolbar.
+
+                    ::Rectangle aUIElementRect( aWindowRect );
+                    sal_Int32   nMiddle( bHorizontalDockArea ? ( aWindowRect.Left() + aWindowRect.getWidth() / 2 ) :
+                                                               ( aWindowRect.Top() + aWindowRect.getHeight() / 2 ));
+                    sal_Bool    bInsertBefore( bHorizontalDockArea ? ( rMousePos.X() < nMiddle ) : ( rMousePos.Y() < nMiddle ));
                     if ( bInsertBefore )
                     {
-                        aUIElementRect.SetPos( aRect.TopLeft() );
                         if ( bHorizontalDockArea )
                         {
-                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( aContainerWinSize.Width() -  aRect.Left() ),
+                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( aContainerWinSize.Width() -  aWindowRect.Left() ),
                                                                                     sal_Int32( aTrackingRect.getWidth() )));
                             if ( nSize == 0 )
-                                nSize = aRect.getWidth();
-                            aUIElementRect.SetSize( ::Size( nSize, aRect.getHeight() ));
+                                nSize = aWindowRect.getWidth();
+
+                            aUIElementRect.SetSize( ::Size( nSize, aWindowRect.getHeight() ));
+                            aWindowRect = implts_determineFrontDockingRect( eDockedArea, nRowCol, aWindowRect,rUIElement.m_aName, aUIElementRect );
 
                             // Set virtual position
-                            rUIElement.m_aDockedData.m_aPos.X() = aRect.Left();
-                            rUIElement.m_aDockedData.m_aPos.Y() = pIter->m_aDockedData.m_aPos.Y();
+                            rUIElement.m_aDockedData.m_aPos.X() = aWindowRect.Left();
+                            rUIElement.m_aDockedData.m_aPos.Y() = nRowCol;
                         }
                         else
                         {
-                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( nTopDockingAreaSize + nMaxLeftRightDockAreaSize - aRect.Top() ),
-                                                                                    sal_Int32( aTrackingRect.getHeight() )));
+                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32(
+                                                    nTopDockingAreaSize + nMaxLeftRightDockAreaSize - aWindowRect.Top() ),
+                                                    sal_Int32( aTrackingRect.getHeight() )));
                             if ( nSize == 0 )
-                                nSize = aRect.getHeight();
-                            aUIElementRect.SetSize( ::Size( aRect.getWidth(), nSize ));
+                                nSize = aWindowRect.getHeight();
+
+                            aUIElementRect.SetSize( ::Size( aWindowRect.getWidth(), nSize ));
+                            aWindowRect = implts_determineFrontDockingRect( eDockedArea, nRowCol, aWindowRect, rUIElement.m_aName, aUIElementRect );
 
                             // Set virtual position
-                            sal_Int32 nPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( aRect.TopLeft() )).Y();
-                            rUIElement.m_aDockedData.m_aPos.X() = pIter->m_aDockedData.m_aPos.X();
+                            sal_Int32 nPosY = pDockingAreaWindow->ScreenToOutputPixel(
+                                                pContainerWindow->OutputToScreenPixel( aWindowRect.TopLeft() )).Y();
+                            rUIElement.m_aDockedData.m_aPos.X() = nRowCol;
                             rUIElement.m_aDockedData.m_aPos.Y() = nPosY;
                         }
+
+                        rTrackingRect = aWindowRect;
+                        return;
                     }
                     else
                     {
                         if ( bHorizontalDockArea )
                         {
-                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32(( aContainerWinSize.Width() ) - aRect.Right() ),
+                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32(( aContainerWinSize.Width() ) - aWindowRect.Right() ),
                                                                                     sal_Int32( aTrackingRect.getWidth() )));
                             if ( nSize == 0 )
                             {
-                                aUIElementRect.SetPos( ::Point( aContainerWinSize.Width() - aTrackingRect.getWidth(), aRect.Top() ));
-                                aUIElementRect.SetSize( ::Size( aTrackingRect.getWidth(), aRect.getHeight() ));
+                                aUIElementRect.SetPos( ::Point( aContainerWinSize.Width() - aTrackingRect.getWidth(), aWindowRect.Top() ));
+                                aUIElementRect.SetSize( ::Size( aTrackingRect.getWidth(), aWindowRect.getHeight() ));
                                 rUIElement.m_aDockedData.m_aPos.X() = aUIElementRect.Left();
                             }
                             else
                             {
-                                aUIElementRect.SetPos( ::Point( aRect.Right(), aRect.Top() ));
-                                aUIElementRect.SetSize( ::Size( nSize, aRect.getHeight() ));
-                                rUIElement.m_aDockedData.m_aPos.X() = aRect.Right();
+                                aUIElementRect.SetPos( ::Point( aWindowRect.Right(), aWindowRect.Top() ));
+                                aUIElementRect.SetSize( ::Size( nSize, aWindowRect.getHeight() ));
+                                rUIElement.m_aDockedData.m_aPos.X() = aWindowRect.Right();
                             }
 
                             // Set virtual position
-                            rUIElement.m_aDockedData.m_aPos.Y() = pIter->m_aDockedData.m_aPos.Y();
+                            rUIElement.m_aDockedData.m_aPos.Y() = nRowCol;
                         }
                         else
                         {
-                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( nTopDockingAreaSize + nMaxLeftRightDockAreaSize - aRect.Bottom() ),
+                            sal_Int32 nSize = ::std::max( sal_Int32( 0 ), std::min( sal_Int32( nTopDockingAreaSize + nMaxLeftRightDockAreaSize - aWindowRect.Bottom() ),
                                                                                     sal_Int32( aTrackingRect.getHeight() )));
-                            aUIElementRect.SetPos( ::Point( aRect.Left(), aRect.Bottom() ));
-                            aUIElementRect.SetSize( ::Size( aRect.getWidth(), nSize ));
+                            aUIElementRect.SetPos( ::Point( aWindowRect.Left(), aWindowRect.Bottom() ));
+                            aUIElementRect.SetSize( ::Size( aWindowRect.getWidth(), nSize ));
 
                             // Set virtual position
-                            sal_Int32 nPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( aRect.BottomRight() )).Y();
-                            rUIElement.m_aDockedData.m_aPos.X() = pIter->m_aDockedData.m_aPos.X();
+                            sal_Int32 nPosY( 0 );
+                            {
+                                vos::OGuard aGuard( Application::GetSolarMutex() );
+                                sal_Int32 nPosY = pDockingAreaWindow->ScreenToOutputPixel(
+                                                    pContainerWindow->OutputToScreenPixel( aWindowRect.BottomRight() )).Y();
+                            }
+                            rUIElement.m_aDockedData.m_aPos.X() = nRowCol;
                             rUIElement.m_aDockedData.m_aPos.Y() = nPosY;
                         }
-                    }
 
-                    break;
+                        rTrackingRect = aUIElementRect;
+                        return;
+                    }
                 }
-
-                switch ( nCurrDockedArea )
+                else
                 {
-                    case DockingArea_DOCKINGAREA_BOTTOM:
-                    case DockingArea_DOCKINGAREA_TOP:
-                    {
-                        if ( pIter->m_aDockedData.m_aPos.Y() > nCurrLinePos )
-                        {
-                            nCurrLinePos = pIter->m_aDockedData.m_aPos.Y();
-                            aDockAreaLinePos.push_back( nCurrLinePos );
-                            aDockAreaLineSize.push_back( aRect.getHeight() );
-
-                            if ( nCurrDockedArea == DockingArea_DOCKINGAREA_BOTTOM )
-                                nRowColPixelPos -= aRect.getHeight();
-                            else
-                                nRowColPixelPos += aRect.getHeight();
-                            aDockAreaLinePixelPos.push_back( nRowColPixelPos );
-                        }
-                        break;
-                    }
-
-                    case DockingArea_DOCKINGAREA_RIGHT:
-                    case DockingArea_DOCKINGAREA_LEFT:
-                    {
-                        if ( pIter->m_aDockedData.m_aPos.X() > nCurrLinePos )
-                        {
-                            nCurrLinePos = pIter->m_aDockedData.m_aPos.X();
-                            aDockAreaLinePos.push_back( nCurrLinePos );
-                            aDockAreaLineSize.push_back( aRect.getWidth() );
-
-                            if ( nCurrDockedArea == DockingArea_DOCKINGAREA_RIGHT )
-                                nRowColPixelPos -= aRect.getWidth();
-                            else
-                                nRowColPixelPos += aRect.getWidth();
-                            aDockAreaLinePixelPos.push_back( nRowColPixelPos );
-                        }
-                        break;
-                    }
+                    implts_setTrackingRect( eDockedArea, rMousePos, aTrackingRect );
+                    rTrackingRect = implts_calcTrackingAndElementRect(
+                                        eDockedArea, nRowCol, rUIElement,
+                                        aTrackingRect, aRowColumnRect, aContainerWinSize );
+                    return;
                 }
             }
-            j++;
+            else
+            {
+                if ((( nRowCol == nMinRowCol ) && ( rDockingOperation == DOCKOP_BEFORE_COLROW )) ||
+                    (( nRowCol == nMaxRowCol ) && ( rDockingOperation == DOCKOP_AFTER_COLROW  )))
+                    bOpOutsideOfDockingArea = sal_True;
+                else
+                {
+                    // handle docking before/after a row
+                    implts_setTrackingRect( eDockedArea, rMousePos, aTrackingRect );
+                    rTrackingRect = implts_calcTrackingAndElementRect(
+                                        eDockedArea, nRowCol, rUIElement,
+                                        aTrackingRect, aRowColumnRect, aContainerWinSize );
+
+                    sal_Int32 nOffsetX( 0 );
+                    sal_Int32 nOffsetY( 0 );
+                    if ( bHorizontalDockArea )
+                        nOffsetY = sal_Int32( floor( aRowColumnRect.getHeight() / 2 + 0.5 ));
+                    else
+                        nOffsetX = sal_Int32( floor( aRowColumnRect.getWidth() / 2 + 0.5 ));
+
+                    if ( rDockingOperation == DOCKOP_BEFORE_COLROW )
+                    {
+                        if (( eDockedArea == DockingArea_DOCKINGAREA_TOP ) ||
+                            ( eDockedArea == DockingArea_DOCKINGAREA_LEFT ))
+                        {
+                            // Docking before/after means move track rectangle half column/row.
+                            // As left and top are ordered 0...n instead of right and bottom
+                            // which uses n...0, we have to use negative values for top/left.
+                            nOffsetX *= -1;
+                            nOffsetY *= -1;
+                        }
+                    }
+                    else
+                    {
+                        if (( eDockedArea == DockingArea_DOCKINGAREA_BOTTOM ) ||
+                            ( eDockedArea == DockingArea_DOCKINGAREA_RIGHT ))
+                        {
+                            // Docking before/after means move track rectangle half column/row.
+                            // As left and top are ordered 0...n instead of right and bottom
+                            // which uses n...0, we have to use negative values for top/left.
+                            nOffsetX *= -1;
+                            nOffsetY *= -1;
+                        }
+                        nRowCol++;
+                    }
+
+                    if ( bHorizontalDockArea )
+                        rUIElement.m_aDockedData.m_aPos.Y() = nRowCol;
+                    else
+                        rUIElement.m_aDockedData.m_aPos.X() = nRowCol;
+
+                    rTrackingRect.Move( nOffsetX, nOffsetY );
+                    rTrackingRect.SetSize( aTrackingRect.GetSize() );
+                }
+            }
         }
     }
+
+    // Docking outside of our docking window area =>
+    // Users want to dock before/after first/last docked element or to an empty docking area
+    if ( bOpOutsideOfDockingArea )
+    {
+        // set correct size for docking
+        implts_setTrackingRect( eDockedArea, rMousePos, aTrackingRect );
+        rTrackingRect = aTrackingRect;
+
+        if ( bHorizontalDockArea )
+        {
+            sal_Int32 nPosX( std::max( sal_Int32( rTrackingRect.Left()), sal_Int32( 0 )));
+            if (( nPosX + rTrackingRect.getWidth()) > aContainerWinSize.Width() )
+                nPosX = std::min( nPosX,
+                                std::max( sal_Int32( aContainerWinSize.Width() - rTrackingRect.getWidth() ),
+                                          sal_Int32( 0 )));
+
+            sal_Int32 nSize = std::min( aContainerWinSize.Width(), rTrackingRect.getWidth() );
+            sal_Int32 nDockHeight = std::max( aDockingAreaRect.getHeight(), sal_Int32( 0 ));
+            if ( nDockHeight == 0 )
+            {
+                sal_Int32 nPosY( std::max( aDockingAreaRect.Top(), aDockingAreaRect.Bottom() ));
+                if ( eDockedArea == DockingArea_DOCKINGAREA_BOTTOM )
+                    nPosY -= rTrackingRect.getHeight();
+                rTrackingRect.SetPos( Point( nPosX, nPosY ));
+                rUIElement.m_aDockedData.m_aPos.Y() = 0;
+            }
+            else if ( rMousePos.Y() < ( aDockingAreaRect.Top() + ( nDockHeight / 2 )))
+            {
+                rTrackingRect.SetPos( Point( nPosX, aDockingAreaRect.Top() - rTrackingRect.getHeight() ));
+                if ( eDockedArea == DockingArea_DOCKINGAREA_TOP )
+                    rUIElement.m_aDockedData.m_aPos.Y() = 0;
+                else
+                    rUIElement.m_aDockedData.m_aPos.Y() = ( nMaxRowCol >= 0 ) ? nMaxRowCol+1 : 0;
+                rDockingOperation = DOCKOP_BEFORE_COLROW;
+            }
+            else
+            {
+                rTrackingRect.SetPos( Point( nPosX, aDockingAreaRect.Bottom() ));
+                if ( eDockedArea == DockingArea_DOCKINGAREA_TOP )
+                    rUIElement.m_aDockedData.m_aPos.Y() = ( nMaxRowCol >= 0 ) ? nMaxRowCol+1 : 0;
+                else
+                    rUIElement.m_aDockedData.m_aPos.Y() = 0;
+                rDockingOperation = DOCKOP_AFTER_COLROW;
+            }
+            rTrackingRect.setWidth( nSize );
+
+            {
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                nPosX = pDockingAreaWindow->ScreenToOutputPixel(
+                                    pContainerWindow->OutputToScreenPixel( rTrackingRect.TopLeft() )).X();
+            }
+            rUIElement.m_aDockedData.m_aPos.X() = nPosX;
+        }
+        else
+        {
+            sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
+                                                        sal_Int32( nMaxLeftRightDockAreaSize ));
+
+            sal_Int32 nPosY( std::max( sal_Int32( aTrackingRect.Top()), sal_Int32( nTopDockingAreaSize )));
+            if (( nPosY + aTrackingRect.getHeight()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
+                nPosY = std::min( nPosY,
+                                std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aTrackingRect.getHeight() )),
+                                        sal_Int32( nTopDockingAreaSize )));
+
+            sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aTrackingRect.getHeight() );
+            sal_Int32 nDockWidth = std::max( aDockingAreaRect.getWidth(), sal_Int32( 0 ));
+            if ( nDockWidth == 0 )
+            {
+                sal_Int32 nPosX( std::max( aDockingAreaRect.Left(), aDockingAreaRect.Right() ));
+                if ( eDockedArea == DockingArea_DOCKINGAREA_RIGHT )
+                    nPosX -= rTrackingRect.getWidth();
+                rTrackingRect.SetPos( Point( nPosX, nPosY ));
+                rUIElement.m_aDockedData.m_aPos.X() = 0;
+            }
+            else if ( rMousePos.X() < ( aDockingAreaRect.Left() + ( nDockWidth / 2 )))
+            {
+                rTrackingRect.SetPos( Point( aDockingAreaRect.Left() - rTrackingRect.getWidth(), nPosY ));
+                if ( eDockedArea == DockingArea_DOCKINGAREA_LEFT )
+                    rUIElement.m_aDockedData.m_aPos.X() = 0;
+                else
+                    rUIElement.m_aDockedData.m_aPos.X() = ( nMaxRowCol >= 0 ) ? nMaxRowCol+1 : 0;
+                rDockingOperation = DOCKOP_BEFORE_COLROW;
+            }
+            else
+            {
+                rTrackingRect.SetPos( Point( aDockingAreaRect.Right(), nPosY ));
+                if ( eDockedArea == DockingArea_DOCKINGAREA_LEFT )
+                    rUIElement.m_aDockedData.m_aPos.X() = ( nMaxRowCol >= 0 ) ? nMaxRowCol+1 : 0;
+                else
+                    rUIElement.m_aDockedData.m_aPos.X() = 0;
+                rDockingOperation = DOCKOP_AFTER_COLROW;
+            }
+            rTrackingRect.setHeight( nSize );
+
+            {
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                nPosY = pDockingAreaWindow->ScreenToOutputPixel(
+                                    pContainerWindow->OutputToScreenPixel( rTrackingRect.TopLeft() )).Y();
+            }
+            rUIElement.m_aDockedData.m_aPos.Y() = nPosY;
+        }
+    }
+}
+
+void LayoutManager::implts_renumberRowColumnData(
+    ::drafts::com::sun::star::ui::DockingArea eDockingArea,
+    DockingOperation eDockingOperation,
+    const UIElement& rUIElement )
+{
+    ReadGuard aReadLock( m_aLock );
+    Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
     aReadLock.unlock();
 
-    if ( pFoundIter != m_aUIElements.end() )
-        return aUIElementRect;
-    else
+    sal_Bool  bHorzDockingArea(( eDockingArea == DockingArea_DOCKINGAREA_TOP    ) ||
+                               ( eDockingArea == DockingArea_DOCKINGAREA_BOTTOM ));
+    sal_Int32 nRowCol( bHorzDockingArea ? rUIElement.m_aDockedData.m_aPos.Y() :
+                                          rUIElement.m_aDockedData.m_aPos.X() );
+
+    WriteGuard aWriteLock( m_aLock );
+    UIElementVector::iterator pIter;
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
     {
-        ::Point  aWinPos    = aTrackingRect.TopLeft();
-        ::Size   aWinSize   = aTrackingRect.GetSize();
-
-        if ( aDockAreaLinePos.size() > 0 )
+        if (( pIter->m_aDockedData.m_nDockedArea == sal_Int16( eDockingArea )) &&
+            ( pIter->m_aName != rUIElement.m_aName ))
         {
-            if (( nDockedArea == DockingArea_DOCKINGAREA_TOP ) ||
-                ( nDockedArea == DockingArea_DOCKINGAREA_LEFT ))
+            sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ?
+                pIter->m_aDockedData.m_aPos.Y() : pIter->m_aDockedData.m_aPos.X();
+            if ( nWindowRowCol >= nRowCol )
             {
-                sal_Int32 nRowColBorder( 0 );
-                sal_Int32 nPixelPos( 0 );
-                for ( sal_Int32 i = 0; i < sal_Int32( aDockAreaLinePos.size() ); i++ )
-                {
-                    nRowColBorder += aDockAreaLineSize[i];
-                    switch ( nDockedArea )
-                    {
-                        case DockingArea_DOCKINGAREA_TOP:
-                        {
-                            if ( rMousePos.Y() <= nRowColBorder )
-                            {
-                                sal_Int32 nPosX( std::max( sal_Int32( aWinPos.X()), sal_Int32( 0 )));
-                                if (( nPosX + aWinSize.Width()) > aContainerWinSize.Width() )
-                                    nPosX = std::min( nPosX,
-                                                    std::max( sal_Int32( aContainerWinSize.Width() - aWinSize.Width() ),
-                                                                sal_Int32( 0 )));
-
-                                sal_Int32 nSize = std::min( aContainerWinSize.Width(), aWinSize.Width() );
-
-                                // Set virtual position
-                                rUIElement.m_aDockedData.m_aPos.X() = nPosX;
-                                rUIElement.m_aDockedData.m_aPos.Y() = aDockAreaLinePos[i];
-
-                                return ::Rectangle( ::Point( nPosX, nPixelPos ),
-                                                    ::Size( nSize, aDockAreaLineSize[i] ));
-                            }
-                            break;
-                        }
-                        case DockingArea_DOCKINGAREA_LEFT:
-                        {
-                            if ( rMousePos.X() <= nRowColBorder )
-                            {
-                                sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
-
-                                sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
-                                if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
-                                    nPosY = std::min( nPosY,
-                                                    std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aWinSize.Height() )),
-                                                              sal_Int32( nTopDockingAreaSize )));
-
-                                sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aWinSize.Height() );
-
-                                // Set virtual position
-                                sal_Int32 nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
-                                rUIElement.m_aDockedData.m_aPos.X() = aDockAreaLinePos[i];
-                                rUIElement.m_aDockedData.m_aPos.Y() = nDockPosY;
-
-                                return ::Rectangle( ::Point( nPixelPos, nPosY ),
-                                                    ::Size( aDockAreaLineSize[i], nSize ));
-                            }
-                            break;
-                        }
-                    }
-                    nPixelPos += aDockAreaLineSize[i];
-                }
-            }
-            else
-            {
-                sal_Bool  bBottom( nDockedArea == DockingArea_DOCKINGAREA_BOTTOM );
-                sal_Int32 nPixelPos( bBottom ? sal_Int32( aContainerWinSize.Height() ) :
-                                               sal_Int32( aContainerWinSize.Width()  ));
-                for ( sal_Int32 i = 0; i < sal_Int32( aDockAreaLinePos.size() ); i++ )
-                {
-                    nPixelPos -= aDockAreaLineSize[i];
-                    switch ( nDockedArea )
-                    {
-                        case DockingArea_DOCKINGAREA_BOTTOM:
-                        {
-                            if ( rMousePos.Y() >= nPixelPos )
-                            {
-                                sal_Int32 nPosX( std::max( sal_Int32( aWinPos.X()), sal_Int32( 0 )));
-                                if (( nPosX + aWinSize.Width()) > aContainerWinSize.Width() )
-                                    nPosX = std::min( nPosX,
-                                                    std::max( sal_Int32( aContainerWinSize.Width() - aWinSize.Width() ),
-                                                                sal_Int32( 0 )));
-
-                                sal_Int32 nSize = std::min( aContainerWinSize.Width(), aWinSize.Width() );
-
-                                // Set virtual position
-                                rUIElement.m_aDockedData.m_aPos.X() = nPosX;
-                                rUIElement.m_aDockedData.m_aPos.Y() = aDockAreaLinePos[i];
-
-                                return ::Rectangle( ::Point( nPosX, nPixelPos ),
-                                                    ::Size( nSize, aDockAreaLineSize[i] ));
-                            }
-                            break;
-                        }
-                        case DockingArea_DOCKINGAREA_RIGHT:
-                        {
-                            if ( rMousePos.X() >= nPixelPos )
-                            {
-                                sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
-
-                                sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
-                                if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
-                                    nPosY = std::min( nPosY,
-                                                      std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aWinSize.Height() )),
-                                                                sal_Int32( nTopDockingAreaSize )));
-
-                                sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aWinSize.Height() );
-
-                                // Set virtual position
-                                sal_Int32 nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
-                                rUIElement.m_aDockedData.m_aPos.X() = aDockAreaLinePos[i];
-                                rUIElement.m_aDockedData.m_aPos.Y() = nDockPosY;
-
-                                return ::Rectangle( ::Point( nPixelPos, nPosY ),
-                                                    ::Size( aDockAreaLineSize[i], nSize ));
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        sal_Int32 nLastDockPixelPos( 0 );
-
-        if ( aDockAreaLinePixelPos.size() > 0 )
-        {
-            sal_Int32 nLastIndex = aDockAreaLinePixelPos.size()-1;
-            if (( nDockedArea == DockingArea_DOCKINGAREA_TOP ) ||
-                ( nDockedArea == DockingArea_DOCKINGAREA_LEFT ))
-                nLastDockPixelPos = aDockAreaLinePixelPos[nLastIndex];
-            else
-                nLastDockPixelPos = aDockAreaLinePixelPos[nLastIndex];
-        }
-
-        switch ( nDockedArea )
-        {
-            case DockingArea_DOCKINGAREA_TOP:
-            {
-                sal_Int32 nPosX( std::max( sal_Int32( aWinPos.X()), sal_Int32( 0 )));
-                if (( nPosX + aWinSize.Width()) > aContainerWinSize.Width() )
-                    nPosX = std::min( nPosX,
-                                      std::max( sal_Int32( aContainerWinSize.Width() - aWinSize.Width() ),
-                                                sal_Int32( 0 )));
-
-                sal_Int32 nSize = std::min( aContainerWinSize.Width(), aWinSize.Width() );
-
-                rUIElement.m_aDockedData.m_aPos.X() = nPosX;
-                if ( aDockAreaLinePixelPos.size() == 0 )
-                    rUIElement.m_aDockedData.m_aPos.Y() = 0;
+                if ( bHorzDockingArea )
+                    pIter->m_aDockedData.m_aPos.Y() += 1;
                 else
-                    rUIElement.m_aDockedData.m_aPos.Y() = aDockAreaLinePos[aDockAreaLinePixelPos.size()-1]+1;
-
-                return ::Rectangle( ::Point( nPosX, nLastDockPixelPos ), ::Size( nSize, aWinSize.Height() ));
-            }
-
-            case DockingArea_DOCKINGAREA_BOTTOM:
-            {
-                sal_Int32 nPosX( std::max( sal_Int32( aWinPos.X()), sal_Int32( 0 )));
-                if (( nPosX + aWinSize.Width()) > aContainerWinSize.Width() )
-                    nPosX = std::min( nPosX,
-                                      std::max( sal_Int32( aContainerWinSize.Width() - aWinSize.Width() ),
-                                                sal_Int32( 0 )));
-
-                sal_Int32 nSize = std::min( aContainerWinSize.Width(), aWinSize.Width() );
-                if ( aDockAreaLinePos.size() == 0 )
-                    nLastDockPixelPos = ( aContainerWinSize.Height() - aWinSize.Height() );
-                else
-                    nLastDockPixelPos = nLastDockPixelPos - aWinSize.Height();
-
-                rUIElement.m_aDockedData.m_aPos.X()        = nPosX;
-                if ( aDockAreaLinePixelPos.size() == 0 )
-                    rUIElement.m_aDockedData.m_aPos.Y() = 0;
-                else
-                    rUIElement.m_aDockedData.m_aPos.Y() = aDockAreaLinePos[aDockAreaLinePixelPos.size()-1]+1;
-
-                return ::Rectangle( ::Point( nPosX, nLastDockPixelPos ), ::Size( nSize, aWinSize.Height() ));
-            }
-
-            case DockingArea_DOCKINGAREA_LEFT:
-            {
-                sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
-
-                sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
-                if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
-                    nPosY = std::min( nPosY,
-                                      std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aWinSize.Height() )),
-                                                sal_Int32( nTopDockingAreaSize )));
-
-                sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aWinSize.Height() );
-
-                sal_Int32 nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
-                if ( aDockAreaLinePixelPos.size() == 0 )
-                    rUIElement.m_aDockedData.m_aPos.X() = 0;
-                else
-                    rUIElement.m_aDockedData.m_aPos.X() = aDockAreaLinePos[aDockAreaLinePixelPos.size()-1]+1;
-                rUIElement.m_aDockedData.m_aPos.Y()       = nDockPosY;
-
-                return ::Rectangle( ::Point( nLastDockPixelPos, nPosY ), ::Size( aWinSize.Width(), nSize ));
-            }
-
-            case DockingArea_DOCKINGAREA_RIGHT:
-            {
-                sal_Int32 nMaxDockingAreaHeight = std::max( sal_Int32( 0 ),
-                                                            sal_Int32( nMaxLeftRightDockAreaSize ));
-
-                sal_Int32 nPosY( std::max( sal_Int32( aWinPos.Y()), sal_Int32( nTopDockingAreaSize )));
-                if (( nPosY + aWinSize.Height()) > ( nTopDockingAreaSize + nMaxDockingAreaHeight ))
-                    nPosY = std::min( nPosY,
-                                      std::max( sal_Int32( nTopDockingAreaSize + ( nMaxDockingAreaHeight - aWinSize.Height() )),
-                                                sal_Int32( nTopDockingAreaSize )));
-
-                sal_Int32 nSize = std::min( nMaxDockingAreaHeight, aWinSize.Height() );
-                if ( aDockAreaLinePos.size() == 0 )
-                    nLastDockPixelPos = ( aContainerWinSize.Width() - aWinSize.Width() );
-                else
-                    nLastDockPixelPos = nLastDockPixelPos - aWinSize.Width();
-
-                sal_Int32 nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
-                if ( aDockAreaLinePixelPos.size() == 0 )
-                    rUIElement.m_aDockedData.m_aPos.X() = 0;
-                else
-                    rUIElement.m_aDockedData.m_aPos.X() = aDockAreaLinePos[aDockAreaLinePixelPos.size()-1]+1;
-                rUIElement.m_aDockedData.m_aPos.Y()       = nDockPosY;
-
-                return ::Rectangle( ::Point( nLastDockPixelPos, nPosY ), ::Size( aWinSize.Width(), nSize ));
+                    pIter->m_aDockedData.m_aPos.X() += 1;
             }
         }
     }
+    aWriteLock.unlock();
 
-    return aTrackingRect;
+    // We have to change the persistent window state part
+    if ( xPersistentWindowState.is() )
+    {
+        try
+        {
+            Sequence< rtl::OUString > aWindowElements = xPersistentWindowState->getElementNames();
+            for ( sal_Int32 i = 0; i < aWindowElements.getLength(); i++ )
+            {
+                if ( rUIElement.m_aName != aWindowElements[i] )
+                {
+                    try
+                    {
+                        Sequence< PropertyValue > aPropValueSeq;
+                        css::awt::Point           aDockedPos;
+                        DockingArea               nDockedArea( DockingArea_DOCKINGAREA_DEFAULT );
+
+                        xPersistentWindowState->getByName( aWindowElements[i] ) >>= aPropValueSeq;
+                        for ( sal_Int32 j = 0; j < aPropValueSeq.getLength(); j++ )
+                        {
+                            if ( aPropValueSeq[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKINGAREA ))
+                                aPropValueSeq[j].Value >>= nDockedArea;
+                            else if ( aPropValueSeq[j].Name.equalsAscii( WINDOWSTATE_PROPERTY_DOCKPOS ))
+                                aPropValueSeq[j].Value >>= aDockedPos;
+                        }
+
+                        sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ? aDockedPos.Y : aDockedPos.X;
+                        if (( nDockedArea == eDockingArea ) && ( nWindowRowCol >= nRowCol ))
+                        {
+                            if ( bHorzDockingArea )
+                                aDockedPos.Y += 1;
+                            else
+                                aDockedPos.X += 1;
+
+                            Reference< XNameReplace > xReplace( xPersistentWindowState, UNO_QUERY );
+                            xReplace->replaceByName( aWindowElements[i], makeAny( aPropValueSeq ));
+                        }
+                    }
+                    catch ( Exception& )
+                    {
+                    }
+                }
+            }
+        }
+        catch ( Exception& )
+        {
+        }
+    }
 }
 
 ::Size LayoutManager::implts_getTopBottomDockingAreaSizes()
@@ -2222,24 +2645,14 @@ Reference< css::awt::XWindowPeer > LayoutManager::implts_createToolkitWindow( co
         // describe window properties.
         css::awt::WindowDescriptor aDescriptor;
         aDescriptor.Type                =   css::awt::WindowClass_SIMPLE                                                  ;
-        aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")                                                       ;
+        aDescriptor.WindowServiceName   =   DECLARE_ASCII("dockingarea")                                                  ;
         aDescriptor.ParentIndex         =   -1                                                                            ;
-        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >( rParent, UNO_QUERY ) ;
+        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >( rParent, UNO_QUERY )            ;
         aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                                                  ;
-        aDescriptor.WindowAttributes    =   0 | css::awt::VclWindowPeerAttribute::CLIPCHILDREN                            ;
+        aDescriptor.WindowAttributes    =   0                                                                             ;
 
-        // create a new blank container window and get access to parent container to append new created task.
+        // create a docking area window
         xPeer = xToolkit->createWindow( aDescriptor );
-
-        Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
-        if( pWindow )
-        {
-            // set an applicatiopn wide gradient
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            Wallpaper aWallpaper;
-            aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
-            pWindow->SetBackground( aWallpaper );
-        }
     }
 
     return xPeer;
@@ -2684,10 +3097,19 @@ throw ( RuntimeException )
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT].clear();
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT].clear();
         m_aDockingArea = css::awt::Rectangle();
+
+        Window* pContainerWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pContainerWindow )
+            pContainerWindow->RemoveChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
     }
 
     // Set new docking area acceptor and add ourself as window listener on the container window.
     // Create our docking area windows which are parents for all docked windows.
+    css::uno::Reference< css::awt::XWindow > xTopDockWindow;
+    css::uno::Reference< css::awt::XWindow > xBottomDockWindow;
+    css::uno::Reference< css::awt::XWindow > xLeftDockWindow;
+    css::uno::Reference< css::awt::XWindow > xRightDockWindow;
+
     m_xDockingAreaAcceptor = xDockingAreaAcceptor;
     if ( m_xDockingAreaAcceptor.is() )
     {
@@ -2696,13 +3118,35 @@ throw ( RuntimeException )
         m_xContainerWindow->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 
         css::uno::Reference< css::awt::XWindowPeer > xParent( m_xContainerWindow, UNO_QUERY );
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP]    = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM] = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT]   = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT]  = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
+        xTopDockWindow = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
+        xBottomDockWindow = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
+        xLeftDockWindow = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
+        xRightDockWindow = Reference< css::awt::XWindow >( implts_createToolkitWindow( xParent ), UNO_QUERY );
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP]    = xTopDockWindow;
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM] = xBottomDockWindow;
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT]   = xLeftDockWindow;
+        m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT]  = xRightDockWindow;
     }
     aWriteLock.unlock();
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        ::DockingAreaWindow* pWindow;
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ) );
+        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_TOP );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xBottomDockWindow ) );
+        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_BOTTOM );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xLeftDockWindow ) );
+        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_LEFT );
+        pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xRightDockWindow ) );
+        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_RIGHT );
+
+        // Add layout manager as listener to get notifications about toolbar button activties
+        Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+        if ( pContainerWindow )
+            pContainerWindow->AddChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
+    }
 
     implts_destroyElements(); // remove all elements
 
@@ -2727,6 +3171,75 @@ throw ( RuntimeException )
     implts_createCustomToolBars(); // create custom toolbars
     implts_sortUIElements();
     implts_doLayout( sal_True );
+}
+
+IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
+{
+    // To enable toolbar controllers to change their image when a sub-toolbar function
+    // is activated, we need this mechanism. We have NO connection between these toolbars
+    // anymore!
+    if ( pEvent &&
+         pEvent->ISA( VclWindowEvent ) &&
+         pEvent->GetId() == VCLEVENT_TOOLBOX_SELECT )
+    {
+        Window*         pWindow( ((VclWindowEvent*)pEvent)->GetWindow() );
+        ToolBox*        pToolBox( 0 );
+        rtl::OUString   aToolbarName;
+        rtl::OUString   aCommand;
+
+        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+        {
+            pToolBox = (ToolBox *)pWindow;
+            aToolbarName = pToolBox->GetSmartHelpId().GetStr();
+            sal_Int32 i = aToolbarName.lastIndexOf( ':' );
+            if (( aToolbarName.getLength() > 0 ) &&
+                ( i > 0 ) && (( i+ 1 ) < aToolbarName.getLength() ))
+            {
+                // Remove ".HelpId:" protocol from toolbar name
+                aToolbarName = aToolbarName.copy( i+1 );
+
+                USHORT nId = pToolBox->GetCurItemId();
+                if ( nId > 0 )
+                    aCommand = pToolBox->GetItemCommand( nId );
+            }
+        }
+
+        if (( aToolbarName.getLength() > 0 ) && ( aCommand.getLength() > 0 ))
+        {
+            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+            ReadGuard aReadLock( m_aLock );
+            std::vector< css::uno::Reference< css::ui::XUIFunctionListener > > aListenerArray;
+            UIElementVector::iterator pIter;
+
+            for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+            {
+                if ( pIter->m_aType.equalsAscii( "toolbar" ) &&
+                    pIter->m_xUIElement.is() )
+                {
+                    css::uno::Reference< css::ui::XUIFunctionListener > xListener( pIter->m_xUIElement, UNO_QUERY );
+                    if ( xListener.is() )
+                        aListenerArray.push_back( xListener );
+                }
+            }
+            aReadLock.unlock();
+            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+            for ( sal_uInt32 i = 0; i < aListenerArray.size(); i++ )
+            {
+                try
+                {
+                    aListenerArray[i]->functionExecute( aToolbarName, aCommand );
+                }
+                catch ( RuntimeException& e )
+                {
+                    throw e;
+                }
+                catch ( Exception& ) {}
+            }
+        }
+    }
+
+    return 1;
 }
 
 void SAL_CALL LayoutManager::createElement( const ::rtl::OUString& aName )
@@ -3880,15 +4393,22 @@ throw (RuntimeException)
 void SAL_CALL LayoutManager::unlock()
 throw (RuntimeException)
 {
+    sal_Bool bDoLayout( sal_False );
+
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
     --m_nLockCount;
     if ( m_nLockCount < 0 )
         m_nLockCount = 0;
+    bDoLayout = ( m_nLockCount == 0 );
 
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    // conform to documentation: unlock with lock count == 0 means force a layout
+    if ( bDoLayout )
+        doLayout();
 }
 
 void SAL_CALL LayoutManager::doLayout()
@@ -4709,6 +5229,7 @@ throw (::com::sun::star::uno::RuntimeException)
     Reference< css::awt::XWindow >         xBottomDockingWindow;
     Reference< css::awt::XWindow >         xContainerWindow;
     UIElement                              aUIDockingElement;
+    DockingOperation                       eDockingOperation( DOCKOP_ON_COLROW );
     ::Size                                 aStatusBarSize;
 
     aDockingData.TrackingRectangle = e.TrackingRectangle;
@@ -4820,7 +5341,8 @@ throw (::com::sun::star::uno::RuntimeException)
                 ::Point aOutputPos = pContainerWindow->ScreenToOutputPixel( aTrackingRect.TopLeft() );
                 aTrackingRect.SetPos( aOutputPos );
 
-                ::Rectangle aNewDockingRect = implts_calcDockingPosSize( aUIDockingElement, aTrackingRect, aMousePos );
+                ::Rectangle         aNewDockingRect( aTrackingRect );
+                implts_calcDockingPosSize( aUIDockingElement, eDockingOperation, aNewDockingRect, aMousePos );
 
                 ::Point aScreenPos = pContainerWindow->OutputToScreenPixel( aNewDockingRect.TopLeft() );
                 aNewTrackingRect = css::awt::Rectangle( aScreenPos.X(),
@@ -4875,7 +5397,10 @@ throw (::com::sun::star::uno::RuntimeException)
             WriteGuard aWriteLock( m_aLock );
             m_aDockUIElement.m_bFloating = aDockingData.bFloating;
             if ( !aDockingData.bFloating )
+            {
                 m_aDockUIElement.m_aDockedData   = aUIDockingElement.m_aDockedData;
+                m_eDockOperation                 = eDockingOperation;
+            }
             else
                 m_aDockUIElement.m_aFloatingData = aUIDockingElement.m_aFloatingData;
             aWriteLock.unlock();
@@ -4902,39 +5427,41 @@ throw (::com::sun::star::uno::RuntimeException)
     aUIDockingElement = m_aDockUIElement;
     bFloating = aUIDockingElement.m_bFloating;
 
-    UIElementVector::iterator pIter;
-    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    UIElement& rUIElement = impl_findElement( aUIDockingElement.m_aName );
+    if ( rUIElement.m_aName == aUIDockingElement.m_aName )
     {
-        Reference< XUIElement > xUIElement( pIter->m_xUIElement, UNO_QUERY );
-        if ( xUIElement.is() )
+        if ( aUIDockingElement.m_bFloating )
         {
-            Reference< XInterface > xIfac( xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xIfac == e.Source )
-            {
-                if ( m_aDockUIElement.m_bFloating )
-                {
-                    // Write last position into position data
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
-                    Window* pContainerWindow( VCLUnoHelper::GetWindow( m_xContainerWindow ) );
-                    Reference< css::awt::XWindow > xWindow( xIfac, UNO_QUERY );
-                    pIter->m_aFloatingData = m_aDockUIElement.m_aFloatingData;
-                    css::awt::Rectangle aTmpRect = xWindow->getPosSize();
-                    pIter->m_aFloatingData.m_aPos = ::Point( aTmpRect.X, aTmpRect.Y );
-                }
-                else
-                {
-                    pIter->m_aDockedData = m_aDockUIElement.m_aDockedData;
-                    pIter->m_aFloatingData.m_aSize = m_aDockUIElement.m_aFloatingData.m_aSize;
-                }
+            // Write last position into position data
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            Window* pContainerWindow( VCLUnoHelper::GetWindow( m_xContainerWindow ) );
+            Reference< css::awt::XWindow > xWindow( aUIDockingElement.m_xUIElement->getRealInterface(), UNO_QUERY );
+            rUIElement.m_aFloatingData = aUIDockingElement.m_aFloatingData;
+            css::awt::Rectangle aTmpRect = xWindow->getPosSize();
+            rUIElement.m_aFloatingData.m_aPos = ::Point( aTmpRect.X, aTmpRect.Y );
+        }
+        else
+        {
+            rUIElement.m_aDockedData = aUIDockingElement.m_aDockedData;
+            rUIElement.m_aFloatingData.m_aSize = aUIDockingElement.m_aFloatingData.m_aSize;
 
-                bStartDockFloated = pIter->m_bFloating;
-                pIter->m_bFloating = m_aDockUIElement.m_bFloating;
-                pIter->m_bUserActive = sal_True;
-                break;
+            if ( m_eDockOperation != DOCKOP_ON_COLROW )
+            {
+                // we have to renumber our row/column data to insert a new row/column
+                implts_renumberRowColumnData( (drafts::com::sun::star::ui::DockingArea)aUIDockingElement.m_aDockedData.m_nDockedArea,
+                                              m_eDockOperation,
+                                              aUIDockingElement );
             }
         }
+
+        bStartDockFloated = rUIElement.m_bFloating;
+        rUIElement.m_bFloating = m_aDockUIElement.m_bFloating;
+        rUIElement.m_bUserActive = sal_True;
     }
+
+    // reset member for next docking operation
     m_aDockUIElement.m_xUIElement.clear();
+    m_eDockOperation = DOCKOP_ON_COLROW;
     aWriteLock.unlock();
 
     implts_writeWindowStateData( aUIDockingElement.m_aName, aUIDockingElement );
