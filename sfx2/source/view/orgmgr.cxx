@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: pb $ $Date: 2000-10-17 13:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
         {
             pEntry->bOwner = TRUE;
             SfxMedium* pMed = new SfxMedium(
-                aFilePath, ( STREAM_READ | STREAM_SHARE_DENYWRITE ), FALSE, TRUE, 0 );
+                aFilePath, ( STREAM_READ | STREAM_SHARE_DENYWRITE ), FALSE, 0 );
             const SfxFilter* pFilter = NULL;
             if( pSfxApp->GetFilterMatcher().GuessFilter( *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
                 pFilter && !pFilter->IsOwnFormat() ||

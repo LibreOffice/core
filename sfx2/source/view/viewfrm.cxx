@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-11 15:37:30 $
+ *  last change: $Author: pb $ $Date: 2000-10-17 13:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,9 +732,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
 
                 pNewMedium = new SfxMedium(
-                    aURL,
-                    nMode, pMedium->IsDirect(), sal_True,
-                    bUseFilter ? pMedium->GetFilter() : 0, pNewSet );
+                    aURL, nMode, pMedium->IsDirect(), bUseFilter ? pMedium->GetFilter() : 0, pNewSet );
 
                 pNewSet = pNewMedium->GetItemSet();
                 if ( pURLItem )
