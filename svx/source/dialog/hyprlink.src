@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:57 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ spanish ] = "Nombre de la URL" ;
         QuickHelpText [ french ] = "Nom de l'URL" ;
         QuickHelpText [ dutch ] = "URL-naam" ;
-        QuickHelpText [ portuguese_brazilian ] = "Name der URL" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nome da URL" ;
         QuickHelpText [ portuguese ] = "Nome do URL" ;
         QuickHelpText [ swedish ] = "URL-namn" ;
         QuickHelpText[ russian ] = "Èìÿ URL";
@@ -111,6 +111,9 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ catalan ] = "Nom de la URL";
         QuickHelpText[ finnish ] = "URL-nimi";
         QuickHelpText[ thai ] = "URL Name";
+        QuickHelpText[ czech ] = "NÃ¡zev URL";
+        QuickHelpText[ hebrew ] = "Name der URL";
+        QuickHelpText[ hindi ] = "URL à¤¨à¤¾à¤®";
     };
     FixedText FT_URL
     {
@@ -140,6 +143,9 @@ DockingWindow RID_SVXDLG_HYPERLINK
         Text[ catalan ] = "URL:";
         Text[ finnish ] = "URL:";
         Text[ thai ] = "URL:";
+        Text[ czech ] = "URL:";
+        Text[ hebrew ] = "URL:";
+        Text[ hindi ] = "URL:";
     };
     ComboBox CB_URL
     {
@@ -158,7 +164,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ italian ] = "Casella di raccolta per gli URL di Internet" ;
         QuickHelpText [ spanish ] = "URLs de Internet" ;
         QuickHelpText [ french ] = "URL Internet" ;
-        QuickHelpText [ portuguese_brazilian ] = "Sammelbox für Internet-URLs" ;
+        QuickHelpText [ portuguese_brazilian ] = "URLs da Internet" ;
         QuickHelpText [ portuguese ] = "Caixa para URLs da Internet" ;
         QuickHelpText [ swedish ] = "Samlingsbox till webbadresser" ;
         QuickHelpText[ russian ] = "Íàêîïèòåëü URL Èíòåğíåòà";
@@ -175,6 +181,9 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ catalan ] = "URLs d'Internet";
         QuickHelpText[ finnish ] = "Internetin URL-osoitteet";
         QuickHelpText[ thai ] = "Internet URLs";
+        QuickHelpText[ czech ] = "InternetovÃ¡ URL";
+        QuickHelpText[ hebrew ] = "Sammelbox fÃ¼r Internet-URLs";
+        QuickHelpText[ hindi ] = "à¤‡à¤¨à¥à¤Ÿà¤°à¤¨à¥‡à¤Ÿà¥ URLs";
     };
     ToolBox TB
     {
@@ -197,20 +206,23 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text [ swedish ] = "Länk" ;
                 Text [ danish ] = "Kæde" ;
                 Text [ portuguese ] = "Hiperligação" ;
-                Text [ portuguese_brazilian ] = "Link" ;
+                Text [ portuguese_brazilian ] = "Hiperlink" ;
                 Text[ chinese_simplified ] = "è¶…é“¾æ¥";
                 Text[ russian ] = "Ãèïåğññûëêà";
-                Text[ polish ] = "£¹cze";
+                Text[ polish ] = "Hiper³¹cze";
                 Text[ japanese ] = "ãƒªãƒ³ã‚¯";
                 Text[ chinese_traditional ] = "è¶…é€£çµ";
                 Text[ arabic ] = "ÇÑÊÈÇØ";
                 Text[ language_user1 ] = " ";
                 Text[ greek ] = "Õğåñ-óıíäåóç";
                 Text[ korean ] = "í•˜ì´í¼ë§í¬";
-                Text[ turkish ] = "Hyperlink";
+                Text[ turkish ] = "Hiperlink";
                 Text[ catalan ] = "Hiperenllaç";
                 Text[ finnish ] = "Hyperlinkki";
                 Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
+                Text[ czech ] = "HypertextovÃ½ odkaz";
+                Text[ hebrew ] = "Hyperlink";
+                Text[ hindi ] = "à¤¹à¤¾à¤‡à¤ªà¤°à¤²à¤¿à¤‚à¤•";
             };
             ToolBoxItem
             {
@@ -223,11 +235,11 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text [ english_us ] = "Bookmark" ;
                 Text [ italian ] = "Bookmark" ;
                 Text [ spanish ] = "Marcador" ;
-                Text [ french ] = "Bookmark" ;
+                Text [ french ] = "Marque-page" ;
                 Text [ swedish ] = "Bokmärke" ;
                 Text [ danish ] = "Bogmærke" ;
                 Text [ portuguese ] = "Marcador" ;
-                Text [ portuguese_brazilian ] = "Bookmark" ;
+                Text [ portuguese_brazilian ] = "Marcador" ;
                 Text[ chinese_simplified ] = "ä¹¦ç­¾";
                 Text[ russian ] = "Çàêëàäêà";
                 Text[ polish ] = "Zak³adka";
@@ -241,6 +253,9 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ catalan ] = "Marcador";
                 Text[ finnish ] = "Kirjanmerkki";
                 Text[ thai ] = "à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
+                Text[ czech ] = "ZÃ¡loÅ¾ka";
+                Text[ hebrew ] = "â€®×¡×™×× ×™×”â€¬";
+                Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤";
             };
             ToolBoxItem
             {
@@ -257,7 +272,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text [ swedish ] = "Sök" ;
                 Text [ danish ] = "Søg" ;
                 Text [ portuguese ] = "Localizar" ;
-                Text [ portuguese_brazilian ] = "Search" ;
+                Text [ portuguese_brazilian ] = "Pesquisar" ;
                 Text[ chinese_simplified ] = "æœå¯»";
                 Text[ russian ] = "Ïîèñê";
                 Text[ polish ] = "Szukaj";
@@ -271,6 +286,9 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ catalan ] = "Cerca";
                 Text[ finnish ] = "Etsi";
                 Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²";
+                Text[ czech ] = "Hledat";
+                Text[ hebrew ] = "Search";
+                Text[ hindi ] = "à¤–à¥‹à¤œ";
             };
         };
     };
@@ -281,7 +299,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text [ dutch ] = "Hyperlink invoegen" ;
     Text [ swedish ] = "Infoga hyperlänk" ;
     Text [ danish ] = "Indsæt hyperlink" ;
-    Text [ portuguese_brazilian ] = "Hyperlink einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir Hiperlink" ;
     Text [ portuguese ] = "Inserir hiperligação" ;
     Text[ chinese_simplified ] = "æ’å…¥è¶…é“¾æ¥";
     Text[ russian ] = "Âñòàâèòü ãèïåğññûëêó";
@@ -296,6 +314,9 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text[ catalan ] = "Insereix hiperenllaç";
     Text[ finnish ] = "Lisää hyperlinkki";
     Text[ thai ] = "à¹à¸—à¸£à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
+    Text[ czech ] = "VloÅ¾it hypertextovÃ½ odkaz";
+    Text[ hebrew ] = "HiperLinkâ€®×”×•×¡×¤×ª â€¬";
+    Text[ hindi ] = "à¤¹à¤¾à¤‡à¤ªà¤°à¤²à¤¿à¤‚à¤• à¤œà¥‹à¤¡à¤¼à¥‹";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMN_HYPERLINK
@@ -314,7 +335,7 @@ Menu RID_SVXMN_HYPERLINK
             Text [ french ] = "Comme ~texte" ;
             Text [ swedish ] = "Som ~text" ;
             Text [ danish ] = "Som tekst" ;
-            Text [ portuguese_brazilian ] = "Als ~Text" ;
+            Text [ portuguese_brazilian ] = "Como Texto" ;
             Text [ portuguese ] = "Como ~texto" ;
             Text[ chinese_simplified ] = "å½“ä½œæ–‡å­—";
             Text[ russian ] = "Êàê òåêñò";
@@ -329,6 +350,9 @@ Menu RID_SVXMN_HYPERLINK
             Text[ catalan ] = "Com a text";
             Text[ finnish ] = "Tekstinä";
             Text[ thai ] = "à¹€à¸›à¹‡à¸™à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+            Text[ czech ] = "Jako text";
+            Text[ hebrew ] = "Als ~Text";
+            Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤œà¥ˆà¤¸à¥‡";
         };
         MenuItem
         {
@@ -343,9 +367,9 @@ Menu RID_SVXMN_HYPERLINK
             Text [ swedish ] = "Som ~knapp" ;
             Text [ danish ] = "Som knap" ;
             Text [ portuguese ] = "Como ~botão" ;
-            Text [ portuguese_brazilian ] = "Als ~Button" ;
+            Text [ portuguese_brazilian ] = "Como ~Botão" ;
             Text[ russian ] = "Êàê êíîïêà";
-            Text[ polish ] = "Jako klawisz";
+            Text[ polish ] = "Jako ~przycisk";
             Text[ japanese ] = "ãƒœã‚¿ãƒ³(~B)";
             Text[ chinese_simplified ] = "å½“ä½œæŒ‰é’®(~B)";
             Text[ chinese_traditional ] = "ç•¶ä½œæŒ‰éˆ•(~B)";
@@ -357,6 +381,9 @@ Menu RID_SVXMN_HYPERLINK
             Text[ catalan ] = "Com a ~botó";
             Text[ finnish ] = "~Painikkeena";
             Text[ thai ] = "à¹€à¸›à¹‡à¸™~à¸›à¸¸à¹ˆà¸¡";
+            Text[ czech ] = "Jako tlaÄÃ­tko";
+            Text[ hebrew ] = "Als ~Button";
+            Text[ hindi ] = "~à¤¬à¤Ÿà¤¨ à¤œà¥ˆà¤¸à¥‡";
         };
     };
 };
@@ -376,11 +403,11 @@ QueryBox RID_SVXQB_NOCONNECT
     Message [ dutch ] = "Deze URL kan pas na het tot stand brengen van een verbinding getest worden.\nWilt u de verbinding tot stand brengen?" ;
     Message [ swedish ] = "Denna URL kan först prövas när en förbindelse har upprättats.\nSka en förbindelse upprättas?" ;
     Message [ danish ] = "URL kan først testes når en forbindelse er blevet oprettet.\nSkal der oprettes en forbindelse?" ;
-    Message [ portuguese_brazilian ] = "Die URL kann erst nach Aufbau einer Verbindung gepr?t werden.\nSoll die Verbindung aufgebaut werden?" ;
+    Message [ portuguese_brazilian ] = "Esta URL só pode ser verificada após estabelecer uma conexão.\nDeseja conectar-se ?" ;
     Message [ portuguese ] = "O URL pode apenas ser verificado depois de  efectuar uma ligação.\nDeseja iniciá-la?" ;
     Message[ chinese_simplified ] = "åªæœ‰åœ¨å»ºç«‹è¿æ¥åæ‰èƒ½ç¡®å®šè¿™ä¸ª URL æ˜¯å¦æ­£ç¡®ã€‚\næ‚¨è¦ç°åœ¨å»ºç«‹è¿æ¥å—ï¼Ÿ";
     Message[ russian ] = "Ïğîâåğèòü URL âîçìîæíî òîëüêî ïîñëå ñîåäèíåíèÿ.\nÓñòàíîâèòü ñîåäèíåíèå?";
-    Message[ polish ] = "URL mo¿e zostaæ sprawdzony dopiero po ustanowieniu po³¹czenia.\nCzy utworzyæ po³¹czenie?";
+    Message[ polish ] = "Ten adres URL mo¿e zostaæ sprawdzony dopiero po ustanowieniu po³¹czenia.\nCzy nawi¹zaæ po³¹czenie?";
     Message[ japanese ] = "ã“ã® URL ã¯æ¥ç¶šã§ãã¦ã‹ã‚‰ã§ã—ã‹ç¢ºèªã§ãã¾ã›ã‚“ã€‚\næ¥ç¶šã—ã¾ã™ã‹ã€‚";
     Message[ chinese_traditional ] = "åªæœ‰åœ¨å»ºç«‹é€£ç·šå¾Œæ‰èƒ½ç¢ºå®šé€™å€‹ URL æ˜¯å¦æ­£ç¢ºã€‚\næ‚¨è¦ç¾åœ¨é€£ç·šåˆ° Internetï¹–";
     Message[ arabic ] = "áÇ íãßä İÍÕ ÇáÚäæÇä (URL)¡ ÅáÇ ÈÚÏ ÅŞÇãÉ ÇáÇÊÕÇá.\nåá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá¿";
@@ -391,6 +418,9 @@ QueryBox RID_SVXQB_NOCONNECT
     Message[ catalan ] = "La URL només es pot verificar després d'establir-se una connexió.\nVoleu establir la connexió?";
     Message[ finnish ] = "Tämä URL-osoite voidaan testata vasta, kun yhteys on muodostettu. Muodostetaanko yhteys?";
     Message[ thai ] = "à¸ªà¸²à¸¡à¸²à¸£à¸–à¸à¸´à¸ªà¸¹à¸ˆà¸™à¹Œ URL à¸™à¸µà¹‰à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™à¸«à¸¥à¸±à¸‡à¸ˆà¸²à¸à¸—à¸³à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­ à¸ªà¸£à¹‰à¸²à¸‡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Message[ czech ] = "Toto URL lze ovÄ›Å™it pouze po navÃ¡zÃ¡nÃ­ spojenÃ­. NavÃ¡zat spojenÃ­?";
+    Message[ hebrew ] = "Die URL kann erst nach Aufbau einer Verbindung geprÃ¼ft werden.\nSoll die Verbindung aufgebaut werden?";
+    Message[ hindi ] = "à¤•à¥‡à¤µà¤² à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨à¥ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤ªà¤¶à¥à¤šà¤¾à¤¤à¥ à¤‡à¤¸ URL à¤•à¥‹ à¤ªà¥à¤°à¤®à¤¾à¤£à¤¿à¤¤ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨à¥ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
 };
 QueryBox RID_SVXQB_DONTEXIST
 {
@@ -407,11 +437,11 @@ QueryBox RID_SVXQB_DONTEXIST
     Message [ french ] = "L'URL n'existe pas.\nVoulez-vous l'insérer tout de même ?" ;
     Message [ swedish ] = "Denna URL existerar inte.\nSka den infogas ändå?" ;
     Message [ danish ] = "URL eksisterer ikke.\nSkal den tilføjes alligevel?" ;
-    Message [ portuguese_brazilian ] = "Die URL existiert nicht.\nSoll sie trotzdem eingef?t werden?" ;
+    Message [ portuguese_brazilian ] = "Esta URL não existe. Inserir mesmo assim ?" ;
     Message [ portuguese ] = "O URL não existe.\nDeseja inseri-lo?" ;
     Message[ chinese_simplified ] = "è¿™ä¸ª URL ä¸å­˜åœ¨ã€‚\næ‚¨è¿˜æ˜¯è¦åŠ å…¥å®ƒï¼Ÿ";
     Message[ russian ] = "URL íå ñóùåñòâóåò.\nÂñòàâèòü, íåñìîòğÿ íà ıòî?";
-    Message[ polish ] = "URL nie istnieje.\nCzy ma on zostaæ mimo to wstawiony?";
+    Message[ polish ] = "Ten adres URL nie istnieje.\nCzy mimo to go wstawiæ?";
     Message[ japanese ] = "ã“ã® URL ã¯å­˜åœ¨ã—ã¾ã›ã‚“ã€‚\nãã‚Œã§ã‚‚æŒ¿å…¥ã—ã¾ã™ã‹ã€‚";
     Message[ chinese_traditional ] = "é€™å€‹ URL ä¸å­˜åœ¨ã€‚\næ‚¨é‚„æ˜¯è¦åŠ å…¥å®ƒï¹–";
     Message[ arabic ] = "åĞÇ ÇáÜ URL ÛíÑ ãæÌæÏ.\nåá ÊÑíÏ ÅÏÎÇáå Úáì ÇáÑÛã ãä Ğáß¿";
@@ -422,7 +452,19 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ catalan ] = "Aquest URL no existeix. Voleu inserir-lo de totes maneres?";
     Message[ finnish ] = "URL-osoitetta ei ole olemassa. Lisätäänkö kuitenkin?";
     Message[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µ URL à¸™à¸µà¹‰à¸­à¸¢à¸¹à¹ˆ  à¹à¸—à¸£à¸à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+    Message[ czech ] = "Toto URL neexistuje. PÅ™esto vloÅ¾it?";
+    Message[ hebrew ] = "Die URL existiert nicht.\nSoll sie trotzdem eingefÃ¼gt werden?";
+    Message[ hindi ] = "à¤‡à¤¸ URL à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤ à¤•à¤¿à¤¸à¥€ à¤¤à¤°à¤¹ à¤œà¥‹à¤¡à¤¼à¤¨à¤¾ à¤¹à¥ˆ?";
 };
+
+
+
+
+
+
+
+
+
 
 
 
