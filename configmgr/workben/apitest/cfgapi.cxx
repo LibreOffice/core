@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-17 11:51:53 $
+ *  last change: $Author: jb $ $Date: 2002-10-28 14:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ void commit()
 
 // -----------------------------------------------------------------------------
 static const sal_Char*  const   s_pProviderService  =   "com.sun.star.configuration.ConfigurationProvider";
+static const sal_Char*  const   s_pAccessService    =   "com.sun.star.configuration.ConfigurationUpdateAccess";
 static const sal_Char*  const   s_pRootNode         =   "org.openoffice.Office.Common";
 static const sal_Char*  const   s_pLocale           =   "en-US";
 
@@ -348,6 +349,9 @@ int _cdecl main( int argc, char * argv[] )
         {
             cout << "\n---------------------------------------------------------------" << endl;
 
+            OUString sViewService = enterValue("Use view/access service: ", s_pAccessService, false);
+            cout << endl;
+
             Sequence< Any > aArgs(2);
 
             OUString sPath =    enterValue("nodepath: ", s_pRootNode, false);
@@ -360,9 +364,7 @@ int _cdecl main( int argc, char * argv[] )
 
             aArgs[1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
 
-            Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
-                aArgs);
+            Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(sViewService,aArgs);
             cout << "---------------------------------------------------------------\n Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
 
             xChangesBatch = Reference< XChangesBatch >(xIFace, UNO_QUERY);
