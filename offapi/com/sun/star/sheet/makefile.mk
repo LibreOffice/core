@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 17:46:24 $
+#   last change: $Author: hjs $ $Date: 2003-08-19 11:31:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -207,6 +207,7 @@ IDLFILES=\
     TablePageBreakData.idl\
     TablePageStyle.idl\
     TableValidation.idl\
+    TableValidationVisibility.idl\
     ValidationAlertStyle.idl\
     ValidationType.idl\
     VolatileResult.idl\
