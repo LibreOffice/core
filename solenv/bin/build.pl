@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-08 13:44:30 $
+#   last change: $Author: vg $ $Date: 2001-06-15 14:01:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.18 $ ';
+$id_str = ' $Revision: 1.19 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -98,6 +98,7 @@ $QuantityToBuild = 0;
 $CurrentPrj = "";
 $StandDir = GetStandDir();
 $QuantityToBuild = GetQuantityToBuild();
+$build_from = "";
 $BuildAllParents = HowToBuild();
 $ENV{mk_tmp} = "1";
 
@@ -167,6 +168,9 @@ sub BuildAll {
             delete $ParentDepsHash{$DeadPrj};
             RemoveFromDependencies($DeadPrj, \%ParentDepsHash);
         };
+        if ($build_from) {
+            &remove_extra_prjs(\%ParentDepsHash);
+        };
         while ($Prj = PickPrjToBuild(\%ParentDepsHash)) {
             print "\n=============\n";
             print "Building project $Prj\n";
@@ -234,6 +238,10 @@ sub HowToBuild {
     foreach $i (0 .. $#ARGV) {
         if ($ARGV[$i] =~ /^-all/) {
             splice(@ARGV, $i, 1);
+            return 1;
+        } elsif ($ARGV[$i] =~ /^-from/) {
+            $build_from = $ARGV[$i + 1];
+            splice(@ARGV, $i, 2);
             return 1;
         };
     };
@@ -406,6 +414,25 @@ sub BuildDependent {
 
 
 #
+# Removes projects which it is not necessary to build
+#
+sub remove_extra_prjs {
+    my ($Prj, $DepsHash, @build_from_deps);
+    $DepsHash = shift;
+    if (!(defined ($$DepsHash{$build_from}))) {
+        print "No direct dependency to or no project $build_from found\n";
+        exit (1);
+    };
+    delete $$DepsHash{$build_from};
+    while ($Prj = FindIndepPrj($DepsHash)) {
+        RemoveFromDependencies($Prj, $DepsHash);
+        delete $$DepsHash{$Prj};
+    };
+    $$DepsHash{$build_from} = ();
+};
+
+
+#
 # Picks project which can be build now from hash and deletes it from hash
 #
 sub PickPrjToBuild {
@@ -483,6 +510,9 @@ sub FindIndepPrj {
             };
         };
         # If there are only dependent projects in hash - generate error
+        if ($build_from) {
+            return "";
+        };
         print "\nError: projects";
         DeadPrjLoop:
         foreach $Prj (keys %$Dependencies) {
@@ -497,7 +527,7 @@ sub FindIndepPrj {
         };
         print "\nhave dead or circular dependencies\n\n";
         $ENV{mk_tmp} = "";
-        exit ();
+        exit (1);
     };
 };
 
