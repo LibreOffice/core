@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 13:47:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,22 @@
 
 // include ---------------------------------------------------------------
 
+#ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
+#ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef _SFX2_DIALOG_HXX
 #include <sfx2/sfxdlg.hxx>
+#endif
+#ifndef _SV_SYSWIN_HXX
 #include <vcl/syswin.hxx>
+#endif
+#ifndef _GLOBALS_HRC
 #include <globals.hrc>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -93,8 +104,13 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
+
+#ifndef _SWUNODEF_HXX
 #include "swunodef.hxx"
+#endif
+#ifndef _ITABENUM_HXX
 #include "itabenum.hxx"
+#endif
 
 class SfxTabPage;
 class SfxViewFrame;
@@ -134,7 +150,9 @@ struct SfxChildWinInfo;
 class SwTOXMark;
 struct SwDocStat;
 
+#ifndef _CNTTAB_HXX
 #include <cnttab.hxx> //add for struct CurTOXType
+#endif
 
 namespace com{namespace sun{namespace star{
     namespace frame{
