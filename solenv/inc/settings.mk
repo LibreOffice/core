@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-11 11:21:57 $
+#   last change: $Author: hjs $ $Date: 2001-10-15 12:33:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -393,10 +393,6 @@ SOLARLANG:=$(solarlang)
 .IF "$(VCL)" != ""
 vcl=$(VCL)
 DONT_USE_OLE2=TRUE
-.ENDIF
-
-.IF "$(SO3)" != ""
-so3=$(SO3)
 .ENDIF
 
 # --- env flags nicht case sensitiv --------------------------------
@@ -1135,9 +1131,6 @@ RSCDEFS+= -DDEBUG
 .IF "$(VCL)"!=""
 RSCDEFS+= -DVCL
 .ENDIF
-.IF "$(SO3)"!=""
-RSCDEFS+= -DSO3
-.ENDIF
 .IF "$(OLD_CHAOS)"!=""
 RSCDEFS+= -DOLD_CHAOS
 .ENDIF
@@ -1204,9 +1197,6 @@ RSCDEFS+= -DSOLAR_PLUGIN
 
 .IF "$(VCL)" != ""
 CDEFS+= -DVCL
-.ENDIF
-.IF "$(SO3)" != ""
-CDEFS+= -DSO3
 .ENDIF
 .IF "$(OLD_CHAOS)"!=""
 CDEFS+= -DOLD_CHAOS
