@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-24 10:26:11 $
+ *  last change: $Author: jp $ $Date: 2001-04-25 18:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,6 +838,10 @@ friend class WW8FormulaControl;
                            BOOL        bSetToBackground = FALSE );
     BOOL ImportURL(String &sURL,String &sMark,WW8_CP nStart);
 
+    SdrObject* ImportOleBase( Graphic& rGraph,
+                                BOOL bTstOCXControls,
+                                const Graphic* pGrf,
+                                const SfxItemSet* pFlySet );
     SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
 
     BOOL ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
@@ -1155,11 +1159,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.23 2001-04-24 10:26:11 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.24 2001-04-25 18:27:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.23  2001/04/24 10:26:11  cmc
+      CJK Vertical Text Alignment {im|ex}port
+
       Revision 1.22  2001/04/23 11:16:23  cmc
       Enable automatic text foreground color {im|ex}port
 

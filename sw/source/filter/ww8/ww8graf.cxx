@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-25 12:55:01 $
+ *  last change: $Author: jp $ $Date: 2001-04-25 18:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,10 +1414,35 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                             // then import either an OLE of a Graphic
                             if( bObj )
+                            {
+                                if( bMakeSdrGrafObj && pTextObj &&
+                                    pTextObj->GetUpGroup() )
                                 {
-                                pFlyFmt = ImportOle();
-                                bObj=FALSE;
+                                    // SdrOleObj/SdrGrafObj anstatt des
+                                    // SdrTextObj in dessen Gruppe einsetzen
+
+                                    Graphic aGraph;
+                                    SdrObject* pNew = ImportOleBase( aGraph,
+                                                                FALSE, 0, 0 );
+                                    if( !pNew )
+                                    {
+                                        pNew = new SdrGrafObj;
+                                        ((SdrGrafObj*)pNew)->SetGraphic( aGraph );
+                                    }
+                                    if( !pDrawModel )
+                                        GrafikCtor();
+
+                                    pNew->SetModel( pDrawModel );
+                                    pNew->SetLogicRect( pTextObj->GetBoundRect() );
+                                    pNew->SetLayer( pTextObj->GetLayer() );
+
+                                    pTextObj->GetUpGroup()->GetSubList()->
+                                        ReplaceObject( pNew, pTextObj->GetOrdNum() );
                                 }
+                                else
+                                    pFlyFmt = ImportOle();
+                                bObj = FALSE;
+                            }
                             else
                             {
                                 InsertTxbxAttrs(nNewStartCp,
@@ -1425,9 +1450,9 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                                 TRUE);
                                 //InsertTxbxCharAttrs(nNewStartCp, nNewStartCp+1, TRUE);
                                 pFlyFmt = ImportGraf(
-                                            bMakeSdrGrafObj ? pTextObj : 0,
-                                            pOldFlyFmt,
-                                            pTextObj
+                                        bMakeSdrGrafObj ? pTextObj : 0,
+                                        pOldFlyFmt,
+                                         pTextObj
                                           ? (nDrawHell == pTextObj->GetLayer())
                                           : FALSE );
                             }
@@ -3161,11 +3186,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.23 2001-04-25 12:55:01 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.24 2001-04-25 18:27:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.23  2001/04/25 12:55:01  cmc
+      ##761## reenable auto for draw layer, keep auto for table borders and shadings disabled
+
       Revision 1.22  2001/04/24 16:17:10  cmc
       ##761## workaround. No automatic colour for table borders, cells or sdrtextobjs
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-11 15:08:01 $
+ *  last change: $Author: jp $ $Date: 2001-04-25 18:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,16 +71,13 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
+#ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef _FILTER_HXX //autogen
+#ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
 #endif
-#ifndef _SVDOOLE2_HXX //autogen
+#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
 #ifndef _MSDFFIMP_HXX
@@ -89,17 +86,23 @@
 #ifndef _SVX_IMPGRF_HXX
 #include <svx/impgrf.hxx>
 #endif
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
+#endif
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
-#ifndef _FMTANCHR_HXX //autogen
+#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
 #endif
-#ifndef _FMTCNTNT_HXX //autogen wg. SwFmtCntnt
+#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
 #ifndef _DOC_HXX
@@ -108,13 +111,9 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
-#ifndef _NDGRF_HXX //autogen wg. SwGrfNode
+#ifndef _NDGRF_HXX
 #include <ndgrf.hxx>
 #endif
-/*
-#ifndef _SHELLIO_HXX
-#include <shellio.hxx>
-#endif*/
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>            // fuer Ole-Node
 #endif
@@ -130,18 +129,11 @@
 #ifndef _WW8PAR2_HXX
 #include <ww8par2.hxx>          // WWFlyPara::BoxUpWidth()
 #endif
-/*
-#ifndef _REDLENUM_HXX
-#include <redlenum.hxx>
-#endif*/
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
 #ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>
-#endif
-#ifndef _MSOCXIMEX_HXX
-#include <svx/msocximex.hxx>
 #endif
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
@@ -151,6 +143,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 
+using namespace ::com::sun::star;
 
 struct OLE_MFP
 {
@@ -298,13 +291,83 @@ static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
 }
 
 
-using namespace ::com::sun::star;
-
 
 SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
                                      const SfxItemSet* pFlySet )
 {
     SwFrmFmt* pFmt = 0;
+    if( nIniFlags & WW8FL_NO_OLE )
+    {
+        Graphic aGraph;
+        SdrObject* pRet = ImportOleBase( aGraph, TRUE, pGrf, pFlySet );
+
+        // create flyset
+        SfxItemSet* pTempSet = 0;
+        if( !pFlySet )
+        {
+            pTempSet = new SfxItemSet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
+                                                              RES_FRMATR_END-1);
+
+            pFlySet = pTempSet;
+
+            if( !bNew )
+                Reader::ResetFrmFmtAttrs( *pTempSet );  // Abstand/Umrandung raus
+
+            SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+            aAnchor.SetAnchor( pPaM->GetPoint() );
+            pTempSet->Put( aAnchor );
+
+            const Size aSizeTwip = OutputDevice::LogicToLogic(
+                                        aGraph.GetPrefSize(),
+                                        aGraph.GetPrefMapMode(),
+                                        MAP_TWIP );
+
+            pTempSet->Put( SwFmtFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
+                                                     aSizeTwip.Height() ) );
+            pTempSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+
+            if( pSFlyPara )         // OLE im Rahmen ?
+            {                       // ok, Rahmen auf Bildgroesse vergroessern
+                                    //  ( nur wenn Auto-Breite )
+                pSFlyPara->BoxUpWidth( aSizeTwip.Width() );
+            }
+        }
+
+        if( pRet )      // Ole-Object wurde eingefuegt
+        {
+            if( pRet->ISA( SdrOle2Obj ))
+            {
+                pFmt = rDoc.Insert( *pPaM, &((SdrOle2Obj*)pRet)->GetObjRef(),
+                                        pFlySet );
+                //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
+                //              object from our persist
+                SvInPlaceObjectRef xEmpty;
+                ((SdrOle2Obj*)pRet)->SetObjRef( xEmpty );
+                delete pRet;        // das brauchen wir nicht mehr
+            }
+            else
+                // any OCX Control
+                pFmt = FindFrmFmt( pRet );
+        }
+        else
+        {
+            pFmt = rDoc.Insert( *pPaM,
+                        aEmptyStr, aEmptyStr,   // Name der Grafik !!
+                        &aGraph,
+                        pFlySet,                // Attribute fuer den FlyFrm
+                        0 );                    // Attribute fuer die Grafik
+        }
+        delete pTempSet;
+    }
+    return pFmt;
+}
+
+SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
+                                            BOOL bTstOCXControls,
+                                            const Graphic* pGrf,
+                                               const SfxItemSet* pFlySet )
+{
+    SdrObject* pRet = 0;
     if( !(nIniFlags & WW8FL_NO_OLE ))
     {
         ASSERT( pStg, "ohne storage geht hier fast gar nichts!" );
@@ -313,7 +376,6 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
 
         INT16 nX, nY;               // nX, nY ist Ziel-Groesse
         BOOL bOleOk = TRUE;
-        Graphic aGraph;
 
         String aSrcStgName = '_';
         aSrcStgName += String::CreateFromInt32( nObjLocFc );        // ergibt Name "_4711"
@@ -322,10 +384,10 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
 
         if( pGrf )
         {
-            aGraph = *pGrf;
+            rGraph = *pGrf;
             const Size aSizeTwip = OutputDevice::LogicToLogic(
-                                        aGraph.GetPrefSize(),
-                                        aGraph.GetPrefMapMode(),
+                                        rGraph.GetPrefSize(),
+                                        rGraph.GetPrefMapMode(),
                                         MAP_TWIP );
             nX = (INT16) aSizeTwip.Width();
             nY = (INT16) aSizeTwip.Height();
@@ -343,14 +405,14 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
                 INT16 nYO = (INT16)( (long)aMfp.yExt * 144 / 254 );
                 */
                 SwWw8ReadScaling( nX, nY, xSrc1 );
-                aGraph = Graphic( aWMF );
+                rGraph = Graphic( aWMF );
             }
             // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
-            else if( SwWw6ReadMacPICTStream( aGraph, xSrc1 ) )
+            else if( SwWw6ReadMacPICTStream( rGraph, xSrc1 ) )
             {
                 const Size aSizeTwip = OutputDevice::LogicToLogic(
-                                            aGraph.GetPrefSize(),
-                                            aGraph.GetPrefMapMode(),
+                                            rGraph.GetPrefSize(),
+                                            rGraph.GetPrefMapMode(),
                                             MAP_TWIP );
                 nX = (INT16) aSizeTwip.Width();
                 nY = (INT16) aSizeTwip.Height();
@@ -380,7 +442,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
                         {
                             // get the grafic of the node and delete it
                             // then complete, because its become a OLE-Object
-                            aGraph = aIdx.GetNode().GetGrfNode()->GetGrf();
+                            rGraph = aIdx.GetNode().GetGrfNode()->GetGrf();
                             Size aSz( aIdx.GetNode().GetGrfNode()->GetTwipSize() );
                             nX = (INT16) aSz.Width();
                             nY = (INT16) aSz.Height();
@@ -396,65 +458,45 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
 #endif
         }       // StorageStreams wieder zu
 
-//#ifdef DEBUG
         SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
-        if(!pFormImpl)
-            pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-        uno::Reference< drawing::XShape > xRef;
-        if (pFormImpl->ReadOCXStream(xSrc1,&xRef,bFloatingCtrl))
+        if( bTstOCXControls )
         {
-            bOleOk = FALSE;
-            uno::Reference< beans::XPropertySet >  xPropSet( xRef, uno::UNO_QUERY );
-            uno::Reference< lang::XUnoTunnel> xTunnel( xPropSet, uno::UNO_QUERY);
-            SwXShape *pSwShape = 0;
-            if(xTunnel.is())
+            if(!pFormImpl)
+                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
+            uno::Reference< drawing::XShape > xRef;
+            if( pFormImpl->ReadOCXStream( xSrc1,&xRef,bFloatingCtrl))
             {
-                pSwShape = (SwXShape*)xTunnel->getSomething(SwXShape::getUnoTunnelId());
+                uno::Reference< beans::XPropertySet >  xPropSet( xRef, uno::UNO_QUERY );
+                uno::Reference< lang::XUnoTunnel> xTunnel( xPropSet, uno::UNO_QUERY);
+
+                if( xTunnel.is() )
+                {
+                    SwXShape *pSwShape = (SwXShape*)xTunnel->getSomething(
+                                            SwXShape::getUnoTunnelId() );
+                    if( pSwShape )
+                    {
+                        SwFrmFmt* pFrmFmt = (SwFrmFmt*)pSwShape->GetRegisteredIn();
+                        if( pFrmFmt )
+                            pRet = pFrmFmt->FindSdrObject();
+                    }
+                }
+                return pRet;
             }
-            return pSwShape ? (SwFrmFmt*)(pSwShape->GetRegisteredIn()) : 0;
         }
-//#endif
 
-
-        if( GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
-            GRAPHIC_BITMAP == aGraph.GetType() )
+        if( GRAPHIC_GDIMETAFILE == rGraph.GetType() ||
+            GRAPHIC_BITMAP == rGraph.GetType() )
         {
             ::SetProgressState( nProgress, rDoc.GetDocShell() );     // Update
 
             Point aTmpPoint;
             Rectangle aRect( aTmpPoint, Size( nX, nY ) );
-            SwAttrSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
-                                                    RES_FRMATR_END-1);
-            if( !pFlySet )
-            {
-                pFlySet = &aFlySet;
-
-                if( !bNew )
-                    Reader::ResetFrmFmtAttrs( aFlySet );    // Abstand/Umrandung raus
-
-                SwFmtAnchor aAnchor( FLY_IN_CNTNT );
-                aAnchor.SetAnchor( pPaM->GetPoint() );
-                aFlySet.Put( aAnchor );
-
-                aFlySet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nX, nY ) );
-                aFlySet.Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
-
-                if( pSFlyPara )         // OLE im Rahmen ?
-                {                       // ok, Rahmen auf Bildgroesse vergroessern
-                                        //  ( nur wenn Auto-Breite )
-                    pSFlyPara->BoxUpWidth( nX );
-                }
-            }
-            else
-            {
-                const SwFmtFrmSize* pSize = (SwFmtFrmSize*)pFlySet->GetItem(
-                                            RES_FRM_SIZE, FALSE );
-                if( pSize )
+            const SwFmtFrmSize* pSize;
+            if( pFlySet && 0 != ( pSize = (SwFmtFrmSize*)pFlySet->GetItem(
+                                            RES_FRM_SIZE, FALSE )) )
                     aRect.SetSize( pSize->GetSize() );
-            }
-
 
             if( bOleOk && !( nIniFlags & WW8FL_OLE_TO_GRAF ))
             {
@@ -469,34 +511,17 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
                 }
                 else
                     pTmpData = 0;
+
                 SvStorageRef xDst0( rDoc.GetDocShell()->GetStorage() );
-                SdrOle2Obj* pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
+                pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
                                         aSrcStgName, xSrc0, xDst0,
-                                        aGraph, aRect, pTmpData,
+                                        rGraph, aRect, pTmpData,
                                         SwMSDffManager::GetFilterFlags());
-                if( pRet )      // Ole-Object wurde eingefuegt
-                {
-                    pFmt = rDoc.Insert( *pPaM, &pRet->GetObjRef(), pFlySet );
-                    //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
-                    //              object from our persist
-                    SvInPlaceObjectRef xEmpty;
-                    pRet->SetObjRef( xEmpty );
-                    delete pRet;        // das brauchen wir nicht mehr
-                }
-                else
-                    bOleOk = FALSE;
                 pDataStream->Seek( nOldPos );
             }
-
-            if( !bOleOk || (nIniFlags & WW8FL_OLE_TO_GRAF) )
-                pFmt = rDoc.Insert( *pPaM,
-                            aEmptyStr, aEmptyStr,   // Name der Grafik !!
-                            &aGraph,
-                            pFlySet,                // Attribute fuer den FlyFrm
-                            0 );                    // Attribute fuer die Grafik
         }
     }
-    return pFmt;
+    return pRet;
 }
 
 
@@ -649,11 +674,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.5 2001-04-11 15:08:01 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.6 2001-04-25 18:27:07 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/04/11 15:08:01  jp
+      Bug #85614#: SdrOleObject - set InPlaceObject pointer to zero if the object is insert as SW-OleObject
+
       Revision 1.4  2000/11/06 09:42:28  jp
       must changes: tempfile
 
