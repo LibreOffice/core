@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 13:13:38 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 06:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
+        SingleLine=TRUE;
     };
 
     Text = "Datenquellen verwalten" ;
@@ -3265,6 +3266,9 @@ String STR_CALCDOC_DOESNOTEXIST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.65  2001/07/23 13:13:38  oj
+ *  #90074# check if calc doc exists
+ *
  *  Revision 1.64  2001/07/19 09:22:58  oj
  *  #89594# insert mnemonics
  *
