@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:51:59 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ String STR_TITLE
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
     Text[ slovak ] = "Titul";
+    Text[ hungarian ] = "Cím";
+    Text[ slovenian ] = "Naslov";
 };
 String STR_ALPHA
 {
@@ -128,6 +130,8 @@ String STR_ALPHA
     Text[ hebrew ] = "Trennzeichen";
     Text[ hindi ] = "अलगानेवाला";
     Text[ slovak ] = "Oddeľovač";
+    Text[ hungarian ] = "Elválasztó";
+    Text[ slovenian ] = "Ločilo";
 };
 String STR_LEVEL
 {
@@ -160,6 +164,8 @@ String STR_LEVEL
     Text[ hebrew ] = "Ebene";
     Text[ hindi ] = "स्तर ";
     Text[ slovak ] = "Úroveň ";
+    Text[ hungarian ] = "Szint";
+    Text[ slovenian ] = "Raven";
 };
 String STR_FILE_NOT_FOUND
 {
@@ -190,6 +196,8 @@ String STR_FILE_NOT_FOUND
     Text[ hebrew ] = "Die Datei \"%1\" konnte im Pfad \"%2\" nicht gefunden werden.";
     Text[ hindi ] = "फाइल, \"%1\" \"%2\" मार्ग में नहीं मिला ।";
     Text[ slovak ] = "Nedá sa nájsť súbor \"%1\" v ceste \"%2\".";
+    Text[ hungarian ] = "Az adott útvonalban ( \"%2\" ) nem található a fájl: \"%1\"";
+    Text[ slovenian ] = "Datoteke \"%1\" ni mogoče najti v poti \"%2\".";
 };
 /*************************************************************************
 
@@ -223,7 +231,7 @@ TabDialog DLG_MULTI_TOX
                 Text[ french ] = "Index";
                 Text[ spanish ] = "�ndice";
                 Text[ italian ] = "Indice";
-                Text[ danish ] = "Indeks";
+                Text[ danish ] = "Indeks/tabel";
                 Text[ swedish ] = "F�rteckning";
                 Text[ polish ] = "Indeks/spis tre�ci";
                 Text[ portuguese_brazilian ] = "�ndice / Tabela";
@@ -240,6 +248,8 @@ TabDialog DLG_MULTI_TOX
                 Text[ hebrew ] = "Verzeichnis";
                 Text[ hindi ] = "अनुक्रमणिका/सारणी";
                 Text[ slovak ] = "Register/tabuľka";
+                Text[ hungarian ] = "Jegyzék";
+                Text[ slovenian ] = "Kazalo/tabela";
             };
             PageItem
             {
@@ -273,6 +283,8 @@ TabDialog DLG_MULTI_TOX
                 Text[ hebrew ] = "Einträge";
                 Text[ hindi ] = "प्रविष्टियाँ";
                 Text[ slovak ] = "Položky";
+                Text[ hungarian ] = "Bejegyzések";
+                Text[ slovenian ] = "Vnosi";
             };
             PageItem
             {
@@ -306,6 +318,8 @@ TabDialog DLG_MULTI_TOX
                 Text[ hebrew ] = "‮סגנונות‬";
                 Text[ hindi ] = "शैलियाँ";
                 Text[ slovak ] = "Štýly";
+                Text[ hungarian ] = "Stílusok";
+                Text[ slovenian ] = "Slogi";
             };
             PageItem
             {
@@ -340,6 +354,8 @@ TabDialog DLG_MULTI_TOX
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभें";
                 Text[ slovak ] = "Stĺpce";
+                Text[ hungarian ] = "Hasábok";
+                Text[ slovenian ] = "Stolpci";
             };
             PageItem
             {
@@ -374,6 +390,8 @@ TabDialog DLG_MULTI_TOX
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
                 Text[ slovak ] = "Pozadie";
+                Text[ hungarian ] = "Háttér";
+                Text[ slovenian ] = "Ozadje";
             };
         };
     };
@@ -411,6 +429,8 @@ TabDialog DLG_MULTI_TOX
         Text[ hebrew ] = "Benutzerdefiniertes Verzeichnis";
         Text[ hindi ] = "उपभोक्ता से परिभाषित अनुक्रमणिका";
         Text[ slovak ] = "Užívateľom definovaný register";
+        Text[ hungarian ] = "Egyéni jegyzék";
+        Text[ slovenian ] = "Uporabniško določeno kazalo";
     };
     CheckBox CB_SHOWEXAMPLE
     {
@@ -426,7 +446,7 @@ TabDialog DLG_MULTI_TOX
         Text[ spanish ] = "Previsuali~zaci�n";
         Text[ finnish ] = "Esikatselu";
         Text[ italian ] = "Mostra anteprima";
-        Text[ danish ] = "~Vis eksempel";
+        Text[ danish ] = "Eksempel";
         Text[ swedish ] = "F~�rhandsvisning";
         Text[ polish ] = "Podgl�d";
         Text[ portuguese_brazilian ] = "Visualizar";
@@ -442,6 +462,8 @@ TabDialog DLG_MULTI_TOX
         Text[ hebrew ] = "~Vorschau";
         Text[ hindi ] = "पूर्वदृश्य";
         Text[ slovak ] = "Náhľad";
+        Text[ hungarian ] = "Minta";
+        Text[ slovenian ] = "Predogled";
     };
     Text[ english_us ] = "Insert Index/Table";
     Text[ portuguese ] = "Inserir �ndice";
@@ -451,7 +473,7 @@ TabDialog DLG_MULTI_TOX
     Text[ french ] = "Insertion d'index";
     Text[ spanish ] = "Insertar �ndice";
     Text[ italian ] = "Inserisci indice";
-    Text[ danish ] = "Inds�t indeks";
+    Text[ danish ] = "Inds�t indeks/tabel";
     Text[ swedish ] = "Infoga f�rteckning";
     Text[ polish ] = "Wstaw indeks/spis tre�ci";
     Text[ portuguese_brazilian ] = "Inserir �ndice/Tabela";
@@ -468,7 +490,7 @@ TabDialog DLG_MULTI_TOX
     Text[ french ] = "Insertion d'index";
     Text[ spanish ] = "Insertar �ndice";
     Text[ italian ] = "Inserisci indice";
-    Text[ danish ] = "Inds�t indeks";
+    Text[ danish ] = "Inds�t indeks/tabel";
     Text[ swedish ] = "Infoga f�rteckning";
     Text[ polish ] = "Wstaw indeks/spis tre�ci";
     Text[ portuguese_brazilian ] = "Inserir �ndice/Tabela";
@@ -486,6 +508,8 @@ TabDialog DLG_MULTI_TOX
     Text[ hebrew ] = "Verzeichnis einfügen";
     Text[ hindi ] = "अनुक्रमणिका/सारणी जोड़ो";
     Text[ slovak ] = "Vytvoriť index/tabuľku";
+    Text[ hungarian ] = "Jegyzék beszúrása";
+    Text[ slovenian ] = "Vstavi kazalo/tabelo";
 };
 //------------------------------------------------------------------
 TabPage TP_TOX_SELECT
@@ -508,7 +532,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Type et titre";
         Text[ spanish ] = "Tipo y t�tulo";
         Text[ italian ] = "Tipo e titolo";
-        Text[ danish ] = "Type og overskrift";
+        Text[ danish ] = "Type og titel";
         Text[ swedish ] = "Typ och rubrik";
         Text[ polish ] = "Typ i tytu�";
         Text[ portuguese_brazilian ] = "Tipo e T�tulo";
@@ -526,6 +550,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Typ und Titel";
         Text[ hindi ] = "वर्ग और शीर्षक";
         Text[ slovak ] = "Druh a titul";
+        Text[ hungarian ] = "Típus és cím";
+        Text[ slovenian ] = "Vrsta in naslov";
     };
     FixedText       FT_TITLE
     {
@@ -541,7 +567,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Titre";
         Text[ spanish ] = "T�tu~lo";
         Text[ italian ] = "Titolo";
-        Text[ danish ] = "Overskrift";
+        Text[ danish ] = "~Titel";
         Text[ swedish ] = "Rubr~ik";
         Text[ polish ] = "~Tytu�";
         Text[ portuguese_brazilian ] = "~T�tulo";
@@ -559,6 +585,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~शीर्षक";
         Text[ slovak ] = "~Titulok";
+        Text[ hungarian ] = "~Cím";
+        Text[ slovenian ] = "~Naslov";
     };
     Edit            ED_TITLE
     {
@@ -580,7 +608,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Type";
         Text[ spanish ] = "Tip~o";
         Text[ italian ] = "Tipo";
-        Text[ danish ] = "T~ype";
+        Text[ danish ] = "Type";
         Text[ swedish ] = "T~yp";
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "Tipo";
@@ -598,6 +626,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Typ";
+        Text[ hungarian ] = "Típus";
+        Text[ slovenian ] = "Vrsta";
     };
     ListBox         LB_TYPE
     {
@@ -885,6 +915,26 @@ TabPage TP_TOX_SELECT
         < "Tabuľka objektov" ;     TO_OBJECT       ;> ;
         < "Zoznam použitej literatúry" ;  TO_AUTHORITIES  ;> ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Tartalomjegyzék" ;     TO_CONTENT      ;> ;
+        < "Tárgymutató" ;     TO_INDEX        ;> ;
+        < "Ábrajegyzék" ; TO_ILLUSTRATION ;> ;
+        < "Táblázatjegyzék" ;    TO_TABLE        ;> ;
+        < "Egyéni" ;   TO_USER         ;> ;
+        < "Objektumjegyzék" ;  TO_OBJECT       ;> ;
+        < "Irodalomjegyzék" ;  TO_AUTHORITIES  ;> ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Kazalo vsebine" ;   TO_CONTENT      ;> ;
+        < "Abecedno kazalo" ;   TO_INDEX        ;> ;
+        < "Kazalo ilustracij" ; TO_ILLUSTRATION ;> ;
+        < "Kazalo tabel" ;  TO_TABLE        ;> ;
+        < "Uporabniško določeno" ;    TO_USER         ;> ;
+        < "Kazalo predmetov" ;  TO_OBJECT       ;> ;
+        < "Bibliografija" ; TO_AUTHORITIES  ;> ;
+    };
     };
     CheckBox        CB_READONLY
     {
@@ -919,6 +969,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "G~eschützt vor manuellen Änderungen";
         Text[ hindi ] = "मान्युवल परिवर्तनों से रक्षित";
         Text[ slovak ] = "Zamknuté proti ručným zmenám";
+        Text[ hungarian ] = "Csak automatikusan frissíthető";
+        Text[ slovenian ] = "Zaščiteno pred ročnim spreminjanjem";
     };
     FixedLine  FL_AREA
     {
@@ -935,7 +987,7 @@ TabPage TP_TOX_SELECT
         Text[ spanish ] = "Crear �ndice";
         Text[ finnish ] = "Luo hakemisto/luettelo";
         Text[ italian ] = "Crea indice";
-        Text[ danish ] = "Opret ~indeks";
+        Text[ danish ] = "Opret indeks/tabel";
         Text[ swedish ] = "Skapa f�rte~ckning";
         Text[ polish ] = "Utw�rz indeks/spis tre�ci";
         Text[ portuguese_brazilian ] = "Criar �ndice/tabela";
@@ -951,6 +1003,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~Verzeichnis erstellen";
         Text[ hindi ] = "अनुक्रमणिका/सारणी उत्पन्न करो";
         Text[ slovak ] = "Vytvoriť register/tabuľku";
+        Text[ hungarian ] = "Jegyzék létrehozása";
+        Text[ slovenian ] = "Ustvari kazalo/tabelo";
     };
     FixedText       FT_AREA
     {
@@ -967,7 +1021,7 @@ TabPage TP_TOX_SELECT
         Text[ spanish ] = "Para";
         Text[ finnish ] = "kohteelle";
         Text[ italian ] = "Per";
-        Text[ danish ] = "For";
+        Text[ danish ] = "til";
         Text[ swedish ] = "F�r";
         Text[ polish ] = "Dotyczy";
         Text[ portuguese_brazilian ] = "para";
@@ -983,6 +1037,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Für";
         Text[ hindi ] = "केलिए";
         Text[ slovak ] = "pre";
+        Text[ hungarian ] = "Hatókör";
+        Text[ slovenian ] = "za";
     };
     ListBox         LB_AREA
     {
@@ -1130,6 +1186,16 @@ TabPage TP_TOX_SELECT
          < "Celý dokument" ;   AREA_DOCUMENT       ;> ;
         < "Kapitola" ;              AREA_CHAPTER        ;> ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Teljes dokumentum" ;    AREA_DOCUMENT       ;> ;
+        < "Fejezet" ;               AREA_CHAPTER        ;> ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Celoten dokument" ;     AREA_DOCUMENT       ;> ;
+        < "Poglavje" ;              AREA_CHAPTER        ;> ;
+    };
     };
     FixedText       FT_LEVEL
     {
@@ -1163,6 +1229,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Auswerten bis Ebene";
         Text[ hindi ] = "एक सतह ऊपर तक परीक्षा करो";
         Text[ slovak ] = "Vyhodnotiť až do úrovne";
+        Text[ hungarian ] = "Kiértékelés adott vázlatszintig";
+        Text[ slovenian ] = "Ovrednoti do ravni";
     };
     NumericField    NF_LEVEL
     {
@@ -1210,6 +1278,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Erzeugen aus";
         Text[ hindi ] = "से उत्पन्न करो";
         Text[ slovak ] = "Vytvoriť z";
+        Text[ hungarian ] = "Létrehozás forrása:";
+        Text[ slovenian ] = "Ustvari iz";
     };
     CheckBox        CB_FROMHEADINGS
     {
@@ -1244,6 +1314,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "बाहरी रूपरेखा";
         Text[ slovak ] = "Osnova";
+        Text[ hungarian ] = "Kivonat";
+        Text[ slovenian ] = "Oris";
     };
     PushButton  PB_CHAPTERDLG
     {
@@ -1284,6 +1356,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~weiteren Vorlagen";
         Text[ hindi ] = "~अधिकतर शैलियाँ";
         Text[ slovak ] = "Ďa~lšie štýly";
+        Text[ hungarian ] = "T~ovábbi stílusok";
+        Text[ slovenian ] = "~Dodatni slogi";
     };
     String ST_USER_ADDSTYLE
     {
@@ -1297,7 +1371,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "~Styles";
         Text[ spanish ] = "~Estilos";
         Text[ italian ] = "Modelli";
-        Text[ danish ] = "Typografier";
+        Text[ danish ] = "T~ypografier";
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "Style";
         Text[ portuguese_brazilian ] = "Esti~los";
@@ -1315,6 +1389,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~Vorlagen";
         Text[ hindi ] = "~शैलियाँ";
         Text[ slovak ] = "Štý~ly";
+        Text[ hungarian ] = "Stíl~usok";
+        Text[ slovenian ] = "Sl~ogi";
     };
     PushButton      PB_ADDSTYLES
     {
@@ -1354,6 +1430,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Verzeichnism~arkierungen";
         Text[ hindi ] = "अनुक्र~मणिका चिह्न";
         Text[ slovak ] = "Značky re~gistra";
+        Text[ hungarian ] = "Tá~rgymutatójelek";
+        Text[ slovenian ] = "Ozna~ke kazala";
     };
 
     RadioButton     RB_FROMCAPTIONS
@@ -1388,6 +1466,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Bes~chriftungen";
         Text[ hindi ] = "कॉप्शन्";
         Text[ slovak ] = "Popisy";
+        Text[ hungarian ] = "Feliratok";
+        Text[ slovenian ] = "Napisi";
     };
     FixedText FT_CAPTIONSEQUENCE
     {
@@ -1421,6 +1501,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~Kategorie";
         Text[ hindi ] = "वर्ग";
         Text[ slovak ] = "Kategórie";
+        Text[ hungarian ] = "Kategória";
+        Text[ slovenian ] = "Kategorija";
     };
     ListBox LB_CAPTIONSEQUENCE
     {
@@ -1443,7 +1525,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "~Affichage";
         Text[ spanish ] = "Visuali~zaci�n";
         Text[ italian ] = "~Visualizzazione";
-        Text[ danish ] = "Visning";
+        Text[ danish ] = "Vis";
         Text[ swedish ] = "Visning";
         Text[ polish ] = "Wy�wietl";
         Text[ portuguese_brazilian ] = "Exibir";
@@ -1461,6 +1543,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~Anzeige";
         Text[ hindi ] = "दिखाओ";
         Text[ slovak ] = "Zobraziť";
+        Text[ hungarian ] = "Megjelenítés";
+        Text[ slovenian ] = "Prikaz";
     };
     ListBox LB_DISPLAYTYPE
     {
@@ -1536,7 +1620,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ danish ] =
     {
-            < "Referencetekst" ; > ;
+            < "Henvisninger" ; > ;
         < "Kategori og nummer" ; > ;
         < "Billedtekst" ; > ;
     };
@@ -1636,6 +1720,18 @@ TabPage TP_TOX_SELECT
         < "Kategórie a číslo" ; > ;
         < "Text popisu" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Hivatkozások" ; > ;
+        < "Kategória és szám" ; > ;
+        < "Feliratszöveg" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Sklici" ; > ;
+        < "Kategorija in številka" ; > ;
+        < "Besedilo napisa" ; > ;
+    };
     };
     RadioButton        RB_FROMOBJECTNAMES
     {
@@ -1669,6 +1765,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Obje~ktnamen";
         Text[ hindi ] = "वस्तु नाम";
         Text[ slovak ] = "Názvy objektov";
+        Text[ hungarian ] = "Objektumok nevei";
+        Text[ slovenian ] = "Imena predmetov";
     };
     CheckBox        CB_COLLECTSAME
     {
@@ -1701,6 +1799,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Zusammenfassen ~gleicher Einträge";
         Text[ hindi ] = "समान प्रविष्टियों को मिलाओ";
         Text[ slovak ] = "Skombinovať rovnaké položky";
+        Text[ hungarian ] = "Azonos bejegyzések egyesítése";
+        Text[ slovenian ] = "Združi enake vnose";
     };
     CheckBox        CB_USEFF
     {
@@ -1733,6 +1833,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Zusammenfassen mit ~f oder ff";
         Text[ hindi ] = "p अथवा ~pp सहित समान प्रविष्टियों को मिलाओ ";
         Text[ slovak ] = "Skombinovať rovnaké položky s p alebo ~pp";
+        Text[ hungarian ] = "p-~vel, illetve pp-vel";
+        Text[ slovenian ] = "Združi enake vnose s p ali ~pp";
     };
     CheckBox CB_USE_DASH
     {
@@ -1765,6 +1867,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Zusammenfassen ~mit -";
         Text[ hindi ] = "- सहित मिलाओ";
         Text[ slovak ] = "Zlúčiť s -";
+        Text[ hungarian ] = "Kötőjellel";
+        Text[ slovenian ] = "Združi z -";
     };
     CheckBox        CB_CASESENSITIVE
     {
@@ -1780,7 +1884,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "En respectant la ~casse";
         Text[ spanish ] = "~May�sculas/min�sculas";
         Text[ italian ] = "Maiuscole/minu~scole";
-        Text[ danish ] = "Forskel p� store og sm� bogstaver";
+        Text[ danish ] = "STORE og sm� bogstaver";
         Text[ swedish ] = "Versal~k�nslig";
         Text[ polish ] = "Uwzgl�dnij wi~elko�� liter";
         Text[ portuguese_brazilian ] = "Diferenciar mai�sculas/min�sculas";
@@ -1798,6 +1902,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Groß- und ~Kleinschreibung beachten";
         Text[ hindi ] = "केस सचेतन";
         Text[ slovak ] = "Rozlišovať veľké a malé písmená";
+        Text[ hungarian ] = "Kis- és nagybetűk megkülönböztetése";
+        Text[ slovenian ] = "Razlikuj velike in male črke";
     };
     CheckBox        CB_INITIALCAPS
     {
@@ -1813,7 +1919,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Entr�es en majuscules (autom.)";
         Text[ spanish ] = "Entradas autom�ticamente en ma~y�sculas";
         Text[ italian ] = "Scrivi le voci maiusc~ole";
-        Text[ danish ] = "Skriv elementer automatisk med stort";
+        Text[ danish ] = "Skriv automatisk elementer med stort";
         Text[ swedish ] = "Skriv ~automatiskt poster med stor bokstav";
         Text[ polish ] = "Wpisy automatycznie z wielkiej litery";
         Text[ portuguese_brazilian ] = "Entradas em mai�sculas autom�ticas";
@@ -1831,6 +1937,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Einträge ~automatisch großschreiben";
         Text[ hindi ] = "प्रविष्टियों को स्वयं बड़े अक्षर में बदलो";
         Text[ slovak ] = "Položka bude pozostávať z veľkých písmen";
+        Text[ hungarian ] = "Bejegyzések automatikus nagybetűsítése";
+        Text[ slovenian ] = "Samodejno začni vnose z veliko začetnico";
     };
     CheckBox        CB_KEYASENTRY
     {
@@ -1863,6 +1971,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~Schlüssel als eigener Eintrag";
         Text[ hindi ] = "की अलग प्रविष्टियों जैसे";
         Text[ slovak ] = "Kľúče ako oddelené položky";
+        Text[ hungarian ] = "A kulcsok legyenek külön bejegyzések";
+        Text[ slovenian ] = "Vsak ključ kot samostojen vnos";
     };
     CheckBox    CB_FROMFILE
     {
@@ -1878,7 +1988,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Fichier ~concordance";
         Text[ spanish ] = "~Archivo de concordancia";
         Text[ italian ] = "File di conco~rdanza";
-        Text[ danish ] = "Konkordansfil";
+        Text[ danish ] = "~Konkordansfil";
         Text[ swedish ] = "Konkordansfil";
         Text[ polish ] = "Plik konkor~dancji";
         Text[ portuguese_brazilian ] = "Arquivo de ~concord�ncia";
@@ -1895,6 +2005,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Konko~rdanzdatei";
         Text[ hindi ] = "~कोनकोर्डेन्स फाइल";
         Text[ slovak ] = "Súbor re~gistra";
+        Text[ hungarian ] = "S~zómutatófájl";
+        Text[ slovenian ] = "~Konkord. datoteka";
     };
     MenuButton  MB_AUTOMARK
     {
@@ -1937,6 +2049,8 @@ TabPage TP_TOX_SELECT
                     Text[ hebrew ] = "‮פתיחה‬";
                     Text[ hindi ] = "खोलो";
                     Text[ slovak ] = "Otvoriť";
+                    Text[ hungarian ] = "Megnyitás";
+                    Text[ slovenian ] = "Odpri";
                 };
                 MenuItem
                 {
@@ -1951,7 +2065,7 @@ TabPage TP_TOX_SELECT
                     Text[ french ] = "~Nouveau...";
                     Text[ spanish ] = "~Nuevo...";
                     Text[ italian ] = "~Nuovo...";
-                    Text[ danish ] = "~Ny...";
+                    Text[ danish ] = "~Ny(t)...";
                     Text[ swedish ] = "~Ny...";
                     Text[ polish ] = "~Nowy...";
                     Text[ portuguese_brazilian ] = "~Novo...";
@@ -1968,6 +2082,8 @@ TabPage TP_TOX_SELECT
                     Text[ hebrew ] = "‮חדש...‬";
                     Text[ hindi ] = "~नया...";
                     Text[ slovak ] = "~Nový...";
+                    Text[ hungarian ] = "Ú~j...";
+                    Text[ slovenian ] = "~Nova...";
                 };
                 MenuItem
                 {
@@ -1999,6 +2115,8 @@ TabPage TP_TOX_SELECT
                     Text[ hebrew ] = "‮עריכה...‬";
                     Text[ hindi ] = "~संपादन...";
                     Text[ slovak ] = "~Upraviť...";
+                    Text[ hungarian ] = "~Szerkesztés...";
+                    Text[ slovenian ] = "~Uredi...";
                 };
             };
         };
@@ -2027,6 +2145,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "~फाइल";
         Text[ slovak ] = "~súbor";
+        Text[ hungarian ] = "~Fájl";
+        Text[ slovenian ] = "~Datoteka";
     };
     CheckBox    CB_FROMTABLES
     {
@@ -2060,6 +2180,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮טבלאות‬";
         Text[ hindi ] = "सारणियाँ";
         Text[ slovak ] = "Tabuľky";
+        Text[ hungarian ] = "Táblázatok";
+        Text[ slovenian ] = "Tabele";
     };
     CheckBox    CB_FROMFRAMES
     {
@@ -2075,7 +2197,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Cadre ~texte";
         Text[ spanish ] = "Marco de te~xto";
         Text[ italian ] = "Cornici";
-        Text[ danish ] = "Tekstboks";
+        Text[ danish ] = "Tekstrammer";
         Text[ swedish ] = "Textramar";
         Text[ polish ] = "Ramki te~kstowe";
         Text[ portuguese_brazilian ] = "Molduras de te~xto";
@@ -2093,6 +2215,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Te~xtrahmen";
         Text[ hindi ] = "~टेक्स्ट्";
         Text[ slovak ] = "Te~xtové rámce";
+        Text[ hungarian ] = "S~zövegkeret";
+        Text[ slovenian ] = "Okviri be~sedila";
     };
     CheckBox    CB_FROMGRAPHICS
     {
@@ -2126,6 +2250,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮גרפיקה‬";
         Text[ hindi ] = "सुचित्र";
         Text[ slovak ] = "Obrázky";
+        Text[ hungarian ] = "Kép";
+        Text[ slovenian ] = "Grafika";
     };
     CheckBox        CB_FROMOLE
     {
@@ -2159,6 +2285,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~OLE-Objekten";
         Text[ hindi ] = "OLE वस्तु";
         Text[ slovak ] = "Objekty OLE";
+        Text[ hungarian ] = "OLE-objektumok";
+        Text[ slovenian ] = "OLE predmeti";
     };
     CheckBox        CB_LEVELFROMCHAPTER
     {
@@ -2174,7 +2302,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Niveau du chapitre d'~origine";
         Text[ spanish ] = "Nivel del cap�tulo orige~n";
         Text[ italian ] = "Livello dal capitolo ~sorgente";
-        Text[ danish ] = "Niveau fra kildekapitel";
+        Text[ danish ] = "Brug niveau fra kildekapitel";
         Text[ swedish ] = "Niv� fr�n urs~prungskapitel";
         Text[ polish ] = "~Poziom z rozdzia�u �r�d�owego";
         Text[ portuguese_brazilian ] = "Usar o n�vel do cap�tulo de origem";
@@ -2191,6 +2319,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Ebene aus Urs~prungskapitel";
         Text[ hindi ] = "मूल अध्याय से सतह का उपयोग करो";
         Text[ slovak ] = "Úroveň zdrojovej kapitoly";
+        Text[ hungarian ] = "A forrásfejezet szintjének használata";
+        Text[ slovenian ] = "Uporabi raven iz izvirnega poglavja";
     };
     FixedLine        FL_IDXOPTIONS
     {
@@ -2206,7 +2336,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "Options";
         Text[ spanish ] = "Opciones";
         Text[ italian ] = "Extra";
-        Text[ danish ] = "Flere";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Till�gg";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Op��es";
@@ -2224,6 +2354,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮אפשריות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     Control CLB_FROMOBJ
     {
@@ -2335,7 +2467,7 @@ TabPage TP_TOX_SELECT
         ItemList [ danish ] =
         {
             < "%PRODUCTNAME Math" ;                 1;> ;
-            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME-diagram" ;          2;> ;
             < "%PRODUCTNAME Calc" ;                 8;> ;
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Andre OLE-objekter";     128;> ;
@@ -2468,6 +2600,22 @@ TabPage TP_TOX_SELECT
             < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
             < "Ostatné OLE objekty";   128;> ;
         };
+        ItemList [ hungarian ] =
+        {
+         < "%PRODUCTNAME Math" ;                1;> ;
+            < "%PRODUCTNAME Chart" ;            2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+            < "Egyéb OLE-objektumok";  128;> ;
+        };
+        ItemList [ slovenian ] =
+        {
+         < "%PRODUCTNAME Math" ;                1;> ;
+            < "%PRODUCTNAME grafikon" ;             2;> ;
+            < "%PRODUCTNAME Calc" ;                 8;> ;
+            < "%PRODUCTNAME Draw/%PRODUCTNAME Impress" ;    16;> ;
+            < "Drugi OLE predmeti";     128;> ;
+        };
     };
     };
     FixedLine FL_FROMOBJ
@@ -2502,6 +2650,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Aus folgenden Objekten erzeugen";
         Text[ hindi ] = "निम्नलिखित वस्तु से उत्पन्न करो";
         Text[ slovak ] = "Vytvoriť z nasledujúcich objektov";
+        Text[ hungarian ] = "Létrehozás a következő objektumokból";
+        Text[ slovenian ] = "Ustvari iz naslednjih predmetov";
     };
     CheckBox CB_SEQUENCE
     {
@@ -2517,7 +2667,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "~Num�roter les entr�es";
         Text[ spanish ] = "~Numerar entradas";
         Text[ italian ] = "Num~era voci";
-        Text[ danish ] = "Nummerer elementer";
+        Text[ danish ] = "~Nummerer elementer";
         Text[ swedish ] = "Numrera poster";
         Text[ polish ] = "N~umeruj wpisy";
         Text[ portuguese_brazilian ] = "~Numerar entradas";
@@ -2535,6 +2685,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~Einträge nummerieren";
         Text[ hindi ] = "~संख्या प्रविष्टियाँ";
         Text[ slovak ] = "Očí~slovať položky";
+        Text[ hungarian ] = "Szám~bejegyzések";
+        Text[ slovenian ] = "Vnosi š~tevilk";
     };
     FixedText FT_BRACKET
     {
@@ -2550,7 +2702,7 @@ TabPage TP_TOX_SELECT
         Text[ french ] = "~Parenth�ses";
         Text[ spanish ] = "~Par�ntesis";
         Text[ italian ] = "Parentesi";
-        Text[ danish ] = "Parenteser";
+        Text[ danish ] = "~Parenteser";
         Text[ swedish ] = "Parenteser";
         Text[ polish ] = "~Nawiasy";
         Text[ portuguese_brazilian ] = "~Colchetes";
@@ -2568,6 +2720,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "~Klammern";
         Text[ hindi ] = "~कोष्ठकें";
         Text[ slovak ] = "~Zátvorky";
+        Text[ hungarian ] = "~Zárójelek";
+        Text[ slovenian ] = "O~klepaji";
     };
     ListBox LB_BRACKET
     {
@@ -2612,6 +2766,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "[keine]";
         Text[ hindi ] = "[कोई नहीं]";
         Text[ slovak ] = "[Nič]";
+        Text[ hungarian ] = "[nincs]";
+        Text[ slovenian ] = "[brez]";
     };
     FixedLine FL_AUTHORITY
     {
@@ -2645,6 +2801,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Formatierung der Einträge";
         Text[ hindi ] = "प्रविष्टियों का रचना";
         Text[ slovak ] = "Formátovanie položiek";
+        Text[ hungarian ] = "Bejegyzések formázása";
+        Text[ slovenian ] = "Oblikovanje vnosov";
     };
     String ST_AUTOMARK_TYPE
     {
@@ -2675,6 +2833,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Markierungsdatei für Stichwortverzeichnis (*.sdi)";
         Text[ hindi ] = "वर्णमाला अनुक्रमणी केलिए चुनाव फाइल (*.sdi)";
         Text[ slovak ] = "súbor abecedného registra (*.sdi)";
+        Text[ hungarian ] = "Kijelölőfájl a tárgymutatóhoz (*.sdi)";
+        Text[ slovenian ] = "Datoteka za izbor za abecedno kazalo (*.sdi)";
     };
     FixedLine FL_SORTOPTIONS
     {
@@ -2707,6 +2867,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮מיון‬";
         Text[ hindi ] = "सोर्ट";
         Text[ slovak ] = "Zoradiť";
+        Text[ hungarian ] = "Rendezés";
+        Text[ slovenian ] = "Razvrsti";
     };
     FixedText FT_LANGUAGE
     {
@@ -2739,6 +2901,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "भाषा";
         Text[ slovak ] = "Jazyk";
+        Text[ hungarian ] = "Nyelv";
+        Text[ slovenian ] = "Jezik";
     };
     ListBox LB_LANGUAGE
     {
@@ -2778,6 +2942,8 @@ TabPage TP_TOX_SELECT
         Text[ hebrew ] = "Schlüsseltyp";
         Text[ hindi ] = "की वर्ग";
         Text[ slovak ] = "Druh kľúča";
+        Text[ hungarian ] = "Kulcs típusa";
+        Text[ slovenian ] = "Vrsta ključa";
     };
     ListBox LB_SORTALG
     {
@@ -2807,7 +2973,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "~Niveau";
         Text[ spanish ] = "Ni~vel";
         Text[ italian ] = "Livello";
-        Text[ danish ] = "Niveau";
+        Text[ danish ] = "~Niveau";
         Text[ swedish ] = "~Niv�";
         Text[ polish ] = "P~oziom";
         Text[ portuguese_brazilian ] = "~N�vel";
@@ -2825,6 +2991,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "E~bene";
         Text[ hindi ] = "~स्तर";
         Text[ slovak ] = "Ú~roveň";
+        Text[ hungarian ] = "~Szint";
+        Text[ slovenian ] = "~Raven";
     };
     Control LB_LEVEL
     {
@@ -2845,7 +3013,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Type";
         Text[ spanish ] = "~Tipo";
         Text[ italian ] = "Tipo";
-        Text[ danish ] = "Type";
+        Text[ danish ] = "~Type";
         Text[ swedish ] = "Ty~p";
         Text[ polish ] = "~Typ";
         Text[ portuguese_brazilian ] = "T~ipo";
@@ -2862,6 +3030,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     FixedText FT_TOKEN
     {
@@ -2878,7 +3048,7 @@ TabPage TP_TOX_ENTRY
         Text[ spanish ] = "~Estructura";
         Text[ finnish ] = "~Rakenne";
         Text[ italian ] = "Struttura";
-        Text[ danish ] = "Struktur";
+        Text[ danish ] = "~Struktur";
         Text[ swedish ] = "~Struktur";
         Text[ polish ] = "Struktura";
         Text[ japanese ] = "構成(~S)";
@@ -2894,6 +3064,8 @@ TabPage TP_TOX_ENTRY
         Text[ portuguese_brazilian ] = "E~strutura";
         Text[ hindi ] = "~Structure";
         Text[ slovak ] = "Štruktú~ra";
+        Text[ hungarian ] = "Sze~rkezet";
+        Text[ slovenian ] = "Z~gradba";
     };
     Window WIN_TOKEN
     {
@@ -2934,7 +3106,7 @@ TabPage TP_TOX_ENTRY
             Text[ french ] = "E#";
             Text[ spanish ] = "E#";
             Text[ italian ] = "E#";
-            Text[ danish ] = "E~#";
+            Text[ danish ] = "E#";
             Text[ swedish ] = "E#";
             Text[ polish ] = "W#";
             Text[ portuguese_brazilian ] = "E#";
@@ -2951,6 +3123,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "E#";
             Text[ hindi ] = "E#";
             Text[ slovak ] = "E#";
+            Text[ hungarian ] = "E#";
+            Text[ slovenian ] = "E#";
         };
         String STR_TOKEN_ENTRY
         {
@@ -2981,6 +3155,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "E";
             Text[ hindi ] = "E";
             Text[ slovak ] = "E";
+            Text[ hungarian ] = "E";
+            Text[ slovenian ] = "E";
         };
         String STR_TOKEN_TAB_STOP
         {
@@ -3011,6 +3187,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "T";
             Text[ hindi ] = "T";
             Text[ slovak ] = "T";
+            Text[ hungarian ] = "T";
+            Text[ slovenian ] = "T";
         };
         String STR_TOKEN_TEXT
         {
@@ -3047,6 +3225,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "#";
             Text[ hindi ] = "#";
             Text[ slovak ] = "#";
+            Text[ hungarian ] = "#";
+            Text[ slovenian ] = "#";
         };
         String STR_TOKEN_CHAPTER_INFO
         {
@@ -3078,6 +3258,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "CI";
             Text[ hindi ] = "CI";
             Text[ slovak ] = "CI";
+            Text[ hungarian ] = "CI";
+            Text[ slovenian ] = "CI";
         };
         String STR_TOKEN_LINK_START
         {
@@ -3108,6 +3290,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "LS";
             Text[ hindi ] = "LS";
             Text[ slovak ] = "LS";
+            Text[ hungarian ] = "LS";
+            Text[ slovenian ] = "LS";
         };
         String STR_TOKEN_LINK_END
         {
@@ -3138,6 +3322,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "LE";
             Text[ hindi ] = "LE";
             Text[ slovak ] = "LE";
+            Text[ hungarian ] = "LE";
+            Text[ slovenian ] = "LE";
         };
         String STR_TOKEN_AUTHORITY
         {
@@ -3169,6 +3355,8 @@ TabPage TP_TOX_ENTRY
             Text[ thai ] = "A";
             Text[ hindi ] = "A";
             Text[ slovak ] = "A";
+            Text[ hungarian ] = "A";
+            Text[ slovenian ] = "A";
         };
         String STR_TOKEN_HELP_ENTRY_NO
         {
@@ -3200,6 +3388,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "Kapitelnummer";
             Text[ hindi ] = "अध्याय संख्या";
             Text[ slovak ] = "Číslo kapitoly";
+            Text[ hungarian ] = "Fejezetszám";
+            Text[ slovenian ] = "Številka poglavja";
         };
         String STR_TOKEN_HELP_ENTRY
         {
@@ -3231,6 +3421,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "‮שורה‬";
             Text[ hindi ] = "प्रविष्टि";
             Text[ slovak ] = "Položka";
+            Text[ hungarian ] = "Bejegyzés";
+            Text[ slovenian ] = "Vnos";
         };
         String STR_TOKEN_HELP_TAB_STOP
         {
@@ -3244,7 +3436,7 @@ TabPage TP_TOX_ENTRY
             Text[ french ] = "Tabulation";
             Text[ spanish ] = "Tabulador";
             Text[ italian ] = "Tabulazione";
-            Text[ danish ] = "Tabulator";
+            Text[ danish ] = "Tabulator stop";
             Text[ swedish ] = "Tabulator";
             Text[ polish ] = "Tabulator";
             Text[ portuguese_brazilian ] = "Tabula��o";
@@ -3262,6 +3454,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "Tabulator";
             Text[ hindi ] = "टॉब रुकावट";
             Text[ slovak ] = "Krok tabulátora";
+            Text[ hungarian ] = "Tabulátor";
+            Text[ slovenian ] = "Tabulatorsko mesto";
         };
         String STR_TOKEN_HELP_TEXT
         {
@@ -3293,6 +3487,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "‮טקסט‬";
             Text[ hindi ] = "टेक्स्ट्";
             Text[ slovak ] = "Text";
+            Text[ hungarian ] = "Szöveg";
+            Text[ slovenian ] = "Besedilo";
         };
         String STR_TOKEN_HELP_PAGE_NUMS
         {
@@ -3324,6 +3520,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "Seitennummer";
             Text[ hindi ] = "पृष्ठ संख्या";
             Text[ slovak ] = "Číslo stránky";
+            Text[ hungarian ] = "Oldalszám";
+            Text[ slovenian ] = "Številka strani";
         };
         String STR_TOKEN_HELP_CHAPTER_INFO
         {
@@ -3355,6 +3553,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "Kapitelinformation";
             Text[ hindi ] = "अध्याय का विषय";
             Text[ slovak ] = "Informácie o kapitole";
+            Text[ hungarian ] = "Fejezet-információ";
+            Text[ slovenian ] = "Informacije o poglavju";
         };
         String STR_TOKEN_HELP_LINK_START
         {
@@ -3386,6 +3586,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "Hyperlink Anfang";
             Text[ hindi ] = "हाइपरलिंक प्रारंभ";
             Text[ slovak ] = "Začiatok hypertextového odkazu";
+            Text[ hungarian ] = "Hiperhivatkozás";
+            Text[ slovenian ] = "Začetek hiperpovezave";
         };
         String STR_TOKEN_HELP_LINK_END
         {
@@ -3417,6 +3619,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "Hyperlink Ende";
             Text[ hindi ] = "हाइपरलिंक अंत";
             Text[ slovak ] = "Koniec hypertextového odkazu";
+            Text[ hungarian ] = "Hiperhivatkozás vége";
+            Text[ slovenian ] = "Konec hiperpovezave";
         };
         String STR_TOKEN_HELP_AUTHORITY
         {
@@ -3447,6 +3651,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = ":‮שורת בבליוגרפיה‬";
             Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि: ";
             Text[ slovak ] = "Položka v zoznamu použitej literatúry: ";
+            Text[ hungarian ] = "Irodalomjegyzék-bejegyzés:";
+            Text[ slovenian ] = "Bibliografski vnos:";
         };
         String STR_CHARSTYLE
         {
@@ -3478,6 +3684,8 @@ TabPage TP_TOX_ENTRY
             Text[ hebrew ] = "Zeichenvorlage:";
             Text[ hindi ] = "अक्षर शैली: ";
             Text[ slovak ] = "Znakový štýl: ";
+            Text[ hungarian ] = "Karakterstílus:";
+            Text[ slovenian ] = "Znakovni slog:";
         };
     };
     PushButton PB_ALL_LEVELS
@@ -3495,7 +3703,7 @@ TabPage TP_TOX_ENTRY
         Text[ spanish ] = "~Todos";
         Text[ finnish ] = "~Kaikki tasot";
         Text[ italian ] = "~Tutto";
-        Text[ danish ] = "Alle niveauer";
+        Text[ danish ] = "A~lle";
         Text[ swedish ] = "~Alla";
         Text[ polish ] = "~Wszystkie poziomy";
         Text[ portuguese_brazilian ] = "Todos os ~n�veis";
@@ -3511,6 +3719,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "~सब स्तरें";
         Text[ slovak ] = "~Všetky úrovne";
+        Text[ hungarian ] = "~Minden szintre";
+        Text[ slovenian ] = "~Vse";
     };
     PushButton PB_ENTRYNO
     {
@@ -3544,6 +3754,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "~Kapitelnr.";
         Text[ hindi ] = "अध्याय संख्या";
         Text[ slovak ] = "Kapitola č.";
+        Text[ hungarian ] = "Fejezetszám";
+        Text[ slovenian ] = "Št. pogl.";
     };
     PushButton PB_ENTRY
     {
@@ -3559,7 +3771,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Texte";
         Text[ spanish ] = "Te~xto de entrada";
         Text[ italian ] = "Testo voce";
-        Text[ danish ] = "Ele~menttekst";
+        Text[ danish ] = "Elementtekst";
         Text[ swedish ] = "~Posttext";
         Text[ polish ] = "Tekst wpisu";
         Text[ portuguese_brazilian ] = "Texto de entrada";
@@ -3577,6 +3789,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "~Eintragstext";
         Text[ hindi ] = "प्रविष्टि टेक्स्ट्";
         Text[ slovak ] = "Text položky";
+        Text[ hungarian ] = "Bejegyzés";
+        Text[ slovenian ] = "Bes. vnosa";
     };
     PushButton PB_CHAPTERINFO
     {
@@ -3592,7 +3806,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Info ~chapitre";
         Text[ spanish ] = "Informaci�n ~cap.";
         Text[ italian ] = "Info capitolo";
-        Text[ danish ] = "Kapitelinfo";
+        Text[ danish ] = "~Kapitelinfo";
         Text[ swedish ] = "~Kapitelinfo";
         Text[ polish ] = "R~ozdzia�";
         Text[ portuguese_brazilian ] = "Info. do ~cap�tulo";
@@ -3610,6 +3824,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "~Kapitelinfo";
         Text[ hindi ] = "~अध्याय विषय";
         Text[ slovak ] = "Informácie o ~kapitole";
+        Text[ hungarian ] = "F~ejezet-információ";
+        Text[ slovenian ] = "~Info. o poglavju";
     };
     PushButton PB_PAGENO
     {
@@ -3643,6 +3859,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "~Seitennr.";
         Text[ hindi ] = "पृष्ठ संख्या";
         Text[ slovak ] = "Číslo str.";
+        Text[ hungarian ] = "Oldalszám";
+        Text[ slovenian ] = "Št. strani";
     };
     PushButton PB_TAB
     {
@@ -3658,7 +3876,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Tabulation";
         Text[ spanish ] = "~Tabulador";
         Text[ italian ] = "~Tabulazione";
-        Text[ danish ] = "Tab~ulator";
+        Text[ danish ] = "Tabulator stop";
         Text[ swedish ] = "~Tabulator";
         Text[ polish ] = "Tabulator";
         Text[ portuguese_brazilian ] = "Tabula��o";
@@ -3676,6 +3894,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "~Tabulator";
         Text[ hindi ] = "टॉब रुकावट";
         Text[ slovak ] = "Krok tabulátora";
+        Text[ hungarian ] = "Tabulátor";
+        Text[ slovenian ] = "Tab. mesto";
     };
     PushButton PB_HYPERLINK
     {
@@ -3709,6 +3929,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "H~yperlink";
         Text[ hindi ] = "हा~इपरलिंक";
         Text[ slovak ] = "H~ypertextový odkaz";
+        Text[ hungarian ] = "~Hiperhivatk.";
+        Text[ slovenian ] = "H~iperpov.";
     };
     ListBox LB_AUTHFIELD
     {
@@ -3732,7 +3954,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Ins�rer";
         Text[ spanish ] = "In~sertar";
         Text[ italian ] = "Inserisci";
-        Text[ danish ] = "Inds�t";
+        Text[ danish ] = "~Inds�t";
         Text[ swedish ] = "~Infoga";
         Text[ polish ] = "W~staw";
         Text[ portuguese_brazilian ] = "~Inserir";
@@ -3750,6 +3972,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "~Vložiť";
+        Text[ hungarian ] = "~Beszúrás";
+        Text[ slovenian ] = "~Vstavi";
     };
     PushButton PB_AUTHREMOVE
     {
@@ -3765,7 +3989,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Borrar";
         Text[ italian ] = "Ri~muovi";
-        Text[ danish ] = "Fjern";
+        Text[ danish ] = "~Fjern";
         Text[ swedish ] = "~Ta bort";
         Text[ polish ] = "~Usu�";
         Text[ portuguese_brazilian ] = "~Remover";
@@ -3783,6 +4007,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "~हटाओ";
         Text[ slovak ] = "Odst~rániť";
+        Text[ hungarian ] = "~Eltávolítás";
+        Text[ slovenian ] = "Odst~rani";
     };
     FixedText FT_CHARSTYLE
     {
@@ -3816,6 +4042,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Zeichen~vorlage";
         Text[ hindi ] = "अक्षर शैली";
         Text[ slovak ] = "Štýl znaku";
+        Text[ hungarian ] = "Karakterstílus";
+        Text[ slovenian ] = "Znakovni slog";
     };
     ListBox LB_CHARSTYLE
     {
@@ -3838,7 +4066,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "~�diter...";
         Text[ spanish ] = "~Editar...";
         Text[ italian ] = "~Modifica...";
-        Text[ danish ] = "Rediger...";
+        Text[ danish ] = "~Rediger...";
         Text[ swedish ] = "~Redigera...";
         Text[ polish ] = "Edyt~uj...";
         Text[ portuguese_brazilian ] = "~Editar...";
@@ -3856,6 +4084,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
         Text[ slovak ] = "~Upraviť...";
+        Text[ hungarian ] = "S~zerkesztés...";
+        Text[ slovenian ] = "~Uredi...";
     };
     FixedText FT_FILLCHAR
     {
@@ -3889,6 +4119,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "~Füllzeichen";
         Text[ hindi ] = "भरने का अक्षर ";
         Text[ slovak ] = "Vyplniť znakom";
+        Text[ hungarian ] = "Kitöltőkarakter";
+        Text[ slovenian ] = "Zapolnitveni znak";
     };
     ComboBox CB_FILLCHAR
     {
@@ -3929,6 +4161,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Ka~piteleintrag";
         Text[ hindi ] = "अध्याय प्रविष्टि";
         Text[ slovak ] = "Položka kapitoly";
+        Text[ hungarian ] = "Fejezet bejegyzés";
+        Text[ slovenian ] = "Vnos v poglavje";
     };
     ListBox LB_CHAPTERENTRY
     {
@@ -4104,6 +4338,18 @@ TabPage TP_TOX_ENTRY
         < "Len popis" ; > ;
         < "Číselný interval a popis" ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Csak számtartomány" ; > ;
+        < "Csak leírás" ; > ;
+        < "Számtartomány és leírás" ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Samo številke" ; > ;
+        < "Samo opis" ; > ;
+        < "Številke in opis" ; > ;
+    };
     };
     FixedText FT_TABPOS
     {
@@ -4137,6 +4383,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Tab~ulatorposition";
         Text[ hindi ] = "टॉब रुकावट स्थान";
         Text[ slovak ] = "Umiestnenie kroku tabulátora";
+        Text[ hungarian ] = "Tabulátorpozíció";
+        Text[ slovenian ] = "Položaj tab. mesta";
     };
     MetricField MF_TABPOS
     {
@@ -4166,7 +4414,7 @@ TabPage TP_TOX_ENTRY
         Text[ portuguese ] = "Alinhar � direita";
         Text[ russian ] = "������";
         Text[ greek ] = "�������� ��~���";
-        Text[ dutch ] = "Rechtslijnend";
+        Text[ dutch ] = "Rechts uitlijnen";
         Text[ french ] = "Aligner � droite";
         Text[ spanish ] = "Alinear a la derecha";
         Text[ finnish ] = "Tasaa oikealle";
@@ -4188,6 +4436,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Rechtsbündig";
         Text[ hindi ] = "दाहिनी ओर पंक्तिकरण";
         Text[ slovak ] = "Zarovnať vpravo";
+        Text[ hungarian ] = "Jobbra igazítás";
+        Text[ slovenian ] = "Poravnaj desno";
     };
     FixedLine FL_ENTRY
     {
@@ -4221,6 +4471,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Struktur und Formatierung";
         Text[ hindi ] = "बनावट";
         Text[ slovak ] = "Štruktúra";
+        Text[ hungarian ] = "Szerkezet és formázás";
+        Text[ slovenian ] = "Zgradba in oblikovanje";
     };
     CheckBox CB_RELTOSTYLE
     {
@@ -4254,6 +4506,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "P~osition der Tabulatoren relativ zum Einzug aus der Absatzvorlage";
         Text[ hindi ] = "परिच्छे~द शैली इन्डेन्ट से सम्बन्धित टॉब स्थान";
         Text[ slovak ] = "Pozícia tabulátora relatí~vna k odsadeniu štýlu odstavca";
+        Text[ hungarian ] = "~Bekezdésstílus behúzásához viszonyított tabulátorpozíció";
+        Text[ slovenian ] = "Položaj tabulatorja ~glede na zamik v slogu odstavka";
     };
     FixedText FT_MAIN_ENTRY_STYLE
     {
@@ -4287,6 +4541,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Zeichenvorla~ge für Haupteinträge";
         Text[ hindi ] = "प्रधान प्रविष्टियों केलिए अक्षर शैली";
         Text[ slovak ] = "Znakový štýl pre hlavné položky";
+        Text[ hungarian ] = "A főbb bejegyzések karakterstílusa";
+        Text[ slovenian ] = "Znakovni slog za glavne vnose";
     };
     ListBox LB_MAIN_ENTRY_STYLE
     {
@@ -4329,6 +4585,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Alphabet~isches Trennzeichen";
         Text[ hindi ] = "वर्णमाला परिसीमित करनेवाला";
         Text[ slovak ] = "Abecedný oddeľovač";
+        Text[ hungarian ] = "Alfabetikus határoló";
+        Text[ slovenian ] = "Abecedno ločilo";
     };
     CheckBox CB_COMMASEPARATED
     {
@@ -4362,6 +4620,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "S~chlüssel kommasepariert";
         Text[ hindi ] = "की कोम्मा से अलग की हुयी";
         Text[ slovak ] = "Kľúče oddelené čiarkami";
+        Text[ hungarian ] = "Vesszővel elválasztott kulcsok";
+        Text[ slovenian ] = "Z vejicami ločen ključ";
     };
     FixedLine FL_FORMAT
     {
@@ -4377,7 +4637,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Formatage";
         Text[ spanish ] = "Formato";
         Text[ italian ] = "Formattazione";
-        Text[ danish ] = "Formatering";
+        Text[ danish ] = "Format";
         Text[ swedish ] = "Formatering";
         Text[ polish ] = "Format";
         Text[ portuguese_brazilian ] = "Formato";
@@ -4395,6 +4655,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
     RadioButton RB_DOCPOS
     {
@@ -4427,6 +4689,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Dokument~position";
         Text[ hindi ] = "लेखपत्र ~स्थान ";
         Text[ slovak ] = "~Pozícia dokumentu ";
+        Text[ hungarian ] = "Dokumentum~pozíció";
+        Text[ slovenian ] = "~Položaj dokumenta";
     };
     RadioButton RB_SORTCONTENT
     {
@@ -4442,7 +4706,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "le ~contenu";
         Text[ spanish ] = "C~ontenido";
         Text[ italian ] = "Contenuto";
-        Text[ danish ] = "Indhold";
+        Text[ danish ] = "I~ndhold";
         Text[ swedish ] = "I~nneh�ll";
         Text[ polish ] = "~Zawarto��";
         Text[ portuguese_brazilian ] = "~Conte�do";
@@ -4460,6 +4724,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "~Inhalt";
         Text[ hindi ] = "~विषय";
         Text[ slovak ] = "~Obsah";
+        Text[ hungarian ] = "~Tartalom";
+        Text[ slovenian ] = "~Vsebina";
     };
     FixedLine FL_SORTING
     {
@@ -4475,7 +4741,7 @@ TabPage TP_TOX_ENTRY
         Text[ french ] = "Trier selon";
         Text[ spanish ] = "Ordenar seg�n";
         Text[ italian ] = "Ordine per";
-        Text[ danish ] = "Sortering efter";
+        Text[ danish ] = "Sorter efter";
         Text[ swedish ] = "Sortering efter";
         Text[ polish ] = "Sortuj wg";
         Text[ portuguese_brazilian ] = "Ordenar por";
@@ -4493,6 +4759,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Sortierung nach";
         Text[ hindi ] = "से सोर्ट करो";
         Text[ slovak ] = "Triediť podľa";
+        Text[ hungarian ] = "Rendezés";
+        Text[ slovenian ] = "Razvrsti po";
     };
     FixedText FT_FIRSTKEY
     {
@@ -4558,6 +4826,8 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ thai ] = "Ascending";
         QuickHelpText[ hindi ] = "आरोहण क्रम";
         QuickHelpText[ slovak ] = "Vzostupne";
+        QuickHelpText[ hungarian ] = "Növekvő";
+        QuickHelpText[ slovenian ] = "Naraščajoče";
     };
     ImageRadioButton RB_SORTDOWN1
     {
@@ -4599,6 +4869,8 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ thai ] = "Descending";
         QuickHelpText[ hindi ] = "अवरोहण क्रम";
         QuickHelpText[ slovak ] = "Zostupne";
+        QuickHelpText[ hungarian ] = "Csökkenő";
+        QuickHelpText[ slovenian ] = "Padajoče";
     };
     ImageRadioButton RB_SORTUP2
     {
@@ -4641,6 +4913,8 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ thai ] = "Ascending";
         QuickHelpText[ hindi ] = "आरोहण क्रम";
         QuickHelpText[ slovak ] = "Vzostupne";
+        QuickHelpText[ hungarian ] = "Növekvő";
+        QuickHelpText[ slovenian ] = "Naraščajoče";
     };
     ImageRadioButton RB_SORTDOWN2
     {
@@ -4682,6 +4956,8 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ thai ] = "Descending";
         QuickHelpText[ hindi ] = "अवरोहण क्रम";
         QuickHelpText[ slovak ] = "Zostupne";
+        QuickHelpText[ hungarian ] = "Csökkenő";
+        QuickHelpText[ slovenian ] = "Padajoče";
     };
     ImageRadioButton RB_SORTUP3
     {
@@ -4724,6 +5000,8 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ thai ] = "Ascending";
         QuickHelpText[ hindi ] = "आरोहण क्रम";
         QuickHelpText[ slovak ] = "Vzostupne";
+        QuickHelpText[ hungarian ] = "Növekvő";
+        QuickHelpText[ slovenian ] = "Naraščajoče";
     };
     ImageRadioButton RB_SORTDOWN3
     {
@@ -4765,6 +5043,8 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ thai ] = "Descending";
         QuickHelpText[ hindi ] = "अवरोहण क्रम";
         QuickHelpText[ slovak ] = "Zostupne";
+        QuickHelpText[ hungarian ] = "Csökkenő";
+        QuickHelpText[ slovenian ] = "Padajoče";
     };
     FixedText FT_SECONDKEY
     {
@@ -4824,6 +5104,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "Sortierschlüssel";
         Text[ hindi ] = "सोर्ट करने का की";
         Text[ slovak ] = "Kľúč pre radenie";
+        Text[ hungarian ] = "Rendezési kulcs";
+        Text[ slovenian ] = "Ključi razvrščanja";
     };
 
     String STR_NOSORTKEY
@@ -4855,6 +5137,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮(ללא)‬";
         Text[ hindi ] = "<कोई नहीं>";
         Text[ slovak ] = "<nič>";
+        Text[ hungarian ] = "<nincs>";
+        Text[ slovenian ] = "<Brez>";
     };
     String STR_NO_CHAR_STYLE
     {
@@ -4886,6 +5170,8 @@ TabPage TP_TOX_ENTRY
         Text[ hebrew ] = "‮(ללא)‬";
         Text[ hindi ] = "<कोई नहीं>";
         Text[ slovak ] = "<žiadny>";
+        Text[ hungarian ] = "<Nincs>";
+        Text[ slovenian ] = "<Brez>";
     };
     String STR_DELIM
     {
@@ -4917,6 +5203,8 @@ TabPage TP_TOX_ENTRY
         Text[ thai ] = "S";
         Text[ hindi ] = "S";
         Text[ slovak ] = "S";
+        Text[ hungarian ] = "S";
+        Text[ slovenian ] = "S";
     };
 };
 TabPage TP_TOX_STYLES
@@ -4935,7 +5223,7 @@ TabPage TP_TOX_STYLES
         Text [ portuguese_brazilian ] = "~N�veis" ;
         Text [ portuguese ] = "~N�veis" ;
         Text [ finnish ] = "~Tasot" ;
-        Text [ danish ] = "Niveauer" ;
+        Text [ danish ] = "~Niveauer" ;
         Text [ french ] = "~Niveaux" ;
         Text [ swedish ] = "Niv�er" ;
         Text [ dutch ] = "~Niveaus" ;
@@ -4958,6 +5246,8 @@ TabPage TP_TOX_STYLES
         Text[ hebrew ] = "Stu~fen";
         Text[ hindi ] = "~स्तरें";
         Text[ slovak ] = "Úro~vne";
+        Text[ hungarian ] = "~Szintek";
+        Text[ slovenian ] = "~Ravni";
     };
     ListBox LB_LEVEL
     {
@@ -4978,7 +5268,7 @@ TabPage TP_TOX_STYLES
         Text [ portuguese_brazilian ] = "Estilo~s do Par�grafo" ;
         Text [ portuguese ] = "Estilo~s de par�grafo" ;
         Text [ finnish ] = "Kappalet~yylit" ;
-        Text [ danish ] = "Afsnitstypografier" ;
+        Text [ danish ] = "A~fsnitstypografier" ;
         Text [ french ] = "Styles de paragraphe" ;
         Text [ swedish ] = "Styckeformatmallar" ;
         Text [ dutch ] = "~Alinea-opmaakprofielen" ;
@@ -5001,6 +5291,8 @@ TabPage TP_TOX_STYLES
         Text[ hebrew ] = "~Absatzvorlagen";
         Text[ hindi ] = "परिच्छेद ~शैलियाँ";
         Text[ slovak ] = "Štýly od~stavca";
+        Text[ hungarian ] = "Bekezdés~stílusok";
+        Text[ slovenian ] = "~Slogi odstavka";
     };
     ListBox LB_PARALAY
     {
@@ -5024,7 +5316,7 @@ TabPage TP_TOX_STYLES
         Text [ spanish ] = "Predeterminado" ;
         Text [ french ] = "Standard" ;
         Text [ swedish ] = "Sta~ndard" ;
-        Text [ danish ] = "Standard" ;
+        Text [ danish ] = "Standar~d" ;
         Text [ portuguese ] = "~Padr�o" ;
         Text [ portuguese_brazilian ] = "~Padr�o" ;
         Text[ chinese_simplified ] = "标准(~D)";
@@ -5044,6 +5336,8 @@ TabPage TP_TOX_STYLES
         Text[ hebrew ] = "‮ברירת צחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
         Text[ slovak ] = "Výcho~dzie";
+        Text[ hungarian ] = "~Alapértelmezett";
+        Text[ slovenian ] = "~Privzeto";
     };
     ImageButton BT_ASSIGN
     {
@@ -5073,7 +5367,7 @@ TabPage TP_TOX_STYLES
         Text[ french ] = "�diter";
         Text[ spanish ] = "Editar";
         Text[ italian ] = "~Modifica";
-        Text[ danish ] = "Rediger";
+        Text[ danish ] = "~Rediger";
         Text[ swedish ] = "~Redigera";
         Text[ polish ] = "Edyt~uj";
         Text[ portuguese_brazilian ] = "~Editar";
@@ -5092,6 +5386,8 @@ TabPage TP_TOX_STYLES
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "~संपादन";
         Text[ slovak ] = "~Upraviť";
+        Text[ hungarian ] = "Sz~erkesztés";
+        Text[ slovenian ] = "~Uredi";
     };
     FixedLine FL_FORMAT
     {
@@ -5106,7 +5402,7 @@ TabPage TP_TOX_STYLES
         Text[ french ] = "Assignation";
         Text[ spanish ] = "Asignaci�n";
         Text[ italian ] = "Assegnazione";
-        Text[ danish ] = "Tildel";
+        Text[ danish ] = "Tildeling";
         Text[ swedish ] = "Tilldelning";
         Text[ polish ] = "Przypisanie";
         Text[ portuguese_brazilian ] = "Atribui��o";
@@ -5125,6 +5421,8 @@ TabPage TP_TOX_STYLES
         Text[ hebrew ] = "‮השמה‬";
         Text[ hindi ] = "निर्दिष्ट करना";
         Text[ slovak ] = "Priradenie";
+        Text[ hungarian ] = "Hozzárendelések";
+        Text[ slovenian ] = "Dodelitev";
     };
 };
 ModalDialog DLG_ADD_IDX_STYLES
@@ -5196,7 +5494,7 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ french ] = "Styles";
         Text[ spanish ] = "~Estilos";
         Text[ italian ] = "~Modelli";
-        Text[ danish ] = "~Typografier";
+        Text[ danish ] = "T~ypografier";
         Text[ swedish ] = "~Mallar";
         Text[ polish ] = "~Style";
         Text[ portuguese_brazilian ] = "E~stilos";
@@ -5214,6 +5512,8 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ hebrew ] = "~Vorlagen";
         Text[ hindi ] = "शैलि~याँ";
         Text[ slovak ] = "Štý~ly";
+        Text[ hungarian ] = "Stíl~usok";
+        Text[ slovenian ] = "Sl~ogi";
     };
     OKButton PB_OK
     {
@@ -5264,6 +5564,8 @@ ModalDialog DLG_ADD_IDX_STYLES
         Text[ hebrew ] = "Nicht zugewiesen";
         Text[ hindi ] = "लागू नहीं किया";
         Text[ slovak ] = "Nepoužité";
+        Text[ hungarian ] = "Nem alkalmazott";
+        Text[ slovenian ] = "Neuporabljeno";
     };
     Text[ english_us ] = "Assign Styles";
     Text[ portuguese ] = "Aplicar estilos";
@@ -5291,6 +5593,8 @@ ModalDialog DLG_ADD_IDX_STYLES
     Text[ hebrew ] = "Vorlage zuweisen";
     Text[ hindi ] = "शैलियाँ निर्दिष्ट करो";
     Text[ slovak ] = "Priradiť štýly";
+    Text[ hungarian ] = "Stílusok hozzárendelése";
+    Text[ slovenian ] = "Dodeli sloge";
 };
 /*-----------------------------------------------------------
 
@@ -5358,6 +5662,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "Suchbegriff";
             Text[ hindi ] = "खोज का विषय";
             Text[ slovak ] = "Hľadaný výraz";
+            Text[ hungarian ] = "Keresett kifejezés";
+            Text[ slovenian ] = "Iskalni pogoj";
         };
         String ST_ALTERNATIVE
         {
@@ -5388,6 +5694,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "Alternativeintrag";
             Text[ hindi ] = "विकल्प प्रविष्टि";
             Text[ slovak ] = "Alternatívna položka";
+            Text[ hungarian ] = "Alternatív bejegyzés";
+            Text[ slovenian ] = "Alternativni vnos";
         };
         String ST_PRIMKEY
         {
@@ -5418,6 +5726,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "1. Schlüssel";
             Text[ hindi ] = "पहिला की";
             Text[ slovak ] = "Prvý kľúč";
+            Text[ hungarian ] = "1. kulcs";
+            Text[ slovenian ] = "1. ključ";
         };
         String ST_SECKEY
         {
@@ -5448,6 +5758,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "2. Schlüssel";
             Text[ hindi ] = "दूसरा की";
             Text[ slovak ] = "Druhý kľúč";
+            Text[ hungarian ] = "2. kulcs";
+            Text[ slovenian ] = "2. ključ";
         };
         String ST_COMMENT
         {
@@ -5478,6 +5790,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "‮הערות‬";
             Text[ hindi ] = "अपवाद";
             Text[ slovak ] = "Komentár";
+            Text[ hungarian ] = "Megjegyzés";
+            Text[ slovenian ] = "Komentar";
         };
         String ST_CASESENSITIVE
         {
@@ -5491,7 +5805,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ french ] = "Respecter la casse";
             Text[ spanish ] = "Coincidencia exacta";
             Text[ italian ] = "Ricerca esatta";
-            Text[ danish ] = "Eksakt";
+            Text[ danish ] = "STORE og sm� bogstaver";
             Text[ swedish ] = "Exakt";
             Text[ polish ] = "Uwzgl�dniaj wielko�� liter";
             Text[ portuguese_brazilian ] = "Diferenciar Mai�sculas/Min�sculas";
@@ -5508,6 +5822,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "‮התאמת אותיות גדולות/קטנות‬";
             Text[ hindi ] = "केस तुलना";
             Text[ slovak ] = "Rozlišovať veľkosť";
+            Text[ hungarian ] = "Kis- és nagybetűk egyeztetése";
+            Text[ slovenian ] = "Razlikuj velike in male črke";
         };
         String ST_WORDONLY
         {
@@ -5538,6 +5854,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "Ganze Wörter";
             Text[ hindi ] = "केवल शब्द";
             Text[ slovak ] = "Celé slová";
+            Text[ hungarian ] = "Csak teljes szavak";
+            Text[ slovenian ] = "Samo beseda";
         };
         String ST_TRUE
         {
@@ -5568,6 +5886,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "‮כן‬";
             Text[ hindi ] = "हाँ";
             Text[ slovak ] = "Áno";
+            Text[ hungarian ] = "Igen";
+            Text[ slovenian ] = "Da";
         };
         String ST_FALSE
         {
@@ -5598,6 +5918,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ hebrew ] = "‮לא‬";
             Text[ hindi ] = "नहीं";
             Text[ slovak ] = "Nie";
+            Text[ hungarian ] = "Nem";
+            Text[ slovenian ] = "Ne";
         };
     };
     FixedLine        FL_ENTRIES
@@ -5631,6 +5953,8 @@ ModalDialog DLG_CREATE_AUTOMARK
         Text[ hebrew ] = "Einträge";
         Text[ hindi ] = "प्रविष्टियाँ";
         Text[ slovak ] = "Položky";
+        Text[ hungarian ] = "Bejegyzések";
+        Text[ slovenian ] = "Vnosi";
     };
 
     Text[ english_us ] = "Edit Concordance File";
@@ -5658,8 +5982,12 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ hebrew ] = "Konkordanzdatei bearbeiten";
     Text[ hindi ] = "कोनकोर्डेन्स फाइल संपादन";
     Text[ slovak ] = "Upraviť súbor konkordancií­";
+    Text[ hungarian ] = "Szómutatófájl szerkesztése";
+    Text[ slovenian ] = "Uredi konkordančno datoteko";
 };
 // -----------------------------------------------------------------------------
+
+
 
 
 
