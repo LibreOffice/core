@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:02:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include <svx/framelinkarray.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 //------------------------------------------------------------------------
 
@@ -163,7 +166,7 @@ enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 //CHINA001
 //========================================================================
 
-class AutoFmtPreview : public Window
+class SC_DLLPUBLIC AutoFmtPreview : public Window
 {
 public:
             AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc );
@@ -195,29 +198,51 @@ private:
     const String            aStrSum;
     SvNumberFormatter*      pNumFmt;
     //-------------------------------------------
-    void    Init            ();
-    void    DoPaint         ( const Rectangle& rRect );
-    void    CalcCellArray   ( BOOL bFitWidth );
-    void    CalcLineMap     ();
-    void    PaintCells      ();
+    SC_DLLPRIVATE void  Init            ();
+    SC_DLLPRIVATE void  DoPaint         ( const Rectangle& rRect );
+    SC_DLLPRIVATE void  CalcCellArray   ( BOOL bFitWidth );
+    SC_DLLPRIVATE void  CalcLineMap     ();
+    SC_DLLPRIVATE void  PaintCells      ();
 
 /*  Usage of type size_t instead of SCCOL/SCROW is correct here - used in
     conjunction with class svx::frame::Array (svx/framelinkarray.hxx), which
     expects size_t coordinates. */
 
-    USHORT              GetFormatIndex( size_t nCol, size_t nRow ) const;
-    const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
-    const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
+    SC_DLLPRIVATE USHORT              GetFormatIndex( size_t nCol, size_t nRow ) const;
+    SC_DLLPRIVATE const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
+    SC_DLLPRIVATE const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
 
-    void                DrawString( size_t nCol, size_t nRow );
-    void                DrawStrings();
-    void                DrawBackground();
+    SC_DLLPRIVATE void                DrawString( size_t nCol, size_t nRow );
+    SC_DLLPRIVATE void                DrawStrings();
+    SC_DLLPRIVATE void                DrawBackground();
 
-    void    MakeFonts       ( USHORT nIndex,
+    SC_DLLPRIVATE void    MakeFonts       ( USHORT nIndex,
                               Font& rFont,
                               Font& rCJKFont,
                               Font& rCTLFont );
-    String  MakeNumberString( String cellString, BOOL bAddDec );
+
+    SC_DLLPRIVATE String    MakeNumberString( String cellString, BOOL bAddDec );
+    SC_DLLPRIVATE void  DrawFrameLine   ( const SvxBorderLine&  rLineD,
+                              Point                 from,
+                              Point                 to,
+                              BOOL                  bHorizontal,
+                              const SvxBorderLine&  rLineLT,
+                              const SvxBorderLine&  rLineL,
+                              const SvxBorderLine&  rLineLB,
+                              const SvxBorderLine&  rLineRT,
+                              const SvxBorderLine&  rLineR,
+                              const SvxBorderLine&  rLineRB );
+    SC_DLLPRIVATE void CheckPriority    ( USHORT            nCurLine,
+                              AutoFmtLine       eLine,
+                              SvxBorderLine&    rLine );
+    SC_DLLPRIVATE void  GetLines        ( USHORT nIndex, AutoFmtLine eLine,
+                              SvxBorderLine&    rLineD,
+                              SvxBorderLine&    rLineLT,
+                              SvxBorderLine&    rLineL,
+                              SvxBorderLine&    rLineLB,
+                              SvxBorderLine&    rLineRT,
+                              SvxBorderLine&    rLineR,
+                              SvxBorderLine&    rLineRB );
 };
 
 #endif // SC_AUTOFMT_HXX
