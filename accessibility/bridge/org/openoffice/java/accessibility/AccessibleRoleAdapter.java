@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRoleAdapter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 15:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ public abstract class AccessibleRoleAdapter {
         javax.accessibility.AccessibleRole.LABEL,
         javax.accessibility.AccessibleRole.LAYERED_PANE,
         javax.accessibility.AccessibleRole.LIST,
-        javax.accessibility.AccessibleRole.LIST_ITEM,
+        javax.accessibility.AccessibleRole.LABEL,   // LIST_ITEM - required by Zoomtext
         javax.accessibility.AccessibleRole.MENU,
         javax.accessibility.AccessibleRole.MENU_BAR,
         javax.accessibility.AccessibleRole.MENU_ITEM,

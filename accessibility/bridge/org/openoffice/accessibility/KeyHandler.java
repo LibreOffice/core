@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyHandler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-08 06:50:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 15:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,22 +71,21 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import javax.accessibility.*;
 
-public class KeyHandler extends Component implements XKeyHandler {
+public class KeyHandler extends Component implements XKeyHandler, java.awt.KeyEventDispatcher {
     EventQueue eventQueue;
 
     public class VCLKeyEvent extends KeyEvent {
         com.sun.star.awt.KeyEvent data;
+        XKeyHandler xKeyHandler;
 
-        public VCLKeyEvent(int id, com.sun.star.awt.KeyEvent event) {
-            super( KeyHandler.this,
-                id,
-                System.currentTimeMillis(),
-                AccessibleKeyBinding.convertModifiers(event.Modifiers),
+        public VCLKeyEvent(Component c, int id, XKeyHandler handler, com.sun.star.awt.KeyEvent event) {
+            super(c, id, System.currentTimeMillis(), AccessibleKeyBinding.convertModifiers(event.Modifiers),
                 id == KeyEvent.KEY_TYPED ? KeyEvent.VK_UNDEFINED : AccessibleKeyBinding.convertKeyCode(event.KeyCode),
                 event.KeyChar != 0 ? event.KeyChar : KeyEvent.CHAR_UNDEFINED
             );
 
             data = event;
+            xKeyHandler = handler;
         }
 
         public void setData(com.sun.star.awt.KeyEvent event) {
@@ -96,73 +95,83 @@ public class KeyHandler extends Component implements XKeyHandler {
         public com.sun.star.awt.KeyEvent getData() {
             return data;
         }
+
+        public XKeyHandler getKeyHandler() {
+            return xKeyHandler;
+        }
     }
 
     public KeyHandler() {
         eventQueue = Toolkit.getDefaultToolkit().getSystemEventQueue();
-        enableEvents(AWTEvent.KEY_EVENT_MASK);
+        java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
     }
 
-    /** Processes key events occurring on this component by dispatching them to any registered KeyListener objects */
-    protected void processKeyEvent(KeyEvent e) {
-        // FIXME: will have to return this event object to VCL
-        System.err.println("in process key event\n");
+    /** This method is called by the current KeyboardFocusManager requesting that this KeyEventDispatcher
+    * dispatch the specified event on its behalf
+    */
+    public boolean dispatchKeyEvent(java.awt.event.KeyEvent e) {
+        if (Build.DEBUG) {
+            System.err.println("in dispatchKeyEvent()");
+        }
 
-        // Ignore key typed events, because VCL doesn't know about them
-        if( e.getID() != KeyEvent.KEY_TYPED && e instanceof VCLKeyEvent ) {
+        if ((e.getID() != KeyEvent.KEY_TYPED) && (e instanceof VCLKeyEvent)) {
             VCLKeyEvent event = (VCLKeyEvent) e;
             com.sun.star.awt.KeyEvent unoKeyEvent = event.getData();
+            XKeyHandler xHandler = event.getKeyHandler();
 
             // Return unhandled key events to VCL
-            if( unoKeyEvent.Source != null ) {
-                XKeyHandler xHandler = (XKeyHandler) UnoRuntime.queryInterface(XKeyHandler.class, unoKeyEvent.Source);
-                if( xHandler != null ) {
-                    if( e.getID() == KeyEvent.KEY_PRESSED ) {
-                        xHandler.keyPressed(unoKeyEvent);
-                    } else if( e.getID() == KeyEvent.KEY_RELEASED ) {
-                        xHandler.keyReleased(unoKeyEvent);
-                    } else if( Build.DEBUG ) {
-                        System.err.println("*** WARNING ***: KeyEvent has unexspected id");
-                    }
-                } else if( Build.DEBUG ) {
-                    System.err.println("*** ERROR ***: KeyEvent source does not implement XKeyHandler");
-                }
-            } else if( Build.DEBUG ) {
-                System.err.println("*** ERROR ***: KeyEvent has no valid source");
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                xHandler.keyPressed(unoKeyEvent);
+            } else if (e.getID() == KeyEvent.KEY_RELEASED) {
+                xHandler.keyReleased(unoKeyEvent);
+            } else if (Build.DEBUG) {
+                System.err.println("*** WARNING ***: KeyEvent has unexspected id");
             }
         }
+        return false;
     }
 
     /** Handler for KeyPressed events */
     public boolean keyPressed(com.sun.star.awt.KeyEvent event) {
+        if (event.Source != null) {
+            XKeyHandler xHandler = (XKeyHandler) UnoRuntime.queryInterface(XKeyHandler.class, event.Source);
+            if (xHandler != null) {
+                eventQueue.postEvent(new VCLKeyEvent(this, KeyEvent.KEY_PRESSED, xHandler, event));
 
-        if( Build.DEBUG ) {
-//          System.err.println("retrieved key pressed event: " + event.KeyChar );
+                // Synthesize KEY_PRESSED event to emulate Java behavior
+                if (event.KeyChar != 0) {
+                    eventQueue.postEvent(new VCLKeyEvent(this, KeyEvent.KEY_TYPED, xHandler, event));
+                }
+
+//              return true;
+                return false;
+            } else if (Build.DEBUG) {
+//              System.err.println("*** ERROR *** KeyEvent source does not implement XKeyHandler");
+            }
+        } else if (Build.DEBUG) {
+//          System.err.println("*** ERROR *** KeyEvent source not valid");
         }
-
-        eventQueue.postEvent(new VCLKeyEvent(KeyEvent.KEY_PRESSED, event));
-
-        // Synthesize KEY_PRESSED event to emulate Java behavior
-        if( event.KeyChar != 0 ) {
-            eventQueue.postEvent(new VCLKeyEvent(KeyEvent.KEY_TYPED, event));
-        }
-
-//      return true;
         return false;
     }
 
     /** Handler for KeyReleased events */
     public boolean keyReleased(com.sun.star.awt.KeyEvent event) {
-        if( Build.DEBUG ) {
-//          System.err.println("retrieved key released event\n");
+        if (event.Source != null) {
+            XKeyHandler xHandler = (XKeyHandler) UnoRuntime.queryInterface(XKeyHandler.class, event.Source);
+            if (xHandler != null) {
+                eventQueue.postEvent(new VCLKeyEvent(this, KeyEvent.KEY_RELEASED, xHandler, event));
+//              return true;
+                return false;
+            } else if (Build.DEBUG) {
+                System.err.println("*** ERROR *** KeyEvent source does not implement XKeyHandler");
+            }
+        } else if (Build.DEBUG) {
+            System.err.println("*** ERROR *** KeyEvent source not valid");
         }
-
-        eventQueue.postEvent(new VCLKeyEvent(KeyEvent.KEY_RELEASED, event));
-
-//      return true;
         return false;
     }
 
     public void disposing(com.sun.star.lang.EventObject event) {
+        java.awt.KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(this);
     }
 };

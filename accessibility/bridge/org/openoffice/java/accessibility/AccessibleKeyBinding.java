@@ -2,10 +2,6 @@
  *
  *  $RCSfile: AccessibleKeyBinding.java,v $
  *
- *  $Revision: 1.3 $
- *
- *  last change: $Author: obr $ $Date: 2002-10-08 06:48:01 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,47 +57,40 @@
 
 package org.openoffice.java.accessibility;
 
-import org.openoffice.accessibility.internal.*;
+import drafts.com.sun.star.accessibility.*;
+import drafts.com.sun.star.awt.*;
 
 /**
  *
  */
 public class AccessibleKeyBinding extends Object implements javax.accessibility.AccessibleKeyBinding {
 
-    javax.swing.KeyStroke[] data;
+    XAccessibleKeyBinding unoAccessibleKeybinding;
 
-    public AccessibleKeyBinding(KeyStroke[] keys) {
-        data = new javax.swing.KeyStroke[keys.length];
-        for(int i=0; i < keys.length; i++) {
-            data[i] = javax.swing.KeyStroke.getKeyStroke(
-                convertKeyCode(keys[i].KeyCode),
-                convertModifiers(keys[i].Modifiers)
-            );
-        }
+    public AccessibleKeyBinding(XAccessibleKeyBinding unoKB) {
+        unoAccessibleKeybinding = unoKB;
     }
 
     public static int convertModifiers(short s) {
         int modifiers = 0;
-
-        if( (s & com.sun.star.awt.KeyModifier.SHIFT) != 0 ) {
-            modifiers = modifiers | java.awt.event.KeyEvent.VK_SHIFT;
+        if ((s & com.sun.star.awt.KeyModifier.SHIFT) != 0) {
+            modifiers = modifiers | java.awt.event.KeyEvent.SHIFT_DOWN_MASK;
         }
 
-        if( (s & com.sun.star.awt.KeyModifier.MOD1) != 0 ) {
-            modifiers = modifiers | java.awt.event.KeyEvent.VK_CONTROL;
+        if ((s & com.sun.star.awt.KeyModifier.MOD1) != 0) {
+            modifiers = modifiers | java.awt.event.KeyEvent.CTRL_DOWN_MASK;
         }
 
-        if( (s & com.sun.star.awt.KeyModifier.MOD2) != 0 ) {
-            modifiers = modifiers | java.awt.event.KeyEvent.VK_ALT;
+        if ((s & com.sun.star.awt.KeyModifier.MOD2) != 0) {
+            modifiers = modifiers | java.awt.event.KeyEvent.ALT_DOWN_MASK;
         }
-
         return modifiers;
     }
 
     public static int convertKeyCode(short s) {
         int keycode = java.awt.event.KeyEvent.VK_UNDEFINED;
 
-        switch( s ) {
+        switch(s) {
             case com.sun.star.awt.Key.NUM0:
                 keycode = java.awt.event.KeyEvent.VK_NUMPAD0;
                 break;
@@ -378,7 +367,6 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
             default:
                 ;
         }
-
         return keycode;
     }
 
@@ -388,15 +376,36 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
 
     /** Returns a key binding for this object */
     public Object getAccessibleKeyBinding(int i) {
-        if( i < data.length ) {
-            return data[i];
-        }
+        try {
+            KeyStroke[] keys = unoAccessibleKeybinding.getAccessibleKeyBinding(i);
+            javax.swing.KeyStroke[] data = new javax.swing.KeyStroke[keys.length];
+            for (int j=0; j < keys.length; j++) {
+                int keyCode = convertKeyCode(keys[j].KeyCode);
+                if (keyCode != java.awt.event.KeyEvent.VK_UNDEFINED) {
+                    data[j] = javax.swing.KeyStroke.getKeyStroke(keyCode, convertModifiers(keys[j].Modifiers));
+                } else {
+                    data[j] = null;
+                }
+            }
 
-        return null;
+            if (keys.length == 1) {
+                return data[0];
+            } else {
+                return data;
+            }
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            return null;
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return null;
+        }
     }
 
     /** Returns the number of key bindings for this object */
         public int getAccessibleKeyBindingCount() {
-        return data.length;
+        try {
+            return unoAccessibleKeybinding.getAccessibleKeyBindingCount();
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return 0;
+        }
     }
 }

@@ -2,10 +2,6 @@
  *
  *  $RCSfile: ToggleButton.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:40 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,28 +57,13 @@
 
 package org.openoffice.java.accessibility;
 
-import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleValue;
+import com.sun.star.uno.*;
+import drafts.com.sun.star.accessibility.*;
 
 class ToggleButton extends AbstractButton implements javax.accessibility.Accessible {
 
-    public ToggleButton(XAccessible accessible, XAccessibleComponent component) {
-        super();
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        addAccessibleEventListener(new AccessibleToggleButtonListener());
-    }
-
-    protected class AccessibleToggleButtonListener extends AccessibleAbstractButtonListener {
-/*
-        protected AccessibleButtonListener() {
-            super();
-        }
-*/
+    public ToggleButton(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     /** Returns the AccessibleContext associated with this object */
@@ -94,11 +75,7 @@ class ToggleButton extends AbstractButton implements javax.accessibility.Accessi
     }
 
     protected class AccessibleToggleButton extends AccessibleAbstractButton {
-/*
-        protected AccessibleToggleButton() {
-            super();
-        }
-*/
+
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return javax.accessibility.AccessibleRole.TOGGLE_BUTTON;
@@ -108,7 +85,7 @@ class ToggleButton extends AbstractButton implements javax.accessibility.Accessi
         public javax.accessibility.AccessibleValue getAccessibleValue() {
             try {
                 XAccessibleValue unoAccessibleValue = (XAccessibleValue)
-                    UnoRuntime.queryInterface(XAccessibleValue.class, unoAccessibleComponent);
+                    UnoRuntime.queryInterface(XAccessibleValue.class, unoAccessibleContext);
                 return (unoAccessibleValue != null) ?
                     new AccessibleValueImpl(unoAccessibleValue) : null;
             } catch (com.sun.star.uno.RuntimeException e) {

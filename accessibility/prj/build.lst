@@ -5,4 +5,5 @@ ac	accessibility\idl\                                    	nmake	-	all	ac_unomake
 ac	accessibility\bridge\org\openoffice\java\accessibility	nmake	-	all	ac_ooja ac_unomakers NULL
 ac	accessibility\bridge\source\remote                      nmake   -   all ac_abr  ac_unomakers NULL
 ac	accessibility\bridge\org\openoffice\accessibility   	nmake	-	all	ac_ooa ac_ooja NULL
+ac	accessibility\bridge\source                             nmake   -   w ac_juab NULL
 

@@ -1,6 +1,6 @@
 /*************************************************************************
  *
- *  $RCSfile: TextComponent.java,v $
+ *  $RCSfile: ToolTip.java,v $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,82 +57,35 @@
 
 package org.openoffice.java.accessibility;
 
-import com.sun.star.uno.UnoRuntime;
+import javax.accessibility.AccessibleState;
+import javax.accessibility.AccessibleStateSet;
+
+import com.sun.star.uno.*;
 import drafts.com.sun.star.accessibility.*;
 
 /**
  */
-public class TextComponent extends Component implements javax.accessibility.Accessible {
+public class ToolTip extends Component implements javax.accessibility.Accessible {
 
-    boolean multiLine = false;
-    boolean editable = false;
-
-    protected TextComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext, XAccessibleStateSet xAccessibleStateSet) {
+    protected ToolTip(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
-        editable = xAccessibleStateSet.contains(AccessibleStateType.EDITABLE);
-        multiLine = xAccessibleStateSet.contains(AccessibleStateType.MULTILINE);
-    }
-
-    protected class AccessibleTextComponentListener extends AccessibleUNOComponentListener {
-
-        protected AccessibleTextComponentListener() {
-            super();
-        }
-
-        protected void setComponentState(short state, boolean enable) {
-            switch (state) {
-                case AccessibleStateType.EDITABLE:
-                    editable = enable;
-                    fireStatePropertyChange(javax.accessibility.AccessibleState.EDITABLE, enable);
-                    break;
-                case AccessibleStateType.MULTILINE:
-                    multiLine = enable;
-                    fireStatePropertyChange(javax.accessibility.AccessibleState.MULTI_LINE, enable);
-                    break;
-                case AccessibleStateType.SINGLE_LINE:
-                    break;
-                default:
-                    super.setComponentState(state, enable);
-                    break;
-            }
-        }
-    }
-
-    protected XAccessibleEventListener createEventListener() {
-        return new AccessibleTextComponentListener();
     }
 
     /** Returns the AccessibleContext associated with this object */
     public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
-            accessibleContext = new AccessibleTextComponent();
+            accessibleContext = new AccessibleToolTip();
         }
         return accessibleContext;
     }
 
-    protected class AccessibleTextComponent extends AccessibleUNOComponent {
+    protected class AccessibleToolTip extends AccessibleUNOComponent {
 
         /**
         * Though the class is abstract, this should be called by all sub-classes
         */
-        protected AccessibleTextComponent() {
+        protected AccessibleToolTip() {
             super();
-        }
-
-        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
-            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
-
-            if (editable) {
-                states.add(javax.accessibility.AccessibleState.EDITABLE);
-            }
-            if (multiLine) {
-                states.add(javax.accessibility.AccessibleState.MULTI_LINE);
-            } else {
-                states.add(javax.accessibility.AccessibleState.SINGLE_LINE);
-            }
-
-            return states;
         }
 
         /*
@@ -141,7 +94,7 @@ public class TextComponent extends Component implements javax.accessibility.Acce
 
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
-            return javax.accessibility.AccessibleRole.TEXT;
+            return javax.accessibility.AccessibleRole.TOOL_TIP;
         }
 
         /** Gets the AccessibleText associated with this object presenting text on the display */
@@ -159,40 +112,26 @@ public class TextComponent extends Component implements javax.accessibility.Acce
             }
         }
 
-        /** Gets the AccessibleEditableText associated with this object presenting text on the display */
-        public javax.accessibility.AccessibleEditableText getAccessibleEditableText() {
-            try {
-                XAccessibleEditableText unoAccessibleText = (XAccessibleEditableText)
-                    UnoRuntime.queryInterface(XAccessibleEditableText.class,unoAccessibleComponent);
-                if (unoAccessibleText != null) {
-                    return new AccessibleEditableTextImpl(unoAccessibleText);
-                } else {
-                    return null;
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
+        /**
+        * Get the state set of this object.
+        *
+        * @return an instance of AccessibleState containing the current state
+        * of the object
+        * @see AccessibleState
+        */
+/*
+        public AccessibleStateSet getAccessibleStateSet() {
+            AccessibleStateSet states = super.getAccessibleStateSet();
+            return states;
         }
-
-        /** Gets the AccessibleAction associated with this object that has a graphical representation */
-        public javax.accessibility.AccessibleAction getAccessibleAction() {
-            try {
-                XAccessibleAction unoAccessibleAction = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleComponent);
-                return (unoAccessibleAction != null) ?
-                    new AccessibleActionImpl(unoAccessibleAction) : null;
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
-        }
-
+*/
         /** Returns the relation set of this object */
+/*
         public javax.accessibility.AccessibleRelationSet getAccessibleRelationSet() {
             try {
-                XAccessibleRelationSet unoAccessibleRelationSet =
-                    unoAccessible.getAccessibleContext().getAccessibleRelationSet();
+                XAccessibleRelationSet unoAccessibleRelationSet = unoAccessibleContext.getAccessibleRelationSet();
                 if (unoAccessibleRelationSet == null) {
-                    return super.getAccessibleRelationSet();
+                    return null;
                 }
 
                 javax.accessibility.AccessibleRelationSet relationSet = new javax.accessibility.AccessibleRelationSet();
@@ -200,19 +139,9 @@ public class TextComponent extends Component implements javax.accessibility.Acce
                 for (int i = 0; i < count; i++) {
                     AccessibleRelation unoAccessibleRelation = unoAccessibleRelationSet.getRelation(i);
                     switch (unoAccessibleRelation.RelationType) {
-                        case AccessibleRelationType.CONTROLLED_BY:
+                        case AccessibleRelationType.LABEL_FOR:
                             relationSet.add(new javax.accessibility.AccessibleRelation(
-                                javax.accessibility.AccessibleRelation.CONTROLLED_BY,
-                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
-                            break;
-                        case AccessibleRelationType.CONTROLLER_FOR:
-                            relationSet.add(new javax.accessibility.AccessibleRelation(
-                                javax.accessibility.AccessibleRelation.CONTROLLER_FOR,
-                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
-                            break;
-                        case AccessibleRelationType.LABELED_BY:
-                            relationSet.add(new javax.accessibility.AccessibleRelation(
-                                javax.accessibility.AccessibleRelation.LABELED_BY,
+                                javax.accessibility.AccessibleRelation.LABEL_FOR,
                                 getAccessibleComponents(unoAccessibleRelation.TargetSet)));
                             break;
                         case AccessibleRelationType.MEMBER_OF:
@@ -226,11 +155,13 @@ public class TextComponent extends Component implements javax.accessibility.Acce
                 }
                 return relationSet;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                return super.getAccessibleRelationSet();
+                return null;
             } catch (com.sun.star.uno.RuntimeException e) {
-                return super.getAccessibleRelationSet();
+                return null;
             }
         }
+*/
     }
 }
+
 

@@ -1,6 +1,6 @@
 /*************************************************************************
  *
- *  $RCSfile: CheckBox.java,v $
+ *  $RCSfile: FocusTraversalPolicy.java,v $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,28 +57,55 @@
 
 package org.openoffice.java.accessibility;
 
-import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
 
-class CheckBox extends ToggleButton {
+public class FocusTraversalPolicy extends java.awt.FocusTraversalPolicy {
 
-    public CheckBox(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
-        super(xAccessible, xAccessibleContext);
+    protected javax.accessibility.Accessible getSelectedAccessibleChild(javax.accessibility.Accessible a) {
+        javax.accessibility.AccessibleContext ac = a.getAccessibleContext();
+        if (ac != null) {
+            javax.accessibility.AccessibleSelection as = ac.getAccessibleSelection();
+            if (as != null) {
+                return as.getAccessibleSelection(0);
+            }
+        }
+        return null;
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleCheckBox();
-        }
-        return accessibleContext;
+    /** Returns the Component that should receive the focus after aComponent */
+    public java.awt.Component getComponentAfter(java.awt.Container focusCycleRoot,
+        java.awt.Component aComponent) {
+        return null;
     }
 
-    protected class AccessibleCheckBox extends AccessibleToggleButton {
-        /** Gets the role of this object */
-        public javax.accessibility.AccessibleRole getAccessibleRole() {
-            return javax.accessibility.AccessibleRole.CHECK_BOX;
+    /** Returns the Component that should receive the focus before aComponent */
+    public java.awt.Component getComponentBefore(java.awt.Container focusCycleRoot,
+        java.awt.Component aComponent) {
+        return null;
+    }
+
+    /** Returns the default Component to focus */
+    public java.awt.Component getDefaultComponent(java.awt.Container focusCycleRoot) {
+        if (focusCycleRoot instanceof javax.accessibility.Accessible) {
+            return (java.awt.Component) getSelectedAccessibleChild((javax.accessibility.Accessible) focusCycleRoot);
         }
+        return null;
+    }
+
+    /** Returns the first Component in the traversal cycle */
+    public java.awt.Component getFirstComponent(java.awt.Container focusCycleRoot) {
+        return null;
+    }
+
+    /** Returns the Component that should receive the focus when a Window is made visible for the first time */
+    public java.awt.Component getInitialComponent(java.awt.Window window) {
+        if (window instanceof NativeFrame) {
+            return ((NativeFrame) window).getInitialComponent();
+        }
+        return null;
+    }
+
+    /** Returns the last Component in the traversal cycle */
+    public java.awt.Component getLastComponent(java.awt.Container focusCycleRoot) {
+        return null;
     }
 }
-

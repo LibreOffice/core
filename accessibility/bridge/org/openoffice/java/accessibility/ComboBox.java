@@ -2,10 +2,6 @@
  *
  *  $RCSfile: ComboBox.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:34 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -66,104 +62,38 @@ import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 import javax.swing.SwingConstants;
 
-import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.uno.*;
+import drafts.com.sun.star.accessibility.*;
 
 /**
  */
-public class ComboBox extends Component implements javax.accessibility.Accessible {
+public class ComboBox extends Container {
 
     private XAccessibleAction unoAccessibleAction = null;
-    private boolean editable = false;
 
-    public ComboBox(XAccessible accessible, XAccessibleComponent component, XAccessibleAction action) {
-        super();
-        initialize(accessible, component, action);
+    public ComboBox(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(javax.accessibility.AccessibleRole.COMBO_BOX, xAccessible, xAccessibleContext);
     }
 
-    private AccessibleContext accessibleTextContext = null;
-    private AccessibleContext accessiblePopupMenuContext = null;
-
-    protected void initialize(XAccessible accessible, XAccessibleComponent component,
-        XAccessibleAction action) {
-        unoAccessibleAction = action;
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        addAccessibleEventListener(new AccessibleComboBoxListener());
-//      accessiblePopupMenuContext = new AccessiblePopupMenu();
-    }
-
-    protected class AccessiblePopupMenu extends AccessibleContext implements javax.accessibility.Accessible {
-
-        /** Gets the accessible context associated with this object */
-        public javax.accessibility.AccessibleContext getAccessibleContext() {
-            return this;
+    /** Appends the specified component to the end of this container */
+    public java.awt.Component add(java.awt.Component c) {
+        // List should be always the first child
+        if (c instanceof List) {
+            return super.add(c, 0);
+        } else {
+            return super.add(c);
         }
-
-        /*
-        * AccessibleContext
-        */
-
-        /** Gets the role of this object */
-        public javax.accessibility.AccessibleRole getAccessibleRole() {
-            return javax.accessibility.AccessibleRole.POPUP_MENU;
-        }
-
-        /**
-        * Get the state set of this object.
-        *
-        * @return an instance of AccessibleState containing the current state
-        * of the object
-        * @see AccessibleState
-        */
-        public AccessibleStateSet getAccessibleStateSet() {
-            AccessibleStateSet states = new AccessibleStateSet();
-            states.add(AccessibleState.ENABLED);
-            return states;
-        }
-
-        /** Gets the locale of the component */
-        public java.util.Locale getLocale() throws java.awt.IllegalComponentStateException {
-            return ComboBox.this.getLocale();
-        }
-
-        /** Returns the number of accessible children of the object. */
-        public int getAccessibleChildrenCount() {
-            return 0;
-        }
-
-        /** Returns the specified Accessible child of the object. */
-        public javax.accessibility.Accessible getAccessibleChild(int i) {
-            return null;
-        }
-
-        /** Gets the 0-based index of this object in its accessible parent */
-        public int getAccessibleIndexInParent() {
-            return 0;
-        }
-
-        /** Gets the accessible parent of this object */
-        public javax.accessibility.Accessible getAccessibleParent() {
-            return ComboBox.this;
-        }
-    }
-
-    protected class AccessibleComboBoxListener extends AccessibleUNOComponentListener {
     }
 
     /** Returns the AccessibleContext associated with this object */
-    public AccessibleContext getAccessibleContext() {
+    public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
             accessibleContext = new AccessibleComboBox();
         }
         return accessibleContext;
     }
 
-    protected class AccessibleComboBox extends AccessibleUNOComponent
+    protected class AccessibleComboBox extends AccessibleContainer
         implements javax.accessibility.AccessibleAction {
 
         /**
@@ -173,48 +103,44 @@ public class ComboBox extends Component implements javax.accessibility.Accessibl
             super();
         }
 
-        /** Gets the role of this object */
-        public javax.accessibility.AccessibleRole getAccessibleRole() {
-            return javax.accessibility.AccessibleRole.COMBO_BOX;
-        }
+        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
 
-        /** Returns the number of accessible children of the object */
-        public int getAccessibleChildrenCount() {
-            return editable ? 2 : 1;
-        }
-
-        /** Returns the specified Accessible child of the object */
-        public javax.accessibility.Accessible getAccessibleChild(int i) {
-            switch (i) {
-            case 0:
-                return (javax.accessibility.Accessible) accessiblePopupMenuContext;
-            case 1:
-                if (editable) {
-                    return (javax.accessibility.Accessible) accessibleTextContext;
+            try {
+                if (unoAS != null) {
+                    if (unoAS.contains(AccessibleStateType.EXPANDABLE)) {
+                        states.add(AccessibleState.EXPANDABLE);
+                    }
+                    if (unoAS.contains(AccessibleStateType.EXPANDED)) {
+                        states.add(AccessibleState.EXPANDED);
+                    }
+                    if (unoAS.contains(AccessibleStateType.COLLAPSED)) {
+                        states.add(AccessibleState.COLLAPSED);
+                    }
                 }
-            default:
-                return null;
+            } catch (com.sun.star.uno.RuntimeException e) {
             }
+
+            return states;
         }
+
+        /*
+        * AccessibleContext
+        */
 
         /** Gets the AccessibleAction associated with this object that supports one or more actions */
         public javax.accessibility.AccessibleAction getAccessibleAction() {
+            if (unoAccessibleAction == null) {
+                unoAccessibleAction = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleContext);
+                if (unoAccessibleAction == null) {
+                    return null;
+                }
+            }
             return this;
         }
 
-        /**
-        * Get the state set of this object.
-        *
-        * @return an instance of AccessibleState containing the current state
-        * of the object
-        * @see AccessibleState
-        */
-/*
-        public AccessibleStateSet getAccessibleStateSet() {
-            AccessibleStateSet states = super.getAccessibleStateSet();
-            return states;
-        }
-*/
         /*
         * AccessibleAction
         */

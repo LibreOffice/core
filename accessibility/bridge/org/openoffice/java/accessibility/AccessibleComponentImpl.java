@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2003-01-13 11:00:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 15:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

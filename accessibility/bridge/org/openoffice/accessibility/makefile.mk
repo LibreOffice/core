@@ -2,10 +2,6 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
-#
-#   last change: $Author: obr $ $Date: 2002-08-14 12:14:49 $
-#
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
 #
@@ -73,7 +69,11 @@ USE_JAVAVER:=TRUE
 
 .IF "$(JAVAVER:s/.//)" >= "140" 
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar 
-JAVAFILES := $(shell +ls *.java)
+JAVAFILES = \
+    AccessBridge.java \
+    KeyHandler.java \
+    WindowsAccessBridgeAdapter.java
+
 JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARTARGET               = $(TARGET).jar

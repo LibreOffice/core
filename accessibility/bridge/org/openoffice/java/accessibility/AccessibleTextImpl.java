@@ -2,10 +2,6 @@
  *
  *  $RCSfile: AccessibleTextImpl.java,v $
  *
- *  $Revision: 1.5 $
- *
- *  last change: $Author: obr $ $Date: 2003-01-13 11:00:07 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -77,6 +73,9 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
     final static double toPointFactor = 1 / (7/10 + 34.5);
 
+    private javax.swing.text.TabSet tabSet = null;
+    private javax.swing.text.TabStop[] tabStops = null;
+
     /** Creates new GenericAccessibleEditableText object */
     public AccessibleTextImpl(XAccessibleText xAccessibleText) {
         unoObject = xAccessibleText;
@@ -94,6 +93,12 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             case AccessibleText.SENTENCE:
                 type = AccessibleTextType.SENTENCE;
                 break;
+            case 4:
+                type = AccessibleTextType.LINE;
+                break;
+            case 5:
+                type = AccessibleTextType.ATTRIBUTE_RUN;
+                break;
             default:
                 break;
         }
@@ -105,10 +110,16 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         short type = toTextType(part);
         if (type > 0) {
             try {
-                // FIXME: Workaround for a bug in the office that an empty string is returned
-                // when asking for the word at the position of a blank
+                // the office returns an empty string when asking for the word at
+                // the position of a blank
                 String s = unoObject.getTextBehindIndex(index, type);
                 if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+//                  int max = getCharCount();
+//                  for (int i=index; i < max; i++) {
+//                      if (! unoObject.getTextBehindIndex(i, AccessibleTextType.CHARACTER).equals(" "))
+//                          break;
+//                      s += " ";
+//                  }
                     s = " ";
                 }
                 return s;
@@ -144,13 +155,16 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         }
     }
 
-    protected static void setAttribute(javax.swing.text.MutableAttributeSet as, com.sun.star.beans.PropertyValue property) {
+    protected void setAttribute(javax.swing.text.MutableAttributeSet as, com.sun.star.beans.PropertyValue property) {
         try {
             // Map alignment attribute
             if (property.Name.equals("ParaAdjust")) {
-                ParagraphAdjust adjust = (ParagraphAdjust)
-                    AnyConverter.toObject(new Type(ParagraphAdjust.class), property.Value);
-                if (adjust == null) {
+                ParagraphAdjust adjust = null;
+                if (property.Value instanceof ParagraphAdjust) {
+                    adjust = (ParagraphAdjust) property.Value;
+                } else if (property.Value instanceof Any) {
+                    adjust = (ParagraphAdjust) AnyConverter.toObject(new Type(ParagraphAdjust.class), property.Value);
+                } else {
                     adjust = ParagraphAdjust.fromInt(AnyConverter.toInt(property.Value));
                 }
                 if (adjust != null) {
@@ -202,10 +216,15 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
             // Set italic attribute
             } else if (property.Name.equals("CharPosture")) {
-                boolean isItalic = (FontSlant.ITALIC == (FontSlant)
-                    AnyConverter.toObject(new Type(FontSlant.class), property.Value));
-
-                StyleConstants.setItalic(as, isItalic);
+                FontSlant fs = null;
+                if (property.Value instanceof FontSlant) {
+                    fs = (FontSlant) property.Value;
+                } else if (property.Value instanceof Any) {
+                    fs = (FontSlant) AnyConverter.toObject(new Type(FontSlant.class), property.Value);
+                }
+                if (fs != null) {
+                    StyleConstants.setItalic(as, FontSlant.ITALIC.equals(fs));
+                }
 
             // Set left indent attribute
             } else if (property.Name.equals("ParaLeftMargin")) {
@@ -218,7 +237,15 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
 
             // Set line spacing attribute
             else if (property.Name.equals("ParaLineSpacing")) {
-                StyleConstants.setLineSpacing(as, (float) (toPointFactor * AnyConverter.toInt(property.Value)));
+                LineSpacing ls = null;
+                if (property.Value instanceof LineSpacing) {
+                    ls = (LineSpacing) property.Value;
+                } else if (property.Value instanceof Any) {
+                    ls = (LineSpacing) AnyConverter.toObject(new Type(LineSpacing.class), property.Value);
+                }
+                if (ls != null) {
+                    StyleConstants.setLineSpacing(as, (float) (toPointFactor * ls.Height));
+                }
             }
 
             // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute
@@ -279,7 +306,13 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                     }
                 }
 
-                StyleConstants.setTabSet(as, new javax.swing.text.TabSet(tabStops));
+                // Re-use tabSet object if possible to make AttributeSet.equals work
+                if ((this.tabSet == null) || !java.util.Arrays.equals(tabStops, this.tabStops)) {
+                    this.tabStops = tabStops;
+                    this.tabSet = new javax.swing.text.TabSet(tabStops);
+                }
+
+                   StyleConstants.setTabSet(as, this.tabSet);
 
             // Set underline attribute
             } else if (property.Name.equals("CharUnderline")) {
@@ -288,25 +321,26 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             }
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             if (Build.DEBUG) {
-                System.err.println(e.getMessage());
+                System.err.println("*** ERROR *** " + e .getClass().getName() + " caught for property " + property.Name + ": " + e.getMessage());
+                System.err.println("              value is of type " + property.Value.getClass().getName());
             }
         }
     }
 
     /** Returns the AttributSet for a given character at a given index */
-    public javax.swing.text.AttributeSet getCharacterAttribute(int param) {
+    public javax.swing.text.AttributeSet getCharacterAttribute(int index) {
         try {
-            com.sun.star.beans.PropertyValue[] propertyValues = unoObject.getCharacterAttributes(param);
+            com.sun.star.beans.PropertyValue[] propertyValues = unoObject.getCharacterAttributes(index);
             javax.swing.text.SimpleAttributeSet attributeSet = new javax.swing.text.SimpleAttributeSet();
             if (null != propertyValues) {
-                for (int index = 0; index < propertyValues.length; index++) {
-                    setAttribute(attributeSet, propertyValues[index]);
+                for (int i = 0; i < propertyValues.length; i++) {
+                    setAttribute(attributeSet, propertyValues[i]);
                 }
             }
             return attributeSet;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             if (Build.DEBUG) {
-                System.err.println(e.getMessage());
+                System.err.println(e.getClass().getName() + " caught at index " + index + ": " + e.getMessage());
             }
             return null;
         }
@@ -347,10 +381,16 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         short type = toTextType(part);
         if (type > 0) {
             try {
-                // FIXME: Workaround for a bug in the office that an empty string is returned
-                // when asking for the word at the position of a blank
+                // the office returns an empty string when asking for the word at
+                // the position of a blank
                 String s = unoObject.getTextBeforeIndex(index, type);
                 if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+//                  int max = getCharCount();
+//                  for (int i=index; i < max; i++) {
+//                      if (! unoObject.getTextBeforeIndex(i, AccessibleTextType.CHARACTER).equals(" "))
+//                          break;
+//                      s += " ";
+//                  }
                     s = " ";
                 }
                 return s;
@@ -366,17 +406,41 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         short type = toTextType(part);
         if (type > 0) {
             try {
-//              if (Build.DEBUG) {
-//                  System.err.println(this + "getAtIndex(" + part + "," + index + ") returns " + unoObject.getTextAtIndex(index, type));
-//              }
-                // FIXME: Workaround for a bug in the office that an empty string is returned
-                // when asking for the word at the position of a blank
+                // the office returns an empty string when asking for the word at
+                // the position of a blank
                 String s = unoObject.getTextAtIndex(index, type);
                 if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+//                  int max = getCharCount();
+//                  for (int i=index; i < max; i++) {
+//                      if (! unoObject.getTextAtIndex(i, AccessibleTextType.CHARACTER).equals(" "))
+//                          break;
+//                      s += " ";
+//                  }
                     s = " ";
+
+                // Workaround for #104847#
+                } else if ((type == AccessibleTextType.LINE) && (s.length() == 0)) {
+                    if (index == getCharCount()) {
+                        s = unoObject.getTextAtIndex(index - 1, type);
+                    }
+                }
+
+                if (Build.DEBUG && (type == AccessibleTextType.LINE)) {
+                    System.err.println(this + " getAtIndex(" + part + "," + index + ") returns " + s + " (length: " + s.length() + ")");
                 }
                 return s;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                   if (Build.DEBUG) {
+                       System.err.println(e.getClass().getName() + " caught for " + this + " getAtIndex(" + part + "," + index + ")");
+                }
+                // Workaround for #104847#
+                if (type == AccessibleTextType.LINE) {
+
+                    try {
+                        return unoObject.getTextAtIndex(index - 1, type);
+                    } catch (com.sun.star.uno.Exception e2) {
+                    }
+                }
             } catch (com.sun.star.uno.RuntimeException e) {
             }
         }
@@ -409,7 +473,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
         } catch (com.sun.star.uno.RuntimeException e) {
         }
-        return null;
+        return new java.awt.Rectangle();
     }
 
     public String toString() {

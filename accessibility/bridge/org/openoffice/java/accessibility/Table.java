@@ -2,10 +2,6 @@
  *
  *  $RCSfile: Table.java,v $
  *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 12:54:04 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,7 +57,6 @@
 
 package org.openoffice.java.accessibility;
 
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.AnyConverter;
@@ -70,23 +65,14 @@ import drafts.com.sun.star.accessibility.*;
 
 public class Table extends DescendantManager implements javax.accessibility.Accessible {
 
-    protected Table(XAccessible accessible, XAccessibleComponent component, boolean multiselectable) {
-        super(multiselectable);
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, component);
-        if (broadcaster != null) {
-            broadcaster.addEventListener(new AccessibleTableListener());
-        }
+    protected Table(XAccessible xAccessible, XAccessibleContext xAccessibleContext, boolean multiselectable) {
+        super(xAccessible, xAccessibleContext, multiselectable);
     }
 
     protected void setActiveDescendant(javax.accessibility.Accessible descendant) {
         javax.accessibility.Accessible oldAD = activeDescendant;
         activeDescendant = descendant;
-        firePropertyChange(AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY,
+        firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_ACTIVE_DESCENDANT_PROPERTY,
             oldAD, descendant);
     }
 
@@ -95,7 +81,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         try {
             if (AnyConverter.isObject(any)) {
                 XAccessible unoAccessible = (XAccessible) AnyConverter.toObject(
-                    AbstractContainer.XAccessibleType, any);
+                    Container.XAccessibleType, any);
                 if (unoAccessible != null) {
                     // FIXME: have to handle non transient objects here ..
                     descendant = new TableCell(unoAccessible);
@@ -111,7 +97,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             TableCell cell = new TableCell(unoAccessible);
             // The AccessBridge for Windows expects an instance of AccessibleContext
             // as parameters
-            firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
+            firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
                 null, cell.getAccessibleContext());
         }
     }
@@ -121,21 +107,21 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             TableCell cell = new TableCell(unoAccessible);
             // The AccessBridge for Windows expects an instance of AccessibleContext
             // as parameters
-            firePropertyChange(AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
+            firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_CHILD_PROPERTY,
                 cell.getAccessibleContext(), null);
         }
     }
 
     protected void add(Object any) {
         try {
-            add((XAccessible) AnyConverter.toObject(AbstractContainer.XAccessibleType, any));
+            add((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected void remove(Object any) {
         try {
-            remove((XAccessible) AnyConverter.toObject(AbstractContainer.XAccessibleType, any));
+            remove((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
@@ -167,6 +153,10 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                     super.notifyEvent(event);
             }
         }
+    }
+
+    protected XAccessibleEventListener createEventListener() {
+        return new AccessibleTableListener();
     }
 
     /** Returns the AccessibleContext associated with this object */
@@ -232,7 +222,7 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         public javax.accessibility.Accessible getAccessibleSelection(int i) {
             javax.accessibility.Accessible child = null;
             try {
-                XAccessible xAccessible = unoAccessibleContext.getAccessibleChild(i);
+                XAccessible xAccessible = unoAccessibleSelection.getSelectedAccessibleChild(i);
                 if (xAccessible != null) {
                     // Re-use the active descandant wrapper if possible
                     javax.accessibility.Accessible activeDescendant = Table.this.activeDescendant;

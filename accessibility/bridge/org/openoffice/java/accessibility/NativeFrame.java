@@ -2,10 +2,6 @@
  *
  *  $RCSfile: NativeFrame.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:38 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -64,6 +60,6 @@ package org.openoffice.java.accessibility;
 public interface NativeFrame {
     public java.awt.Component getInitialComponent();
     public void setInitialComponent(java.awt.Component c);
-    public Integer getHWND();
+//  public Integer getHWND();
 }
 

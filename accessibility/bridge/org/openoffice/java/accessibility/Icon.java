@@ -2,10 +2,6 @@
  *
  *  $RCSfile: Icon.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:36 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,83 +57,30 @@
 
 package org.openoffice.java.accessibility;
 
-import java.text.BreakIterator;
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 
-import com.sun.star.awt.Point;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.AccessibleEventId;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
-import drafts.com.sun.star.accessibility.AccessibleStateType;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleImage;
+import drafts.com.sun.star.accessibility.*;
 
 /**
  */
-public class Icon extends Component implements Accessible {
+public class Icon extends Component implements javax.accessibility.Accessible {
 
-    protected Icon(XAccessible accessible, XAccessibleComponent xAccessibleComponent) {
-        super();
-        initialize(accessible, xAccessibleComponent);
-    }
-
-    protected void initialize(XAccessible accessible, XAccessibleComponent xAccessibleComponent) {
-        unoAccessible = accessible;
-        unoAccessibleComponent = xAccessibleComponent;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        addAccessibleEventListener(new AccessibleIconListener());
-    }
-
-    protected class AccessibleIconListener extends AccessibleUNOComponentListener {
-
-        protected AccessibleIconListener() {
-            super();
-        }
-
-        /** Updates the accessible name and fires the appropriate PropertyChangedEvent */
-        protected void handleNameChangedEvent(Object any) {
-            try {
-                // This causes the property change event to be fired in the VCL thread
-                // context. If this causes problems, it has to be deligated to the java
-                // dispatch thread ..
-                if (accessibleContext != null) {
-                    accessibleContext.setAccessibleName(AnyConverter.toString(any));
-                }
-            }
-            catch (com.sun.star.lang.IllegalArgumentException e) {
-            }
-        }
-
-        /** Called by OpenOffice process to notify property changes */
-        public void notifyEvent(AccessibleEventObject event) {
-            switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_TEXT_EVENT:
-                    // text changes already handled along with ACCESSIBLE_NAME_EVENT
-                    break;
-                default:
-                    super.notifyEvent(event);
-            }
-        }
+    protected Icon(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     /** Returns the AccessibleContext associated with this object */
-    public AccessibleContext getAccessibleContext() {
+    public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
             accessibleContext = new AccessibleIcon();
         }
         return accessibleContext;
     }
 
-    protected class AccessibleIcon extends AccessibleUNOComponent
-         /* implements AccessibleExtendedComponent */ {
+    protected class AccessibleIcon extends AccessibleUNOComponent {
 
         /**
         * Though the class is abstract, this should be called by all sub-classes

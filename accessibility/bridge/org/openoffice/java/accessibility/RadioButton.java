@@ -2,10 +2,6 @@
  *
  *  $RCSfile: RadioButton.java,v $
  *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: obr $ $Date: 2003-01-13 11:00:07 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,30 +57,24 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.uno.*;
+import drafts.com.sun.star.accessibility.*;
 
 class RadioButton extends ToggleButton {
 
-    public RadioButton(XAccessible accessible, XAccessibleComponent component) {
-        super(accessible, component);
+    public RadioButton(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     /** Returns the AccessibleContext associated with this object */
     public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
             accessibleContext = new AccessibleRadioButton();
-            System.err.println("RadioButton created");
         }
         return accessibleContext;
     }
 
     protected class AccessibleRadioButton extends AccessibleToggleButton {
-
-/*
-        protected AccessibleRadioButton() {
-        }
-*/
 
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {

@@ -2,10 +2,6 @@
  *
  *  $RCSfile: Separator.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:39 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,48 +57,32 @@
 
 package org.openoffice.java.accessibility;
 
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 import javax.swing.SwingConstants;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.uno.*;
+import drafts.com.sun.star.accessibility.*;
 
 /**
  */
-public class Separator extends Component implements SwingConstants, Accessible {
+public class Separator extends Component implements SwingConstants, javax.accessibility.Accessible {
 
     private int orientation = HORIZONTAL;
 
-    public Separator(XAccessible accessible, XAccessibleComponent component, int orientation) {
-        super();
+    public Separator(XAccessible xAccessible, XAccessibleContext xAccessibleContext, int orientation) {
+        super(xAccessible, xAccessibleContext);
         this.orientation = orientation;
-        initialize(accessible, component);
-    }
-
-    public Separator(XAccessible accessible, XAccessibleComponent component) {
-        super();
-        initialize(accessible, component);
-    }
-
-    protected void initialize(XAccessible accessible, XAccessibleComponent component) {
         setFocusable(false);
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-    }
-/*
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        addAccessibleEventListener(new AccessibleSeparatorListener());
     }
 
-    protected class AccessibleSeparatorListener extends AccessibleUNOComponentListener {
+    public Separator(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
+        setFocusable(false);
     }
-*/
+
     /** Returns the AccessibleContext associated with this object */
-    public AccessibleContext getAccessibleContext() {
+    public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
             accessibleContext = new AccessibleSeparator();
         }
@@ -118,20 +98,10 @@ public class Separator extends Component implements SwingConstants, Accessible {
             super();
         }
 
-        /** Gets the role of this object */
-        public javax.accessibility.AccessibleRole getAccessibleRole() {
-            return javax.accessibility.AccessibleRole.SEPARATOR;
-        }
+        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
 
-        /**
-        * Get the state set of this object.
-        *
-        * @return an instance of AccessibleState containing the current state
-        * of the object
-        * @see AccessibleState
-        */
-        public AccessibleStateSet getAccessibleStateSet() {
-            AccessibleStateSet states = super.getAccessibleStateSet();
             switch (orientation) {
                 case HORIZONTAL:
                     states.add(AccessibleState.HORIZONTAL);
@@ -142,7 +112,17 @@ public class Separator extends Component implements SwingConstants, Accessible {
                 default:
                     break;
             }
+
             return states;
+        }
+
+        /*
+        * AccessibleContext
+        */
+
+        /** Gets the role of this object */
+        public javax.accessibility.AccessibleRole getAccessibleRole() {
+            return javax.accessibility.AccessibleRole.SEPARATOR;
         }
     }
 }

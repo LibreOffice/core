@@ -2,10 +2,6 @@
  *
  *  $RCSfile: Tree.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:41 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -70,17 +66,8 @@ import drafts.com.sun.star.accessibility.*;
 
 public class Tree extends DescendantManager implements javax.accessibility.Accessible {
 
-    protected Tree(XAccessible accessible, XAccessibleComponent component) {
-        super();
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, component);
-        if (broadcaster != null) {
-            broadcaster.addEventListener(new AccessibleTreeListener());
-        }
+    protected Tree(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     protected void setActiveDescendant(javax.accessibility.Accessible descendant) {
@@ -95,7 +82,7 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
         try {
             if (AnyConverter.isObject(any)) {
                 XAccessible unoAccessible = (XAccessible) AnyConverter.toObject(
-                    AbstractContainer.XAccessibleType, any);
+                    Container.XAccessibleType, any);
                 if (unoAccessible != null) {
                     // FIXME: have to handle non transient objects here ..
                     descendant = new TreeItem(unoAccessible);
@@ -122,14 +109,14 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
 
     protected void add(Object any) {
         try {
-            add((XAccessible) AnyConverter.toObject(AbstractContainer.XAccessibleType, any));
+            add((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected void remove(Object any) {
         try {
-            remove((XAccessible) AnyConverter.toObject(AbstractContainer.XAccessibleType, any));
+            remove((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
@@ -164,6 +151,10 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
         }
     }
 
+    protected XAccessibleEventListener createEventListener() {
+        return new AccessibleTreeListener();
+    }
+
     /** Returns the AccessibleContext associated with this object */
     public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
@@ -189,6 +180,33 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
         protected AccessibleTree() {
             super();
         }
+
+        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
+
+            try {
+                if (unoAS != null) {
+                    if (unoAS.contains(AccessibleStateType.EXPANDABLE)) {
+                        states.add(javax.accessibility.AccessibleState.EXPANDABLE);
+                    }
+                    if (unoAS.contains(AccessibleStateType.EXPANDED)) {
+                        states.add(javax.accessibility.AccessibleState.EXPANDED);
+                    }
+                    if (unoAS.contains(AccessibleStateType.COLLAPSED)) {
+                        states.add(javax.accessibility.AccessibleState.COLLAPSED);
+                    }
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
+
+            return states;
+        }
+
+
+        /*
+        * AccessibleContext
+        */
 
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
@@ -216,8 +234,8 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
         }
 
         /*
-        * AccessibleSelection
-        */
+         * AccessibleSelection
+         */
 
         /** Returns an Accessible representing the specified selected child of the object */
         public javax.accessibility.Accessible getAccessibleSelection(int i) {
@@ -281,12 +299,16 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
             return accessibleContext;
         }
 
-        protected class AccessibleTreeItem extends javax.accessibility.AccessibleContext {
+        protected class AccessibleTreeItem extends javax.accessibility.AccessibleContext
+            implements javax.accessibility.AccessibleSelection {
 
             XAccessibleContext unoAccessibleContext;
+            XAccessibleSelection unoAccessibleSelection;
 
             public AccessibleTreeItem(XAccessibleContext xAccessibleContext) {
                 unoAccessibleContext = xAccessibleContext;
+                unoAccessibleSelection = (XAccessibleSelection)
+                    UnoRuntime.queryInterface(XAccessibleSelection.class, xAccessibleContext);
             }
 
             /** Returns the accessible name of this object */
@@ -411,6 +433,15 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                     if (unoAccessibleStateSet.contains(AccessibleStateType.SELECTED)) {
                         stateSet.add(javax.accessibility.AccessibleState.SELECTED);
                     }
+                    if (unoAccessibleStateSet.contains(AccessibleStateType.EXPANDABLE)) {
+                        stateSet.add(javax.accessibility.AccessibleState.EXPANDABLE);
+                    }
+                    if (unoAccessibleStateSet.contains(AccessibleStateType.EXPANDED)) {
+                        stateSet.add(javax.accessibility.AccessibleState.EXPANDED);
+                    }
+                    if (unoAccessibleStateSet.contains(AccessibleStateType.COLLAPSED)) {
+                        stateSet.add(javax.accessibility.AccessibleState.COLLAPSED);
+                    }
                     return stateSet;
                 } catch (com.sun.star.uno.RuntimeException e) {
                     return null;
@@ -427,6 +458,11 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                 } catch (com.sun.star.uno.RuntimeException e) {
                     return null;
                 }
+            }
+
+            /** Returns the AccessibleSelection interface for this object */
+            public javax.accessibility.AccessibleSelection getAccessibleSelection() {
+                return (unoAccessibleSelection != null) ? this : null;
             }
 
             /** Gets the AccessibleAction associated with this object that has a graphical representation */
@@ -477,6 +513,78 @@ public class Tree extends DescendantManager implements javax.accessibility.Acces
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }
                 return null;
+            }
+
+            /*
+             * AccessibleSelection
+             */
+
+            /** Returns an Accessible representing the specified selected child of the object */
+            public javax.accessibility.Accessible getAccessibleSelection(int i) {
+                javax.accessibility.Accessible child = null;
+                try {
+                    XAccessible xAccessible = unoAccessibleContext.getAccessibleChild(i);
+                    if (xAccessible != null) {
+                        child = new TreeItem(xAccessible);
+                    }
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                } catch (com.sun.star.uno.RuntimeException e) {
+                }
+                return child;
+            }
+
+            /** Adds the specified Accessible child of the object to the object's selection */
+            public void addAccessibleSelection(int i) {
+                try {
+                    unoAccessibleSelection.selectAccessibleChild(i);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                } catch (com.sun.star.uno.RuntimeException e) {
+                }
+            }
+
+            /** Clears the selection in the object, so that no children in the object are selected */
+            public void clearAccessibleSelection() {
+                try {
+                    unoAccessibleSelection.clearAccessibleSelection();
+                } catch (com.sun.star.uno.RuntimeException e) {
+                }
+            }
+
+            /** Returns the number of Accessible children currently selected */
+            public int getAccessibleSelectionCount() {
+                try {
+                    return unoAccessibleSelection.getSelectedAccessibleChildCount();
+                } catch (com.sun.star.uno.RuntimeException e) {
+                    return 0;
+                }
+            }
+
+            /** Determines if the current child of this object is selected */
+            public boolean isAccessibleChildSelected(int i) {
+                try {
+                    return unoAccessibleSelection.isAccessibleChildSelected(i);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                    return false;
+                } catch (com.sun.star.uno.RuntimeException e) {
+                    return false;
+                }
+            }
+
+            /** Removes the specified child of the object from the object's selection */
+            public void removeAccessibleSelection(int i) {
+                try {
+                    unoAccessibleSelection.deselectSelectedAccessibleChild(i);
+                } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                } catch (com.sun.star.uno.RuntimeException e) {
+                }
+            }
+
+            /** Causes every child of the object to be selected if the object supports multiple selection */
+            public void selectAllAccessibleSelection() {
+                try {
+                    unoAccessibleSelection.selectAllAccessible();
+                } catch (com.sun.star.uno.RuntimeException e) {
+                }
             }
         }
     }

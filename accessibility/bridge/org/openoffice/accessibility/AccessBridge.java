@@ -2,10 +2,6 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.12 $
- *
- *  last change: $Author: obr $ $Date: 2003-01-13 11:00:34 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -86,7 +82,6 @@ import java.lang.reflect.InvocationTargetException;
 
 public class AccessBridge {
 
-
     //
     static public class _AccessBridge implements XAccessibleTopWindowMap, XInitialization {
         static final String _serviceName = "drafts.com.sun.star.accessibility.bridge.AccessBridge";
@@ -94,58 +89,10 @@ public class AccessBridge {
         XMultiServiceFactory serviceManager;
         java.util.Hashtable frameMap;
 
-        AccessibleObjectFactory factory;
-
-        protected class JABWEventListener implements java.awt.event.AWTEventListener {
-            Method registerVirtualFrame;
-            Method revokeVirtualFrame;
-
-            // On Windows all native frames must be registered to the access bridge. Therefor
-            // the bridge exports two methods that we try to find here.
-            public JABWEventListener() {
-                try {
-                    Class bridge = Class.forName("com.sun.java.accessibility.AccessBridge");
-                    Class[] parameterTypes = { javax.accessibility.Accessible.class, Integer.class };
-
-                    if (bridge != null) {
-                        registerVirtualFrame = bridge.getMethod("registerVirtualFrame", parameterTypes);
-                        revokeVirtualFrame = bridge.getMethod("revokeVirtualFrame", parameterTypes);
-                    }
-                } catch (NoSuchMethodException e) {
-                    System.err.println("ERROR: incompatible AccessBridge found: " + e.getMessage());
-
-                    // Forward this exception to UNO to indicate that the service will not work correctly.
-                    throw new com.sun.star.uno.RuntimeException("incompatible AccessBridge class: " + e.getMessage());
-                } catch (java.lang.SecurityException e) {
-                    System.err.println("ERROR: no access to AccessBridge: " + e.getMessage());
-
-                    // Forward this exception to UNO to indicate that the service will not work correctly.
-                    throw new com.sun.star.uno.RuntimeException("Security exception caught: " + e.getMessage());
-                } catch(ClassNotFoundException e) {
-                    // Forward this exception to UNO to indicate that the service will not work correctly.
-                    throw new com.sun.star.uno.RuntimeException("ClassNotFound exception caught: " + e.getMessage());
-                }
-            }
-
-            public void eventDispatched(java.awt.AWTEvent e) {
-                switch (e.getID()) {
-                    case java.awt.event.WindowEvent.WINDOW_OPENED:
-                        if (Build.DEBUG) {
-//                          System.err.println("retrieved WINDOW_OPENED");
-                        }
-                        break;
-                    case java.awt.event.WindowEvent.WINDOW_CLOSED:
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
 
         public _AccessBridge(XMultiServiceFactory xMultiServiceFactory) {
             serviceManager = xMultiServiceFactory;
             frameMap = new java.util.Hashtable();
-            factory = AccessibleObjectFactory.getDefault();
         }
 
         /*
@@ -153,25 +100,19 @@ public class AccessBridge {
         */
 
         public void initialize(java.lang.Object[] arguments) {
-            for(int i = 0; i < arguments.length; i++) {
-                if( AnyConverter.isObject(arguments[i]) ) {
-                    try {
-                        // Currently there is no way to determine if key event forwarding is needed or not,
-                        // so we have to do it always ..
-                        XExtendedToolkit unoToolkit = (XExtendedToolkit)
-                            AnyConverter.toObject(new Type(XExtendedToolkit.class), arguments[i]);
+            try {
+                // Currently there is no way to determine if key event forwarding is needed or not,
+                // so we have to do it always ..
+                XExtendedToolkit unoToolkit = (XExtendedToolkit)
+                    AnyConverter.toObject(new Type(XExtendedToolkit.class), arguments[0]);
 
-                        if(unoToolkit != null) {
-                            unoToolkit.addKeyHandler(new KeyHandler());
-                        } else if( Build.DEBUG) {
-                            System.err.println("argument " + i + "is not of type XExtendedToolkit.");
-                        }
-                    }
-
-                    catch(com.sun.star.lang.IllegalArgumentException e) {
-                        // FIXME: output
-                    }
+                if(unoToolkit != null) {
+                    unoToolkit.addKeyHandler(new KeyHandler());
+                } else if( Build.DEBUG) {
+                    System.err.println("argument 0 is not of type XExtendedToolkit.");
                 }
+            } catch(com.sun.star.lang.IllegalArgumentException e) {
+                        // FIXME: output
             }
         }
 
@@ -188,7 +129,7 @@ public class AccessBridge {
                         System.out.println("register native frame: " + handle);
                     }
 
-                    java.awt.Window w = factory.getTopWindow(xAccessible);
+                    java.awt.Window w = AccessibleObjectFactory.getTopWindow(xAccessible);
                     if (w != null) {
                         frameMap.put(handle, w);
                     }
@@ -227,8 +168,8 @@ public class AccessBridge {
         public _WinAccessBridge(XMultiServiceFactory xMultiServiceFactory) {
             super(xMultiServiceFactory);
 
-            java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
-            tk.addAWTEventListener(new JABWEventListener(), java.awt.AWTEvent.WINDOW_EVENT_MASK);
+//          java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
+//          tk.addAWTEventListener(new WindowsAccessBridgeAdapter(), java.awt.AWTEvent.WINDOW_EVENT_MASK);
 
             // On Windows all native frames must be registered to the access bridge. Therefor
             // the bridge exports two methods that we try to find here.
@@ -315,7 +256,7 @@ public class AccessBridge {
                 // The office sometimes registers frames more than once, so check here if already done
                 Integer handle = new Integer(AnyConverter.toInt(any));
                 if (! frameMap.containsKey(handle)) {
-                    java.awt.Window w = factory.getTopWindow(xAccessible);
+                    java.awt.Window w = AccessibleObjectFactory.getTopWindow(xAccessible);
 
                     if (Build.DEBUG) {
                         System.out.println("register native frame: " + handle);
@@ -384,51 +325,6 @@ public class AccessBridge {
         if (implName.equals(AccessBridge.class.getName()) ) {
             // Initialize toolkit to register at Java <-> Windows access bridge
             java.awt.Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
-
-            String logPath = null;
-
-            try {
-                XInterface instance = (XInterface) multiFactory.createInstance(
-                    "org.openoffice.accessibility.internal.RemoteAccessBridge"
-                );
-
-                if(instance != null) {
-                    XAccessibilityInformationProvider infoProvider = (XAccessibilityInformationProvider)
-                        UnoRuntime.queryInterface(XAccessibilityInformationProvider.class, instance);
-
-                    if(infoProvider != null) {
-                        if( Build.DEBUG ) {
-                            logPath = infoProvider.getEnvironment("ACCESSBRIDGE_LOGPATH");
-                        }
-                    } else {
-                        System.err.println("InfoProvider does not implement XAccessibleInformationProvider.");
-                    }
-
-                } else {
-                    System.err.println("InfoProvider service not found.");
-                    throw new com.sun.star.uno.RuntimeException("RemoteAccessBridge service not found.\n");
-                }
-            }
-
-            catch (com.sun.star.uno.Exception e) {
-                System.err.println(e.getMessage());
-                throw new com.sun.star.uno.RuntimeException(e.getMessage());
-            }
-
-               // Redirect output to log file if ACCESSBRIDGE_LOGPATH environment variable is set.
-            if( logPath != null && logPath.length() > 0 ) {
-                try {
-                    java.io.PrintStream log = new java.io.PrintStream(
-                        new java.io.FileOutputStream( logPath + java.io.File.separator + "AccessBridge.log")
-                    );
-
-                    System.setOut(log);
-                    System.setErr(log);
-                }
-
-                catch(java.io.FileNotFoundException e) {
-                }
-            }
 
             Class serviceClass;
             String os = (String) System.getProperty("os.name");

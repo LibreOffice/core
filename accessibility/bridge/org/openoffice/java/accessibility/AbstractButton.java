@@ -2,10 +2,6 @@
  *
  *  $RCSfile: AbstractButton.java,v $
  *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: obr $ $Date: 2003-01-13 11:00:06 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,56 +57,21 @@
 
 package org.openoffice.java.accessibility;
 
-import java.text.BreakIterator;
-
-import javax.accessibility.AccessibleAction;
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
-import javax.accessibility.AccessibleStateSet;
-import javax.accessibility.AccessibleText;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 
-import com.sun.star.awt.Point;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.uno.UnoRuntime;
-
+import com.sun.star.uno.*;
 import drafts.com.sun.star.accessibility.*;
 
 /**
  */
 public abstract class AbstractButton extends Component {
 
-    protected AbstractButton() {
-        super();
-    }
-
-    protected class AccessibleAbstractButtonListener extends AccessibleUNOComponentListener {
-
-        protected AccessibleAbstractButtonListener() {
-            super();
-        }
-
-        protected void setComponentState(short state, boolean enable) {
-            switch (state) {
-                case AccessibleStateType.ARMED:
-                    fireStatePropertyChange(AccessibleState.ARMED, enable);
-                    break;
-                case AccessibleStateType.CHECKED:
-                    fireStatePropertyChange(AccessibleState.CHECKED, enable);
-                    break;
-                case AccessibleStateType.PRESSED:
-                    fireStatePropertyChange(AccessibleState.PRESSED, enable);
-                    break;
-                default:
-                    super.setComponentState(state, enable);
-                    break;
-            }
-        }
+    protected AbstractButton(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     protected abstract class AccessibleAbstractButton extends AccessibleUNOComponent
-        implements AccessibleAction /*, AccessibleExtendedComponent */ {
+        implements javax.accessibility.AccessibleAction {
 
         /**
         * Though the class is abstract, this should be called by all sub-classes
@@ -119,43 +80,31 @@ public abstract class AbstractButton extends Component {
             super();
         }
 
+        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
+
+            try {
+                if (unoAS != null) {
+                    if (unoAS.contains(AccessibleStateType.ARMED)) {
+                        states.add(AccessibleState.ARMED);
+                    }
+                    if (unoAS.contains(AccessibleStateType.PRESSED)) {
+                        states.add(AccessibleState.PRESSED);
+                    }
+                    if (unoAS.contains(AccessibleStateType.CHECKED)) {
+                        states.add(AccessibleState.CHECKED);
+                    }
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
+
+            return states;
+        }
+
         /*
         * AccessibleContext
         */
-
-        /**
-        * Get the state set of this object.
-        *
-        * @return an instance of AccessibleState containing the current state
-        * of the object
-        * @see AccessibleState
-        */
-        public AccessibleStateSet getAccessibleStateSet() {
-            AccessibleStateSet states = super.getAccessibleStateSet();
-            // FIXME: quick hack to avoid dead lock in Window.dispose ..
-            if (java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().isDispatchThread()) {
-                return states;
-            }
-            if (!isShowing()) {
-                return states;
-            }
-            try {
-                XAccessibleStateSet unoAccessibleStateSet =
-                    unoAccessible.getAccessibleContext().getAccessibleStateSet();
-                if (unoAccessibleStateSet.contains(AccessibleStateType.ARMED)) {
-                    states.add(AccessibleState.ARMED);
-                }
-                if (unoAccessibleStateSet.contains(AccessibleStateType.PRESSED)) {
-                    states.add(AccessibleState.PRESSED);
-                }
-                if (unoAccessibleStateSet.contains(AccessibleStateType.CHECKED)) {
-                    states.add(AccessibleState.CHECKED);
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-            } catch (NullPointerException e) {
-            }
-            return states;
-        }
 
         /** Gets the AccessibleAction associated with this object that supports one or more actions */
         public javax.accessibility.AccessibleAction getAccessibleAction() {
@@ -175,12 +124,6 @@ public abstract class AbstractButton extends Component {
             } catch (com.sun.star.uno.RuntimeException e) {
                 return null;
             }
-        }
-
-        /** Gets the locale of the component */
-        public java.util.Locale getLocale() throws java.awt.IllegalComponentStateException {
-            // The java loader sets the UI locale as default at startup
-            return java.util.Locale.getDefault();
         }
 
         /*
@@ -226,5 +169,4 @@ public abstract class AbstractButton extends Component {
         }
     }
 }
-
 

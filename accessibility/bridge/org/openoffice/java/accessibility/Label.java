@@ -2,10 +2,6 @@
  *
  *  $RCSfile: Label.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:36 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,62 +57,29 @@
 
 package org.openoffice.java.accessibility;
 
-import java.text.BreakIterator;
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleAction;
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
-import javax.accessibility.AccessibleText;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-
-import com.sun.star.awt.Point;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.uno.*;
 import drafts.com.sun.star.accessibility.*;
 
 /**
  */
-public class Label extends Component implements Accessible {
+public class Label extends Component implements javax.accessibility.Accessible {
 
-    protected Label(XAccessible accessible, XAccessibleComponent xAccessibleComponent) {
-        super();
-        initialize(accessible, xAccessibleComponent);
-    }
-
-    protected void initialize(XAccessible accessible, XAccessibleComponent xAccessibleComponent) {
-        unoAccessible = accessible;
-        unoAccessibleComponent = xAccessibleComponent;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        addAccessibleEventListener(new AccessibleLabelListener());
-    }
-
-    protected class AccessibleLabelListener extends AccessibleUNOComponentListener {
-
-        protected AccessibleLabelListener() {
-            super();
-        }
+    protected Label(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     /** Returns the AccessibleContext associated with this object */
-    public AccessibleContext getAccessibleContext() {
+    public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
-            unoAccessibleContext = unoAccessible.getAccessibleContext();
-            if (unoAccessibleContext != null) {
-                accessibleContext = new AccessibleLabel();
-            }
+            accessibleContext = new AccessibleLabel();
         }
         return accessibleContext;
     }
 
-    protected XAccessibleContext unoAccessibleContext = null;
-
-    protected class AccessibleLabel extends AccessibleUNOComponent
-        /* implements AccessibleExtendedComponent */ {
+    protected class AccessibleLabel extends AccessibleUNOComponent {
 
         /**
         * Though the class is abstract, this should be called by all sub-classes
@@ -138,7 +101,7 @@ public class Label extends Component implements Accessible {
         public javax.accessibility.AccessibleText getAccessibleText() {
             try {
                 XAccessibleText unoAccessibleText = (XAccessibleText)
-                    UnoRuntime.queryInterface(XAccessibleText.class,unoAccessibleComponent);
+                    UnoRuntime.queryInterface(XAccessibleText.class, unoAccessibleContext);
                 if (unoAccessibleText != null) {
                     return new AccessibleTextImpl(unoAccessibleText);
                 } else {
@@ -198,5 +161,4 @@ public class Label extends Component implements Accessible {
         }
     }
 }
-
 

@@ -2,10 +2,6 @@
  *
  *  $RCSfile: ScrollBar.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:39 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,73 +57,30 @@
 
 package org.openoffice.java.accessibility;
 
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 import javax.swing.SwingConstants;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.AccessibleEventId;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleValue;
+import drafts.com.sun.star.accessibility.*;
 
 /**
  */
-public class ScrollBar extends Component implements SwingConstants, Accessible {
+public class ScrollBar extends Component implements SwingConstants, javax.accessibility.Accessible {
 
     private int orientation = HORIZONTAL;
 
-    public ScrollBar(XAccessible accessible, XAccessibleComponent component, int orientation) {
-        super();
+    public ScrollBar(XAccessible xAccessible, XAccessibleContext xAccessibleContext, int orientation) {
+        super(xAccessible, xAccessibleContext);
         this.orientation = orientation;
-        initialize(accessible, component);
     }
 
-    public ScrollBar(XAccessible accessible, XAccessibleComponent component) {
-        super();
-        initialize(accessible, component);
-    }
-
-    protected void initialize(XAccessible accessible, XAccessibleComponent component) {
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        addAccessibleEventListener(new AccessibleScrollBarListener());
-    }
-
-    protected void fireValuePropertyChanged(Number oldValue, Number newValue) {
-        java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue().invokeLater(
-            new PropertyChangeBroadcaster(accessibleContext.ACCESSIBLE_VALUE_PROPERTY,
-            oldValue, newValue));
-    }
-
-    protected class AccessibleScrollBarListener extends AccessibleUNOComponentListener {
-        /** Passes the event to all registered listeners (if any) */
-        protected void handleValueEvent(Number oldValue, Number newValue) {
-            // Notify property event listeners
-            ScrollBar.this.fireValuePropertyChanged(oldValue, newValue);
-        }
-
-        /** Called by OpenOffice process to notify property changes */
-        public void notifyEvent(AccessibleEventObject event) {
-            switch(event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_VALUE_EVENT:
-                    // Fire the appropriate PropertyChangeEvent
-                    handleValueEvent(toNumber(event.OldValue), toNumber(event.NewValue));
-                    break;
-                default:
-                    super.notifyEvent(event);
-            }
-        }
+    public ScrollBar(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     /** Returns the AccessibleContext associated with this object */
-    public AccessibleContext getAccessibleContext() {
+    public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
             accessibleContext = new AccessibleScrollBar();
         }
@@ -135,9 +88,8 @@ public class ScrollBar extends Component implements SwingConstants, Accessible {
     }
 
     protected class AccessibleScrollBar extends AccessibleUNOComponent implements
-        javax.accessibility.AccessibleValue, javax.accessibility.AccessibleAction {
+        javax.accessibility.AccessibleAction {
 
-        protected XAccessibleValue unoAccessibleValue;
         protected XAccessibleAction unoAccessibleAction;
         protected int actionCount = 0;
 
@@ -146,29 +98,17 @@ public class ScrollBar extends Component implements SwingConstants, Accessible {
         */
         protected AccessibleScrollBar() {
             super();
-            unoAccessibleValue = (XAccessibleValue) UnoRuntime.queryInterface(
-                XAccessibleValue.class, unoAccessibleComponent);
             unoAccessibleAction = (XAccessibleAction) UnoRuntime.queryInterface(
-                XAccessibleAction.class, ScrollBar.this.unoAccessibleComponent);
+                XAccessibleAction.class, unoAccessibleContext);
             if (unoAccessibleAction != null) {
                 actionCount = unoAccessibleAction.getAccessibleActionCount();
             }
         }
 
-        /** Gets the role of this object */
-        public javax.accessibility.AccessibleRole getAccessibleRole() {
-            return javax.accessibility.AccessibleRole.SCROLL_BAR;
-        }
+        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
 
-        /**
-        * Get the state set of this object.
-        *
-        * @return an instance of AccessibleState containing the current state
-        * of the object
-        * @see AccessibleState
-        */
-        public AccessibleStateSet getAccessibleStateSet() {
-            AccessibleStateSet states = super.getAccessibleStateSet();
             switch (orientation) {
                 case HORIZONTAL:
                     states.add(AccessibleState.HORIZONTAL);
@@ -179,12 +119,29 @@ public class ScrollBar extends Component implements SwingConstants, Accessible {
                 default:
                     break;
             }
+
             return states;
         }
 
-        /** Gets the AccessibleValue associated with this object that supports a Numerical value */
+        /*
+        * AccessibleContext
+        */
+
+        /** Gets the role of this object */
+        public javax.accessibility.AccessibleRole getAccessibleRole() {
+            return javax.accessibility.AccessibleRole.SCROLL_BAR;
+        }
+
+        /** Gets the AccessibleValue associated with this object that has a graphical representation */
         public javax.accessibility.AccessibleValue getAccessibleValue() {
-            return this;
+            try {
+                XAccessibleValue unoAccessibleValue = (XAccessibleValue)
+                    UnoRuntime.queryInterface(XAccessibleValue.class, unoAccessibleContext);
+                return (unoAccessibleValue != null) ?
+                    new AccessibleValueImpl(unoAccessibleValue) : null;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
         }
 
         /** Gets the AccessibleAction associated with this object that supports one or more actions */
@@ -221,45 +178,6 @@ public class ScrollBar extends Component implements SwingConstants, Accessible {
         /** Returns the number of accessible actions available in this object */
         public int getAccessibleActionCount() {
             return actionCount;
-        }
-
-        /*
-        * AccessibleValue
-        */
-
-        /** Get the minimum value of this object as a Number */
-        public java.lang.Number getMinimumAccessibleValue() {
-            try {
-                return toNumber(unoAccessibleValue.getMinimumValue());
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
-        }
-
-        /** Get the value of this object as a Number */
-        public java.lang.Number getCurrentAccessibleValue() {
-            try {
-                return toNumber(unoAccessibleValue.getCurrentValue());
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
-        }
-        /** Get the maximum value of this object as a Number */
-        public java.lang.Number getMaximumAccessibleValue() {
-            try {
-                return toNumber(unoAccessibleValue.getMaximumValue());
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return null;
-            }
-        }
-
-        /** Set the value of this object as a Number */
-        public boolean setCurrentAccessibleValue(java.lang.Number number) {
-            try {
-                return unoAccessibleValue.setCurrentValue(number);
-            } catch (com.sun.star.uno.RuntimeException e) {
-                return false;
-            }
         }
     }
 }

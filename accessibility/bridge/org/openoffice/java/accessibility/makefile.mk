@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obr $ $Date: 2002-12-06 11:19:00 $
+#   last change: $Author: hr $ $Date: 2003-03-18 15:48:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,6 @@ JAVADIR = $(OUT)$/misc$/java
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar
 JAVAFILES = \
     AbstractButton.java \
-    AbstractContainer.java \
     AccessibleActionImpl.java \
     AccessibleComponentImpl.java \
     AccessibleEditableTextImpl.java \
@@ -85,6 +84,7 @@ JAVAFILES = \
     AccessibleKeyBinding.java \
     AccessibleObjectFactory.java \
     AccessibleRoleAdapter.java \
+    AccessibleSelectionImpl.java \
     AccessibleTextImpl.java \
     AccessibleValueImpl.java \
     Application.java \
@@ -95,22 +95,21 @@ JAVAFILES = \
     Container.java \
     DescendantManager.java \
     Dialog.java \
+    FocusTraversalPolicy.java \
     Frame.java \
     Icon.java \
     Label.java \
     List.java \
     Menu.java \
-    MenuBar.java \
     MenuItem.java \
     NativeFrame.java \
-    PageTabList.java \
-    PopupMenu.java \
     RadioButton.java \
     ScrollBar.java \
     Separator.java \
     Table.java \
     TextComponent.java \
     ToggleButton.java \
+    ToolTip.java \
     Tree.java \
     Window.java
 

@@ -2,10 +2,6 @@
  *
  *  $RCSfile: Button.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:34 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,28 +57,17 @@
 
 package org.openoffice.java.accessibility;
 
-import javax.accessibility.Accessible;
-import javax.accessibility.AccessibleContext;
+import com.sun.star.uno.*;
+import drafts.com.sun.star.accessibility.*;
 
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
+class Button extends AbstractButton implements javax.accessibility.Accessible {
 
-class Button extends AbstractButton implements Accessible {
-
-    public Button(XAccessible accessible, XAccessibleComponent component) {
-        super();
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        addAccessibleEventListener(new AccessibleButtonListener());
-    }
-
-    protected class AccessibleButtonListener extends AccessibleAbstractButtonListener {
+    public Button(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     /** Returns the AccessibleContext associated with this object */
-    public AccessibleContext getAccessibleContext() {
+    public javax.accessibility.AccessibleContext getAccessibleContext() {
         if (accessibleContext == null) {
             accessibleContext = new AccessibleButton();
         }

@@ -2,10 +2,6 @@
  *
  *  $RCSfile: List.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:37 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -70,17 +66,8 @@ import drafts.com.sun.star.accessibility.*;
 
 public class List extends DescendantManager implements javax.accessibility.Accessible {
 
-    protected List(XAccessible accessible, XAccessibleComponent component) {
-        super();
-        unoAccessible = accessible;
-        unoAccessibleComponent = component;
-        // To reflect focus and other component state changes, the accessibility
-        // event listener must already be added here
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, component);
-        if (broadcaster != null) {
-            broadcaster.addEventListener(new AccessibleListListener());
-        }
+    protected List(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
     protected void setActiveDescendant(javax.accessibility.Accessible descendant) {
@@ -95,10 +82,20 @@ public class List extends DescendantManager implements javax.accessibility.Acces
         try {
             if (AnyConverter.isObject(any)) {
                 XAccessible unoAccessible = (XAccessible) AnyConverter.toObject(
-                    AbstractContainer.XAccessibleType, any);
+                    Container.XAccessibleType, any);
                 if (unoAccessible != null) {
                     // FIXME: have to handle non transient objects here ..
                     descendant = new ListItem(unoAccessible);
+                    if (Build.DEBUG) {
+                        try {
+                            if (Build.DEBUG) {
+                                System.err.println("[List] retrieved active descendant event: new descendant is " +
+                                    unoAccessible.getAccessibleContext().getAccessibleName());
+                            }
+                        } catch (java.lang.NullPointerException e) {
+                            System.err.println("*** ERROR *** new active descendant not accessible");
+                        }
+                    }
                 }
             }
             setActiveDescendant(descendant);
@@ -128,14 +125,14 @@ public class List extends DescendantManager implements javax.accessibility.Acces
 
     protected void add(Object any) {
         try {
-            add((XAccessible) AnyConverter.toObject(AbstractContainer.XAccessibleType, any));
+            add((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
 
     protected void remove(Object any) {
         try {
-            remove((XAccessible) AnyConverter.toObject(AbstractContainer.XAccessibleType, any));
+            remove((XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
         }
     }
@@ -171,6 +168,10 @@ public class List extends DescendantManager implements javax.accessibility.Acces
                     super.notifyEvent(event);
             }
         }
+    }
+
+    protected XAccessibleEventListener createEventListener() {
+        return new AccessibleListListener();
     }
 
     /** Returns the AccessibleContext associated with this object */
@@ -238,7 +239,7 @@ public class List extends DescendantManager implements javax.accessibility.Acces
         public javax.accessibility.Accessible getAccessibleSelection(int i) {
             javax.accessibility.Accessible child = null;
             try {
-                XAccessible xAccessible = unoAccessibleContext.getAccessibleChild(i);
+                XAccessible xAccessible = unoAccessibleSelection.getSelectedAccessibleChild(i);
                 if (xAccessible != null) {
                     // Re-use the active descandant wrapper if possible
                     javax.accessibility.Accessible activeDescendant = List.this.activeDescendant;
@@ -247,8 +248,13 @@ public class List extends DescendantManager implements javax.accessibility.Acces
                     } else {
                         child = new ListItem(xAccessible);
                     }
+                } else if (Build.DEBUG) {
+                    System.out.println(i + "th selected child is not accessible");
                 }
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                if (Build.DEBUG) {
+                    System.err.println("IndexOutOfBoundsException caught for AccessibleList.getAccessibleSelection(" + i + ")");
+                }
             } catch (com.sun.star.uno.RuntimeException e) {
             }
             return child;

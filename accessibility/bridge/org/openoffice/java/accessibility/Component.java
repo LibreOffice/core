@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2003-01-13 11:00:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 15:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,29 +65,32 @@ import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.AccessibleEventId;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
-import drafts.com.sun.star.accessibility.AccessibleStateType;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
-import drafts.com.sun.star.accessibility.XAccessibleEventListener;
-import drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster;
+import drafts.com.sun.star.accessibility.*;
 
 public abstract class Component extends java.awt.Component {
-    final static String monitorClassName =
-        "com.sun.java.accessibility.util.AccessibilityEventMonitor$AccessibilityEventListener";
-
     public static final Type RectangleType = new Type(com.sun.star.awt.Rectangle.class);
+    public static final Type SelectionType = new Type(com.sun.star.awt.Selection.class);
 
-    protected XAccessible unoAccessible = null;
-    protected XAccessibleComponent unoAccessibleComponent = null;
+    protected XAccessible unoAccessible;
+    protected XAccessibleContext unoAccessibleContext;
+    protected XAccessibleComponent unoAccessibleComponent;
 
     protected boolean disposed = false;
 
-    protected Component() {
+    protected Component(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super();
-//      enableEvents(java.awt.AWTEvent.FOCUS_EVENT_MASK);
+        unoAccessible = xAccessible;
+        unoAccessibleContext = xAccessibleContext;
+        unoAccessibleComponent = (XAccessibleComponent)
+            UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
+        // Add the event listener right away, because the global focus notification doesn't
+        // work yet ..
+        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
+            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
+            unoAccessibleComponent);
+        if (broadcaster != null) {
+            broadcaster.addEventListener(createEventListener());
+        }
     }
 
     /**
@@ -154,10 +157,9 @@ public abstract class Component extends java.awt.Component {
 
     public Object[] getAccessibleComponents(Object[] targetSet) {
         try {
-            AccessibleObjectFactory factory = AccessibleObjectFactory.getDefault();
             java.util.ArrayList list = new java.util.ArrayList(targetSet.length);
             for (int i=0; i < targetSet.length; i++) {
-                java.awt.Component c = factory.getAccessibleComponent(
+                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
                     (XAccessible) UnoRuntime.queryInterface(XAccessible.class, targetSet[i]));
                 if (c != null) {
                     list.add(c);
@@ -167,15 +169,6 @@ public abstract class Component extends java.awt.Component {
             return list.toArray();
         } catch (com.sun.star.uno.RuntimeException e) {
             return null;
-        }
-    }
-
-    protected void addAccessibleEventListener(XAccessibleEventListener listener) {
-        XAccessibleEventBroadcaster broadcaster = (XAccessibleEventBroadcaster)
-            UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class,
-            unoAccessibleComponent);
-        if (broadcaster != null) {
-            broadcaster.addEventListener(listener);
         }
     }
 
@@ -201,11 +194,6 @@ public abstract class Component extends java.awt.Component {
                 AccessibleContext ac = accessibleContext;
                 if (ac != null) {
                     ac.firePropertyChange(propertyName, oldValue, newValue);
-                } else if (Build.DEBUG) {
-                    XAccessibleContext xac = unoAccessible.getAccessibleContext();
-                    System.err.println("Ignoring event: " + propertyName + " for " +
-                        AccessibleRoleAdapter.getAccessibleRole(xac.getAccessibleRole()) +
-                        " " + xac.getAccessibleName());
                 }
             } catch (java.lang.Exception e) {
                 if (Build.DEBUG) {
@@ -237,7 +225,7 @@ public abstract class Component extends java.awt.Component {
     /**
     * Update the proxy objects appropriatly on property change events
     */
-    protected abstract class AccessibleUNOComponentListener implements XAccessibleEventListener {
+    protected class AccessibleUNOComponentListener implements XAccessibleEventListener {
 
         protected AccessibleUNOComponentListener() {
         }
@@ -247,6 +235,12 @@ public abstract class Component extends java.awt.Component {
                 case AccessibleStateType.ACTIVE:
                     // Only frames should be active
                     break;
+                case AccessibleStateType.ARMED:
+                    fireStatePropertyChange(AccessibleState.ARMED, enable);
+                    break;
+                case AccessibleStateType.CHECKED:
+                    fireStatePropertyChange(AccessibleState.CHECKED, enable);
+                    break;
                 case AccessibleStateType.ENABLED:
                     setEnabled(enable);
                     break;
@@ -255,6 +249,9 @@ public abstract class Component extends java.awt.Component {
                         Component.this, enable ?
                         java.awt.event.FocusEvent.FOCUS_GAINED :
                         java.awt.event.FocusEvent.FOCUS_LOST));
+                    break;
+                case AccessibleStateType.PRESSED:
+                    fireStatePropertyChange(AccessibleState.PRESSED, enable);
                     break;
                 case AccessibleStateType.SELECTED:
                     fireStatePropertyChange(AccessibleState.SELECTED, enable);
@@ -313,9 +310,49 @@ public abstract class Component extends java.awt.Component {
             }
         }
 
+        /** Fires the appropriate PropertyChangeEvent */
+        protected void handleTextChangedEvent(Object any1, Object any2) {
+            Object[] values = new Object[2];
+            try {
+                if (AnyConverter.isObject(any1)) {
+                    com.sun.star.awt.Selection s = (com.sun.star.awt.Selection)
+                        AnyConverter.toObject(SelectionType, any1);
+                    if (s != null) {
+                        // Since there is nothing like a "range" object in the JAA yet,
+                        // the Integer[2] is a private negotiation with the JABG
+                        Integer[] deleted = { new Integer(s.Min), new Integer(s.Max) };
+                        values[0] = deleted;
+                        if (Build.DEBUG) {
+                            System.err.println("text range (" + s.Min + "," + s.Max + ") deleted");
+                        }
+                    }
+                }
+
+                if (AnyConverter.isObject(any2)) {
+                    com.sun.star.awt.Selection s = (com.sun.star.awt.Selection)
+                        AnyConverter.toObject(SelectionType, any2);
+                    if (s != null) {
+                        // Since there is nothing like a "range" object in the JAA yet,
+                        // the Integer[2] is a private negotiation with the JABG
+                        Integer[] inserted = { new Integer(s.Min), new Integer(s.Max) };
+                        values[1] = inserted;
+                        if (Build.DEBUG) {
+                            System.err.println("text range (" + s.Min + "," + s.Max + ") inserted");
+                        }
+                    }
+                }
+                firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY, values[0], values[1]);
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+            }
+        }
+
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
+                case AccessibleEventId.ACCESSIBLE_ACTION_EVENT:
+                    firePropertyChange(accessibleContext.ACCESSIBLE_ACTION_PROPERTY,
+                        toNumber(event.OldValue), toNumber(event.NewValue));
+                    break;
                 case AccessibleEventId.ACCESSIBLE_NAME_EVENT:
                     // Set the accessible name for the corresponding context, which will fire a property
                     // change event itself
@@ -326,6 +363,11 @@ public abstract class Component extends java.awt.Component {
                     // change event itself - so do not set propertyName !
                     handleDescriptionChangedEvent(event.NewValue);
                     break;
+                case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+                    if(Build.DEBUG) {
+                        System.out.println("Unexpected child event for object of role " + getAccessibleContext().getAccessibleRole());
+                    }
+                    break;
                 case AccessibleEventId.ACCESSIBLE_STATE_EVENT:
                     // Update the internal state set and fire the appropriate PropertyChangedEvent
                     handleStateChangedEvent(event.OldValue, event.NewValue);
@@ -335,9 +377,13 @@ public abstract class Component extends java.awt.Component {
                     firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
                     break;
                 case AccessibleEventId.ACCESSIBLE_TEXT_EVENT:
-                    // FIXME: enhance text information ..
-                    firePropertyChange(AccessibleContext.ACCESSIBLE_TEXT_PROPERTY, null, new Integer(0));
+                    handleTextChangedEvent(event.OldValue, event.NewValue);
                     break;
+                case AccessibleEventId.ACCESSIBLE_CARET_EVENT:
+                    firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
+                    break;
+                case AccessibleEventId.ACCESSIBLE_VALUE_EVENT:
+                    firePropertyChange(accessibleContext.ACCESSIBLE_VALUE_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
                 default:
                     // Warn about unhandled events
                     if(Build.DEBUG) {
@@ -349,13 +395,18 @@ public abstract class Component extends java.awt.Component {
         /** Called by OpenOffice process to notify that the UNO component is disposing */
         public void disposing(com.sun.star.lang.EventObject eventObject) {
             disposed = true;
-            AccessibleObjectFactory.getDefault().disposing(Component.this);
+            AccessibleObjectFactory.disposing(Component.this);
         }
+    }
+
+    protected XAccessibleEventListener createEventListener() {
+        return new AccessibleUNOComponentListener();
     }
 
     protected AccessibleContext accessibleContext = null;
 
-    protected abstract class AccessibleUNOComponent extends java.awt.Component.AccessibleAWTComponent {
+    protected abstract class AccessibleUNOComponent extends java.awt.Component.AccessibleAWTComponent
+        implements javax.accessibility.AccessibleExtendedComponent {
 
         /**
         * Though the class is abstract, this should be called by all sub-classes
@@ -373,6 +424,62 @@ public abstract class Component extends java.awt.Component {
             if (s != null && s.length() > 0) {
                 setAccessibleDescription(s);
             }
+        }
+
+        /** Check if the parent of an selectable object supports AccessibleSelection */
+        protected void dbgCheckSelectable() {
+            javax.accessibility.Accessible parent = getAccessibleParent();
+            if (parent != null) {
+                javax.accessibility.AccessibleContext parentAC = parent.getAccessibleContext();
+                if (parentAC != null) {
+                    if (parentAC.getAccessibleSelection() == null) {
+                        System.err.println("*** ERROR *** Object claims to be selectable, but parent does not support AccessibleSelection");
+                    }
+                } else {
+                    System.err.println("*** ERROR *** Object claims to be selectable, but parent is not accessible");
+                }
+            } else {
+                System.err.println("*** ERROR *** Object claims to be selectable, but has no accessible parent");
+            }
+        }
+
+        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+            javax.accessibility.AccessibleStateSet states = new javax.accessibility.AccessibleStateSet();
+
+            if (Component.this.isEnabled()) {
+                states.add(AccessibleState.ENABLED);
+            }
+            if (Component.this.isFocusTraversable()) {
+                states.add(AccessibleState.FOCUSABLE);
+            }
+            if (Component.this.isVisible()) {
+                states.add(AccessibleState.VISIBLE);
+            }
+            if (Component.this.isShowing()) {
+                states.add(AccessibleState.SHOWING);
+            }
+            if (Component.this.isFocusOwner()) {
+                states.add(AccessibleState.FOCUSED);
+            }
+
+            try {
+                if (unoAS != null) {
+                    if (unoAS.contains(AccessibleStateType.SELECTABLE)) {
+                        states.add(AccessibleState.SELECTABLE);
+
+                        if (Build.DEBUG) {
+                            dbgCheckSelectable();
+                        }
+                    }
+                    if (unoAS.contains(AccessibleStateType.SELECTED)) {
+                        states.add(AccessibleState.SELECTED);
+                    }
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
+
+            return states;
         }
 
         protected java.awt.event.ComponentListener accessibleComponentHandler = null;
@@ -469,51 +576,32 @@ public abstract class Component extends java.awt.Component {
         *    containing the current state set of the object
         * @see AccessibleState
         */
-        public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
-            javax.accessibility.AccessibleStateSet states = new javax.accessibility.AccessibleStateSet();
-            if (Component.this.isEnabled()) {
-                states.add(AccessibleState.ENABLED);
-            }
-            if (Component.this.isFocusTraversable()) {
-                states.add(AccessibleState.FOCUSABLE);
-            }
-            if (Component.this.isVisible()) {
-                states.add(AccessibleState.VISIBLE);
-            }
-            if (Component.this.isShowing()) {
-                states.add(AccessibleState.SHOWING);
-            }
-            if (Component.this.isFocusOwner()) {
-                states.add(AccessibleState.FOCUSED);
-            }
-
-            /**
-            * Never hold the tree lock when calling back into the office !!
-            * This may cause deadlocks when new native frames are registered
-            * with the Solar-Mutex acquired ..
-            */
-
-            javax.accessibility.Accessible ap = getAccessibleParent();
-            if (ap != null) {
-                javax.accessibility.AccessibleContext pac = ap.getAccessibleContext();
-                if (pac != null) {
-                    javax.accessibility.AccessibleSelection as = pac.getAccessibleSelection();
-                    if (as != null) {
-                        states.add(AccessibleState.SELECTABLE);
-                        int i = getAccessibleIndexInParent();
-                        if (i >= 0) {
-                            if (as.isAccessibleChildSelected(i)) {
-                                states.add(AccessibleState.SELECTED);
-                            }
-                        }
-                    }
+        public final javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
+            try {
+                XAccessibleStateSet unoASS = null;
+                if ( !disposed ) {
+                    unoASS = unoAccessibleContext.getAccessibleStateSet();
                 }
+                return getAccessibleStateSetImpl(unoASS);
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return getAccessibleStateSetImpl(null);
             }
-            return states;
+        }
+
+        /** Gets the locale of the component */
+        public java.util.Locale getLocale() throws java.awt.IllegalComponentStateException {
+            try {
+                com.sun.star.lang.Locale unoLocale = unoAccessible.getAccessibleContext().getLocale();
+                return new java.util.Locale(unoLocale.Language, unoLocale.Country);
+            } catch (IllegalAccessibleComponentStateException e) {
+                throw new java.awt.IllegalComponentStateException(e.getMessage());
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return java.util.Locale.getDefault();
+            }
         }
 
         /*
-        * AccessibleComponent
+        * AccessibleExtendedComponent
         */
 
         /** Returns the background color of the object */
@@ -659,6 +747,50 @@ public abstract class Component extends java.awt.Component {
 
         public void requestFocus() {
             unoAccessibleComponent.grabFocus();
+        }
+
+        public String getToolTipText() {
+            try {
+                XAccessibleExtendedComponent unoAccessibleExtendedComponent = (XAccessibleExtendedComponent)
+                    UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, unoAccessibleComponent);
+                if (unoAccessibleExtendedComponent != null) {
+                    return unoAccessibleExtendedComponent.getToolTipText();
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+            return null;
+        }
+
+        public String getTitledBorderText() {
+            try {
+                XAccessibleExtendedComponent unoAccessibleExtendedComponent = (XAccessibleExtendedComponent)
+                    UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, unoAccessibleComponent);
+                if (unoAccessibleExtendedComponent != null) {
+                    return unoAccessibleExtendedComponent.getTitledBorderText();
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+            return null;
+        }
+
+        public javax.accessibility.AccessibleKeyBinding getAccessibleKeyBinding() {
+            try {
+                XAccessibleAction unoAccessibleAction = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class, unoAccessibleComponent);
+                if (unoAccessibleAction != null) {
+                    XAccessibleKeyBinding unoAccessibleKeyBinding = unoAccessibleAction.getAccessibleKeyBinding(0);
+                    if (unoAccessibleKeyBinding != null) {
+                        return new AccessibleKeyBinding(unoAccessibleKeyBinding);
+                    }
+                }
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return null;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+            return null;
         }
     }
 

@@ -2,10 +2,6 @@
  *
  *  $RCSfile: Window.java,v $
  *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: obr $ $Date: 2003-01-13 11:00:08 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -265,7 +261,7 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
         /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
         protected void handleChildRemovedEvent(Object any) {
             try {
-                java.awt.Component c = AccessibleObjectFactory.getDefault().getAccessibleComponent(
+                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
                     (XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
                 if (c != null) {
                     Window.this.remove(c);
@@ -278,15 +274,14 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
         /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
         protected void handleChildAddedEvent(Object any) {
             try {
-                XAccessible xAccessible = (XAccessible) AnyConverter.toObject(AbstractContainer.XAccessibleType, any);
-                AccessibleObjectFactory factory = AccessibleObjectFactory.getDefault();
-                java.awt.Component c = factory.getAccessibleComponent(xAccessible);
+                XAccessible xAccessible = (XAccessible) AnyConverter.toObject(Container.XAccessibleType, any);
+                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(xAccessible);
                 if (c != null) {
                     // Seems to be already in child list
                     if (this.equals(c.getParent()))
                         return;
                 } else {
-                    c = factory.createAccessibleComponent(xAccessible);
+                    c = AccessibleObjectFactory.createAccessibleComponent(xAccessible);
                 }
                 if (c != null) {
                     Window.this.add(c, xAccessible.getAccessibleContext().
@@ -611,9 +606,16 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
             // Not supported by UNO accessibility API
         }
 
+        /** Returns the Accessible child, if one exists, contained at the local coordinate Point */
         public javax.accessibility.Accessible getAccessibleAt(java.awt.Point p) {
-            // Not supported by this implementation
-            return null;
+            try {
+                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
+                    unoAccessibleComponent.getAccessibleAt(new com.sun.star.awt.Point(p.x, p.y)));
+
+                return (javax.accessibility.Accessible) c;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
         }
 
         public boolean isFocusTraversable() {

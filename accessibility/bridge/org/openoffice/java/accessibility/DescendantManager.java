@@ -2,10 +2,6 @@
  *
  *  $RCSfile: DescendantManager.java,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:35 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -61,37 +57,24 @@
 
 package org.openoffice.java.accessibility;
 
-import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.AccessibleEventId;
-import drafts.com.sun.star.accessibility.AccessibleEventObject;
-import drafts.com.sun.star.accessibility.AccessibleStateType;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster;
-import drafts.com.sun.star.accessibility.XAccessibleSelection;
+import drafts.com.sun.star.accessibility.*;
 
 public abstract class DescendantManager extends Component {
-    final static String monitorClassName =
-        "com.sun.java.accessibility.util.AccessibilityEventMonitor$AccessibilityEventListener";
-
+    protected XAccessibleSelection unoAccessibleSelection = null;
     protected javax.accessibility.Accessible activeDescendant = null;
     protected boolean multiselectable = false;
 
-    protected DescendantManager() {
-        super();
+    protected DescendantManager(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+        super(xAccessible, xAccessibleContext);
     }
 
-    protected DescendantManager(boolean multiselectable) {
-        super();
+    protected DescendantManager(XAccessible xAccessible, XAccessibleContext xAccessibleContext, boolean multiselectable) {
+        super(xAccessible, xAccessibleContext);
         this.multiselectable = multiselectable;
-    }
-
-    protected boolean isEventMonitorCalling(Throwable t) {
-        StackTraceElement[] stack = t.getStackTrace();
-        return (stack.length > 1) && (stack[1].getClassName().equals(monitorClassName));
     }
 
     /**
@@ -107,16 +90,13 @@ public abstract class DescendantManager extends Component {
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
                 case AccessibleEventId.ACCESSIBLE_SELECTION_EVENT:
-                    firePropertyChange(AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
+                    firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
                     break;
                 default:
                     super.notifyEvent(event);
             }
         }
     }
-
-    protected XAccessibleContext unoAccessibleContext = null;
-    protected XAccessibleSelection unoAccessibleSelection = null;
 
     protected abstract class AccessibleDescendantManager extends AccessibleUNOComponent
         implements javax.accessibility.AccessibleSelection {
@@ -128,14 +108,25 @@ public abstract class DescendantManager extends Component {
             super();
         }
 
-        /** Returns the number of accessible children of the object */
-        public int getAccessibleChildrenCount() {
-            // FIXME: Workaround for AccessibilityEventMonitor problem
-            // The AccessibilityEventMonitor traverses all children to check if they have transient state or not.
-            if (isEventMonitorCalling(new Throwable())) {
-                return 0;
+        /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+            javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
+
+            states.add(AccessibleExtendedState.MANAGES_DESCENDANTS);
+            if (multiselectable) {
+                states.add(javax.accessibility.AccessibleState.MULTISELECTABLE);
             }
 
+            return states;
+        }
+
+
+        /*
+        * AccessibleContext
+        */
+
+        /** Returns the number of accessible children of the object */
+        public int getAccessibleChildrenCount() {
             try {
                 return unoAccessibleContext.getAccessibleChildCount();
             } catch (com.sun.star.uno.RuntimeException e) {
@@ -146,16 +137,6 @@ public abstract class DescendantManager extends Component {
         /** Returns the AccessibleSelection interface for this object */
         public javax.accessibility.AccessibleSelection getAccessibleSelection() {
             return (unoAccessibleSelection != null) ? this : null;
-        }
-
-        /** Returns the state set of this object */
-        public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
-            javax.accessibility.AccessibleStateSet stateSet = super.getAccessibleStateSet();
-            stateSet.add(AccessibleExtendedState.MANAGES_DESCENDANTS);
-            if (multiselectable) {
-                stateSet.add(javax.accessibility.AccessibleState.MULTISELECTABLE);
-            }
-            return stateSet;
         }
 
         /*

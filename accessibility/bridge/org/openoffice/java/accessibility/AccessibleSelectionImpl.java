@@ -1,6 +1,6 @@
 /*************************************************************************
  *
- *  $RCSfile: CheckBox.java,v $
+ *  $RCSfile: AccessibleSelectionImpl.java,v $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,28 +57,73 @@
 
 package org.openoffice.java.accessibility;
 
-import com.sun.star.uno.*;
 import drafts.com.sun.star.accessibility.*;
 
-class CheckBox extends ToggleButton {
+class AccessibleSelectionImpl implements javax.accessibility.AccessibleSelection {
+    XAccessibleSelection unoAccessibleSelection;
 
-    public CheckBox(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
-        super(xAccessible, xAccessibleContext);
+    AccessibleSelectionImpl(XAccessibleSelection xAccessibleSelection) {
+        unoAccessibleSelection = xAccessibleSelection;
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleCheckBox();
-        }
-        return accessibleContext;
-    }
-
-    protected class AccessibleCheckBox extends AccessibleToggleButton {
-        /** Gets the role of this object */
-        public javax.accessibility.AccessibleRole getAccessibleRole() {
-            return javax.accessibility.AccessibleRole.CHECK_BOX;
+    /** Returns an Accessible representing the specified selected child of the object */
+    public javax.accessibility.Accessible getAccessibleSelection(int i) {
+        try {
+            return (javax.accessibility.Accessible) AccessibleObjectFactory.getAccessibleComponent(
+                unoAccessibleSelection.getSelectedAccessibleChild(i));
+        } catch (com.sun.star.uno.Exception e) {
+            return null;
         }
     }
+
+    /** Adds the specified Accessible child of the object to the object's selection */
+    public void addAccessibleSelection(int i) {
+        try {
+            unoAccessibleSelection.selectAccessibleChild(i);
+        } catch (com.sun.star.uno.Exception e) {
+        }
+    }
+
+    /** Clears the selection in the object, so that no children in the object are selected */
+    public void clearAccessibleSelection() {
+        try {
+            unoAccessibleSelection.clearAccessibleSelection();
+        } catch (com.sun.star.uno.RuntimeException e) {
+        }
+    }
+
+    /** Returns the number of Accessible children currently selected */
+    public int getAccessibleSelectionCount() {
+        try {
+            return unoAccessibleSelection.getSelectedAccessibleChildCount();
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return 0;
+        }
+    }
+
+    /** Determines if the current child of this object is selected */
+    public boolean isAccessibleChildSelected(int i) {
+        try {
+            return unoAccessibleSelection.isAccessibleChildSelected(i);
+        } catch (com.sun.star.uno.Exception e) {
+            return false;
+        }
+    }
+
+    /** Removes the specified child of the object from the object's selection */
+    public void removeAccessibleSelection(int i) {
+        try {
+            unoAccessibleSelection.deselectSelectedAccessibleChild(i);
+        } catch (com.sun.star.uno.Exception e) {
+        }
+    }
+
+    /** Causes every child of the object to be selected if the object supports multiple selection */
+    public void selectAllAccessibleSelection() {
+        try {
+            unoAccessibleSelection.selectAllAccessible();
+        } catch (com.sun.star.uno.RuntimeException e) {
+        }
+    }
+
 }
-
