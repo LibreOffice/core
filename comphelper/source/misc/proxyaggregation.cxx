@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyaggregation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 15:01:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,9 @@ namespace comphelper
         // then the proxy itself
         if ( xFactory.is() )
         {
-            m_xProxyAggregate = xFactory->createProxy( _rxComponent );
+            { // i36686 OJ: achieve the desctruction of the tempoary -> otherwise it leads to _rRefCount -= 2
+                m_xProxyAggregate = xFactory->createProxy( _rxComponent );
+            }
             if ( m_xProxyAggregate.is() )
                 m_xProxyAggregate->queryAggregation( ::getCppuType( &m_xProxyTypeAccess ) ) >>= m_xProxyTypeAccess;
 
