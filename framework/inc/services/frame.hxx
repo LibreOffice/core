@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:29:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,8 +214,8 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -594,7 +594,7 @@ class Frame :   // interfaces
         ::vcl::EventPoster                                                      m_aPoster                           ;
         sal_Bool                                                                m_bIsHidden                         ;   /// indicates, if this frame is used in hidden mode or not
         static css::uno::WeakReference< css::frame::XFrame >                    m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
-        css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
+        css::uno::Reference< ::com::sun::star::frame::XLayoutManager >    m_xLayoutManager                    ;   /// is used to layout the child windows of the frame.
         css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper               ;
 
     protected:
