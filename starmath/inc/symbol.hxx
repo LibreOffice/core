@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-22 12:41:48 $
+ *  last change: $Author: tl $ $Date: 2001-06-28 07:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ class SmSymSetManager : public SfxListener
                         const SfxHint& rHint, const TypeId& rHintType);
 
     UINT32      GetHashIndex(const String& rSymbolName);
+    void        EnterHashTable(SmSym& rSymbol);
     void        EnterHashTable(SmSymSet& rSymbolSet);
     void        FillHashTable();
     void        Init();
