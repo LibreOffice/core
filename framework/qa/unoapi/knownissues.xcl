@@ -1,35 +1,10 @@
-### 107961 ###
-fwk.Desktop::com::sun::star::frame::XComponentLoader
+### i30570 ###
+fwl.FilterFactory::com::sun::star::container::XNameReplace
+fwl.TypeDetection::com::sun::star::container::XNameReplace
 
-### 112305 ###
-fwk.DispatchRecorder::com::sun::star::frame::XDispatchRecorder
-
-### 112363 ###
-fwk.DocumentProperties::com::sun::star::document::XStandaloneDocumentInfo
-fwk.DocumentProperties::com::sun::star::document::DocumentInfo
-
-### 112425 ###
-fwk.Desktop::com::sun::star::frame::XDispatchProviderInterception
-
-### 112432 ###
+### i30573 ###
 fwl.TypeDetection::com::sun::star::document::XTypeDetection
 
-### 112498 ###
-fwl.FilterFactory::com::sun::star::container::XContainerQuery
-fwl.FrameLoaderFactory::com::sun::star::container::XContainerQuery
-fwl.ContentHandlerFactory::com::sun::star::container::XContainerQuery
-fwl.TypeDetection::com::sun::star::container::XContainerQuery
-
-### 112537 ###
-fwl.ContentHandlerFactory::com::sun::star::lang::XMultiServiceFactory
-
-### 112552 ###
-fwk.JobHandler::com::sun::star::frame::XDispatchProvider
-fwk.JobHandler::com::sun::star::lang::XInitialization
-
-### i19645 ###
-fwk.Frame::com::sun::star::frame::XDispatchProvider
-
-### 112541 ###
-fwk.SoundHandler::com::sun::star::frame::XDispatch
-fwk.SoundHandler::com::sun::star::frame::XNotifyingDispatch
+### 117450 ###
+fwk.UIConfigurationManager::drafts::com::sun::star::ui::XUIConfiguration
+fwk.UIConfigurationManager::drafts::com::sun::star::ui::XUIConfigurationManager
