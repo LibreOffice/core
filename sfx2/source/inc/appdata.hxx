@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:29:31 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 12:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ public:
     String                              aLastNewURL;            // for AppControl
     String                              aOpenList;              // command line arguments
     String                              aPrintList;             // command line arguments
-    String                              aUcbUrl;                // command line arguments
+    String                              aPortalConnect;         // command line arguments
+    bool                                bServer;                // command line arguments
 
     // DDE stuff
     DdeService*                         pDdeService;
