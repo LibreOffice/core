@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:19:23 $
+ *  last change: $Author: mba $ $Date: 2002-04-05 12:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,6 +513,10 @@ SfxPopupWindow::SfxPopupWindow( USHORT nId, const ResId &rId, SfxBindings &rBind
     bFloating(FALSE)
 {
     bCascading = FALSE;
+}
+
+SfxPopupWindow::~SfxPopupWindow()
+{
 }
 
 void SfxPopupWindow::MouseMove( const MouseEvent& rMEvt )
