@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-28 14:30:10 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 20:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ SwDoc::~SwDoc()
 {
     aIdleTimer.Stop();  // den Idltimer abschalten
 
-    delete pUnoCallBack;
+    delete pUnoCallBack, pUnoCallBack = 0;
     delete pURLStateChgd;
 
     delete pLayouter;
