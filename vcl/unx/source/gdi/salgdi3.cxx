@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 16:45:44 $
+ *  last change: $Author: pl $ $Date: 2001-10-17 14:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,7 @@ SalGraphicsData::SelectFont()
     if( !pFontGC_ )
     {
         XGCValues values;
-        values.subwindow_mode       = IncludeInferiors;
+        values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = True;
         values.foreground           = nTextPixel_;

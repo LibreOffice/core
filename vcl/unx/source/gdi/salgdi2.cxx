@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: pl $ $Date: 2001-10-17 14:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,9 @@ GC SalGraphicsData::CreateGC( Drawable hDrawable, unsigned long nMask )
     values.line_width           = 1;
     values.fill_style           = FillStippled;
     values.stipple              = GetDisplay()->GetInvert50();
+    values.subwindow_mode       = ClipByChildren;
 
-    return XCreateGC( GetXDisplay(), hDrawable, nMask, &values );
+    return XCreateGC( GetXDisplay(), hDrawable, nMask | GCSubwindowMode, &values );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

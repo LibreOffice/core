@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-16 16:07:49 $
+ *  last change: $Author: pl $ $Date: 2001-10-17 14:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ using namespace vcl;
 #define _IsMapped()         maFrameData.bMapped_
 
 static XLIB_Window  hPresentationWindow = None;
+::std::list< XLIB_Window > aPresentationReparentList;
 static SalFrame*    pIntroBitmap = NULL;
 static bool     bWasIntroBitmap = false;
 
@@ -178,6 +179,38 @@ static bool     bWasIntroBitmap = false;
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 static long sal_CallbackDummy( void*, SalFrame*, USHORT, const void* )
 { return 0; }
+
+static void doReparentPresentationDialogues( SalDisplay* pDisplay )
+{
+    BOOL bIgnore = pDisplay->GetXLib()->GetIgnoreXErrors();
+    while( aPresentationReparentList.begin() != aPresentationReparentList.end() )
+    {
+        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+        int x, y;
+        XLIB_Window aRoot;
+        unsigned int w, h, bw, d;
+        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+        XGetGeometry( pDisplay->GetDisplay(),
+                      aPresentationReparentList.front(),
+                      &aRoot,
+                      &x, &y, &w, &h, &bw, &d );
+        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+        XTranslateCoordinates( pDisplay->GetDisplay(),
+                               hPresentationWindow,
+                               pDisplay->GetRootWindow(),
+                               x, y,
+                               &x, &y,
+                               &aRoot );
+        pDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
+        XReparentWindow( pDisplay->GetDisplay(),
+                         aPresentationReparentList.front(),
+                         pDisplay->GetRootWindow(),
+                         x, y );
+        aPresentationReparentList.pop_front();
+    }
+    XSync( pDisplay->GetDisplay(), False );
+    pDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+}
 
 
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -457,10 +490,7 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 #ifdef DEBUG
         fprintf( stderr, "nStyle = 0x%x\n", nStyle_ );
 #endif
-        // look if any frame is in full screen mode
-        // in this case make the frame override redirect so it can show
-        // above the full screen frame
-           if( IsOverrideRedirect() || hPresentationWindow != None )
+           if( IsOverrideRedirect() )
            {
                XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True ); nArgs++;
            }
@@ -537,11 +567,11 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     pDisplay_->getWMAdaptor()->
         setFrameTypeAndDecoration(
                                   pFrame_,
-                                  mpParent ?
+                                  (mpParent && hPresentationWindow == None) ?
                                   WMAdaptor::windowType_ModelessDialogue
                                   : WMAdaptor::windowType_Normal,
                                   nDecoFlags,
-                                  mpParent );
+                                  hPresentationWindow ? NULL : mpParent );
 
     if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
         pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, true, true );
@@ -635,7 +665,10 @@ inline SalFrameData::~SalFrameData()
     }
 
     if( GetWindow() == hPresentationWindow )
+    {
         hPresentationWindow = None;
+        doReparentPresentationDialogues( GetDisplay() );
+    }
 
     if( pIntroBitmap == pFrame_ )
         pIntroBitmap = NULL;
@@ -686,6 +719,8 @@ inline SalFrameData::~SalFrameData()
 
 SalFrame::~SalFrame()
 {
+    if( maFrameData.hStackingWindow_ )
+        aPresentationReparentList.remove( maFrameData.hStackingWindow_ );
     // aus papis child liste entfernen
     if( maFrameData.mpParent )
         maFrameData.mpParent->maFrameData.maChildren.remove( this );
@@ -774,7 +809,7 @@ void SalFrame::SetIcon( USHORT nIcon )
         int iconSize = 32;
         if ( XGetIconSizes( _GetXDisplay(), maFrameData.GetShellWindow(), &pIconSize, &nSizes ) )
         {
-#if defined DBG_UTIL || defined DEBUG
+#if defined DEBUG
             fprintf(stderr, "SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
 #endif
             int i;
@@ -784,7 +819,7 @@ void SalFrame::SetIcon( USHORT nIcon )
                 if( pIconSize[i].max_width > iconSize )
                     iconSize = pIconSize[i].max_width;
 
-#if defined DBG_UTIL || defined DEBUG
+#if defined DEBUG
                 fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
                         pIconSize[i].min_width, pIconSize[i].min_height,
                         pIconSize[i].max_width, pIconSize[i].max_height,
@@ -1349,11 +1384,6 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
     if ( !values.width || !values.height || aPosSize_ == rPosSize )
         return;
-#ifdef DEBUG
-    fprintf(stderr, "SalFrameData::SetPosSize( %dx%d+%d+%d )\n",
-            rPosSize.GetWidth(), rPosSize.GetHeight(),
-            rPosSize.Left(), rPosSize.Top() );
-#endif
 
     if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
     {
@@ -1535,6 +1565,8 @@ void SalFrame::StartPresentation( BOOL bStart )
     else
         MessageToXAutoLock( _GetXDisplay(), XAUTOLOCK_ENABLE );
 
+    if( ! bStart && hPresentationWindow != None )
+        doReparentPresentationDialogues( _GetDisplay() );
     hPresentationWindow = bStart ? maFrameData.GetWindow() : None;
     if( bStart || maFrameData.nScreenSaversTimeout_ )
     {
@@ -2380,9 +2412,10 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
         nCount          = pEvent->xgraphicsexpose.count;
     }
 
-    if( IsOverrideRedirect() && ! aRestoreFullScreen_.IsEmpty() )
+    if( IsOverrideRedirect() && ! aRestoreFullScreen_.IsEmpty()
+        && aPresentationReparentList.begin() == aPresentationReparentList.end() )
         // we are in fullscreen mode -> override redirect
-         // focus is probably lost, so reget it
+         // focus is possibly lost, so reget it
          XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ), RevertToNone, CurrentTime );
 
     // width and height are extents, so they are of by one for rectangle
@@ -2595,8 +2628,40 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
         || ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
     {
         // Reparenting before Destroy
+        aPresentationReparentList.remove( hStackingWindow_ );
         hStackingWindow_ = None;
         return 0;
+    }
+
+    /*
+     *  evil hack to show decorated windows on top
+     *  of override redirect presentation windows:
+     *  reparent the window manager window to the presentation window
+     *  does not work with non-reparenting WMs
+     *  in future this should not be necessary anymore with
+     *  _NET_WM_STATE_FULLSCREEN available
+     */
+    if( hPresentationWindow != None
+        && hPresentationWindow != GetWindow()
+        && hStackingWindow_ != None
+        && hStackingWindow_ != GetDisplay()->GetRootWindow()
+        )
+    {
+        int x = 0, y = 0;
+        XLIB_Window aChild;
+        XTranslateCoordinates( GetXDisplay(),
+                               hStackingWindow_,
+                               GetDisplay()->GetRootWindow(),
+                               0, 0,
+                               &x, &y,
+                               &aChild
+                               );
+        XReparentWindow( GetXDisplay(),
+                         hStackingWindow_,
+                         hPresentationWindow,
+                         x, y
+                         );
+        aPresentationReparentList.push_back( hStackingWindow_ );
     }
 
 #ifdef NC_EVENTS
@@ -2929,6 +2994,9 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                                 pDisplay_->getWMAdaptor()->changeReferenceFrame( *it, pFrame_ );
                         }
                     }
+
+                    if( hPresentationWindow != None )
+                        XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
                 }
                 break;
 
