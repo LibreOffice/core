@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: tl $ $Date: 2001-05-30 07:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ void SmDLL::Init()
     SmModule::RegisterInterface(pp);
 
     SmDocShell::Factory().RegisterMenuBar( SmResId(RID_SMMENU) );
-    SmDocShell::Factory().RegisterPluginMenuBar( SmResId(RID_SMMENU) );
+    SmDocShell::Factory().RegisterPluginMenuBar( SmResId(RID_SMPLUGINMENU) );
     SmDocShell::Factory().RegisterAccel ( SmResId(RID_SMACCEL) );
     SmDocShell::RegisterInterface(pp);
 
