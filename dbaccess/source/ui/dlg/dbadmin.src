@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:33:13 $
+ *  last change: $Author: fs $ $Date: 2002-04-30 15:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1713,79 +1713,9 @@ TabPage PAGE_LDAP
     Hide = TRUE;
     HelpId = HID_DSADMIN_PAGE_LDAP;
 
-    FixedText FT_USERNAME
-    {
-        Pos = MAP_APPFONT ( 6 , 7 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~Benutzername" ;
-        Text [ english ] = "~Username" ;
-        Text [ NORWEGIAN ] = "~Username" ;
-        Text [ DANISH ] = "Brugernavn" ;
-        Text [ english_US ] = "~User name" ;
-        Text [ SPANISH ] = "N~ombre del usuario" ;
-        Text [ FINNISH ] = "~K‰ytt‰j‰tunnus" ;
-        Text [ FRENCH ] = "Nom d'~utilisateur" ;
-        Text [ ITALIAN ] = "Nome ~utente" ;
-        Text [ DUTCH ] = "Naam ~gebruiker" ;
-        Text [ SWEDISH ] = "A~nv‰ndarnamn" ;
-        Text [ PORTUGUESE ] = "Nome do ~utilizador" ;
-        Text [ portuguese_brazilian ] = "~Benutzername" ;
-        Text [ chinese_simplified ] = "‰ΩøÁî®Âêç(~U)";
-        Text [ russian ] = "»Ïˇ ÔÓÎ¸ÁÓ‚‡ÚÂÎˇ";
-        Text [ polish ] = "Nazwa uøytkownika";
-        Text [ japanese ] = "„É¶„Éº„Ç∂„ÉºÂêç(~U)";
-        Text [ chinese_traditional ] = "‰ΩøÁî®ËÄÖÂêçÁ®±(~U)";
-        Text [ arabic ] = "«”„ «·„” Œœ„";
-        Text [ greek ] = "ºÌÔÏ· ˜ÒﬁÛÙÁ";
-        Text [ korean ] = "ÏÇ¨Ïö©Ïûê Ïù¥Î¶Ñ(~U)";
-        Text [ turkish ] = "Kullan˝c˝ ad˝";
-        Text [ language_user1 ] = " ";
-        Text[ catalan ] = "N~ombre del usuario";
-    };
-    Edit ET_USERNAME
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 90 , 6 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
-        TabStop = TRUE ;
-        HelpId = HID_DSADMIN_USER_ODBC;
-    };
-    CheckBox CB_PASSWORD_REQUIRED
-    {
-        Pos = MAP_APPFONT ( 90 , 21 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text = "Passwort erforderlich";
-        Text [ english ] = "Password required";
-        Text [ english_us ] = "Password required";
-        HelpId = HID_DSADMIN_PWDREC_ODBC;
-        Text [ portuguese ] = "Necess·rio senha";
-        Text [ russian ] = "“Â·ÛÂÚÒˇ Ô‡ÓÎ¸";
-        Text [ greek ] = "¡·ÈÙÂﬂÙ·È Í˘‰ÈÍ¸Ú Ò¸Û‚·ÛÁÚ";
-        Text [ dutch ] = "Wachtwoord verlangd";
-        Text [ french ] = "Mot de passe requis";
-        Text [ spanish ] = "Se necesita una contraseÒa";
-        Text [ italian ] = "Password necessaria";
-        Text [ danish ] = "Adgangskode pÂkrÊvet";
-        Text [ swedish ] = "Lˆsenord kr‰vs";
-        Text [ polish ] = "Podaj has≥o";
-        Text [ portuguese_brazilian ] = "Password required";
-        Text [ japanese ] = "„Éë„Çπ„ÉØ„Éº„Éâ„ÅåÂøÖË¶Å";
-        Text [ korean ] = "Ìå®Ïä§ÏõåÎìúÍ∞Ä ÌïÑÏöîÌï©ÎãàÎã§";
-        Text [ chinese_simplified ] = "ÂøÖÈ°ªËæìÂÖ•ÂØÜÁ†Å";
-        Text [ chinese_traditional ] = "ÂøÖÈ†àËº∏ÂÖ•ÂØÜÁ¢º";
-        Text [ turkish ] = "Password required";
-        Text [ arabic ] = "„ÿ·Ê» ﬂ·„… ”—";
-        Text[ finnish ] = "Salasana pakollinen";
-        Text[ catalan ] = "Se necesita una contraseÒa";
-    };
-    FixedLine FL_SEPARATOR1
-    {
-        Pos = MAP_APPFONT ( 4 , 34 ) ;
-        Size = MAP_APPFONT ( 252 , 1 ) ;
-    };
     FixedText FT_HOSTNAME
     {
-        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Rechnername" ;
         Text [ english ] = "~Hostname" ;
@@ -1816,12 +1746,12 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_HOSTNAME;
 
-        Pos = MAP_APPFONT ( 91 , 39 ) ;
+        Pos = MAP_APPFONT ( 91 , 7 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
     FixedText FT_BASEDN
     {
-        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Base DN" ;
         Text [ english ] = "~Base DN" ;
@@ -1853,17 +1783,17 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_BASEDN;
 
-        Pos = MAP_APPFONT ( 91 , 57 ) ;
+        Pos = MAP_APPFONT ( 91 , 25 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
     FixedLine FL_SEPARATOR2
     {
-        Pos = MAP_APPFONT ( 4 , 74 ) ;
+        Pos = MAP_APPFONT ( 4 , 42 ) ;
         Size = MAP_APPFONT ( 252 , 1 ) ;
     };
     FixedText FT_PORTNUMBER
     {
-        Pos = MAP_APPFONT ( 6 , 79 ) ;
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Portnummer" ;
         Text [ english ] = "~Portnumber" ;
@@ -1894,12 +1824,12 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_PORTNUMBER;
 
-        Pos = MAP_APPFONT ( 91 , 80 ) ;
+        Pos = MAP_APPFONT ( 91 , 48 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
     FixedText FT_LDAPROWCOUNT
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Pos = MAP_APPFONT ( 6 , 67 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Datens‰tze (max.)" ;
         Text [ english ] = "~Rows (max.)" ;
@@ -1930,7 +1860,7 @@ TabPage PAGE_LDAP
         Border = TRUE ;
         HelpId = HID_DSADMIN_LDAP_ROWCOUNT;
 
-        Pos = MAP_APPFONT ( 91 , 98 ) ;
+        Pos = MAP_APPFONT ( 91 , 66 ) ;
         Size = MAP_APPFONT ( 105 , 12 ) ;
     };
 };
@@ -3550,6 +3480,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.95  2002/04/29 08:33:13  oj
+ *  #98772# new resources
+ *
  *  Revision 1.94  2002/02/26 14:16:22  kz
  *  Merge SRC641: 26.02.02 - 15:15:57
  *
