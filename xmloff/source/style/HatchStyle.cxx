@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-23 10:05:52 $
+ *  last change: $Author: cl $ $Date: 2001-10-25 16:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ sal_Bool XMLHatchStyleExport::exportXML(
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
 
             // Do Write
-            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_GRADIENT,
+            SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_HATCH,
                                       sal_True, sal_False );
         }
     }
