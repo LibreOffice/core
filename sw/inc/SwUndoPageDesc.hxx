@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoPageDesc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:56:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,12 @@ public:
 
 class SwUndoPageDescCreate : public SwUndo
 {
+    const SwPageDesc * pDesc; // #116530#
     SwPageDescExt aNew;
     SwDoc * pDoc;
 
 public:
-    SwUndoPageDescCreate(const SwPageDesc & aNew, SwDoc * pDoc);
+    SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc * pDoc); // #116530#
     virtual ~SwUndoPageDescCreate();
 
     virtual void Undo(SwUndoIter & rIt);
