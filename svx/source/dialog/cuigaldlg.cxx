@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:01:57 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                         String              aFileName;
 
                         if( ( aDesc.Detect() && ::std::find( rFormats.begin(), rFormats.end(), aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ).ToLowerAscii() ) != rFormats.end() ) ||
-                            ::std::find( rFormats.begin(), rFormats.end(), aFoundURL.GetExtension().ToLowerAscii() ) != rFormats.end() )
+                            ::std::find( rFormats.begin(), rFormats.end(), String(aFoundURL.GetExtension().toAsciiLowerCase()) ) != rFormats.end() )
                         {
                             rMutex.acquire();
                             mpBrowser->aFoundList.Insert( new String( aFoundURL.GetMainURL( INetURLObject::NO_DECODE ) ), LIST_APPEND );
@@ -330,9 +330,9 @@ void SAL_CALL TakeThread::run()
     {
         // kompletten Filenamen aus FoundList holen
         if( mpBrowser->bTakeAll )
-            aURL = *mpBrowser->aFoundList.GetObject( nPos = i );
+            aURL = INetURLObject(*mpBrowser->aFoundList.GetObject( nPos = i ));
         else
-            aURL = *mpBrowser->aFoundList.GetObject( nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) );
+            aURL = INetURLObject(*mpBrowser->aFoundList.GetObject( nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ));
 
         // Position in Taken-Liste uebernehmen
         mrTakenList.Insert( (void*) nPos, LIST_APPEND );
@@ -979,7 +979,7 @@ void TPGalleryThemeProperties::SearchFiles()
     aLbxFound.Clear();
 
     pProgress->SetFileType( aCbbFileType.GetText() );
-    pProgress->SetDirectory( String() );
+    pProgress->SetDirectory( rtl::OUString() );
     pProgress->Update();
     pProgress->Execute();
     delete pProgress;
