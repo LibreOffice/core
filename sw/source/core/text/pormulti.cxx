@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 11:10:06 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,7 +1325,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 {
 #ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = ( 0 != pGrid );
+    const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
     USHORT nGridWidth = 0;
     USHORT nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;
@@ -1341,11 +1341,11 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     const sal_Bool bRubyInGrid = bHasGrid && rMulti.IsRuby();
 
     const USHORT nOldHeight = rMulti.Height();
-    const sal_Bool bOldGridModeAllowed = GetTxtFrm()->GetGridModeAllowed();
+    const sal_Bool bOldGridModeAllowed = GetInfo().SnapToGrid();
 
     if ( bRubyInGrid )
     {
-        GetTxtFrm()->SetGridModeAllowed( ! bRubyTop );
+        GetInfo().SetSnapToGrid( ! bRubyTop );
         rMulti.Height( pCurr->Height() );
     }
 #endif
@@ -1573,12 +1573,12 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                 if ( bRubyTop )
                 {
                     nOfst += nRubyHeight;
-                    GetTxtFrm()->SetGridModeAllowed( sal_True );
+                    GetInfo().SetSnapToGrid( sal_True );
                 }
                 else
                 {
                     nOfst += pCurr->Height() - nRubyHeight;
-                    GetTxtFrm()->SetGridModeAllowed( sal_False );
+                    GetInfo().SetSnapToGrid( sal_False );
                 }
             }
 #endif
@@ -1593,7 +1593,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
 #ifdef VERTICAL_LAYOUT
     if ( bRubyInGrid )
-        GetTxtFrm()->SetGridModeAllowed( bOldGridModeAllowed );
+        GetInfo().SetSnapToGrid( bOldGridModeAllowed );
 #endif
 
     // delete underline font
@@ -1755,8 +1755,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
 #ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = pGrid &&
-                              GRID_LINES_CHARS == pGrid->GetGridType();
+    const sal_Bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
     USHORT nGridWidth = 0;
     USHORT nRubyHeight = 0;
@@ -1794,17 +1793,16 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 #ifdef VERTICAL_LAYOUT
 
         // in grid mode we temporarily have to disable the grid for the ruby line
-        const sal_Bool bOldGridModeAllowed =
-                GetTxtFrm()->GetGridModeAllowed();
+        const sal_Bool bOldGridModeAllowed = GetInfo().SnapToGrid();
         if ( bHasGrid && aInf.IsRuby() && bRubyTop )
-            GetTxtFrm()->SetGridModeAllowed( sal_False );
+            aInf.SetSnapToGrid( sal_False );
 #endif
         // If there's no more rubytext, then buildportion is forbidden
         if( pFirstRest || !aInf.IsRuby() )
             BuildPortions( aInf );
 
 #ifdef VERTICAL_LAYOUT
-        GetTxtFrm()->SetGridModeAllowed( bOldGridModeAllowed );
+        aInf.SetSnapToGrid( bOldGridModeAllowed );
 #endif
 
         rMulti.CalcSize( *this, aInf );
@@ -1843,12 +1841,12 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 #ifdef VERTICAL_LAYOUT
             // in grid mode we temporarily have to disable the grid for the ruby line
             if ( bHasGrid && aTmp.IsRuby() && ! bRubyTop )
-                GetTxtFrm()->SetGridModeAllowed( sal_False );
+                aTmp.SetSnapToGrid( sal_False );
 #endif
             BuildPortions( aTmp );
 
 #ifdef VERTICAL_LAYOUT
-            GetTxtFrm()->SetGridModeAllowed( bOldGridModeAllowed );
+            aTmp.SetSnapToGrid( bOldGridModeAllowed );
 #endif
 
             rMulti.CalcSize( *this, aInf );

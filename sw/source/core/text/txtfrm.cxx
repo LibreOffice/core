@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,6 @@ void SwTxtFrm::InitCtor()
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
 #ifdef VERTICAL_LAYOUT
         bFieldFollow = bHasAnimation = bIsSwapped = sal_False;
-        bGridMode = sal_True;
 #else
         bFieldFollow = bHasAnimation = sal_False;
 #endif

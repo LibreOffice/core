@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 11:11:09 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,12 +808,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         rInf.SetLen( rInf.GetText().Len() );
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() )
+    if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
+         SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() &&
-            rInf.GetFrm()->GetGridModeAllowed() && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const USHORT nGridWidth = pGrid->GetBaseHeight();
             long* pKernArray = new long[rInf.GetLen()];
@@ -1195,7 +1194,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 }
 #ifdef VERTICAL_LAYOUT
                 else if ( rInf.GetFont() &&
-                          SW_CJK == rInf.GetFont()->GetActual() )
+                          SW_CJK == rInf.GetFont()->GetActual() &&
+                          LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
                 {
                     nScrPos = pKernArray[i-1] + nScr;
                     nSpaceSum += rInf.GetSpace();
@@ -1463,12 +1463,11 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                            rInf.GetText().Len();
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() )
+    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
+         SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && nLn &&
-            rInf.GetFrm()->GetGridModeAllowed() && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const USHORT nGridWidth = pGrid->GetBaseHeight();
 
@@ -1633,12 +1632,11 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     long nKernSum = 0;
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() )
+    if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && rInf.GetLen() &&
-            rInf.GetFrm()->GetGridModeAllowed() && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const USHORT nGridWidth = pGrid->GetBaseHeight();
 
@@ -1667,7 +1665,8 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 #ifdef VERTICAL_LAYOUT
         if ( nSpaceAdd &&
                 ( CH_BLANK == rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) ||
-                ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() ) ) )
+                ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() &&
+                  LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) ) ) )
             nSpaceSum += nSpaceAdd;
 #else
         if ( nSpaceAdd &&
@@ -1821,12 +1820,11 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                                                : rInf.GetLen() );
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() )
+    if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() &&
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
         GETGRID( rInf.GetFrm()->FindPageFrm() )
-        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && nLn &&
-            rInf.GetFrm()->GetGridModeAllowed() && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+        if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const USHORT nGridWidth = pGrid->GetBaseHeight();
 

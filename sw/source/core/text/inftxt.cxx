@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 11:10:06 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,11 @@
 #endif
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
+#endif
+#ifdef VERTICAL_LAYOUT
+#ifndef _SVX_PGRDITEM_HXX
+#include <svx/pgrditem.hxx>
+#endif
 #endif
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -318,6 +323,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
       bForbiddenChars( rNew.HasForbiddenChars() ),
+#ifdef VERTICAL_LAYOUT
+      bSnapToGrid( rNew.SnapToGrid() ),
+#endif
       nDirection( rNew.GetDirection() )
 {
 #ifndef PRODUCT
@@ -364,6 +372,9 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bURLNotify = pNoteURL && !bOnWin
         && (pOut && OUTDEV_PRINTER != pOut->GetOutDevType());
 
+#ifdef VERTICAL_LAYOUT
+    SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() );
+#endif
 
     pFnt = pNewFnt;
     pUnderFnt = 0;
@@ -424,6 +435,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bHanging( rNew.IsHanging() ),
       bScriptSpace( rNew.HasScriptSpace() ),
       bForbiddenChars( rNew.HasForbiddenChars() ),
+#ifdef VERTICAL_LAYOUT
+      bSnapToGrid( rNew.SnapToGrid() ),
+#endif
       nDirection( rNew.GetDirection() )
 {
 #ifndef PRODUCT
@@ -475,6 +489,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
 #endif
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
@@ -502,6 +517,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
 #endif
     aDrawInf.SetKanaComp( nComp );
     return pFnt->_GetTxtSize( aDrawInf );
@@ -519,6 +535,7 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
 #endif
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
@@ -548,6 +565,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
 #endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( 0 );
@@ -570,6 +588,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
 #endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( 0 );
@@ -594,6 +613,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
 #endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( &rExtraCharPos );
@@ -692,8 +712,10 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 #ifdef VERTICAL_LAYOUT
     // the font is used to identify the current script via nActual
     aDrawInf.SetFont( pFnt );
-    // the frmae is used to identify the orientation
+    // the frame is used to identify the orientation
     aDrawInf.SetFrm( GetTxtFrm() );
+    // we have to know if the paragraph should snap to grid
+    aDrawInf.SetSnapToGrid( SnapToGrid() );
     // for underlining we must know when not to add extra space behind
     // a character in justified mode
     aDrawInf.SetSpaceStop( ! rPor.GetPortion() ||

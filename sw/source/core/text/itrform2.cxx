@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 11:10:06 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
 #ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = pGrid &&
+    const sal_Bool bHasGrid = pGrid && rInf.SnapToGrid() &&
                               GRID_LINES_CHARS == pGrid->GetGridType();
 
     const USHORT nGridWidth = bHasGrid ?

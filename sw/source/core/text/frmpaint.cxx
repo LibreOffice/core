@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-28 08:20:19 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pTxtFrm );
     aDrawInf.SetFont( pFnt );
+    aDrawInf.SetSnapToGrid( sal_False );
 #endif
     sal_Bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, pSh->GetOut() ) > nMax;
@@ -635,6 +636,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 #ifdef VERTICAL_LAYOUT
                 aDrawInf.SetFrm( this );
                 aDrawInf.SetFont( pFnt );
+                aDrawInf.SetSnapToGrid( sal_False );
 #endif
 
                 pFnt->_DrawText( aDrawInf );

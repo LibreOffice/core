@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-21 08:30:44 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,9 @@ protected:
     sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
     sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
     sal_Bool bForbiddenChars : 1; // Forbidden start/endline characters
+#ifdef VERTICAL_LAYOUT
+    sal_Bool bSnapToGrid : 1;   // paragraph snaps to grid
+#endif
     sal_uInt8 nDirection : 2;       // writing direction: 0/90/180/270 degree
 
 protected:
@@ -279,6 +282,10 @@ public:
     inline void SetScriptSpace( const sal_Bool bNew ) { bScriptSpace = bNew; }
     inline sal_Bool HasForbiddenChars() const { return bForbiddenChars; }
     inline void SetForbiddenChars( const sal_Bool bN ) { bForbiddenChars = bN; }
+#ifdef VERTICAL_LAYOUT
+    inline sal_Bool SnapToGrid() const { return bSnapToGrid; }
+    inline void SetSnapToGrid( const sal_Bool bN ) { bSnapToGrid = bN; }
+#endif
     inline sal_uInt8 GetDirection() const { return nDirection; }
     inline void SetDirection( const sal_uInt8 nNew ) { nDirection = nNew; }
     inline sal_Bool IsRotated() const { return 0 != ( 1 & nDirection ); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
     USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
 
     GETGRID( pFrm->FindPageFrm() )
-    const sal_Bool bHasGrid = ( 0 != pGrid );
+    const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
 
     if ( bHasGrid )
     {

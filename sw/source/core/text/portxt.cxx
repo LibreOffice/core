@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-12 12:43:38 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,9 @@ sal_Bool lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString& rStr,
         else if ( pBreakIt->xBreak.is() )
             nScript = (BYTE)pBreakIt->xBreak->getScriptType( rStr, nPos );
 
-        // this character is ASIAN?
-        if( ASIAN == nScript )
+        // this character is ASIAN, not KOREAN?
+        if( ASIAN == nScript &&
+            LANGUAGE_KOREAN != rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos ) )
             return sal_True;
 
         if ( ! i )
