@@ -71,9 +71,9 @@ import com.sun.star.comp.loader.FactoryHelper;
 import org.openoffice.accessibility.internal.*;
 import org.openoffice.java.accessibility.*;
 
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.bridge.XAccessibleTopWindowMap;
-import drafts.com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XExtendedToolkit;
 
 import javax.accessibility.Accessible;
 import java.lang.reflect.Method;
@@ -84,7 +84,7 @@ public class AccessBridge {
 
     //
     static public class _AccessBridge implements XAccessibleTopWindowMap, XInitialization {
-        static final String _serviceName = "drafts.com.sun.star.accessibility.bridge.AccessBridge";
+        static final String _serviceName = "com.sun.star.accessibilityAccessBridge";
 
         XMultiServiceFactory serviceManager;
         java.util.Hashtable frameMap;
