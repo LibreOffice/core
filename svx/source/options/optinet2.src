@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-06 22:16:20 $
+ *  last change: $Author: kz $ $Date: 2001-12-10 22:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1507,8 +1507,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     StringList [ french ] =
     {
          < "Jamais" ; > ;
-        < "Gem�� Pfadliste" ; > ;
-        < "Chaque fois" ; > ;
+        < "Selon la liste des chemins" ; > ;
+        < "Toujours" ; > ;
     };
     StringList [ spanish ] =
     {
@@ -1537,7 +1537,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     StringList [ swedish ] =
     {
          < "Aldrig" ; > ;
-        < "Gem�� Pfadliste" ; > ;
+        < "Enligt s�kv�gslista" ; > ;
         < "Alltid" ; > ;
     };
     StringList [ polish ] =
@@ -1554,9 +1554,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     StringList [ japanese ] =
     {
-         < "Nie" ; > ;
-        < "Gem�� Pfadliste" ; > ;
-        < "すべてのﾍﾟｰｼﾞ" ; > ;
+         < "実行しない" ; > ;
+        < "ﾊﾟｽのﾘｽﾄどおりに" ; > ;
+        < "常に実行する" ; > ;
     };
     StringList [ korean ] =
     {
@@ -1567,14 +1567,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     StringList [ chinese_simplified ] =
     {
          < "从不" ; > ;
-        < "Gem�� Pfadliste" ; > ;
-        < "总是" ; > ;
+        < "依照路径列单" ; > ;
+        < "自动" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
          < "從不" ; > ;
-        < "Gem�� Pfadliste" ; > ;
-        < "總是" ; > ;
+        < "依照路經清單" ; > ;
+        < "自動" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -1665,13 +1665,13 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ finnish ] = "~Path list";
         Text[ italian ] = "~Path list";
         Text[ danish ] = "~Path list";
-        Text[ swedish ] = "~Path list";
+        Text[ swedish ] = "S�~kv�gslista";
         Text[ polish ] = "~Path list";
         Text[ portuguese_brazilian ] = "~Path list";
-        Text[ japanese ] = "~Path list";
+        Text[ japanese ] = "ﾊﾟｽのﾘｽﾄ";
         Text[ korean ] = "~Path list";
-        Text[ chinese_simplified ] = "~Path list";
-        Text[ chinese_traditional ] = "~Path list";
+        Text[ chinese_simplified ] = "路经列单";
+        Text[ chinese_traditional ] = "路經清單";
         Text[ turkish ] = "~Path list";
         Text[ arabic ] = "~Path list";
         Text[ catalan ] = "~Path list";
@@ -2141,7 +2141,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ swedish ] = "~Plug-ins" ;
         Text [ danish ] = "aktiver" ;
         Text [ italian ] = "~PlugIn" ;
-        Text [ spanish ] = "Plug-ins" ;
+        Text [ spanish ] = "~Plug-ins" ;
         Text [ french ] = "Plug-ins" ;
         Text [ dutch ] = "V~rijgeven" ;
         Text [ portuguese ] = "~Plug-ins" ;
@@ -2170,7 +2170,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ greek ] = "��������������";
         Text[ dutch ] = "Applets";
         Text[ french ] = "Applets";
-        Text[ spanish ] = "Applets";
+        Text[ spanish ] = "~Applets";
         Text[ finnish ] = "Sovelmat";
         Text[ italian ] = "Applets";
         Text[ danish ] = "Applets";
@@ -2300,6 +2300,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
