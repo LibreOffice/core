@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 16:55:29 $
+ *  last change: $Author: ab $ $Date: 2000-11-28 11:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 #include "xmlmetae.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLBASICE_HXX
+#include "xmlscripte.hxx"
+#endif
+
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include "families.hxx"
 #endif
@@ -179,6 +183,8 @@ void SvXMLExport::_InitCtor()
                                   sXML_n_math, XML_NAMESPACE_MATH );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM, sXML_namespace_form,
                                   sXML_url_form, XML_NAMESPACE_FORM );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_SCRIPT, sXML_namespace_script,
+                               sXML_url_script, XML_NAMESPACE_SCRIPT );
 
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
@@ -429,6 +435,12 @@ void SvXMLExport::_ExportMeta()
 
 void SvXMLExport::_ExportScripts()
 {
+    // <office:script>
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_script,
+                            sal_True, sal_True );
+
+    XMLBasicExport aBasicExp( *this );
+    aBasicExp.Export();
 }
 
 void SvXMLExport::_ExportFontDecls()
