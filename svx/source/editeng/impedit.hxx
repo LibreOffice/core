@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:59 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,6 +738,9 @@ public:
 
     void                    SetVertical( BOOL bVertical );
     BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+
+    void                    SetFixedCellHeight( BOOL bUseFixedCellHeight );
+    BOOL                    IsFixedCellHeight() const { return GetEditDoc().IsFixedCellHeight(); }
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir ) { eDefaultHorizontalTextDirection = eHTextDir; }
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const { return eDefaultHorizontalTextDirection; }
