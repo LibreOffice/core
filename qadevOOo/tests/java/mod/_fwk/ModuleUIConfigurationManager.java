@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModuleUIConfigurationManager.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-05-12 16:14:32 $
+ *  last change: $Date: 2004-11-02 12:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,11 @@ public class ModuleUIConfigurationManager extends TestCase {
 
 
             tEnv.addObjRelation("XInitialization.args", initProps);
+
+            // the short cut manager service name
+            // 2do: correct the service name when it's no longer in drafts
+            tEnv.addObjRelation("XConfigurationManager.ShortCutManager",
+                "drafts.com.sun.star.ui.ModuleAcceleratorConfiguration");
 
             // the resourceURL
             tEnv.addObjRelation("XModuleUIConfigurationManager.ResourceURL",
