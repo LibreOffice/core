@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.26 $
- *  last change: $Author: rt $ $Date: 2003-09-19 07:58:46 $
+ *  $Revision: 1.27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2634,13 +2634,23 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
 
             if ( !pDisp || pDisp->IsInterceptDispatch() )
             {
+                BOOL bDeleteCache = FALSE;
+                if ( !pCache )
+                {
+                    pCache = new SfxStateCache( nSlot );
+                    pCache->GetSlotServer( *GetDispatcher_Impl(), pImp->xProv );
+                    bDeleteCache = TRUE;
+                }
+
                 SfxItemState eState = SFX_ITEM_SET;
                 SfxPoolItem *pItem=NULL;
-                BindDispatch_Impl *pBind = new BindDispatch_Impl( xDisp, aURL, NULL );
+                BindDispatch_Impl *pBind = new BindDispatch_Impl( xDisp, aURL, pCache );
                 pBind->acquire();
                 xDisp->addStatusListener( pBind, aURL );
                 if ( !pBind->GetStatus().IsEnabled )
+                {
                     eState = SFX_ITEM_DISABLED;
+                }
                 else
                 {
                     ::com::sun::star::uno::Any aAny = pBind->GetStatus().State;
@@ -2674,8 +2684,11 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                         pItem = new SfxVoidItem( nSlot );
                 }
 
+                xDisp->removeStatusListener( pBind, aURL );
                 pBind->Release();
                 rpState = pItem;
+                if ( bDeleteCache )
+                    DELETEZ( pCache );
                 return eState;
             }
         }
