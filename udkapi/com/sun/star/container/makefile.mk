@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:31 $
+#   last change: $Author: cl $ $Date: 2001-05-31 13:37:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,9 @@ PACKAGE=com$/sun$/star$/container
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    XIdentifierAccess.idl\
+    XIdentifierReplace.idl\
+    XIdentifierContainer.idl\
     ContainerEvent.idl\
     ElementExistException.idl\
     NoSuchElementException.idl\
