@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:33:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "È¸»ç(~C)";
         Text[ turkish ] = "Þirket";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~mpresa";
     };
     Edit ED_COMPANY
     {
@@ -154,6 +155,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "ÀÌ¸§/¼º/ÀÌ´Ï¼È(~N)";
         Text[ turkish ] = "~Ad/Soyad/Baþharfler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nom~bre/Apellidos/Iniciales";
     };
     FixedText FT_NAME_RUSS
     {
@@ -229,6 +231,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "°Å¸® ¹øÁö¼ö(~S)";
         Text[ turkish ] = "Cadde";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Calle";
     };
     FixedText FT_STREET_RUSS
     {
@@ -291,6 +294,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "¿ìÆí¹øÈ£/µµ½Ã";
         Text[ turkish ] = "Posta kodu/þehir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "CP/C~iudad";
     };
     Edit ED_PLZ
     {
@@ -348,6 +352,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "±¹°¡";
         Text[ turkish ] = "Ülke";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~País";
     };
     Edit ED_COUNTRY
     {
@@ -381,6 +386,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "Á÷ÇÔ/Á÷À§(~T)";
         Text[ turkish ] = "~Unvan/Pozisyon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Título/p~osición";
     };
     Edit ED_TITLE
     {
@@ -422,6 +428,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "Tel. (ÀÚÅÃ/È¸»ç)";
         Text[ turkish ] = "Tlf. (Ev/Ýþ)";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tel. (Privado/trabajo)";
     };
     Edit ED_TELPRIVAT
     {
@@ -463,6 +470,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "ÆÑ½º/E-mail(~X)";
         Text[ turkish ] = "Faks/e-posta";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fa~x/E-mail";
     };
     Edit ED_FAX
     {
@@ -503,6 +511,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = " ÁÖ¼Ò ";
         Text[ turkish ] = "Adres ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "  Dirección ";
     };
     CheckBox CB_USEDATA
     {
@@ -530,6 +539,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "¹®¼­ µî·ÏÁ¤º¸¿ë µ¥ÀÌÅÍ »ç¿ë";
         Text[ turkish ] = "Verileri belge özellikleri için kullan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Usar ~datos para las propiedades del documento";
     };
 
      // extra Resourcen f"ur die amerikanische Postadresse
@@ -556,6 +566,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "µµ½Ã/±¹°¡/¿ìÆí¹øÈ£";
         Text[ turkish ] = "Þehir/Ülke/Posta kodu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ciudad/País/CP";
     };
     String STR_QUERY_REG
     {
@@ -580,6 +591,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ korean ] = "ÁÖ¼Ò³ª ¿ìÆí¹øÈ£ µîÀº µî·Ï Å° ±¸¼º¿¡ ÀÌ¿ëµÈ´Ù´Â »ç½ÇÀ» ¸í½ÉÇÏ½Ê½Ã¿À. µî·ÏÀÌ ¿Ï·áµÉ ¶§±îÁö´Â ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ ´õ ÀÌ»ó ¹Ù²Ü ¼ö ¾ø½À´Ï´Ù. Áö±ÝÀÌ¶óµµ ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Cadde, posta kodu ve þehir bilgilerinin kayýt kodunun oluþturulmasý için kullanýldýðýný dikkate alýn. Kayýt yapýlana kadar bu kullanýcý verileri deðiþtirilemez. Kullanýcý verilerini þimdi deðiþtirmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tenga en cuenta que la calle, el código postal y la ciudad se tendrán en cuenta para determinar la clave de registro. Estos datos no podrán ser modificados hasta que se registre. ¿Desea modificar aún estos datos de usuario?";
     };
     Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¸ê®Æ";
     Text[ arabic ] = "ÈíÇäÇÊ ÇáãÓÊÎÏã";
@@ -587,6 +599,7 @@ TabPage RID_SFXPAGE_GENERAL
     Text[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ";
     Text[ turkish ] = "Kullanýcý verileri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Datos del usuario";
 };
 
 // RID_SVXQB_CHANGEDATA ---------------------------------------------------
@@ -616,6 +629,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ¼Ì½À´Ï´Ù.\n±×·Î ÀÎÇØ µî·ÏÀÌ ¹«È¿È­µÈ´Ù´Â »ç½Ç¿¡ À¯ÀÇÇÏ½Ê½Ã¿À. \n±×·¯¸é ¾ÕÀ¸·Î 30ÀÏ³»¿¡ ÀÔ·ÂÇØ¾ß ÇÒ »õ µî·Ï Å°°¡ ÇÊ¿äÇÕ´Ï´Ù.\nµî·Ï ¾ç½ÄÀº µµ¿ò¸»-µî·Ï... ¸Þ´º¿¡¼­ Ã£À» ¼ö ÀÖ½À´Ï´Ù.\n»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦¡¡Á¤¸» º¯°æÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Kullanýcý verilerini deðiþtirdiniz.\nBu nedenle kayýt iþlemi de iptal edilecektir.\nEn geç 30 gün içerisinde yeni bir kayýt koduý girmeniz gerekiyor.\nÝlgili kayýt formunu mönüde, \"Yardým - Kayýt...\" altýnda bulabilirsiniz.\nKullanýcý verilerini gerçekten deðiþtirmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirará el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los próximos 30 días.\nEl formulario de registro lo encuentra en el menú Ayuda - Registro...\n¿Desea realmente modificar los datos de usuario?";
 };
 
  // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
@@ -897,6 +911,18 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < " " ; FUNIT_MILE ; > ;
         < " " ; FUNIT_PICA ; > ;
         < " " ; FUNIT_POINT ; > ;
+    };
+    ItemList [ catalan ] =
+    {
+            < "Milímetro" ; FUNIT_POINT ; > ;
+        < "Centímetro" ; FUNIT_POINT ; > ;
+        < "Metro" ; FUNIT_POINT ; > ;
+        < "Kilómetro" ; FUNIT_POINT ; > ;
+        < "Pulgadas" ; FUNIT_POINT ; > ;
+        < "Pie" ; FUNIT_POINT ; > ;
+        < "Millas" ; FUNIT_POINT ; > ;
+        < "Pica" ; FUNIT_POINT ; > ;
+        < "Punto" ; FUNIT_POINT ; > ;
     };
     };
 
