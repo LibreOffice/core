@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,7 +1203,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
         delete pColorTable;
 
     aBackgroundColorSet.SetColCount( 10 );
-    aBackgroundColorSet.SetLineCount( 8 );
+    aBackgroundColorSet.SetLineCount( 10 );
     aBackgroundColorSet.CalcWindowSizePixel( aSize15x15 );
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 09:31:05 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,12 +779,6 @@ void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
         aFld.SetValue( aFld.Normalize( aOrigSize.Height() ), eUnit );
         sTemp += UniString::CreateFromAscii(" x ");
         sTemp += aFld.GetText();
-        long nXSize = aOrigSizeFT.GetTextWidth( sTemp );
-        long nXPos = aOrigSizePB.GetPosPixel().X() + aOrigSizePB.GetSizePixel().Width()/2;
-        nXPos -= (nXSize/2);
-        Point aTxtPos(aOrigSizeFT.GetPosPixel());
-        aTxtPos.X() = nXPos;
-        aOrigSizeFT.SetPosPixel(aTxtPos);
         aOrigSizeFT.SetText(sTemp);
     }
     aLeftFT         .Enable(bFound);

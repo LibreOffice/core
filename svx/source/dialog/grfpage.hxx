@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,24 +120,24 @@ class SvxGrfCropPage : public SfxTabPage
     RadioButton     aSizeConstRB;
     RadioButton     aZoomConstRB;
 
-    GroupBox        aSizeGB;
-    FixedText       aWidthFT;
-    MetricField     aWidthMF;
-    FixedText       aHeightFT;
-    MetricField     aHeightMF;
-
     GroupBox        aZoomGB;
     FixedText       aWidthZoomFT;
     MetricField     aWidthZoomMF;
     FixedText       aHeightZoomFT;
     MetricField     aHeightZoomMF;
 
+    GroupBox        aSizeGB;
+    FixedText       aWidthFT;
+    MetricField     aWidthMF;
+    FixedText       aHeightFT;
+    MetricField     aHeightMF;
+    FixedText       aOrigSizeFT;
+    PushButton      aOrigSizePB;
+
     // Example
     SvxCropExample  aExampleWN;
     GroupBox        aExampleGB;
 
-    FixedText       aOrigSizeFT;
-    PushButton      aOrigSizePB;
 
     Timer           aTimer;
     String          aGraphicName;
