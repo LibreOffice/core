@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hro $ $Date: 2004-09-16 10:33:50 $
+#   last change: $Author: hr $ $Date: 2004-11-26 22:28:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ TARGETTYPE=GUI
 APP1TARGET=so$/swriter
 APP1NOSAL=TRUE
 APP1LINKRES=$(MISC)$/$(TARGET).res
-APP1ICON=$(SOLARRESDIR)$/icons/002_text_document.ico
+APP1ICON=$(SOLARRESDIR)$/icons/so8-writer-app.ico
 APP1OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/swriter.obj
@@ -85,7 +85,7 @@ APP1OBJS = \
 APP2TARGET=so$/scalc
 APP2NOSAL=TRUE
 APP2LINKRES=$(MISC)$/$(TARGET).res
-APP2ICON=$(SOLARRESDIR)$/icons/004_spreadsheet_document.ico
+APP2ICON=$(SOLARRESDIR)$/icons/so8-calc-app.ico
 APP2OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/scalc.obj
@@ -93,7 +93,7 @@ APP2OBJS = \
 APP3TARGET=so$/sdraw
 APP3NOSAL=TRUE
 APP3LINKRES=$(MISC)$/$(TARGET).res
-APP3ICON=$(SOLARRESDIR)$/icons/006_drawing_document.ico
+APP3ICON=$(SOLARRESDIR)$/icons/so8-draw-app.ico
 APP3OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sdraw.obj
@@ -101,7 +101,7 @@ APP3OBJS = \
 APP4TARGET=so$/simpress
 APP4NOSAL=TRUE
 APP4LINKRES=$(MISC)$/$(TARGET).res
-APP4ICON=$(SOLARRESDIR)$/icons/008_presentation_document.ico
+APP4ICON=$(SOLARRESDIR)$/icons/so8-impress-app.ico
 APP4OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/simpress.obj
@@ -109,7 +109,7 @@ APP4OBJS = \
 APP5TARGET=so$/sbase
 APP5NOSAL=TRUE
 APP5LINKRES=$(MISC)$/$(TARGET).res
-APP5ICON=$(SOLARRESDIR)$/icons/014_database_document.ico
+APP5ICON=$(SOLARRESDIR)$/icons/so8-base-app.ico
 APP5OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/sbase.obj
@@ -117,7 +117,7 @@ APP5OBJS = \
 APP6TARGET=so$/smath
 APP6NOSAL=TRUE
 APP6LINKRES=$(MISC)$/$(TARGET).res
-APP6ICON=$(SOLARRESDIR)$/icons/015_math_document.ico
+APP6ICON=$(SOLARRESDIR)$/icons/so8-math-app.ico
 APP6OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
