@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:13:18 $
+ *  last change: $Author: mib $ $Date: 2001-03-14 10:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,6 +1014,123 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
     }
 }
 
+sal_Bool lcl_txtpara_isFrameAnchor(
+        const Reference < XTextContent > rTxtCntnt,
+        const Reference < XTextFrame >& rParentTxtFrame )
+{
+    Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
+    Any aAny = xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame") ) );
+    Reference < XTextFrame > xAnchorTxtFrame;
+    aAny >>= xAnchorTxtFrame;
+
+    return xAnchorTxtFrame == rParentTxtFrame;
+}
+
+void XMLTextParagraphExport::exportFrameFrames(
+        sal_Bool bAutoStyles,
+        sal_Bool bProgress,
+        const Reference < XTextFrame > *pParentTxtFrame )
+{
+    if( pFrameTextFrameIdxs )
+    {
+        sal_uInt16 i = 0;
+        while( i < pFrameTextFrameIdxs->Count() )
+        {
+            Any aAny = xTextFrames->getByIndex( (*pFrameTextFrameIdxs)[i] );
+            Reference < XTextFrame > xTxtFrame;
+            aAny >>= xTxtFrame;
+            Reference < XTextContent > xTxtCntnt( xTxtFrame, UNO_QUERY );
+            if( bAutoStyles ||
+                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            {
+                if( !bAutoStyles )
+                    pFrameTextFrameIdxs->Remove( i );
+                sal_uInt16 nOldCount = pFrameTextFrameIdxs->Count();
+                exportTextFrame( xTxtCntnt, bAutoStyles, bProgress );
+                if( bAutoStyles )
+                    i++;
+                else if( pFrameTextFrameIdxs->Count() != nOldCount )
+                    i = 0;
+            }
+            else
+                i++;
+        }
+    }
+    if( pFrameGraphicIdxs )
+    {
+        sal_uInt16 i = 0;
+        while( i < pFrameGraphicIdxs->Count() )
+        {
+            Any aAny = xGraphics->getByIndex( (*pFrameGraphicIdxs)[i] );
+            Reference < XTextContent > xTxtCntnt;
+            aAny >>= xTxtCntnt;
+            if( bAutoStyles ||
+                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            {
+                if( !bAutoStyles )
+                    pFrameGraphicIdxs->Remove( i );
+                sal_uInt16 nOldCount = pFrameGraphicIdxs->Count();
+                exportTextGraphic( xTxtCntnt, bAutoStyles );
+                if( bAutoStyles )
+                    i++;
+                else if( pFrameGraphicIdxs->Count() != nOldCount )
+                    i = 0;
+            }
+            else
+                i++;
+        }
+    }
+    if( pFrameEmbeddedIdxs )
+    {
+        sal_uInt16 i = 0;
+        while( i < pFrameEmbeddedIdxs->Count() )
+        {
+            Any aAny = xEmbeddeds->getByIndex( (*pFrameEmbeddedIdxs)[i] );
+            Reference < XTextContent > xTxtCntnt;
+            aAny >>= xTxtCntnt;
+            if( bAutoStyles ||
+                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            {
+                if( !bAutoStyles )
+                    pFrameEmbeddedIdxs->Remove( i );
+                sal_uInt16 nOldCount = pFrameEmbeddedIdxs->Count();
+                exportTextEmbedded( xTxtCntnt, bAutoStyles );
+                if( bAutoStyles )
+                    i++;
+                else if( pFrameEmbeddedIdxs->Count() != nOldCount )
+                    i = 0;
+            }
+            else
+                i++;
+        }
+    }
+    if( pFrameShapeIdxs )
+    {
+        sal_uInt16 i = 0;
+        while( i < pFrameShapeIdxs->Count() )
+        {
+            Any aAny = xShapes->getByIndex( (*pFrameShapeIdxs)[i] );
+            Reference < XShape > xShape;
+            aAny >>= xShape;
+            Reference < XTextContent > xTxtCntnt( xShape, UNO_QUERY );
+            if( bAutoStyles ||
+                lcl_txtpara_isFrameAnchor( xTxtCntnt, *pParentTxtFrame ) )
+            {
+                if( !bAutoStyles )
+                    pFrameShapeIdxs->Remove( i );
+                sal_uInt16 nOldCount = pFrameShapeIdxs->Count();
+                exportShape( xTxtCntnt, bAutoStyles );
+                if( bAutoStyles )
+                    i++;
+                else if( pFrameShapeIdxs->Count() != nOldCount )
+                    i = 0;
+            }
+            else
+                i++;
+        }
+    }
+}
+
 void XMLTextParagraphExport::exportText(
         const Reference < XText > & rText,
         sal_Bool bAutoStyles,
@@ -1691,6 +1808,9 @@ void XMLTextParagraphExport::_exportTextFrame(
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_text_box, sal_False, sal_True );
+
+    // frame bound frames
+    exportFramesBoundToFrame( xTxtFrame, bProgress );
 
     // script:events
     Reference<XEventsSupplier> xEventsSupp( xTxtFrame, UNO_QUERY );

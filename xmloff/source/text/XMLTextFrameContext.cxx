@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-13 15:50:55 $
+ *  last change: $Author: mib $ $Date: 2001-03-14 10:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,7 +889,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         }
         // else: no object, no event import
     }
-    else if( xOldTextCursor.is() )  // text-box
+    if( !pContext && xOldTextCursor.is() )  // text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
                             GetImport(), nPrefix, rLocalName, xAttrList,
                             XML_TEXT_TYPE_TEXTBOX );
