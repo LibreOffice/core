@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-07-05 15:05:00 $
+ *  last change: $Author: er $ $Date: 2001-07-11 15:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,13 @@ extern "C" {
 #define SC_COLLATOR_IGNORES ( \
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
 #endif
+#define SC_TRANSLITERATION_IGNORECASE ( \
+    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE | \
+    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
+    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
+#define SC_TRANSLITERATION_CASESENSE ( \
+    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
+    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
 
 
 //------------------------------------------------------------------------
@@ -510,8 +517,8 @@ class EditTextObject;
 class SfxObjectShell;
 class SvNumberFormatter;
 class ScUnitConverter;
-class International;
 class CharClass;
+class LocaleDataWrapper;
 class SvtSysLocale;
 class CalendarWrapper;
 class CollatorWrapper;
@@ -520,6 +527,9 @@ class IntlWrapper;
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
 }}}}
+namespace utl {
+    class TransliterationWrapper;
+}
 
 #ifndef _SCALC_EXE
 class ScGlobal
@@ -553,9 +563,13 @@ public:
     static SvtSysLocale*        pSysLocale;
     // for faster access a pointer to the single instance provided by SvtSysLocale
     static const CharClass*     pCharClass;
+    // for faster access a pointer to the single instance provided by SvtSysLocale
+    static const LocaleDataWrapper* pLocaleData;
     static CalendarWrapper*     pCalendar;
     static CollatorWrapper*     pCollator;
     static CollatorWrapper*     pCaseCollator;
+    static ::utl::TransliterationWrapper* pTransliteration;
+    static ::utl::TransliterationWrapper* pCaseTransliteration;
     static IntlWrapper*         pScIntlWrapper;
     static LanguageType         eLnge;
     static sal_Unicode          cListDelimiter;
