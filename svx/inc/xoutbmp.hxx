@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xoutbmp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-21 14:11:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // -----------
 // - Defines -
 // -----------
@@ -97,7 +101,7 @@ class VirtualDevice;
 class INetURLObject;
 class Polygon;
 
-class XOutBitmap
+class SVX_DLLPUBLIC XOutBitmap
 {
 public:
 
