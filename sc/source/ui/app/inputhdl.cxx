@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:27:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,7 +1009,7 @@ void ScInputHandler::UseColData()           // beim Tippen
                         //! GetExactMatch funktioniert dann auch nicht
                         lcl_RemoveLineEnd( aNew );
 
-                        //  Absaetze beibehalten, nur den Rest anfügen
+                        //  Absaetze beibehalten, nur den Rest anfuegen
                         //! genaue Ersetzung im EnterHandler !!!
 
                         // ein Space zwischen Absaetzen:
