@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-10 08:13:01 $
+ *  last change: $Author: thb $ $Date: 2002-09-24 16:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,36 +366,38 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         // avoid shadow line drawing in XOut
         rXOut.SetLineAttr(aEmptySet);
 
+        if (PaintNeedsXPoly())
         {
+            if( !bXPolyIsLine )
+            {
+                XPolygon aX(GetXPoly()); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
+                aX.Move(nXDist,nYDist);
+
+                // #100127# Output original geometry for metafiles
+                ImpGraphicFill aFill( *this, rXOut );
+
+                rXOut.DrawXPolygon(aX);
+            }
+        } else {
             // #100127# Output original geometry for metafiles
             ImpGraphicFill aFill( *this, rXOut );
 
-            if (PaintNeedsXPoly()) {
-                XPolygon aX(GetXPoly()); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
-                aX.Move(nXDist,nYDist);
-                if (bXPolyIsLine) {
-                    rXOut.DrawXPolyLine(aX);
-                } else {
-                    rXOut.DrawXPolygon(aX);
-                }
+            Rectangle aR(aRect);
+            aR.Move(nXDist,nYDist);
+            if (eKind==OBJ_CIRC) {
+                rXOut.DrawEllipse(aR);
             } else {
-                Rectangle aR(aRect);
-                aR.Move(nXDist,nYDist);
-                if (eKind==OBJ_CIRC) {
-                    rXOut.DrawEllipse(aR);
-                } else {
-                    GetBoundRect(); // fuer aPnt1,aPnt2
-                    Point aTmpPt1(aPnt1);
-                    Point aTmpPt2(aPnt2);
-                    aTmpPt1.X()+=nXDist;
-                    aTmpPt1.Y()+=nYDist;
-                    aTmpPt2.X()+=nXDist;
-                    aTmpPt2.Y()+=nYDist;
-                    switch (eKind) {
-                        case OBJ_SECT: rXOut.DrawPie(aR,aTmpPt1,aTmpPt2); break;
-                        case OBJ_CARC: rXOut.DrawArc(aR,aTmpPt1,aTmpPt2); break;
-                        case OBJ_CCUT: DBG_ERROR("SdrCircObj::Paint(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
-                    }
+                GetBoundRect(); // fuer aPnt1,aPnt2
+                Point aTmpPt1(aPnt1);
+                Point aTmpPt2(aPnt2);
+                aTmpPt1.X()+=nXDist;
+                aTmpPt1.Y()+=nYDist;
+                aTmpPt2.X()+=nXDist;
+                aTmpPt2.Y()+=nYDist;
+                switch (eKind) {
+                    case OBJ_SECT: rXOut.DrawPie(aR,aTmpPt1,aTmpPt2); break;
+                    case OBJ_CARC: rXOut.DrawArc(aR,aTmpPt1,aTmpPt2); break;
+                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::Paint(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
                 }
             }
         }
@@ -424,17 +426,21 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     }
 
     if (!bHideContour) {
-        // #100127# Output original geometry for metafiles
-        ImpGraphicFill aFill( *this, rXOut );
+        if (PaintNeedsXPoly())
+        {
+            if( !bXPolyIsLine )
+            {
+                const XPolygon& rXP=GetXPoly(); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
 
-        if (PaintNeedsXPoly()) {
-            const XPolygon& rXP=GetXPoly(); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
-            if (bXPolyIsLine) {
-                rXOut.DrawXPolyLine(rXP);
-            } else {
+                // #100127# Output original geometry for metafiles
+                ImpGraphicFill aFill( *this, rXOut );
+
                 rXOut.DrawXPolygon(rXP);
             }
         } else {
+            // #100127# Output original geometry for metafiles
+            ImpGraphicFill aFill( *this, rXOut );
+
             if (eKind==OBJ_CIRC) {
                 rXOut.DrawEllipse(aRect);
             } else {
