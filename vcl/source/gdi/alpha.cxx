@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alpha.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2000-11-16 13:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,14 @@ BOOL AlphaMask::Expand( ULONG nDX, ULONG nDY, BYTE* pInitTransparency )
         aColor = Color( *pInitTransparency, *pInitTransparency, *pInitTransparency );
 
     return Bitmap::Expand( nDX, nDY, pInitTransparency ? &aColor : NULL );
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+                           const AlphaMask* pAlphaSrc )
+{
+    return Bitmap::CopyPixel( rRectDst, rRectSrc, (Bitmap*) pAlphaSrc );
 }
 
 // -----------------------------------------------------------------------------
