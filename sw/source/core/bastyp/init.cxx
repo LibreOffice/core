@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-09 18:33:08 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
 #endif
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
+#endif
 #ifndef _SVX_CMAPITEM_HXX //autogen
 #include <svx/cmapitem.hxx>
 #endif
@@ -256,9 +259,6 @@
 #endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
-#endif
-#ifndef _FMT2LINES_HXX
-#include <fmt2lines.hxx>
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
@@ -674,7 +674,7 @@ void _InitCore()
 
     aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] =
                 new SvxEmphasisMarkItem();
-    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SwFmt2Lines( FALSE );
+    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( FALSE );
 
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );

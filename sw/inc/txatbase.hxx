@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 10:46:50 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ class SvxColorItem;
 class SvxCharSetColorItem;
 class SvXMLAttrContainerItem;
 class SwFmtRuby;
-class SwFmt2Lines;
+class SvxTwoLinesItem;
 class SvxEmphasisMarkItem;
 class SwFmtCharFmt;
 class SwFmtINetFmt;
@@ -195,7 +195,7 @@ public:
     inline const SwFmtINetFmt           &GetINetFmt() const;
     inline const SvXMLAttrContainerItem &GetXMLAttrContainer() const;
     inline const SwFmtRuby              &GetRuby() const;
-    inline const SwFmt2Lines            &Get2Lines() const;
+    inline const SvxTwoLinesItem        &Get2Lines() const;
     inline const SvxEmphasisMarkItem    &GetEmphasisMark() const;
 
 private:
@@ -426,11 +426,11 @@ inline const SwFmtRuby& SwTxtAttr::GetRuby() const
             "Falsche Abfrage" );
     return (const SwFmtRuby&)*pAttr;
 }
-inline const SwFmt2Lines& SwTxtAttr::Get2Lines() const
+inline const SvxTwoLinesItem& SwTxtAttr::Get2Lines() const
 {
     ASSERT( pAttr && pAttr->Which() == RES_CHRATR_TWO_LINES,
             "Falsche Abfrage" );
-    return (const SwFmt2Lines&)*pAttr;
+    return (const SvxTwoLinesItem&)*pAttr;
 }
 
 inline const SvxEmphasisMarkItem& SwTxtAttr::GetEmphasisMark() const
@@ -442,6 +442,9 @@ inline const SvxEmphasisMarkItem& SwTxtAttr::GetEmphasisMark() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/06 10:46:50  jp
+      new flags for the SwTxtAttr
+
       Revision 1.4  2000/11/02 17:26:48  jp
       TwoLines as char and not as text attribute
 

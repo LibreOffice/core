@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:49:30 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ class SwCharSetCol;
 class SwImplPrev;
 class SwFmtRuby;
 class SwCharFmt;
-class SwFmt2Lines;
+class SvxTwoLinesItem;
 
 // ATT_FONT ***********************************************************
 
@@ -458,7 +458,7 @@ public:
 class SwTxt2Lines : public SwTxtAttrEnd
 {
 public:
-    SwTxt2Lines( const SwFmt2Lines& rAttr,
+    SwTxt2Lines( const SvxTwoLinesItem& rAttr,
                     xub_StrLen nStart, xub_StrLen nEnd );
 };
 

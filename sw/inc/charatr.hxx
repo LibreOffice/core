@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,9 @@ inline const SvxLanguageItem     &SwAttrSet::GetCTLLanguage(BOOL bInP) const
     {   return (const SvxLanguageItem&)Get( RES_CHRATR_CTL_LANGUAGE,bInP); }
 inline const SvxEscapementItem   &SwAttrSet::GetEscapement(BOOL bInP) const
     {   return (const SvxEscapementItem&)Get( RES_CHRATR_ESCAPEMENT,bInP); }
-inline const SvxCaseMapItem      &SwAttrSet::GetCaseMap(BOOL bInP) const
+inline const SvxCaseMapItem     &SwAttrSet::GetCaseMap(BOOL bInP) const
     {   return (const SvxCaseMapItem&)Get( RES_CHRATR_CASEMAP,bInP); }
-inline const SvxNoHyphenItem     &SwAttrSet::GetNoHyphenHere(BOOL bInP) const
+inline const SvxNoHyphenItem    &SwAttrSet::GetNoHyphenHere(BOOL bInP) const
     {   return (const SvxNoHyphenItem&)Get( RES_CHRATR_NOHYPHEN,bInP); }
 inline const SvxBlinkItem  &SwAttrSet::GetBlink(BOOL bInP) const
     {   return (const SvxBlinkItem&)Get( RES_CHRATR_BLINK,bInP); }
@@ -136,8 +136,8 @@ inline const SvxBrushItem &SwAttrSet::GetChrBackground( BOOL bInP ) const
     {   return (const SvxBrushItem&)Get( RES_CHRATR_BACKGROUND, bInP ); }
 inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( BOOL bInP ) const
     {   return (const SvxEmphasisMarkItem&)Get( RES_CHRATR_EMPHASIS_MARK, bInP ); }
-inline const SwFmt2Lines        &SwAttrSet::Get2Lines( BOOL bInP ) const
-    {   return (const SwFmt2Lines&)Get( RES_CHRATR_TWO_LINES, bInP ); }
+inline const SvxTwoLinesItem    &SwAttrSet::Get2Lines( BOOL bInP ) const
+    {   return (const SvxTwoLinesItem&)Get( RES_CHRATR_TWO_LINES, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Charakter-Attribut Methoden vom SwFmt
@@ -186,7 +186,7 @@ inline const SvxBrushItem            &SwFmt::GetChrBackground(BOOL bInP) const
     {   return aSet.GetChrBackground(bInP); }
 inline const SvxEmphasisMarkItem    &SwFmt::GetEmphasisMark( BOOL bInP ) const
     {   return aSet.GetEmphasisMark(bInP); }
-inline const SwFmt2Lines            &SwFmt::Get2Lines( BOOL bInP ) const
+inline const SvxTwoLinesItem        &SwFmt::Get2Lines( BOOL bInP ) const
     {   return aSet.Get2Lines(bInP); }
 
 #endif

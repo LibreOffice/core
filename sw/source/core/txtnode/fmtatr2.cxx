@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 11:11:12 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #endif
 #ifndef _TXTATR_HXX //autogen
 #include <txtatr.hxx>
-#endif
-#ifndef _FMT2LINES_HXX
-#include <fmt2lines.hxx>
 #endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
@@ -400,120 +397,6 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
     }
     return bRet;
 }
-
-
-
-
-/*************************************************************************
-|*    class SwFmt2Lines
-*************************************************************************/
-
-SwFmt2Lines::SwFmt2Lines( sal_Bool bFlag, sal_Unicode nStartBracket,
-                                          sal_Unicode nEndBracket )
-    : SfxPoolItem( RES_CHRATR_TWO_LINES ),
-    bOn( bFlag ), cStartBracket( nStartBracket ), cEndBracket( nEndBracket )
-{
-}
-
-SwFmt2Lines::SwFmt2Lines( const SwFmt2Lines& rAttr )
-    : SfxPoolItem( RES_CHRATR_TWO_LINES ),
-    bOn( rAttr.bOn ), cStartBracket( rAttr.cStartBracket ),
-    cEndBracket( rAttr.cEndBracket )
-{
-}
-
-SwFmt2Lines::~SwFmt2Lines()
-{
-}
-
-int SwFmt2Lines::operator==( const SfxPoolItem& rAttr ) const
-{
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return bOn == ((SwFmt2Lines&)rAttr).bOn &&
-           cStartBracket == ((SwFmt2Lines&)rAttr).cStartBracket &&
-           cEndBracket == ((SwFmt2Lines&)rAttr).cEndBracket;
-}
-
-SfxPoolItem* SwFmt2Lines::Clone( SfxItemPool* ) const
-{
-    return new SwFmt2Lines( *this );
-}
-
-BOOL SwFmt2Lines::QueryValue( com::sun::star::uno::Any& rVal,
-                                BYTE nMemberId ) const
-{
-    BOOL bRet = TRUE;
-    XubString sVal;
-    switch( nMemberId )
-    {
-/*  case MID_URL_URL:
-        sVal = aURL;
-        break;
-    case MID_URL_TARGET:
-        sVal = aTargetFrame;
-        break;
-    case MID_URL_HYPERLINKNAME:
-        sVal = aName;
-        break;
-    case MID_URL_VISITED_FMT:
-        sVal = SwXStyleFamilies::GetProgrammaticName( aVisitedFmt,
-                                                    SFX_STYLE_FAMILY_CHAR );
-        break;
-    case MID_URL_UNVISITED_FMT:
-        sVal = SwXStyleFamilies::GetProgrammaticName( aINetFmt,
-                                                    SFX_STYLE_FAMILY_CHAR );
-        break;
-*/
-    default:
-        bRet = FALSE;
-        break;
-    }
-    rVal <<= OUString(sVal);
-    return bRet;
-}
-
-BOOL SwFmt2Lines::PutValue( const com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId )
-{
-    BOOL bRet;
-    if( rVal.getValueType() == ::getCppuType((rtl::OUString*)0) )
-    {
-        bRet = TRUE;
-
-        XubString sVal = *(rtl::OUString*)rVal.getValue();
-        switch( nMemberId )
-        {
-/*      case MID_URL_URL:
-            aURL = sVal;
-            break;
-        case MID_URL_TARGET:
-            aTargetFrame = sVal;
-            break;
-        case MID_URL_HYPERLINKNAME:
-            aName = sVal;
-            break;
-        case MID_URL_VISITED_FMT:
-            aVisitedFmt = SwXStyleFamilies::GetUIName( sVal,
-                                                    SFX_STYLE_FAMILY_CHAR );
-            nVisitedId = USHRT_MAX;
-            break;
-        case MID_URL_UNVISITED_FMT:
-            aINetFmt = SwXStyleFamilies::GetUIName( sVal,
-                                                    SFX_STYLE_FAMILY_CHAR );
-            nINetId = USHRT_MAX;
-            break;
-*/      default:
-            bRet = FALSE;
-            break;
-        }
-    }
-    else
-        bRet = FALSE;
-    return bRet;
-}
-
-
-
 
 
 /*************************************************************************

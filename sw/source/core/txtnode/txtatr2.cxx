@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 12:29:03 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
 #endif
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
+#endif
 
 #ifndef _TXTINET_HXX //autogen
 #include <txtinet.hxx>
@@ -143,9 +146,6 @@
 #endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
-#endif
-#ifndef _FMT2LINES_HXX
-#include <fmt2lines.hxx>
 #endif
 
 TYPEINIT1(SwTxtINetFmt,SwClient);
@@ -768,7 +768,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 
 // ******************************
 
-SwTxt2Lines::SwTxt2Lines( const SwFmt2Lines& rAttr,
+SwTxt2Lines::SwTxt2Lines( const SvxTwoLinesItem& rAttr,
                         xub_StrLen nStart, xub_StrLen nEnd )
     : SwTxtAttrEnd( rAttr, nStart, nEnd )
 {

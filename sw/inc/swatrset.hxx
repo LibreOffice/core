@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ class SvxCaseMapItem;
 class SvxNoHyphenItem;
 class SvxBlinkItem;
 class SvxEmphasisMarkItem;
-class SwFmt2Lines;
+class SvxTwoLinesItem;
 
 // Frame-Attribute
 class SwFmtFillOrder;
@@ -271,7 +271,7 @@ public:
     inline const SvxWeightItem          &GetCTLWeight( BOOL = TRUE ) const;
     inline const SfxBoolItem            &GetWritingDirection( BOOL = TRUE ) const;
     inline const SvxEmphasisMarkItem    &GetEmphasisMark( BOOL = TRUE ) const;
-    inline const SwFmt2Lines            &Get2Lines( BOOL = TRUE ) const;
+    inline const SvxTwoLinesItem        &Get2Lines( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx
     inline const SwFmtFillOrder         &GetFillOrder( BOOL = TRUE ) const;
@@ -344,6 +344,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/02 17:26:48  jp
+      TwoLines as char and not as text attribute
+
       Revision 1.2  2000/10/30 12:49:30  jp
       new: EmphasisItem
 

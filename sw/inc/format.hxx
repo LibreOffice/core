@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ public:
     inline const SfxBoolItem         &GetWritingDirection( BOOL = TRUE ) const;
 
     inline const SvxEmphasisMarkItem &GetEmphasisMark( BOOL = TRUE ) const;
-    inline const SwFmt2Lines         &Get2Lines( BOOL = TRUE ) const;
+    inline const SvxTwoLinesItem    &Get2Lines( BOOL = TRUE ) const;
 
     // Frame-Attribute  - impl. steht im frmatr.hxx,
     // fuer LINUX, SINIX, HPUX auch in gcc_outl.cxx

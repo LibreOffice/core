@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 18:55:06 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 21:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
 #endif
+#ifndef _SVX_TWOLINESITEM_HXX
+#include <svx/twolinesitem.hxx>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
 #include <com/sun/star/text/ScriptType.hdl>
 #endif
@@ -150,9 +153,6 @@
 #endif
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
-#endif
-#ifndef _FMT2LINES_HXX
-#include <fmt2lines.hxx>
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
@@ -334,7 +334,7 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
         pNew = new SwTxtBackground( (SvxBrushItem&)rNew, nStt, nEnd );
         break;
     case RES_CHRATR_TWO_LINES:
-        pNew = new SwTxt2Lines( (SwFmt2Lines&)rNew, nStt, nEnd );
+        pNew = new SwTxt2Lines( (SvxTwoLinesItem&)rNew, nStt, nEnd );
         break;
     case RES_TXTATR_REFMARK:
         pNew = nStt == nEnd
