@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:34:09 $
+ *  last change: $Author: os $ $Date: 2000-12-05 13:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,29 +225,33 @@ SwModuleOptions::SwModuleOptions() :
     aWebTableConfig(TRUE),
     bHideFieldTips(FALSE)
 {
-    aRevisionConfig.Load();
 }
 /* -----------------------------10.10.00 16:22--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString> SwRevisionConfig::GetPropertyNames()
+const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static Sequence<OUString> aNames;
+    if(!aNames.getLength())
     {
-        "TextDisplay/Insert/Attribute",             // 0
-        "TextDisplay/Insert/Color",                 // 1
-        "TextDisplay/Delete/Attribute",             // 2
-        "TextDisplay/Delete/Color",                 // 3
-        "TextDisplay/ChangedAttribute/Attribute",   // 4
-        "TextDisplay/ChangedAttribute/Color",       // 5
-        "LinesChanged/Mark",                        // 6
-        "LinesChanged/Color"                        // 7
-    };
-    const int nCount = 8;
-    Sequence<OUString> aNames(nCount);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < nCount; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        const int nCount = 8;
+        aNames.realloc(nCount);
+        static const char* aPropNames[] =
+        {
+            "TextDisplay/Insert/Attribute",             // 0
+            "TextDisplay/Insert/Color",                 // 1
+            "TextDisplay/Delete/Attribute",             // 2
+            "TextDisplay/Delete/Color",                 // 3
+            "TextDisplay/ChangedAttribute/Attribute",   // 4
+            "TextDisplay/ChangedAttribute/Color",       // 5
+            "LinesChanged/Mark",                        // 6
+            "LinesChanged/Color"                        // 7
+        };
+        Sequence<OUString> aNames(nCount);
+        OUString* pNames = aNames.getArray();
+        for(int i = 0; i < nCount; i++)
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    }
     return aNames;
 }
 /*-- 10.10.00 16:22:22---------------------------------------------------
@@ -265,6 +269,13 @@ SwRevisionConfig::SwRevisionConfig() :
     aFormatAttr.nItemId = SID_ATTR_CHAR_WEIGHT;
     aFormatAttr.nAttr = WEIGHT_BOLD;
     aFormatAttr.nColor = COL_BLACK;
+
+#if SUPD>615
+    EnableNotification(GetPropertyNames());
+#else
+    Sequence <OUString> aNames(GetPropertyNames());
+    EnableNotification(aNames);
+#endif
     Load();
 }
 /*-- 10.10.00 16:22:23---------------------------------------------------
@@ -285,8 +296,8 @@ void SwRevisionConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString
   -----------------------------------------------------------------------*/
 void SwRevisionConfig::Commit()
 {
-    Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
+    const Sequence<OUString>& aNames = GetPropertyNames();
+    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -314,9 +325,8 @@ void SwRevisionConfig::Commit()
   -----------------------------------------------------------------------*/
 void SwRevisionConfig::Load()
 {
-    Sequence<OUString> aNames = GetPropertyNames();
+    const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
@@ -345,83 +355,88 @@ void SwRevisionConfig::Load()
 /* -----------------------------10.10.00 16:22--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString> SwInsertConfig::GetPropertyNames()
+const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static Sequence<OUString> aNames;
+    if(!aNames.getLength())
     {
-        "Table/Header",                                 // 0
-        "Table/RepeatHeader",                           // 1
-        "Table/Border",                                 // 2
-        "Table/Split",                                  // 3 from here not in writer/web
-        "Caption/Automatic",                            // 4
-        "Caption/StarWriterObject/Table/Enable",        // 5
-        "Caption/StarWriterObject/Table/Settings/Category",     // 6
-        "Caption/StarWriterObject/Table/Settings/Numbering",    // 7
-        "Caption/StarWriterObject/Table/Settings/CaptionText",  // 8
-        "Caption/StarWriterObject/Table/Settings/Delimiter",    // 9
-        "Caption/StarWriterObject/Table/Settings/Level",        //10
-        "Caption/StarWriterObject/Table/Settings/Position",     //11
-        "Caption/StarWriterObject/Frame/Enable",                //12
-        "Caption/StarWriterObject/Frame/Settings/Category",     //13
-        "Caption/StarWriterObject/Frame/Settings/Numbering",    //14
-        "Caption/StarWriterObject/Frame/Settings/CaptionText",  //15
-        "Caption/StarWriterObject/Frame/Settings/Delimiter",    //16
-        "Caption/StarWriterObject/Frame/Settings/Level",        //17
-        "Caption/StarWriterObject/Frame/Settings/Position",     //18
-        "Caption/StarWriterObject/Graphic/Enable",              //19
-        "Caption/StarWriterObject/Graphic/Settings/Category",   //20
-        "Caption/StarWriterObject/Graphic/Settings/Numbering",  //21
-        "Caption/StarWriterObject/Graphic/Settings/CaptionText",//22
-        "Caption/StarWriterObject/Graphic/Settings/Delimiter",  //23
-        "Caption/StarWriterObject/Graphic/Settings/Level",      //24
-        "Caption/StarOfficeObject/Calc/Enable",                 //25
-        "Caption/StarOfficeObject/Calc/Settings/Category",      //26
-        "Caption/StarOfficeObject/Calc/Settings/Numbering",     //27
-        "Caption/StarOfficeObject/Calc/Settings/CaptionText",   //28
-        "Caption/StarOfficeObject/Calc/Settings/Delimiter",     //29
-        "Caption/StarOfficeObject/Calc/Settings/Level",         //30
-        "Caption/StarOfficeObject/Calc/Settings/Position",      //31
-        "Caption/StarOfficeObject/Impress/Enable",              //32
-        "Caption/StarOfficeObject/Impress/Settings/Category",   //33
-        "Caption/StarOfficeObject/Impress/Settings/Numbering",  //34
-        "Caption/StarOfficeObject/Impress/Settings/CaptionText",//35
-        "Caption/StarOfficeObject/Impress/Settings/Delimiter",  //36
-        "Caption/StarOfficeObject/Impress/Settings/Level",      //37
-        "Caption/StarOfficeObject/Impress/Settings/Position",   //38
-        "Caption/StarOfficeObject/Chart/Enable",                //39
-        "Caption/StarOfficeObject/Chart/Settings/Category",     //40
-        "Caption/StarOfficeObject/Chart/Settings/Numbering",    //41
-        "Caption/StarOfficeObject/Chart/Settings/CaptionText",  //42
-        "Caption/StarOfficeObject/Chart/Settings/Delimiter",    //43
-        "Caption/StarOfficeObject/Chart/Settings/Level",        //44
-        "Caption/StarOfficeObject/Chart/Settings/Position",     //45
-        "Caption/StarOfficeObject/Formula/Enable",              //46
-        "Caption/StarOfficeObject/Formula/Settings/Category",   //47
-        "Caption/StarOfficeObject/Formula/Settings/Numbering",  //48
-        "Caption/StarOfficeObject/Formula/Settings/CaptionText",//49
-        "Caption/StarOfficeObject/Formula/Settings/Delimiter",  //50
-        "Caption/StarOfficeObject/Formula/Settings/Level",      //51
-        "Caption/StarOfficeObject/Formula/Settings/Position",   //52
-        "Caption/StarOfficeObject/Draw/Enable",                 //53
-        "Caption/StarOfficeObject/Draw/Settings/Category",      //54
-        "Caption/StarOfficeObject/Draw/Settings/Numbering",     //55
-        "Caption/StarOfficeObject/Draw/Settings/CaptionText",   //56
-        "Caption/StarOfficeObject/Draw/Settings/Delimiter",     //57
-        "Caption/StarOfficeObject/Draw/Settings/Level",         //58
-        "Caption/StarOfficeObject/Draw/Settings/Position",      //59
-        "Caption/StarOfficeObject/OLEMisc/Enable",              //60
-        "Caption/StarOfficeObject/OLEMisc/Settings/Category",   //61
-        "Caption/StarOfficeObject/OLEMisc/Settings/Numbering",  //62
-        "Caption/StarOfficeObject/OLEMisc/Settings/CaptionText",//63
-        "Caption/StarOfficeObject/OLEMisc/Settings/Delimiter",  //64
-        "Caption/StarOfficeObject/OLEMisc/Settings/Level",      //65
-        "Caption/StarOfficeObject/OLEMisc/Settings/Position"    //66
-    };
-    const int nCount = bIsWeb ? 3: 67;
-    Sequence<OUString> aNames(nCount);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < nCount; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        const int nCount = bIsWeb ? 3: 67;
+        aNames.realloc(nCount);
+        static const char* aPropNames[] =
+        {
+            "Table/Header",                                 // 0
+            "Table/RepeatHeader",                           // 1
+            "Table/Border",                                 // 2
+            "Table/Split",                                  // 3 from here not in writer/web
+            "Caption/Automatic",                            // 4
+            "Caption/StarWriterObject/Table/Enable",        // 5
+            "Caption/StarWriterObject/Table/Settings/Category",     // 6
+            "Caption/StarWriterObject/Table/Settings/Numbering",    // 7
+            "Caption/StarWriterObject/Table/Settings/CaptionText",  // 8
+            "Caption/StarWriterObject/Table/Settings/Delimiter",    // 9
+            "Caption/StarWriterObject/Table/Settings/Level",        //10
+            "Caption/StarWriterObject/Table/Settings/Position",     //11
+            "Caption/StarWriterObject/Frame/Enable",                //12
+            "Caption/StarWriterObject/Frame/Settings/Category",     //13
+            "Caption/StarWriterObject/Frame/Settings/Numbering",    //14
+            "Caption/StarWriterObject/Frame/Settings/CaptionText",  //15
+            "Caption/StarWriterObject/Frame/Settings/Delimiter",    //16
+            "Caption/StarWriterObject/Frame/Settings/Level",        //17
+            "Caption/StarWriterObject/Frame/Settings/Position",     //18
+            "Caption/StarWriterObject/Graphic/Enable",              //19
+            "Caption/StarWriterObject/Graphic/Settings/Category",   //20
+            "Caption/StarWriterObject/Graphic/Settings/Numbering",  //21
+            "Caption/StarWriterObject/Graphic/Settings/CaptionText",//22
+            "Caption/StarWriterObject/Graphic/Settings/Delimiter",  //23
+            "Caption/StarWriterObject/Graphic/Settings/Level",      //24
+            "Caption/StarOfficeObject/Calc/Enable",                 //25
+            "Caption/StarOfficeObject/Calc/Settings/Category",      //26
+            "Caption/StarOfficeObject/Calc/Settings/Numbering",     //27
+            "Caption/StarOfficeObject/Calc/Settings/CaptionText",   //28
+            "Caption/StarOfficeObject/Calc/Settings/Delimiter",     //29
+            "Caption/StarOfficeObject/Calc/Settings/Level",         //30
+            "Caption/StarOfficeObject/Calc/Settings/Position",      //31
+            "Caption/StarOfficeObject/Impress/Enable",              //32
+            "Caption/StarOfficeObject/Impress/Settings/Category",   //33
+            "Caption/StarOfficeObject/Impress/Settings/Numbering",  //34
+            "Caption/StarOfficeObject/Impress/Settings/CaptionText",//35
+            "Caption/StarOfficeObject/Impress/Settings/Delimiter",  //36
+            "Caption/StarOfficeObject/Impress/Settings/Level",      //37
+            "Caption/StarOfficeObject/Impress/Settings/Position",   //38
+            "Caption/StarOfficeObject/Chart/Enable",                //39
+            "Caption/StarOfficeObject/Chart/Settings/Category",     //40
+            "Caption/StarOfficeObject/Chart/Settings/Numbering",    //41
+            "Caption/StarOfficeObject/Chart/Settings/CaptionText",  //42
+            "Caption/StarOfficeObject/Chart/Settings/Delimiter",    //43
+            "Caption/StarOfficeObject/Chart/Settings/Level",        //44
+            "Caption/StarOfficeObject/Chart/Settings/Position",     //45
+            "Caption/StarOfficeObject/Formula/Enable",              //46
+            "Caption/StarOfficeObject/Formula/Settings/Category",   //47
+            "Caption/StarOfficeObject/Formula/Settings/Numbering",  //48
+            "Caption/StarOfficeObject/Formula/Settings/CaptionText",//49
+            "Caption/StarOfficeObject/Formula/Settings/Delimiter",  //50
+            "Caption/StarOfficeObject/Formula/Settings/Level",      //51
+            "Caption/StarOfficeObject/Formula/Settings/Position",   //52
+            "Caption/StarOfficeObject/Draw/Enable",                 //53
+            "Caption/StarOfficeObject/Draw/Settings/Category",      //54
+            "Caption/StarOfficeObject/Draw/Settings/Numbering",     //55
+            "Caption/StarOfficeObject/Draw/Settings/CaptionText",   //56
+            "Caption/StarOfficeObject/Draw/Settings/Delimiter",     //57
+            "Caption/StarOfficeObject/Draw/Settings/Level",         //58
+            "Caption/StarOfficeObject/Draw/Settings/Position",      //59
+            "Caption/StarOfficeObject/OLEMisc/Enable",              //60
+            "Caption/StarOfficeObject/OLEMisc/Settings/Category",   //61
+            "Caption/StarOfficeObject/OLEMisc/Settings/Numbering",  //62
+            "Caption/StarOfficeObject/OLEMisc/Settings/CaptionText",//63
+            "Caption/StarOfficeObject/OLEMisc/Settings/Delimiter",  //64
+            "Caption/StarOfficeObject/OLEMisc/Settings/Level",      //65
+            "Caption/StarOfficeObject/OLEMisc/Settings/Position"    //66
+        };
+        Sequence<OUString> aNames(nCount);
+        OUString* pNames = aNames.getArray();
+        for(int i = 0; i < nCount; i++)
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    }
     return aNames;
 }
 /*-- 10.10.00 16:22:22---------------------------------------------------
@@ -440,6 +455,13 @@ SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
     aGlobalNames[GLOB_NAME_CHART  ] = SvGlobalName(SO3_SCH_CLASSID);
     if(!bIsWeb)
         pCapOptions = new InsCaptionOptArr;
+
+#if SUPD>615
+    EnableNotification(GetPropertyNames());
+#else
+    Sequence <OUString> aNames(GetPropertyNames());
+    EnableNotification(aNames);
+#endif
     Load();
 }
 /*-- 10.10.00 16:22:23---------------------------------------------------
@@ -481,8 +503,8 @@ void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_
 //-----------------------------------------------------------------------------
 void SwInsertConfig::Commit()
 {
-    Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
+    const Sequence<OUString>& aNames = GetPropertyNames();
+    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -625,9 +647,8 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
 //-----------------------------------------------------------------------------
 void SwInsertConfig::Load()
 {
-    Sequence<OUString> aNames = GetPropertyNames();
+    const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
@@ -768,24 +789,29 @@ void SwInsertConfig::Load()
 /* -----------------------------10.10.00 16:22--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString> SwTableConfig::GetPropertyNames()
+const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    static Sequence<OUString> aNames;
+    if(!aNames.getLength())
     {
-        "Shift/Row",                    //  0
-        "Shift/Column",                 //  1
-        "Insert/Row",                   //  2
-        "Insert/Column",                //  3
-        "Change/Effect",                //  4
-        "Input/NumberRecognition",      //  5
-        "Input/NumberFormatRecognition",//  6
-        "Input/Alignment"               //  7
-    };
-    const int nCount = 8;
-    Sequence<OUString> aNames(nCount);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < nCount; i++)
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        const int nCount = 8;
+        aNames.realloc(nCount);
+        static const char* aPropNames[] =
+        {
+            "Shift/Row",                    //  0
+            "Shift/Column",                 //  1
+            "Insert/Row",                   //  2
+            "Insert/Column",                //  3
+            "Change/Effect",                //  4
+            "Input/NumberRecognition",      //  5
+            "Input/NumberFormatRecognition",//  6
+            "Input/Alignment"               //  7
+        };
+        Sequence<OUString> aNames(nCount);
+        OUString* pNames = aNames.getArray();
+        for(int i = 0; i < nCount; i++)
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
+    }
     return aNames;
 }
 /*-- 10.10.00 16:22:22---------------------------------------------------
@@ -794,6 +820,12 @@ Sequence<OUString> SwTableConfig::GetPropertyNames()
 SwTableConfig::SwTableConfig(sal_Bool bWeb) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/Table") : C2U("Office.Writer/Table"))
 {
+#if SUPD>615
+    EnableNotification(GetPropertyNames());
+#else
+    Sequence <OUString> aNames(GetPropertyNames());
+    EnableNotification(aNames);
+#endif
     Load();
 }
 /*-- 10.10.00 16:22:23---------------------------------------------------
@@ -814,8 +846,8 @@ void SwTableConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& 
   -----------------------------------------------------------------------*/
 void SwTableConfig::Commit()
 {
-    Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
+    const Sequence<OUString>& aNames = GetPropertyNames();
+    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -841,9 +873,8 @@ void SwTableConfig::Commit()
   -----------------------------------------------------------------------*/
 void SwTableConfig::Load()
 {
-    Sequence<OUString> aNames = GetPropertyNames();
+    const Sequence<OUString>& aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-    EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
     if(aValues.getLength() == aNames.getLength())
