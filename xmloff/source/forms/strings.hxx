@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:00:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,11 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_DEFAULT_SPINVALUE,  "DefaultSpinValue");
     XMLFORM_CONSTASCII_STRING( PROPERTY_SPIN_INCREMENT,     "SpinIncrement");
     XMLFORM_CONSTASCII_STRING( PROPERTY_ORIENTATION,        "Orientation");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_TOGGLE,             "Toggle");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_FOCUS_ON_CLICK,     "FocusOnClick");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_VISUAL_EFFECT,      "VisualEffect");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_IMAGE_POSITION,     "ImagePosition");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_IMAGE_ALIGN,        "ImageAlign");
 
     XMLFORM_CONSTASCII_STRING( PROPERTY_BOUND_CELL,         "BoundCell");
     XMLFORM_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,    "CellRange");
