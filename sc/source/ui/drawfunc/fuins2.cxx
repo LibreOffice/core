@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:21:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,9 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
         pView->UnmarkAll();
 
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
+        try
+        {
             awt::Size aSz = xObj->getVisualAreaSize( nAspect );
             Size aSize( aSz.Width, aSz.Height );
 
@@ -435,6 +438,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             }
 
             rReq.Done();
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ASSERT( "May need error handling here!\n" );
+        }
     }
     else
         rReq.Ignore();
