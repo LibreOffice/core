@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:59:14 $
+ *  last change: $Author: hr $ $Date: 2004-06-22 17:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,18 +416,30 @@ extern "C"
 
 void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, Drawable aWindow )
 {
-    XEvent aEvent;
-
-    if( pFrame )
-        while( XCheckTypedWindowEvent( pDisplay, aWindow, Expose, &aEvent ) )
+    // get frame if necessary
+    if( ! pFrame )
+    {
+        const std::list< SalFrame* >& rFrames = GetSalData()->GetDisplay()->getFrames();
+        for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end() && ! pFrame; ++it )
         {
-            SalPaintEvent aPEvt;
-            aPEvt.mnBoundX          = aEvent.xexpose.x;
-            aPEvt.mnBoundY          = aEvent.xexpose.y;
-            aPEvt.mnBoundWidth      = aEvent.xexpose.width+1;
-            aPEvt.mnBoundHeight     = aEvent.xexpose.height+1;
-            pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+            const SystemEnvData* pEnvData = (*it)->GetSystemData();
+            if( pEnvData->aWindow == aWindow )
+                pFrame = *it;
         }
+        if( ! pFrame )
+            return;
+    }
+
+    XEvent aEvent;
+    while( XCheckTypedWindowEvent( pDisplay, aWindow, Expose, &aEvent ) )
+    {
+        SalPaintEvent aPEvt;
+        aPEvt.mnBoundX          = aEvent.xexpose.x;
+        aPEvt.mnBoundY          = aEvent.xexpose.y;
+        aPEvt.mnBoundWidth      = aEvent.xexpose.width+1;
+        aPEvt.mnBoundHeight     = aEvent.xexpose.height+1;
+        pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+    }
 
     do
     {
@@ -594,7 +606,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSa
         XChangeGC( pXDisp, aGC, nValues, &aNewVal );
     }
 
-    static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, nDepth, *pPosAry, aGC );
+    static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aDrawable, nDepth, *pPosAry, aGC, bWindow_ );
 
     if( rSalBitmap.GetBitCount() == 1 )
         XChangeGC( pXDisp, aGC, nValues, &aOldVal );
@@ -630,7 +642,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         // draw paint bitmap in pixmap #1
         aValues.function = GXcopy, aValues.foreground = nWhite, aValues.background = nBlack;
         aTmpGC = XCreateGC( pXDisp, aFG, nValues, &aValues );
-        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aFG, nDepth, aTmpRect, aTmpGC );
+        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aFG, nDepth, aTmpRect, aTmpGC, false );
         DBG_TESTTRANS( aFG );
 
         // draw background in pixmap #2
@@ -644,7 +656,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         // mask out paint bitmap in pixmap #1 (transparent areas 0)
         aValues.function = GXand, aValues.foreground = 0x00000000, aValues.background = 0xffffffff;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-        static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aFG, 1, aTmpRect, aTmpGC );
+        static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aFG, 1, aTmpRect, aTmpGC, false );
 
         DBG_TESTTRANS( aFG );
 
@@ -654,7 +666,7 @@ void X11SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
             // mask out background in pixmap #2 (nontransparent areas 0)
             aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
             XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-            static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aBG, 1, aTmpRect, aTmpGC );
+            static_cast<const X11SalBitmap&>(rTransBitmap).ImplDraw( aBG, 1, aTmpRect, aTmpGC, false );
 
             DBG_TESTTRANS( aBG );
         }
@@ -726,7 +738,7 @@ void X11SalGraphics::drawMask( const SalTwoRect* pPosAry,
         aValues.function = GXcopyInverted;
         aValues.foreground = 1, aValues.background = 0;
         aTmpGC = XCreateGC( pXDisp, aStipple, GCFunction | GCForeground | GCBackground, &aValues );
-        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aStipple, 1, aTwoRect, aTmpGC );
+        static_cast<const X11SalBitmap&>(rSalBitmap).ImplDraw( aStipple, 1, aTwoRect, aTmpGC, false );
 
         XFreeGC( pXDisp, aTmpGC );
 
