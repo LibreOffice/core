@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:21:56 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,12 +664,12 @@ int getValueOfDouble( char* pBuffer, double f, int nPrecision )
         *pBuffer++ = '-';
         f = -f;
     }
-    int exponent = log10( f );
+    int exponent = (int)log10( f );
     if( exponent < 4 && exponent > -4 )
         exponent = 0;
     f /= pow( 10, (double) exponent );
 
-    int nInt = f;
+    int nInt = (int)f;
     f -= nInt;
     // f should really not be 1.0 after this, but some
     // hardware implementations seem to round at this point
@@ -696,7 +696,7 @@ int getValueOfDouble( char* pBuffer, double f, int nPrecision )
         do
         {
             f *= 10;
-            nInt = f;
+            nInt = (int)f;
             f -= nInt;
             // f should really not be 1.0 after this, but some
             // hardware implementations seem to round at this point
