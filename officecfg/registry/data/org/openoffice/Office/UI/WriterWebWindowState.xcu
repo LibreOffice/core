@@ -309,12 +309,6 @@
      <value xml:lang="de">Nummerierung und Aufzählung</value>
     </prop>
    </node>
-   <node oor:name="private:resource/toolbar/oleobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">OlE-Object</value>
-     <value xml:lang="de">Ole-Objekt</value>
-    </prop>
-   </node>
    <node oor:name="private:resource/toolbar/previewobjectbar" oor:op="replace">
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Page Preview</value>
