@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 18:05:36 $
+ *  last change: $Author: pw $ $Date: 2000-10-25 13:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,8 +508,19 @@ PrintDialog* __EXPORT SdViewShell::CreatePrintDialog(Window *pParent)
             if( aStrRange.Len() )
             {
                 pDlg->SetRangeText( aStrRange );
-                pDlg->CheckRange( PRINTDIALOG_RANGE );
+                // According #79749 always check PRINTDIALOG_ALL
+                // pDlg->CheckRange( PRINTDIALOG_RANGE );
             }
+        }
+    }
+    else
+    {
+        String aStrRange( ( (SdOutlineViewShell*)this)->GetPageRangeString() );
+        if( aStrRange.Len() )
+        {
+            pDlg->SetRangeText( aStrRange );
+            // According #79749 always check PRINTDIALOG_ALL
+            // pDlg->CheckRange( PRINTDIALOG_RANGE );
         }
     }
     pDlg->EnableRange( PRINTDIALOG_RANGE );
@@ -519,7 +530,8 @@ PrintDialog* __EXPORT SdViewShell::CreatePrintDialog(Window *pParent)
     if( this->ISA( SdDrawViewShell ) && pView->HasMarkedObj() )
     {
         pDlg->EnableRange( PRINTDIALOG_SELECTION );
-        pDlg->CheckRange( PRINTDIALOG_SELECTION );
+        // According #79749 always check PRINTDIALOG_ALL
+        // pDlg->CheckRange( PRINTDIALOG_SELECTION );
     }
 
     return pDlg;
