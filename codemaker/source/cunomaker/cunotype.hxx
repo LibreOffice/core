@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunotype.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-17 16:15:48 $
+ *  last change: $Author: jsc $ $Date: 2001-04-20 13:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ public:
     virtual void dumpLGetCunoType(FileStream& o);
 
     virtual void dumpType(FileStream& o, const ::rtl::OString& type, sal_Bool bConst=sal_False,
-                          sal_Bool bPointer=sal_False, sal_Bool bNative=sal_False)
+                          sal_Bool bPointer=sal_False, sal_Bool bParam=sal_False)
                     throw( CannotDumpException );
     ::rtl::OString  getTypeClass(const ::rtl::OString& type="", sal_Bool bCStyle=sal_False);
     ::rtl::OString  getBaseType(const ::rtl::OString& type);

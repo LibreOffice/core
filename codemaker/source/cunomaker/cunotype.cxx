@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunotype.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-17 16:15:48 $
+ *  last change: $Author: jsc $ $Date: 2001-04-20 13:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,8 +330,8 @@ OString CunoType::dumpHeaderDefine(FileStream& o, sal_Char* prefix, sal_Bool bEx
 
 void CunoType::dumpDefaultHIncludes(FileStream& o)
 {
-    o << "#ifndef _CUNO_CUNO_H_\n"
-      << "#include <cuno/cuno.h>\n"
+    o << "#ifndef _UNO_CUNO_H_\n"
+      << "#include <uno/cuno.h>\n"
       << "#endif\n";
 /*
     if (m_typeMgr.getTypeClass(m_typeName) == RT_TYPE_INTERFACE &&
@@ -462,12 +462,13 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                         }
                         else
                         {
-                            dumpInclude(o, relType, prefix);
-//                          o << endl;
-//                          dumpNameSpace(o, sal_True, sal_False, relType);
-//                          o << "\nclass " << scopedName(m_typeName, relType, sal_True) << ";\n";
-//                          dumpNameSpace(o, sal_False, sal_False, relType);
-//                          o << "\n\n";
+//                          dumpInclude(o, relType, prefix);
+                            OString type(relType.replace('/', '_'));
+                            o << "\n#ifndef " << type.toUpperCase() << "\n";
+                            o << "#define " << type.toUpperCase() << "\n";
+                            o << "struct _" << type << ";\n"
+                              << "typedef struct _" << type << "_ftab * " << type << ";\n";
+                            o << "#endif\n\n";
                         }
                     } else
                     {
@@ -1063,7 +1064,7 @@ OString CunoType::getTypeClass(const OString& type, sal_Bool bCStyle)
 }
 
 void CunoType::dumpType(FileStream& o, const OString& type,
-                        sal_Bool bConst, sal_Bool bPointer, sal_Bool bNative)
+                        sal_Bool bConst, sal_Bool bPointer, sal_Bool bParam)
     throw( CannotDumpException )
 {
     OString sType(checkRealBaseType(type, sal_True));
@@ -1090,15 +1091,13 @@ void CunoType::dumpType(FileStream& o, const OString& type,
             o << " >";
         }
         o << "*/ uno_Sequence *";
+        if (bPointer) o << "*";
         return;
     }
     switch (typeClass)
     {
         case RT_TYPE_INTERFACE:
-            if (bNative)
-                o << relType.replace('/', '_');
-            else
-                o << relType.replace('/', '_') << " *";
+            o << relType.replace('/', '_') << " *";
             break;
         case RT_TYPE_INVALID:
             {
@@ -1106,7 +1105,7 @@ void CunoType::dumpType(FileStream& o, const OString& type,
                 if (tmp.getLength() > 0)
                 {
                     o << tmp.getStr();
-                    if ( bPointer && relType.equals("any") )
+                    if ( bParam && !bPointer && relType.equals("any") )
                         o << " *";
                 } else
                     throw CannotDumpException("Unknown type '" + relType + "', incomplete type library.");
@@ -1115,13 +1114,15 @@ void CunoType::dumpType(FileStream& o, const OString& type,
         case RT_TYPE_STRUCT:
         case RT_TYPE_EXCEPTION:
             o << relType.replace('/', '_');
-            if ( bPointer ) o << " *";
+            if ( bParam && !bPointer ) o << " *";
             break;
         case RT_TYPE_ENUM:
         case RT_TYPE_TYPEDEF:
             o << relType.replace('/', '_');
             break;
     }
+
+    if (bPointer) o << "*";
 }
 
 OString CunoType::getBaseType(const OString& type)
@@ -1551,8 +1552,11 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
     o << endl;
     dumpOpenExternC(o);
 
+    o << "#ifndef " << m_name.toUpperCase() << "\n";
+    o << "#define " << m_name.toUpperCase() << "\n";
     o << "struct _" << m_name << "_ftab;\n"
-      << "typedef struct _" << m_name << "_ftab * " << m_name << ";\n\n";
+      << "typedef struct _" << m_name << "_ftab * " << m_name << ";\n";
+    o << "#endif\n\n";
 
     dumpDeclaration(o);
 
@@ -1777,28 +1781,27 @@ void InterfaceType::dumpAttributes(FileStream& o, const OString& interfaceType, 
 
         o << indent() << "cuno_ErrorCode (SAL_CALL *get" << fieldName << ")( "
           << interfaceType << " *, uno_Any *, ";
-        dumpType(o, fieldType);
-        o << "* );\n";
+        dumpType(o, fieldType, sal_False, sal_True);
+        o << " );\n";
 
         if (access != RT_ACCESS_READONLY)
         {
             OString relType = checkSpecialCunoType(fieldType);
-            sal_Bool bRef = sal_False;
-            sal_Bool bConst = sal_False;
+            sal_Bool bParam = sal_False;
 
             if ( m_typeMgr.getTypeClass(relType) == RT_TYPE_STRUCT ||
                  m_typeMgr.getTypeClass(relType) == RT_TYPE_EXCEPTION ||
                 (isBaseType(relType) && relType.equals("any")))
             {
-                bRef = sal_True;
+                bParam = sal_True;
             } else
             {
-                bRef = sal_False;
+                bParam = sal_False;
             }
 
             o << indent() << "cuno_ErrorCode (SAL_CALL *set" << fieldName << ")( "
                 << interfaceType << " *, uno_Any *, ";
-            dumpType(o, fieldType, bConst, bRef);
+            dumpType(o, fieldType, sal_False, sal_False, bParam);
             o << " );\n";
         }
     }
@@ -1816,7 +1819,7 @@ void InterfaceType::dumpMethods(FileStream& o, const OString& interfaceType, Typ
     RTParamMode  paramMode = RT_PARAM_INVALID;
 
     sal_Bool bPointer = sal_False;
-    sal_Bool bConst = sal_False;
+    sal_Bool bParam = sal_False;
     sal_Bool bWithRunTimeExcp = sal_True;
 
     for (sal_uInt16 i=0; i < methodCount; i++)
@@ -1856,8 +1859,7 @@ void InterfaceType::dumpMethods(FileStream& o, const OString& interfaceType, Typ
         if ( !isVoid(returnType) )
         {
             o << ", ";
-            dumpType(o, returnType);
-            o << "*";
+            dumpType(o, returnType, sal_False, sal_True);
         }
 
         sal_uInt16 j;
@@ -1878,10 +1880,10 @@ void InterfaceType::dumpMethods(FileStream& o, const OString& interfaceType, Typ
                         m_typeMgr.getTypeClass(relType) == RT_TYPE_EXCEPTION ||
                         (isBaseType(relType) && relType.equals("any")))
                     {
-                        bPointer = sal_True;
+                        bParam = sal_True;
                     } else
                     {
-                        bPointer = sal_False;
+                        bParam = sal_False;
                     }
                     break;
                 }
@@ -1891,7 +1893,7 @@ void InterfaceType::dumpMethods(FileStream& o, const OString& interfaceType, Typ
                     break;
             }
 
-            dumpType(o, paramType, bConst, bPointer);
+            dumpType(o, paramType, sal_False, bPointer, bParam);
         }
         o << " );\n";
     }
