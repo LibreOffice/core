@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:25:21 $
+ *  last change: $Author: as $ $Date: 2002-07-02 07:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ namespace framework{
 
 #define COMMAND_PLUGIN                      DECLARE_ASCII("-plugin"     )   /// office is plugged into a browser
 #define COMMAND_HEADLESS                    DECLARE_ASCII("-headless"   )   /// office runs in headless mode for scripting
+#define COMMAND_INVISIBLE                   DECLARE_ASCII("-invisible"  )   /// office runs in invisible mode which supress splash screen and first empry document
+#define COMMAND_SERVER                      DECLARE_ASCII("-server"     )   /// office runs as server
 
 /*-************************************************************************************************************//**
     @short          This method parse command line of office and search for any argument.

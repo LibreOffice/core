@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:49:35 $
+ *  last change: $Author: as $ $Date: 2002-07-02 07:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,419 +148,75 @@ typedef TFrameContainer::const_iterator                             TConstFrameI
                     It's possible to set one of these frames as active or deactive. You could have full index-access to
                     container-items.
 
-    @implements     -
     @base           ThreadHelpBase
-                    TransactionBase
+                        guarantee right initialized lock member during boostrap!
 
     @devstatus      ready to use
     @threadsafe     yes
+    @modified       01.07.2002 14:39, as96863
 *//*-*************************************************************************************************************/
-
 class FrameContainer : private ThreadHelpBase
-                     , private TransactionBase
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    //_______________________________________
+    // member
+
+    private:
+
+        /// list to hold all frames
+        TFrameContainer m_aContainer;
+        /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
+        css::uno::Reference< css::frame::XFrame > m_xActiveFrame;
+        /// if an instance of this class is used at the desktop and last frame will be removed we must terminate the desktop
+        ::vos::ORef< AsyncQuit > m_rQuitTimer;
+
+    //_______________________________________
+    // interface
 
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      standard constructor
-            @descr      This will initialize an empty container.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-         FrameContainer();
-
-        /*-****************************************************************************************************//**
-            @short      standard destructor to delete instance
-            @descr      This will clear the container, if programmer forget this.
-
-            @seealso    method clear()
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
+        /// constructor / destructor
+                 FrameContainer();
         virtual ~FrameContainer();
 
-        /*-****************************************************************************************************//**
-            @short      append a new frame to the end of container
-            @descr      The reference must be valid! If it's not, we do nothing.
-                        If a lock is set, we do nothing to.
-                        (In debug version an assertion is thrown to show the programmer possible problems!)
+        /// add/remove/mark container items
+        void                                      append     ( const css::uno::Reference< css::frame::XFrame >& xFrame );
+        void                                      remove     ( const css::uno::Reference< css::frame::XFrame >& xFrame );
+        void                                      setActive  ( const css::uno::Reference< css::frame::XFrame >& xFrame );
+        css::uno::Reference< css::frame::XFrame > getActive  (                                                         ) const;
 
-            @seealso    -
+        /// checks and free memory
+        sal_Bool exist      ( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
+        sal_Bool hasElements(                                                         ) const;
+        void     clear      (                                                         );
 
-            @param      "xFrame" is the frame to add in container.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void append( const css::uno::Reference< css::frame::XFrame >& xFrame );
-
-        /*-****************************************************************************************************//**
-            @short      remove an existing frame from the container
-            @descr      The reference must be valid! If element not exist in container we do nothing.
-                        If a lock is set, we do nothing to.
-                        (In debug version an assertion is thrown to show the programmer possible problems!)
-
-            @seealso    method clear()
-
-            @param      "xFrame" is the frame to remove from the container.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void remove( const css::uno::Reference< css::frame::XFrame >& xFrame );
-
-        /*-****************************************************************************************************//**
-            @short      ask for an existing frame in container
-            @descr      Use it to get information about existing items in container.
-                        The reference must be valid! The lock is ignored! (We do not change the content of container.)
-
-            @seealso    -
-
-            @param      "xFrame" is the frame to search.
-            @return     sal_True , if frame exist<BR>
-                        sal_False, other way.
-
-            @onerror    We return sal_False.
-        *//*-*****************************************************************************************************/
-
-        sal_Bool exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
-
-        /*-****************************************************************************************************//**
-            @short      clear the container and free memory
-            @descr      This will clear the container. If you call this method again and the container is already empty, we do nothing!
-                        If a lock is set, we do nothing.
-                        (In debug version an assertion is thrown to show the programmer this problem!)
-
-            @seealso    method remove()
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void clear();
-
-        /*-****************************************************************************************************//**
-            @short      get count of items in container
-            @descr      We ignore the lock - because caller can know these value but he can use it for
-                        direct indexaccess only, if a lock is set!
-
-            @seealso    -
-
-            @param      -
-            @return     count of container items.
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        sal_uInt32 getCount() const;
-
-        /*-****************************************************************************************************//**
-            @short      get item of container by index
-            @descr      If no lock is set, we return NULL. The index must in range [0 ... count-1]!
-
-            @seealso    -
-
-            @param      -
-            @return     Frame item, if index valid<BR>
-                        NULL, other way.
-
-            @onerror    We return NULL!
-        *//*-*****************************************************************************************************/
-
+        /// deprecated IndexAccess!
+        sal_uInt32                                getCount  (                   ) const;
         css::uno::Reference< css::frame::XFrame > operator[]( sal_uInt32 nIndex ) const;
 
-        /*-****************************************************************************************************//**
-            @short      get all current items of container as snapshot
-            @descr      No lock must set. We return a snapshot only.
-
-            @seealso    -
-
-            @param      -
-            @return     Sequence of frames
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
+        /// replacement for deprectaed index access
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
 
-        /*-****************************************************************************************************//**
-            @short      ask it to get information about existing elements
-            @descr      No lock must set. We use current container items only.
+        /// for special feature "async quit timer" of desktop only!
+        void enableQuitTimer ( const css::uno::Reference< css::frame::XDesktop >& xDesktop );
+        void disableQuitTimer(                                                             );
 
-            @seealso    -
-
-            @param      -
-            @return     sal_True , if one or more elements exist<BR>
-                        sal_False, other way.
-
-            @onerror    We return sal_False.
-        *//*-*****************************************************************************************************/
-
-        sal_Bool hasElements() const;
-
-        /*-****************************************************************************************************//**
-            @short      set the current active frame in container
-            @descr      Some implementations like Desktop or Frame need an active frame.
-                        But this frame must be a child of these objects! Its not possible to hold an extra reference
-                        for these special case. Its better to control this rule by the container himself.
-                        He know, which frame is child or not.
-
-            @seealso    method Desktop::setActiveFrame()
-            @seealso    method Frame::setActiveFrame()
-
-            @param      "xFrame" must a valid reference to an existing frame in container.
-            @return     -
-
-            @onerror    If refrence not valid, we throw an assertion!
-        *//*-*****************************************************************************************************/
-
-        void setActive( const css::uno::Reference< css::frame::XFrame >& xFrame );
-
-        /*-****************************************************************************************************//**
-            @short      get the current active frame in container.
-            @descr      -
-
-            @seealso    method Desktop::getActiveFrame()
-            @seealso    method Frame::getActiveFrame()
-
-            @param      -
-            @return     A valid reference, if an active one exist.
-                        A null-reference, other way.
-
-            @onerror    We return a null-reference.
-        *//*-*****************************************************************************************************/
-
-        css::uno::Reference< css::frame::XFrame > getActive() const;
-
-        /*-****************************************************************************************************//**
-            @short      Enable or disable automatic termination of desktop if last frame was removed from container
-            @descr      Only the desktop should use this functions!
-
-            @seealso    class Desktop
-            @seealso    class AsyncQuit
-
-            @param      "xDesktop", reference to the desktop which sould be terminated on timer end.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void enableQuitTimer    ( const css::uno::Reference< css::frame::XDesktop >& xDesktop   );
-        void disableQuitTimer   (                                                               );
-
-        /*-****************************************************************************************************//**
-            @short      implements default searches at children ...
-            @descr      You CAN use these implementation or write your own code!
-                        With these method we support a search for a target at your children.
-
-            @ATTENTION  These methods never create a new tree node!
-                        If searched target not exist we return NULL.
-
-            @seealso    -
-
-            @param      "sTargetName"   This must be a non special target name. (_blank _self ... are not allowed! _beamer is a valid name!)
-            @return     A reference to an existing frame or null if search failed.
-
-            @onerror    A null reference is returned.
-        *//*-*****************************************************************************************************/
-
+        /// special helper for Frame::findFrame()
         css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const ::rtl::OUString& sName ) const;
         css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( const ::rtl::OUString& sName ) const;
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        void impl_clear();
-        void impl_disableQuitTimer();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @attention  We don't need any mutex/lock here. We check incoming parameter only - no internal member!
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
+    //_______________________________________
+    // debug!
 
     #ifdef ENABLE_ASSERTIONS
 
-    private:
+    public:
 
-        //*********************************************************************************************************
-        // - check for NULL pointer or invalid references
-        inline sal_Bool implcp_append( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
-        {
-            return  (
-                        ( &xFrame       ==  NULL        )   ||
-                        ( xFrame.is()   ==  sal_False   )
-                    );
-        }
+        void impldbg_checkForZombie() const;
 
-        //*********************************************************************************************************
-        // - check for NULL pointer or invalid references only
-        //   Don't look for Zombies here!
-        inline sal_Bool implcp_remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
-        {
-            return  (
-                        ( &xFrame       ==  NULL        )   ||
-                        ( xFrame.is()   ==  sal_False   )
-                    );
-        }
-
-        //*********************************************************************************************************
-        // - check for NULL pointer or invalid references
-        inline sal_Bool implcp_exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
-        {
-            return  (
-                        ( &xFrame       ==  NULL        )   ||
-                        ( xFrame.is()   ==  sal_False   )
-                    );
-        }
-
-        //*********************************************************************************************************
-        // - check if index out of range
-        inline sal_Bool implcp_IndexOperator( sal_uInt32 nIndex, sal_uInt32 nMax ) const
-        {
-            return  (
-                        ( nIndex    <   0       )   ||
-                        ( nIndex    >=  nMax    )
-                    );
-        }
-
-        //*********************************************************************************************************
-        // - check for NULL pointer
-        // - a null reference is allowed - because sometimes we must deactivate path to bottom
-        inline sal_Bool implcp_setActive( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
-        {
-            return( &xFrame == NULL );
-        }
-
-        //*********************************************************************************************************
-        // - check for null pointer
-        // - look for special target names ... some of them are not allowed as valid frame name
-        // Attention: "_beamer" is a valid name.
-        inline sal_Bool implcp_searchDeepDown( const ::rtl::OUString& sName ) const
-        {
-            return  (
-                        ( &sName    ==  NULL                    )   ||
-                        ( sName     ==  SPECIALTARGET_BLANK     )   ||
-                        ( sName     ==  SPECIALTARGET_SELF      )   ||
-                        ( sName     ==  SPECIALTARGET_TOP       )   ||
-                        ( sName     ==  SPECIALTARGET_PARENT    )
-                    );
-        }
-
-        //*********************************************************************************************************
-        // - check for null pointer
-        // - look for special target names ... some of them are not allowed as valid frame name
-        // Attention: "_beamer" is a valid name.
-        inline sal_Bool implcp_searchFlatDown( const ::rtl::OUString& sName ) const
-        {
-            return  (
-                        ( &sName    ==  NULL                    )   ||
-                        ( sName     ==  SPECIALTARGET_BLANK     )   ||
-                        ( sName     ==  SPECIALTARGET_SELF      )   ||
-                        ( sName     ==  SPECIALTARGET_TOP       )   ||
-                        ( sName     ==  SPECIALTARGET_PARENT    )
-                    );
-        }
-
-        //*********************************************************************************************************
-        // - check for null pointer
-        // - look for special target names ... some of them are not allowed as valid frame name
-        // Attention: "_beamer" is a valid name.
-        inline sal_Bool implcp_searchDirectChildren( const ::rtl::OUString& sName ) const
-        {
-            return  (
-                        ( &sName    ==  NULL                    )   ||
-                        ( sName     ==  SPECIALTARGET_BLANK     )   ||
-                        ( sName     ==  SPECIALTARGET_SELF      )   ||
-                        ( sName     ==  SPECIALTARGET_TOP       )   ||
-                        ( sName     ==  SPECIALTARGET_PARENT    )
-                    );
-        }
-/*TODO
-
-    This method is not threadsafe ...
-    Correct it!
-
-        //*********************************************************************************************************
-        // Special debug mode.
-        // If these container closed - we should search for created zombie frames before.
-        // Sometimes a frame was inserted which hold no component inside!
-        // They are created by failed dispatch calls ...
-        inline sal_Bool impldbg_existZombie() const
-        {
-            sal_Bool bZombieExist = sal_False;
-            for( TConstFrameIterator pItem=m_aContainer.begin(); pItem!=m_aContainer.end(); ++pItem )
-            {
-                if( (*pItem)->getComponentWindow().is() == sal_False )
-                {
-                    bZombieExist = sal_True;
-                    break;
-                }
-            }
-            return bZombieExist;
-        }
-*/
     #endif  // #ifdef ENABLE_ASSERTIONS
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+}; // class FrameContainer
 
-    private:
+} // namespace framework
 
-        TFrameContainer                                 m_aContainer        ;   /// list to hold all frames
-        css::uno::Reference< css::frame::XFrame >       m_xActiveFrame      ;   /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
-        ::vos::ORef< AsyncQuit >                        m_rQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
-
-};      //  class FrameContainer
-
-}       //  namespace framework
-
-#endif  //  #ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
+#endif // #ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
