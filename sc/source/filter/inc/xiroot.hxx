@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@ public:
     XclImpObjectManager&        GetObjectManager() const;
     /** Returns the web query buffer. */
     XclImpWebQueryBuffer&       GetWebQueryBuffer() const;
+
+    /** Returns the Calc add-in function name for an Excel function name. */
+    String                      GetScAddInName( const String& rXclName ) const;
 
     /** Checks if the passed cell address is a valid Calc cell position.
         @descr  See XclRoot::CheckCellAddress for details. */
