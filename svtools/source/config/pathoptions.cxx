@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 15:49:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,14 +209,11 @@ class SvtPathOptions_Impl
         String                              m_aEmptyString;
         mutable ::osl::Mutex                m_aMutex;
 
-        // not const because of using a mutex
-        const String&   GetPath( SvtPathOptions::Pathes );
-        void            SetPath( SvtPathOptions::Pathes, const String& rNewPath );
-
     public:
                         SvtPathOptions_Impl();
 
         // get the pathes, not const because of using a mutex
+        const String&   GetPath( SvtPathOptions::Pathes );
         const String&   GetAddinPath() { return GetPath( SvtPathOptions::PATH_ADDIN ); }
         const String&   GetAutoCorrectPath() { return GetPath( SvtPathOptions::PATH_AUTOCORRECT ); }
         const String&   GetAutoTextPath() { return GetPath( SvtPathOptions::PATH_AUTOTEXT ); }
@@ -243,6 +240,7 @@ class SvtPathOptions_Impl
         const String&   GetUIConfigPath() { return GetPath( SvtPathOptions::PATH_UICONFIG ); }
 
         // set the pathes
+        void            SetPath( SvtPathOptions::Pathes, const String& rNewPath );
         void            SetAddinPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_ADDIN, rPath ); }
         void            SetAutoCorrectPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOCORRECT, rPath ); }
         void            SetAutoTextPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_AUTOTEXT, rPath ); }
@@ -1084,6 +1082,16 @@ LanguageType SvtPathOptions::GetLanguageType() const
 BOOL SvtPathOptions::IsPathReadonly(Pathes ePath)const
 {
     return pImp->IsPathReadonly(ePath);
+}
+// -----------------------------------------------------------------------
+const String& SvtPathOptions::GetPath(Pathes ePath)const
+{
+    return pImp->GetPath(ePath);
+}
+// -----------------------------------------------------------------------
+void SvtPathOptions::SetPath( SvtPathOptions::Pathes ePath, const String& rNewPath )
+{
+    pImp->SetPath(ePath, rNewPath);
 }
 
 // class PathService -----------------------------------------------------
