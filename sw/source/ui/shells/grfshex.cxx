@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-07-17 08:43:22 $
+ *  last change: $Author: os $ $Date: 2001-07-20 11:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
 
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
@@ -184,7 +187,7 @@ BOOL SwTextShell::InsertGraphicDlg()
 
     // pool formats
     //
-    const SvStringsDtor& rFrmPoolArr = pDoc->GetFrmFmtNmArray();
+    const SvStringsDtor& rFrmPoolArr = SwStyleNameMapper::GetFrmFmtUINameArray();
     for( i = 0; i < rFrmPoolArr.Count(); i++ )
     {
         String *pFormat = new String(*rFrmPoolArr[i]);
