@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:17:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ void X11SalOpenGL::MakeVisualWeights( Display* pDisplay,
         int nDoubleBuffer = 0;
         int nHaveGL = 0;
         // a weight lesser than zero indicates an invalid visual (wrong screen)
-        if( pInfos[i].c_class == TrueColor && pWeights[i] >= 0)
+        if( pInfos[i].c_class == TrueColor && pInfos[i].depth > 14 && pWeights[i] >= 0)
         {
             pGetConfig( pDisplay, &pInfos[ i ], GLX_USE_GL, &nHaveGL );
             pGetConfig( pDisplay, &pInfos[ i ], GLX_DOUBLEBUFFER, &nDoubleBuffer );
