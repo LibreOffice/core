@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:28:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,19 +140,12 @@ public:
     */
     void GetMenuState (SfxItemSet& rSet);
 
-    /** Return the controller associated with the view shell.
-
-        <p>The call can fail for three reasons:<br>
-            1. The controller has been disposed but the pointer of the
-            controller is returned (not NULL).  May be fixed by
-            registering as dispose listener.  Usually the controller
-            is disposed when the view shell is destroyed.<br>
-            2. The controller is not the controller of the view
-            shell.  This should not be possible because the controller
-            is registered at the view shell during its construction
-            and normally can not be replaced.</p>
+    /** Make sure that mpMainController points to a controller that matches
+        the current stacked view shell.  If that is not the case the current
+        controller is replaced by a new one.  Otherwise this method returns
+        without changing anything.
     */
-    DrawController* GetDrawController (void);
+    void UpdateController (void);
 
     /** This call is forwarded to the main sub-shell.
     */
@@ -189,7 +182,27 @@ public:
         USHORT nDiffFlags = SFX_PRINTER_ALL,
         BOOL _bShowDialog = TRUE);
 
-    void PreparePrint (PrintDialog* pPrintDialog);
+    virtual void PreparePrint (PrintDialog* pPrintDialog);
+
+    /// Forward methods to main sub shell.
+    virtual void WriteUserDataSequence (
+        ::com::sun::star::uno::Sequence <
+        ::com::sun::star::beans::PropertyValue >&,
+        sal_Bool bBrowse = sal_False);
+    virtual void ReadUserDataSequence (
+        const ::com::sun::star::uno::Sequence <
+        ::com::sun::star::beans::PropertyValue >&,
+        sal_Bool bBrowse = sal_False);
+    virtual void UIActivate (SvInPlaceObject *pIPObj);
+    virtual void UIDeactivate (SvInPlaceObject *pIPObj);
+    virtual void SetZoomFactor (
+        const Fraction &rZoomX,
+        const Fraction &rZoomY);
+    virtual USHORT PrepareClose (BOOL bUI = TRUE, BOOL bForBrowsing = FALSE);
+    virtual void WriteUserData (String&, BOOL bBrowse = FALSE);
+    virtual void ReadUserData (const String&, BOOL bBrowse = FALSE);
+    virtual SdrView* GetDrawView (void) const;
+    virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
 protected:
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC,
@@ -208,7 +221,8 @@ private:
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
 
-    /** Main controller of the view shell.
+    /** Main controller of the view shell.  During the switching from one
+        stacked shell to another this pointer may be NULL.
     */
     DrawController* mpController;
 
