@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:27:36 $
+ *  last change: $Author: ama $ $Date: 2001-03-05 14:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,15 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
             {
                 MSHORT nRedlPos = pDoc->GetRedlinePos( rTxtNode );
                 if( MSHRT_MAX != nRedlPos )
+                {
+#ifndef OLD_ATTR_HANDLING
+                    SwAttrHandler aAttrHandler;
+                    aAttrHandler.Init( GetTxtNode()->GetSwAttrSet() );
+                    SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, sal_True );
+#else
                     SwRedlineItr aRedln( rTxtNode, *pFnt, nRedlPos, sal_True );
+#endif
+                }
             }
 
             if( pSh->GetViewOptions()->IsParagraph() && Prt().Height() )
