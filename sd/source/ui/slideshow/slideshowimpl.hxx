@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:41:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,9 @@ private:
     bool            mbInputFreeze;
 
     PresentationSettings maPresSettings;
+
+    /// used in updateHdl to prevent recursive calls
+    sal_Int32       mnEntryCounter;
 
     sal_Int32       mnLastPageNumber;
     WrappedShapeEventImplMap    maShapeEventMap;
