@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:24:26 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
         return new LCTransliterationNode (name,attr);
     if (name.equalsAscii("LC_COLLATION"))
         return new LCCollationNode (name,attr);
+    if (name.equalsAscii("LC_INDEX"))
+        return new LCIndexNode (name,attr);
     if (name.equalsAscii("LC_SEARCH"))
         return new LCSearchNode (name,attr);
     if (name.equalsAscii("LC_MISC"))
@@ -443,7 +445,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) {
         return;
     }
     sal_Int16 nbOfCollations = 0;
-    sal_Int16 nbOfCollationOptions;
+    sal_Int16 nbOfCollationOptions = 0;
     sal_Int16 i;
 
     for ( i = 0; i < getNumberOfChildren(); i++ ) {
@@ -536,6 +538,101 @@ void LCSearchNode::generateCode (const OFileWriter &of)
     of.writeFunction("getSearchOptions_", "nbOfSearchOptions", "searchOptions");
 }
 
+void LCIndexNode::generateCode (const OFileWriter &of) {
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
+    if (useLocale.getLength() > 0) {
+        of.writeRefFunction("getIndexAlgorithm_", useLocale);
+        of.writeRefFunction("getUnicodeScripts_", useLocale);
+        of.writeRefFunction("getFollowPageWords_", useLocale);
+        return;
+    }
+    sal_Int16 nbOfIndexs = 0;
+    sal_Int16 nbOfUnicodeScripts = 0;
+    sal_Int16 nbOfPageWords = 0;
+    sal_Int16 i;
+    for (i = 0; i< getNumberOfChildren();i++) {
+        LocaleNode * currNode = getChildAt (i);
+        if( currNode->getName().compareToAscii("IndexKey") == 0 )
+        {
+            ::rtl::OUString str;
+            str = currNode->getAttr() -> getValueByName("unoid");
+            of.writeParameter("IndexID", str, nbOfIndexs);
+            str = currNode->getValue();
+            of.writeParameter("IndexKey", str, nbOfIndexs);
+            str = currNode -> getAttr() -> getValueByName("default");
+            of.writeDefaultParameter("Index", str, nbOfIndexs);
+            str = currNode -> getAttr() -> getValueByName("phonetic");
+            of.writeParameter("Phonetic", str, nbOfIndexs);
+            of.writeAsciiString("\n");
+
+            nbOfIndexs++;
+        }
+        if( currNode->getName().compareToAscii("UnicodeScript") == 0 )
+        {
+            of.writeParameter("unicodeScript", currNode->getValue(), nbOfUnicodeScripts );
+            nbOfUnicodeScripts++;
+
+        }
+        if( currNode->getName().compareToAscii("FollowPageWord") == 0 )
+        {
+            of.writeParameter("followPageWord", currNode->getValue(), nbOfPageWords);
+            nbOfPageWords++;
+        }
+    }
+    of.writeAsciiString("static const sal_Int16 nbOfIndexs = ");
+    of.writeInt(nbOfIndexs);
+    of.writeAsciiString(";\n\n");
+
+    of.writeAsciiString("\nstatic const sal_Unicode* IndexArray[] = {\n");
+    for(i = 0; i < nbOfIndexs; i++) {
+        of.writeAsciiString("\tIndexID");
+        of.writeInt(i);
+        of.writeAsciiString(",\n");
+
+        of.writeAsciiString("\tIndexKey");
+        of.writeInt(i);
+        of.writeAsciiString(",\n");
+
+        of.writeAsciiString("\tdefaultIndex");
+        of.writeInt(i);
+        of.writeAsciiString(",\n");
+
+        of.writeAsciiString("\tPhonetic");
+        of.writeInt(i);
+        of.writeAsciiString(",\n");
+    }
+    of.writeAsciiString("};\n\n");
+
+    of.writeAsciiString("static const sal_Int16 nbOfUnicodeScripts = ");
+    of.writeInt( nbOfUnicodeScripts );
+    of.writeAsciiString(";\n\n");
+
+    of.writeAsciiString("static const sal_Unicode* UnicodeScriptArray[] = {");
+    for( i=0; i<nbOfUnicodeScripts; i++ )
+    {
+        of.writeAsciiString( "unicodeScript" );
+        of.writeInt( i );
+        of.writeAsciiString( ", " );
+    }
+    of.writeAsciiString("NULL };\n");
+
+    of.writeAsciiString("static const sal_Int16 nbOfPageWords = ");
+    of.writeInt(nbOfPageWords);
+    of.writeAsciiString(";\n\n");
+
+    of.writeAsciiString("\nstatic const sal_Unicode* FollowPageWordArray[] = {\n");
+    for(i = 0; i < nbOfPageWords; i++) {
+        of.writeAsciiString("\tfollowPageWord");
+        of.writeInt(i);
+        of.writeAsciiString(",\n");
+    }
+    of.writeAsciiString("};\n\n");
+
+    of.writeFunction("getIndexAlgorithm_", "nbOfIndexs", "IndexArray");
+    of.writeFunction("getUnicodeScripts_", "nbOfUnicodeScripts", "UnicodeScriptArray");
+    of.writeFunction("getFollowPageWords_", "nbOfPageWords", "FollowPageWordArray");
+}
+
 void LCCalendarNode::generateCode (const OFileWriter &of) {
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
@@ -559,7 +656,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
         of.writeDefaultParameter("Calendar", str, i);
 
         // Generate Days of Week
-        sal_Char *elementTag;
+        const sal_Char *elementTag;
         LocaleNode * daysNode = NULL;
         ::rtl::OUString ref_name = calNode->getChildAt(0)->getAttr()->getValueByName("ref");
         if (ref_name.getLength() > 0 && i > 0) {
@@ -826,8 +923,8 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) {
 }
 
 struct NameValuePair {
-    sal_Char *name;
-    sal_Char *value;
+    const sal_Char *name;
+    const sal_Char *value;
 };
 static NameValuePair ReserveWord[] = {
     { "trueWord", "trur" },
