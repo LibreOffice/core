@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ class SapiDocu_PE : public TokenInterpreter
     void                AddDocuToken2Description(
                             DYN ary::info::DocuToken &
                                                 let_drNewToken );
+    void                AddDocuToken2Deprecated(
+                            DYN ary::info::DocuToken &
+                                                let_drNewToken );
     void                AddDocuToken2CurAtTag(
                             DYN ary::info::DocuToken &
                                                 let_drNewToken );
@@ -159,6 +162,9 @@ class SapiDocu_PE : public TokenInterpreter
                             DYN ary::info::DocuToken &
                                                 let_drNewToken );
     void                SetCurSeeAlsoAtTagLinkText(
+                            DYN ary::info::DocuToken &
+                                                let_drNewToken );
+    void                SetCurSinceAtTagVersion(
                             DYN ary::info::DocuToken &
                                                 let_drNewToken );
 
