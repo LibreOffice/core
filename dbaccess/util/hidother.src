@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-30 13:49:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 14:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,10 @@ hidspecial HID_DSADMIN_DATASOURCE_NEWDS                 { HelpId = HID_DSADMIN_D
 hidspecial HID_DSADMIN_DATASOURCE_DSLIST                { HelpId = HID_DSADMIN_DATASOURCE_DSLIST; };
 
 hidspecial HID_DSADMIN_USER_JDBC                        { HelpId = HID_DSADMIN_USER_JDBC; };
-hidspecial HID_DSADMIN_USER_ODBC                        { HelpId = HID_DSADMIN_USER_OBC; };
+hidspecial HID_DSADMIN_USER_ODBC                        { HelpId = HID_DSADMIN_USER_ODBC; };
 hidspecial HID_DSADMIN_USER_ADABAS                      { HelpId = HID_DSADMIN_USER_ADABAS
 hidspecial HID_DSADMIN_PWDREC_JDBC                      { HelpId = HID_DSADMIN_PWDREC_JDBC; };
-hidspecial HID_DSADMIN_PWDREC_ODBC                      { HelpId = HID_DSADMIN_PWDREC_OBC; };
+hidspecial HID_DSADMIN_PWDREC_ODBC                      { HelpId = HID_DSADMIN_PWDREC_ODBC; };
 hidspecial HID_DSADMIN_PWDREC_ADABAS                    { HelpId = HID_DSADMIN_PWDREC_ADABAS; };
 
 hidspecial HID_DSADMIN_CHARSET_JDBC                     { HelpId = HID_DSADMIN_CHARSET_JDBC; };
@@ -82,6 +82,9 @@ hidspecial HID_DSADMIN_CONNURL_JDBCPAGE                 { HelpId = HID_DSADMIN_C
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/30 13:49:40  fs
+ *  initial checkin hid list for the dbaccess project
+ *
  *
  *  Revision 1.0 30.10.00 14:02:39  fs
  ************************************************************************/
