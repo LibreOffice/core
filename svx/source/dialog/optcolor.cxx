@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:39:12 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,10 +1115,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
         AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( pButton,
                             sName, String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2)), ResId(RID_SVXDLG_NAME) );
         DBG_ASSERT(aNameDlg, "Dialogdiet fail!");//CHINA001
-        //CHINA001 aNameDlg.SetText(String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1)));
-        //CHINA001 aNameDlg.SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
-        //CHINA001 aNameDlg.SetEditHelpId(HID_OPTIONS_COLORCONFIG_NAME_SCHEME);
-        //CHINA001 aNameDlg.SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
+        aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));
         aNameDlg->SetText(String(SVX_RES(RID_SVXSTR_COLOR_CONFIG_SAVE1)));
         aNameDlg->SetHelpId(HID_OPTIONS_COLORCONFIG_SAVE_SCHEME);
         aNameDlg->SetEditHelpId(HID_OPTIONS_COLORCONFIG_NAME_SCHEME);
