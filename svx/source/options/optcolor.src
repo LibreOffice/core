@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ korean ] = "색 구성표";
         Text[ chinese_simplified ] = "颜色图案";
         Text[ chinese_traditional ] = "顔色圖案";
-        Text[ turkish ] = "Color scheme";
+        Text[ turkish ] = "Renk �emas�";
         Text[ arabic ] = "Color scheme";
         Text[ catalan ] = "Color scheme";
         Text[ thai ] = "Color scheme";
+        Text[ czech ] = "Barevné schéma";
+        Text[ hebrew ] = "‮תיכנון צבעים‬";
+        Text[ hindi ] = "Color scheme";
     };
     FixedText FT_COLORSCHEME
     {
@@ -123,10 +126,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ korean ] = "구성표";
         Text[ chinese_simplified ] = "颜色图案";
         Text[ chinese_traditional ] = "顏色圖案";
-        Text[ turkish ] = "Scheme";
+        Text[ turkish ] = "�ema";
         Text[ arabic ] = "Scheme";
         Text[ catalan ] = "Scheme";
         Text[ thai ] = "Scheme";
+        Text[ czech ] = "Schéma";
+        Text[ hebrew ] = "‮תכנון‬";
+        Text[ hindi ] = "Scheme";
     };
     ListBox LB_COLORSCHEME
     {
@@ -143,26 +149,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text = "Speichern..." ;
         Text [ ENGLISH ] = "Save..." ;
         Text[ english_us ] = "Save...";
-        Text[ portuguese ] = "Save...";
-        Text[ russian ] = "Save...";
-        Text[ greek ] = "Save...";
-        Text[ dutch ] = "Save...";
+        Text[ portuguese ] = "Guardar...";
+        Text[ russian ] = "���������...";
+        Text[ greek ] = "����������...";
+        Text[ dutch ] = "Opslaan...";
         Text[ french ] = "Enregistrer...";
         Text[ spanish ] = "Guardar...";
-        Text[ finnish ] = "Save...";
+        Text[ finnish ] = "Tallenna...";
         Text[ italian ] = "Salva...";
-        Text[ danish ] = "Save...";
+        Text[ danish ] = "Gem...";
         Text[ swedish ] = "Spara...";
-        Text[ polish ] = "Save...";
+        Text[ polish ] = "Zapisz...";
         Text[ portuguese_brazilian ] = "Save...";
         Text[ japanese ] = "保存...";
         Text[ korean ] = "저장...";
         Text[ chinese_simplified ] = "存盘...";
         Text[ chinese_traditional ] = "儲存...";
-        Text[ turkish ] = "Save...";
-        Text[ arabic ] = "Save...";
+        Text[ turkish ] = "Kaydet...";
+        Text[ arabic ] = "���...";
         Text[ catalan ] = "Save...";
         Text[ thai ] = "บันทึก...";
+        Text[ czech ] = "Uložit...";
+        Text[ hebrew ] = "‮שמירה...‬";
+        Text[ hindi ] = "Save...";
     };
     PushButton PB_DELETESCHEME
     {
@@ -171,26 +180,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text = "L�schen" ;
         Text [ ENGLISH ] = "Delete" ;
         Text[ english_us ] = "Delete";
-        Text[ portuguese ] = "Delete";
-        Text[ russian ] = "Delete";
-        Text[ greek ] = "Delete";
-        Text[ dutch ] = "Delete";
+        Text[ portuguese ] = "Eliminar";
+        Text[ russian ] = "�������";
+        Text[ greek ] = "��������";
+        Text[ dutch ] = "Wissen";
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "Borrar";
-        Text[ finnish ] = "Delete";
+        Text[ finnish ] = "Poista";
         Text[ italian ] = "Elimina";
-        Text[ danish ] = "Delete";
+        Text[ danish ] = "Slet";
         Text[ swedish ] = "Radera";
-        Text[ polish ] = "Delete";
+        Text[ polish ] = "Usu�";
         Text[ portuguese_brazilian ] = "Delete";
         Text[ japanese ] = "削除";
         Text[ korean ] = "삭제";
         Text[ chinese_simplified ] = "删除";
         Text[ chinese_traditional ] = "刪除";
-        Text[ turkish ] = "Delete";
-        Text[ arabic ] = "Delete";
+        Text[ turkish ] = "Sil";
+        Text[ arabic ] = "���";
         Text[ catalan ] = "Suprimeix";
         Text[ thai ] = "ลบ";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "‮מחיקה‬";
+        Text[ hindi ] = "Delete";
     };
     FixedLine FL_CUSTOMCOLORS
     {
@@ -211,15 +223,18 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ danish ] = "Scheme";
         Text[ swedish ] = "Anv�ndardefinierade f�rger";
         Text[ polish ] = "Scheme";
-        Text[ portuguese_brazilian ] = "Scheme";
-        Text[ japanese ] = "パターン";
+        Text[ portuguese_brazilian ] = "Custom colors";
+        Text[ japanese ] = "ユーザー定義の色";
         Text[ korean ] = "사용자 정의 색상";
         Text[ chinese_simplified ] = "自定的颜色";
         Text[ chinese_traditional ] = "自訂的顏色";
-        Text[ turkish ] = "Scheme";
+        Text[ turkish ] = "�zel renkler";
         Text[ arabic ] = "Scheme";
-        Text[ catalan ] = "Scheme";
-        Text[ thai ] = "Scheme";
+        Text[ catalan ] = "Custom colors";
+        Text[ thai ] = "Custom colors";
+        Text[ czech ] = "Schéma";
+        Text[ hebrew ] = "‮תכנון‬";
+        Text[ hindi ] = "Custom colors";
     };
     Control CT_COLORCONFIG
     {
@@ -239,26 +254,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text = "Ein" ;
             Text [ ENGLISH ] = "On" ;
             Text[ english_us ] = "On";
-            Text[ portuguese ] = "On";
-            Text[ russian ] = "On";
-            Text[ greek ] = "On";
-            Text[ dutch ] = "On";
+            Text[ portuguese ] = "Ligado";
+            Text[ russian ] = "���.";
+            Text[ greek ] = "���";
+            Text[ dutch ] = "In";
             Text[ french ] = "Activ�";
             Text[ spanish ] = "Activado";
-            Text[ finnish ] = "On";
+            Text[ finnish ] = "on";
             Text[ italian ] = "on";
-            Text[ danish ] = "On";
+            Text[ danish ] = "aktiveret";
             Text[ swedish ] = "P�";
-            Text[ polish ] = "On";
+            Text[ polish ] = "w��cz";
             Text[ portuguese_brazilian ] = "Ativado";
             Text[ japanese ] = "オン";
             Text[ korean ] = "사용";
             Text[ chinese_simplified ] = "启动";
             Text[ chinese_traditional ] = "啟動";
-            Text[ turkish ] = "On";
-            Text[ arabic ] = "On";
+            Text[ turkish ] = "A��k";
+            Text[ arabic ] = "�����";
             Text[ catalan ] = "Activat";
             Text[ thai ] = "เปิด";
+            Text[ czech ] = "Zapnuto";
+            Text[ hebrew ] = "‮מופעל‬";
+            Text[ hindi ] = "On";
         };
         String ST_UIELEM
         {
@@ -281,10 +299,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ korean ] = "사용자 인터페이스 요소";
             Text[ chinese_simplified ] = "使用者界面的元件";
             Text[ chinese_traditional ] = "使用者介面的元件";
-            Text[ turkish ] = "User interface elements";
+            Text[ turkish ] = "Kullan�c� aray�z� elementi";
             Text[ arabic ] = "User interface elements";
             Text[ catalan ] = "User interface elements";
             Text[ thai ] = "User interface elements";
+            Text[ czech ] = "Prvky uživatelského rozhraní";
+            Text[ hebrew ] = "‮מרכיבי ממשק המשתמש‬";
+            Text[ hindi ] = "User interface elements";
         };
         String ST_COLSET
         {
@@ -307,36 +328,42 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ korean ] = "색상 설정";
             Text[ chinese_simplified ] = "颜色的设定";
             Text[ chinese_traditional ] = "顔色的設定";
-            Text[ turkish ] = "Color setting";
+            Text[ turkish ] = "Renk ayar�";
             Text[ arabic ] = "Color setting";
             Text[ catalan ] = "Color setting";
             Text[ thai ] = "Color setting";
+            Text[ czech ] = "Nastavení barev";
+            Text[ hebrew ] = "‮קביעת צבע‬";
+            Text[ hindi ] = "Color setting";
         };
         String ST_PREVIEW
         {
             Text = "Vorschau" ;
             Text [ ENGLISH ] = "Preview" ;
             Text[ english_us ] = "Preview";
-            Text[ portuguese ] = "Preview";
-            Text[ russian ] = "Preview";
-            Text[ greek ] = "Preview";
-            Text[ dutch ] = "Preview";
+            Text[ portuguese ] = "Previsualizar";
+            Text[ russian ] = "��������";
+            Text[ greek ] = "�������������";
+            Text[ dutch ] = "Voorbeeld";
             Text[ french ] = "Aper�u";
             Text[ spanish ] = "Previsualizaci�n";
-            Text[ finnish ] = "Preview";
+            Text[ finnish ] = "Esikatselu";
             Text[ italian ] = "Anteprima";
-            Text[ danish ] = "Preview";
+            Text[ danish ] = "Eksempel";
             Text[ swedish ] = "F�rhandsvisning";
-            Text[ polish ] = "Preview";
+            Text[ polish ] = "Podgl�d";
             Text[ portuguese_brazilian ] = "Pr�-visualizar";
             Text[ japanese ] = "プレビュー";
             Text[ korean ] = "미리 보기";
             Text[ chinese_simplified ] = "预览";
             Text[ chinese_traditional ] = "預覽";
-            Text[ turkish ] = "Preview";
-            Text[ arabic ] = "Preview";
+            Text[ turkish ] = "�nizleme";
+            Text[ arabic ] = "��������";
             Text[ catalan ] = "Previsualitzaci�";
             Text[ thai ] = "แสดงตัวอย่าง";
+            Text[ czech ] = "Náhled";
+            Text[ hebrew ] = "‮תצוגה מקדימה‬";
+            Text[ hindi ] = "Preview";
         };
         Window WN_SCROLL
         {
@@ -383,26 +410,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Allgemein" ;
                 Text [ ENGLISH ] = "General" ;
                 Text[ english_us ] = "General";
-                Text[ portuguese ] = "General";
-                Text[ russian ] = "General";
-                Text[ greek ] = "General";
-                Text[ dutch ] = "General";
+                Text[ portuguese ] = "Geral";
+                Text[ russian ] = "�����";
+                Text[ greek ] = "������";
+                Text[ dutch ] = "Algemeen";
                 Text[ french ] = "G�n�ral";
                 Text[ spanish ] = "General";
-                Text[ finnish ] = "General";
+                Text[ finnish ] = "Yleist�";
                 Text[ italian ] = "Generale";
-                Text[ danish ] = "General";
+                Text[ danish ] = "Generelt";
                 Text[ swedish ] = "Allm�nt";
-                Text[ polish ] = "General";
-                Text[ portuguese_brazilian ] = "General";
+                Text[ polish ] = "Og�lne";
+                Text[ portuguese_brazilian ] = "Geral";
                 Text[ japanese ] = "全般";
                 Text[ korean ] = "일반";
                 Text[ chinese_simplified ] = "一般";
                 Text[ chinese_traditional ] = "一般";
-                Text[ turkish ] = "General";
-                Text[ arabic ] = "General";
-                Text[ catalan ] = "General";
-                Text[ thai ] = "General";
+                Text[ turkish ] = "Genel";
+                Text[ arabic ] = "���";
+                Text[ catalan ] = "Continguts";
+                Text[ thai ] = "ทั่วไป";
+                Text[ czech ] = "Obecné";
+                Text[ hebrew ] = "‮כללי‬";
+                Text[ hindi ] = "सामान्य";
             };
 
             FixedText FT_DOCCOLOR
@@ -427,10 +457,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "문서 배경";
                 Text[ chinese_simplified ] = "文档的背景";
                 Text[ chinese_traditional ] = "文件的背景";
-                Text[ turkish ] = "Document color";
+                Text[ turkish ] = "Belge arkaplan�";
                 Text[ arabic ] = "Document color";
                 Text[ catalan ] = "Document color";
                 Text[ thai ] = "Document color";
+                Text[ czech ] = "Pozadí dokumentu";
+                Text[ hebrew ] = "‮רקע מסמך‬";
+                Text[ hindi ] = "Document background";
             };
             LB_WN( DOCCOLOR, 1 )
 
@@ -444,22 +477,25 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ russian ] = "Document boundaries";
                 Text[ greek ] = "Document boundaries";
                 Text[ dutch ] = "Document boundaries";
-                Text[ french ] = "Bordures des documents";
-                Text[ spanish ] = "Bordes del documento";
+                Text[ french ] = "D�limitations du texte";
+                Text[ spanish ] = "L�mites del texto";
                 Text[ finnish ] = "Document boundaries";
-                Text[ italian ] = "Margini documento";
+                Text[ italian ] = "Margini del testo";
                 Text[ danish ] = "Document boundaries";
-                Text[ swedish ] = "Dokumentinramning";
+                Text[ swedish ] = "Textinramningar";
                 Text[ polish ] = "Document boundaries";
                 Text[ portuguese_brazilian ] = "Document boundaries";
-                Text[ japanese ] = "ドキュメントの境界";
-                Text[ korean ] = "문서 테두리";
-                Text[ chinese_simplified ] = "文档的边框";
-                Text[ chinese_traditional ] = "文件的邊框";
-                Text[ turkish ] = "Document boundaries";
+                Text[ japanese ] = "テキストの境界";
+                Text[ korean ] = "텍스트 경계";
+                Text[ chinese_simplified ] = "正文边界";
+                Text[ chinese_traditional ] = "內文邊界";
+                Text[ turkish ] = "Metin s�n�rlamas�";
                 Text[ arabic ] = "Document boundaries";
                 Text[ catalan ] = "Document boundaries";
                 Text[ thai ] = "Document boundaries";
+                Text[ czech ] = "Hranice dokumentu";
+                Text[ hebrew ] = "‮גבולות מסמך‬";
+                Text[ hindi ] = "टेक्स्ट् सीमा";
             };
             LB_WN( DOCBOUND, 2 )
 
@@ -485,10 +521,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "응용 프로그램 배경";
                 Text[ chinese_simplified ] = "应用程序的背景";
                 Text[ chinese_traditional ] = "應用程式的背景";
-                Text[ turkish ] = "Application background";
+                Text[ turkish ] = "Uygulama arkaplan�";
                 Text[ arabic ] = "Application background";
                 Text[ catalan ] = "Application background";
                 Text[ thai ] = "Application background";
+                Text[ czech ] = "Pozadí aplikace";
+                Text[ hebrew ] = "‮רקע יישום‬";
+                Text[ hindi ] = "Application background";
             };
             LB_WN( APPBACKGROUND, 3 )
 
@@ -514,10 +553,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "개체 테두리";
                 Text[ chinese_simplified ] = "对象的边框";
                 Text[ chinese_traditional ] = "物件的邊框";
-                Text[ turkish ] = "Object boundaries";
+                Text[ turkish ] = "Nesne s�n�rlar�";
                 Text[ arabic ] = "Object boundaries";
                 Text[ catalan ] = "Object boundaries";
                 Text[ thai ] = "Object boundaries";
+                Text[ czech ] = "Hranice objektu";
+                Text[ hebrew ] = "‮גבולות עצם‬";
+                Text[ hindi ] = "Object boundaries";
             };
             LB_WN( OBJECTBOUNDARIES, 4 )
 
@@ -543,10 +585,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "테이블 테두리";
                 Text[ chinese_simplified ] = "表格的边框";
                 Text[ chinese_traditional ] = "表格的邊框";
-                Text[ turkish ] = "Table boundaries";
+                Text[ turkish ] = "Tablo s�n�rlar�";
                 Text[ arabic ] = "Table boundaries";
                 Text[ catalan ] = "Table boundaries";
                 Text[ thai ] = "Table boundaries";
+                Text[ czech ] = "Hranice tabulky";
+                Text[ hebrew ] = "‮גבולות טבלה‬";
+                Text[ hindi ] = "Table boundaries";
             };
             LB_WN( TABLEBOUNDARIES, 5 )
 
@@ -556,26 +601,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Schriftfarbe" ;
                 Text [ ENGLISH ] = "Font color" ;
                 Text[ english_us ] = "Font color";
-                Text[ portuguese ] = "Font color";
-                Text[ russian ] = "Font color";
+                Text[ portuguese ] = "Cor da letra";
+                Text[ russian ] = "���� ������";
                 Text[ spanish ] = "Color de la fuente";
                 Text[ italian ] = "Colore carattere";
                 Text[ swedish ] = "Teckenf�rg";
-                Text[ polish ] = "Font color";
-                Text[ portuguese_brazilian ] = "Font color";
+                Text[ polish ] = "Kolor";
+                Text[ portuguese_brazilian ] = "Cor da Fonte";
                 Text[ japanese ] = "フォントの色";
                 Text[ korean ] = "글꼴 색상";
-                Text[ turkish ] = "Font color";
-                Text[ thai ] = "Font color";
-                Text[ greek ] = "Font color";
-                Text[ dutch ] = "Font color";
+                Text[ turkish ] = "Yaz�tipi rengi";
+                Text[ thai ] = "สีตัวอักษร";
+                Text[ greek ] = "����� ��������������";
+                Text[ dutch ] = "Tekstkleur";
                 Text[ french ] = "Couleur de police";
-                Text[ finnish ] = "Font color";
-                Text[ danish ] = "Font color";
+                Text[ finnish ] = "Fontin v�ri";
+                Text[ danish ] = "Skriftfarve";
                 Text[ chinese_simplified ] = "文字颜色";
                 Text[ chinese_traditional ] = "字型顏色";
-                Text[ arabic ] = "Font color";
-                Text[ catalan ] = "Font color";
+                Text[ arabic ] = "��� ����";
+                Text[ catalan ] = "Color de la lletra";
+                Text[ czech ] = "Barva písma";
+                Text[ hebrew ] = "‮צבע גופן‬";
+                Text[ hindi ] = "टेक्स्ट् का रंग";
             };
             LB_WN( FONTCOLOR, 6 )
 
@@ -601,10 +649,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "방문하지 않은 링크";
                 Text[ chinese_simplified ] = "尚未访问过的链接";
                 Text[ chinese_traditional ] = "尚未訪問過的捷徑";
-                Text[ turkish ] = "Unvisited Links (new documents only)";
+                Text[ turkish ] = "Ziyaret edilmemi� ba�lant�";
                 Text[ arabic ] = "Unvisited Links (new documents only)";
                 Text[ catalan ] = "Unvisited Links (new documents only)";
                 Text[ thai ] = "Unvisited Links (new documents only)";
+                Text[ czech ] = "Nenavštívené odkazy";
+                Text[ hebrew ] = "‮קישורים שלא הופעלו‬";
+                Text[ hindi ] = "Unvisited links";
             };
             LB_WN( LINKS, 7 )
 
@@ -630,10 +681,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "방문한 링크";
                 Text[ chinese_simplified ] = "访问过的链接";
                 Text[ chinese_traditional ] = "訪問過的捷徑";
-                Text[ turkish ] = "Visited Links (new documents only)";
+                Text[ turkish ] = "Ziyaret edilmi� ba�lant�lar";
                 Text[ arabic ] = "Visited Links (new documents only)";
                 Text[ catalan ] = "Visited Links (new documents only)";
                 Text[ thai ] = "Visited Links (new documents only)";
+                Text[ czech ] = "Navštívené odkazy";
+                Text[ hebrew ] = "‮קישורים שהופעלו‬";
+                Text[ hindi ] = "Visited links";
             };
             LB_WN( LINKSVISITED, 8 )
 
@@ -643,9 +697,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "AutoRechtschreibpr�fung" ;
                 Text [ ENGLISH ] = "AutoSpellcheck" ;
                 Text[ english_us ] = "AutoSpellcheck";
-                Text[ portuguese ] = "AutoSpellcheck";
-                Text[ russian ] = "AutoSpellcheck";
-                Text[ greek ] = "AutoSpellcheck";
+                Text[ portuguese ] = "Verifica��o autom�tica da ortografia";
+                Text[ russian ] = "������������ ����������";
+                Text[ greek ] = "��������� ������� �����������";
                 Text[ dutch ] = "AutoSpellcheck";
                 Text[ french ] = "V�rification orthographique automatique";
                 Text[ spanish ] = "Revisi�n ortogr�fica autom�tica";
@@ -659,10 +713,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "자동 맞춤법 검사";
                 Text[ chinese_simplified ] = "自动检查拼写";
                 Text[ chinese_traditional ] = "自動檢查拼寫";
-                Text[ turkish ] = "AutoSpellcheck";
-                Text[ arabic ] = "AutoSpellcheck";
+                Text[ turkish ] = "Otomatik Hece Kontrol�";
+                Text[ arabic ] = "����� ������ ������";
                 Text[ catalan ] = "AutoSpellcheck";
                 Text[ thai ] = "AutoSpellcheck";
+                Text[ czech ] = "Automatická kontrola pravopisu";
+                Text[ hebrew ] = "‮איות אוטומטי‬";
+                Text[ hindi ] = "AutoSpellcheck";
             };
             LB_WN( SPELL, 9 )
 
@@ -672,26 +729,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Textdokument" ;
                 Text [ ENGLISH ] = "Text Document" ;
                 Text[ english_us ] = "Text Document";
-                Text[ portuguese ] = "Text Document";
-                Text[ russian ] = "Text Document";
-                Text[ greek ] = "Text Document";
-                Text[ dutch ] = "Text Document";
+                Text[ portuguese ] = "Documento de texto";
+                Text[ russian ] = "��������� ��������";
+                Text[ greek ] = "������� ��������";
+                Text[ dutch ] = "Tekstdocument";
                 Text[ french ] = "Document texte";
                 Text[ spanish ] = "Documento de texto";
-                Text[ finnish ] = "Text Document";
+                Text[ finnish ] = "Tekstiasiakirja";
                 Text[ italian ] = "Documento di testo";
-                Text[ danish ] = "Text Document";
+                Text[ danish ] = "Tekstdokument";
                 Text[ swedish ] = "Textdokument";
-                Text[ polish ] = "Text Document";
-                Text[ portuguese_brazilian ] = "Text Document";
+                Text[ polish ] = "Dokument tekstowy";
+                Text[ portuguese_brazilian ] = "Documento Texto";
                 Text[ japanese ] = "文書ドキュメント";
                 Text[ korean ] = "텍스트 문서";
                 Text[ chinese_simplified ] = "文本文档";
                 Text[ chinese_traditional ] = "文字文件";
-                Text[ turkish ] = "Text Document";
-                Text[ arabic ] = "Text Document";
-                Text[ catalan ] = "Text Document";
-                Text[ thai ] = "Text Document";
+                Text[ turkish ] = "Metin belgesi";
+                Text[ arabic ] = "����� ��";
+                Text[ catalan ] = "Document de text";
+                Text[ thai ] = "เอกสารข้อความ";
+                Text[ czech ] = "Textový dokument";
+                Text[ hebrew ] = "‮מסמך טקסט‬";
+                Text[ hindi ] = "टेक्स्ट् लेखपत्र";
             };
 
             FixedText FT_WRITERTEXTGRID
@@ -700,26 +760,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Raster" ;
                 Text [ ENGLISH ] = "Grid" ;
                 Text[ english_us ] = "Grid";
-                Text[ portuguese ] = "Grid";
-                Text[ russian ] = "Grid";
-                Text[ greek ] = "Grid";
-                Text[ dutch ] = "Grid";
+                Text[ portuguese ] = "Grelha";
+                Text[ russian ] = "�����";
+                Text[ greek ] = "������";
+                Text[ dutch ] = "Raster";
                 Text[ french ] = "Grille";
                 Text[ spanish ] = "Cuadr�cula";
-                Text[ finnish ] = "Grid";
+                Text[ finnish ] = "Ruudukko";
                 Text[ italian ] = "Griglia";
-                Text[ danish ] = "Grid";
+                Text[ danish ] = "Gitter";
                 Text[ swedish ] = "Raster";
-                Text[ polish ] = "Grid";
-                Text[ portuguese_brazilian ] = "Grid";
+                Text[ polish ] = "Raster";
+                Text[ portuguese_brazilian ] = "Linhas de grade";
                 Text[ japanese ] = "罫線";
                 Text[ korean ] = "그리드";
                 Text[ chinese_simplified ] = "格子线";
                 Text[ chinese_traditional ] = "格子線";
-                Text[ turkish ] = "Grid";
-                Text[ arabic ] = "Grid";
-                Text[ catalan ] = "Grid";
-                Text[ thai ] = "Grid";
+                Text[ turkish ] = "Izgara";
+                Text[ arabic ] = "������";
+                Text[ catalan ] = "Graella";
+                Text[ thai ] = "เส้นตาราง";
+                Text[ czech ] = "Mřížka";
+                Text[ hebrew ] = "‮רשת‬";
+                Text[ hindi ] = "छपाई";
             };
             LB_WN( WRITERTEXTGRID, 11 )
 
@@ -745,10 +808,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "필드 음영";
                 Text[ chinese_simplified ] = "字段背景颜色";
                 Text[ chinese_traditional ] = "欄位背景顔色";
-                Text[ turkish ] = "Field shadings";
+                Text[ turkish ] = "Alan g�lgesi";
                 Text[ arabic ] = "Field shadings";
                 Text[ catalan ] = "Field shadings";
                 Text[ thai ] = "Field shadings";
+                Text[ czech ] = "Stínování polí";
+                Text[ hebrew ] = "‮הצללות שדה‬";
+                Text[ hindi ] = "Field shadings";
             };
             LB_WN( WRITERFIELDSHADINGS, 12 )
 
@@ -774,10 +840,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "색인과 목차 음영";
                 Text[ chinese_simplified ] = "目录背景颜色";
                 Text[ chinese_traditional ] = "目錄背景顔色";
-                Text[ turkish ] = "Index and table shadings";
+                Text[ turkish ] = "�ndeks ve tablo �ekilleri";
                 Text[ arabic ] = "Index and table shadings";
                 Text[ catalan ] = "Index and table shadings";
                 Text[ thai ] = "Index and table shadings";
+                Text[ czech ] = "Stínování rejstříku a tabulky";
+                Text[ hebrew ] = "‮הצללות אינדקס וטבלה‬";
+                Text[ hindi ] = "Index and table shadings";
             };
             LB_WN( WRITERIDXSHADINGS, 13 )
 
@@ -803,10 +872,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "메모 표시기";
                 Text[ chinese_simplified ] = "备注标记";
                 Text[ chinese_traditional ] = "備註標記";
-                Text[ turkish ] = "Note indicator";
+                Text[ turkish ] = "Not g�sterici";
                 Text[ arabic ] = "Note indicator";
                 Text[ catalan ] = "Note indicator";
                 Text[ thai ] = "Note indicator";
+                Text[ czech ] = "Indikátor poznámky";
+                Text[ hebrew ] = "‮סמן הערה‬";
+                Text[ hindi ] = "Note indicator";
             };
             LB_WN( WRITERNOTESINDICATOR, 14 )
 
@@ -832,10 +904,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "스크립트 표시기";
                 Text[ chinese_simplified ] = "脚本标记";
                 Text[ chinese_traditional ] = "程式檔標記";
-                Text[ turkish ] = "Script indicator";
+                Text[ turkish ] = "Script G�stergeci";
                 Text[ arabic ] = "Script indicator";
                 Text[ catalan ] = "Script indicator";
                 Text[ thai ] = "Script indicator";
+                Text[ czech ] = "Indikátor skriptu";
+                Text[ hebrew ] = "‮סימן סקריפט‬";
+                Text[ hindi ] = "Script indicator";
             };
             LB_WN( WRITERSCRIPTINDICATOR, 15 )
 
@@ -861,10 +936,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "구역 테두리";
                 Text[ chinese_simplified ] = "区域的边框";
                 Text[ chinese_traditional ] = "區域的邊框";
-                Text[ turkish ] = "Section boundaries";
+                Text[ turkish ] = "B�l�m s�n�rlar�";
                 Text[ arabic ] = "Section boundaries";
                 Text[ catalan ] = "Section boundaries";
                 Text[ thai ] = "Section boundaries";
+                Text[ czech ] = "Hranice sekcí";
+                Text[ hebrew ] = "‮גבולות קטעים‬";
+                Text[ hindi ] = "Section boundaries";
             };
             LB_WN( WRITERSECTIONBOUNDARIES, 16 )
 
@@ -888,10 +966,14 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "페이지 및 열 나누기";
                 Text[ chinese_simplified ] = "换页";
                 Text[ chinese_traditional ] = "換頁和換欄";
-                Text[ turkish ] = "Page breaks";
+                Text[ turkish ] = "Sayfa ve s�tun kesmeleri";
                 Text[ arabic ] = "Page breaks";
                 Text[ catalan ] = "Page breaks";
                 Text[ thai ] = "Page breaks";
+                Text[ czech ] = "Zalomení stránek";
+                Text[ hebrew ] = "‮מעברי דף‬";
+                Text[ portuguese_brazilian ] = "Page breaks";
+                Text[ hindi ] = "Page and column breaks";
             };
             LB_WN( WRITERPAGEBREAKS, 17 )
 
@@ -901,26 +983,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Direkt-Cursor" ;
                 Text [ ENGLISH ] = "Direct Cursor" ;
                 Text[ english_us ] = "Direct cursor";
-                Text[ portuguese ] = "Direct Cursor";
-                Text[ russian ] = "Direct Cursor";
-                Text[ greek ] = "Direct Cursor";
-                Text[ dutch ] = "Direct Cursor";
+                Text[ portuguese ] = "Cursor directo";
+                Text[ russian ] = "��������� ������";
+                Text[ greek ] = "������ �������";
+                Text[ dutch ] = "Directcursor";
                 Text[ french ] = "Curseur direct";
                 Text[ spanish ] = "Cursor directo";
-                Text[ finnish ] = "Direct Cursor";
+                Text[ finnish ] = "Suora kohdistin";
                 Text[ italian ] = "Cursore diretto";
-                Text[ danish ] = "Direct Cursor";
+                Text[ danish ] = "Direkte mark�r";
                 Text[ swedish ] = "Direktmark�r";
-                Text[ polish ] = "Direct Cursor";
-                Text[ portuguese_brazilian ] = "Direct Cursor";
+                Text[ polish ] = "Kursor bezpo�redni";
+                Text[ portuguese_brazilian ] = "Cursor direto";
                 Text[ japanese ] = "ダイレクトカーソル";
                 Text[ korean ] = "커서 위치 직접 조정";
                 Text[ chinese_simplified ] = "直接定位光标";
                 Text[ chinese_traditional ] = "直接定位游標";
-                Text[ turkish ] = "Direct Cursor";
-                Text[ arabic ] = "Direct Cursor";
-                Text[ catalan ] = "Direct Cursor";
-                Text[ thai ] = "Direct Cursor";
+                Text[ turkish ] = "Do�rudan imle�";
+                Text[ arabic ] = "���� �����";
+                Text[ catalan ] = "Cursor directe";
+                Text[ thai ] = "เคอร์เซอร์โดยตรง";
+                Text[ czech ] = "Přímý kurzor";
+                Text[ hebrew ] = "‮סמן ישיר‬";
+                Text[ hindi ] = "सीधा कर्सर";
             };
             LB_WN( WRITERDIRECTCURSOR, 18 )
 
@@ -930,26 +1015,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "HTML-Dokument" ;
                 Text [ ENGLISH ] = "HTML document" ;
                 Text[ english_us ] = "HTML Document";
-                Text[ portuguese ] = "HTML document";
-                Text[ russian ] = "HTML document";
-                Text[ greek ] = "HTML document";
-                Text[ dutch ] = "HTML document";
+                Text[ portuguese ] = "Documento HTML";
+                Text[ russian ] = "�������� HTML";
+                Text[ greek ] = "������� HTML";
+                Text[ dutch ] = "HTML-document";
                 Text[ french ] = "Document HTML";
                 Text[ spanish ] = "Documento HTML";
-                Text[ finnish ] = "HTML document";
+                Text[ finnish ] = "HTML-asiakirja";
                 Text[ italian ] = "Documento HTML";
-                Text[ danish ] = "HTML document";
+                Text[ danish ] = "HTML-Dokument";
                 Text[ swedish ] = "HTML-dokument";
-                Text[ polish ] = "HTML document";
-                Text[ portuguese_brazilian ] = "HTML document";
+                Text[ polish ] = "Dokument HTML";
+                Text[ portuguese_brazilian ] = "Documento HTML";
                 Text[ japanese ] = "HTML 形式ドキュメント";
                 Text[ korean ] = "HTML 문서";
                 Text[ chinese_simplified ] = "HTML 文档";
                 Text[ chinese_traditional ] = "HTML 文件";
-                Text[ turkish ] = "HTML document";
-                Text[ arabic ] = "HTML document";
-                Text[ catalan ] = "HTML document";
-                Text[ thai ] = "HTML document";
+                Text[ turkish ] = "HTML belgesi";
+                Text[ arabic ] = "����� HTML";
+                Text[ catalan ] = "Document HTML";
+                Text[ thai ] = "เอกสาร HTML ";
+                Text[ czech ] = "HTML dokument";
+                Text[ hebrew ] = "‮מסמך LMTH‬";
+                Text[ hindi ] = "HTML Document";
             };
 
             FixedText FT_HTMLSGML
@@ -965,19 +1053,22 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ french ] = "Mise en �vidence de la syntaxe SGML";
                 Text[ spanish ] = "Resaltar sintaxis SGML";
                 Text[ finnish ] = "SGML syntax highlighting";
-                Text[ italian ] = "Rilievo sintassi SGML";
+                Text[ italian ] = "Evidenziazione sintassi SGML";
                 Text[ danish ] = "SGML syntax highlighting";
                 Text[ swedish ] = "Markering av SGML-syntax";
                 Text[ polish ] = "SGML syntax highlighting";
                 Text[ portuguese_brazilian ] = "SGML syntax highlighting";
-                Text[ japanese ] = "SGML シンタックスのハイライト";
+                Text[ japanese ] = "SGML シンタックスの強調表示";
                 Text[ korean ] = "SGML 구문 강조 표시";
                 Text[ chinese_simplified ] = "突出显示 SGML 语法";
                 Text[ chinese_traditional ] = "突出顯示 SGML 語法";
-                Text[ turkish ] = "SGML syntax highlighting";
+                Text[ turkish ] = "SGML s�zdizimi vurgusu";
                 Text[ arabic ] = "SGML syntax highlighting";
                 Text[ catalan ] = "SGML syntax highlighting";
                 Text[ thai ] = "SGML syntax highlighting";
+                Text[ czech ] = "Zvýrazňování SGML syntaxe";
+                Text[ hebrew ] = "‮הבלטת תחביר SGML‬";
+                Text[ hindi ] = "SGML syntax highlighting";
             };
             LB_WN( HTMLSGML, 20 )
 
@@ -994,19 +1085,22 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ french ] = "Mise en �vidence des commentaires";
                 Text[ spanish ] = "Resaltar comentario";
                 Text[ finnish ] = "Comment highlighting";
-                Text[ italian ] = "Rilievo commento";
+                Text[ italian ] = "Evidenziazione commento";
                 Text[ danish ] = "Comment highlighting";
                 Text[ swedish ] = "Kommentarmarkering";
                 Text[ polish ] = "Comment highlighting";
                 Text[ portuguese_brazilian ] = "Comment highlighting";
-                Text[ japanese ] = "コメントのハイライト";
+                Text[ japanese ] = "コメントの強調表示";
                 Text[ korean ] = "설명 강조 표시";
                 Text[ chinese_simplified ] = "突出显示备注";
                 Text[ chinese_traditional ] = "突出顯示備註";
-                Text[ turkish ] = "Comment highlighting";
+                Text[ turkish ] = "Yorum vurgulamas�";
                 Text[ arabic ] = "Comment highlighting";
                 Text[ catalan ] = "Comment highlighting";
                 Text[ thai ] = "Comment highlighting";
+                Text[ czech ] = "Zvýrazňování komentářů";
+                Text[ hebrew ] = "‮הבלטת הערות‬";
+                Text[ hindi ] = "Comment highlighting";
             };
             LB_WN( HTMLCOMMENT, 21 )
 
@@ -1023,19 +1117,22 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ french ] = "Mise en �vidence des mots-cl�s";
                 Text[ spanish ] = "Resaltar palabra clave";
                 Text[ finnish ] = "Keyword highlighting";
-                Text[ italian ] = "Rilievo parola ricercata";
+                Text[ italian ] = "Evidenziazione parola ricercata";
                 Text[ danish ] = "Keyword highlighting";
                 Text[ swedish ] = "Nyckelordsmarkering";
                 Text[ polish ] = "Keyword highlighting";
                 Text[ portuguese_brazilian ] = "Keyword highlighting";
-                Text[ japanese ] = "キーワードのハイライト";
+                Text[ japanese ] = "キーワードの強調表示";
                 Text[ korean ] = "키워드 강조 표시";
                 Text[ chinese_simplified ] = "突出显示关键字";
                 Text[ chinese_traditional ] = "突出顯示關鍵字";
-                Text[ turkish ] = "Keyword highlighting";
+                Text[ turkish ] = "Anahtar kelime g�sterimi";
                 Text[ arabic ] = "Keyword highlighting";
                 Text[ catalan ] = "Keyword highlighting";
                 Text[ thai ] = "Keyword highlighting";
+                Text[ czech ] = "Zvýrazňování klíčových slov";
+                Text[ hebrew ] = "‮הבלטת מילות מפתח‬";
+                Text[ hindi ] = "Keyword highlighting";
             };
             LB_WN( HTMLKEYWORD, 22 )
 
@@ -1065,6 +1162,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ arabic ] = "��";
                 Text[ catalan ] = "Text";
                 Text[ thai ] = "ข้อความ";
+                Text[ czech ] = "Text";
+                Text[ hebrew ] = "‮טקסט‬";
+                Text[ hindi ] = "टेक्स्ट्";
             };
             LB_WN( HTMLUNKNOWN, 23 )
 
@@ -1074,26 +1174,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Tabellendokument" ;
                 Text [ ENGLISH ] = "Spreadsheet" ;
                 Text[ english_us ] = "Spreadsheet";
-                Text[ portuguese ] = "Spreadsheet";
-                Text[ russian ] = "Spreadsheet";
-                Text[ greek ] = "Spreadsheet";
-                Text[ dutch ] = "Spreadsheet";
+                Text[ portuguese ] = "Folha de c�lculo";
+                Text[ russian ] = "�������� ����������� �������";
+                Text[ greek ] = "������� ������";
+                Text[ dutch ] = "Werkbladdocument";
                 Text[ french ] = "Classeur";
                 Text[ spanish ] = "Hoja de c�lculo";
-                Text[ finnish ] = "Spreadsheet";
+                Text[ finnish ] = "Laskentataulukko";
                 Text[ italian ] = "Foglio elettronico";
-                Text[ danish ] = "Spreadsheet";
+                Text[ danish ] = "Regneark";
                 Text[ swedish ] = "Tabelldokument";
-                Text[ polish ] = "Spreadsheet";
-                Text[ portuguese_brazilian ] = "Spreadsheet";
+                Text[ polish ] = "Arkusz kalkulacyjny";
+                Text[ portuguese_brazilian ] = "Planilha";
                 Text[ japanese ] = "表計算ドキュメント";
                 Text[ korean ] = "스프레드시트";
                 Text[ chinese_simplified ] = "工作表文档";
                 Text[ chinese_traditional ] = "工作表文件";
-                Text[ turkish ] = "Spreadsheet";
-                Text[ arabic ] = "Spreadsheet";
-                Text[ catalan ] = "Spreadsheet";
-                Text[ thai ] = "Spreadsheet";
+                Text[ turkish ] = "Hesap �izelgesi";
+                Text[ arabic ] = "����� ����";
+                Text[ catalan ] = "Fulla de c�lcul";
+                Text[ thai ] = "กระดาษคำนวณ";
+                Text[ czech ] = "Tabulka";
+                Text[ hebrew ] = "‮גליון עבודה‬";
+                Text[ hindi ] = "स्प्रेडशीट्";
             };
 
             FixedText FT_CALCGRID
@@ -1118,10 +1221,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "눈금선";
                 Text[ chinese_simplified ] = "格子线条";
                 Text[ chinese_traditional ] = "格子線條";
-                Text[ turkish ] = "Grid lines";
+                Text[ turkish ] = "Izgara �izgileri";
                 Text[ arabic ] = "Grid lines";
                 Text[ catalan ] = "Grid lines";
                 Text[ thai ] = "Grid lines";
+                Text[ czech ] = "Čáry mřížky";
+                Text[ hebrew ] = "‮קווי רשת‬";
+                Text[ hindi ] = "Grid lines";
             };
             LB_WN( CALCGRID, 25 )
 
@@ -1147,10 +1253,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "페이지 나누기";
                 Text[ chinese_simplified ] = "换页";
                 Text[ chinese_traditional ] = "換頁";
-                Text[ turkish ] = "Page breaks";
+                Text[ turkish ] = "Sayfa sonlar�";
                 Text[ arabic ] = "Page breaks";
                 Text[ catalan ] = "Page breaks";
                 Text[ thai ] = "Page breaks";
+                Text[ czech ] = "Zalomení stránek";
+                Text[ hebrew ] = "‮מעברי דף‬";
+                Text[ hindi ] = "Page breaks";
             };
             LB_WN( CALCPAGEBREAK, 26 )
 
@@ -1176,10 +1285,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "수동 페이지 나누기";
                 Text[ chinese_simplified ] = "手工换页";
                 Text[ chinese_traditional ] = "手動換頁";
-                Text[ turkish ] = "Manual page breaks";
+                Text[ turkish ] = "Otomatik olmayan sayfa kesimi";
                 Text[ arabic ] = "Manual page breaks";
                 Text[ catalan ] = "Manual page breaks";
                 Text[ thai ] = "Manual page breaks";
+                Text[ czech ] = "Ruční zalomení stránek";
+                Text[ hebrew ] = "‮מעברי דף ידניים‬";
+                Text[ hindi ] = "Manual page breaks";
             };
             LB_WN( CALCPAGEBREAKMANUAL, 27 )
 
@@ -1205,10 +1317,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "자동 페이지 나누기";
                 Text[ chinese_simplified ] = "自动换页";
                 Text[ chinese_traditional ] = "自動換頁";
-                Text[ turkish ] = "Automatic page breaks";
+                Text[ turkish ] = "Otomatik sayfa kesimleri";
                 Text[ arabic ] = "Automatic page breaks";
                 Text[ catalan ] = "Automatic page breaks";
                 Text[ thai ] = "Automatic page breaks";
+                Text[ czech ] = "Automatická zalomení stránek";
+                Text[ hebrew ] = "‮מעברי דף אוטומטיים‬";
+                Text[ hindi ] = "Automatic page breaks";
             };
             LB_WN( CALCPAGEBREAKAUTO, 28 )
 
@@ -1238,6 +1353,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ arabic ] = "Detective";
                 Text[ catalan ] = "Detective";
                 Text[ thai ] = "Detective";
+                Text[ czech ] = "Detektiv";
+                Text[ hebrew ] = "‮הבלש‬";
+                Text[ hindi ] = "Detective";
             };
             LB_WN( CALCDETECTIVE, 29 )
 
@@ -1263,10 +1381,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "추적 오류";
                 Text[ chinese_simplified ] = "侦探错误";
                 Text[ chinese_traditional ] = "偵探錯誤";
-                Text[ turkish ] = "Detective error";
+                Text[ turkish ] = "Dedektif hatas�";
                 Text[ arabic ] = "Detective error";
                 Text[ catalan ] = "Detective error";
                 Text[ thai ] = "Detective error";
+                Text[ czech ] = "Chyba detektiva";
+                Text[ hebrew ] = "‮שגיאת בלש‬";
+                Text[ hindi ] = "Detective error";
             };
             LB_WN( CALCDETECTIVEERROR, 30 )
 
@@ -1276,26 +1397,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Referenzen" ;
                 Text [ ENGLISH ] = "References" ;
                 Text[ english_us ] = "References";
-                Text[ portuguese ] = "References";
-                Text[ russian ] = "References";
-                Text[ greek ] = "References";
-                Text[ dutch ] = "References";
+                Text[ portuguese ] = "Refer�ncias";
+                Text[ russian ] = "������";
+                Text[ greek ] = "��������";
+                Text[ dutch ] = "Verwijzingen";
                 Text[ french ] = "R�f�rences";
                 Text[ spanish ] = "Referencias";
-                Text[ finnish ] = "References";
+                Text[ finnish ] = "Viitteet";
                 Text[ italian ] = "Riferimenti";
-                Text[ danish ] = "References";
+                Text[ danish ] = "Referencer";
                 Text[ swedish ] = "Referenser";
-                Text[ polish ] = "References";
-                Text[ portuguese_brazilian ] = "References";
+                Text[ polish ] = "Odwo�ania";
+                Text[ portuguese_brazilian ] = "Refer�ncias";
                 Text[ japanese ] = "参照";
                 Text[ korean ] = "참조";
                 Text[ chinese_simplified ] = "引用";
                 Text[ chinese_traditional ] = "參照";
-                Text[ turkish ] = "References";
-                Text[ arabic ] = "References";
-                Text[ catalan ] = "References";
-                Text[ thai ] = "References";
+                Text[ turkish ] = "Referanslar";
+                Text[ arabic ] = "�������";
+                Text[ catalan ] = "Refer�ncies";
+                Text[ thai ] = "การอ้างอิง";
+                Text[ czech ] = "Odkazy";
+                Text[ hebrew ] = "‮הפניות‬";
+                Text[ hindi ] = "रेफरेन्स ";
             };
             LB_WN( CALCREFERENCE, 31 )
 
@@ -1321,10 +1445,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "메모 배경";
                 Text[ chinese_simplified ] = "备注的背景";
                 Text[ chinese_traditional ] = "備註的背景";
-                Text[ turkish ] = "Notes background";
+                Text[ turkish ] = "Not arkaplan�";
                 Text[ arabic ] = "Notes background";
                 Text[ catalan ] = "Notes background";
                 Text[ thai ] = "Notes background";
+                Text[ czech ] = "Pozadí poznámek";
+                Text[ hebrew ] = "‮רקע הערות‬";
+                Text[ hindi ] = "Notes background";
             };
             LB_WN( CALCNOTESBACKGROUND, 32 )
 
@@ -1350,10 +1477,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "그리기 / 프레젠테이션";
                 Text[ chinese_simplified ] = "绘图/演示文稿";
                 Text[ chinese_traditional ] = "繪圖/簡報";
-                Text[ turkish ] = "Drawing / Presentation";
+                Text[ turkish ] = "�izim / Sunu";
                 Text[ arabic ] = "Drawing / Presentation";
                 Text[ catalan ] = "Drawing / Presentation";
                 Text[ thai ] = "Drawing / Presentation";
+                Text[ czech ] = "Kreslení / prezentace";
+                Text[ hebrew ] = "‮סרטוט \\ מצגת‬";
+                Text[ hindi ] = "Drawing / Presentation";
             };
 
             FixedText FT_DRAWGRID
@@ -1362,26 +1492,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Raster" ;
                 Text [ ENGLISH ] = "Grid" ;
                 Text[ english_us ] = "Grid";
-                Text[ portuguese ] = "Grid";
-                Text[ russian ] = "Grid";
-                Text[ greek ] = "Grid";
-                Text[ dutch ] = "Grid";
+                Text[ portuguese ] = "Grelha";
+                Text[ russian ] = "�����";
+                Text[ greek ] = "������";
+                Text[ dutch ] = "Raster";
                 Text[ french ] = "Grille";
                 Text[ spanish ] = "Cuadr�cula";
-                Text[ finnish ] = "Grid";
+                Text[ finnish ] = "Ruudukko";
                 Text[ italian ] = "Griglia";
-                Text[ danish ] = "Grid";
+                Text[ danish ] = "Gitter";
                 Text[ swedish ] = "Raster";
-                Text[ polish ] = "Grid";
-                Text[ portuguese_brazilian ] = "Grid";
+                Text[ polish ] = "Raster";
+                Text[ portuguese_brazilian ] = "Linhas de grade";
                 Text[ japanese ] = "グリッド線";
                 Text[ korean ] = "그리드";
                 Text[ chinese_simplified ] = "网格";
                 Text[ chinese_traditional ] = "網格";
-                Text[ turkish ] = "Grid";
-                Text[ arabic ] = "Grid";
-                Text[ catalan ] = "Grid";
-                Text[ thai ] = "Grid";
+                Text[ turkish ] = "Izgara";
+                Text[ arabic ] = "������";
+                Text[ catalan ] = "Graella";
+                Text[ thai ] = "เส้นตาราง";
+                Text[ czech ] = "Mřížka";
+                Text[ hebrew ] = "‮רשת‬";
+                Text[ hindi ] = "छपाई";
             };
             LB_WN( DRAWGRID, 34 )
 
@@ -1397,9 +1530,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ greek ] = "Basic Syntax Highlighting";
                 Text[ dutch ] = "Basic Syntax Highlighting";
                 Text[ french ] = "Mise en �vidence de la syntaxe de base";
-                Text[ spanish ] = "Resaltar la sintaxis base";
+                Text[ spanish ] = "Resaltar la sintaxis de base";
                 Text[ finnish ] = "Basic Syntax Highlighting";
-                Text[ italian ] = "Mettere in rilievo sintassi base";
+                Text[ italian ] = "Evidenziazione sintassi base";
                 Text[ danish ] = "Basic Syntax Highlighting";
                 Text[ swedish ] = "Markering av Basic-syntax";
                 Text[ polish ] = "Basic Syntax Highlighting";
@@ -1408,10 +1541,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "Basic 구문 강조 표시";
                 Text[ chinese_simplified ] = "突出显示 Basic 语法";
                 Text[ chinese_traditional ] = "突出顯示 Basic 語法";
-                Text[ turkish ] = "Basic Syntax Highlighting";
+                Text[ turkish ] = "Temel Yaz�m G�sterimi";
                 Text[ arabic ] = "Basic Syntax Highlighting";
                 Text[ catalan ] = "Basic Syntax Highlighting";
                 Text[ thai ] = "Basic Syntax Highlighting";
+                Text[ czech ] = "Zvýrazňování Basic syntaxe";
+                Text[ hebrew ] = "‮הבלטת תחביר בייסיק‬";
+                Text[ hindi ] = "Basic Syntax Highlighting";
             };
 
             FixedText FT_BASICIDENTIFIER
@@ -1436,10 +1572,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "확인자";
                 Text[ chinese_simplified ] = "标志";
                 Text[ chinese_traditional ] = "標誌";
-                Text[ turkish ] = "Identifier";
+                Text[ turkish ] = "Belirte�";
                 Text[ arabic ] = "Identifier";
                 Text[ catalan ] = "Identifier";
                 Text[ thai ] = "Identifier";
+                Text[ czech ] = "Identifikátor";
+                Text[ hebrew ] = "‮מזהה‬";
+                Text[ hindi ] = "Identifier";
             };
             LB_WN( BASICIDENTIFIER, 36 )
 
@@ -1449,26 +1588,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Kommentar" ;
                 Text [ ENGLISH ] = "Comment" ;
                 Text[ english_us ] = "Comment";
-                Text[ portuguese ] = "Comment";
-                Text[ russian ] = "Comment";
-                Text[ greek ] = "Comment";
-                Text[ dutch ] = "Comment";
+                Text[ portuguese ] = "Coment�rio";
+                Text[ russian ] = "�����������";
+                Text[ greek ] = "������";
+                Text[ dutch ] = "Commentaar";
                 Text[ french ] = "Commentaire";
                 Text[ spanish ] = "Comentario";
-                Text[ finnish ] = "Comment";
+                Text[ finnish ] = "Huomautukset";
                 Text[ italian ] = "Commento";
-                Text[ danish ] = "Comment";
+                Text[ danish ] = "Kommentar";
                 Text[ swedish ] = "Kommentar";
-                Text[ polish ] = "Comment";
-                Text[ portuguese_brazilian ] = "Comment";
+                Text[ polish ] = "Komentarz";
+                Text[ portuguese_brazilian ] = "Coment�rio";
                 Text[ japanese ] = "コメント";
                 Text[ korean ] = "설명";
                 Text[ chinese_simplified ] = "注解";
                 Text[ chinese_traditional ] = "備註";
-                Text[ turkish ] = "Comment";
-                Text[ arabic ] = "Comment";
-                Text[ catalan ] = "Comment";
-                Text[ thai ] = "Comment";
+                Text[ turkish ] = "Yorum";
+                Text[ arabic ] = "�����";
+                Text[ catalan ] = "Comentari";
+                Text[ thai ] = "ข้อคิดเห็น";
+                Text[ czech ] = "Komentář";
+                Text[ hebrew ] = "‮הערה‬";
+                Text[ hindi ] = "अपवाद";
             };
             LB_WN( BASICCOMMENT, 37 )
 
@@ -1478,26 +1620,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Zahl" ;
                 Text [ ENGLISH ] = "Number" ;
                 Text[ english_us ] = "Number";
-                Text[ portuguese ] = "Number";
-                Text[ russian ] = "Number";
-                Text[ greek ] = "Number";
-                Text[ dutch ] = "Number";
+                Text[ portuguese ] = "N�mero";
+                Text[ russian ] = "�����";
+                Text[ greek ] = "�������";
+                Text[ dutch ] = "Getal";
                 Text[ french ] = "Nombre";
                 Text[ spanish ] = "N�mero";
-                Text[ finnish ] = "Number";
+                Text[ finnish ] = "Luku";
                 Text[ italian ] = "Numero";
-                Text[ danish ] = "Number";
+                Text[ danish ] = "Tal";
                 Text[ swedish ] = "Tal";
-                Text[ polish ] = "Number";
-                Text[ portuguese_brazilian ] = "Number";
+                Text[ polish ] = "Liczba";
+                Text[ portuguese_brazilian ] = "N�mero";
                 Text[ japanese ] = "数値";
                 Text[ korean ] = "수";
                 Text[ chinese_simplified ] = "数字";
                 Text[ chinese_traditional ] = "數字";
-                Text[ turkish ] = "Number";
-                Text[ arabic ] = "Number";
-                Text[ catalan ] = "Number";
-                Text[ thai ] = "Number";
+                Text[ turkish ] = "Say�";
+                Text[ arabic ] = "Angle";
+                Text[ catalan ] = "Nombre";
+                Text[ thai ] = "จำนวนที่เป็นเศษส่วน";
+                Text[ czech ] = "Číslo";
+                Text[ hebrew ] = "‮מספר‬";
+                Text[ hindi ] = "दशांश डॉलर";
             };
             LB_WN( BASICNUMBER, 38 )
 
@@ -1523,10 +1668,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "문자열";
                 Text[ chinese_simplified ] = "字串";
                 Text[ chinese_traditional ] = "字串";
-                Text[ turkish ] = "String";
+                Text[ turkish ] = "Dizi";
                 Text[ arabic ] = "String";
                 Text[ catalan ] = "String";
                 Text[ thai ] = "String";
+                Text[ czech ] = "Řetězec";
+                Text[ hebrew ] = "‮מחרוזת‬";
+                Text[ hindi ] = "String";
             };
             LB_WN( BASICSTRING, 39 )
 
@@ -1552,10 +1700,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "연산자";
                 Text[ chinese_simplified ] = "运算符";
                 Text[ chinese_traditional ] = "運算符";
-                Text[ turkish ] = "Operator";
+                Text[ turkish ] = "Operat�r";
                 Text[ arabic ] = "Operator";
                 Text[ catalan ] = "Operator";
                 Text[ thai ] = "Operator";
+                Text[ czech ] = "Operátor";
+                Text[ hebrew ] = "‮אופרטור‬";
+                Text[ hindi ] = "Operator";
             };
             LB_WN( BASICOPERATOR, 40 )
 
@@ -1581,10 +1732,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ korean ] = "예약식";
                 Text[ chinese_simplified ] = "保留的表达式";
                 Text[ chinese_traditional ] = "保留的表達式";
-                Text[ turkish ] = "Reserved expression";
+                Text[ turkish ] = "�zel ama�l� deyim";
                 Text[ arabic ] = "Reserved expression";
                 Text[ catalan ] = "Reserved expression";
                 Text[ thai ] = "Reserved expression";
+                Text[ czech ] = "Rezervovaný výraz";
+                Text[ hebrew ] = "‮ביטוי שמור‬";
+                Text[ hindi ] = "Reserved expression";
             };
             LB_WN( BASICKEYWORD, 41 )
 
@@ -1594,26 +1748,29 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Fehler" ;
                 Text [ ENGLISH ] = "Error" ;
                 Text[ english_us ] = "Error";
-                Text[ portuguese ] = "Error";
-                Text[ russian ] = "Error";
-                Text[ greek ] = "Error";
-                Text[ dutch ] = "Error";
+                Text[ portuguese ] = "Erro";
+                Text[ russian ] = "������";
+                Text[ greek ] = "������";
+                Text[ dutch ] = "Fout";
                 Text[ french ] = "Erreur";
                 Text[ spanish ] = "Error";
-                Text[ finnish ] = "Error";
+                Text[ finnish ] = "Virhe";
                 Text[ italian ] = "Errore";
-                Text[ danish ] = "Error";
+                Text[ danish ] = "Fejl";
                 Text[ swedish ] = "Fel";
-                Text[ polish ] = "Error";
-                Text[ portuguese_brazilian ] = "Error";
+                Text[ polish ] = "B��d";
+                Text[ portuguese_brazilian ] = "Erro";
                 Text[ japanese ] = "エラー";
                 Text[ korean ] = "오류";
                 Text[ chinese_simplified ] = "错误";
                 Text[ chinese_traditional ] = "錯誤";
-                Text[ turkish ] = "Error";
-                Text[ arabic ] = "Error";
-                Text[ catalan ] = "Error";
-                Text[ thai ] = "Error";
+                Text[ turkish ] = "Hata";
+                Text[ arabic ] = "���";
+                Text[ catalan ] = "S'ha produ�t un error";
+                Text[ thai ] = "ผิดพลาด";
+                Text[ czech ] = "Chyba";
+                Text[ hebrew ] = "‮שגיאה‬";
+                Text[ hindi ] = "गलती";
             };
             LB_WN( BASICERROR, 42 )
 
@@ -1642,10 +1799,13 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
     Message[ korean ] = "색 구성표를 정말로 삭제하시겠습니까?";
     Message[ chinese_simplified ] = "您真的要删除这个颜色图案？";
     Message[ chinese_traditional ] = "真的要刪除這個顏色圖案？";
-    Message[ turkish ] = "Do you really want to delete the color scheme?";
+    Message[ turkish ] = "Ger�ekten renk �emas�n� silmek istiyor musunuz?";
     Message[ arabic ] = "Do you really want to delete the color scheme?";
     Message[ catalan ] = "Do you really want to delete the color scheme?";
     Message[ thai ] = "Do you really want to delete the color scheme?";
+    Message[ czech ] = "Opravdu chcete odstranit barevné schéma?";
+    Message[ hebrew ] = "‮האם אכן למחוק את תכנון הצבעים?‬";
+    Message[ hindi ] = "Do you really want to delete the color scheme?";
 };
 String RID_SVXSTR_COLOR_CONFIG_DELETE
 {
@@ -1667,10 +1827,13 @@ String RID_SVXSTR_COLOR_CONFIG_DELETE
     Text[ korean ] = "색 구성표 삭제";
     Text[ chinese_simplified ] = "确认删除颜色图案";
     Text[ chinese_traditional ] = "確認刪除顔色圖案";
-    Text[ turkish ] = "Color Scheme Deletion";
+    Text[ turkish ] = "Renk �emas� Silme ��lem";
     Text[ arabic ] = "Color Scheme Deletion";
     Text[ catalan ] = "Color Scheme Deletion";
     Text[ thai ] = "Color Scheme Deletion";
+    Text[ czech ] = "Smazání barevného schématu";
+    Text[ hebrew ] = "‮מחיקת תכנון הצבעים‬";
+    Text[ hindi ] = "Color Scheme Deletion";
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE1
 {
@@ -1692,10 +1855,13 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE1
     Text[ korean ] = "구성표 저장";
     Text[ chinese_simplified ] = "存盘颜色图案";
     Text[ chinese_traditional ] = "儲存顔色圖案";
-    Text[ turkish ] = "Save scheme";
+    Text[ turkish ] = "�emay� kaydet";
     Text[ arabic ] = "Save scheme";
     Text[ catalan ] = "Save scheme";
     Text[ thai ] = "Save scheme";
+    Text[ czech ] = "Uložit schéma";
+    Text[ hebrew ] = "‮שמירת התכנון‬";
+    Text[ hindi ] = "Save scheme";
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE2
 {
@@ -1717,11 +1883,27 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE2
     Text[ korean ] = "색 구성표 이름";
     Text[ chinese_simplified ] = "颜色图案的名称";
     Text[ chinese_traditional ] = "顏色圖案的名稱";
-    Text[ turkish ] = "Name of color scheme";
+    Text[ turkish ] = "Renk �emas�n�n ismi";
     Text[ arabic ] = "Name of color scheme";
     Text[ catalan ] = "Name of color scheme";
     Text[ thai ] = "Name of color scheme";
+    Text[ czech ] = "Název barevného schématu";
+    Text[ hebrew ] = "‮שם תכנון הצבעים‬";
+    Text[ hindi ] = "Name of color scheme";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
