@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-09 15:50:28 $
+ *  last change: $Author: thb $ $Date: 2002-08-12 17:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1150,7 +1150,14 @@ namespace accessibility
         if( rCacheTF.GetIndexAtPoint( aLogPoint, nPara, nIndex ) &&
             GetParagraphIndex() == nPara )
         {
-            return nIndex;
+            // #102259# Double-check if we're _really_ on the given character
+            awt::Rectangle aRect1( getCharacterBounds(nIndex) );
+            Rectangle aRect2( aRect1.X, aRect1.Y,
+                              aRect1.Width + aRect1.X, aRect1.Height + aRect1.Y );
+            if( aRect2.IsInside( Point( rPoint.X, rPoint.Y ) ) )
+                return nIndex;
+            else
+                return -1;
         }
         else
         {
