@@ -53,7 +53,6 @@ CONVERTSCRIPT=$(SOLARENV)$/bin$/convertlinks.pl
 #--------------------
 # WNT ONLY
 #--------------------
-DOLLARSIGN=$$
 MY_DELETE_RECURSIVE=del /sxyf
 MY_DIRCMP=dircmp -r
 MY_TEXTCOPY=cat
@@ -71,7 +70,6 @@ DESTDIRDLL=$(DESTDIRBIN)
 #--------------------
 # UNX ONLY
 #--------------------
-DOLLARSIGN=\$$
 MY_DELETE_RECURSIVE=rm -rf
 MY_DIRCMP=dircmp 
 MY_TEXTCOPY= tr -d "\015"
