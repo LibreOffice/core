@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:30:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,8 @@ void UpdateDispatcher::handle(AddNode const& aAddNode)
 
     OSL_ENSURE(aAddedTree.is(), "AddNode has no new data -> cannot add anything");
 
-    OSL_ENSURE( !aAddedTree.is() || (m_bInValueSet == aAddedTree.getSegmentRootNode()->isValue()),
+    OSL_ENSURE( !aAddedTree.is() ||
+                ((m_bInValueSet||m_bInLocalizedValues) == aAddedTree.getSegmentRootNode()->isValue()),
                 "Found added subtree in value set (extensible group)\n" );
 
     this->visitTree( aAddedTree.getTreeAccess() );
@@ -256,10 +257,14 @@ void UpdateDispatcher::handle(RemoveNode const& aRemoveNode)
 
     data::TreeSegment aRemovedTree = aRemoveNode.getRemovedTree();
 
-    OSL_ENSURE( !aRemovedTree.is() || (m_bInValueSet == aRemovedTree.getSegmentRootNode()->isValue()),
+    OSL_ENSURE( !aRemovedTree.is() ||
+                ((m_bInValueSet||m_bInLocalizedValues) == aRemovedTree.getSegmentRootNode()->isValue()),
                 "Found removed subtree in value set (extensible group)\n" );
 
-    if (m_bInValueSet)
+    if (m_bInLocalizedValues)
+        OSL_TRACE("configmgr: UpdateDispatcher - Removing value for locale ignored");
+
+    else if (m_bInValueSet)
         m_xUpdateHandler->removeProperty( aRemoveNode.getNodeName() );
 
     else
