@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-24 14:16:17 $
+ *  last change: $Author: mib $ $Date: 2002-01-31 09:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2567,7 +2567,7 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
                                    rDfltFont.GetFamilyName(),
                                    rDfltFont.GetStyleName(),
                                    rDfltFont.GetPitch(),
-                                   eEnc );
+                                   eEnc, aWhichIds[i] );
                 pDoc->SetDefault( aFont );
             }
 
