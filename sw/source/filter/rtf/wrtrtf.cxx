@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:51:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,9 @@
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>      // fuer SwPageDesc ...
 #endif
-
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
@@ -202,7 +204,12 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>      // ResId fuer Statusleiste
 #endif
-
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
 #ifndef SW_MS_MSFILTER_HXX
 #include <msfilter.hxx>
 #endif
@@ -221,6 +228,7 @@ SV_DECL_VARARR( RTFColorTbl, Color, 5, 8 )
 SV_IMPL_VARARR( RTFColorTbl, Color )
 
 
+
 SwRTFWriter::SwRTFWriter( const String& rFltName )
 {
     // schreibe Win-RTF-HelpFileFmt
@@ -230,8 +238,8 @@ SwRTFWriter::SwRTFWriter( const String& rFltName )
 }
 
 
-SwRTFWriter::~SwRTFWriter() {}
-
+SwRTFWriter::~SwRTFWriter()
+{}
 
 
 ULONG SwRTFWriter::WriteStream()
@@ -243,6 +251,11 @@ ULONG SwRTFWriter::WriteStream()
         bTxtAttr = bAssociated = FALSE;
 
     nCurScript = 1;                     // latin - ask the doc??
+
+    nCurRedline = USHRT_MAX;
+    if(pDoc->GetRedlineTbl().Count())
+        nCurRedline = 0;
+
 
     pCurEndPosLst = 0;
     nBkmkTabPos = USHRT_MAX;
@@ -360,6 +373,7 @@ ULONG SwRTFWriter::WriteStream()
         pNumRuleTbl->Remove( 0, pNumRuleTbl->Count() );
         delete pNumRuleTbl;
     }
+    delete pRedlAuthors;
 
     // schreibe Win-RTF-HelpFileFmt
     bOutOutlineOnly = bWriteHelpFmt = FALSE;
@@ -481,6 +495,7 @@ void SwRTFWriter::MakeHeader()
     OutRTFColorTab();
     OutRTFStyleTab();
     OutRTFListTab();
+    OutRTFRevTab();
 
     Strm() << SwRTFWriter::sNewLine;        // ein Trenner
 
@@ -992,7 +1007,47 @@ void SwRTFWriter::OutRTFFontTab()
     Strm() << '}';
 }
 
+void RTF_WrtRedlineAuthor::Write(Writer &rWrt)
+{
+    SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
 
+    rRTFWrt.Strm() << '{' << sRTF_IGNORE << sRTF_REVTBL << ' ';
+    typedef std::vector<String>::iterator myiter;
+
+    for(std::vector<String>::iterator aIter = maAuthors.begin(); aIter != maAuthors.end(); ++aIter)
+    {
+        rRTFWrt.Strm() << '{';
+        // rWrt.bWriteHelpFmt
+        RTFOutFuncs::Out_String( rRTFWrt.Strm(), *aIter, DEF_ENCODING,  rRTFWrt.bWriteHelpFmt  ) << ";}";
+    }
+    rRTFWrt.Strm() << '}' << SwRTFWriter::sNewLine;
+}
+
+bool SwRTFWriter::OutRTFRevTab()
+{
+    // Writes the revision author table
+    int nRevAuthors = pDoc->GetRedlineTbl().Count();
+
+    pRedlAuthors = new RTF_WrtRedlineAuthor;
+    // RTF always seems to use Unknown as the default first entry
+    String sUnknown(RTL_CONSTASCII_STRINGPARAM("Unknown"));
+    pRedlAuthors->AddName(sUnknown);
+
+    if (nRevAuthors < 1)
+        return false;
+
+    // pull out all the redlines and make a vector of all the author names
+    for( int i = 0; i < pDoc->GetRedlineTbl().Count(); ++i )
+    {
+        const SwRedline* pRedl = pDoc->GetRedlineTbl()[ i ];
+        const String sAuthor = SW_MOD()->GetRedlineAuthor( pRedl->GetAuthor() );
+        pRedlAuthors->AddName(sAuthor);
+    }
+
+    pRedlAuthors->Write(*this);
+
+    return true;
+}
 
 void SwRTFWriter::OutRTFStyleTab()
 {
@@ -1124,6 +1179,80 @@ void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
         Strm() << sRTF_PARD << SwRTFWriter::sNewLine;
     else
         pFlyFmt = pOldFlyFmt;
+}
+
+
+
+void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
+{
+        const SwRedline *pCurRedline = 0;
+        USHORT nCount = pDoc->GetRedlineTbl().Count();
+
+        if (nCurRedline < nCount)
+        {
+            pCurRedline = pDoc->GetRedlineTbl()[nCurRedline];
+            if(pCurRedline)
+            {
+                const SwPosition* pStartPos = pCurRedline->Start();
+                const SwPosition* pEndPos = pStartPos == pCurRedline->GetPoint()
+                                            ? pCurRedline->GetMark()
+                                            : pCurRedline->GetPoint();
+
+                USHORT nStart = pStartPos->nContent.GetIndex();
+                USHORT nEnd = pEndPos->nContent.GetIndex();
+
+                ULONG nCurPam  = pCurPam->GetPoint()->nNode.GetIndex();
+                ULONG nStartIndex = pStartPos->nNode.GetIndex();
+                ULONG nEndIndex = pEndPos->nNode.GetIndex();
+                const String& rStr = pCurPam->GetNode()->GetTxtNode()->GetTxt();
+                xub_StrLen nEnde = rStr.Len();
+
+                bool bSpanRedline = (nCurPam >= nStartIndex) && (nCurPam <= nEndIndex) && (nStartIndex != nEndIndex);
+
+                if ((bSpanRedline && nCntntPos == 0) ||
+                    (nStartIndex == nCurPam && nStart == nCntntPos))
+                {
+                    // We are at the start of a redline just need to find out which type
+                    Strm() << '{';
+                    if(pCurRedline->GetType() == REDLINE_INSERT)
+                    {
+                        Strm() << sRTF_REVISED;
+                        Strm() << sRTF_REVAUTH;
+                        String sName = SW_MOD()->GetRedlineAuthor(pCurRedline->GetAuthor());
+                        OutLong( pRedlAuthors->AddName(sName) );
+                        Strm() << sRTF_REVDTTM;
+                        OutLong( sw::ms::DateTime2DTTM(pCurRedline->GetTimeStamp()) );
+                        Strm() << ' ';
+                    }
+                    else if(pCurRedline->GetType() == REDLINE_DELETE)
+                    {
+                        Strm() << sRTF_DELETED;
+                        Strm() << sRTF_REVAUTHDEL;
+                        String sDelName = SW_MOD()->GetRedlineAuthor(pCurRedline->GetAuthor());
+                        OutLong( pRedlAuthors->AddName(sDelName) );
+                        Strm() << sRTF_REVDTTMDEL;
+                        OutLong( sw::ms::DateTime2DTTM(pCurRedline->GetTimeStamp()) );
+                        Strm() << ' ';
+                    }
+                }
+
+                // this is either then of the end of the node or the end of the redline
+                // time to close off this one
+                if( (bSpanRedline && nCntntPos == nEnde) ||
+                    (nEndIndex == nCurPam && nEnd == nCntntPos) )
+                {
+                    Strm() << '}';
+                }
+
+                // We have come to the end of a redline move to the next one
+                // and use resursion to see if another redline starts here
+                if (nEndIndex == nCurPam && nEnd == nCntntPos)
+                {
+                    nCurRedline++;
+                    OutRedline(nCntntPos);
+                }
+            }
+        }
 }
 
 void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
