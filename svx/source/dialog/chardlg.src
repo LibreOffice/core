@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:10:04 $
+ *  last change: $Author: os $ $Date: 2000-12-06 11:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3865,7 +3865,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     {
         Pos = MAP_APPFONT( 3, 3 );
         Size = MAP_APPFONT( 254, 10 );
-        Text = "Zweizeilig";
+        Text = "Doppelzeilig";
         Text [ english_us ] = "Two lines" ;
         Text[ portuguese ] = "Two lines";
         Text[ russian ] = "Two lines";
@@ -3889,7 +3889,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     {
         Pos = MAP_APPFONT( 6, 15 );
         Size = MAP_APPFONT( 248, 10 );
-        Text = "Z~weizeillig pro Zeile schreiben";
+        Text = "~Doppelzeilig schreiben";
         Text [ english_us ] = "Two lines each line" ;
         TabStop = TRUE;
         Text[ portuguese ] = "Two lines each line";
