@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:35:02 $
+ *  last change: $Author: obo $ $Date: 2001-08-24 09:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ polish ] = "~Osad� jako szablon standardowy";
                     Text[ portuguese_brazilian ] = "Set As Default Template";
                     Text[ japanese ] = "標準ﾃﾝﾌﾟﾚｰﾄとして設定";
-                    Text[ korean ] = "기본 템플릿으로 설정";
+                    Text[ korean ] = "기본 서식 파일으로 설정";
                     Text[ chinese_simplified ] = "设定成标准样式";
                     Text[ chinese_traditional ] = "設定成標準樣式";
                     Text[ turkish ] = "Set As Default Template";
@@ -805,7 +805,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ polish ] = "~Zresetuj szablon standardowy";
                     Text[ portuguese_brazilian ] = "Reset Default Template";
                     Text[ japanese ] = "標準ﾃﾝﾌﾟﾚｰﾄを元に戻す";
-                    Text[ korean ] = "기본 템플릿 초기화";
+                    Text[ korean ] = "기본 서식 파일 초기화";
                     Text[ chinese_simplified ] = "重设标准样式";
                     Text[ chinese_traditional ] = "重設標準樣式";
                     Text[ turkish ] = "Reset Default Template";
@@ -878,6 +878,7 @@ ModalDialog DLG_ORGANIZE
     Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
+
 
 
 
