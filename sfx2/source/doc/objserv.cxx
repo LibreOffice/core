@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-03 13:33:47 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1642,15 +1642,6 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
                 rSet.Put( SfxBoolItem( nSID, SFX_LOADED_IMAGES !=
                             ( pImp->nLoadedFlags & SFX_LOADED_IMAGES ) ) );
                 break;
-
-            case SID_ACTIVEMODULE:
-            {
-                SfxShell *pSh = GetModule();
-                if ( !pSh )
-                    pSh = this;
-                rSet.Put( SfxObjectItem( SID_ACTIVEMODULE, pSh ) );
-                break;
-            }
         }
     }
 }
