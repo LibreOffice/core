@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-06 09:15:00 $
+ *  last change: $Author: ama $ $Date: 2000-11-28 14:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     pOrig->Pos( aCharPos );
     pOrig->SSize( aCharSize );
     sal_Bool bRet = sal_True;
+    sal_Bool bWidth = sal_True;//pCMS && pCMS->bRealWidth;
     if( !pCurr->GetLen() && !pCurr->Width() )
     {
         if ( pCMS && pCMS->bRealHeight )
@@ -373,8 +374,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     {
         KSHORT nPorHeight = nTmpHeight;
         KSHORT nPorAscent = nTmpAscent;
-        KSHORT nX = 0;
-        KSHORT nFirst = 0;
+        SwTwips nX = 0;
+        SwTwips nFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
         SvShorts *pSpaceAdd = pCurr->GetpSpaceAdd();
         MSHORT nSpaceIdx = 0;
@@ -515,13 +516,26 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             SeekAndChg( aInf );
                             const sal_Bool bOldOnWin = aInf.OnWin();
                             aInf.SetOnWin( sal_False ); // keine BULLETs!
+                            SwTwips nTmp = nX;
                             nX += pPor->GetTxtSize( aInf ).Width();
                             aInf.SetOnWin( bOldOnWin );
                             if ( pPor->InSpaceGrp() && nSpaceAdd )
                                 nX += pPor->CalcSpacing( nSpaceAdd, aInf );
+                            if( bWidth )
+                            {
+                                pPor->SetLen( pPor->GetLen() + 1 );
+                                aInf.SetLen( pPor->GetLen() );
+                                aInf.SetOnWin( sal_False ); // keine BULLETs!
+                                nTmp += pPor->GetTxtSize( aInf ).Width();
+                                aInf.SetOnWin( bOldOnWin );
+                                if ( pPor->InSpaceGrp() && nSpaceAdd )
+                                    nTmp += pPor->CalcSpacing(nSpaceAdd, aInf);
+                                pOrig->Width( nTmp - nX );
+                            }
                         }
                         pPor->SetLen( nOldLen );
                     }
+                    bWidth = sal_False;
                     break;
                 }
             }
@@ -645,6 +659,38 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         nTmpAscent = nPorAscent;
                         nTmpHeight = pOrig->Height();
                     }
+                }
+                if( bWidth && pPor->PrtWidth() && pPor->GetLen() &&
+                    aInf.GetIdx() == nOfst )
+                {
+                    if( !pPor->IsFlyPortion() && pPor->Height() &&
+                        pPor->GetAscent() )
+                    {
+                        nPorHeight = pPor->Height();
+                        nPorAscent = pPor->GetAscent();
+                    }
+                    SwTwips nTmp;
+                    if( 2 > pPor->GetLen() )
+                    {
+                        nTmp = pPor->Width();
+                        if ( pPor->InSpaceGrp() && nSpaceAdd )
+                            nTmp += pPor->CalcSpacing( nSpaceAdd, aInf );
+                    }
+                    else
+                    {
+                        const sal_Bool bOldOnWin = aInf.OnWin();
+                        xub_StrLen nOldLen = pPor->GetLen();
+                        pPor->SetLen( 1 );
+                        aInf.SetLen( pPor->GetLen() );
+                        SeekAndChg( aInf );
+                        aInf.SetOnWin( sal_False ); // keine BULLETs!
+                        nTmp = pPor->GetTxtSize( aInf ).Width();
+                        aInf.SetOnWin( bOldOnWin );
+                        if ( pPor->InSpaceGrp() && nSpaceAdd )
+                            nTmp += pPor->CalcSpacing( nSpaceAdd, aInf );
+                        pPor->SetLen( nOldLen );
+                    }
+                    pOrig->Width( nTmp );
                 }
             }
         }
