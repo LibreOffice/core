@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:50 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,7 @@
 #include <svtools/moduleoptions.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
-#include <sch/schdll0.hxx>
-
+#include <sot/exchange.hxx>
 
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -220,7 +219,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             if ( SvtModuleOptions().IsChart() )
             {
                 SvGlobalName aObjClsId = *xIPObj->GetSvFactory();
-                if (SchModuleDummy::HasID( aObjClsId ))
+                if (SotExchange::IsChart( aObjClsId ))
                 {
                     SchMemChart* pMemChart = SchDLL::GetChartData(xIPObj);
                     if (pMemChart)
