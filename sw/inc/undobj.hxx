@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 13:27:58 $
+ *  last change: $Author: jp $ $Date: 2001-11-13 13:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class SwNodeIndex;
 class SwNodeRange;
 class SwFmtAnchor;
 struct SwUndoGroupObjImpl;
+class SdrMark;
 class SdrMarkList;
 class SdrObject;
 class SdrObjGroup;
@@ -1375,6 +1376,7 @@ public:
 class SwUndoDrawDelete : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
+    SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
     USHORT nSize;
     BOOL bDelFmt;
 
@@ -1384,7 +1386,7 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void AddObj( USHORT nPos, SwDrawFrmFmt*, SdrObject* );
+    void AddObj( USHORT nPos, SwDrawFrmFmt*, const SdrMark& );
 };
 
 //--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:32:06 $
+ *  last change: $Author: jp $ $Date: 2001-11-13 13:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,7 @@ SwUndoDrawDelete::SwUndoDrawDelete( USHORT nCnt )
     : SwUndo( UNDO_DRAWDELETE ), nSize( nCnt ), bDelFmt( TRUE )
 {
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
+    pMarkLst = new SdrMarkList();
 }
 
 SwUndoDrawDelete::~SwUndoDrawDelete()
@@ -587,6 +588,7 @@ SwUndoDrawDelete::~SwUndoDrawDelete()
             delete pTmp->pFmt;
     }
     __DELETE ( nSize ) pObjArr;
+    delete pMarkLst;
 }
 
 void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
@@ -602,6 +604,7 @@ void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->_Changed( *pObj, SDRUSERCALL_INSERTED, NULL );
     }
+    rIter.pMarkList = pMarkLst;
 }
 
 void SwUndoDrawDelete::Redo( SwUndoIter &rIter )
@@ -626,10 +629,11 @@ void SwUndoDrawDelete::Redo( SwUndoIter &rIter )
     }
 }
 
-void SwUndoDrawDelete::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt, SdrObject* pObj )
+void SwUndoDrawDelete::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt,
+                                const SdrMark& rMark )
 {
     SwUndoGroupObjImpl& rSave = *( pObjArr + nPos );
-    rSave.pObj = pObj;
+    rSave.pObj = rMark.GetObj();
     rSave.pFmt = pFmt;
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
 
@@ -637,7 +641,10 @@ void SwUndoDrawDelete::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt, SdrObject* pObj 
     ::lcl_SendRemoveToUno( *pFmt );
 
     // aus dem Array austragen
-    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
+    SwDoc* pDoc = pFmt->GetDoc();
+    SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
+
+    pMarkLst->InsertEntry( rMark );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 18:16:15 $
+ *  last change: $Author: jp $ $Date: 2001-11-13 13:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,8 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 //ContactObjekte vernichten, Formate sicherstellen.
                 for( i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
-                    pObj = rMrkList.GetMark( i )->GetObj();
+                    const SdrMark& rMark = *rMrkList.GetMark( i );
+                    pObj = rMark.GetObj();
                     SwDrawContact *pContact = (SwDrawContact*)pObj->GetUserCall();
                     if( pContact ) // natuerlich nicht bei gruppierten Objekten
                     {
@@ -406,7 +407,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         pObj->SetUserCall( 0 );
 
                         if( pUndo )
-                            pUndo->AddObj( i, pFmt, pObj );
+                            pUndo->AddObj( i, pFmt, rMark );
                         else
                             DelFrmFmt( pFmt );
                     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 13:44:28 $
+ *  last change: $Author: jp $ $Date: 2001-11-13 13:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,8 +361,16 @@ BOOL SwDoc::Undo( SwUndoIter& rUndoIter )
     USHORT nAktId = pUndo->GetId();
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
     //              Undo heraus
-    if( UNDO_START != nAktId && UNDO_END != nAktId )
+    switch( nAktId )
+    {
+    case UNDO_START:
+    case UNDO_END:
+    case UNDO_INSDRAWFMT:
+        break;
+
+    default:
         rUndoIter.ClearSelections();
+    }
 
     pUndo->Undo( rUndoIter );
 
