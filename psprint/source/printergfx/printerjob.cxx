@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-31 11:42:45 $
+ *  last change: $Author: pl $ $Date: 2001-07-05 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,6 +715,9 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
     sal_uInt64 nWritten = 0;
     bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
         || nWritten != aLine.Len() ? false : true;
+
+    if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
+        WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );
 
     sal_Char  pTranslate [128];
     sal_Int32 nChar = 0;
