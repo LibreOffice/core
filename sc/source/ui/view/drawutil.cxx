@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawutil.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2001-04-18 10:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include "drawutil.hxx"
 #include "document.hxx"
 #include "global.hxx"
+#include "viewdata.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -98,15 +99,15 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, USHORT nTab,
     long nTwipsY = 0;
     for (i=nStartCol; i<nEndCol; i++)
     {
-        long nWidth = (long) pDoc->GetColWidth(i,nTab);
-        nTwipsX += nWidth;
-        nPixelX += (long) ( nWidth * nPPTX );
+        USHORT nWidth = pDoc->GetColWidth(i,nTab);
+        nTwipsX += (long) nWidth;
+        nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
     for (i=nStartRow; i<nEndRow; i++)
     {
-        long nHeight = (long) pDoc->GetRowHeight(i,nTab);
-        nTwipsY += nHeight;
-        nPixelY += (long) ( nHeight * nPPTY );
+        USHORT nHeight = pDoc->GetRowHeight(i,nTab);
+        nTwipsY += (long) nHeight;
+        nPixelY += ScViewData::ToPixel( nHeight, nPPTY );
     }
 
     MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );

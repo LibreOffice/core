@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-12 14:48:58 $
+ *  last change: $Author: nn $ $Date: 2001-04-18 10:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,7 +1003,7 @@ void ScViewData::EditGrowX()
     while (aArea.GetWidth() + 0 < nTextWidth && nEditEndCol < nRight)
     {
         ++nEditEndCol;
-        long nPix = (long) ( pDoc->GetColWidth( nEditEndCol, nTabNo ) * nPPTX );
+        long nPix = ToPixel( pDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
         aArea.Right() += pWin->PixelToLogic(Size(nPix,0)).Width();
 
         if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
@@ -1059,7 +1059,7 @@ void ScViewData::EditGrowY()
     {
         ++nEditEndRow;
         ScDocument* pDoc = GetDocument();
-        long nPix = (long) ( pDoc->GetRowHeight( nEditEndRow, nTabNo ) * nPPTY );
+        long nPix = ToPixel( pDoc->GetRowHeight( nEditEndRow, nTabNo ), nPPTY );
         aArea.Bottom() += pWin->PixelToLogic(Size(0,nPix)).Height();
 
         if ( aArea.Bottom() > aArea.Top() + aSize.Height() - 1 )
@@ -1204,7 +1204,7 @@ Point ScViewData::GetScrPos( USHORT nWhereX, USHORT nWhereY, ScSplitPos eWhich,
                 nTSize = pDoc->GetColWidth( nX, nTabNo );
                 if (nTSize)
                 {
-                    long nSizeXPix = (long) ( nTSize * nPPTX );
+                    long nSizeXPix = ToPixel( nTSize, nPPTX );
                     nScrPosX += nSizeXPix;
                 }
             }
@@ -1216,7 +1216,7 @@ Point ScViewData::GetScrPos( USHORT nWhereX, USHORT nWhereY, ScSplitPos eWhich,
             nTSize = pDoc->GetColWidth( nX, nTabNo );
             if (nTSize)
             {
-                long nSizeXPix = (long) ( nTSize * nPPTX );
+                long nSizeXPix = ToPixel( nTSize, nPPTX );
                 nScrPosX -= nSizeXPix;
             }
         }
@@ -1235,7 +1235,7 @@ Point ScViewData::GetScrPos( USHORT nWhereX, USHORT nWhereY, ScSplitPos eWhich,
                 nTSize = pDoc->FastGetRowHeight( nY, nTabNo );
                 if (nTSize)
                 {
-                    long nSizeYPix = (long) ( nTSize * nPPTY );
+                    long nSizeYPix = ToPixel( nTSize, nPPTY );
                     nScrPosY += nSizeYPix;
                 }
             }
@@ -1247,7 +1247,7 @@ Point ScViewData::GetScrPos( USHORT nWhereX, USHORT nWhereY, ScSplitPos eWhich,
             nTSize = pDoc->FastGetRowHeight( nY, nTabNo );
             if (nTSize)
             {
-                long nSizeYPix = (long) ( nTSize * nPPTY );
+                long nSizeYPix = ToPixel( nTSize, nPPTY );
                 nScrPosY -= nSizeYPix;
             }
         }
@@ -1288,7 +1288,7 @@ USHORT ScViewData::CellsAtX( short nPosX, short nDir, ScHSplitPos eWhichX, USHOR
             USHORT nTSize = pDoc->GetColWidth( nColNo, nTabNo );
             if (nTSize)
             {
-                long nSizeXPix = (long) ( nTSize * nPPTX );
+                long nSizeXPix = ToPixel( nTSize, nPPTX );
                 nScrPosX += (USHORT) nSizeXPix;
             }
         }
@@ -1332,7 +1332,7 @@ USHORT ScViewData::CellsAtY( short nPosY, short nDir, ScVSplitPos eWhichY, USHOR
             USHORT nTSize = pDoc->FastGetRowHeight( nRowNo, nTabNo );
             if (nTSize)
             {
-                long nSizeYPix = (long) ( nTSize * nPPTY );
+                long nSizeYPix = ToPixel( nTSize, nPPTY );
                 nScrPosY += (USHORT) nSizeYPix;
             }
         }
@@ -1387,10 +1387,10 @@ BOOL ScViewData::GetMergeSizePixel( USHORT nX, USHORT nY, long& rSizeXPix, long&
         USHORT i;
         USHORT nCountX = pMerge->GetColMerge();
         for (i=0; i<nCountX; i++)
-            nOutWidth += (long) ( pDoc->GetColWidth(nX+i,nTabNo) * nPPTX );
+            nOutWidth += ToPixel( pDoc->GetColWidth(nX+i,nTabNo), nPPTX );
         USHORT nCountY = pMerge->GetRowMerge();
         for (i=0; i<nCountY; i++)
-            nOutHeight += (long) ( pDoc->GetRowHeight(nY+i,nTabNo) * nPPTY );
+            nOutHeight += ToPixel( pDoc->GetRowHeight(nY+i,nTabNo), nPPTY );
 
         rSizeXPix = nOutWidth;
         rSizeYPix = nOutHeight;
@@ -1398,8 +1398,8 @@ BOOL ScViewData::GetMergeSizePixel( USHORT nX, USHORT nY, long& rSizeXPix, long&
     }
     else
     {
-        rSizeXPix = (long) ( pDoc->GetColWidth( nX, nTabNo ) * nPPTX );
-        rSizeYPix = (long) ( pDoc->GetRowHeight( nY, nTabNo ) * nPPTY );
+        rSizeXPix = ToPixel( pDoc->GetColWidth( nX, nTabNo ), nPPTX );
+        rSizeYPix = ToPixel( pDoc->GetRowHeight( nY, nTabNo ), nPPTY );
         return FALSE;
     }
 }
@@ -1428,7 +1428,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     {
         while ( rPosX<=MAXCOL && nClickX >= nScrX )
         {
-            nScrX += (long) ( pDoc->GetColWidth( rPosX, nTabNo ) * nPPTX );
+            nScrX += ToPixel( pDoc->GetColWidth( rPosX, nTabNo ), nPPTX );
             ++rPosX;
         }
         --rPosX;
@@ -1438,7 +1438,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         while ( rPosX>0 && nClickX < nScrX )
         {
             --rPosX;
-            nScrX -= (long) ( pDoc->GetColWidth( rPosX, nTabNo ) * nPPTX );
+            nScrX -= ToPixel( pDoc->GetColWidth( rPosX, nTabNo ), nPPTX );
         }
     }
 
@@ -1446,7 +1446,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     {
         while ( rPosY<=MAXROW && nClickY >= nScrY )
         {
-            nScrY += (long) ( pDoc->FastGetRowHeight( rPosY, nTabNo ) * nPPTY );
+            nScrY += ToPixel( pDoc->FastGetRowHeight( rPosY, nTabNo ), nPPTY );
             ++rPosY;
         }
         --rPosY;
@@ -1456,7 +1456,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         while ( rPosY>0 && nClickY < nScrY )
         {
             --rPosY;
-            nScrY -= (long) ( pDoc->FastGetRowHeight( rPosY, nTabNo ) * nPPTY );
+            nScrY -= ToPixel( pDoc->FastGetRowHeight( rPosY, nTabNo ), nPPTY );
         }
     }
 
@@ -1540,14 +1540,14 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, USHORT nNewPosX )
             {
                 long nThis = pDoc->GetColWidth( i,nTabNo );
                 nTPosX -= nThis;
-                nPixPosX -= (long)(nThis*nPPTX);
+                nPixPosX -= ToPixel(nThis, nPPTX);
             }
         else
             for ( i=nNewPosX; i<nOldPosX; i++ )
             {
                 long nThis = pDoc->GetColWidth( i,nTabNo );
                 nTPosX += nThis;
-                nPixPosX += (long)(nThis*nPPTX);
+                nPixPosX += ToPixel(nThis, nPPTX);
             }
 
         pThisTab->nPosX[eWhich] = nNewPosX;
@@ -1575,14 +1575,14 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, USHORT nNewPosY )
             {
                 long nThis = pDoc->FastGetRowHeight( i,nTabNo );
                 nTPosY -= nThis;
-                nPixPosY -= (long)(nThis*nPPTY);
+                nPixPosY -= ToPixel(nThis, nPPTY);
             }
         else
             for ( i=nNewPosY; i<nOldPosY; i++ )
             {
                 long nThis = pDoc->FastGetRowHeight( i,nTabNo );
                 nTPosY += nThis;
-                nPixPosY += (long)(nThis*nPPTY);
+                nPixPosY += ToPixel(nThis, nPPTY);
             }
 
         pThisTab->nPosY[eWhich] = nNewPosY;
@@ -1606,13 +1606,13 @@ void ScViewData::RecalcPixPos()             // nach Zoom-Aenderungen
         long nPixPosX = 0;
         USHORT nPosX = pThisTab->nPosX[eWhich];
         for (i=0; i<nPosX; i++)
-            nPixPosX -= (long)(pDoc->GetColWidth(i,nTabNo) * nPPTX);
+            nPixPosX -= ToPixel(pDoc->GetColWidth(i,nTabNo), nPPTX);
         pThisTab->nPixPosX[eWhich] = nPixPosX;
 
         long nPixPosY = 0;
         USHORT nPosY = pThisTab->nPosY[eWhich];
         for (i=0; i<nPosY; i++)
-            nPixPosY -= (long)(pDoc->FastGetRowHeight(i,nTabNo) * nPPTY);
+            nPixPosY -= ToPixel(pDoc->FastGetRowHeight(i,nTabNo), nPPTY);
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
 }
@@ -1648,7 +1648,7 @@ void ScViewData::SetScreen( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRo
         nTSize = pDoc->GetColWidth( nCol, nTabNo );
         if (nTSize)
         {
-            nSizePix = (long) ( nTSize * nPPTX );
+            nSizePix = ToPixel( nTSize, nPPTX );
             nScrPosX += (USHORT) nSizePix;
         }
     }
@@ -1658,7 +1658,7 @@ void ScViewData::SetScreen( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRo
         nTSize = pDoc->FastGetRowHeight( nRow, nTabNo );
         if (nTSize)
         {
-            nSizePix = (long) ( nTSize * nPPTY );
+            nSizePix = ToPixel( nTSize, nPPTY );
             nScrPosY += (USHORT) nSizePix;
         }
     }
@@ -2293,7 +2293,7 @@ BOOL ScViewData::UpdateFixX( USHORT nTab )              // TRUE = Wert geaendert
         USHORT nTSize = pDoc->GetColWidth( nX, nTab );
         if (nTSize)
         {
-            long nPix = (long) ( nTSize * nPPTX );
+            long nPix = ToPixel( nTSize, nPPTX );
             nNewPos += nPix;
         }
     }
@@ -2325,7 +2325,7 @@ BOOL ScViewData::UpdateFixY( USHORT nTab )              // TRUE = Wert geaendert
         USHORT nTSize = pDoc->FastGetRowHeight( nY, nTab );
         if (nTSize)
         {
-            long nPix = (long) ( nTSize * nPPTY );
+            long nPix = ToPixel( nTSize, nPPTY );
             nNewPos += nPix;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:48:29 $
+ *  last change: $Author: nn $ $Date: 2001-04-18 10:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,10 +461,20 @@ public:
 
     const Size&     GetScenButSize() const              { return aScenButSize; }
     void            SetScenButSize(const Size& rNew)    { aScenButSize = rNew; }
+
+    static inline long ToPixel( USHORT nTwips, double nFactor );
 };
 
 
 // ---------------------------------------------------------------------------
+
+inline long ScViewData::ToPixel( USHORT nTwips, double nFactor )
+{
+    long nRet = (long)( nTwips * nFactor );
+    if (!nRet)
+        nRet = 1;
+    return nRet;
+}
 
 inline void ScViewData::GetMoveCursor( USHORT& rCurX, USHORT& rCurY )
 {

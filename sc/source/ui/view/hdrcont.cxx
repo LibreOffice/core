@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2001-04-18 10:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,7 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
                             break;
 
                         case SC_HDRPAINT_TEXT:
+                            if ( nSizePix > 1 )     // minimal check for small columns/rows
                             {
                                 if ( bMark != bBoldSet )
                                 {

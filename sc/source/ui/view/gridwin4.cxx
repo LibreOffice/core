@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-26 18:58:36 $
+ *  last change: $Author: nn $ $Date: 2001-04-18 10:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,30 +367,30 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
     double nPPTX = pViewData->GetPPTX();
     double nPPTY = pViewData->GetPPTY();
 
-    long nScrX = (long) ( pDoc->GetColWidth( nX1, nTab ) * nPPTX );
+    long nScrX = ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
     while ( nScrX <= aPixRect.Left() && nX1 < MAXCOL )
     {
         ++nX1;
-        nScrX += (long) ( pDoc->GetColWidth( nX1, nTab ) * nPPTX );
+        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
     }
     USHORT nX2 = nX1;
     while ( nScrX <= aPixRect.Right() && nX2 < MAXCOL )
     {
         ++nX2;
-        nScrX += (long) ( pDoc->GetColWidth( nX2, nTab ) * nPPTX );
+        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
     }
 
-    long nScrY = (long) ( pDoc->GetRowHeight( nY1, nTab ) * nPPTY );
+    long nScrY = ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
     while ( nScrY <= aPixRect.Top() && nY1 < MAXROW )
     {
         ++nY1;
-        nScrY += (long) ( pDoc->GetRowHeight( nY1, nTab ) * nPPTY );
+        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
     }
     USHORT nY2 = nY1;
     while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
     {
         ++nY2;
-        nScrY += (long) ( pDoc->GetRowHeight( nY2, nTab ) * nPPTY );
+        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY2, nTab ), nPPTY );
     }
 
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
@@ -1345,11 +1345,11 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                     nLoopEndX = nX1;
             }
 
-            USHORT nEndY = nScrY + (USHORT) ( nHeightTwips * nPPTY ) - 1;
+            USHORT nEndY = nScrY + (USHORT) ScViewData::ToPixel( nHeightTwips, nPPTY ) - 1;
             USHORT nScrX = (USHORT) aScrPos.X();
             for (USHORT nX=nX1; nX<=nLoopEndX; nX++)
             {
-                USHORT nWidth = (USHORT) ( pDoc->GetColWidth( nX,nTab ) * nPPTX );
+                USHORT nWidth = (USHORT) ScViewData::ToPixel( pDoc->GetColWidth( nX,nTab ), nPPTX );
                 if ( nWidth > 0 )
                 {
                     USHORT nEndX = nScrX + nWidth - 1;
@@ -1474,7 +1474,7 @@ void ScGridWindow::DrawDragRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     {
         if (nX2<=MAXCOL && nX2>=nX1)
             for (i=nX1; i<=nX2; i++)
-                nSizeXPix += (long) ( pDoc->GetColWidth( i, nTab ) * nPPTX );
+                nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( i, nTab ), nPPTX );
         else
         {
             aScrPos.X() -= 1;
@@ -1484,7 +1484,7 @@ void ScGridWindow::DrawDragRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
 
     if (nY2<=MAXROW && nY2>=nY1)
         for (i=nY1; i<=nY2; i++)
-            nSizeYPix += (long) ( pDoc->GetRowHeight( i, nTab ) * nPPTY );
+            nSizeYPix += ScViewData::ToPixel( pDoc->GetRowHeight( i, nTab ), nPPTY );
     else
     {
         aScrPos.Y() -= 1;
