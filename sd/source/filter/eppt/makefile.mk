@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 18:19:46 $
+#   last change: $Author: rt $ $Date: 2004-11-26 19:50:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,11 @@ ENABLE_EXCEPTIONS=TRUE
 NOOPTFILES= $(SLO)$/epptso.obj
 .ENDIF
 
-SLOFILES =	$(SLO)$/eppt.obj		\
-            $(SLO)$/epptso.obj		\
-            $(SLO)$/escherex.obj	\
-            $(SLO)$/dinfos2.obj
+SLOFILES =	$(SLO)$/eppt.obj			\
+            $(SLO)$/epptso.obj			\
+            $(SLO)$/escherex.obj		\
+            $(SLO)$/dinfos2.obj			\
+            $(SLO)$/pptexanimations.obj
 
 SHL1TARGET	=	emp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=	eppt
@@ -91,7 +92,7 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS = 	\
                 $(SVXLIB)			\
-                                $(SOTLIB)                       \
+                $(SOTLIB)           \
                 $(GOODIESLIB)		\
                 $(VCLLIB)			\
                 $(SOTLIB)			\
@@ -100,12 +101,6 @@ SHL1STDLIBS = 	\
                 $(UCBHELPERLIB)		\
                 $(CPPULIB)			\
                 $(SALLIB)
-
-#				$(SVTOOLLIB)		\
-#				$(SVLLIB)			\
-#				$(TKLIB)			\
-#				$(SJLIB)			\
-#				$(VOSLIB)			\
 
 # --- Targets --------------------------------------------------------------
 
