@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 13:00:00 $
+#   last change: $Author: rt $ $Date: 2004-11-26 19:31:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/animationexport.obj\
+        $(SLO)$/animationimport.obj\
         $(SLO)$/XMLNumberStyles.obj\
         $(SLO)$/XMLGraphicsDefaultStyle.obj\
         $(SLO)$/viewcontext.obj\
@@ -110,32 +112,6 @@ SLOFILES =	\
         $(SLO)$/ximpcustomshape.obj \
         $(SLO)$/EnhancedCustomShapeToken.obj \
         $(SLO)$/XMLReplacementImageContext.obj
-
-SVXLIGHTOBJFILES =	\
-        $(OBJ)$/XMLNumberStyles.obj\
-        $(OBJ)$/XMLGraphicsDefaultStyle.obj\
-        $(OBJ)$/viewcontext.obj\
-        $(OBJ)$/eventimp.obj\
-        $(OBJ)$/layerimp.obj\
-        $(OBJ)$/ximpshow.obj\
-        $(OBJ)$/animimp.obj\
-        $(OBJ)$/numithdl.obj\
-        $(OBJ)$/sdxmlimp.obj \
-        $(OBJ)$/ximpstyl.obj \
-        $(OBJ)$/ximpbody.obj \
-        $(OBJ)$/ximpshap.obj \
-        $(OBJ)$/ximpgrp.obj \
-        $(OBJ)$/ximp3dscene.obj \
-        $(OBJ)$/ximp3dobject.obj \
-        $(OBJ)$/ximpnote.obj \
-        $(OBJ)$/sdpropls.obj \
-        $(OBJ)$/propimp0.obj \
-        $(OBJ)$/xexptran.obj \
-        $(OBJ)$/shapeimport.obj \
-        $(OBJ)$/XMLImageMapContext.obj \
-        $(OBJ)$/XMLShapePropertySetContext.obj \
-        $(OBJ)$/XMLShapeStyleContext.obj \
-        $(OBJ)$/ximppage.obj
 
 # --- Targets --------------------------------------------------------------
 
