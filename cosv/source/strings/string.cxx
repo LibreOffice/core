@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:40 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,17 +158,6 @@ String::String( const char *        i_str,
 {
 }
 
-/*  The case i_nStartPosition == 0 is not handled specially,
-    because time efficiency seems to be more important than
-    space efficiency in such base functionality classes. If
-    used with care, the case i_nStartPosition==0 will be rare.
-*/
-String::String( const self &        i_rStr,
-                position_type       i_nStartPosition )
-    :   pd( new S_Data(str_from_StringOffset(i_rStr, i_nStartPosition)) )
-{
-}
-
 /*  For efficiency see the previous c'tor.
 */
 String::String( const self &        i_rStr,
@@ -220,14 +209,6 @@ String::swap( self & i_rStr )
     const S_Data * pTemp = pd;
     pd = i_rStr.pd;
     i_rStr.pd = pTemp;
-}
-
-void
-String::assign( const self &        i_rStr,
-                position_type       i_nStartPosition )
-{
-    pd->Release();
-    pd = new S_Data( str_from_StringOffset(i_rStr, i_nStartPosition) );
 }
 
 void
@@ -354,9 +335,8 @@ compare( const CharOrder_Table &            i_rOrder,
 {
     const char * it1 = i_s1;
     const char * it2 = i_s2;
-    for ( ; *it1 == *it2 AND *it1 != '\0'; ++it1, ++it2 )
+    for ( ; i_rOrder(*it1) == i_rOrder(*it2) AND *it1 != '\0'; ++it1, ++it2 )
     {}
-
     return int( i_rOrder(*it1) - i_rOrder(*it2) );
 }
 
@@ -410,7 +390,7 @@ compare( const CharOrder_Table &            i_rOrder,
 
     const char * it1 = i_s1;
     const char * it2 = i_s2;
-    for ( ; *it1 == *it2 AND *it1 != '\0' AND it1 != sEnd; ++it1, ++it2 )
+    for ( ; i_rOrder(*it1) == i_rOrder(*it2) AND *it1 != '\0' AND it1 != sEnd; ++it1, ++it2 )
     {}
 
     if ( it1 != sEnd )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-06-25 15:15:46 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@ class String
                         String(
                             const char *        i_str,
                             size_type           i_nLength );
-                        String(
-                            const self &        i_rStr,
-                            position_type       i_nStartPosition);
     /** @precond i_nLength == str::maxsize
                  || i_nStartPosition+i_nLength <= i_rStr.Size().
     */
@@ -163,9 +160,6 @@ class String
     void                swap(
                             self &              i_rStr );
 
-    void                assign(
-                            const self &        i_rStr,
-                            position_type       i_nStartPosition);
     /** @precond i_nLength == str::maxsize
                  || i_nStartPosition+i_nLength <= i_rStr.Size().
     */
@@ -285,6 +279,9 @@ class String
 
     //*** Natural order, no substrings
 
+inline int          compare(
+                        const String &          i_s1,
+                        const String &          i_s2 );
 inline int          compare(
                         const String &          i_s1,
                         const char *            i_s2 );
@@ -480,6 +477,11 @@ String::end() const
 
 
 //******************     global compare-functions      ********************//
+inline int
+compare( const String &          i_s1,
+         const String &          i_s2 )
+{ return i_s1.compare(i_s2); }
+
 inline int
 compare( const String &                     i_s1,
          const char *                       i_s2 )

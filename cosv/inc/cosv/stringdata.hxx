@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringdata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ StringData<CHAR>::Data() const
 }
 
 template <class CHAR>
-StringData<CHAR>::size_type
+typename StringData<CHAR>::size_type
 StringData<CHAR>::Size() const
 {
     return nSize;

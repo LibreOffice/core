@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dirchain.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:38 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ class DirectoryChain
     DirectoryChain &    operator+=(
                             const DirectoryChain &
                                                 i_rDC );
+    DirectoryChain &    operator-=(
+                            uintt               i_nLevelsUp );
+
     // OPERATIONS
     void                Set(
                             const char *        i_sPath,
@@ -162,6 +165,9 @@ DirectoryChain::operator+=( const String & i_sName )
 inline DirectoryChain &
 DirectoryChain::operator+=( const DirectoryChain & i_rDC )
     { PushBack(i_rDC); return *this;  }
+inline DirectoryChain &
+DirectoryChain::operator-=( uintt i_nLevelsUp )
+    { PopBack(i_nLevelsUp); return *this;  }
 inline uintt
 DirectoryChain::Size() const
     { return aPath.size(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: str_types.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:40 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ namespace csv
 
 CharOrder_Table::CharOrder_Table( const int * i_pCharWeightsArray )
 {
-    memcpy( cWeights, i_pCharWeightsArray, 256 );
+    memcpy( cWeights, i_pCharWeightsArray, 256 * sizeof(int) );
 }
 
 

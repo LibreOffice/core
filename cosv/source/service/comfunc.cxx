@@ -2,9 +2,9 @@
  *
  *  $RCSfile: comfunc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,23 +124,23 @@ void
 date2str(String & out_Str, int day, int month, int year)
 {
    char buf[11] = "00.00.0000";
-   buf[0] = char(day/10) + '0';
-   buf[1] = char(day%10) + '0';
-   buf[3] = char(month/10) + '0';
-   buf[4] = char(month%10) + '0';
+   buf[0] = static_cast<char>(day/10 + '0');
+   buf[1] = static_cast<char>(day%10 + '0');
+   buf[3] = static_cast<char>(month/10 + '0');
+   buf[4] = static_cast<char>(month%10 + '0');
 
    if (year < 100)
    {
-      buf[6] = char(year/10) + '0';
-      buf[7] = char(year%10) + '0';
+      buf[6] = static_cast<char>(year/10 + '0');
+      buf[7] = static_cast<char>(year%10 + '0');
       buf[8] = 0;
    }
    else
    {
-      buf[6] = char(year/1000) + '0';
-      buf[7] = char(year%1000/100) + '0';
-      buf[8] = char(year%100/10) + '0';
-      buf[9] = char(year%10) + '0';
+      buf[6] = static_cast<char>(year/1000 + '0');
+      buf[7] = static_cast<char>(year%1000/100 + '0');
+      buf[8] = static_cast<char>(year%100/10 + '0');
+      buf[9] = static_cast<char>(year%10 + '0');
    }
    out_Str = buf;
 }
@@ -172,12 +172,12 @@ void
 time2str(String & out_Str, int hour, int min, int sec)
 {
    char buf[9] = "00:00:00";
-   buf[0] = char(hour/10) + '0';
-   buf[1] = char(hour%10) + '0';
-   buf[3] = char(min/10) + '0';
-   buf[4] = char(min%10) + '0';
-   buf[6] = char(sec/10) + '0';
-   buf[7] = char(sec%10) + '0';
+   buf[0] = static_cast<char>(hour/10 + '0');
+   buf[1] = static_cast<char>(hour%10 + '0');
+   buf[3] = static_cast<char>(min/10 + '0');
+   buf[4] = static_cast<char>(min%10 + '0');
+   buf[6] = static_cast<char>(sec/10 + '0');
+   buf[7] = static_cast<char>(sec%10 + '0');
    out_Str = buf;
 }
 

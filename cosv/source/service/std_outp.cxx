@@ -2,9 +2,9 @@
  *
  *  $RCSfile: std_outp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-21 08:27:38 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,30 +69,32 @@
 namespace csv
 {
 
+#ifdef CSV_NO_IOSTREAMS
 redirect_out *  redirect_out::pStdOut_ = 0;
 redirect_out *  redirect_out::pStdErr_ = 0;
+#endif // defined(CSV_NO_IOSTREAMS)
 
 
 void
 Endl( ostream & io_rStream, bool bUseRedirect, int* )
 {
 #ifndef CSV_NO_IOSTREAMS
-    if (NOT bUseRedirect)
+//    if (NOT bUseRedirect)
         io_rStream << std::endl;
-    else
+//    else
 #endif
-        static_cast< redirect_out& >(io_rStream).re_endl();
+//        static_cast< redirect_out& >(io_rStream).re_endl();
 }
 
 void
 Flush( ostream & io_rStream, bool bUseRedirect, int* )
 {
 #ifndef CSV_NO_IOSTREAMS
-    if (NOT bUseRedirect)
+//    if (NOT bUseRedirect)
         io_rStream << std::flush;
-    else
+//    else
 #endif
-        static_cast< redirect_out& >(io_rStream).re_flush();
+//        static_cast< redirect_out& >(io_rStream).re_flush();
 }
 
 void
@@ -103,7 +105,7 @@ PerformAssertion(const char * condition, const char * file, unsigned line)
          << " in file: "
          << file
          << " at line: "
-         << __LINE__
+         << line
          << Endl;
 
     exit(3);

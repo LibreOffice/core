@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-16 16:27:05 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,32 @@ StreamStr::operator_add_token( const char *        i_sText,
     return *this;
 }
 
+StreamStr &
+StreamStr::operator_read_line( bstream & i_src )
+{
+    char c = 0;
+    intt nCount = 0;
+    for ( nCount = i_src.read(&c, 1);
+          nCount == 1 AND c >= 32;
+          nCount = i_src.read(&c, 1) )
+    {
+        operator<<(c);
+    }
+
+    bool bEndOfStream = nCount == 0;
+    // Check for line-end:
+    if ( NOT bEndOfStream AND c != 0 )
+    {
+        char oldc = c;
+          if (i_src.read(&c, 1) == 1)
+        {
+            if (c >= 32 OR c == oldc)
+                i_src.seek(-1,::csv::cur);
+        }
+    }
+    return *this;
+}
+
 void
 StreamStr::replace( position_type       i_nStart,
                     size_type           i_nSize,
@@ -529,15 +555,15 @@ StreamStr::replace( position_type       i_nStart,
 
    size_type anz = min( length() - i_nStart, i_nSize );
 
-   if ( i_nSize < i_aReplacement.nLength )
+   if ( anz < i_aReplacement.nLength )
    {
-        ProvideAddingSize( i_aReplacement.nLength - i_nSize );
+        ProvideAddingSize( i_aReplacement.nLength - anz );
    }
-   else if ( i_nSize > i_aReplacement.nLength )
+   else if ( anz > i_aReplacement.nLength )
    {
-        seek_type nMove = seek_type(i_nSize - i_aReplacement.nLength);
+        seek_type nMove = seek_type(anz - i_aReplacement.nLength);
 
-        MoveData( dpData + i_nStart + i_nSize,
+        MoveData( dpData + i_nStart + anz,
                   pEnd,
                   -nMove );
         pEnd -= nMove;
@@ -565,14 +591,11 @@ void
 StreamStr::replace_all( Area                i_aStrToSearch,
                         Area                i_aReplacement )
 {
-    position_type p =0;
+    position_type p = 0;
     const char *  pSearch = i_aStrToSearch.sStr;
     size_type     nSearch = i_aStrToSearch.nLength;
-    size_type     nStop = length();
-    if (nStop > nSearch)
-        nStop -= nSearch;
 
-    while ( p < length() )
+    while ( p <= length() - nSearch )
     {
         if ( strncmp(dpData+p, pSearch, nSearch) == 0 )
         {
@@ -602,8 +625,11 @@ StreamStr::to_lower( position_type       i_nStart,
 
     if ( i_nStart < length() )
     {
-         for ( char * pChange = dpData + i_nStart;
-              pChange != pEnd;
+        char * pStop = i_nStart + i_nLength < length()
+                            ?   dpData + i_nStart + i_nLength
+                            :   pEnd;
+        for ( char * pChange = dpData + i_nStart;
+              pChange != pStop;
               ++pChange )
         {
             *pChange =  (*pChange & char(0x80)) == '\0'
@@ -611,7 +637,7 @@ StreamStr::to_lower( position_type       i_nStart,
                             :   *pChange;
         }
     }
-     return *this;
+    return *this;
 }
 
 StreamStr &
@@ -630,8 +656,11 @@ StreamStr::to_upper( position_type       i_nStart,
 
     if ( i_nStart < length() )
     {
-         for ( char * pChange = dpData + i_nStart;
-              pChange != pEnd;
+        char * pStop = i_nStart + i_nLength < length()
+                            ?   dpData + i_nStart + i_nLength
+                            :   pEnd;
+        for ( char * pChange = dpData + i_nStart;
+              pChange != pStop;
               ++pChange )
         {
             *pChange =  (*pChange & char(0x80)) == '\0'
@@ -639,7 +668,7 @@ StreamStr::to_upper( position_type       i_nStart,
                             :   *pChange;
         }
     }
-     return *this;
+    return *this;
 }
 
 
@@ -777,7 +806,7 @@ StreamStr::Resize( size_type i_nMinimumCapacity )
     size_type nNewSize = nCapacity1 < 128
                             ?   nCapacity1 << 1
                             :   (nCapacity1 << 1) - (nCapacity1 >> 1);
-    nCapacity1 = csv::max( nNewSize, i_nMinimumCapacity + 1 );
+    nCapacity1 = csv::max( nNewSize, size_type(i_nMinimumCapacity + 1) );
 
     char * pNew = new char[nCapacity1];
     strcpy ( pNew, dpData );

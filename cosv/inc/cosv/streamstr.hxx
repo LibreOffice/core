@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,8 @@ class StreamStr : public bostream
     self &              operator_add_token(
                             const char *        i_sText,
                             char                i_cDelimiter );
+    self &              operator_read_line(
+                            bstream &           i_src );
 
 //***********   Not yet implemented    *********************//
     void                strip_front(

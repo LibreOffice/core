@@ -2,9 +2,9 @@
  *
  *  $RCSfile: std_outp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 namespace csv
 {
 
+#ifdef CSV_NO_IOSTREAMS
 class redirect_out : public ostream
 {
   public:
@@ -104,16 +105,18 @@ class redirect_out : public ostream
     static redirect_out *
                         pStdErr_;
 };
-
+#endif // defined(CSV_NO_IOSTREAMS)
 
 
 inline ostream &
 Cout()
 {
+
 #ifndef CSV_NO_IOSTREAMS
-    return redirect_out::useme_()
-            ?   (ostream&)( redirect_out::std_() )
-            :   (ostream&)( std::cout );
+//    return redirect_out::useme_()
+//            ?   (ostream&)( redirect_out::std_() )
+//            :   (ostream&)( std::cout );
+    return (ostream&)( std::cout );
 #else
     csv_assert( redirect_out::useme_() );
     return redirect_out::std_();
@@ -124,9 +127,10 @@ inline ostream &
 Cerr()
 {
 #ifndef CSV_NO_IOSTREAMS
-    return redirect_out::useme_()
-            ?   (ostream&)( redirect_out::err_() )
-            :   (ostream&)( std::cerr );
+//    return redirect_out::useme_()
+//            ?   (ostream&)( redirect_out::err_() )
+//            :   (ostream&)( std::cerr );
+    return (ostream&)( std::cerr );
 #else
     csv_assert( redirect_out::useme_() );
     return redirect_out::err_();
@@ -151,7 +155,8 @@ operator<<( csv::ostream &          io_rStream,
             csv::F_FLUSHING_FUNC    i_fFlushingFunc )
 {
 #ifndef CSV_NO_IOSTREAMS
-    (*i_fFlushingFunc)( io_rStream, csv::redirect_out::useme_(), 0 );
+//    (*i_fFlushingFunc)( io_rStream, csv::redirect_out::useme_(), 0 );
+    (*i_fFlushingFunc)( io_rStream, false, 0 );
 #else
     csv_assert( csv::redirect_out::useme_() );
     (*i_fFlushingFunc)( io_rStream, true, 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
+ *  last change: $Author: np $ $Date: 2002-11-01 12:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,10 @@ class Path
     bool                IsFile() const          { return sFile.length() > 0; }
 
     /// Directories have a delimiter at the end, files not.
-    virtual void        Get(
+    void                Get(
                             ostream &           o_rPath ) const;
     /// Directories have a delimiter at the end, files not.
-    virtual void        Get(
+    void                Get(
                             bostream &          o_rPath ) const;
     // ACCESS
     DirectoryChain &    DirChain()              { return aPath; }
