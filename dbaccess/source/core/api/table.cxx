@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-27 14:17:20 $
+ *  last change: $Author: oj $ $Date: 2002-03-27 14:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,7 @@ void ODBTable::refreshIndexes()
                     if(aName.getLength())
                         aName += aDot;
                     aName += xRow->getString(6);
-                    if(aName.getLength())
+                    if ( !xRow->wasNull() && aName.getLength() )
                         aVector.push_back(aName);
                 }
             }
