@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyEntryContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 10:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ XMLIndexBibliographyEntryContext::~XMLIndexBibliographyEntryContext()
 {
 }
 
-static const SvXMLEnumMapEntry aBibliographyDataFieldMap[] =
+const SvXMLEnumMapEntry aBibliographyDataFieldMap[] =
 {
     { sXML_address,             BibliographyDataField::ADDRESS },
     { sXML_annote,              BibliographyDataField::ANNOTE },
