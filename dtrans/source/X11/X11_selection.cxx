@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-22 16:13:02 $
+ *  last change: $Author: pl $ $Date: 2002-12-10 14:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,6 +977,15 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         if( it == m_aSelections.end() )
             return false;
     }
+
+    if( it->second->m_aTypes.getLength() == 0 )
+    {
+        Sequence< DataFlavor > aFlavors;
+        getPasteDataTypes( selection, aFlavors );
+        if( it->second->m_aTypes.getLength() == 0 )
+            return false;
+    }
+
     const Sequence< DataFlavor >& rTypes( it->second->m_aTypes );
     const Sequence< Atom >& rNativeTypes( it->second->m_aNativeTypes );
 #ifdef DEBUG
