@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 10:10:05 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ DAVResourceAccess::DAVResourceAccess(
                 const rtl::OUString & rURL )
     throw( DAVException )
 : m_aURL( rURL ),
+  m_bRedirected( sal_False ),
   m_xSMgr( rSMgr ),
   m_pSessionFactory( pSessionFactory )
 {
@@ -198,6 +199,7 @@ void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
     throw( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    m_bRedirected = sal_True;
     m_aURL  = rNewURL;
     m_aPath = rtl::OUString(); // Next initialize() will create new session.
 }
@@ -580,6 +582,15 @@ void DAVResourceAccess::UNLOCK ( const ucb::Lock & rLock,
 }
 
 //=========================================================================
+// DAVRedirectionListener method
+// virtual
+void DAVResourceAccess::redirectNotify( const rtl::OUString & rFromURI,
+                                        const rtl::OUString & rToURI )
+{
+    setURL( rToURI );
+}
+
+//=========================================================================
 // init dav session and path
 void DAVResourceAccess::initialize()
     throw ( DAVException )
@@ -600,6 +611,7 @@ void DAVResourceAccess::initialize()
                 m_xSession
                     = m_pSessionFactory->createDAVSession( m_aURL, m_xSMgr );
                 m_xSession->setServerAuthListener( &webdavAuthListener );
+                m_xSession->setRedirectionListener( this );
             }
             catch ( DAVException const & )
             {

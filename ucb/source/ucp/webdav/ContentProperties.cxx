@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-06 10:37:56 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ using namespace webdav_ucp;
 //=========================================================================
 
 ContentProperties::ContentProperties( const DAVResource& rResource )
-: pIsDocument( 0 ),
+: bTrailingSlash( sal_False ),
+  pIsDocument( 0 ),
   pIsFolder( 0 ),
   pSize( 0 ),
   pDateCreated( 0 ),
@@ -223,12 +224,20 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
         }
         ++it;
       }
+
+    if ( rResource.uri.getStr()[ rResource.uri.getLength() - 1 ]
+        == sal_Unicode( '/' ) )
+    {
+//        if ( pIsFolder && *pIsFolder )
+            bTrailingSlash = sal_True;
+    }
 }
 
 //=========================================================================
 ContentProperties::ContentProperties(
                         const rtl::OUString & rTitle, sal_Bool bFolder )
 : aTitle( rTitle ),
+  bTrailingSlash( sal_False ),
   pIsDocument( new sal_Bool( !bFolder ) ),
   pIsFolder( new sal_Bool( bFolder ) ),
   pSize( 0 ),
@@ -252,6 +261,7 @@ ContentProperties::ContentProperties(
 //=========================================================================
 ContentProperties::ContentProperties( const rtl::OUString & rTitle )
 : aTitle( rTitle ),
+  bTrailingSlash( sal_False ),
   pIsDocument( 0 ),
   pIsFolder( 0 ),
   pSize( 0 ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,17 +86,18 @@ namespace webdav_ucp
 class NeonSession : public DAVSession
 {
     private:
-        osl::Mutex              mMutex;
-        rtl::OUString           mScheme;
-        rtl::OUString           mHostName;
-        rtl::OUString           mProxyName;
-        sal_Int32               mPort;
-        sal_Int32               mProxyPort;
-        HttpSession *           mHttpSession;
-        DAVAuthListener *       mListener;
-        DAVSessionFactory *     m_pSessionFactory;
+        osl::Mutex                mMutex;
+        rtl::OUString             mScheme;
+        rtl::OUString             mHostName;
+        rtl::OUString             mProxyName;
+        sal_Int32                 mPort;
+        sal_Int32                 mProxyPort;
+        HttpSession *             mHttpSession;
+        DAVAuthListener *         mListener;
+        DAVRedirectionListener *  mRedirectionListener;
+        DAVSessionFactory *       m_pSessionFactory;
         // Note: Uncomment the following if locking support is required
-        // NeonLockSession *    mNeonLockSession;
+        // NeonLockSession *      mNeonLockSession;
 
         static sal_Bool           sSockInited;
         static http_request_hooks mRequestHooks;
@@ -135,6 +136,9 @@ class NeonSession : public DAVSession
 
         virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener);
         virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener);
+
+        virtual void setRedirectionListener(
+            DAVRedirectionListener * inRedirectionListener );
 
         virtual void OPTIONS( const ::rtl::OUString &  inPath,
                               DAVCapabilities & outCapabilities,

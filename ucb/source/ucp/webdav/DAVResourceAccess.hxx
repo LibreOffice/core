@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _DAVAUTHLISTENER_HXX_
 #include "DAVAuthListener.hxx"
 #endif
+#ifndef _DAVREDIRECTIONLISTENER_HXX_
+#include "DAVRedirectionListener.hxx"
+#endif
 #ifndef _DAVEXCEPTION_HXX_
 #include "DAVException.hxx"
 #endif
@@ -109,18 +112,19 @@ namespace webdav_ucp
 
 class DAVSessionFactory;
 
-class DAVResourceAccess
+class DAVResourceAccess : public DAVRedirectionListener
 {
     osl::Mutex    m_aMutex;
     rtl::OUString m_aURL;
     rtl::OUString m_aPath;
     rtl::Reference< DAVSession > m_xSession;
+    sal_Bool m_bRedirected;
     DAVSessionFactory*           m_pSessionFactory;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
 
 public:
-    DAVResourceAccess() : m_pSessionFactory( 0 ) {}
+    DAVResourceAccess() : m_pSessionFactory( 0 ), m_bRedirected( sal_False ) {}
     DAVResourceAccess( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XMultiServiceFactory > & rSMgr,
                        DAVSessionFactory* pSessionFactory,
@@ -129,6 +133,8 @@ public:
 
     void setURL( const rtl::OUString & rNewURL )
         throw( DAVException );
+
+    const rtl::OUString & getURL() const { return m_aURL; }
 
     DAVSessionFactory * getSessionFactory() const { return m_pSessionFactory; }
 
@@ -240,6 +246,10 @@ public:
               const com::sun::star::uno::Reference<
                    com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( DAVException );
+
+    // DAVRedirectionListener methods
+    virtual void redirectNotify( const rtl::OUString & rFromURI,
+                                 const rtl::OUString & rToURI );
 
 private:
     sal_Bool handleException( DAVException & e );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ namespace webdav_ucp
 {
 
 class DAVAuthListener;
+class DAVRedirectionListener;
 
 class DAVSession : public ::cppu::OWeakObject
 {
@@ -109,6 +110,11 @@ public:
     //
     virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener) = 0;
     virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener ) = 0;
+
+    // redirection notification
+    //
+    virtual void setRedirectionListener(
+        DAVRedirectionListener * inRedirectionListener) = 0;
 
     // DAV methods
     //

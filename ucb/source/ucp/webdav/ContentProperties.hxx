@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-06 10:37:56 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ public:
     // Mandatory UCB props.
       ::rtl::OUString aTitle;           // Title
       ::rtl::OUString aEscapedTitle;    // escaped Title
+    sal_Bool bTrailingSlash;
+
     sal_Bool * pIsFolder;
     sal_Bool * pIsDocument;
 

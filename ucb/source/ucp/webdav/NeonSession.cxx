@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-14 13:46:58 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 
 #ifndef _DAVAUTHLISTENER_HXX_
 #include "DAVAuthListener.hxx"
+#endif
+#ifndef _DAVREDIRECTIONLISTENER_HXX_
+#include "DAVRedirectionListener.hxx"
 #endif
 #ifndef _NEONTYPES_HXX_
 #include "NeonTypes.hxx"
@@ -178,7 +181,9 @@ NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
                           const rtl::OUString& inUri,
                           const ProxyConfig& rProxyCfg )
     throw ( DAVException )
-: m_pSessionFactory( pSessionFactory )
+: mListener( 0 ),
+  mRedirectionListener( 0 ),
+  m_pSessionFactory( pSessionFactory )
 {
     // @@@ We need to keep the char buffer for hostname and proxyname
     // for the whole session lifetime because neon only stores a pointer
@@ -268,6 +273,12 @@ void NeonSession::setServerAuthListener(DAVAuthListener * inDAVAuthListener)
 void NeonSession::setProxyAuthListener(DAVAuthListener * inDAVAuthListener)
 {
     // Note: Content is currently not using proxy auth
+}
+
+void NeonSession::setRedirectionListener(
+                    DAVRedirectionListener * inRedirectionListener )
+{
+    mRedirectionListener = inRedirectionListener;
 }
 
 // -------------------------------------------------------------------
@@ -1158,7 +1169,17 @@ int NeonSession::RedirectConfirm(
 void NeonSession::RedirectNotify(
                     void * userdata, const char * src, const char * dest )
 {
-//  NeonSession * theSession = ( NeonSession * )userdata;
+    NeonSession * pSession = static_cast< NeonSession * >( userdata );
+    if ( pSession )
+    {
+        if ( pSession->mRedirectionListener )
+        {
+            pSession->mRedirectionListener->redirectNotify(
+                rtl::OUString(),
+                rtl::OUString::createFromAscii(
+                    http_redirect_location( pSession->mHttpSession ) ) );
+        }
+    }
 }
 
 // static

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-06 08:43:38 $
+ *  last change: $Author: kso $ $Date: 2001-10-25 13:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,8 +208,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
     if ( getResult( nIndex ) )
     {
-        rtl::OUString aId
-            = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
+        rtl::OUString aId = m_pImpl->m_xContent->getResourceAccess().getURL();
 
         const ContentProperties& props
                             = *( m_pImpl->m_aResults[ nIndex ]->pData );
@@ -218,6 +217,9 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
             aId += rtl::OUString::createFromAscii( "/" );
 
         aId += props.aEscapedTitle;
+
+        if ( props.bTrailingSlash )
+            aId += rtl::OUString::createFromAscii( "/" );
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
@@ -445,8 +447,7 @@ sal_Bool DataSupplier::getData()
             return sal_False;
           }
 
-        NeonUri aURI(
-            m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
+        NeonUri aURI( m_pImpl->m_xContent->getResourceAccess().getURL() );
         rtl::OUString aPath = aURI.GetPath();
         if ( aPath.getStr()[ aPath.getLength() - 1 ] == sal_Unicode( '/' ) )
             aPath = aPath.copy( 0, aPath.getLength() - 1 );
