@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-06 12:23:07 $
+ *  last change: $Author: sj $ $Date: 2002-11-07 14:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4812,6 +4812,11 @@ PPTParaPropSet::PPTParaPropSet( PPTParaPropSet& rParaPropSet )
     pParaSet->mnRefCount++;
 
     mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
+
+#ifdef DBG_EXTRACT_BUDATA
+    mnCharacters = rParaPropSet.mnCharacters;
+#endif
+
 }
 
 PPTParaPropSet::~PPTParaPropSet()
@@ -4830,6 +4835,9 @@ PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
         pParaSet->mnRefCount++;
 
         mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
+#ifdef DBG_EXTRACT_BUDATA
+        mnCharacters = rParaPropSet.mnCharacters;
+#endif
     }
     return *this;
 }
@@ -4852,6 +4860,9 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet )
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
     mnLanguage = rCharPropSet.mnLanguage;
+#ifdef DBG_EXTRACT_BUDATA
+    mnCharacters = rCharPropSet.mnCharacters;
+#endif
 }
 
 PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph )
@@ -4864,6 +4875,9 @@ PPTCharPropSet::PPTCharPropSet( PPTCharPropSet& rCharPropSet, sal_uInt32 nParagr
     maString = rCharPropSet.maString;
     mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
     mnLanguage = 0;
+#ifdef DBG_EXTRACT_BUDATA
+    mnCharacters = rCharPropSet.mnCharacters;
+#endif
 }
 
 PPTCharPropSet::~PPTCharPropSet()
@@ -4886,6 +4900,9 @@ PPTCharPropSet& PPTCharPropSet::operator=( PPTCharPropSet& rCharPropSet )
         mnParagraph = rCharPropSet.mnParagraph;
         maString = rCharPropSet.maString;
         mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : NULL;
+#ifdef DBG_EXTRACT_BUDATA
+        mnCharacters = rCharPropSet.mnCharacters;
+#endif
     }
     return *this;
 }
@@ -5184,8 +5201,8 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                                                         PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd )
 {
     sal_uInt32 nMerk = rIn.Tell();
-
     sal_uInt32 nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
+
     String aString;
     DffRecordHeader aTextHd;
     rIn >> aTextHd;
@@ -5250,12 +5267,15 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         sal_uInt16  i, j, nDummy16;
         sal_Bool    bTextPropAtom = sal_False;
 
-        UINT16  nStringLen = aString.Len();
+        sal_uInt16 nStringLen = aString.Len();
 
         DffRecordHeader aTextHd;
+
 #ifdef DBG_EXTRACT_BUDATA
-        sal_uInt16 nParaCount = 0;
+        sal_uInt16 nParaEntryCount = 0;
+        sal_uInt16 nCharEntryCount = 0;
 #endif
+
         rTextHeader.SeekToContent( rIn );
         if ( rMan.SeekToRec( rIn, PPT_PST_StyleTextPropAtom, rTextHeader.GetRecEndFilePos(), &aTextHd ) )
             bTextPropAtom = sal_True;
@@ -5263,14 +5283,15 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         {
             PPTParaPropSet aParaPropSet;
             ImplPPTParaPropSet& aSet = *aParaPropSet.pParaSet;
-#ifdef DBG_EXTRACT_BUDATA
-            aSet.mpArry[ PPT_ParaAttr_DontKnow3 ] = ++nParaCount;
-#endif
             if ( bTextPropAtom )
             {
                 rIn >> nCharCount
                     >> aParaPropSet.pParaSet->mnDepth;  // Einruecktiefe
 
+#ifdef DBG_EXTRACT_BUDATA
+                aSet.mnEntryCount = ++nParaEntryCount;
+                aParaPropSet.mnCharacters = (sal_uInt16)nCharCount;
+#endif
                 nCharCount--;
 
                 rIn >> nMask;
@@ -5343,33 +5364,6 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             else
                 nCharCount = nStringLen;
 
-            if ( nExtParaPos )                          // if set, get the new ppt2000 numrules
-            {
-                if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
-                {
-                    sal_uInt32 nBuFlags, nOldPos = rIn.Tell();
-                    rIn.Seek( nExtParaPos );
-                    rIn >> nBuFlags;
-
-                    if ( nBuFlags & 0x800000 )
-                        rIn >> aSet.nBuInstance;
-                    if ( nBuFlags & 0x01000000 )
-                        rIn >> aSet.nNumberingType;
-                    if ( nBuFlags & 0x02000000 )
-                    {
-                        rIn >> aSet.nBuStart;
-                        aSet.bNumberingActive = sal_True;
-                    }
-                    aSet.nBuFlags = nBuFlags;
-                    nExtParaPos = rIn.Tell() + 8;
-                    rIn.Seek( nOldPos );
-                }
-                if ( aParaPropList.Count() )            // has previous bullet settings
-                {
-                    PPTParaPropSet* pPrevious = (PPTParaPropSet*)aParaPropList.Last();
-                    aSet.bNumberingActive = pPrevious->pParaSet->bNumberingActive;
-                }
-            }
             if ( rRuler.GetTextOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_TextOfs ] ) )
                 aSet.mnAttrSet |= 1 << PPT_ParaAttr_TextOfs;
             if ( rRuler.GetBulletOfs( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_BulletOfs ] ) )
@@ -5407,14 +5401,18 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             }
             nCharAnzRead += nCharCount + 1;
         }
-        UINT32 bEmptyParaPossible = TRUE;
-        UINT32 nCurrentPara = nCharAnzRead = 0;
 
-        UINT32 nCurrentSpecMarker = (UINT32)aSpecMarkerList.First();
+        sal_Bool bEmptyParaPossible = sal_True;
+        sal_uInt32 nCurrentPara = nCharAnzRead = 0;
+        sal_uInt32 nCurrentSpecMarker = (sal_uInt32)aSpecMarkerList.First();
+        sal_uInt32 nExtBuInd = 0x3c00;
+
         while ( nCharAnzRead < nStringLen )
         {
-            PPTCharPropSet aCharPropSet( nCurrentPara );
+            sal_uInt32 nBuFlags, nNumberingType, nLatestParaUpdate = 0xffffffff;
+            sal_uInt16 nBuInstance, nBuStart;
 
+            PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
             {
                 rIn >> nDummy16;
@@ -5431,17 +5429,21 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     }
                 }
                 ImplPPTCharPropSet& aSet = *aCharPropSet.pCharSet;
-                // Zeichenattribute
+
+#ifdef DBG_EXTRACT_BUDATA
+                aSet.mnEntryCount = ++nCharEntryCount;
+                aCharPropSet.mnCharacters = (sal_uInt16)nCharCount;
+#endif
+                // character attributes
                 rIn >> nMask;
 
-                if ( (UINT16)nMask )
+                if ( (sal_uInt16)nMask )
                 {
-                    aSet.mnAttrSet |= (UINT16)nMask;
+                    aSet.mnAttrSet |= (sal_uInt16)nMask;
                     rIn >> aSet.mnFlags;
                 }
-
                 // Die Sortierung der Char-Attribs ist etwas durcheinander...
-                static USHORT __READONLY_DATA aCharAttrTable[16] =
+                static sal_uInt16 __READONLY_DATA aCharAttrTable[16] =
                 {
                     16, 21, 22, 23, 17, 18, 19, 20,
                     24, 25, 26, 27, 28, 29, 30, 31
@@ -5486,7 +5488,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                             break;
                             case PPT_CharAttr_FontColor :
                             {
-                                UINT32 nVal;
+                                sal_uInt32 nVal;
                                 rIn >> nVal;
                                 if ( !( nVal & 0xff000000 ) )
                                     nVal = PPT_COLSCHEME_HINTERGRUND;
@@ -5509,9 +5511,45 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             else
                 nCharCount = nStringLen;
 
-            UINT32 nLen;
+            /* SJ: get the new ppt2000 numrules (f???!!!, why are the bullet information
+               stored in the portion and not paragraph section ?
+               that makes no sense and cost me days of my life.)
+            */
+            if ( nExtParaPos && ( ( nMask & 0x3c00 ) != nExtBuInd ) )
+            {
+                nExtBuInd = nMask & 0x3c00;
+                if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
+                {
+                    sal_uInt32 nOldPos = rIn.Tell();
+                    rIn.Seek( nExtParaPos );
+                    rIn >> nBuFlags;
+                    if ( nBuFlags & 0x800000 )
+                        rIn >> nBuInstance;
+                    if ( nBuFlags & 0x01000000 )
+                        rIn >> nNumberingType;
+                    if ( nBuFlags & 0x02000000 )
+                        rIn >> nBuStart;
+                    nExtParaPos = rIn.Tell() + 8;
+                    rIn.Seek( nOldPos );
+                }
+            }
+
+            sal_uInt32 nLen;
             while( nCharCount )
             {
+                if ( nExtParaPos && ( nLatestParaUpdate != nCurrentPara ) && ( nCurrentPara < aParaPropList.Count() ) )
+                {
+                    PPTParaPropSet* pPropSet = (PPTParaPropSet*)aParaPropList.GetObject( nCurrentPara );
+                    pPropSet->pParaSet->nBuFlags = nBuFlags;
+                    if ( nBuFlags & 0x800000 )
+                        pPropSet->pParaSet->nBuInstance = nBuInstance;
+                    if ( nBuFlags & 0x01000000 )
+                        pPropSet->pParaSet->nNumberingType = nNumberingType;
+                    if ( nBuFlags & 0x02000000 )
+                        pPropSet->pParaSet->nBuStart = nBuStart;
+                    nLatestParaUpdate = nCurrentPara;
+                }
+
                 aCharPropSet.mnOriginalTextPos = nCharAnzRead;
                 if ( nCurrentSpecMarker &&  ( ( nCurrentSpecMarker & 0xffff ) < ( nCharAnzRead + nCharCount ) ) )
                 {
@@ -5519,7 +5557,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     {
                         nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
                         if ( nLen )
-                            aCharPropSet.maString = String( aString, (UINT16)nCharAnzRead, (UINT16)nLen );
+                            aCharPropSet.maString = String( aString, (sal_uInt16)nCharAnzRead, (sal_uInt16)nLen );
                         else if ( bEmptyParaPossible )
                             aCharPropSet.maString = String();
                         if ( nLen || bEmptyParaPossible )
@@ -5528,14 +5566,14 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         nLen++;
                         nCharAnzRead += nLen;
                         nCharCount -= nLen;
-                        bEmptyParaPossible = TRUE;
+                        bEmptyParaPossible = sal_True;
                     }
                     else if ( nCurrentSpecMarker & PPT_SPEC_SYMBOL )
                     {
                         if ( ( nCurrentSpecMarker & 0xffff ) != nCharAnzRead )
                         {
                             nLen = ( nCurrentSpecMarker & 0xffff ) - nCharAnzRead;
-                            aCharPropSet.maString = String( aString, (UINT16)nCharAnzRead, (UINT16)nLen );
+                            aCharPropSet.maString = String( aString, (sal_uInt16)nCharAnzRead, (sal_uInt16)nLen );
                             aCharPropList.Insert( new PPTCharPropSet( aCharPropSet, nCurrentPara ), LIST_APPEND );
                             nCharCount -= nLen;
                             nCharAnzRead += nLen;
@@ -5547,16 +5585,16 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         aCharPropList.Insert( pCPropSet, LIST_APPEND );
                         nCharCount--;
                         nCharAnzRead++;
-                        bEmptyParaPossible = FALSE;
+                        bEmptyParaPossible = sal_False;
                     }
-                    nCurrentSpecMarker = (UINT32)aSpecMarkerList.Next();
+                    nCurrentSpecMarker = (sal_uInt32)aSpecMarkerList.Next();
                 }
                 else
                 {
-                    aCharPropSet.maString = String( aString, (UINT16)nCharAnzRead, (UINT16)nCharCount );
+                    aCharPropSet.maString = String( aString, (sal_uInt16)nCharAnzRead, (sal_uInt16)nCharCount );
                     aCharPropList.Insert( new PPTCharPropSet( aCharPropSet, nCurrentPara ), LIST_APPEND );
                     nCharAnzRead += nCharCount;
-                    bEmptyParaPossible = FALSE;
+                    bEmptyParaPossible = sal_False;
                     break;
                 }
             }
@@ -6025,22 +6063,6 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader, const PPT
             if ( pCharPropSet )
             {
                 PPTPortionObj* pPPTPortion = new PPTPortionObj( *pCharPropSet, rStyleSheet, nInstance, pParaSet->mnDepth );
-                if ( ( pPPTPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_ResetNumbering ) )
-                        && ( pPPTPortion->pCharSet->mnFlags & ( 1 << PPT_CharAttr_ResetNumbering ) ) )
-                {
-                    if ( pParaSet->nBuFlags & 0x02000000 )
-                        pParaSet->nBuStart = 1;
-                }
-                else if ( pParaSet->bNumberingActive )
-                {
-                    pParaSet->nBuFlags |= 0x02000000;
-                }
-                if ( ( pPPTPortion->pCharSet->mnAttrSet & ( 3 << PPT_CharAttr_EnableNumbering1 ) )
-                        && ( pPPTPortion->pCharSet->mnFlags & ( 3 << PPT_CharAttr_EnableNumbering1 ) ) )
-                {
-                    if ( pParaSet->bNumberingActive )
-                        pParaSet->nBuFlags |= 0x02000000;
-                }
                 mpPortionList[ i ] = pPPTPortion;
                 if ( !mbTab )
                     mbTab = mpPortionList[ i ]->HasTabulator();
@@ -6922,8 +6944,17 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             {
                                 ByteString aParaEntries( "ParagraphEntryCount:" );
                                 PPTParaPropSet* pSet = (PPTParaPropSet*)aStyleTextPropReader.aParaPropList.GetObject( nParagraphs - 1 );
-                                aParaEntries.Append( Implgethex( pSet->pParaSet->mpArry[ PPT_ParaAttr_DontKnow3 ], 2 ) );
+                                aParaEntries.Append( Implgethex( pSet->pParaSet->mnEntryCount, 2 ) );
                                 aFileStream.Write( aParaEntries.GetBuffer(), aParaEntries.Len() );
+                                aFileStream << nLineBreak;
+                            }
+                            sal_uInt32 nPortionEntries = aStyleTextPropReader.aCharPropList.Count();
+                            if ( nPortionEntries )
+                            {
+                                ByteString aCharEntries( "CharacterEntryCount:" );
+                                PPTCharPropSet* pSet = (PPTCharPropSet*)aStyleTextPropReader.aCharPropList.GetObject( nPortionEntries - 1 );
+                                aCharEntries.Append( Implgethex( pSet->pCharSet->mnEntryCount, 2 ) );
+                                aFileStream.Write( aCharEntries.GetBuffer(), aCharEntries.Len() );
                                 aFileStream << nLineBreak;
                             }
                             sal_uInt32 nCharCount = aStyleTextPropReader.aCharPropList.Count();
@@ -6963,8 +6994,20 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             {
                                 ByteString aBuFlag;
                                 PPTParaPropSet* pSet = (PPTParaPropSet*)aStyleTextPropReader.aParaPropList.GetObject( i );
-                                aBuFlag.Append( Implgethex( pSet->pParaSet->mnAttrSet & 0xf, 1 ) );
+                                aBuFlag.Append( Implgethex( pSet->mnCharacters, 2 ) );
+                                aBuFlag.Append( ByteString( "ParaFlags:" ) );
+                                aBuFlag.Append( Implgethex( pSet->pParaSet->mnAttrSet, 4 ) );
                                 aBuFlag.Append( Implgethex( pSet->pParaSet->mpArry[ PPT_ParaAttr_BulletOn ], 1 ) );
+                                aFileStream.Write( aBuFlag.GetBuffer(), aBuFlag.Len() );
+                                aFileStream << nLineBreak;
+                            }
+                            for ( i = 0; i < nPortionEntries; i++ )
+                            {
+                                ByteString aBuFlag;
+                                PPTCharPropSet* pSet = (PPTCharPropSet*)aStyleTextPropReader.aCharPropList.GetObject( i );
+                                aBuFlag.Append( Implgethex( pSet->mnCharacters, 2 ) );
+                                aBuFlag.Append( ByteString( "CharFlags:" ) );
+                                aBuFlag.Append( Implgethex( pSet->pCharSet->mnAttrSet, 4 ) );
                                 aFileStream.Write( aBuFlag.GetBuffer(), aBuFlag.Len() );
                                 aFileStream << nLineBreak;
                             }
