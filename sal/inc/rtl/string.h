@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1134,8 +1134,10 @@ sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str,
     for double-byte encodings, UTF-7, UTF-8).
 
     If the length of the Unicode string is greater than zero, the reference
-    count of the new string will be 1.  This function does not handle
-    out-of-memory conditions.
+    count of the new string will be 1.
+
+    If an out-of-memory condition occurs, newStr will point to a null pointer
+    upon return.
 
     @param newStr
     pointer to the new string.  The pointed-to data must be null or a valid
