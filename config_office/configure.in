@@ -189,7 +189,9 @@ if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
    fi
 else 
    CygwinVer="false"
-   with_use_shell="4nt"
+   if test "$_os" = "WINNT"; then
+      with_use_shell="4nt"
+   fi
 fi
 if test "$_os" = "SunOS" -o "$_os" = "Linux" -o "$_os" = "WINNT" -o "$_os" = "Darwin" -o "$_os" = "FreeBSD" -o "$_os" = "OSF1" -o "$_os" = "NetBSD" -o "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
    AC_MSG_RESULT([checked ($_os)])
