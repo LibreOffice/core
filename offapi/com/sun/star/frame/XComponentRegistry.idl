@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentRegistry.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-03-22 17:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,8 @@
 // DocMerge from xml: interface com::sun::star::frame::XComponentRegistry
 /** makes it possible to instanciate desktop components.
 
-
-
-
-
-
-
-    @deprecated@see         XFrame
+    @deprecated
+    @see XFrame
  */
 interface XComponentRegistry: com::sun::star::uno::XInterface
 {
@@ -104,6 +99,9 @@ interface XComponentRegistry: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:25  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:14  mi
     moved from api
 
