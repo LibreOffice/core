@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:51 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,8 +498,12 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         }
     }
 
-    if( pTmpFile )
+    if (pTmpFile)
     {
+        //#i20775#
+        if (pTmpFile->Tell() == 0)
+            bValidBmp = false;
+
         if( bValidBmp )
         {
             GraphicFilter* pGF = ::GetGrfFilter();
