@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:27:36 $
+ *  last change: $Author: as $ $Date: 2001-07-31 08:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,7 @@ class Desktop   :   // interfaces
         ELoadState                                                      m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         TaskCreator                                                     m_aTaskCreator              ;   /// Helper to create new tasks or plugin frames!
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;   /// last target of "loadComponentFromURL()"!
+        css::uno::Reference< css::frame::XTerminateListener >           m_xPipeTerminator           ;
 
         // Properties
 /*OBSOLETE

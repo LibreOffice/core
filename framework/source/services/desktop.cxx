@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: as $ $Date: 2001-07-27 11:10:46 $
+ *  last change: $Author: as $ $Date: 2001-07-31 08:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,10 +410,15 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     // Attention, Our timer hold a reference to use ... and sometimes (e.g. for headless office mode)
     // he forget this one insteandly during his own instantiation! So we can die during next call.
     // That's why it's agood idea to hold use self alive.
     css::uno::Reference< css::frame::XDesktop > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    // Get other neccessary references.
+    css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator = m_xPipeTerminator                          ;
+    css::lang::EventObject                                aEvent          ( static_cast< ::cppu::OWeakObject* >(this) );
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     // Set default return value to TRUE!
     // Because; if we detect a vetor of a listener or a task say "no" to our close() call ...
@@ -428,7 +433,16 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
 
     try
     {
+        // Ask normal terminate listener.
         impl_sendQueryTerminationEvent();
+        // If no veto comes (no exception was thrown!)
+        // we should ask our pipe terminator.
+        // He close pipe if no external requests are pending.
+        // Otherwise he throw the veto exception and we don't terminate!
+        if( xPipeTerminator.is() == sal_True )
+        {
+            xPipeTerminator->queryTermination( aEvent );
+        }
     }
     catch( css::frame::TerminationVetoException& )
     {
@@ -473,7 +487,13 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
             /* UNSAFE AREA ------------------------------------------------------------------------------------- */
         #endif
 
+        // Send event to normal listener ...
         impl_sendNotifyTerminationEvent();
+        // ... but don't forget to send it to our special pipe terminator too!
+        if( xPipeTerminator.is() == sal_True )
+        {
+            xPipeTerminator->notifyTermination( aEvent );
+        }
     }
     // If somewhere break this terminate operation and we must return FALSE ...
     // we must reactivate our quit timer!
@@ -493,8 +513,9 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     @descr      You can add a listener, if you wish to get an event, if desktop will be terminate.
                 Then it's possible to say "NO" by using a TerminateVetoException!
 
-    @attention  a)  We don't need any mutex or lock here ... because our helper is threadsafe himself ... and live
-                    if we live. Our registered transaction guarantee that!
+    @attention  a)  We know a special terminate listener - the pipe terminator. He is called as last of all terminate
+                    listeners. If no request stands in our office pipe - he has no veto. Otherwise
+                    he close the pipe and external requests are rejected.
                 b)  May be we dispose our listener during our own dispose methode ... after closing object for
                     real working. They call us back to remove her interfaces from our listener container.
                     So we should allow that by using E_SOFTEXCEPTIONS and suppress rejection of this calls!
@@ -516,7 +537,25 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
+    sal_Bool                                       bSpecialListener = sal_False                       ;
+    css::uno::Reference< css::lang::XServiceInfo > xInfo            ( xListener, css::uno::UNO_QUERY );
+    if( xInfo.is() == sal_True )
+    {
+        if( xInfo->getImplementationName() == IMPLEMENTATIONNAME_PIPETERMINATOR )
+        {
+            /* SAFE AREA --------------------------------------------------------------------------------------- */
+            WriteGuard aWriteLock( m_aLock );
+            m_xPipeTerminator = xListener;
+            aWriteLock.unlock();
+            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
+            bSpecialListener = sal_True;
+        }
+    }
+
+    if( bSpecialListener == sal_False )
+    {
+        m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
+    }
 }
 
 //*****************************************************************************************************************
@@ -1228,6 +1267,7 @@ void SAL_CALL Desktop::dispose() throw( css::uno::RuntimeException )
     m_xFramesHelper     = css::uno::Reference< css::frame::XFrames >();
     m_xLastFrame        = css::uno::Reference< css::frame::XFrame >();
     m_xFactory          = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    m_xPipeTerminator   = css::uno::Reference< css::frame::XTerminateListener >();
 
     // Disable object for further working.
     m_aTransactionManager.setWorkingMode( E_CLOSE );
