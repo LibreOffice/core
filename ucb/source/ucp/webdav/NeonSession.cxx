@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-01-23 14:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,6 @@
 #endif
 #ifndef _UCBDEADPROPERTYVALUE_HXX_
 #include "UCBDeadPropertyValue.hxx"
-#endif
-
-#ifndef HTTP_REQUEST_H // for HTTP_SESSION_FTP
-#include "http_request.h"
 #endif
 
 using namespace com::sun::star;
@@ -960,13 +956,11 @@ HttpSession * NeonSession::CreateSession( const rtl::OUString & inHostName,
     // Add hooks (i.e. for adding additional headers to the request)
     http_add_hooks( theHttpSession, &mRequestHooks, this, NULL );
 
-#if defined HTTP_SESSION_FTP
     if (inFtp)
         http_session_ftp(theHttpSession,
                          rtl::OUStringToOString(inUserInfo,
                                                 RTL_TEXTENCODING_UTF8).
                              getStr());
-#endif // HTTP_SESSION_FTP
 
     if ( inProxyName.getLength() )
     {
