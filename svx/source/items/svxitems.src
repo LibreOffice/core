@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:35:16 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,7 +1033,7 @@ String RID_SVXITEMS_COLOR
     Text[ chinese_traditional ] = "ÃC¦â ";
     Text[ arabic ] = "Çááæä ";
     Text[ greek ] = "×ñşìá ";
-    Text[ korean ] = "»ö ";
+    Text[ korean ] = "»ö»ó ";
     Text[ turkish ] = "Renk ";
     Text[ language_user1 ] = " ";
 };
@@ -3630,7 +3630,7 @@ String RID_ATTR_CHAR_CHARSETCOLOR
     Text[ polish ] = "Kolor zbioru znaków";
     Text[ portuguese_brazilian ] = "Charset Color";
     Text[ japanese ] = "•¶š—ñ‚ÌF";
-    Text[ korean ] = "¹®ÀÚ ¼¼Æ® »ö";
+    Text[ korean ] = "¹®ÀÚ ÁıÇÕ  »ö»ó";
     Text[ chinese_simplified ] = "×ÖÌåÑÕÉ«";
     Text[ chinese_traditional ] = "¦r«¬ÃC¦â";
     Text[ arabic ] = "áæä ãÌãæÚÉ ÇáÃÍÑİ";
@@ -4584,7 +4584,7 @@ String RID_SVXITEMS_HORJUST_STANDARD
     Text[ chinese_traditional ] = "¤ô¥­¹ï»ô ¼Ğ·Ç";
     Text[ arabic ] = "ãÍÇĞÇÉ ÃİŞíÉ ŞíÇÓíÉ";
     Text[ greek ] = "Ïñéæüíôéá óôïß÷éóç ùò ğñïåğéëïãŞ";
-    Text[ korean ] = "¼öÆò ¸ÂÃã Ç¥ÁØ";
+    Text[ korean ] = "¼öÆò ¸ÂÃã, Ç¥ÁØ";
     Text[ turkish ] = "Yatay hizalama (standart)";
     Text[ language_user1 ] = " ";
 };
@@ -4740,7 +4740,7 @@ String RID_SVXITEMS_VERJUST_STANDARD
     Text[ chinese_traditional ] = "¼Ğ·Ç««ª½¹ï»ô";
     Text[ arabic ] = "ãÍÇĞÇÉ ÑÃÓíÉ ŞíÇÓíÉ";
     Text[ greek ] = "Ïñéæüíôéá óôïß÷éóç ùò ğñïåğéëïãŞ";
-    Text[ korean ] = "¼öÁ÷ ¸ÂÃã Ç¥ÁØ";
+    Text[ korean ] = "¼öÁ÷ ¸ÂÃã, Ç¥ÁØ";
     Text[ turkish ] = "Standart dikey hizalama";
     Text[ language_user1 ] = " ";
 };
@@ -6063,7 +6063,7 @@ String RID_SVXITEMS_LRSPACE_LEFT
     Text[ chinese_traditional ] = "¥ªÁY±Æ ";
     Text[ arabic ] = "ÅÒÇÍÉ íÓÑì ";
     Text[ greek ] = "Åóï÷Ş áñéóôåñÜ ";
-    Text[ korean ] = "¿ŞÂÊ µé¿© ¾²±â ";
+    Text[ korean ] = "¿ŞÂÊ  µé¿© ¾²±â ";
     Text[ turkish ] = "Sol girinti ";
     Text[ language_user1 ] = " ";
 };
@@ -6089,7 +6089,7 @@ String RID_SVXITEMS_LRSPACE_FLINE
     Text[ chinese_traditional ] = "­º¦æ ";
     Text[ arabic ] = "ÇáÓØÑ ÇáÃæá ";
     Text[ greek ] = "Ğñşôç ãñáììŞ ";
-    Text[ korean ] = "Ã¹ ÁÙ ";
+    Text[ korean ] = "Ã¹ Çà ";
     Text[ turkish ] = "İlk satır ";
     Text[ language_user1 ] = " ";
 };
@@ -6115,7 +6115,7 @@ String RID_SVXITEMS_LRSPACE_RIGHT
     Text[ chinese_traditional ] = "¥kÁY±Æ ";
     Text[ arabic ] = "ÅÒÇÍÉ íãäì ";
     Text[ greek ] = "Åóï÷Ş äåîéÜ ";
-    Text[ korean ] = "¿À¸¥ÂÊ µé¿© ¾²±â ";
+    Text[ korean ] = "¿À¸¥ÂÊ  µé¿© ¾²±â ";
     Text[ turkish ] = "Sağ girinti ";
     Text[ language_user1 ] = " ";
 };
@@ -6999,7 +6999,7 @@ String RID_SVXITEMS_AUTHOR_COMPLETE
     Text[ chinese_traditional ] = "§@ªÌ¡G ";
     Text[ arabic ] = "ÇáãÄáİ: ";
     Text[ greek ] = "ÓõíôÜêôçò: ";
-    Text[ korean ] = "ÀÛ¼ºÀÎ: ";
+    Text[ korean ] = "ÀÛ¼ºÀÚ: ";
     Text[ turkish ] = "Yazan: ";
     Text[ language_user1 ] = " ";
 };
@@ -7025,7 +7025,7 @@ String RID_SVXITEMS_DATE_COMPLETE
     Text[ chinese_traditional ] = "¤é´Á¡G ";
     Text[ arabic ] = "ÇáÊÇÑíÎ: ";
     Text[ greek ] = "Çìåñïìçíßá: ";
-    Text[ korean ] = "³¯Â¥: ";
+    Text[ korean ] = "ÀÏÀÚ: ";
     Text[ turkish ] = "Tarih: ";
     Text[ language_user1 ] = " ";
 };
@@ -7171,7 +7171,7 @@ String RID_SVXITEMS_EMPHASIS_NONE_STYLE
     Text[ polish ] = "brak";
     Text[ portuguese_brazilian ] = "none";
     Text[ japanese ] = "‚È‚µ";
-    Text[ korean ] = "none";
+    Text[ korean ] = "¾øÀ½";
     Text[ chinese_simplified ] = "ÎŞ";
     Text[ chinese_traditional ] = "µL";
     Text[ turkish ] = "none";
@@ -7194,9 +7194,9 @@ String RID_SVXITEMS_EMPHASIS_DOT_STYLE
     Text[ polish ] = "Dots ";
     Text[ portuguese_brazilian ] = "Dots ";
     Text[ japanese ] = "Dots ";
-    Text[ korean ] = "Dots ";
+    Text[ korean ] = "Á¡ ";
     Text[ chinese_simplified ] = "µã ";
-    Text[ chinese_traditional ] = "Dots ";
+    Text[ chinese_traditional ] = "ÂI ";
     Text[ turkish ] = "Dots ";
     Text[ arabic ] = "äŞÇØ";
 };
@@ -7219,7 +7219,7 @@ String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
     Text[ japanese ] = "Ring ";
     Text[ korean ] = "Ring ";
     Text[ chinese_simplified ] = "Ô²ĞÎ ";
-    Text[ chinese_traditional ] = "Ring ";
+    Text[ chinese_traditional ] = "¶ê§Î ";
     Text[ turkish ] = "Ring ";
     Text[ arabic ] = "ÏÇÆÑÉ";
 };
@@ -7241,9 +7241,9 @@ String RID_SVXITEMS_EMPHASIS_DISC_STYLE
     Text[ polish ] = "Filled ring ";
     Text[ portuguese_brazilian ] = "Filled ring ";
     Text[ japanese ] = "Filled ring ";
-    Text[ korean ] = "Filled ring ";
+    Text[ korean ] = "Ã¤¿öÁø ¿ø ";
     Text[ chinese_simplified ] = "³äÌîµÄÔ²ĞÎ ";
-    Text[ chinese_traditional ] = "Filled ring ";
+    Text[ chinese_traditional ] = "¥R¶ñªº¶ê§Î ";
     Text[ turkish ] = "Filled ring ";
     Text[ arabic ] = "ÏÇÆÑÉ ãÚÈÃÉ";
 };
@@ -7266,7 +7266,7 @@ String RID_SVXITEMS_EMPHASIS_ACCENT_STYLE
     Text[ japanese ] = "Accent ";
     Text[ korean ] = "Accent ";
     Text[ chinese_simplified ] = "ÖØÒô·ûºÅ ";
-    Text[ chinese_traditional ] = "Accent ";
+    Text[ chinese_traditional ] = "­«­µ²Å¸¹ ";
     Text[ turkish ] = "Accent ";
     Text[ arabic ] = "Accent ";
 };
@@ -7288,9 +7288,9 @@ String RID_SVXITEMS_EMPHASIS_ABOVE_POS
     Text[ polish ] = "Above";
     Text[ portuguese_brazilian ] = "Above";
     Text[ japanese ] = "Above";
-    Text[ korean ] = "Above";
+    Text[ korean ] = "À§";
     Text[ chinese_simplified ] = "Ö®ÉÏ";
-    Text[ chinese_traditional ] = "Above";
+    Text[ chinese_traditional ] = "¤§¤W";
     Text[ turkish ] = "Above";
     Text[ arabic ] = "ÃÚáì";
 };
@@ -7313,7 +7313,7 @@ String RID_SVXITEMS_EMPHASIS_BELOW_POS
     Text[ japanese ] = "Below";
     Text[ korean ] = "Below";
     Text[ chinese_simplified ] = "Ö®ÏÂ";
-    Text[ chinese_traditional ] = "Below";
+    Text[ chinese_traditional ] = "¤§¤U";
     Text[ turkish ] = "Below";
     Text[ arabic ] = "ÃÓİá";
 };
@@ -7337,7 +7337,7 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ japanese ] = "Two lines off";
     Text[ korean ] = "Two lines off";
     Text[ chinese_simplified ] = "²»Ê¹ÓÃË«ĞĞ";
-    Text[ chinese_traditional ] = "Two lines off";
+    Text[ chinese_traditional ] = "¤£¨Ï¥ÎÂù¦æ";
     Text[ turkish ] = "Two lines off";
     Text[ arabic ] = "Two lines off";
 };
@@ -7360,7 +7360,7 @@ String RID_SVXITEMS_TWOLINES
     Text[ japanese ] = "Two lines";
     Text[ korean ] = "Two lines";
     Text[ chinese_simplified ] = "Ë«ĞĞ";
-    Text[ chinese_traditional ] = "Two lines";
+    Text[ chinese_traditional ] = "Âù¦æ";
     Text[ turkish ] = "Two lines";
     Text[ arabic ] = "Two lines";
 };
@@ -7382,9 +7382,9 @@ String RID_SVXITEMS_SCRPTSPC_OFF
     Text[ polish ] = "No automatic character distance";
     Text[ portuguese_brazilian ] = "No automatic character distance";
     Text[ japanese ] = "No automatic character distance";
-    Text[ korean ] = "No automatic character distance";
+    Text[ korean ] = "¹®ÀÚ °£°İ ºñÀÚµ¿";
     Text[ chinese_simplified ] = "²»×Ô¶¯µ÷Õû×Ö·û¼ä¸ô";
-    Text[ chinese_traditional ] = "No automatic character distance";
+    Text[ chinese_traditional ] = "¤£¦Û°Ê½Õ¾ã¦r¤¸¶¡¹j";
     Text[ turkish ] = "No automatic character distance";
     Text[ arabic ] = "ÈÏæä ÊÈÇÚÏ ÊáŞÇÆí ááÃÍÑİ";
 };
@@ -7407,7 +7407,7 @@ String RID_SVXITEMS_SCRPTSPC_ON
     Text[ japanese ] = "Automatic character distance";
     Text[ korean ] = "Automatic character distance";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû×Ö·û¼ä¸ô";
-    Text[ chinese_traditional ] = "Automatic character distance";
+    Text[ chinese_traditional ] = "¤£¦Û°Ê½Õ¾ã¦r¤¸¶¡¹j";
     Text[ turkish ] = "Automatic character distance";
     Text[ arabic ] = "ÈÏæä ÊÈÇÚÏ ÊáŞÇÆí ááÃÍÑİ";
 };
@@ -7431,7 +7431,7 @@ String RID_SVXITEMS_HNGPNCT_OFF
     Text[ japanese ] = "No hanging punctuation at line end";
     Text[ korean ] = "No hanging punctuation at line end";
     Text[ chinese_simplified ] = "ĞĞÄ©²»¸½¼Ó±êµã·ûºÅ";
-    Text[ chinese_traditional ] = "No hanging punctuation at line end";
+    Text[ chinese_traditional ] = "¦æ¥½¤£ªş¥[¼ĞÂI²Å¸¹";
     Text[ turkish ] = "No hanging punctuation at line end";
     Text[ arabic ] = "No hanging punctuation at line end";
 };
@@ -7454,7 +7454,7 @@ String RID_SVXITEMS_HNGPNCT_ON
     Text[ japanese ] = "Hanging punctuation at line end";
     Text[ korean ] = "Hanging punctuation at line end";
     Text[ chinese_simplified ] = "ĞĞÄ©¸½¼Ó±êµã·ûºÅ";
-    Text[ chinese_traditional ] = "Hanging punctuation at line end";
+    Text[ chinese_traditional ] = "¦æ¥½ªş¥[¼ĞÂI²Å¸¹";
     Text[ turkish ] = "Hanging punctuation at line end";
     Text[ arabic ] = "Hanging punctuation at line end";
 };
