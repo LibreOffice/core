@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:23:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ class FmXFormShell  :public FmXFormShell_BASE
 
     FmXDispatchInterceptorImpl*     m_pExternalViewInterceptor;
 
-    ::svxform::DocumentType
+    mutable ::svxform::DocumentType
                     m_eDocumentType;        /// the type of document we're living in
     sal_Int16       m_nLockSlotInvalidation;
     sal_Bool        m_bHadPropBrw:1;
@@ -590,7 +590,10 @@ public:
 
     /// classifies our host document
     ::svxform::DocumentType
-            getDocumentType();
+            getDocumentType() const;
+
+    /// determines whether our host document is currently read-only
+    bool    IsReadonlyDoc() const;
 
     // das Setzen des curObject/selObject/curForm erfolgt verzoegert (SetSelectionDelayed), mit den folgenden
     // Funktionen laesst sich das abfragen/erzwingen
