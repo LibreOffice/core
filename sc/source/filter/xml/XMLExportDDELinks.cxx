@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:46:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,9 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
             for(sal_Int32 nColumn = 0; nColumn < nColCount; nColumn++)
             {
-                BOOL bIsString = FALSE;
-                const MatValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), bIsString );
+                ScMatValType nType = SC_MATVAL_VALUE;
+                const ScMatrixValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), nType );
+                BOOL bIsString = (nType != SC_MATVAL_VALUE);
 
                 if (nColumn == 0)
                 {
