@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-21 15:50:08 $
+ *  last change: $Author: pl $ $Date: 2002-01-15 17:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,135 +165,6 @@ struct SalPrinterQueueInfo
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-#ifdef DO_TAB_CHECK
-#include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-using namespace com::sun::star::beans;
-
-static const char* pHead = "StarOffice 6.0";
-static const char* pFoot = "sun.com/staroffice";
-
-static const char* pLines[] =
-{
-    "Evaluation Version",
-    "Testversion",
-    "Version d\'évaluation",
-    "Versión de prueba",
-    "Versione per valutazione"
-};
-
-static void doTab( Printer* pPrinter )
-{
-    static bool bChecked    = false;
-    static bool bDoTab      = true;
-    static ::std::list<String> aLines;
-    if( ! bChecked )
-    {
-        bChecked = true;
-        for( int i = 0; i < sizeof(pLines)/sizeof(pLines[0]); i++ )
-            aLines.push_back( String( ByteString( pLines[i] ), RTL_TEXTENCODING_ISO_8859_1 ) );
-        try
-        {
-            Reference< XMultiServiceFactory > xFac( ::comphelper::getProcessServiceFactory() );
-            if( xFac.is() )
-            {
-                Reference< XMaterialHolder > xHolder( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.tab.tabreg" ) ) ), UNO_QUERY );
-                if( xHolder.is() )
-                {
-                    Any aMaterial( xHolder->getMaterial() );
-                    aLines.clear();
-                    bDoTab = aMaterial.hasValue();
-                    if( bDoTab )
-                    {
-                        Sequence< NamedValue > aSeq;
-                        aMaterial >>= aSeq;
-                        for( int i = 0; i < aSeq.getLength(); i++ )
-                        {
-                            ::rtl::OUString aL;
-                            aSeq[i].Value >>= aL;
-                            String aLine( aL );
-                            if( aLine.Len() )
-                            {
-                                ::std::list<String>::const_iterator it;
-                                for( it = aLines.begin(); it != aLines.end() && ! (*it).Equals( aLine ); ++it )
-                                    ;
-                                if( it == aLines.end() )
-                                    aLines.push_back( aLine );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch(...)
-        {
-        }
-    }
-    if( bDoTab )
-    {
-        pPrinter->Push( PUSH_ALL );
-
-        pPrinter->SetMapMode( MapMode( MAP_10TH_MM ) );
-        pPrinter->SetTextColor( Color( COL_BLACK ) );
-        pPrinter->SetLineColor( Color( COL_BLACK ) );
-        pPrinter->SetFillColor( Color( COL_WHITE ) );
-        pPrinter->SetClipRegion();
-
-        Size aPaperSize( pPrinter->GetOutputSize() );
-        Font aNormalFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 40 ) );
-        Font aBigBoldFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), Size( 0, 60 ) );
-        aBigBoldFont.SetWeight( WEIGHT_BOLD );
-
-        String aHeader = String( ByteString( pHead ), RTL_TEXTENCODING_ISO_8859_1 );
-        String aFooter = String( ByteString( pFoot ), RTL_TEXTENCODING_ISO_8859_1 );
-
-        // calculate size of box
-        int nWidth = 0, nHeight = 0, w, i;
-        pPrinter->SetFont( aBigBoldFont );
-        int nBigHeight = pPrinter->GetTextHeight();
-        nWidth = pPrinter->GetTextWidth( aHeader );
-        w = pPrinter->GetTextWidth( aFooter );
-        nWidth = w > nWidth ? w : nWidth;
-
-        nHeight = 3*nBigHeight;
-
-        pPrinter->SetFont( aNormalFont );
-        int nNormHeigth = pPrinter->GetTextHeight();
-        ::std::list<String>::const_iterator it;
-        for( it = aLines.begin(); it != aLines.end(); ++it )
-        {
-            w = pPrinter->GetTextWidth( *it );
-            nWidth = w > nWidth ? w : nWidth;
-        }
-        nWidth += 100;
-        nHeight += nNormHeigth * (aLines.size() + 1);
-
-        Point aTopLeft( aPaperSize.Width() - nWidth - 50,
-                        aPaperSize.Height() - nHeight - 50 );
-        pPrinter->DrawRect( Rectangle( aTopLeft, Size( nWidth, nHeight ) ) );
-        pPrinter->DrawLine( Point( aTopLeft.X(), aTopLeft.Y() + (3*nBigHeight/2) ),
-                            Point( aTopLeft.X()+nWidth-1, aTopLeft.Y() + (3*nBigHeight/2) ) );
-        pPrinter->DrawLine( Point( aTopLeft.X(), aTopLeft.Y() + nHeight - (3*nBigHeight/2) ),
-                            Point( aTopLeft.X()+nWidth-1, aTopLeft.Y() + nHeight - (3*nBigHeight/2) ) );
-
-        int nY = aTopLeft.Y() + (nHeight-nNormHeigth*aLines.size())/2;
-        for( it = aLines.begin(); it != aLines.end(); ++it )
-        {
-            w = pPrinter->GetTextWidth( *it );
-            pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, nY ), *it );
-            nY += nNormHeigth;
-        }
-        pPrinter->SetFont( aBigBoldFont );
-        w = pPrinter->GetTextWidth( aHeader );
-        pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, aTopLeft.Y()+nBigHeight/4 ), aHeader );
-        w = pPrinter->GetTextWidth( aFooter );
-        pPrinter->DrawText( Point( aTopLeft.X() + (nWidth-w)/2, aTopLeft.Y()+nHeight-(5*nBigHeight/4) ), aFooter );
-
-        pPrinter->Pop();
-    }
-}
-#endif
 
 int nImplSysDialog = 0;
 
@@ -2061,11 +1932,6 @@ BOOL Printer::EndPage()
 {
     if ( !IsJobActive() )
         return FALSE;
-
-#ifdef DO_TAB_CHECK
-    if( mpPrinter )
-        doTab( this );
-#endif
 
     mbInPrintPage = FALSE;
 
