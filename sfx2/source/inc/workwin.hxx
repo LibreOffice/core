@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:02:29 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ protected:
     virtual Rectangle       GetTopRect_Impl();
     SvBorder                Arrange_Impl();
     virtual void            SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
+    static sal_Bool         IsPluginMode( SfxObjectShell* pObjShell );
 
 public:
                             SfxWorkWindow( Window *pWin, SfxBindings& rBindings, SfxWorkWindow* pParent = NULL);
@@ -383,10 +384,8 @@ public:
     void                    ResetStatusBar_Impl();
     void                    SetStatusBar_Impl(const ResId&, SfxShell *pShell, SfxBindings& );
     void                    UpdateStatusBar_Impl();
-    //SfxStatusBarManager*    GetStatusBarManager_Impl();
-    //SfxStatusBarManager*    MakeStatusBarManager_Impl( BOOL bCreate );
-    //SfxStatBar_Impl*        GetStatusBar_Impl();
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrameInterface();
 };
 /*
 class SfxPIWorkWin_Impl : public SfxWorkWindow
