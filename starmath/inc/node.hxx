@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-23 10:11:08 $
+ *  last change: $Author: tl $ $Date: 2001-04-19 14:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,12 @@
 
 extern SmFormat *pActiveFormat;
 
+class SmDocShell;
+
 class SmNode;
 DECLARE_DYNARRAY(SmNodeArray, SmNode *);
+
+////////////////////////////////////////////////////////////////////////////////
 
 enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
 
@@ -166,7 +170,7 @@ public:
             void SetFontSize(const Fraction &rRelSize, USHORT nType);
             void SetSize(const Fraction &rScale);
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void PrepareAttributes();
 
             void ToggleDebug() const;
@@ -390,7 +394,7 @@ public:
     void                SetText(const XubString &rText) { aText = rText; }
     const XubString &   GetText() const { return aText; }
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
@@ -413,7 +417,7 @@ public:
     :   SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  //! default Font nicht immer richtig
     {}
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 };
@@ -449,7 +453,7 @@ public:
     virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
 };
@@ -467,7 +471,7 @@ public:
         SetText((xub_Unicode) MS_PLACE);
     }
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 };
 
@@ -484,7 +488,7 @@ public:
         SetText((xub_Unicode) MS_ERROR);
     }
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 };
 
@@ -520,7 +524,7 @@ public:
     :   SmStructureNode(NLINE, rNodeToken)
     {}
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 };
 
@@ -818,7 +822,7 @@ public:
     const Fraction & GetSizeParameter() const {return aFontSize;}
     const USHORT& GetSizeType() const {return nSizeType;}
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
 };
@@ -867,7 +871,7 @@ public:
     void         IncreaseBy(const SmToken &rToken);
     void         Clear() { nNum = 0; }
 
-    virtual void Prepare(const SmFormat &rFormat);
+    virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-23 10:11:19 $
+ *  last change: $Author: tl $ $Date: 2001-04-19 14:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _SMMOD_HXX
 #include "smmod.hxx"
+#endif
+#ifndef DOCUMENT_HXX
+#include <document.hxx>
 #endif
 #ifndef _MATHTYPE_HXX
 #include "mathtype.hxx"
@@ -346,7 +349,7 @@ void SmNode::PrepareAttributes()
 }
 
 
-void SmNode::Prepare(const SmFormat &rFormat)
+void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
 #ifdef DEBUG
     bIsDebug    = TRUE;
@@ -372,7 +375,7 @@ void SmNode::Prepare(const SmFormat &rFormat)
     USHORT      nSize = GetNumSubNodes();
     for (USHORT i = 0; i < nSize; i++)
         if (pNode = GetSubNode(i))
-            pNode->Prepare(rFormat);
+            pNode->Prepare(rFormat, rDocShell);
 }
 
 
@@ -698,9 +701,9 @@ SmNode * SmTableNode::GetLeftMost()
 /**************************************************************************/
 
 
-void SmLineNode::Prepare(const SmFormat &rFormat)
+void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
     //! wir verwenden hier den 'FNT_VARIABLE' Font, da er vom Ascent und Descent
     //! ia besser zum Rest der Formel passt als der 'FNT_MATH' Font.
@@ -1917,10 +1920,10 @@ void SmFontNode::CreateTextFromNode(String &rText)
 }
 
 
-void SmFontNode::Prepare(const SmFormat &rFormat)
+void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     //! prepare subnodes first
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
     int  nFnt = -1;
     switch (GetToken().eType)
@@ -2323,9 +2326,9 @@ void SmRectangleNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 /**************************************************************************/
 
 
-void SmTextNode::Prepare(const SmFormat &rFormat)
+void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
     aText = GetToken().aText;
     GetFont() = rFormat.GetFont(GetFontDesc());
@@ -2611,9 +2614,9 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
 }
 
 
-void SmMathSymbolNode::Prepare(const SmFormat &rFormat)
+void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
     DBG_ASSERT(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL,
         "Sm : falsches CHARSET für Zeichen aus dem StarMath Font");
@@ -2656,15 +2659,15 @@ void SmMathSymbolNode::CreateTextFromNode(String &rText)
 /**************************************************************************/
 
 
-void SmSpecialNode::Prepare(const SmFormat &rFormat)
+void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
-    SmSym     *pSym;
+    const SmSym   *pSym;
     SmModule  *pp = SM_MOD1();
 
     Size  aOldSize = GetFont().GetSize();
-    if (pSym = pp->GetSymSetManager()->GetSymbol(GetToken().aText))
+    if (pSym = rDocShell.GetSymSetManager().GetSymbol(GetToken().aText))
     {   SetText( pSym->GetCharacter() );
         GetFont() = pSym->GetFace();
 
@@ -2730,9 +2733,9 @@ void SmGlyphSpecialNode::Arrange(const OutputDevice &rDev, const SmFormat &rForm
 /**************************************************************************/
 
 
-void SmPlaceNode::Prepare(const SmFormat &rFormat)
+void SmPlaceNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
     GetFont().SetColor(COL_GRAY);
     Flags() |= FLG_COLOR | FLG_FONT | FLG_ITALIC;
@@ -2753,9 +2756,9 @@ void SmPlaceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 /**************************************************************************/
 
 
-void SmErrorNode::Prepare(const SmFormat &rFormat)
+void SmErrorNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
     GetFont().SetColor(COL_RED);
     Flags() |= FLG_VISIBLE | FLG_BOLD | FLG_ITALIC
@@ -2790,9 +2793,9 @@ void SmBlankNode::IncreaseBy(const SmToken &rToken)
 }
 
 
-void SmBlankNode::Prepare(const SmFormat &rFormat)
+void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
-    SmNode::Prepare(rFormat);
+    SmNode::Prepare(rFormat, rDocShell);
 
     //! hier muß/sollte es lediglich nicht der StarMath Font sein,
     //! damit für das in Arrange verwendete Zeichen ein "normales"
