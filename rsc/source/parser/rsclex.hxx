@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:34:46 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ struct RSCHEADER {
 struct Node {
     Node*   pPrev;
     RSCINST aInst;
-    USHORT  nTupelRec;  // Rekursionstiefe fuer Tupel
+    sal_uInt32  nTupelRec;  // Rekursionstiefe fuer Tupel
     Node() { pPrev = NULL; nTupelRec = 0; };
 };
 
@@ -113,7 +113,7 @@ class ObjectStack {
         BOOL        IsEmpty()   { return( pRoot == NULL ); }
         void        IncTupelRec() { pRoot->nTupelRec++; }
         void        DecTupelRec() { pRoot->nTupelRec--; }
-        USHORT      TupelRecCount() const { return pRoot->nTupelRec; }
+        sal_uInt32  TupelRecCount() const { return pRoot->nTupelRec; }
         void        Push( RSCINST aInst )
                     {
                         Node* pTmp;
