@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x_parse.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ X_Parser::GetInfo( ostream &      o_rOutputMedium ) const
             o_rOutputMedium << "Unexpected end of file.";
             break;
         case x_UnspecifiedSyntaxError:
-            o_rOutputMedium << "Unspecified syntax error.";
+            o_rOutputMedium << "Unspecified syntax problem in file.";
             break;
         case x_Any:
         default:
