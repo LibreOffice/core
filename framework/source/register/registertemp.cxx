@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-20 10:19:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #include <services/contenthandlerfactory.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_DETECTORFACTORY_HXX_
+#include <services/detectorfactory.hxx>
+#endif
+
 #ifndef __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
 #include <services/substitutepathvars.hxx>
 #endif
@@ -124,6 +128,7 @@ COMPONENTGETIMPLEMENTATIONENVIRONMENT
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
                         COMPONENTINFO( ::framework::FrameLoaderFactory          )
                         COMPONENTINFO( ::framework::FilterFactory               )
+                        COMPONENTINFO( ::framework::DetectorFactory             )
                         COMPONENTINFO( ::framework::TypeDetection               )
                         COMPONENTINFO( ::framework::ContentHandlerFactory       )
                         COMPONENTINFO( ::framework::SubstitutePathVariables     )
@@ -133,6 +138,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
                         IFFACTORY( ::framework::FrameLoaderFactory              )   else
                         IFFACTORY( ::framework::FilterFactory                   )   else
+                        IFFACTORY( ::framework::DetectorFactory                 )   else
                         IFFACTORY( ::framework::TypeDetection                   )   else
                         IFFACTORY( ::framework::ContentHandlerFactory           )   else
                         IFFACTORY( ::framework::SubstitutePathVariables         )   else
