@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,4 +141,3 @@ class Parser
 }   // namespace autodoc
 
 #endif
-
