@@ -60,6 +60,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Vector;
 import java.util.Enumeration;
@@ -257,6 +258,69 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         return (col);
     }
 
+    /**
+     * Parses a Pexlcel Formula in Reverse Polish Notation into an sxc formula
+     * that uses infix notation
+     *
+     *  @return  The number of columns in the current sheet.
+     */
+    protected String parseFormula(String inputString) {
+
+        Debug.log(Debug.TRACE,"parseFormula : " + inputString);
+
+        Stack myStack = new Stack();
+        String nextChar;
+        String topOfStack;
+        String outputString = "=";
+        String op1,op2;
+
+        for (int i = 1;i<=inputString.length()-1;i++) {
+
+
+            char ch = inputString.charAt(i);        // Check to see if this is a cell or an operator
+            if(((ch>='a') && (ch<='z')) || (ch>='A') && (ch<='Z'))  {
+                int interval = 1;
+                char nextRef = inputString.charAt(i+interval);
+                if(((nextRef>='a') && (nextRef<='z')) || (nextRef>='A') && (nextRef<='Z')) { // if cell col > 26
+                    interval++;
+                    nextRef = inputString.charAt(i+interval);
+                }
+                while(nextRef>='0' && nextRef<='9') { // Keep reading until we reach another operator or cell reference
+                    interval++;
+                    nextRef = inputString.charAt(i+interval);
+                }
+                nextChar = inputString.substring(i,i+interval); // if cell then read all of the cell reference
+                i += interval-1;
+            } else
+                nextChar = inputString.substring(i,i+1);
+
+            if (    nextChar.equals("+") ||
+                    nextChar.equals("-") ||
+                    nextChar.equals("*") ||
+                    nextChar.equals("/") ||
+                    nextChar.equals("^")) {
+
+                op2 = (String)myStack.pop();
+                if(!myStack.empty()) {
+                    op1 = (String)myStack.pop();
+
+                    outputString += op1;
+                    outputString += nextChar;
+                    outputString += op2;
+                } else {
+                    outputString += nextChar;
+                    outputString += op2;
+                }
+            } else {
+                myStack.push(nextChar);
+            }
+        }
+        while(!myStack.empty()) {
+            topOfStack = (String)myStack.pop();
+            outputString += topOfStack;
+        }
+        return outputString;
+    }
 
     /**
      *  This method returns the contents of the current cell.
@@ -278,6 +342,9 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
                                     + "," + cell.getCol() + ") to an empty string");
                 System.err.println("Error msg: " + e.getMessage());
             }
+        }
+        if (contents.startsWith("=")) {
+            contents = parseFormula(contents);
         }
         return contents;
     }
