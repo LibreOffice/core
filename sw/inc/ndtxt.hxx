@@ -2,12 +2,12 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:16:28 $
- *  $Revision: 1.35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:44 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:16:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ public:
     // (Methode steht im ndcopy.cxx!!)
     void CopyCollFmt( SwTxtNode& rDestNd );
 
+    const SwNodeNum* _GetNodeNum() const { return pNdNum; }
 
     //
     // BEGIN OF BULLET/NUMBERING/OUTLINE STUFF:
@@ -402,7 +403,7 @@ public:
 
        @return additional indents
      */
-    long GetLeftMarginWithNum( BOOL bTxtLeft = FALSE ) const;
+     long GetLeftMarginWithNum( BOOL bTxtLeft = FALSE ) const;
 
     /**
        Returns the combined first line indent of this text node and
