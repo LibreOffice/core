@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:06:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,19 +71,8 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Size = MAP_APPFONT ( 188 , 100 ) ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Text = "Silbentrennung" ;
-    Text [ English ] = "Hypenation" ;
-    Text [ norwegian ] = "Hypenation" ;
-    Text [ italian ] = "Sillabazione" ;
-    Text [ portuguese_brazilian ] = "Divisão Silábica" ;
-    Text [ portuguese ] = "Divisão silábica" ;
-    Text [ finnish ] = "Tavutus" ;
-    Text [ danish ] = "Orddeling" ;
-    Text [ french ] = "Coupure des mots" ;
-    Text [ swedish ] = "Avstavning" ;
-    Text [ dutch ] = "Woordafbreking" ;
-    Text [ spanish ] = "Separación silábica" ;
-    Text [ english_us ] = "Hyphenation" ;
+    Text [ de ] = "Silbentrennung" ;
+    Text [ en-US ] = "Hyphenation" ;
     Moveable = TRUE ;
     Edit ED_WORD
     {
@@ -111,148 +100,37 @@ ModalDialog RID_SVXDLG_HYPHENATE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        TEXT = "W~ort" ;
-        TEXT [ English ] = "~Word" ;
-        TEXT [ norwegian ] = "Word" ;
-        TEXT [ italian ] = "Parola" ;
-        TEXT [ portuguese_brazilian ] = "~Palavra" ;
-        TEXT [ portuguese ] = "Pa~lavra" ;
-        TEXT [ finnish ] = "~Sana" ;
-        TEXT [ danish ] = "~Ord" ;
-        TEXT [ french ] = "Mot" ;
-        TEXT [ swedish ] = "~Ord" ;
-        TEXT [ dutch ] = "W~oord" ;
-        TEXT [ spanish ] = "Palabra" ;
-        TEXT [ english_us ] = "~Word" ;
-        TEXT[ chinese_simplified ] = "å­—(~W)";
-        TEXT[ russian ] = "Ñëîâî";
-        TEXT[ polish ] = "~Wyraz";
-        TEXT[ japanese ] = "å˜èª(~W)";
-        TEXT[ chinese_traditional ] = "å­—(~W)";
-        TEXT[ arabic ] = "ÇáßáãÉ";
-        TEXT[ greek ] = "Ëİ~îç";
-        TEXT[ korean ] = "ë‹¨ì–´(~W)";
-        TEXT[ turkish ] = "~Kelime";
-        TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Paraula";
-        TEXT[ thai ] = "~à¸„à¸³";
-        TEXT[ czech ] = "Slovo";
-        TEXT[ hebrew ] = "W~ort";
-        TEXT[ hindi ] = "~à¤¶à¤¬à¥à¤¦";
-        TEXT[ slovak ] = "~Slovo";
-        TEXT[ hungarian ] = "~SzÃ³";
-        TEXT[ slovenian ] = "~Beseda";
+        Text [ de ] = "W~ort" ;
+        Text [ en-US ] = "~Word" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_HYPH_CONTINUE
     {
         Pos = MAP_APPFONT ( 132 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        TEXT = "~Weiter" ;
-        TEXT [ English ] = "~Continue" ;
-        TEXT [ english_us ] = "~Next" ;
+        Text [ de ] = "~Weiter" ;
+        Text [ en-US ] = "~Next" ;
         TABSTOP = TRUE ;
-        Text [ dutch ] = "~Verder" ;
-        Text [ italian ] = "Avanti" ;
-        Text [ spanish ] = "Continuar" ;
-        Text [ french ] = "Suivant" ;
-        Text [ swedish ] = "~Nästa" ;
-        Text [ danish ] = "~Næste" ;
-        Text [ portuguese ] = "~Continuar" ;
-        Text [ portuguese_brazilian ] = "~Próximo" ;
-        Text[ chinese_simplified ] = "ç»§ç»­(~N)";
-        Text[ russian ] = "Äàëåå";
-        Text[ polish ] = "~Dalej";
-        Text[ japanese ] = "æ¬¡ã¸(~N)";
-        Text[ chinese_traditional ] = "ä¸‹ä¸€æ­¥(~N)";
-        Text[ arabic ] = "ÇáÊÇáí";
-        Text[ greek ] = "Åğüìåíï";
-        Text[ korean ] = "ë‹¤ìŒ(~N)";
-        Text[ turkish ] = "~Sonraki";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Següent";
-        Text[ finnish ] = "~Seuraava";
-        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸›";
-        Text[ czech ] = "DalÅ¡Ã­";
-        Text[ hebrew ] = "â€®×”×‘×â€¬";
-        Text[ hindi ] = "~à¤†à¤—à¥‡";
-        Text[ slovak ] = "Ä~alÅ¡Ã­";
-        Text[ hungarian ] = "~KÃ¶vetkezÅ‘";
-        Text[ slovenian ] = "~Naprej";
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_HYPH_DELETE
     {
         Pos = MAP_APPFONT ( 132 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        TEXT = "~Entfernen" ;
-        TEXT [ English ] = "~Erase" ;
-        TEXT [ norwegian ] = "~Erase" ;
-        TEXT [ italian ] = "Ri~muovi" ;
-        TEXT [ portuguese_brazilian ] = "~Remover" ;
-        TEXT [ portuguese ] = "~Remover" ;
-        TEXT [ finnish ] = "~Poista" ;
-        TEXT [ danish ] = "~Fjern" ;
-        TEXT [ french ] = "Supprimer" ;
-        TEXT [ swedish ] = "Ta ~bort" ;
-        TEXT [ dutch ] = "Ver~wijderen" ;
-        TEXT [ spanish ] = "~Borrar" ;
-        TEXT [ english_us ] = "~Remove" ;
+        Text [ de ] = "~Entfernen" ;
+        Text [ en-US ] = "~Remove" ;
         TABSTOP = TRUE ;
-        TEXT[ chinese_simplified ] = "åˆ é™¤(~R)";
-        TEXT[ russian ] = "Óäàëèòü";
-        TEXT[ polish ] = "~Usuñ";
-        TEXT[ japanese ] = "å‰Šé™¤(~R)";
-        TEXT[ chinese_traditional ] = "åˆªé™¤(~R)";
-        TEXT[ arabic ] = "ÅÒÇáÉ";
-        TEXT[ greek ] = "ÄéáãñáöŞ";
-        TEXT[ korean ] = "ì œê±°(~R)";
-        TEXT[ turkish ] = "~Kaldır";
-        TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Suprimeix";
-        TEXT[ thai ] = "à¹€~à¸­à¸²à¸­à¸­à¸";
-        TEXT[ czech ] = "Odstranit";
-        TEXT[ hebrew ] = "â€®×”×¡×¨×”â€¬";
-        TEXT[ hindi ] = "~à¤¹à¤Ÿà¤¾à¤“";
-        TEXT[ slovak ] = "Odst~rÃ¡niÅ¥";
-        TEXT[ hungarian ] = "~EltÃ¡volÃ­tÃ¡s";
-        TEXT[ slovenian ] = "Odst~rani";
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_HYPH_CUT
     {
         Pos = MAP_APPFONT ( 132 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        TEXT = "~Trennen" ;
-        TEXT [ English ] = "Hyphe~nate" ;
-        TEXT [ norwegian ] = "Hyphe~nate" ;
-        TEXT [ italian ] = "Si~llabazione" ;
-        TEXT [ portuguese_brazilian ] = "Dividir ~Sílabas" ;
-        TEXT [ portuguese ] = "~Separar" ;
-        TEXT [ finnish ] = "~Tavuta" ;
-        TEXT [ danish ] = "~Del ord" ;
-        TEXT [ french ] = "~Couper" ;
-        TEXT [ swedish ] = "A~vstava" ;
-        TEXT [ dutch ] = "~Afbreken" ;
-        TEXT [ spanish ] = "~Separar" ;
-        TEXT [ english_us ] = "~Hyphenate" ;
+        Text [ de ] = "~Trennen" ;
+        Text [ en-US ] = "~Hyphenate" ;
         TABSTOP = TRUE ;
         DEFBUTTON = TRUE ;
-        TEXT[ chinese_simplified ] = "è¿å­—ç¬¦(~H)";
-        TEXT[ russian ] = "Ïåğåíåñòè";
-        TEXT[ polish ] = "~Podziel wyrazy";
-        TEXT[ japanese ] = "åˆ†ã‘ã‚‹(~H)";
-        TEXT[ chinese_traditional ] = "é€£å­—ç¬¦(~H)";
-        TEXT[ arabic ] = "İÕá ÇáãŞÇØÚ";
-        TEXT[ greek ] = "Óõëëáâéóìüò";
-        TEXT[ korean ] = "í•˜ì´í”ˆ ë„£ê¸°(~H)";
-        TEXT[ turkish ] = "~Ayır";
-        TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Parteix els mots";
-        TEXT[ thai ] = "à¹ƒà¸ªà¹ˆ~à¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œ";
-        TEXT[ czech ] = "DÄ›lit slova";
-        TEXT[ hebrew ] = "~Trennen";
-        TEXT[ hindi ] = "~à¤¹à¤¾à¤‡à¤«à¤¼à¤¨à¥‡à¤Ÿà¥";
-        TEXT[ slovak ] = "~DeliÅ¥ slovÃ¡";
-        TEXT[ hungarian ] = "~ElvÃ¡lasztÃ¡s";
-        TEXT[ slovenian ] = "~Deli besede";
+        Text [ x-comment ] = " ";
     };
     CancelButton BTN_HYPH_CANCEL
     {
@@ -266,24 +144,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
     };
-    Text[ chinese_simplified ] = "è¿å­—ç¬¦";
-    Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ";
-    Text[ polish ] = "Dzielenie wyrazów";
-    Text[ japanese ] = "ãƒã‚¤ãƒ•ãƒãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "é€£å­—ç¬¦";
-    Text[ arabic ] = "İÕá ÇáãŞÇØÚ";
-    Text[ greek ] = "Óõëëáâéóìüò";
-    Text[ korean ] = "í•˜ì´í”ˆ ë„£ê¸°";
-    Text[ turkish ] = "Heceleme";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Separació en síl.labes";
-    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œ";
-    Text[ czech ] = "DÄ›lenÃ­ slov";
-    Text[ hebrew ] = "â€®×©×‘×™×¨×ª ××œ×™×â€¬";
-    Text[ hindi ] = "à¤¹à¤¾à¤‡à¤«à¤¼à¤¨à¥‡à¤¶à¤¨à¥";
-    Text[ slovak ] = "Delenie slov";
-    Text[ hungarian ] = "ElvÃ¡lasztÃ¡s";
-    Text[ slovenian ] = "Deljenje besed";
+    Text [ x-comment ] = " ";
 };
  // ******************************************************************* EOF
 
