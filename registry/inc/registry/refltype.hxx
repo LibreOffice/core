@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refltype.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-15 18:01:32 $
+ *  last change: $Author: jsc $ $Date: 2002-11-11 15:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/15 18:01:32  jsc
+    #88337# review docu
+
     Revision 1.5  2001/05/18 15:30:58  jsc
     #87233# insert enum value
 
@@ -201,8 +204,8 @@ enum RTTypeClass
         a base service, properties (fields), references to services or interfaces.
      */
     RT_TYPE_SERVICE,
-    /** specifies that the blob represents a singleton type (a special service). A singleton blob
-        can contain a base service, properties (fields), references to services or interfaces.
+    /** specifies that the blob represents a singleton type (a named object) which refers exactly
+        one existing service.
      */
     RT_TYPE_SINGLETON,
     /// deprecated, not used.
