@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintAreas.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:46:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** represents a sheet which has print areas.
  */
-interface XPrintAreas: com::sun::star::uno::XInterface
+published interface XPrintAreas: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
