@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:49:16 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _SV_FONTCVT_HXX
-#include <vcl/fontcvt.hxx>
-#endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -418,7 +415,7 @@ void WW8WrtStyle::BuildStd(const String& rName, bool bPapFmt, short nWwBase,
     memset( &aWW8_STD, 0, sizeof( WW8_STD ) );
 
     UINT16 nBit16 = 0x1000;         // fInvalHeight
-    nBit16 |= (0x0FFF & nWwId);
+    nBit16 |= (ww::stiNil & nWwId);
     Set_UInt16( pData, nBit16 );
 
     nBit16 = nWwBase << 4;          // istdBase
@@ -660,36 +657,17 @@ void WW8WrtStyle::OutStyleTab()
     rWrt.bStyDef = false;
 }
 
-
 /*  */
 
 //---------------------------------------------------------------------------
 //          Fonts
 //---------------------------------------------------------------------------
-bool wwFont::IsStarSymbol(const String &rFamilyNm)
-{
-    String sFamilyNm  = ::GetFontToken(rFamilyNm, 0);
-    return (sFamilyNm.EqualsIgnoreCaseAscii("starsymbol") ||
-        sFamilyNm.EqualsIgnoreCaseAscii("opensymbol"));
-}
-
-String wwFont::MapFont(const String &rFamilyNm)
-{
-    String sRet;
-    if (IsStarSymbol(rFamilyNm))
-        sRet.ASSIGN_CONST_ASC("Arial Unicode MS");
-    else
-        sRet = GetSubsFontName(rFamilyNm, SUBSFONT_ONLYONE | SUBSFONT_MS);
-    return sRet;
-}
-
 wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
     rtl_TextEncoding eChrSet, bool bWrtWW8) : mbAlt(false), mbWrtWW8(bWrtWW8)
 {
-    msFamilyNm  = ::GetFontToken(rFamilyName, 0);
-    msAltNm = MapFont(msFamilyNm);
-    if (!msAltNm.Len())
-        msAltNm = GetFontToken(rFamilyName, 1);
+    FontMapExport aResult(rFamilyName);
+    msFamilyNm = aResult.msPrimary;
+    msAltNm = aResult.msSecondary;
     if (msAltNm.Len() && msAltNm != msFamilyNm &&
         (msFamilyNm.Len() + msAltNm.Len() + 2 <= 65) )
     {
