@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.1 2000-09-29 16:16:04 mh Exp $
+	$Id: style.mod,v 1.2 2000-10-04 16:17:18 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -252,7 +252,7 @@
 <!ATTLIST style:properties style:use-optimal-row-height %boolean; #IMPLIED>
 
 <!-- table cell properties -->
-<!ATTLIST style:properties fo:vertcal-align (top|middle|bottom) #IMPLIED>
+<!ATTLIST style:properties fo:vertical-align (top|middle|bottom) #IMPLIED>
 
 <!ELEMENT style:columns (style:column*)>
 <!ATTLIST style:columns fo:column-count %nonNegativeInteger; #IMPLIED>
