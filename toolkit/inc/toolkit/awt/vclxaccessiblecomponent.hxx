@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-05 08:22:34 $
+ *  last change: $Author: pb $ $Date: 2002-03-22 08:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _TOOLKIT_AWT_VCLXAccessibleComponent_HXX_
-#define _TOOLKIT_AWT_VCLXAccessibleComponent_HXX_
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
+#define _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
@@ -206,5 +206,5 @@ public:
 ---------------------------------------------------------- */
 
 
-#endif // _TOOLKIT_AWT_VCLXAccessibleComponent_HXX_
+#endif // _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 
