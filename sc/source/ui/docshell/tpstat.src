@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:15:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage RID_SCPAGE_STAT
         Text [ italian ] = "Numero di tabelle:" ;
         Text [ portuguese_brazilian ] = "Número de tabelas:" ;
         Text [ portuguese ] = "Número de tabelas:" ;
-        Text [ finnish ] = "Taulukoita:" ;
+        Text [ finnish ] = "Lomakkeiden määrä:" ;
         Text [ danish ] = "Antal tabeller:" ;
         Text [ french ] = "Nombre de feuilles :" ;
         Text [ swedish ] = "Antal tabeller:" ;
@@ -132,6 +132,7 @@ TabPage RID_SCPAGE_STAT
         Text[ turkish ] = "Hücre sayýsý:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad de celdas:";
+        Text[ finnish ] = "Solujen määrä:";
     };
     FixedText FT_CELLS
     {
@@ -168,6 +169,7 @@ TabPage RID_SCPAGE_STAT
         Text[ turkish ] = "Sayfa sayýsý:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad de páginas:";
+        Text[ finnish ] = "Sivujen määrä:";
     };
     FixedText FT_PAGES
     {
@@ -203,5 +205,6 @@ TabPage RID_SCPAGE_STAT
         Text[ turkish ] = "Belge: ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Documento:  ";
+        Text[ finnish ] = "Asiakirja: ";
     };
 };
