@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:49:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 
 #include "scmatrix.hxx"
 #include "global.hxx"
+#include "address.hxx"
 #include "errorcodes.hxx"
 #include "interpre.hxx"
 
@@ -84,16 +85,16 @@
 
 //------------------------------------------------------------------------
 
-void ScMatrix::CreateMatrix(USHORT nC, USHORT nR)       // nur fuer ctor
+void ScMatrix::CreateMatrix(SCSIZE nC, SCSIZE nR)       // nur fuer ctor
 {
     pErrorInterpreter = NULL;
-    nAnzCol = nC;
-    nAnzRow = nR;
-    ULONG nCount = (ULONG) nAnzCol * nAnzRow;
+    nColCount = nC;
+    nRowCount = nR;
+    SCSIZE nCount = nColCount * nRowCount;
     if ( !nCount || nCount > GetElementsMax() )
     {
         DBG_ERRORFILE("ScMatrix::CreateMatrix: dimension error");
-        nAnzCol = nAnzRow = 1;
+        nColCount = nRowCount = 1;
         pMat = new MatValue[1];
         pMat[0].fVal = CreateDoubleError( errStackOverflow);
     }
@@ -110,7 +111,7 @@ ScMatrix::~ScMatrix()
 
 ScMatrix* ScMatrix::Clone() const
 {
-    ScMatrix* pScMat = new ScMatrix(nAnzCol, nAnzRow);
+    ScMatrix* pScMat = new ScMatrix( nColCount, nRowCount);
     MatCopy(*pScMat);
     pScMat->SetErrorInterpreter( pErrorInterpreter);    // TODO: really?
     return pScMat;
@@ -131,7 +132,10 @@ ScMatrix::ScMatrix(SvStream& rStream)
         : pErrorInterpreter( NULL)
         , nRefCnt(0)
 {
-    USHORT nC, nR;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
+    USHORT nC;
+    USHORT nR;
 
     rStream >> nC;
     rStream >> nR;
@@ -142,9 +146,9 @@ ScMatrix::ScMatrix(SvStream& rStream)
     String aMatStr;
     double fVal;
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-    ULONG nCount = (ULONG) nAnzCol * nAnzRow;
-    ULONG nReadCount = (ULONG) nC * nR;
-    for (ULONG i=0; i<nReadCount; i++)
+    SCSIZE nCount = nColCount * nRowCount;
+    SCSIZE nReadCount = (SCSIZE) nC * nR;
+    for (SCSIZE i=0; i<nReadCount; i++)
     {
         BYTE nType;
         rStream >> nType;
@@ -175,11 +179,16 @@ ScMatrix::ScMatrix(SvStream& rStream)
             }
         }
     }
+#else
+    CreateMatrix(0,0);
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScMatrix::Store(SvStream& rStream) const
 {
-    ULONG nCount = (ULONG) nAnzCol * nAnzRow;
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
+    SCSIZE nCount = nColCount * nRowCount;
     // Don't store matrix with more than USHORT max elements, old versions
     // might get confused in loops for(USHORT i=0; i<nC*nR; i++)
     if ( !pMat || nCount > ((USHORT)(~0)) )
@@ -197,12 +206,15 @@ void ScMatrix::Store(SvStream& rStream) const
         return;
     }
 
-    rStream << nAnzCol;
-    rStream << nAnzRow;
+    rStream << (USHORT) nColCount;
+#if SC_ROWLIMIT_MORE_THAN_32K
+    #error row32k
+#endif
+    rStream << (USHORT) nRowCount;
 
     String aMatStr;
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
-    for (ULONG i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
         BYTE nType = CELLTYPE_VALUE;
         if ( bIsString && bIsString[i] )
@@ -223,14 +235,15 @@ void ScMatrix::Store(SvStream& rStream) const
         else if ( nType == CELLTYPE_STRING )
             rStream.WriteByteString( aMatStr, eCharSet );
     }
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 void ScMatrix::ResetIsString()
 {
-    ULONG nCount = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE nCount = nColCount * nRowCount;
     if (bIsString)
     {
-        for (ULONG i = 0; i < nCount; i++)
+        for (SCSIZE i = 0; i < nCount; i++)
         {
             if ( bIsString[i] )
                 delete pMat[i].pS;
@@ -245,8 +258,8 @@ void ScMatrix::DeleteIsString()
 {
     if ( bIsString )
     {
-        ULONG nCount = (ULONG) nAnzCol * nAnzRow;
-        for ( ULONG i = 0; i < nCount; i++ )
+        SCSIZE nCount = nColCount * nRowCount;
+        for ( SCSIZE i = 0; i < nCount; i++ )
         {
             if ( bIsString[i] )
                 delete pMat[i].pS;
@@ -256,23 +269,23 @@ void ScMatrix::DeleteIsString()
     }
 }
 
-void ScMatrix::PutDouble(double fVal, USHORT nC, USHORT nR)
+void ScMatrix::PutDouble(double fVal, SCSIZE nC, SCSIZE nR)
 {
-    if (nC < nAnzCol && nR < nAnzRow)
-        PutDouble( fVal, (ULONG) nC * nAnzRow + nR );
+    if (ValidColRow( nC, nR))
+        PutDouble( fVal, CalcOffset( nC, nR) );
     else
         DBG_ERRORFILE("ScMatrix::PutDouble: dimension error");
 }
 
-void ScMatrix::PutDoubleAndResetString( double fVal, USHORT nC, USHORT nR )
+void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nC, SCSIZE nR )
 {
-    if (nC < nAnzCol && nR < nAnzRow)
-        PutDoubleAndResetString( fVal, (ULONG) nC * nAnzRow + nR );
+    if (ValidColRow( nC, nR))
+        PutDoubleAndResetString( fVal, CalcOffset( nC, nR) );
     else
         DBG_ERRORFILE("ScMatrix::PutDoubleAndResetString: dimension error");
 }
 
-void ScMatrix::PutDoubleAndResetString( double fVal, ULONG nIndex )
+void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nIndex )
 {
     if ( IsString( nIndex ) )
     {
@@ -282,15 +295,15 @@ void ScMatrix::PutDoubleAndResetString( double fVal, ULONG nIndex )
     PutDouble( fVal, nIndex );
 }
 
-void ScMatrix::PutString(const String& rStr, USHORT nC, USHORT nR)
+void ScMatrix::PutString(const String& rStr, SCSIZE nC, SCSIZE nR)
 {
-    if (nC < nAnzCol && nR < nAnzRow)
-        PutString( rStr, (ULONG) nC * nAnzRow + nR );
+    if (ValidColRow( nC, nR))
+        PutString( rStr, CalcOffset( nC, nR) );
     else
         DBG_ERRORFILE("ScMatrix::PutString: dimension error");
 }
 
-void ScMatrix::PutString(const String& rStr, ULONG nIndex)
+void ScMatrix::PutString(const String& rStr, SCSIZE nIndex)
 {
     if (bIsString == NULL)
         ResetIsString();
@@ -301,7 +314,7 @@ void ScMatrix::PutString(const String& rStr, ULONG nIndex)
     bIsString[nIndex] = SC_MATVAL_STRING;
 }
 
-void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, ULONG nIndex )
+void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
 {
     DBG_ASSERT( bFlag, "ScMatrix::PutStringEntry: bFlag == 0" );
     if (bIsString == NULL)
@@ -318,15 +331,15 @@ void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, ULONG nIndex )
     bIsString[nIndex] = bFlag;
 }
 
-void ScMatrix::PutEmpty(USHORT nC, USHORT nR)
+void ScMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
 {
-    if (nC < nAnzCol && nR < nAnzRow)
-        PutEmpty( (ULONG) nC * nAnzRow + nR );
+    if (ValidColRow( nC, nR))
+        PutEmpty( CalcOffset( nC, nR) );
     else
         DBG_ERRORFILE("ScMatrix::PutEmpty: dimension error");
 }
 
-void ScMatrix::PutEmpty(ULONG nIndex)
+void ScMatrix::PutEmpty(SCSIZE nIndex)
 {
     if (bIsString == NULL)
         ResetIsString();
@@ -337,15 +350,15 @@ void ScMatrix::PutEmpty(ULONG nIndex)
     pMat[nIndex].fVal = 0.0;
 }
 
-void ScMatrix::PutEmptyPath(USHORT nC, USHORT nR)
+void ScMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
 {
-    if (nC < nAnzCol && nR < nAnzRow)
-        PutEmptyPath( (ULONG) nC * nAnzRow + nR );
+    if (ValidColRow( nC, nR))
+        PutEmptyPath( CalcOffset( nC, nR) );
     else
         DBG_ERRORFILE("ScMatrix::PutEmptyPath: dimension error");
 }
 
-void ScMatrix::PutEmptyPath(ULONG nIndex)
+void ScMatrix::PutEmptyPath(SCSIZE nIndex)
 {
     if (bIsString == NULL)
         ResetIsString();
@@ -356,10 +369,10 @@ void ScMatrix::PutEmptyPath(ULONG nIndex)
     pMat[nIndex].fVal = 0.0;
 }
 
-USHORT ScMatrix::GetError( USHORT nC, USHORT nR) const
+USHORT ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
 {
-    if (nC < nAnzCol && nR < nAnzRow)
-        return GetError( (ULONG) nC * nAnzRow + nR );
+    if (ValidColRow( nC, nR))
+        return GetError( CalcOffset( nC, nR) );
     else
     {
         DBG_ERRORFILE("ScMatrix::GetError: dimension error");
@@ -367,10 +380,10 @@ USHORT ScMatrix::GetError( USHORT nC, USHORT nR) const
     }
 }
 
-double ScMatrix::GetDouble(USHORT nC, USHORT nR) const
+double ScMatrix::GetDouble(SCSIZE nC, SCSIZE nR) const
 {
-    if (nC < nAnzCol && nR < nAnzRow)
-        return GetDouble( (ULONG) nC * nAnzRow + nR );
+    if (ValidColRow( nC, nR))
+        return GetDouble( CalcOffset( nC, nR) );
     else
     {
         DBG_ERRORFILE("ScMatrix::GetDouble: dimension error");
@@ -378,11 +391,11 @@ double ScMatrix::GetDouble(USHORT nC, USHORT nR) const
     }
 }
 
-const String& ScMatrix::GetString(USHORT nC, USHORT nR) const
+const String& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
 {
-    if (nC < nAnzCol && nR < nAnzRow)
+    if (ValidColRow( nC, nR))
     {
-        ULONG nIndex = (ULONG) nC * nAnzRow + nR;
+        SCSIZE nIndex = CalcOffset( nC, nR);
         if ( IsString( nIndex ) )
             return GetString( nIndex );
         else
@@ -393,11 +406,11 @@ const String& ScMatrix::GetString(USHORT nC, USHORT nR) const
     return ScGlobal::GetEmptyString();
 }
 
-const MatValue* ScMatrix::Get(USHORT nC, USHORT nR, BOOL& bString) const
+const MatValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, BOOL& bString) const
 {
-    if (nC < nAnzCol && nR < nAnzRow)
+    if (ValidColRow( nC, nR))
     {
-        ULONG nIndex = (ULONG) nC * nAnzRow + nR;
+        SCSIZE nIndex = CalcOffset( nC, nR);
         if (bIsString && bIsString[nIndex])
             bString = TRUE;
         else
@@ -411,7 +424,7 @@ const MatValue* ScMatrix::Get(USHORT nC, USHORT nR, BOOL& bString) const
 
 void ScMatrix::MatCopy(ScMatrix& mRes) const
 {
-    if (nAnzCol != mRes.nAnzCol || nAnzRow != mRes.nAnzRow)
+    if (nColCount != mRes.nColCount || nRowCount != mRes.nRowCount)
     {
         DBG_ERRORFILE("ScMatrix::MatCopy: dimension error");
     }
@@ -420,10 +433,10 @@ void ScMatrix::MatCopy(ScMatrix& mRes) const
         if (bIsString)
         {
             mRes.ResetIsString();
-            for (USHORT i = 0; i < nAnzCol; i++)
+            for (SCSIZE i = 0; i < nColCount; i++)
             {
-                ULONG nStart = (ULONG) i * nAnzRow;
-                for (USHORT j = 0; j < nAnzRow; j++)
+                SCSIZE nStart = i * nRowCount;
+                for (SCSIZE j = 0; j < nRowCount; j++)
                 {
                     if ( bIsString[nStart+j] )
                         mRes.PutStringEntry( pMat[nStart+j].pS,
@@ -436,8 +449,8 @@ void ScMatrix::MatCopy(ScMatrix& mRes) const
         else
         {
             mRes.DeleteIsString();
-            ULONG nCount = (ULONG) nAnzCol * nAnzRow;
-            for (ULONG i = 0; i < nCount; i++)
+            SCSIZE nCount = nColCount * nRowCount;
+            for (SCSIZE i = 0; i < nCount; i++)
                 mRes.pMat[i].fVal = pMat[i].fVal;
         }
     }
@@ -445,7 +458,7 @@ void ScMatrix::MatCopy(ScMatrix& mRes) const
 
 void ScMatrix::MatTrans(ScMatrix& mRes) const
 {
-    if (nAnzCol != mRes.nAnzRow || nAnzRow != mRes.nAnzCol)
+    if (nColCount != mRes.nRowCount || nRowCount != mRes.nColCount)
     {
         DBG_ERRORFILE("ScMatrix::MatTrans: dimension error");
     }
@@ -454,28 +467,28 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
         if (bIsString)
         {
             mRes.ResetIsString();
-            for ( ULONG i = 0; i < nAnzCol; i++ )
+            for ( SCSIZE i = 0; i < nColCount; i++ )
             {
-                ULONG nStart = i * nAnzRow;
-                for ( ULONG j = 0; j < nAnzRow; j++ )
+                SCSIZE nStart = i * nRowCount;
+                for ( SCSIZE j = 0; j < nRowCount; j++ )
                 {
                     if ( bIsString[nStart+j] )
                         mRes.PutStringEntry( pMat[nStart+j].pS,
-                            bIsString[nStart+j], j*mRes.nAnzRow+i );
+                            bIsString[nStart+j], j*mRes.nRowCount+i );
                     else
-                        mRes.pMat[j*mRes.nAnzRow+i].fVal = pMat[nStart+j].fVal;
+                        mRes.pMat[j*mRes.nRowCount+i].fVal = pMat[nStart+j].fVal;
                 }
             }
         }
         else
         {
             mRes.DeleteIsString();
-            for ( ULONG i = 0; i < nAnzCol; i++ )
+            for ( SCSIZE i = 0; i < nColCount; i++ )
             {
-                ULONG nStart = i * nAnzRow;
-                for ( ULONG j = 0; j < nAnzRow; j++ )
+                SCSIZE nStart = i * nRowCount;
+                for ( SCSIZE j = 0; j < nRowCount; j++ )
                 {
-                    mRes.pMat[j*mRes.nAnzRow+i].fVal = pMat[nStart+j].fVal;
+                    mRes.pMat[j*mRes.nRowCount+i].fVal = pMat[nStart+j].fVal;
                 }
             }
         }
@@ -484,7 +497,7 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
 
 void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
 {
-    if (nAnzCol < mRes.nAnzCol || nAnzRow < mRes.nAnzRow)
+    if (nColCount < mRes.nColCount || nRowCount < mRes.nRowCount)
     {
         DBG_ERRORFILE("ScMatrix::MatCopyUpperLeft: dimension error");
     }
@@ -493,52 +506,51 @@ void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
         if (bIsString)
         {
             mRes.ResetIsString();
-            for ( ULONG i = 0; i < mRes.nAnzCol; i++ )
+            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
             {
-                ULONG nStart = i * nAnzRow;
-                for ( ULONG j = 0; j < mRes.nAnzRow; j++ )
+                SCSIZE nStart = i * nRowCount;
+                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
                 {
                     if ( bIsString[nStart+j] )
                         mRes.PutStringEntry( pMat[nStart+j].pS, bIsString[nStart+j],
-                            i*mRes.nAnzRow+j );
+                            i*mRes.nRowCount+j );
                     else
-                        mRes.pMat[i*mRes.nAnzRow+j].fVal = pMat[nStart+j].fVal;
+                        mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
                 }
             }
         }
         else
         {
             mRes.DeleteIsString();
-            for ( ULONG i = 0; i < mRes.nAnzCol; i++ )
+            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
             {
-                ULONG nStart = i * nAnzRow;
-                for ( ULONG j = 0; j < mRes.nAnzRow; j++ )
+                SCSIZE nStart = i * nRowCount;
+                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
                 {
-                    mRes.pMat[i*mRes.nAnzRow+j].fVal = pMat[nStart+j].fVal;
+                    mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
                 }
             }
         }
     }
 }
 
-void ScMatrix::FillDouble( double fVal, USHORT nC1, USHORT nR1,
-                            USHORT nC2, USHORT nR2 )
+void ScMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 )
 {
-    if (nC2 < nAnzCol && nR2 < nAnzRow)
+    if (ValidColRow( nC1, nR1) && ValidColRow( nC2, nR2))
     {
-        if ( nC1 == 0 && nR1 == 0 && nC2 == nAnzCol-1 && nR2 == nAnzRow-1 )
+        if ( nC1 == 0 && nR1 == 0 && nC2 == nColCount-1 && nR2 == nRowCount-1 )
         {
-            ULONG nEnd = (ULONG) nAnzCol * nAnzRow;
-            for ( ULONG j=0; j<nEnd; j++ )
+            SCSIZE nEnd = nColCount * nRowCount;
+            for ( SCSIZE j=0; j<nEnd; j++ )
                 pMat[j].fVal = fVal;
         }
         else
         {
-            for ( USHORT i=nC1; i<=nC2; i++ )
+            for ( SCSIZE i=nC1; i<=nC2; i++ )
             {
-                ULONG nOff1 = (ULONG) i * nAnzRow + nR1;
-                ULONG nOff2 = nOff1 + nR2 - nR1;
-                for ( ULONG j=nOff1; j<=nOff2; j++ )
+                SCSIZE nOff1 = i * nRowCount + nR1;
+                SCSIZE nOff2 = nOff1 + nR2 - nR1;
+                for ( SCSIZE j=nOff1; j<=nOff2; j++ )
                     pMat[j].fVal = fVal;
             }
         }
@@ -547,15 +559,15 @@ void ScMatrix::FillDouble( double fVal, USHORT nC1, USHORT nR1,
         DBG_ERRORFILE("ScMatrix::FillDouble: dimension error");
 }
 
-void ScMatrix::FillDoubleLowerLeft( double fVal, USHORT nC2 )
+void ScMatrix::FillDoubleLowerLeft( double fVal, SCSIZE nC2 )
 {
-    if (nC2 < nAnzCol && nC2 < nAnzRow)
+    if (ValidColRow( nC2, nC2))
     {
-        for ( USHORT i=1; i<=nC2; i++ )
+        for ( SCSIZE i=1; i<=nC2; i++ )
         {
-            ULONG nOff1 = (ULONG) i * nAnzRow;
-            ULONG nOff2 = nOff1 + i;
-            for ( ULONG j=nOff1; j<nOff2; j++ )
+            SCSIZE nOff1 = i * nRowCount;
+            SCSIZE nOff2 = nOff1 + i;
+            for ( SCSIZE j=nOff1; j<nOff2; j++ )
                 pMat[j].fVal = fVal;
         }
     }
@@ -565,17 +577,17 @@ void ScMatrix::FillDoubleLowerLeft( double fVal, USHORT nC2 )
 
 void ScMatrix::CompareEqual()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     if ( bIsString )
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal == 0.0);
     }
     else
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                 pMat[j].fVal = (pMat[j].fVal == 0.0);
     }
@@ -583,17 +595,17 @@ void ScMatrix::CompareEqual()
 
 void ScMatrix::CompareNotEqual()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     if ( bIsString )
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal != 0.0);
     }
     else
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                 pMat[j].fVal = (pMat[j].fVal != 0.0);
     }
@@ -601,17 +613,17 @@ void ScMatrix::CompareNotEqual()
 
 void ScMatrix::CompareLess()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     if ( bIsString )
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal < 0.0);
     }
     else
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                 pMat[j].fVal = (pMat[j].fVal < 0.0);
     }
@@ -619,17 +631,17 @@ void ScMatrix::CompareLess()
 
 void ScMatrix::CompareGreater()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     if ( bIsString )
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal > 0.0);
     }
     else
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                 pMat[j].fVal = (pMat[j].fVal > 0.0);
     }
@@ -637,17 +649,17 @@ void ScMatrix::CompareGreater()
 
 void ScMatrix::CompareLessEqual()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     if ( bIsString )
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal <= 0.0);
     }
     else
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                 pMat[j].fVal = (pMat[j].fVal <= 0.0);
     }
@@ -655,17 +667,17 @@ void ScMatrix::CompareLessEqual()
 
 void ScMatrix::CompareGreaterEqual()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     if ( bIsString )
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( !bIsString[j])     // else: #WERT!
                 if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                     pMat[j].fVal = (pMat[j].fVal >= 0.0);
     }
     else
     {
-        for ( ULONG j=0; j<n; j++ )
+        for ( SCSIZE j=0; j<n; j++ )
             if ( ::rtl::math::isFinite( pMat[j].fVal))  // else: DoubleError
                 pMat[j].fVal = (pMat[j].fVal >= 0.0);
     }
@@ -673,11 +685,11 @@ void ScMatrix::CompareGreaterEqual()
 
 double ScMatrix::And()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     bool bAnd = true;
     if ( bIsString )
     {
-        for ( ULONG j=0; bAnd && j<n; j++ )
+        for ( SCSIZE j=0; bAnd && j<n; j++ )
         {
             if ( bIsString[j] )
             {   // assuming a CompareMat this is an error
@@ -691,7 +703,7 @@ double ScMatrix::And()
     }
     else
     {
-        for ( ULONG j=0; bAnd && j<n; j++ )
+        for ( SCSIZE j=0; bAnd && j<n; j++ )
         {
             if ( ::rtl::math::isFinite( pMat[j].fVal))
                 bAnd = (pMat[j].fVal != 0.0);
@@ -704,11 +716,11 @@ double ScMatrix::And()
 
 double ScMatrix::Or()
 {
-    ULONG n = (ULONG) nAnzCol * nAnzRow;
+    SCSIZE n = nColCount * nRowCount;
     bool bOr = false;
     if ( bIsString )
     {
-        for ( ULONG j=0; !bOr && j<n; j++ )
+        for ( SCSIZE j=0; !bOr && j<n; j++ )
             if ( bIsString[j] )
             {   // assuming a CompareMat this is an error
                 return CreateDoubleError( errIllegalArgument );
@@ -720,7 +732,7 @@ double ScMatrix::Or()
     }
     else
     {
-        for ( ULONG j=0; !bOr && j<n; j++ )
+        for ( SCSIZE j=0; !bOr && j<n; j++ )
             if ( ::rtl::math::isFinite( pMat[j].fVal))
                 bOr = (pMat[j].fVal != 0.0);
             else
