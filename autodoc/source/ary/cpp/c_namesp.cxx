@@ -2,9 +2,9 @@
  *
  *  $RCSfile: c_namesp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,8 +161,7 @@ Namespace::Add_LocalOperation( const udmstri &     i_sLocalName,
                                OSid                i_nOS,
                                Cid                 i_nId )
 {
-    aLocalOperations.insert(
-            S_LocalOperation(i_sLocalName, i_nOS, i_nId) );
+    aLocalOperations.insert( S_LocalOperation(i_sLocalName, i_nOS, i_nId) );
 }
 
 
@@ -215,6 +214,15 @@ Namespace::Search_LocalClass( const udmstri & i_sName ) const
 {
     return csv::value_from_map(aLocalClasses, i_sName);
 }
+
+Rid
+Namespace::Search_LocalOperation( const String &      i_sName,
+                                  OSid                i_nSignature ) const
+{
+    return aLocalOperations.find(
+            S_LocalOperation(i_sName, i_nSignature, 0)) != aLocalOperations.end();
+}
+
 
 Cid
 Namespace::inq_Id() const
