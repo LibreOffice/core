@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:10:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,21 +84,18 @@
 class XclOcxConverter : protected SvxMSConvertOCXControls
 {
 protected:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >    XDrawPageRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       XShapeRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  XFormComponentRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    XControlModelRef;
-
-protected:
     explicit            XclOcxConverter( const XclRoot& rRoot );
     virtual             ~XclOcxConverter();
 
     /** Sets the sheet index of the currently processed object. GetDrawPage() needs this. */
     void                SetScTab( SCTAB nScTab );
+    /** Calls SetScTab() with the passed sheet index and updates the xDrawPage base class member. */
+    void                SetDrawPage( SCTAB nScTab );
 
 private:
     /** Returns the current draw page. */
-    virtual const XDrawPageRef& GetDrawPage();
+    virtual const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >&
+                            GetDrawPage();
 
 private:
     const XclRoot&      mrRoot;         /// Root data.
@@ -129,18 +126,26 @@ public:
 private:
     /** Inserts the passed control rxFComp into the document. */
     virtual sal_Bool    InsertControl(
-                            const XFormComponentRef& rxFComp,
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::form::XFormComponent >& rxFComp,
                             const ::com::sun::star::awt::Size& rSize,
-                            XShapeRef* pxShape,
+                            ::com::sun::star::uno::Reference<
+                                ::com::sun::star::drawing::XShape >* pxShape,
                             BOOL bFloatingCtrl );
 
     /** Tries to set a spreadsheet cell link and source range link at the passed form control. */
     void                ConvertSheetLinks(
-                            XControlModelRef rxModel,
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XControlModel >& rxModel,
                             const XclImpCtrlLinkHelper& rControl ) const;
+    /** Tries to register a Basic macro for the control. */
+    void                RegisterTbxMacro( XclImpEscherTbxCtrl& rTbxCtrl );
 
 private:
-    SotStorageStreamRef  mxStrm;         /// The 'Ctls' strem.
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        mxDocFactory;       /// The MultiServiceFactory of the Calc document.
+    SotStorageStreamRef mxStrm;             /// The 'Ctls' stream in the Excel file.
+    sal_Int32           mnLastIndex;        /// Last insertion index of a control.
 };
 
 // ----------------------------------------------------------------------------
@@ -162,10 +167,12 @@ public:
 #if EXC_EXP_OCX_CTRL
     /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
-    XclExpObjOcxCtrl*   CreateCtrlObj( const XShapeRef& rxShape );
+    XclExpObjOcxCtrl*   CreateCtrlObj( const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape >& rxShape );
 #else
     /** Creates a TBX form control OBJ record from the passed form control. */
-    XclExpObjTbxCtrl*   CreateCtrlObj( const XShapeRef& rxShape );
+    XclExpObjTbxCtrl*   CreateCtrlObj( const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::drawing::XShape >& rxShape );
 #endif
 
 private:
@@ -173,7 +180,15 @@ private:
         @param rControl  The Excel form control that stores and exports the links. */
     void                ConvertSheetLinks(
                             XclExpCtrlLinkHelper& rControl,
-                            const XControlModelRef& rxModel ) const;
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XControlModel >& rxModel ) const;
+#if !EXC_EXP_OCX_CTRL
+    /** Tries to get the name of a Basic macro from a control. */
+    void                ConvertTbxMacro(
+                            XclExpObjTbxCtrl& rTbxCtrl,
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::awt::XControlModel >& rxModel );
+#endif
 
 private:
 #if EXC_EXP_OCX_CTRL
