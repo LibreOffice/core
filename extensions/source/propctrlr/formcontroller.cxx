@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-20 07:53:50 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,7 +1305,7 @@ namespace pcr
                     const ::rtl::OUString * pMethods = aMethSeq.getConstArray();
                     sal_uInt32 nMethCount = aMethSeq.getLength();
 
-                    for (sal_uInt32 j = 0 ; j < nMethCount ; j++,++pMethods )
+                    for (sal_uInt32 j = 0 ; j < nMethCount ; ++j,++pMethods )
                     {
 
                         EventDisplayDescription* pEventDisplayDescription = GetEvtTranslation(*pMethods);
@@ -1319,50 +1319,55 @@ namespace pcr
                             }
 
 
-                            for (sal_uInt32 nI=0; nI<nScrEvts;nI++)
+                            const ScriptEventDescriptor* pEvent = pEvDes;
+                            for ( sal_uInt32 nI=0; nI<nScrEvts; ++nI, ++pEvent)
                             {
-                                const ScriptEventDescriptor& rEvDe = pEvDes[nI];
-
-                                if ((rEvDe.ListenerType == aListenerClassName || rEvDe.ListenerType == aOUListener )
-                                    && rEvDe.EventMethod == (*pMethods))
+                                if  (   (   ( pEvent->ListenerType == aListenerClassName )
+                                        ||  ( pEvent->ListenerType == aOUListener )
+                                        )
+                                    &&  ( pEvent->EventMethod == (*pMethods) )
+                                    )
                                 {
-                                    SvxMacro* pMacro=NULL;
+                                    SvxMacro* pMacro = NULL;
 
-                                    const ScriptEventDescriptor& rTheEvDe = pEvDes[nI];
-                                    if (rTheEvDe.ScriptCode.getLength()>0 && rTheEvDe.ScriptType.getLength()>0)
+                                    if  (   (pEvent->ScriptCode.getLength() > 0)
+                                        &&  (pEvent->ScriptType.getLength() > 0)
+                                        )
                                     {
-                                        if( m_xEventManager.is() )
-                                        {
-                                            pMacro = new SvxMacro(rTheEvDe.ScriptCode,rTheEvDe.ScriptType);
-                                        }
-                                        else
-                                        {
-                                            ::rtl::OUString aMacro = rTheEvDe.ScriptCode;
-                                            ::rtl::OUString aLibName;
+                                        ::rtl::OUString sScriptType = pEvent->ScriptType;
+                                        ::rtl::OUString sScriptCode = pEvent->ScriptCode;
+                                        ::rtl::OUString sLibName;
 
-                                            sal_Int32 nIndex = rTheEvDe.ScriptCode.indexOf( (sal_Unicode)':' );
-                                            if (nIndex >= 0)
-                                            {
-                                                ::rtl::OUString aPrefix = rTheEvDe.ScriptCode.copy( 0, nIndex );
-                                                aMacro = rTheEvDe.ScriptCode.copy( nIndex + 1 );
-                                                if( String(aPrefix).EqualsAscii("application") )
-                                                    aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
-                                                // else
+                                        if ( 0 == sScriptType.compareToAscii( "StarBasic" ) )
+                                        {   // it's a StarBasic macro
+                                            // strip the prefix from the macro name (if any)
+
+                                            sal_Int32 nPrefixLen = sScriptCode.indexOf( ':' );
+                                            if ( nPrefixLen >= 0 )
+                                            {   // it contains a prefix
+                                                ::rtl::OUString sPrefix = sScriptCode.copy( 0, nPrefixLen );
+                                                sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
+                                                if ( 0 == sPrefix.compareToAscii( "application" ) )
+                                                {
+                                                    sLibName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
+                                                }
+                                                else if ( 0 == sPrefix.compareToAscii( "document" ) )
+                                                {
                                                     // ??? document name is unknown here!
+                                                }
+                                                else
+                                                    DBG_ERROR( "OPropertyBrowserController::ChangeEventProperty: invalid (unknown) prefix" );
                                             }
-
-                                            SvxMacro aTmpMacro( aMacro, rTheEvDe.ScriptType );
-                                            pMacro = new SvxMacro( aMacro, aLibName, aTmpMacro.GetScriptType() );
                                         }
 
-                                        aTable.Insert(aNameArray.size(),pMacro);
+                                        SvxMacro aTypeTranslator( sScriptCode, sScriptType );
+                                        pMacro = new SvxMacro( sScriptCode, sLibName, aTypeTranslator.GetScriptType() );
                                     }
-                                    else
-                                    {
-                                        aTable.Insert(aNameArray.size(),NULL);
-                                    }
+
+                                    aTable.Insert(aNameArray.size(), pMacro);
                                 }
                             }
+
                             aNameArray.push_back(pEventDisplayDescription->sDisplayName);
                         }
                     }
@@ -1391,10 +1396,10 @@ namespace pcr
                 // the shell we're working with ...
                 // TODO: need a replacement for this
 
-                const SvxMacroTableDtor& aTab=pMacroTabPage->GetMacroTbl();
+                const SvxMacroTableDtor& aTab = pMacroTabPage->GetMacroTbl();
 
-                if (nObjIdx>=0 && m_xEventManager.is())
-                        m_xEventManager->revokeScriptEvents(nObjIdx);
+                if ( nObjIdx>=0 && m_xEventManager.is() )
+                    m_xEventManager->revokeScriptEvents( nObjIdx );
 
 
                 sal_uInt16 nEventCount = (sal_uInt16)aTab.Count();
@@ -1402,19 +1407,17 @@ namespace pcr
 
                 Sequence< ScriptEventDescriptor > aSeqScriptEvts(nEventCount);
 
-                ScriptEventDescriptor *pSeqScriptEvts=aSeqScriptEvts.getArray();
+                ScriptEventDescriptor* pWriteScriptEvents = aSeqScriptEvts.getArray();
                 nIndex=0;
 
                 String aListenerClassName,aName,aListener;
-                //  Sequence< Reference< XIdlMethod > > aMethSeq;
 
                 pListeners = m_aObjectListenerTypes.getConstArray();
 
-                ::rtl::OUString aMacStr;
-                for (i = 0 ; i < nLength ; i++,++pListeners )
+                ::rtl::OUString sScriptCode;
+                for (i = 0 ; i < nLength ; ++i, ++pListeners )
                 {
                     // Methode ansprechen
-                    //  const Reference< XIdlClass > & (*pListeners) = pListeners[i];
 
                     // Namen besorgen
                     aListener = pListeners->getTypeName();
@@ -1428,58 +1431,52 @@ namespace pcr
                     if (aListenerClassName.Len() != 0)
                     {
                         // Methoden der Listener ausgeben
-                        aMethSeq = getEventMethods( (*pListeners) );
+                        aMethSeq = getEventMethods( *pListeners );
 
-                        const ::rtl::OUString* pMethods = aMethSeq.getConstArray();
-                        sal_uInt32 nMethCount = aMethSeq.getLength();
-
-                        for (sal_uInt32 j = 0 ; j < nMethCount ; j++,++pMethods )
+                        const ::rtl::OUString* pMethods     =               +   aMethSeq.getConstArray();
+                        const ::rtl::OUString* pMethodsEnd  =   pMethods    +   aMethSeq.getLength();
+                        for ( ; pMethods != pMethodsEnd; ++pMethods )
                         {
-                            //  Reference< XIdlMethod >  xMethod = pMethods[ j ];
+                            EventDisplayDescription* pEventDisplayDescription = GetEvtTranslation( *pMethods );
 
-                            //  aMethName=xMethod->getName();
-
-                            EventDisplayDescription *pEventDisplayDescription=GetEvtTranslation(*pMethods);
-
-                            if (pEventDisplayDescription != NULL)
+                            if ( pEventDisplayDescription )
                             {
-                                (aName = aListenerClassName) += ';';
-
-                                aName += (*pMethods).getStr();
-
-                                SvxMacro *pMacro=aTab.Get(nIndex++);
-                                if (pMacro!=NULL)
+                                SvxMacro* pMacro = aTab.Get( nIndex++ );
+                                if ( pMacro )
                                 {
-                                       aMacStr = String(pMacro->GetMacName());
-                                    if (nEventIndex<nEventCount)
+                                       sScriptCode = pMacro->GetMacName();
+                                    if ( nEventIndex < nEventCount )
                                     {
-                                        if( m_xEventManager.is() )
+                                        if ( m_xEventManager.is() )
                                         {
-                                            pSeqScriptEvts[nEventIndex].ListenerType = aListenerClassName;
+                                            pWriteScriptEvents->ListenerType = aListenerClassName;
                                         }
-                                        else    // Dialog editor mode
-                                        {
-                                            pSeqScriptEvts[nEventIndex].ListenerType = aListener;
-                                            if( pMacro->GetLibName().EqualsAscii("StarOffice") )
-                                            {
-                                                aMacStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application:" ));
-                                            }
-                                            else
-                                            {
-                                                aMacStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "document:" ));
-                                            }
-                                            aMacStr += pMacro->GetMacName();
+                                        else
+                                        {   // Dialog editor mode
+                                            pWriteScriptEvents->ListenerType = aListener;
                                         }
-                                           pSeqScriptEvts[nEventIndex].ScriptCode = aMacStr;
-                                        pSeqScriptEvts[nEventIndex].EventMethod = *pMethods;
-                                        pSeqScriptEvts[nEventIndex].ScriptType = pMacro->GetLanguage();
+
+                                        sal_Bool bApplicationMacro = pMacro->GetLibName().EqualsAscii("StarOffice");
+
+                                        sScriptCode = ::rtl::OUString::createFromAscii( bApplicationMacro ? "application:" : "document:" );
+                                        sScriptCode += pMacro->GetMacName();
+
+                                        pWriteScriptEvents->ScriptCode = sScriptCode;
+                                        pWriteScriptEvents->EventMethod = *pMethods;
+                                        pWriteScriptEvents->ScriptType = pMacro->GetLanguage();
+
+                                        ++nEventIndex;
+                                        ++pWriteScriptEvents;
                                     }
-                                    nEventIndex++;
                                 }
                                 else
-                                    aMacStr = ::rtl::OUString();
-                                getPropertyBox()->SetPropertyValue( aName, aMacStr);
+                                    sScriptCode = ::rtl::OUString();
 
+                                // set the new "property value"
+                                aName = aListenerClassName;
+                                aName += ';';
+                                aName += pMethods->getStr();
+                                getPropertyBox()->SetPropertyValue( aName, sScriptCode);
                             }
                         }
                     }
@@ -2588,6 +2585,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2001/08/20 07:53:50  ab
+ *  #90513# application and document location prefixes
+ *
  *  Revision 1.41  2001/08/13 15:46:18  fs
  *  #90958# +getRowSet / +ensureRowsetConnection: allow to calc the connection even when only controls are inspected (and not forms)
  *
