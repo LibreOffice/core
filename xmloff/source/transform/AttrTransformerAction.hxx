@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:43:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ enum XMLAttrTransformerAction
     XML_ATACTION_EVENT_NAME,
     XML_ATACTION_MACRO_NAME,
     XML_ATACTION_MACRO_LOCATION,
+    XML_ATACTION_DLG_BORDER,
     XML_ATACTION_URI_OOO,                // an URI in OOo notation
                                          // - param1: pacakage URI are supported
     XML_ATACTION_URI_OASIS,              // an URI in OASIS notation
