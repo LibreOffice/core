@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:18:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2812,7 +2812,7 @@ BOOL SwLayIdle::CollectAutoCmplWords( BOOL bVisAreaOnly )
 |*  Letzte Aenderung    MA 09. Jun. 94
 |*
 |*************************************************************************/
-void SwLayIdle::ShowIdle( ColorName eName )
+void SwLayIdle::ShowIdle( ColorData eColorData )
 {
     if ( !bIndicator )
     {
@@ -2823,18 +2823,18 @@ void SwLayIdle::ShowIdle( ColorName eName )
             Rectangle aRect( 0, 0, 5, 5 );
             aRect = pWin->PixelToLogic( aRect );
             pWin->Push( PUSH_FILLCOLOR );
-            pWin->SetFillColor( eName );
+            pWin->SetFillColor( eColorData );
             pWin->DrawRect( aRect );
             pWin->Pop();
         }
     }
 }
-#define SHOW_IDLE( ColorName ) ShowIdle( ColorName )
+#define SHOW_IDLE( ColorData ) ShowIdle( ColorData )
 #else
-#define SHOW_IDLE( ColorName )
+#define SHOW_IDLE( ColorData )
 #endif
 #else
-#define SHOW_IDLE( ColorName )
+#define SHOW_IDLE( ColorData )
 #endif
 
 /*************************************************************************
