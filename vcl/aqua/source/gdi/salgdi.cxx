@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.18 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-06 01:20:05 $
+ *  $Revision: 1.19 $
+ *  last change: $Author: pluby $ $Date: 2000-12-06 03:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,9 @@ static RGBColor SALColor2RGBColor ( SalColor nSalColor )
 SalGraphics::SalGraphics()
 {
     RGBColor aBlackColor;
+
+    maGraphicsData.mhClipRgn = NULL;
+    maGraphicsData.mhGrowRgn = NULL;
 
     maGraphicsData.mnPenMode        = patCopy;
     maGraphicsData.mbTransparentPen = FALSE;
