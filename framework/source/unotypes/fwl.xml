@@ -55,19 +55,6 @@
     </component-description>
 
     <component-description>
-        <author> Ingrid Halama </author>
-        <name> com.sun.star.comp.framework.MediaTypeDetectionHelper </name>
-        <description>
-            Provides a mapping for a given sequence of ContentIdentifierStrings to
-            a sequence of belonging MediaType's.
-        </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.frame.MediaTypeDetectionHelper </supported-service>
-    </component-description>
-
-    <component-description>
         <author> Carsten Driesner </author>
         <name> com.sun.star.comp.framework.SubstituteVariables </name>
         <description>
@@ -76,7 +63,7 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> com.sun.star.frame.PathSubstitution </supported-service>
+        <supported-service> com.sun.star.util.PathSubstitution </supported-service>
     </component-description>
 
     <component-description>
@@ -88,7 +75,7 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> com.sun.star.frame.PathSettings </supported-service>
+        <supported-service> com.sun.star.util.PathSettings </supported-service>
     </component-description>
 
     <project-build-dependency>  cppu        </project-build-dependency>

@@ -20,30 +20,6 @@
 
     <component-description>
         <author> Andreas Schluens </author>
-        <name> com.sun.star.comp.framework.Task </name>
-        <description>
-            Specifies a separate task within a desktop environment.
-        </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.frame.Task </supported-service>
-    </component-description>
-
-    <component-description>
-        <author> Andreas Schluens </author>
-        <name> com.sun.star.comp.framework.PlugInFrame </name>
-        <description>
-            Extend a task for using in a browser plugin environment.
-        </description>
-        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
-        <language> c++ </language>
-        <status value="final"/>
-        <supported-service> com.sun.star.mozilla.Plugin </supported-service>
-    </component-description>
-
-    <component-description>
-        <author> Andreas Schluens </author>
         <name> com.sun.star.comp.framework.Desktop </name>
         <description>
             A desktop environment contains tasks with one or more frames in which components can be loaded.
@@ -80,6 +56,20 @@
         <language> c++ </language>
         <status value="final"/>
         <supported-service> com.sun.star.util.URLTransformer </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.JobExecutor </name>
+        <description>
+            It implements a generic job execution service, which can start
+            registered uno services on triggered events, control her lifetime
+            and handle there own configuration.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.task.JobExecutor </supported-service>
     </component-description>
 
     <component-description>
