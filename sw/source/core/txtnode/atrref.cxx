@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrref.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,18 @@
 
 #pragma hdrstop
 
+#ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-
+#endif
 #ifndef _TXTRFMRK_HXX //autogen
 #include <txtrfmrk.hxx>
 #endif
 #ifndef _FMTRFMRK_HXX //autogen
 #include <fmtrfmrk.hxx>
 #endif
-#include "swfont.hxx"
+#ifndef _SWFONT_HXX
+#include <swfont.hxx>
+#endif
 
 
 /****************************************************************************
@@ -129,6 +132,9 @@ SwTxtRefMark::SwTxtRefMark( const SwFmtRefMark& rAttr,
         nEnd = *pEnde;
         pEnd = &nEnd;
     }
+    SetDontMergeAttr( TRUE );
+    SetDontMoveAttr( TRUE );
+    SetOverlapAllowedAttr( TRUE );
 }
 
 xub_StrLen* SwTxtRefMark::GetEnd()

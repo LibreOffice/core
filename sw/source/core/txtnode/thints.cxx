@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:28:47 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,15 +770,12 @@ BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
         // (rSet) immer als TextAttribute setzen, damit sie angezeigt werden.
         int bHasCharFmts = FALSE;
         if( pSwpHints )
-        {
-            USHORT nWhich;
-            for( USHORT n = 0; !bHasCharFmts && n < pSwpHints->Count(); ++n )
-            {
-                nWhich = (*pSwpHints)[ n ]->Which();
-                bHasCharFmts = ( RES_TXTATR_CHARFMT == nWhich ||
-                                 RES_TXTATR_INETFMT == nWhich );
-            }
-        }
+            for( USHORT n = 0; n < pSwpHints->Count(); ++n )
+                if( (*pSwpHints)[ n ]->IsCharFmtAttr() )
+                {
+                    bHasCharFmts = TRUE;
+                    break;
+                }
 
         if( !bHasCharFmts )
         {
@@ -1102,7 +1099,7 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStart, xub_StrLen nEnd,
 }
 
 int lcl_IsNewAttrInSet( const SwpHints& rHints, const SfxPoolItem& rItem,
-    const xub_StrLen nEnd )
+                        const xub_StrLen nEnd )
 {
     int bIns = TRUE;
     for( USHORT i = 0; i < rHints.Count(); ++i )
@@ -1113,9 +1110,7 @@ int lcl_IsNewAttrInSet( const SwpHints& rHints, const SfxPoolItem& rItem,
 
         if( pOther->GetEnd() &&
             *pOther->GetEnd() == nEnd &&
-            (  RES_TXTATR_CHARFMT == pOther->Which() ||
-               RES_TXTATR_INETFMT == pOther->Which() ||
-               pOther->Which() == rItem.Which() ) )
+            ( pOther->IsCharFmtAttr() || pOther->Which() == rItem.Which() ) )
         {
             bIns = FALSE;
             break;
@@ -1325,8 +1320,8 @@ USHORT SwpHints::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
 
         const USHORT nWhich = pHt->Which();
 
-        if( ( ( RES_TXTATR_CHARFMT == nWhich || RES_TXTATR_INETFMT == nWhich )
-              && lcl_Included( RES_CHRATR_LANGUAGE, pHt ) )
+        if( ( pHt->IsCharFmtAttr() &&
+              lcl_Included( RES_CHRATR_LANGUAGE, pHt ) )
             || RES_CHRATR_LANGUAGE == nWhich )
         {
             const xub_StrLen *pEndIdx = pHt->GetEnd();
@@ -1391,19 +1386,14 @@ void SwpHints::ClearDummies( SwTxtNode &rNode )
         SwTxtAttr *pHt = GetHt( i++ );
         const USHORT nWhich = pHt->Which();
         const xub_StrLen *pEnd = pHt->GetEnd();
-        if ( pEnd && RES_TXTATR_REFMARK != nWhich
-                  && RES_TXTATR_TOXMARK != nWhich
-                  && RES_TXTATR_CHARFMT != nWhich
-                  && RES_TXTATR_INETFMT != nWhich )
+        if ( pEnd && !pHt->IsOverlapAllowedAttr() && !pHt->IsCharFmtAttr() )
             for( USHORT j = i; j < Count(); ++j  )
             {
                 SwTxtAttr *pOther = GetHt(j);
                 if ( *pOther->GetStart() > *pHt->GetStart() )
                     break;
 
-                if( pOther->Which() == nWhich ||
-                    RES_TXTATR_CHARFMT == pOther->Which() ||
-                    RES_TXTATR_INETFMT == pOther->Which() )
+                if( pOther->Which() == nWhich || pOther->IsCharFmtAttr() )
                 {
                     //JP 03.10.95: nicht zusammenfassen, zu kompliziert
                     //          fuer WIN95-Compiler!!
@@ -1440,30 +1430,26 @@ BOOL SwpHints::Merge( SwTxtNode &rNode )
     while ( i < Count() )
     {
         SwTxtAttr *pHt = GetHt( i++ );
-        const USHORT nWhich = pHt->Which();
         const xub_StrLen *pEnd = pHt->GetEnd();
-        if ( pEnd && nWhich != RES_TXTATR_REFMARK
-                  && nWhich != RES_TXTATR_TOXMARK )
+        if ( pEnd && !pHt->IsDontMergeAttr() )
         {
+            const USHORT nWhich = pHt->Which();
             for ( USHORT j = i; j < Count(); j++  )
             {
                 SwTxtAttr *pOther = GetHt(j);
                 if ( *pOther->GetStart() > *pEnd )
                     break;   // keine beruehrenden Attribute mehr vorhanden
-                if ( *pOther->GetStart() == *pEnd &&
-                     ( pOther->Which() == pHt->Which() ||
-                       RES_TXTATR_CHARFMT == pOther->Which() ||
-                       RES_TXTATR_INETFMT == pOther->Which() ||
-                       ( ( RES_TXTATR_CHARFMT == pHt->Which() ||
-                           RES_TXTATR_INETFMT == pHt->Which() ) &&
-                         RES_TXTATR_REFMARK != pOther->Which() &&
-                         RES_TXTATR_TOXMARK != pOther->Which() ) ) )
+
+                if( *pOther->GetStart() == *pEnd &&
+                     ( pOther->Which() == nWhich ||
+                       pOther->IsCharFmtAttr() ||
+                       ( pHt->IsCharFmtAttr() && !pHt->IsDontMergeAttr() )))
                 {
                     // Beruehrendes Attribut gefunden mit gleichem Typ bzw.
                     // Zeichenvorlage.
                     // Bei Attribut mit anderem Wert bzw. Zeichenvorlage
                     // ist keine Verschmelzung mehr moeglich
-                    if ( pOther->Which() == pHt->Which() &&
+                    if( pOther->Which() == nWhich &&
                          pOther->GetAttr() == pHt->GetAttr() )
                     {
                         // Unser Partner pOther erfuellt alle Voraussetzungen,
@@ -1475,11 +1461,9 @@ BOOL SwpHints::Merge( SwTxtNode &rNode )
                         for ( USHORT k = 0; k+1 < i; k++ )
                         {
                             SwTxtAttr *pAnOther = GetHt(k);
-                            if ( ( pAnOther->Which() == pHt->Which() ||
-                                   RES_TXTATR_CHARFMT == pAnOther->Which() ||
-                                   RES_TXTATR_CHARFMT == pHt->Which() ||
-                                   RES_TXTATR_INETFMT == pAnOther->Which() ||
-                                   RES_TXTATR_INETFMT == pHt->Which() )
+                            if( ( pAnOther->Which() == nWhich ||
+                                  pAnOther->IsCharFmtAttr() ||
+                                  pHt->IsCharFmtAttr() )
                                  && pAnOther->GetEnd()
                                  && *pAnOther->GetEnd() == *pEnd )
                             {
@@ -1541,8 +1525,7 @@ BOOL SwpHints::Forget( const USHORT i, const USHORT nWhich,
         const xub_StrLen *pEnd = pHt->GetEnd();
         if ( pEnd && *pEnd == nEnd &&
              ( nWhch == nWhich ||
-             ( ( nWhch == RES_TXTATR_CHARFMT || RES_TXTATR_INETFMT == nWhch )
-               && lcl_Included( nWhich, pHt ) ) ) )
+             ( pHt->IsCharFmtAttr() && lcl_Included( nWhich, pHt ) ) ) )
         {
             bRet = TRUE;
             break;
@@ -1722,29 +1705,27 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
     // AMA: Damit wir endlich mit ueberlappenden Hints fertig werden ...
     //      das neue Verfahren:
 
-    if( !(SETATTR_NOHINTADJUST & nMode) &&
-        RES_TXTATR_TOXMARK != nWhich && RES_TXTATR_REFMARK != nWhich )
+    if( !(SETATTR_NOHINTADJUST & nMode) && !pHint->IsOverlapAllowedAttr() )
     {
         const SfxPoolItem* pParaItem;
         xub_StrLen nMaxEnd = *pHtEnd;
         xub_StrLen nHtEnd = *pHtEnd;
         BOOL bParaAttr = rNode.GetpSwAttrSet() &&
-            ( SFX_ITEM_SET == rNode.GetpSwAttrSet()->GetItemState(
-            nWhich, FALSE, &pParaItem ) ) && ( pParaItem == &pHint->GetAttr() );
+            ( SFX_ITEM_SET == rNode.GetpSwAttrSet()->GetItemState( nWhich,
+                FALSE, &pParaItem ) ) && ( pParaItem == &pHint->GetAttr() );
         BOOL bReplace = !( SETATTR_DONTREPLACE & nMode );
-        SwpHtStart_SAR *pTmpHints = NULL;
+        SwpHtStart_SAR *pTmpHints = 0;
 
         USHORT i;
         // Wir wollen zwar von nHtStart bis nMaxEnd, muessen aber ggf.
         // stueckeln (Attribute duerfen keine Zeichenvorlagen ueberlappen).
         // Das erste Stueck wird also von nHtStart bis zum ersten Start/Ende
         // einer Zeichenvorlage gehen usw. bis nHtEnd = nMaxEnd erreicht ist.
-        do
-        {
+        do {
             BOOL bINet = nWhich == RES_TXTATR_INETFMT;
             BOOL bForgetAttr = bParaAttr;
             // Muessen wir uns aufspalten?
-            if ( !bINet )
+            if ( !bINet || !pHint->IsDontMergeAttr() )
             {
                 // Ab der zweiten Runde muessen wir zunaechst einen neuen
                 // Hint erzeugen.
@@ -1761,10 +1742,9 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                     SwTxtAttr *pOther = GetHt(i);
                     // Wir suchen nach Zeichenvorlagen, die uns schneiden
                     // oder in uns liegen
-                    BOOL bOtherFmt = pOther->Which() == RES_TXTATR_CHARFMT
-                                     || pOther->Which() == RES_TXTATR_INETFMT;
-                    if( bOtherFmt || ( RES_TXTATR_CHARFMT == nWhich
-                                       && pOther->GetEnd() ) )
+                    BOOL bOtherFmt = pOther->IsCharFmtAttr();
+                    if( bOtherFmt ||
+                        ( RES_TXTATR_CHARFMT == nWhich && pOther->GetEnd() ) )
                     {
                         if( bForgetAttr && bOtherFmt &&
                             *pOther->GetStart() <= nHtStart &&
@@ -1803,16 +1783,14 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
             i = 0;
             while(i < Count())
             {
-                BOOL bCheckInclude = FALSE;
                 SwTxtAttr *pOther = GetHt(i);
                 const USHORT nOtherWhich = pOther->Which();
-                BOOL bCharFmt = RES_TXTATR_CHARFMT == nOtherWhich;
-                if( nOtherWhich == nWhich ||
-                    ( bINet && ( bCharFmt ||
-                          TRUE == ( bCheckInclude = TRUE ) ) ) ||
-                    ( RES_TXTATR_CHARFMT == nWhich &&   // fix: 10411
-                        ( RES_TXTATR_INETFMT == nOtherWhich ||
-                          TRUE == ( bCheckInclude = TRUE ) ) ) )
+                BOOL bCheckInclude = pHint->IsCharFmtAttr() &&
+                                     pOther->IsCharFmtAttr() &&
+                                     nWhich != nOtherWhich;
+
+                BOOL bOtherCharFmt = RES_TXTATR_CHARFMT == nOtherWhich;
+                if( nOtherWhich == nWhich || bCheckInclude )
                 {
                     if(0 == pOther->GetEnd())
                     {
@@ -1831,17 +1809,18 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                     }
                     else
                     {
-                    // Attribute mit Anfang und Ende.
+                        // Attribute mit Anfang und Ende.
                         const Range aHintRg( nHtStart, nHtEnd );
                         const Range aOtherRg( *pOther->GetStart(),
                                                 *pOther->GetEnd() );
 
-                        if( aOtherRg.IsInside( aHintRg.Min() )
-                            || aHintRg.IsInside( aOtherRg.Min() ) )
+                        if( aOtherRg.IsInside( aHintRg.Min() ) ||
+                            aHintRg.IsInside( aOtherRg.Min() ) )
                         {
                             // aBig umspannt beide Ranges
-                            const Range aBig( Min( aHintRg.Min(), aOtherRg.Min()),
-                                              Max( aHintRg.Max(), aOtherRg.Max()));
+                            const Range aBig(
+                                    Min( aHintRg.Min(), aOtherRg.Min()),
+                                    Max( aHintRg.Max(), aOtherRg.Max()));
 
                             // Gleiches Attribut
                             // oder Zeichenvorlage:
@@ -1863,10 +1842,9 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                                 BOOL bTmpReplace = bReplace ||
                                     ( aHintRg == aOtherRg &&
                                       nWhich == nOtherWhich &&
-                                      RES_TXTATR_CHARFMT != nWhich &&
-                                      RES_TXTATR_INETFMT != nWhich );
+                                      !pHint->IsCharFmtAttr() );
                                 if( bNoINet && bTmpReplace &&
-                                    ( !bCharFmt || nWhich == nOtherWhich ) )
+                                    ( !bOtherCharFmt || nWhich == nOtherWhich ) )
                                 {
                                     if( !bCheckInclude ||
                                         lcl_Included( nOtherWhich, pHint ) )
@@ -1885,12 +1863,12 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                             else if( aBig.Max() == aHintRg.Max() )
                             {
                                 if( bNoINet &&
-                                    ( !bCharFmt || RES_TXTATR_CHARFMT != nWhich ) &&
+                                    ( !bOtherCharFmt || RES_TXTATR_CHARFMT != nWhich ) &&
                                     ( bReplace || aHintRg.Max() != aOtherRg.Max() ) )
                                 {
                                     if( ( bCheckInclude &&
                                           lcl_Included( nOtherWhich, pHint ) ) ||
-                                          ( !bCheckInclude && !bCharFmt ) )
+                                          ( !bCheckInclude && !bOtherCharFmt ) )
                                     {
                                         if( nMaxEnd == nHtStart )
                                             bForgetAttr = FALSE;
@@ -1919,9 +1897,8 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                                     }
                                 }
                             }
-                            else
                             // 3) der neue ueberlappt vorne
-                            if( aBig.Min() == aHintRg.Min() )
+                            else if( aBig.Min() == aHintRg.Min() )
                             {
                                 if( bNoINet &&
                                     ( RES_TXTATR_CHARFMT != nOtherWhich ||
@@ -1930,7 +1907,7 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                                 {
                                     if( ( bCheckInclude &&
                                           lcl_Included( nOtherWhich, pHint ) ) ||
-                                        ( !bCheckInclude && !bCharFmt ) )
+                                        ( !bCheckInclude && !bOtherCharFmt ) )
                                     {
                                         if( pHistory ) pHistory->Add( pOther );
 
@@ -2048,23 +2025,6 @@ void SwpHints::DeleteAtPos( const USHORT nPos )
     if( pHistory ) pHistory->Add( pHint );
     SwpHintsArr::DeleteAtPos( nPos );
 
-/* Node-Pointer werden im DTOR noch benutzt !!
-    switch( pHint->Which() )            // Node-Pointer zuruecksetzen
-    {
-    case RES_TXTATR_CHARFMT:
-            ((SwTxtCharFmt*)pHint)->ChgTxtNode( 0 );
-            break;
-    case RES_TXTATR_FIELD:
-            ((SwTxtFld*)pHint)->ChgTxtNode( 0 );
-            break;
-    case RES_TXTATR_FTN :
-            ((SwTxtFtn*)pHint)->ChgTxtNode( 0 );
-            break;
-    case RES_TXTATR_REFMARK:
-            ((SwTxtRefMark*)pHint)->ChgTxtNode( 0 );
-            break;
-    }
-*/
     if( RES_TXTATR_FIELD == pHint->Which() )
     {
         SwFieldType* pFldTyp = ((SwTxtFld*)pHint)->GetFld().GetFld()->GetTyp();

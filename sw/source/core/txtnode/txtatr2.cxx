@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:50:47 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,12 +228,6 @@ void SwImplPrev::ResetFont( SwFont* pFont, const BOOL bColor )
  *                      class SwTxtCharFmt
  *************************************************************************/
 
-SwTxtCharFmt::~SwTxtCharFmt( )
-{
-    delete pImpl;
-}
-
-
 SwTxtCharFmt::SwTxtCharFmt( const SwFmtCharFmt& rAttr,
                     xub_StrLen nStart, xub_StrLen nEnd )
     : SwTxtAttrEnd( rAttr, nStart, nEnd ),
@@ -241,6 +235,12 @@ SwTxtCharFmt::SwTxtCharFmt( const SwFmtCharFmt& rAttr,
     pMyTxtNd( 0 )
 {
     ((SwFmtCharFmt&)rAttr).pTxtAttr = this;
+    SetCharFmtAttr( TRUE );
+}
+
+SwTxtCharFmt::~SwTxtCharFmt( )
+{
+    delete pImpl;
 }
 
 void SwTxtCharFmt::ChgFnt( SwFont *pFont )
@@ -303,12 +303,6 @@ BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
  *                      class SwTxtINetFmt
  *************************************************************************/
 
-SwTxtINetFmt::~SwTxtINetFmt( )
-{
-    delete pImpl;
-}
-
-
 SwTxtINetFmt::SwTxtINetFmt( const SwFmtINetFmt& rAttr,
                             xub_StrLen nStart, xub_StrLen nEnd )
     : SwTxtAttrEnd( rAttr, nStart, nEnd ),
@@ -318,8 +312,13 @@ SwTxtINetFmt::SwTxtINetFmt( const SwFmtINetFmt& rAttr,
 {
     bValidVis = FALSE;
     ((SwFmtINetFmt&)rAttr).pTxtAttr  = this;
+    SetCharFmtAttr( TRUE );
 }
 
+SwTxtINetFmt::~SwTxtINetFmt( )
+{
+    delete pImpl;
+}
 void SwTxtINetFmt::ChgFnt( SwFont *pFont )
 {
     SwCharFmt* pFmt = GetCharFmt();
@@ -549,6 +548,11 @@ SwTxtBackground::SwTxtBackground( const SvxBrushItem& rAttr,
     : SwTxtAttrEnd( rAttr, nStart, nEnd ),
     pPrevColor( NULL )
 {
+#ifdef JP_DEBUG
+    SetDontExpand( TRUE );              // never expand this attribut
+    SetLockExpandFlag( TRUE );
+    SetDontMergeAttr( TRUE );
+#endif
 }
 
 SwTxtBackground::~SwTxtBackground( )
@@ -676,7 +680,9 @@ SwTxtRuby::SwTxtRuby( const SwFmtRuby& rAttr,
     pMyTxtNd( 0 )
 {
     ((SwFmtRuby&)rAttr).pTxtAttr  = this;
-
+    SetDontExpand( TRUE );              // never expand this attribut
+    SetLockExpandFlag( TRUE );
+    SetDontMergeAttr( TRUE );
 }
 
 SwTxtRuby::~SwTxtRuby()

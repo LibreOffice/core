@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,26 @@
 
 #pragma hdrstop
 
-#include "swtypes.hxx"
-
-#ifndef _SFXITEMPOOL_HXX //autogen
+#ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
-#include "txatbase.hxx"
 
-SwTxtAttr::~SwTxtAttr( )
-{
-}
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _TXATBASE_HXX
+#include <txatbase.hxx>
+#endif
 
 SwTxtAttr::SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStt )
     : pAttr( &rAttr ), nStart( nStt )
 {
-    bDontExpand = FALSE;
+    bDontExpand = bLockExpandFlag = bDontMergeAttr =
+        bDontMoveAttr = bCharFmtAttr = bOverlapAllowedAttr = FALSE;
+}
+
+SwTxtAttr::~SwTxtAttr( )
+{
 }
 
 xub_StrLen* SwTxtAttr::GetEnd()
@@ -97,7 +102,7 @@ void SwTxtAttr::RemoveFromPool( SfxItemPool& rPool )
 
 int SwTxtAttr::operator==( const SwTxtAttr& rAttr ) const
 {
-    return GetAttr()  == rAttr.GetAttr();
+    return GetAttr() == rAttr.GetAttr();
 }
 
 void SwTxtAttr::ChgFnt(SwFont *)
@@ -109,7 +114,8 @@ void SwTxtAttr::RstFnt(SwFont *)
 }
 
 SwTxtAttrEnd::SwTxtAttrEnd( const SfxPoolItem& rAttr, xub_StrLen nS,
-    xub_StrLen nE ) : SwTxtAttr( rAttr, nS ), nEnd( nE )
+                            xub_StrLen nE )
+    : SwTxtAttr( rAttr, nS ), nEnd( nE )
 {
 }
 

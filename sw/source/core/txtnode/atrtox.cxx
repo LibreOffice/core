@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrtox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,21 @@
 
 #pragma hdrstop
 
-#include "doc.hxx"
-
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 #ifndef _TXTTXMRK_HXX //autogen
 #include <txttxmrk.hxx>
 #endif
-#include "swfont.hxx"
-#include "tox.hxx"
-#include "ndtxt.hxx"
+#ifndef _SWFONT_HXX
+#include <swfont.hxx>
+#endif
+#ifndef _TOX_HXX
+#include <tox.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
 
 SwTxtTOXMark::SwTxtTOXMark( const SwTOXMark& rAttr,
                     xub_StrLen nStart, xub_StrLen* pEnde )
@@ -86,6 +93,9 @@ SwTxtTOXMark::SwTxtTOXMark( const SwTOXMark& rAttr,
         nEnd = *pEnde;
         pEnd = &nEnd;
     }
+    SetDontMergeAttr( TRUE );
+    SetDontMoveAttr( TRUE );
+    SetOverlapAllowedAttr( TRUE );
 }
 
 SwTxtTOXMark::~SwTxtTOXMark()

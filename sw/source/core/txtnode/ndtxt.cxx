@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 16:39:22 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,14 +609,11 @@ void SwTxtNode::MoveTxtAttr_To_AttrSet()
 
         const USHORT nWhich = pHt->Which();
 
-        if( *pHtEndIdx < aText.Len() || nWhich == RES_TXTATR_CHARFMT
-                                     || nWhich == RES_TXTATR_INETFMT )
+        if( *pHtEndIdx < aText.Len() || pHt->IsCharFmtAttr() )
             break;
 
-        if( nWhich == RES_TXTATR_TOXMARK || nWhich == RES_TXTATR_REFMARK )
-            continue;
-
-        if( SwCntntNode::SetAttr( pHt->GetAttr() ) )
+        if( !pHt->IsDontMoveAttr() &&
+            SwCntntNode::SetAttr( pHt->GetAttr() ) )
         {
             pSwpHints->DeleteAtPos(i);
             DestroyAttr( pHt );
@@ -815,7 +812,7 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                 }
                 else if( 0 != ( pEnd = pHt->GetEnd() ) && *pEnd >= nPos )
                 {
-                    if( *pEnd > nPos )
+                    if( *pEnd > nPos || IsIgnoreDontExpand() )
                     {
                         bCheckURL = TRUE;
                         *pEnd += nLen;
@@ -836,12 +833,11 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
 
                         if( aDontExp[ nWhPos ] )
                             continue;
-                        BOOL bCharFmt = ( nWhich == RES_TXTATR_CHARFMT ||
-                                          nWhich == RES_TXTATR_INETFMT );
+
                         if( pHt->DontExpand() )
                         {
                             pHt->SetDontExpand( FALSE );
-                            if( bCharFmt )
+                            if( pHt->IsCharFmtAttr() )
                             {
                                 bNoExp = TRUE;
                                 aDontExp[ RES_TXTATR_CHARFMT -RES_CHRATR_BEGIN ]
@@ -1014,7 +1010,7 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
 //FEATURE::CONDCOLL
 }
 
-// Wennn man sich genau am Ende einer Text- bzw. INetvorlage befindet,
+// Wenn man sich genau am Ende einer Text- bzw. INetvorlage befindet,
 // bekommt diese das DontExpand-Flag verpasst
 
 BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, BOOL bFlag,
@@ -1023,24 +1019,27 @@ BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, BOOL bFlag,
     const xub_StrLen nIdx = rIdx.GetIndex();
     if( bFmtToTxtAttributes && nIdx == aText.Len() )
         FmtToTxtAttr( this );
-    if( !pSwpHints )
-        return FALSE;
-    const USHORT nEndCnt = pSwpHints->GetEndCount();
-    USHORT nPos = nEndCnt;
+
     BOOL bRet = FALSE;
-    while( nPos )
+    if( pSwpHints )
     {
-        SwTxtAttr *pTmp = pSwpHints->GetEnd( --nPos );
-        xub_StrLen *pEnd = pTmp->GetEnd();
-        if( !pEnd || *pEnd > nIdx )
-            continue;
-        if( nIdx != *pEnd )
-            nPos = 0;
-        else if( bFlag != pTmp->DontExpand() && *pEnd > *pTmp->GetStart() )
+        const USHORT nEndCnt = pSwpHints->GetEndCount();
+        USHORT nPos = nEndCnt;
+        while( nPos )
         {
-            bRet = TRUE;
-            pSwpHints->NoteInHistory( pTmp );
-            pTmp->SetDontExpand( bFlag );
+            SwTxtAttr *pTmp = pSwpHints->GetEnd( --nPos );
+            xub_StrLen *pEnd = pTmp->GetEnd();
+            if( !pEnd || *pEnd > nIdx )
+                continue;
+            if( nIdx != *pEnd )
+                nPos = 0;
+            else if( bFlag != pTmp->DontExpand() && !pTmp->IsLockExpandFlag()
+                     && *pEnd > *pTmp->GetStart())
+            {
+                bRet = TRUE;
+                pSwpHints->NoteInHistory( pTmp );
+                pTmp->SetDontExpand( bFlag );
+            }
         }
     }
     return bRet;
@@ -2692,6 +2691,9 @@ void SwTxtNode::Replace( const SwIndex& rStart, xub_StrLen nLen,
             --nLen;
         }
 
+    BOOL bOldExpFlg = IsIgnoreDontExpand();
+    SetIgnoreDontExpand( TRUE );
+
     if( nLen && rText.Len() )
     {
         // dann das 1. Zeichen ersetzen den Rest loschen und einfuegen
@@ -2714,6 +2716,7 @@ void SwTxtNode::Replace( const SwIndex& rStart, xub_StrLen nLen,
         aText.Insert( rText, nStart );
         Update( rStart, rText.Len(), FALSE );
     }
+    SetIgnoreDontExpand( bOldExpFlg );
     SwDelTxt aDelHint( nStart, nDelLen );
     SwModify::Modify( 0, &aDelHint );
 
