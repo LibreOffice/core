@@ -960,37 +960,95 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a href="../index.html">SDK home</a>&nbsp;&nbsp;<a href="#tools">tools overview</a>
       </p>
-      <p>The autodoc tools ...</p>
+      <p>The autodoc tool is for creating javadoc-like documentation from C++ and UNOIDL source code.</p>
+      <p>There are some conventions to follow, when documenting C++- or UNOIDL-sourcecode. See at &nbsp;
+         (( REFERENCE to commenting guides for C++ and IDL )). &nbsp;<br>
+         If you don't know those, but know Javadoc: For simple C++ &nbsp;sourcecode documentation, 
+         using javadoc-style comments will work.<br>
+      </p>
       <p><b>Usage:</b></p>
-      <blockquote> 
-      <b><code>autodoc ... </code></b>
+      <blockquote>
+      <b><code>autodoc [ -v &lt;VerboseNr&gt; ] [ -name "&lt;TitleForTheDocu&gt;" ] -html &lt;OutputDirectory&gt;
+               -lg &lt;SourcecodeLanguage&gt;<br>
+               { [ -p &lt;ProjectName&gt; &lt;ProjectRootDirectory&gt; ] &nbsp;-t &lt;SourceTree&gt;* 
+               | -d &lt;SourceDirectory&gt;* | -f &lt;SourceFile&gt;* }*               
+         </code></b>
       <p><b>Options:</b></p>
       <p>
-      <table width=100% border=1 cellpadding=4 cellspacing=0>
+      <table width="100%" border="1" cellpadding="4" cellspacing="0">
         <tr>
-          <td width=15%><code>-O&lt;path&gt;</code></td>
-          <td width=85%>
-            path describes the root directory for the generated output. The output directory
-            tree is generated under this directory.
+          <td width="15%"><code>-v &lt;VerboseNr&gt;</code></td>
+          <td width="85%"> 
+            &lt;VerboseNr&gt; == 5 displays the parsed source code tokens, so you can locate, which piece 
+            caused an parsing error.<br>
+            &lt;VerboseNr&gt; == 2 &nbsp;displays not only the parsed source code, but also the comments.<br><br>
+            This option has to be the first one, if it is used.<br>
           </td>
         </tr>
         <tr>
-          <td width=15%><code>-T&lt;name&gt;</code></td>
-          <td width=85%>
-            name specifies a type or a list of types. The output for this [t1;...] type is generated.
-            If no '-T' option is specified, then output for all types is generated.
+          <td width="15%"><code>-name "&lt;Title&gt;"</code></td>
+          <td width="85%">
+            &lt;Title&gt; occurs as the title of the start page of the HTML output. &nbsp;If
+            &nbsp;this option is omitted, a default title is created.</td>
+        </tr>
+        <tr>
+          <td valign="Top"><code>-html &lt;OutputDirectory&gt;</code></td>
+          <td valign="Top">
+            Specifies the root directory, where the HTML output is created.<br>
+            Autodoc does not remove old files there, though it overwrites them.<br>
           </td>
         </tr>
         <tr>
-          <td width=15%><code>-B&lt;name&gt;</code></td>
-          <td width=85%>
-            name specifies the base node. All types are searched under this node. Default is the
-            root '/' of the registry files.
+          <td valign="Top"><code>-lg &lt;SourcecodeLanguage&gt;</code></td>
+          <td valign="Top">Possible values are: &nbsp; &nbsp;c++, &nbsp; idl.<br><br>
+            This also specifies which files will be parsed: "c++" parses all files with the endings .hxx and .h, 
+            "idl" parses all files with the ending .idl .<br>
+            To change this behaviour, see at option&nbsp; -f.<br>
+          </td>
+        </tr>
+        <tr>
+          <td width="15%"><code>-p &lt;ProjectName&gt; &lt;ProjectDirectory&gt;</code></td>
+          <td width="85%">
+            This option can be used, to divide large code bases into different projects.<br>
+            &lt;ProjectName&gt; gives a user-defined name for the project.<br>
+            &lt;ProjectDirectory&gt; is the root to which all paths, given with the following
+            options -t, -d and -f, are relative. <br>
+            This option can be omitted, then there are no projects and all paths in the
+            following options are relative to the working directory.<br> <br>
+            The "{ ... }*"&nbsp; around the options -p,-t,-d,-f &nbsp;indicates, that
+            this whole block of options can be repeated, each block starting with a new -p .<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="Top"><code>-t &lt;SourceTree&gt;</code></td>
+          <td valign="Top">
+            Specifies to parse all files in th directory &lt;SourceTree&gt; and it's subdirectories, where the 
+            file ending matches the option -lg.<br>
+            There can be given multiple directories after one -t option.<br>
+            All relative paths &nbsp;are relative to the project-rootdirectory, given with the -p option.<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="Top"><code>-d &lt;SourceDirectory&gt;</code></td>
+          <td valign="Top">
+            Specifies to parse all files in th directory &lt;SourceDirectory&gt;, but
+            NOT it's subdirectories, where the file ending matches the option -lg.<br>
+            There can be given multiple directories after one -d option.<br>
+            All relative paths &nbsp;are relative to the project-rootdirectory, given
+            with the -p option.<br>
+          </td>
+        </tr>
+        <tr>
+          <td valign="Top"><code>-f &lt;SourceFile&gt;</code></td>
+          <td valign="Top">
+            Specifies to parse the given file. The ending does not have to match the -lg option.<br>
+            There can be given multiple files after one -f option.<br>
+            All relative paths &nbsp;are relative to the project-rootdirectory, given with the -p option.
           </td>
         </tr>
       </table>
-      </p>
-      </blockquote> 
+      </p>Remark: The sequence of options matters! Use them in the order given in the "Usage"-paragraph.</p>
+      </blockquote>
     </td>
   </tr>
   <tr> 
