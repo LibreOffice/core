@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-22 09:33:46 $
+ *  last change: $Author: jp $ $Date: 2000-10-12 21:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5083,6 +5083,8 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(const SwUnoCrsr& rUnoCrsr,
 SwXParaFrameEnumeration::~SwXParaFrameEnumeration()
 {
     aFrameArr.DeleteAndDestroy(0, aFrameArr.Count());
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
+    delete pUnoCrsr;
 }
 /* -----------------------------03.04.00 10:15--------------------------------
     Description: Search for a FLYCNT text attribute at the cursor point
@@ -5312,6 +5314,10 @@ SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
         delete pCurDepend;
         aFrameArr.Remove(nFrame - 1);
     }
+
+    if( aPortionArr.Count() )
+        aPortionArr.DeleteAndDestroy(0, aPortionArr.Count() );
+
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     delete pUnoCrsr;
 }
