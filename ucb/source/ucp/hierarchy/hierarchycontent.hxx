@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2000-11-23 14:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,8 +205,7 @@ private:
     void destroy( sal_Bool bDeletePhysical )
         throw( ::com::sun::star::ucb::CommandAbortedException );
 
-    void HierarchyContent::transfer(
-                        const ::com::sun::star::ucb::TransferInfo& rInfo )
+    void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo )
         throw( ::com::sun::star::ucb::CommandAbortedException );
 
 public:
