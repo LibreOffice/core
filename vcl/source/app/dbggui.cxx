@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: cd $ $Date: 2000-10-23 06:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1765,6 +1765,23 @@ void DbgPrintMsgBox( const char* pLine )
     short nRet = aBox.Execute();
 #endif
 #else
+#if defined( WNT )
+    if ( GetSystemMetrics( SM_DEBUG ) )
+    {
+        strcpy( aDbgOutBuf, pLine );
+        strcat( aDbgOutBuf, "\r\n" );
+        OutputDebugString( aDbgOutBuf );
+        return;
+    }
+#endif
+#ifdef UNX
+    fprintf( stderr, "%s\n", pLine );
+    return;
+#else
+    DbgPrintFile( pLine );
+    return;
+#endif
+/*
     USHORT nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
     ErrorBox aBox( Application::GetAppWindow(), WB_YES_NO_CANCEL | WB_DEF_NO,
@@ -1772,12 +1789,14 @@ void DbgPrintMsgBox( const char* pLine )
     aBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output (Server)") ) );
     Application::SetSystemWindowMode( nOldMode );
     short nRet = aBox.Execute();
+*/
 #endif
-
+#ifndef REMOTE_APPSERVER
     if ( nRet == RET_YES )
         GetpApp()->Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug-Utilities-Error" ) ) );
     else if ( nRet == RET_CANCEL )
         DbgCoreDump();
+#endif
 }
 
 // -----------------------------------------------------------------------
