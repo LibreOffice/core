@@ -2,9 +2,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:18:03 $
+#   last change: $Author: rt $ $Date: 2004-07-06 15:00:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,12 @@
 
 package installer::worker;
 
+use installer::control;
 use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
+use installer::mail;
 use installer::pathanalyzer;
 use installer::scriptitems;
 use installer::systemactions;
@@ -97,7 +99,7 @@ sub unpack_all_targzfiles_in_directory
 
         if ($returnvalue)
         {
-            $infoline = "Error: Could not execute \"$systemcall\"!\n";
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
         else
@@ -183,7 +185,7 @@ sub link_install_sets_to_ship
 
     if ($returnvalue)
     {
-        $infoline = "Error: Could not create link \"$localshipinstalldir\"!\n";
+        $infoline = "ERROR: Could not create link \"$localshipinstalldir\"!\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
@@ -255,6 +257,171 @@ sub save_checksum_file
     my $numberedchecksumfilename = $installer::globals::checksumfilename;
     $numberedchecksumfilename =~ s/\./_$current_install_number\./;  # checksum.txt -> checksum_01.txt
     installer::files::save_file($installchecksumdir . $installer::globals::separator . $numberedchecksumfilename, $checksumfile);
+}
+
+###############################################################
+# Removing all directories of a special language
+# in the directory $basedir
+###############################################################
+
+sub remove_old_installation_sets
+{
+    my ($basedir) = @_;
+
+    print "... removing old installation directories ...\n";
+
+    my $removedir = $basedir;
+
+    if ( -d $removedir ) { installer::systemactions::remove_complete_directory($removedir, 1); }
+
+    # looking for non successful old installation sets
+
+    $removedir = $basedir . "_with_error";
+    if ( -d $removedir ) { installer::systemactions::remove_complete_directory($removedir, 1); }
+
+    $removedir = $basedir . "_inprogress";
+    if ( -d $removedir ) { installer::systemactions::remove_complete_directory($removedir, 1); }
+
+    # finally the $basedir can be created empty
+
+    installer::systemactions::create_directory($basedir);
+}
+
+###############################################################
+# Removing all non successful installation sets on ship
+###############################################################
+
+sub remove_old_ship_installation_sets
+{
+    my ($fulldir, $counter) = @_;
+
+    print "... removing old installation directories ...\n";
+
+    my $basedir = $fulldir;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$basedir);
+
+    # collecting all directories next to the new installation directory
+    my $alldirs = installer::systemactions::get_all_directories($basedir);
+
+    if ( $fulldir =~ /^\s*(.*?inprogress\-)(\d+)(.*?)\s*$/ )
+    {
+        my $pre_inprogress = $1;        # $pre still contains "inprogress"
+        my $number = $2;
+        my $post = $3;
+        my $pre_with_error = $pre_inprogress;
+        $pre_with_error =~ s/inprogress/with_error/;
+
+        for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
+        {
+            if ( ${$alldirs}[$i] eq $fulldir ) { next; }    # do not delete the newly created directory
+
+            if ( ${$alldirs}[$i] =~ /^\s*\Q$pre_inprogress\E\d+\Q$post\E\s*$/ ) # removing old "inprogress" directories
+            {
+                installer::systemactions::remove_complete_directory(${$alldirs}[$i], 1);
+            }
+
+            if ( ${$alldirs}[$i] =~ /^\s*\Q$pre_with_error\E\d+\Q$post\E\s*$/ ) # removing old "with_error" directories
+            {
+                installer::systemactions::remove_complete_directory(${$alldirs}[$i], 1);
+            }
+        }
+    }
+}
+
+###############################################################
+# Creating the installation directory structure
+###############################################################
+
+sub create_installation_directory
+{
+    my ($shipinstalldir, $languagestringref, $current_install_number_ref) = @_;
+
+    my $installdir = "";
+
+    if ( $installer::globals::updatepack )
+    {
+        $installdir = $shipinstalldir;
+        installer::systemactions::create_directory_structure($installdir);
+        $$current_install_number_ref = installer::systemactions::determine_maximum_number($installdir, $languagestringref);
+        $installdir = installer::systemactions::rename_string_in_directory($installdir, "number", $$current_install_number_ref);
+        remove_old_ship_installation_sets($installdir);
+    }
+    else
+    {
+        $installdir = installer::systemactions::create_directories("install", $languagestringref);
+        print "... creating installation set in $installdir ...\n";
+        remove_old_installation_sets($installdir);
+        my $inprogressinstalldir = $installdir . "_inprogress";
+        installer::systemactions::rename_directory($installdir, $inprogressinstalldir);
+        $installdir = $inprogressinstalldir;
+    }
+
+    return $installdir;
+}
+
+###############################################################
+# Analyzing and creating the log file
+###############################################################
+
+sub analyze_and_save_logfile
+{
+    my ($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number) = @_;
+
+    print "... checking log file " . $loggingdir . $installer::globals::logfilename . "\n";
+
+    my $contains_error = installer::control::check_logfile(\@installer::globals::logfileinfo);
+
+    # Dependent from the success, the installation directory can be renamed and mails can be send.
+
+    if ( $contains_error )
+    {
+        my $errordir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_with_error");
+        if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
+    }
+    else
+    {
+        my $destdir = "";
+
+        if ( $installer::globals::updatepack )
+        {
+            $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_packed");
+            installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $destdir);
+        }
+        else
+        {
+            $destdir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "");
+        }
+    }
+
+    # Saving the logfile in the log file directory and additionally in a log directory in the install directory
+
+    my $numberedlogfilename = $installer::globals::logfilename;
+    if ( $installer::globals::updatepack ) { $numberedlogfilename =~ s /logfile/log_$current_install_number/; }
+    print "... creating log file $numberedlogfilename \n";
+    installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
+    installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
+
+    # Saving the checksumfile in a checksum directory in the install directory
+    # installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
+}
+
+###############################################################
+# Removing all directories that are saved in the
+# global directory @installer::globals::removedirs
+###############################################################
+
+sub clean_output_tree
+{
+    print "... cleaning the output tree ...\n";
+
+    for ( my $i = 0; $i <= $#installer::globals::removedirs; $i++ )
+    {
+        if ( -d $installer::globals::removedirs[$i] )
+        {
+            print "... removing directory $installer::globals::removedirs[$i] ...\n";
+            installer::systemactions::remove_complete_directory($installer::globals::removedirs[$i], 1);
+        }
+    }
 }
 
 1;
