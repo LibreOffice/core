@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:16:59 $
+ *  last change: $Author: ka $ $Date: 2001-06-12 14:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XBINARYSTREAMRESOLVER_HPP_
+#include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #endif
 
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
@@ -800,9 +803,8 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     return xDashHelper;
 }
 
-::rtl::OUString SvXMLImport::ResolveGraphicObjectURL(
-                                    const ::rtl::OUString& rURL,
-                                    sal_Bool bLoadOnDemand )
+::rtl::OUString SvXMLImport::ResolveGraphicObjectURL( const ::rtl::OUString& rURL,
+                                                      sal_Bool bLoadOnDemand )
 {
     ::rtl::OUString sRet;
 
@@ -826,6 +828,43 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
         sRet = INetURLObject::RelToAbs( rURL );
 
     return sRet;
+}
+
+::rtl::OUString SvXMLImport::ResolveGraphicObjectURLFromBase64( const ::rtl::OUString& rBase64String )
+{
+    OUString aRet;
+    OUString aTrimmedChars( rBase64String. trim() );
+
+    if( aTrimmedChars.getLength() )
+    {
+        Reference< document::XBinaryStreamResolver > xStmResolver( xGraphicResolver, UNO_QUERY );
+
+        if( xStmResolver.is() )
+        {
+            Reference< XOutputStream > xOStm( xStmResolver->createOutputStream() );
+
+            if( xOStm.is() )
+            {
+                Sequence< sal_Int8 > aBuffer( ( aTrimmedChars.getLength() / 4 ) * 3 );
+
+                if( GetMM100UnitConverter().decodeBase64SomeChars( aBuffer, aTrimmedChars ) )
+                {
+                    try
+                    {
+                        xOStm->writeBytes( aBuffer );
+                        xOStm->closeOutput();
+
+                        aRet = xStmResolver->resolveOutputStream( xOStm );
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                }
+            }
+        }
+    }
+
+    return aRet;
 }
 
 ::rtl::OUString SvXMLImport::ResolveEmbeddedObjectURL(

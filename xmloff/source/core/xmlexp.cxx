@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:16:04 $
+ *  last change: $Author: ka $ $Date: 2001-06-12 14:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XBINARYSTREAMRESOLVER_HPP_
+#include <com/sun/star/document/XBinaryStreamResolver.hpp>
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
@@ -1217,7 +1220,9 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool b
 OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
 {
     OUString sRet( rGraphicObjectURL );
-    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol, sGraphicObjectProtocol.getLength() ) && xGraphicResolver.is() )
+    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
+                                          sGraphicObjectProtocol.getLength() ) &&
+        xGraphicResolver.is() )
     {
         sRet = xGraphicResolver->resolveGraphicObjectURL( rGraphicObjectURL );
     }
@@ -1225,6 +1230,31 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
         sRet = INetURLObject::AbsToRel( sRet );
 
     return sRet;
+}
+
+sal_Bool SvXMLExport::AddEmbeddedGraphicObjectAsBase64( const OUString& rGraphicObjectURL )
+{
+    sal_Bool bRet = sal_False;
+
+    if( 0 == rGraphicObjectURL.compareTo( sGraphicObjectProtocol,
+                                          sGraphicObjectProtocol.getLength() ) &&
+        xGraphicResolver.is() )
+    {
+        Reference< XBinaryStreamResolver > xStmResolver( xGraphicResolver, UNO_QUERY );
+
+        if( xStmResolver.is() )
+        {
+            Reference< XInputStream > xIn( xStmResolver->getInputStream( rGraphicObjectURL ) );
+
+            if( xIn.is() )
+            {
+                XMLBase64Export aBase64Exp( *this );
+                bRet = aBase64Exp.exportXML( xIn );
+            }
+        }
+    }
+
+    return bRet;
 }
 
 OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
