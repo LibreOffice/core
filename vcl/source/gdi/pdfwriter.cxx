@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:19:19 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 
 using namespace vcl;
 
-PDFWriter::PDFWriter( const rtl::OUString& rFilename, PDFVersion eVersion, Compression eCompression )
+PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext )
         :
-        pImplementation( new PDFWriterImpl( rFilename, eVersion, eCompression ) )
+        pImplementation( new PDFWriterImpl( rContext ) )
 {
 }
 
@@ -309,6 +309,21 @@ void PDFWriter::DrawTransparent( const PolyPolygon& rPolyPoly, USHORT nTranspare
     ((PDFWriterImpl*)pImplementation)->drawTransparent( rPolyPoly, nTransparencePercent );
 }
 
+void PDFWriter::BeginTransparencyGroup()
+{
+    ((PDFWriterImpl*)pImplementation)->beginTransparencyGroup();
+}
+
+void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, USHORT nTransparentPercent )
+{
+    ((PDFWriterImpl*)pImplementation)->endTransparencyGroup( rRect, nTransparentPercent );
+}
+
+void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, const Bitmap& rAlphaMask )
+{
+    ((PDFWriterImpl*)pImplementation)->endTransparencyGroup( rRect, rAlphaMask );
+}
+
 void PDFWriter::Push( USHORT nFlags )
 {
     ((PDFWriterImpl*)pImplementation)->push( nFlags );
@@ -399,7 +414,7 @@ void PDFWriter::SetTextLineColor( const Color& rColor )
     ((PDFWriterImpl*)pImplementation)->setTextLineColor( rColor );
 }
 
-void PDFWriter::SetTextAlign( TextAlign eAlign )
+void PDFWriter::SetTextAlign( ::TextAlign eAlign )
 {
     ((PDFWriterImpl*)pImplementation)->setTextAlign( eAlign );
 }
@@ -407,4 +422,114 @@ void PDFWriter::SetTextAlign( TextAlign eAlign )
 void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
 {
     ((PDFWriterImpl*)pImplementation)->drawJPGBitmap( rStreamData, rSrcSizePixel, rTargetArea, rMask );
+}
+
+sal_Int32 PDFWriter::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )
+{
+    return ((PDFWriterImpl*)pImplementation)->createLink( rRect, nPageNr );
+}
+
+sal_Int32 PDFWriter::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+{
+    return ((PDFWriterImpl*)pImplementation)->createDest( rRect, nPageNr, eType );
+}
+
+sal_Int32 PDFWriter::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
+{
+    return ((PDFWriterImpl*)pImplementation)->setLinkDest( nLinkId, nDestId );
+}
+
+sal_Int32 PDFWriter::SetLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL )
+{
+    return ((PDFWriterImpl*)pImplementation)->setLinkURL( nLinkId, rURL );
+}
+
+void PDFWriter::SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyId )
+{
+    ((PDFWriterImpl*)pImplementation)->setLinkPropertyId( nLinkId, nPropertyId );
+}
+
+sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const rtl::OUString& rText, sal_Int32 nDestID )
+{
+    return ((PDFWriterImpl*)pImplementation)->createOutlineItem( nParent, rText, nDestID );
+}
+
+sal_Int32 PDFWriter::SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
+{
+    return ((PDFWriterImpl*)pImplementation)->setOutlineItemParent( nItem, nNewParent );
+}
+
+sal_Int32 PDFWriter::SetOutlineItemText( sal_Int32 nItem, const rtl::OUString& rText )
+{
+    return  ((PDFWriterImpl*)pImplementation)->setOutlineItemText( nItem, rText );
+}
+
+sal_Int32 PDFWriter::SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDest )
+{
+    return ((PDFWriterImpl*)pImplementation)->setOutlineItemDest( nItem, nDest );
+}
+
+void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+{
+    ((PDFWriterImpl*)pImplementation)->createNote( rRect, rNote, nPageNr );
+}
+
+sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType )
+{
+    return ((PDFWriterImpl*)pImplementation)->beginStructureElement( eType );
+}
+
+void PDFWriter::EndStructureElement()
+{
+    ((PDFWriterImpl*)pImplementation)->endStructureElement();
+}
+
+bool PDFWriter::SetCurrentStructureElement( sal_Int32 nID )
+{
+    return ((PDFWriterImpl*)pImplementation)->setCurrentStructureElement( nID );
+}
+
+sal_Int32 PDFWriter::GetCurrentStructureElement()
+{
+    return ((PDFWriterImpl*)pImplementation)->getCurrentStructureElement();
+}
+
+bool PDFWriter::SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal )
+{
+    return ((PDFWriterImpl*)pImplementation)->setStructureAttribute( eAttr, eVal );
+}
+
+bool PDFWriter::SetStructureAttributeNumerical( enum StructAttribute eAttr, sal_Int32 nValue )
+{
+    return ((PDFWriterImpl*)pImplementation)->setStructureAttributeNumerical( eAttr, nValue );
+}
+
+void PDFWriter::SetStructureBoundingBox( const Rectangle& rRect )
+{
+    ((PDFWriterImpl*)pImplementation)->setStructureBoundingBox( rRect );
+}
+
+void PDFWriter::SetActualText( const String& rText )
+{
+    ((PDFWriterImpl*)pImplementation)->setActualText( rText );
+}
+
+void PDFWriter::SetAlternateText( const String& rText )
+{
+    ((PDFWriterImpl*)pImplementation)->setAlternateText( rText );
+}
+
+void PDFWriter::SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr )
+{
+    ((PDFWriterImpl*)pImplementation)->setAutoAdvanceTime( nSeconds, nPageNr );
+}
+
+void PDFWriter::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr )
+{
+    ((PDFWriterImpl*)pImplementation)->setPageTransition( eType, nMilliSec, nPageNr );
+}
+
+sal_Int32 PDFWriter::CreateControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr )
+{
+    return ((PDFWriterImpl*)pImplementation)->createControl( rControl, nPageNr );
 }
