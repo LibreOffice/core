@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 20:28:28 $
+#   last change: $Author: kz $ $Date: 2005-01-18 15:49:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ RESLIB1LIST=\
     $(SRS)$/drawfunc.srs \
     $(SRS)$/core.srs 	\
     $(SRS)$/styleui.srs	\
-    $(SRS)$/scslots.srs	\
     $(SRS)$/formdlgs.srs \
     $(SRS)$/pagedlg.srs	\
     $(SRS)$/navipi.srs	\
@@ -100,7 +99,7 @@ RESLIB1IMAGES=\
     $(PRJ)$/res					\
     $(PRJ)$/res/imglst/apptbx	\
     $(PRJ)$/res/imglst/dbgui	\
-    $(PRJ)$/res/imglst/navipi	
+    $(PRJ)$/res/imglst/navipi
 
 RESLIB1SRSFILES=\
     $(RESLIB1LIST)
@@ -138,7 +137,7 @@ SHL1STDLIBS+=       \
     $(SOTLIB)		\
     $(XMLOFFLIB)	\
     $(DBTOOLSLIB)	\
-    $(AVMEDIALIB)	
+    $(AVMEDIALIB)
 
 .IF "$(OS)"=="MACOSX"
 # static libraries at end for OS X
@@ -321,5 +320,5 @@ LIB8OBJFILES = \
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
-   
+
 
