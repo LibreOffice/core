@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-27 15:42:04 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 20:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,13 +534,6 @@ ULONG SwTextBlocks::ConvertToNew()
                     }
                     if (SWBLK_SW2 == nType )
                         pNew->pDoc->SetPersist( 0 );
-                    else
-                    {
-                        SwDocShell * pDocShell = pNew->pDoc->GetDocShell();
-                        pDocShell->InvalidateModel();
-                        pDocShell->ReactivateModel();
-                        ((SfxObjectShell *)pDocShell)->Clear();
-                    }
                 }
                 if (SWBLK_SW2 == nType )
                     ::EndProgress( pOld->pDoc->GetDocShell() );
@@ -697,7 +690,7 @@ USHORT SwTextBlocks::Rename( USHORT n, const String* s, const String* l )
         {
             // Vorher den neuen Eintrag in die Liste setzen!
             GetAppCharClass().toUpper( aNew );
-            nErr = pImp->Rename( n, aNew, aLong );
+             nErr = pImp->Rename( n, aNew, aLong );
             if( !nErr )
             {
                 BOOL bOnlyTxt = pImp->aNames[ n ]->bIsOnlyTxt;
