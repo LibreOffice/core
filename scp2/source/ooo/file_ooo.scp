@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.23 $
+*  $Revision: 1.24 $
 *
-*  last change: $Author: obo $ $Date: 2004-07-05 13:17:25 $
+*  last change: $Author: obo $ $Date: 2004-07-06 12:28:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -970,7 +970,7 @@ File gid_File_Oo_Office_Ui_Chartcommands_Xcs
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
     Name = "/registry/schema/org/openoffice/Office/UI/ChartCommands.xcs";
 End
-       
+
 File gid_File_Oo_Office_Ui_Chartcommands_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1483,37 +1483,37 @@ File gid_File_Registry_Spool_Oo_Common_Cjk_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
-    Name (81) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
-    Name (82) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
-    Name (86) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
-    Name (88) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Name (ja) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Name (ko) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Name (zh-CN) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Name (zh-TW) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
-    Name (66) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
-    Name (91) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
-    Name (96) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
-    Name (97) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Name (th) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Name (hi-IN) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Name (ar) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Name (he) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
-    Name (81) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
-    Name (82) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
-    Name (86) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
-    Name (88) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Name (ja) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Name (ko) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Name (zh-CN) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Name (zh-TW) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Spool;
-    Name (82) = "/registry/spool/org.openoffice.Office.Common-korea.xcu";
+    Name (ko) = "/registry/spool/org.openoffice.Office.Common-korea.xcu";
 End
 
 #ifdef UNX
@@ -2104,4 +2104,4 @@ File gid_File_Xml_javasettings
     Styles = (PACKED);
 End
 
-#endif 
+#endif
