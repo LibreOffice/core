@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-05 14:06:48 $
+ *  last change: $Author: hdu $ $Date: 2002-04-09 16:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
         case( META_EPS_ACTION ): pAction = new MetaEPSAction; break;
         case( META_REFPOINT_ACTION ): pAction = new MetaRefPointAction; break;
         case( META_COMMENT_ACTION ): pAction = new MetaCommentAction; break;
+        case( META_LAYOUTMODE_ACTION ): pAction = new MetaLayoutModeAction; break;
 
         default:
         {
@@ -2912,8 +2913,9 @@ MetaFontAction::MetaFontAction( const Font& rFont ) :
     // we change the textencoding to RTL_TEXTENCODING_UNICODE here, which seems
     // to be the right way; changing the textencoding at other sources
     // is too dangerous at the moment
-    if( ( maFont.GetName().SearchAscii( "StarSymbol" ) != STRING_NOTFOUND ) &&
-        ( maFont.GetCharSet() != RTL_TEXTENCODING_UNICODE ) )
+    if( ( ( maFont.GetName().SearchAscii( "StarSymbol" ) != STRING_NOTFOUND )
+       || ( maFont.GetName().SearchAscii( "OpenSymbol" ) != STRING_NOTFOUND ) )
+     && ( maFont.GetCharSet() != RTL_TEXTENCODING_UNICODE ) )
     {
         maFont.SetCharSet( RTL_TEXTENCODING_UNICODE );
     }
@@ -3443,3 +3445,49 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     else
         mpData = NULL;
 }
+
+// ========================================================================
+
+IMPL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
+
+// ------------------------------------------------------------------------
+
+MetaLayoutModeAction::MetaLayoutModeAction( ULONG nLayoutMode ) :
+    MetaAction  ( META_LAYOUTMODE_ACTION ),
+    mnLayoutMode( nLayoutMode )
+{
+}
+
+// ------------------------------------------------------------------------
+
+void MetaLayoutModeAction::Execute( OutputDevice* pOut )
+{
+    pOut->SetLayoutMode( mnLayoutMode );
+}
+
+// ------------------------------------------------------------------------
+
+MetaAction* MetaLayoutModeAction::Clone()
+{
+    MetaAction* pClone = (MetaAction*) new MetaLayoutModeAction( *this );
+    pClone->ResetRefCount();
+    return pClone;
+}
+
+// ------------------------------------------------------------------------
+
+void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
+{
+    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    rOStm << mnLayoutMode;
+}
+
+// ------------------------------------------------------------------------
+
+void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
+{
+    COMPAT( rIStm );
+    rIStm >> mnLayoutMode;
+}
+
+// ========================================================================
