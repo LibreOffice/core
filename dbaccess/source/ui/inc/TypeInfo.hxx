@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ const sal_uInt16 TYPE_OTHER     = 30;
         @param  _rTypeInfo      contains a map of type to typeinfo
         @param  _nType          the requested type
         @param  _sTypeName      the typename
+        @param  _sCreateParams  the create params
         @param  _nPrecision     the precision
         @param  _nScale         the scale
         @param  _bAutoIncrement if it is a auto increment
@@ -175,6 +176,7 @@ const sal_uInt16 TYPE_OTHER     = 30;
     TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
                                const ::rtl::OUString& _sTypeName,
+                               const ::rtl::OUString& _sCreateParams,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
                                sal_Bool _bAutoIncrement,
