@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 13:46:05 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2317,7 +2317,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         // Font wird nicht restauriert...
     }
 
-    if ( ( rFont.GetColor() == COL_AUTO ) && pOut )
+    if ( ( ( rFont.GetColor() == COL_AUTO ) || ( IsForceAutoColor() ) ) && pOut )
     {
         if ( IsAutoColorEnabled() && ( pOut->GetOutDevType() != OUTDEV_PRINTER ) )
         {

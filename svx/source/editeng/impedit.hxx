@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,7 @@ private:
     sal_Bool            bOwnerOfRefDev;
     sal_Bool            bDowning;
     sal_Bool            bUseAutoColor;
+    sal_Bool            bForceAutoColor;
     sal_Bool            bCallParaInsertedOrDeleted;
 
     // Fuer Formatierung / Update....
@@ -646,6 +647,8 @@ private:
     Color               GetAutoColor() const;
     void                EnableAutoColor( BOOL b ) { bUseAutoColor = b; }
     BOOL                IsAutoColorEnabled() const { return bUseAutoColor; }
+    void                ForceAutoColor( BOOL b ) { bUseAutoColor = b; }
+    BOOL                IsForceAutoColor() const { return bForceAutoColor; }
 
     inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode );
     inline void             EraseVirtualDevice();

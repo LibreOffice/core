@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-26 10:21:05 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 14:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,13 +171,19 @@ ULONG Outliner::GetTextHeight() const
 void Outliner::SetNotifyHdl( const Link& rLink )
 {
     DBG_CHKTHIS(Outliner,0);
-    pEditEngine->SetNotifyHdl( rLink );
+    pEditEngine->aOutlinerNotifyHdl = rLink;
+
+    if ( rLink.IsSet() )
+        pEditEngine->SetNotifyHdl( LINK( this, Outliner, EditEngineNotifyHdl ) );
+    else
+        pEditEngine->SetNotifyHdl( Link() );
+
 }
 
 Link Outliner::GetNotifyHdl() const
 {
     DBG_CHKTHIS(Outliner,0);
-    return pEditEngine->GetNotifyHdl();
+    return pEditEngine->aOutlinerNotifyHdl;
 }
 
 void Outliner::SetStatusEventHdl( const Link& rLink )
@@ -732,6 +738,18 @@ void Outliner::EnableAutoColor( BOOL b )
 }
 
 BOOL Outliner::IsAutoColorEnabled() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->IsAutoColorEnabled();
+}
+
+void Outliner::ForceAutoColor( BOOL b )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->EnableAutoColor( b );
+}
+
+BOOL Outliner::IsForceAutoColor() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsAutoColorEnabled();
