@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:45:00 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,8 @@ struct WW8SwFlyPara
     bool bToggelPos;
 
     WW8SwFlyPara(SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
-        short nPgLeft, short nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy);
+        sal_uInt32 nPgLeft, sal_uInt32 nPgWidth, INT32 nIniFlyDx,
+        INT32 nIniFlyDy);
 
     void BoxUpWidth( long nWidth );
     SwWW8FltAnchorStack *pOldAnchorStck;
