@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 19:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ namespace configmgr
 
         protected:
         // legacy commit support
-            virtual std::auto_ptr<SubtreeChange> preCommitChange();
+            virtual std::auto_ptr<SubtreeChange> preCommitChanges();
             virtual void finishCommit(SubtreeChange& rChange);
             virtual void revertCommit(SubtreeChange& rChange);
 

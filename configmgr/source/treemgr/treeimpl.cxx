@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 19:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ void TreeImpl::implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges) c
     }
 }
 //-----------------------------------------------------------------------------
-
+// mark the given node and all its ancestors (we can stop when we hit a node that already is marked)
 void TreeImpl::markChanged(NodeOffset nNode)
 {
     OSL_ASSERT(isValidNode(nNode));
@@ -385,7 +385,7 @@ void TreeImpl::markChanged(NodeOffset nNode)
 
             nNode = pNode->parent();
         }
-        while (nNode && node(nNode)->hasChanges());
+        while (nNode && !node(nNode)->hasChanges());
     }
 
     if (nNode == 0) // just marked parent

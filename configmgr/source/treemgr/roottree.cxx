@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 19:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
 
     // find the name and path of the change
     Name aRootName(m_pTree->name(m_pTree->root()));
-    AbsolutePath aPath = m_pTree->getContextPath().compose(RelativePath(aRootName));
+    AbsolutePath aPath = m_pTree->getContextPath();
 
     OSL_ENSURE(aRootName.toString() == pTreeChange->getNodeName(), "ERROR in Commit: Change Name Mismatch");
 
@@ -144,7 +144,7 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
 
     // find the name and path of the change
     Name aRootName(m_pTree->name(m_pTree->root()));
-    AbsolutePath aPath = m_pTree->getContextPath().compose(RelativePath(aRootName));
+    AbsolutePath aPath = m_pTree->getContextPath();
 
     OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
     if (rChangeList.pathToRoot != aPath.toString())
@@ -159,7 +159,7 @@ void CommitHelper::revertCommit(TreeChangeList& rChangeList)
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
     Name aRootName(m_pTree->name(m_pTree->root()));
-    AbsolutePath aPath = m_pTree->getContextPath().compose(RelativePath(aRootName));
+    AbsolutePath aPath = m_pTree->getContextPath();
 
     OSL_ENSURE(rChangeList.pathToRoot == aPath.toString(), "ERROR: cannot handle rebased changes trees");
     if (rChangeList.pathToRoot != aPath.toString())
