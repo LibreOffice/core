@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-10-18 14:17:07 $
+ *  last change: $Author: os $ $Date: 2000-10-19 10:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4646,7 +4646,7 @@ void SwXParagraph::removeVetoableChangeListener(const OUString& PropertyName, co
 {
     DBG_WARNING("not implemented")
 }
-
+//-----------------------------------------------------------------------------
 beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             SwUnoCrsr& rUnoCrsr,
                             SfxItemSet** ppSet,
@@ -4667,7 +4667,7 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
                         RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
                         RES_FILL_ORDER,     RES_FRMATR_END -1,
                         0L);
-        SwXTextCursor::GetCrsrAttr( rUnoCrsr, **ppSet );
+        SwXTextCursor::GetCrsrAttr( rUnoCrsr, **ppSet, TRUE );
     }
     if(rPropertyName.equals(C2U(UNO_NAME_PAGE_DESC_NAME)))
     {
@@ -4700,6 +4700,19 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
     else
     {
         eRet = rPropSet.getPropertyState( rPropertyName, **ppSet );
+        //special handling for character attributes that are set in the ItemSet of the text node
+        if(beans::PropertyState_DEFAULT_VALUE == eRet)
+        {
+            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                    rPropSet.getPropertyMap(), rPropertyName);
+            if(pMap)
+            {
+                SwNode& rTxtNode = rUnoCrsr.GetPoint()->nNode.GetNode();
+                SwAttrSet* pNodeAttrSet = ((SwTxtNode&)rTxtNode).GetpSwAttrSet();
+                if(pNodeAttrSet && SFX_ITEM_SET == pNodeAttrSet->GetItemState(pMap->nWID, FALSE))
+                    eRet = beans::PropertyState_DIRECT_VALUE;
+            }
+        }
     }
 
     return eRet;
