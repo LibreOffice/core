@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-03 19:57:38 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,15 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     m_pWindow = GTK_WINDOW(gtk_window_new( GTK_WINDOW_POPUP ));
     m_nStyle = SAL_FRAME_STYLE_CHILD;
     InitCommon();
+     // #i41820#
+     int x_ret, y_ret;
+     unsigned int w, h, bw, d;
+     XLIB_Window aRoot, aParent;
+     XGetGeometry( getDisplay()->GetDisplay(), pSysData->aWindow,
+                   &aRoot, &x_ret, &y_ret, &w, &h, &bw, &d );
+     maGeometry.nWidth   = w;
+     maGeometry.nHeight  = h;
+     gtk_window_resize( m_pWindow, w, h );
     XReparentWindow( getDisplay()->GetDisplay(),
                      GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
                      (XLIB_Window)pSysData->aWindow,
@@ -1384,6 +1393,10 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
     {
         bContinueDispatch = false;
         gtk_window_resize( m_pWindow, pEvent->xconfigure.width, pEvent->xconfigure.height );
+    //#i41820#
+        maGeometry.nWidth  = pEvent->xconfigure.width;
+        maGeometry.nHeight = pEvent->xconfigure.height;
+        setMinMaxSize();
     }
     else if( m_pForeignTopLevel &&
              pEvent->type == ConfigureNotify &&
