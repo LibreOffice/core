@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:44:48 $
+#   last change: $Author: vg $ $Date: 2005-02-24 14:43:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 # mk file for linux ppc using gcc 3.X
 ASM=
 AFLAGS=
@@ -151,7 +150,7 @@ STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK=gcc
+LINK*=gcc 
 # default linker flags
 LINKFLAGS=-Wl,-rpath,\''$$ORIGIN'\'
 
