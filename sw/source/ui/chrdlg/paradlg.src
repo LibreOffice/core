@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-11 23:20:10 $
+ *  last change: $Author: rt $ $Date: 2000-12-13 22:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,10 +179,10 @@ TabDialog DLG_PARA
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Asian typography";
                 Text[ russian ] = "Asian typography";
-                Text[ greek ] = "Asian typography";
+                Text[ greek ] = "ÁóéÜôéêç ôõðïãñáößá";
                 Text[ dutch ] = "Asian typography";
                 Text[ french ] = "Typographie asiatique";
-                Text[ spanish ] = "Asian typography";
+                Text[ spanish ] = "Tipografía asiática";
                 Text[ italian ] = "Asian typography";
                 Text[ danish ] = "Asian typography";
                 Text[ swedish ] = "Asian typography";
