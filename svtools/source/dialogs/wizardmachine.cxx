@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-15 14:08:27 $
+ *  last change: $Author: kz $ $Date: 2001-02-19 16:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include <svtools/svtdata.hxx>
+#include "svtdata.hxx"
 #endif
 #ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
@@ -448,6 +448,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/15 14:08:27  fs
+ *  initial checkin - a wizard dialog base class
+ *
  *  Revision 1.1  2001/02/12 07:16:52  fs
  *  initial checkin - importing StarOffice 5.2 database files
  *
