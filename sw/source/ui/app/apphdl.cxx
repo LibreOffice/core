@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:32:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
