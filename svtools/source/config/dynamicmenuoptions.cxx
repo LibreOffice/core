@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-05-10 10:57:38 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 08:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ using namespace ::com::sun::star::beans ;
 
 #define SETNODE_NEWMENU                                 OUString(RTL_CONSTASCII_USTRINGPARAM("New"                      ))
 #define SETNODE_WIZARDMENU                              OUString(RTL_CONSTASCII_USTRINGPARAM("Wizard"                   ))
+#define SETNODE_HELPBOOKMARKS                           OUString(RTL_CONSTASCII_USTRINGPARAM("HelpBookmarks"            ))
 
 #define PROPERTYNAME_URL                                DYNAMICMENU_PROPERTYNAME_URL
 #define PROPERTYNAME_TITLE                              DYNAMICMENU_PROPERTYNAME_TITLE
@@ -248,7 +249,7 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        Sequence< OUString > impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount );
+        Sequence< OUString > impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount, sal_uInt32& nHelpBookmarksCount );
 
         /*-****************************************************************************************************//**
             @short      convert routine
@@ -272,8 +273,9 @@ class SvtDynamicMenuOptions_Impl : public ConfigItem
 
     private:
 
-        vector< MenuItem >  m_aNewMenu     ;
-        vector< MenuItem >  m_aWizardMenu  ;
+        vector< MenuItem >  m_aNewMenu            ;
+        vector< MenuItem >  m_aWizardMenu         ;
+        vector< MenuItem >  m_aHelpBookmarksMenu  ;
 };
 
 //_________________________________________________________________________________________________________________
@@ -290,9 +292,10 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
 {
     // Use our list snapshot of configuration keys to get his values.
     // See impl_GetPropertyNames() for further informations.
-    sal_uInt32              nNewCount   = 0;
-    sal_uInt32              nWizardCount= 0;
-    Sequence< OUString >    lNames    = impl_GetPropertyNames ( nNewCount, nWizardCount );
+    sal_uInt32              nNewCount          = 0;
+    sal_uInt32              nWizardCount       = 0;
+    sal_uInt32              nHelpBookmarksCount= 0;
+    Sequence< OUString >    lNames    = impl_GetPropertyNames ( nNewCount, nWizardCount, nHelpBookmarksCount );
     Sequence< Any >         lValues   = GetProperties         ( lNames                  );
 
     // Safe impossible cases.
@@ -360,6 +363,23 @@ SvtDynamicMenuOptions_Impl::SvtDynamicMenuOptions_Impl()
         m_aWizardMenu.push_back( aItem );
     }
 
+    // Attention: Don't reset nPosition here!
+
+    // Get names/values for wizard menu.
+    // 4 subkeys for every item!
+    for( nItem=0; nItem<nHelpBookmarksCount; ++nItem )
+    {
+        lValues[nPosition] >>= aItem.sURL             ;
+        ++nPosition;
+        lValues[nPosition] >>= aItem.sTitle           ;
+        ++nPosition;
+        lValues[nPosition] >>= aItem.sImageIdentifier ;
+        ++nPosition;
+        lValues[nPosition] >>= aItem.sTargetName      ;
+        ++nPosition;
+        m_aHelpBookmarksMenu.push_back( aItem );
+    }
+
 /*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of ouer baseclass.
     // We need it to get information about changes outside these class on ouer used configuration keys!
@@ -396,6 +416,7 @@ void SvtDynamicMenuOptions_Impl::Commit()
     // Delete complete sets first.
     ClearNodeSet( SETNODE_NEWMENU    );
     ClearNodeSet( SETNODE_WIZARDMENU );
+    ClearNodeSet( SETNODE_HELPBOOKMARKS );
 
     MenuItem                    aItem                           ;
     OUString                    sNode                           ;
@@ -447,6 +468,29 @@ void SvtDynamicMenuOptions_Impl::Commit()
 
         SetSetProperties( SETNODE_WIZARDMENU, lPropertyValues );
     }
+
+    // Copy help bookmarks entries to save-list!
+    sal_uInt32 nHelpBookmarksCount = m_aHelpBookmarksMenu.size();
+    for( nItem=0; nItem<nHelpBookmarksCount; ++nItem )
+    {
+        aItem = m_aHelpBookmarksMenu[nItem];
+        // Format:  "HelpBookmarks/1/URL"
+        //          "HelpBookmarks/1/Title"
+        //          ...
+        sNode = SETNODE_HELPBOOKMARKS + PATHDELIMITER + PATHPREFIX + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
+
+        lPropertyValues[OFFSET_URL             ].Name  =   sNode + PROPERTYNAME_URL             ;
+        lPropertyValues[OFFSET_TITLE           ].Name  =   sNode + PROPERTYNAME_TITLE           ;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Name  =   sNode + PROPERTYNAME_IMAGEIDENTIFIER ;
+        lPropertyValues[OFFSET_TARGETNAME      ].Name  =   sNode + PROPERTYNAME_TARGETNAME      ;
+
+        lPropertyValues[OFFSET_URL             ].Value <<= aItem.sURL                           ;
+        lPropertyValues[OFFSET_TITLE           ].Value <<= aItem.sTitle                         ;
+        lPropertyValues[OFFSET_IMAGEIDENTIFIER ].Value <<= aItem.sImageIdentifier               ;
+        lPropertyValues[OFFSET_TARGETNAME      ].Value <<= aItem.sTargetName                    ;
+
+        SetSetProperties( SETNODE_HELPBOOKMARKS, lPropertyValues );
+    }
 }
 
 //*****************************************************************************************************************
@@ -464,6 +508,12 @@ void SvtDynamicMenuOptions_Impl::Clear( EDynamicMenuType eMenu )
 
         case E_WIZARDMENU   :   {
                                     m_aWizardMenu.clear();
+                                    SetModified();
+                                }
+                                break;
+
+        case E_HELPBOOKMARKS :  {
+                                    m_aHelpBookmarksMenu.clear();
                                     SetModified();
                                 }
                                 break;
@@ -485,6 +535,11 @@ Sequence< Sequence< PropertyValue > > SvtDynamicMenuOptions_Impl::GetMenu( EDyna
 
         case E_WIZARDMENU   :   {
                                     lReturn = impl_GetSequenceFromList( m_aWizardMenu );
+                                }
+                                break;
+
+        case E_HELPBOOKMARKS :  {
+                                    lReturn = impl_GetSequenceFromList( m_aHelpBookmarksMenu );
                                 }
                                 break;
     }
@@ -515,24 +570,32 @@ void SvtDynamicMenuOptions_Impl::AppendItem(            EDynamicMenuType    eMen
                                 SetModified();
                             }
                             break;
+
+        case E_HELPBOOKMARKS :  {
+                                m_aHelpBookmarksMenu.push_back( aItem );
+                                SetModified();
+                            }
+                            break;
     }
 }
 
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount )
+Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt32& nNewCount, sal_uInt32& nWizardCount, sal_uInt32& nHelpBookmarksCount )
 {
     // First get ALL names of current existing list items in configuration!
-    Sequence< OUString > lNewItems      = GetNodeNames( SETNODE_NEWMENU    );
-    Sequence< OUString > lWizardItems   = GetNodeNames( SETNODE_WIZARDMENU );
+    Sequence< OUString > lNewItems           = GetNodeNames( SETNODE_NEWMENU       );
+    Sequence< OUString > lWizardItems        = GetNodeNames( SETNODE_WIZARDMENU    );
+    Sequence< OUString > lHelpBookmarksItems = GetNodeNames( SETNODE_HELPBOOKMARKS );
 
     // Get information about list counts ...
-    nNewCount    = lNewItems.getLength   ();
-    nWizardCount = lWizardItems.getLength();
+    nNewCount           = lNewItems.getLength          ();
+    nWizardCount        = lWizardItems.getLength       ();
+    nHelpBookmarksCount = lHelpBookmarksItems.getLength();
     // ... and create a property list with right size!
     // 4 properties for every item
-    Sequence< OUString > lProperties( (nNewCount+nWizardCount)*PROPERTYCOUNT );
+    Sequence< OUString > lProperties( (nNewCount+nWizardCount+nHelpBookmarksCount)*PROPERTYCOUNT );
 
     sal_uInt32  nPosition = 0   ;
     sal_uInt32  nItem     = 0   ;
@@ -583,6 +646,27 @@ Sequence< OUString > SvtDynamicMenuOptions_Impl::impl_GetPropertyNames( sal_uInt
         lProperties[nPosition] = SETNODE_WIZARDMENU + PATHDELIMITER + lWizardItems[nItem] + PATHDELIMITER + PROPERTYNAME_IMAGEIDENTIFIER;
         ++nPosition;
         lProperties[nPosition] = SETNODE_WIZARDMENU + PATHDELIMITER + lWizardItems[nItem] + PATHDELIMITER + PROPERTYNAME_TARGETNAME     ;
+        ++nPosition;
+    }
+
+    // Attention: Don't reset nPosition here!
+
+    // Add names for help bookmarks to list.
+    // 4 subkeys for every item!
+    for( nItem=0; nItem<nHelpBookmarksCount; ++nItem )
+    {
+        sPosition  = lHelpBookmarksItems[nItem].copy( 1, lHelpBookmarksItems[nItem].getLength()-1 );
+        nPosition  = sPosition.toInt32();
+        nPosition *= PROPERTYCOUNT;
+        nPosition += ((nNewCount+nWizardCount)*PROPERTYCOUNT);
+
+        lProperties[nPosition] = SETNODE_HELPBOOKMARKS + PATHDELIMITER + lHelpBookmarksItems[nItem] + PATHDELIMITER + PROPERTYNAME_URL            ;
+        ++nPosition;
+        lProperties[nPosition] = SETNODE_HELPBOOKMARKS + PATHDELIMITER + lHelpBookmarksItems[nItem] + PATHDELIMITER + PROPERTYNAME_TITLE          ;
+        ++nPosition;
+        lProperties[nPosition] = SETNODE_HELPBOOKMARKS + PATHDELIMITER + lHelpBookmarksItems[nItem] + PATHDELIMITER + PROPERTYNAME_IMAGEIDENTIFIER;
+        ++nPosition;
+        lProperties[nPosition] = SETNODE_HELPBOOKMARKS + PATHDELIMITER + lHelpBookmarksItems[nItem] + PATHDELIMITER + PROPERTYNAME_TARGETNAME     ;
         ++nPosition;
     }
 
