@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:37:12 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,10 @@
 #include "prevchld.hxx"
 #include "fuslshow.hxx"
 #include "SdUnoOutlineView.hxx"
+
+#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
+#include "AccessibleOutlineView.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -2428,5 +2432,35 @@ void SdOutlineViewShell::VisAreaChanged(const Rectangle& rRect)
     if( pController )
     {
         pController->fireVisAreaChanged( rRect );
+    }
+}
+
+/** If there is a valid controller then create a new instance of
+    <type>AccessibleDrawDocumentView</type>.  Otherwise delegate this call
+    to the base class to return a default object (probably an empty
+    reference).
+*/
+::com::sun::star::uno::Reference<
+    ::drafts::com::sun::star::accessibility::XAccessible>
+    SdOutlineViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
+{
+    if (GetController() != NULL)
+    {
+        accessibility::AccessibleOutlineView* pDocumentView =
+            new accessibility::AccessibleOutlineView (
+                pWindow,
+                this,
+                GetController(),
+                pWindow->GetAccessibleParentWindow()->GetAccessible());
+        pDocumentView->Init();
+        return ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::accessibility::XAccessible>
+            (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
+                ::com::sun::star::uno::UNO_QUERY);
+    }
+    else
+    {
+        OSL_TRACE ("SdOutlineViewShell::CreateAccessibleDocumentView: no controller");
+        return SdViewShell::CreateAccessibleDocumentView (pWindow);
     }
 }
