@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:10:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,8 +1048,8 @@ TabPage TP_FRM_STD
     Hide = TRUE ;
     FixedText FT_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 43 , 8 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_2 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
@@ -1082,11 +1082,19 @@ TabPage TP_FRM_STD
         Text[ hungarian ] = "S~z√©less√©g";
         Text[ slovenian ] = "~≈†irina";
     };
+    FixedText FT_WIDTH_AUTO
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_2 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text = "Breite (mindestens)" ;
+        Text [ english_us ] = "~Width (at least)" ;
+    };
     MetricField ED_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 14 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_3 , SWFRMPG_ROW_1 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_3) , RSC_CD_TEXTBOX_HEIGHT ) ;
         Text = "12,99" ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -1102,8 +1110,8 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_REL_WIDTH
     {
-        Pos = MAP_APPFONT ( 59 , 30 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_3 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text = "R~elativ" ;
         Text [ ENGLISH ] = "~Relative" ;
@@ -1135,10 +1143,44 @@ TabPage TP_FRM_STD
         Text[ hungarian ] = "~Relat√≠v";
         Text[ slovenian ] = "Relat~ivno";
     };
+    CheckBox CB_AUTOWIDTH
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_4 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text = "Automatisch" ;
+        Text[ english_us ] = "Automatic";
+        Text[ swedish ] = "Au~tomatisk storlek";
+        Text[ japanese ] = "„Çµ„Ç§„Ç∫Ëá™ÂãïË™øÊï¥";
+        Text[ korean ] = "ÌÅ¨Í∏∞ ÏûêÎèô Ï°∞Ï†à";
+        Text[ chinese_simplified ] = "Ëá™Âä®Ë∞ÉÊï¥Â§ßÂ∞è(~A)";
+        Text[ chinese_traditional ] = "Ëá™ÂãïË™øÊï¥Â§ßÂ∞è";
+        Text[ portuguese ] = "Alt~ura autom·tica";
+        Text[ russian ] = "¿‚ÚÓÔÓ‰·Ó";
+        Text[ greek ] = "¡~ıÙ¸Ï·ÙÔ ˝¯ÔÚ";
+        Text[ dutch ] = "Automatische h~oogte";
+        Text[ french ] = "Hauteur automatique";
+        Text[ spanish ] = "~TamaÒo autom·tico";
+        Text[ finnish ] = "Automaattinen korkeus";
+        Text[ italian ] = "Altezza. ~auto";
+        Text[ danish ] = "Automatisk st¯rrelse";
+        Text[ polish ] = "WysokoúÊ automatyczna ";
+        Text[ portuguese_brazilian ] = "Altura A~utom·tica";
+        Text[ turkish ] = "Otomatikboyut";
+        Text[ arabic ] = "«— ›«⁄  ·ﬁ«∆Ì";
+        Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏™‡∏π~‡∏á‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
+        Text[ catalan ] = "AlÁada auto~m.";
+        Text[ czech ] = "Automatick√° v√Ω≈°ka";
+        Text[ hebrew ] = "Au~tom. Gr√∂√üe";
+        Text[ hindi ] = "‡§∏‡•ç‡§µ‡§ö‡§æ‡§≤‡§ø‡§§ ‡§¢‡§Ç‡§ó ‡§∏‡•á ~‡§ä‡§Å‡§ö‡§æ‡§à";
+        Text[ slovak ] = "Automatick√° ~v√Ω≈°ka";
+        Text[ hungarian ] = "Automatikus m√©retez√©s";
+        Text[ slovenian ] = "Samodejno prilagodi velikost";
+    };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
-        Size = MAP_APPFONT ( 43 , 8 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text = "H~ˆhe" ;
         Text [ ENGLISH ] = "H~eight" ;
@@ -1171,11 +1213,19 @@ TabPage TP_FRM_STD
         Text[ hungarian ] = "~Magass√°g";
         Text[ slovenian ] = "Vi~≈°ina";
     };
+    FixedText FT_HEIGHT_AUTO
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Left = TRUE ;
+        Text = "Hˆhe (mindestens)" ;
+        Text [ english_us ] = "H~eight (at least)" ;
+    };
     MetricField ED_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 59 , 44 ) ;
-        Size = MAP_APPFONT ( 45 , 12 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_3 , SWFRMPG_ROW_5 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_3) , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1190,8 +1240,8 @@ TabPage TP_FRM_STD
     };
     CheckBox CB_REL_HEIGHT
     {
-        Pos = MAP_APPFONT ( 59 , 60 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_7 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text = "Re~lativ" ;
         Text [ ENGLISH ] = "Re~lative" ;
@@ -1223,10 +1273,18 @@ TabPage TP_FRM_STD
         Text[ hungarian ] = "R~elat√≠v";
         Text[ slovenian ] = "Re~lativno";
     };
+    CheckBox CB_AUTOHEIGHT
+    {
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_8 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text = "Automatisch" ;
+        Text[ english_us ] = "Automatic";
+    };
     CheckBox CB_FIXEDRATIO
     {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_9 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text = "~Abgleich" ;
         Text [ ENGLISH ] = "~Match" ;
@@ -1258,40 +1316,6 @@ TabPage TP_FRM_STD
         Text[ slovak ] = "~Zachova≈• pomer";
         Text[ hungarian ] = "R√∂gz√≠~tett m√©retar√°ny";
         Text[ slovenian ] = "~Ohrani sorazmerno";
-    };
-    CheckBox CB_AUTOHEIGHT
-    {
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "Au~tom. Grˆﬂe" ;
-        Text[ english_us ] = "AutoSize";
-        Text[ swedish ] = "Au~tomatisk storlek";
-        Text[ japanese ] = "„Çµ„Ç§„Ç∫Ëá™ÂãïË™øÊï¥";
-        Text[ korean ] = "ÌÅ¨Í∏∞ ÏûêÎèô Ï°∞Ï†à";
-        Text[ chinese_simplified ] = "Ëá™Âä®Ë∞ÉÊï¥È´òÂ∫¶";
-        Text[ chinese_traditional ] = "Ëá™ÂãïË™øÊï¥Â§ßÂ∞è";
-        Text[ portuguese ] = "Alt~ura autom·tica";
-        Text[ russian ] = "¿‚ÚÓÔÓ‰·Ó";
-        Text[ greek ] = "¡~ıÙ¸Ï·ÙÔ ˝¯ÔÚ";
-        Text[ dutch ] = "Automatische h~oogte";
-        Text[ french ] = "Hauteur automatique";
-        Text[ spanish ] = "~TamaÒo autom·tico";
-        Text[ finnish ] = "Automaattinen korkeus";
-        Text[ italian ] = "Altezza. ~auto";
-        Text[ danish ] = "Automatisk st¯rrelse";
-        Text[ polish ] = "WysokoúÊ automatyczna ";
-        Text[ portuguese_brazilian ] = "Altura A~utom·tica";
-        Text[ turkish ] = "Otomatikboyut";
-        Text[ arabic ] = "«— ›«⁄  ·ﬁ«∆Ì";
-        Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏™‡∏π~‡∏á‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
-        Text[ catalan ] = "AlÁada auto~m.";
-        Text[ czech ] = "Automatick√° v√Ω≈°ka";
-        Text[ hebrew ] = "Au~tom. Gr√∂√üe";
-        Text[ hindi ] = "‡§∏‡•ç‡§µ‡§ö‡§æ‡§≤‡§ø‡§§ ‡§¢‡§Ç‡§ó ‡§∏‡•á ~‡§ä‡§Å‡§ö‡§æ‡§à";
-        Text[ slovak ] = "Automatick√° ~v√Ω≈°ka";
-        Text[ hungarian ] = "Automatikus m√©retez√©s";
-        Text[ slovenian ] = "Samodejno prilagodi velikost";
     };
     PushButton BT_REALSIZE
     {
@@ -1332,8 +1356,8 @@ TabPage TP_FRM_STD
     };
     FixedLine FL_SIZE
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 104 , 8 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_0 , SWFRMPG_ROW_0 ) ;
+        Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_0) , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Grˆﬂe" ;
         Text [ ENGLISH ] = "Size" ;
         Text [ norwegian ] = "St¯rrelse" ;
@@ -1368,7 +1392,7 @@ TabPage TP_FRM_STD
     FixedLine FL_TYPE_SEP
     {
         Pos = MAP_APPFONT ( 111 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 86 ) ;
+        Size = MAP_APPFONT ( 4 , (SWFRMPG_ROW_9+RSC_CD_CHECKBOX_HEIGHT-SWFRMPG_ROW_1) ) ;
         Vert = TRUE;
     };
     RadioButton RB_ANCHOR_PAGE
@@ -1584,8 +1608,8 @@ TabPage TP_FRM_STD
     };
     FixedText FT_HORIZONTAL
     {
-        Pos = MAP_APPFONT ( 12 , 117 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , SWFRMPG_ROW_12 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text = "Horizo~ntal" ;
         Text [ ENGLISH ] = "Hori~zontal" ;
@@ -1620,15 +1644,15 @@ TabPage TP_FRM_STD
     };
     ListBox DLB_HORIZONTAL
     {
-        Pos = MAP_APPFONT ( 49 , 115 ) ;
+        Pos = MAP_APPFONT ( 49 , SWFRMPG_ROW_11 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_AT_HORZ_POS
     {
-        Pos = MAP_APPFONT ( 101 , 117 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Pos = MAP_APPFONT ( 101 , SWFRMPG_ROW_12 ) ;
+        Size = MAP_APPFONT ( 20 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Center = TRUE ;
         Text = "u~m" ;
         Text [ ENGLISH ] = "~by" ;
@@ -1664,8 +1688,8 @@ TabPage TP_FRM_STD
     MetricField ED_AT_HORZ_POS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 115 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 123 , SWFRMPG_ROW_11 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1680,8 +1704,8 @@ TabPage TP_FRM_STD
     };
     FixedText FT_HORI_RELATION
     {
-        Pos = MAP_APPFONT ( 160 , 117 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 160 , SWFRMPG_ROW_12 ) ;
+        Size = MAP_APPFONT ( 21 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
         Text = "z~u" ;
         Text [ ENGLISH ] = "~to" ;
@@ -1716,15 +1740,15 @@ TabPage TP_FRM_STD
     };
     ListBox LB_HORI_RELATION
     {
-        Pos = MAP_APPFONT ( 183 , 115 ) ;
+        Pos = MAP_APPFONT ( 183 , SWFRMPG_ROW_11 ) ;
         Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     CheckBox CB_MIRROR
     {
-        Pos = MAP_APPFONT ( 12 , 131 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_13 ) ;
+        Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text = "Auf geraden Seiten spie~geln" ;
         Text [ ENGLISH ] = "~Mirror on even pages" ;
@@ -1758,8 +1782,8 @@ TabPage TP_FRM_STD
     };
     FixedText FT_VERTICAL
     {
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , SWFRMPG_ROW_15 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
@@ -1794,15 +1818,15 @@ TabPage TP_FRM_STD
     };
     ListBox DLB_VERTICAL
     {
-        Pos = MAP_APPFONT ( 49 , 145 ) ;
+        Pos = MAP_APPFONT ( 49 , SWFRMPG_ROW_14 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_AT_VERT_POS
     {
-        Pos = MAP_APPFONT ( 101 , 147 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Pos = MAP_APPFONT ( 101 , SWFRMPG_ROW_15 ) ;
+        Size = MAP_APPFONT ( 20 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
         Text = "u~m" ;
         Text [ ENGLISH ] = "b~y" ;
@@ -1838,8 +1862,8 @@ TabPage TP_FRM_STD
     MetricField ED_AT_VERT_POS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 145 ) ;
-        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Pos = MAP_APPFONT ( 123 , SWFRMPG_ROW_14 ) ;
+        Size = MAP_APPFONT ( 35 , RSC_CD_TEXTBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -1854,8 +1878,8 @@ TabPage TP_FRM_STD
     };
     FixedText FT_VERT_RELATION
     {
-        Pos = MAP_APPFONT ( 160 , 147 ) ;
-        Size = MAP_APPFONT ( 21 , 8 ) ;
+        Pos = MAP_APPFONT ( 160 , SWFRMPG_ROW_15 ) ;
+        Size = MAP_APPFONT ( 21 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
         Text = "z~u" ;
         Text [ ENGLISH ] = "t~o" ;
@@ -1890,15 +1914,15 @@ TabPage TP_FRM_STD
     };
     ListBox LB_VERT_RELATION
     {
-        Pos = MAP_APPFONT ( 183 , 145 ) ;
+        Pos = MAP_APPFONT ( 183 , SWFRMPG_ROW_14 ) ;
         Size = MAP_APPFONT ( 65 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     CheckBox CB_FOLLOWTEXTFLOW
     {
-        Pos = MAP_APPFONT ( 12 , 161 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_16 ) ;
+        Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         Text = "Textfluss folgen" ;
         Text [ english_us ] = "Follow text flow" ;
@@ -1906,8 +1930,8 @@ TabPage TP_FRM_STD
     };
     FixedLine FL_POSITION
     {
-        Pos = MAP_APPFONT ( 6 , 104 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , SWFRMPG_ROW_10 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Position" ;
         Text [ ENGLISH ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
