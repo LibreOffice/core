@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 15:45:51 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,8 @@ namespace dbp
     {
         FreeResource();
 
+        enableFormDatasourceDisplay();
+
         m_aSelectOne.SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
         m_aSelectAll.SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveAllEntries));
         m_aDeselectOne.SetClickHdl(LINK(this, OGridFieldsSelection, OnMoveOneEntry));
@@ -523,6 +525,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/20 15:45:51  fs
+ *  #85200# added missing help ids
+ *
  *  Revision 1.1  2001/03/05 14:52:24  fs
  *  initial checkin - grid auto pilot implementations
  *

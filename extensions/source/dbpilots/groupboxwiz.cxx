@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 15:45:51 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 16:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,21 @@ namespace dbp
         ,m_aExistingRadios      (this, ResId(LB_RADIOBUTTONS))
     {
         FreeResource();
+
+        if (getContext().aFieldNames.getLength())
+        {
+            enableFormDatasourceDisplay();
+        }
+        else
+        {
+            adjustControlForNoDSDisplay(&m_aFrame);
+            adjustControlForNoDSDisplay(&m_aRadioNameLabel);
+            adjustControlForNoDSDisplay(&m_aRadioName);
+            adjustControlForNoDSDisplay(&m_aMoveRight);
+            adjustControlForNoDSDisplay(&m_aMoveLeft);
+            adjustControlForNoDSDisplay(&m_aExistingRadiosLabel);
+            adjustControlForNoDSDisplay(&m_aExistingRadios, sal_True);
+        }
 
         m_aMoveLeft.SetClickHdl(LINK(this, ORadioSelectionPage, OnMoveEntry));
         m_aMoveRight.SetClickHdl(LINK(this, ORadioSelectionPage, OnMoveEntry));
@@ -605,6 +620,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/20 15:45:51  fs
+ *  #85200# added missing help ids
+ *
  *  Revision 1.7  2001/03/06 15:09:00  fs
  *  adjust the focus on the RadioSelectionPage
  *
