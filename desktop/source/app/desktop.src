@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-20 20:04:16 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 13:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,42 +65,54 @@ WarningBox WARNINGBOX_JAVANOTCONFIGURED
 {
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini Konfiguration gefunden. Diese Konfiguration wird benötigt um mit Java korrekt zusammen zuarbeiten. Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte java.ini Konfiguration gefunden. %PRODUCTNAME benötigt die java.ini.  Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation zu beenden klicken Sie auf 'Abbrechen'." ;
+    Message[ ENGLISH ] ="%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation." ;
+    Message[ english_us ] ="%PRODUCTNAME %PRODUCTVERSION has detected a faulty java.ini configuration. %PRODUCTNAME requires the java.ini. Click 'OK' to start the Java Setup and install a JRE or choose between already installed JREs.\nIf you do not want to install a JRE, click 'Cancel'. This will also cancel the current operation." ;
 };
 
 WarningBox WARNINGBOX_JAVADISABLED
 {
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_OK ;
-    Message = "Die Java Unterstützung wurde deaktiviert. Um die Java Unterstützung zu reaktivieren klicken Sie 'OK'. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+    Message = "Für diese Operation ist Java erforderlich, aber die Java-Unterstützung wurde deaktiviert. Um die Java-Unterstützung zu reaktivieren, klicken Sie auf 'OK'. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
+    Message[ ENGLISH ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'." ;
+    Message[ english_us ] = "This operation requires Java, but Java support has been disabled. To enable Java support, click 'OK'. To abort the current operation, click  'Cancel'." ;
 };
 
 WarningBox WARNINGBOX_MISSINGJAVARUNTIME
 {
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION wurde konfiguriert ein Java Runtime Environment (JRE) im Ordner %s zu verwenden. Dieses JRE konnte nicht gefunden werden.  Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+    Message = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION wurde konfiguriert das JRE im Ordner %s zu verwenden. Dieses JRE wurde nicht gefunden.\nKlicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
+    Message[ ENGLISH ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'." ;
+    Message[ english_us ] = "This operation requires a Java Runtime Environment (JRE). %PRODUCTNAME %PRODUCTVERSION was configured to use the JRE located at %s. This JRE was not found. To start the Java Setup, click 'OK'. To abort the current operation, click  'Cancel'." ;
 };
 
 WarningBox WARNINGBOX_JVMCREATIONFAILED
 {
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION hat eine fehlerhafte Java Installation gefunden.  Bitte installieren Sie Java neu. Klicken Sie 'OK' um das Java Setup zu starten. Mit dem Java Setup können Sie ein JRE installieren oder aus vorhanden JREs eins auswählen. Um die aktuelle Operation, welche Java benötigt, zu beenden klicken Sie auf 'Abbrechen'." ;
+    Message = "Für diese Operation ist ein Java Runtime Environment (JRE) erforderlich. %PRODUCTNAME %PRODUCTVERSION hat ein fehlerhaftes JRE gefunden.Klicken Sie auf 'OK' um das Java-Setup zu starten. Um die aktuelle Operation zu beenden, klicken Sie auf 'Abbrechen'." ;
+    Message[ ENGLISH ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'." ;
+    Message[ english_us ] = "The current operation requires a Java Runtime Environment (JRE), but the JRE that %PRODUCTNAME %PRODUCTVERSION has detected is defective.\nTo start the Java Setup, click 'OK'. To abort the current operation, click 'Cancel'." ;
 };
 
 WarningBox WARNINGBOX_JVMSETUPNOTSTARTED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION kann das Java Setup nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das Setup. Wählen Sie dann die 'Reparatur' Option um eine  Reparatur durch zu führen." ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION konnte das Java-Setup nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. Wählen Sie 'Reparieren'." ;
+    Message[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
+    Message[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION could not start the Java Setup. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
 };
 
 WarningBox WARNINGBOX_JAVALDXNOTSTARTED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message = "%PRODUCTNAME %PRODUCTVERSION kann das JavaLDX nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das Setup. Wählen Sie dann die 'Reparatur' Option um eine  Reparatur durch zu führen." ;
+    Message = "%PRODUCTNAME %PRODUCTVERSION konnte Java-LDX nicht starten. Beenden Sie %PRODUCTNAME und starten Sie das %PRODUCTNAME %PRODUCTVERSION Installationsprogramm. Wählen Sie 'Reparieren'." ;
+    Message[ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
+    Message[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION could not start Java LDX. Exit %PRODUCTNAME and start the %PRODUCTNAME %PRODUCTVERSION Setup. Choose 'Repair'." ;
 };
 
 String STR_RECOVER_QUERY
@@ -586,30 +598,42 @@ String STR_SSO_REQUEST
 
 String STR_WARNING_FAULTYJAVACFG
 {
-    Text = "Fehlerhafte java.ini Konfiguration" ;
+    Text = "Fehlerhafte java.ini-Konfiguration" ;
+    Text[ ENGLISH ] = "Defective java.ini Configuration" ;
+    Text[ english_us ] = "Defective java.ini Configuration" ;
 };
 
 String STR_WARNING_JAVADISABLED
 {
-    Text = "Java Unterstützung deaktiviert" ;
+    Text = "Java-Unterstützung deaktiviert" ;
+    Text[ ENGLISH ] = "Java Support Disabled" ;
+    Text[ english_us ] = "Java Support Disabled" ;
 };
 
 String STR_WARNING_MISSINGJAVARUNTIME
 {
-    Text = "Java Runtime Environment nicht vorhanden" ;
+    Text = "JRE wurde nicht gefunden" ;
+    Text[ ENGLISH ] = "Unable to Locate JRE" ;
+    Text[ english_us ] = "Unable to Locate JRE" ;
 };
 
 String STR_WARNING_FAULTYJAVAINSTALL
 {
-    Text = "Fehlerhafte Java Installation" ;
+    Text = "Fehlerhafte Java-Installation" ;
+    Text[ ENGLISH ] = "Defective Java Installation" ;
+    Text[ english_us ] = "Defective Java Installation" ;
 };
 
 String STR_WARNING_CANNOTSTARTJVMSETUP
 {
-    Text = "Java Setup kann nicht gestarted werden" ;
+    Text = "Java-Setup konnte nicht gestartet werden" ;
+    Text[ ENGLISH ] = "Could Not Start Java Setup" ;
+    Text[ english_us ] = "Could Not Start Java Setup" ;
 };
 
 String STR_WARNING_CANNOTSTARTJAVALDX
 {
     Text = "JavaLDX kann nicht gestarted werden" ;
+    Text[ ENGLISH ] = "Could Not Start Java LDX" ;
+    Text[ english_us ] = "Could Not Start Java LDX" ;
 };
