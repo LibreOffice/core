@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:20:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,6 +545,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
 
             }
             break;
+            case FN_XFORMS_INIT:
+                // slot is always active!
+                break;
             case FN_EDIT_FORMULA:
                 {
                     SwWrtShell* pSh = 0;
@@ -872,6 +875,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
     Beschreibung:   Felddialog starten
  --------------------------------------------------------------------*/
 
+void NewXForms( SfxRequest& rReq ); // implementation: below
 
 void SwModule::ExecOther(SfxRequest& rReq)
 {
@@ -888,6 +892,10 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_BUSINESS_CARD:
         case FN_LABEL:
             InsertLab(rReq, nWhich == FN_LABEL);
+            break;
+
+        case FN_XFORMS_INIT:
+            NewXForms( rReq );
             break;
 
         case SID_ATTR_METRIC:
@@ -1444,3 +1452,35 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
 }
 
 
+
+void NewXForms( SfxRequest& rReq )
+{
+    // copied & excerpted from SwModule::InsertLab(..)
+
+    // create new document
+    SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
+    xDocSh->DoInitNew( 0 );
+    xDocSh->Stamp_SetActivateEvent(SFX_EVENT_CREATEDOC);
+
+    // initialize XForms
+    static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );
+
+    // put document into frame
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    DBG_ASSERT( pArgs, "no arguments in SfxRequest");
+    if( pArgs != NULL )
+    {
+        const SfxPoolItem* pFrameItem = NULL;
+        pArgs->GetItemState( SID_DOCFRAME, FALSE, &pFrameItem );
+        if( pFrameItem != NULL )
+        {
+            SfxFrame* pFrame =
+                static_cast<const SfxFrameItem*>( pFrameItem )->GetFrame();
+            DBG_ASSERT( pFrame != NULL, "no frame?" );
+            pFrame->InsertDocument( xDocSh );
+        }
+    }
+
+    // set return value
+    rReq.SetReturnValue( SfxVoidItem( rReq.GetSlot() ) );
+}
