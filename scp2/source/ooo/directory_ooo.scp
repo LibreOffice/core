@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.20 $
+*  $Revision: 1.21 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-07 10:18:09 $
+*  last change: $Author: kz $ $Date: 2005-01-13 19:22:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -179,7 +179,7 @@ End
 
 Directory gid_Dir_User_Autotext_Language
     ParentID = gid_Dir_User_Autotext;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_User_Uno_Packages
@@ -832,7 +832,7 @@ End
 
 Directory gid_Dir_Autotext_Language
     ParentID = gid_Dir_Autotext;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_Share_Autocorr
@@ -946,7 +946,7 @@ End
 
 Directory gid_Dir_Config_Language
     ParentID = gid_Dir_Config;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_Share_Config_Help
@@ -1136,7 +1136,7 @@ End
 
 Directory gid_Dir_Template_Language
     ParentID = gid_Dir_Template;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_Template_Educate
@@ -1236,7 +1236,7 @@ End
 
 Directory gid_Dir_Share_Database_Language
     ParentID = gid_Dir_Share_Database;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_Explorer
@@ -1251,7 +1251,7 @@ End
 
 Directory gid_Dir_Bookmark_Language
     ParentID = gid_Dir_Bookmark;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_Bookmark_Info
@@ -1297,7 +1297,7 @@ End
 Directory gid_Dir_Samples_Language
     ParentID = gid_Dir_Samples;
     Styles = (CREATE);
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_Samples_Drawings
@@ -1347,7 +1347,7 @@ End
 
 Directory gid_Dir_Wordbook_Language
     ParentID = gid_Dir_Wordbook;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 Directory gid_Dir_Share_Plugin
@@ -1498,7 +1498,7 @@ End
 
 Directory gid_Dir_Cde_Language_Netdir
     ParentID = gid_Dir_Cde_Netdir;
-    DIR_ENGLISH_ALL_LANG;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
 End
 
 #endif
