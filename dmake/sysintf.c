@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.4 2002-10-11 13:42:44 waratah Exp $
+/* RCS  $Id: sysintf.c,v 1.5 2003-12-17 16:01:35 vg Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -441,7 +441,40 @@ Get_switch_char()
    return( getswitchar() );
 }
 
+/*
+** Create a temporary file and open with exclusive access
+** Path is updated with the filename and the file descriptor
+** is returned.  Note that the new name should be freed when
+** the file is removed.
+**/
+int Create_temp(tmpdir, path, suff)
+char *tmpdir;
+char **path;
+char *suff;
+{
+   int fd;
 
+#if defined(HAVE_MKSTEMP)
+   mode_t       mask;
+
+   *path = DmStrJoin( tmpdir, "/", -1, FALSE);
+   *path = DmStrJoin( *path, "mkXXXXXX", -1, TRUE );
+   *path = DmStrJoin( *path, suff, -1, TRUE );
+   mask = umask(0044);
+   fd = mkstemp( *path );
+   umask(mask);
+
+#elif defined(HAVE_TEMPNAM)
+   *path = DmStrJoin( tempnam(tmpdir, "mk"), suff, -1, TRUE );
+   fd = open(*path, O_CREAT | O_EXCL | O_TRUNC | O_RDWR, 0600);
+#else
+
+#error mkstemp() or tempnam() is needed
+
+#endif
+
+   return fd;
+}
 
 /*
 ** Generate a temporary file name and open the file for writing.
@@ -449,19 +482,40 @@ Get_switch_char()
 ** return -1, else return the fileno of the open file.
 ** and update the source file pointer to point at the new file name.
 ** Note that the new name should be freed when the file is removed.
+** The file stream is opened with the given mode
 */
 PUBLIC FILE*
-Get_temp(path, suff, op)
+Get_temp(path, suff, mode)
 char **path;
 char *suff;
-int  op;
+char *mode;
 {
-   extern char *tempnam();
+   int          fd;
+   FILE         *fp;
+   char         *tmpdir;
+   int          tries = 20;
 
-   *path = DmStrJoin( tempnam(NIL(char), "mk"), suff, -1, TRUE );
-   Def_macro( "TMPFILE", *path, M_MULTI|M_EXPANDED );
+   tmpdir = Read_env_string( "TMPDIR" );
+   if( tmpdir == NIL(char) )
+      tmpdir = "/tmp";
 
-   return( op?fopen(*path, "w"):NIL(FILE) );
+   while( --tries )
+   {
+      if( (fd = Create_temp(tmpdir, path, suff)) != -1)
+         break;
+
+      free(*path);
+   }
+
+   if( fd != -1)
+   {
+      Def_macro( "TMPFILE", *path, M_MULTI|M_EXPANDED );
+      fp = fdopen(fd, mode);
+   }
+   else
+      fp = NIL(FILE);
+
+   return fp;
 }
 
 
@@ -480,7 +534,7 @@ char    **fname;
 
    name = (cp != NIL(CELL))?cp->CE_NAME:"makefile text";
 
-   if( (fp = Get_temp(&tmpname, suffix, TRUE)) == NIL(FILE) )
+   if( (fp = Get_temp(&tmpname, suffix, "w")) == NIL(FILE) )
       Open_temp_error( tmpname, name );
 
    Link_temp( cp, fp, tmpname );
