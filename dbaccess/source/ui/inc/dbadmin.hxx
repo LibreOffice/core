@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-28 11:45:46 $
+ *  last change: $Author: fs $ $Date: 2000-11-28 13:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,9 @@ public:
     /// get the access key of the currently selected data source
     sal_Int32       getSelectedAccessKey() const { return getAccessKey(m_aDatasourceList.GetSelectEntryPos()); }
 
+    /// number of entries in the datasource list
+    sal_Int32   count() const { return m_aDatasourceList.GetEntryCount(); }
+
     /// select a data source by name, valid only for non-deleted data sources
     void        select(const String& _rName);
     /// select a data source by acces key
@@ -633,6 +636,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/11/28 11:45:46  oj
+ *  #80827# check dbroot if dbconfig failed
+ *
  *  Revision 1.6  2000/11/23 02:04:35  svesik
  *  Remove stl/ from #include statement
  *
