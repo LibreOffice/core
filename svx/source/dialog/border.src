@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-06-03 08:57:45 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,17 +135,17 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "~Default";
         Text[ greek ] = "~Default";
         Text[ dutch ] = "~Default";
-        Text[ french ] = "~Default";
-        Text[ spanish ] = "~Default";
+        Text[ french ] = "Par d�faut";
+        Text[ spanish ] = "~Predeterminado";
         Text[ finnish ] = "~Default";
-        Text[ italian ] = "~Default";
+        Text[ italian ] = "S~tandard";
         Text[ danish ] = "~Default";
-        Text[ swedish ] = "~Default";
+        Text[ swedish ] = "~Standard";
         Text[ polish ] = "~Default";
         Text[ portuguese_brazilian ] = "~Default";
-        Text[ japanese ] = "~Default";
+        Text[ japanese ] = "標準";
         Text[ korean ] = "표준";
-        Text[ chinese_simplified ] = "~Default";
+        Text[ chinese_simplified ] = "标准(~D)";
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ turkish ] = "~Default";
         Text[ arabic ] = "~Default";
@@ -170,17 +170,17 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "~User-defined";
         Text[ greek ] = "~User-defined";
         Text[ dutch ] = "~User-defined";
-        Text[ french ] = "~User-defined";
-        Text[ spanish ] = "~User-defined";
+        Text[ french ] = "D�fini par l'utilisateur";
+        Text[ spanish ] = "Definido por el ~usuario";
         Text[ finnish ] = "~User-defined";
-        Text[ italian ] = "~User-defined";
+        Text[ italian ] = "Personalizzato";
         Text[ danish ] = "~User-defined";
-        Text[ swedish ] = "~User-defined";
+        Text[ swedish ] = "~Anv�ndardefinierad";
         Text[ polish ] = "~User-defined";
         Text[ portuguese_brazilian ] = "~User-defined";
-        Text[ japanese ] = "~User-defined";
+        Text[ japanese ] = "ユーザー定義(~U)";
         Text[ korean ] = "사용자 정의";
-        Text[ chinese_simplified ] = "~User-defined";
+        Text[ chinese_simplified ] = "使用者自设(~U)";
         Text[ chinese_traditional ] = "使用者自訂(~U)";
         Text[ turkish ] = "~User-defined";
         Text[ arabic ] = "~User-defined";
@@ -241,17 +241,17 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "St~yle";
         Text[ greek ] = "St~yle";
         Text[ dutch ] = "St~yle";
-        Text[ french ] = "St~yle";
-        Text[ spanish ] = "St~yle";
+        Text[ french ] = "Style";
+        Text[ spanish ] = "~Estilo";
         Text[ finnish ] = "St~yle";
-        Text[ italian ] = "St~yle";
+        Text[ italian ] = "Stile";
         Text[ danish ] = "St~yle";
-        Text[ swedish ] = "St~yle";
+        Text[ swedish ] = "St~il";
         Text[ polish ] = "St~yle";
         Text[ portuguese_brazilian ] = "St~yle";
-        Text[ japanese ] = "St~yle";
+        Text[ japanese ] = "スタイル";
         Text[ korean ] = "유형";
-        Text[ chinese_simplified ] = "St~yle";
+        Text[ chinese_simplified ] = "风格(~Y)";
         Text[ chinese_traditional ] = "風格";
         Text[ turkish ] = "St~yle";
         Text[ arabic ] = "St~yle";
@@ -274,17 +274,17 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "~Color";
         Text[ greek ] = "~Color";
         Text[ dutch ] = "~Color";
-        Text[ french ] = "~Color";
+        Text[ french ] = "Couleur";
         Text[ spanish ] = "~Color";
         Text[ finnish ] = "~Color";
-        Text[ italian ] = "~Color";
+        Text[ italian ] = "Colore";
         Text[ danish ] = "~Color";
-        Text[ swedish ] = "~Color";
+        Text[ swedish ] = "~F�rg";
         Text[ polish ] = "~Color";
         Text[ portuguese_brazilian ] = "~Color";
-        Text[ japanese ] = "~Color";
+        Text[ japanese ] = "色(~C)";
         Text[ korean ] = "색상";
-        Text[ chinese_simplified ] = "~Color";
+        Text[ chinese_simplified ] = "彩色(~C)";
         Text[ chinese_traditional ] = "顏色(~C)";
         Text[ turkish ] = "~Color";
         Text[ arabic ] = "~Color";
