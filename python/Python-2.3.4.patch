@@ -1,5 +1,28 @@
 *** misc/Python-2.3.4/Makefile.pre.in	Tue Nov 18 20:54:00 2003
---- misc/build/Python-2.3.4/Makefile.pre.in	Sun Nov  7 12:27:04 2004
+--- misc/build/Python-2.3.4/Makefile.pre.in	Mon Dec  6 14:52:45 2004
+***************
+*** 114,123 ****
+  RUNSHARED=       @RUNSHARED@
+  
+  # Modes for directories, executables and data files created by the
+! # install process.  Default to user-only-writable for all file types.
+! DIRMODE=	755
+! EXEMODE=	755
+! FILEMODE=	644
+  
+  # configure script arguments
+  CONFIG_ARGS=	@CONFIG_ARGS@
+--- 114,123 ----
+  RUNSHARED=       @RUNSHARED@
+  
+  # Modes for directories, executables and data files created by the
+! # install process.  Default to group-writable for all file types.
+! DIRMODE=	775
+! EXEMODE=	775
+! FILEMODE=	664
+  
+  # configure script arguments
+  CONFIG_ARGS=	@CONFIG_ARGS@
 ***************
 *** 345,351 ****
   
@@ -17,8 +40,41 @@
   		$(LN) -f $(INSTSONAME) $@; \
   	else\
   		$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM); \
-*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Sun Nov  7 12:28:29 2004
---- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/configure	Fri May  7 21:13:40 2004
+--- misc/build/Python-2.3.4/configure	Mon Dec  6 14:42:14 2004
+***************
+*** 10129,10134 ****
+--- 10129,10135 ----
+  	case $ac_sys_system/$ac_sys_release in
+  	SunOS*) if test "$GCC" = yes;
+  	        then CCSHARED="-fPIC";
++ 	        else CCSHARED="-KPIC";  # for sun's cc
+  	        fi;;
+  	hp*|HP*) if test "$GCC" = yes;
+  		 then CCSHARED="-fPIC";
+*** misc/Python-2.3.4/Mac/OSX/Makefile	Tue Nov  4 23:45:16 2003
+--- misc/build/Python-2.3.4/Mac/OSX/Makefile	Mon Dec  6 14:53:16 2004
+***************
+*** 26,33 ****
+  INSTALLED_PYTHONW=$(APPINSTALLDIR)/Contents/MacOS/Python
+  
+  # Items more-or-less copied from the main Makefile
+! DIRMODE=755
+! FILEMODE=644
+  INSTALL=/usr/bin/install -c
+  INSTALL_SYMLINK=ln -fsn
+  INSTALL_PROGRAM=${INSTALL}
+--- 26,33 ----
+  INSTALLED_PYTHONW=$(APPINSTALLDIR)/Contents/MacOS/Python
+  
+  # Items more-or-less copied from the main Makefile
+! DIRMODE=775
+! FILEMODE=664
+  INSTALL=/usr/bin/install -c
+  INSTALL_SYMLINK=ln -fsn
+  INSTALL_PROGRAM=${INSTALL}
+*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Mon Dec  6 14:56:37 2004
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Mon Dec  6 14:42:08 2004
 ***************
 *** 1 ****
 ! dummy
@@ -71,8 +127,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_bsddb.mak	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_bsddb.mak	Mon Dec  6 14:56:37 2004
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Mon Dec  6 14:42:08 2004
 ***************
 *** 1 ****
 ! dummy
@@ -332,8 +388,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_csv.dep	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_csv.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_csv.dep	Mon Dec  6 14:56:34 2004
+--- misc/build/Python-2.3.4/PCbuild/_csv.dep	Mon Dec  6 14:42:08 2004
 ***************
 *** 1 ****
 ! dummy
@@ -387,8 +443,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_csv.mak	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_csv.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_csv.mak	Mon Dec  6 14:56:34 2004
+--- misc/build/Python-2.3.4/PCbuild/_csv.mak	Mon Dec  6 14:42:08 2004
 ***************
 *** 1 ****
 ! dummy
@@ -648,8 +704,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_socket.dep	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_socket.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_socket.dep	Mon Dec  6 14:56:33 2004
+--- misc/build/Python-2.3.4/PCbuild/_socket.dep	Mon Dec  6 14:42:08 2004
 ***************
 *** 1 ****
 ! dummy
@@ -707,8 +763,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_socket.mak	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_socket.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_socket.mak	Mon Dec  6 14:56:33 2004
+--- misc/build/Python-2.3.4/PCbuild/_socket.mak	Mon Dec  6 14:42:08 2004
 ***************
 *** 1 ****
 ! dummy
@@ -968,8 +1024,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_sre.dep	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_sre.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_sre.dep	Mon Dec  6 14:56:34 2004
+--- misc/build/Python-2.3.4/PCbuild/_sre.dep	Mon Dec  6 14:42:09 2004
 ***************
 *** 1 ****
 ! dummy
@@ -1025,8 +1081,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_sre.mak	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_sre.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_sre.mak	Mon Dec  6 14:56:34 2004
+--- misc/build/Python-2.3.4/PCbuild/_sre.mak	Mon Dec  6 14:42:09 2004
 ***************
 *** 1 ****
 ! dummy
@@ -1286,8 +1342,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_symtable.dep	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_symtable.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_symtable.dep	Mon Dec  6 14:56:35 2004
+--- misc/build/Python-2.3.4/PCbuild/_symtable.dep	Mon Dec  6 14:42:09 2004
 ***************
 *** 1 ****
 ! dummy
@@ -1342,8 +1398,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_symtable.mak	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/_symtable.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_symtable.mak	Mon Dec  6 14:56:34 2004
+--- misc/build/Python-2.3.4/PCbuild/_symtable.mak	Mon Dec  6 14:42:09 2004
 ***************
 *** 1 ****
 ! dummy
@@ -1601,8 +1657,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_testcapi.dep	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_testcapi.dep	Mon Dec  6 14:56:35 2004
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Mon Dec  6 14:42:09 2004
 ***************
 *** 1 ****
 ! dummy
@@ -1657,8 +1713,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_testcapi.mak	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_testcapi.mak	Mon Dec  6 14:56:35 2004
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Mon Dec  6 14:42:09 2004
 ***************
 *** 1 ****
 ! dummy
@@ -1916,8 +1972,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_tkinter.dep	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_tkinter.dep	Mon Dec  6 14:56:37 2004
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Mon Dec  6 14:42:09 2004
 ***************
 *** 1 ****
 ! dummy
@@ -1971,8 +2027,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_tkinter.mak	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/_tkinter.mak	Mon Dec  6 14:56:37 2004
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Mon Dec  6 14:42:10 2004
 ***************
 *** 1 ****
 ! dummy
@@ -2242,8 +2298,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/bz2.dep	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/bz2.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/bz2.dep	Mon Dec  6 14:56:36 2004
+--- misc/build/Python-2.3.4/PCbuild/bz2.dep	Mon Dec  6 14:42:10 2004
 ***************
 *** 1 ****
 ! dummy
@@ -2298,8 +2354,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/bz2.mak	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/bz2.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/bz2.mak	Mon Dec  6 14:56:36 2004
+--- misc/build/Python-2.3.4/PCbuild/bz2.mak	Mon Dec  6 14:42:10 2004
 ***************
 *** 1 ****
 ! dummy
@@ -2508,8 +2564,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/datetime.dep	Sun Nov  7 12:28:25 2004
---- misc/build/Python-2.3.4/PCbuild/datetime.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/datetime.dep	Mon Dec  6 14:56:29 2004
+--- misc/build/Python-2.3.4/PCbuild/datetime.dep	Mon Dec  6 14:42:10 2004
 ***************
 *** 1 ****
 ! dummy
@@ -2564,8 +2620,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/datetime.mak	Sun Nov  7 12:28:25 2004
---- misc/build/Python-2.3.4/PCbuild/datetime.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/datetime.mak	Mon Dec  6 14:56:28 2004
+--- misc/build/Python-2.3.4/PCbuild/datetime.mak	Mon Dec  6 14:42:10 2004
 ***************
 *** 1 ****
 ! dummy
@@ -2825,8 +2881,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Mon Dec  6 14:56:36 2004
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Mon Dec  6 14:42:10 2004
 ***************
 *** 1 ****
 ! dummy
@@ -2836,8 +2892,8 @@
 ! ..\PC\make_versioninfo.c : \
 ! 	"..\Include\patchlevel.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Mon Dec  6 14:56:36 2004
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Mon Dec  6 14:42:10 2004
 ***************
 *** 1 ****
 ! dummy
@@ -3078,8 +3134,8 @@
 ! 
 ! 
 ! !ENDIF 
-*** misc/Python-2.3.4/PCbuild/mmap.dep	Sun Nov  7 12:28:25 2004
---- misc/build/Python-2.3.4/PCbuild/mmap.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/mmap.dep	Mon Dec  6 14:56:29 2004
+--- misc/build/Python-2.3.4/PCbuild/mmap.dep	Mon Dec  6 14:42:11 2004
 ***************
 *** 1 ****
 ! dummy
@@ -3132,8 +3188,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/mmap.mak	Sun Nov  7 12:28:25 2004
---- misc/build/Python-2.3.4/PCbuild/mmap.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/mmap.mak	Mon Dec  6 14:56:29 2004
+--- misc/build/Python-2.3.4/PCbuild/mmap.mak	Mon Dec  6 14:42:11 2004
 ***************
 *** 1 ****
 ! dummy
@@ -3391,8 +3447,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/parser.dep	Sun Nov  7 12:28:25 2004
---- misc/build/Python-2.3.4/PCbuild/parser.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/parser.dep	Mon Dec  6 14:56:30 2004
+--- misc/build/Python-2.3.4/PCbuild/parser.dep	Mon Dec  6 14:42:11 2004
 ***************
 *** 1 ****
 ! dummy
@@ -3450,8 +3506,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/parser.mak	Sun Nov  7 12:28:25 2004
---- misc/build/Python-2.3.4/PCbuild/parser.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/parser.mak	Mon Dec  6 14:56:29 2004
+--- misc/build/Python-2.3.4/PCbuild/parser.mak	Mon Dec  6 14:42:11 2004
 ***************
 *** 1 ****
 ! dummy
@@ -3711,8 +3767,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/pyexpat.dep	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/pyexpat.dep	Mon Dec  6 14:56:30 2004
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Mon Dec  6 14:42:11 2004
 ***************
 *** 1 ****
 ! dummy
@@ -3802,8 +3858,8 @@
 ! 	"..\Modules\expat\xmltok_impl.h"\
 ! 	"..\Modules\expat\xmltok_ns.c"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pyexpat.mak	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/pyexpat.mak	Mon Dec  6 14:56:30 2004
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Mon Dec  6 14:42:11 2004
 ***************
 *** 1 ****
 ! dummy
@@ -4093,8 +4149,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/python.dep	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/python.dep	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/python.dep	Mon Dec  6 14:56:30 2004
+--- misc/build/Python-2.3.4/PCbuild/python.dep	Mon Dec  6 14:42:11 2004
 ***************
 *** 1 ****
 ! dummy
@@ -4151,8 +4207,8 @@
 ! ..\PC\python_exe.rc : \
 ! 	"..\PC\pycon.ico"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/python.mak	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/python.mak	Sun Nov  7 11:43:09 2004
+*** misc/Python-2.3.4/PCbuild/python.mak	Mon Dec  6 14:56:30 2004
+--- misc/build/Python-2.3.4/PCbuild/python.mak	Mon Dec  6 14:42:12 2004
 ***************
 *** 1 ****
 ! dummy
@@ -4446,8 +4502,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/pythoncore.dep	Sun Nov  7 12:28:29 2004
---- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/pythoncore.dep	Mon Dec  6 14:56:38 2004
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Mon Dec  6 14:42:12 2004
 ***************
 *** 1 ****
 ! dummy
@@ -9904,8 +9960,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythoncore.mak	Sun Nov  7 12:28:29 2004
---- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/pythoncore.mak	Mon Dec  6 14:56:37 2004
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Mon Dec  6 14:42:12 2004
 ***************
 *** 1 ****
 ! dummy
@@ -11363,8 +11419,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/pythonw.dep	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/pythonw.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/pythonw.dep	Mon Dec  6 14:56:31 2004
+--- misc/build/Python-2.3.4/PCbuild/pythonw.dep	Mon Dec  6 14:42:12 2004
 ***************
 *** 1 ****
 ! dummy
@@ -11421,8 +11477,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythonw.mak	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/pythonw.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/pythonw.mak	Mon Dec  6 14:56:31 2004
+--- misc/build/Python-2.3.4/PCbuild/pythonw.mak	Mon Dec  6 14:42:12 2004
 ***************
 *** 1 ****
 ! dummy
@@ -11700,8 +11756,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/select.dep	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/select.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/select.dep	Mon Dec  6 14:56:31 2004
+--- misc/build/Python-2.3.4/PCbuild/select.dep	Mon Dec  6 14:42:12 2004
 ***************
 *** 1 ****
 ! dummy
@@ -11754,8 +11810,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/select.mak	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/select.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/select.mak	Mon Dec  6 14:56:31 2004
+--- misc/build/Python-2.3.4/PCbuild/select.mak	Mon Dec  6 14:42:13 2004
 ***************
 *** 1 ****
 ! dummy
@@ -12015,8 +12071,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/unicodedata.dep	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/unicodedata.dep	Mon Dec  6 14:56:32 2004
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Mon Dec  6 14:42:13 2004
 ***************
 *** 1 ****
 ! dummy
@@ -12072,8 +12128,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/unicodedata.mak	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/unicodedata.mak	Mon Dec  6 14:56:31 2004
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Mon Dec  6 14:42:13 2004
 ***************
 *** 1 ****
 ! dummy
@@ -12331,16 +12387,16 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	Mon Dec  6 14:56:32 2004
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Mon Dec  6 14:42:13 2004
 ***************
 *** 1 ****
 ! dummy
 --- 1,2 ----
 ! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von w9xpopen.mak
 ! 
-*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	Sun Nov  7 12:28:26 2004
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	Mon Dec  6 14:56:32 2004
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Mon Dec  6 14:42:13 2004
 ***************
 *** 1 ****
 ! dummy
@@ -12541,8 +12597,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/winreg.dep	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/winreg.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/winreg.dep	Mon Dec  6 14:56:33 2004
+--- misc/build/Python-2.3.4/PCbuild/winreg.dep	Mon Dec  6 14:42:13 2004
 ***************
 *** 1 ****
 ! dummy
@@ -12596,8 +12652,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winreg.mak	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/winreg.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/winreg.mak	Mon Dec  6 14:56:32 2004
+--- misc/build/Python-2.3.4/PCbuild/winreg.mak	Mon Dec  6 14:42:14 2004
 ***************
 *** 1 ****
 ! dummy
@@ -12873,8 +12929,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/winsound.dep	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/winsound.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/winsound.dep	Mon Dec  6 14:56:33 2004
+--- misc/build/Python-2.3.4/PCbuild/winsound.dep	Mon Dec  6 14:42:14 2004
 ***************
 *** 1 ****
 ! dummy
@@ -12927,8 +12983,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winsound.mak	Sun Nov  7 12:28:27 2004
---- misc/build/Python-2.3.4/PCbuild/winsound.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/winsound.mak	Mon Dec  6 14:56:33 2004
+--- misc/build/Python-2.3.4/PCbuild/winsound.mak	Mon Dec  6 14:42:14 2004
 ***************
 *** 1 ****
 ! dummy
@@ -13186,8 +13242,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/zlib.dep	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/zlib.dep	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/zlib.dep	Mon Dec  6 14:56:36 2004
+--- misc/build/Python-2.3.4/PCbuild/zlib.dep	Mon Dec  6 14:42:14 2004
 ***************
 *** 1 ****
 ! dummy
@@ -13241,8 +13297,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/zlib.mak	Sun Nov  7 12:28:28 2004
---- misc/build/Python-2.3.4/PCbuild/zlib.mak	Sun Nov  7 11:43:10 2004
+*** misc/Python-2.3.4/PCbuild/zlib.mak	Mon Dec  6 14:56:35 2004
+--- misc/build/Python-2.3.4/PCbuild/zlib.mak	Mon Dec  6 14:42:14 2004
 ***************
 *** 1 ****
 ! dummy
@@ -13510,15 +13566,3 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/configure	Fri May  7 21:13:40 2004
---- misc/build/Python-2.3.4/configure	Sun Nov  7 11:43:10 2004
-***************
-*** 10129,10134 ****
---- 10129,10135 ----
-  	case $ac_sys_system/$ac_sys_release in
-  	SunOS*) if test "$GCC" = yes;
-  	        then CCSHARED="-fPIC";
-+ 	        else CCSHARED="-KPIC";  # for sun's cc
-  	        fi;;
-  	hp*|HP*) if test "$GCC" = yes;
-  		 then CCSHARED="-fPIC";
