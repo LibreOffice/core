@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 09:07:32 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 10:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,7 +783,9 @@ void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyCha
                 }
                 else
                 {
-                    ImplSetPosSize( StdTabController::FindControl( getControls(), xModel ) );
+                    uno::Sequence<uno::Reference<awt::XControl> > aControlSequence(getControls());
+                    uno::Reference<awt::XControl> aControlRef( StdTabController::FindControl( aControlSequence, xModel ) );
+                    ImplSetPosSize( aControlRef );
                 }
                 break;
             }
