@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-06 18:27:47 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,22 @@ class ScDetectiveFunc
 
     void        FillAttributes( ScDetectiveData& rData );
 
+                // called from DrawEntry/DrawAlienEntry and InsertObject
+    BOOL        InsertArrow( USHORT nCol, USHORT nRow,
+                                USHORT nRefStartCol, USHORT nRefStartRow,
+                                USHORT nRefEndCol, USHORT nRefEndRow,
+                                BOOL bFromOtherTab, BOOL bRed,
+                                ScDetectiveData& rData );
+    BOOL        InsertToOtherTab( USHORT nStartCol, USHORT nStartRow,
+                                USHORT nEndCol, USHORT nEndRow, BOOL bRed,
+                                ScDetectiveData& rData );
+
+                // DrawEntry / DrawAlienEntry check for existing arrows and errors
     BOOL        DrawEntry( USHORT nCol, USHORT nRow, const ScTripel& rRefStart, const ScTripel& rRefEnd,
                                 ScDetectiveData& rData );
     BOOL        DrawAlienEntry( const ScTripel& rRefStart, const ScTripel& rRefEnd,
                                 ScDetectiveData& rData );
+
     void        DrawCircle( USHORT nCol, USHORT nRow, ScDetectiveData& rData );
 
     SdrObject*  DrawCaption( USHORT nCol, USHORT nRow, const String& rText,
@@ -159,6 +171,8 @@ public:
 
     ScDetectiveObjType GetDetectiveObjectType( SdrObject* pObject,
                                 ScAddress& rPosition, ScRange& rSource, BOOL& rRedLine );
+    void        InsertObject( ScDetectiveObjType eType, const ScAddress& rPosition,
+                                const ScRange& rSource, BOOL bRedLine );
 };
 
 

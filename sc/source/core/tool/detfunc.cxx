@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-06 18:29:04 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 15:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,175 @@ BOOL ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )         // static
     return FALSE;
 }
 
+//------------------------------------------------------------------------
+
+//  InsertXXX: called from DrawEntry/DrawAlienEntry and InsertObject
+
+BOOL ScDetectiveFunc::InsertArrow( USHORT nCol, USHORT nRow,
+                                USHORT nRefStartCol, USHORT nRefStartRow,
+                                USHORT nRefEndCol, USHORT nRefEndRow,
+                                BOOL bFromOtherTab, BOOL bRed,
+                                ScDetectiveData& rData )
+{
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    SdrPage* pPage = pModel->GetPage(nTab);
+
+    BOOL bArea = ( nRefStartCol != nRefEndCol || nRefStartRow != nRefEndRow );
+    if (bArea && !bFromOtherTab)
+    {
+        // insert the rectangle before the arrow - this is relied on in FindFrameForObject
+
+        Point aStartCorner = GetDrawPos( nRefStartCol, nRefStartRow, FALSE );
+        Point aEndCorner = GetDrawPos( nRefEndCol+1, nRefEndRow+1, FALSE );
+
+        SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
+
+//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
+        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
+
+        ScDrawLayer::SetAnchor( pBox, SCA_CELL );
+        pBox->SetLayer( SC_LAYER_INTERN );
+        pPage->InsertObject( pBox );
+        pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
+
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
+        pData->aStt.nCol = nRefStartCol;
+        pData->aStt.nRow = nRefStartRow;
+        pData->aStt.nTab = nTab;
+        pData->aEnd.nCol = nRefEndCol;
+        pData->aEnd.nRow = nRefEndRow;
+        pData->aEnd.nTab = nTab;
+        pData->bValidStart = TRUE;
+        pData->bValidEnd = TRUE;
+    }
+
+    Point aStartPos = GetDrawPos( nRefStartCol, nRefStartRow, TRUE );
+    Point aEndPos   = GetDrawPos( nCol, nRow, TRUE );
+
+    if (bFromOtherTab)
+    {
+        aStartPos = Point( aEndPos.X() - 1000, aEndPos.Y() - 1000 );
+        if (aStartPos.X() < 0)
+            aStartPos.X() += 2000;
+        if (aStartPos.Y() < 0)
+            aStartPos.Y() += 2000;
+    }
+
+    SfxItemSet& rAttrSet = bFromOtherTab ? rData.GetFromTabSet() : rData.GetArrowSet();
+
+    if (bArea && !bFromOtherTab)
+        rAttrSet.Put( XLineWidthItem( 50 ) );               // Bereich
+    else
+        rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
+
+    ColorData nColorData = ( bRed ? COL_LIGHTRED : COL_LIGHTBLUE );
+    rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
+    Point aPointArr[2] = {aStartPos, aEndPos};
+    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
+                XPolyPolygon(XPolygon(Polygon(2, aPointArr))));
+
+    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
+
+//-/    pArrow->SetAttributes( rAttrSet, FALSE );
+    pArrow->SetItemSetAndBroadcast(rAttrSet);
+
+    ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
+    pArrow->SetLayer( SC_LAYER_INTERN );
+    pPage->InsertObject( pArrow );
+    pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
+
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
+    if (bFromOtherTab)
+        pData->bValidStart = FALSE;
+    else
+    {
+        pData->aStt.nCol = nRefStartCol;
+        pData->aStt.nRow = nRefStartRow;
+        pData->aStt.nTab = nTab;
+        pData->bValidStart = TRUE;
+    }
+
+    pData->aEnd.nCol = nCol;
+    pData->aEnd.nRow = nRow;
+    pData->aEnd.nTab = nTab;
+    pData->bValidEnd = TRUE;
+
+    return TRUE;
+}
+
+BOOL ScDetectiveFunc::InsertToOtherTab( USHORT nStartCol, USHORT nStartRow,
+                                USHORT nEndCol, USHORT nEndRow, BOOL bRed,
+                                ScDetectiveData& rData )
+{
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    SdrPage* pPage = pModel->GetPage(nTab);
+
+    BOOL bArea = ( nStartCol != nEndCol || nStartRow != nEndRow );
+    if (bArea)
+    {
+        Point aStartCorner = GetDrawPos( nStartCol, nStartRow, FALSE );
+        Point aEndCorner = GetDrawPos( nEndCol+1, nEndRow+1, FALSE );
+
+        SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
+
+//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
+        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
+
+        ScDrawLayer::SetAnchor( pBox, SCA_CELL );
+        pBox->SetLayer( SC_LAYER_INTERN );
+        pPage->InsertObject( pBox );
+        pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
+
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
+        pData->aStt.nCol = nStartCol;
+        pData->aStt.nRow = nStartRow;
+        pData->aStt.nTab = nTab;
+        pData->aEnd.nCol = nEndCol;
+        pData->aEnd.nRow = nEndRow;
+        pData->aEnd.nTab = nTab;
+        pData->bValidStart = TRUE;
+        pData->bValidEnd = TRUE;
+    }
+
+    Point aStartPos = GetDrawPos( nStartCol, nStartRow, TRUE );
+    Point aEndPos   = Point( aStartPos.X() + 1000, aStartPos.Y() - 1000 );
+    if (aEndPos.Y() < 0)
+        aEndPos.Y() += 2000;
+
+    SfxItemSet& rAttrSet = rData.GetToTabSet();
+    if (bArea)
+        rAttrSet.Put( XLineWidthItem( 50 ) );               // Bereich
+    else
+        rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
+
+    ColorData nColorData = ( bRed ? COL_LIGHTRED : COL_LIGHTBLUE );
+    rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
+    Point aPointArr[2] = {aStartPos, aEndPos};
+    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
+                XPolyPolygon(XPolygon(Polygon(2, aPointArr))));
+
+    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
+
+//-/    pArrow->SetAttributes( rAttrSet, FALSE );
+    pArrow->SetItemSetAndBroadcast(rAttrSet);
+
+    ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
+    pArrow->SetLayer( SC_LAYER_INTERN );
+    pPage->InsertObject( pArrow );
+    pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
+
+    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
+    pData->aStt.nCol = nStartCol;
+    pData->aStt.nRow = nStartRow;
+    pData->aStt.nTab = nTab;
+    pData->bValidStart = TRUE;
+    pData->bValidEnd = FALSE;
+
+    return TRUE;
+}
+
+//------------------------------------------------------------------------
+
 //  DrawEntry:      Formel auf dieser Tabelle,
 //                  Referenz auf dieser oder anderer
 //  DrawAlienEntry: Formel auf anderer Tabelle,
@@ -460,93 +629,14 @@ BOOL ScDetectiveFunc::DrawEntry( USHORT nCol, USHORT nRow,
                     nCol, nRow, nTab ) )
         return FALSE;
 
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    SdrPage* pPage = pModel->GetPage(nTab);
-
-    BOOL bArea = (rRefStart != rRefEnd);
-    BOOL bAlien = ( rRefEnd.GetTab() < nTab || rRefStart.GetTab() > nTab );
-    if (bArea && !bAlien)
-    {
-        // insert the rectangle before the arrow - this is relied on in FindFrameForObject
-
-        Point aStartCorner = GetDrawPos( rRefStart.GetCol(), rRefStart.GetRow(), FALSE );
-        Point aEndCorner = GetDrawPos( rRefEnd.GetCol()+1, rRefEnd.GetRow()+1, FALSE );
-
-        SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
-
-//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
-        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
-
-        ScDrawLayer::SetAnchor( pBox, SCA_CELL );
-        pBox->SetLayer( SC_LAYER_INTERN );
-        pPage->InsertObject( pBox );
-        pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
-
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
-        pData->aStt = rRefStart;
-        pData->aEnd = rRefEnd;
-        pData->bValidStart = TRUE;
-        pData->bValidEnd = TRUE;
-    }
-
-    Point aStartPos = GetDrawPos( rRefStart.GetCol(), rRefStart.GetRow(), TRUE );
-    Point aEndPos   = GetDrawPos( nCol, nRow, TRUE );
-
-    if (bAlien)
-    {
-        aStartPos = Point( aEndPos.X() - 1000, aEndPos.Y() - 1000 );
-        if (aStartPos.X() < 0)
-            aStartPos.X() += 2000;
-        if (aStartPos.Y() < 0)
-            aStartPos.Y() += 2000;
-    }
-
-    SfxItemSet& rAttrSet = bAlien ? rData.GetFromTabSet() : rData.GetArrowSet();
-
-    if (bArea && !bAlien)
-        rAttrSet.Put( XLineWidthItem( 50 ) );               // Bereich
-    else
-        rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
-
-    ColorData nColorData;
     ScTripel aErrorPos;
-    if (HasError( rRefStart, rRefEnd, aErrorPos ))
-        nColorData = COL_LIGHTRED;
-    else
-        nColorData = COL_LIGHTBLUE;
+    BOOL bError = HasError( rRefStart, rRefEnd, aErrorPos );
+    BOOL bAlien = ( rRefEnd.GetTab() < nTab || rRefStart.GetTab() > nTab );
 
-    rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
-    Point aPointArr[2] = {aStartPos, aEndPos};
-    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
-                XPolyPolygon(XPolygon(Polygon(2, aPointArr))));
-
-    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
-
-//-/    pArrow->SetAttributes( rAttrSet, FALSE );
-    pArrow->SetItemSetAndBroadcast(rAttrSet);
-
-    ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
-    pArrow->SetLayer( SC_LAYER_INTERN );
-    pPage->InsertObject( pArrow );
-    pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
-
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
-    if (bAlien)
-        pData->bValidStart = FALSE;
-    else
-    {
-        pData->aStt.nCol = rRefStart.GetCol();
-        pData->aStt.nRow = rRefStart.GetRow();
-        pData->aStt.nTab = rRefStart.GetTab();
-        pData->bValidStart = TRUE;
-    }
-
-    pData->aEnd.nCol = nCol;
-    pData->aEnd.nRow = nRow;
-    pData->aEnd.nTab = nTab;
-    pData->bValidEnd = TRUE;
-
-    return TRUE;
+    return InsertArrow( nCol, nRow,
+                        rRefStart.GetCol(), rRefStart.GetRow(),
+                        rRefEnd.GetCol(), rRefEnd.GetRow(),
+                        bAlien, bError, rData );
 }
 
 BOOL ScDetectiveFunc::DrawAlienEntry( const ScTripel& rRefStart, const ScTripel& rRefEnd,
@@ -556,72 +646,12 @@ BOOL ScDetectiveFunc::DrawAlienEntry( const ScTripel& rRefStart, const ScTripel&
                     0, 0, nTab+1 ) )
         return FALSE;
 
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    SdrPage* pPage = pModel->GetPage(nTab);
-
-    BOOL bArea = (rRefStart != rRefEnd);
-    if (bArea)
-    {
-        Point aStartCorner = GetDrawPos( rRefStart.GetCol(), rRefStart.GetRow(), FALSE );
-        Point aEndCorner = GetDrawPos( rRefEnd.GetCol()+1, rRefEnd.GetRow()+1, FALSE );
-
-        SdrRectObj* pBox = new SdrRectObj(Rectangle(aStartCorner,aEndCorner));
-
-//-/        pBox->SetAttributes( rData.GetBoxSet(), FALSE );
-        pBox->SetItemSetAndBroadcast(rData.GetBoxSet());
-
-        ScDrawLayer::SetAnchor( pBox, SCA_CELL );
-        pBox->SetLayer( SC_LAYER_INTERN );
-        pPage->InsertObject( pBox );
-        pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
-
-        ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, TRUE );
-        pData->aStt = rRefStart;
-        pData->aEnd = rRefEnd;
-        pData->bValidStart = TRUE;
-        pData->bValidEnd = TRUE;
-    }
-
-    Point aStartPos = GetDrawPos( rRefStart.GetCol(), rRefStart.GetRow(), TRUE );
-    Point aEndPos   = Point( aStartPos.X() + 1000, aStartPos.Y() - 1000 );
-    if (aEndPos.Y() < 0)
-        aEndPos.Y() += 2000;
-
-    SfxItemSet& rAttrSet = rData.GetToTabSet();
-    if (bArea)
-        rAttrSet.Put( XLineWidthItem( 50 ) );               // Bereich
-    else
-        rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
-
-    ColorData nColorData;
     ScTripel aErrorPos;
-    if (HasError( rRefStart, rRefEnd, aErrorPos ))
-        nColorData = COL_LIGHTRED;
-    else
-        nColorData = COL_LIGHTBLUE;
-    rAttrSet.Put( XLineColorItem( String(), Color( nColorData ) ) );
-    Point aPointArr[2] = {aStartPos, aEndPos};
-    SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE,
-                XPolyPolygon(XPolygon(Polygon(2, aPointArr))));
+    BOOL bError = HasError( rRefStart, rRefEnd, aErrorPos );
 
-    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
-
-//-/    pArrow->SetAttributes( rAttrSet, FALSE );
-    pArrow->SetItemSetAndBroadcast(rAttrSet);
-
-    ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
-    pArrow->SetLayer( SC_LAYER_INTERN );
-    pPage->InsertObject( pArrow );
-    pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
-
-    ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, TRUE );
-    pData->aStt.nCol = rRefStart.GetCol();
-    pData->aStt.nRow = rRefStart.GetRow();
-    pData->aStt.nTab = rRefStart.GetTab();
-    pData->bValidStart = TRUE;
-    pData->bValidEnd = FALSE;
-
-    return TRUE;
+    return InsertToOtherTab( rRefStart.GetCol(), rRefStart.GetRow(),
+                                rRefEnd.GetCol(), rRefEnd.GetRow(),
+                                bError, rData );
 }
 
 void ScDetectiveFunc::DrawCircle( USHORT nCol, USHORT nRow, ScDetectiveData& rData )
@@ -1720,5 +1750,33 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject,
     }
 
     return eType;
+}
+
+void ScDetectiveFunc::InsertObject( ScDetectiveObjType eType,
+                            const ScAddress& rPosition, const ScRange& rSource,
+                            BOOL bRedLine )
+{
+    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    if (!pModel) return;
+    ScDetectiveData aData( pModel );
+
+    switch (eType)
+    {
+        case SC_DETOBJ_ARROW:
+        case SC_DETOBJ_FROMOTHERTAB:
+            InsertArrow( rPosition.Col(), rPosition.Row(),
+                         rSource.aStart.Col(), rSource.aStart.Row(),
+                         rSource.aEnd.Col(), rSource.aEnd.Row(),
+                         (eType == SC_DETOBJ_FROMOTHERTAB), bRedLine, aData );
+            break;
+        case SC_DETOBJ_TOOTHERTAB:
+            InsertToOtherTab( rSource.aStart.Col(), rSource.aStart.Row(),
+                              rSource.aEnd.Col(), rSource.aEnd.Row(),
+                              bRedLine, aData );
+            break;
+        case SC_DETOBJ_CIRCLE:
+            DrawCircle( rPosition.Col(), rPosition.Row(), aData );
+            break;
+    }
 }
 
