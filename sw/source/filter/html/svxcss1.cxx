@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:27:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 
 #ifndef _SVX_UDLNITEM_HXX //autogen
@@ -884,9 +887,10 @@ BOOL SvxCSS1Parser::DeclarationParsed( const String& rProperty,
 
 /*  */
 
-SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, USHORT nMinFixLineSp,
+SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const String& rBaseURL, USHORT nMinFixLineSp,
                               USHORT *pWhichIds, USHORT nWhichIds ) :
     CSS1Parser(),
+    sBaseURL( rBaseURL ),
     pSheetItemSet(0), pItemSet(0),
     nMinFixLineSpace( nMinFixLineSp ),
     pSearchEntry( 0 ), bIgnoreFontFamily( FALSE ),
@@ -1716,7 +1720,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
 
         if( aURL.Len() )
         {
-            aBrushItem.SetGraphicLink( INetURLObject::RelToAbs( aURL ) );
+            aBrushItem.SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject( rParser.GetBaseURL()), aURL ) );
             aBrushItem.SetGraphicPos( eRepeat );
         }
 
