@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:51 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 07:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
+#include <com/sun/star/sdbc/XDriver.hpp>
 #endif
 
 //.........................................................................
@@ -573,9 +576,12 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
 
-    /** creates a new connection. The caller is responsible to dispose it
+    /** creates a new connection. The caller is responsible to dispose it !!!!
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createConnection();
+    /** return the corresponding driver for the selected URL
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
 
     // adds a new detail page and remove all the old ones
     void addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc);
@@ -667,6 +673,8 @@ private:
     DECL_LINK(OnRestoreDatasource, Window*);
     DECL_LINK(OnApplyChanges, PushButton*);
     DECL_LINK(OnAsyncApplyChanges, void*);
+
+    String getConnectionURL() const;
 };
 
 //.........................................................................
@@ -678,6 +686,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/05/29 13:11:51  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.17  2001/05/15 15:06:25  fs
  *  #86991# +prepareSwitchDatasource
  *
