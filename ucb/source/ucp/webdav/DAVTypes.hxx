@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVTypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ struct DAVCapabilities
     DAVCapabilities() : class1( false ), class2( false ), executable( false ) {}
 };
 
-enum Depth { ZERO = 0, ONE = 1, INFINITY = -1 };
+enum Depth { DAVZERO = 0, DAVONE = 1, DAVINFINITY = -1 };
 
 enum ProppatchOperation { PROPSET = 0, PROPREMOVE = 1 };
 
