@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-12 16:49:01 $
+ *  last change: $Author: obo $ $Date: 2002-06-25 12:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <osl/process.h>
 
 #include <set>
+#include <stdio.h>
 
 // NETBSD has no RTLD_GLOBAL
 #ifndef RTLD_GLOBAL
