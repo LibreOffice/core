@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 18:21:45 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,6 +952,7 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
                 if ( pDoc->IsImportingXML() )
                 {   // temporary formula string as string tokens
                     pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText );
+                    pDoc->IncXMLImportedFormulaCount( rText.Len() );
                 }
                 else
                 {
@@ -2828,6 +2829,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString );
             pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pCode);
             delete pCode;
+            pDoc->IncXMLImportedFormulaCount( rString.Len() );
         }
         else
             pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,rString);
