@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -102,28 +106,36 @@ class XMLRedlineImportHelper
     const ::rtl::OUString sInsertion;
     const ::rtl::OUString sDeletion;
     const ::rtl::OUString sFormatChange;
+    const ::rtl::OUString sShowChanges;
+    const ::rtl::OUString sRecordChanges;
+    const ::rtl::OUString sRedlineProtectionKey;
 
     RedlineMapType aRedlineMap;
-
-    /// redline mode before the import (to be restored after import)
-    sal_uInt16 eSavedRedlineMode;
-    sal_Bool bSavedRedlineMode;     /// validity-flag for eSavedRedlineMode
 
     /// if sal_True, no redlines should be inserted into document
     /// (This typically happen when a document is loaded in 'insert'-mode.)
     sal_Bool bIgnoreRedlines;
 
-    /// save the document (for destructor)
-    SwDoc* pSaveDoc;
+    /// save information for saving and reconstruction of the redline mode
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> xModelPropertySet;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> xImportInfoPropertySet;
+    sal_Bool bShowChanges;
+    sal_Bool bRecordChanges;
+    ::com::sun::star::uno::Sequence<sal_Int8> aProtectionKey;
 
 public:
 
     XMLRedlineImportHelper(
         sal_Bool bIgnoreRedlines,       /// ignore redlines mode
-        /// model (for saving the redline mode)
+
+        // property sets of model + import info for saving + restoring the
+        // redline mode
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel> & rModel,
-        sal_Bool bPreserveRedlineMode);
+            ::com::sun::star::beans::XPropertySet> & rModel,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rImportInfoSet );
     virtual ~XMLRedlineImportHelper();
 
     /// create a redline object
@@ -169,6 +181,16 @@ public:
         /// XTextRange _inside_ a table/section
         ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextRange> & rRange);
+
+    /// set redline mode: show changes
+    void SetShowChanges( sal_Bool bShowChanges );
+
+    /// set redline mode: record changes
+    void SetRecordChanges( sal_Bool bRecordChanges );
+
+    /// set redline protection key
+    void SetProtectionKey(
+        const ::com::sun::star::uno::Sequence<sal_Int8> & rKey );
 
 private:
 

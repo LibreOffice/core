@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ public:
     SwXMLTextImportHelper(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::frame::XModel>& rModel,
+            const ::com::sun::star::uno::Reference <
+                ::com::sun::star::beans::XPropertySet>& rInfoSet,
             sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
             sal_Bool bBlockM, sal_Bool bOrganizerM,
             sal_Bool bPreserveRedlineMode );
@@ -153,6 +155,10 @@ public:
         sal_Bool bIsOutsideOfParagraph);
     virtual void RedlineAdjustStartNodeCursor(
         sal_Bool bStart);
+    virtual void SetShowChanges( sal_Bool bShowChanges );
+    virtual void SetRecordChanges( sal_Bool bRecordChanges );
+    virtual void SetChangesProtectionKey(
+        const ::com::sun::star::uno::Sequence<sal_Int8> & rKey );
 };
 
 #endif  //  _XMLTEXTI_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
+
 
 
 using namespace ::com::sun::star;
@@ -127,6 +131,7 @@ using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XWordCursor;
 using ::com::sun::star::lang::XUnoTunnel;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XPropertySetInfo;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime
 // using ::com::sun::star::util::DateTime;
 
@@ -324,22 +329,47 @@ RedlineInfo::~RedlineInfo()
 
 XMLRedlineImportHelper::XMLRedlineImportHelper(
     sal_Bool bNoRedlinesPlease,
-    const Reference<XModel> & rModel,
-    sal_Bool bPreserveRedlineMode) :
+    const Reference<XPropertySet> & rModel,
+    const Reference<XPropertySet> & rImportInfo ) :
         sEmpty(),
         sInsertion(RTL_CONSTASCII_USTRINGPARAM(sXML_insertion)),
         sDeletion(RTL_CONSTASCII_USTRINGPARAM(sXML_deletion)),
         sFormatChange(RTL_CONSTASCII_USTRINGPARAM(sXML_format_change)),
+        sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges")),
+        sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges")),
+        sRedlineProtectionKey(RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey")),
         aRedlineMap(),
         bIgnoreRedlines(bNoRedlinesPlease),
-        bSavedRedlineMode(sal_False),
-        eSavedRedlineMode(REDLINE_NONE),
-        pSaveDoc(NULL)
+        xModelPropertySet(rModel),
+        xImportInfoPropertySet(rImportInfo)
 {
-    if (bPreserveRedlineMode)
+    // check to see if redline mode is handled outside of component
+    sal_Bool bHandleShowChanges = sal_True;
+    sal_Bool bHandleRecordChanges = sal_True;
+    if ( xImportInfoPropertySet.is() )
     {
-        Reference<XPropertySet> xPropertySet(rModel, UNO_QUERY);
-        SaveRedlineMode(xPropertySet);
+        Reference<XPropertySetInfo> xInfo =
+            xImportInfoPropertySet->getPropertySetInfo();
+
+        bHandleShowChanges = ! xInfo->hasPropertyByName( sShowChanges );
+        bHandleRecordChanges = ! xInfo->hasPropertyByName( sRecordChanges );
+    }
+
+    // get redline mode
+    bShowChanges = *(sal_Bool*)
+        ( bHandleShowChanges ? xModelPropertySet : xImportInfoPropertySet )
+        ->getPropertyValue( sShowChanges ).getValue();
+    bRecordChanges = *(sal_Bool*)
+        ( bHandleRecordChanges ? xModelPropertySet : xImportInfoPropertySet )
+        ->getPropertyValue( sRecordChanges ).getValue();
+
+    // set redline mode to "don't record changes"
+    if( bHandleRecordChanges )
+    {
+        Any aAny;
+        sal_Bool bTmp = sal_False;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xModelPropertySet->setPropertyValue( sRecordChanges, aAny );
     }
 }
 
@@ -356,16 +386,41 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
     }
     aRedlineMap.clear();
 
-    // set redline mode; first set bogus redline mode with
-    // SetRedlineMode_intern(), so that the subsequent
-    // SetRedlineMode() is forced to update the data structures
-    if ( (NULL != pSaveDoc) && bSavedRedlineMode )
+    // set redline mode, either to info property set, or directly to
+    // the document
+    sal_Bool bHandleShowChanges = sal_True;
+    sal_Bool bHandleRecordChanges = sal_True;
+    sal_Bool bHandleProtectionKey = sal_True;
+    if ( xImportInfoPropertySet.is() )
     {
-        // set previous redline mode
-        sal_uInt16 nRedlineMode = eSavedRedlineMode;
-        pSaveDoc->SetRedlineMode_intern(~nRedlineMode);
-        pSaveDoc->SetRedlineMode(nRedlineMode);
+        Reference<XPropertySetInfo> xInfo =
+            xImportInfoPropertySet->getPropertySetInfo();
+
+        bHandleShowChanges = ! xInfo->hasPropertyByName( sShowChanges );
+        bHandleRecordChanges = ! xInfo->hasPropertyByName( sRecordChanges );
+        bHandleProtectionKey = ! xInfo->hasPropertyByName( sRedlineProtectionKey );
     }
+
+    // set redline mode & key
+    Any aAny;
+
+    aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
+    if ( bHandleShowChanges )
+        xModelPropertySet->setPropertyValue( sShowChanges, aAny );
+    else
+        xImportInfoPropertySet->setPropertyValue( sShowChanges, aAny );
+
+    aAny.setValue( &bRecordChanges, ::getBooleanCppuType() );
+    if ( bHandleRecordChanges )
+        xModelPropertySet->setPropertyValue( sRecordChanges, aAny );
+    else
+        xImportInfoPropertySet->setPropertyValue( sRecordChanges, aAny );
+
+    aAny <<= aProtectionKey;
+    if ( bHandleProtectionKey )
+        xModelPropertySet->setPropertyValue( sRedlineProtectionKey, aAny );
+    else
+        xImportInfoPropertySet->setPropertyValue( sRedlineProtectionKey, aAny);
 }
 
 void XMLRedlineImportHelper::Add(
@@ -648,9 +703,6 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         pDoc->SetRedlineMode_intern(REDLINE_ON);
         pDoc->AppendRedline(pRedline);
         pDoc->SetRedlineMode_intern(REDLINE_NONE);
-
-        // also: save document
-        pSaveDoc = pDoc;
     }
 }
 
@@ -694,39 +746,18 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
 }
 
 
-void XMLRedlineImportHelper::SaveRedlineMode(
-    const Reference<XPropertySet> & rPropertySet)
+void XMLRedlineImportHelper::SetShowChanges( sal_Bool bShow )
 {
-    DBG_ASSERT(rPropertySet.is(), "Expected property set");
-    if (rPropertySet.is())
-    {
-        OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
-        OUString sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges"));
-
-        // save show redline mode
-        Any aAny = rPropertySet->getPropertyValue(sShowChanges);
-        eSavedRedlineMode &= ~ (REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE);
-        eSavedRedlineMode |= REDLINE_SHOW_INSERT;
-        if (*(sal_Bool*)aAny.getValue())
-            eSavedRedlineMode |= REDLINE_SHOW_DELETE;
-
-        // save record redlines
-        aAny = rPropertySet->getPropertyValue(sRecordChanges);
-        eSavedRedlineMode &= ~ REDLINE_ON;
-        if (*(sal_Bool*)aAny.getValue())
-            eSavedRedlineMode |= REDLINE_ON;
-
-        bSavedRedlineMode = sal_True;
-
-        // and finally, disable record redlines property
-        sal_Bool bTmp = sal_False;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        rPropertySet->setPropertyValue(sRecordChanges, aAny);
-    }
+    bShowChanges = bShow;
 }
 
-void XMLRedlineImportHelper::DontRestoreRedlineMode()
+void XMLRedlineImportHelper::SetRecordChanges( sal_Bool bRecord )
 {
-    // just pretend we didn't save any info in the first place.
-    bSavedRedlineMode = sal_False;
+    bRecordChanges = bRecord;
+}
+
+void XMLRedlineImportHelper::SetProtectionKey(
+    const Sequence<sal_Int8> & rKey )
+{
+    aProtectionKey = rKey;
 }

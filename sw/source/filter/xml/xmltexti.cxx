@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-04 10:36:31 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,15 +166,17 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
+        const Reference<XPropertySet> & rInfoSet,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
         sal_Bool bBlockM, sal_Bool bOrganizerM,
         sal_Bool bPreserveRedlineMode ) :
     XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress, bBlockM,
                          bOrganizerM ),
-    pRedlineHelper(new XMLRedlineImportHelper(bInsertM || bBlockM, rModel,
-                                              bPreserveRedlineMode))
-//  pRedlineHelper(NULL)
+    pRedlineHelper( NULL )
 {
+    Reference<XPropertySet> xDocPropSet( rModel, UNO_QUERY );
+    pRedlineHelper = new XMLRedlineImportHelper(
+        bInsertM || bBlockM, xDocPropSet, rInfoSet );
 }
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
@@ -537,7 +539,8 @@ void SwXMLTextImportHelper::endPlugin()
 
 XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
-    return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
+    return new SwXMLTextImportHelper( GetModel(), getImportInfo(),
+                                      IsInsertMode(),
                                       IsStylesOnlyMode(), bShowProgress,
                                       IsBlockMode(), IsOrganizerMode(),
                                       bPreserveRedlineMode );
@@ -597,3 +600,25 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
     }
     // else: ignore redline (wasn't added before, or no open redline ID
 }
+
+void SwXMLTextImportHelper::SetShowChanges( sal_Bool bShowChanges )
+{
+    if ( NULL != pRedlineHelper )
+        pRedlineHelper->SetShowChanges( bShowChanges );
+}
+
+void SwXMLTextImportHelper::SetRecordChanges( sal_Bool bRecordChanges )
+{
+    if ( NULL != pRedlineHelper )
+        pRedlineHelper->SetRecordChanges( bRecordChanges );
+}
+
+void SwXMLTextImportHelper::SetChangesProtectionKey(
+    const Sequence<sal_Int8> & rKey )
+{
+    if ( NULL != pRedlineHelper )
+        pRedlineHelper->SetProtectionKey( rKey );
+}
+
+
+

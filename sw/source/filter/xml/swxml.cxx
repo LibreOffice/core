@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,6 +421,19 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         { "NumberStyles", sizeof("NumberStyles")-1, 0,
               &::getCppuType( (Reference<container::XNameContainer> *) 0),
               beans::PropertyAttribute::MAYBEVOID, 0},
+        { "RecordChanges", sizeof("RecordChanges")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "ShowChanges", sizeof("ShowChanges")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "RedlineProtectionKey", sizeof("RedlineProtectionKey")-1, 0,
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+              new uno::Type(::getCppuType((Sequence<sal_Int8>*)0)),
+#else
+              &::getCppuType((Sequence<sal_Int8>*)0),
+#endif
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -464,25 +477,15 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
     xInfoSet->setPropertyValue(sProgressRange, aProgRange);
 
-    // filter argument to prevent multiple switching of redline mode
-    OUString sPreserveRedlineMode(
-        RTL_CONSTASCII_USTRINGPARAM("PreserveRedlineMode"));
-    beans::PropertyValue aValue;
-    aValue.Name = sPreserveRedlineMode;
-    sal_Bool bTmp = sal_False;
-    aValue.Value.setValue( &bTmp, ::getBooleanCppuType() );
-
     // prepare filter arguments
     Sequence<Any> aFilterArgs( 5 );
     Any *pArgs = aFilterArgs.getArray();
     *pArgs++ <<= xGraphicResolver;
     *pArgs++ <<= xObjectResolver;
-    *pArgs++ <<= aValue;            // redline mode, as prepared above
     *pArgs++ <<= xStatusIndicator;
     *pArgs++ <<= xInfoSet;
     Sequence<Any> aEmptyArgs( 3 );
     pArgs = aEmptyArgs.getArray();
-    *pArgs++ <<= aValue;            // redline mode, as prepared above
     *pArgs++ <<= xStatusIndicator;
     *pArgs++ <<= xInfoSet;
 
@@ -509,6 +512,25 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     rDoc.AddLink(); // prevent deletion
     sal_uInt32 nRet = 0;
 
+    // save redline mode into import info property set
+    Any aAny;
+    sal_Bool bTmp;
+    OUString sShowChanges( RTL_CONSTASCII_USTRINGPARAM("ShowChanges") );
+    bTmp = IsShowChanges( rDoc.GetRedlineMode() );
+    aAny.setValue( &bTmp, ::getBooleanCppuType() );
+    xInfoSet->setPropertyValue( sShowChanges, aAny );
+    OUString sRecordChanges( RTL_CONSTASCII_USTRINGPARAM("RecordChanges") );
+    bTmp = IsRedlineOn(rDoc.GetRedlineMode());
+    aAny.setValue( &bTmp, ::getBooleanCppuType() );
+    xInfoSet->setPropertyValue( sRecordChanges, aAny );
+    OUString sRedlineProtectionKey( RTL_CONSTASCII_USTRINGPARAM("RedlineProtectionKey") );
+    aAny <<= rDoc.GetRedlinePasswd();
+    xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
+
+    // force redline mode to "none"
+    rDoc.SetRedlineMode_intern( REDLINE_NONE );
+
+
     if ( NULL != pStorage )
     {
         // read storage streams
@@ -527,11 +549,10 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
 
-        // save redline mode (*after* it was set in the settings)
-        // (Also pass info to components to not bother with save/restore of
-        //  redline mode.)
-        sal_uInt16 nRedlineMode = rDoc.GetRedlineMode();
-        rDoc.SetRedlineMode_intern(REDLINE_NONE);
+        // update redline view mode (was set in view settings)
+        bTmp = IsShowChanges(rDoc.GetRedlineMode());
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        xInfoSet->setPropertyValue( sShowChanges, aAny );
 
         ReadThroughComponent(
             pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
@@ -547,13 +568,6 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                sal_False );
-
-        // and restore redline mode
-        // (First set bogus mode to make sure the mode in SetRedlineMode()
-        //  is different from it's previous mode.)
-        rDoc.SetRedlineMode_intern( ~nRedlineMode );
-        rDoc.SetRedlineMode( nRedlineMode );
-
     }
     else
     {
@@ -576,6 +590,30 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     }
 
     aOpt.ResetAllFmtsOnly();
+
+    // redline password
+    aAny = xInfoSet->getPropertyValue( sRedlineProtectionKey );
+    Sequence<sal_Int8> aKey;
+    aAny >>= aKey;
+    rDoc.SetRedlinePasswd( aKey );
+
+    // restore redline mode from import info property set
+    sal_Int16 nRedlineMode = REDLINE_SHOW_INSERT;
+    aAny = xInfoSet->getPropertyValue( sShowChanges );
+    if ( *(sal_Bool*)aAny.getValue() )
+        nRedlineMode |= REDLINE_SHOW_DELETE;
+    aAny = xInfoSet->getPropertyValue( sRecordChanges );
+    if ( *(sal_Bool*)aAny.getValue() || (aKey.getLength() > 0) )
+        nRedlineMode |= REDLINE_ON;
+    else
+        nRedlineMode |= REDLINE_NONE;
+
+    // ... restore redline mode
+    // (First set bogus mode to make sure the mode in SetRedlineMode()
+    //  is different from it's previous mode.)
+    rDoc.SetRedlineMode_intern( ~nRedlineMode );
+    rDoc.SetRedlineMode( nRedlineMode );
+
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );

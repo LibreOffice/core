@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-05 20:00:28 $
+ *  last change: $Author: dvo $ $Date: 2001-05-02 16:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,9 +761,9 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp;
-    sal_Bool bRecordRedlineChanges = sal_False,bShowRedlineChanges = sal_False,
+    sal_Bool bShowRedlineChanges = sal_False,
              bShowFooter = sal_False, bShowHeader = sal_False;
-    sal_Bool bChangeShowRedline = sal_False, bChangeRecordRedline = sal_False,
+    sal_Bool bChangeShowRedline = sal_False,
              bChangeFooter = sal_False, bChangeHeader = sal_False;
 
     for (sal_Int32 i = 0; i < nCount ; i++)
@@ -793,11 +793,6 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
             bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
             bChangeShowRedline = sal_True;
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "RecordRedlineChanges" ) ) )
-        {
-            bRecordRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
-            bChangeRecordRedline = sal_True;
-        }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
         {
             bShowHeader = *(sal_Bool *)(pValue->Value.getValue());
@@ -818,23 +813,22 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     if (bChangeFooter)
         pDoc->SetFootInBrowse ( bShowFooter );
 
-    sal_uInt16 eOld = pDoc->GetRedlineMode();
     if (bChangeShowRedline)
     {
+/*      sal_uInt16 eOld = pDoc->GetRedlineMode();
+        eOld &= ~(REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE);
+
+        // set REDLINE_SHOW_DELETE as appropriate,
+        // and always set REDLINE_SHOW_INSERT
+        eOld |= REDLINE_SHOW_INSERT;
         if ( bShowRedlineChanges )
-            eOld |= (REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE);
-        else
-            eOld &= ~(REDLINE_SHOW_INSERT|REDLINE_SHOW_INSERT);
-    }
-    if (bChangeRecordRedline)
-    {
-        if ( bRecordRedlineChanges )
-            eOld |= (REDLINE_ON);
-        else
-            eOld &= ~(REDLINE_ON);
-    }
-    if (bChangeShowRedline || bChangeRecordRedline )
+            eOld |= REDLINE_SHOW_DELETE;
+
         pDoc->SetRedlineMode( eOld );
+*/
+        GetTextImport()->SetShowChanges( bShowRedlineChanges );
+
+    }
 }
 
 void SwXMLImport::SetConfigurationSettings(const uno::Sequence < PropertyValue > & aConfigProps)
