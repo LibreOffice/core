@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-04-22 14:07:55 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 01:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Grid";
         Text[ arabic ] = "Grid";
         Text[ catalan ] = "Grid";
+        Text[ thai ] = "Grid";
     };
     RadioButton     RB_NOGRID
     {
@@ -118,6 +119,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "No grid";
         Text[ arabic ] = "No grid";
         Text[ catalan ] = "No grid";
+        Text[ thai ] = "No grid";
     };
     RadioButton     RB_LINESGRID
     {
@@ -144,6 +146,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Grid (lines only)";
         Text[ arabic ] = "Grid (lines only)";
         Text[ catalan ] = "Grid (lines only)";
+        Text[ thai ] = "Grid (lines only)";
     };
     RadioButton     RB_CHARSGRID
     {
@@ -170,6 +173,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Grid (lines and characters)";
         Text[ arabic ] = "Grid (lines and characters)";
         Text[ catalan ] = "Grid (lines and characters)";
+        Text[ thai ] = "Grid (lines and characters)";
     };
     Window          WN_EXAMPLE
     {
@@ -201,6 +205,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Grid layout";
         Text[ arabic ] = "Grid layout";
         Text[ catalan ] = "Grid layout";
+        Text[ thai ] = "Grid layout";
     };
     FixedText       FT_LINESPERPAGE
     {
@@ -227,6 +232,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Lines per page";
         Text[ arabic ] = "Lines per page";
         Text[ catalan ] = "Lines per page";
+        Text[ thai ] = "Lines per page";
     };
     NumericField    NF_LINESPERPAGE
     {
@@ -249,7 +255,7 @@ TabPage TP_TEXTGRID_PAGE
         Pos = MAP_APPFONT ( 133 , 69 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Basistextgröße" ;
-        Text [ english_us ] = "Base text size" ;
+        Text [ english_us ] = "Max. base text size" ;
         Text[ portuguese ] = "Base text size";
         Text[ russian ] = "Base text size";
         Text[ greek ] = "Base text size";
@@ -269,6 +275,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Base text size";
         Text[ arabic ] = "Base text size";
         Text[ catalan ] = "Base text size";
+        Text[ thai ] = "Base text size";
     };
     MetricField     MF_TEXTSIZE
     {
@@ -312,6 +319,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Characters per line";
         Text[ arabic ] = "Characters per line";
         Text[ catalan ] = "Characters per line";
+        Text[ thai ] = "Characters per line";
     };
     NumericField    NF_CHARSPERLINE
     {
@@ -354,6 +362,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Ruby text size";
         Text[ arabic ] = "Ruby text size";
         Text[ catalan ] = "Ruby text size";
+        Text[ thai ] = "Ruby text size";
     };
     MetricField     MF_RUBYSIZE
     {
@@ -397,6 +406,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Ruby text below/left from base text";
         Text[ arabic ] = "Ruby text below/left from base text";
         Text[ catalan ] = "Ruby text below/left from base text";
+        Text[ thai ] = "Ruby text below/left from base text";
     };
     FixedLine       FL_DISPLAY
     {
@@ -423,6 +433,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Grid display";
         Text[ arabic ] = "Grid display";
         Text[ catalan ] = "Grid display";
+        Text[ thai ] = "Grid display";
     };
     CheckBox        CB_DISPLAY
     {
@@ -449,6 +460,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Display grid";
         Text[ arabic ] = "Display grid";
         Text[ catalan ] = "Display grid";
+        Text[ thai ] = "Display grid";
     };
     CheckBox        CB_PRINT
     {
@@ -475,6 +487,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Print grid";
         Text[ arabic ] = "Print grid";
         Text[ catalan ] = "Print grid";
+        Text[ thai ] = "Print grid";
     };
     FixedText       FT_COLOR
     {
@@ -501,6 +514,7 @@ TabPage TP_TEXTGRID_PAGE
         Text[ turkish ] = "Grid color";
         Text[ arabic ] = "Grid color";
         Text[ catalan ] = "Grid color";
+        Text[ thai ] = "Grid color";
     };
     ListBox         LB_COLOR
     {
