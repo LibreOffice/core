@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.13 $
+#  $Revision: 1.14 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:52:16 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:40:26 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -131,7 +131,7 @@ CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_F
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/DocumentLoader$(EXE_EXT)
-	cd $(OUT_BIN) && $(basename $@) "../../examples/cpp/DocumentLoader/test.sxw"
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) "../../examples/cpp/DocumentLoader/test.sxw"
 
 .PHONY: clean
 clean :
