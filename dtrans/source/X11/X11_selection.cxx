@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 15:05:37 $
+ *  last change: $Author: pl $ $Date: 2001-07-31 10:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1963,18 +1963,13 @@ void SelectionManager::accept( sal_Int8 dragOperation, Window aDropWindow, Time 
     if( aDropWindow == m_aCurrentDropWindow )
     {
         Atom nAction = None;
-        switch( dragOperation & (DNDConstants::ACTION_MOVE | DNDConstants::ACTION_COPY | DNDConstants::ACTION_LINK) )
-        {
-            case DNDConstants::ACTION_LINK:
-                nAction = m_nXdndActionLink;
-                break;
-            case DNDConstants::ACTION_MOVE:
-                nAction = m_nXdndActionMove;
-                break;
-            case DNDConstants::ACTION_COPY:
-                nAction = m_nXdndActionCopy;
-                break;
-        }
+        dragOperation &= (DNDConstants::ACTION_MOVE | DNDConstants::ACTION_COPY | DNDConstants::ACTION_LINK);
+        if( dragOperation & DNDConstants::ACTION_MOVE )
+            nAction = m_nXdndActionMove;
+        else if( dragOperation & DNDConstants::ACTION_COPY )
+            nAction = m_nXdndActionCopy;
+        else if( dragOperation & DNDConstants::ACTION_LINK )
+            nAction = m_nXdndActionLink;
         sendDragStatus( nAction );
     }
 }
