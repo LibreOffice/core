@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-14 15:39:46 $
+#   last change: $Author: hjs $ $Date: 2002-01-24 12:41:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,13 @@ dmake_test_version:
 
 # --- common tool makros --------------------------------------
 .INCLUDE : unitools.mk
+
+#have SCRIPTEXT already defined in product.mk but available for all
+.IF "$(GUI)"=="WNT"
+SCRIPTEXT=.btm
+.ELSE           # "$(GUI)"=="WNT"
+SCRIPTEXT=
+.ENDIF          # "$(GUI)"=="WNT"
 
 .IF "$(PRODUCTNAME)"!=""
 .INCLUDE : product.mk
