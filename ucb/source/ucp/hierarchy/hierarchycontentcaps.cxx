@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontentcaps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:08:50 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,11 +113,9 @@
 #include "hierarchycontent.hxx"
 #endif
 
-using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::ucb;
+using namespace com::sun;
+using namespace com::sun::star;
 using namespace hierarchy_ucp;
-using namespace rtl;
 
 //=========================================================================
 //
@@ -133,8 +131,8 @@ using namespace rtl;
 //=========================================================================
 
 // virtual
-Sequence< Property > HierarchyContent::getProperties(
-                            const Reference< XCommandEnvironment > & xEnv )
+uno::Sequence< beans::Property > HierarchyContent::getProperties(
+            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -146,49 +144,52 @@ Sequence< Property > HierarchyContent::getProperties(
         //
         //=================================================================
 
-        static Property aLinkPropertyInfoTable[] =
+        static beans::Property aLinkPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
                 getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
                 getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND
+                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
             ),
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TargetURL" ) ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND
+                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
             )
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
         };
-        return Sequence< Property >( aLinkPropertyInfoTable, 5 );
+        return uno::Sequence< beans::Property >( aLinkPropertyInfoTable, 5 );
     }
     else if ( m_eKind == FOLDER )
     {
@@ -198,34 +199,37 @@ Sequence< Property > HierarchyContent::getProperties(
         //
         //=================================================================
 
-        static Property aFolderPropertyInfoTable[] =
+        static beans::Property aFolderPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
                 getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
                 getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND
+                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
             )
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
@@ -234,7 +238,7 @@ Sequence< Property > HierarchyContent::getProperties(
             // New properties
             ///////////////////////////////////////////////////////////////
         };
-        return Sequence< Property >( aFolderPropertyInfoTable, 4 );
+        return uno::Sequence< beans::Property >( aFolderPropertyInfoTable, 4 );
     }
     else
     {
@@ -244,34 +248,38 @@ Sequence< Property > HierarchyContent::getProperties(
         //
         //=================================================================
 
-        static Property aRootFolderPropertyInfoTable[] =
+        static beans::Property aRootFolderPropertyInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required properties
             ///////////////////////////////////////////////////////////////
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
                 -1,
                 getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
                 -1,
                 getCppuBooleanType(),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
                 -1,
-                getCppuType( static_cast< const OUString * >( 0 ) ),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                    | beans::PropertyAttribute::READONLY
             )
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
@@ -280,14 +288,15 @@ Sequence< Property > HierarchyContent::getProperties(
             // New properties
             ///////////////////////////////////////////////////////////////
         };
-        return Sequence< Property >( aRootFolderPropertyInfoTable, 4 );
+        return uno::Sequence<
+                beans::Property >( aRootFolderPropertyInfoTable, 4 );
     }
 }
 
 //=========================================================================
 // virtual
-Sequence< CommandInfo > HierarchyContent::getCommands(
-                            const Reference< XCommandEnvironment > & xEnv )
+uno::Sequence< star::ucb::CommandInfo > HierarchyContent::getCommands(
+            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -299,41 +308,47 @@ Sequence< CommandInfo > HierarchyContent::getCommands(
         //
         //=================================================================
 
-        static CommandInfo aLinkCommandInfoTable[] =
+        static star::ucb::CommandInfo aLinkCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
                 getCppuVoidType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
                 getCppuVoidType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+                getCppuType(
+                    static_cast< uno::Sequence< beans::Property > * >( 0 ) )
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+                getCppuType(
+                    static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                 -1,
                 getCppuBooleanType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                 -1,
                 getCppuVoidType()
             )
@@ -341,7 +356,8 @@ Sequence< CommandInfo > HierarchyContent::getCommands(
             // New commands
             ///////////////////////////////////////////////////////////////
         };
-        return Sequence< CommandInfo >( aLinkCommandInfoTable, 6 );
+        return uno::Sequence<
+                star::ucb::CommandInfo >( aLinkCommandInfoTable, 6 );
     }
     else if ( m_eKind == FOLDER )
     {
@@ -351,59 +367,67 @@ Sequence< CommandInfo > HierarchyContent::getCommands(
         //
         //=================================================================
 
-        static CommandInfo aFolderCommandInfoTable[] =
+        static star::ucb::CommandInfo aFolderCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
                 getCppuVoidType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
                 getCppuVoidType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+                getCppuType(
+                    static_cast< uno::Sequence< beans::Property > * >( 0 ) )
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+                getCppuType(
+                    static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
                 -1,
                 getCppuBooleanType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
                 -1,
                 getCppuVoidType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                 -1,
-                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+                getCppuType(
+                    static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                 -1,
-                getCppuType( static_cast< TransferInfo * >( 0 ) )
+                getCppuType( static_cast< star::ucb::TransferInfo * >( 0 ) )
             )
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////
         };
-        return Sequence< CommandInfo >( aFolderCommandInfoTable, 8 );
+        return uno::Sequence<
+                star::ucb::CommandInfo >( aFolderCommandInfoTable, 8 );
     }
     else
     {
@@ -413,48 +437,56 @@ Sequence< CommandInfo > HierarchyContent::getCommands(
         //
         //=================================================================
 
-        static CommandInfo aRootFolderCommandInfoTable[] =
+        static star::ucb::CommandInfo aRootFolderCommandInfoTable[] =
         {
             ///////////////////////////////////////////////////////////////
             // Required commands
             ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
                 -1,
                 getCppuVoidType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
                 -1,
                 getCppuVoidType()
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
                 -1,
-                getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+                getCppuType(
+                    static_cast< uno::Sequence< beans::Property > * >( 0 ) )
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
                 -1,
-                getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+                getCppuType(
+                    static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
             ),
             ///////////////////////////////////////////////////////////////
             // Optional standard commands
             ///////////////////////////////////////////////////////////////
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
                 -1,
-                getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+                getCppuType(
+                    static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
             ),
-            CommandInfo(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
+            star::ucb::CommandInfo(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                 -1,
-                getCppuType( static_cast< TransferInfo * >( 0 ) )
+                getCppuType( static_cast< star::ucb::TransferInfo * >( 0 ) )
             )
             ///////////////////////////////////////////////////////////////
             // New commands
         };
-        return Sequence< CommandInfo >( aRootFolderCommandInfoTable, 6 );
+        return uno::Sequence<
+                star::ucb::CommandInfo >( aRootFolderCommandInfoTable, 6 );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-13 14:14:01 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,8 @@
 #include "hierarchycontent.hxx"
 #endif
 
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::sdbc;
-using namespace rtl;
-using namespace ucb;
-
+using namespace com::sun;
+using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 namespace hierarchy_ucp
@@ -101,11 +95,11 @@ namespace hierarchy_ucp
 
 struct ResultListEntry
 {
-    OUString                        aId;
-    Reference< XContentIdentifier > xId;
-    Reference< XContent >           xContent;
-    Reference< XRow >               xRow;
-    HierarchyEntryData              aData;
+    rtl::OUString                                   aId;
+    uno::Reference< star::ucb::XContentIdentifier > xId;
+    uno::Reference< star::ucb::XContent >           xContent;
+    uno::Reference< sdbc::XRow >                    xRow;
+    HierarchyEntryData                              aData;
 
     ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
 };
@@ -126,18 +120,19 @@ typedef std::vector< ResultListEntry* > ResultList;
 
 struct DataSupplier_Impl
 {
-    osl::Mutex                        m_aMutex;
-    ResultList                        m_aResults;
-    vos::ORef< HierarchyContent >     m_xContent;
-    Reference< XMultiServiceFactory > m_xSMgr;
-    HierarchyEntry                    m_aFolder;
-    HierarchyEntry::iterator          m_aIterator;
-      sal_Int32                       m_nOpenMode;
-      sal_Bool                        m_bCountFinal;
+    osl::Mutex                                      m_aMutex;
+    ResultList                                      m_aResults;
+    rtl::Reference< HierarchyContent >              m_xContent;
+    uno::Reference< lang::XMultiServiceFactory >    m_xSMgr;
+    HierarchyEntry                                  m_aFolder;
+    HierarchyEntry::iterator                        m_aIterator;
+    sal_Int32                                       m_nOpenMode;
+    sal_Bool                                        m_bCountFinal;
 
-    DataSupplier_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
-                       const vos::ORef< HierarchyContent >& rContent,
-                       sal_Int32 nOpenMode )
+    DataSupplier_Impl(
+        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+        const rtl::Reference< HierarchyContent >& rContent,
+        sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
       m_aFolder( rxSMgr,
                  static_cast< HierarchyContentProvider * >(
@@ -171,9 +166,9 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 
 HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
-                            const Reference< XMultiServiceFactory >& rxSMgr,
-                            const vos::ORef< HierarchyContent >& rContent,
-                            sal_Int32 nOpenMode )
+                const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+                const rtl::Reference< HierarchyContent >& rContent,
+                sal_Int32 nOpenMode )
 : m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
 {
 }
@@ -187,14 +182,14 @@ HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 
 //=========================================================================
 // virtual
-OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
+rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
                                                         sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
+        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( aId.getLength() )
         {
             // Already cached.
@@ -204,30 +199,30 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
 
     if ( getResult( nIndex ) )
     {
-        OUString aId
+        rtl::OUString aId
             = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += OUString::createFromAscii( "/" );
+            aId += rtl::OUString::createFromAscii( "/" );
 
         aId += m_pImpl->m_aResults[ nIndex ]->aData.aName;
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
     }
-    return OUString();
+    return rtl::OUString();
 }
 
 //=========================================================================
 // virtual
-Reference< XContentIdentifier >
+uno::Reference< star::ucb::XContentIdentifier >
 HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        Reference< XContentIdentifier > xId
+        uno::Reference< star::ucb::XContentIdentifier > xId
                                 = m_pImpl->m_aResults[ nIndex ]->xId;
         if ( xId.is() )
         {
@@ -236,26 +231,27 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    OUString aId = queryContentIdentifierString( nIndex );
+    rtl::OUString aId = queryContentIdentifierString( nIndex );
     if ( aId.getLength() )
     {
-        Reference< XContentIdentifier > xId = new ContentIdentifier( aId );
+        uno::Reference< star::ucb::XContentIdentifier > xId
+            = new ::ucb::ContentIdentifier( aId );
         m_pImpl->m_aResults[ nIndex ]->xId = xId;
         return xId;
     }
-    return Reference< XContentIdentifier >();
+    return uno::Reference< star::ucb::XContentIdentifier >();
 }
 
 //=========================================================================
 // virtual
-Reference< XContent > HierarchyResultSetDataSupplier::queryContent(
-                                                        sal_uInt32 nIndex )
+uno::Reference< star::ucb::XContent >
+HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        Reference< XContent > xContent
+        uno::Reference< star::ucb::XContent > xContent
                                 = m_pImpl->m_aResults[ nIndex ]->xContent;
         if ( xContent.is() )
         {
@@ -264,22 +260,23 @@ Reference< XContent > HierarchyResultSetDataSupplier::queryContent(
         }
     }
 
-    Reference< XContentIdentifier > xId = queryContentIdentifier( nIndex );
+    uno::Reference< star::ucb::XContentIdentifier > xId
+        = queryContentIdentifier( nIndex );
     if ( xId.is() )
     {
         try
         {
-            Reference< XContent > xContent
+            uno::Reference< star::ucb::XContent > xContent
                 = m_pImpl->m_xContent->getProvider()->queryContent( xId );
             m_pImpl->m_aResults[ nIndex ]->xContent = xContent;
             return xContent;
 
         }
-        catch ( IllegalIdentifierException& )
+        catch ( star::ucb::IllegalIdentifierException const & )
         {
         }
     }
-    return Reference< XContent >();
+    return uno::Reference< star::ucb::XContent >();
 }
 
 //=========================================================================
@@ -325,8 +322,8 @@ sal_Bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     if ( !bFound )
         m_pImpl->m_bCountFinal = sal_True;
 
-    vos::ORef< ResultSet > xResultSet = getResultSet();
-    if ( xResultSet.isValid() )
+    rtl::Reference< ::ucb::ResultSet > xResultSet = getResultSet().getBodyPtr();
+    if ( xResultSet.is() )
     {
         // Callbacks follow!
         aGuard.clear();
@@ -362,8 +359,8 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
 
     m_pImpl->m_bCountFinal = sal_True;
 
-    vos::ORef< ResultSet > xResultSet = getResultSet();
-    if ( xResultSet.isValid() )
+    rtl::Reference< ::ucb::ResultSet > xResultSet = getResultSet().getBodyPtr();
+    if ( xResultSet.is() )
     {
         // Callbacks follow!
         aGuard.clear();
@@ -394,14 +391,14 @@ sal_Bool HierarchyResultSetDataSupplier::isCountFinal()
 
 //=========================================================================
 // virtual
-Reference< XRow > HierarchyResultSetDataSupplier::queryPropertyValues(
-                                                        sal_uInt32 nIndex  )
+uno::Reference< sdbc::XRow >
+HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        Reference< XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
+        uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
             // Already cached.
@@ -411,10 +408,10 @@ Reference< XRow > HierarchyResultSetDataSupplier::queryPropertyValues(
 
     if ( getResult( nIndex ) )
     {
-        static OUString aFolderType( OUString::createFromAscii(
-                                           HIERARCHY_FOLDER_CONTENT_TYPE ) );
-        static OUString aLinkType( OUString::createFromAscii(
-                                           HIERARCHY_LINK_CONTENT_TYPE ) );
+        static rtl::OUString aFolderType(
+            rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE ) );
+        static rtl::OUString aLinkType(
+            rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) );
 
         HierarchyContentProperties aData;
 
@@ -424,7 +421,7 @@ Reference< XRow > HierarchyResultSetDataSupplier::queryPropertyValues(
         aData.bIsFolder    = !aData.bIsDocument;
         aData.aContentType = aData.bIsFolder ? aFolderType : aLinkType;
 
-        Reference< XRow > xRow = HierarchyContent::getPropertyValues(
+        uno::Reference< sdbc::XRow > xRow = HierarchyContent::getPropertyValues(
                         m_pImpl->m_xSMgr,
                         getResultSet()->getProperties(),
                         aData,
@@ -435,7 +432,7 @@ Reference< XRow > HierarchyResultSetDataSupplier::queryPropertyValues(
         return xRow;
     }
 
-    return Reference< XRow >();
+    return uno::Reference< sdbc::XRow >();
 }
 
 //=========================================================================
@@ -445,7 +442,7 @@ void HierarchyResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
-        m_pImpl->m_aResults[ nIndex ]->xRow = Reference< XRow >();
+        m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
 //=========================================================================
@@ -457,7 +454,7 @@ void HierarchyResultSetDataSupplier::close()
 //=========================================================================
 // virtual
 void HierarchyResultSetDataSupplier::validate()
-    throw( ResultSetException )
+    throw( star::ucb::ResultSetException )
 {
 }
 
@@ -467,7 +464,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
 {
     switch ( m_pImpl->m_nOpenMode )
     {
-        case OpenMode::FOLDERS:
+        case star::ucb::OpenMode::FOLDERS:
             if ( rResult.aTargetURL.getLength() > 0 )
             {
                 // Entry is a link.
@@ -475,7 +472,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
             }
             break;
 
-        case OpenMode::DOCUMENTS:
+        case star::ucb::OpenMode::DOCUMENTS:
             if ( rResult.aTargetURL.getLength() == 0 )
             {
                 // Entry is a folder.
@@ -483,7 +480,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
             }
             break;
 
-        case OpenMode::ALL:
+        case star::ucb::OpenMode::ALL:
         default:
             break;
     }

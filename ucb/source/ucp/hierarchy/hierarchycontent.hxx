@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-04 10:37:14 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,12 @@
 
 #include <list>
 
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
 #include <com/sun/star/ucb/XContentCreator.hpp>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
 #endif
 
 #ifndef _UCBHELPER_CONTENTHELPER_HXX
@@ -195,7 +193,7 @@ private:
         ::com::sun::star::ucb::XContentIdentifier >
     makeNewIdentifier( const rtl::OUString& rTitle );
 
-    typedef vos::ORef< HierarchyContent > HierarchyContentRef;
+    typedef rtl::Reference< HierarchyContent > HierarchyContentRef;
     typedef std::list< HierarchyContentRef > HierarchyContentRefList;
     void queryChildren( HierarchyContentRefList& rChildren );
 
@@ -208,19 +206,25 @@ private:
                              ::com::sun::star::beans::Property >& rProperties );
     void setPropertyValues(
             const ::com::sun::star::uno::Sequence<
-                     ::com::sun::star::beans::PropertyValue >& rValues );
+                    ::com::sun::star::beans::PropertyValue >& rValues,
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
 
-    void insert( sal_Int32 nNameClashResolve )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+    void insert( sal_Int32 nNameClashResolve,
+                 const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
 
-    void destroy( sal_Bool bDeletePhysical )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+    void destroy( sal_Bool bDeletePhysical,
+                  const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
+        throw( ::com::sun::star::uno::Exception );
 
     void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo,
                    const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-                ::com::sun::star::ucb::InteractiveBadTransferURLException );
+        throw( ::com::sun::star::uno::Exception );
 
 public:
     // Create existing content. Fail, if not already exists.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-21 08:56:23 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 
 #include <vector>
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
@@ -95,9 +99,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
 #include <com/sun/star/util/XStringEscape.hpp>
-#endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
 #endif
 #ifndef _HIERARCHYPROVIDER_HXX
 #include "hierarchyprovider.hxx"
@@ -165,7 +166,7 @@ HierarchyEntry::HierarchyEntry(
     if ( nPos > HIERARCHY_URL_SCHEME_LENGTH )
         m_aName = rURL.copy( nPos + 1 );
     else
-        VOS_ENSURE( sal_False, "HierarchyEntry - Invalid URL!" );
+        OSL_ENSURE( sal_False, "HierarchyEntry - Invalid URL!" );
 }
 
 //=========================================================================
@@ -174,7 +175,7 @@ sal_Bool HierarchyEntry::hasData()
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     Reference< XHierarchicalNameAccess > xRootReadAccess = getRootReadAccess();
 
-    VOS_ENSURE( xRootReadAccess.is(), "HierarchyEntry::hasData - No root!" );
+    OSL_ENSURE( xRootReadAccess.is(), "HierarchyEntry::hasData - No root!" );
 
     if ( xRootReadAccess.is() )
         return xRootReadAccess->hasByHierarchicalName( m_aPath );
@@ -192,7 +193,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
         Reference< XHierarchicalNameAccess > xRootReadAccess
             = getRootReadAccess();
 
-        VOS_ENSURE( xRootReadAccess.is(),
+        OSL_ENSURE( xRootReadAccess.is(),
                     "HierarchyEntry::getData - No root!" );
 
         if ( xRootReadAccess.is() )
@@ -211,7 +212,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             if ( !( xRootReadAccess->getByHierarchicalName(
                             aTitlePath ) >>= rData.aTitle ) )
             {
-                VOS_ENSURE( sal_False,
+                OSL_ENSURE( sal_False,
                             "HierarchyEntry::getData - "
                             "Got no Title value!" );
                 return sal_False;
@@ -223,7 +224,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             if ( !( xRootReadAccess->getByHierarchicalName(
                             aTargetURLPath ) >>= rData.aTargetURL ) )
             {
-                VOS_ENSURE( sal_False,
+                OSL_ENSURE( sal_False,
                             "HierarchyEntry::getData - "
                             "Got no TargetURL value!" );
                 return sal_False;
@@ -241,7 +242,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
     {
         // getByHierarchicalName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::getData - caught NoSuchElementException!" );
     }
     return sal_False;
@@ -279,7 +280,7 @@ sal_Bool HierarchyEntry::setData(
                 // Skip "/Children" segment of the path, too.
                 nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
-                VOS_ENSURE( nPos != -1,
+                OSL_ENSURE( nPos != -1,
                             "HierarchyEntry::setData - Wrong path!" );
 
                 aParentPath += OUString::createFromAscii( "/" );
@@ -307,12 +308,12 @@ sal_Bool HierarchyEntry::setData(
                         aArguments ),
                     UNO_QUERY );
 
-            VOS_ENSURE( xBatch.is(),
+            OSL_ENSURE( xBatch.is(),
                         "HierarchyEntry::setData - No batch!" );
 
             Reference< XNameAccess > xParentNameAccess( xBatch, UNO_QUERY );
 
-            VOS_ENSURE( xParentNameAccess.is(),
+            OSL_ENSURE( xParentNameAccess.is(),
                         "HierarchyEntry::setData - No name access!" );
 
             if ( xBatch.is() && xParentNameAccess.is() )
@@ -356,7 +357,7 @@ sal_Bool HierarchyEntry::setData(
 
                     aMyKey >>= xNameReplace;
 
-                    VOS_ENSURE( xNameReplace.is(),
+                    OSL_ENSURE( xNameReplace.is(),
                                 "HierarchyEntry::setData - No name replace!" );
                 }
                 else
@@ -385,7 +386,7 @@ sal_Bool HierarchyEntry::setData(
                                             "Children" ) ) >>= xFac;
                     }
 
-                    VOS_ENSURE( xFac.is(),
+                    OSL_ENSURE( xFac.is(),
                                 "HierarchyEntry::setData - No factory!" );
 
                     if ( xFac.is() )
@@ -393,7 +394,7 @@ sal_Bool HierarchyEntry::setData(
                         xNameReplace = Reference< XNameReplace >(
                                         xFac->createInstance(), UNO_QUERY );
 
-                        VOS_ENSURE( xNameReplace.is(),
+                        OSL_ENSURE( xNameReplace.is(),
                                 "HierarchyEntry::setData - No name replace!" );
 
                         if ( xNameReplace.is() )
@@ -401,7 +402,7 @@ sal_Bool HierarchyEntry::setData(
                             xContainer = Reference< XNameContainer >(
                                                         xFac, UNO_QUERY );
 
-                            VOS_ENSURE( xContainer.is(),
+                            OSL_ENSURE( xContainer.is(),
                                 "HierarchyEntry::setData - No container!" );
                         }
                     }
@@ -438,35 +439,35 @@ sal_Bool HierarchyEntry::setData(
     {
         // replaceByName, insertByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                 "HierarchyEntry::setData - caught IllegalArgumentException!" );
     }
     catch ( NoSuchElementException& )
     {
         // replaceByName, getByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                 "HierarchyEntry::setData - caught NoSuchElementException!" );
     }
     catch ( ElementExistException& )
     {
         // insertByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::setData - caught ElementExistException!" );
     }
     catch ( WrappedTargetException& )
     {
         // replaceByName, insertByName, getByName, commitChanges
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                 "HierarchyEntry::setData - caught WrappedTargetException!" );
     }
     catch ( Exception& )
     {
         // createInstance, createInstanceWithArguments
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::setData - caught Exception!" );
     }
 
@@ -525,7 +526,7 @@ sal_Bool HierarchyEntry::move(
             // Skip "/Children" segment of the path, too.
             nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
-            VOS_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
+            OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
 
             aOldParentPath += OUString::createFromAscii( "/" );
             aOldParentPath += m_aPath.copy( 0, nPos );
@@ -542,7 +543,7 @@ sal_Bool HierarchyEntry::move(
             // Skip "/Children" segment of the path, too.
             nPos = aNewPath.lastIndexOf( '/', nPos - 1 );
 
-            VOS_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
+            OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
 
             aNewParentPath += OUString::createFromAscii( "/" );
             aNewParentPath += aNewPath.copy( 0, nPos );
@@ -569,7 +570,7 @@ sal_Bool HierarchyEntry::move(
                 aArguments ),
             UNO_QUERY );
 
-        VOS_ENSURE( xOldParentBatch.is(), "HierarchyEntry::move - No batch!" );
+        OSL_ENSURE( xOldParentBatch.is(), "HierarchyEntry::move - No batch!" );
 
         if ( !xOldParentBatch.is() )
             return sal_False;
@@ -595,7 +596,7 @@ sal_Bool HierarchyEntry::move(
                     aArguments ),
                 UNO_QUERY );
 
-            VOS_ENSURE( xNewParentBatch.is(), "HierarchyEntry::move - No batch!" );
+            OSL_ENSURE( xNewParentBatch.is(), "HierarchyEntry::move - No batch!" );
 
             if ( !xNewParentBatch.is() )
                 return sal_False;
@@ -609,7 +610,7 @@ sal_Bool HierarchyEntry::move(
     {
         // createInstance, createInstanceWithArguments
 
-        VOS_ENSURE( sal_False, "HierarchyEntry::move - caught Exception!" );
+        OSL_ENSURE( sal_False, "HierarchyEntry::move - caught Exception!" );
         return sal_False;
     }
 
@@ -626,7 +627,7 @@ sal_Bool HierarchyEntry::move(
         xOldParentNameAccess
             = Reference< XNameAccess >( xOldParentBatch, UNO_QUERY );
 
-        VOS_ENSURE( xOldParentNameAccess.is(),
+        OSL_ENSURE( xOldParentNameAccess.is(),
                     "HierarchyEntry::move - No name access!" );
 
         if ( !xOldParentNameAccess.is() )
@@ -649,7 +650,7 @@ sal_Bool HierarchyEntry::move(
     {
         // getByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
@@ -657,7 +658,7 @@ sal_Bool HierarchyEntry::move(
     {
         // getByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught WrappedTargetException!" );
         return sal_False;
     }
@@ -675,7 +676,7 @@ sal_Bool HierarchyEntry::move(
     {
         // getByName, removeByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
@@ -689,7 +690,7 @@ sal_Bool HierarchyEntry::move(
         Reference< XNameReplace > xNewNameReplace;
         aEntry >>= xNewNameReplace;
 
-        VOS_ENSURE( xNewNameReplace.is(),
+        OSL_ENSURE( xNewNameReplace.is(),
                     "HierarchyEntry::move - No name replace!" );
 
         if ( !xNewNameReplace.is() )
@@ -702,7 +703,7 @@ sal_Bool HierarchyEntry::move(
         else
             xNewParentNameAccess = xOldParentNameAccess;
 
-        VOS_ENSURE( xNewParentNameAccess.is(),
+        OSL_ENSURE( xNewParentNameAccess.is(),
                     "HierarchyEntry::move - No name access!" );
 
         if ( !xNewParentNameAccess.is() )
@@ -743,7 +744,7 @@ sal_Bool HierarchyEntry::move(
     {
         // replaceByName, insertByName, getByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
@@ -751,7 +752,7 @@ sal_Bool HierarchyEntry::move(
     {
         // replaceByName, insertByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught IllegalArgumentException!" );
         return sal_False;
     }
@@ -759,7 +760,7 @@ sal_Bool HierarchyEntry::move(
     {
         // insertByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught ElementExistException!" );
         return sal_False;
     }
@@ -767,7 +768,7 @@ sal_Bool HierarchyEntry::move(
     {
         // replaceByName, insertByName, getByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught WrappedTargetException!" );
         return sal_False;
     }
@@ -788,7 +789,7 @@ sal_Bool HierarchyEntry::move(
     {
         // commitChanges
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::move - caught WrappedTargetException!" );
         return sal_False;
     }
@@ -829,7 +830,7 @@ sal_Bool HierarchyEntry::remove()
                 // Skip "/Children" segment of the path, too.
                 nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
-                VOS_ENSURE( nPos != -1,
+                OSL_ENSURE( nPos != -1,
                             "HierarchyEntry::remove - Wrong path!" );
 
                 aParentPath += OUString::createFromAscii( "/" );
@@ -857,12 +858,12 @@ sal_Bool HierarchyEntry::remove()
                     aArguments ),
                 UNO_QUERY );
 
-            VOS_ENSURE( xBatch.is(),
+            OSL_ENSURE( xBatch.is(),
                         "HierarchyEntry::remove - No batch!" );
 
             Reference< XNameAccess > xParentNameAccess( xBatch, UNO_QUERY );
 
-            VOS_ENSURE( xParentNameAccess.is(),
+            OSL_ENSURE( xParentNameAccess.is(),
                         "HierarchyEntry::remove - No name access!" );
 
             if ( xBatch.is() && xParentNameAccess.is() )
@@ -886,7 +887,7 @@ sal_Bool HierarchyEntry::remove()
                         >>= xContainer;
                 }
 
-                VOS_ENSURE( xContainer.is(),
+                OSL_ENSURE( xContainer.is(),
                             "HierarchyEntry::remove - No container!" );
 
                 if ( xContainer.is() )
@@ -906,21 +907,21 @@ sal_Bool HierarchyEntry::remove()
     {
         // getByName, removeByName
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                 "HierarchyEntry::remove - caught NoSuchElementException!" );
     }
     catch ( WrappedTargetException& )
     {
         // getByName, commitChanges
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                 "HierarchyEntry::remove - caught WrappedTargetException!" );
     }
     catch ( Exception& )
     {
         // createInstance, createInstanceWithArguments
 
-        VOS_ENSURE( sal_False,
+        OSL_ENSURE( sal_False,
                     "HierarchyEntry::remove - caught Exception!" );
     }
 
@@ -958,7 +959,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
                         = Reference< XNameAccess >(
                                 xRootHierNameAccess, UNO_QUERY );
 
-                VOS_ENSURE( xNameAccess.is(),
+                OSL_ENSURE( xNameAccess.is(),
                             "HierarchyEntry::first - No name access!" );
 
                 if ( xNameAccess.is() )
@@ -967,13 +968,13 @@ sal_Bool HierarchyEntry::first( iterator& it )
                 Reference< XHierarchicalNameAccess > xHierNameAccess(
                                                 xNameAccess, UNO_QUERY );
 
-                VOS_ENSURE( xHierNameAccess.is(),
+                OSL_ENSURE( xHierNameAccess.is(),
                             "HierarchyEntry::first - No hier. name access!" );
 
                 Reference< XStringEscape > xEscaper(
                                             xRootHierNameAccess, UNO_QUERY );
 
-                VOS_ENSURE( xEscaper.is(),
+                OSL_ENSURE( xEscaper.is(),
                             "HierarchyEntry::first - No string escaper!" );
 
                 it.m_pImpl->dir = xHierNameAccess;
@@ -988,12 +989,12 @@ sal_Bool HierarchyEntry::first( iterator& it )
         {
             // getByHierarchicalName
 
-            VOS_ENSURE( sal_False,
+            OSL_ENSURE( sal_False,
                     "HierarchyEntry::first - caught NoSuchElementException!" );
         }
         catch ( Exception& )
         {
-            VOS_ENSURE( sal_False,
+            OSL_ENSURE( sal_False,
                     "HierarchyEntry::first - caught Exception!" );
         }
     }
@@ -1023,7 +1024,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
 {
     Reference< XStringEscape > xEscaper( getRootReadAccess(), UNO_QUERY );
 
-    VOS_ENSURE( xEscaper.is(),
+    OSL_ENSURE( xEscaper.is(),
                 "HierarchyEntry::createPathFromHierarchyURL - No escaper!" );
 
     // Transform path....
@@ -1056,7 +1057,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const OUString& rURL )
                 }
                 catch ( IllegalArgumentException& )
                 {
-                    VOS_ENSURE( sal_False,
+                    OSL_ENSURE( sal_False,
                                 "HierarchyEntry::createPathFromHierarchyURL - "
                                 "caught IllegalArgumentException!" );
                 }
@@ -1131,7 +1132,7 @@ Reference< XHierarchicalNameAccess > HierarchyEntry::getRootReadAccess()
             {
                 // createInstance, createInstanceWithArguments
 
-                VOS_ENSURE( sal_False,
+                OSL_ENSURE( sal_False,
                             "HierarchyEntry::getRootReadAccess - "
                             "caught Exception!" );
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicresultset.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DYNAMICRESULTSET_HXX
 #define _DYNAMICRESULTSET_HXX
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 #ifndef _UCBHELPER_RESULTSETHELPER_HXX
 #include <ucbhelper/resultsethelper.hxx>
@@ -77,7 +77,7 @@ namespace hierarchy_ucp {
 
 class DynamicResultSet : public ::ucb::ResultSetImplHelper
 {
-      vos::ORef< HierarchyContent > m_xContent;
+    rtl::Reference< HierarchyContent > m_xContent;
 
 private:
     virtual void initStatic();
@@ -87,7 +87,7 @@ public:
     DynamicResultSet(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-              const vos::ORef< HierarchyContent >& rxContent,
+            const rtl::Reference< HierarchyContent >& rxContent,
             const com::sun::star::ucb::OpenCommandArgument2& rCommand );
 };
 

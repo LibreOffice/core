@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-14 08:24:02 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 
  *************************************************************************/
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
@@ -82,11 +82,8 @@
 #include "hierarchycontent.hxx"
 #endif
 
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
-using namespace rtl;
+using namespace com::sun;
+using namespace com::sun::star;
 
 using namespace hierarchy_ucp;
 
@@ -99,7 +96,7 @@ using namespace hierarchy_ucp;
 //=========================================================================
 
 HierarchyContentProvider::HierarchyContentProvider(
-                        const Reference< XMultiServiceFactory >& rXSMgr )
+            const uno::Reference< lang::XMultiServiceFactory >& rXSMgr )
 : ::ucb::ContentProviderImplHelper( rXSMgr ),
   m_bTriedToGetRootReadAccess( sal_False )
 {
@@ -118,10 +115,10 @@ HierarchyContentProvider::~HierarchyContentProvider()
 //=========================================================================
 
 XINTERFACE_IMPL_4( HierarchyContentProvider,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XContentProvider,
-                   XInitialization );
+                   lang::XTypeProvider,
+                   lang::XServiceInfo,
+                   star::ucb::XContentProvider,
+                   lang::XInitialization );
 
 //=========================================================================
 //
@@ -130,10 +127,10 @@ XINTERFACE_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
-                         XTypeProvider,
-                         XServiceInfo,
-                         XContentProvider,
-                      XInitialization );
+                      lang::XTypeProvider,
+                      lang::XServiceInfo,
+                      star::ucb::XContentProvider,
+                      lang::XInitialization );
 
 //=========================================================================
 //
@@ -142,9 +139,9 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( HierarchyContentProvider,
-                     OUString::createFromAscii(
+                     rtl::OUString::createFromAscii(
                          "com.sun.star.comp.ucb.HierarchyContentProvider" ),
-                     OUString::createFromAscii(
+                     rtl::OUString::createFromAscii(
                          HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
@@ -162,24 +159,26 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyContentProvider );
 //=========================================================================
 
 // virtual
-Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
-                        const Reference< XContentIdentifier >& Identifier )
-    throw( IllegalIdentifierException, RuntimeException )
+uno::Reference< star::ucb::XContent > SAL_CALL
+HierarchyContentProvider::queryContent(
+        const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
     // Check URL scheme...
 
-    OUString aScheme( OUString::createFromAscii( HIERARCHY_URL_SCHEME ) );
+    rtl::OUString aScheme
+        = rtl::OUString::createFromAscii( HIERARCHY_URL_SCHEME );
     if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase(
                                                                 aScheme ) )
-        throw IllegalIdentifierException();
+        throw star::ucb::IllegalIdentifierException();
 
     // Check URL. Must be at least the URL of the Root Folder.
-    OUString aId = Identifier->getContentIdentifier();
+    rtl::OUString aId = Identifier->getContentIdentifier();
     if ( aId.compareToAscii( HIERARCHY_ROOT_FOLDER_URL,
                              HIERARCHY_ROOT_FOLDER_URL_LENGTH ) != 0 )
-        throw IllegalIdentifierException();
+        throw star::ucb::IllegalIdentifierException();
 
     // Remove trailing slash, except from Root folder URL.
     if ( aId.getLength() > HIERARCHY_ROOT_FOLDER_URL_LENGTH )
@@ -190,11 +189,11 @@ Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
     }
 
     // Encode URL and create new Id. This may "correct" user-typed-in URL's.
-    Reference< XContentIdentifier > xCanonicId =
-                new ::ucb::ContentIdentifier( m_xSMgr, encodeURL( aId ) );
+    uno::Reference< star::ucb::XContentIdentifier > xCanonicId
+        = new ::ucb::ContentIdentifier( m_xSMgr, encodeURL( aId ) );
 
     // Check, if a content with given id already exists...
-    Reference< XContent > xContent
+    uno::Reference< star::ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).getBodyPtr();
     if ( xContent.is() )
         return xContent;
@@ -205,7 +204,7 @@ Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
     xContent = HierarchyContent::create( m_xSMgr, this, xCanonicId );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
-        throw IllegalIdentifierException();
+        throw star::ucb::IllegalIdentifierException();
 
     return xContent;
 }
@@ -218,15 +217,15 @@ Reference< XContent > SAL_CALL HierarchyContentProvider::queryContent(
 
 // virtual
 void SAL_CALL HierarchyContentProvider::initialize(
-                                    const Sequence< Any >& aArguments )
-    throw( Exception, RuntimeException )
+                                const uno::Sequence< uno::Any >& aArguments )
+    throw( uno::Exception, uno::RuntimeException )
 {
     if ( aArguments.getLength() > 0 )
     {
          // Extract config provider from service init args.
          aArguments[ 0 ] >>= m_xConfigProvider;
 
-        VOS_ENSURE( m_xConfigProvider.is(),
+        OSL_ENSURE( m_xConfigProvider.is(),
                     "HierarchyContentProvider::initialize - "
                     "No config provider!" );
     }
@@ -238,7 +237,8 @@ void SAL_CALL HierarchyContentProvider::initialize(
 //
 //=========================================================================
 
-Reference< XMultiServiceFactory > HierarchyContentProvider::getConfigProvider()
+uno::Reference< lang::XMultiServiceFactory >
+HierarchyContentProvider::getConfigProvider()
 {
     if ( !m_xConfigProvider.is() )
     {
@@ -247,19 +247,19 @@ Reference< XMultiServiceFactory > HierarchyContentProvider::getConfigProvider()
         {
             try
             {
-               m_xConfigProvider = Reference< XMultiServiceFactory >(
+               m_xConfigProvider = uno::Reference< lang::XMultiServiceFactory >(
                     m_xSMgr->createInstance(
-                        OUString::createFromAscii( "com.sun.star.configuration."
-                                                   "ConfigurationProvider" ) ),
-                    UNO_QUERY );
+                        rtl::OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    uno::UNO_QUERY );
 
-                VOS_ENSURE( m_xConfigProvider.is(),
+                OSL_ENSURE( m_xConfigProvider.is(),
                             "HierarchyContentProvider::getConfigProvider - "
                             "No config provider!" );
             }
-            catch ( Exception& )
+            catch ( uno::Exception const & )
             {
-                VOS_ENSURE( sal_False,
+                OSL_ENSURE( sal_False,
                                "HierarchyContentProvider::getConfigProvider - "
                                "caught exception!" );
             }
@@ -270,7 +270,7 @@ Reference< XMultiServiceFactory > HierarchyContentProvider::getConfigProvider()
 }
 
 //=========================================================================
-Reference< XHierarchicalNameAccess >
+uno::Reference< container::XHierarchicalNameAccess >
 HierarchyContentProvider::getRootConfigReadNameAccess()
 {
     if ( !m_xRootConfigReadNameAccess.is() )
@@ -283,7 +283,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess()
                 OSL_ENSURE( sal_False,
                     "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "Unable to read any config data! -> #82494#" );
-                return Reference< XHierarchicalNameAccess >();
+                return uno::Reference< container::XHierarchicalNameAccess >();
             }
 
             try
@@ -292,31 +292,31 @@ HierarchyContentProvider::getRootConfigReadNameAccess()
 
                 if ( m_xConfigProvider.is() )
                 {
-                    Sequence< Any > aArguments( 1 );
-                    aArguments[ 0 ] <<= OUString::createFromAscii(
+                    uno::Sequence< uno::Any > aArguments( 1 );
+                    aArguments[ 0 ] <<= rtl::OUString::createFromAscii(
                                         "/org.openoffice.ucb.Hierarchy/Root" );
 
                     m_bTriedToGetRootReadAccess = sal_True;
 
                     m_xRootConfigReadNameAccess
-                        = Reference< XHierarchicalNameAccess >(
+                        = uno::Reference< container::XHierarchicalNameAccess >(
                             m_xConfigProvider->createInstanceWithArguments(
-                                OUString::createFromAscii(
+                                rtl::OUString::createFromAscii(
                                     "com.sun.star.configuration."
                                     "ConfigurationAccess" ),
                                 aArguments ),
-                            UNO_QUERY );
+                            uno::UNO_QUERY );
                 }
             }
-            catch ( RuntimeException& )
+            catch ( uno::RuntimeException const & )
             {
                 throw;
             }
-            catch ( Exception& )
+            catch ( uno::Exception const & )
             {
                 // createInstance, createInstanceWithArguments
 
-                VOS_ENSURE( sal_False,
+                OSL_ENSURE( sal_False,
                     "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "caught Exception!" );
             }

@@ -46,9 +46,9 @@
     <project-build-dependency> vos                </project-build-dependency>
     <project-build-dependency> ucbhelper          </project-build-dependency>
 
-    <runtime-module-dependency> sal2          </runtime-module-dependency>
-    <runtime-module-dependency> cppu2         </runtime-module-dependency>
-    <runtime-module-dependency> cppuhelper2$(COM) </runtime-module-dependency>
+    <runtime-module-dependency> sal3              </runtime-module-dependency>
+    <runtime-module-dependency> cppu3             </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper3$(COM) </runtime-module-dependency>
     <runtime-module-dependency> vos2$(COM)        </runtime-module-dependency>
     <runtime-module-dependency> ucbhelper1$(COM)  </runtime-module-dependency>
 
@@ -74,11 +74,14 @@
     <type> com.sun.star.ucb.ContentInfoAttribute               </type>
     <type> com.sun.star.ucb.InsertCommandArgument              </type>
     <type> com.sun.star.ucb.InteractiveBadTransferURLException </type>
+    <type> com.sun.star.ucb.MissingPropertiesException         </type>
     <type> com.sun.star.ucb.NameClash                          </type>
+    <type> com.sun.star.ucb.NameClashException                 </type>
     <type> com.sun.star.ucb.OpenCommandArgument2               </type>
     <type> com.sun.star.ucb.OpenMode                           </type>
     <type> com.sun.star.ucb.ResultSetException                 </type>
     <type> com.sun.star.ucb.TransferInfo                       </type>
+    <type> com.sun.star.ucb.UnsuppertedNameClashException      </type>
     <type> com.sun.star.ucb.XCommandInfo                       </type>
     <type> com.sun.star.ucb.XCommandInfoChangeNotifier         </type>
     <type> com.sun.star.ucb.XCommandProcessor                  </type>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynamicresultset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,8 @@
 #include "dynamicresultset.hxx"
 #endif
 
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
+using namespace com::sun;
+using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
 //=========================================================================
@@ -89,9 +88,9 @@ using namespace hierarchy_ucp;
 //=========================================================================
 
 DynamicResultSet::DynamicResultSet(
-                      const Reference< XMultiServiceFactory >& rxSMgr,
-                      const vos::ORef< HierarchyContent >& rxContent,
-                      const OpenCommandArgument2& rCommand )
+            const uno::Reference< lang::XMultiServiceFactory >& rxSMgr,
+            const rtl::Reference< HierarchyContent >& rxContent,
+            const star::ucb::OpenCommandArgument2& rCommand )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent )
 {

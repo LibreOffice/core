@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _HIERARCHYDATASUPPLIER_HXX
 #define _HIERARCHYDATASUPPLIER_HXX
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
 #endif
@@ -87,7 +91,7 @@ public:
     HierarchyResultSetDataSupplier(
                     const com::sun::star::uno::Reference<
                         com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                    const vos::ORef< HierarchyContent >& rContent,
+                    const rtl::Reference< HierarchyContent >& rContent,
                     sal_Int32 nOpenMode = com::sun::star::ucb::OpenMode::ALL );
     virtual ~HierarchyResultSetDataSupplier();
 
