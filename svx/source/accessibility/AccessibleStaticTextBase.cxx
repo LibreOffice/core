@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:55:23 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,79 +779,94 @@ namespace accessibility
         }
     }
 
-    ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
+
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
             // #106393# Special casing one behind last paragraph
-            if( aPos.nIndex == mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
+
+            if( aPos.nIndex < mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
             {
-                return ::rtl::OUString();
-            }
-            else
-            {
-                return mpImpl->GetParagraph( aPos.nPara ).getText();
+                aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
+                aResult.SegmentStart = 0;
+                aResult.SegmentEnd = aResult.SegmentText.getLength();
             }
         }
         else
         {
-            return mpImpl->GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
+            aResult = mpImpl->GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
         }
+
+        return aResult;
     }
 
-    ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
+
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
             if( aPos.nIndex == mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
             {
                 // #103589# Special casing one behind the last paragraph
-                return mpImpl->GetParagraph( aPos.nPara ).getText();
+                aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
+                aResult.SegmentStart = 0;
+                aResult.SegmentEnd = aResult.SegmentText.getLength();
             }
             else if( aPos.nPara > 0 )
             {
-                return mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
-            }
-            else
-            {
-                return ::rtl::OUString();
+                aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
+                aResult.SegmentStart = 0;
+                aResult.SegmentEnd = aResult.SegmentText.getLength();
             }
         }
         else
         {
-            return mpImpl->GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
+            aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
         }
+
+        return aResult;
     }
 
-    ::rtl::OUString SAL_CALL AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
+        ::com::sun::star::accessibility::TextSegment aResult;
+        aResult.SegmentStart = -1;
+        aResult.SegmentEnd = -1;
+
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
             if( aPos.nPara + 1 < mpImpl->GetParagraphCount() )
             {
-                return mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
-            }
-            else
-            {
-                return ::rtl::OUString();
+                aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
+                aResult.SegmentStart = 0;
+                aResult.SegmentEnd = aResult.SegmentText.getLength();
             }
         }
         else
         {
-            return mpImpl->GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
+            aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
         }
+
+        return aResult;
     }
 
     sal_Bool SAL_CALL AccessibleStaticTextBase::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
