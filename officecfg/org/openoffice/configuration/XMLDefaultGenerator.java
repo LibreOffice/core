@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDefaultGenerator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2001-07-05 08:04:36 $
+ *  last change: $Author: dg $ $Date: 2002-05-06 18:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ public class XMLDefaultGenerator {
         try
         {
             SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setValidating(true);
+            // factory.setValidating(true);
 
             // Parse the input
             SAXParser saxParser = factory.newSAXParser();

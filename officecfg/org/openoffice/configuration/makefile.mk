@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jb $ $Date: 2002-03-28 14:24:14 $
+#   last change: $Author: dg $ $Date: 2002-05-06 18:37:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,9 +66,6 @@ PRJNAME=officecfg
 TARGET =cfgimport
 PACKAGE=org$/openoffice$/configuration
 
-# Our jar build rules don't like -P#
-MAXPROCESS=1
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
@@ -82,6 +79,7 @@ JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/Generator.class \
     $(CLASSDIR)$/$(PACKAGE)$/Trim.class \
     $(CLASSDIR)$/$(PACKAGE)$/Decoder.class \
+    $(CLASSDIR)$/$(PACKAGE)$/FileHelper.class \
     $(CLASSDIR)$/$(PACKAGE)$/Inspector.class 
 
 JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
