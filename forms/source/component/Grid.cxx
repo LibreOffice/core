@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:42:23 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,7 @@ void OGridControlModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(33, m_xAggregateSet)
+    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(34, m_xAggregateSet)
         DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
@@ -518,6 +518,7 @@ void OGridControlModel::fillProperties(
         DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(ENABLED,             sal_Bool,           BOUND);
         DECL_PROP1(BORDER,              sal_Int16,          BOUND);
+        DECL_PROP1(BORDERCOLOR,         sal_Int16,          BOUND);
         DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,    BOUND);
         DECL_PROP3(TEXTCOLOR,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP3(BACKGROUNDCOLOR,     sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
@@ -583,6 +584,9 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
             break;
         case PROPERTY_ID_BORDER:
             rValue <<= (sal_Int16)m_nBorder;
+            break;
+        case PROPERTY_ID_BORDERCOLOR:
+            rValue <<= m_aBorderColor;
             break;
         case PROPERTY_ID_DEFAULTCONTROL:
             rValue <<= m_aDefaultControl;
@@ -653,6 +657,9 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
         case PROPERTY_ID_BORDER:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nBorder);
             break;
+        case PROPERTY_ID_BORDERCOLOR:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aBorderColor, ::getCppuType((const sal_Int32*)NULL));
+            break;
         case PROPERTY_ID_DEFAULTCONTROL:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefaultControl);
             break;
@@ -718,6 +725,9 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         case PROPERTY_ID_BORDER:
             rValue >>= m_nBorder;
             break;
+        case PROPERTY_ID_BORDERCOLOR:
+            m_aBorderColor = rValue;
+            break;
         case PROPERTY_ID_DEFAULTCONTROL:
             rValue >>= m_aDefaultControl;
             break;
@@ -777,6 +787,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             aReturn <<= (sal_Int16)1;
             break;
 
+        case PROPERTY_ID_BORDERCOLOR:
         case PROPERTY_ID_TABSTOP:
         case PROPERTY_ID_BACKGROUNDCOLOR:
         case PROPERTY_ID_ROWHEIGHT:
