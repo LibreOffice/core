@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:03:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,10 +1320,11 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 CheckTblBoxCntnt();
             }
 
-            if( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
+            SwCrsrMoveState aTmpState( MV_NONE );
+            aTmpState.bRealHeight = TRUE;
+            if( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint(), &aTmpState ) )
             {
                 Point aCentrPt( aCharRect.Center() );
-                SwCrsrMoveState aTmpState( MV_NONE );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
                 pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
                 if ( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
@@ -1359,7 +1360,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             if( bSVCrsrVis )
             {
                 aCrsrHeight.X() = 0;
-                aCrsrHeight.Y() = aCharRect.Height();
+                aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
+                                  -aCharRect.Width() : aCharRect.Height();
                 pVisCrsr->Show();           // wieder anzeigen
             }
             eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
