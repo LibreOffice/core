@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-19 20:08:20 $
+ *  last change: $Author: kz $ $Date: 2002-05-06 07:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8422,7 +8422,7 @@ String STR_ItemValEDGE_ORTHOLINES
     Text[ dutch ] = "Standaardverbinding";
     Text[ chinese_simplified ] = "ζ ‡ε‡†θΏζ¥η¬¦";
     Text[ greek ] = "Σύνδεση προεπιλογής";
-    Text[ korean ] = "ν‘μ¤€ μ—°κ²°μ„ ";
+    Text[ korean ] = "ν‘μ¤€ μ—°κ²°μ";
     Text[ turkish ] = "Standart baπlayύcύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector estαndar";
@@ -8450,7 +8450,7 @@ String STR_ItemValEDGE_THREELINES
     Text[ dutch ] = "Lijnverbinding";
     Text[ chinese_simplified ] = "ηΊΏη¶θΏζ¥η¬¦";
     Text[ greek ] = "Σύνδεση γραμμών";
-    Text[ korean ] = "μ„  μ—°κ²°μ„ ";
+    Text[ korean ] = "μ„  μ—°κ²°μ";
     Text[ turkish ] = "Kφώeli baπlayύcύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector lineal";
@@ -8478,7 +8478,7 @@ String STR_ItemValEDGE_ONELINE
     Text[ dutch ] = "Direct-verbinding";
     Text[ chinese_simplified ] = "η›΄ηΊΏθΏζ¥η¬¦";
     Text[ greek ] = "Απ΄ευθείας σύνδεση";
-    Text[ korean ] = "μ§μ„  μ—°κ²°μ„ ";
+    Text[ korean ] = "μ§μ„  μ—°κ²°μ";
     Text[ turkish ] = "Dόz baπlayύcύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector directo";
@@ -8506,7 +8506,7 @@ String STR_ItemValEDGE_BEZIER
     Text[ dutch ] = "Curvenverbinding";
     Text[ chinese_simplified ] = "ζ›²ηΊΏθΏζ¥η¬¦";
     Text[ greek ] = "Σύνδεση καμπυλών";
-    Text[ korean ] = "κ³΅μ„  μ—°κ²°μ„ ";
+    Text[ korean ] = "κ³΅μ„  μ—°κ²°μ";
     Text[ turkish ] = "Eπri baπlayύcύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector curvo";
@@ -14511,7 +14511,7 @@ String SIP_SA_EDGERESERVE02
     Text[ dutch ] = "Verbindingsreserve 2";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 2";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 2";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 2";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 2";
     Text[ turkish ] = "Baπlayύcύ - Yedek 2";
     Text[ catalan ] = "Conector reserva 2";
     Text[ finnish ] = "Varattu liitin 2";
@@ -14539,7 +14539,7 @@ String SIP_SA_EDGERESERVE03
     Text[ dutch ] = "Verbindingsreserve 3";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 3";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 3";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 3";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 3";
     Text[ turkish ] = "Baπlayύcύ - Yedek 3";
     Text[ catalan ] = "Conector reserva 3";
     Text[ finnish ] = "Varattu liitin 3";
@@ -14567,7 +14567,7 @@ String SIP_SA_EDGERESERVE04
     Text[ dutch ] = "Verbindingsreserve 4";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 4";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 4";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 4";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 4";
     Text[ turkish ] = "Baπlayύcύ - Yedek 4";
     Text[ catalan ] = "Conector reserva 4";
     Text[ finnish ] = "Varattu liitin 4";
@@ -14595,7 +14595,7 @@ String SIP_SA_EDGERESERVE05
     Text[ dutch ] = "Verbindingsreserve 5";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 5";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 5";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 5";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 5";
     Text[ turkish ] = "Baπlayύcύ - Yedek 5";
     Text[ catalan ] = "Conector reserva 5";
     Text[ finnish ] = "Varattu liitin 5";
@@ -14623,7 +14623,7 @@ String SIP_SA_EDGERESERVE06
     Text[ dutch ] = "Verbindingsreserve 6";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 6";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 6";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 6";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 6";
     Text[ turkish ] = "Baπlayύcύ - Yedek 6";
     Text[ catalan ] = "Conector reserva 6";
     Text[ finnish ] = "Varattu liitin 6";
@@ -14651,7 +14651,7 @@ String SIP_SA_EDGERESERVE07
     Text[ dutch ] = "Verbindingsreserve 7";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 7";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 7";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 7";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 7";
     Text[ turkish ] = "Baπlayύcύ - Yedek 7";
     Text[ catalan ] = "Conector reserva 7";
     Text[ finnish ] = "Varattu liitin 7";
@@ -14679,7 +14679,7 @@ String SIP_SA_EDGERESERVE08
     Text[ dutch ] = "Verbindingsreserve 8";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 8";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 8";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 8";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 8";
     Text[ turkish ] = "Baπlayύcύ - Yedek 8";
     Text[ catalan ] = "Conector reserva 8";
     Text[ finnish ] = "Varattu liitin 8";
@@ -14707,7 +14707,7 @@ String SIP_SA_EDGERESERVE09
     Text[ dutch ] = "Verbindingsreserve 9";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ιΆ„η•™ 9";
     Text[ greek ] = "Συνδέσεις εναλλακτ. 9";
-    Text[ korean ] = "μ»¤λ„¥ν„° μλΉ„ 9";
+    Text[ korean ] = "μ—°κ²°μ μλΉ„ 9";
     Text[ turkish ] = "Baπlayύcύ - Yedek 9";
     Text[ catalan ] = "Conector reserva 9";
     Text[ finnish ] = "Varattu liitin 9";
@@ -14735,7 +14735,7 @@ String SIP_SDRATTRSET_EDGE
     Text[ dutch ] = "Verbindingsattributen";
     Text[ chinese_simplified ] = "θΏζ¥η¬¦ε±ζ€§";
     Text[ greek ] = "Ιδιότητες σύνδεσης";
-    Text[ korean ] = "μ»¤λ„¥ν„° μ†μ„±";
+    Text[ korean ] = "μ—°κ²°μ μ†μ„±";
     Text[ turkish ] = "Baπlayύcύ φznitelikleri";
     Text[ catalan ] = "Atributos de conector";
     Text[ finnish ] = "Liitinmδδritteet";
