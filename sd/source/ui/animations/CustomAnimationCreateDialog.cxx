@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:41:15 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
+#endif
+
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
@@ -286,6 +290,8 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     FreeResource();
 
+    USHORT nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
+
     PresetCategoryList::const_iterator aIter( rCategoryList.begin() );
     const PresetCategoryList::const_iterator aEnd( rCategoryList.end() );
     while( aIter != aEnd )
@@ -309,10 +315,15 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
                 {
                     USHORT nPos = mpLBEffects->InsertEntry( pDescriptor->getLabel() );
                     mpLBEffects->SetEntryData( nPos, static_cast<void*>( new CustomAnimationPresetPtr( pDescriptor ) ) );
+
+                    if( nFirstEffect == LISTBOX_ENTRY_NOTFOUND )
+                        nFirstEffect = nPos;
                 }
             }
         }
     }
+
+    mpLBEffects->SelectEntryPos( nFirstEffect );
 
     fillDurationComboBox( mpCBSpeed );
     mpCBSpeed->SelectEntryPos( 2 );
@@ -502,10 +513,13 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mpTabControl->SetActivatePageHdl( LINK( this, CustomAnimationCreateDialog, implActivatePagekHdl ) );
     mpTabControl->SetDeactivatePageHdl( LINK( this, CustomAnimationCreateDialog, implDeactivatePagekHdl ) );
 
+    setPosition();
 }
 
 CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
 {
+    storePosition();
+
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     pOptions->SetPreviewNewEffects( getCurrentPage()->getIsPreview() );
 
@@ -581,5 +595,56 @@ void CustomAnimationCreateDialog::preview( const CustomAnimationPresetPtr& pPres
     mpPane->preview( pSequence->getRootNode() );
 }
 
+namespace
+{
+Window * lcl_GetTopmostParent( Window * pWindow )
+{
+    Window * pResult = 0;
+    Window * pCurrent = pWindow ? pWindow->GetParent() : 0;
+    while( pCurrent )
+    {
+        pResult = pCurrent;
+        pCurrent = pCurrent->GetParent();
+    }
+    return pResult;
+}
 }
 
+void CustomAnimationCreateDialog::setPosition()
+{
+    SvtViewOptions aDlgOpt(
+        E_TABDIALOG, String::CreateFromInt32( DLG_CUSTOMANIMATION_CREATE ) );
+    if ( aDlgOpt.Exists() )
+    {
+        SetWindowState( ByteString( aDlgOpt.GetWindowState().getStr(),
+                                    RTL_TEXTENCODING_ASCII_US ) );
+    }
+    else
+    {
+        // default position: aligned with right edge of parent
+        Window * pParent = lcl_GetTopmostParent( this );
+        if( pParent )
+        {
+            Point aPos( GetPosPixel());
+            Size  aSize( GetSizePixel());
+            Point aParentPos( pParent->GetPosPixel());
+            Size  aParentSize( pParent->GetSizePixel());
+
+            // right center
+            aPos.setX( aParentSize.getWidth() - aSize.getWidth() );
+            aPos.setY( (aParentSize.getHeight() - aSize.getHeight()) / 2 );
+            SetPosPixel( aPos );
+        }
+    }
+}
+
+void CustomAnimationCreateDialog::storePosition()
+{
+    // save settings (screen position and current page)
+    SvtViewOptions aDlgOpt(
+        E_TABDIALOG, String::CreateFromInt32( DLG_CUSTOMANIMATION_CREATE ) );
+    aDlgOpt.SetWindowState(
+        OUString::createFromAscii( GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
+}
+
+}
