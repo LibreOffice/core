@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:56:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,7 +1178,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer;
     if ( pChildWindow )
     {
-        VCLXTopWindow* pPeer = new VCLXTopWindow;
+        VCLXTopWindow* pPeer = new VCLXTopWindow(true);
         osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
         pPeer->SetWindow( pChildWindow );
         xPeer = pPeer;
