@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:14:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,22 @@ namespace dbaui
            sal_Bool bChangedSomething = sal_False;
         fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
         fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
-        fillString(_rSet,&m_aETHostServer, DSID_CONNECTURL, bChangedSomething);
+
+        if ( m_aETHostServer.GetText() != m_aETHostServer.GetSavedValue() )
+        {
+            DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
+            ODsnTypeCollection* pCollection = NULL;
+            if (pCollectionItem)
+                pCollection = pCollectionItem->getCollection();
+            DBG_ASSERT(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
+
+            String sUrl = pCollection->getDatasourcePrefix(DST_LDAP);
+            sUrl += m_aETHostServer.GetText();
+            _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
+            bChangedSomething = sal_True;
+        }
+
+        // fillString(_rSet,&m_aETHostServer, DSID_CONNECTURL, bChangedSomething);
         fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
@@ -416,18 +431,7 @@ namespace dbaui
 
     BOOL OMySQLIntroPageSetup::FillItemSet(SfxItemSet& _rSet)
     {
-        ODsnTypeCollection*pCollection = NULL;
-        sal_Bool bChangedSomething = sal_False;
-        DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
-        if (pCollectionItem)
-            ODsnTypeCollection*pCollection = pCollectionItem->getCollection();
-        DBG_ASSERT(pCollection, "OMySQLIntroPageSetup::FillItemSet : really need a DSN type collection !");
-
-        if (getMySQLMode() == 1)
-            _rSet.Put(SfxStringItem(DSID_CONNECTURL, pCollection->getDatasourcePrefix(DST_MYSQL_JDBC)));
-        else
-            _rSet.Put(SfxStringItem(DSID_CONNECTURL, pCollection->getDatasourcePrefix(DST_MYSQL_ODBC)));
-        bChangedSomething = sal_True;           //?????
+        OSL_ENSURE(sal_False,"Who called me?! Please ask oj for more information.");
         return sal_True;
     }
 
@@ -574,6 +578,8 @@ namespace dbaui
         }
         callModifiedHdl();
 
+        sal_Bool bRoadmapState = ((m_aETDatabasename.GetText().Len() != 0 ) && ( m_aETHostname.GetText().Len() != 0 ) && (m_aNFPortNumber.GetText().Len() != 0 ) && ( m_aETDriverClass.GetText().Len() != 0 ));
+        SetRoadmapStateValue(bRoadmapState);
     }
 
     // -----------------------------------------------------------------------
@@ -672,6 +678,8 @@ namespace dbaui
         sal_Bool bEnable = pDrvItem->GetValue().Len() != 0;
         m_aPBTestJavaDriver.Enable(bEnable);
         OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
+
+        SetRoadmapStateValue(checkTestConnection());
     }
 
 
@@ -771,7 +779,6 @@ namespace dbaui
         return bChangedSomething;
     }
 
-
     OGenericAdministrationPage* OAuthentificationPageSetup::CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OAuthentificationPageSetup( pParent, _rAttrSet) );
@@ -818,7 +825,16 @@ namespace dbaui
     // -----------------------------------------------------------------------
     void OAuthentificationPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+        SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, sal_True);
+        SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
 
+        m_aETUserName.SetText(pUidItem->GetValue());
+        m_aCBPasswordRequired.Check(pAllowEmptyPwd->GetValue());
+
+        m_aETUserName.ClearModifyFlag();
     }
 
     // -----------------------------------------------------------------------
