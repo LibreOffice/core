@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:51:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,70 +62,16 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>CD</author>
-		<desc xml:lang="en-US">Contains general information about ~ and rules, and about actions based on office commands.</desc>
+		<desc >Contains general information about ~ and rules, and about actions based on office commands.</desc>
 	</info>
 	<templates>
 		<group oor:name="CommandType">
 			<info>
-				<desc xml:lang="en-US">Describes a command.</desc>
-				<desc xml:lang="el">Describes a command.</desc>
-				<desc xml:lang="nl">Describes a command.</desc>
-				<desc xml:lang="fr">Describes a command.</desc>
-				<desc xml:lang="fi">Describes a command.</desc>
-				<desc xml:lang="cs">Describes a command.</desc>
-				<desc xml:lang="da">Describes a command.</desc>
-				<desc xml:lang="zh-CN">描述命令。</desc>
-				<desc xml:lang="zh-TW">Describes a command.</desc>
-				<desc xml:lang="ar">Describes a command.</desc>
-				<desc xml:lang="he">Describes a command.</desc>
-				<desc xml:lang="ca">Describes a command.</desc>
-				<desc xml:lang="pt">Describes a command.</desc>
-				<desc xml:lang="ru">Describes a command.</desc>
-				<desc xml:lang="es">Describes a command.</desc>
-				<desc xml:lang="it">Describes a command.</desc>
-				<desc xml:lang="sv">Describes a command.</desc>
-				<desc xml:lang="pl">Describes a command.</desc>
-				<desc xml:lang="pt-BR">Describes a command.</desc>
-				<desc xml:lang="ja">コマンドを記述します。</desc>
-				<desc xml:lang="ko">Describes a command.</desc>
-				<desc xml:lang="tr">Describes a command.</desc>
-				<desc xml:lang="th">Describes a command.</desc>
-				<desc xml:lang="hi-IN">Describes a command.</desc>
-				<desc xml:lang="x-comment">Describes a command.</desc>
-				<desc xml:lang="hu">Describes a command.</desc>
-				<desc xml:lang="sk">Describes a command.</desc>
-				<desc xml:lang="sl">Describes a command.</desc>
+				<desc>Describes a command.</desc>
 			</info>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="el">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="nl">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="fr">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="fi">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="cs">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="da">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="zh-CN">指定不通过协议分发的命令名称。</desc>
-					<desc xml:lang="zh-TW">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="ar">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="he">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="ca">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="pt">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="ru">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="es">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="it">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="sv">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="pl">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="pt-BR">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="ja">プロトコル部分を含めないでディスパッチするためのコマンド名を指定します。</desc>
-					<desc xml:lang="ko">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="tr">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="th">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="hi-IN">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="x-comment">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="hu">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="sk">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="sl">Specifies the command name for dispatching without a protocol part.</desc>
+					<desc>Specifies the command name for dispatching without a protocol part.</desc>
 				</info>
 			</prop>
 		</group>
@@ -133,65 +79,11 @@
 	<component>
 		<group oor:name="Execute">
 			<info>
-				<desc xml:lang="en-US">Contains information about the execute status.</desc>
-				<desc xml:lang="el">Contains information about the execute status.</desc>
-				<desc xml:lang="nl">Contains information about the execute status.</desc>
-				<desc xml:lang="fr">Contains information about the execute status.</desc>
-				<desc xml:lang="fi">Contains information about the execute status.</desc>
-				<desc xml:lang="cs">Contains information about the execute status.</desc>
-				<desc xml:lang="da">Contains information about the execute status.</desc>
-				<desc xml:lang="zh-CN">含有有关执行状态的信息。</desc>
-				<desc xml:lang="zh-TW">Contains information about the execute status.</desc>
-				<desc xml:lang="ar">Contains information about the execute status.</desc>
-				<desc xml:lang="he">Contains information about the execute status.</desc>
-				<desc xml:lang="ca">Contains information about the execute status.</desc>
-				<desc xml:lang="pt">Contains information about the execute status.</desc>
-				<desc xml:lang="ru">Contains information about the execute status.</desc>
-				<desc xml:lang="es">Contains information about the execute status.</desc>
-				<desc xml:lang="it">Contains information about the execute status.</desc>
-				<desc xml:lang="sv">Contains information about the execute status.</desc>
-				<desc xml:lang="pl">Contains information about the execute status.</desc>
-				<desc xml:lang="pt-BR">Contains information about the execute status.</desc>
-				<desc xml:lang="ja">実行状態に関する情報が含まれます。</desc>
-				<desc xml:lang="ko">Contains information about the execute status.</desc>
-				<desc xml:lang="tr">Contains information about the execute status.</desc>
-				<desc xml:lang="th">Contains information about the execute status.</desc>
-				<desc xml:lang="hi-IN">Contains information about the execute status.</desc>
-				<desc xml:lang="x-comment">Contains information about the execute status.</desc>
-				<desc xml:lang="hu">Contains information about the execute status.</desc>
-				<desc xml:lang="sk">Contains information about the execute status.</desc>
-				<desc xml:lang="sl">Contains information about the execute status.</desc>
+				<desc>Contains information about the execute status.</desc>
 			</info>
 			<set oor:name="Disabled" oor:node-type="CommandType">
 				<info>
-					<desc xml:lang="en-US">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="el">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="nl">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="fr">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="fi">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="cs">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="da">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="zh-CN">含有 Office 使用者界面中禁用的命令。</desc>
-					<desc xml:lang="zh-TW">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="ar">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="he">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="ca">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="pt">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="ru">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="es">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="it">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="sv">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="pl">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="pt-BR">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="ja">Office ユーザーインタフェース内で無効にするコマンドが含まれます。</desc>
-					<desc xml:lang="ko">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="tr">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="th">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="hi-IN">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="x-comment">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="hu">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="sk">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="sl">Contains commands that are disabled in the Office user interface.</desc>
+					<desc>Contains commands that are disabled in the Office user interface.</desc>
 				</info>
 			</set>
 		</group>
