@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-04-02 15:19:20 $
+ *  last change: $Author: os $ $Date: 2002-06-12 13:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,18 +788,29 @@ void SwColumnPage::Init()
 {
     aCLNrEdt.SetValue(nCols);
 
-    aAutoWidthBox.Check(pColMgr->IsAutoWidth() || bHtmlMode );
+    BOOL bAutoWidth = pColMgr->IsAutoWidth() || bHtmlMode;
+    aAutoWidthBox.Check( bAutoWidth );
 
-        // Setzen der Breiten
-    for(USHORT i = 0; i < nCols; ++i)
+    sal_Int32 nColumnWidthSum = 0;
+    // Setzen der Breiten
+    USHORT i;
+    for(i = 0; i < nCols; ++i)
     {
         nColWidth[i] = pColMgr->GetColWidth(i);
+        nColumnWidthSum += nColWidth[i];
         if(i < nCols - 1)
             nColDist[i] = pColMgr->GetGutterWidth(i);
     }
 
     if( 1 < nCols )
     {
+        // #97495# make sure that the automatic column widht's are always equal
+        if(bAutoWidth)
+        {
+            nColumnWidthSum /= nCols;
+            for(i = 0; i < nCols; ++i)
+                nColWidth[i] = nColumnWidthSum;
+        }
         USHORT eAdj = pColMgr->GetAdjust();
         if( COLADJ_NONE == eAdj )       // der Dialog kennt kein NONE!
         {

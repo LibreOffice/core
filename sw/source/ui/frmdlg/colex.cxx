@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-04-10 15:15:35 $
+ *  last change: $Author: os $ $Date: 2002-06-12 13:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,8 @@ void SwColExample::DrawPage( const Point& rOrg,
                             const BOOL bEnabled )
 {
     SwPageExample::DrawPage( rOrg, bSecond, bEnabled );
-    if( pColMgr && pColMgr->GetCount() >1 )
+    USHORT nColumnCount;
+    if( pColMgr && 0 != (nColumnCount = pColMgr->GetCount()))
     {
         long nL = GetLeft();
         long nR = GetRight();
@@ -282,69 +283,79 @@ void SwColExample::DrawPage( const Point& rOrg,
             nR = GetLeft();
         }
 
-        USHORT nColumnCount = pColMgr->GetCount();
-        if(nColumnCount)
+        SetFillColor( Color( COL_LIGHTGRAY ) );
+        Rectangle aRect;
+        aRect.Right() = rOrg.X() + GetSize().Width() - nR;
+        aRect.Left()  = rOrg.X() + nL;
+        aRect.Top()   = rOrg.Y() + GetTop()
+                        + GetHdHeight() + GetHdDist();
+        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
+                        - GetFtHeight() - GetFtDist();
+        DrawRect(aRect);
+
+        if(GetColor() == Color(COL_TRANSPARENT))
         {
-            SetFillColor( Color( COL_LIGHTGRAY ) );
-            Rectangle aRect;
-            aRect.Right() = rOrg.X() + GetSize().Width() - nR;
-            aRect.Left()  = rOrg.X() + nL;
-            aRect.Top()   = rOrg.Y() + GetTop()
-                            + GetHdHeight() + GetHdDist();
-            aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom()
-                            - GetFtHeight() - GetFtDist();
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            const Color& rFieldColor = rStyleSettings.GetFieldColor();
+            SetFillColor( rFieldColor );
+        }
+        else
+            SetFillColor( GetColor() );
+
+        // #97495# make sure that the automatic column widht's are always equal
+        BOOL bAutoWidth = pColMgr->IsAutoWidth();
+        sal_Int32 nAutoColWidth = 0;
+        if(bAutoWidth)
+        {
+            sal_Int32 nColumnWidthSum = 0;
+            USHORT i;
+            for(i = 0; i < nColumnCount; ++i)
+                nColumnWidthSum += pColMgr->GetColWidth( i );
+            nAutoColWidth = nColumnWidthSum / nColumnCount;
+        }
+
+        for(USHORT i = 0; i < nColumnCount; i++)
+        {
+            if(!bAutoWidth)
+                nAutoColWidth = pColMgr->GetColWidth( i );
+            aRect.Right() = aRect.Left() + nAutoColWidth;
             DrawRect(aRect);
+            if(i < nColumnCount - 1)
+                aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
+        }
+        if(pColMgr->HasLine())
+        {
+            Point aUp( rOrg.X() + nL, rOrg.Y() + GetTop() );
+            Point aDown( rOrg.X() + nL, rOrg.Y() + GetSize().Height()
+                        - GetBottom() - GetFtHeight() - GetFtDist() );
 
-            if(GetColor() == Color(COL_TRANSPARENT))
+            if( pColMgr->GetLineHeightPercent() != 100 )
             {
-                const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-                const Color& rFieldColor = rStyleSettings.GetFieldColor();
-                SetFillColor( rFieldColor );
-            }
-            else
-                SetFillColor( GetColor() );
-            for(USHORT i = 0; i < nColumnCount; i++)
-            {
-                aRect.Right() = aRect.Left() + pColMgr->GetColWidth( i );
-                DrawRect(aRect);
-                if(i < nColumnCount - 1)
-                    aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
-            }
-            if(pColMgr->HasLine())
-            {
-    //          SetPen( Pen ( PEN_SOLID ) );
-                Point aUp( rOrg.X() + nL, rOrg.Y() + GetTop() );
-                Point aDown( rOrg.X() + nL, rOrg.Y() + GetSize().Height()
-                            - GetBottom() - GetFtHeight() - GetFtDist() );
-
-                if( pColMgr->GetLineHeightPercent() != 100 )
+                long nLength = aDown.Y() - aUp.Y();
+                nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
+                switch(pColMgr->GetAdjust())
                 {
-                    long nLength = aDown.Y() - aUp.Y();
-                    nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
-                    switch(pColMgr->GetAdjust())
-                    {
-                        case COLADJ_BOTTOM: aUp.Y() += nLength; break;
-                        case COLADJ_TOP: aDown.Y() -= nLength; break;
-                        case COLADJ_CENTER:
-                            aUp.Y() += nLength / 2;
-                            aDown.Y() -= nLength / 2;
-                        break;
-                    }
+                    case COLADJ_BOTTOM: aUp.Y() += nLength; break;
+                    case COLADJ_TOP: aDown.Y() -= nLength; break;
+                    case COLADJ_CENTER:
+                        aUp.Y() += nLength / 2;
+                        aDown.Y() -= nLength / 2;
+                    break;
                 }
+            }
 
-                int nDist;
-                for( i = 0; i < nColumnCount -  1; i++)
-                {
-                    int nGutter = pColMgr->GetGutterWidth(i);
-                    nDist = pColMgr->GetColWidth( i ) + nGutter;
-                    nDist -= (i == 0) ?
-                        nGutter/2 :
-                            0;
-                    aUp.X() += nDist;
-                    aDown.X() += nDist;
-                    DrawLine( aUp, aDown );
+            int nDist;
+            for( i = 0; i < nColumnCount -  1; i++)
+            {
+                int nGutter = pColMgr->GetGutterWidth(i);
+                nDist = pColMgr->GetColWidth( i ) + nGutter;
+                nDist -= (i == 0) ?
+                    nGutter/2 :
+                        0;
+                aUp.X() += nDist;
+                aDown.X() += nDist;
+                DrawLine( aUp, aDown );
 
-                }
             }
         }
     }
@@ -484,6 +495,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
     long nFrmWidth = aFrmSize.Width();
     SwColumns& rCols = aCols.GetColumns();
     USHORT nColCount = rCols.Count();
+
     for(USHORT i = 0; i < nColCount; i++)
     {
         SwColumn* pCol = rCols[i];
@@ -499,6 +511,24 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         nRight *= nFrmWidth;
         nRight /= nWishSum;
         pCol->SetRight((USHORT)nRight);
+    }
+    // #97495# make sure that the automatic column width's are always equal
+    if(nColCount && aCols.IsOrtho())
+    {
+        sal_Int32 nColumnWidthSum = 0;
+        USHORT i;
+        for(i = 0; i < nColCount; ++i)
+        {
+            SwColumn* pCol = rCols[i];
+            nColumnWidthSum += pCol->GetWishWidth();
+            nColumnWidthSum -= (pCol->GetRight() + pCol->GetLeft());
+        }
+        nColumnWidthSum /= nColCount;
+        for(i = 0; i < nColCount; ++i)
+        {
+            SwColumn* pCol = rCols[i];
+            pCol->SetWishWidth(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft());
+        }
     }
 }
 /* -----------------------------08.02.2002 11:44------------------------------
