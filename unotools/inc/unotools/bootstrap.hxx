@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 10:27:11 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@ namespace utl
 
         /// retrieve the product patch level; uses the given default, if not found
         static rtl::OUString getProductPatchLevel(rtl::OUString const& _sDefault);
+
+        /// reload cached data
+        static void reloadData();
 
     public: // retrieve path information about the installatíon location
         enum PathStatus
