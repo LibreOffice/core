@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:25 $
+ *  last change: $Author: jp $ $Date: 2001-05-28 10:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,23 +300,6 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             nLvlNumberLevel = nOpenBrakets;
             break;
 
-        case RTF_LI:
-            if( pCurNumFmt && -1 != nTokenValue )
-            {
-                if( 0 > nTokenValue )
-                    nTokenValue =- nTokenValue;
-                pCurNumFmt->SetAbsLSpace( USHORT( nTokenValue ));
-            }
-            break;
-
-        case RTF_FI:
-            if( pCurNumFmt && -1 != nTokenValue )
-            {
-                if( 0 < short( nTokenValue ))
-                    nTokenValue = - short( nTokenValue );
-                pCurNumFmt->SetFirstLineOffset( short( nTokenValue ));
-            }
-            break;
 
         case RTF_TEXTTOKEN:
             if( nLvlTxtLevel == nOpenBrakets )
@@ -336,10 +319,37 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             break;
 
         default:
-            if( pCurNumFmt &&
-                RTF_CHRFMT == (nToken & ~(0xff | RTF_SWGDEFS) ))
+            if( pCurNumFmt && (
+                RTF_CHRFMT == (nToken & ~(0xff | RTF_SWGDEFS) ) ||
+                RTF_PARFMT == (nToken & ~(0xff | RTF_SWGDEFS) ) ))
             {
-                ReadAttr( nToken, &GetNumChrFmt( *pDoc, rRule, nNumLvl ) );
+                SfxItemSet aSet( pDoc->GetAttrPool(), aTxtNodeSetRange );
+                // put the current CharFmtAttr into the set
+                SfxItemSet& rCFmtSet = GetNumChrFmt( *pDoc, rRule, nNumLvl );
+                aSet.Put( rCFmtSet );
+                // and put the current "LRSpace" into the set
+                {
+                    SvxLRSpaceItem aLR;
+                    aLR.SetTxtLeft( pCurNumFmt->GetAbsLSpace() );
+                    aLR.SetTxtFirstLineOfst(pCurNumFmt->GetFirstLineOffset());
+                    aSet.Put( aLR );
+                }
+
+                ReadAttr( nToken, &aSet );
+
+                // put all CharFmt Items into the charfmt
+                rCFmtSet.Put( aSet );
+
+                // test for LRSpace Item. If exist then set all relevant
+                // values on the numrule format
+                const SfxPoolItem* pItem;
+                if( SFX_ITEM_SET == aSet.GetItemState( RES_LR_SPACE,
+                        FALSE, &pItem ))
+                {
+                    const SvxLRSpaceItem& rLR = *(SvxLRSpaceItem*)pItem;
+                    pCurNumFmt->SetAbsLSpace( rLR.GetTxtLeft() );
+                    pCurNumFmt->SetFirstLineOffset( rLR.GetTxtFirstLineOfst());
+                }
 
                 // dann aus der Vorlage den Font holen
                 if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->GetNumberingType() )
@@ -373,10 +383,10 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             // wieviele Levels stehen im String?
             pCurNumFmt->SetIncludeUpperLevels( (BYTE)sLvlNumber.Len() );
         }
-        else if( !sLvlText.Len() )
+        else
         {
             pCurNumFmt->SetNumberingType(SVX_NUM_NUMBER_NONE);
-            pCurNumFmt->SetSuffix( aEmptyStr );
+            pCurNumFmt->SetSuffix( sLvlText );
         }
     }
 
@@ -669,34 +679,33 @@ void SwRTFParser::ReadListOverrideTable()
         const SfxPoolItem* pItem;
         const SwTxtFmtColl* pColl;
         SvxRTFStyleType* pStyle = GetStyleTbl().First();
+        USHORT nRulePos;
+        const SwNumRule *pRule;
         do {
             if( MAXLEVEL > pStyle->nOutlineNo &&
                 0 != ( pColl = aTxtCollTbl.Get( (USHORT)GetStyleTbl().
                                                         GetCurKey() )) &&
                 SFX_ITEM_SET == pColl->GetItemState( RES_PARATR_NUMRULE,
-                FALSE, &pItem ))
+                                                    FALSE, &pItem ) &&
+                USHRT_MAX != (nRulePos = pDoc->FindNumRule(
+                                ((SwNumRuleItem*)pItem)->GetValue() )) &&
+                (pRule = pDoc->GetNumRuleTbl()[ nRulePos ])->IsAutoRule() )
             {
-                USHORT nRulePos = pDoc->FindNumRule(
-                                ((SwNumRuleItem*)pItem)->GetValue() );
-                if( USHRT_MAX != nRulePos )
-                {
-                    const SwNumRule *pRule = pDoc->GetNumRuleTbl()[ nRulePos ];
-                    pDoc->SetOutlineNumRule( *pRule );
-                    pDoc->DelNumRule( pRule->GetName() );
-                    // now pRule pointer is invalid !!!
+                pDoc->SetOutlineNumRule( *pRule );
+                pDoc->DelNumRule( pRule->GetName() );
+                // now pRule pointer is invalid !!!
 
-                    // now decrement all position in the listtable, which will
-                    // behind the doc-rule position
-                    for( USHORT n = aListArr.Count(); n; )
-                    {
-                        SwListEntry& rEntry = aListArr[ --n ];
-                        if( rEntry.nListDocPos == nRulePos )
-                            aListArr.Remove( n );
-                        else if( rEntry.nListDocPos > nRulePos )
-                            --rEntry.nListDocPos;
-                    }
-                    break;
+                // now decrement all position in the listtable, which will
+                // behind the doc-rule position
+                for( USHORT n = aListArr.Count(); n; )
+                {
+                    SwListEntry& rEntry = aListArr[ --n ];
+                    if( rEntry.nListDocPos == nRulePos )
+                        aListArr.Remove( n );
+                    else if( rEntry.nListDocPos > nRulePos )
+                        --rEntry.nListDocPos;
                 }
+                break;
             }
 
             pStyle->aAttrSet.ClearItem( FN_PARAM_NUM_LEVEL );
@@ -1100,10 +1109,28 @@ NUMATTR_SETUNDERLINE:
 
 // dann noch die Ausgabe-Funktionen (nur fuer WinWord 97)
 
+BOOL lcl_IsExportNumRule( const SwNumRule& rRule, BYTE* pEnd = 0 )
+{
+    BYTE nEnd = MAXLEVEL;
+    while( nEnd-- && !rRule.GetNumFmt( nEnd ))
+        ;
+    ++nEnd;
+
+    const SwNumFmt* pNFmt;
+    for( BYTE nLvl = 0; nLvl < nEnd; ++nLvl )
+        if( SVX_NUM_NUMBER_NONE != ( pNFmt = &rRule.Get( nLvl ))
+            ->GetNumberingType() || pNFmt->GetPrefix().Len() ||
+            (pNFmt->GetSuffix().Len() && pNFmt->GetSuffix() != aDotStr ))
+            break;
+
+    if( pEnd )
+        *pEnd = nEnd;
+    return nLvl != nEnd;
+}
+
 void SwRTFWriter::OutRTFListTab()
 {
     ByteString sOverrideList;
-    const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     USHORT nId = 1, nTmplId = 1, n;
 
     // prepare the NodeNum to generate the NumString
@@ -1112,30 +1139,12 @@ void SwRTFWriter::OutRTFListTab()
         aNdNum.GetLevelVal()[ n ] = n;
     BYTE aNumLvlPos[ MAXLEVEL ];
 
-    for( n = rListTbl.Count()+1; n; )
+    if( !pNumRuleTbl )
+        BuildNumRuleTbl();
+
+    for( n = 0; n < pNumRuleTbl->Count(); ++n )
     {
-        const SwNumRule* pRule;
-        --n;
-        if( n == rListTbl.Count() )
-            pRule = pDoc->GetOutlineNumRule();
-        else
-        {
-            pRule = rListTbl[ n ];
-            if( !pDoc->IsUsed( *pRule ))
-                continue;
-        }
-
-        BYTE nEnd = MAXLEVEL;
-        while( nEnd-- && !pRule->GetNumFmt( nEnd ))
-            ;
-        ++nEnd;
-
-        for( BYTE nLvl = 0; nLvl < nEnd; ++nLvl )
-            if( SVX_NUM_NUMBER_NONE != pRule->Get( nLvl ).GetNumberingType() )
-                break;
-
-        if( nLvl == nEnd )      // alle Level no number -> dont write it
-            continue;
+        const SwNumRule* pRule = (*pNumRuleTbl)[ n ];
 
         // mit der ersten Rule wird auch die ListTable geschrieben
         if( !sOverrideList.Len() )
@@ -1147,6 +1156,9 @@ void SwRTFWriter::OutRTFListTab()
 
         if( pRule->IsContinusNum() )
             Strm() << sRTF_LISTSIMPLE;
+
+        BYTE nLvl, nEnd;
+        lcl_IsExportNumRule( *pRule, &nEnd );
 
         for( nLvl = 0; nLvl < nEnd; ++nLvl )
         {
@@ -1187,10 +1199,23 @@ void SwRTFWriter::OutRTFListTab()
             if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() ||
                 SVX_NUM_BITMAP == rFmt.GetNumberingType() )
             {
-                Strm() << "\\'01\\'"; OutHex( rFmt.GetBulletChar() );
+                Strm() << "\\'01";
+                ByteString sNo( ByteString::CreateFromInt32( rFmt.GetBulletChar()));
+                Strm() << "\\u" << sNo.GetBuffer() << " ?";
                 bWriteBulletFont = TRUE;
             }
-            else if( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
+            else if( SVX_NUM_NUMBER_NONE == rFmt.GetNumberingType() )
+            {
+                String sOut( rFmt.GetPrefix() ); sOut += rFmt.GetSuffix();
+                if( sOut.Len() )
+                {
+                    Strm() << "\\'";
+                    OutHex( sOut.Len() );
+                    RTFOutFuncs::Out_String( Strm(), sOut,
+                                            DEF_ENCODING, bWriteHelpFmt );
+                }
+            }
+            else
             {
                 memset( aNumLvlPos, 0, MAXLEVEL );
                 BYTE* pLvlPos = aNumLvlPos;
@@ -1290,11 +1315,57 @@ void SwRTFWriter::OutRTFListTab()
 
 USHORT SwRTFWriter::GetId( const SwNumRuleItem& rItem ) const
 {
-    return pDoc->FindNumRule( rItem.GetValue() );
+    USHORT n, nId = USHRT_MAX;
+    if( !pNumRuleTbl )
+    {
+        SwRTFWriter* pThis = (SwRTFWriter*)this;
+        pThis->BuildNumRuleTbl();
+    }
+    const String& rNm = rItem.GetValue();
+    for( n = pNumRuleTbl->Count(); n; )
+        if( (*pNumRuleTbl)[ --n ]->GetName() == rNm )
+        {
+            nId = n;
+            break;
+        }
+
+    return nId;
 }
 
-void SwRTFWriter::OutListNum( const SwTxtNode& rNd )
+USHORT SwRTFWriter::GetNumRuleId( const SwNumRule& rRule )
 {
+    if( !pNumRuleTbl )
+        BuildNumRuleTbl();
+    SwNumRulePtr pR = (SwNumRulePtr)&rRule;
+    return pNumRuleTbl->GetPos( pR );
+}
+
+void SwRTFWriter::BuildNumRuleTbl()
+{
+    const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
+    if( !pNumRuleTbl )
+        pNumRuleTbl = new SwNumRuleTbl( (BYTE)rListTbl.Count() );
+    for( USHORT n = rListTbl.Count()+1; n; )
+    {
+        SwNumRule* pRule;
+        --n;
+        if( n == rListTbl.Count() )
+            pRule = (SwNumRule*)pDoc->GetOutlineNumRule();
+        else
+        {
+            pRule = rListTbl[ n ];
+            if( !pDoc->IsUsed( *pRule ))
+                continue;
+        }
+
+        if( lcl_IsExportNumRule( *pRule ))
+            pNumRuleTbl->Insert( pRule, pNumRuleTbl->Count() );
+    }
+}
+
+BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
+{
+    BOOL bRet = FALSE;
     const SwNumRule* pRule = rNd.GetNumRule();
     const SwNodeNum* pNdNum = 0;
     // or is an outlinerule valid?
@@ -1308,8 +1379,10 @@ void SwRTFWriter::OutListNum( const SwTxtNode& rNd )
     {
         bOutFmtAttr = FALSE;
         bOutListNumTxt = TRUE;
+        bRet = TRUE;
 
-        BOOL bValidNum = MAXLEVEL > pNdNum->GetLevel();
+        BOOL bValidNum = MAXLEVEL > pNdNum->GetLevel(),
+             bExportNumRule = USHRT_MAX != GetNumRuleId( *pRule );
         BYTE nLvl = GetRealLevel( pNdNum->GetLevel() );
         const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
         if( !pFmt )
@@ -1325,7 +1398,8 @@ void SwRTFWriter::OutListNum( const SwTxtNode& rNd )
         if( bValidNum )
         {
             aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
-            Strm() << '{' << sRTF_LISTTEXT << sRTF_PARD << sRTF_PLAIN << ' ';
+            if( bExportNumRule )
+                Strm() << '{' << sRTF_LISTTEXT << sRTF_PARD << sRTF_PLAIN << ' ';
         }
         aSet.Put( aLR );
         Out_SfxItemSet( aRTFAttrFnTab, *this, aSet, TRUE );
@@ -1348,26 +1422,33 @@ void SwRTFWriter::OutListNum( const SwTxtNode& rNd )
                 bOutFmtAttr = FALSE;
             }
 
-            RTFOutFuncs::Out_String( Strm(), sTxt, DEF_ENCODING, bWriteHelpFmt);
+            if( sTxt.Len() )
+                RTFOutFuncs::Out_String( Strm(), sTxt, DEF_ENCODING, bWriteHelpFmt);
 
-            if( OUTLINE_RULE != pRule->GetRuleType() )
+            if( bExportNumRule )
             {
-                Strm() /*<< sRTF_TAB*/ << '}' << sRTF_ILVL;
-                if( nLvl > 8 )          // RTF-kennt nur 9 Ebenen
+                if( OUTLINE_RULE != pRule->GetRuleType() )
                 {
-                    OutULong( 8 );
-                    OutComment( *this, sRTF_SOUTLVL );
-                    OutULong( nLvl ) << '}';
+                    Strm() /*<< sRTF_TAB*/ << '}' << sRTF_ILVL;
+                    if( nLvl > 8 )          // RTF-kennt nur 9 Ebenen
+                    {
+                        OutULong( 8 );
+                        OutComment( *this, sRTF_SOUTLVL );
+                        OutULong( nLvl ) << '}';
+                    }
+                    else
+                        OutULong( nLvl );
+                    Strm()  << ' ';
                 }
                 else
-                    OutULong( nLvl );
-                Strm()  << ' ';
+                    Strm() /*<< sRTF_TAB*/ << '}';
             }
-            else
-                Strm() /*<< sRTF_TAB*/ << '}';
+            else if( sTxt.Len() )
+                Strm() << sRTF_TAB;
         }
         bOutListNumTxt = FALSE;
     }
+    return bRet;
 }
 
 
