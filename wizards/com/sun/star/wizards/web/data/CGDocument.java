@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CGDocument.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $  $Date: 2004-11-27 09:10:08 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,9 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
                || appType == TypeDetection.IMPRESS_DOC
                || appType == TypeDetection.DRAW_DOC ) || appType == TypeDetection.HTML_DOC;
 
-        String[] parts = media.split("_");
+//        String[] parts = media.split("_");    // line removed because of compatibility to JDK13
+        String[] parts = JavaTools.ArrayoutofString(media, "_");
+
 
         isSODocument = parts.length < 2 ? false : isSOOpenable  && ( parts[1].startsWith("Star") );
 
