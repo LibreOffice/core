@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2004-10-01 16:01:16 $
+#   last change: $Author: obo $ $Date: 2004-11-19 11:41:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,31 +69,32 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 use strict;
 use Getopt::Long;
+use File::Find;
 use File::Basename;
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
 
 #### globals ####
 
-my $img_global = '%GLOBAL%';  # 'global' image prefix
+my $img_global = '%GLOBALRES%';  # 'global' image prefix
 my $img_module = '%MODULE%';  # 'module' image prefix
-my $img_custom = '%CUSTOM%';  # 'custom' image prefix
 
 my $out_file;                # path to output archive
 my $tmp_out_file;            # path to temporary output file
 my $global_path;             # path to global images directory
 my $module_path;             # path to module images directory
 my $custom_path;             # path to custom images directory
-my $imagelist_path;          # path to directory containing the image lists
+my @imagelist_path;          # pathes to directories containing the image lists
 my $verbose;                 # be verbose
 my $extra_verbose;           # be extra verbose
 my $do_rebuild = 0;          # is rebuilding zipfile required?
 
+my @custom_list;
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.7 $ ';
+my $id_str = ' $Revision: 1.8 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -109,6 +110,8 @@ foreach ( @{$image_lists_ref} ) {
 }
 $do_rebuild = is_file_newer(\%image_lists_hash) if $do_rebuild == 0;
 my ($global_hash_ref, $module_hash_ref, $custom_hash_ref) = iterate_image_lists($image_lists_ref);
+# custom_hash filled from filesystem lookup
+find_custom($custom_hash_ref);
 my $zip_hash_ref = create_zip_list($global_hash_ref, $module_hash_ref, $custom_hash_ref);
 $do_rebuild = is_file_newer($zip_hash_ref) if $do_rebuild == 0;
 if ( $do_rebuild == 1 ) {
@@ -133,13 +136,13 @@ sub parse_options
                              '-g=s' => \$global_path,
                              '-m=s' => \$module_path,
                              '-c=s' => \$custom_path,
-                             '-l=s' => \$imagelist_path,
+                             '-l=s' => \@imagelist_path,
                              '-v'   => \$verbose,
                              '-vv'  => \$extra_verbose
                             );
 
     if ( $opt_help || !$success || !$out_file || !$global_path
-        || !$module_path || !$custom_path || !$imagelist_path )
+        || !$module_path || !$custom_path || !@imagelist_path )
     {
         usage();
         exit(1);
@@ -156,7 +159,7 @@ sub parse_options
     print_error("directory is not writable: '$out_dir'", 2) if ! -w $out_dir;
 
     # Check paths.
-    foreach ($global_path, $module_path, $custom_path, $imagelist_path) {
+    foreach ($global_path, $module_path, $custom_path, @imagelist_path) {
         print_error("no such directory: '$_'", 2) if ! -d $_;
         print_error("can't search directory: '$_'", 2) if ! -x $_;
     }
@@ -164,10 +167,12 @@ sub parse_options
 
 sub get_image_lists
 {
-    my @image_lists = glob("$imagelist_path/*.ilst");
-
+    my @image_lists;
+    foreach ( @imagelist_path ) {
+        push @image_lists, glob("$_/*.ilst");
+    }
     if ( !@image_lists ) {
-        print_error("can't find any image lists in '$imagelist_path'", 3);
+        print_error("can't find any image lists in '@imagelist_path'", 3);
     }
 
     return wantarray ? @image_lists : \@image_lists;
@@ -181,8 +186,8 @@ sub iterate_image_lists
     my %module_hash;
     my %custom_hash;
 
-    foreach ( @{$image_lists_ref} ) {
-        parse_image_list($_, \%global_hash, \%module_hash, \%custom_hash);
+    foreach my $i ( @{$image_lists_ref} ) {
+        parse_image_list($i, \%global_hash, \%module_hash, \%custom_hash);
     }
 
     return (\%global_hash, \%module_hash, \%custom_hash);
@@ -208,16 +213,13 @@ sub parse_image_list
         # clean up backslashes and double slashes
         tr{\\}{/}s;
         tr{/}{}s;
+        # hack "res" back into globals
         if ( /^\Q$img_global\E\/(.*)$/o ) {
-            $global_hash_ref->{$1}++;
+            $global_hash_ref->{"res/".$1}++;
             next;
         }
         if ( /^\Q$img_module\E\/(.*)$/o ) {
             $module_hash_ref->{$1}++;
-            next;
-        }
-        if ( /^\Q$img_custom\E\/(.*)$/o ) {
-            $custom_hash_ref->{$1}++;
             next;
         }
         # parse failed if we reach this point, bail out
@@ -227,6 +229,28 @@ sub parse_image_list
     close(IMAGE_LIST);
 
     return ($global_hash_ref, $module_hash_ref, $custom_hash_ref);
+}
+
+sub find_custom
+{
+    my $custom_hash_ref = shift;
+    my $keep_back;
+    find({ wanted => \&wanted, no_chdir => 0 }, "$custom_path");
+    foreach ( @custom_list ) {
+        if ( /^\Q$custom_path\E\/(.*)$/o ) {
+            $keep_back=$1;
+            $custom_hash_ref->{$keep_back}++;
+        }
+    }
+}
+
+sub wanted
+{
+    my $file = $_;
+
+    if ( $file =~ /.*\.png$/ && -f $file ) {
+        push @custom_list, $File::Find::name;
+    }
 }
 
 sub create_zip_list
@@ -246,6 +270,7 @@ sub create_zip_list
             next;
         }
         if ( exists $custom_hash_ref->{$_} ) {
+            $zip_hash{$_} = $custom_path;
             next;
         }
         # it's neither in 'module' nor 'custom', record it in zip hash
@@ -253,14 +278,15 @@ sub create_zip_list
     }
     foreach ( keys %{$module_hash_ref} ) {
         if ( exists $custom_hash_ref->{$_} ) {
+            $zip_hash{$_} = $custom_path;
             next;
         }
         # it's not in 'custom', record it in zip hash
         $zip_hash{$_} = $module_path;
     }
-    foreach ( keys %{$custom_hash_ref} ) {
-        $zip_hash{$_} = $custom_path;
-    }
+#    foreach ( keys %{$custom_hash_ref} ) {
+#        $zip_hash{$_} = $custom_path;
+#    }
 
     if ( @warn_list ) {
         foreach ( @warn_list ) {
@@ -344,7 +370,7 @@ sub usage
     print STDERR "    -g g_path          path to global images directory\n";
     print STDERR "    -m m_path          path to module images directory\n";
     print STDERR "    -c c_path          path to custom images directory\n";
-    print STDERR "    -l imagelist_path  path to directory containing the image lists\n";
+    print STDERR "    -l imagelist_path  path to directory containing image lists (may appear mutiple times)\n";
     print STDERR "    -v                 verbose\n";
     print STDERR "    -vv                very verbose\n";
 }
