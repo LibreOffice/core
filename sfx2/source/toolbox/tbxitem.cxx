@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-05 12:15:18 $
+ *  last change: $Author: mba $ $Date: 2002-04-05 12:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <framework/menuconfiguration.hxx>
+#include <vcl/taskpanelist.hxx>
 
 #pragma hdrstop
 
@@ -112,6 +113,7 @@
 #include "app.hxx"
 #include "unoctitm.hxx"
 #include "helpid.hrc"
+#include "workwin.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -503,6 +505,7 @@ SfxPopupWindow::SfxPopupWindow( USHORT nId, WinBits nBits, SfxBindings &rBinding
     bFloating(FALSE)
 {
     bCascading = FALSE;
+    rBindings.GetWorkWindow_Impl()->GetWindow()->GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
 //--------------------------------------------------------------------
@@ -513,10 +516,12 @@ SfxPopupWindow::SfxPopupWindow( USHORT nId, const ResId &rId, SfxBindings &rBind
     bFloating(FALSE)
 {
     bCascading = FALSE;
+    rBindings.GetWorkWindow_Impl()->GetWindow()->GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
 SfxPopupWindow::~SfxPopupWindow()
 {
+    GetBindings().GetWorkWindow_Impl()->GetWindow()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
 void SfxPopupWindow::MouseMove( const MouseEvent& rMEvt )
