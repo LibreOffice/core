@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-03 11:38:05 $
+#   last change: $Author: hjs $ $Date: 2001-04-19 15:52:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1295,12 +1295,13 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/$(COMP9TYPELIST)_description.obj
 COMP9RDBTARGETN:=$(BIN)$/$(COMP9TYPELIST).rdb
 .ENDIF
 
+UNOTYPES!:=$(strip $(UNOTYPES))
+
 #moved here to get UNOTYPES from COMPxTYPELIST
 .IF "$(UNOTYPES)" != ""
 UNOUCRHEADER=$(foreach,j,$(subst,.,$/ $(UNOTYPES)) $(UNOUCROUT)$/$(j:+".hpp"))
 UNOUCRTARGET:=$(UNOUCRHEADER)
 .ENDIF			# "$(UNOTYPES)" != ""
-
 
 .IF "$(HELPIDFILES)"!=""
 MAKE_HELPIDS=$(MISC)$/helpids.don
