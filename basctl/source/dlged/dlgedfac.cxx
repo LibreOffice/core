@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:11 $
+ *  last change: $Author: tbe $ $Date: 2001-07-27 18:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,13 @@
 #include "dlgedobj.hxx"
 #endif
 
+#ifndef _BASCTL_DLGEDDEF_HXX
+#include <dlgeddef.hxx>
+#endif
+
 #ifndef _BASCTL_PROPBRW_HXX
 #include "propbrw.hxx"
 #endif
-
-#include <vcsbxdef.hxx>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -127,8 +129,8 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
         bNeedsInit = sal_False;
     }
 
-    if( (pObjFactory->nInventor == VCSbxInventor) &&
-        (pObjFactory->nIdentifier >= OBJ_DLG_CHECKBOX) &&
+    if( (pObjFactory->nInventor == DlgInventor) &&
+        (pObjFactory->nIdentifier >= OBJ_DLG_PUSHBUTTON) &&
         (pObjFactory->nIdentifier <= OBJ_DLG_VFIXEDLINE)    )
     {
         switch( pObjFactory->nIdentifier )

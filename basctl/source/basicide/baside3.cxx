@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
+ *  last change: $Author: tbe $ $Date: 2001-07-27 18:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,10 @@
 #include <propbrw.hxx>
 #endif
 
-#include <vcsbxdef.hxx>
+#ifndef _BASCTL_DLGEDDEF_HXX
+#include <dlgeddef.hxx>
+#endif
+
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include <basidesh.hxx>

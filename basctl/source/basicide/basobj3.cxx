@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
+ *  last change: $Author: tbe $ $Date: 2001-07-27 18:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
-
-// In bastype3.cxx:
-USHORT GetDialogSbxId();
 
 #define LINE_SEP    0x0A
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-10 11:31:03 $
+ *  last change: $Author: tbe $ $Date: 2001-07-27 18:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,9 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 #endif
 
-#include "vcsbxdef.hxx"
+#ifndef _BASCTL_DLGEDDEF_HXX
+#include <dlgeddef.hxx>
+#endif
 
 
 using namespace comphelper;
@@ -607,7 +609,7 @@ void DlgEditor::SetInsertObj( USHORT eObj )
     eActObj = eObj;
 
     if( pSdrView )
-        pSdrView->SetCurrentObj( eActObj, VCSbxInventor );
+        pSdrView->SetCurrentObj( eActObj, DlgInventor );
 }
 
 //----------------------------------------------------------------------------

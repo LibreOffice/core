@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-04 13:37:14 $
+ *  last change: $Author: tbe $ $Date: 2001-07-27 18:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #pragma hdrstop
 #define _SI_NOSBXCONTROLS
-#include <vcsbxdef.hxx>
+
 #include <svtools/sbx.hxx>
 #include <bastype2.hxx>
 #include <basobj.hxx>
@@ -84,13 +84,6 @@ using namespace ::com::sun::star;
 SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 );
 
 SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
-
-USHORT GetDialogSbxId()
-{
-    // damit nicht ueberall si.hxx includet werden muss!
-    return SBXID_DIALOG;
-}
-
 
 
 void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-18 16:26:56 $
+ *  last change: $Author: tbe $ $Date: 2001-07-27 18:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #include <vector>
 #include <algorithm>
 
+#ifndef _BASCTL_DLGEDDEF_HXX
+#include <dlgeddef.hxx>
+#endif
+
 #ifndef _BASCTL_DLGEDOBJ_HXX
 #include "dlgedobj.hxx"
 #endif
@@ -93,8 +97,6 @@
 #ifndef _BASCTL_DLGRESID_HRC
 #include <dlgresid.hrc>
 #endif
-
-#include "vcsbxdef.hxx"
 
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
@@ -649,7 +651,7 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
 
 sal_uInt32 DlgEdObj::GetObjInventor()   const
 {
-    return VCSbxInventor;
+    return DlgInventor;
 }
 
 //----------------------------------------------------------------------------
@@ -660,7 +662,7 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
 
     if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDialogModel") ))
     {
-        return OBJ_DIALOG;
+        return OBJ_DLG_DIALOG;
     }
     else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ))
     {
