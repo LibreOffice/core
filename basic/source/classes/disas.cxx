@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:19:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ void SbiDisas::ImmOp( String& rText )
 
 void SbiDisas::OnOp( String& rText )
 {
-    rText += nOp1 & 0x7FFF;
+    rText += String::CreateFromInt32(nOp1 & 0x7FFF);
     if( nOp1 & 0x800 )
         rText.AppendAscii( "\t; Gosub" );
 }
@@ -620,7 +620,7 @@ void SbiDisas::VarDefOp( String& rText )
 
 void SbiDisas::OffOp( String& rText )
 {
-    rText += ( nOp1 & 0x7FFF );
+    rText += String::CreateFromInt32( nOp1 & 0x7FFF );
     rText.AppendAscii( "\t; " );
     // Der Typ
     USHORT n = nOp1;
