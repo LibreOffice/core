@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:14:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
