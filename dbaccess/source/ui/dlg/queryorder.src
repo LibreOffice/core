@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:14:32 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,14 +503,14 @@ ModalDialog DLG_ORDERCRIT
         Text [ spanish ] = "Nombre de campo" ;
         Text [ ENGLISH_US ] = "Field name" ;
         Center = TRUE ;
-        Text[ chinese_simplified ] = "À¸Ãû";
+        Text[ chinese_simplified ] = "×Ö¶ÎÃû³Æ";
         Text[ russian ] = "Èìÿ ïîëÿ";
         Text[ polish ] = "Nazwa pola";
         Text[ japanese ] = "Ì¨°ÙÄÞ–¼";
         Text[ chinese_traditional ] = "Äæ¦ì¦WºÙ";
         Text[ arabic ] = "ÇÓã ÇáÍÞá";
         Text[ greek ] = "¼íïìá ðåäßïõ";
-        Text[ korean ] = "ÇÊµå¸í";
+        Text[ korean ] = "ÇÊµå ÀÌ¸§";
         Text[ turkish ] = "Alan adý";
         Text[ language_user1 ] = " ";
     };
@@ -611,7 +611,7 @@ ModalDialog DLG_ORDERCRIT
         Text [ norwegian ] = "Operator" ;
         Text [ italian ] = "Operatore" ;
         Text [ portuguese_brazilian ] = "Operador" ;
-        Text [ portuguese ] = "Operador" ;
+        Text [ portuguese ] = "Ligação" ;
         Text [ finnish ] = "Operaattori" ;
         Text [ danish ] = "Kæde" ;
         Text [ french ] = "Lien" ;
