@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ButtonOperator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:26:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -60,18 +60,18 @@ import java.util.Vector;
 */
 public class ButtonOperator implements XActionListener, XStatusListener
 {
-    private XMultiServiceFactory    m_xMSF;
-    private DocumentHelper          m_aDocument;
+    private XComponentContext   m_xCtx;
+    private DocumentHelper      m_aDocument;
 
-    private Vector                  m_aButtons;
-    private Vector                  m_aDispatchers;
+    private Vector              m_aButtons;
+    private Vector              m_aDispatchers;
 
     /* ------------------------------------------------------------------ */
     /** ctor
     */
-    public ButtonOperator( XMultiServiceFactory aMSF, DocumentHelper aDocument )
+    public ButtonOperator( XComponentContext xCtx, DocumentHelper aDocument )
     {
-        m_xMSF = aMSF;
+        m_xCtx = xCtx;
         m_aDocument = aDocument;
         m_aButtons = new Vector();
         m_aDispatchers = new Vector();
@@ -102,7 +102,9 @@ public class ButtonOperator implements XActionListener, XStatusListener
         {
             // instantiate an interaction handler who can handle SQLExceptions
             XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(
-                XInteractionHandler.class, m_xMSF.createInstance( "com.sun.star.sdb.InteractionHandler" ) );
+                XInteractionHandler.class,
+                m_xCtx.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.sdb.InteractionHandler", m_xCtx ) );
 
             // create a new request
             InteractionRequest aRequest = new InteractionRequest( aError );
@@ -275,7 +277,7 @@ public class ButtonOperator implements XActionListener, XStatusListener
                     PropertyValue[] aDummyArgs = new PropertyValue[] { };
                     try
                     {
-                        xDispatcher.dispatch( FLTools.parseURL( sActionURL, m_xMSF ), aDummyArgs );
+                        xDispatcher.dispatch( FLTools.parseURL( sActionURL, m_xCtx ), aDummyArgs );
                     }
                     catch( java.lang.Exception e )
                     {
