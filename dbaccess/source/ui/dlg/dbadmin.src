@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:48:59 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 14:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1557,7 +1557,7 @@ TabPage PAGE_ADO
         Text [ polish ] = "Podaj has�o";
         Text [ portuguese_brazilian ] = "beim ?ffnen ~fragen";
         Text [ japanese ] = "パスワードが必要";
-        Text [ korean ] = "패스워드가 필요합니다";
+        Text [ korean ] = "암호가 필요";
         Text [ chinese_simplified ] = "必须输入密码";
         Text [ chinese_traditional ] = "必須輸入密碼";
         Text [ turkish ] = "A�arken sor";
@@ -1767,7 +1767,7 @@ TabPage PAGE_JDBC
         Text [ polish ] = "Podaj has�o";
         Text [ portuguese_brazilian ] = "beim ?ffnen ~fragen";
         Text [ japanese ] = "パスワードが必要";
-        Text [ korean ] = "패스워드가 필요합니다";
+        Text [ korean ] = "암호가 필요";
         Text [ chinese_simplified ] = "必须输入密码";
         Text [ chinese_traditional ] = "必須輸入密碼";
         Text [ turkish ] = "A�arken sor";
@@ -1895,14 +1895,14 @@ TabPage PAGE_ODBC
         Text [ greek ] = "���������� ������� ���������";
         Text [ dutch ] = "Wachtwoord verlangd";
         Text [ french ] = "Mot de passe requis";
-        Text [ spanish ] = "Se necesita una contrase�a";
+        Text [ spanish ] = "Se requiere una contrase�a";
         Text [ italian ] = "Password necessaria";
         Text [ danish ] = "Adgangskode n�dvendig";
         Text [ swedish ] = "L�senord kr�vs";
         Text [ polish ] = "Podaj has�o";
         Text [ portuguese_brazilian ] = "Password required";
         Text [ japanese ] = "パスワードが必要";
-        Text [ korean ] = "패스워드가 필요합니다";
+        Text [ korean ] = "암호가 필요";
         Text [ chinese_simplified ] = "必须输入密码";
         Text [ chinese_traditional ] = "必須輸入密碼";
         Text [ turkish ] = "Password required";
@@ -3951,6 +3951,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.109  2002/09/05 13:48:59  kz
+ *  Merge SRX643: 05.09.02 - 15:45:41
+ *
  *  Revision 1.108  2002/08/29 12:07:36  gt
  *  #99281# new mask color magenta
  *
