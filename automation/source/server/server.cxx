@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:23:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,6 +971,16 @@ ImplRemoteControl::~ImplRemoteControl()
     if ( pServiceMgr )
         pServiceMgr->StopCommunication();
 
+    if ( GetTTSettings()->pDisplayHidWin )
+    {
+        delete (Window*)(GetTTSettings()->pDisplayHidWin);
+        GetTTSettings()->pDisplayHidWin = NULL;
+    }
+    if ( GetTTSettings()->pTranslateWin )
+    {
+        delete (Window*)(GetTTSettings()->pTranslateWin);
+        GetTTSettings()->pTranslateWin = NULL;
+    }
 #if OSL_DEBUG_LEVEL > 1
     delete m_pDbgWin;
 #endif
