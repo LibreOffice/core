@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageSink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,24 +64,20 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
-class ZipPackageSink : public com::sun::star::io::XActiveDataSink,
-                public cppu::OWeakObject
+class ZipPackageSink : public ::cppu::WeakImplHelper1
+<
+    com::sun::star::io::XActiveDataSink
+>
 {
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
 public:
-    ZipPackageSink(void);
-    ~ZipPackageSink(void);
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(void)
-        throw();
-    virtual void SAL_CALL release(void)
-        throw();
+    ZipPackageSink();
+    virtual ~ZipPackageSink();
     virtual void SAL_CALL setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
         throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )

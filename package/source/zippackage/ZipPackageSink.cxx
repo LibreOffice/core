@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageSink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:16:31 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,26 +68,6 @@ ZipPackageSink::ZipPackageSink(void)
 }
 ZipPackageSink::~ZipPackageSink(void)
 {
-}
-com::sun::star::uno::Any SAL_CALL ZipPackageSink::queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException)
-{
-    com::sun::star::uno::Any aReturn( ::cppu::queryInterface
-                (   rType, static_cast< com::sun::star::io::XActiveDataSink*> ( this )));
-    if ( aReturn.hasValue () == sal_True )
-        return aReturn ;
-    else
-        return OWeakObject::queryInterface ( rType ) ;
-}
-void SAL_CALL ZipPackageSink::acquire(void)
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ZipPackageSink::release(void)
-    throw()
-{
-    OWeakObject::release();
 }
 void SAL_CALL ZipPackageSink::setInputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& aStream )
     throw(::com::sun::star::uno::RuntimeException)
