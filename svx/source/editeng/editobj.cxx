@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-28 09:34:09 $
+ *  last change: $Author: mt $ $Date: 2002-07-01 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1739,9 +1739,6 @@ void BinTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
         // Symbol-Convertion because of StyleSheet?
         if ( pStyleSheetPool && pC->GetLoadStoreTempInfos() && pC->GetLoadStoreTempInfos()->aOrgString_Load.Len() )
         {
-            // When getting this assertion, we shouldn't convert anything here !!!
-            DBG_ASSERT( ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON ) && pC->aStyle.Len(), "FinishLoad: TempLoadStoreInfos, why?!" );
-
             SfxStyleSheet* pStyle = (SfxStyleSheet*)pStyleSheetPool->Find( pC->GetStyle(), pC->GetFamily() );
             if ( pStyle )
             {
