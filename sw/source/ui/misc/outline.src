@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:10:56 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ ModalDialog DLG_NUM_NAMES
         Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "Format";
         Text[ catalan ] = "Forma";
+        Text[ finnish ] = "Muotoile";
     };
     ListBox LB_FORM
     {
@@ -406,6 +407,18 @@ ModalDialog DLG_NUM_NAMES
         < "Sin nombre 8" ; > ;
         < "Sin nombre 9" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Nimetön 1" ; > ;
+        < "Nimetön 2" ; > ;
+        < "Nimetön 3" ; > ;
+        < "Nimetön 4" ; > ;
+        < "Nimetön 5" ; > ;
+        < "Nimetön 6" ; > ;
+        < "Nimetön 7" ; > ;
+        < "Nimetön 8" ; > ;
+        < "Nimetön 9" ; > ;
+    };
     };
     Edit ED_FORM
     {
@@ -421,6 +434,7 @@ ModalDialog DLG_NUM_NAMES
     Text[ turkish ] = "Farklý kaydet...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar como";
+    Text[ finnish ] = "Tallenna nimellä";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -475,6 +489,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Numeración";
+                Text[ finnish ] = "Numerointi";
             };
             PageItem
             {
@@ -501,6 +516,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posición";
+                Text[ finnish ] = "Sijainti";
             };
         };
     };
@@ -528,6 +544,7 @@ TabDialog DLG_TAB_OUTLINE
         Text[ korean ] = "¼­½Ä(~F)";
         Text[ turkish ] = "Format";
         Text[ catalan ] = "~Forma";
+        Text[ finnish ] = "~Muotoile";
     };
     Menu MN_FORM
     {
@@ -824,6 +841,7 @@ TabDialog DLG_TAB_OUTLINE
                 Text[ turkish ] = "Farklý kaydet...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "G~uardar como...";
+                Text[ finnish ] = "~Tallenna nimellä";
             };
         };
     };
@@ -868,7 +886,7 @@ TabPage TP_OUTLINE_NUM
         Text [ italian ] = "Livello" ;
         Text [ portuguese_brazilian ] = "Nível" ;
         Text [ portuguese ] = "Nível" ;
-        Text [ finnish ] = "Taso" ;
+        Text [ finnish ] = "Taso " ;
         Text [ danish ] = "Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "Nivå" ;
@@ -897,7 +915,7 @@ TabPage TP_OUTLINE_NUM
         Text [ italian ] = "~Modello di paragrafo" ;
         Text [ portuguese_brazilian ] = "~Estilo de parágrafo" ;
         Text [ portuguese ] = "~Estilo de parágrafo" ;
-        Text [ finnish ] = "~Kappaletyyli" ;
+        Text [ finnish ] = "~Kappaleen tyyli" ;
         Text [ danish ] = "Afsnitstypografi" ;
         Text [ french ] = "~Style de paragraphe" ;
         Text [ swedish ] = "~Styckeformatmall" ;
@@ -939,7 +957,7 @@ TabPage TP_OUTLINE_NUM
         Text [ italian ] = "~Numero" ;
         Text [ portuguese_brazilian ] = "~Número" ;
         Text [ portuguese ] = "~Número" ;
-        Text [ finnish ] = "~Numero" ;
+        Text [ finnish ] = "~Luku" ;
         Text [ danish ] = "Nummer" ;
         Text [ french ] = "~Numéro" ;
         Text [ swedish ] = "~Nummer" ;
@@ -994,6 +1012,7 @@ TabPage TP_OUTLINE_NUM
         Text[ turkish ] = "Karakter þablonu";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "E~stilo de carácter";
+        Text[ finnish ] = "~Merkistön tyyli";
     };
     ListBox LB_CHARFMT
     {
@@ -1012,7 +1031,7 @@ TabPage TP_OUTLINE_NUM
         Text [ italian ] = "~Completo" ;
         Text [ portuguese_brazilian ] = "~Completar" ;
         Text [ portuguese ] = "Co~mpleto" ;
-        Text [ finnish ] = "~Täydellinen" ;
+        Text [ finnish ] = "~Näytä alatasot" ;
         Text [ danish ] = "Fuldstændig" ;
         Text [ french ] = "C~omplet" ;
         Text [ swedish ] = "~Fullständig" ;
@@ -1086,7 +1105,7 @@ TabPage TP_OUTLINE_NUM
         Text [ italian ] = "~Davanti" ;
         Text [ portuguese_brazilian ] = "antes" ;
         Text [ portuguese ] = "an~tes" ;
-        Text [ finnish ] = "Edellä" ;
+        Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "Før" ;
         Text [ french ] = "Devant" ;
         Text [ swedish ] = "f~ramför" ;
@@ -1125,7 +1144,7 @@ TabPage TP_OUTLINE_NUM
         Text [ italian ] = "D~ietro" ;
         Text [ portuguese_brazilian ] = "atrßs" ;
         Text [ portuguese ] = "~Atrás" ;
-        Text [ finnish ] = "jäljessä" ;
+        Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "Derrière" ;
         Text [ swedish ] = "ba~kom" ;
@@ -1164,7 +1183,7 @@ TabPage TP_OUTLINE_NUM
         Text [ italian ] = "~Inizia con" ;
         Text [ portuguese_brazilian ] = "~Começar em" ;
         Text [ portuguese ] = "~Começar em" ;
-        Text [ finnish ] = "~Start at" ;
+        Text [ finnish ] = "~Aloita kohdasta" ;
         Text [ danish ] = "Begynd med" ;
         Text [ french ] = "~À partir de" ;
         Text [ swedish ] = "~Börja med" ;
@@ -1260,6 +1279,7 @@ TabPage TP_OUTLINE_NUM
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Previsualización";
+        Text[ finnish ] = "Esikatselu";
     };
     String ST_NO_COLL
     {
@@ -1269,7 +1289,7 @@ TabPage TP_OUTLINE_NUM
         TEXT [ italian ] = "(nessuno)" ;
         TEXT [ portuguese_brazilian ] = "(nenhum)" ;
         TEXT [ portuguese ] = "(nenhum)" ;
-        TEXT [ finnish ] = "(ei mitään)" ;
+        TEXT [ finnish ] = "(Ei mitään)" ;
         TEXT [ danish ] = "(ingen)" ;
         TEXT [ french ] = "(aucun(e))" ;
         TEXT [ swedish ] = "(ingen)" ;
