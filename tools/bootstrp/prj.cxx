@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-22 12:26:58 $
+ *  last change: $Author: nf $ $Date: 2001-02-23 15:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,7 +1643,6 @@ BOOL StarFile::NeedsUpdate()
             (( aStat.DateModified() == aDate ) && ( aStat.TimeModified() > aTime )))
             return TRUE;
     }
-    else
-        return FALSE;
+    return FALSE;
 }
 
