@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:47:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,17 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
 {
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 210 , 165 ) ;
-    Text = "%MACROLANG Makros" ;
-    Text [ ENGLISH ] = "%MACROLANG Macros" ;
+    Text [ de ] = "%MACROLANG Makros" ;
     Moveable = TRUE ;
-    Text[ english_us ] = "%MACROLANG Macros";
+    Text [ en-US ] = "%MACROLANG Macros";
     Closeable = TRUE ;
 
     FixedText SF_TXT_SCRIPTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "~Makros" ;
-        Text [ ENGLISH ] = "~Macros" ;
-        Text [ english_us ] = "~Macros" ;
+        Text [ de ] = "~Makros" ;
+        Text [ en-US ] = "~Macros" ;
     };
 
     Control SF_CTRL_SCRIPTSBOX
@@ -119,53 +117,47 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         DefButton = TRUE;
-        Text = "Aus~f�hren" ;
-        Text [ ENGLISH ] = "R~un" ;
-        Text [ english_us ] = "R~un" ;
+        Text [ de ] = "Aus~f�hren" ;
+        Text [ en-US ] = "R~un" ;
     };
     CancelButton SF_PB_CLOSE
     {
         Pos = MAP_APPFONT ( 144 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Schlie�en" ;
-        Text [ ENGLISH ] = "Close" ;
-        Text [ english_us ] = "Close" ;
+        Text [ de ] = "Schlie�en" ;
+        Text [ en-US ] = "Close" ;
     };
 
     PushButton SF_PB_CREATE
     {
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Pos = MAP_APPFONT ( 144 , 60 ) ;
-        Text = "~Erstellen..." ;
-        Text [ ENGLISH ] = "~Create..." ;
-        Text [ english_us ] = "~Create..." ;
+        Text [ de ] = "~Erstellen..." ;
+        Text [ en-US ] = "~Create..." ;
         TabStop = TRUE ;
     };
     PushButton SF_PB_EDIT
     {
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Pos = MAP_APPFONT ( 144 , 77 ) ;
-        Text = "~Bearbeiten" ;
-        Text [ ENGLISH ] = "~Edit" ;
-        Text [ english_us ] = "~Edit" ;
+        Text [ de ] = "~Bearbeiten" ;
+        Text [ en-US ] = "~Edit" ;
         TabStop = TRUE ;
     };
     PushButton SF_PB_RENAME
     {
         Pos = MAP_APPFONT ( 144 , 94 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Umbenennen..." ;
-        Text [ ENGLISH ] = "Rename..." ;
-        Text [ english_us ] = "Rename..." ;
+        Text [ de ] = "~Umbenennen..." ;
+        Text [ en-US ] = "Rename..." ;
     };
     PushButton SF_PB_DEL
     {
         Pos = MAP_APPFONT ( 144 , 114 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Löschen..." ;
-        Text [ ENGLISH ] = "~Delete..." ;
-        Text [ english_us ] = "~Delete..." ;
+        Text [ de ] = "~Löschen..." ;
+        Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
     };
     HelpButton SF_PB_HELP
@@ -175,12 +167,11 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
         TabStop = TRUE ;
     };
 
-    };
+};
 ModalDialog DLG_NEWLIB
 {
-    Text = "Bibliothek erstellen" ;
-    Text [ ENGLISH ] = "Create Library" ;
-    Text [ english_us ] = "Create Library" ;
+    Text [ de ] = "Bibliothek erstellen" ;
+    Text [ en-US ] = "Create Library" ;
     Size = MAP_APPFONT ( 160 , 55 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -202,9 +193,8 @@ ModalDialog DLG_NEWLIB
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         WordBreak = TRUE ;
-        Text = "Geben Sie den Namen für die neue Bibliothek ein." ;
-        Text [ English ] = "Enter the name for the new library." ;
-        Text [ english_us ] = "Enter the name for the new library." ;
+        Text [ de ] = "Geben Sie den Namen für die neue Bibliothek ein." ;
+        Text [ en-US ] = "Enter the name for the new library." ;
     };
     Edit ED_LIBNAME
     {
@@ -215,104 +205,87 @@ ModalDialog DLG_NEWLIB
     };
     String STR_NEWLIB
     {
-    Text = "Bibliothek erstellen" ;
-    Text [ ENGLISH ] = "Create Library" ;
-    Text [ english_us ] = "Create Library" ;
+        Text [ de ] = "Bibliothek erstellen" ;
+        Text [ en-US ] = "Create Library" ;
     };
     String STR_NEWMACRO
     {
-        Text = "Macro erstellen" ;
-        Text [ English ] = "Create Macro" ;
-        Text [ english_us ] = "Create Macro" ;
+        Text [ de ] = "Macro erstellen" ;
+        Text [ en-US ] = "Create Macro" ;
     };
     String STR_FT_NEWMACRO
     {
-        Text = "Geben Sie den Namen für das neue Macro ein." ;
-        Text [ English ] = "Enter the name for the new macro." ;
-        Text [ english_us ] = "Enter the name for the new macro." ;
+        Text [ de ] = "Geben Sie den Namen für das neue Macro ein." ;
+        Text [ en-US ] = "Enter the name for the new macro." ;
     };
     String STR_RENAME
     {
-        Text = "Umbenennen" ;
-        Text [ English ] = "Rename" ;
-        Text [ english_us ] = "Rename" ;
+        Text [ de ] = "Umbenennen" ;
+        Text [ en-US ] = "Rename" ;
     };
     String STR_FT_RENAME
     {
-        Text = "Geben Sie den Namen für das ausgewählte Objekt ein." ;
-        Text [ English ] = "Enter the new name for the selected object." ;
-        Text [ english_us ] = "Enter the new name for the selected object." ;
+        Text [ de ] = "Geben Sie den Namen für das ausgewählte Objekt ein." ;
+        Text [ en-US ] = "Enter the new name for the selected object." ;
     };
 };
 String STR_DELQUERY
 {
-    Text = "Möchten Sie das folgende Objekt löschen?";
-    Text [ English ] = "Do you want to delete the following object?";
-    Text [ english_us ] = "Do you want to delete the following object?";
+    Text [ de ] = "Möchten Sie das folgende Objekt löschen?";
+    Text [ en-US ] = "Do you want to delete the following object?";
 };
 String STR_DELQUERY_TITLE
 {
-    Text = "Löschen bestätigen";
-    Text [ English ] = "Confirm Deletion";
-    Text [ english_us ] = "Confirm Deletion";
+    Text [ de ] = "Löschen bestätigen";
+    Text [ en-US ] = "Confirm Deletion";
 };
 String STR_DELFAILED
 {
-    Text = "Das ausgewälte Objekt konnte nicht gelöscht werden.";
-    Text [ English ] = "The selected object could not be deleted.";
-    Text [ english_us ] = "The selected object could not be deleted.";
+    Text [ de ] = "Das ausgewälte Objekt konnte nicht gelöscht werden.";
+    Text [ en-US ] = "The selected object could not be deleted.";
 };
 String STR_DELFAILEDPERM
 {
-    Text = " Sie haben keine Berechtigung zum Löschen dieses Objektes.";
-    Text [ English ] = " You do not have permission to delete this object.";
-    Text [ english_us ] = " You do not have permission to delete this object.";
+    Text [ de ] = " Sie haben keine Berechtigung zum Löschen dieses Objektes.";
+    Text [ en-US ] = " You do not have permission to delete this object.";
 };
 String STR_DELFAILED_TITLE
 {
-    Text = "Fehler beim Löschen";
-    Text [ English ] = "Error Deleting Object";
-    Text [ english_us ] = "Error Deleting Object";
+    Text [ de ] = "Fehler beim Löschen";
+    Text [ en-US ] = "Error Deleting Object";
 };
 String STR_CREATEFAILED
 {
-    Text = "Das Objekt konnte nicht erstellt werden.";
-    Text [ English ] = "The object could not be created.";
-    Text [ english_us ] = "The object could not be created.";
+    Text [ de ] = "Das Objekt konnte nicht erstellt werden.";
+    Text [ en-US ] = "The object could not be created.";
 };
 String STR_CREATEFAILEDDUP
 {
-    Text = " Ein Objekt mit dem selben Namen existiert bereits.";
-    Text [ English ] = " Object with the same name already exists.";
-    Text [ english_us ] = " Object with the same name already exists.";
+    Text [ de ] = " Ein Objekt mit dem selben Namen existiert bereits.";
+    Text [ en-US ] = " Object with the same name already exists.";
 };
 String STR_CREATEFAILEDPERM
 {
-    Text = " Sie haben keine Berechtigung zum Erstellen dieses Objektes.";
-    Text [ English ] = " You do not have permission to create this object.";
-    Text [ english_us ] = " You do not have permission to create this object.";
+    Text [ de ] = " Sie haben keine Berechtigung zum Erstellen dieses Objektes.";
+    Text [ en-US ] = " You do not have permission to create this object.";
 };
 String STR_CREATEFAILED_TITLE
 {
-    Text = "Fehler beim Erstellen";
-    Text [ English ] = "Error Creating Object";
-    Text [ english_us ] = "Error Creating Object";
+    Text [ de ] = "Fehler beim Erstellen";
+    Text [ en-US ] = "Error Creating Object";
 };
 String STR_RENAMEFAILED
 {
-    Text = "Das Objekt konnte nicht umbenannt werden.";
-    Text [ English ] = "The object could not be renamed.";
-    Text [ english_us ] = "The object could not be renamed.";
+    Text [ de ] = "Das Objekt konnte nicht umbenannt werden.";
+    Text [ en-US ] = "The object could not be renamed.";
 };
 String STR_RENAMEFAILEDPERM
 {
-    Text = " Sie haben keine Berechtigung zum Umbenennen dieses Objektes.";
-    Text [ English ] = " You do not have permission to rename this object.";
-    Text [ english_us ] = " You do not have permission to rename this object.";
+    Text [ de ] = " Sie haben keine Berechtigung zum Umbenennen dieses Objektes.";
+    Text [ en-US ] = " You do not have permission to rename this object.";
 };
 String STR_RENAMEFAILED_TITLE
 {
-    Text = "Fehler beim Umbennen";
-    Text [ English ] = "Error Renaming Object";
-    Text [ english_us ] = "Error Renaming Object";
+    Text [ de ] = "Fehler beim Umbennen";
+    Text [ en-US ] = "Error Renaming Object";
 };
