@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.127 $
+#   $Revision: 1.128 $
 #
-#   last change: $Author: vg $ $Date: 2004-11-22 14:30:31 $
+#   last change: $Author: vg $ $Date: 2004-12-03 14:52:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.127 $ ';
+    $id_str = ' $Revision: 1.128 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1218,24 +1218,24 @@ sub BuildDependent {
                 # start current child & all
                 # that could be started now
                 start_child($child_nick) if ($child_nick);
-                $child_nick = &PickPrjToBuild($dependencies_hash);
+                $child_nick = PickPrjToBuild($dependencies_hash);
                 if (!$child_nick) {
                     return if ($BuildAllParents);
                     sleep 1 if (!$no_projects);
                 };
             } while (!$no_projects);
             return if ($BuildAllParents);
+            while (children_number()) {
+                handle_dead_children();
+                sleep 1;
+            };
 
             if (defined $broken_modules_hashes{$dependencies_hash}) {
-                while (children_number()) {
-                    handle_dead_children();
-                    sleep 1;
-                }
                 cancel_build();
             }
-            &mp_success_exit;
+            mp_success_exit();
         } else {
-            &dmake_dir($child_nick);
+            dmake_dir($child_nick);
         };
         $child_nick = '';
     };
