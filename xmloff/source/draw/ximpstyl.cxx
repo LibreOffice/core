@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 14:53:22 $
+ *  last change: $Author: cl $ $Date: 2001-06-27 15:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
             if( (nPrefix == XML_NAMESPACE_XLINK) && aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
             {
                 uno::Any aAny;
-                aAny <<= xAttrList->getValueByIndex(i);
+                aAny <<= GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) );
                 XMLPropertyState aPropState( rProp.mnIndex, aAny );
                 rProperties.push_back( aPropState );
             }
@@ -837,9 +837,9 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
         // look for PageMaster with this name
 
         // #80012# GetStylesContext() replaced with GetAutoStylesContext()
-        const SvXMLStyleContext* pStyle =
-            GetSdImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
-            XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, msPageMasterName);
+        const SvXMLStylesContext* pAutoStyles = GetSdImport().GetShapeImport()->GetAutoStylesContext();
+
+        const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, msPageMasterName) : NULL;
 
         if(pStyle && pStyle->ISA(SdXMLPageMasterContext))
         {
