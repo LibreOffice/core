@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-28 09:48:42 $
+ *  last change: $Author: csaba $ $Date: 2000-12-07 18:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,17 +777,28 @@ SfxIniManager* SfxApplication::CreateIniManager()
     // A fat office can be repaired by user himself ...
     // but portal problems must fixed by an admin!
     String aMsg;
+
+    // Changed as per BugID 79541 Branding/Configuration
+    ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
+    UNOANY MyAny = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    UNOOUSTRING aProductName ;
+
+    MyAny >>= aProductName;
+
     if( Application::IsRemoteServer())
     {
         aMsg += DEFINE_CONST_UNICODE("Your user account is not configured correctly.\n");
-        aMsg += DEFINE_CONST_UNICODE("Please contact your StarPortal administator.\n");
+            aMsg += DEFINE_CONST_UNICODE("Please contact your %PRODUCTNAME administator.\n");
     }
     else
     {
         aMsg += DEFINE_CONST_UNICODE("Configuration files could not be found.\n");
-        aMsg += DEFINE_CONST_UNICODE("Can't start neither StarOffice nor Setup.\n");
+            aMsg += DEFINE_CONST_UNICODE("Can't start neither %PRODUCTNAME nor Setup.\n");
         aMsg += DEFINE_CONST_UNICODE("Please try to start setup by yourself.");
     }
+
+    // merge Productname into the String
+    aMsg.SearchAndReplaceAscii( "%PRODUCTNAME" , aProductName );
 
     String aImageName( aSetupObj.PathToFileName() );
     ::vos::OProcess aProcess( aImageName.GetBuffer() );
@@ -1240,17 +1251,27 @@ SfxIniManager* SfxApplication::CreateIniManager()
     // A fat office can be repaired by user himself ...
     // but portal problems must fixed by an admin!
     String aMsg;
+    // Changed as per BugID 79541 Branding/Configuration
+    ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
+    UNOANY MyAny = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME);
+    UNOOUSTRING aProductName ;
+
+    MyAny >>= aProductName;
+
     if( Application::IsRemoteServer())
     {
         aMsg += DEFINE_CONST_UNICODE("Your user account is not configured correctly.\n");
-        aMsg += DEFINE_CONST_UNICODE("Please contact your StarPortal administator.\n");
+            aMsg += DEFINE_CONST_UNICODE("Please contact your %PRODUCTNAME administator.\n");
     }
     else
     {
         aMsg += DEFINE_CONST_UNICODE("Configuration files could not be found.\n");
-        aMsg += DEFINE_CONST_UNICODE("Can't start neither StarOffice nor Setup.\n");
+            aMsg += DEFINE_CONST_UNICODE("Can't start neither %PRODUCTNAME nor Setup.\n");
         aMsg += DEFINE_CONST_UNICODE("Please try to start setup by yourself.");
     }
+
+    // merge Productname into the String
+    aMsg.SearchAndReplaceAscii("%PRODUCTNAME" , aProductName );
 
     String aImageName( aSetupObj.PathToFileName() );
     ::vos::OProcess aProcess( aImageName.GetBuffer() );
