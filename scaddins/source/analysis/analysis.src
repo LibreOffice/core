@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-14 09:06:09 $
+ *  last change: $Author: gt $ $Date: 2001-06-14 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2260,8 +2260,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselI
         {
-            Text = "X";
-            Text[ english ] = "X";
+            Text = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text[ english ] = "The value at which to evaluate the function";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "The value at which to evaluate the function";
             Text[ portuguese ] = "x";
@@ -2398,8 +2398,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselJ
         {
-            Text = "X";
-            Text[ english ] = "X";
+            Text = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text[ english ] = "The value at which to evaluate the function";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "The value at which to evaluate the function";
             Text[ portuguese ] = "x";
@@ -2536,8 +2536,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselK
         {
-            Text = "X";
-            Text[ english ] = "X";
+            Text = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text[ english ] = "The value at which to evaluate the function";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "The value at which to evaluate the function";
             Text[ portuguese ] = "x";
@@ -2674,8 +2674,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselY
         {
-            Text = "X";
-            Text[ english ] = "X";
+            Text = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text[ english ] = "The value at which to evaluate the function";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "The value at which to evaluate the function";
             Text[ portuguese ] = "x";
