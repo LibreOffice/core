@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 12:27:21 $
+ *  last change: $Author: os $ $Date: 2002-08-13 15:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1363,22 +1363,16 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCHR_INET_NORMAL:
         {
-            if(SwViewOption::IsLinks())
-            {
-                Color aCol( SwViewOption::GetLinksColor() );
-                aSet.Put( SvxColorItem( aCol ) );
-                aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
-            }
+            Color aCol( COL_BLUE );
+            aSet.Put( SvxColorItem( aCol ) );
+            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
         }
         break;
     case RES_POOLCHR_INET_VISIT:
         {
-            if(SwViewOption::IsVisitedLinks())
-            {
-                Color aCol( SwViewOption::GetVisitedLinksColor() );
-                aSet.Put( SvxColorItem( aCol ) );
-                aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
-            }
+            Color aCol( COL_RED );
+            aSet.Put( SvxColorItem( aCol ) );
+            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
         }
         break;
     case RES_POOLCHR_JUMPEDIT:
