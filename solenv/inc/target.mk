@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.111 $
+#   $Revision: 1.112 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-13 12:31:46 $
+#   last change: $Author: hjs $ $Date: 2002-06-14 09:24:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,9 @@ SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
 .ENDIF
 
 .INCLUDE : pstrules.mk
+
+.INCLUDE : tg_yxx.mk
+
 
 .IF "$(nodep)"==""
 .IF "$(TESTOBJECTS)"!=""
@@ -2300,12 +2303,6 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 .ELSE
 .INCLUDE : tg_res.mk
 .ENDIF
-
-# -------
-# - YXX -
-# -------
-
-.INCLUDE : tg_yxx.mk
 
 # -------
 # - APP -
