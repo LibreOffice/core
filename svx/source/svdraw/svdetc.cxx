@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-04 16:00:49 $
+ *  last change: $Author: ka $ $Date: 2001-04-12 15:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 
 #ifndef _SV_CONFIG_HXX //autogen
 #include <vcl/config.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_CACHEOPTIONS_HXX
+#include <svtools/cacheoptions.hxx>
 #endif
 
 #ifndef _SFX_WHITER_HXX //autogen
@@ -201,30 +205,9 @@ SdrGlobalData::~SdrGlobalData()
 OLEObjCache::OLEObjCache()
 :   Container( 0 )
 {
-    nSize = 20;
-/* !!! IniManager
-    SfxIniManager* pIniMgr = SfxIniManager::Get();
+    SvtCacheOptions aCacheOptions;
 
-    if(pIniMgr)
-    {
-        sal_Char aTextOLECacheNum[] = "MaxOLEObjectsInDrawingEngineMemory";
-        String aKeyName = UniString(aTextOLECacheNum, sizeof(aTextOLECacheNum-1));
-        String aGroupName(pIniMgr->GetGroupName(SFX_GROUP_WORKINGSET_IMPL));
-
-        if(!pIniMgr->ReadKey(aGroupName, aKeyName).Len())
-        {
-            pIniMgr->WriteKey(aGroupName, aKeyName, UniString::CreateFromInt32(nSize));
-        }
-        else
-        {
-            String aIniManagerString = pIniMgr->Get(SFX_GROUP_WORKINGSET_IMPL, aKeyName);
-            nSize = aIniManagerString.ToInt32();
-
-            if(nSize < 5)
-                nSize = 5;
-        }
-    }
-*/
+    nSize = aCacheOptions.GetDrawingEngineOLE_Objects();
     pTimer = new AutoTimer();
     Link aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 
