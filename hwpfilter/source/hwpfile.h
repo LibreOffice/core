@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpfile.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:37:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 // hwpfile.h
 // (C) 1998 Mizi Research, All rights are reserved
 //
-// $Id: hwpfile.h,v 1.1 2003-10-15 14:37:09 dvo Exp $
+// $Id: hwpfile.h,v 1.2 2005-02-16 18:17:47 vg Exp $
 //
 
 #ifndef _HWPFILE_H_
@@ -133,7 +133,7 @@ struct ColumnInfo{
  *
  * @short HWP file management object
  * @author Mizi Reserach
- * @version $Id: hwpfile.h,v 1.1 2003-10-15 14:37:09 dvo Exp $
+ * @version $Id: hwpfile.h,v 1.2 2005-02-16 18:17:47 vg Exp $
  */
 class DLLEXPORT HWPFile
 {
@@ -246,7 +246,7 @@ class DLLEXPORT HWPFile
  * Reads paragraph list of hwp file from HIODev
  */
         bool ParaListRead();
-/// 그림 등의 추가 정보를 읽는다.
+/* 그림 등의 추가 정보를 읽는다. */
 /**
  * Reads additional information like embeded image of hwp file from HIODev
  */
@@ -341,7 +341,7 @@ class DLLEXPORT HWPFile
         OlePicture *oledata;
 
     private:
-// hwp 파일 이름
+/* hwp 파일 이름 */
         char      fname[256];
           int           m_nCurrentPage;
           int m_nMaxSettedPage;
@@ -359,7 +359,7 @@ class DLLEXPORT HWPFile
         LinkedList<EmPicture> emblist;
         LinkedList<HyperText> hyperlist;
         int currenthyper;
-        LinkedList<ParaShape> pslist;             // 스타오피스의 구조상 필요
+        LinkedList<ParaShape> pslist;             /* 스타오피스의 구조상 필요 */
         LinkedList<CharShape> cslist;
         LinkedList<FBoxStyle> fbslist;
         LinkedList<DateCode> datecodes;

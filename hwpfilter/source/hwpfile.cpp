@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpfile.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:41:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hwpfile.cpp,v 1.1 2003-10-15 14:41:17 dvo Exp $ */
+/* $Id: hwpfile.cpp,v 1.2 2005-02-16 18:17:32 vg Exp $ */
 
 #include "precompile.h"
 
@@ -497,7 +497,7 @@ ColumnDef *HWPFile::GetColumnDef(int num)
     else
         return 0;
 }
-//@return 인덱스는 1부터 시작한다.
+/* @return 인덱스는 1부터 시작한다. */
 int HWPFile::GetPageMasterNum(int page)
 {
     LinkedListIterator<ColumnInfo> it(&columnlist);
