@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportLayouter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 12:47:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
 
 package com.sun.star.wizards.report;
 
-import com.sun.rsasign.s;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.EventObject;
@@ -88,7 +87,6 @@ public class ReportLayouter {
     XListBox xLayoutListBox;
     int iOldContentPos;
     int iOldLayoutPos;
-    XTextComponent xTitleTextBox;
     ReportDocument CurReportDocument;
     public String[][] LayoutFiles;
     public String[][] ContentFiles;
@@ -109,7 +107,6 @@ public class ReportLayouter {
             sOrientationHeader = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 22);
             sOrientVertical = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 23);
             sOrientHorizontal = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 24);
-            sReportTitle = CurUnoDialog.oResource.getResText(UIConsts.RID_REPORT + 33);
 
             ContentFiles = FileAccess.getFolderTitles(CurReportDocument.xMSF, "cnt", ReportWizard.ReportPath);
             LayoutFiles = FileAccess.getFolderTitles(CurReportDocument.xMSF, "stl", ReportWizard.ReportPath);
@@ -121,36 +118,28 @@ public class ReportLayouter {
             //      if ((bcntexists == false) || (bstlexists == false))
             //          throw  new NoValidPathException(CurReportDocument.xMSF);
 
-            CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblTitle",
-                                            new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" }, new Object[] { new Integer(8), sReportTitle, new Integer(95), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE),
-                                            new Short(curtabindex++), new Integer(200)});
-
-            xTitleTextBox = CurUnoDialog.insertTextField("txtTitle", SOTXTTITLE, new TextListenerImpl(),
-                                                new String[] { "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(12), "HID:34362", new Integer(95), new Integer(37), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(169)});
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblContent",
                                             new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(8), slblDataStructure, new Integer(95), new Integer(57), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)});
+                                            new Object[] { new Integer(8), slblDataStructure, new Integer(95), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)});
 
             short iSelPos = (short) JavaTools.FieldInList(ContentFiles[1], ReportWizard.ReportPath + "/cnt-default.stw");
             iOldContentPos = (int) iSelPos;
             xContentListBox = CurUnoDialog.insertListBox("lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                                             new String[] { "Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width" },
-                                            new Object[] { new Integer(74), "HID:34363", new Integer(95), new Integer(67), new short[] { iSelPos }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), new Integer(99)
+                                            new Object[] { new Integer(108), "HID:34363", new Integer(95), new Integer(37), new short[] { iSelPos }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), new Integer(99)
             });
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblLayout",
                                             new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(8), slblPageLayout, new Integer(205), new Integer(57), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)});
+                                            new Object[] { new Integer(8), slblPageLayout, new Integer(205), new Integer(27), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(99)});
 
             short iSelLayoutPos = (short) JavaTools.FieldInList(LayoutFiles[1], ReportWizard.ReportPath + "/stl-default.stw");
             xLayoutListBox = CurUnoDialog.insertListBox("lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                                                     new String[] { "Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width" },
-                                                    new Object[] { new Integer(74), "HID:34364", new Integer(205), new Integer(67), new short[] { iSelLayoutPos }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), new Integer(99)
+                                                    new Object[] { new Integer(108), "HID:34364", new Integer(205), new Integer(37), new short[] { iSelLayoutPos }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), new Integer(99)
             });
             iOldLayoutPos = (int) iSelPos;
-
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblOrientation",
                                         new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
                                         new Object[] { new Integer(8), sOrientationHeader, new Integer(95), new Integer(148), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(74)});
@@ -213,10 +202,13 @@ public class ReportLayouter {
 
                     case SOOPTLANDSCAPE :
                         CurReportDocument.changePageOrientation(curofficepath.BitmapPath, true);
+                        CurUnoDialog.setControlProperty("imgOrientation", "ImageURL", curofficepath.BitmapPath + "/landscape.gif");
+
                         break;
 
                     case SOOPTPORTRAIT :
                         CurReportDocument.changePageOrientation(curofficepath.BitmapPath, false);
+                        CurUnoDialog.setControlProperty("imgOrientation", "ImageURL", curofficepath.BitmapPath + "/portrait.gif");
                         break;
 
                     default :
@@ -226,12 +218,6 @@ public class ReportLayouter {
                 e.printStackTrace();
             }
             CurReportDocument.unlockallControllers();
-            //TODO reset controls
-            //          if (bNewLandscape == true)
-            //              CurUnoDialog.setControlProperty("imgOrientation", "ImageURL", BitmapPath + "/landscape.gif");
-            //          else
-            //              CurUnoDialog.setControlProperty("imgOrientation", "ImageURL", BitmapPath + "/portrait.gif");
-
             Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, "Enabled", new Boolean(true));
         }
 
@@ -258,7 +244,7 @@ public class ReportLayouter {
         }
     }
 
-    class TextListenerImpl implements com.sun.star.awt.XTextListener {
+/*  class TextListenerImpl implements com.sun.star.awt.XTextListener {
 
         public void textChanged(com.sun.star.awt.TextEvent EventObject) {
             try {
@@ -271,6 +257,6 @@ public class ReportLayouter {
 
         public void disposing(EventObject EventObject) {
         }
-    }
+    } */
 
 }
