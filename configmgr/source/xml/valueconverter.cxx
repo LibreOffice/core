@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-12 13:26:29 $
+ *  last change: $Author: lla $ $Date: 2001-05-04 10:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 
 #include "strdecl.hxx"
 #include "typeconverter.hxx"
+
+#include "msc_msg.hxx"
+
+#ifndef _RTL_CHAR_H_
+#include <rtl/char.h>
+#endif
 
 // #define ASCII(x) OUString::createFromAscii(x)
 namespace configmgr
@@ -423,17 +429,24 @@ namespace
     sal_Int32 const NO_MORE_TOKENS = -1;
     struct OTokenizeByWhitespace
     {
+
         static inline bool isWhitespace(sal_Unicode ch)
         {
             // note: for definition of whitescape see also
             //   canUseWhitespace(OUString const&)
             // in xmlformater.cxx
             // -----------------------------------------------------------------------------
+/*
             sal_Unicode const c_chWhite0 = ' ';
             sal_Unicode const c_chWhite1 = '\t';
 
-            OSL_ENSURE(ch != 0xA && ch != 0xD, "Unexpected line break character");
+#pragma MSC_MSG("LLA->JB Why yon handle line breaks uncorrect?")
+            //! OSL_ENSURE((ch != 0xA) && (ch != 0xD), "Unexpected line break character");
+            if (ch == 0xD) return true;
+            if (ch == 0xA) return true;
             return (ch == c_chWhite0) || (ch == c_chWhite1);
+*/
+            return rtl_char_isWhitespace(ch) ? true : false;
         }
 
         sal_Int32 findFirstTokenStart(OUString const& sText) const throw()
