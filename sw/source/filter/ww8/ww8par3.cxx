@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:25:16 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1555,7 +1555,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
         SwNumRule * pNumRule = pTxtNode->GetNumRule(); // #i27610#
 
         if( IsInvalidOrToBeMergedTabCell() &&
-            ! pNumRule->IsOutlineRule() ) // #i27610#
+            ! (pNumRule && pNumRule->IsOutlineRule()) ) // #i27610#
             pTxtNode->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
 
         if( !rStyleInfo.pOutlineNumrule )
