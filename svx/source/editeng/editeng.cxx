@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-02 14:07:17 $
+ *  last change: $Author: mt $ $Date: 2001-04-03 17:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,6 +528,13 @@ USHORT EditEngine::GetScriptType( const ESelection& rSelection ) const
     EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
     return pImpEditEngine->GetScriptType( aSel );
 }
+
+void EditEngine::TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    pImpEditEngine->TransliterateText( pImpEditEngine->CreateSel( rSelection ), nTransliterationMode );
+}
+
 
 void EditEngine::SetPolygon( const XPolyPolygon& rPoly )
 {
