@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-01-17 11:13:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,11 @@
 #include "XMLTextFrameHyperlinkContext.hxx"
 #endif
 
+// OD 2004-04-21 #i26791#
+#ifndef _XMLOFF_TXTPARAIMPHINT_HXX
+#include <txtparaimphint.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -95,12 +100,12 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         TextContentAnchorType eATyp,
-           Reference < XTextContent> *pTxtCntnt,
-        TextContentAnchorType *pAnchrType ) :
+        // OD 2004-04-20 #i26791#
+        XMLTextFrameHint_Impl* pTextFrameHint ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     eAnchorType( eATyp ),
-    pTextContent( pTxtCntnt ),
-    pAnchorType( pAnchrType ),
+    // OD 2004-04-20 #i26791#
+    mpTextFrameHint( pTextFrameHint ),
     bMap( sal_False )
 {
     OUString sShow;
@@ -199,10 +204,12 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
     if( pTextFrameContext )
     {
         pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
-        if( pAnchorType )
-            *pAnchorType = pTextFrameContext->GetAnchorType();
-        if( pTextContent )
-            *pTextContent = pTextFrameContext->GetTextContent();
+        // OD 2004-04-20 #i26791#
+        if ( mpTextFrameHint )
+        {
+            mpTextFrameHint->GetContextRef() = pTextFrameContext;
+            mpTextFrameHint->GetAnchorTypeRef() = pTextFrameContext->GetAnchorType();
+        }
         pContext = pTextFrameContext;
     }
     else
