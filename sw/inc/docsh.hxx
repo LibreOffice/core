@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:13:23 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ public:
 
     // aber selbst implementieren
     SFX_DECL_INTERFACE(SW_DOCSHELL);
-    SFX_DECL_OBJECTFACTORY_DLL(SwDocShell, SW_DLL());
+    SFX_DECL_OBJECTFACTORY(SwDocShell);
     TYPEINFO();
 
     static SfxInterface *_GetInterface() { return _GetInterfaceImpl(); }
