@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:21 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 12:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 
 // Any method of this class must be called with an acquired solar mutex!
 
+class SwAccessibleMap;
+
 class SwAccessibleFrame
 {
     SwRect maVisArea;
@@ -92,10 +94,11 @@ class SwAccessibleFrame
                                     const SwFrmOrObj& rChild,
                                     sal_Int32& rPos,
                                     sal_Bool bInPagePreview );
-    static SwFrmOrObj GetChildAt( const SwRect& rVisArea,
+    static SwFrmOrObj GetChildAtPixel( const SwRect& rVisArea,
                                     const SwFrm *pFrm,
                                     const Point& rPos,
-                                    sal_Bool bInPagePreview );
+                                    sal_Bool bInPagePreview,
+                                    const SwAccessibleMap *pMap );
     static void GetChildren( const SwRect& rVisArea, const SwFrm *pFrm,
                              ::std::list< SwFrmOrObj >& rChildren,
                              sal_Bool bInPagePreview );
@@ -146,7 +149,8 @@ protected:
     inline sal_Int32 GetChildCount() const;
     inline SwFrmOrObj GetChild( sal_Int32 nPos ) const;
     inline sal_Int32 GetChildIndex( const SwFrmOrObj& rChild ) const;
-    inline SwFrmOrObj GetChildAt( const Point& rPos ) const;
+    inline SwFrmOrObj GetChildAtPixel( const Point& rPos,
+                                    const SwAccessibleMap *pMap ) const;
     inline void GetChildren( ::std::list< SwFrmOrObj >& rChildren ) const;
 
     inline void SetVisArea( const SwRect& rNewVisArea );
@@ -194,9 +198,10 @@ inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrmOrObj& rChild ) co
     return GetChildIndex( maVisArea, mpFrm, rChild, nPos, IsInPagePreview() ) ? nPos : -1L;
 }
 
-inline SwFrmOrObj SwAccessibleFrame::GetChildAt( const Point& rPos ) const
+inline SwFrmOrObj SwAccessibleFrame::GetChildAtPixel( const Point& rPos,
+                                    const SwAccessibleMap *pMap ) const
 {
-    return GetChildAt( maVisArea, mpFrm, rPos, IsInPagePreview() );
+    return GetChildAtPixel( maVisArea, mpFrm, rPos, IsInPagePreview(), pMap );
 }
 
 inline void SwAccessibleFrame::GetChildren(

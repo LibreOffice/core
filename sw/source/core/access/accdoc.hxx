@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-07 07:32:53 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 12:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@ public:
         getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleComponent  ==============================================
+    virtual sal_Bool SAL_CALL contains(
+            const ::com::sun::star::awt::Point& aPoint )
+        throw (::com::sun::star::uno::RuntimeException);
+
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt(
                 const ::com::sun::star::awt::Point& aPoint )

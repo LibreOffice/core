@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-06 08:29:17 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 12:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,15 +823,35 @@ sal_Bool SAL_CALL SwAccessibleContext::contains(
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
+    const SwFrm *pParent = GetParent();
+    ASSERT( pParent, "no Parent found" );
+
     Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
     SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
+    Rectangle aPixBounds( 0, 0, 0, 0 );
+    if( GetFrm()->IsPageFrm() &&
+        static_cast < const SwPageFrm * >( GetFrm() )->IsEmptyPage() )
+    {
+        ASSERT( GetShell()->IsPreView(), "empty page accessible?" );
+        if( GetShell()->IsPreView() )
+            aLogBounds.SSize( GetMap()->GetPreViewPageSize() );
+    }
+    if( !aLogBounds.IsEmpty() )
+    {
+        aPixBounds = GetMap()->CoreToPixel( aLogBounds.SVRect() );
+        if( !pParent->IsRootFrm() )
+        {
+            Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
+            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
+            aPixBounds.Left() -= aParentPixPos.X();
+            aPixBounds.Top() -= aParentPixPos.Y();
+        }
+    }
 
-    Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
-    Point aLogPoint( pWin->PixelToLogic( aPixPoint ) ); // twip rel to doc root
-
-    return aLogBounds.IsInside( aLogPoint );
+    Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
+    return aPixBounds.IsInside( aPixPoint );
 }
 
 
@@ -843,15 +863,23 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
+    const SwFrm *pParent = GetParent();
+
     Reference< XAccessible > xAcc;
 
     Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-    Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
-    Point aLogPoint( GetMap()->PixelToCore( aPixPoint ) ); // twip rel to doc root
+    Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
+    if( pParent && !pParent->IsRootFrm() )
+    {
+        Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
+        Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
+        aPixPoint.X() += aParentPixPos.X();
+        aPixPoint.Y() += aParentPixPos.Y();
+    }
 
-    const SwFrmOrObj aChild( GetChildAt( aLogPoint ) );
+    const SwFrmOrObj aChild( GetChildAtPixel( aPixPoint, GetMap() ) );
     if( aChild.GetSwFrm() )
     {
         xAcc = GetMap()->GetContext( aChild.GetSwFrm() );

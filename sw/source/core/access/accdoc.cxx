@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-09 12:51:26 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 12:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,22 @@ awt::Point SAL_CALL SwAccessibleDocumentBase::getLocation()
     awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
 
     return aSize;
+}
+
+sal_Bool SAL_CALL SwAccessibleDocumentBase::contains(
+            const ::com::sun::star::awt::Point& aPoint )
+        throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    Window *pWin = GetWindow();
+
+    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+
+    Rectangle aPixBounds( pWin->GetWindowExtentsRelative( pWin->GetAccessibleParentWindow() ) );
+
+    Point aPixPoint( aPoint.X, aPoint.Y );
+    return aPixBounds.IsInside( aPixPoint );
 }
 
 Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-10 16:53:33 $
+ *  last change: $Author: mib $ $Date: 2002-08-07 12:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,10 +292,11 @@ sal_Bool SwAccessibleFrame::GetChildIndex( const SwRect& rVisArea,
     return bFound;
 }
 
-SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
+SwFrmOrObj SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
                                           const SwFrm *pFrm,
-                                          const Point& rPos,
-                                          sal_Bool bInPagePreview )
+                                          const Point& rPixPos,
+                                          sal_Bool bInPagePreview,
+                                          const SwAccessibleMap *pMap )
 {
     SwFrmOrObj aRet;
 
@@ -312,14 +313,19 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
             // and the positiion is inside the frame's paint area.
             if( rLower.IsAccessible( bInPagePreview ) )
             {
-                if( rLower.GetBounds().IsInside( rPos ) )
-                    aRet = rLower;
+                SwRect aLogBounds( rLower.GetBounds( ) );
+                if( !aLogBounds.IsEmpty() )
+                {
+                    Rectangle aPixBounds( pMap->CoreToPixel( aLogBounds.SVRect() ) );
+                    if( aPixBounds.IsInside( rPixPos ) )
+                        aRet = rLower;
+                }
             }
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos,
-                                   bInPagePreview );
+                aRet = GetChildAtPixel( rVisArea, rLower.GetSwFrm(), rPixPos,
+                                   bInPagePreview, pMap );
             }
             aRIter++;
         }
@@ -338,14 +344,19 @@ SwFrmOrObj SwAccessibleFrame::GetChildAt( const SwRect& rVisArea,
             // and the positiion is inside the frame's paint area.
             if( rLower.IsAccessible( bInPagePreview ) )
             {
-                if( rLower.GetBounds().IsInside( rPos ) )
-                    aRet = rLower;
+                SwRect aLogBounds( rLower.GetBounds( ) );
+                if( !aLogBounds.IsEmpty() )
+                {
+                    Rectangle aPixBounds( pMap->CoreToPixel( aLogBounds.SVRect() ) );
+                    if( aPixBounds.IsInside( rPixPos ) )
+                        aRet = rLower;
+                }
             }
             else if( rLower.GetSwFrm() )
             {
                 // There are no unaccessible SdrObjects that count
-                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos,
-                                   bInPagePreview );
+                aRet = GetChildAtPixel( rVisArea, rLower.GetSwFrm(), rPixPos,
+                                   bInPagePreview, pMap );
             }
             ++aIter;
         }
