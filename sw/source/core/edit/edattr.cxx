@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:40:11 $
+ *  last change: $Author: jp $ $Date: 2000-11-23 20:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#include <com/sun/star/i18n/ScriptType.hdl>
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 
 #ifndef _TXATBASE_HXX //autogen
@@ -121,11 +121,18 @@
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
-#ifndef _SCRPMTCH_HXX
-#include <scrpmtch.hxx>
-#endif
 
+#if SUPD<614
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
+#endif
+using namespace ::com::sun::star::text;
+#else
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 using namespace ::com::sun::star::i18n;
+#endif
 
 /*************************************
  * harte Formatierung (Attribute)
@@ -467,7 +474,7 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
 // returns the scripttpye of the selection
 USHORT SwEditShell::GetScriptType() const
 {
-    USHORT nRet = SCRIPTTYPE_NONE;
+    USHORT nRet = 0;
     if( pBreakIt->xBreak.is() )
     {
         FOREACHPAM_START(this)
@@ -531,166 +538,5 @@ USHORT SwEditShell::GetScriptType() const
     return nRet;
 }
 
-
-GetLatinAsianComplexAttr::GetLatinAsianComplexAttr( USHORT nWhich )
-    : nWhId( nWhich ), pSet( 0 )
-{
-    Init();
-}
-
-GetLatinAsianComplexAttr::GetLatinAsianComplexAttr( USHORT nWhich,
-                                                    SwEditShell& rSh )
-    : nWhId( nWhich )
-{
-    Init();
-    pSet = new SfxItemSet( rSh.GetAttrPool(), nWhId, nWhId,
-                                        nCJKWhId, nCJKWhId,
-                                        nCTLWhId, nCTLWhId,
-                                        0 );
-    rSh.GetAttr( *pSet );
-}
-GetLatinAsianComplexAttr::~GetLatinAsianComplexAttr()
-{
-    delete pSet;
-}
-
-void GetLatinAsianComplexAttr::Init()
-{
-    switch( nWhId )
-    {
-    case RES_CHRATR_FONT:
-        nCJKWhId = RES_CHRATR_CJK_FONT;
-        nCTLWhId = RES_CHRATR_CTL_FONT;
-        break;
-    case RES_CHRATR_FONTSIZE:
-        nCJKWhId = RES_CHRATR_CJK_FONTSIZE;
-        nCTLWhId = RES_CHRATR_CTL_FONTSIZE;
-        break;
-    case RES_CHRATR_POSTURE:
-        nCJKWhId = RES_CHRATR_CJK_POSTURE;
-        nCTLWhId = RES_CHRATR_CTL_POSTURE;
-        break;
-    case RES_CHRATR_WEIGHT:
-        nCJKWhId = RES_CHRATR_CJK_WEIGHT;
-        nCTLWhId = RES_CHRATR_CTL_WEIGHT;
-        break;
-    case RES_CHRATR_LANGUAGE:
-        nCJKWhId = RES_CHRATR_CJK_LANGUAGE;
-        nCTLWhId = RES_CHRATR_CTL_LANGUAGE;
-        break;
-
-    default:
-        ASSERT( !this, "wrong WhichId for this class" );
-        nWhId = 0;
-    }
-}
-
-
-const SfxItemSet* GetLatinAsianComplexAttr::GetItemSet( USHORT nScriptType,
-                                                const SfxItemSet* pGetSet )
-{
-    if( !pGetSet )
-        pGetSet = pSet;
-
-    const USHORT nArrLen = 3;
-    struct {
-        const SfxPoolItem* pItem;
-        USHORT nWhichId, nClearId;
-    } aItemArr[ nArrLen ] = {
-        { 0, nWhId, nWhId },
-        { 0, nCJKWhId, nCJKWhId },
-        { 0, nCTLWhId, nCTLWhId }
-    };
-
-
-    for( USHORT nArrIdx = 0; nArrIdx < nArrLen; ++nArrIdx )
-    {
-        USHORT nWId = aItemArr[ nArrIdx ].nWhichId;
-        SfxItemState eState = pGetSet->GetItemState( nWId, FALSE,
-                                            &aItemArr[ nArrIdx ].pItem );
-        if( SFX_ITEM_DONTCARE == eState )
-            aItemArr[ nArrIdx ].pItem = 0;
-        else if( SFX_ITEM_SET != eState || pGetSet != pSet )
-        {
-            pSet->Put( pSet->Get( nWId ));
-            aItemArr[ nArrIdx ].pItem = &pSet->Get( nWId );
-        }
-    }
-
-#define SCRIPTTYPE_NONE     0
-#define SCRIPTTYPE_LATIN    1
-#define SCRIPTTYPE_ASIAN    2
-#define SCRIPTTYPE_COMPLEX  4
-
-    switch( nScriptType )
-    {
-    case SCRIPTTYPE_NONE:       //no one valid -> match to latin
-    case SCRIPTTYPE_LATIN:
-        if( aItemArr[ 0 ].pItem )
-            aItemArr[ 0 ].nClearId = 0;
-        break;
-    case SCRIPTTYPE_ASIAN:
-        if( aItemArr[ 1 ].pItem )
-            aItemArr[ 1 ].nClearId = 0;
-        break;
-    case SCRIPTTYPE_COMPLEX:
-        if( aItemArr[ 2 ].pItem )
-            aItemArr[ 2 ].nClearId = 0;
-        break;
-
-    case SCRIPTTYPE_LATIN|SCRIPTTYPE_ASIAN:
-        if(  aItemArr[ 0 ].pItem &&  aItemArr[ 1 ].pItem &&
-            *aItemArr[ 0 ].pItem == *aItemArr[ 1 ].pItem )
-            aItemArr[ 0 ].nClearId = aItemArr[ 1 ].nClearId = 0;
-        break;
-
-    case SCRIPTTYPE_LATIN|SCRIPTTYPE_COMPLEX:
-        if(  aItemArr[ 0 ].pItem &&  aItemArr[ 2 ].pItem &&
-            *aItemArr[ 0 ].pItem == *aItemArr[ 2 ].pItem )
-            aItemArr[ 0 ].nClearId = aItemArr[ 2 ].nClearId = 0;
-        break;
-
-    case SCRIPTTYPE_ASIAN|SCRIPTTYPE_COMPLEX:
-        if(  aItemArr[ 1 ].pItem &&  aItemArr[ 2 ].pItem &&
-            *aItemArr[ 1 ].pItem == *aItemArr[ 2 ].pItem )
-            aItemArr[ 1 ].nClearId = aItemArr[ 2 ].nClearId = 0;
-        break;
-
-    case SCRIPTTYPE_LATIN|SCRIPTTYPE_ASIAN|SCRIPTTYPE_COMPLEX:
-        if( aItemArr[0].pItem && aItemArr[1].pItem && aItemArr[2].pItem &&
-            *aItemArr[0].pItem == *aItemArr[1].pItem &&
-            *aItemArr[0].pItem == *aItemArr[2].pItem )
-            aItemArr[0].nClearId = aItemArr[1].nClearId =
-                aItemArr[2].nClearId = 0;
-        break;
-    }
-
-    for( nArrIdx = 0; nArrIdx < nArrLen; ++nArrIdx )
-    {
-        USHORT nWId = aItemArr[nArrIdx].nClearId;
-        if( nWId )
-            pSet->ClearItem( nWId );
-    }
-    if( !pSet->Count() )
-        delete pSet, pSet = 0;
-
-    return pSet;
-}
-
-const SfxItemSet* GetLatinAsianComplexAttr::GetItemSet(USHORT nScriptType)
-{
-    return ( pSet && nWhId ) ? GetItemSet( nScriptType, 0 ) : 0;
-}
-
-const SfxItemSet* GetLatinAsianComplexAttr::GetItemSet( USHORT nScriptType,
-                                                const SfxItemSet& rSet )
-{
-    if( !pSet && nWhId )
-        pSet = new SfxItemSet( *rSet.GetPool(), nWhId, nWhId,
-                                        nCJKWhId, nCJKWhId,
-                                        nCTLWhId, nCTLWhId,
-                                        0 );
-    return nWhId ? GetItemSet( nScriptType, &rSet ) : 0;
-}
 
 
