@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:07:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,18 @@ protected:
 public:
     TYPEINFO();
 
-    SwTable( SwTableFmt* );
+    // single argument ctors shall be explicit.
+    explicit SwTable( SwTableFmt* );
+    virtual ~SwTable();
+
+    // @@@ public copy ctor, but no copy assignment?
     SwTable( const SwTable& rTable );       // kein Copy der Lines !!
-    ~SwTable();
+private:
+    // @@@ public copy ctor, but no copy assignment?
+    SwTable & operator= (const SwTable &);
+    // no default ctor.
+    SwTable();
+public:
 
     SwHTMLTableLayout *GetHTMLTableLayout() { return pHTMLLayout; }
     const SwHTMLTableLayout *GetHTMLTableLayout() const { return pHTMLLayout; }
@@ -282,8 +291,10 @@ class SwTableLine: public SwClient      // Client vom FrmFmt
 public:
     TYPEINFO();
 
+    SwTableLine() : pUpper(0) {}
+
     SwTableLine( SwTableLineFmt*, USHORT nBoxes, SwTableBox *pUp );
-    ~SwTableLine();
+    virtual ~SwTableLine();
 
           SwTableBoxes &GetTabBoxes() { return aBoxes; }
     const SwTableBoxes &GetTabBoxes() const { return aBoxes; }
@@ -317,13 +328,13 @@ class SwTableBox: public SwClient       //Client vom FrmFmt
 
     //nicht (mehr) implementiert.
     SwTableBox( const SwTableBox & );
+    SwTableBox &operator=( const SwTableBox &); //gibts nicht.
 
     SwTableLines aLines;
     const SwStartNode * pSttNd;
     SwTableLine *pUpper;
     SwTableBox_Impl* pImpl;
 
-    SwTableBox &operator=( const SwTableBox &); //gibts nicht.
     // falls das Format schon Formeln/Values enthaelt, muss ein neues
     // fuer die neue Box erzeugt werden.
     SwTableBoxFmt* CheckBoxFmt( SwTableBoxFmt* );
@@ -331,10 +342,12 @@ class SwTableBox: public SwClient       //Client vom FrmFmt
 public:
     TYPEINFO();
 
+    SwTableBox() : pSttNd(0), pUpper(0), pImpl(0) {}
+
     SwTableBox( SwTableBoxFmt*, USHORT nLines, SwTableLine *pUp = 0 );
     SwTableBox( SwTableBoxFmt*, const SwStartNode&, SwTableLine *pUp = 0 );
     SwTableBox( SwTableBoxFmt*, const SwNodeIndex&, SwTableLine *pUp = 0 );
-    ~SwTableBox();
+    virtual ~SwTableBox();
 
           SwTableLines &GetTabLines() { return aLines; }
     const SwTableLines &GetTabLines() const { return aLines; }
