@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2000-10-06 05:30:59 $
+ *  last change: $Author: pb $ $Date: 2000-10-26 12:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,11 @@ SvtHelpOptions::~SvtHelpOptions()
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( getInitMutex() );
     if ( !--nRefCount )
+    {
+        if ( pOptions->IsModified() )
+            pOptions->Commit();
         DELETEZ( pOptions );
+    }
 }
 
 void SvtHelpOptions::SetExtendedHelp( sal_Bool b )

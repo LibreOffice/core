@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-09 06:30:33 $
+ *  last change: $Author: pb $ $Date: 2000-10-26 12:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,11 @@ SvtUserOptions::~SvtUserOptions()
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if ( !--nRefCount )
+    {
+        if ( pOptions->IsModified() )
+            pOptions->Commit();
         DELETEZ( pOptions );
+    }
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoopt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:18:35 $
+ *  last change: $Author: pb $ $Date: 2000-10-26 12:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,11 @@ SvtUndoOptions::~SvtUndoOptions()
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if ( !--nRefCount )
+    {
+        if ( pOptions->IsModified() )
+            pOptions->Commit();
         DELETEZ( pOptions );
+    }
 }
 
 void SvtUndoOptions::SetUndoCount( sal_Int32 n )
