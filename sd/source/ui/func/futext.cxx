@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:17:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1225,58 +1225,61 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                     pView->EndTextEdit(TRUE);
                 }
 
-                FASTBOOL bNewObj = TRUE;
-
-                OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
-                if( ( pOPO && pOPO->IsVertical() ) ||
-                    nSlotId == SID_ATTR_CHAR_VERTICAL ||
-                    nSlotId == SID_TEXT_FITTOSIZE_VERTICAL )
-                    pOutl->SetVertical( TRUE );
-
-
-                if (pView->BegTextEdit(pTextObj, pPV, pWindow, bNewObj, pOutl) &&
-                    pTextObj->GetObjInventor() == SdrInventor)
+                if( pTextObj )
                 {
-                    bFirstObjCreated = TRUE;
-                    DeleteDefaultText();
+                    FASTBOOL bNewObj = TRUE;
 
-                    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+                    OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+                    if( ( pOPO && pOPO->IsVertical() ) ||
+                        nSlotId == SID_ATTR_CHAR_VERTICAL ||
+                        nSlotId == SID_TEXT_FITTOSIZE_VERTICAL )
+                        pOutl->SetVertical( TRUE );
 
-                    UINT16 nSdrObjKind = pTextObj->GetObjIdentifier();
 
-                    SdrViewEvent aVEvt;
-                    SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
-
-                    if (eHit == SDRHIT_TEXTEDIT)
+                    if (pView->BegTextEdit(pTextObj, pPV, pWindow, bNewObj, pOutl) &&
+                        pTextObj->GetObjInventor() == SdrInventor)
                     {
-                        // Text getroffen
-                        if (nSdrObjKind == OBJ_TEXT ||
-                            nSdrObjKind == OBJ_TITLETEXT ||
-                            nSdrObjKind == OBJ_OUTLINETEXT ||
-                            nSlotId == SID_TEXTEDIT ||
-                            !bQuickDrag)
-                        {
-                            pOLV->MouseButtonDown(rMEvt);
-                            pOLV->MouseMove(rMEvt);
-                            pOLV->MouseButtonUp(rMEvt);
-                        }
+                        bFirstObjCreated = TRUE;
+                        DeleteDefaultText();
 
-                        if (pViewShell->GetFrameView()->IsQuickEdit() &&
-                            bQuickDrag && pTextObj->GetOutlinerParaObject())
+                        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+
+                        UINT16 nSdrObjKind = pTextObj->GetObjIdentifier();
+
+                        SdrViewEvent aVEvt;
+                        SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+
+                        if (eHit == SDRHIT_TEXTEDIT)
                         {
-                            pOLV->MouseButtonDown(rMEvt);
+                            // Text getroffen
+                            if (nSdrObjKind == OBJ_TEXT ||
+                                nSdrObjKind == OBJ_TITLETEXT ||
+                                nSdrObjKind == OBJ_OUTLINETEXT ||
+                                nSlotId == SID_TEXTEDIT ||
+                                !bQuickDrag)
+                            {
+                                pOLV->MouseButtonDown(rMEvt);
+                                pOLV->MouseMove(rMEvt);
+                                pOLV->MouseButtonUp(rMEvt);
+                            }
+
+                            if (pViewShell->GetFrameView()->IsQuickEdit() &&
+                                bQuickDrag && pTextObj->GetOutlinerParaObject())
+                            {
+                                pOLV->MouseButtonDown(rMEvt);
+                            }
+                        }
+                        else
+                        {
+                            // #98198# Move cursor to end of text
+                            ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+                            pOLV->SetSelection(aNewSelection);
                         }
                     }
                     else
                     {
-                        // #98198# Move cursor to end of text
-                        ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-                        pOLV->SetSelection(aNewSelection);
+                        RestoreDefaultText();
                     }
-                }
-                else
-                {
-                    RestoreDefaultText();
                 }
             }
         }
