@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-23 07:55:18 $
+ *  last change: $Author: pb $ $Date: 2001-02-27 13:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,6 @@
 #define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)
 #define RID_STR_HLPAPPNOTSTARTED                (RID_SFX_APP_START+69)
 
-#define STR_NOMODUL                             (RID_SFX_APP_START+73)
-#define STR_NOOFFICE                            (RID_SFX_APP_START+74)
 #define STR_NODOUBLE                            (RID_SFX_APP_START+75)
 #define STR_NOPRINTER                           (RID_SFX_APP_START+76)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-12 13:35:03 $
+ *  last change: $Author: pb $ $Date: 2001-02-27 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,60 +1509,6 @@ String STR_NOPRINTER
     Text[ greek ] = "Ορισμένες από τις λειτουργίες του %PRODUCTNAME δεν θα λειτουργήσουν σωστά χωρίς το πρόγραμμα οδήγησης του εκτυπωτή.\nΠαρακαλώ να γίνει η εγκατάσταση ενός προγράμματος οδήγησης εκτυπωτή.";
     Text[ korean ] = "ΐΟΊΞ  %PRODUCTNAME ±β΄ΙΐΊ ΗΑΈ°ΕΝ µε¶σΐΜΉφ ΎψΐΜ΄Β  Α¤Θ®ΗΟ°Τ ΐΫµΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΗΑΈ°ΕΝ µε¶σΐΜΉφΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Bazύ %PRODUCTNAME iώlevleri yazύcύ sόrόcόsό olmadan doπru ηalύώamaz.\nBir yazύcύ sόrόcόsό kurun.";
-    Text[ language_user1 ] = " ";
-};
-
-String STR_NOMODUL
-{
-    TEXT = "Applikationsmodule kφnnen nicht als Applikationen\ngestartet werden, wenn der StarDesktop aktiv ist." ;
-    TEXT [ English ] = "Application modules may not be started\nif StarDesktop is active." ;
-    Text [ english_us ] = "Application modules may not be started\n when %PRODUCTNAME Desktop is active." ;
-    Text [ italian ] = "Se lo %PRODUCTNAME Desktop θ attivo i moduli applicativi\n non possono essere avviati come apllicazioni." ;
-    Text [ spanish ] = "Los mσdulos de aplicaciσn no pueden ser\niniciados como aplicaciones si el escritorio (%PRODUCTNAME Desktop) estα activo." ;
-    Text [ french ] = "Impossible de dιmarrer les modules d'application comme applications,\n si le %PRODUCTNAME Desktop est actif." ;
-    Text [ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is." ;
-    Text [ swedish ] = "Tillδmpningsmoduler kan inte startas som\ntillδmpningar nδr %PRODUCTNAME Desktop δr aktiv." ;
-    Text [ danish ] = "Det er ikke muligt at starte applikationsmoduler som applikationer,\nεr %PRODUCTNAME Desktop er aktiv." ;
-    Text [ portuguese_brazilian ] = "Applikationsmodule kφnnen nicht als Applikationen\ngestartet werden, wenn der %PRODUCTNAME Desktop aktiv ist." ;
-    Text [ portuguese ] = "Impossνvel iniciar os mσdulos como aplicaηυes quando o %PRODUCTNAME Desktop se encontra activo." ;
-    Text[ chinese_simplified ] = "ΘηΉϋ%PRODUCTNAME Desktop΄¦ΣΪΌ¤»ξΧ΄Μ¬\n£¬Σ¦ΣΓ³ΜΠςµΔΔ£Ώι²»ΔάΉ»µ±ΧχΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠ΅£";
-    Text[ russian ] = "Ηΰοσρκ μξδσλει οπθλξζενθÿ β κΰχερςβε οπθλξζενθι νεβξημξζεν,\nερλθ ΰκςθβθπξβΰν StarDesktoπ.";
-    Text[ polish ] = "Modu³y aplikacji nie mogΉ zostaζ uruchomione jako aplikacje\n, jeli jest w³Ήczony pulpit %PRODUCTNAME Desktop.";
-    Text[ japanese ] = "%PRODUCTNAME Desktop ‚ª±ΈΓ¨Μή‚Μ‚Ζ‚«‚ΝA±ΜίΨΉ°Ό®έ‚Ζ‚µ‚Δ±ΜίΨΉ°Ό®έ ΣΌή­°Ω‚π\nJn‚Ε‚«‚ά‚Ή‚ρB";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Desktop ¨Ο¥Ξ¤¤®Ι\n΅Mΐ³¥Ξµ{§ΗªΊΌÒ¶τ¤£―ΰ°χ·ν§@ΐ³¥Ξµ{¦΅±Ò°ΚΉB¦ζ΅C";
-    Text[ arabic ] = "αΗ νγίδ ΘΟΑ ζΝΟΗΚ ΗαΚΨΘνήΗΚ ΗαδγΨνΙ ίΚΨΘνήΗΚ΅\nΕΠΗ ίΗδ %PRODUCTNAME Desktop δΤΨΗπ.";
-    Text[ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is.";
-    Text[ chinese_simplified ] = "ΘηΉϋ%PRODUCTNAME Desktop΄¦ΣΪΌ¤»ξΧ΄Μ¬\n£¬Σ¦ΣΓ³ΜΠςµΔΔ£Ώι²»ΔάΉ»µ±ΧχΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠ΅£";
-    Text[ greek ] = "Δεν είναι δυνατόν να εκτελεστούν οι λειτουργικές μονάδες εφαρμογών\nόταν είναι ενεργοποιημένο το StarDesktop.";
-    Text[ korean ] = "StarDesktopΐΜ Θ°ΌΊΘ­µΗΎξ ΐΦΐΈΈι.\n ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΊ ΐΐΏλΗΑ·Ξ±Χ·¥ \n·ΞΌ­ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
-    Text[ turkish ] = "Uygulama modόlleri, %PRODUCTNAME masaόstό etkinken uygulama olarak\nηalύώtύrύlamaz.";
-    Text[ language_user1 ] = " ";
-};
-
-String STR_NOOFFICE
-{
-    TEXT = "Der StarDesktop kann nicht gestartet werden,\nwenn das StarWriter Applikationsmodul als\nApplikation gestartet wurde." ;
-    TEXT [ English ] = "StarDesktop  may not be started if StarWriter\napplication module is active in application mode\n" ;
-    Text [ english_us ] = "%PRODUCTNAME Desktop cannot be started if the %PRODUCTNAME Writer\napplication module has been started\nas an application." ;
-    Text [ italian ] = "Se il modulo di applicazione %PRODUCTNAME Writer θ stato avviato\ncome applicazione non θ possibile\navviare lo %PRODUCTNAME Desktop." ;
-    Text [ spanish ] = "No se pude iniciar el escritorio\nsi se ha iniciado %PRODUCTNAME Writer\ncomo aplicaciσn." ;
-    Text [ french ] = "Impossible de lancer le %PRODUCTNAME Desktop,\nsi le module d'application %PRODUCTNAME Writer a ιtι lancι\ncomme application." ;
-    Text [ dutch ] = "%PRODUCTNAME Desktop kan niet worden gestart\nals een %PRODUCTNAME Writer applicatiemodule als\napplicatie werd gestart." ;
-    Text [ swedish ] = "%PRODUCTNAME Desktop kan inte startas\nnδr %PRODUCTNAME Writer-tillδmpningsmodulen\nhar startats som tillδmpning." ;
-    Text [ danish ] = "Det er ikke muligt at starte %PRODUCTNAME Desktop,\nnεr %PRODUCTNAME Writer applikationsmodulet er blevet startet \nsom applikation." ;
-    Text [ portuguese_brazilian ] = "Der %PRODUCTNAME Desktop kann nicht gestartet werden,\nwenn das %PRODUCTNAME Writer Applikationsmodul als\nApplikation gestartet wurde." ;
-    Text [ portuguese ] = "Impossνvel iniciar o %PRODUCTNAME Desktop quando o mσdulo da\naplicaηγo %PRODUCTNAME Writer ι iniciado\ncomo aplicaηγo." ;
-    Text[ chinese_simplified ] = "ΤΪ%PRODUCTNAME WriterΣ¦ΣΓ³ΜΠςΔ£Ώι±»µ±Χχ\nΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠΚ±Ξή·¨Ζτ¶―%PRODUCTNAME Desktop ΅£";
-    Text[ russian ] = "Ηΰοσρςθςό %PRODUCTNAME Desktop νεβξημξζνξ,\nερλθ μξδσλό οπθλξζενθÿ %PRODUCTNAME Writer ηΰοσωεν β κΰχερςβε\nοπθλξζενθÿ.";
-    Text[ polish ] = "Pulpitu %PRODUCTNAME Desktop nie moΏna uruchomiζ, \njeli modu³ aplikacji %PRODUCTNAME Writer \nzosta³ uruchomiony jako aplikacja.";
-    Text[ japanese ] = "%PRODUCTNAME Writer ±ΜίΨΉ°Ό®έ ΣΌή­°Ω‚ª\n±ΜίΨΉ°Ό®έ‚Ζ‚µ‚ΔJn‚³‚κ‚Δ‚Ά‚ι‚ΝA\n%PRODUCTNAME Desktop‚ΝJn‚Ε‚«‚ά‚Ή‚ρB";
-    Text[ chinese_traditional ] = "¦b%PRODUCTNAME Writerΐ³¥Ξµ{¦΅ΌÒ¶τ³Q·ν§@\nΐ³¥Ξµ{¦΅±Ò°ΚΉB¦ζ®ΙµLªk±Ò°Κ%PRODUCTNAME Desktop΅C";
-    Text[ arabic ] = "αΗ νγίδί ΘΟΑ %PRODUCTNAME Desktop΅\nΕΠΗ ίδΚ ήΟ ΘΟΓΚ ζΝΟΙ ΗαΚΨΘνή ΗαδγΨνΙ αά %PRODUCTNAME Writer ήΘα Παί\nίΚΨΘνή.";
-    Text[ dutch ] = "%PRODUCTNAME Desktop kan niet worden gestart\nals een %PRODUCTNAME Writer applicatiemodule als\napplicatie werd gestart.";
-    Text[ chinese_simplified ] = "ΤΪ%PRODUCTNAME WriterΣ¦ΣΓ³ΜΠςΔ£Ώι±»µ±Χχ\nΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠΚ±Ξή·¨Ζτ¶―%PRODUCTNAME Desktop ΅£";
-    Text[ greek ] = "Δεν είναι δυνατόν να εκκινήσει το %PRODUCTNAME Desktop\nαν εκκίνησε η λειτουργική μονάδα της εφαρμογής\n του %PRODUCTNAME Writer ως εφαρνογή.";
-    Text[ korean ] = "StarWriter  ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΜ \nΐΐΏλΗΑ·Ξ±Χ·¥ΐΈ·ΞΌ­ ½ΓΐΫµΗΎϊΐΈΈι, StarDesktopΐΊ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
-    Text[ turkish ] = "%PRODUCTNAME masaόstό, %PRODUCTNAME Writer uygulama modulό\nuygulama olarak ηalύώtύrύlmύώsa baώlatύlamaz.";
     Text[ language_user1 ] = " ";
 };
 
