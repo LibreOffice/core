@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: mh $ $Date: 2000-12-07 10:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,14 @@
 //------------------------------------------------------------------
 
 #include <sfx2/request.hxx>
+#include <sfx2/bindings.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
+#include <svx/fontwork.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/xdef.hxx>
+#include <svx/xftsfit.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -83,6 +87,8 @@
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
+
+#include "sc.hrc"
 
 using namespace com::sun::star;
 
@@ -250,6 +256,270 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
             DBG_ERROR("falscher Slot");
     }
 }
+
+USHORT ScGetFontWorkId();       // wegen CLOOKs - in drtxtob2
+
+//------------------------------------------------------------------
+
+//
+//          Funktionen auf Drawing-Objekten
+//
+
+void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
+{
+    SfxBindings& rBindings = pViewData->GetBindings();
+    ScTabView*   pTabView  = pViewData->GetView();
+    ScDrawView*  pView     = pTabView->GetScDrawView();
+    Window*      pWin      = pTabView->GetActiveWin();
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    USHORT nSlotId = rReq.GetSlot();
+
+    //!!!
+    // wer weiss, wie lange das funktioniert? (->vom Abreisscontrol funktioniert es)
+    //
+    if (nSlotId == SID_OBJECT_ALIGN && pArgs)
+        nSlotId = SID_OBJECT_ALIGN + ((SfxEnumItem&)pArgs->Get(SID_OBJECT_ALIGN)).GetValue() + 1;
+
+    switch (nSlotId)
+    {
+        case SID_OBJECT_HEAVEN:
+            pView->SetMarkedToLayer( SC_LAYER_FRONT );
+            rBindings.Invalidate(SID_OBJECT_HEAVEN);
+            rBindings.Invalidate(SID_OBJECT_HELL);
+            break;
+        case SID_OBJECT_HELL:
+            pView->SetMarkedToLayer( SC_LAYER_BACK );
+            rBindings.Invalidate(SID_OBJECT_HEAVEN);
+            rBindings.Invalidate(SID_OBJECT_HELL);
+            break;
+
+        case SID_FRAME_TO_TOP:
+            pView->PutMarkedToTop();
+            break;
+        case SID_FRAME_TO_BOTTOM:
+            pView->PutMarkedToBtm();
+            break;
+        case SID_FRAME_UP:
+            pView->MovMarkedToTop();
+            break;
+        case SID_FRAME_DOWN:
+            pView->MovMarkedToBtm();
+            break;
+
+        case SID_GROUP:
+            pView->GroupMarked();
+            break;
+        case SID_UNGROUP:
+            pView->UnGroupMarked();
+            break;
+        case SID_ENTER_GROUP:
+            pView->EnterMarkedGroup();
+            break;
+        case SID_LEAVE_GROUP:
+            pView->LeaveOneGroup();
+            break;
+
+        case SID_MIRROR_HORIZONTAL:
+            pView->MirrorAllMarkedHorizontal();
+            break;
+        case SID_MIRROR_VERTICAL:
+            pView->MirrorAllMarkedVertical();
+            break;
+
+        case SID_OBJECT_ALIGN_LEFT:
+            if (pView->IsAlignPossible())
+                pView->AlignMarkedObjects(SDRHALIGN_LEFT, SDRVALIGN_NONE);
+            break;
+        case SID_OBJECT_ALIGN_CENTER:
+            if (pView->IsAlignPossible())
+                pView->AlignMarkedObjects(SDRHALIGN_CENTER, SDRVALIGN_NONE);
+            break;
+        case SID_OBJECT_ALIGN_RIGHT:
+            if (pView->IsAlignPossible())
+                pView->AlignMarkedObjects(SDRHALIGN_RIGHT, SDRVALIGN_NONE);
+            break;
+        case SID_OBJECT_ALIGN_UP:
+            if (pView->IsAlignPossible())
+                pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_TOP);
+            break;
+        case SID_OBJECT_ALIGN_MIDDLE:
+            if (pView->IsAlignPossible())
+                pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_CENTER);
+            break;
+        case SID_OBJECT_ALIGN_DOWN:
+            if (pView->IsAlignPossible())
+                pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_BOTTOM);
+            break;
+
+        case SID_DELETE:
+        case SID_DELETE_CONTENTS:
+            pView->DeleteMarked();
+            if (!pTabView->IsDrawSelMode())
+                pViewData->GetViewShell()->SetDrawShell( FALSE );
+            break;
+
+        case SID_CUT:
+            pView->DoCut();
+            if (!pTabView->IsDrawSelMode())
+                pViewData->GetViewShell()->SetDrawShell( FALSE );
+            break;
+
+        case SID_COPY:
+            pView->DoCopy();
+            break;
+
+        case SID_PASTE:
+            pView->PasteClipboard( pWin );          // Fenster fuer Position
+            break;
+
+        case SID_SELECTALL:
+            pView->MarkAll();
+            break;
+
+        case SID_ANCHOR_PAGE:
+            pView->SetAnchor( SCA_PAGE );
+            rBindings.Invalidate( SID_ANCHOR_PAGE );
+            rBindings.Invalidate( SID_ANCHOR_CELL );
+            break;
+
+        case SID_ANCHOR_CELL:
+            pView->SetAnchor( SCA_CELL );
+            rBindings.Invalidate( SID_ANCHOR_PAGE );
+            rBindings.Invalidate( SID_ANCHOR_CELL );
+            break;
+
+        case SID_ANCHOR_TOGGLE:
+            {
+                switch( pView->GetAnchor() )
+                {
+                    case SCA_CELL:
+                    pView->SetAnchor( SCA_PAGE );
+                    break;
+                    default:
+                    pView->SetAnchor( SCA_CELL );
+                    break;
+                }
+            }
+            rBindings.Invalidate( SID_ANCHOR_PAGE );
+            rBindings.Invalidate( SID_ANCHOR_CELL );
+            break;
+
+        case SID_OBJECT_ROTATE:
+            {
+                SdrDragMode eMode;
+                if (pView->GetDragMode() == SDRDRAG_ROTATE)
+                    eMode = SDRDRAG_MOVE;
+                else
+                    eMode = SDRDRAG_ROTATE;
+                pView->SetDragMode( eMode );
+                rBindings.Invalidate( SID_OBJECT_ROTATE );
+                rBindings.Invalidate( SID_OBJECT_MIRROR );
+                if (eMode == SDRDRAG_ROTATE && !pView->IsFrameDragSingles())
+                {
+                    pView->SetFrameDragSingles( TRUE );
+                    rBindings.Invalidate( SID_BEZIER_EDIT );
+                }
+            }
+            break;
+        case SID_OBJECT_MIRROR:
+            {
+                SdrDragMode eMode;
+                if (pView->GetDragMode() == SDRDRAG_MIRROR)
+                    eMode = SDRDRAG_MOVE;
+                else
+                    eMode = SDRDRAG_MIRROR;
+                pView->SetDragMode( eMode );
+                rBindings.Invalidate( SID_OBJECT_ROTATE );
+                rBindings.Invalidate( SID_OBJECT_MIRROR );
+                if (eMode == SDRDRAG_MIRROR && !pView->IsFrameDragSingles())
+                {
+                    pView->SetFrameDragSingles( TRUE );
+                    rBindings.Invalidate( SID_BEZIER_EDIT );
+                }
+            }
+            break;
+        case SID_BEZIER_EDIT:
+            {
+                BOOL bOld = pView->IsFrameDragSingles();
+                pView->SetFrameDragSingles( !bOld );
+                rBindings.Invalidate( SID_BEZIER_EDIT );
+                if (bOld && pView->GetDragMode() != SDRDRAG_MOVE)
+                {
+                    pView->SetDragMode( SDRDRAG_MOVE );
+                    rBindings.Invalidate( SID_OBJECT_ROTATE );
+                    rBindings.Invalidate( SID_OBJECT_MIRROR );
+                }
+            }
+            break;
+
+        case SID_FONTWORK:
+        {
+            USHORT nId = ScGetFontWorkId();
+            SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+
+            if ( rReq.GetArgs() )
+                pViewFrm->SetChildWindow( nId,
+                                           ((const SfxBoolItem&)
+                                            (rReq.GetArgs()->Get(SID_FONTWORK))).
+                                                GetValue() );
+            else
+                pViewFrm->ToggleChildWindow( nId );
+
+            rBindings.Invalidate( SID_FONTWORK );
+            rReq.Done();
+        }
+        break;
+
+        case SID_ORIGINALSIZE:
+            pView->SetMarkedOriginalSize();
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+//------------------------------------------------------------------
+
+void ScDrawShell::ExecFormText(SfxRequest& rReq)
+{
+    ScDrawView*         pDrView     = pViewData->GetScDrawView();
+    const SdrMarkList&  rMarkList   = pDrView->GetMarkList();
+
+    if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
+    {
+        const SfxItemSet& rSet = *rReq.GetArgs();
+        const SfxPoolItem* pItem;
+
+        if ( pDrView->IsTextEdit() )
+            pDrView->ScEndTextEdit();
+
+        if (    SFX_ITEM_SET ==
+                rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem)
+             && XFTFORM_NONE !=
+                ((const XFormTextStdFormItem*) pItem)->GetValue() )
+        {
+
+            USHORT nId              = SvxFontWorkChildWindow::GetChildWindowId();
+            SfxViewFrame* pViewFrm  = pViewData->GetViewShell()->GetViewFrame();
+            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)
+                                       (pViewFrm->
+                                            GetChildWindow(nId)->GetWindow());
+
+            pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
+                                    rSet, *rMarkList.GetMark(0)->GetObj(),
+                                   ((const XFormTextStdFormItem*) pItem)->
+                                   GetValue());
+        }
+        else
+            pDrView->SetAttributes(rSet);
+    }
+}
+
+
+
+
 
 
 
