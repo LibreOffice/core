@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:37 $
+ *  last change: $Author: tbe $ $Date: 2001-04-03 13:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,8 +1072,8 @@ void SAL_CALL exportDialogModel(
                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
-        pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":helptext") ) );
+        //pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
+        //                       OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":helptext") ) );
         xOut->ignorableWhitespace( OUString() );
         xOut->startElement( aWindowName, xWindow );
 
