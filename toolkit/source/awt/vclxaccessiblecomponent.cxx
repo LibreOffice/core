@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: tbe $ $Date: 2002-10-30 13:27:10 $
+ *  last change: $Author: tbe $ $Date: 2002-11-04 16:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,9 +730,22 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
 // accessibility::XAccessibleComponent
 awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeException)
 {
-    awt::Rectangle aBounds;
-    if ( mxWindow.is() )
-        aBounds = mxWindow->getPosSize();
+    awt::Rectangle aBounds ( 0, 0, 0, 0 );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        Rectangle aRect = pWindow->GetWindowExtentsRelative( NULL );
+        aBounds = AWTRectangle( aRect );
+        Window* pParent = pWindow->GetAccessibleParentWindow();
+        if ( pParent )
+        {
+            Rectangle aParentRect = pParent->GetWindowExtentsRelative( NULL );
+            awt::Point aParentScreenLoc = AWTPoint( aParentRect.TopLeft() );
+            aBounds.X -= aParentScreenLoc.X;
+            aBounds.Y -= aParentScreenLoc.Y;
+        }
+    }
 
     uno::Reference< accessibility::XAccessible > xParent( implGetForeignControlledParent() );
     if ( xParent.is() )
@@ -765,7 +778,6 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
     }
 
     return aBounds;
-
 }
 
 awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeException)
