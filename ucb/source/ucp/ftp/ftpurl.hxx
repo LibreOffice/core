@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-25 12:09:13 $
+ *  last change: $Author: abi $ $Date: 2002-10-25 14:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,8 @@ namespace ftp {
         rtl::OUString ren(const rtl::OUString& NewTitle)
             throw(curl_exception);
 
-        void del() const;
+        void del() const
+            throw(curl_exception);
 
 
     private:
