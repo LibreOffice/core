@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-02 16:12:23 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2429,21 +2429,27 @@ void SdrModel::PreSave()
 {
     sal_uInt16 nCnt(GetMasterPageCount());
 
-    for(sal_uInt16 i(0); i < nCnt; i++)
+    for(sal_uInt16 a(0); a < nCnt; a++)
     {
         // MasterPages
-        SdrObjListIter aIter(*GetMasterPage(i));
-        while(aIter.IsMore())
-            aIter.Next()->PreSave();
+        const SdrObjList& rObjList = *GetMasterPage(a);
+        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
+            rObjList.GetObj(b)->PreSave();
+//-/        SdrObjListIter aIter(*GetMasterPage(i), IM_FLAT);
+//-/        while(aIter.IsMore())
+//-/            aIter.Next()->PreSave();
     }
 
     nCnt = GetPageCount();
-    for(i = 0; i < nCnt; i++)
+    for(a = 0; a < nCnt; a++)
     {
         // Pages
-        SdrObjListIter aIter(*GetPage(i));
-        while(aIter.IsMore())
-            aIter.Next()->PreSave();
+        const SdrObjList& rObjList = *GetPage(a);
+        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
+            rObjList.GetObj(b)->PreSave();
+//-/        SdrObjListIter aIter(*GetPage(i), IM_FLAT);
+//-/        while(aIter.IsMore())
+//-/            aIter.Next()->PreSave();
     }
 }
 
@@ -2451,21 +2457,27 @@ void SdrModel::PostSave()
 {
     sal_uInt16 nCnt(GetMasterPageCount());
 
-    for(sal_uInt16 i(0); i < nCnt; i++)
+    for(sal_uInt16 a(0); a < nCnt; a++)
     {
         // MasterPages
-        SdrObjListIter aIter(*GetMasterPage(i));
-        while(aIter.IsMore())
-            aIter.Next()->PostSave();
+        const SdrObjList& rObjList = *GetMasterPage(a);
+        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
+            rObjList.GetObj(b)->PostSave();
+//-/        SdrObjListIter aIter(*GetMasterPage(i), IM_FLAT);
+//-/        while(aIter.IsMore())
+//-/            aIter.Next()->PreSave();
     }
 
     nCnt = GetPageCount();
-    for(i = 0; i < nCnt; i++)
+    for(a = 0; a < nCnt; a++)
     {
         // Pages
-        SdrObjListIter aIter(*GetPage(i));
-        while(aIter.IsMore())
-            aIter.Next()->PostSave();
+        const SdrObjList& rObjList = *GetPage(a);
+        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
+            rObjList.GetObj(b)->PostSave();
+//-/        SdrObjListIter aIter(*GetPage(i), IM_FLAT);
+//-/        while(aIter.IsMore())
+//-/            aIter.Next()->PreSave();
     }
 }
 

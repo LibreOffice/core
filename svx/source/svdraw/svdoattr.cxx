@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,6 +1186,11 @@ void SdrAttrObj::ForceDefaultAttr()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // ItemSet access
+const SfxItemSet& SdrAttrObj::GetUnmergedItemSet() const
+{
+    return SdrAttrObj::GetItemSet();
+}
+
 const SfxItemSet& SdrAttrObj::GetItemSet() const
 {
     ((SdrAttrObj*)this)->ImpForceItemSet();

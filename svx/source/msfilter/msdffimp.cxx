@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-06 17:09:15 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2463,7 +2463,7 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
                 {
                     E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
 //-/                    if ( nVal != (long)pSingleExtrude->GetExtrudeDepth() )
-                    sal_uInt32 nSingleExtrudeDepth = (sal_uInt32)((Svx3DDepthItem&)(pSingleExtrude->GetItem(SDRATTR_3DOBJ_DEPTH))).GetValue();
+                    sal_Int32 nSingleExtrudeDepth = pSingleExtrude->GetExtrudeDepth();
                     if( nVal != (sal_Int32)nSingleExtrudeDepth)
                     {
                         if ( nVal == 338667 )
@@ -2560,7 +2560,7 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
                 E3dExtrudeObj* pSingleExtrude = (E3dExtrudeObj*)pSingleObj;
 
 //-/                double fFrontPlaneDepth = pSingleExtrude->GetExtrudeDepth();
-                double fFrontPlaneDepth = (double)((Svx3DDepthItem&)(pSingleExtrude->GetItem(SDRATTR_3DOBJ_DEPTH))).GetValue();
+                double fFrontPlaneDepth = (double)pSingleExtrude->GetExtrudeDepth();
 
                 if ( bUseBackSide )
                     fFrontPlaneDepth = 0.0;

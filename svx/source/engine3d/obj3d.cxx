@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-31 12:43:34 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2068,12 +2068,12 @@ void E3dObject::AfterRead()
         pSub->AfterRead();
 
     // put loaded items to ItemSet
-    Collect3DAttributes((SfxItemSet&)GetItemSet());
+//-/    Collect3DAttributes((SfxItemSet&)GetItemSet());
 }
 
-void E3dObject::Collect3DAttributes(SfxItemSet& rAttr) const
-{
-}
+//-/void E3dObject::Collect3DAttributes(SfxItemSet& rAttr) const
+//-/{
+//-/}
 
 /*************************************************************************
 |*
@@ -2232,22 +2232,24 @@ E3dCompoundObject::E3dCompoundObject(E3dDefaultAttributes& rDefault) : E3dObject
 void E3dCompoundObject::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
     // Defaults setzen
-    aFrontMaterial = rDefault.GetDefaultFrontMaterial();
+//-/    SetFrontMaterial(rDefault.GetDefaultFrontMaterial());
+    aMaterialAmbientColor = rDefault.GetDefaultAmbientColor();
+
     aBackMaterial = rDefault.GetDefaultBackMaterial();
-    eTextureKind = rDefault.GetDefaultTextureKind();
-    eTextureMode = rDefault.GetDefaultTextureMode();
-    bDoubleSided = rDefault.GetDefaultDoubleSided();
+//-/    eTextureKind = rDefault.GetDefaultTextureKind();
+//-/    eTextureMode = rDefault.GetDefaultTextureMode();
+//-/    bDoubleSided = rDefault.GetDefaultDoubleSided();
     bCreateNormals = rDefault.GetDefaultCreateNormals();
     bCreateTexture = rDefault.GetDefaultCreateTexture();
-    bUseStdNormals = rDefault.GetDefaultUseStdNormals();
-    bUseStdNormalsUseSphere = rDefault.GetDefaultUseStdNormalsUseSphere();
-    bInvertNormals = rDefault.GetDefaultInvertNormals();
-    bUseStdTextureX = rDefault.GetDefaultUseStdTextureX();
-    bUseStdTextureXUseSphere = rDefault.GetDefaultUseStdTextureXUseSphere();
-    bUseStdTextureY = rDefault.GetDefaultUseStdTextureY();
-    bUseStdTextureYUseSphere = rDefault.GetDefaultUseStdTextureYUseSphere();
-    bShadow3D = rDefault.GetDefaultShadow3D();
-    bFilterTexture = rDefault.GetDefaultFilterTexture();
+//-/    bUseStdNormals = rDefault.GetDefaultUseStdNormals();
+//-/    bUseStdNormalsUseSphere = rDefault.GetDefaultUseStdNormalsUseSphere();
+//-/    bInvertNormals = rDefault.GetDefaultInvertNormals();
+//-/    bUseStdTextureX = rDefault.GetDefaultUseStdTextureX();
+//-/    bUseStdTextureXUseSphere = rDefault.GetDefaultUseStdTextureXUseSphere();
+//-/    bUseStdTextureY = rDefault.GetDefaultUseStdTextureY();
+//-/    bUseStdTextureYUseSphere = rDefault.GetDefaultUseStdTextureYUseSphere();
+//-/    bShadow3D = rDefault.GetDefaultShadow3D();
+//-/    bFilterTexture = rDefault.GetDefaultFilterTexture();
     bUseDifferentBackMaterial = rDefault.GetDefaultUseDifferentBackMaterial();
 }
 
@@ -2430,31 +2432,58 @@ void E3dCompoundObject::WriteData(SvStream& rOut) const
 #ifdef DBG_UTIL
         aCompat.SetID("E3dCompoundObject");
 #endif
-        rOut << BOOL(bDoubleSided);
+//-/        rOut << BOOL(bDoubleSided);
+        rOut << BOOL(GetDoubleSided());
 #endif
 
         // neue Parameter zur Geometrieerzeugung
         rOut << BOOL(bCreateNormals);
         rOut << BOOL(bCreateTexture);
-        rOut << BOOL(bUseStdNormals);
-        rOut << BOOL(bUseStdNormalsUseSphere);
-        rOut << BOOL(bUseStdTextureX);
-        rOut << BOOL(bUseStdTextureXUseSphere);
-        rOut << BOOL(bUseStdTextureY);
-        rOut << BOOL(bUseStdTextureYUseSphere);
-        rOut << BOOL(bShadow3D);
+
+//-/        rOut << BOOL(bUseStdNormals);
+//-/        rOut << BOOL(bUseStdNormalsUseSphere);
+        sal_uInt16 nVal = GetNormalsKind();
+        rOut << BOOL(nVal > 0);
+        rOut << BOOL(nVal > 1);
+
+//-/        rOut << BOOL(bUseStdTextureX);
+//-/        rOut << BOOL(bUseStdTextureXUseSphere);
+        nVal = GetTextureProjectionX();
+        rOut << BOOL(nVal > 0);
+        rOut << BOOL(nVal > 1);
+
+//-/        rOut << BOOL(bUseStdTextureY);
+//-/        rOut << BOOL(bUseStdTextureYUseSphere);
+        nVal = GetTextureProjectionY();
+        rOut << BOOL(nVal > 0);
+        rOut << BOOL(nVal > 1);
+
+//-/        rOut << BOOL(bShadow3D);
+        rOut << BOOL(GetShadow3D());
 
         // neu al 384:
-        aFrontMaterial.WriteData(rOut);
+//-/        aFrontMaterial.WriteData(rOut);
+        rOut << GetMaterialAmbientColor();
+        rOut << GetMaterialColor();
+        rOut << GetMaterialSpecular();
+        rOut << GetMaterialEmission();
+        rOut << GetMaterialSpecularIntensity();
+
         aBackMaterial.WriteData(rOut);
-        rOut << (UINT16)eTextureKind;
-        rOut << (UINT16)eTextureMode;
-        rOut << BOOL(bInvertNormals);
+
+//-/        rOut << (UINT16)eTextureKind;
+        rOut << (UINT16)GetTextureKind();
+
+//-/        rOut << (UINT16)eTextureMode;
+        rOut << (UINT16)GetTextureMode();
+
+//-/        rOut << BOOL(bInvertNormals);
+        rOut << BOOL(GetNormalsInvert());
 
         // neu ab 534: (hat noch gefehlt)
-        rOut << BOOL(bFilterTexture);
+//-/        rOut << BOOL(bFilterTexture);
+        rOut << BOOL(GetTextureFilter());
     }
-
 }
 
 /*************************************************************************
@@ -2485,21 +2514,68 @@ void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     bBytesLeft = FALSE;
     if (aCompat.GetBytesLeft () >= sizeof (BOOL))
     {
-        BOOL bTmp;
-        rIn >> bTmp; bDoubleSided = bTmp;
+        BOOL bTmp, bTmp2;
+        sal_uInt16 nTmp;
+
+        rIn >> bTmp;
+        mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
+//-/        bDoubleSided = bTmp;
 
         // neue Parameter zur Geometrieerzeugung
         if (aCompat.GetBytesLeft () >= sizeof (BOOL))
         {
-            rIn >> bTmp; bCreateNormals = bTmp;
-            rIn >> bTmp; bCreateTexture = bTmp;
-            rIn >> bTmp; bUseStdNormals = bTmp;
-            rIn >> bTmp; bUseStdNormalsUseSphere = bTmp;
-            rIn >> bTmp; bUseStdTextureX = bTmp;
-            rIn >> bTmp; bUseStdTextureXUseSphere = bTmp;
-            rIn >> bTmp; bUseStdTextureY = bTmp;
-            rIn >> bTmp; bUseStdTextureYUseSphere = bTmp;
-            rIn >> bTmp; bShadow3D = bTmp;
+            rIn >> bTmp;
+            bCreateNormals = bTmp;
+
+            rIn >> bTmp;
+            bCreateTexture = bTmp;
+
+//-/            rIn >> bTmp;
+//-/            bUseStdNormals = bTmp;
+//-/            rIn >> bTmp;
+//-/            bUseStdNormalsUseSphere = bTmp;
+            rIn >> bTmp;
+            rIn >> bTmp2;
+            if(bTmp == FALSE && bTmp2 == FALSE)
+                nTmp = 0;
+            else if(bTmp == TRUE && bTmp2 == FALSE)
+                nTmp = 1;
+            else
+                nTmp = 2;
+            mpObjectItemSet->Put(Svx3DNormalsKindItem(nTmp));
+
+//-/            rIn >> bTmp;
+//-/            bUseStdTextureX = bTmp;
+//-/            rIn >> bTmp;
+//-/            bUseStdTextureXUseSphere = bTmp;
+            rIn >> bTmp;
+            rIn >> bTmp2;
+            if(bTmp == FALSE && bTmp2 == FALSE)
+                nTmp = 0;
+            else if(bTmp == TRUE && bTmp2 == FALSE)
+                nTmp = 1;
+            else
+                nTmp = 2;
+            mpObjectItemSet->Put(Svx3DTextureProjectionXItem(nTmp));
+
+//-/            rIn >> bTmp;
+//-/            bUseStdTextureY = bTmp;
+//-/            rIn >> bTmp;
+//-/            bUseStdTextureYUseSphere = bTmp;
+            rIn >> bTmp;
+            rIn >> bTmp2;
+            if(bTmp == FALSE && bTmp2 == FALSE)
+                nTmp = 0;
+            else if(bTmp == TRUE && bTmp2 == FALSE)
+                nTmp = 1;
+            else
+                nTmp = 2;
+            mpObjectItemSet->Put(Svx3DTextureProjectionYItem(nTmp));
+
+            rIn >> bTmp;
+//-/            bShadow3D = bTmp;
+            mpObjectItemSet->Put(Svx3DShadow3DItem(bTmp));
+
             // Setze ein Flag fuer den Aufrufer, dass neues Format
             // zu lesen ist
             bBytesLeft = TRUE;
@@ -2509,17 +2585,48 @@ void E3dCompoundObject::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         if (aCompat.GetBytesLeft () >= sizeof (B3dMaterial))
         {
             UINT16 nTmp;
-            aFrontMaterial.ReadData(rIn);
+
+//-/            aFrontMaterial.ReadData(rIn);
+            Color aCol;
+
+            rIn >> aCol;
+            SetMaterialAmbientColor(aCol);
+
+            rIn >> aCol;
+//-/            SetItem(Svx3DMaterialColorItem(aCol));
+            // do NOT use, this is the old 3D-Color(!)
+            // SetItem(XFillColorItem(String(), aCol));
+
+            rIn >> aCol;
+            mpObjectItemSet->Put(Svx3DMaterialSpecularItem(aCol));
+
+            rIn >> aCol;
+            mpObjectItemSet->Put(Svx3DMaterialEmissionItem(aCol));
+
+            rIn >> nTmp;
+            mpObjectItemSet->Put(Svx3DMaterialSpecularIntensityItem(nTmp));
+
             aBackMaterial.ReadData(rIn);
-            rIn >> nTmp; eTextureKind = (Base3DTextureKind)nTmp;
-            rIn >> nTmp; eTextureMode = (Base3DTextureMode)nTmp;
-            rIn >> bTmp; bInvertNormals = bTmp;
+
+            rIn >> nTmp;
+//-/            eTextureKind = (Base3DTextureKind)nTmp;
+            mpObjectItemSet->Put(Svx3DTextureKindItem(nTmp));
+
+            rIn >> nTmp;
+//-/            eTextureMode = (Base3DTextureMode)nTmp;
+            mpObjectItemSet->Put(Svx3DTextureModeItem(nTmp));
+
+            rIn >> bTmp;
+//-/            bInvertNormals = bTmp;
+            mpObjectItemSet->Put(Svx3DNormalsInvertItem(bTmp));
         }
 
         // neu ab 534: (hat noch gefehlt)
         if (aCompat.GetBytesLeft () >= sizeof (BOOL))
         {
-            rIn >> bTmp; bFilterTexture = bTmp;
+            rIn >> bTmp;
+//-/            bFilterTexture = bTmp;
+            mpObjectItemSet->Put(Svx3DTextureFilterItem(bTmp));
         }
     }
 }
@@ -2722,18 +2829,23 @@ void E3dCompoundObject::CreateGeometry()
     // und Default -Normalen oder -Texturkoordinaten erzeugen
     if(bCreateNormals)
     {
-        if(bUseStdNormals && bUseStdNormalsUseSphere)
+//-/        if(bUseStdNormals && bUseStdNormalsUseSphere)
+        if(GetNormalsKind() > 1)
             GetDisplayGeometry().CreateDefaultNormalsSphere();
-        if(bInvertNormals)
+        if(GetNormalsInvert())
             GetDisplayGeometry().InvertNormals();
     }
 
     if(bCreateTexture)
     {
+//-/        GetDisplayGeometry().CreateDefaultTexture(
+//-/            ((bUseStdTextureX) ? B3D_CREATE_DEFAULT_X : FALSE)
+//-/            |((bUseStdTextureY) ? B3D_CREATE_DEFAULT_Y : FALSE),
+//-/            bUseStdTextureXUseSphere);
         GetDisplayGeometry().CreateDefaultTexture(
-            ((bUseStdTextureX) ? B3D_CREATE_DEFAULT_X : FALSE)
-            |((bUseStdTextureY) ? B3D_CREATE_DEFAULT_Y : FALSE),
-            bUseStdTextureXUseSphere);
+            ((GetTextureProjectionX() > 0) ? B3D_CREATE_DEFAULT_X : FALSE)
+            |((GetTextureProjectionY() > 0) ? B3D_CREATE_DEFAULT_Y : FALSE),
+            GetTextureProjectionX() > 1);
     }
 
     // Am Ende der Geometrieerzeugung das model an den erzeugten
@@ -2773,7 +2885,7 @@ void E3dCompoundObject::AddGeometry(const PolyPolygon3D& rPolyPolygon3D,
         if(bCreateE3dPolyObj)
         {
             E3dPolyObj* pObj = new E3dPolyObj(
-                rPolyPolygon3D, bDoubleSided, TRUE);
+                rPolyPolygon3D, GetDoubleSided(), TRUE);
             pObj->SetPartOfParent();
             Insert3DObj(pObj);
         }
@@ -2808,7 +2920,7 @@ void E3dCompoundObject::AddGeometry(
         if(bCreateE3dPolyObj)
         {
             E3dPolyObj* pObj = new E3dPolyObj(
-                rPolyPolygon3D, rPolyNormal3D, bDoubleSided, TRUE);
+                rPolyPolygon3D, rPolyNormal3D, GetDoubleSided(), TRUE);
             pObj->SetPartOfParent();
             Insert3DObj(pObj);
         }
@@ -2846,7 +2958,7 @@ void E3dCompoundObject::AddGeometry(
         {
             E3dPolyObj* pObj = new E3dPolyObj(
                 rPolyPolygon3D, rPolyNormal3D,
-                rPolyTexture3D, bDoubleSided, TRUE);
+                rPolyTexture3D, GetDoubleSided(), TRUE);
             pObj->SetPartOfParent();
             Insert3DObj(pObj);
         }
@@ -3331,27 +3443,29 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
     const E3dCompoundObject& r3DObj = (const E3dCompoundObject&) rObj;
 
     aDisplayGeometry = r3DObj.aDisplayGeometry;
-    bDoubleSided = r3DObj.bDoubleSided;
+//-/    bDoubleSided = r3DObj.bDoubleSided;
     bCreateNormals = r3DObj.bCreateNormals;
     bCreateTexture = r3DObj.bCreateTexture;
-    bUseStdNormals = r3DObj.bUseStdNormals;
-    bUseStdNormalsUseSphere = r3DObj.bUseStdNormalsUseSphere;
-    bUseStdTextureX = r3DObj.bUseStdTextureX;
-    bUseStdTextureXUseSphere = r3DObj.bUseStdTextureXUseSphere;
-    bUseStdTextureY = r3DObj.bUseStdTextureY;
-    bUseStdTextureYUseSphere = r3DObj.bUseStdTextureYUseSphere;
+//-/    bUseStdNormals = r3DObj.bUseStdNormals;
+//-/    bUseStdNormalsUseSphere = r3DObj.bUseStdNormalsUseSphere;
+//-/    bUseStdTextureX = r3DObj.bUseStdTextureX;
+//-/    bUseStdTextureXUseSphere = r3DObj.bUseStdTextureXUseSphere;
+//-/    bUseStdTextureY = r3DObj.bUseStdTextureY;
+//-/    bUseStdTextureYUseSphere = r3DObj.bUseStdTextureYUseSphere;
     bGeometryValid = r3DObj.bGeometryValid;
-    bShadow3D = r3DObj.bShadow3D;
+//-/    bShadow3D = r3DObj.bShadow3D;
     bBytesLeft = r3DObj.bBytesLeft;
     bCreateE3dPolyObj = r3DObj.bCreateE3dPolyObj;
 
     // neu ab 383:
-    aFrontMaterial = r3DObj.aFrontMaterial;
+//-/    aFrontMaterial = r3DObj.aFrontMaterial;
+    aMaterialAmbientColor = r3DObj.aMaterialAmbientColor;
+
     aBackMaterial = r3DObj.aBackMaterial;
-    eTextureKind = r3DObj.eTextureKind;
-    eTextureMode = r3DObj.eTextureMode;
-    bInvertNormals = r3DObj.bInvertNormals;
-    bFilterTexture = r3DObj.bFilterTexture;
+//-/    eTextureKind = r3DObj.eTextureKind;
+//-/    eTextureMode = r3DObj.eTextureMode;
+//-/    bInvertNormals = r3DObj.bInvertNormals;
+//-/    bFilterTexture = r3DObj.bFilterTexture;
     bUseDifferentBackMaterial = r3DObj.bUseDifferentBackMaterial;
 }
 
@@ -3400,9 +3514,15 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                 // Material setzen
                 pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient);
                 pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse);
-                pBase3D->SetMaterial(aFrontMaterial.GetMaterial(Base3DMaterialSpecular), Base3DMaterialSpecular);
-                pBase3D->SetMaterial(aFrontMaterial.GetMaterial(Base3DMaterialEmission), Base3DMaterialEmission);
-                pBase3D->SetShininess(aFrontMaterial.GetShininess());
+
+//-/                pBase3D->SetMaterial(aFrontMaterial.GetMaterial(Base3DMaterialSpecular), Base3DMaterialSpecular);
+                pBase3D->SetMaterial(GetMaterialSpecular(), Base3DMaterialSpecular);
+
+//-/                pBase3D->SetMaterial(aFrontMaterial.GetMaterial(Base3DMaterialEmission), Base3DMaterialEmission);
+                pBase3D->SetMaterial(GetMaterialEmission(), Base3DMaterialEmission);
+
+//-/                pBase3D->SetShininess(aFrontMaterial.GetShininess());
+                pBase3D->SetShininess(GetMaterialSpecularIntensity());
 
                 if(GetUseDifferentBackMaterial())
                 {
@@ -3675,9 +3795,15 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
                 if(pTexture)
                 {
                     // Einige Modi einstellen
-                    pTexture->SetTextureKind(eTextureKind);
-                    pTexture->SetTextureMode(eTextureMode);
-                    pTexture->SetTextureFilter(bFilterTexture ? Base3DTextureLinear : Base3DTextureNearest);
+//-/                    pTexture->SetTextureKind(eTextureKind);
+                    pTexture->SetTextureKind(GetTextureKind());
+
+//-/                    pTexture->SetTextureMode(eTextureMode);
+                    pTexture->SetTextureMode(GetTextureMode());
+
+//-/                    pTexture->SetTextureFilter(bFilterTexture ? Base3DTextureLinear : Base3DTextureNearest);
+                    pTexture->SetTextureFilter(GetTextureFilter() ?
+                        Base3DTextureLinear : Base3DTextureNearest);
 
                     pTexture->SetTextureWrapS(eWrapX);
                     pTexture->SetTextureWrapT(eWrapY);
@@ -3914,9 +4040,9 @@ void E3dCompoundObject::CenterObject(const Vector3D& rCenter)
 
 Color E3dCompoundObject::GetShadowColor()
 {
-    const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(GetItem(SDRATTR_SHADOWCOLOR)));
-    Color aShadCol = rShadColItem.GetValue();
-    return aShadCol;
+    return ((SdrShadowColorItem&)(GetItem(SDRATTR_SHADOWCOLOR))).GetValue();
+//-/    Color aShadCol = rShadColItem.GetValue();
+//-/    return aShadCol;
 //-/    Color aShadCol;
 //-/
 //-/    if (pShadAttr!=NULL)
@@ -4441,11 +4567,19 @@ B3dGeometry& E3dCompoundObject::GetDisplayGeometry()
 |*
 \************************************************************************/
 
-void E3dCompoundObject::SetFrontMaterial(const B3dMaterial& rNew)
+//-/void E3dCompoundObject::SetFrontMaterial(const B3dMaterial& rNew)
+//-/{
+//-/    if(aFrontMaterial != rNew)
+//-/    {
+//-/        aFrontMaterial = rNew;
+//-/    }
+//-/}
+
+void E3dCompoundObject::SetMaterialAmbientColor(const Color& rColor)
 {
-    if(aFrontMaterial != rNew)
+    if(aMaterialAmbientColor != rColor)
     {
-        aFrontMaterial = rNew;
+        aMaterialAmbientColor = rColor;
     }
 }
 
@@ -4495,10 +4629,11 @@ void E3dCompoundObject::Paint3D(ExtOutputDevice& rOut, Base3D* pBase3D,
             bIsLineDraft, bIsFillDraft);
 
         // Culling?
-        pBase3D->SetCullMode(bDoubleSided ? Base3DCullNone : Base3DCullBack);
+        pBase3D->SetCullMode(GetDoubleSided() ? Base3DCullNone : Base3DCullBack);
 
         // Objekt flat darstellen?
-        BOOL bForceFlat = (bUseStdNormals && !bUseStdNormalsUseSphere);
+//-/        BOOL bForceFlat = (bUseStdNormals && !bUseStdNormalsUseSphere);
+        BOOL bForceFlat = ((GetNormalsKind() > 0) && !(GetNormalsKind() > 1));
         pBase3D->SetForceFlat(bForceFlat);
 
         // Geometrie ausgeben
@@ -4645,7 +4780,8 @@ void E3dCompoundObject::GetShadowPolygon(PolyPolygon& rPoly)
     B3dEntityBucket& rEntityBucket = GetDisplayGeometry().GetEntityBucket();
     GeometryIndexValueBucket& rIndexBucket = GetDisplayGeometry().GetIndexBucket();
 
-    if(bShadow3D)
+//-/    if(bShadow3D)
+    if(GetShadow3D())
     {
         // 3D Schatten. Nimm Lichtquelle und Ebene. Projiziere
         // die Punkte und jage sie durch die 3D Darstellung.
@@ -5139,150 +5275,183 @@ void E3dCompoundObject::ImpLocalItemValueChange(const SfxPoolItem& rNew)
     {
         case SDRATTR_3DOBJ_DOUBLE_SIDED:
         {
-            BOOL bNew = ((const Svx3DDoubleSidedItem&)rNew).GetValue();
-            ImpSetDoubleSided(bNew);
+//-/            BOOL bNew = ((const Svx3DDoubleSidedItem&)rNew).GetValue();
+//-/            if(GetDoubleSided() != bNew)
+                bGeometryValid = FALSE;
             break;
         }
         case SDRATTR_3DOBJ_NORMALS_KIND:
         {
-            UINT16 nNew = ((const Svx3DNormalsKindItem&)rNew).GetValue();
-            if(nNew == 0)
-            {
-                ImpSetUseStdNormals(FALSE);
-                ImpSetUseStdNormalsUseSphere(FALSE);
-            }
-            else if(nNew == 1)
-            {
-                ImpSetUseStdNormals(TRUE);
-                ImpSetUseStdNormalsUseSphere(FALSE);
-            }
-            else
-            {
-                ImpSetUseStdNormals(TRUE);
-                ImpSetUseStdNormalsUseSphere(TRUE);
-            }
+//-/            UINT16 nNew = ((const Svx3DNormalsKindItem&)rNew).GetValue();
+//-/            if(GetNormalsKind() != nNew)
+                bGeometryValid = FALSE;
+//-/            if(nNew == 0)
+//-/            {
+//-/                ImpSetUseStdNormals(FALSE);
+//-/                ImpSetUseStdNormalsUseSphere(FALSE);
+//-/            }
+//-/            else if(nNew == 1)
+//-/            {
+//-/                ImpSetUseStdNormals(TRUE);
+//-/                ImpSetUseStdNormalsUseSphere(FALSE);
+//-/            }
+//-/            else
+//-/            {
+//-/                ImpSetUseStdNormals(TRUE);
+//-/                ImpSetUseStdNormalsUseSphere(TRUE);
+//-/            }
             break;
         }
         case SDRATTR_3DOBJ_NORMALS_INVERT:
         {
-            BOOL bNew = ((const Svx3DNormalsInvertItem&)rNew).GetValue();
-            ImpSetInvertNormals(bNew);
+//-/            BOOL bNew = ((const Svx3DNormalsInvertItem&)rNew).GetValue();
+//-/            if(GetNormalsInvert() != bNew)
+//-/                GetDisplayGeometry().InvertNormals();
+                bGeometryValid = FALSE;
+//-/            ImpSetInvertNormals(bNew);
             break;
         }
         case SDRATTR_3DOBJ_TEXTURE_PROJ_X:
         {
-            UINT16 nNew = ((const Svx3DTextureProjectionXItem&)rNew).GetValue();
-            if(nNew == 0)
-            {
-                ImpSetUseStdTextureX(FALSE);
-                ImpSetUseStdTextureXUseSphere(FALSE);
-            }
-            else if(nNew == 1)
-            {
-                ImpSetUseStdTextureX(TRUE);
-                ImpSetUseStdTextureXUseSphere(FALSE);
-            }
-            else
-            {
-                ImpSetUseStdTextureX(TRUE);
-                ImpSetUseStdTextureXUseSphere(TRUE);
-            }
+//-/            UINT16 nNew = ((const Svx3DTextureProjectionXItem&)rNew).GetValue();
+//-/            if(GetTextureProjectionX() != nNew)
+                bGeometryValid = FALSE;
+//-/            if(nNew == 0)
+//-/            {
+//-/                ImpSetUseStdTextureX(FALSE);
+//-/                ImpSetUseStdTextureXUseSphere(FALSE);
+//-/            }
+//-/            else if(nNew == 1)
+//-/            {
+//-/                ImpSetUseStdTextureX(TRUE);
+//-/                ImpSetUseStdTextureXUseSphere(FALSE);
+//-/            }
+//-/            else
+//-/            {
+//-/                ImpSetUseStdTextureX(TRUE);
+//-/                ImpSetUseStdTextureXUseSphere(TRUE);
+//-/            }
             break;
         }
         case SDRATTR_3DOBJ_TEXTURE_PROJ_Y:
         {
-            UINT16 nNew = ((const Svx3DTextureProjectionYItem&)rNew).GetValue();
-            if(nNew == 0)
-            {
-                ImpSetUseStdTextureY(FALSE);
-                ImpSetUseStdTextureYUseSphere(FALSE);
-            }
-            else if(nNew == 1)
-            {
-                ImpSetUseStdTextureY(TRUE);
-                ImpSetUseStdTextureYUseSphere(FALSE);
-            }
-            else
-            {
-                ImpSetUseStdTextureY(TRUE);
-                ImpSetUseStdTextureYUseSphere(TRUE);
-            }
+//-/            UINT16 nNew = ((const Svx3DTextureProjectionYItem&)rNew).GetValue();
+//-/            if(GetTextureProjectionY() != nNew)
+                bGeometryValid = FALSE;
+//-/            if(nNew == 0)
+//-/            {
+//-/                ImpSetUseStdTextureY(FALSE);
+//-/                ImpSetUseStdTextureYUseSphere(FALSE);
+//-/            }
+//-/            else if(nNew == 1)
+//-/            {
+//-/                ImpSetUseStdTextureY(TRUE);
+//-/                ImpSetUseStdTextureYUseSphere(FALSE);
+//-/            }
+//-/            else
+//-/            {
+//-/                ImpSetUseStdTextureY(TRUE);
+//-/                ImpSetUseStdTextureYUseSphere(TRUE);
+//-/            }
             break;
         }
-        case SDRATTR_3DOBJ_SHADOW_3D:
-        {
-            BOOL bNew = ((const Svx3DShadow3DItem&)rNew).GetValue();
-            ImpSetDrawShadow3D(bNew);
-            break;
-        }
-        case SDRATTR_3DOBJ_MAT_COLOR:
-        {
-            B3dMaterial aNewMat = GetFrontMaterial();
-            Color aNew = ((const Svx3DMaterialColorItem&)rNew).GetValue();
-            aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
-            SetFrontMaterial(aNewMat);
-            break;
-        }
-        case SDRATTR_3DOBJ_MAT_EMISSION:
-        {
-            B3dMaterial aNewMat = GetFrontMaterial();
-            Color aNew = ((const Svx3DMaterialEmissionItem&)rNew).GetValue();
-            aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
-            SetFrontMaterial(aNewMat);
-            break;
-        }
-        case SDRATTR_3DOBJ_MAT_SPECULAR:
-        {
-            B3dMaterial aNewMat = GetFrontMaterial();
-            Color aNew = ((const Svx3DMaterialSpecularItem&)rNew).GetValue();
-            aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
-            SetFrontMaterial(aNewMat);
-            break;
-        }
-        case SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY:
-        {
-            B3dMaterial aNewMat = GetFrontMaterial();
-            UINT16 nNew = ((const Svx3DMaterialSpecularIntensityItem&)rNew).GetValue();
-            aNewMat.SetShininess(nNew);
-            SetFrontMaterial(aNewMat);
-            break;
-        }
-        case SDRATTR_3DOBJ_TEXTURE_KIND:
-        {
-            UINT16 nNew = ((const Svx3DTextureKindItem&)rNew).GetValue();
-            if(nNew == 0)
-            {
-                ImpSetTextureKind(Base3DTextureLuminance);
-            }
-            else
-            {
-                ImpSetTextureKind(Base3DTextureColor);
-            }
-            break;
-        }
-        case SDRATTR_3DOBJ_TEXTURE_MODE:
-        {
-            UINT16 nNew = ((const Svx3DTextureModeItem&)rNew).GetValue();
-            if(nNew == 0)
-            {
-                ImpSetTextureMode(Base3DTextureReplace);
-            }
-            else if(nNew == 1)
-            {
-                ImpSetTextureMode(Base3DTextureModulate);
-            }
-            else
-            {
-                ImpSetTextureMode(Base3DTextureBlend);
-            }
-            break;
-        }
-        case SDRATTR_3DOBJ_TEXTURE_FILTER:
-        {
-            BOOL bNew = ((const Svx3DTextureFilterItem&)rNew).GetValue();
-            ImpSetFilterTexture(bNew);
-            break;
-        }
+//-/        case SDRATTR_3DOBJ_SHADOW_3D:
+//-/        {
+//-/            BOOL bNew = ((const Svx3DShadow3DItem&)rNew).GetValue();
+//-/            if(GetShadow3D() != bNew)
+//-/                ;
+//-///-/            ImpSetDrawShadow3D(bNew);
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DOBJ_MAT_COLOR:
+//-/        {
+//-/            // set 3d object color as fill color
+//-/            Color aNew = ((const Svx3DMaterialColorItem&)rNew).GetValue();
+//-/            ImpForceItemSet();
+//-/            mpObjectItemSet->Put(XFillColorItem(String(), aNew));
+//-///-/            if(GetMaterialColor() != aNew)
+//-///-/            {
+//-///-/                B3dMaterial aNewMat = GetFrontMaterial();
+//-///-/                aNewMat.SetMaterial(aNew, Base3DMaterialDiffuse);
+//-///-/                SetFrontMaterial(aNewMat);
+//-///-/            }
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DOBJ_MAT_EMISSION:
+//-/        {
+//-/            Color aNew = ((const Svx3DMaterialEmissionItem&)rNew).GetValue();
+//-/            if(GetMaterialEmission() != aNew)
+//-/            {
+//-/                B3dMaterial aNewMat = GetFrontMaterial();
+//-/                aNewMat.SetMaterial(aNew, Base3DMaterialEmission);
+//-/                SetFrontMaterial(aNewMat);
+//-/            }
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DOBJ_MAT_SPECULAR:
+//-/        {
+//-/            Color aNew = ((const Svx3DMaterialSpecularItem&)rNew).GetValue();
+//-/            if(GetMaterialSpecular() != aNew)
+//-/            {
+//-/                B3dMaterial aNewMat = GetFrontMaterial();
+//-/                aNewMat.SetMaterial(aNew, Base3DMaterialSpecular);
+//-/                SetFrontMaterial(aNewMat);
+//-/            }
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY:
+//-/        {
+//-/            UINT16 nNew = ((const Svx3DMaterialSpecularIntensityItem&)rNew).GetValue();
+//-/            if(GetMaterialSpecularIntensity() != nNew)
+//-/            {
+//-/                B3dMaterial aNewMat = GetFrontMaterial();
+//-/                aNewMat.SetShininess(nNew);
+//-/                SetFrontMaterial(aNewMat);
+//-/            }
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DOBJ_TEXTURE_KIND:
+//-/        {
+//-/            Base3DTextureKind eNew = ((const Svx3DTextureKindItem&)rNew).GetValue();
+//-/            if(GetTextureKind() != eNew)
+//-/                ;
+//-/            if(nNew == 0)
+//-/            {
+//-/                ImpSetTextureKind(Base3DTextureLuminance);
+//-/            }
+//-/            else
+//-/            {
+//-/                ImpSetTextureKind(Base3DTextureColor);
+//-/            }
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DOBJ_TEXTURE_MODE:
+//-/        {
+//-/            Base3DTextureMode eNew = ((const Svx3DTextureModeItem&)rNew).GetValue();
+//-/            if(GetTextureMode() != eNew)
+//-/                ;
+//-/            if(nNew == 0)
+//-/            {
+//-/                ImpSetTextureMode(Base3DTextureReplace);
+//-/            }
+//-/            else if(nNew == 1)
+//-/            {
+//-/                ImpSetTextureMode(Base3DTextureModulate);
+//-/            }
+//-/            else
+//-/            {
+//-/                ImpSetTextureMode(Base3DTextureBlend);
+//-/            }
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DOBJ_TEXTURE_FILTER:
+//-/        {
+//-/            BOOL bNew = ((const Svx3DTextureFilterItem&)rNew).GetValue();
+//-/            if(GetTextureFilter() != bNew)
+//-/                ;
+//-/            ImpSetFilterTexture(bNew);
+//-/            break;
+//-/        }
     }
 }
 
@@ -5294,6 +5463,13 @@ void E3dCompoundObject::SetItem( const SfxPoolItem& rItem )
     // handle value change
     if(rItem.Which() >= SDRATTR_3DOBJ_FIRST && rItem.Which() <= SDRATTR_3DOBJ_LAST)
         ImpLocalItemValueChange(rItem);
+
+//-/    // set fill color as 3d object color
+//-/    if(rItem.Which() == XATTR_FILLCOLOR)
+//-/    {
+//-/        Color aNew = ((const XFillColorItem&)rItem).GetValue();
+//-/        mpObjectItemSet->Put(Svx3DMaterialColorItem(aNew));
+//-/    }
 }
 
 void E3dCompoundObject::ClearItem( USHORT nWhich )
@@ -5306,6 +5482,10 @@ void E3dCompoundObject::ClearItem( USHORT nWhich )
         // handle value change
         if(nWhich >= SDRATTR_3DOBJ_FIRST && nWhich <= SDRATTR_3DOBJ_LAST)
             ImpLocalItemValueChange(mpObjectItemSet->Get(nWhich));
+
+//-/        // clear fill color when 3d object color is cleared
+//-/        if(nWhich == XATTR_FILLCOLOR)
+//-/            mpObjectItemSet->ClearItem(SDRATTR_3DOBJ_MAT_COLOR);
     }
 }
 
@@ -5316,7 +5496,15 @@ void E3dCompoundObject::SetItemSet( const SfxItemSet& rSet )
 
     // handle value change
     for(sal_uInt16 nWhich(SDRATTR_3DOBJ_FIRST); nWhich <= SDRATTR_3DOBJ_TEXTURE_FILTER; nWhich++)
-        ImpLocalItemValueChange(rSet.Get(nWhich));
+        if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
+            ImpLocalItemValueChange(rSet.Get(nWhich));
+
+//-/    // set fill color as 3d object color
+//-/    if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLCOLOR, FALSE))
+//-/    {
+//-/        Color aNew = ((const XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetValue();
+//-/        mpObjectItemSet->Put(Svx3DMaterialColorItem(aNew));
+//-/    }
 }
 
 //-/void E3dCompoundObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
@@ -5476,125 +5664,125 @@ void E3dCompoundObject::SetItemSet( const SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void E3dCompoundObject::Collect3DAttributes(SfxItemSet& rAttr) const
-{
-    // call parent
-    E3dObject::Collect3DAttributes(rAttr);
-
-    // special Attr for E3dCompoundObject
-    BOOL bObjDoubleSided = bDoubleSided;
-    UINT16 nObjNormalsKind;
-    if(!bUseStdNormals)
-    {
-        nObjNormalsKind = 0;
-    }
-    else
-    {
-        if(bUseStdNormalsUseSphere)
-        {
-            nObjNormalsKind = 2;
-        }
-        else
-        {
-            nObjNormalsKind = 1;
-        }
-    }
-    BOOL bObjNormalsInvert = bInvertNormals;
-    UINT16 nObjTextureProjX;
-    if(!bUseStdTextureX)
-    {
-        nObjTextureProjX = 0;
-    }
-    else
-    {
-        if(bUseStdTextureXUseSphere)
-        {
-            nObjTextureProjX = 2;
-        }
-        else
-        {
-            nObjTextureProjX = 1;
-        }
-    }
-    UINT16 nObjTextureProjY;
-    if(!bUseStdTextureY)
-    {
-        nObjTextureProjY = 0;
-    }
-    else
-    {
-        if(bUseStdTextureYUseSphere)
-        {
-            nObjTextureProjY = 2;
-        }
-        else
-        {
-            nObjTextureProjY = 1;
-        }
-    }
-    BOOL bObjShadow3D = bShadow3D;
-    const B3dMaterial& rMat = GetFrontMaterial();
-    Color aObjMaterialColor = ((const XFillColorItem&)(GetItem(XATTR_FILLCOLOR))).GetValue();
-    Color aObjMaterialEmission = rMat.GetMaterial(Base3DMaterialEmission);
-    Color aObjMaterialSpecular = rMat.GetMaterial(Base3DMaterialSpecular);
-    UINT16 nObjMaterialIntensity = rMat.GetShininess();
-    UINT16 nObjTextureKind;
-    if(eTextureKind == Base3DTextureColor)
-    {
-        nObjTextureKind = 1;
-    }
-    else
-    {
-        nObjTextureKind = 0;
-    }
-    UINT16 nObjTextureMode;
-    if(eTextureMode == Base3DTextureReplace)
-    {
-        nObjTextureMode = 0;
-    }
-    else if(eTextureMode == Base3DTextureModulate)
-    {
-        nObjTextureMode = 1;
-    }
-    else
-    {
-        nObjTextureMode = 2;
-    }
-    BOOL bObjTextureFilter = bFilterTexture;
-
-    // DoubleSided
-    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bObjDoubleSided));
-
-    // NormalsKind
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nObjNormalsKind));
-
-    // NormalsInvert
-    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bObjNormalsInvert));
-
-    // TextureProjectionX
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nObjTextureProjX));
-
-    // TextureProjectionY
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nObjTextureProjY));
-
-    // Shadow3D
-    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bObjShadow3D));
-
-    // Material
-    rAttr.Put(SvxColorItem(aObjMaterialColor, SDRATTR_3DOBJ_MAT_COLOR));
-    rAttr.Put(SvxColorItem(aObjMaterialEmission, SDRATTR_3DOBJ_MAT_EMISSION));
-    rAttr.Put(SvxColorItem(aObjMaterialSpecular, SDRATTR_3DOBJ_MAT_SPECULAR));
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nObjMaterialIntensity));
-
-    // TextureKind
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nObjTextureKind));
-
-    // TextureMode
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nObjTextureMode));
-
-    // TextureFilter
-    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, bObjTextureFilter));
-}
+//-/void E3dCompoundObject::Collect3DAttributes(SfxItemSet& rAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dObject::Collect3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dCompoundObject
+//-/    BOOL bObjDoubleSided = bDoubleSided;
+//-/    UINT16 nObjNormalsKind;
+//-/    if(!bUseStdNormals)
+//-/    {
+//-/        nObjNormalsKind = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(bUseStdNormalsUseSphere)
+//-/        {
+//-/            nObjNormalsKind = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjNormalsKind = 1;
+//-/        }
+//-/    }
+//-/    BOOL bObjNormalsInvert = bInvertNormals;
+//-/    UINT16 nObjTextureProjX;
+//-/    if(!bUseStdTextureX)
+//-/    {
+//-/        nObjTextureProjX = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(bUseStdTextureXUseSphere)
+//-/        {
+//-/            nObjTextureProjX = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjTextureProjX = 1;
+//-/        }
+//-/    }
+//-/    UINT16 nObjTextureProjY;
+//-/    if(!bUseStdTextureY)
+//-/    {
+//-/        nObjTextureProjY = 0;
+//-/    }
+//-/    else
+//-/    {
+//-/        if(bUseStdTextureYUseSphere)
+//-/        {
+//-/            nObjTextureProjY = 2;
+//-/        }
+//-/        else
+//-/        {
+//-/            nObjTextureProjY = 1;
+//-/        }
+//-/    }
+//-/    BOOL bObjShadow3D = bShadow3D;
+//-/    const B3dMaterial& rMat = GetFrontMaterial();
+//-/    Color aObjMaterialColor = ((const XFillColorItem&)(GetItem(XATTR_FILLCOLOR))).GetValue();
+//-/    Color aObjMaterialEmission = rMat.GetMaterial(Base3DMaterialEmission);
+//-/    Color aObjMaterialSpecular = rMat.GetMaterial(Base3DMaterialSpecular);
+//-/    UINT16 nObjMaterialIntensity = rMat.GetShininess();
+//-/    UINT16 nObjTextureKind;
+//-/    if(eTextureKind == Base3DTextureColor)
+//-/    {
+//-/        nObjTextureKind = 1;
+//-/    }
+//-/    else
+//-/    {
+//-/        nObjTextureKind = 0;
+//-/    }
+//-/    UINT16 nObjTextureMode;
+//-/    if(eTextureMode == Base3DTextureReplace)
+//-/    {
+//-/        nObjTextureMode = 0;
+//-/    }
+//-/    else if(eTextureMode == Base3DTextureModulate)
+//-/    {
+//-/        nObjTextureMode = 1;
+//-/    }
+//-/    else
+//-/    {
+//-/        nObjTextureMode = 2;
+//-/    }
+//-/    BOOL bObjTextureFilter = bFilterTexture;
+//-/
+//-/    // DoubleSided
+//-/    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bObjDoubleSided));
+//-/
+//-/    // NormalsKind
+//-/    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nObjNormalsKind));
+//-/
+//-/    // NormalsInvert
+//-/    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bObjNormalsInvert));
+//-/
+//-/    // TextureProjectionX
+//-/    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nObjTextureProjX));
+//-/
+//-/    // TextureProjectionY
+//-/    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nObjTextureProjY));
+//-/
+//-/    // Shadow3D
+//-/    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bObjShadow3D));
+//-/
+//-/    // Material
+//-/    rAttr.Put(SvxColorItem(aObjMaterialColor, SDRATTR_3DOBJ_MAT_COLOR));
+//-/    rAttr.Put(SvxColorItem(aObjMaterialEmission, SDRATTR_3DOBJ_MAT_EMISSION));
+//-/    rAttr.Put(SvxColorItem(aObjMaterialSpecular, SDRATTR_3DOBJ_MAT_SPECULAR));
+//-/    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nObjMaterialIntensity));
+//-/
+//-/    // TextureKind
+//-/    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nObjTextureKind));
+//-/
+//-/    // TextureMode
+//-/    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nObjTextureMode));
+//-/
+//-/    // TextureFilter
+//-/    rAttr.Put(SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, bObjTextureFilter));
+//-/}
 
 //-/void E3dCompoundObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
 //-/{
@@ -5959,100 +6147,100 @@ void E3dCompoundObject::Collect3DAttributes(SfxItemSet& rAttr) const
 //-/    }
 //-/}
 
-void E3dCompoundObject::ImpSetDoubleSided(BOOL bNew)
-{
-    if(bDoubleSided != bNew)
-    {
-        bDoubleSided = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dCompoundObject::ImpSetDoubleSided(BOOL bNew)
+//-/{
+//-/    if(bDoubleSided != bNew)
+//-/    {
+//-/        bDoubleSided = bNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetUseStdNormals(BOOL bNew)
-{
-    if(bUseStdNormals != bNew)
-    {
-        bUseStdNormals = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dCompoundObject::ImpSetUseStdNormals(BOOL bNew)
+//-/{
+//-/    if(bUseStdNormals != bNew)
+//-/    {
+//-/        bUseStdNormals = bNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetUseStdNormalsUseSphere(BOOL bNew)
-{
-    if(bUseStdNormalsUseSphere != bNew)
-    {
-        bUseStdNormalsUseSphere = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dCompoundObject::ImpSetUseStdNormalsUseSphere(BOOL bNew)
+//-/{
+//-/    if(bUseStdNormalsUseSphere != bNew)
+//-/    {
+//-/        bUseStdNormalsUseSphere = bNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetInvertNormals(BOOL bNew)
-{
-    if(bInvertNormals != bNew)
-    {
-        bInvertNormals = bNew;
-        GetDisplayGeometry().InvertNormals();
-    }
-}
+//-/void E3dCompoundObject::ImpSetInvertNormals(BOOL bNew)
+//-/{
+//-/    if(bInvertNormals != bNew)
+//-/    {
+//-/        bInvertNormals = bNew;
+//-/        GetDisplayGeometry().InvertNormals();
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetUseStdTextureX(BOOL bNew)
-{
-    if(bUseStdTextureX != bNew)
-    {
-        bUseStdTextureX = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dCompoundObject::ImpSetUseStdTextureX(BOOL bNew)
+//-/{
+//-/    if(bUseStdTextureX != bNew)
+//-/    {
+//-/        bUseStdTextureX = bNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetUseStdTextureXUseSphere(BOOL bNew)
-{
-    if(bUseStdTextureXUseSphere != bNew)
-    {
-        bUseStdTextureXUseSphere = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dCompoundObject::ImpSetUseStdTextureXUseSphere(BOOL bNew)
+//-/{
+//-/    if(bUseStdTextureXUseSphere != bNew)
+//-/    {
+//-/        bUseStdTextureXUseSphere = bNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetUseStdTextureY(BOOL bNew)
-{
-    if(bUseStdTextureY != bNew)
-    {
-        bUseStdTextureY = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dCompoundObject::ImpSetUseStdTextureY(BOOL bNew)
+//-/{
+//-/    if(bUseStdTextureY != bNew)
+//-/    {
+//-/        bUseStdTextureY = bNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetUseStdTextureYUseSphere(BOOL bNew)
-{
-    if(bUseStdTextureYUseSphere != bNew)
-    {
-        bUseStdTextureYUseSphere = bNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dCompoundObject::ImpSetUseStdTextureYUseSphere(BOOL bNew)
+//-/{
+//-/    if(bUseStdTextureYUseSphere != bNew)
+//-/    {
+//-/        bUseStdTextureYUseSphere = bNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetTextureKind(Base3DTextureKind eNew)
-{
-    if(eTextureKind != eNew)
-    {
-        eTextureKind = eNew;
-    }
-}
+//-/void E3dCompoundObject::ImpSetTextureKind(Base3DTextureKind eNew)
+//-/{
+//-/    if(eTextureKind != eNew)
+//-/    {
+//-/        eTextureKind = eNew;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetTextureMode(Base3DTextureMode eNew)
-{
-    if(eTextureMode != eNew)
-    {
-        eTextureMode = eNew;
-    }
-}
+//-/void E3dCompoundObject::ImpSetTextureMode(Base3DTextureMode eNew)
+//-/{
+//-/    if(eTextureMode != eNew)
+//-/    {
+//-/        eTextureMode = eNew;
+//-/    }
+//-/}
 
-void E3dCompoundObject::ImpSetFilterTexture(BOOL bNew)
-{
-    if(bFilterTexture != bNew)
-    {
-        bFilterTexture = bNew;
-    }
-}
+//-/void E3dCompoundObject::ImpSetFilterTexture(BOOL bNew)
+//-/{
+//-/    if(bFilterTexture != bNew)
+//-/    {
+//-/        bFilterTexture = bNew;
+//-/    }
+//-/}
 
 // EOF

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: deflt3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,20 +98,20 @@ void E3dDefaultAttributes::Reset()
     // Compound-Objekt
 //  aDefaultFrontMaterial;
 //  aDefaultBackMaterial;
-    eDefaultTextureKind = Base3DTextureColor;
-    eDefaultTextureMode = Base3DTextureModulate;
-    bDefaultDoubleSided = FALSE;
+//-/    eDefaultTextureKind = Base3DTextureColor;
+//-/    eDefaultTextureMode = Base3DTextureModulate;
+//-/    bDefaultDoubleSided = FALSE;
     bDefaultCreateNormals = TRUE;
     bDefaultCreateTexture = TRUE;
-    bDefaultUseStdNormals = FALSE;
-    bDefaultUseStdNormalsUseSphere = FALSE;
-    bDefaultInvertNormals = FALSE;
-    bDefaultUseStdTextureX = FALSE;
-    bDefaultUseStdTextureXUseSphere = FALSE;
-    bDefaultUseStdTextureY = FALSE;
-    bDefaultUseStdTextureYUseSphere = FALSE;
-    bDefaultShadow3D = FALSE;
-    bDefaultFilterTexture = FALSE;
+//-/    bDefaultUseStdNormals = FALSE;
+//-/    bDefaultUseStdNormalsUseSphere = FALSE;
+//-/    bDefaultInvertNormals = FALSE;
+//-/    bDefaultUseStdTextureX = FALSE;
+//-/    bDefaultUseStdTextureXUseSphere = FALSE;
+//-/    bDefaultUseStdTextureY = FALSE;
+//-/    bDefaultUseStdTextureYUseSphere = FALSE;
+//-/    bDefaultShadow3D = FALSE;
+//-/    bDefaultFilterTexture = FALSE;
     bDefaultUseDifferentBackMaterial = FALSE;
 
     // Cube-Objekt
@@ -121,16 +121,16 @@ void E3dDefaultAttributes::Reset()
     bDefaultCubePosIsCenter = FALSE;
 
     // Sphere-Objekt
-    nDefaultHSegments = 24;
-    nDefaultVSegments = 24;
+//-/    nDefaultHSegments = 24;
+//-/    nDefaultVSegments = 24;
     aDefaultSphereCenter = Vector3D(0.0, 0.0, 0.0);
     aDefaultSphereSize = Vector3D(1000.0, 1000.0, 1000.0);
 
     // Lathe-Objekt
     nDefaultLatheEndAngle = 3600;
     fDefaultLatheScale = 1.0;
-    fDefaultBackScale = 1.0;
-    fDefaultPercentDiag = 0.05;
+//-/    fDefaultBackScale = 1.0;
+//-/    fDefaultPercentDiag = 0.05;
     bDefaultLatheSmoothed = TRUE;
     bDefaultLatheSmoothFrontBack = FALSE;
     bDefaultLatheCharacterMode = FALSE;
@@ -139,7 +139,7 @@ void E3dDefaultAttributes::Reset()
 
     // Extrude-Objekt
     fDefaultExtrudeScale = 1.0;
-    fDefaultExtrudeDepth = 1000.0;
+//-/    fDefaultExtrudeDepth = 1000.0;
     bDefaultExtrudeSmoothed = TRUE;
     bDefaultExtrudeSmoothFrontBack = FALSE;
     bDefaultExtrudeCharacterMode = FALSE;
@@ -148,10 +148,10 @@ void E3dDefaultAttributes::Reset()
 
     // Scene-Objekt
 //  aDefaultLightGroup;
-    aDefaultShadowPlaneDirection = Vector3D(0.0, 0.0, 1.0);
-    eDefaultShadeModel = Base3DSmooth;
+//-/    aDefaultShadowPlaneDirection = Vector3D(0.0, 0.0, 1.0);
+//-/    eDefaultShadeModel = Base3DSmooth;
     bDefaultDither = TRUE;
-    bDefaultForceDraftShadeModel = FALSE;
+//-/    bDefaultForceDraftShadeModel = FALSE;
 }
 
 /*************************************************************************

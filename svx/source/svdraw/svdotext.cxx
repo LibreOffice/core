@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1893,11 +1893,11 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
     if(rHead.GetVersion() < 12 && !bTextFrame)
     {
-        SetItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-        SetItem(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+        mpObjectItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+        mpObjectItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
 //-/        SdrOutlinerSetItem aOutl(*pOutlAttr);
 //-/        aOutl.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
-        SetItem(SvxAdjustItem(SVX_ADJUST_CENTER));
+        mpObjectItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
     }
 
     if (bTextFrame && pOutlinerParaObject!=NULL)

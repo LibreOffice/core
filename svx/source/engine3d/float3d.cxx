@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,11 +1530,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         {
             UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue();
 
-            if( ( !aBtnTexLuminance.IsChecked() && nValue == 0 ) ||
-                ( !aBtnTexColor.IsChecked() && nValue == 1 ) )
+            if( ( !aBtnTexLuminance.IsChecked() && nValue == 1 ) ||
+                ( !aBtnTexColor.IsChecked() && nValue == 3 ) )
             {
-                aBtnTexLuminance.Check( nValue == 0 );
-                aBtnTexColor.Check( nValue == 1 );
+                aBtnTexLuminance.Check( nValue == 1 );
+                aBtnTexColor.Check( nValue == 3 );
                 bUpdate = TRUE;
             }
         }
@@ -1555,11 +1555,11 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         {
             UINT16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue();
 
-            if( ( !aBtnTexReplace.IsChecked() && nValue == 0 ) ||
-                ( !aBtnTexModulate.IsChecked() && nValue == 1 ) )
+            if( ( !aBtnTexReplace.IsChecked() && nValue == 1 ) ||
+                ( !aBtnTexModulate.IsChecked() && nValue == 2 ) )
             {
-                aBtnTexReplace.Check( nValue == 0 );
-                aBtnTexModulate.Check( nValue == 1 );
+                aBtnTexReplace.Check( nValue == 1 );
+                aBtnTexModulate.Check( nValue == 2 );
                 //aBtnTexBlend.Check( nValue == 2 );
                 bUpdate = TRUE;
             }
@@ -1663,10 +1663,12 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     //aLbMatFavorites.SelectEntryPos( 0 );
 
     // Objektfarbe
-    eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_COLOR);
+//-/    eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_COLOR);
+    eState = rAttrs.GetItemState(XATTR_FILLCOLOR);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_COLOR)).GetValue();
+//-/        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_COLOR)).GetValue();
+        aColor = ((const XFillColorItem&)rAttrs.Get(XATTR_FILLCOLOR)).GetValue();
         aCtlLightPreview.GetPreviewControl().SetMaterial( aColor, Base3DMaterialDiffuse );
         ColorLB* pLb = &aLbMatColor;
         if( aColor != pLb->GetSelectEntryColor() )
@@ -2216,13 +2218,13 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 // Texturen
     // Art
-    nValue = 99;
+    nValue = 3;
     if( aBtnTexLuminance.IsChecked() )
-        nValue = 0;
-    else if( aBtnTexColor.IsChecked() )
         nValue = 1;
+    else if( aBtnTexColor.IsChecked() )
+        nValue = 3;
 
-    if( nValue <= 1 )
+    if( nValue == 1 || nValue == 3 )
         rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_TEXTURE_KIND, nValue ) );
     else
         rAttrs.InvalidateItem( SDRATTR_3DOBJ_TEXTURE_KIND );
@@ -2231,13 +2233,13 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     // Modus
     nValue = 99;
     if( aBtnTexReplace.IsChecked() )
-        nValue = 0;
-    else if( aBtnTexModulate.IsChecked() )
         nValue = 1;
+    else if( aBtnTexModulate.IsChecked() )
+        nValue = 2;
     //else if( aBtnTexBlend.IsChecked() )
     //  nValue = 2;
 
-    if( nValue <= 2 )
+    if( nValue == 1 || nValue == 2 )
         rAttrs.Put( SfxUInt16Item( SDRATTR_3DOBJ_TEXTURE_MODE, nValue ) );
     else
         rAttrs.InvalidateItem( SDRATTR_3DOBJ_TEXTURE_MODE );
@@ -2287,11 +2289,12 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( aLbMatColor.GetSelectEntryCount() )
     {
         aColor = aLbMatColor.GetSelectEntryColor();
-        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DOBJ_MAT_COLOR ) );
+//-/        rAttrs.Put( SvxColorItem( aColor, SDRATTR_3DOBJ_MAT_COLOR ) );
+        rAttrs.Put( XFillColorItem( String(), aColor) );
     }
     else
     {
-        rAttrs.InvalidateItem( SDRATTR_3DOBJ_MAT_COLOR );
+//-/        rAttrs.InvalidateItem( SDRATTR_3DOBJ_MAT_COLOR );
         rAttrs.InvalidateItem( XATTR_FILLCOLOR );
     }
 

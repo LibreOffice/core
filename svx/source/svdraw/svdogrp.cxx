@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1478,6 +1478,30 @@ SfxItemSet* SdrObjGroup::CreateNewItemSet(SfxItemPool& rPool)
 {
     // include ALL items
     return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void SdrObjGroup::PreSave()
+{
+    if(!IsLinkedGroup())
+    {
+        sal_uInt32 nCount(pSub->GetObjCount());
+        for(sal_uInt32 a(0); a < nCount; a++)
+            pSub->GetObj(a)->PreSave();
+    }
+}
+
+void SdrObjGroup::PostSave()
+{
+    if(!IsLinkedGroup())
+    {
+        sal_uInt32 nCount(pSub->GetObjCount());
+        for(sal_uInt32 a(0); a < nCount; a++)
+            pSub->GetObj(a)->PostSave();
+    }
 }
 
 //-/void SdrObjGroup::BroadcastItemChange(const SdrBroadcastItemChange& rChange)

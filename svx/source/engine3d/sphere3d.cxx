@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,8 @@ E3dSphereObj::E3dSphereObj(int dummy) // den Parameter braucht es um unterscheid
 void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
     // Defaults setzen
-    nHSegments = rDefault.GetDefaultHSegments();
-    nVSegments = rDefault.GetDefaultVSegments();
+//-/    nHSegments = rDefault.GetDefaultHSegments();
+//-/    nVSegments = rDefault.GetDefaultVSegments();
     aCenter = rDefault.GetDefaultSphereCenter();
     aSize = rDefault.GetDefaultSphereSize();
 }
@@ -170,24 +170,32 @@ void E3dSphereObj::CreateGeometry()
     Polygon3D   aNormal3D(4);
     Polygon3D   aTexture3D(4);
 
+    if ( GetHorizontalSegments() <  3  )
+        mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(3));
+
+    if ( GetHorizontalSegments() > 100 )
+        mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(100));
+
+    if ( GetVerticalSegments() <  2  )
+        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(2));
+
+    if ( GetVerticalSegments() > 100 )
+        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(100));
+
     // Start der Geometrieerzeugung ankuendigen
     StartCreateGeometry();
-
-    if ( nHSegments <  3  )  nHSegments =   3;
-    if ( nHSegments > 100 )  nHSegments = 100;
-    if ( nVSegments <  2  )  nVSegments =   2;
-    if ( nVSegments > 100 )  nVSegments = 100;
 
     Vector3D aRadius = aSize / 2;
     double fHSin1, fHSin2, fHCos1, fHCos2;
     double fHAng = 0;
-    double fHInc = DEG2RAD(360) / nHSegments;
-    double fVInc = DEG2RAD(180) / nVSegments;
+    double fHInc = DEG2RAD(360) / GetHorizontalSegments();
+    double fVInc = DEG2RAD(180) / GetVerticalSegments();
 
     fHSin2 = 0.0; // sin(0)
     fHCos2 = 1.0; // cos(0)
+    sal_uInt16 nUpperBound = (sal_uInt16)GetHorizontalSegments();
 
-    for (USHORT nH = 0; nH < nHSegments; nH++)
+    for (USHORT nH = 0; nH < nUpperBound; nH++)
     {
         fHAng += fHInc;
         fHSin1 = fHSin2;
@@ -200,8 +208,9 @@ void E3dSphereObj::CreateGeometry()
         double fVSin1, fVSin2, fVCos1, fVCos2;
         fVSin2 = 1.0; // sin(90)
         fVCos2 = 0.0; // cos(90)
+        sal_uInt16 nUpperVert = (sal_uInt16)GetVerticalSegments();
 
-        for (USHORT nV = 0; nV < nVSegments; nV++)
+        for (USHORT nV = 0; nV < nUpperVert; nV++)
         {
             Vector3D aPos;
 
@@ -238,17 +247,17 @@ void E3dSphereObj::CreateGeometry()
             if(GetCreateTexture())
             {
                 aTexture3D[1].X() =
-                    (double)(nHSegments - (nH + 1)) / (double)nHSegments;
+                    (double)(nUpperBound - (nH + 1)) / (double)nUpperBound;
                 aTexture3D[1].Y() =
-                    (double)nV / (double)nVSegments;
+                    (double)nV / (double)nUpperVert;
 
                 aTexture3D[2].X() =
-                    (double)((nHSegments - (nH + 1)) - 1) / (double)nHSegments;
+                    (double)((nUpperBound - (nH + 1)) - 1) / (double)nUpperBound;
                 aTexture3D[2].Y() = aTexture3D[1].Y();
 
                 aTexture3D[3].X() = aTexture3D[2].X();
                 aTexture3D[3].Y() =
-                    (double)(nV+1) / (double)nVSegments;
+                    (double)(nV+1) / (double)nUpperVert;
 
                 aTexture3D[0].X() = aTexture3D[1].X();
                 aTexture3D[0].Y() = aTexture3D[3].Y();
@@ -329,11 +338,11 @@ SdrObject *E3dSphereObj::DoConvertToPolyObj(BOOL bBezier) const
 
 void E3dSphereObj::ReSegment(long nHSegs, long nVSegs)
 {
-    if ((nHSegs != nHSegments || nVSegs != nVSegments) &&
+    if((nHSegs != GetHorizontalSegments() || nVSegs != GetVerticalSegments()) &&
         (nHSegs != 0 || nVSegs != 0))
     {
-        nHSegments = nHSegs;
-        nVSegments = nVSegs;
+        mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nHSegs));
+        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nVSegs));
 
         bGeometryValid = FALSE;
     }
@@ -405,13 +414,18 @@ void E3dSphereObj::WriteData(SvStream& rOut) const
         E3dObject::WriteOnlyOwnMembers(rOut);
     }
     // Das gehört zu E3dSphere
-    rOut << nHSegments;
-    rOut << nVSegments;
+//-/    rOut << nHSegments;
+    rOut << GetHorizontalSegments();
+
+//-/    rOut << nVSegments;
+    rOut << GetVerticalSegments();
+
     rOut << aCenter;
     rOut << aSize;
 
     // Das hier ist ein Merkmal eines Compound-Objektes
-    rOut << bDoubleSided;
+//-/    rOut << bDoubleSided;
+    rOut << GetDoubleSided();
 
     // Ab Version 395 (8.6.98): Parameter aus dem Objekt
     // E3dCompoundObject. Da irgendwann mal jemand die Ableitungs-
@@ -419,24 +433,54 @@ void E3dSphereObj::WriteData(SvStream& rOut) const
     // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
     // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
     // E3dCompoundObject oder E3dObject aendern.
-    rOut << BOOL(bDoubleSided);
+//-/    rOut << BOOL(bDoubleSided);
+    rOut << GetDoubleSided();
+
     rOut << BOOL(bCreateNormals);
     rOut << BOOL(bCreateTexture);
-    rOut << BOOL(bUseStdNormals);
-    rOut << BOOL(bUseStdNormalsUseSphere);
-    rOut << BOOL(bUseStdTextureX);
-    rOut << BOOL(bUseStdTextureXUseSphere);
-    rOut << BOOL(bUseStdTextureY);
-    rOut << BOOL(bUseStdTextureYUseSphere);
-    rOut << BOOL(bShadow3D);
-    aFrontMaterial.WriteData(rOut);
+
+//-/    rOut << BOOL(bUseStdNormals);
+//-/    rOut << BOOL(bUseStdNormalsUseSphere);
+    sal_uInt16 nVal = GetNormalsKind();
+    rOut << BOOL(nVal > 0);
+    rOut << BOOL(nVal > 1);
+
+//-/    rOut << BOOL(bUseStdTextureX);
+//-/    rOut << BOOL(bUseStdTextureXUseSphere);
+    nVal = GetTextureProjectionX();
+    rOut << BOOL(nVal > 0);
+    rOut << BOOL(nVal > 1);
+
+//-/    rOut << BOOL(bUseStdTextureY);
+//-/    rOut << BOOL(bUseStdTextureYUseSphere);
+    nVal = GetTextureProjectionY();
+    rOut << BOOL(nVal > 0);
+    rOut << BOOL(nVal > 1);
+
+//-/    rOut << BOOL(bShadow3D);
+    rOut << BOOL(GetShadow3D());
+
+//-/    aFrontMaterial.WriteData(rOut);
+    rOut << GetMaterialAmbientColor();
+    rOut << GetMaterialColor();
+    rOut << GetMaterialSpecular();
+    rOut << GetMaterialEmission();
+    rOut << GetMaterialSpecularIntensity();
+
     aBackMaterial.WriteData(rOut);
-    rOut << (UINT16)eTextureKind;
-    rOut << (UINT16)eTextureMode;
-    rOut << BOOL(bInvertNormals);
+
+//-/    rOut << (UINT16)eTextureKind;
+    rOut << (UINT16)GetTextureKind();
+
+//-/    rOut << (UINT16)eTextureMode;
+    rOut << (UINT16)GetTextureMode();
+
+//-/    rOut << BOOL(bInvertNormals);
+    rOut << BOOL(GetNormalsInvert());
 
     // neu ab 534: (hat noch gefehlt)
-    rOut << BOOL(bFilterTexture);
+//-/    rOut << BOOL(bFilterTexture);
+    rOut << BOOL(GetTextureFilter());
 
     if(nVersion < 3800)
     {
@@ -459,6 +503,8 @@ void E3dSphereObj::ReadData31(const SdrObjIOHeader& rHead, SvStream& rIn)
 #endif
     // dann die Member
     UINT16  nTmp16;
+    sal_Int32 nTmp32;
+
     pSub->Load(rIn, *pPage);
     // FG: Die Daten des 3D-Objektes
     rIn >> aLocalBoundVol;
@@ -472,8 +518,15 @@ void E3dSphereObj::ReadData31(const SdrObjIOHeader& rHead, SvStream& rIn)
     rIn >> nPartOfParent;
     rIn >> nTmp16; eDragDetail = E3dDragDetail(nTmp16);
     // FG: Die Daten der Kugel
-    rIn >> nHSegments;
-    rIn >> nVSegments;
+
+//-/    rIn >> nHSegments;
+    rIn >> nTmp32;
+    mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nTmp32));
+
+//-/    rIn >> nVSegments;
+    rIn >> nTmp32;
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nTmp32));
+
     rIn >> aCenter;
     rIn >> aSize;
 
@@ -530,15 +583,23 @@ void E3dSphereObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         if (aCompat.GetBytesLeft ())
         {
             // neue Member
-            rIn >> nHSegments;
-            rIn >> nVSegments;
+//-/            rIn >> nHSegments;
+            sal_Int32 nTmp32;
+
+            rIn >> nTmp32;
+            mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nTmp32));
+
+            rIn >> nTmp32;
+            mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nTmp32));
+
             rIn >> aCenter;
             rIn >> aSize;
             if (aCompat.GetBytesLeft ())
             {
                 rIn >> bMyDoubleSided;
-                bDoubleSided = bMyDoubleSided; // FG: Member des E3dCompounds wird dort eigentlich
-            }                                    //     sowieso nochmal gemacht, ist aber sicherer so.
+//-/                bDoubleSided = bMyDoubleSided;
+                mpObjectItemSet->Put(Svx3DDoubleSidedItem(bMyDoubleSided));
+            }
 
             if (aCompat.GetBytesLeft())
             {
@@ -548,31 +609,99 @@ void E3dSphereObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
                 // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
                 // E3dCompoundObject oder E3dObject aendern.
-                BOOL bTmp;
-                UINT16 nTmp16;
+                BOOL bTmp, bTmp2;
+                sal_uInt16 nTmp;
 
-                rIn >> bTmp; bDoubleSided = bTmp;
+//-/                rIn >> bTmp; bDoubleSided = bTmp;
+                rIn >> bTmp;
+                mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
+
                 rIn >> bTmp; bCreateNormals = bTmp;
                 rIn >> bTmp; bCreateTexture = bTmp;
-                rIn >> bTmp; bUseStdNormals = bTmp;
-                rIn >> bTmp; bUseStdNormalsUseSphere = bTmp;
-                rIn >> bTmp; bUseStdTextureX = bTmp;
-                rIn >> bTmp; bUseStdTextureXUseSphere = bTmp;
-                rIn >> bTmp; bUseStdTextureY = bTmp;
-                rIn >> bTmp; bUseStdTextureYUseSphere = bTmp;
-                rIn >> bTmp; bShadow3D = bTmp;
-                aFrontMaterial.ReadData(rIn);
+
+//-/                rIn >> bTmp; bUseStdNormals = bTmp;
+//-/                rIn >> bTmp; bUseStdNormalsUseSphere = bTmp;
+                rIn >> bTmp;
+                rIn >> bTmp2;
+                if(bTmp == FALSE && bTmp2 == FALSE)
+                    nTmp = 0;
+                else if(bTmp == TRUE && bTmp2 == FALSE)
+                    nTmp = 1;
+                else
+                    nTmp = 2;
+                mpObjectItemSet->Put(Svx3DNormalsKindItem(nTmp));
+
+//-/                rIn >> bTmp; bUseStdTextureX = bTmp;
+//-/                rIn >> bTmp; bUseStdTextureXUseSphere = bTmp;
+                rIn >> bTmp;
+                rIn >> bTmp2;
+                if(bTmp == FALSE && bTmp2 == FALSE)
+                    nTmp = 0;
+                else if(bTmp == TRUE && bTmp2 == FALSE)
+                    nTmp = 1;
+                else
+                    nTmp = 2;
+                mpObjectItemSet->Put(Svx3DTextureProjectionXItem(nTmp));
+
+//-/                rIn >> bTmp; bUseStdTextureY = bTmp;
+//-/                rIn >> bTmp; bUseStdTextureYUseSphere = bTmp;
+                rIn >> bTmp;
+                rIn >> bTmp2;
+                if(bTmp == FALSE && bTmp2 == FALSE)
+                    nTmp = 0;
+                else if(bTmp == TRUE && bTmp2 == FALSE)
+                    nTmp = 1;
+                else
+                    nTmp = 2;
+                mpObjectItemSet->Put(Svx3DTextureProjectionYItem(nTmp));
+
+//-/                rIn >> bTmp; bShadow3D = bTmp;
+                rIn >> bTmp;
+                mpObjectItemSet->Put(Svx3DShadow3DItem(bTmp));
+
+//-/                aFrontMaterial.ReadData(rIn);
+                Color aCol;
+
+                rIn >> aCol;
+                SetMaterialAmbientColor(aCol);
+
+                rIn >> aCol;
+//-/                SetItem(Svx3DMaterialColorItem(aCol));
+                // do NOT use, this is the old 3D-Color(!)
+                // SetItem(XFillColorItem(String(), aCol));
+
+                rIn >> aCol;
+                mpObjectItemSet->Put(Svx3DMaterialSpecularItem(aCol));
+
+                rIn >> aCol;
+                mpObjectItemSet->Put(Svx3DMaterialEmissionItem(aCol));
+
+                rIn >> nTmp;
+                mpObjectItemSet->Put(Svx3DMaterialSpecularIntensityItem(nTmp));
+
                 aBackMaterial.ReadData(rIn);
-                rIn >> nTmp16; eTextureKind = Base3DTextureKind(nTmp16);
-                rIn >> nTmp16; eTextureMode = Base3DTextureMode(nTmp16);
-                rIn >> bTmp; bInvertNormals = bTmp;
+
+//-/                rIn >> nTmp16; eTextureKind = Base3DTextureKind(nTmp16);
+                rIn >> nTmp;
+                mpObjectItemSet->Put(Svx3DTextureKindItem(nTmp));
+
+//-/                rIn >> nTmp16; eTextureMode = Base3DTextureMode(nTmp16);
+                rIn >> nTmp;
+                mpObjectItemSet->Put(Svx3DTextureModeItem(nTmp));
+
+//-/                rIn >> bTmp; bInvertNormals = bTmp;
+                rIn >> bTmp;
+                mpObjectItemSet->Put(Svx3DNormalsInvertItem(bTmp));
+
             }
 
             // neu ab 534: (hat noch gefehlt)
             if (aCompat.GetBytesLeft () >= sizeof (BOOL))
             {
                 BOOL bTmp;
-                rIn >> bTmp; bFilterTexture = bTmp;
+//-/                rIn >> bTmp; bFilterTexture = bTmp;
+                rIn >> bTmp;
+                mpObjectItemSet->Put(Svx3DTextureFilterItem(bTmp));
             }
         }
         else
@@ -601,8 +730,8 @@ void E3dSphereObj::operator=(const SdrObject& rObj)
     // weitere Parameter kopieren
     const E3dSphereObj& r3DObj = (const E3dSphereObj&) rObj;
 
-    nHSegments = r3DObj.nHSegments;
-    nVSegments = r3DObj.nVSegments;
+//-/    nHSegments = r3DObj.nHSegments;
+//-/    nVSegments = r3DObj.nVSegments;
     aCenter       = r3DObj.aCenter;
     aSize         = r3DObj.aSize;
 }
@@ -681,14 +810,16 @@ void E3dSphereObj::ImpLocalItemValueChange(const SfxPoolItem& rNew)
     {
         case SDRATTR_3DOBJ_HORZ_SEGS:
         {
-            UINT32 nNew = ((const Svx3DHorizontalSegmentsItem&)rNew).GetValue();
-            ImpSetHSegments(nNew);
+            bGeometryValid = FALSE;
+//-/            UINT32 nNew = ((const Svx3DHorizontalSegmentsItem&)rNew).GetValue();
+//-/            ImpSetHSegments(nNew);
             break;
         }
         case SDRATTR_3DOBJ_VERT_SEGS:
         {
-            UINT32 nNew = ((const Svx3DVerticalSegmentsItem&)rNew).GetValue();
-            ImpSetVSegments(nNew);
+            bGeometryValid = FALSE;
+//-/            UINT32 nNew = ((const Svx3DVerticalSegmentsItem&)rNew).GetValue();
+//-/            ImpSetVSegments(nNew);
             break;
         }
     }
@@ -724,7 +855,8 @@ void E3dSphereObj::SetItemSet( const SfxItemSet& rSet )
 
     // handle value change
     for(sal_uInt16 nWhich(SDRATTR_3DOBJ_HORZ_SEGS); nWhich <= SDRATTR_3DOBJ_VERT_SEGS; nWhich++)
-        ImpLocalItemValueChange(rSet.Get(nWhich));
+        if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
+            ImpLocalItemValueChange(rSet.Get(nWhich));
 }
 
 //-/void E3dSphereObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
@@ -753,21 +885,21 @@ void E3dSphereObj::SetItemSet( const SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void E3dSphereObj::Collect3DAttributes(SfxItemSet& rAttr) const
-{
-    // call parent
-    E3dCompoundObject::Collect3DAttributes(rAttr);
-
-    // special Attr for E3dSphereObj
-    long nObjHorzSegs = nHSegments;
-    long nObjVertSegs = nVSegments;
-
-    // HorizSegs
-    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nObjHorzSegs));
-
-    // VertSegs
-    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nObjVertSegs));
-}
+//-/void E3dSphereObj::Collect3DAttributes(SfxItemSet& rAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::Collect3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dSphereObj
+//-/    long nObjHorzSegs = nHSegments;
+//-/    long nObjVertSegs = nVSegments;
+//-/
+//-/    // HorizSegs
+//-/    rAttr.Put(Svx3DHorizontalSegmentsItem(nObjHorzSegs));
+//-/
+//-/    // VertSegs
+//-/    rAttr.Put(Svx3DVerticalSegmentsItem(nObjVertSegs));
+//-/}
 
 //-/void E3dSphereObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
 //-/{
@@ -844,22 +976,22 @@ void E3dSphereObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralSphere3d);
 }
 
-void E3dSphereObj::ImpSetHSegments(long nNew)
-{
-    if(nHSegments != nNew)
-    {
-        nHSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dSphereObj::ImpSetHSegments(long nNew)
+//-/{
+//-/    if(nHSegments != nNew)
+//-/    {
+//-/        nHSegments = nNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dSphereObj::ImpSetVSegments(long nNew)
-{
-    if(nVSegments != nNew)
-    {
-        nVSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dSphereObj::ImpSetVSegments(long nNew)
+//-/{
+//-/    if(nVSegments != nNew)
+//-/    {
+//-/        nVSegments = nNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
 // EOF

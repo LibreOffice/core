@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,11 +200,40 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 #endif
 
     // Defaults setzen
-    aLightGroup = rDefault.GetDefaultLightGroup();
-    aShadowPlaneDirection = rDefault.GetDefaultShadowPlaneDirection();
-    eShadeModel = rDefault.GetDefaultShadeModel();
+//-/    aLightGroup = rDefault.GetDefaultLightGroup();
+
+    // set defaults for LightGroup from ItemPool
+    aLightGroup.SetModelTwoSide(GetTwoSidedLighting());
+    aLightGroup.SetIntensity( GetLightColor1(), Base3DMaterialDiffuse, Base3DLight0);
+    aLightGroup.SetIntensity( GetLightColor2(), Base3DMaterialDiffuse, Base3DLight1);
+    aLightGroup.SetIntensity( GetLightColor3(), Base3DMaterialDiffuse, Base3DLight2);
+    aLightGroup.SetIntensity( GetLightColor4(), Base3DMaterialDiffuse, Base3DLight3);
+    aLightGroup.SetIntensity( GetLightColor5(), Base3DMaterialDiffuse, Base3DLight4);
+    aLightGroup.SetIntensity( GetLightColor6(), Base3DMaterialDiffuse, Base3DLight5);
+    aLightGroup.SetIntensity( GetLightColor7(), Base3DMaterialDiffuse, Base3DLight6);
+    aLightGroup.SetIntensity( GetLightColor8(), Base3DMaterialDiffuse, Base3DLight7);
+    aLightGroup.SetGlobalAmbientLight(GetGlobalAmbientColor());
+    aLightGroup.Enable( GetLightOnOff1(), Base3DLight0);
+    aLightGroup.Enable( GetLightOnOff2(), Base3DLight1);
+    aLightGroup.Enable( GetLightOnOff3(), Base3DLight2);
+    aLightGroup.Enable( GetLightOnOff4(), Base3DLight3);
+    aLightGroup.Enable( GetLightOnOff5(), Base3DLight4);
+    aLightGroup.Enable( GetLightOnOff6(), Base3DLight5);
+    aLightGroup.Enable( GetLightOnOff7(), Base3DLight6);
+    aLightGroup.Enable( GetLightOnOff8(), Base3DLight7);
+    aLightGroup.SetDirection( GetLightDirection1(), Base3DLight0);
+    aLightGroup.SetDirection( GetLightDirection2(), Base3DLight1);
+    aLightGroup.SetDirection( GetLightDirection3(), Base3DLight2);
+    aLightGroup.SetDirection( GetLightDirection4(), Base3DLight3);
+    aLightGroup.SetDirection( GetLightDirection5(), Base3DLight4);
+    aLightGroup.SetDirection( GetLightDirection6(), Base3DLight5);
+    aLightGroup.SetDirection( GetLightDirection7(), Base3DLight6);
+    aLightGroup.SetDirection( GetLightDirection8(), Base3DLight7);
+
+//-/    aShadowPlaneDirection = rDefault.GetDefaultShadowPlaneDirection();
+//-/    eShadeModel = rDefault.GetDefaultShadeModel();
     bDither = rDefault.GetDefaultDither();
-    bForceDraftShadeModel = rDefault.GetDefaultForceDraftShadeModel();
+//-/    bForceDraftShadeModel = rDefault.GetDefaultForceDraftShadeModel();
 
     // Alte Werte initialisieren
     aCamera.SetViewWindow(-2, -2, 4, 4);
@@ -214,8 +243,17 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     aCameraSet.SetViewportRectangle(aRect);
     nSortingMode = E3D_SORT_FAST_SORTING | E3D_SORT_IN_PARENTS | E3D_SORT_TEST_LENGTH;
 
+    // set defaults for Camera from ItemPool
+    aCamera.SetProjection(GetPerspective());
+    Vector3D aActualPosition = aCamera.GetPosition();
+    double fNew = GetDistance();
+    if(fabs(fNew - aActualPosition.Z()) > 1.0)
+        aCamera.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
+    fNew = GetFocalLength() / 100.0;
+    aCamera.SetFocalLength(fNew);
+
     // Schattenebene normalisieren
-    aShadowPlaneDirection.Normalize();
+//-/    aShadowPlaneDirection.Normalize();
 }
 
 /*************************************************************************
@@ -364,6 +402,7 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
 {
     // Alte Kamera setzen
     aCamera = rNewCamera;
+    ImpSetSceneItemsFromCamera();
     SetRectsDirty();
 
     // Neue Kamera aus alter fuellen
@@ -712,14 +751,24 @@ void E3dScene::WriteData(SvStream& rOut) const
     rOut << nSortingMode;
 
     // neu ab 377:
-    rOut << aShadowPlaneDirection;
+//-/    rOut << aShadowPlaneDirection;
+    Vector3D aPlaneDirection = GetShadowPlaneDirection();
+    rOut << aPlaneDirection;
 
     // neu ab 383:
     rOut << (BOOL)bDither;
 
     // neu ab 384:
-    rOut << (UINT16)eShadeModel;
-    rOut << (BOOL)bForceDraftShadeModel;
+//-/    rOut << (UINT16)eShadeModel;
+//-/    rOut << (BOOL)bForceDraftShadeModel;
+    sal_uInt16 nShadeMode = GetShadeMode();
+    if(nShadeMode == 0)
+        rOut << (sal_uInt16)Base3DFlat;
+    else if(nShadeMode == 1)
+        rOut << (sal_uInt16)Base3DPhong;
+    else
+        rOut << (sal_uInt16)Base3DSmooth;
+    rOut << (BOOL)(nShadeMode > 2);
 
 #endif
 }
@@ -803,7 +852,10 @@ void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         // neu ab 377:
         if (aCompat.GetBytesLeft() >= sizeof(Vector3D))
         {
-            rIn >> aShadowPlaneDirection;
+//-/            rIn >> aShadowPlaneDirection;
+            Vector3D aShadowVec;
+            rIn >> aShadowVec;
+            SetShadowPlaneDirection(aShadowVec);
         }
 
         // neu ab 383:
@@ -816,11 +868,21 @@ void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         if (aCompat.GetBytesLeft() >= sizeof(UINT16))
         {
             UINT16 nTmp;
-            rIn >> nTmp; eShadeModel = (Base3DShadeModel)nTmp;
+            rIn >> nTmp;
+//-/            eShadeModel = (Base3DShadeModel)nTmp;
+            if(nTmp == (Base3DShadeModel)Base3DFlat)
+                mpObjectItemSet->Put(Svx3DShadeModeItem(0));
+            else if(nTmp == (Base3DShadeModel)Base3DPhong)
+                mpObjectItemSet->Put(Svx3DShadeModeItem(1));
+            else
+                mpObjectItemSet->Put(Svx3DShadeModeItem(2));
         }
         if (aCompat.GetBytesLeft() >= sizeof(BOOL))
         {
-            rIn >> bTmp; bForceDraftShadeModel = bTmp;
+            rIn >> bTmp;
+//-/            bForceDraftShadeModel = bTmp;
+            if(bTmp)
+                mpObjectItemSet->Put(Svx3DShadeModeItem(3));
         }
 
         // SnapRects der Objekte ungueltig
@@ -831,6 +893,10 @@ void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         InitTransformationSet();
 
         RebuildLists();
+
+        // set items from combined read objects like lightgroup and camera
+        ImpSetLightItemsFromLightGroup();
+        ImpSetSceneItemsFromCamera();
     }
 }
 
@@ -915,14 +981,16 @@ void E3dScene::operator=(const SdrObject& rObj)
     nSortingMode     = r3DObj.nSortingMode;
 
     // neu ab 377:
-    aShadowPlaneDirection = r3DObj.aShadowPlaneDirection;
+//-/    aShadowPlaneDirection = r3DObj.aShadowPlaneDirection;
     aCameraSet = r3DObj.aCameraSet;
+    ImpSetSceneItemsFromCamera();
 
     // neu ab 383:
     aLightGroup = r3DObj.aLightGroup;
-    eShadeModel = r3DObj.eShadeModel;
+    ImpSetLightItemsFromLightGroup();
+//-/    eShadeModel = r3DObj.eShadeModel;
     bDither = r3DObj.bDither;
-    bForceDraftShadeModel = r3DObj.bForceDraftShadeModel;
+//-/    bForceDraftShadeModel = r3DObj.bForceDraftShadeModel;
 
     bBoundVolValid = FALSE;
     RebuildLists();
@@ -1204,18 +1272,17 @@ void E3dScene::RemoveLightObjects()
 
 void E3dScene::CreateLightObjectsFromLightGroup()
 {
-    if(GetLightGroup().IsLightingEnabled())
+    if(aLightGroup.IsLightingEnabled())
     {
         // Global Ambient Light
-        const Color& rAmbient = GetLightGroup().GetGlobalAmbientLight();
+        const Color& rAmbient = aLightGroup.GetGlobalAmbientLight();
         if(rAmbient != Color(COL_BLACK))
             Insert3DObj(new E3dLight(Vector3D(), rAmbient, 1.0));
 
         // Andere Lichter
         for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
         {
-            B3dLight& rLight = GetLightGroup().
-                GetLightObject((Base3DLightNumber)(Base3DLight0 + a));
+            B3dLight& rLight = aLightGroup.GetLightObject((Base3DLightNumber)(Base3DLight0 + a));
             if(rLight.IsEnabled())
             {
                 if(rLight.IsDirectionalSource())
@@ -1253,7 +1320,7 @@ void E3dScene::FillLightGroup()
         Base3DLightNumber eLight = Base3DLight0;
 
         // AmbientLight aus
-        GetLightGroup().SetGlobalAmbientLight(Color(COL_BLACK));
+        aLightGroup.SetGlobalAmbientLight(Color(COL_BLACK));
 
         while ( a3DIterator.IsMore() )
         {
@@ -1273,13 +1340,13 @@ void E3dScene::FillLightGroup()
                         // Position, keine Richtung
                         B3dColor aCol(pLight->GetColor().GetColor());
                         aCol *= pLight->GetIntensity();
-                        GetLightGroup().SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
-                        GetLightGroup().SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
+                        aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
+                        aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
                         Vector3D aPos = pLight->GetPosition();
-                        GetLightGroup().SetPosition(aPos, eLight);
+                        aLightGroup.SetPosition(aPos, eLight);
 
                         // Lichtquelle einschalten
-                        GetLightGroup().Enable(TRUE, eLight);
+                        aLightGroup.Enable(TRUE, eLight);
 
                         // Naechstes Licht in Base3D
                         eLight = (Base3DLightNumber)(eLight + 1);
@@ -1290,13 +1357,13 @@ void E3dScene::FillLightGroup()
                         // Richtung, keine Position
                         B3dColor aCol(pLight->GetColor().GetColor());
                         aCol *= pLight->GetIntensity();
-                        GetLightGroup().SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
-                        GetLightGroup().SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
+                        aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
+                        aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
                         Vector3D aDir = ((E3dDistantLight *)pLight)->GetDirection();
-                        GetLightGroup().SetDirection(aDir, eLight);
+                        aLightGroup.SetDirection(aDir, eLight);
 
                         // Lichtquelle einschalten
-                        GetLightGroup().Enable(TRUE, eLight);
+                        aLightGroup.Enable(TRUE, eLight);
 
                         // Naechstes Licht in Base3D
                         eLight = (Base3DLightNumber)(eLight + 1);
@@ -1307,8 +1374,8 @@ void E3dScene::FillLightGroup()
                         // ambientes licht, auf globales aufaddieren
                         B3dColor aCol(pLight->GetColor().GetColor());
                         aCol *= pLight->GetIntensity();
-                        aCol += (B3dColor &)GetLightGroup().GetGlobalAmbientLight();
-                        GetLightGroup().SetGlobalAmbientLight(aCol);
+                        aCol += (B3dColor &)aLightGroup.GetGlobalAmbientLight();
+                        aLightGroup.SetGlobalAmbientLight(aCol);
                     }
                 }
             }
@@ -1317,13 +1384,13 @@ void E3dScene::FillLightGroup()
         // Alle anderen Lichter ausschalten
         while(eLight <= Base3DLight7)
         {
-            GetLightGroup().Enable(FALSE, eLight);
+            aLightGroup.Enable(FALSE, eLight);
             eLight = (Base3DLightNumber)(eLight + 1);
         }
     }
 
     // Beleuchtung einschalten, falls Lampen vorhanden
-    GetLightGroup().EnableLighting(bLampFound);
+    aLightGroup.EnableLighting(bLampFound);
 }
 
 /*************************************************************************
@@ -1850,118 +1917,174 @@ void E3dScene::RecalcSnapRect()
 |*
 \************************************************************************/
 
-void E3dScene::Collect3DAttributes(SfxItemSet& rAttr) const
+void E3dScene::ImpSetLightItemsFromLightGroup()
 {
-    // call parent
-    E3dObject::Collect3DAttributes(rAttr);
-
-    // special Attr for E3dCompoundObject
-    B3dLightGroup& rLightGroup = ((E3dScene*)this)->GetLightGroup();
-    Camera3D aSceneCam (GetCamera());
-    double   fSceneCamPosZ = aSceneCam.GetPosition().Z();
-    double   fSceneFocal = aSceneCam.GetFocalLength() * 100.0;
-    BOOL     bSceneTwoSidedLighting = rLightGroup.GetModelTwoSide();
-    Color    aSceneLightColor1 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0);
-    Color    aSceneLightColor2 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1);
-    Color    aSceneLightColor3 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2);
-    Color    aSceneLightColor4 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3);
-    Color    aSceneLightColor5 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4);
-    Color    aSceneLightColor6 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5);
-    Color    aSceneLightColor7 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6);
-    Color    aSceneLightColor8 = rLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7);
-    Color    aSceneAmbientColor = rLightGroup.GetGlobalAmbientLight();
-    BOOL     bSceneLightOn1 = rLightGroup.IsEnabled(Base3DLight0);
-    BOOL     bSceneLightOn2 = rLightGroup.IsEnabled(Base3DLight1);
-    BOOL     bSceneLightOn3 = rLightGroup.IsEnabled(Base3DLight2);
-    BOOL     bSceneLightOn4 = rLightGroup.IsEnabled(Base3DLight3);
-    BOOL     bSceneLightOn5 = rLightGroup.IsEnabled(Base3DLight4);
-    BOOL     bSceneLightOn6 = rLightGroup.IsEnabled(Base3DLight5);
-    BOOL     bSceneLightOn7 = rLightGroup.IsEnabled(Base3DLight6);
-    BOOL     bSceneLightOn8 = rLightGroup.IsEnabled(Base3DLight7);
-    Vector3D aSceneLightDirection1 = rLightGroup.GetDirection( Base3DLight0 );
-    Vector3D aSceneLightDirection2 = rLightGroup.GetDirection( Base3DLight1 );
-    Vector3D aSceneLightDirection3 = rLightGroup.GetDirection( Base3DLight2 );
-    Vector3D aSceneLightDirection4 = rLightGroup.GetDirection( Base3DLight3 );
-    Vector3D aSceneLightDirection5 = rLightGroup.GetDirection( Base3DLight4 );
-    Vector3D aSceneLightDirection6 = rLightGroup.GetDirection( Base3DLight5 );
-    Vector3D aSceneLightDirection7 = rLightGroup.GetDirection( Base3DLight6 );
-    Vector3D aSceneLightDirection8 = rLightGroup.GetDirection( Base3DLight7 );
-    ProjectionType eScenePT = aSceneCam.GetProjection();
-    UINT16   nSceneShadeMode;
-    const Vector3D& rShadowVec = ((E3dScene*)this)->GetShadowPlaneDirection();
-    UINT16 nSceneShadowSlant = (UINT16)((atan2(rShadowVec.Y(), rShadowVec.Z()) / F_PI180) + 0.5);
-
-    if(bForceDraftShadeModel)
-    {
-        nSceneShadeMode = 3; // Draft-Modus
-    }
-    else
-    {
-        if(eShadeModel == Base3DSmooth)
-        {
-            nSceneShadeMode = 2; // Gouraud
-        }
-        else if(eShadeModel == Base3DFlat)
-        {
-            nSceneShadeMode = 0; // Flat
-        }
-        else // Base3DPhong
-        {
-            nSceneShadeMode = 1; // Phong
-        }
-    }
-
-    // ProjectionType
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, (UINT16)eScenePT));
-
-    // CamPos
-    rAttr.Put(SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, (UINT32)(fSceneCamPosZ + 0.5)));
-
-    // FocalLength
-    rAttr.Put(SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, (UINT32)(fSceneFocal + 0.5)));
+    ImpForceItemSet();
 
     // TwoSidedLighting
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bSceneTwoSidedLighting));
+    mpObjectItemSet->Put(Svx3DTwoSidedLightingItem(aLightGroup.GetModelTwoSide()));
 
     // LightColors
-    rAttr.Put(SvxColorItem(aSceneLightColor1, SDRATTR_3DSCENE_LIGHTCOLOR_1));
-    rAttr.Put(SvxColorItem(aSceneLightColor2, SDRATTR_3DSCENE_LIGHTCOLOR_2));
-    rAttr.Put(SvxColorItem(aSceneLightColor3, SDRATTR_3DSCENE_LIGHTCOLOR_3));
-    rAttr.Put(SvxColorItem(aSceneLightColor4, SDRATTR_3DSCENE_LIGHTCOLOR_4));
-    rAttr.Put(SvxColorItem(aSceneLightColor5, SDRATTR_3DSCENE_LIGHTCOLOR_5));
-    rAttr.Put(SvxColorItem(aSceneLightColor6, SDRATTR_3DSCENE_LIGHTCOLOR_6));
-    rAttr.Put(SvxColorItem(aSceneLightColor7, SDRATTR_3DSCENE_LIGHTCOLOR_7));
-    rAttr.Put(SvxColorItem(aSceneLightColor8, SDRATTR_3DSCENE_LIGHTCOLOR_8));
+    mpObjectItemSet->Put(Svx3DLightcolor1Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0)));
+    mpObjectItemSet->Put(Svx3DLightcolor2Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1)));
+    mpObjectItemSet->Put(Svx3DLightcolor3Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2)));
+    mpObjectItemSet->Put(Svx3DLightcolor4Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3)));
+    mpObjectItemSet->Put(Svx3DLightcolor5Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4)));
+    mpObjectItemSet->Put(Svx3DLightcolor6Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5)));
+    mpObjectItemSet->Put(Svx3DLightcolor7Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6)));
+    mpObjectItemSet->Put(Svx3DLightcolor8Item(aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7)));
 
     // AmbientColor
-    rAttr.Put(SvxColorItem(aSceneAmbientColor, SDRATTR_3DSCENE_AMBIENTCOLOR));
+    mpObjectItemSet->Put(Svx3DAmbientcolorItem(aLightGroup.GetGlobalAmbientLight()));
 
     // LightOn
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, bSceneLightOn1));
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_2, bSceneLightOn2));
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_3, bSceneLightOn3));
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_4, bSceneLightOn4));
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_5, bSceneLightOn5));
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_6, bSceneLightOn6));
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_7, bSceneLightOn7));
-    rAttr.Put(SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, bSceneLightOn8));
+    mpObjectItemSet->Put(Svx3DLightOnOff1Item(aLightGroup.IsEnabled(Base3DLight0)));
+    mpObjectItemSet->Put(Svx3DLightOnOff2Item(aLightGroup.IsEnabled(Base3DLight1)));
+    mpObjectItemSet->Put(Svx3DLightOnOff3Item(aLightGroup.IsEnabled(Base3DLight2)));
+    mpObjectItemSet->Put(Svx3DLightOnOff4Item(aLightGroup.IsEnabled(Base3DLight3)));
+    mpObjectItemSet->Put(Svx3DLightOnOff5Item(aLightGroup.IsEnabled(Base3DLight4)));
+    mpObjectItemSet->Put(Svx3DLightOnOff6Item(aLightGroup.IsEnabled(Base3DLight5)));
+    mpObjectItemSet->Put(Svx3DLightOnOff7Item(aLightGroup.IsEnabled(Base3DLight6)));
+    mpObjectItemSet->Put(Svx3DLightOnOff8Item(aLightGroup.IsEnabled(Base3DLight7)));
 
     // LightDirection
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, aSceneLightDirection1));
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, aSceneLightDirection2));
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, aSceneLightDirection3));
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, aSceneLightDirection4));
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, aSceneLightDirection5));
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, aSceneLightDirection6));
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, aSceneLightDirection7));
-    rAttr.Put(SvxVector3DItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, aSceneLightDirection8));
-
-    // ShadowSlant
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nSceneShadowSlant));
-
-    // ShadeMode
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nSceneShadeMode));
+    mpObjectItemSet->Put(Svx3DLightDirection1Item(aLightGroup.GetDirection( Base3DLight0 )));
+    mpObjectItemSet->Put(Svx3DLightDirection2Item(aLightGroup.GetDirection( Base3DLight1 )));
+    mpObjectItemSet->Put(Svx3DLightDirection3Item(aLightGroup.GetDirection( Base3DLight2 )));
+    mpObjectItemSet->Put(Svx3DLightDirection4Item(aLightGroup.GetDirection( Base3DLight3 )));
+    mpObjectItemSet->Put(Svx3DLightDirection5Item(aLightGroup.GetDirection( Base3DLight4 )));
+    mpObjectItemSet->Put(Svx3DLightDirection6Item(aLightGroup.GetDirection( Base3DLight5 )));
+    mpObjectItemSet->Put(Svx3DLightDirection7Item(aLightGroup.GetDirection( Base3DLight6 )));
+    mpObjectItemSet->Put(Svx3DLightDirection8Item(aLightGroup.GetDirection( Base3DLight7 )));
 }
+
+void E3dScene::ImpSetSceneItemsFromCamera()
+{
+    ImpForceItemSet();
+    Camera3D aSceneCam (GetCamera());
+
+    // ProjectionType
+    mpObjectItemSet->Put(Svx3DPerspectiveItem((UINT16)aSceneCam.GetProjection()));
+
+    // CamPos
+    mpObjectItemSet->Put(Svx3DDistanceItem((UINT32)(aSceneCam.GetPosition().Z() + 0.5)));
+
+    // FocalLength
+    mpObjectItemSet->Put(Svx3DFocalLengthItem((UINT32)((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
+}
+
+//-/void E3dScene::Collect3DAttributes(SfxItemSet& rAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dObject::Collect3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dCompoundObject
+//-///-/    B3dLightGroup& rLightGroup = ((E3dScene*)this)->GetLightGroup();
+//-/    Camera3D aSceneCam (GetCamera());
+//-/    double   fSceneCamPosZ = aSceneCam.GetPosition().Z();
+//-/    double   fSceneFocal = aSceneCam.GetFocalLength() * 100.0;
+//-/    BOOL     bSceneTwoSidedLighting = aLightGroup.GetModelTwoSide();
+//-/    Color    aSceneLightColor1 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight0);
+//-/    Color    aSceneLightColor2 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight1);
+//-/    Color    aSceneLightColor3 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight2);
+//-/    Color    aSceneLightColor4 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight3);
+//-/    Color    aSceneLightColor5 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight4);
+//-/    Color    aSceneLightColor6 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight5);
+//-/    Color    aSceneLightColor7 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight6);
+//-/    Color    aSceneLightColor8 = aLightGroup.GetIntensity(Base3DMaterialDiffuse, Base3DLight7);
+//-/    Color    aSceneAmbientColor = aLightGroup.GetGlobalAmbientLight();
+//-/    BOOL     bSceneLightOn1 = aLightGroup.IsEnabled(Base3DLight0);
+//-/    BOOL     bSceneLightOn2 = aLightGroup.IsEnabled(Base3DLight1);
+//-/    BOOL     bSceneLightOn3 = aLightGroup.IsEnabled(Base3DLight2);
+//-/    BOOL     bSceneLightOn4 = aLightGroup.IsEnabled(Base3DLight3);
+//-/    BOOL     bSceneLightOn5 = aLightGroup.IsEnabled(Base3DLight4);
+//-/    BOOL     bSceneLightOn6 = aLightGroup.IsEnabled(Base3DLight5);
+//-/    BOOL     bSceneLightOn7 = aLightGroup.IsEnabled(Base3DLight6);
+//-/    BOOL     bSceneLightOn8 = aLightGroup.IsEnabled(Base3DLight7);
+//-/    Vector3D aSceneLightDirection1 = aLightGroup.GetDirection( Base3DLight0 );
+//-/    Vector3D aSceneLightDirection2 = aLightGroup.GetDirection( Base3DLight1 );
+//-/    Vector3D aSceneLightDirection3 = aLightGroup.GetDirection( Base3DLight2 );
+//-/    Vector3D aSceneLightDirection4 = aLightGroup.GetDirection( Base3DLight3 );
+//-/    Vector3D aSceneLightDirection5 = aLightGroup.GetDirection( Base3DLight4 );
+//-/    Vector3D aSceneLightDirection6 = aLightGroup.GetDirection( Base3DLight5 );
+//-/    Vector3D aSceneLightDirection7 = aLightGroup.GetDirection( Base3DLight6 );
+//-/    Vector3D aSceneLightDirection8 = aLightGroup.GetDirection( Base3DLight7 );
+//-/    ProjectionType eScenePT = aSceneCam.GetProjection();
+//-///-/    UINT16   nSceneShadeMode;
+//-///-/    const Vector3D& rShadowVec = ((E3dScene*)this)->GetShadowPlaneDirection();
+//-///-/    UINT16 nSceneShadowSlant = (UINT16)((atan2(rShadowVec.Y(), rShadowVec.Z()) / F_PI180) + 0.5);
+//-/
+//-///-/    if(bForceDraftShadeModel)
+//-///-/    {
+//-///-/        nSceneShadeMode = 3; // Draft-Modus
+//-///-/    }
+//-///-/    else
+//-///-/    {
+//-///-/        if(eShadeModel == Base3DSmooth)
+//-///-/        {
+//-///-/            nSceneShadeMode = 2; // Gouraud
+//-///-/        }
+//-///-/        else if(eShadeModel == Base3DFlat)
+//-///-/        {
+//-///-/            nSceneShadeMode = 0; // Flat
+//-///-/        }
+//-///-/        else // Base3DPhong
+//-///-/        {
+//-///-/            nSceneShadeMode = 1; // Phong
+//-///-/        }
+//-///-/    }
+//-/
+//-/    // ProjectionType
+//-/    rAttr.Put(Svx3DPerspectiveItem((UINT16)eScenePT));
+//-/
+//-/    // CamPos
+//-/    rAttr.Put(Svx3DDistanceItem((UINT32)(fSceneCamPosZ + 0.5)));
+//-/
+//-/    // FocalLength
+//-/    rAttr.Put(Svx3DFocalLengthItem((UINT32)(fSceneFocal + 0.5)));
+//-/
+//-/    // TwoSidedLighting
+//-/    rAttr.Put(Svx3DTwoSidedLightingItem(bSceneTwoSidedLighting));
+//-/
+//-/    // LightColors
+//-/    rAttr.Put(Svx3DLightcolor1Item(aSceneLightColor1));
+//-/    rAttr.Put(Svx3DLightcolor2Item(aSceneLightColor2));
+//-/    rAttr.Put(Svx3DLightcolor3Item(aSceneLightColor3));
+//-/    rAttr.Put(Svx3DLightcolor4Item(aSceneLightColor4));
+//-/    rAttr.Put(Svx3DLightcolor5Item(aSceneLightColor5));
+//-/    rAttr.Put(Svx3DLightcolor6Item(aSceneLightColor6));
+//-/    rAttr.Put(Svx3DLightcolor7Item(aSceneLightColor7));
+//-/    rAttr.Put(Svx3DLightcolor8Item(aSceneLightColor8));
+//-/
+//-/    // AmbientColor
+//-/    rAttr.Put(Svx3DAmbientcolorItem(aSceneAmbientColor));
+//-/
+//-/    // LightOn
+//-/    rAttr.Put(Svx3DLightOnOff1Item(bSceneLightOn1));
+//-/    rAttr.Put(Svx3DLightOnOff2Item(bSceneLightOn2));
+//-/    rAttr.Put(Svx3DLightOnOff3Item(bSceneLightOn3));
+//-/    rAttr.Put(Svx3DLightOnOff4Item(bSceneLightOn4));
+//-/    rAttr.Put(Svx3DLightOnOff5Item(bSceneLightOn5));
+//-/    rAttr.Put(Svx3DLightOnOff6Item(bSceneLightOn6));
+//-/    rAttr.Put(Svx3DLightOnOff7Item(bSceneLightOn7));
+//-/    rAttr.Put(Svx3DLightOnOff8Item(bSceneLightOn8));
+//-/
+//-/    // LightDirection
+//-/    rAttr.Put(Svx3DLightDirection1Item(aSceneLightDirection1));
+//-/    rAttr.Put(Svx3DLightDirection2Item(aSceneLightDirection2));
+//-/    rAttr.Put(Svx3DLightDirection3Item(aSceneLightDirection3));
+//-/    rAttr.Put(Svx3DLightDirection4Item(aSceneLightDirection4));
+//-/    rAttr.Put(Svx3DLightDirection5Item(aSceneLightDirection5));
+//-/    rAttr.Put(Svx3DLightDirection6Item(aSceneLightDirection6));
+//-/    rAttr.Put(Svx3DLightDirection7Item(aSceneLightDirection7));
+//-/    rAttr.Put(Svx3DLightDirection8Item(aSceneLightDirection8));
+//-/
+//-///-/    // ShadowSlant
+//-///-/    rAttr.Put(Svx3DShadowSlantItem(nSceneShadowSlant));
+//-/
+//-///-/    // ShadeMode
+//-///-/    rAttr.Put(Svx3DShadeModeItem(nSceneShadeMode));
+//-/}
 
 // ItemSet access
 const sal_uInt16 E3dScene::mnSceneRangeData[4] = { SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST, 0, 0 };
@@ -2059,8 +2182,7 @@ void E3dScene::ImpLocalItemValueChange(const SfxPoolItem& rNew)
         case SDRATTR_3DSCENE_PERSPECTIVE            :
         {
             Camera3D aSceneCam(GetCamera());
-            ProjectionType eNew = (ProjectionType)((const Svx3DPerspectiveItem&)rNew).GetValue();
-            aSceneCam.SetProjection( eNew );
+            aSceneCam.SetProjection(GetPerspective());
             SetCamera( aSceneCam );
             break;
         }
@@ -2068,7 +2190,7 @@ void E3dScene::ImpLocalItemValueChange(const SfxPoolItem& rNew)
         {
             Camera3D aSceneCam(GetCamera());
             Vector3D aActualPosition = aSceneCam.GetPosition();
-            double fNew = (double)((const Svx3DDistanceItem&)rNew).GetValue();
+            double fNew = GetDistance();
             if(fabs(fNew - aActualPosition.Z()) > 1.0)
             {
                 aSceneCam.SetPosition( Vector3D( aActualPosition.X(), aActualPosition.Y(), fNew) );
@@ -2079,204 +2201,214 @@ void E3dScene::ImpLocalItemValueChange(const SfxPoolItem& rNew)
         case SDRATTR_3DSCENE_FOCAL_LENGTH           :
         {
             Camera3D aSceneCam(GetCamera());
-            double fNew = (double)((const Svx3DFocalLengthItem&)rNew).GetValue() / 100.0;
-            aSceneCam.SetFocalLength( fNew);
+            double fNew = GetFocalLength() / 100.0;
+            aSceneCam.SetFocalLength(fNew);
             SetCamera( aSceneCam );
             break;
         }
         case SDRATTR_3DSCENE_TWO_SIDED_LIGHTING     :
         {
-            BOOL bNew = ((const Svx3DTwoSidedLightingItem&)rNew).GetValue();
-            GetLightGroup().SetModelTwoSide( bNew );
+//-/            BOOL bNew = ((const Svx3DTwoSidedLightingItem&)rNew).GetValue();
+            aLightGroup.SetModelTwoSide(GetTwoSidedLighting());
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_1           :
         {
-            Color aNew = ((const Svx3DLightcolor1Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight0);
+//-/            Color aNew = ((const Svx3DLightcolor1Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor1(), Base3DMaterialDiffuse, Base3DLight0);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_2           :
         {
-            Color aNew = ((const Svx3DLightcolor2Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight1);
+//-/            Color aNew = ((const Svx3DLightcolor2Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor2(), Base3DMaterialDiffuse, Base3DLight1);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_3           :
         {
-            Color aNew = ((const Svx3DLightcolor3Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight2);
+//-/            Color aNew = ((const Svx3DLightcolor3Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor3(), Base3DMaterialDiffuse, Base3DLight2);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_4           :
         {
-            Color aNew = ((const Svx3DLightcolor4Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight3);
+//-/            Color aNew = ((const Svx3DLightcolor4Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor4(), Base3DMaterialDiffuse, Base3DLight3);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_5           :
         {
-            Color aNew = ((const Svx3DLightcolor5Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight4);
+//-/            Color aNew = ((const Svx3DLightcolor5Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor5(), Base3DMaterialDiffuse, Base3DLight4);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_6           :
         {
-            Color aNew = ((const Svx3DLightcolor6Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight5);
+//-/            Color aNew = ((const Svx3DLightcolor6Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor6(), Base3DMaterialDiffuse, Base3DLight5);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_7           :
         {
-            Color aNew = ((const Svx3DLightcolor7Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight6);
+//-/            Color aNew = ((const Svx3DLightcolor7Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor7(), Base3DMaterialDiffuse, Base3DLight6);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTCOLOR_8           :
         {
-            Color aNew = ((const Svx3DLightcolor8Item&)rNew).GetValue();
-            GetLightGroup().SetIntensity( aNew, Base3DMaterialDiffuse, Base3DLight7);
+//-/            Color aNew = ((const Svx3DLightcolor8Item&)rNew).GetValue();
+            aLightGroup.SetIntensity( GetLightColor8(), Base3DMaterialDiffuse, Base3DLight7);
             break;
         }
         case SDRATTR_3DSCENE_AMBIENTCOLOR           :
         {
-            Color aNew = ((const Svx3DAmbientcolorItem&)rNew).GetValue();
-            GetLightGroup().SetGlobalAmbientLight( aNew );
+//-/            Color aNew = ((const Svx3DAmbientcolorItem&)rNew).GetValue();
+            aLightGroup.SetGlobalAmbientLight(GetGlobalAmbientColor());
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_1              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff1Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight0);
+//-/            BOOL bNew = ((const Svx3DLightOnOff1Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff1(), Base3DLight0);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_2              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff2Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight1);
+//-/            BOOL bNew = ((const Svx3DLightOnOff2Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff2(), Base3DLight1);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_3              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff3Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight2);
+//-/            BOOL bNew = ((const Svx3DLightOnOff3Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff3(), Base3DLight2);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_4              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff4Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight3);
+//-/            BOOL bNew = ((const Svx3DLightOnOff4Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff4(), Base3DLight3);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_5              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff5Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight4);
+//-/            BOOL bNew = ((const Svx3DLightOnOff5Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff5(), Base3DLight4);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_6              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff6Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight5);
+//-/            BOOL bNew = ((const Svx3DLightOnOff6Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff6(), Base3DLight5);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_7              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff7Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight6);
+//-/            BOOL bNew = ((const Svx3DLightOnOff7Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff7(), Base3DLight6);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTON_8              :
         {
-            BOOL bNew = ((const Svx3DLightOnOff8Item&)rNew).GetValue();
-            GetLightGroup().Enable( bNew, Base3DLight7);
+//-/            BOOL bNew = ((const Svx3DLightOnOff8Item&)rNew).GetValue();
+            aLightGroup.Enable( GetLightOnOff8(), Base3DLight7);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_1       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection1Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight0);
+//-/            Vector3D aNew = ((const Svx3DLightDirection1Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection1(), Base3DLight0);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_2       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection2Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight1);
+//-/            Vector3D aNew = ((const Svx3DLightDirection2Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection2(), Base3DLight1);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_3       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection3Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight2);
+//-/            Vector3D aNew = ((const Svx3DLightDirection3Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection3(), Base3DLight2);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_4       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection4Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight3);
+//-/            Vector3D aNew = ((const Svx3DLightDirection4Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection4(), Base3DLight3);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_5       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection5Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight4);
+//-/            Vector3D aNew = ((const Svx3DLightDirection5Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection5(), Base3DLight4);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_6       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection6Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight5);
+//-/            Vector3D aNew = ((const Svx3DLightDirection6Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection6(), Base3DLight5);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_7       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection7Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight6);
+//-/            Vector3D aNew = ((const Svx3DLightDirection7Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection7(), Base3DLight6);
             break;
         }
         case SDRATTR_3DSCENE_LIGHTDIRECTION_8       :
         {
-            Vector3D aNew = ((const Svx3DLightDirection8Item&)rNew).GetValue();
-            GetLightGroup().SetDirection( aNew, Base3DLight7);
+//-/            Vector3D aNew = ((const Svx3DLightDirection8Item&)rNew).GetValue();
+            aLightGroup.SetDirection( GetLightDirection8(), Base3DLight7);
             break;
         }
-        case SDRATTR_3DSCENE_SHADOW_SLANT           :
-        {
-            UINT16 nNew = ((const Svx3DShadowSlantItem&)rNew).GetValue();
-            double fWink = (double)nNew * F_PI180;
-            Vector3D aVec(0.0, sin(fWink), cos(fWink));
-            aVec.Normalize();
-            ImpSetShadowPlaneDirection(aVec);
-            break;
-        }
-        case SDRATTR_3DSCENE_SHADE_MODE             :
-        {
-            UINT16 nNew = ((const Svx3DShadeModeItem&)rNew).GetValue();
-            if(nNew == 3)
-            {
-                ImpSetForceDraftShadeModel(TRUE);
-                ImpSetShadeModel(Base3DSmooth);
-            }
-            else
-            {
-                ImpSetForceDraftShadeModel(FALSE);
-
-                if(nNew == 0)
-                {
-                    ImpSetShadeModel(Base3DFlat);
-                }
-                else if(nNew == 1)
-                {
-                    ImpSetShadeModel(Base3DPhong);
-                }
-                else
-                {
-                    // Gouraud
-                    ImpSetShadeModel(Base3DSmooth);
-                }
-            }
-            break;
-        }
+//-/        case SDRATTR_3DSCENE_SHADOW_SLANT           :
+//-/        {
+//-///-/            UINT16 nNew = ((const Svx3DShadowSlantItem&)rNew).GetValue();
+//-/            UINT16 nNew = GetShadowSlant();
+//-/            double fWink = (double)nNew * F_PI180;
+//-/            Vector3D aVec(0.0, sin(fWink), cos(fWink));
+//-/            aVec.Normalize();
+//-///-/            ImpSetShadowPlaneDirection(aVec);
+//-/            aShadowPlaneDirection = aVec;
+//-///-/            aShadowPlaneDirection.Normalize();
+//-/            break;
+//-/        }
+//-/        case SDRATTR_3DSCENE_SHADE_MODE             :
+//-/        {
+//-///-/            UINT16 nNew = ((const Svx3DShadeModeItem&)rNew).GetValue();
+//-/            sal_uInt16 nNew = GetShadeMode();
+//-/            if(nNew == 3)
+//-/            {
+//-/                bForceDraftShadeModel = TRUE;
+//-///-/                ImpSetShadeModel(Base3DSmooth);
+//-/                eShadeModel = Base3DSmooth;
+//-/                SetRectsDirty();
+//-/            }
+//-/            else
+//-/            {
+//-/                bForceDraftShadeModel = FALSE;
+//-/                SetRectsDirty();
+//-/
+//-/                if(nNew == 0)
+//-/                {
+//-///-/                    ImpSetShadeModel(Base3DFlat);
+//-/                    eShadeModel = Base3DFlat;
+//-/                }
+//-/                else if(nNew == 1)
+//-/                {
+//-///-/                    ImpSetShadeModel(Base3DPhong);
+//-/                    eShadeModel = Base3DPhong;
+//-/                }
+//-/                else
+//-/                {
+//-/                    // Gouraud
+//-///-/                    ImpSetShadeModel(Base3DSmooth);
+//-/                    eShadeModel = Base3DSmooth;
+//-/                }
+//-/            }
+//-/            break;
+//-/        }
     }
 }
 
@@ -2356,7 +2488,8 @@ void E3dScene::SetItemSet( const SfxItemSet& rSet )
 
     // handle value change
     for(sal_uInt16 nWhich(SDRATTR_3DSCENE_FIRST); nWhich <= SDRATTR_3DSCENE_LAST; nWhich++)
-        ImpLocalItemValueChange(rSet.Get(nWhich));
+        if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
+            ImpLocalItemValueChange(rSet.Get(nWhich));
 
     // set at all contained objects
     sal_uInt32 nCount(pSub->GetObjCount());
@@ -2381,6 +2514,25 @@ void E3dScene::SetItemSet( const SfxItemSet& rSet )
 //-/            pObj->Distribute3DAttributes(rSet);
 //-/        }
 //-/    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// pre- and postprocessing for objects for saving
+
+void E3dScene::PreSave()
+{
+    // set at all contained objects
+    sal_uInt32 nCount(pSub->GetObjCount());
+    for(sal_uInt32 a(0); a < nCount; a++)
+        pSub->GetObj(a)->PreSave();
+}
+
+void E3dScene::PostSave()
+{
+    // set at all contained objects
+    sal_uInt32 nCount(pSub->GetObjCount());
+    for(sal_uInt32 a(0); a < nCount; a++)
+        pSub->GetObj(a)->PostSave();
 }
 
 //-/void E3dScene::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
@@ -3079,28 +3231,43 @@ void E3dScene::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
     }
 }
 
-void E3dScene::ImpSetShadowPlaneDirection(const Vector3D& rNew)
+//-/void E3dScene::ImpSetShadowPlaneDirection(const Vector3D& rNew)
+//-/{
+//-/    aShadowPlaneDirection = rNew;
+//-/    aShadowPlaneDirection.Normalize();
+//-/}
+
+//-/void E3dScene::ImpSetShadeModel(Base3DShadeModel eNew)
+//-/{
+//-/    if(eShadeModel != eNew)
+//-/    {
+//-/        eShadeModel = eNew;
+//-/        SetRectsDirty();
+//-/    }
+//-/}
+
+//-/void E3dScene::ImpSetForceDraftShadeModel(BOOL bNew)
+//-/{
+//-/    if(bNew != bForceDraftShadeModel)
+//-/    {
+//-/        bForceDraftShadeModel = bNew;
+//-/        SetRectsDirty();
+//-/    }
+//-/}
+
+Vector3D E3dScene::GetShadowPlaneDirection() const
 {
-    aShadowPlaneDirection = rNew;
-    aShadowPlaneDirection.Normalize();
+    double fWink = (double)GetShadowSlant() * F_PI180;
+    Vector3D aShadowPlaneDir(0.0, sin(fWink), cos(fWink));
+    aShadowPlaneDir.Normalize();
+    return aShadowPlaneDir;
 }
 
-void E3dScene::ImpSetShadeModel(Base3DShadeModel eNew)
+void E3dScene::SetShadowPlaneDirection(const Vector3D& rVec)
 {
-    if(eShadeModel != eNew)
-    {
-        eShadeModel = eNew;
-        SetRectsDirty();
-    }
-}
-
-void E3dScene::ImpSetForceDraftShadeModel(BOOL bNew)
-{
-    if(bNew != bForceDraftShadeModel)
-    {
-        bForceDraftShadeModel = bNew;
-        SetRectsDirty();
-    }
+    UINT16 nSceneShadowSlant = (UINT16)((atan2(rVec.Y(), rVec.Z()) / F_PI180) + 0.5);
+    ImpForceItemSet();
+    mpObjectItemSet->Put(Svx3DShadowSlantItem(nSceneShadowSlant));
 }
 
 // EOF

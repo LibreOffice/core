@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,9 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const PolyPolygon& rPol
     // Ueberfluessige Punkte entfernen, insbesondere doppelte
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
-    nVSegments = aPolyPoly3D[0].GetPointCount();
+
+//-/    nVSegments = aPolyPoly3D[0].GetPointCount();
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -157,7 +159,8 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolyPolygon& rXP
     // Ueberfluessige Punkte entfernen, insbesondere doppelte
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
-    nVSegments = aPolyPoly3D[0].GetPointCount();
+//-/    nVSegments = aPolyPoly3D[0].GetPointCount();
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -177,7 +180,8 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolygon& rXPoly)
     // Ueberfluessige Punkte entfernen, insbesondere doppelte
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
-    nVSegments = aPolyPoly3D[0].GetPointCount();
+//-/    nVSegments = aPolyPoly3D[0].GetPointCount();
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -200,7 +204,8 @@ E3dLatheObj::E3dLatheObj (E3dDefaultAttributes& rDefault, const PolyPolygon3D rP
     // Ueberfluessige Punkte entfernen, insbesondere doppelte
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
-    nVSegments = aPolyPoly3D[0].GetPointCount();
+//-/    nVSegments = aPolyPoly3D[0].GetPointCount();
+    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aPolyPoly3D[0].GetPointCount()));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -223,12 +228,14 @@ E3dLatheObj::E3dLatheObj()
 void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
     // Defaults setzen
-    nHSegments = rDefault.GetDefaultHSegments();
-    nVSegments = rDefault.GetDefaultVSegments();
-    nEndAngle = rDefault.GetDefaultLatheEndAngle();
+    ImpForceItemSet();
+
+//-/    nHSegments = rDefault.GetDefaultHSegments();
+//-/    nVSegments = rDefault.GetDefaultVSegments();
+//-/    nEndAngle = rDefault.GetDefaultLatheEndAngle();
     fLatheScale = rDefault.GetDefaultLatheScale();
-    fLatheBackScale = rDefault.GetDefaultBackScale();
-    fLathePercentDiag = rDefault.GetDefaultPercentDiag();
+//-/    fLatheBackScale = rDefault.GetDefaultBackScale();
+//-/    fLathePercentDiag = rDefault.GetDefaultPercentDiag();
     bLatheSmoothed = rDefault.GetDefaultLatheSmoothed();
     bLatheSmoothFrontBack = rDefault.GetDefaultLatheSmoothFrontBack();
     bLatheCharacterMode = rDefault.GetDefaultLatheCharacterMode();
@@ -259,7 +266,7 @@ void E3dLatheObj::CreateGeometry()
     PolyPolygon3D aLathePoly3D(aPolyPoly3D);
 
     // Eventuelle Anpassung der Segmentanzahlen
-    aLathePoly3D = CreateLathePolyPoly(aPolyPoly3D, nVSegments);
+    aLathePoly3D = CreateLathePolyPoly(aPolyPoly3D, GetVerticalSegments());
 
     // Normale holen
     Vector3D aNormal = aLathePoly3D.GetNormal();
@@ -274,11 +281,12 @@ void E3dLatheObj::CreateGeometry()
     aLathePoly3D.SetDirections();
 
     // Spezialfall Einzelnes Polygon erzeugen
-    FASTBOOL bSinglePoly = (nEndAngle == 0 || nHSegments == 0);
+    BOOL bSinglePoly = (GetEndAngle() == 0 || GetHorizontalSegments() == 0);
     if(bSinglePoly)
     {
         // nur ein Polygon erzeugen
-        bDoubleSided = TRUE;
+//-/        bDoubleSided = TRUE;
+        mpObjectItemSet->Put(Svx3DDoubleSidedItem(TRUE));
 
         // Fuer evtl. selbst erzeugte Normalen
         PolyPolygon3D aNormalsFront;
@@ -291,22 +299,27 @@ void E3dLatheObj::CreateGeometry()
     {
         // Eventuell doppelseitig erzeugen?
         if(!aLathePoly3D.IsClosed())
-            bDoubleSided = TRUE;
+//-/            bDoubleSided = TRUE;
+            mpObjectItemSet->Put(Svx3DDoubleSidedItem(TRUE));
 
         // Seiten genenrieren?
-        BOOL bCreateSides = ((nEndAngle < 3600 && !bDoubleSided) || (fLatheBackScale != 1.0));
+//-/        BOOL bCreateSides = ((GetEndAngle() < 3600 && !GetDoubleSided()) || (fLatheBackScale != 1.0));
+        BOOL bCreateSides = ((GetEndAngle() < 3600 && !GetDoubleSided())
+            || (GetBackScale() != 100));
 
         // Polygone vorbereiten
         PolyPolygon3D aPrev, aFront, aBack, aNext;
 
         // Rotation vorbereiten
-        double fAng = DEG2RAD(double(nEndAngle) / 10);
+        double fAng = DEG2RAD(double(GetEndAngle()) / 10);
         Matrix4D aRotMat;
 
         // Skalierung vorbereiten
         double fScalePerStep;
-        if(fLatheBackScale != 1.0)
-            fScalePerStep = (fLatheBackScale - 1.0) / (double)nHSegments;
+//-/        if(fLatheBackScale != 1.0)
+        if(GetBackScale() != 100)
+//-/            fScalePerStep = (fLatheBackScale - 1.0) / (double)GetHorizontalSegments();
+            fScalePerStep = (((double)GetBackScale() - 100.0) / 100.0) / (double)GetHorizontalSegments();
 
         // Texturen erzeugen?
         double fTextureDepth=1.0;
@@ -315,42 +328,46 @@ void E3dLatheObj::CreateGeometry()
             fTextureStart = fTextureDepth = 0.0;
 
         // aPrev bis aBack ausfuellen als Startvorbereitung
-        aRotMat.RotateY(-(fAng / (double)nHSegments));
+        aRotMat.RotateY(-(fAng / (double)GetHorizontalSegments()));
         aPrev = aLathePoly3D;
         RotatePoly(aPrev, aRotMat);
-        if(fLatheBackScale != 1.0)
+//-/        if(fLatheBackScale != 1.0)
+        if(GetBackScale() != 100)
         {
             ScalePoly(aPrev, 1.0 - fScalePerStep);
         }
         aRotMat.Identity();
-        aRotMat.RotateY(fAng / (double)nHSegments);
+        aRotMat.RotateY(fAng / (double)GetHorizontalSegments());
         aFront = aLathePoly3D;
         aBack = aLathePoly3D;
         RotatePoly(aBack, aRotMat);
-        if(fLatheBackScale != 1.0)
+//-/        if(fLatheBackScale != 1.0)
+        if(GetBackScale() != 100)
         {
             ScalePoly(aBack, 1.0 + fScalePerStep);
         }
 
         // Werte fuer Textur-Zwischensegmenterzeugung berechnen
         double fTmpStart = 0.0;
-        double fTmpLength = fTextureDepth / (double)nHSegments;
+        double fTmpLength = fTextureDepth / (double)GetHorizontalSegments();
+        sal_uInt16 nUpperBound = (sal_uInt16)GetHorizontalSegments();
 
-        for(UINT16 a=0;a<nHSegments;a++)
+        for(UINT16 a=0;a<nUpperBound;a++)
         {
             // Naechstes Polygon vorbereiten
             aNext = aLathePoly3D;
 
             // Rotieren
-            if(!(a+2 == nHSegments && nEndAngle == 3600))
+            if(!(a+2 == nUpperBound && GetEndAngle() == 3600))
             {
                 aRotMat.Identity();
-                aRotMat.RotateY((fAng * (double)(a+2))/ (double)nHSegments);
+                aRotMat.RotateY((fAng * (double)(a+2))/ (double)nUpperBound);
                 RotatePoly(aNext, aRotMat);
             }
 
             // Skalieren
-            if(fLatheBackScale != 1.0)
+//-/            if(fLatheBackScale != 1.0)
+            if(GetBackScale() != 100)
             {
                 ScalePoly(aNext, 1.0 + (fScalePerStep * (double)(a+2)));
             }
@@ -362,8 +379,10 @@ void E3dLatheObj::CreateGeometry()
                 &aPrev,
                 &aNext,
                 (a == 0) && bCreateSides && bLatheCloseFront,
-                (a == nHSegments-1) && bCreateSides && bLatheCloseBack,
-                fLathePercentDiag * (double(nHSegments) / 6.0),
+                (a == nUpperBound-1) && bCreateSides && bLatheCloseBack,
+//-/                fLathePercentDiag
+                ((double)GetPercentDiagonal() / 200.0)
+                    * (double(nUpperBound) / 6.0),
                 GetLatheSmoothed(),
                 GetLatheSmoothed(),
                 GetLatheSmoothFrontBack(),
@@ -397,7 +416,8 @@ PolyPolygon3D E3dLatheObj::CreateLathePolyPoly(PolyPolygon3D& rPolyPoly3D, long 
     {
         // Erstes Polygon anpassen
         aLathePolyPolygon3D[0] = CreateLathePoly(aLathePolyPolygon3D[0], nVSegs);
-        nVSegments = aLathePolyPolygon3D[0].GetPointCount();
+//-/        nVSegments = aLathePolyPolygon3D[0].GetPointCount();
+        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(aLathePolyPolygon3D[0].GetPointCount()));
 
         // andere Polygone im richtigen Verhaeltnis anpassen,
         // aber nur, wenn Wert fuer erstes angepasst werden musste
@@ -484,14 +504,14 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
     const E3dLatheObj& r3DObj = (const E3dLatheObj&)rObj;
 
     aPolyPoly3D  = r3DObj.aPolyPoly3D;
-    nHSegments   = r3DObj.nHSegments;
-    nVSegments   = r3DObj.nVSegments;
-    nEndAngle    = r3DObj.nEndAngle;
+//-/    nHSegments   = r3DObj.nHSegments;
+//-/    nVSegments   = r3DObj.nVSegments;
+//-/    nEndAngle    = r3DObj.nEndAngle;
     fLatheScale  = r3DObj.fLatheScale;
 
     // Ab Version 374 (15.12.97)
-    fLatheBackScale = r3DObj.fLatheBackScale;
-    fLathePercentDiag = r3DObj.fLathePercentDiag;
+//-/    fLatheBackScale = r3DObj.fLatheBackScale;
+//-/    fLathePercentDiag = r3DObj.fLathePercentDiag;
     bLatheSmoothed = r3DObj.bLatheSmoothed;
     bLatheSmoothFrontBack = r3DObj.bLatheSmoothFrontBack;
     bLatheCharacterMode = r3DObj.bLatheCharacterMode;
@@ -543,18 +563,28 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
     // rOut << aPolyPoly3D;
     rOut << aPolyPoly3D[0];
 
-    rOut << nHSegments;
-    rOut << nEndAngle;
-    rOut << ((E3dLatheObj*)this)->bDoubleSided;
+//-/    rOut << nHSegments;
+    rOut << GetHorizontalSegments();
+
+//-/    rOut << nEndAngle;
+    rOut << GetEndAngle();
+
+    rOut << ((E3dLatheObj*)this)->GetDoubleSided();
     rOut << fLatheScale;
 
     // Ab Version 364f (19.06.97)
-    rOut << nVSegments;
+//-/    rOut << nVSegments;
+    rOut << GetVerticalSegments();
 
     // Ab Version 374 (15.12.97)
     rOut << aPolyPoly3D;
-    rOut << fLatheBackScale;
-    rOut << fLathePercentDiag;
+
+//-/    rOut << fLatheBackScale;
+    rOut << ((double)GetBackScale() / 100.0);
+
+//-/    rOut << fLathePercentDiag;
+    rOut << ((double)GetPercentDiagonal() / 200.0);
+
     rOut << (BOOL)bLatheSmoothed;
     rOut << (BOOL)bLatheSmoothFrontBack;
     rOut << (BOOL)bLatheCharacterMode;
@@ -565,21 +595,49 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
     // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
     // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
     // E3dCompoundObject oder E3dObject aendern.
-    rOut << BOOL(bDoubleSided);
+    rOut << GetDoubleSided();
+
     rOut << BOOL(bCreateNormals);
     rOut << BOOL(bCreateTexture);
-    rOut << BOOL(bUseStdNormals);
-    rOut << BOOL(bUseStdNormalsUseSphere);
-    rOut << BOOL(bUseStdTextureX);
-    rOut << BOOL(bUseStdTextureXUseSphere);
-    rOut << BOOL(bUseStdTextureY);
-    rOut << BOOL(bUseStdTextureYUseSphere);
-    rOut << BOOL(bShadow3D);
-    aFrontMaterial.WriteData(rOut);
+
+//-/    rOut << BOOL(bUseStdNormals);
+//-/    rOut << BOOL(bUseStdNormalsUseSphere);
+    sal_uInt16 nVal = GetNormalsKind();
+    rOut << BOOL(nVal > 0);
+    rOut << BOOL(nVal > 1);
+
+//-/    rOut << BOOL(bUseStdTextureX);
+//-/    rOut << BOOL(bUseStdTextureXUseSphere);
+    nVal = GetTextureProjectionX();
+    rOut << BOOL(nVal > 0);
+    rOut << BOOL(nVal > 1);
+
+//-/    rOut << BOOL(bUseStdTextureY);
+//-/    rOut << BOOL(bUseStdTextureYUseSphere);
+    nVal = GetTextureProjectionY();
+    rOut << BOOL(nVal > 0);
+    rOut << BOOL(nVal > 1);
+
+//-/    rOut << BOOL(bShadow3D);
+    rOut << BOOL(GetShadow3D());
+
+//-/    aFrontMaterial.WriteData(rOut);
+    rOut << GetMaterialAmbientColor();
+    rOut << GetMaterialColor();
+    rOut << GetMaterialSpecular();
+    rOut << GetMaterialEmission();
+    rOut << GetMaterialSpecularIntensity();
+
     aBackMaterial.WriteData(rOut);
-    rOut << (UINT16)eTextureKind;
-    rOut << (UINT16)eTextureMode;
-    rOut << BOOL(bInvertNormals);
+
+//-/    rOut << (UINT16)eTextureKind;
+    rOut << (UINT16)GetTextureKind();
+
+//-/    rOut << (UINT16)eTextureMode;
+    rOut << (UINT16)GetTextureMode();
+
+//-/    rOut << BOOL(bInvertNormals);
+    rOut << BOOL(GetNormalsInvert());
 
     // Ab Version 513a (5.2.99): Parameter fuer das
     // Erzeugen der Vorder/Rueckwand
@@ -587,7 +645,8 @@ void E3dLatheObj::WriteData(SvStream& rOut) const
     rOut << BOOL(bLatheCloseBack);
 
     // neu ab 534: (hat noch gefehlt)
-    rOut << BOOL(bFilterTexture);
+//-/    rOut << BOOL(bFilterTexture);
+    rOut << BOOL(GetTextureFilter());
 
     if(nVersion < 3800)
     {
@@ -638,22 +697,35 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         {
             // neue Member
             BOOL bTmp;
+            sal_Int32 nTmp;
 
             // alte Version holt sich nur ein Polygon3D, wird hier durch
             // Eintragen als erstes Teilpolygon geladen
             // rIn >> aPolyPoly3D;
             rIn >> aPolyPoly3D[0];
 
-            rIn >> nHSegments;
-            rIn >> nEndAngle;
-            rIn >> bTmp; bDoubleSided = bTmp;
+//-/            rIn >> nHSegments;
+            rIn >> nTmp;
+            mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nTmp));
+
+//-/            rIn >> nEndAngle;
+            rIn >> nTmp;
+            mpObjectItemSet->Put(Svx3DEndAngleItem(nTmp));
+
+//-/            rIn >> bTmp; bDoubleSided = bTmp;
+            rIn >> bTmp;
+            mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
+
             rIn >> fLatheScale;
         }
 
         if (aCompat.GetBytesLeft())
         {
             // Ab Version 364f (19.06.97)
-            rIn >> nVSegments;
+//-/            rIn >> nVSegments;
+            sal_Int32 nTmp;
+            rIn >> nTmp;
+            mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nTmp));
         }
 
         if (aCompat.GetBytesLeft())
@@ -661,11 +733,18 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // Ab Version 374 (15.12.97)
             // Gesamtes PolyPolygon laden
             BOOL bTmp;
+            double fTmp;
 
             aPolyPoly3D.Clear();
             rIn >> aPolyPoly3D;
-            rIn >> fLatheBackScale;
-            rIn >> fLathePercentDiag;
+
+//-/            rIn >> fLatheBackScale;
+            rIn >> fTmp;
+            mpObjectItemSet->Put(Svx3DBackscaleItem((sal_uInt16)(fTmp * 100.0)));
+
+//-/            rIn >> fLathePercentDiag;
+            rIn >> fTmp;
+            mpObjectItemSet->Put(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
 
             rIn >> bTmp; bLatheSmoothed = bTmp;
             rIn >> bTmp; bLatheSmoothFrontBack = bTmp;
@@ -674,8 +753,11 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         else
         {
             // Geometrie aus erzeugten PolyObj's rekonstruieren
-            fLatheBackScale = 1.0;
-            fLathePercentDiag = 0.05;
+//-/            fLatheBackScale = 1.0;
+            mpObjectItemSet->Put(Svx3DBackscaleItem(100));
+
+//-/            fLathePercentDiag = 0.05;
+            mpObjectItemSet->Put(Svx3DPercentDiagonalItem(10));
 
             bLatheSmoothed = TRUE;
             bLatheSmoothFrontBack = FALSE;
@@ -690,23 +772,89 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // bisher NOCH NIE gespeichert (Grrr). Diese Stelle muss nun natuerlich
             // auch IMMER MITGEPFLEGT werden, wenn sich Parameter in
             // E3dCompoundObject oder E3dObject aendern.
-            BOOL bTmp;
+            BOOL bTmp, bTmp2;
+            sal_uInt16 nTmp;
 
-            rIn >> bTmp; bDoubleSided = bTmp;
+//-/                rIn >> bTmp; bDoubleSided = bTmp;
+            rIn >> bTmp;
+            mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
+
             rIn >> bTmp; bCreateNormals = bTmp;
             rIn >> bTmp; bCreateTexture = bTmp;
-            rIn >> bTmp; bUseStdNormals = bTmp;
-            rIn >> bTmp; bUseStdNormalsUseSphere = bTmp;
-            rIn >> bTmp; bUseStdTextureX = bTmp;
-            rIn >> bTmp; bUseStdTextureXUseSphere = bTmp;
-            rIn >> bTmp; bUseStdTextureY = bTmp;
-            rIn >> bTmp; bUseStdTextureYUseSphere = bTmp;
-            rIn >> bTmp; bShadow3D = bTmp;
-            aFrontMaterial.ReadData(rIn);
+
+//-/                rIn >> bTmp; bUseStdNormals = bTmp;
+//-/                rIn >> bTmp; bUseStdNormalsUseSphere = bTmp;
+            rIn >> bTmp;
+            rIn >> bTmp2;
+            if(bTmp == FALSE && bTmp2 == FALSE)
+                nTmp = 0;
+            else if(bTmp == TRUE && bTmp2 == FALSE)
+                nTmp = 1;
+            else
+                nTmp = 2;
+            mpObjectItemSet->Put(Svx3DNormalsKindItem(nTmp));
+
+//-/                rIn >> bTmp; bUseStdTextureX = bTmp;
+//-/                rIn >> bTmp; bUseStdTextureXUseSphere = bTmp;
+            rIn >> bTmp;
+            rIn >> bTmp2;
+            if(bTmp == FALSE && bTmp2 == FALSE)
+                nTmp = 0;
+            else if(bTmp == TRUE && bTmp2 == FALSE)
+                nTmp = 1;
+            else
+                nTmp = 2;
+            mpObjectItemSet->Put(Svx3DTextureProjectionXItem(nTmp));
+
+//-/                rIn >> bTmp; bUseStdTextureY = bTmp;
+//-/                rIn >> bTmp; bUseStdTextureYUseSphere = bTmp;
+            rIn >> bTmp;
+            rIn >> bTmp2;
+            if(bTmp == FALSE && bTmp2 == FALSE)
+                nTmp = 0;
+            else if(bTmp == TRUE && bTmp2 == FALSE)
+                nTmp = 1;
+            else
+                nTmp = 2;
+            mpObjectItemSet->Put(Svx3DTextureProjectionYItem(nTmp));
+
+//-/                rIn >> bTmp; bShadow3D = bTmp;
+            rIn >> bTmp;
+            mpObjectItemSet->Put(Svx3DShadow3DItem(bTmp));
+
+//-/                aFrontMaterial.ReadData(rIn);
+            Color aCol;
+
+            rIn >> aCol;
+            SetMaterialAmbientColor(aCol);
+
+            rIn >> aCol;
+//-/            SetItem(Svx3DMaterialColorItem(aCol));
+            // do NOT use, this is the old 3D-Color(!)
+            // SetItem(XFillColorItem(String(), aCol));
+
+            rIn >> aCol;
+            mpObjectItemSet->Put(Svx3DMaterialSpecularItem(aCol));
+
+            rIn >> aCol;
+            mpObjectItemSet->Put(Svx3DMaterialEmissionItem(aCol));
+
+            rIn >> nTmp;
+            mpObjectItemSet->Put(Svx3DMaterialSpecularIntensityItem(nTmp));
+
             aBackMaterial.ReadData(rIn);
-            rIn >> nTmp16; eTextureKind = Base3DTextureKind(nTmp16);
-            rIn >> nTmp16; eTextureMode = Base3DTextureMode(nTmp16);
-            rIn >> bTmp; bInvertNormals = bTmp;
+
+//-/                rIn >> nTmp16; eTextureKind = Base3DTextureKind(nTmp16);
+            rIn >> nTmp;
+            mpObjectItemSet->Put(Svx3DTextureKindItem(nTmp));
+
+//-/                rIn >> nTmp16; eTextureMode = Base3DTextureMode(nTmp16);
+            rIn >> nTmp;
+            mpObjectItemSet->Put(Svx3DTextureModeItem(nTmp));
+
+//-/                rIn >> bTmp; bInvertNormals = bTmp;
+            rIn >> bTmp;
+            mpObjectItemSet->Put(Svx3DNormalsInvertItem(bTmp));
         }
 
         if (aCompat.GetBytesLeft())
@@ -728,7 +876,9 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         if (aCompat.GetBytesLeft () >= sizeof (BOOL))
         {
             BOOL bTmp;
-            rIn >> bTmp; bFilterTexture = bTmp;
+//-/            rIn >> bTmp; bFilterTexture = bTmp;
+            rIn >> bTmp;
+            mpObjectItemSet->Put(Svx3DTextureFilterItem(bTmp));
         }
     }
 
@@ -755,11 +905,14 @@ SdrObject *E3dLatheObj::DoConvertToPolyObj(BOOL bBezier) const
 
 void E3dLatheObj::ReSegment(long nHSegs, long nVSegs)
 {
-    if ((nHSegs != nHSegments || nVSegs != nVSegments) &&
+    if ((nHSegs != GetHorizontalSegments() || nVSegs != GetVerticalSegments()) &&
         (nHSegs != 0 || nVSegs != 0))
     {
-        nHSegments = nHSegs;
-        nVSegments = nVSegs;
+//-/        nHSegments = nHSegs;
+        mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nHSegs));
+
+//-/        nVSegments = nVSegs;
+        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nVSegs));
 
         bGeometryValid = FALSE;
     }
@@ -881,32 +1034,37 @@ void E3dLatheObj::ImpLocalItemValueChange(const SfxPoolItem& rNew)
     {
         case SDRATTR_3DOBJ_HORZ_SEGS:
         {
-            UINT32 nNew = ((const Svx3DHorizontalSegmentsItem&)rNew).GetValue();
-            ImpSetHSegments(nNew);
+            bGeometryValid = FALSE;
+//-/            UINT32 nNew = ((const Svx3DHorizontalSegmentsItem&)rNew).GetValue();
+//-/            ImpSetHSegments(nNew);
             break;
         }
         case SDRATTR_3DOBJ_VERT_SEGS:
         {
-            UINT32 nNew = ((const Svx3DVerticalSegmentsItem&)rNew).GetValue();
-            ImpSetVSegments(nNew);
+            bGeometryValid = FALSE;
+//-/            UINT32 nNew = ((const Svx3DVerticalSegmentsItem&)rNew).GetValue();
+//-/            ImpSetVSegments(nNew);
             break;
         }
         case SDRATTR_3DOBJ_PERCENT_DIAGONAL:
         {
-            UINT16 nNew = ((const Svx3DPercentDiagonalItem&)rNew).GetValue();
-            ImpSetLathePercentDiag((double)nNew / 200.0);
+            bGeometryValid = FALSE;
+//-/            UINT16 nNew = ((const Svx3DPercentDiagonalItem&)rNew).GetValue();
+//-/            ImpSetLathePercentDiag((double)nNew / 200.0);
             break;
         }
         case SDRATTR_3DOBJ_BACKSCALE:
         {
-            UINT16 nNew = ((const Svx3DBackscaleItem&)rNew).GetValue();
-            ImpSetLatheBackScale((double)nNew / 100.0);
+            bGeometryValid = FALSE;
+//-/            UINT16 nNew = ((const Svx3DBackscaleItem&)rNew).GetValue();
+//-/            ImpSetLatheBackScale((double)nNew / 100.0);
             break;
         }
         case SDRATTR_3DOBJ_END_ANGLE:
         {
-            UINT16 nNew = ((const Svx3DEndAngleItem&)rNew).GetValue();
-            ImpSetEndAngle((long)nNew);
+            bGeometryValid = FALSE;
+//-/            UINT16 nNew = ((const Svx3DEndAngleItem&)rNew).GetValue();
+//-/            ImpSetEndAngle((long)nNew);
             break;
         }
     }
@@ -942,7 +1100,8 @@ void E3dLatheObj::SetItemSet( const SfxItemSet& rSet )
 
     // handle value change
     for(sal_uInt16 nWhich(SDRATTR_3DOBJ_PERCENT_DIAGONAL); nWhich <= SDRATTR_3DOBJ_END_ANGLE; nWhich++)
-        ImpLocalItemValueChange(rSet.Get(nWhich));
+        if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
+            ImpLocalItemValueChange(rSet.Get(nWhich));
 }
 
 //-/void E3dLatheObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
@@ -986,33 +1145,33 @@ void E3dLatheObj::SetItemSet( const SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void E3dLatheObj::Collect3DAttributes(SfxItemSet& rAttr) const
-{
-    // call parent
-    E3dCompoundObject::Collect3DAttributes(rAttr);
-
-    // special Attr for E3dLatheObj
-    long nObjHorzSegs = nHSegments;
-    long nObjVertSegs = nVSegments;
-    UINT16 nObjPercentDiagonal = (UINT16)((fLathePercentDiag * 200.0) + 0.5);
-    UINT16 nObjBackScale = (UINT16)((fLatheBackScale * 100.0) + 0.5);
-    UINT16 nObjEndAngle = (UINT16)(nEndAngle + 0.5);
-
-    // HorizSegs
-    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nObjHorzSegs));
-
-    // VertSegs
-    rAttr.Put(SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nObjVertSegs));
-
-    // PercentDiagonal
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, nObjPercentDiagonal));
-
-    // BackScale
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nObjBackScale));
-
-    // EndAngle
-    rAttr.Put(SfxUInt16Item(SDRATTR_3DOBJ_END_ANGLE, nObjEndAngle));
-}
+//-/void E3dLatheObj::Collect3DAttributes(SfxItemSet& rAttr) const
+//-/{
+//-/    // call parent
+//-/    E3dCompoundObject::Collect3DAttributes(rAttr);
+//-/
+//-/    // special Attr for E3dLatheObj
+//-/    long nObjHorzSegs = nHSegments;
+//-/    long nObjVertSegs = nVSegments;
+//-/    UINT16 nObjPercentDiagonal = (UINT16)((fLathePercentDiag * 200.0) + 0.5);
+//-/    UINT16 nObjBackScale = (UINT16)((fLatheBackScale * 100.0) + 0.5);
+//-/    UINT16 nObjEndAngle = (UINT16)(nEndAngle + 0.5);
+//-/
+//-/    // HorizSegs
+//-/    rAttr.Put(Svx3DHorizontalSegmentsItem(nObjHorzSegs));
+//-/
+//-/    // VertSegs
+//-/    rAttr.Put(Svx3DVerticalSegmentsItem(nObjVertSegs));
+//-/
+//-/    // PercentDiagonal
+//-/    rAttr.Put(Svx3DPercentDiagonalItem(nObjPercentDiagonal));
+//-/
+//-/    // BackScale
+//-/    rAttr.Put(Svx3DBackscaleItem(nObjBackScale));
+//-/
+//-/    // EndAngle
+//-/    rAttr.Put(Svx3DEndAngleItem(nObjEndAngle));
+//-/}
 
 //-/void E3dLatheObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
 //-/{
@@ -1200,50 +1359,49 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
     return pPathObj;
 }
 
-void E3dLatheObj::ImpSetHSegments(long nNew)
-{
-    if(nHSegments != nNew)
-    {
-        nHSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dLatheObj::ImpSetHSegments(long nNew)
+//-/{
+//-/    if(nHSegments != nNew)
+//-/    {
+//-/        nHSegments = nNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dLatheObj::ImpSetVSegments(long nNew)
-{
-    if(nVSegments != nNew)
-    {
-        nVSegments = nNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dLatheObj::ImpSetVSegments(long nNew)
+//-/{
+//-/    if(nVSegments != nNew)
+//-/    {
+//-/        nVSegments = nNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dLatheObj::ImpSetLathePercentDiag(double fNew)
-{
-    if(fLathePercentDiag != fNew)
-    {
-        fLathePercentDiag = fNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dLatheObj::ImpSetLathePercentDiag(double fNew)
+//-/{
+//-/    if(fLathePercentDiag != fNew)
+//-/    {
+//-/        fLathePercentDiag = fNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dLatheObj::ImpSetLatheBackScale(double fNew)
-{
-    if(fLatheBackScale != fNew)
-    {
-        fLatheBackScale = fNew;
-        bGeometryValid = FALSE;
-    }
-}
+//-/void E3dLatheObj::ImpSetLatheBackScale(double fNew)
+//-/{
+//-/    if(fLatheBackScale != fNew)
+//-/    {
+//-/        fLatheBackScale = fNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
-void E3dLatheObj::ImpSetEndAngle(long nNew)
-{
-    if(nEndAngle != nNew)
-    {
-        nEndAngle = nNew;
-        bGeometryValid = FALSE;
-    }
-}
-
+//-/void E3dLatheObj::ImpSetEndAngle(long nNew)
+//-/{
+//-/    if(nEndAngle != nNew)
+//-/    {
+//-/        nEndAngle = nNew;
+//-/        bGeometryValid = FALSE;
+//-/    }
+//-/}
 
 // EOF

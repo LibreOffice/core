@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-11-07 12:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,7 +872,9 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
             // eine beidseitige Darstellung notwendig.
             aDefault.SetDefaultExtrudeCloseFront(FALSE);
             aDefault.SetDefaultExtrudeCloseBack(FALSE);
-            aDefault.SetDefaultDoubleSided(TRUE);
+
+//-/            aDefault.SetDefaultDoubleSided(TRUE);
+            aSet.Put(Svx3DDoubleSidedItem(TRUE));
 
             // Fuellattribut setzen
             aSet.Put(XFillStyleItem(XFILL_SOLID));
