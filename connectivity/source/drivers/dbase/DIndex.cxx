@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 14:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,13 @@ BOOL ODbaseIndex::DropImpl()
     if(UCBContentHelper::Exists(sPath))
     {
         if(!UCBContentHelper::Kill(sPath))
-            throw SQLException(::rtl::OUString::createFromAscii("Could not delete index!"),*m_pTable,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+            throw SQLException(
+                ::rtl::OUString::createFromAscii("The index could not be deleted. An unknown error while accessing the file system occured."),
+                *m_pTable,
+                OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),
+                1000,
+                Any()
+            );
     }
 
     // InfDatei abgleichen
@@ -563,7 +569,13 @@ BOOL ODbaseIndex::CreateImpl()
     // Anlegen des Index
     ::rtl::OUString sFile = getCompletePath();
     if(UCBContentHelper::Exists(sFile))
-        throw SQLException(::rtl::OUString::createFromAscii("Object already exists!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),1000,Any());
+        throw SQLException(
+            ::rtl::OUString::createFromAscii("The index name can't be used, as it is already used for another table."),
+            *this,
+            OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ERRORMSG_SEQUENCE),
+            1000,
+            Any()
+        );
 
     // Index ist nur einstufig
     if (m_pColumns->getCount() > 1)
