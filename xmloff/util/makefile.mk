@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 13:09:33 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:30:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,11 +64,12 @@ PRJ=..
 
 PRJNAME=xmloff
 TARGET=xo
-TARGET_FILTER=xof
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 # --- Allgemein ----------------------------------------------------
 NO_BSYMBOLIC=TRUE
@@ -86,10 +87,6 @@ LIB1FILES=	\
     $(SLB)$/forms.lib \
     $(SLB)$/xforms.lib
 
-LIB5TARGET= $(SLB)$/$(TARGET_FILTER).lib
-LIB5FILES= \
-    $(SLB)$/transform.lib
-
 # --- Shared-Library -----------------------------------------------
 
 .IF "$(GUI)"!="UNX"
@@ -101,6 +98,7 @@ LIB4OBJFILES=\
 
 SHL1TARGET= xo$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= _ixo
+SHL1USE_EXPORTS=ordinal
 
 SHL1STDLIBS= \
         $(SVTOOLLIB)	\
@@ -128,9 +126,6 @@ SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=   $(LIB1TARGET)
 
 
-SHL5TARGET= $(TARGET_FILTER)$(UPD)$(DLLPOSTFIX)
-SHL5IMPLIB= _i$(TARGET_FILTER)
-
 SHL5STDLIBS= \
         $(TOOLSLIB)         \
         $(RTLLIB)           \
@@ -146,11 +141,6 @@ SHL5STDLIBS= \
 .ELSE
     SHL5STDLIBS += $(LIBPRE) ixo.lib
 .ENDIF
-
-SHL5DEF=    $(MISC)$/$(SHL5TARGET).def
-SHL5LIBS=   $(LIB5TARGET)
-
-SHL5VERSIONMAP=$(TARGET_FILTER).map 
 
 # --- Static-Lib ---------------------------------------------------------
 
@@ -171,20 +161,9 @@ LIB2FILES=  \
 # --- Def-File ---------------------------------------------------------
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =xo
 DEF1DES     =XML Office Lib
-DEF1EXPORTFILE=	exports.dxp
-
-DEF5NAME    =$(SHL5TARGET)
-
 
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-# --- Filter -----------------------------------------------------------
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    +$(TYPE) xo.flt > $@
-
