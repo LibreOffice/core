@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:43:07 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,7 +1298,7 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 
     pDVList = NULL;
 
-    pAutoFilterBuffer = new XclImpAutoFilterBuffer;
+    pAutoFilterBuffer = NULL;
     pWebQBuffer = NULL;
 
     pExcRoot->pRootStorage = pStorage;
