@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-14 12:07:24 $
+ *  last change: $Author: svesik $ $Date: 2000-12-19 01:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+#ifndef FREEBSD
 #include <alloca.h>
+#endif
 
 #include <salunx.h>
 
