@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-09 12:24:29 $
+ *  last change: $Author: tl $ $Date: 2001-08-13 10:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,6 +841,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Serif" ;
+        Text[ english ] = "~Serif" ;
     };
     ListBox 5
     {
@@ -856,6 +857,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "S~ans" ;
+        Text[ english ] = "S~ans" ;
     };
     ListBox 6
     {
@@ -871,6 +873,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "F~ixed" ;
+        Text[ english ] = "F~ixed" ;
     };
     ListBox 7
     {
