@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:59:35 $
+ *  last change: $Author: oj $ $Date: 2002-10-08 13:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,10 +877,15 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 
     if(m_pSkipDeletedSet)
     {
+        aBookmark.realloc(nRealLen);
         if(moveToBookmark(makeAny(aBookmark)))
         {
             sal_Int32 nRowPos = getDriverPos();
-            if(nRowPos == m_nRowPos)
+            if ( -1 == m_nRowPos )
+            {
+                nRowPos = m_aPosToBookmarks.size() + 1;
+            }
+            if ( nRowPos == m_nRowPos )
                 ++nRowPos;
             m_nRowPos = nRowPos;
             m_pSkipDeletedSet->insertNewPosition(nRowPos);
@@ -1136,6 +1141,8 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
         TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(aBookmark);
         if(aFind != m_aPosToBookmarks.end())
             m_nRowPos = aFind->second;
+        else
+            m_nRowPos = -1;
         return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
     }
     return sal_False;
