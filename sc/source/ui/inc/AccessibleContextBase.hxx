@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:20:25 $
+ *  last change: $Author: sab $ $Date: 2002-04-19 17:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,18 +357,20 @@ protected:
     virtual Rectangle GetBoundingBox(void)
         throw (::com::sun::star::uno::RuntimeException);
 
+public:
     /// Calls all Listener to tell they the change.
     void
-        CommitChange(const drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent);
+        CommitChange(const drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent) const;
 
+protected:
     /// Calls all Listener to tell they that the object is now DEFUNC
-    void CommitDefunc();
+    void CommitDefunc() const;
 
     /// Calls all FocusListener to tell they that the focus is gained.
-    void CommitFocusGained(const com::sun::star::awt::FocusEvent& rFocusEvent);
+    void CommitFocusGained(const com::sun::star::awt::FocusEvent& rFocusEvent) const;
 
     /// Calls all FocusListener to tell they that the focus is lost.
-    void CommitFocusLost(const com::sun::star::awt::FocusEvent& rFocusEvent);
+    void CommitFocusLost(const com::sun::star::awt::FocusEvent& rFocusEvent) const;
 
     sal_Bool IsDefunc() { return rBHelper.bDisposed; }
 
