@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scpaction_ooo.scp,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2004-02-10 15:45:40 $
+*  last change: $Author: kz $ $Date: 2004-12-06 12:08:48 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,19 +60,6 @@
 ************************************************************************/
 
 #include "macros.inc"
-
-ScpAction scp_Copy_Loader
-  #ifdef UNX
-    Copy = "loader.bin";
-  #else
-    Copy = EXENAME(loader);
-  #endif
-    Name = EXENAME(setup);
-End
-
-ScpAction scp_Installwebtop
-    FlatLoaderZip = "user_registry.xsl";
-End
 
 ScpAction scp_Copy_License_Html
   #ifdef UNX
