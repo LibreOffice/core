@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:40:28 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,7 +1138,7 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
     else
         nSwNumLevel = 0xff;                 // keine Nummer
 
-    BYTE nLevel = (nSwNumLevel < MAXLEVEL) ? nSwNumLevel : NO_NUM;
+    BYTE nLevel = (nSwNumLevel < MAXLEVEL) ? nSwNumLevel : NO_NUMLEVEL;
     SwNodeNum aNum(nLevel);
     SwTxtNode* pNd = pPaM->GetNode()->GetTxtNode();
     pNd->UpdateNum(aNum);
