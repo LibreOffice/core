@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:29:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,8 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 
         fprintf( fp, "\nZeichenattribute:" );
         BOOL bZeroAttr = FALSE;
-        for ( USHORT z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
+        USHORT z;
+        for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
         {
             EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
             ByteString aCharAttribs;
@@ -441,7 +442,8 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 
         fprintf( fp, "\n\nZeilen:" );
         // Erstmal die Inhalte...
-        for ( USHORT nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
+        USHORT nLine;
+        for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
 
@@ -521,11 +523,13 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 
 ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
 {
+    USHORT z;
+
     ByteString aDebStr( "Absatzlaenge = " );
     aDebStr += ByteString::CreateFromInt32( pPPortion->GetNode()->Len() );
 
     aDebStr += "\nZeichenattribute:";
-    for ( USHORT z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
+    for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
     {
         EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
         aDebStr += "\n  ";
