@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:02 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,23 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 #include <svtools/eitem.hxx>
+#include <svtools/generictoolboxcontroller.hxx>
 #include <vcl/msgbox.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "recfloat.hxx"
 #include "dialog.hrc"
@@ -78,6 +92,102 @@
 #include "dispatch.hxx"
 #include "viewfrm.hxx"
 #include "viewsh.hxx"
+#include "imagemgr.hxx"
+
+using namespace ::com::sun::star;
+
+static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, const uno::Reference< frame::XFrame >& xFrame )
+{
+    rtl::OUString aLabel;
+    rtl::OUString aModuleIdentifier;
+    uno::Reference< container::XNameAccess > xUICommandLabels;
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager;
+    uno::Reference< container::XNameAccess > xUICommandDescription;
+    uno::Reference< drafts::com::sun::star::frame::XModuleManager > xModuleManager;
+
+    static uno::WeakReference< lang::XMultiServiceFactory > xTmpServiceManager;
+    static uno::WeakReference< container::XNameAccess >     xTmpNameAccess;
+    static uno::WeakReference< drafts::com::sun::star::frame::XModuleManager > xTmpModuleMgr;
+
+    xServiceManager = xTmpServiceManager;
+    if ( !xServiceManager.is() )
+    {
+        xServiceManager = ::comphelper::getProcessServiceFactory();
+        xTmpServiceManager = xServiceManager;
+    }
+
+    xUICommandDescription = xTmpNameAccess;
+    if ( !xUICommandDescription.is() )
+    {
+        xUICommandDescription = uno::Reference< container::XNameAccess >(
+                                    xServiceManager->createInstance(
+                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            "drafts.com.sun.star.frame.UICommandDescription" ))),
+                                    uno::UNO_QUERY );
+        xTmpNameAccess = xUICommandDescription;
+    }
+
+    xModuleManager = xTmpModuleMgr;
+    if ( !xModuleManager.is() )
+    {
+        xModuleManager = uno::Reference< drafts::com::sun::star::frame::XModuleManager >(
+            xServiceManager->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.frame.ModuleManager" ))),
+            uno::UNO_QUERY_THROW );
+        xTmpModuleMgr = xModuleManager;
+    }
+
+    // Retrieve label from UI command description service
+    try
+    {
+        try
+        {
+            aModuleIdentifier = xModuleManager->identify( xFrame );
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        if ( xUICommandDescription.is() )
+        {
+            uno::Any a = xUICommandDescription->getByName( aModuleIdentifier );
+            uno::Reference< container::XNameAccess > xUICommands;
+            a >>= xUICommandLabels;
+        }
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    if ( xUICommandLabels.is() )
+    {
+        try
+        {
+            if ( rCommandURL.getLength() > 0 )
+            {
+                uno::Sequence< beans::PropertyValue > aPropSeq;
+                uno::Any a( xUICommandLabels->getByName( rCommandURL ));
+                if ( a >>= aPropSeq )
+                {
+                    for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    {
+                        if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                        {
+                            aPropSeq[i].Value >>= aLabel;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        catch (uno::Exception& )
+        {
+        }
+    }
+
+    return aLabel;
+}
 
 SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW );
 
@@ -117,22 +227,61 @@ sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
     return bRet;
 }
 
-SfxRecordingFloat_Impl::SfxRecordingFloat_Impl( SfxBindings* pBindings ,
-                                        SfxChildWindow* pChildWin ,
-                                        Window* pParent )
-                        : SfxFloatingWindow( pBindings ,
-                                        pChildWin ,
-                                        pParent ,
-                                        SfxResId( SID_RECORDING_FLOATWINDOW ) )
-                        , pWrapper( pChildWin )
-                        , aTbx( this, GetBindings(), SfxResId(SID_RECORDING_FLOATWINDOW) )
+SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
+    SfxBindings* pBindings ,
+    SfxChildWindow* pChildWin ,
+    Window* pParent )
+    : SfxFloatingWindow( pBindings ,
+                         pChildWin ,
+                         pParent ,
+                         SfxResId( SID_RECORDING_FLOATWINDOW ) )
+    , pWrapper( pChildWin )
+    , aTbx( this, SfxResId(SID_RECORDING_FLOATWINDOW) )
 {
-    aTbx.Initialize();
-    Size aSize = aTbx.GetToolBox().CalcWindowSizePixel();
-    aTbx.GetToolBox().SetPosSizePixel( Point(), aSize );
+    // Retrieve label from helper function
+    uno::Reference< frame::XFrame > xFrame = GetBindings().GetActiveFrame();
+    rtl::OUString aCommandStr( RTL_CONSTASCII_USTRINGPARAM( ".uno:StopRecording" ));
+    aTbx.SetItemText( SID_STOP_RECORDING, GetLabelFromCommandURL( aCommandStr, xFrame ));
+
+    // Determine size of toolbar
+    Size aSize = aTbx.CalcWindowSizePixel();
+    aTbx.SetPosSizePixel( Point(), aSize );
     SetOutputSizePixel( aSize );
+
+    // create a generic toolbox controller for our internal toolbox
+    svt::GenericToolboxController* pController = new svt::GenericToolboxController(
+                                                    ::comphelper::getProcessServiceFactory(),
+                                                    xFrame,
+                                                    &aTbx,
+                                                    SID_STOP_RECORDING,
+                                                    aCommandStr );
+    xStopRecTbxCtrl = uno::Reference< frame::XToolbarController >(
+                            static_cast< cppu::OWeakObject* >( pController ),
+                        uno::UNO_QUERY );
+    uno::Reference< util::XUpdatable > xUpdate( xStopRecTbxCtrl, uno::UNO_QUERY );
+    if ( xUpdate.is() )
+        xUpdate->update();
+
+    aTbx.SetSelectHdl( LINK( this, SfxRecordingFloat_Impl, Select ) );
+
+    // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, TRUE );
     GetBindings().GetDispatcher()->Execute( SID_RECORDMACRO, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+}
+
+SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
+{
+    try
+    {
+        if ( xStopRecTbxCtrl.is() )
+        {
+            uno::Reference< lang::XComponent > xComp( xStopRecTbxCtrl, uno::UNO_QUERY );
+            xComp->dispose();
+        }
+    }
+    catch ( uno::Exception& )
+    {
+    }
 }
 
 BOOL SfxRecordingFloat_Impl::Close()
@@ -162,4 +311,13 @@ void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
     }
 
     SfxFloatingWindow::StateChanged( nStateChange );
+}
+
+IMPL_LINK( SfxRecordingFloat_Impl, Select, ToolBox*, pToolBar )
+{
+    sal_Int16   nKeyModifier( (sal_Int16)aTbx.GetModifier() );
+    if ( xStopRecTbxCtrl.is() )
+        xStopRecTbxCtrl->execute( nKeyModifier );
+
+    return 1;
 }
