@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigationbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:15:41 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 09:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
 #endif
+#include <comphelper/basicio.hxx>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarModel()
@@ -88,6 +89,7 @@ namespace frm
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::container;
+    using namespace ::comphelper;
 
 #define REGISTER_PROP( prop, member ) \
     registerProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT, \
@@ -518,12 +520,12 @@ namespace frm
     void ONavigationBarModel::fillProperties( Sequence< Property >& /* [out] */ _rProps,
         Sequence< Property >& /* [out] */ _rAggregateProps ) const
     {
-        BEGIN_AGGREGATION_PROPERTY_HELPER( 4, m_xAggregateSet )
+        BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( 4, m_xAggregateSet )
             DECL_PROP2( NAME,               ::rtl::OUString,    BOUND, MAYBEDEFAULT );
             DECL_PROP2( CLASSID,            sal_Int16,          READONLY, TRANSIENT);
             DECL_PROP2( TAG,                ::rtl::OUString,    BOUND, MAYBEDEFAULT );
             DECL_PROP2( TABINDEX,           sal_Int16,          BOUND, MAYBEDEFAULT );
-        END_AGGREGATION_PROPERTY_HELPER();
+        END_DESCRIBE_PROPERTIES();
 
         // properties which the OPropertyContainerHelper is responsible for
         Sequence< Property > aContainedProperties;
