@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-08 09:37:32 $
+ *  last change: $Author: dr $ $Date: 2002-07-29 14:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1406,11 +1406,9 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 BOOL  bFilterActive = IsAutoFilterActive( nPosX, nPosY,
                                                           pViewData->GetTabNo() );
-                Color aColor( bFilterActive ? COL_LIGHTBLUE : COL_BLACK );
 
                 aComboButton.SetOptSizePixel();
-                aComboButton.SetColor( aColor );
-                DrawComboButton( aScrPos, nSizeX, nSizeY, TRUE );
+                DrawComboButton( aScrPos, nSizeX, nSizeY, bFilterActive, TRUE );
 
 #if 0
                 if (   bWasFilterBox

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 14:38:59 $
+ *  last change: $Author: dr $ $Date: 2002-07-29 14:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
                         / rZoomY.GetDenominator();
     long nBHeight = nVer + aTextSize.Height() + 1;
     Size aButSize( nBWidth, nBHeight );
-    aComboButton.Draw( Point(aOuter.Right()-nBWidth+1, nButtonY), aButSize, Color( COL_BLACK ) );
+    aComboButton.Draw( Point(aOuter.Right()-nBWidth+1, nButtonY), aButSize, false );
     if (pButtonViewData)
         pButtonViewData->SetScenButSize( aButSize );
 
@@ -1112,7 +1112,6 @@ void ScGridWindow::DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
 
     Point aOldPos  = aComboButton.GetPosPixel();    // Zustand fuer MouseDown/Up
     Size  aOldSize = aComboButton.GetSizePixel();   // merken
-    Color aOldCol  = aComboButton.GetColor();
 
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1172,21 +1171,17 @@ void ScGridWindow::DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                     bSimpleQuery = FALSE;
                         }
 
-                    Color   aColor( ( bSimpleQuery && bColumnFound )
-                                        ? COL_LIGHTBLUE
-                                        : COL_BLACK );
+                    bool bArrowState = bSimpleQuery && bColumnFound;
                     long    nSizeX;
                     long    nSizeY;
 
                     pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                     aComboButton.SetOptSizePixel();
-                    aComboButton.SetColor( aColor );
                     DrawComboButton( pViewData->GetScrPos( nCol, nRow, eWhich ),
-                                     nSizeX, nSizeY );
+                                     nSizeX, nSizeY, bArrowState );
 
                     aComboButton.SetPosPixel( aOldPos );    // alten Zustand
                     aComboButton.SetSizePixel( aOldSize );  // fuer MouseUp/Down
-                    aComboButton.SetColor( aOldCol );       // wiederherstellen
                 }
             }
         }
@@ -1259,6 +1254,7 @@ BOOL ScGridWindow::IsAutoFilterActive( USHORT nCol, USHORT nRow, USHORT nTab )
 void ScGridWindow::DrawComboButton( const Point&    rCellPos,
                                     long            nCellSizeX,
                                     long            nCellSizeY,
+                                    BOOL            bArrowState,
                                     BOOL            bBtnIn )
 {
     Point   aScrPos  = rCellPos;
@@ -1281,7 +1277,7 @@ void ScGridWindow::DrawComboButton( const Point&    rCellPos,
     aComboButton.SetPosPixel( aScrPos );
 
     HideCursor();
-    aComboButton.Draw( bBtnIn );
+    aComboButton.Draw( bArrowState, bBtnIn );
     ShowCursor();
 }
 

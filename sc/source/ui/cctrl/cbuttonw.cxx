@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cbuttonw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: dr $ $Date: 2002-07-29 14:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <tools/svwin.h>
 #include <vcl/window.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/svapp.hxx>
 
 #include "cbutton.hxx"
 
@@ -101,7 +102,7 @@ void ScDDComboBoxButton::SetOptSizePixel()
 
 void ScDDComboBoxButton::Draw( const Point& rAt,
                                const Size&  rSize,
-                               const Color& rArrowCol,
+                               BOOL         bState,
                                BOOL         bBtnIn  /* = FALSE */ )
 {
     // save old state
@@ -139,7 +140,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
     aInnerRect.Top()   = aInnerCenter.Y() - (aInnerSize.Width()>>1);
     aInnerRect.Bottom()= aInnerCenter.Y() + (aInnerSize.Width()>>1);
 
-    ImpDrawArrow( aInnerRect, rArrowCol );
+    ImpDrawArrow( aInnerRect, bState );
 
 
     // restore old state
@@ -157,7 +158,7 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
 //------------------------------------------------------------------------
 
 void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
-                                       const Color&     rColor )
+                                       BOOL             bState )
 {
     // no need to save old line and fill color here (is restored after the call)
 
@@ -175,8 +176,10 @@ void ScDDComboBoxButton::ImpDrawArrow( const Rectangle& rRect,
 
     Rectangle aTempRect = aPixRect;
 
-    pOut->SetFillColor( rColor );
-    pOut->SetLineColor( rColor );
+    const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
+    Color aColor( bState ? COL_LIGHTBLUE : rSett.GetButtonTextColor() );
+    pOut->SetFillColor( aColor );
+    pOut->SetLineColor( aColor );
 
     aTempRect.Left()   = aCenter.X() - aSize4.Width();
     aTempRect.Right()  = aCenter.X() + aSize4.Width();
