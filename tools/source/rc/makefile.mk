@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:04:40 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 15:04:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,10 +74,12 @@ TARGET=rc
 # --- Files --------------------------------------------------------
 
 SLOFILES=	$(SLO)$/rc.obj		\
+            $(SLO)$/isofallback.obj	\
             $(SLO)$/resmgr.obj	\
             $(SLO)$/resary.obj
 
 OBJFILES=	$(OBJ)$/rc.obj		\
+            $(OBJ)$/isofallback.obj	\
             $(OBJ)$/resmgr.obj	\
             $(OBJ)$/resary.obj
 
