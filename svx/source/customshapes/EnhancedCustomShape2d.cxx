@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:02:44 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2278,14 +2278,11 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
         for ( i = 0; i < nCount; i++ )
         {
             SdrGluePoint aGluePoint;
-            Rectangle aNewSnapRect( pRet->GetSnapRect() );
-            sal_Int32 nXMove = aLogicRect.Left() - aNewSnapRect.Left();
-            sal_Int32 nYMove = aLogicRect.Top() - aNewSnapRect.Top();
             const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True );
-            double fXRel = rPoint.X() + nXMove;
-            double fYRel = rPoint.Y() + nYMove;
-            fXRel = fXRel / aNewSnapRect.GetWidth() * 10000;
-            fYRel = fYRel / aNewSnapRect.GetHeight() * 10000;
+            double fXRel = rPoint.X();
+            double fYRel = rPoint.Y();
+            fXRel = fXRel / aLogicRect.GetWidth() * 10000;
+            fYRel = fYRel / aLogicRect.GetHeight() * 10000;
             aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
             aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
