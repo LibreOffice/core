@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,11 +1295,11 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             CheckItem(nActFamily, TRUE);    // Button in Toolbox checken
             aFilterLb.SetUpdateMode(FALSE);
             aFilterLb.Clear();
+            //insert hierarchical at the beginning
+            aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
             for(USHORT i = 0; i < rFilter.Count(); ++i)
                 aFilterLb.InsertEntry(rFilter.GetObject(i)->aName);
-            //insert hierarchical at the beginning
-            aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
             if(nActFilter < aFilterLb.GetEntryCount() - 1)
                 aFilterLb.SelectEntryPos(nActFilter + 1);
             else
