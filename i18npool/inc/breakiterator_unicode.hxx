@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-26 01:34:49 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
 protected:
-    sal_Char *cBreakIterator;
+    const sal_Char *cBreakIterator;
     Boundary result; // for word break iterator
 
     icu::BreakIterator *characterBreak, *editWordBreak, *dictWordBreak,
