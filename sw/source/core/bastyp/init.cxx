@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:29:25 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,6 +453,7 @@ USHORT __FAR_DATA aTableBoxSetRange[] = {
     RES_BACKGROUND,     RES_SHADOW,
     RES_PROTECT,        RES_PROTECT,
     RES_VERT_ORIENT,    RES_VERT_ORIENT,
+    RES_FRAMEDIR,       RES_FRAMEDIR,
     RES_BOXATR_BEGIN,   RES_BOXATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
