@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: as $ $Date: 2002-09-03 11:47:39 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef _UNO_COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
@@ -143,6 +149,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::beans;
 
 //------------------------------------------------------------------------
 
@@ -150,6 +157,46 @@ using namespace ::com::sun::star::util;
 #include "sfxslots.hxx"
 
 DBG_NAME(SfxTopViewFrame);
+
+class SfxAsyncCloser_Impl
+{
+    SfxFrame*   pFrame;
+    Timer*      pTimer;
+
+public:
+
+    SfxAsyncCloser_Impl( SfxFrame* );
+    ~SfxAsyncCloser_Impl();
+    DECL_LINK( TimerHdl, Timer*);
+};
+
+// -----------------------------------------------------------------------
+
+SfxAsyncCloser_Impl::SfxAsyncCloser_Impl( SfxFrame* pF )
+    : pFrame( pF )
+{
+    pTimer = new Timer;
+    pTimer->SetTimeoutHdl( LINK(this, SfxAsyncCloser_Impl, TimerHdl) );
+    pTimer->SetTimeout( 0 );
+    pTimer->Start();
+}
+
+// -----------------------------------------------------------------------
+
+SfxAsyncCloser_Impl::~SfxAsyncCloser_Impl()
+{
+    delete pTimer;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK(SfxAsyncCloser_Impl, TimerHdl, Timer*, pTimer)
+{
+    pTimer->Stop();
+    pFrame->CloseDocument_Impl();
+    delete this;
+    return 0L;
+}
 
 class SfxTopFrame_Impl
 {
@@ -180,6 +227,7 @@ public:
     virtual void        Resize();
     virtual void        GetFocus();
     void                DoResize();
+    DECL_LINK(          CloserHdl, void* );
 };
 
 SfxTopWindow_Impl::SfxTopWindow_Impl( SfxTopFrame* pF )
@@ -543,7 +591,20 @@ void SfxTopFrame::SetMenuBar_Impl( MenuBar *pMenu )
     if ( pWin && pWin->GetMenuBar() != pMenu )
     {
         pWin->SetMenuBar( pMenu );
+        if ( pMenu )
+        {
+            CheckMenuCloser_Impl( pMenu );
+            pMenu->SetCloserHdl( LINK( pWindow, SfxTopWindow_Impl, CloserHdl ) );
+        }
     }
+}
+
+IMPL_LINK( SfxTopWindow_Impl, CloserHdl, void*, pVoid )
+{
+    if ( pFrame && !pFrame->PrepareClose_Impl( TRUE ) )
+        return 0L;
+    new SfxAsyncCloser_Impl( pFrame );
+    return 0L;
 }
 
 void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
@@ -894,6 +955,7 @@ sal_Bool SfxTopViewFrame::Close()
         // vern"unftig verwenden - also besser still legen
         GetDispatcher()->Lock(sal_True);
         delete this;
+
         return sal_True;
     }
 
@@ -1364,3 +1426,44 @@ void SfxTopViewFrame::Deactivate( sal_Bool bMDI )
 //(mba): hier evtl. wie in Beanframe NotifyEvent ?!
 }
 
+void SfxTopFrame::CheckMenuCloser_Impl( MenuBar* pMenuBar )
+{
+    Reference < ::com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
+
+    // checks if there is more than one "real" (not help) task window
+    // in this case a close button is inserted into the menubar
+
+    if ( !xFrame->getController().is() )
+        // dummy component
+        return;
+
+    Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop( xFrame->getCreator(), UNO_QUERY );
+    if ( !xDesktop.is() )
+        // test only for task windows
+        return;
+
+    sal_Bool bLastTask = sal_False;
+    Reference < ::com::sun::star::container::XIndexAccess >
+            xList ( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+    sal_Int32 nCount = xList->getCount();
+    if ( nCount<=1 )
+        // only one task
+        bLastTask = sal_True;
+    else if ( nCount==2 )
+    {
+        // if we have to tasks, one can be the help task, that should be ignored
+        for( sal_Int32 i=0; i<nCount; ++i )
+        {
+            Reference < ::com::sun::star::frame::XFrame > xTask;
+            ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
+            if ( (aVal>>=xTask) && xTask.is() && xTask->getName().compareToAscii("OFFICE_HELP_TASK") == COMPARE_EQUAL )
+            {
+                // one of the two open tasks was the help task -> ignored
+                bLastTask = sal_True;
+                break;
+            }
+        }
+    }
+
+    pMenuBar->ShowCloser(bLastTask);
+}

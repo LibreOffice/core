@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:50:13 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,8 @@ class MenuDispatcher   :   // interfaces
     //-------------------------------------------------------------------------------------------------------------
 
     private:
+
+        DECL_LINK( Close_Impl, void* );
 
         /*-****************************************************************************************************//**
             @short      -

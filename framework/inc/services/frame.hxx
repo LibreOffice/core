@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: as $ $Date: 2002-07-31 11:01:10 $
+ *  last change: $Author: mba $ $Date: 2002-10-07 10:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,7 @@ class Frame :   // interfaces
         DECL_LINK( implts_windowClosing, void* );
 
         // non threadsafe
+        void                                                    CheckMenuCloser_Impl();
         void                                                    impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
         sal_Bool                                                impl_tryToChangeProperty        ( const ::rtl::OUString&                                sProperty        ,
                                                                                                   const css::uno::Any&                                  aValue           ,
