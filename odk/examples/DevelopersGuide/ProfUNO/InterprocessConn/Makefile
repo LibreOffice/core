@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:44:19 $
+#  last change: $Author: hr $ $Date: 2004-02-02 20:03:13 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -85,7 +85,7 @@ ProfUNOInterprocessExamples : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@) "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"
+	java -classpath "$(SDK_CLASSPATH)" $(basename $@) "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"
 
 .PHONY: clean
 clean :
