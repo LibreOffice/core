@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-07 13:42:13 $
+ *  last change: $Author: ama $ $Date: 2001-06-15 11:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1977,7 +1977,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             FASTBOOL bSetCntnt = TRUE;
             if ( pCntntPrev )
             {
-                if ( !pCntntPrev->IsValid() )
+                if ( !pCntntPrev->IsValid() && pPage->IsAnLower( pCntntPrev ) )
                     pPage->InvalidateCntnt();
                 if ( pOldUpper != pCntnt->GetUpper() &&
                      pPage->GetPhyPageNum() < pCntnt->FindPageFrm()->GetPhyPageNum() )
