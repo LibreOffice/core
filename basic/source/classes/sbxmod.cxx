@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:56:27 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,9 +808,22 @@ void SbModule::GlobalRunInit( BOOL bBasicStart )
 
         SbxObject* pParent = pBasic->GetParent();
         if( pParent )
-            pBasic = PTR_CAST(StarBASIC,pParent);
-        if( pBasic )
-            pBasic->InitAllModules();
+        {
+            StarBASIC * pParentBasic = PTR_CAST(StarBASIC,pParent);
+            if( pParentBasic )
+            {
+                pParentBasic->InitAllModules( pBasic );
+
+                // #109018 Parent can also have a parent (library in doc)
+                SbxObject* pParentParent = pParentBasic->GetParent();
+                if( pParentParent )
+                {
+                    StarBASIC * pParentParentBasic = PTR_CAST(StarBASIC,pParentParent);
+                    if( pParentParentBasic )
+                        pParentParentBasic->InitAllModules( pParentBasic );
+                }
+            }
+        }
     }
 }
 
