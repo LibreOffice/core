@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-20 14:36:22 $
+ *  last change: $Author: obr $ $Date: 2001-11-21 14:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,6 @@ typedef struct _osl_TProfileImpl
     osl_TProfileSection* m_Sections;
     pthread_mutex_t m_AccessLock;
     sal_Bool    m_bIsValid;
-    sal_Bool    m_bIsSoffice;
 } osl_TProfileImpl;
 
 
@@ -222,8 +221,6 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
 sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max);
 
-
-static sal_Bool bGlobalSofficeFlag=sal_False;
 
 /* implemented in file.c */
 extern oslFileError FileURLToPath( char *, size_t, rtl_uString* );
@@ -307,21 +304,6 @@ oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfi
     if ( pProfile == 0 )
     {
         return 0;
-    }
-
-    pProfile->m_bIsSoffice = sal_False;
-
-    if ( strstr(pszProfileName,"sofficerc") != 0 )
-    {
-        if ( bGlobalSofficeFlag == sal_True )
-        {
-            OSL_ENSURE(0,"Attempt to open sofficerc more than once\n");
-        }
-        else
-        {
-            bGlobalSofficeFlag=sal_True;
-        }
-        pProfile->m_bIsSoffice=sal_True;
     }
 
     pProfile->m_Flags = Flags & FLG_USER;
@@ -2291,14 +2273,6 @@ static sal_Bool storeProfile(osl_TFile* pFile, osl_TProfileImpl* pProfile, sal_B
             for ( i = 0 ; i < pProfile->m_NoLines ; i++ )
             {
                 OSL_VERIFY(OslProfile_putLine(pTmpFile, pProfile->m_Lines[i]));
-            }
-
-            if ( pProfile->m_bIsSoffice == sal_True )
-            {
-/*                  OSL_ENSURE( ( ( pTmpFile->m_nWriteBufLen - pTmpFile->m_nWriteBufFree ) > 5000 ), "Profile to write is less than 5000 bytes\n"); */
-/*                  OSL_ENSURE( ( pProfile->m_NoSections > 15 ), "Profile to write has less than 15 Sections\n"); */
-/*                  OSL_ENSURE( ( pProfile->m_NoLines > 170 ), "Profile to write has less than 170 lines\n"); */
-/*                  OSL_ENSURE( ( i > 170 ), "less than 170 lines to be written in Profile\n"); */
             }
 
             if ( ! writeProfileImpl(pTmpFile) )
