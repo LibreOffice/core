@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:54:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef DBAUI_RELATIONCONTROL_HXX
 #include "RelationControl.hxx"
+#endif
+#ifndef DBACCESS_SOURCE_UI_INC_RELATIONCONTROL_HRC
+#include "RelationControl.hrc"
 #endif
 
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
@@ -523,10 +526,10 @@ namespace dbaui
                                                const OJoinTableView::OTableWindowMap* _pTableMap,
                                                IRelationControlInterface* _pParentDialog)
      : Window(_pParent,_rResId)
-     , m_lmbLeftTable(          this, ModuleRes(LB_LEFT_TABLE))
-     , m_lmbRightTable(         this, ModuleRes(LB_RIGHT_TABLE))
-     , m_aFL_InvolvedTables(    this, ModuleRes(FL_INVOLVED_TABLES))
-     , m_aFL_InvolvedFields(    this, ModuleRes(FL_INVOLVED_FIELDS))
+     , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE))
+     , m_lmbRightTable(         this, ResId(LB_RIGHT_TABLE))
+     , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES))
+     , m_aFL_InvolvedFields(    this, ResId(FL_INVOLVED_FIELDS))
      , m_pTableMap(_pTableMap)
      , m_pParentDialog(_pParentDialog)
     {
