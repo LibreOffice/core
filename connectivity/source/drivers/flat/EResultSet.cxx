@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:26:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,8 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException)
             aOwnTypes.push_back(*pBegin);
         }
     }
-    Sequence< Type > aRet(aOwnTypes.begin(),aOwnTypes.size());
+    Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
+    Sequence< Type > aRet(pTypes, aOwnTypes.size());
     return ::comphelper::concatSequences(aRet,OFlatResultSet_BASE::getTypes());
 }
 
