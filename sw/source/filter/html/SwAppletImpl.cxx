@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:16:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,8 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
 {
     comphelper::EmbeddedObjectContainer aCnt;
     ::rtl::OUString aName;
+
+    // create Applet; it will be in running state
     xApplet = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_APPLET_CLASSID ).GetByteSequence(), aName );
 
     String sCodeBase;
@@ -199,7 +201,6 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
         sCodeBase = aTmpURL.GetPartBeforeLastName();
     }
 
-    svt::EmbeddedObjectRef::TryRunningState( xApplet );
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
@@ -247,7 +248,6 @@ SwApplet_Impl::~SwApplet_Impl()
 void SwApplet_Impl::FinishApplet()
 {
     //xApplet->EnableSetModified( TRUE );
-    svt::EmbeddedObjectRef::TryRunningState( xApplet );
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
