@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:23:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _SVDOGRAF_HXX
 #include <svx/svdograf.hxx>
 #endif
+#ifndef _SVDOMEDIA_HXX
+#include <svx/svdomedia.hxx>
+#endif
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
 #endif
@@ -111,6 +114,9 @@
 #endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIAWINDOW_HXX //autogen
+#include <avmedia/mediawindow.hxx>
 #endif
 
 #include "app.hrc"
@@ -300,6 +306,49 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     return pNewGrafObj;
 }
 
+// -----------------------------------------------------------------------------
+
+SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
+                                   const Point& rPos, const Size& rSize )
+{
+    EndTextEdit();
+    nAction = rAction;
+
+    SdrMediaObj*    pNewMediaObj = NULL;
+    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+    SdrObject*      pPickObj = NULL;
+
+    if( this->ISA( SlideView ) )
+        pPV = HitPage( rPos );
+
+    if( !pPickObj && pPV )
+    {
+        SdrPageView* pPageView = pPV;
+        PickObj(rPos, pPickObj, pPageView);
+    }
+
+    if( nAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
+    {
+        pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
+        pNewMediaObj->setURL( rMediaURL );
+
+        BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+        ReplaceObject(pPickObj, *pPV, pNewMediaObj);
+        EndUndo();
+    }
+    else if( pPV )
+    {
+        pNewMediaObj = new SdrMediaObj( Rectangle( rPos, rSize ) );
+
+        if( pPV && InsertObject( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER ) )
+            pNewMediaObj->setURL( rMediaURL );
+    }
+
+    rAction = nAction;
+
+    return pNewMediaObj;
+}
+
 /*************************************************************************
 |*
 |* Timer-Handler fuer InsertFile beim Drop()
@@ -328,7 +377,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-        if( !Sound::IsSoundFile( aCurrentDropFile ) )
+        if( !::avmedia::MediaWindow::isMediaURL( aCurrentDropFile ) )
         {
             FilterProgress* pFilterProgress = new FilterProgress( pGraphicFilter, pViewSh->GetDocSh() );
 
@@ -390,7 +439,26 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 
         if( !bOK )
         {
-            if( Sound::IsSoundFile( aCurrentDropFile ) || ( nAction & DND_ACTION_LINK ) )
+            Size aPrefSize;
+
+            if( ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile ) &&
+                ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, true, &aPrefSize ) )
+            {
+                if( aPrefSize.Width() && aPrefSize.Height() )
+                {
+                    ::sd::Window* pWin = pViewSh->GetActiveWindow();
+
+                    if( pWin )
+                        aPrefSize = pWin->PixelToLogic( aPrefSize, MAP_100TH_MM );
+                    else
+                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+                }
+                else
+                    aPrefSize  = Size( 5000, 5000 );
+
+                InsertMediaURL( aCurrentDropFile, nAction, aDropPos, aPrefSize ) ;
+            }
+            else if( nAction & DND_ACTION_LINK )
                 static_cast< DrawViewShell* >( pViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, String(), &aDropPos );
             else
             {
