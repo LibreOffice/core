@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:55:06 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
@@ -88,7 +94,22 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
+#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XVALUEBINDING_HPP_
+#include <drafts/com/sun/star/form/XValueBinding.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HPP_
+#include <drafts/com/sun/star/form/XListEntrySink.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSOURCE_HPP_
+#include <drafts/com/sun/star/form/XListEntrySource.hpp>
+#endif
 
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
+#endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
 #endif
@@ -101,6 +122,12 @@
 #endif
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
+#endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
 #endif
 
 #ifndef SC_FAPIHELPER_HXX
@@ -115,17 +142,27 @@
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::awt::XControlModel;
 using ::com::sun::star::form::XFormComponent;
+using ::drafts::com::sun::star::form::XBindableValue;
+using ::drafts::com::sun::star::form::XValueBinding;
+using ::drafts::com::sun::star::form::XListEntrySink;
+using ::drafts::com::sun::star::form::XListEntrySource;
 using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XControlShape;
+using ::com::sun::star::table::CellAddress;
+using ::com::sun::star::table::CellRangeAddress;
 
 
 #define EXC_STREAMNAME_CTLS     String( RTL_CONSTASCII_USTRINGPARAM( "Ctls" ) )
@@ -204,14 +241,10 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
         {
             if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
             {
-                // let the Escher control object set additional properties
+                // set the spreadsheet links
                 Reference< XControlShape > xControlShape( xShape, UNO_QUERY );
                 if( xControlShape.is() )
-                {
-                    Reference< XPropertySet > xPropSet( xControlShape->getControl(), UNO_QUERY );
-                    if( xPropSet.is() )
-                        rOcxCtrl.SetProperties( xPropSet );
-                }
+                    ConvertSheetLinks( xControlShape->getControl(), rOcxCtrl );
 
                 rOcxCtrl.SetSdrObj( pSdrObj );
                 return true;
@@ -231,11 +264,16 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl )
     {
         Reference< XInterface > xInt( rxServiceFactory->createInstance( rTbxCtrl.GetServiceName() ) );
         Reference< XFormComponent > xFormComp( xInt, UNO_QUERY );
+        Reference< XControlModel > xModel( xInt, UNO_QUERY );
         Reference< XPropertySet > xPropSet( xInt, UNO_QUERY );
-        if( xFormComp.is() && xPropSet.is() )
+        if( xFormComp.is() && xModel.is() && xPropSet.is() )
         {
+            // set the links to the spreadsheet
+            ConvertSheetLinks( xModel, rTbxCtrl );
+
             // set the control properties
             rTbxCtrl.SetProperties( xPropSet );
+
             // the shape to fill
             Reference< XShape > xShape;
             // dummy size -> is done in XclImpEscherTbxCtrl::Apply
@@ -295,6 +333,95 @@ sal_Bool XclImpOcxConverter::InsertControl(
     return bRet;
 }
 
+void XclImpOcxConverter::ConvertSheetLinks(
+        Reference< XControlModel > rxModel, const XclImpCtrlLinkHelper& rControl ) const
+{
+    Reference< XMultiServiceFactory > xFactory;
+    if( SfxObjectShell* pDocShell = GetDocShell() )
+        xFactory = Reference< XMultiServiceFactory >( pDocShell->GetModel(), UNO_QUERY );
+    if( !xFactory.is() )
+        return;
+
+    // *** cell link *** ------------------------------------------------------
+
+    const ScAddress* pCellLink = rControl.GetCellLink();
+    Reference< XBindableValue > xBindable( rxModel, UNO_QUERY );
+    if( pCellLink && xBindable.is() )
+    {
+        // create argument sequence for createInstanceWithArguments()
+        CellAddress aApiAddress;
+        ScUnoConversion::FillApiAddress( aApiAddress, *pCellLink );
+
+        NamedValue aValue;
+        aValue.Name = CREATE_OUSTRING( SC_UNONAME_BOUNDCELL );
+        aValue.Value <<= aApiAddress;
+
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the CellValueBinding instance
+        Reference< XInterface > xInt;
+        try
+        {
+            switch( rControl.GetBindingMode() )
+            {
+                case xlBindContent:
+                    xInt = xFactory->createInstanceWithArguments(
+                        CREATE_OUSTRING( SC_SERVICENAME_VALBIND ), aArgs );
+                break;
+                case xlBindPosition:
+                    xInt = xFactory->createInstanceWithArguments(
+                        CREATE_OUSTRING( SC_SERVICENAME_LISTCELLBIND ), aArgs );
+                break;
+                default:
+                    DBG_ERRORFILE( "XclImpOcxConverter::ConvertSheetLinks - unknown binding mode" );
+            }
+        }
+        catch( const Exception& )
+        {
+        }
+
+        // set the binding at the control
+        Reference< XValueBinding > xBinding( xInt, UNO_QUERY );
+        if( xBinding.is() )
+            xBindable->setValueBinding( xBinding );
+    }
+
+    // *** source range *** ---------------------------------------------------
+
+    const ScRange* pSrcRange = rControl.GetSourceRange();
+    Reference< XListEntrySink > xEntrySink( rxModel, UNO_QUERY );
+    if( pSrcRange && xEntrySink.is() )
+    {
+        // create argument sequence for createInstanceWithArguments()
+        CellRangeAddress aApiRange;
+        ScUnoConversion::FillApiRange( aApiRange, *pSrcRange );
+
+        NamedValue aValue;
+        aValue.Name = CREATE_OUSTRING( SC_UNONAME_CELLRANGE );
+        aValue.Value <<= aApiRange;
+
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the CellValueBinding instance
+        Reference< XInterface > xInt;
+        try
+        {
+            xInt = xFactory->createInstanceWithArguments(
+                CREATE_OUSTRING( SC_SERVICENAME_LISTSOURCE ), aArgs );
+        }
+        catch( const Exception& )
+        {
+        }
+
+        // set the binding at the control
+        Reference< XListEntrySource > xEntrySource( xInt, UNO_QUERY );
+        if( xEntrySource.is() )
+            xEntrySink->setListEntrySource( xEntrySource );
+    }
+}
+
 
 // ----------------------------------------------------------------------------
 
@@ -333,6 +460,7 @@ XclExpObjOcxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& 
                     // adjust the class name to "Forms.***.1"
                     aClassName.InsertAscii( "Forms.", 0 ).AppendAscii( ".1" );
                     pOcxCtrl = new XclExpObjOcxCtrl( GetRoot(), rxShape, aClassName, nStrmStart, nStrmSize );
+                    ConvertSheetLinks( *pOcxCtrl, xControlModel );
                 }
             }
         }
@@ -357,12 +485,62 @@ XclExpObjTbxCtrl* XclExpOcxConverter::CreateCtrlObj( const Reference< XShape >& 
             pTbxCtrl = new XclExpObjTbxCtrl( GetRoot(), rxShape, xControlModel );
             if( pTbxCtrl->GetObjType() == EXC_OBJ_CMO_UNKNOWN )
                 DELETEZ( pTbxCtrl );
+
+            if( pTbxCtrl )
+                ConvertSheetLinks( *pTbxCtrl, xControlModel );
         }
     }
     return pTbxCtrl;
 }
 
 #endif
+
+void XclExpOcxConverter::ConvertSheetLinks(
+        XclExpCtrlLinkHelper& rControl, const Reference< XControlModel >& rxModel ) const
+{
+    // *** cell link *** ------------------------------------------------------
+
+    Reference< XBindableValue > xBindable( rxModel, UNO_QUERY );
+    if( xBindable.is() )
+    {
+        Reference< XServiceInfo > xServInfo( xBindable->getValueBinding(), UNO_QUERY );
+        Reference< XPropertySet > xPropSet( xServInfo, UNO_QUERY );
+        if( xServInfo.is() &&
+            xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_VALBIND ) ) &&
+            xPropSet.is() )
+        {
+            CellAddress aApiAddress;
+            if( ::getPropValue( aApiAddress, xPropSet, CREATE_OUSTRING( SC_UNONAME_BOUNDCELL ) ) )
+            {
+                ScAddress aCellLink;
+                ScUnoConversion::FillScAddress( aCellLink, aApiAddress );
+                rControl.SetCellLink( aCellLink );
+            }
+        }
+    }
+
+    // *** source range *** ---------------------------------------------------
+
+    Reference< XListEntrySink > xEntrySink( rxModel, UNO_QUERY );
+    if( xEntrySink.is() )
+    {
+        Reference< XServiceInfo > xServInfo( xEntrySink->getListEntrySource(), UNO_QUERY );
+        Reference< XPropertySet > xPropSet( xServInfo, UNO_QUERY );
+        if( xServInfo.is() &&
+            xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_LISTSOURCE ) ) &&
+            xPropSet.is() )
+        {
+            CellRangeAddress aApiRange;
+            if( ::getPropValue( aApiRange, xPropSet, CREATE_OUSTRING( SC_UNONAME_CELLRANGE ) ) )
+            {
+                ScRange aSrcRange;
+                ScUnoConversion::FillScRange( aSrcRange, aApiRange );
+                rControl.SetSourceRange( aSrcRange );
+            }
+        }
+    }
+}
+
 
 // ============================================================================
 
