@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2000-11-24 19:52:06 $
+ *  last change: $Author: mh $ $Date: 2000-11-28 14:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,12 @@
 
 #pragma hdrstop
 
+#include <stdio.h>
 #include <ctype.h>
 #include <float.h>
 #include <math.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
