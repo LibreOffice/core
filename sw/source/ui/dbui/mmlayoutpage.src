@@ -1,0 +1,208 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mmlayoutpage.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:17:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <mmlayoutpage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+TabPage DLG_MM_LAYOUT_PAGE
+{
+    HelpID = HID_MM_LAYOUT_PAGE;
+    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Layout des Adressblocks und der Briefanrede anpassen" ;
+        Text[ en-US ] = "Adjust layout of address block and salutation";
+    };
+    FixedLine       FL_POSITION
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ de ] = "Adressblock-Position" ;
+        Text[ en-US ] = "Address block position";
+    };
+    CheckBox CB_ALIGN
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ de ] = "Am Text ausrichten" ;
+        Text[ en-US ] = "Align to text body";
+    };
+    FixedText       FT_LEFT
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Text [ de ] = "Von links" ;
+        Text[ en-US ] = "From ~left";
+    };
+    MetricField     MF_LEFT
+    {
+        Pos = MAP_APPFONT ( 78 , 44 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 99999 ;
+        DecimalDigits = 2 ;
+        Value = 200 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 99999 ;
+        SpinSize = 10 ;
+    };
+    FixedText       FT_TOP
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 62 , 8 ) ;
+        Text [ de ] = "Von oben" ;
+        Text[ en-US ] = "~From top";
+    };
+    MetricField     MF_TOP
+    {
+        Pos = MAP_APPFONT ( 78 , 59 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Border = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 99999 ;
+        DecimalDigits = 2 ;
+        Value = 200 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 99999 ;
+        SpinSize = 10 ;
+    };
+    FixedLine       FL_GREETINGLINE
+    {
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ de ] = "Briefanrede-Position" ;
+        Text[ en-US ] = "Salutation position";
+    };
+    FixedText       FT_UP
+    {
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Text [ de ] = "Nach" ;
+        Text[ en-US ] = "Move";
+    };
+    PushButton      MF_UP
+    {
+        Pos = MAP_APPFONT ( 68 , 88 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Oben" ;
+        Text[ en-US ] = "~Up";
+    };
+    FixedText       FT_DOWN
+    {
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Text [ de ] = "Nach" ;
+        Text[ en-US ] = "Move";
+    };
+    PushButton      PB_DOWN
+    {
+        Pos = MAP_APPFONT ( 68 , 105 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Unten" ;
+        Text[ en-US ] = "~Down";
+    };
+    Window          WIN_EXAMPLECONTAINER
+    {
+        Pos = MAP_APPFONT ( 130 , 20 ) ;
+        Size = MAP_APPFONT ( 124 , 159 ) ;
+        Border = TRUE;
+    };
+    FixedText       FT_ZOOM
+    {
+        Pos = MAP_APPFONT ( 161 , 185 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Right = TRUE;
+        Text [ de ] = "Ansicht" ;
+        Text[ en-US ] = "~Zoom";
+    };
+    ListBox        LB_ZOOM
+    {
+        Pos = MAP_APPFONT ( 204 , 182 ) ;
+        Size = MAP_APPFONT ( 50 , 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList =                \
+        {                           \
+            < "Ganze Seite" ; > ;       \
+        };                          \
+        StringList [en-US]=    \
+        {                           \
+            < "Entire page" ; > ;        \
+        };
+    };
+
+};
+
+
+
