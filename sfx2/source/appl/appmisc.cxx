@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 13:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,26 +1038,21 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 
 Config* SfxApplication::GetFilterIni()
 {
-#if SUPD<613//MUSTINI
     if( !pAppData_Impl->pFilterIni )
     {
-        String aIniFile( DEFINE_CONST_UNICODE( FILTER_INI ) );
-        if ( GetIniManager()->SearchFile( aIniFile, SFX_KEY_MODULES_PATH ) )
-            pAppData_Impl->pFilterIni = new Config( aIniFile );
-        else
-            // da fr"uher immer ein pointer != NULL returniert wurde, m"ussen
-            // wir das jetzt wohl auch tun
-            pAppData_Impl->pFilterIni = new Config();
+        String aIniFile( SvtPathOptions().GetModulePath() );
+        ::rtl::OUString aTemp;
+        if ( ::osl::FileBase::normalizePath( aIniFile, aTemp ) == osl::FileBase::E_None )
+        {
+            aIniFile = aTemp;
+            aIniFile += DEFINE_CONST_UNICODE("/");
+            aIniFile += DEFINE_CONST_UNICODE( "install.ini" );
+            ::osl::FileBase::getSystemPathFromNormalizedPath( aIniFile, aTemp );
+            pAppData_Impl->pFilterIni = new Config( aTemp );
+        }
     }
+
     return pAppData_Impl->pFilterIni;
-#else
-    if( !pAppData_Impl->pFilterIni )
-    {
-        String aIniFile( SvtPathOptions().GetModulePath() + DEFINE_CONST_UNICODE("/") + DEFINE_CONST_UNICODE( FILTER_INI ) );
-        pAppData_Impl->pFilterIni = new Config( aIniFile );
-    }
-    return pAppData_Impl->pFilterIni;
-#endif
 }
 
 
