@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-01 15:11:20 $
+ *  last change: $Author: sj $ $Date: 2002-12-11 14:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2724,10 +2724,10 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
     {   // the writer is doing it's own cropping, so this part affects only impress and calc
         if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS )
         {
-            sal_uInt32 nCropTop     = GetPropertyValue( DFF_Prop_cropFromTop, 0 );
-            sal_uInt32 nCropBottom  = GetPropertyValue( DFF_Prop_cropFromBottom, 0 );
-            sal_uInt32 nCropLeft    = GetPropertyValue( DFF_Prop_cropFromLeft, 0 );
-            sal_uInt32 nCropRight   = GetPropertyValue( DFF_Prop_cropFromRight, 0 );
+            sal_Int32 nCropTop      = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromTop, 0 );
+            sal_Int32 nCropBottom   = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromBottom, 0 );
+            sal_Int32 nCropLeft     = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromLeft, 0 );
+            sal_Int32 nCropRight    = (sal_Int32)GetPropertyValue( DFF_Prop_cropFromRight, 0 );
 
             if( nCropTop || nCropBottom || nCropLeft || nCropRight )
             {
