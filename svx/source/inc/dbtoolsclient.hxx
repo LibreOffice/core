@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:46:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,10 @@ namespace svxform
         virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False) const;
+
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+            getComponentContextConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
     };
 //........................................................................
 }   // namespace svxform
