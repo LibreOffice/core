@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:20:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,7 +1958,9 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             return;
         }
 
-        sal_Bool bChkAtCnt = sal_False;
+        // OD 18.11.2003 #110978# - always check Writer fly frames, that are
+        // anchored to character.
+        //sal_Bool bChkAtCnt = sal_False;
         const xub_StrLen nStrLen = GetTxtNode()->GetTxt().Len();
         if ( nStrLen || !FormatEmpty() )
         {
@@ -2067,7 +2069,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                     ValidateFrm();
                     SetWidow( sal_False );
                 }
-                bChkAtCnt = sal_True;
             }
             if( IsEmptyMaster() )
             {
@@ -2077,7 +2078,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             }
         }
         MSHORT nMaxRepeat = 2;
-        if( bChkAtCnt && nRepeat < nMaxRepeat )
+        if ( nRepeat < nMaxRepeat )
         {
             sal_Bool bRepeat = sal_False;
             MSHORT nRepAdd = 0;
@@ -2094,12 +2095,18 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                         if ( pO->ISA(SwVirtFlyDrawObj) )
                         {
                             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                            if( pFly->IsAutoPos() && !::IsInProgress( pFly ) )
+                            // OD 07.10.2003 #110978# - allow invalidation,
+                            // even if formatting of the fly frame or another fly frame
+                            // is in progress
+                            //if ( pFly->IsAutoPos() && !::IsInProgress( pFly ) )
+                            if ( pFly->IsAutoPos() )
                             {
                                 ++nAutoCnt;
                                 ASSERT( pFly->IsFlyAtCntFrm(), "Not at content, but autopos.?" );
                                 ((SwFlyAtCntFrm*)pFly)->CheckCharRect();
 
+                                // OD 07.10.2003 #110978# - no format of the fly frame
+                                /*
                                 // we have to check if the anchor of the fly
                                 // is inside this frame before calling
                                 // pFly->Calc. Otherwise the master could
@@ -2112,39 +2119,14 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                                      pPos->nContent.GetIndex() >= GetOfst() )
                                 {
                                     SwTwips nOldTop = (pFly->Frm().*fnRect->fnGetTop)();
-                                    /// OD 23.07.2002 #101612#: calculation of fly
-                                    ///     frame can cause grow of the text frame
-                                    ///     and thus probably the section, the text
-                                    ///     frame is in.
-                                    ///     Thus, do *not* ColLock() the section the
-                                    ///     text frame is in, for calculating its
-                                    ///     fly frames.
-                                    ///     NOTE: This locking was introduced for
-                                    ///     fixing part of bug #99066#, which is still open.
-                                    /*
-                                    SwSectionFrm* pSect = FindSctFrm();
-                                    if( pSect )
-                                    {
-                                        if( pSect->IsColLocked() )
-                                            pSect = NULL;
-                                        else
-                                            pSect->ColLock();
-                                    }
-                                    */
+
                                     pFly->Calc();
-                                    /// OD 23.07.2002 #101612#: no pSect.ColLock()
-                                    ///     performed.
-                                    ///     Thus, ColUnLock() not necessary.
-                                    ///     NOTE: Introduced for fixing part of
-                                    ///     bug #99066# - see above
-                                    /*
-                                    if( pSect )
-                                        pSect->ColUnlock();
-                                    */
+
                                     bRepeat = sal_True;
                                     if( !nRepAdd && nOldTop >= (pFly->Frm().*fnRect->fnGetTop)() )
                                         nRepAdd = 1;
                                 }
+                                */
                             }
                         }
                     }
