@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 13:18:24 $
+ *  last change: $Author: sb $ $Date: 2000-12-08 13:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,7 +1311,7 @@ void SfxMedium::Transfer_Impl()
         }
 
         CloseOutStream();
-        SvStream *pStream = new SvFileStream( pImp->pTempFile->GetURL(), STREAM_STD_READ );
+        SvStream *pStream = new SvFileStream( pImp->pTempFile->GetFileName(), STREAM_STD_READ );
         SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
         Reference < ::com::sun::star::io::XInputStream > xStream
             = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
