@@ -1,5 +1,5 @@
 Summary: OpenOffice.org desktop integration
-Name: openoffice-suse-menus
+Name: openofficeorg-suse-menus
 Version: 2.0
 Release: 1
 Group: Office
@@ -67,24 +67,6 @@ OpenOffice.org desktop integration
 /opt/gnome2/share/icons/gnome/16x16/mimetypes/%PREFIX-master-document.png
 /opt/gnome2/share/icons/gnome/16x16/mimetypes/%PREFIX-formula.png
 /opt/gnome2/share/icons/gnome/16x16/mimetypes/%PREFIX-database.png
-/opt/gnome2/share/icons/gnome/22x22/apps/%PREFIX-writer.png
-/opt/gnome2/share/icons/gnome/22x22/apps/%PREFIX-calc.png
-/opt/gnome2/share/icons/gnome/22x22/apps/%PREFIX-draw.png
-/opt/gnome2/share/icons/gnome/22x22/apps/%PREFIX-impress.png
-/opt/gnome2/share/icons/gnome/22x22/apps/%PREFIX-math.png
-/opt/gnome2/share/icons/gnome/22x22/apps/%PREFIX-base.png
-/opt/gnome2/share/icons/gnome/22x22/apps/%PREFIX-printeradmin.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-text.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-text-template.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-spreadsheet.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-spreadsheet-template.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-drawing.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-drawing-template.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-presentation.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-presentation-template.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-master-document.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-formula.png
-/opt/gnome2/share/icons/gnome/22x22/mimetypes/%PREFIX-database.png
 /opt/gnome2/share/icons/gnome/32x32/apps/%PREFIX-writer.png
 /opt/gnome2/share/icons/gnome/32x32/apps/%PREFIX-calc.png
 /opt/gnome2/share/icons/gnome/32x32/apps/%PREFIX-draw.png
@@ -139,24 +121,6 @@ OpenOffice.org desktop integration
 /opt/kde3/share/icons/hicolor/16x16/mimetypes/%PREFIX-master-document.png
 /opt/kde3/share/icons/hicolor/16x16/mimetypes/%PREFIX-formula.png
 /opt/kde3/share/icons/hicolor/16x16/mimetypes/%PREFIX-database.png
-/opt/kde3/share/icons/hicolor/22x22/apps/%PREFIX-writer.png
-/opt/kde3/share/icons/hicolor/22x22/apps/%PREFIX-calc.png
-/opt/kde3/share/icons/hicolor/22x22/apps/%PREFIX-draw.png
-/opt/kde3/share/icons/hicolor/22x22/apps/%PREFIX-impress.png
-/opt/kde3/share/icons/hicolor/22x22/apps/%PREFIX-math.png
-/opt/kde3/share/icons/hicolor/22x22/apps/%PREFIX-base.png
-/opt/kde3/share/icons/hicolor/22x22/apps/%PREFIX-printeradmin.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-text.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-text-template.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-spreadsheet.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-spreadsheet-template.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-drawing.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-drawing-template.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-presentation.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-presentation-template.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-master-document.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-formula.png
-/opt/kde3/share/icons/hicolor/22x22/mimetypes/%PREFIX-database.png
 /opt/kde3/share/icons/hicolor/32x32/apps/%PREFIX-writer.png
 /opt/kde3/share/icons/hicolor/32x32/apps/%PREFIX-calc.png
 /opt/kde3/share/icons/hicolor/32x32/apps/%PREFIX-draw.png
@@ -211,24 +175,6 @@ OpenOffice.org desktop integration
 /opt/kde3/share/icons/locolor/16x16/mimetypes/%PREFIX-master-document.png
 /opt/kde3/share/icons/locolor/16x16/mimetypes/%PREFIX-formula.png
 /opt/kde3/share/icons/locolor/16x16/mimetypes/%PREFIX-database.png
-/opt/kde3/share/icons/locolor/22x22/apps/%PREFIX-writer.png
-/opt/kde3/share/icons/locolor/22x22/apps/%PREFIX-calc.png
-/opt/kde3/share/icons/locolor/22x22/apps/%PREFIX-draw.png
-/opt/kde3/share/icons/locolor/22x22/apps/%PREFIX-impress.png
-/opt/kde3/share/icons/locolor/22x22/apps/%PREFIX-math.png
-/opt/kde3/share/icons/locolor/22x22/apps/%PREFIX-base.png
-/opt/kde3/share/icons/locolor/22x22/apps/%PREFIX-printeradmin.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-text.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-text-template.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-spreadsheet.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-spreadsheet-template.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-drawing.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-drawing-template.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-presentation.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-presentation-template.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-master-document.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-formula.png
-/opt/kde3/share/icons/locolor/22x22/mimetypes/%PREFIX-database.png
 /opt/kde3/share/icons/locolor/32x32/apps/%PREFIX-writer.png
 /opt/kde3/share/icons/locolor/32x32/apps/%PREFIX-calc.png
 /opt/kde3/share/icons/locolor/32x32/apps/%PREFIX-draw.png
