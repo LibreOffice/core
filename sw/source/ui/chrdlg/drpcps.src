@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:56:26 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese ] = "Conteúdo" ;
         Text[ chinese_simplified ] = "ÄÚÈÝ";
         Text[ russian ] = "Ñîäåðæèìîå";
-        Text[ polish ] = "Zawarto?æ";
+        Text[ polish ] = "Zawartoœæ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -468,3 +468,4 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
+
