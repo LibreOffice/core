@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2001-04-10 12:04:38 $
+#   last change: $Author: hr $ $Date: 2002-08-20 16:33:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,12 @@ PRJNAME=dtrans
 TARGET=dtransaqua
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" 
+.IF "$(GUIBASE)"=="aqua"
 COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/applicat.rdb
-.ENDIF "$(OS)"=="MACOSX"
+.ENDIF # "$(GUIBASE)"=="aqua"
+.ENDIF # "$(OS)"=="MACOSX" 
 USE_BOUNDCHK=
 
 # --- Settings -----------------------------------------------------
@@ -85,9 +87,12 @@ dummy:
  
 .ELSE		# "$(OS)"!="MACOSX"
 
-.INCLUDE : ..$/cppumaker.mk
+.IF "$(GUIBASE)"!="aqua"
+dummy:
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+.ELSE
 
-SYMBOLPREFIX=$(TARGET)$(UPD)$(DLLPOSTFIX)
+.INCLUDE : ..$/cppumaker.mk
 
 SLOFILES= \
         $(SLO)$/aqua_service.obj	\
@@ -114,15 +119,15 @@ APP1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
         -framework Cocoa
-
-.ENDIF		# "$(OS)"!="MACOSX"
-
+                
 # --- Targets ------------------------------------------------------
 
-#.IF "$(depend)" == ""
 ALL : ALLTAR
-    +deliver
+    +deliver.pl
     +regcomp -register -r $(BIN)$/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
 
 .INCLUDE :	target.mk
+
+.ENDIF		# "$(GUIBASE)"!="aqua"
+.ENDIF		# "$(OS)"!="MACOSX"
 
