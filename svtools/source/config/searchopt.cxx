@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-19 16:12:03 $
+ *  last change: $Author: tl $ $Date: 2001-02-21 13:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-#define MAX_FLAGS_OFFSET    23
+#define MAX_FLAGS_OFFSET    24
 
 //////////////////////////////////////////////////////////////////////
 
@@ -179,31 +179,32 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
 {
     static const char* aPropNames[ MAX_FLAGS_OFFSET + 1 ] =
     {
-        "IsMatchCase",                          //  0
-        "Japanese/IsMatchFullHalfWidthForm",    //  1
-        "Japanese/IsMatchHiraganaKatakana",     //  2
-        "Japanese/IsMatchContractions",         //  3
-        "Japanese/IsMatchMinusDashCho-on",      //  4
-        "Japanese/IsMatchRepeatCharMarks",      //  5
-        "Japanese/IsMatchVariantFormKanji",     //  6
-        "Japanese/IsMatchOldKanaForms",         //  7
-        "Japanese/IsMatchCho-onUsedForVowels",  //  8
-        "Japanese/IsMatch_DiZi_DuZu",           //  9
-        "Japanese/IsMatch_BaVa_HaFa",           // 10
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 11
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 12
-        "Japanese/IsMatch_SeShe_ZeJe",          // 13
-        "Japanese/IsMatch_IaIya",               // 14
-        "Japanese/IsMatch_KiKu",                // 15
-        "Japanese/IsIgnorePunctuation",         // 16
-        "Japanese/IsIgnoreWhitespaces",         // 17
-        "IsWholeWordsOnly",                     // 18
-        "IsBackwards",                          // 19
-        "IsUseRegularExpression",               // 20
-        "IsSearchForStyles",                    // 21
-        "IsSimilaritySearch",                   // 22
-        "IsSoundsLikeEnabled"                   // 23
+        "IsWholeWordsOnly",                     //  0
+        "IsBackwards",                          //  1
+        "IsUseRegularExpression",               //  2
         //"IsCurrentSelectionOnly",             // interactively set or not...
+        "IsSearchForStyles",                    //  3
+        "IsSimilaritySearch",                   //  4
+        "IsUseAsianOptions",                    //  5
+        "IsMatchCase",                          //  6
+        "Japanese/IsMatchFullHalfWidthForms",   //  7
+        "Japanese/IsMatchHiraganaKatakana",     //  8
+        "Japanese/IsMatchContractions",         //  9
+        "Japanese/IsMatchMinusDashCho-on",      // 10
+        "Japanese/IsMatchRepeatCharMarks",      // 11
+        "Japanese/IsMatchVariantFormKanji",     // 12
+        "Japanese/IsMatchOldKanaForms",         // 13
+        "Japanese/IsMatch_DiZi_DuZu",           // 14
+        "Japanese/IsMatch_BaVa_HaFa",           // 15
+        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 16
+        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 17
+        "Japanese/IsMatch_SeShe_ZeJe",          // 18
+        "Japanese/IsMatch_IaIya",               // 19
+        "Japanese/IsMatch_KiKu",                // 20
+        "Japanese/IsIgnorePunctuation",         // 21
+        "Japanese/IsIgnoreWhitespace",          // 22
+        "Japanese/IsIgnoreProlongedSoundMark",  // 23
+        "Japanese/IsIgnoreMiddleDot"            // 24
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
@@ -309,336 +310,352 @@ SvtSearchOptions::~SvtSearchOptions()
 }
 
 
-INT32 SvtSearchOptions::GetTransliterationSettings() const
+INT32 SvtSearchOptions::GetTransliterationFlags() const
 {
     INT32 nRes = 0;
 
-    if (IsMatchCase())
+    if (!IsMatchCase())
         nRes |= TransliterationModules_IGNORE_CASE;
-    if (IsMatchFullHalfWidth())
+    if (!IsMatchFullHalfWidthForms())
         nRes |= TransliterationModules_IGNORE_WIDTH;
-    if (IsMatchHiraganaKatakana())
+    if (!IsMatchHiraganaKatakana())
         nRes |= TransliterationModules_IGNORE_KANA;
-    if (IsMatchContractions())
+    if (!IsMatchContractions())
         nRes |= TransliterationModules_ignoreSize_ja_JP;
-    if (IsMatchMinusDashChoon())
+    if (!IsMatchMinusDashChoon())
         nRes |= TransliterationModules_ignoreMinusSign_ja_JP;
-    if (IsMatchRepeatCharMarks())
+    if (!IsMatchRepeatCharMarks())
         nRes |= TransliterationModules_ignoreIterationMark_ja_JP;
-    if (IsMatchVariantFormKanji())
+    if (!IsMatchVariantFormKanji())
         nRes |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
-    if (IsMatchOldKanaForms())
+    if (!IsMatchOldKanaForms())
         nRes |= TransliterationModules_ignoreTraditionalKana_ja_JP;
-    if (IsMatchChoonUsedForVowels())
-        nRes |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
-    if (IsMatchDiziDuzu())
+    if (!IsMatchDiziDuzu())
         nRes |= TransliterationModules_ignoreZiZu_ja_JP;
-    if (IsMatchBavaHafa())
+    if (!IsMatchBavaHafa())
         nRes |= TransliterationModules_ignoreBaFa_ja_JP;
-    if (IsMatchTsithichiDhizi())
+    if (!IsMatchTsithichiDhizi())
         nRes |= TransliterationModules_ignoreTiJi_ja_JP;
-    if (IsMatchHyuiyuByuvyu())
+    if (!IsMatchHyuiyuByuvyu())
         nRes |= TransliterationModules_ignoreHyuByu_ja_JP;
-    if (IsMatchSesheZeje())
+    if (!IsMatchSesheZeje())
         nRes |= TransliterationModules_ignoreSeZe_ja_JP;
-    if (IsMatchIaiya())
+    if (!IsMatchIaiya())
         nRes |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
-    if (IsMatchKiku())
+    if (!IsMatchKiku())
         nRes |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
-    if (IsIgnorePunctuation())
+    if ( IsIgnorePunctuation())
         nRes |= TransliterationModules_ignoreSeparator_ja_JP;
-    if (IsIgnoreWhitespaces())
+    if ( IsIgnoreWhitespace())
         nRes |= TransliterationModules_ignoreSpace_ja_JP;
+    if ( IsIgnoreProlongedSoundMark())
+        nRes |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+    if ( IsIgnoreMiddleDot())
+        nRes |= TransliterationModules_ignoreMiddleDot_ja_JP;
 
     return nRes;
 }
 
 
-BOOL SvtSearchOptions::IsMatchCase() const
+BOOL SvtSearchOptions::IsWholeWordsOnly() const
 {
     return pImpl->GetFlag( 0 );
 }
 
 
-void SvtSearchOptions::SetMatchCase( BOOL bVal )
+void SvtSearchOptions::SetWholeWordsOnly( BOOL bVal )
 {
     pImpl->SetFlag( 0, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchFullHalfWidth() const
+BOOL SvtSearchOptions::IsBackwards() const
 {
     return pImpl->GetFlag( 1 );
 }
 
 
-void SvtSearchOptions::SetMatchFullHalfWidth( BOOL bVal )
+void SvtSearchOptions::SetBackwards( BOOL bVal )
 {
     pImpl->SetFlag( 1, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchHiraganaKatakana() const
+BOOL SvtSearchOptions::IsUseRegularExpression() const
 {
     return pImpl->GetFlag( 2 );
 }
 
 
-void SvtSearchOptions::SetMatchHiraganaKatakana( BOOL bVal )
+void SvtSearchOptions::SetUseRegularExpression( BOOL bVal )
 {
     pImpl->SetFlag( 2, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchContractions() const
+BOOL SvtSearchOptions::IsSearchForStyles() const
 {
     return pImpl->GetFlag( 3 );
 }
 
 
-void SvtSearchOptions::SetMatchContractions( BOOL bVal )
+void SvtSearchOptions::SetSearchForStyles( BOOL bVal )
 {
     pImpl->SetFlag( 3, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchMinusDashChoon() const
+BOOL SvtSearchOptions::IsSimilaritySearch() const
 {
     return pImpl->GetFlag( 4 );
 }
 
 
-void SvtSearchOptions::SetMatchMinusDashChoon( BOOL bVal )
+void SvtSearchOptions::SetSimilaritySearch( BOOL bVal )
 {
     pImpl->SetFlag( 4, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchRepeatCharMarks() const
+BOOL SvtSearchOptions::IsUseAsianOptions() const
 {
     return pImpl->GetFlag( 5 );
 }
 
 
-void SvtSearchOptions::SetMatchRepeatCharMarks( BOOL bVal )
+void SvtSearchOptions::SetUseAsianOptions( BOOL bVal )
 {
     pImpl->SetFlag( 5, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchVariantFormKanji() const
+BOOL SvtSearchOptions::IsMatchCase() const
 {
     return pImpl->GetFlag( 6 );
 }
 
 
-void SvtSearchOptions::SetMatchVariantFormKanji( BOOL bVal )
+void SvtSearchOptions::SetMatchCase( BOOL bVal )
 {
     pImpl->SetFlag( 6, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchOldKanaForms() const
+BOOL SvtSearchOptions::IsMatchFullHalfWidthForms() const
 {
     return pImpl->GetFlag( 7 );
 }
 
 
-void SvtSearchOptions::SetMatchOldKanaForms( BOOL bVal )
+void SvtSearchOptions::SetMatchFullHalfWidthForms( BOOL bVal )
 {
     pImpl->SetFlag( 7, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchChoonUsedForVowels() const
+BOOL SvtSearchOptions::IsMatchHiraganaKatakana() const
 {
     return pImpl->GetFlag( 8 );
 }
 
 
-void SvtSearchOptions::SetMatchChoonUsedForVowels( BOOL bVal )
+void SvtSearchOptions::SetMatchHiraganaKatakana( BOOL bVal )
 {
     pImpl->SetFlag( 8, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchDiziDuzu() const
+BOOL SvtSearchOptions::IsMatchContractions() const
 {
     return pImpl->GetFlag( 9 );
 }
 
 
-void SvtSearchOptions::SetMatchDiziDuzu( BOOL bVal )
+void SvtSearchOptions::SetMatchContractions( BOOL bVal )
 {
     pImpl->SetFlag( 9, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchBavaHafa() const
+BOOL SvtSearchOptions::IsMatchMinusDashChoon() const
 {
     return pImpl->GetFlag( 10 );
 }
 
 
-void SvtSearchOptions::SetMatchBavaHafa( BOOL bVal )
+void SvtSearchOptions::SetMatchMinusDashChoon( BOOL bVal )
 {
     pImpl->SetFlag( 10, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchTsithichiDhizi() const
+BOOL SvtSearchOptions::IsMatchRepeatCharMarks() const
 {
     return pImpl->GetFlag( 11 );
 }
 
 
-void SvtSearchOptions::SetMatchTsithichiDhizi( BOOL bVal )
+void SvtSearchOptions::SetMatchRepeatCharMarks( BOOL bVal )
 {
     pImpl->SetFlag( 11, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchHyuiyuByuvyu() const
+BOOL SvtSearchOptions::IsMatchVariantFormKanji() const
 {
     return pImpl->GetFlag( 12 );
 }
 
 
-void SvtSearchOptions::SetMatchHyuiyuByuvyu( BOOL bVal )
+void SvtSearchOptions::SetMatchVariantFormKanji( BOOL bVal )
 {
     pImpl->SetFlag( 12, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchSesheZeje() const
+BOOL SvtSearchOptions::IsMatchOldKanaForms() const
 {
     return pImpl->GetFlag( 13 );
 }
 
 
-void SvtSearchOptions::SetMatchSesheZeje( BOOL bVal )
+void SvtSearchOptions::SetMatchOldKanaForms( BOOL bVal )
 {
     pImpl->SetFlag( 13, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchIaiya() const
+BOOL SvtSearchOptions::IsMatchDiziDuzu() const
 {
     return pImpl->GetFlag( 14 );
 }
 
 
-void SvtSearchOptions::SetMatchIaiya( BOOL bVal )
+void SvtSearchOptions::SetMatchDiziDuzu( BOOL bVal )
 {
     pImpl->SetFlag( 14, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchKiku() const
+BOOL SvtSearchOptions::IsMatchBavaHafa() const
 {
     return pImpl->GetFlag( 15 );
 }
 
 
-void SvtSearchOptions::SetMatchKiku( BOOL bVal )
+void SvtSearchOptions::SetMatchBavaHafa( BOOL bVal )
 {
     pImpl->SetFlag( 15, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsIgnorePunctuation() const
+BOOL SvtSearchOptions::IsMatchTsithichiDhizi() const
 {
     return pImpl->GetFlag( 16 );
 }
 
 
-void SvtSearchOptions::SetIgnorePunctuation( BOOL bVal )
+void SvtSearchOptions::SetMatchTsithichiDhizi( BOOL bVal )
 {
     pImpl->SetFlag( 16, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsIgnoreWhitespaces() const
+BOOL SvtSearchOptions::IsMatchHyuiyuByuvyu() const
 {
     return pImpl->GetFlag( 17 );
 }
 
 
-void SvtSearchOptions::SetIgnoreWhitespaces( BOOL bVal )
+void SvtSearchOptions::SetMatchHyuiyuByuvyu( BOOL bVal )
 {
     pImpl->SetFlag( 17, bVal );
 }
 
-BOOL SvtSearchOptions::IsWholeWordsOnly() const
+
+BOOL SvtSearchOptions::IsMatchSesheZeje() const
 {
     return pImpl->GetFlag( 18 );
 }
 
 
-void SvtSearchOptions::SetWholeWordsOnly( BOOL bVal )
+void SvtSearchOptions::SetMatchSesheZeje( BOOL bVal )
 {
     pImpl->SetFlag( 18, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsBackwards() const
+BOOL SvtSearchOptions::IsMatchIaiya() const
 {
     return pImpl->GetFlag( 19 );
 }
 
 
-void SvtSearchOptions::SetBackwards( BOOL bVal )
+void SvtSearchOptions::SetMatchIaiya( BOOL bVal )
 {
     pImpl->SetFlag( 19, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsUseRegularExpression() const
+BOOL SvtSearchOptions::IsMatchKiku() const
 {
     return pImpl->GetFlag( 20 );
 }
 
 
-void SvtSearchOptions::SetUseRegularExpression( BOOL bVal )
+void SvtSearchOptions::SetMatchKiku( BOOL bVal )
 {
     pImpl->SetFlag( 20, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsSearchForStyles() const
+BOOL SvtSearchOptions::IsIgnorePunctuation() const
 {
     return pImpl->GetFlag( 21 );
 }
 
 
-void SvtSearchOptions::SetSearchForStyles( BOOL bVal )
+void SvtSearchOptions::SetIgnorePunctuation( BOOL bVal )
 {
     pImpl->SetFlag( 21, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsSimilaritySearch() const
+BOOL SvtSearchOptions::IsIgnoreWhitespace() const
 {
     return pImpl->GetFlag( 22 );
 }
 
 
-void SvtSearchOptions::SetSimilaritySearch( BOOL bVal )
+void SvtSearchOptions::SetIgnoreWhitespace( BOOL bVal )
 {
     pImpl->SetFlag( 22, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsSoundsLikeEnabled() const
+BOOL SvtSearchOptions::IsIgnoreProlongedSoundMark() const
 {
     return pImpl->GetFlag( 23 );
 }
 
 
-void SvtSearchOptions::SetSoundsLikeEnabled( BOOL bVal )
+void SvtSearchOptions::SetIgnoreProlongedSoundMark( BOOL bVal )
 {
     pImpl->SetFlag( 23, bVal );
 }
+
+
+BOOL SvtSearchOptions::IsIgnoreMiddleDot() const
+{
+    return pImpl->GetFlag( 24 );
+}
+
+
+void SvtSearchOptions::SetIgnoreMiddleDot( BOOL bVal )
+{
+    pImpl->SetFlag( 24, bVal );
+}
+
 
 
 //////////////////////////////////////////////////////////////////////

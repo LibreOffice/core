@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchopt.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 10:58:48 $
+ *  last change: $Author: tl $ $Date: 2001-02-21 13:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ public:
     SvtSearchOptions();
     ~SvtSearchOptions();
 
-    INT32   GetTransliterationSettings() const;
+    INT32   GetTransliterationFlags() const;
 
     //
     // General Options
@@ -90,7 +90,7 @@ public:
     BOOL    IsUseRegularExpression() const;
     BOOL    IsSearchForStyles() const;
     BOOL    IsSimilaritySearch() const;
-    BOOL    IsSoundsLikeEnabled() const;
+    BOOL    IsUseAsianOptions() const;
     BOOL    IsMatchCase() const;            // also Japanese search option
 
     void    SetWholeWordsOnly( BOOL bVal );
@@ -98,21 +98,20 @@ public:
     void    SetUseRegularExpression( BOOL bVal );
     void    SetSearchForStyles( BOOL bVal );
     void    SetSimilaritySearch( BOOL bVal );
-    void    SetSoundsLikeEnabled( BOOL bVal );
+    void    SetUseAsianOptions( BOOL bVal );
     void    SetMatchCase( BOOL bVal );      // also Japanese search option
 
     //
     // Japanese search options
     //
 
-    BOOL    IsMatchFullHalfWidth() const;
+    BOOL    IsMatchFullHalfWidthForms() const;
     BOOL    IsMatchHiraganaKatakana() const;
     BOOL    IsMatchContractions() const;
     BOOL    IsMatchMinusDashChoon() const;
     BOOL    IsMatchRepeatCharMarks() const;
     BOOL    IsMatchVariantFormKanji() const;
     BOOL    IsMatchOldKanaForms() const;
-    BOOL    IsMatchChoonUsedForVowels() const;
     BOOL    IsMatchDiziDuzu() const;
     BOOL    IsMatchBavaHafa() const;
     BOOL    IsMatchTsithichiDhizi() const;
@@ -121,16 +120,17 @@ public:
     BOOL    IsMatchIaiya() const;
     BOOL    IsMatchKiku() const;
     BOOL    IsIgnorePunctuation() const;
-    BOOL    IsIgnoreWhitespaces() const;
+    BOOL    IsIgnoreWhitespace() const;
+    BOOL    IsIgnoreProlongedSoundMark() const;
+    BOOL    IsIgnoreMiddleDot() const;
 
-    void    SetMatchFullHalfWidth( BOOL bVal );
+    void    SetMatchFullHalfWidthForms( BOOL bVal );
     void    SetMatchHiraganaKatakana( BOOL bVal );
     void    SetMatchContractions( BOOL bVal );
     void    SetMatchMinusDashChoon( BOOL bVal );
     void    SetMatchRepeatCharMarks( BOOL bVal );
     void    SetMatchVariantFormKanji( BOOL bVal );
     void    SetMatchOldKanaForms( BOOL bVal );
-    void    SetMatchChoonUsedForVowels( BOOL bVal );
     void    SetMatchDiziDuzu( BOOL bVal );
     void    SetMatchBavaHafa( BOOL bVal );
     void    SetMatchTsithichiDhizi( BOOL bVal );
@@ -139,7 +139,9 @@ public:
     void    SetMatchIaiya( BOOL bVal );
     void    SetMatchKiku( BOOL bVal );
     void    SetIgnorePunctuation( BOOL bVal );
-    void    SetIgnoreWhitespaces( BOOL bVal );
+    void    SetIgnoreWhitespace( BOOL bVal );
+    void    SetIgnoreProlongedSoundMark( BOOL bVal );
+    void    SetIgnoreMiddleDot( BOOL bVal );
 };
 
 
