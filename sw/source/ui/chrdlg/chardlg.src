@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 20:58:14 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ TabDialog DLG_CHAR
                 Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Layout azjatycki";
+                Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ ·¹ÀÌ¾Æ¿ô";
@@ -383,13 +383,13 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "~URL";
         Text[ russian ] = "U~RL";
         Text[ polish ] = "URL";
-        Text[ japanese ] = "URL(~U)";
+        Text[ japanese ] = "~URL";
         Text[ chinese_traditional ] = "~URL";
         Text[ arabic ] = "U~RL";
         Text[ dutch ] = "U~RL";
         Text[ chinese_simplified ] = "~URL";
         Text[ greek ] = "URL";
-        Text[ korean ] = "URL";
+        Text[ korean ] = "~URL";
         Text[ turkish ] = "U~RL";
     };
     Edit ED_URL
@@ -445,10 +445,10 @@ TabPage TP_CHAR_URL
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "H~inweis";
-        Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "ÅØ½ºÆ®";
-        Text[ chinese_simplified ] = "ÎÄ×Ö";
-        Text[ chinese_traditional ] = "¤å¦r";
+        Text[ japanese ] = "•¶Žš—ñ(~X)";
+        Text[ korean ] = "ÅØ½ºÆ®(~X)";
+        Text[ chinese_simplified ] = "ÎÄ×Ö(~X)";
+        Text[ chinese_traditional ] = "¤å¦r(~X)";
         Text[ turkish ] = "B~ilgi";
         Text[ arabic ] = "äÕ";
     };
