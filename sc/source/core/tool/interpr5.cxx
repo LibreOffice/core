@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:37:22 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,9 +712,10 @@ void ScInterpreter::ScMatValue()
                             pMat->GetDimensions(nCl, nRw);
                             if (nC < nCl && nR < nRw)
                             {
-                                BOOL bIsString;
-                                const MatValue* pMatVal = pMat->Get(nC, nR, bIsString);
-                                if (bIsString)
+                                ScMatValType nMatValType;
+                                const ScMatrixValue* pMatVal = pMat->Get( nC,
+                                        nR, nMatValType);
+                                if (nMatValType != SC_MATVAL_VALUE)
                                     PushString( pMatVal->GetString() );
                                 else
                                     PushDouble(pMatVal->fVal);
@@ -766,9 +767,10 @@ void ScInterpreter::ScMatValue()
                     pMat->GetDimensions(nCl, nRw);
                     if (nC < nCl && nR < nRw)
                     {
-                        BOOL bIsString;
-                        const MatValue* pMatVal = pMat->Get(nC, nR, bIsString);
-                        if (bIsString)
+                        ScMatValType nMatValType;
+                        const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
+                                nMatValType);
+                        if (nMatValType != SC_MATVAL_VALUE)
                             PushString( pMatVal->GetString() );
                         else
                             PushDouble(pMatVal->fVal);
@@ -3909,9 +3911,9 @@ void ScInterpreter::ScMatRef()
             SCSIZE nR = static_cast<SCSIZE>(aPos.Row() - aAdr.Row());
             if (nC < nCl && nR < nRw)
             {
-                BOOL bIsString;
-                const MatValue* pMatVal = pMat->Get(nC, nR, bIsString);
-                if (bIsString)
+                ScMatValType nMatValType;
+                const ScMatrixValue* pMatVal = pMat->Get( nC, nR, nMatValType);
+                if (nMatValType != SC_MATVAL_VALUE)
                 {
                     if ( pMat->IsEmptyPath( nC, nR))
                     {   // result of empty FALSE jump path
