@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-07-16 17:26:03 $
+ *  last change: $Author: nn $ $Date: 2001-08-27 18:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,13 +1326,6 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     bAutoDec = ( rInfo.nDecimals < 0 );
     bAutoInt = ( rInfo.nInteger < 0 );
 
-    if ( bAutoDec )
-    {   // This denotes the GENERAL keyword in proper case which may appear
-        // anywhere in any format code.
-        aFormatCode.append( pFormatter->GetStandardName( nFormatLang ) );
-        return ;
-    }
-
     sal_uInt16 nPrec = 0;
     sal_uInt16 nLeading = 0;
     if ( rInfo.nDecimals >= 0 )                     //  < 0 : Default
@@ -1340,6 +1333,25 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     if ( rInfo.nInteger >= 0 )                      //  < 0 : Default
         nLeading = (sal_uInt16) rInfo.nInteger;
 
+    if ( bAutoDec )
+    {
+        if ( nType == XML_TOK_STYLES_CURRENCY_STYLE )
+        {
+            //  for currency formats, "automatic decimals" is used for the automatic
+            //  currency format with (fixed) decimals from the locale settings
+
+            const LocaleDataWrapper& rLoc = pData->GetLocaleData( nFormatLang );
+            nPrec = rLoc.getCurrDigits();
+        }
+        else
+        {
+            //  for other types, "automatic decimals" means dynamic determination of
+            //  decimals, as achieved with the "general" keyword
+
+            aFormatCode.append( pFormatter->GetStandardName( nFormatLang ) );
+            return;
+        }
+    }
     if ( bAutoInt )
     {
         //!...
@@ -1371,8 +1383,19 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
     if ( aSymbol.getLength() == 0 )
     {
         //  get currency symbol for language
-        aSymbol = pData->GetLocaleData( nFormatLang ).getCurrSymbol();
-        bAutomatic = sal_True;
+
+        //aSymbol = pData->GetLocaleData( nFormatLang ).getCurrSymbol();
+
+        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        if ( pFormatter )
+        {
+            pFormatter->ChangeIntl( nFormatLang );
+            String sCurString, sDummy;
+            pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
+            aSymbol = sCurString;
+
+            bAutomatic = sal_True;
+        }
     }
     else if ( nLang == LANGUAGE_SYSTEM && aSymbol.compareToAscii("CCC") == 0 )
     {
