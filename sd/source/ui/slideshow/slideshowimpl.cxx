@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:20:26 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,8 @@ SlideshowImpl::SlideshowImpl(
     msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
     msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
-    mnLastPageNumber(-1)
+    mnLastPageNumber(-1),
+    mbIsPaused(false)
 {
     if( mpViewShell )
         mpOldActiveWindow = mpViewShell->GetActiveWindow();
@@ -648,13 +649,15 @@ void SlideshowImpl::startShowImpl( const Sequence< Reference< XDrawPage > >& aSl
 
         if( mxShow.is() )
         {
-            mxView = mxView.createFromQuery( new SlideShowView( *mpShowWindow, mpDoc, meAnimationMode ) );
+            mxView = mxView.createFromQuery( new SlideShowView( *mpShowWindow, mpDoc, meAnimationMode, this ) );
 
             mxShow->addView( mxView.getRef() );
             mxShow->addSlideShowListener( Reference< XSlideShowListener >( this ) );
             const sal_Int32 nStartIndex = mpAnimationPageList->getStartPageIndex();
             mxShow->show( aSlides, aRootNodes, ( nStartIndex > 0) ? nStartIndex : 0, aProperties );
-            update();
+
+//          update is now started in onFirstPaint()
+//          update();
         }
     }
     catch( Exception& e )
@@ -801,6 +804,14 @@ void SlideshowImpl::stopShow()
 
         mpViewShell->GetViewShellBase().UpdateBorder();
     }
+}
+
+/** called only by the slideshow view when the first paint event occurs.
+    This actually starts the slideshow. */
+void SlideshowImpl::onFirstPaint()
+{
+    maUpdateTimer.SetTimeout( (ULONG)100 );
+    maUpdateTimer.Start();
 }
 
 void SlideshowImpl::paint( const Rectangle& rRect )
@@ -1062,13 +1073,20 @@ void SlideshowImpl::gotoSlideIndex( sal_Int32 nPageIndex )
 
 bool SlideshowImpl::pause( bool bPause )
 {
-    if( mxShow.is() )
+    if( bPause != mbIsPaused )
     {
-        bool bRet = mxShow->pause(bPause);
-        if( !bPause )
-            update();
+        if( mxShow.is() )
+        {
+            bool bRet = mxShow->pause(bPause);
+            if( !bPause )
+                update();
 
-        return bRet;
+            return bRet;
+        }
+        else
+        {
+            return false;
+        }
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:21:00 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,7 @@ typedef ::std::auto_ptr< SlideShowViewMouseMotionListeners >    SlideShowViewMou
 ///////////////////////////////////////////////////////////////////////
 
 class ShowWindow;
+class SlideshowImpl;
 
 typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::presentation::XSlideShowView,
                                             ::com::sun::star::awt::XWindowListener,
@@ -358,7 +359,7 @@ class SlideShowView : public ::comphelper::OBaseMutex,
                     public SlideShowView_Base
 {
 public:
-    SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, AnimationMode eAnimationMode );
+    SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, AnimationMode eAnimationMode, SlideshowImpl* pSlideShow );
 
     /// Dispose all internal references
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -408,6 +409,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              mxWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >          mxWindowPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer >             mxPointer;
+    SlideshowImpl*                          mpSlideShow;
     ShowWindow&                             mrOutputWindow;
     SlideShowViewListenersPtr               mpViewListeners;
     SlideShowViewPaintListenersPtr          mpPaintListeners;
@@ -417,6 +419,7 @@ private:
     bool                                    mbIsMouseMotionListener;
     Rectangle                               maPresentationArea;
     AnimationMode                           meAnimationMode;
+    bool                                    mbFirstPaint;
 };
 
 

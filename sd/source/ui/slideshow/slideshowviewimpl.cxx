@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:20:49 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _SD_SLIDESHOWVIEWIMPL_HXX_
 #include <slideshowviewimpl.hxx>
+#endif
+#ifndef _SD_SLIDESHOWIMPL_HXX_
+#include <slideshowimpl.hxx>
 #endif
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -184,11 +187,12 @@ bool SlideShowViewMouseMotionListeners::implNotify( const Reference< awt::XMouse
 // SlideShowView
 ///////////////////////////////////////////////////////////////////////
 
-SlideShowView::SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, AnimationMode eAnimationMode )
+SlideShowView::SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, AnimationMode eAnimationMode, SlideshowImpl* pSlideShow  )
 :   SlideShowView_Base( m_aMutex ),
     mpCanvas( ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas( rOutputWindow ) ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_QUERY_THROW ),
     mxWindowPeer( mxWindow, uno::UNO_QUERY_THROW ),
+    mpSlideShow( pSlideShow ),
     mpDoc( pDoc ),
     mxPointer(),
     mrOutputWindow( rOutputWindow ),
@@ -197,7 +201,8 @@ SlideShowView::SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, A
     mpMouseListeners( new SlideShowViewMouseListeners( m_aMutex ) ),
     mpMouseMotionListeners( new SlideShowViewMouseMotionListeners( m_aMutex ) ),
     mbIsMouseMotionListener( false ),
-    meAnimationMode( eAnimationMode )
+    meAnimationMode( eAnimationMode ),
+    mbFirstPaint( true )
 {
     init();
 }
@@ -243,12 +248,20 @@ void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeExc
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // Change event source, to enable listeners to match event
-    // with view
-    awt::PaintEvent aEvent( e );
-    aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
+    if( mbFirstPaint )
+    {
+        mbFirstPaint = false;
+        mpSlideShow->onFirstPaint();
+    }
+    else
+    {
+        // Change event source, to enable listeners to match event
+        // with view
+        awt::PaintEvent aEvent( e );
+        aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    mpPaintListeners->notify( aEvent );
+        mpPaintListeners->notify( aEvent );
+    }
 }
 
 // XSlideShowView methods

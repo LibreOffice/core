@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:20:38 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,10 @@ public:
 
     void receiveRequest(SfxRequest& rReq);
 
+    /** called only by the slideshow view when the first paint event occurs.
+        This actually starts the slideshow. */
+    void onFirstPaint();
+
 private:
     void startShowImpl(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > >& aSlides,
@@ -380,6 +384,7 @@ private:
     bool            mbAutoSaveSuppressed : 1;
     bool            mbRehearseTimings : 1;
     bool            mbDesignMode : 1;
+    bool            mbIsPaused : 1;
     PresentationSettings maPresSettings;
 
     sal_Int32       mnLastPageNumber;
