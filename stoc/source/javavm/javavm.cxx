@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-21 15:57:33 $
+ *  last change: $Author: jl $ $Date: 2001-06-11 15:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef UNX
+#include <signal.h>
+#endif
 
 #include <time.h>
 
@@ -603,6 +607,22 @@ namespace stoc_javavm {
         if( err != 0)
         {
             // Try VM 1.2
+
+            // The office sets a signal handler at startup. That causes a crash
+            // with java 1.3 under Solaris. To make it work, we set back the
+            // handler
+#ifdef UNX
+            struct sigaction act;
+            act.sa_handler=SIG_DFL;
+            act.sa_flags= 0;
+            sigaction( SIGSEGV, &act, NULL);
+            sigaction( SIGPIPE, &act, NULL);
+            sigaction( SIGBUS, &act, NULL);
+            sigaction( SIGILL, &act, NULL);
+            sigaction( SIGFPE, &act, NULL);
+
+#endif
+
             JavaVMInitArgs vm_args2;
             JavaVMOption options[1];
 
