@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-13 12:55:21 $
+ *  last change: $Author: aw $ $Date: 2001-04-24 11:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3025,34 +3025,53 @@ void SdrPathObj::ConvertAllSegments(SdrPathType ePathType)
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
 BOOL SdrPathObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) const
 {
-    // get turn and shear
-    double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
-    double fShear = (aGeo.nShearWink / 100.0) * F_PI180;
+    double fRotate;
+    double fShear;
+    Rectangle aRectangle;
 
-    // get path, remove rotate and shear
-    rPolyPolygon = GetPathPoly();
-
-    if(aGeo.nDrehWink)
-        RotateXPoly(rPolyPolygon, Point(), -aGeo.nSin, aGeo.nCos);
-
-    Rectangle aRectangle(rPolyPolygon.GetBoundRect());
-    Point aTmp(aRectangle.TopLeft());
-
-    if(aGeo.nShearWink)
+    if(eKind==OBJ_LINE)
     {
-        ShearXPoly(rPolyPolygon, aTmp, -aGeo.nTan, FALSE);
+        // #85920# special handling for single line mode (2 points)
+        XPolygon aLine(2);
+        aLine[0] = GetPoint(0);
+        aLine[1] = GetPoint(1);
+        rPolyPolygon.Clear();
+        rPolyPolygon.Insert(aLine);
         aRectangle = rPolyPolygon.GetBoundRect();
-        aTmp = aRectangle.TopLeft();
+
+        // fill in values
+        fRotate = fShear = 0.0;
     }
+    else
+    {
+        // get turn and shear
+        fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
+        fShear = (aGeo.nShearWink / 100.0) * F_PI180;
 
-    RotatePoint(aTmp, Point(), aGeo.nSin, aGeo.nCos);
-    aTmp -= aRectangle.TopLeft();
+        // get path, remove rotate and shear
+        rPolyPolygon = GetPathPoly();
+        if(aGeo.nDrehWink)
+            RotateXPoly(rPolyPolygon, Point(), -aGeo.nSin, aGeo.nCos);
 
-    // polygon to base position
-    rPolyPolygon.Move(aTmp.X(), aTmp.Y());
+        aRectangle = rPolyPolygon.GetBoundRect();
+        Point aTmp(aRectangle.TopLeft());
 
-    // get bound rect for values
-    aRectangle = rPolyPolygon.GetBoundRect();
+        if(aGeo.nShearWink)
+        {
+            ShearXPoly(rPolyPolygon, aTmp, -aGeo.nTan, FALSE);
+            aRectangle = rPolyPolygon.GetBoundRect();
+            aTmp = aRectangle.TopLeft();
+        }
+
+        RotatePoint(aTmp, Point(), aGeo.nSin, aGeo.nCos);
+        aTmp -= aRectangle.TopLeft();
+
+        // polygon to base position
+        rPolyPolygon.Move(aTmp.X(), aTmp.Y());
+
+        // get bound rect for values
+        aRectangle = rPolyPolygon.GetBoundRect();
+    }
 
     // fill in values
     Vector2D aScale((double)aRectangle.GetWidth(), (double)aRectangle.GetHeight());
@@ -3174,33 +3193,77 @@ void SdrPathObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
     if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
         aTranslate -= Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
 
-    // set PathPoly
+    // set PathPoly and get type
     SetPathPoly(aNewPolyPolygon);
 
-    // shear?
-    if(fShear != 0.0)
+    if(eKind==OBJ_LINE)
     {
-        GeoStat aGeoStat;
-        aGeoStat.nShearWink = FRound((atan(fShear) / F_PI180) * 100.0);
-        aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
-    }
+        // #85920# special handling for single line mode (2 points)
+        Point aPoint1 = aNewPolyPolygon[0][0];
+        Point aPoint2 = aNewPolyPolygon[0][1];
 
-    // rotation?
-    if(fRotate != 0.0)
-    {
-        GeoStat aGeoStat;
-        aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
-        aGeoStat.RecalcSinCos();
-        Rotate(Point(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
-    }
+        // shear?
+        if(fShear != 0.0)
+        {
+            GeoStat aGeoStat;
+            aGeoStat.nShearWink = FRound((atan(fShear) / F_PI180) * 100.0);
+            aGeoStat.RecalcTan();
+            ShearPoint(aPoint1, Point(), aGeoStat.nTan, FALSE);
+            ShearPoint(aPoint2, Point(), aGeoStat.nTan, FALSE);
+        }
 
-    // translate?
-    if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+        // rotation?
+        if(fRotate != 0.0)
+        {
+            GeoStat aGeoStat;
+            aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
+            aGeoStat.RecalcSinCos();
+            RotatePoint(aPoint1, Point(), aGeoStat.nSin, aGeoStat.nCos);
+            RotatePoint(aPoint2, Point(), aGeoStat.nSin, aGeoStat.nCos);
+        }
+
+        // translate?
+        if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+        {
+            Point aOffset((sal_Int32)FRound(aTranslate.X()), (sal_Int32)FRound(aTranslate.Y()));
+            aPoint1 += aOffset;
+            aPoint2 += aOffset;
+        }
+
+        // put points back to poly
+        aNewPolyPolygon[0][0] = aPoint1;
+        aNewPolyPolygon[0][1] = aPoint2;
+
+        // set PathPoly again; this sets all of JOEs old needed stati and values
+        SetPathPoly(aNewPolyPolygon);
+    }
+    else
     {
-        Move(Size(
-            (sal_Int32)FRound(aTranslate.X()),
-            (sal_Int32)FRound(aTranslate.Y())));
+        // shear?
+        if(fShear != 0.0)
+        {
+            GeoStat aGeoStat;
+            aGeoStat.nShearWink = FRound((atan(fShear) / F_PI180) * 100.0);
+            aGeoStat.RecalcTan();
+            Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
+        }
+
+        // rotation?
+        if(fRotate != 0.0)
+        {
+            GeoStat aGeoStat;
+            aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
+            aGeoStat.RecalcSinCos();
+            Rotate(Point(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+        }
+
+        // translate?
+        if(aTranslate.X() != 0.0 || aTranslate.Y() != 0.0)
+        {
+            Move(Size(
+                (sal_Int32)FRound(aTranslate.X()),
+                (sal_Int32)FRound(aTranslate.Y())));
+        }
     }
 }
 
