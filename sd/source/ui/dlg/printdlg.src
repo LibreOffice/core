@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:00:48 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ czech ] = "Volby tisku";
         Text[ hebrew ] = "Druckoptionen";
         Text[ hindi ] = "Print options";
+        Text[ slovak ] = "Nastavenia tlače";
     };
     RadioButton RBT_SCALE
     {
@@ -151,6 +152,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ czech ] = "Přizpůsobit stránku rozsahu tisku";
         Text[ hebrew ] = "~Seite an Druckbereich anpassen";
         Text[ hindi ] = "छपा~ई फैलाव केलिए योग्य पृष्ठ";
+        Text[ slovak ] = "Roztiahnuť stránku na celý rozsah t~lače";
     };
     RadioButton RBT_POSTER
     {
@@ -184,6 +186,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ czech ] = "Posterizovat";
         Text[ hebrew ] = "Auf ~mehrere Seiten drucken";
         Text[ hindi ] = "~पोस्टरैज";
+        Text[ slovak ] = "~Posterizovať";
     };
     RadioButton RBT_CUT
     {
@@ -217,6 +220,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ czech ] = "Oříznout";
         Text[ hebrew ] = "~Abschneiden";
         Text[ hindi ] = "~सुगठित";
+        Text[ slovak ] = "O~rezať";
     };
     FixedText FI_INFO
     {
@@ -251,6 +255,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ czech ] = "Nastavení stránky neodpovídá rozsahu tisku.\nVyberte jednu z následujících možností";
         Text[ hebrew ] = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen";
         Text[ hindi ] = "पृष्ठ निर्धारण छपाई फैलाव से भिन्न है ।\nनिम्नलिखित विकल्पों में एक चुनो";
+        Text[ slovak ] = "Nastavenie tlače nezodpovedá rozsahu tlače.\nVyberte jednu z nasledujúcich možností";
     };
     Text [ english_us ] = "Warning Print Options" ;
     Text [ portuguese ] = "Advert�ncia sobre op��es de impress�o" ;
@@ -277,7 +282,10 @@ ModalDialog DLG_PRINT_WARNINGS
     Text[ czech ] = "Varování - nastavení tisku";
     Text[ hebrew ] = "Warnung Druckoptionen";
     Text[ hindi ] = "चेतावनी छापना विकल्प";
+    Text[ slovak ] = "Varovanie - nastavenie tlače";
 };
+
+
 
 
 
