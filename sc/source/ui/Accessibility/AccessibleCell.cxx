@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-13 12:26:31 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ ScAccessibleCell::ScAccessibleCell(
         ScAccessibleDocument* pAccDoc)
     :
     ScAccessibleCellBase(rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
-    accessibility::AccessibleStaticTextBase(this, CreateEditSource(pViewShell, rCellAddress, eSplitPos)),
+    accessibility::AccessibleStaticTextBase(CreateEditSource(pViewShell, rCellAddress, eSplitPos)),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
     mpAccDoc(pAccDoc)
@@ -159,6 +159,21 @@ ScAccessibleCell::~ScAccessibleCell()
         // call dispose to inform object wich have a weak reference to this object
         dispose();
     }
+}
+
+void ScAccessibleCell::Init()
+{
+    ScAccessibleCellBase::Init();
+
+    SetEventSource(this);
+}
+
+void SAL_CALL ScAccessibleCell::disposing()
+{
+    // #100593# dispose in AccessibleStaticTextBase
+    Dispose();
+
+    ScAccessibleCellBase::disposing();
 }
 
     //=====  XInterface  =====================================================

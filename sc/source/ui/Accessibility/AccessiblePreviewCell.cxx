@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,8 @@ void ScAccessiblePreviewCell::CreateTextHelper()
             (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
 
-        mpTextHelper = new accessibility::AccessibleTextHelper(this, pEditSource );
+        mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+        mpTextHelper->SetEventSource(this);
     }
 }
 

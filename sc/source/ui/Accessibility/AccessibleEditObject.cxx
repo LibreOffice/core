@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-13 12:27:13 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,8 +350,8 @@ void ScAccessibleEditObject::CreateTextHelper()
                 (new ScAccessibleEditObjectTextData(mpEditView, mpWindow));
             ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
 
-            mpTextHelper = new accessibility::AccessibleTextHelper(this, pEditSource );
-
+            mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+            mpTextHelper->SetEventSource(this);
             mpTextHelper->SetFocus(sal_True);
         }
         else
@@ -360,7 +360,8 @@ void ScAccessibleEditObject::CreateTextHelper()
                 (new ScAccessibleEditLineTextData(NULL, mpWindow));
             ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
 
-            mpTextHelper = new accessibility::AccessibleTextHelper(this, pEditSource );
+            mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+            mpTextHelper->SetEventSource(this);
         }
     }
 }

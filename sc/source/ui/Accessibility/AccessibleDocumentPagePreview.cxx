@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,11 +226,12 @@ accessibility::AccessibleTextHelper* ScNotesChilds::CreateTextHelper(const Strin
         (new ScAccessibleNoteTextData(mpViewShell, rString, aCellPos, bMarkNote));
     ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
 
-    pTextHelper = new accessibility::AccessibleTextHelper(mpAccDoc, pEditSource );
+    pTextHelper = new accessibility::AccessibleTextHelper(pEditSource);
 
     if (pTextHelper)
     {
-        pTextHelper->SetChildrenOffset(nChildOffset);
+        pTextHelper->SetEventSource(mpAccDoc);
+        pTextHelper->SetStartIndex(nChildOffset);
         pTextHelper->SetOffset(rVisRect.TopLeft());
     }
 
@@ -562,7 +563,7 @@ struct ScChangeOffset
     void operator() (const ScAccNote& rNote)
     {
         if (rNote.mpTextHelper)
-            rNote.mpTextHelper->SetChildrenOffset(rNote.mpTextHelper->GetChildrenOffset() + mnDiff);
+            rNote.mpTextHelper->SetStartIndex(rNote.mpTextHelper->GetStartIndex() + mnDiff);
     }
 };
 
@@ -1391,6 +1392,8 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
         mpViewShell = NULL;
     }
 
+    // #100593# no need to Dispose the AccessibleTextHelper,
+    // as long as mpNotesChilds are destructed here
     if (mpNotesChilds)
         DELETEZ(mpNotesChilds);
 
