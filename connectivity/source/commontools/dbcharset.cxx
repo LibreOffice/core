@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 22:21:42 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 09:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,48 +94,42 @@ namespace dbtools
         :m_nLivingIterators(0)
     #endif
     {
-        m_aEncodings.resize(11);
+        m_aEncodings.resize(9);
         m_aEncodings[0] = RTL_TEXTENCODING_MS_1252;     // ANSI
         m_aEncodings[1] = RTL_TEXTENCODING_APPLE_ROMAN; // MAC
-        m_aEncodings[2] = RTL_TEXTENCODING_IBM_850;     // DOS
-        m_aEncodings[3] = RTL_TEXTENCODING_IBM_850;     // IBMPC
-        m_aEncodings[4] = RTL_TEXTENCODING_IBM_437;     // IBMPC_437
-        m_aEncodings[5] = RTL_TEXTENCODING_IBM_850;     // IBMPC_850
-        m_aEncodings[6] = RTL_TEXTENCODING_IBM_860;     // IBMPC_860
-        m_aEncodings[7] = RTL_TEXTENCODING_IBM_861;     // IBMPC_861
-        m_aEncodings[8] = RTL_TEXTENCODING_IBM_863;     // IBMPC_863
-        m_aEncodings[9] = RTL_TEXTENCODING_IBM_865;     // IBMPC_865
-        m_aEncodings[10] = RTL_TEXTENCODING_DONTKNOW;   // SYSTEM
+        m_aEncodings[2] = RTL_TEXTENCODING_IBM_437;     // IBMPC_437
+        m_aEncodings[3] = RTL_TEXTENCODING_IBM_850;     // IBMPC_850
+        m_aEncodings[4] = RTL_TEXTENCODING_IBM_860;     // IBMPC_860
+        m_aEncodings[5] = RTL_TEXTENCODING_IBM_861;     // IBMPC_861
+        m_aEncodings[6] = RTL_TEXTENCODING_IBM_863;     // IBMPC_863
+        m_aEncodings[7] = RTL_TEXTENCODING_IBM_865;     // IBMPC_865
+        m_aEncodings[8] = RTL_TEXTENCODING_DONTKNOW;    // SYSTEM
 
-        m_aNames.resize(11);
+        m_aNames.resize(9);
         m_aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ANSI"));
         m_aNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAC"));
-        m_aNames[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOS"));
-        m_aNames[3] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC"));
-        m_aNames[4] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_437"));
-        m_aNames[5] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_850"));
-        m_aNames[6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_860"));
-        m_aNames[7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_861"));
-        m_aNames[8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_863"));
-        m_aNames[9] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_865"));
-        m_aNames[10] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSTEM"));
+        m_aNames[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_437"));
+        m_aNames[3] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_850"));
+        m_aNames[4] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_860"));
+        m_aNames[5] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_861"));
+        m_aNames[6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_863"));
+        m_aNames[7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_865"));
+        m_aNames[8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSTEM"));
 
         OSL_ENSURE(m_aEncodings.size() == m_aNames.size(),
             "OCharsetMap::OCharsetMap: inconsistentce(1)!");
 
         // the IANA representations of the character sets which we know
-        m_aIanaNames.resize(11);
+        m_aIanaNames.resize(9);
         m_aIanaNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("windows-1252"));
         m_aIanaNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macintosh"));
-        m_aIanaNames[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM850"));
+        m_aIanaNames[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM437"));
         m_aIanaNames[3] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM850"));
-        m_aIanaNames[4] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM437"));
-        m_aIanaNames[5] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM850"));
-        m_aIanaNames[6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM860"));
-        m_aIanaNames[7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM861"));
-        m_aIanaNames[8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM863"));
-        m_aIanaNames[9] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM865"));
-        m_aIanaNames[10] = ::rtl::OUString();
+        m_aIanaNames[4] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM860"));
+        m_aIanaNames[5] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM861"));
+        m_aIanaNames[6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM863"));
+        m_aIanaNames[7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM865"));
+        m_aIanaNames[8] = ::rtl::OUString();
 
         OSL_ENSURE(m_aNames.size() == m_aIanaNames.size(),
             "OCharsetMap::OCharsetMap: inconsistentce(2)!");
@@ -283,6 +277,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/11/29 22:21:42  fs
+ *  initial checkin - helper class for translating charset representations
+ *
  *
  *  Revision 1.0 29.11.00 18:42:55  fs
  ************************************************************************/
