@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:31:32 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 17:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@
 #include <cppuhelper/implbase3.hxx>
 #endif
 
+#include <bridges/java/jvmcontext.hxx>
+
 #include <cppuhelper/servicefactory.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -104,10 +106,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include <jni.h>
-
-//#include <com_sun_star_comp_helper_RegistryServiceFactory.h>
-//#include <com_sun_star_comp_helper_SharedLibraryLoader.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::loader;
@@ -156,7 +154,8 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_sun_star_comp_helper_SharedLibrar
             JavaVM * pJVM;
             pJEnv->GetJavaVM( &pJVM );
 
-            uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pJVM);
+            JavaVMContext * pVMContext = new JavaVMContext(pJVM);
+            uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pVMContext);
 
             OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
             if (pSym = osl_getSymbol( lib, aWriteInfoName.pData ))
@@ -248,7 +247,8 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_SharedLibrary
 
             pJEnv->GetJavaVM( &pJVM );
 
-            uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pJVM);
+            JavaVMContext * pVMContext = new JavaVMContext(pJVM);
+            uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pVMContext);
 
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
 
@@ -339,94 +339,97 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_SharedLibrary
 extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory
     (JNIEnv * pJEnv, jclass jClass, jstring jWriteRegFile, jstring jReadRegFile, jboolean jbReadOnly )
 {
-    jobject jRegServiceFac;
     uno_Environment * pJavaEnv = 0;
-    uno_Environment * pUnoEnv = 0;
-     JavaVM * pJVM;
+    uno_Environment * pCurrEnv = 0;
 
-    try
-    {
-        pJEnv->GetJavaVM( &pJVM );
+    JavaVMContext * pVMContext = NULL;
+    JavaVM * pJVM;
+    pJEnv->GetJavaVM(&pJVM);
+    jobject joGlobalRegServiceFac = 0;
+    jobject joRegServiceFac = 0;
 
-        //fprintf(stderr, "creating java environment\n");
-        uno_getEnvironment( &pJavaEnv, OUString::createFromAscii("java").pData, pJVM );
-        //fprintf(stderr, "done\n");
+    try {
+        OUString aWriteRegFile;
+        OUString aReadRegFile;
+
+        sal_Bool bReadOnly = jbReadOnly == JNI_FALSE ? sal_False : sal_True;
+
+        if (jReadRegFile) {
+            const jchar* pjReadRegFile = pJEnv->GetStringChars(jReadRegFile, NULL);
+            aReadRegFile = OUString(pjReadRegFile);
+            pJEnv->ReleaseStringChars(jReadRegFile, pjReadRegFile);
+        }
+
+        if (jWriteRegFile) {
+            const jchar * pjWriteRegFile = pJEnv->GetStringChars(jWriteRegFile, NULL);
+            aWriteRegFile = OUString(pjWriteRegFile);
+            pJEnv->ReleaseStringChars(jWriteRegFile, pjWriteRegFile);
+        }
+
+        Reference<XMultiServiceFactory> rMSFac;
+        if (aReadRegFile.getLength() == 0)
+            rMSFac = createRegistryServiceFactory( aWriteRegFile, bReadOnly);
+
+        else
+            rMSFac = createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);
+
+        JavaVMContext * pVMContext = new JavaVMContext(pJVM);
+        pVMContext->registerThread();
+
+        uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pVMContext);
+        if(!pJavaEnv) throw RuntimeException();
 
         OUString aCurrentEnv(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
+        uno_getEnvironment(&pCurrEnv, aCurrentEnv.pData, NULL);
+        if(!pCurrEnv) throw RuntimeException();
 
-        //fprintf(stderr, "getting uno env\n");
-        uno_getEnvironment(&pUnoEnv, aCurrentEnv.pData, NULL);
-        //fprintf(stderr, "done\n");
+        Mapping curr_java(pCurrEnv, pJavaEnv);
+        if (!curr_java.is()) throw RuntimeException();
 
-        if (pJavaEnv && pUnoEnv)
-        {
-            OUString aWriteRegFile;
-            OUString aReadRegFile;
+        pJavaEnv->release(pJavaEnv);
+        pJavaEnv = NULL;
 
-            sal_Bool bReadOnly = jbReadOnly == JNI_FALSE? sal_False : sal_True;
+        pCurrEnv->release(pCurrEnv);
+        pCurrEnv = NULL;
 
-            if (jWriteRegFile)
-            {
-                const jchar* pjWriteRegFile = pJEnv->GetStringChars( jWriteRegFile, NULL );
-                aWriteRegFile = OUString( pjWriteRegFile );
-                pJEnv->ReleaseStringChars( jWriteRegFile, pjWriteRegFile );
-            }
 
-            if (jReadRegFile)
-            {
-                const jchar* pjReadRegFile = pJEnv->GetStringChars( jReadRegFile, NULL );
-                aReadRegFile = OUString( pjReadRegFile );
-                pJEnv->ReleaseStringChars( jReadRegFile, pjReadRegFile );
-            }
-            //fprintf(stderr, "getting the native RegistryServiceFactory\n");
-            Reference<XMultiServiceFactory> rMSFac;
+        joGlobalRegServiceFac = (jobject)curr_java.mapInterface(rMSFac.get(), getCppuType((Reference<XMultiServiceFactory > *)0));
+        if(!joGlobalRegServiceFac) throw RuntimeException();
 
-            if (aReadRegFile.getLength() == 0)
-            {
-                rMSFac = createRegistryServiceFactory( aWriteRegFile, bReadOnly);
-            }
-            else
-            {
-                rMSFac = createRegistryServiceFactory( aWriteRegFile, aReadRegFile, bReadOnly );
-            }
+        // we need a local reference have to delete the global reference to the mapped object
+        jclass jcObject = pJEnv->FindClass("java/lang/Object");
+        if(pJEnv->ExceptionOccurred()) throw RuntimeException();
 
-        //fprintf(stderr, "done\n");
-            //Reference<XMultiServiceFactory> rMSFac = createRegistryServiceFactory( OUString::createFromAscii("m:\\applicat.rdb"), OUString() );
-            Mapping dest2java( pUnoEnv, pJavaEnv );
+        jobjectArray jaTmp = pJEnv->NewObjectArray(1, jcObject, joGlobalRegServiceFac);
+        if(pJEnv->ExceptionOccurred()) throw RuntimeException();
 
-            if ( dest2java.is() )
-            {
+        // delete the global reference
+          pJEnv->DeleteGlobalRef(joGlobalRegServiceFac);
+          joGlobalRegServiceFac = 0;
 
-                typelib_InterfaceTypeDescription * pXMultiServiceFactory_Type = 0;
-                getCppuType((Reference< XMultiServiceFactory > *) 0).getDescription((typelib_TypeDescription **) & pXMultiServiceFactory_Type);
-                jRegServiceFac = (jobject) dest2java.mapInterface( rMSFac.get(), getCppuType((Reference< XMultiServiceFactory > *) 0));
+        // get the local reference
+        joRegServiceFac = pJEnv->GetObjectArrayElement(jaTmp, 0);
+        if(pJEnv->ExceptionOccurred()) throw RuntimeException();
 
-                if (pUnoEnv->pExtEnv)
-                (*pUnoEnv->pExtEnv->releaseInterface)( pUnoEnv->pExtEnv, rMSFac.get() );
-            }
-        }
-        if (pJavaEnv)
-            (*pJavaEnv->release)( pJavaEnv );
-        if (pUnoEnv)
-            (*pUnoEnv->release)( pUnoEnv );
+
+        pVMContext->revokeThread();
+        pVMContext = NULL;
     }
-    catch (::com::sun::star::uno::Exception ex)
-    {
+    catch (RuntimeException & runtimeException) {
+        if(joGlobalRegServiceFac)
+            pJEnv->DeleteGlobalRef(joGlobalRegServiceFac);
 
-        //jclass exClass = pJEnv->FindClass("com/sun/star/uno/Exception");
+        if(pVMContext)
+            pVMContext->revokeThread();
+
         if (pJavaEnv)
-            (*pJavaEnv->release)( pJavaEnv );
-        if (pUnoEnv)
-            (*pUnoEnv->release)( pUnoEnv );
-        /*
-        if (exClass)
-        {
-            OString msg = OUStringToOString( ex.Message, osl_getThreadTextEncoding());
-            pJEnv->ThrowNew(exClass, msg.getStr());
-        }
-        */
+            (*pJavaEnv->release)(pJavaEnv);
 
+        if (pCurrEnv)
+            (*pCurrEnv->release)(pCurrEnv);
     }
-    return jRegServiceFac;
+
+    OSL_TRACE("javaunohelper.cxx: object %i", joRegServiceFac);
+
+    return joRegServiceFac;
 }
-
