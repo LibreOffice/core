@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:41:36 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
    access the document root storage (only a workaround is available:
    XDocumentSubstorageSupplier). Final API not yet designed => TODO: MAV
 
- - filter unwanted models (Basic-IDE, help documents, others(?) => TODO: CD
+ - filter unwanted models notified by global document event broadcaster
+   - help documents
+   - others, which I don't know yet
 
  *************************************************************************/
 
@@ -78,6 +80,7 @@
 #include "cppuhelper/weak.hxx"
 
 #include "com/sun/star/frame/XFramesSupplier.hpp"
+#include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 
 #ifdef ROOTSTORAGE_ACCESS_WORKAROUND
@@ -173,10 +176,18 @@ getDocumentTitle( const uno::Reference< uno::XInterface > & xDoc )
 {
     rtl::OUString aTitle;
 
-    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
-    if ( xModel.is() )
+    uno::Reference< frame::XStorable > xStorable( xDoc, uno::UNO_QUERY );
+
+    OSL_ENSURE( xStorable.is(),
+                "getDocumentTitle - Got no frame::XStorable interface!" );
+
+    if ( xStorable.is() )
     {
-        rtl::OUString aURL = xModel->getURL();
+        // Note: frame::XModel::getURL() is not what I need; URL never gets
+        //       updated, for instance after saving a document with different
+        //       name.
+
+        rtl::OUString aURL = xStorable->getLocation();
 
         if ( aURL.getLength() > 0 )
         {
@@ -204,21 +215,29 @@ getDocumentTitle( const uno::Reference< uno::XInterface > & xDoc )
         }
         else
         {
-            // Newly created documents that have not yet been saved
-            // have no URL. Try to get Title property from document model,
-            // which, btw, must not match the title shown in the Office's title
-            // bar. So, it has just limited value. But this is better than
-            // nothing.
+            uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
 
-            uno::Sequence< beans::PropertyValue > aProps
-                = xModel->getArgs();
-            for ( sal_Int32 n = 0; n < aProps.getLength(); ++n )
+            OSL_ENSURE( xStorable.is(),
+                "getDocumentTitle - Got no frame::XModel interface!" );
+
+            if ( xModel.is() )
             {
-                if ( aProps[ n ].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                // Newly created documents that have not yet been saved
+                // have no URL. Try to get Title property from document model,
+                // which, btw, must not match the title shown in the Office's
+                // title bar. So, it has just limited value. But this is better
+                // than nothing.
+
+                uno::Sequence< beans::PropertyValue > aProps
+                    = xModel->getArgs();
+                for ( sal_Int32 n = 0; n < aProps.getLength(); ++n )
                 {
-                    aProps[ n ].Value >>= aTitle;
-                    break;
+                    if ( aProps[ n ].Name.equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                    {
+                        aProps[ n ].Value >>= aTitle;
+                        break;
+                    }
                 }
             }
         }
