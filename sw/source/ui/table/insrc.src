@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ ENGLISH ] = "~before" ;
         Text [ norwegian ] = "~før" ;
         Text [ italian ] = "Davanti" ;
-        Text [ portuguese_brazilian ] = "~antes" ;
+        Text [ portuguese_brazilian ] = "~Antes" ;
         Text [ portuguese ] = "à ~frente" ;
         Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "foran" ;
@@ -122,16 +122,19 @@ ModalDialog DLG_INS_ROW_COL
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä¹‹å‰(~B)";
         Text[ russian ] = "äî";
-        Text[ polish ] = "prze~d";
+        Text[ polish ] = "~Przed";
         Text[ japanese ] = "å‰(~B)";
         Text[ chinese_traditional ] = "ä¹‹å‰(~B)";
         Text[ arabic ] = "ŞÈá";
         Text[ greek ] = "Ğñéí áğü";
         Text[ korean ] = "ì•(~B)";
-        Text[ turkish ] = "ön~üne";
+        Text[ turkish ] = "~Önce";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~bans de";
         Text[ thai ] = "~à¸à¹ˆà¸­à¸™";
+        Text[ czech ] = "pÅ™ed";
+        Text[ hebrew ] = "da~vor";
+        Text[ hindi ] = "~à¤ªà¤¹à¤¿à¤²à¥‡";
     };
     RadioButton CB_POS_AFTER
     {
@@ -141,7 +144,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ ENGLISH ] = "~behind" ;
         Text [ norwegian ] = "~bak" ;
         Text [ italian ] = "~Dietro" ;
-        Text [ portuguese_brazilian ] = "~atr?s" ;
+        Text [ portuguese_brazilian ] = "A~pós" ;
         Text [ portuguese ] = "~atrás" ;
         Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "efter" ;
@@ -154,16 +157,19 @@ ModalDialog DLG_INS_ROW_COL
         Check = TRUE ;
         Text[ chinese_simplified ] = "ä¹‹å(~F)";
         Text[ russian ] = "ïîñëå";
-        Text[ polish ] = "za";
+        Text[ polish ] = "~za";
         Text[ japanese ] = "å¾Œ(~F)";
         Text[ chinese_traditional ] = "ä¹‹å¾Œ(~F)";
         Text[ arabic ] = "ÈÚÏ";
         Text[ greek ] = "ìåôÜ áğü";
         Text[ korean ] = "ë’¤(~F)";
-        Text[ turkish ] = "ar~kasına";
+        Text[ turkish ] = "~Sonra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "da~rrera";
         Text[ thai ] = "à¸«~à¸¥à¸±à¸‡à¸ˆà¸²à¸";
+        Text[ czech ] = "za";
+        Text[ hebrew ] = "da~hinter";
+        Text[ hindi ] = "à¤ªà¤¶à¥à¤šà¤¾~à¤¤";
     };
     NumericField ED_COUNT
     {
@@ -206,10 +212,13 @@ ModalDialog DLG_INS_ROW_COL
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ greek ] = "ÅéóáãùãŞ";
         Text[ korean ] = "ì‚½ì…";
-        Text[ turkish ] = "Ekle";
+        Text[ turkish ] = "Arasına Ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insereix";
         Text[ thai ] = "à¹à¸—à¸£à¸";
+        Text[ czech ] = "VloÅ¾it";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+        Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     FixedLine FL_POS
     {
@@ -229,15 +238,18 @@ ModalDialog DLG_INS_ROW_COL
         Text[ danish ] = "Placering";
         Text[ swedish ] = "Position";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Posição";
         Text[ japanese ] = "ä½ç½®";
         Text[ korean ] = "ìœ„ì¹˜";
         Text[ chinese_simplified ] = "ä½ç½®";
         Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ turkish ] = "İş unvanı";
+        Text[ turkish ] = "Konum";
         Text[ arabic ] = "Start_num";
         Text[ catalan ] = "Posició";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
     };
     FixedText FT_COUNT
     {
@@ -259,7 +271,7 @@ ModalDialog DLG_INS_ROW_COL
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ•°ç›®(~A)";
         Text[ russian ] = "êîë-âî";
-        Text[ polish ] = "Liczba";
+        Text[ polish ] = "~Iloœæ";
         Text[ japanese ] = "æ•°(~A)";
         Text[ chinese_traditional ] = "æ•¸ç›®(~A)";
         Text[ arabic ] = "ÇáÚÏÏ";
@@ -269,6 +281,9 @@ ModalDialog DLG_INS_ROW_COL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Quantitat";
         Text[ thai ] = "~à¸ˆà¸³à¸™à¸§à¸™";
+        Text[ czech ] = "MnoÅ¾stvÃ­";
+        Text[ hebrew ] = "~Anzahl";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼";
     };
     String STR_ROW
     {
@@ -276,7 +291,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ ENGLISH ] = " rows" ;
         Text [ norwegian ] = " rader" ;
         Text [ italian ] = " righe" ;
-        Text [ portuguese_brazilian ] = "fileiras" ;
+        Text [ portuguese_brazilian ] = " Linhas" ;
         Text [ portuguese ] = " Linhas" ;
         Text [ finnish ] = " Rivit" ;
         Text [ danish ] = "rækker" ;
@@ -297,6 +312,9 @@ ModalDialog DLG_INS_ROW_COL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = " Files";
         Text[ thai ] = " à¹à¸–à¸§";
+        Text[ czech ] = " Å™Ã¡dky";
+        Text[ hebrew ] = " Zeilen";
+        Text[ hindi ] = " à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¤¾à¤";
     };
     String STR_COL
     {
@@ -304,7 +322,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ ENGLISH ] = " columns" ;
         Text [ norwegian ] = " kolonner" ;
         Text [ italian ] = " colonne" ;
-        Text [ portuguese_brazilian ] = "colunas" ;
+        Text [ portuguese_brazilian ] = " Colunas" ;
         Text [ portuguese ] = " Colunas" ;
         Text [ finnish ] = " Sarakkeet" ;
         Text [ danish ] = "kolonner" ;
@@ -315,7 +333,7 @@ ModalDialog DLG_INS_ROW_COL
         Text [ english_us ] = " Columns" ;
         Text[ chinese_simplified ] = "æ ";
         Text[ russian ] = " ñòîëáöû";
-        Text[ polish ] = " Kolumny";
+        Text[ polish ] = "Kolumny";
         Text[ japanese ] = "åˆ—";
         Text[ chinese_traditional ] = "æ¬„";
         Text[ arabic ] = " ÃÚãÏÉ";
@@ -325,6 +343,9 @@ ModalDialog DLG_INS_ROW_COL
         Text[ language_user1 ] = " ";
         Text[ catalan ] = " Columnes";
         Text[ thai ] = " à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = " sloupce";
+        Text[ hebrew ] = "â€®×˜×•×¨×™×â€¬";
+        Text[ hindi ] = " à¤¸à¥à¤¤à¤‚à¤­";
     };
     Text[ chinese_simplified ] = "æ’å…¥";
     Text[ russian ] = "Âñòàâêà";
@@ -338,7 +359,19 @@ ModalDialog DLG_INS_ROW_COL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix";
     Text[ thai ] = "à¹à¸—à¸£à¸";
+    Text[ czech ] = "VloÅ¾it";
+    Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+    Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
 };
+
+
+
+
+
+
+
+
+
 
 
 
