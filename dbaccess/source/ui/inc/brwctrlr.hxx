@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 12:58:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,10 +403,13 @@ namespace dbaui
         void ExecuteFilterSortCrit(sal_Bool bFilter);
 
         // execute the search slot
-        void ExecuteSearch();
+        void        ExecuteSearch();
 
-        void applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied);
-        void applyParserOrder(const ::rtl::OUString& _rOldOrder);
+        void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied);
+        void        applyParserOrder(const ::rtl::OUString& _rOldOrder);
+
+        sal_uInt16  getCurrentColumnPosition();
+        void        setCurrentColumnPosition(sal_uInt16 _nPos);
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, void* );
