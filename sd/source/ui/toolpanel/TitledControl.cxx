@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitledControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:59:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,8 @@ TitledControl::TitledControl (
     TitleBar::TitleBarType eType)
     : ::Window (pParent->GetWindow(), WB_TABSTOP),
       TreeNode(pParent),
-      msTitle (rTitle),
-      mpUserData (NULL),
-      mbVisible (true),
-      mpControlFactory(NULL)
+    mpControlFactory(NULL),
+      mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
 {
     if (pControl.get() != NULL)
     {
@@ -121,8 +119,8 @@ TitledControl::TitledControl (
     : ::Window (pParent->GetWindow(), WB_TABSTOP),
       TreeNode(pParent),
       msTitle (rTitle),
-      mpUserData (NULL),
       mbVisible (true),
+      mpUserData (NULL),
       mpControlFactory(pControlFactory)
 {
     mpControlContainer->AddControl (::std::auto_ptr<TreeNode> (
@@ -316,27 +314,28 @@ const String& TitledControl::GetTitle (void) const
 
 
 
-void TitledControl::Expand (bool bExpanded)
+bool TitledControl::Expand (bool bExpanded)
 {
+    bool bExpansionStateChanged (false);
+
     if (IsExpandable())
     {
-        GetTitleBar()->Expand (bExpanded);
+        if (GetTitleBar()->IsExpanded() != bExpanded)
+            bExpansionStateChanged |= GetTitleBar()->Expand (bExpanded);
         // Get the control.  Use the bExpanded parameter as argument to
         // indicate that a control is created via its factory only when it
         // is to be expanded.  When it is collapsed this is not necessary.
         TreeNode* pControl = GetControl(bExpanded);
-        if (pControl != NULL)
-            pControl->Expand (bExpanded);
-        UpdateStates();
+        if (pControl != NULL
+            && GetControl()->IsExpanded() != bExpanded)
+        {
+            bExpansionStateChanged |= pControl->Expand (bExpanded);
+        }
+        if (bExpansionStateChanged)
+            UpdateStates();
     }
-}
 
-
-
-
-void TitledControl::Collapse (void)
-{
-    Expand (false);
+    return bExpansionStateChanged;
 }
 
 
@@ -449,7 +448,8 @@ IMPL_LINK(TitledControl, WindowEventListener,
                 // Toggle expansion.
                 GetParentNode()->GetControlContainer().SetExpansionState (
                     this,
-                    ControlContainer::ES_TOGGLE);
+                    mbExpansionModeIsToggle ? ControlContainer::ES_TOGGLE
+                                            : ControlContainer::ES_EXPAND);
                 break;
         }
     }
