@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdiocmpt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:12:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,19 +62,45 @@
 #ifndef _SD_SDIOCMPT_HXX
 #define _SD_SDIOCMPT_HXX
 
-#ifndef _SVDIO_HXX //autogen
-#include <svx/svdio.hxx>
+//BFS02#ifndef _SVDIO_HXX //autogen
+//BFS02#include <svx/svdio.hxx>
+//BFS02#endif
+#ifndef _STREAM_HXX //autogen
+#include <tools/stream.hxx>
 #endif
+
+//BFS02
+//////////////////////////////////////////////////////////////////////////////
+class SvStream;
+
+class old_SdrDownCompat
+{
+protected:
+    SvStream&                   rStream;
+    UINT32                      nSubRecSiz;
+    UINT32                      nSubRecPos;
+    UINT16                      nMode;
+    BOOL                        bOpen;
+
+protected:
+    void Read();
+    void Write();
+
+public:
+    old_SdrDownCompat(SvStream& rNewStream, UINT16 nNewMode);
+    ~old_SdrDownCompat();
+    void  OpenSubRecord();
+    void  CloseSubRecord();
+};
+//////////////////////////////////////////////////////////////////////////////
 
 #ifndef INCLUDED_SDDLLAPI_H
 #include "sddllapi.h"
 #endif
 
-class SvStream;
-
 #define SDIOCOMPAT_VERSIONDONTKNOW (UINT16)0xffff
 
-class SD_DLLPUBLIC SdIOCompat : public SdrDownCompat
+class SD_DLLPUBLIC SdIOCompat : public old_SdrDownCompat
 {
 private:
     UINT16 nVersion;
@@ -84,7 +110,7 @@ public:
                 // nVer:     nur beim Schreiben angeben
             SdIOCompat(SvStream& rNewStream, USHORT nNewMode,
                        UINT16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
-            ~SdIOCompat() {};
+            ~SdIOCompat();
     UINT16  GetVersion() const { return nVersion; }
 };
 
