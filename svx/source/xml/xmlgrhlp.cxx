@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,8 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
 void SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
                                            const ::rtl::OUString& rPictureStreamName )
 {
-    GraphicObject aGrfObject( ByteString( String( rPictureStreamName ), RTL_TEXTENCODING_ASCII_US ) );
+    String aPictureStreamName(rPictureStreamName);
+    GraphicObject aGrfObject( ByteString( aPictureStreamName, RTL_TEXTENCODING_ASCII_US ) );
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
