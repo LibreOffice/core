@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-14 07:11:58 $
+ *  last change: $Author: nn $ $Date: 2001-06-21 09:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5391,6 +5391,13 @@ String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormu
                     double fDummy;
                     if ( pFormatter->IsNumberFormat(aVal, nNumFmt, fDummy) )
                         aVal.Insert('\'',0);
+                    else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
+                    {
+                        //  if the string starts with a "'", add another one because setFormula
+                        //  strips one (like text input, except for "text" number formats)
+                        if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
+                            aVal.Insert('\'',0);
+                    }
                 }
             }
         }
