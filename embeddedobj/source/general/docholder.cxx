@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-02 14:32:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitFo
 
 uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 {
+    // the frame for outplace activation
     if ( !m_xFrame.is() )
     {
         uno::Reference< frame::XFrame > xDesktopFrame(
@@ -260,6 +261,10 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
             m_pInterceptor->acquire();
 
             xInterception->registerDispatchProviderInterceptor( m_pInterceptor );
+
+            // register interceptor from outside
+            if ( m_xOutplaceInterceptor.is() )
+                xInterception->registerDispatchProviderInterceptor( m_xOutplaceInterceptor );
         }
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
@@ -392,8 +397,8 @@ void DocumentHolder::SetTitle( const rtl::OUString& aDocumentName )
         if( xPropSet.is() )
         {
             uno::Any aAny;
-            static const sal_Unicode u[] = { ' ','( ',0 };
-            static const sal_Unicode c[] = { ' )',0 };
+            static const sal_Unicode u[] = { ' ', '(', ' ', 0 };
+            static const sal_Unicode c[] = { ' ', ')',0 };
             rtl::OUString aTotalName( aFilterName );
             aTotalName += rtl::OUString( u );
             aTotalName += aDocumentName;
@@ -428,6 +433,7 @@ void DocumentHolder::Hide()
         m_xFrame->deactivate();
 }
 
+#if 0
 sal_Bool DocumentHolder::SetVisArea( const awt::Rectangle& aRect )
 {
     if ( m_xDocument.is() )
@@ -481,47 +487,62 @@ sal_Bool DocumentHolder::GetVisArea( awt::Rectangle *pRect )
 
     return sal_False;
 }
+#endif
 
-sal_Bool DocumentHolder::SetExtent( const awt::Size& aSize )
+sal_Bool DocumentHolder::SetExtent( sal_Int64 nAspect, const awt::Size& aSize )
 {
-    if ( m_xDocument.is() )
+    uno::Reference< embed::XVisualObject > xDocVis( m_xDocument, uno::UNO_QUERY );
+    if ( xDocVis.is() )
     {
-        uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
-        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
-            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
-            {
-                // should allways be there
-                uno::Sequence< sal_Int32 > aRect;
-                if ( ( aArgs[nInd].Value >>= aRect ) && aRect.getLength() == 4 )
-                {
-                    aRect[2] = aRect[0] + aSize.Width;
-                    aRect[3] = aRect[1] + aSize.Height;
-
-                    aArgs[nInd].Value <<= aRect;
-
-                    m_xDocument->attachResource( m_xDocument->getURL(), aArgs );
-                    return sal_True;
-                }
-            }
-
-        OSL_ENSURE( sal_False, "WinExtent seems not to be implemented!\n" );
+        try
+        {
+            xDocVis->setVisualAreaSize( nAspect, aSize );
+            return sal_True;
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: Error handling
+        }
     }
 
     return sal_False;
 }
 
-sal_Bool DocumentHolder::GetExtent( awt::Size *pSize )
+sal_Bool DocumentHolder::GetExtent( sal_Int64 nAspect, awt::Size *pSize )
 {
-    awt::Rectangle aRect;
-    if ( pSize && GetVisArea( &aRect ) )
+    uno::Reference< embed::XVisualObject > xDocVis( m_xDocument, uno::UNO_QUERY );
+    if ( pSize && xDocVis.is() )
     {
-        pSize->Width = aRect.Width;
-        pSize->Height = aRect.Height;
-
-        return sal_True;
+        try
+        {
+            *pSize = xDocVis->getVisualAreaSize( nAspect );
+            return sal_True;
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: Error handling
+        }
     }
 
     return sal_False;
+}
+
+sal_Int32 DocumentHolder::GetMapMode( sal_Int64 nAspect )
+{
+    uno::Reference< embed::XVisualObject > xDocVis( m_xDocument, uno::UNO_QUERY );
+    if ( xDocVis.is() )
+    {
+        try
+        {
+            return xDocVis->getMapMode( nAspect );
+        }
+        catch( uno::Exception& )
+        {
+            // TODO: Error handling
+        }
+    }
+
+    return 0;
 }
 
 void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject& aSource )
