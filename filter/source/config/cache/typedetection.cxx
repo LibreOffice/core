@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:22:27 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,20 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
 #ifndef _WLDCRD_HXX
 #include <tools/wldcrd.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
+#include <framework/interaction.hxx>
 #endif
 
 //_______________________________________________
@@ -227,6 +235,14 @@ TypeDetection::~TypeDetection()
         }
 
         //*******************************************
+        // flat detection failed
+        // pure deep detection failed
+        // => ask might existing InteractionHandler
+        // means: ask user for it's decision
+        if (!sType.getLength())
+            sType = impl_askUserForTypeAndFilterIfAllowed(stlDescriptor);
+
+        //*******************************************
         // no real detected type - but a might valid one.
         // update descriptor and set last chance for return.
         if (!sType.getLength() && sLastChance.getLength())
@@ -270,6 +286,14 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     // Every flat detected type by pattern wont be detected deep!
     sal_Bool bMatchByPattern = sal_False;
 
+    // If we e.g. collect all filters of a factory (be a forced factory preselection)
+    // we should preferr all filters of this factory, where the type match the given URL.
+    // All other types (which sorrespond to filters of the same factory - but dont match
+    // the URL) should be "used later" for detection and sorted at the end of our return vector
+    // rFlatTypes!
+    // => bPreferredPreselection = (matchByExtension || matchByURLPattern)
+    sal_Bool bPreferredPreselection = sal_False;
+
     // validate type
     ::rtl::OUString sType(sPreSelType);
     CacheItem       aType;
@@ -312,7 +336,8 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
             WildCard aCheck(sExtension.makeStringAndClear());
             if (aCheck.Matches(aParsedURL.Main))
             {
-                bBreakDetection = sal_True;
+                bBreakDetection        = sal_True;
+                bPreferredPreselection = sal_True;
                 break;
             }
         }
@@ -326,19 +351,21 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                 WildCard aCheck(*pIt);
                 if (aCheck.Matches(aParsedURL.Main))
                 {
-                    bBreakDetection = sal_True;
-                    bMatchByPattern = sal_True;
+                    bBreakDetection        = sal_True;
+                    bMatchByPattern        = sal_True;
+                    bPreferredPreselection = sal_True;
                     break;
                 }
             }
         }
 
-        // ? this type does not seem to fit the requirements
-        // But its an existing and well known type.
-        // At least - [because may be the extension was missing :-( ]
-        // we should try to detect this type deep ...
-        // So we accept it here :-)
         /*
+            ? this type does not seem to fit the requirements
+            But its an existing and well known type.
+            At least - [because may be the extension was missing :-( ]
+            we should try to detect this type deep ...
+            So we accept it here :-)
+
         if (!bBreakDetection)
             sType = ::rtl::OUString();
         */
@@ -348,7 +375,10 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     if (sType.getLength())
     {
         css::beans::NamedValue aResult(sType, css::uno::makeAny(bMatchByPattern));
-        rFlatTypes.push_back(aResult);
+        if (bPreferredPreselection)
+            rFlatTypes.push_front(aResult);
+        else
+            rFlatTypes.push_back(aResult);
 
         return sal_True;
     }
@@ -614,40 +644,35 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
 ::rtl::OUString TypeDetection::impl_askDetectService(const ::rtl::OUString&               sDetectService,
                                                            ::comphelper::MediaDescriptor& rDescriptor   )
 {
-    // create the needed input stream on demand.
-    // Its better to do it here, then every detector
-    // do it by itself ... To many error constallations exists!
-
-    /* Attention!
-            Please read documentation of this method! It does something special
-            and can supress the following code lines or the whole detection ...
-     */
+    // Open the stream and add it to the media descriptor if this method is called for the first time.
+    // All following requests to this method will detect, that there already exists a stream .-)
+    // Attention: This method throws an exception if the stream could not be opened.
+    // It's important to break any further detection in such case.
+    // Catch it on the highest detection level only !!!
     impl_openStream(rDescriptor);
 
     css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xServiceManager;
+    css::uno::Reference< css::lang::XMultiServiceFactory >         xSMGR;
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    xServiceManager = m_xSMGR;
+    xSMGR = m_xSMGR;
     aLock.clear();
     // <- SAFE
 
+    if (!xSMGR.is())
+        return ::rtl::OUString();
+
     try
     {
-        if ( xServiceManager.is() )
-        {
-            xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(xServiceManager->createInstance(sDetectService), css::uno::UNO_QUERY);
-            if (!xDetector.is())
-                return ::rtl::OUString();
-        }
-        else
-            return ::rtl::OUString();
+        xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
+                xSMGR->createInstance(sDetectService),
+                css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
-    {
+        {}
+    if (!xDetector.is())
         return ::rtl::OUString();
-    }
 
     // start deep detection
     // Dont forget to convert stl descriptor to its uno representation.
@@ -662,14 +687,6 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     ::rtl::OUString sDeepType = xDetector->detect(lDescriptor);
     rDescriptor << lDescriptor;
 
-    css::uno::Reference< css::io::XInputStream > xStream = rDescriptor.getUnpackedValueOrDefault(
-        ::rtl::OUString::createFromAscii("InputStream"),
-        css::uno::Reference< css::io::XInputStream >());
-    if (!xStream.is())
-        throw css::uno::Exception(
-            ::rtl::OUString::createFromAscii("InputStream"),
-            static_cast< css::document::XTypeDetection* >(this));
-
     // analyze the results
     // a) detect service returns "" => return "" too and remove TYPE/FILTER prop from descriptor
     // b) returned type is unknown  => return "" too and remove TYPE/FILTER prop from descriptor
@@ -682,6 +699,75 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
         return sDeepType;
     else
         return ::rtl::OUString();
+}
+
+/*-----------------------------------------------
+    17.12.2004 13:47
+-----------------------------------------------*/
+::rtl::OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aLock.clear();
+    // <- SAFE
+
+    css::uno::Reference< css::task::XInteractionHandler > xInteraction =
+        rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+        css::uno::Reference< css::task::XInteractionHandler >());
+
+    if (!xInteraction.is())
+        return ::rtl::OUString();
+
+    ::rtl::OUString sURL =
+        rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(),
+        ::rtl::OUString());
+
+    css::uno::Reference< css::io::XInputStream > xStream =
+        rDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_INPUTSTREAM(),
+        css::uno::Reference< css::io::XInputStream >());
+
+    // Dont distrub the user for "non existing files - means empty URLs" or
+    // if we was forced to detect a stream.
+    // Reason behind: We must be shure to ask user for "unknown contents" only ...
+    // and not for "missing files". Especialy if detection is done by a stream only
+    // we cant check if the stream points to an "existing content"!
+    if (
+        (!sURL.getLength()                                     ) || // "non existing file" ?
+        (!xStream.is()                                         ) || // non existing file !
+        (sURL.equalsIgnoreAsciiCaseAsciiL("private:stream", 14))    // not a good idea .-)
+       )
+        return ::rtl::OUString();
+
+    try
+    {
+        // create a new request to ask user for it's decision about the usable filter
+        ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect(sURL);
+        css::uno::Reference< css::task::XInteractionRequest > xRequest(static_cast< css::task::XInteractionRequest* >(pRequest), css::uno::UNO_QUERY_THROW);
+        xInteraction->handle(xRequest);
+
+        // "Cancel" pressed? => return with error
+        if (pRequest->isAbort())
+            return ::rtl::OUString();
+
+        // "OK" pressed => verify the selected filter, get it's coressponding
+        // type and return it. (BTW: We must update the media descriptor here ...)
+        // The user selected explicitly a filter ... but normaly we are interested on
+        // a type here only. But we must be shure, that the selected filter is used
+        // too and no ambigous filter registration disturb us .-)
+
+        ::rtl::OUString sFilter = pRequest->getFilter();
+        if (!impl_validateAndSetFilterOnDescriptor(rDescriptor, sFilter))
+            return ::rtl::OUString();
+
+        ::rtl::OUString sType;
+        rDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] >>= sType;
+        return sType;
+    }
+    catch(const css::uno::Exception&)
+        {}
+
+    return ::rtl::OUString();
 }
 
 /*-----------------------------------------------
