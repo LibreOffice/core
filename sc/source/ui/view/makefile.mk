@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:54:14 $
+#   last change: $Author: rt $ $Date: 2004-09-17 13:55:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 # drawattr.cxx fuer IDL (enums), sollte in den Svx gehen??
+
 
 SLOFILES =  \
         $(SLO)$/tabview.obj \
@@ -165,7 +166,8 @@ SLOFILES =  \
         $(SLO)$/pgbrksh.obj
 
 EXCEPTIONSFILES=\
-        $(SLO)$/viewdata.obj
+        $(SLO)$/viewdata.obj    \
+        $(SLO)$/cellsh1.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
     NOOPTFILES= \
