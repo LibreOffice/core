@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:56:04 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:24:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=envelp
-
+LIBTARGET=no
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -102,6 +102,13 @@ EXCEPTIONSFILES= \
         $(SLO)$/labelexp.obj      \
         $(SLO)$/mailmrge.obj
 
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =	\
+     $(SLO)$/envimg.obj  \
+        $(SLO)$/labelcfg.obj  \
+        $(SLO)$/labimg.obj  \
+        $(SLO)$/syncbtn.obj
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
