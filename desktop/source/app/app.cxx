@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-17 09:11:53 $
+ *  last change: $Author: mba $ $Date: 2002-01-18 16:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,21 +1378,20 @@ void Desktop::Main()
         }
     }
 
-    if ( bExpired )
-    {
-        String aMsg;
-        aMsg += DEFINE_CONST_UNICODE("This Version has expired!\n");
-        InfoBox aBox( NULL, aMsg );
-        aBox.Execute();
-        return;
-    }
-
     if ( aEval.Len() )
     {
         if ( aTitle.GetChar(aTitle.Len()-1) != ' ' )
             aTitle += ' ';
         aTitle += aEval;
     }
+
+    if ( bExpired )
+    {
+        InfoBox aBox( NULL, aTitle );
+        aBox.Execute();
+        return;
+    }
+
 #endif
 
 #ifndef PRODUCT
