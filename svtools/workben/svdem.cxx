@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:35:50 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,9 +334,9 @@ void ShowFont::Paint( const Rectangle& )
     Size        aWindowSize( GetOutputSize() );
     long        x,y;
 
-    if ( rFont.GetLineOrientation() )
+    if ( rFont.GetOrientation() )
     {
-        aText.Append( String::CreateFromInt32( rFont.GetLineOrientation()/10 ) );
+        aText.Append( String::CreateFromInt32( rFont.GetOrientation()/10 ) );
         aText.AppendAscii( " degree." );
 
         x = aWindowSize.Width()/2;
@@ -540,7 +540,7 @@ void MyFontDialog::SetAttr()
     aFont.SetWordLineMode( aWordLineBox.IsChecked() );
     aFont.SetShadow( aShadowBox.IsChecked() );
     aFont.SetOutline( aOutlineBox.IsChecked() );
-    aFont.SetLineOrientation( aLineOrientSlider.GetOrientation() );
+    aFont.SetOrientation( aLineOrientSlider.GetOrientation() );
     aFont.SetTransparent( TRUE );
     aMapText.SetText( pList->GetFontMapText( aFont ) );
     aShowFont.SetFont( aFont );
