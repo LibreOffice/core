@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:32:26 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _SW3IO_HXX
 #include <sw3io.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
 #endif
 
 using namespace utl;
@@ -574,6 +577,25 @@ BOOL SwOLEObj::RemovedFromLRU()
     return bRet;
 }
 
+
+String SwOLEObj::GetDescription()
+{
+    String aResult;
+    SvInPlaceObject * pOLE = GetOleRef();
+
+    if (pOLE)
+    {
+        if (SotExchange::IsMath(*pOLE->GetSvFactory()))
+            aResult = SW_RES(STR_FORMULA);
+        else if (SotExchange::IsChart(*pOLE->GetSvFactory()))
+            aResult = SW_RES(STR_CHART);
+        else
+            aResult = SW_RES(STR_OLE);
+    }
+
+    return aResult;
+}
+
 SwOLELRUCache::SwOLELRUCache()
     : SvPtrarr( 64, 16 ),
     utl::ConfigItem( OUString::createFromAscii( "Office.Common/Cache" )),
@@ -675,6 +697,3 @@ void SwOLELRUCache::Remove( SwOLEObj& rObj )
             SvPtrarr::Remove( nPos );
     }
 }
-
-
-
