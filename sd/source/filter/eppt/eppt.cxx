@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-16 13:09:30 $
+ *  last change: $Author: sj $ $Date: 2001-01-18 12:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2168,10 +2168,11 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
     }
 }
 
-void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, Collection& rFontCollection, int nLevel )
+void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+                                        Collection& rFontCollection, int nLevel, sal_uInt16 nCharacterHeight )
 {
     ParagraphObj aParagraphObj( rXPropSet, rBuProv );
-
+    aParagraphObj.CalculateGraphicBulletSize( nCharacterHeight );
     PPTExParaLevel& rLev = maParaLevel[ nLevel ];
 
     if ( aParagraphObj.meTextAdjust == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
@@ -2294,8 +2295,8 @@ void PPTExStyleSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::c
     if ( nInstance == EPP_TEXTTYPE_notUsed )
         return;
 
-    mpParaSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel );
     mpCharSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel );
+    mpParaSheet[ nInstance ]->SetStyleSheet( rXPropSet, rFontCollection, nLevel, mpCharSheet[ nInstance ]->maCharLevel[ nLevel ].mnFontHeight );
 }
 
 sal_Bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-08 18:27:56 $
+ *  last change: $Author: sj $ $Date: 2001-01-18 12:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,23 +240,41 @@ PPTExBulletProvider::~PPTExBulletProvider()
     delete pGraphicProv;
 }
 
-sal_uInt16 PPTExBulletProvider::GetId( Graphic& rGraphic )
+sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraphicSize )
 {
     sal_uInt16 nRetValue = 0xffff;
-    if ( !!rGraphic )
+    sal_uInt32 nId = 0;
+
+    if ( rUniqueId.Len() )
     {
-        sal_uInt32 nId = 0;
-        if ( rGraphic.GetType() == GRAPHIC_BITMAP )
+        GraphicObject   aGraphicObject( rUniqueId );
+        Graphic         aGraph( aGraphicObject.GetGraphic() );
+        Size            aPrefSize( aGraph.GetPrefSize() );
+        double          fQ1 = ( (double)aPrefSize.Width() / (double)aPrefSize.Height() );
+        double          fQ2 = ( (double)rGraphicSize.Width() / (double)rGraphicSize.Height() );
+        double          fXScale = 1;
+        double          fYScale = 1;
+
+        if ( fQ1 > fQ2 )
+            fYScale = fQ1 / fQ2;
+        else if ( fQ1 < fQ2 )
+            fXScale = fQ2 / fQ1;
+
+        Rectangle       aRect;
+        Graphic         aGraphic( aGraphicObject.GetGraphic() );
+        BitmapEx        aBmpEx( aGraphic.GetBitmapEx() );
+        if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
         {
-            Rectangle   aRect;
-            GraphicObject aGraphicObject( rGraphic );
-            nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL );
+            aBmpEx.Scale( fXScale, fYScale );
+            Size aNewSize( (sal_Int32)((double)rGraphicSize.Width() / fXScale + 0.5 ),
+                            (sal_Int32)((double)rGraphicSize.Height() / fYScale + 0.5 ) );
+            rGraphicSize = aNewSize;
         }
-        else
-        {
-//          sal_uInt32 nId = pGraphicProv->ImplGetBlibID( aDestStrm, WMF );
-            nId = 0;
-        }
+        Graphic         aBmpGraphic( aBmpEx );
+        GraphicObject   aMappedGraphicObject( aBmpGraphic );
+
+        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aMappedGraphicObject.GetUniqueID(), aRect, NULL );
+
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = (sal_uInt16)nId - 1;
     }
@@ -1445,6 +1463,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj, sal_uInt
             nPropertyFlags |= 1;            // turn off bullet explicit
             nBulletFlags = 0;
         }
+/*
         PortionObj* pPortion = (PortionObj*)pPara->First();
         if ( pPortion ) // in SO the bulletrealsize does not depend to the following portion charactersize
         {
@@ -1459,6 +1478,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj, sal_uInt
                 }
             }
         }
+*/
         rOut << nCharCount
              << nDepth                          // Level
              << (sal_uInt32)nPropertyFlags;     // Paragraph Attribut Set
@@ -2147,6 +2167,24 @@ void ParagraphObj::ImplClear()
         delete (PortionObj*)pPtr;
 }
 
+void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
+{
+    if ( ( (SvxExtNumType)nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff ) )
+    {
+        // calculate the bulletrealsize for this grafik
+        if ( aBuGraSize.Width() && aBuGraSize.Height() )
+        {
+            double fCharHeight = nFontHeight;
+            double fLen = aBuGraSize.Height();
+            fCharHeight = fCharHeight * 0.2540;
+            double fQuo = fLen / fCharHeight;
+            nBulletRealSize = (sal_Int16)( fQuo + 0.5 );
+            if ( (sal_uInt16)nBulletRealSize > 400 )
+                nBulletRealSize = 400;
+        }
+    }
+}
+
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bGetPropStateValue )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > aXIndexReplace;
@@ -2165,235 +2203,89 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
             if ( nCount )
             {
                 bExtendedParameters = TRUE;
-                nBulletRealSize = 0;
-
-                sal_Bool bFastFind = TRUE;
-
-                Size aBuGraSize( 0, 0 );
-
+                nBulletRealSize = 100;
                 nMappedNumType = 0;
 
+                String aGraphicURL;
                 for ( sal_Int32 i = 0; i < nCount; i++ )
                 {
-                    sal_Int32 nQuickIndex = i;
-
                     const void* pValue = pPropValue[ i ].Value.getValue();
                     if ( pValue )
                     {
-                        String aString( pPropValue[ i ].Name );
-                        ByteString aPropName( aString, RTL_TEXTENCODING_UTF8 );
-                        if ( !bFastFind )
+                        ::rtl::OUString aPropName( pPropValue[ i ].Name );
+                        if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NumberingType" ) ) )
+                            nNumberingType = *( (sal_Int16*)pValue );
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Adjust" ) ) )
+                            nHorzAdjust = *( (sal_Int16*)pValue );
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletChar" ) ) )
                         {
-                            if ( aPropName == "NumberingType" )
-                                nQuickIndex = 0;
-                            else if ( aPropName == "Adjust" )
-                                nQuickIndex = 1;
-                            else if ( aPropName == "Prefix" )
-                                nQuickIndex = 2;
-                            else if ( aPropName == "Suffix" )
-                                nQuickIndex = 3;
-                            else if ( aPropName == "BulletChar" )
-                                nQuickIndex = 4;
-                            else if ( aPropName == "BulletFont" )
-                                nQuickIndex = 5;
-                            else if ( aPropName == "Graphic" )
-                                nQuickIndex = 6;
-                            else if ( aPropName == "GraphicSize" )
-                                nQuickIndex = 7;
-                            else if ( aPropName == "StartWith" )
-                                nQuickIndex = 8;
-                            else if ( aPropName == "LeftMargin" )
-                                nQuickIndex = 9;
-                            else if ( aPropName == "FirstLineOffset" )
-                                nQuickIndex = 10;
-                            else if ( aPropName == "SymbolTextDistance" )
-                                nQuickIndex = 11;
-                            else if ( aPropName == "BulletColor" )
-                                nQuickIndex = 12;
-                            else if ( aPropName == "BulletRelSize" )
-                                nQuickIndex = 13;
-                            else
-                            {
-                                DBG_ERROR( "Unbekanntes Property" );
-                                bFastFind = TRUE;
-                                continue;   // unbekanntes Property;
-                            }
-                            pValue = pPropValue[ i ].Value.getValue();
+                            String aString( *( (String*)pValue ) );
+                            if ( aString.Len() )
+                                cBulletId = aString.GetChar( 0 );
                         }
-                        switch( nQuickIndex )
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletFont" ) ) )
+                            aFontDesc = *( (::com::sun::star::awt::FontDescriptor*)pValue );
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicURL" ) ) )
+                            aGraphicURL = ( *(::rtl::OUString*)pValue );
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicSize" ) ) )
                         {
-                            case 0 :
-                            {
-                                if ( aPropName == "NumberingType" )
-                                {
-                                    nNumberingType = *( (sal_Int16*)pValue );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 1 :
-                            {
-                                if ( aPropName == "Adjust" )
-                                {
-                                    nHorzAdjust = *( (sal_Int16*)pValue );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 2 :
-                            {
-                                if ( aPropName == "Prefix" )
-                                {
-//                                  sPrefix = *( (String*)pValue );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 3 :
-                            {
-                                if ( aPropName == "Suffix" )
-                                {
-//                                  sSuffix = *( (String*)pValue );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 4 :
-                            {
-                                if ( aPropName == "BulletChar" )
-                                {
-                                    String aString( *( (String*)pValue ) );
-                                    if ( aString.Len() )
-                                        cBulletId = aString.GetChar( 0 );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 5 :
-                            {
-                                if ( aPropName == "BulletFont" )
-                                {
-                                    aFontDesc = *( (::com::sun::star::awt::FontDescriptor*)pValue );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 6 :
-                            {
-                                if ( aPropName == "Graphic" )
-                                {
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
-                                    if ( ::cppu::extractInterface( xBitmap, pPropValue[ i ].Value ) )
-                                    {
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >
-                                            xBitmap( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)pValue );
-                                        if ( xBitmap.is() )
-                                        {
-                                            Graphic aGraphic( VCLUnoHelper::GetBitmap( xBitmap ) );
-                                            nBulletId = rBuProv.GetId( aGraphic );
-                                            if ( nBulletId != 0xffff )
-                                                bExtendedBulletsUsed = TRUE;
-                                        }
-                                    }
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 7 :
-                            {
-                                if ( aPropName == "GraphicSize" )
-                                {
-                                    if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (::com::sun::star::awt::Size*)0) )
-                                        aBuGraSize =  *(Size*)pValue;
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 8 :
-                            {
-                                if ( aPropName == "StartWith" )
-                                {
-                                    nStartWith = *( (sal_Int16*)pValue );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 9 :
-                            {
-                                if ( aPropName == "LeftMargin" )
-                                {
-                                    nTextOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 10 :
-                            {
-                                if ( aPropName == "FirstLineOffset" )
-                                {
-                                    nBulletOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 11 :
-                            {
-                                if ( aPropName == "SymbolTextDistance" )
-                                    continue;
-                            }
-                            break;
-                            case 12 :
-                            {
-                                if ( aPropName == "BulletColor" )
-                                {
-                                    sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
-                                    nBulletColor = nSOColor & 0xff00;                           // GRUEN
-                                    nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // ROT
-                                    nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // BLAU
-                                    continue;
-                                }
-                            }
-                            break;
-                            case 13 :
-                            {
-                                if ( aPropName == "BulletRelSize" )
-                                {
-                                    nBulletRealSize = *( (sal_Int16*)pValue );
-                                    nParaFlags |= 0x40;
-                                    nBulletFlags |= 8;
-                                    continue;
-                                }
-                            }
+                            if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (::com::sun::star::awt::Size*)0) )
+                                aBuGraSize =  *(Size*)pValue;
                         }
-                        if ( bFastFind )
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StartWith" ) ) )
+                            nStartWith = *( (sal_Int16*)pValue );
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LeftMargin" ) ) )
+                            nTextOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FirstLineOffset" ) ) )
+                            nBulletOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletColor" ) ) )
                         {
-                            bFastFind = FALSE;
-                            i--;    // nochmal den letzten index, aber diesmal andere Reihenfolge beruecksichtigen
+                            sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
+                            nBulletColor = nSOColor & 0xff00;                           // GRUEN
+                            nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // ROT
+                            nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // BLAU
                         }
+                        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BulletRelSize" ) ) )
+                        {
+                            nBulletRealSize = *( (sal_Int16*)pValue );
+                            nParaFlags |= 0x40;
+                            nBulletFlags |= 8;
+                        }
+#ifdef DBG_UTIL
+                        else if ( ! (
+                                ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SymbolTextDistance" ) ) )
+                            ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Prefix" ) ) )
+                            ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Suffix" ) ) )
+                            ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Graphic" ) ) ) ) )
+                        {
+                            DBG_ERROR( "Unbekanntes Property" );
+                        }
+#endif
                     }
                 }
-                if ( ( (SvxExtNumType)nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff ) )
+
+                if ( aGraphicURL.Len() )
                 {
-                    // calculate the bulletrealsize for this grafik
-                    nBulletRealSize = 100;
-                    if ( aBuGraSize.Width() && aBuGraSize.Height() )
+                    xub_StrLen nIndex = aGraphicURL.Search( (sal_Unicode)':', 0 );
+                    if ( nIndex != STRING_NOTFOUND )
                     {
-                        double fCharHeight = 24;
-                        PortionObj* pPortion = (PortionObj*)First();
-                        if ( pPortion )
-                            fCharHeight = pPortion->mnCharHeight;
-
-                        double fLen = aBuGraSize.Width();
-                        if ( aBuGraSize.Height() > fLen )
-                            fLen = aBuGraSize.Height();
-
-                        fCharHeight = fCharHeight * 25.40;
-                        double fQuo = fLen / fCharHeight;
-                        nBulletRealSize = (sal_Int16)( 100 * fQuo );
-                        if ( (sal_uInt16)nBulletRealSize > 400 )
-                            nBulletRealSize = 400;
+                        nIndex++;
+                        if ( aGraphicURL.Len() > nIndex  )
+                        {
+                            ByteString aUniqueId( aGraphicURL, nIndex, aGraphicURL.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+                            if ( aUniqueId.Len() )
+                            {
+                                nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
+                                if ( nBulletId != 0xffff )
+                                    bExtendedBulletsUsed = TRUE;
+                            }
+                        }
                     }
                 }
+
+                PortionObj* pPortion = (PortionObj*)First();
+                CalculateGraphicBulletSize( ( pPortion ) ? pPortion->mnCharHeight : 24 );
+
                 switch( (SvxExtNumType)nNumberingType )
                 {
                     case SVX_NUM_NUMBER_NONE : nParaFlags |= 0xf; break;
@@ -2658,6 +2550,7 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     sPrefix = rParagraphObj.sPrefix;
     sSuffix = rParagraphObj.sSuffix;
     sGraphicUrl = rParagraphObj.sGraphicUrl;            // String auf eine Graphic
+    aBuGraSize = rParagraphObj.aBuGraSize;
     nNumberingType = rParagraphObj.nNumberingType;      // in wirlichkeit ist dies ein SvxEnum
     nHorzAdjust = rParagraphObj.nHorzAdjust;
     nBulletColor = rParagraphObj.nBulletColor;

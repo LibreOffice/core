@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-08 18:27:11 $
+ *  last change: $Author: sj $ $Date: 2001-01-18 12:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ struct SOParagraph
     String                  sPrefix;
     String                  sSuffix;
     String                  sGraphicUrl;            // String auf eine Graphic
+    Size                    aBuGraSize;
     sal_uInt32              nNumberingType;         // in wirlichkeit ist dies ein SvxEnum
     sal_uInt32              nHorzAdjust;
     sal_uInt32              nBulletColor;
@@ -352,7 +353,7 @@ class PPTExBulletProvider
 
     public :
 
-        sal_uInt16              GetId( Graphic& rBitmap );
+        sal_uInt16              GetId( const ByteString& rUniqueId, Size& rGraphicSize );
 
                                 PPTExBulletProvider();
                                 ~PPTExBulletProvider();
@@ -459,7 +460,8 @@ struct PPTExParaSheet
                 PPTExParaLevel  maParaLevel[ 5 ];
                 PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider& rProv );
 
-                void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &, Collection& rFontCollection, int nLevel );
+                void    SetStyleSheet( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
+                                        Collection& rFontCollection, int nLevel, sal_uInt16 nCharHeight );
                 void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sal_Bool bFirst, sal_Bool bSimpleText );
 };
 
@@ -709,12 +711,14 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         sal_Int16           mnLineSpacingTop;
         sal_Int16           mnLineSpacingBottom;
 
-        ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
-                                        ParaFlags, Collection& rFontCollection,
-                                        PPTExBulletProvider& rBuProv );
+                        ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
+                            ParaFlags, Collection& rFontCollection,
+                                PPTExBulletProvider& rBuProv );
                         ParagraphObj( ParagraphObj& rParargraphObj );
                         ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
                                         PPTExBulletProvider& rBuProv );
+
+        void            CalculateGraphicBulletSize( sal_uInt16 nFontHeight );
                         ~ParagraphObj();
 
         void            Write( SvStream* pStrm );
