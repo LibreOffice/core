@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLogger.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tpf $  $Date: 2002-01-14 17:20:20 $
+ *  last change: $Author: tpf $  $Date: 2002-03-04 17:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,196 +71,83 @@
 module com { module sun { module star { module util { module logging {
 
 //=============================================================================
-/** logging interface
+/** Local logging interface derived from the final 1.4 j2sdk java.util.logging
+    interface. For speedup the XLoggerRemote interface should be used by any
+    component implementing this interface for remote communication.
+    This will enable some prechecks before the costly remote logging call is
+    made.
 */
 
 interface XLogger: com::sun::star::uno::XInterface
 {
-
-    //-------------------------------------------------------------------------
     /** Just to adhere to the API known from the standalone scenario.
         You can use it to create a new Logger, but to bootstrap the first
-        logger you need a createINstanceWithArguments(string logger)
+        logger you need a createInstanceWithArguments(string logger)
         or equivalent.
 
         @param host
         host of the caller
+
+        @returns XLogger instance
     */
 
-    XLogger getLogger( [in] string logger );
+    XLogger getLogger( [in] string name );
 
     //-------------------------------------------------------------------------
-    /** Sets the pid of the caller once (performance).
 
-        @param PID
-        PID of the caller
+    /** gets logging level of this XLogger
+
+        @returns logging level of this XLogger
     */
 
-    [oneway] boolean isLoggable( [in] long level );
+    long getLevel();
 
     //-------------------------------------------------------------------------
-    /** Log a SEVERE message.
 
-        @param sourceClass
-        name of class that issued the logging request
+    /** gets name of this XLogger
 
-        @param sourceMethod
-        name of method that issued the logging request
-
-        @param msg
-        the string message
-
-        @param thread
-        client thread that initially called this method
+        @returns name of this XLogger
     */
 
-    [oneway] void severe(   [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] string msg );
+    string getName();
 
     //-------------------------------------------------------------------------
-    /** Log a WARNING message.
 
-        @param sourceClass
-        name of class that issued the logging request
+    /** will this XLogger instance produce any output for the given level?
+        can be used to optimize performance as maybe complex parameter evaluation
+        in the logp call can be omitted if isLoggable evaluates to false
 
-        @param sourceMethod
-        name of method that issued the logging request
+        @param level
+        level to be checked against
 
-        @param msg
-        the string message
-
-        @param thread
-        client thread that initially called this method
+        @returns true if there will be some output for this XLogger for the given level,
+                 false otherwise
     */
 
-    [oneway] void warning(  [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] string msg );
+    boolean isLoggable( [in] long level );
 
     //-------------------------------------------------------------------------
-    /** Log an INFO message.
 
-        @param sourceClass
-        name of class that issued the logging request
-
-        @param sourceMethod
-        name of method that issued the logging request
-
-        @param msg
-        the string message
-
-        @param thread
-        client thread that initially called this method
-    */
-
-    [oneway] void info(     [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] string msg );
-
-    //-------------------------------------------------------------------------
-    /** Log a CONFIG message.
-
-        @param sourceClass
-        name of class that issued the logging request
-
-        @param sourceMethod
-        name of method that issued the logging request
-
-        @param msg
-        the string message
-
-        @param thread
-        client thread that initially called this method
-    */
-
-    [oneway] void config(   [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] string msg );
-
-    //-------------------------------------------------------------------------
-    /** Log a FINE message.
-
-        @param sourceClass
-        name of class that issued the logging request
-
-        @param sourceMethod
-        name of method that issued the logging request
-
-        @param msg
-        the string message
-
-        @param thread
-        client thread that initially called this method
-    */
-
-    [oneway] void fine(     [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] string msg );
-
-    //-------------------------------------------------------------------------
-    /** Log a FINER message.
-
-        @param sourceClass
-        name of class that issued the logging request
-
-        @param sourceMethod
-        name of method that issued the logging request
-
-        @param msg
-        the string message
-
-        @param thread
-        client thread that initially called this method
-    */
-
-    [oneway] void finer(    [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] string msg );
-
-    //-------------------------------------------------------------------------
-    /** Log a FINEST message.
-
-        @param sourceClass
-        name of class that issued the logging request
-
-        @param sourceMethod
-        name of method that issued the logging request
-
-        @param msg
-        the string message
-
-        @param thread
-        client thread that initially called this method
-    */
-
-    [oneway] void finest(   [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] string msg );
-
-    //-------------------------------------------------------------------------
-    /** Log a message.
-
-        @param sourceClass
-        name of class that issued the logging request
-
-        @param sourceMethod
-        name of method that issued the logging request
+    /** Log a message. The p in logp is derived from "precise" as given
+        is the java.util.logging API
 
         @param level
         the log level of this message
 
+        @param sourceClass
+        name of class that issued the logging request
+
+        @param sourceMethod
+        name of method that issued the logging request
+
         @param msg
         the string message
-
-        @param thread
-        client thread that initially called this method
     */
 
-    [oneway] void log(      [in] string sourceClass,
-                            [in] string sourceMethod,
-                            [in] long   level,
-                            [in] string msg );
+    [oneway] void logp( [in] long   level,
+                        [in] string sourceClass,
+                        [in] string sourceMethod,
+                        [in] string msg );
 };
 
 //=============================================================================
