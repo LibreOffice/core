@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:55 $
+ *  last change: $Author: bm $ $Date: 2000-10-12 14:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,10 +129,11 @@ enum SvxChartStyle
     CHSTYLE_2D_STOCK_1,
     CHSTYLE_2D_STOCK_2,
     CHSTYLE_2D_STOCK_3,
-    CHSTYLE_2D_STOCK_4
+    CHSTYLE_2D_STOCK_4,
+    CHSTYLE_ADDIN
 };
 
-#define CHSTYLE_COUNT   (CHSTYLE_2D_LINE_COLUMN + 1)
+#define CHSTYLE_COUNT   (CHSTYLE_ADDIN + 1)
 
 enum SvxChartDataDescr
 {
@@ -146,7 +147,7 @@ enum SvxChartDataDescr
     CHDESCR_TEXTANDVALUE
 };
 
-#define CHDESCR_COUNT   (CHDESCR_TEXTANDPERCENT + 1)
+#define CHDESCR_COUNT   (CHDESCR_TEXTANDVALUE + 1)
 
 enum SvxChartLegendPos
 {
