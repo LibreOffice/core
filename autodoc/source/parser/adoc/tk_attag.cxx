@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_attag.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ DEFINE_TOKEN_CLASS(at_include,  "<included text>")
 DEFINE_TOKEN_CLASS(at_label,  "Label")
 DEFINE_TOKEN_CLASS(at_HTML,  "")
 DEFINE_TOKEN_CLASS(at_NOHTML,  "")
+DEFINE_TOKEN_CLASS(at_since, "Since");
 
 }   // namespace adoc
 
