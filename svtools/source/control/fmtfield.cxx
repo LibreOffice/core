@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-14 08:47:26 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 08:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,26 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
+#ifdef NEW_REGULAR_SEARCH
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+    #include <com/sun/star/util/SearchOptions.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHALGORITHMS_HPP_
+    #include <com/sun/star/util/SearchAlgorithms.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
+    #include <com/sun/star/util/SearchResult.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+    #include <com/sun/star/util/SearchFlags.hpp>
+    #endif
+    #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+    #include <com/sun/star/lang/Locale.hpp>
+    #endif
+#endif
 
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 //==============================================================================
 // regulaerer Ausdruck, um komplette Zahlen und alles, was waehrend der Eingabe einer kompletten Zahl als Fragment vorkommt,
@@ -844,7 +862,11 @@ BOOL DoubleNumericField::CheckText(const XubString& sText) const
     USHORT nStart = 0, nEnd = sForceComplete.Len();
     BOOL bFound = m_pConformanceTester->SearchFrwrd(sForceComplete, &nStart, &nEnd);
 
+#ifdef NEW_REGULAR_SEARCH
+    if (bFound && (nStart == 0) && (nEnd == sForceComplete.Len()))
+#else
     if (bFound && (nStart == 0) && (nEnd == sForceComplete.Len() - 1))
+#endif
         return TRUE;
 
     return FALSE;
@@ -884,7 +906,22 @@ void DoubleNumericField::ResetConformanceTester()
     sDescription.SearchAndReplaceAscii("##", String::CreateFromAscii(cSepHexCode));
 
     delete m_pConformanceTester;
+
+#ifdef NEW_REGULAR_SEARCH
+    SearchOptions aParam;
+    aParam.algorithmType = SearchAlgorithms_REGEXP;
+    aParam.searchFlag = SearchFlags::ALL_IGNORE_CASE;
+    aParam.searchString = sDescription;
+
+    String sLanguage, sCountry;
+    ConvertLanguageToIsoNames( pFormatEntry ? pFormatEntry->GetLanguage() : LANGUAGE_ENGLISH_US, sLanguage, sCountry );
+    aParam.Locale.Language = sLanguage;
+    aParam.Locale.Country = sCountry;
+
+    m_pConformanceTester = new TextSearch(aParam);
+#else
     m_pConformanceTester = new SearchText(SearchParam(sDescription, SearchParam::SRCH_REGEXP, FALSE), GetpApp()->GetAppInternational());
+#endif
 }
 
 
