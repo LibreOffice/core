@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-04 11:58:47 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2549,7 +2549,7 @@ String FMT_REG_AUTHOR
     TEXT[ chinese_traditional ] = "§@ªÌ";
     TEXT[ arabic ] = "ÇáãÄáİ";
     TEXT[ greek ] = "ÓõíôÜêôçò";
-    TEXT[ korean ] = "ÀÛ¼ºÀÎ";
+    TEXT[ korean ] = "ÀÛ¼ºÀÚ";
     TEXT[ turkish ] = "Yazan";
     TEXT[ language_user1 ] = " ";
 };
