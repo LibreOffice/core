@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:19:44 $
+#   last change: $Author: hr $ $Date: 2004-11-09 11:50:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,12 +70,6 @@ UNIXVERSIONNAMES = UDK
 .ENDIF # WNT
 
 .INCLUDE: settings.mk
-
-.IF "$(SOLAR_JAVA)"==""
-nojava:
-    @echo "Not building jvmaccess because Java is disabled"
-.ENDIF
-
 
 .IF "$(UNIXVERSIONNAMES)" == ""
 SHL1TARGET = $(TARGET)$(UDK_MAJOR)$(COMID)
