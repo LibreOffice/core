@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:17 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,6 @@
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
-#endif
-
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include "xmlnmspe.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLEMENT_HXX
@@ -1484,6 +1480,7 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     case FIELD_ID_DDE:
         // name from field master
          ProcessString(sXML_connection_name,
+
                        GetStringProperty(sPropertyName,
                                          GetMasterPropertySet(rTextField)));
         ExportElement(sXML_dde_connection, sPresentation);
@@ -1497,20 +1494,12 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     case FIELD_ID_URL:
     {
         // this field is a special case because it gets mapped onto a
-        // hyperlink, rather than one of the regular text field. We
-        // can't use our helper functions, as the assume namespace
-        // text.
-        OUString sHref = GetStringProperty(sPropertyURL, xPropSet);
-        if (sHref.getLength()>0)
-        {
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sHref);
-        }
-        OUString sTarget = GetStringProperty(sPropertyTargetFrame,xPropSet);
-        if (sTarget.getLength()>0)
-        {
-            rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_target_frame_name,
-                                 sTarget);
-        }
+        // hyperlink, rather than one of the regular text field.
+        ProcessString(sXML_href, GetStringProperty(sPropertyURL, xPropSet),
+                      sal_True, XML_NAMESPACE_XLINK);
+        ProcessString(sXML_target_frame_name,
+                      GetStringProperty(sPropertyTargetFrame,xPropSet),
+                      sal_True, XML_NAMESPACE_OFFICE);
         SvXMLElementExport aUrlField(rExport, XML_NAMESPACE_TEXT, sXML_a,
                                      sal_False, sal_False);
         GetExport().GetDocHandler()->characters(sPresentation);
@@ -1526,13 +1515,15 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
 
     case FIELD_ID_SCRIPT:
         ProcessString(sXML_language,
-                      GetStringProperty(sPropertyScriptType, xPropSet));
+                      GetStringProperty(sPropertyScriptType, xPropSet),
+                      sal_True, XML_NAMESPACE_SCRIPT);
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for script field");
         if (GetBoolProperty(sPropertyURLContent, xPropSet))
         {
             ProcessString(sXML_href,
-                          GetStringProperty(sPropertyContent, xPropSet));
+                          GetStringProperty(sPropertyContent, xPropSet),
+                          sal_False, XML_NAMESPACE_XLINK);
             ExportElement(sXML_script);
         }
         else
@@ -1544,16 +1535,24 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
 
     case FIELD_ID_ANNOTATION:
     {
+        // author
         ProcessString(sXML_author,
-                      GetStringProperty(sPropertyAuthor, xPropSet));
-        ProcessDate(sXML_date,
-                    GetDateProperty(sPropertyDate, xPropSet));
+                      GetStringProperty(sPropertyAuthor, xPropSet),
+                      sal_True, XML_NAMESPACE_OFFICE);
+
+        // date time
+        ProcessDate(sXML_create_date,
+                    GetDateProperty(sPropertyDate, xPropSet),
+                    XML_NAMESPACE_OFFICE);
+
+        // check for empty presentation (just in case)
         DBG_ASSERT(sPresentation.equals(sEmpty),
                    "Unexpected presentation for annotation field");
-        SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT,
+
+        // annotation element + content
+        SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_OFFICE,
                                  sXML_annotation, sal_False, sal_True);
-        ProcessParagraphSequence(
-            GetStringProperty(sPropertyContent, xPropSet));
+        ProcessParagraphSequence(GetStringProperty(sPropertyContent,xPropSet));
         break;
     }
 
@@ -1816,21 +1815,18 @@ void XMLTextFieldExport::ExportFieldDeclarations()
 
                 // export elements; can't use ProcessString because
                 // elements are in office namespace
-                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                         sXML_dde_application,
-                                         GetStringProperty(
-                                             sPropertyDDECommandType,
-                                             xPropSet));
-                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                         sXML_dde_topic,
-                                         GetStringProperty(
-                                             sPropertyDDECommandFile,
-                                             xPropSet));
-                GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
-                                         sXML_dde_item,
-                                         GetStringProperty(
-                                             sPropertyDDECommandElement,
-                                             xPropSet));
+                ProcessString(sXML_dde_application,
+                              GetStringProperty(sPropertyDDECommandType,
+                                                xPropSet),
+                              sal_False, XML_NAMESPACE_OFFICE);
+                ProcessString(sXML_dde_topic,
+                              GetStringProperty(sPropertyDDECommandFile,
+                                                xPropSet),
+                              sal_False, XML_NAMESPACE_OFFICE);
+                ProcessString(sXML_dde_item,
+                              GetStringProperty(sPropertyDDECommandElement,
+                                                xPropSet),
+                              sal_False, XML_NAMESPACE_OFFICE);
                 sal_Bool bIsAutomaticUpdate = GetBoolProperty(
                     sPropertyIsAutomaticUpdate, xPropSet);
                 if (bIsAutomaticUpdate)
@@ -1995,7 +1991,8 @@ void XMLTextFieldExport::ProcessBoolean(const sal_Char* pXmlName,
 /// export string attribute
 void XMLTextFieldExport::ProcessString(const sal_Char* pXmlName,
                                        const OUString& sValue,
-                                       sal_Bool bOmitEmpty)
+                                       sal_Bool bOmitEmpty,
+                                       sal_uInt16 nPrefix)
 {
     DBG_ASSERT(NULL!=pXmlName, "invalid element name");
     if (NULL == pXmlName) {
@@ -2008,17 +2005,18 @@ void XMLTextFieldExport::ProcessString(const sal_Char* pXmlName,
     }
 
     // write attribute
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, pXmlName, sValue);
+    GetExport().AddAttribute(nPrefix, pXmlName, sValue);
 }
 
 /// export a string attribute
 void XMLTextFieldExport::ProcessString(const sal_Char* pXmlName,
                                        const ::rtl::OUString& sValue,
-                                       const ::rtl::OUString& sDefault)
+                                       const ::rtl::OUString& sDefault,
+                                       sal_uInt16 nPrefix)
 {
     if (sValue != sDefault)
     {
-        ProcessString(pXmlName, sValue);
+        ProcessString(pXmlName, sValue, sal_False, nPrefix);
     }
 }
 
@@ -2027,7 +2025,8 @@ void XMLTextFieldExport::ProcessString(const sal_Char* pXmlName,
 void XMLTextFieldExport::ProcessString(
     const sal_Char* pXmlName,
     const sal_Char* pValue,
-    sal_Bool bOmitEmpty)
+    sal_Bool bOmitEmpty,
+    sal_uInt16 nPrefix)
 {
     DBG_ASSERT(NULL != pXmlName, "invalid element name");
     DBG_ASSERT(NULL != pValue, "invalid value name");
@@ -2047,13 +2046,14 @@ void XMLTextFieldExport::ProcessString(
 void XMLTextFieldExport::ProcessString(
     const sal_Char* pXmlName,
     const sal_Char* pValue,
-    const sal_Char* pDefault)
+    const sal_Char* pDefault,
+    sal_uInt16 nPrefix)
 {
     // save comparisons if pointers are equals.  This will happen
     // frequently, as almost every code in here uses sXML_* constants.
     if ((pValue != pDefault) && (0 != strcmp(pValue, pDefault)))
     {
-        ProcessString(pXmlName, pValue);
+        ProcessString(pXmlName, pValue, sal_False, nPrefix);
     }
 }
 
@@ -2131,7 +2131,8 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
                                          double dValue,
                                          sal_Bool bIsDate,
                                          sal_Bool bIsDuration,
-                                         sal_Bool bOmitDurationIfZero)
+                                         sal_Bool bOmitDurationIfZero,
+                                         sal_uInt16 nPrefix)
 {
     // truncate for date granularity
     if (bIsDate)
@@ -2155,13 +2156,14 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     }
 
     // output attribute
-    ProcessString(sXMLName, aBuffer.makeStringAndClear());
+    ProcessString(sXMLName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
 }
 
 /// export a date or time
 void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
                                          const DateTime& rTime,
-                                         sal_Bool bIsDate)
+                                         sal_Bool bIsDate,
+                                         sal_uInt16 nPrefix)
 {
     OUStringBuffer aBuffer;
 
@@ -2180,20 +2182,21 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     rExport.GetMM100UnitConverter().convertDateTime(aBuffer, aDateTime);
 
     // output attribute
-    ProcessString(sXMLName, aBuffer.makeStringAndClear());
+    ProcessString(sXMLName, aBuffer.makeStringAndClear(), sal_True, nPrefix);
 }
 
 /// export date according to ISO 8601
 void XMLTextFieldExport::ProcessDate(
     const sal_Char* sXMLName,
-    const ::com::sun::star::util::Date& rDate)
+    const ::com::sun::star::util::Date& rDate,
+    sal_uInt16 nPrefix)
 {
     // the easiest way: delegate to ProcessDateTime (as date)
     DateTime aDateTime;
     aDateTime.Day = rDate.Day;
     aDateTime.Month = rDate.Month;
     aDateTime.Year = rDate.Year;
-    ProcessDateTime(sXMLName, aDateTime, sal_True);
+    ProcessDateTime(sXMLName, aDateTime, sal_True, nPrefix);
 }
 
 
@@ -2202,13 +2205,14 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
                                          sal_Int32 nMinutes,
                                          sal_Bool bIsDate,
                                          sal_Bool bIsDuration,
-                                         sal_Bool bOmitDurationIfZero)
+                                         sal_Bool bOmitDurationIfZero,
+                                         sal_uInt16 nPrefix)
 {
     // handle bOmitDurationIfZero here, because we can precisely compare ints
     if (!(bIsDuration && bOmitDurationIfZero && (nMinutes==0)))
     {
         ProcessDateTime(sXMLName, (double)nMinutes / (double)(24*60),
-                        bIsDate, bIsDuration, bOmitDurationIfZero);
+                        bIsDate, bIsDuration, bOmitDurationIfZero, nPrefix);
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:16 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,11 +167,9 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_HREF,
     XML_TOK_TEXTFIELD_TARGET_FRAME,
 
-    XML_TOK_TEXTFIELD_DATE,
-    XML_TOK_TEXTFIELD_AUTHOR,
-    XML_TOK_TEXTFIELD_SCRIPT,
+    XML_TOK_TEXTFIELD_OFFICE_CREATE_DATE,
+    XML_TOK_TEXTFIELD_OFFICE_AUTHOR,
     XML_TOK_TEXTFIELD_ANNOTATION,
-    XML_TOK_TEXTFIELD_THREF,        // text:href (as opposed to xlink:href)
     XML_TOK_TEXTFIELD_LANGUAGE,
 
     XML_TOK_TEXTFIELD_UNKNOWN

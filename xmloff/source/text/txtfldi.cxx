@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:17 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,12 +387,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXTFIELD_HREF },
     { XML_NAMESPACE_OFFICE, sXML_target_frame_name,
       XML_TOK_TEXTFIELD_TARGET_FRAME },
-    { XML_NAMESPACE_TEXT, sXML_date, XML_TOK_TEXTFIELD_DATE },
-    { XML_NAMESPACE_TEXT, sXML_author, XML_TOK_TEXTFIELD_AUTHOR },
-    { XML_NAMESPACE_TEXT, sXML_script, XML_TOK_TEXTFIELD_SCRIPT },
+    { XML_NAMESPACE_OFFICE, sXML_create_date,
+                XML_TOK_TEXTFIELD_OFFICE_CREATE_DATE },
+    { XML_NAMESPACE_OFFICE, sXML_author, XML_TOK_TEXTFIELD_OFFICE_AUTHOR },
     { XML_NAMESPACE_TEXT, sXML_annotation, XML_TOK_TEXTFIELD_ANNOTATION },
-    { XML_NAMESPACE_TEXT, sXML_href, XML_TOK_TEXTFIELD_THREF },
-    { XML_NAMESPACE_TEXT, sXML_language, XML_TOK_TEXTFIELD_LANGUAGE },
+    { XML_NAMESPACE_SCRIPT, sXML_language, XML_TOK_TEXTFIELD_LANGUAGE },
 
     XML_TOKEN_MAP_END
 };
@@ -3462,7 +3461,7 @@ void XMLAnnotationImportContext::ProcessAttribute(
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_DATE:
+        case XML_TOK_TEXTFIELD_OFFICE_CREATE_DATE:
         {
             DateTime aDateTime;
             if (SvXMLUnitConverter::convertDateTime(aDateTime, sAttrValue))
@@ -3475,7 +3474,7 @@ void XMLAnnotationImportContext::ProcessAttribute(
             break;
         }
 
-        case XML_TOK_TEXTFIELD_AUTHOR:
+        case XML_TOK_TEXTFIELD_OFFICE_AUTHOR:
             sAuthor = sAttrValue;
             bAuthorOK = sal_True;
             break;
@@ -3549,10 +3548,8 @@ void XMLScriptImportContext::ProcessAttribute(
 {
     switch (nAttrToken)
     {
-        case XML_TOK_TEXTFIELD_THREF:
-        case XML_TOK_TEXTFIELD_SCRIPT:
+        case XML_TOK_TEXTFIELD_HREF:
             sContent = sAttrValue;
-            bUrlContent = (nAttrToken == XML_TOK_TEXTFIELD_THREF);
             bContentOK = sal_True;
             break;
 
@@ -3566,7 +3563,8 @@ void XMLScriptImportContext::ProcessAttribute(
             break;
     }
 
-    bValid = bContentOK && bScriptTypeOK;
+    // validity depends only on script type
+    bValid = bScriptTypeOK;
 }
 
 void XMLScriptImportContext::PrepareField(
@@ -3574,10 +3572,16 @@ void XMLScriptImportContext::PrepareField(
 {
     Any aAny;
 
+    // if href attribute was present, we use it. Else we use element content
+    if (! bContentOK)
+    {
+        sContent = GetContent();
+    }
     aAny <<= sContent;
     xPropertySet->setPropertyValue(sPropertyContent, aAny);
 
-    aAny.setValue(&bUrlContent, ::getBooleanCppuType());
+    // URL or script text? We use URL if we have an href-attribute
+    aAny.setValue(&bContentOK, ::getBooleanCppuType());
     xPropertySet->setPropertyValue(sPropertyURLContent, aAny);
 
     aAny <<= sScriptType;

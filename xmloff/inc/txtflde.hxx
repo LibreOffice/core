@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-15 13:36:16 $
+ *  last change: $Author: dvo $ $Date: 2001-01-15 17:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
 #endif
 
 #ifndef _RTL_USTRING
@@ -261,25 +265,29 @@ protected:
     void ProcessString(
         const sal_Char* pXmlName,       /// attribute name (namespace text)
         const ::rtl::OUString& sValue,  /// attribute value
-        sal_Bool bOmitEmpty = sal_False); /// omit attribute, if value is empty
+        sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute, omit if default
     void ProcessString(
         const sal_Char* pXmlName,       /// attribute name (namespace text)
         const ::rtl::OUString& sValue,  /// attribute value
-        const ::rtl::OUString& sDefault);/// default value; omit if equal
+        const ::rtl::OUString& sDefault, /// default value; omit if equal
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute
     void ProcessString(
         const sal_Char* pXmlName,       /// attribute name (namespace text)
         const sal_Char* pValue,         /// attribute value
-        sal_Bool bOmitEmpty = sal_False); /// omit attribute, if value is empty
+        sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute, omit if default
     void ProcessString(
         const sal_Char* pXmlName,       /// attribute name (namespace text)
         const sal_Char* pValue,         /// attribute value
-        const sal_Char* pDefault);      /// attribute default
+        const sal_Char* pDefault,       /// attribute default
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string as a sequence of paragraphs
     void ProcessParagraphSequence(
@@ -312,7 +320,8 @@ protected:
         double dValue,              /// date/time value
         sal_Bool bIsDate,           /// export as date (rather than date/time)?
         sal_Bool bIsDuration = sal_False,           /// export as duration
-        sal_Bool bOmitDurationIfZero = sal_True);   /// omit zero-length durat.
+        sal_Bool bOmitDurationIfZero = sal_True,    /// omit zero-length durat.
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a date, time, or duration
     void ProcessDateTime(
@@ -320,18 +329,21 @@ protected:
         sal_Int32 nMinutes,             /// date/time value in minutes
         sal_Bool bIsDate,           /// export as date?
         sal_Bool bIsDuration,       /// export as duration?
-        sal_Bool bOmitDurationIfZero);  /// omit zero-length durations
+        sal_Bool bOmitDurationIfZero,   /// omit zero-length durations
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
         const sal_Char* sXMLName,   /// name of attribute
         const ::com::sun::star::util::DateTime& rTime,      /// date/time value
-        sal_Bool bIsDate );             /// export as date (rather than date/time)?
+        sal_Bool bIsDate,           /// export as date (rather than date/time)?
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export date according to ISO 8601
     void ProcessDate(
         const sal_Char* sXMLName,   /// name of attribute
-        const ::com::sun::star::util::Date& rTime);     /// date value
+        const ::com::sun::star::util::Date& rTime,  /// date value
+        sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export all attributes for bibliography data fields
     void ProcessBibliographyData(
