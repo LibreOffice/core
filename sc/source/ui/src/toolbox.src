@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 23:53:31 $
+ *  last change: $Author: nn $ $Date: 2002-05-29 15:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2002-05-02 23:53:31 $ $Revision: 1.38 $
+ // $Author: nn $ $Date: 2002-05-29 15:02:21 $ $Revision: 1.39 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1721,6 +1721,11 @@ FloatingWindow RID_TBXCTL_INSOBJ
         167;                                            \
     };
 
+
+// mask color for high contrast
+#define SC_HC_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
+
+
 ImageList RID_DEFAULTIMAGELIST_SC
 {
     ImageBitmap = Bitmap
@@ -1801,7 +1806,7 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File [ japanese ] = "sch_out81.bmp" ;
         File [ korean ] = "sch_out82.bmp" ;
     };
-    MaskColor = STD_MASKCOLOR ;
+    MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 
@@ -1829,7 +1834,7 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File [ japanese ] = "lch_out81.bmp" ;
         File [ korean ] = "lch_out82.bmp" ;
     };
-    MaskColor = STD_MASKCOLOR ;
+    MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
 };
 ImageList RID_OFFICEIMAGELIST_SC
@@ -1849,14 +1854,14 @@ ImageList RID_OFFICEIMAGELIST_LC
 ImageList RID_OFFICEIMAGELIST_SCH
 {
     ImageBitmap = Bitmap { File = "sch_off.bmp" ; };
-    MaskColor = STD_MASKCOLOR ;
+    MaskColor = SC_HC_MASKCOLOR ;
     OFFICE_IDLIST
 };
 
 ImageList RID_OFFICEIMAGELIST_LCH
 {
     ImageBitmap = Bitmap { File = "lch_off.bmp" ; };
-    MaskColor = STD_MASKCOLOR ;
+    MaskColor = SC_HC_MASKCOLOR ;
     OFFICE_IDLIST
 };
 
