@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:21:21 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 15:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,7 +1080,7 @@ TabPage TP_PRIVATE_DATA
         Text[ russian ] = "Ñòğàíà/îáëàñòü";
         Text[ greek ] = "×şñá";
         Text[ dutch ] = "~Land";
-        Text[ french ] = "~Pays";
+        Text[ french ] = "~Pays/État";
         Text[ spanish ] = "~País/Provincia";
         Text[ italian ] = "Provincia/Paese";
         Text[ danish ] = "Land";
@@ -1462,7 +1462,7 @@ TabPage TP_BUSINESS_DATA
         Text[ russian ] = "Ñòğàíà/îáëàñòü";
         Text[ greek ] = "×şñá";
         Text[ dutch ] = "~Land";
-        Text[ french ] = "~Pays";
+        Text[ french ] = "~Pays/État";
         Text[ spanish ] = "País/Pro~vincia";
         Text[ italian ] = "Provincia/Paese";
         Text[ danish ] = "Land";
@@ -1584,7 +1584,7 @@ TabPage TP_BUSINESS_DATA
         Text[ polish ] = "Strona macierzysta/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / eMail";
         Text[ japanese ] = "Î°ÑÍß°¼Ş/E-mail";
-        Text[ korean ] = "È¨ÆäÀÌÁö / ÀüÀÚ¿ìÆí(~M)";
+        Text[ korean ] = "È¨ÆäÀÌÁö /E-Mail";
         Text[ chinese_simplified ] = "Ö÷Ò³/µç×ÓÓÊ¼ş";
         Text[ chinese_traditional ] = "­º­¶/¹q¤l¶l¥ó";
         Text[ arabic ] = "ãæŞÚ ÇáÅäÊÑäÊ / ÇáÈÑíÏ ÇáÅáßÊÑæäí";
