@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-22 18:09:25 $
+ *  last change: $Author: ka $ $Date: 2001-03-29 12:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,15 @@ void DropTargetHelper::ImplBeginDrag( const Sequence< DataFlavor >& rSupportedDa
         aFlavorEx.mnSotId = SotExchange::RegisterFormat( *pFlavor );
 
         mpFormats->push_back( aFlavorEx );
+
+        if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !IsDropFormatSupported( SOT_FORMAT_GDIMETAFILE ) )
+        {
+            if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
+            {
+                aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
+                mpFormats->push_back( aFlavorEx );
+            }
+        }
     }
 }
 
