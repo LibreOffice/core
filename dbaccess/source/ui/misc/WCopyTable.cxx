@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-03 11:27:30 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 12:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,6 +730,8 @@ void OCopyTableWizard::appendKey(Reference<XKeysSupplier>& _rxSup,const ODatabas
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
     Reference<XDataDescriptorFactory> xKeyFactory(_rxSup->getKeys(),UNO_QUERY);
     OSL_ENSURE(xKeyFactory.is(),"No XDataDescriptorFactory Interface!");
+    if ( !xKeyFactory.is() )
+        return;
     Reference<XAppend> xAppend(xKeyFactory,UNO_QUERY);
     OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
