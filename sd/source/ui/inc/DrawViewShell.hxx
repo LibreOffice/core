@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:12:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,9 @@ public:
 
     EditMode        GetEditMode() const { return eEditMode; }
     virtual SdPage* GetActualPage() { return pActualPage; }
+
+    /// inherited from sd::ViewShell
+    virtual SdPage* getCurrentPage() const;
 
     void            ResetActualPage();
     void            ResetActualLayer();
