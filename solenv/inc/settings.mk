@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-12 14:57:46 $
+#   last change: $Author: hjs $ $Date: 2001-07-16 13:23:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1110,7 +1110,7 @@ CDEFSDBGUTIL=-DDBG_UTIL
 CDEFSOPT=-DOPTIMIZE
 HDEFS=-D:$(GUI) -D:$(COM)
 
-MKDEPFLAGS=-I$(INCDEPN:s/ / -I/)
+MKDEPFLAGS=-D_SOLAR__PRIVATE -I$(INCDEPN:s/ / -I/)
 MKDEPALLINC=$(SOLARINCLUDES:s/-I/ -I/)
 MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
 MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
