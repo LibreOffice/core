@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:52:16 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ class SwGlossaryHdl
                     SwGlossaries* pGlossaries,
                     SwTextBlocks *pGlossary,
                     BOOL bApi = FALSE );
-    BOOL    ConvertToNew(SwTextBlocks& rOld);
 public:
+    BOOL    ConvertToNew(SwTextBlocks& rOld);
     void    GlossaryDlg();
 
     USHORT  GetGroupCnt() const;
