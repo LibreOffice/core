@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:14:56 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,12 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
 #endif
 
     PowerPointImportParam aParam( rDocStream, nImportFlags, pTracer );
+    SvStream* pCurrentUserStream = rStorage.OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ), STREAM_STD_READ );
+    if( pCurrentUserStream )
+    {
+        *pCurrentUserStream >> aParam.aCurrentUserAtom;
+        delete pCurrentUserStream;
+    }
     pFilter = new ImplSdPPTImport( pDocument, rStorage, rMedium, aParam );
 }
 
