@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:36:49 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,28 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
 #endif
 
+#ifndef SC_COMPILER_HXX
+#include "compiler.hxx"
+#endif
+#ifndef SC_RANGENAM_HXX
+#include "rangenam.hxx"
+#endif
+
+#ifndef SC_XLROOT_HXX
+#include "xlroot.hxx"
+#endif
 
 // Token array ================================================================
 
-bool XclTokenArrayHelper::GetString( String& rString, const ScTokenArray& rTokenArray )
+bool XclTokenArrayHelper::GetString( String& rString, const ScTokenArray& rScTokArr )
 {
     bool bRet = false;
-    ScToken** ppToken = rTokenArray.GetArray();
-    ScToken** ppEndToken = ppToken + rTokenArray.GetLen();
+    ScToken** ppToken = rScTokArr.GetArray();
+    ScToken** ppEndToken = ppToken + rScTokArr.GetLen();
     if( ppToken && (ppToken < ppEndToken) )
     {
         enum { stBegin, stStr, stError } eState = stBegin;  // last read token
@@ -106,11 +114,11 @@ bool XclTokenArrayHelper::GetString( String& rString, const ScTokenArray& rToken
     return bRet;
 }
 
-bool XclTokenArrayHelper::GetStringList( String& rStringList, const ScTokenArray& rTokenArray, sal_Unicode cSep )
+bool XclTokenArrayHelper::GetStringList( String& rStringList, const ScTokenArray& rScTokArr, sal_Unicode cSep )
 {
     bool bRet = false;
-    ScToken** ppToken = rTokenArray.GetArray();
-    ScToken** ppEndToken = ppToken + rTokenArray.GetLen();
+    ScToken** ppToken = rScTokArr.GetArray();
+    ScToken** ppEndToken = ppToken + rScTokArr.GetLen();
     if( ppToken && (ppToken < ppEndToken) )
     {
         enum { stBegin, stStr, stSep, stError } eState = stBegin;   // last read token
@@ -146,43 +154,55 @@ bool XclTokenArrayHelper::GetStringList( String& rStringList, const ScTokenArray
     return bRet;
 }
 
-void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rTokenArray, sal_Unicode cStringSep )
+void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep )
 {
     String aString;
-    if( GetString( aString, rTokenArray ) )
+    if( GetString( aString, rScTokArr ) )
     {
-        rTokenArray.Clear();
+        rScTokArr.Clear();
         xub_StrLen nTokenCnt = aString.GetTokenCount( cStringSep );
         xub_StrLen nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
             String aToken( aString.GetToken( 0, cStringSep, nStringIx ) );
             if( nToken > 0 )
-                rTokenArray.AddOpCode( ocSep );
-            rTokenArray.AddString( aToken );
+                rScTokArr.AddOpCode( ocSep );
+            rScTokArr.AddString( aToken );
         }
     }
 }
 
+// ----------------------------------------------------------------------------
+
+const ScRangeData* XclTokenArrayHelper::GetSharedFormula( const XclRoot& rRoot, const ScTokenArray& rScTokArr )
+{
+    if( rScTokArr.GetLen() == 1 )
+        if( const ScToken* pToken = const_cast< ScTokenArray& >( rScTokArr ).First() )
+            if( pToken->GetOpCode() == ocName )
+                if( const ScRangeData* pData = rRoot.GetNamedRanges().FindIndex( pToken->GetIndex() ) )
+                    if( pData->HasType( RT_SHARED ) )
+                        return pData;
+    return 0;
+}
 
 // ----------------------------------------------------------------------------
 
-inline void lcl_xlformula_GetAddress( ScAddress& rAddress, const ScToken& rToken )
+namespace {
+
+inline void lclGetAddress( ScAddress& rAddress, const ScToken& rToken )
 {
     const SingleRefData& rRef = rToken.GetSingleRef();
     rAddress.Set( rRef.nCol, rRef.nRow, rRef.nTab );
 }
 
-bool XclTokenArrayHelper::GetMultipleOpRefs(
-        ScAddress& rFormula,
-        ScAddress& rColFirstPos, ScAddress& rColRelPos,
-        ScAddress& rRowFirstPos, ScAddress& rRowRelPos,
-        bool& rbIsDoubleRefMode, const ScTokenArray& rTokenArray )
+} // namespace
+
+bool XclTokenArrayHelper::GetMultipleOpRefs( XclMultipleOpRefs& rRefs, const ScTokenArray& rScTokArr )
 {
-    rbIsDoubleRefMode = false;
+    rRefs.mbDblRefMode = false;
     bool bRet = false;
-    ScToken** ppToken = rTokenArray.GetArray();
-    ScToken** ppEndToken = ppToken + rTokenArray.GetLen();
+    ScToken** ppToken = rScTokArr.GetArray();
+    ScToken** ppEndToken = ppToken + rScTokArr.GetLen();
     if( ppToken && (ppToken < ppEndToken) )
     {
         enum
@@ -212,7 +232,7 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
                         case stOpen:
                             eState = bIsSingleRef ? stFormula : stError;
                             if( bIsSingleRef )
-                                lcl_xlformula_GetAddress( rFormula, *pToken );
+                                lclGetAddress( rRefs.maFmlaScPos, *pToken );
                         break;
                         case stFormula:
                             eState = bIsSep ? stFormulaSep : stError;
@@ -220,7 +240,7 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
                         case stFormulaSep:
                             eState = bIsSingleRef ? stColFirst : stError;
                             if( bIsSingleRef )
-                                lcl_xlformula_GetAddress( rColFirstPos, *pToken );
+                                lclGetAddress( rRefs.maColFirstScPos, *pToken );
                         break;
                         case stColFirst:
                             eState = bIsSep ? stColFirstSep : stError;
@@ -228,7 +248,7 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
                         case stColFirstSep:
                             eState = bIsSingleRef ? stColRel : stError;
                             if( bIsSingleRef )
-                                lcl_xlformula_GetAddress( rColRelPos, *pToken );
+                                lclGetAddress( rRefs.maColRelScPos, *pToken );
                         break;
                         case stColRel:
                             eState = bIsSep ? stColRelSep : ((eOpCode == ocClose) ? stClose : stError);
@@ -237,8 +257,8 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
                             eState = bIsSingleRef ? stRowFirst : stError;
                             if( bIsSingleRef )
                             {
-                                lcl_xlformula_GetAddress( rRowFirstPos, *pToken );
-                                rbIsDoubleRefMode = true;
+                                lclGetAddress( rRefs.maRowFirstScPos, *pToken );
+                                rRefs.mbDblRefMode = true;
                             }
                         break;
                         case stRowFirst:
@@ -247,7 +267,7 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
                         case stRowFirstSep:
                             eState = bIsSingleRef ? stRowRel : stError;
                             if( bIsSingleRef )
-                                lcl_xlformula_GetAddress( rRowRelPos, *pToken );
+                                lclGetAddress( rRefs.maRowRelScPos, *pToken );
                         break;
                         case stRowRel:
                             eState = (eOpCode == ocClose) ? stClose : stError;
@@ -264,7 +284,6 @@ bool XclTokenArrayHelper::GetMultipleOpRefs(
     }
     return bRet;
 }
-
 
 // ============================================================================
 
