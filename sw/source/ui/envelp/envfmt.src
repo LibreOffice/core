@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:16:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Příjemce";
         Text[ hebrew ] = "Empfänger";
         Text[ hindi ] = "लेनेवाला";
+        Text[ slovak ] = "Príjemca";
     };
     FixedText TXT_ADDR_POS
     {
@@ -133,6 +134,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedText TXT_ADDR_LEFT
     {
@@ -167,6 +169,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "zleva";
         Text[ hebrew ] = "‮משמאל‬";
         Text[ hindi ] = "बायाँ ओर से ";
+        Text[ slovak ] = "zľava";
     };
     MetricField FLD_ADDR_LEFT
     {
@@ -218,6 +221,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "shora";
         Text[ hebrew ] = "‮מלמעלה‬";
         Text[ hindi ] = "ऊपर से ";
+        Text[ slovak ] = "zhora";
     };
     MetricField FLD_ADDR_TOP
     {
@@ -267,6 +271,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     MenuButton BTN_ADDR_EDIT
     {
@@ -301,6 +306,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "संपादन";
+        Text[ slovak ] = "Upraviť";
     };
     FixedLine FL_SENDER
     {
@@ -334,6 +340,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Odesilatel";
         Text[ hebrew ] = "‮שולח‬";
         Text[ hindi ] = "भेजनेवाला";
+        Text[ slovak ] = "Odosielateľ";
     };
     FixedText TXT_SEND_POS
     {
@@ -366,6 +373,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     FixedText TXT_SEND_LEFT
     {
@@ -400,6 +408,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "zleva";
         Text[ hebrew ] = "‮משמאל‬";
         Text[ hindi ] = "बायाँ ओर से";
+        Text[ slovak ] = "zľava";
     };
     MetricField FLD_SEND_LEFT
     {
@@ -451,6 +460,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "shora";
         Text[ hebrew ] = "‮מלמעלה‬";
         Text[ hindi ] = "ऊपर से";
+        Text[ slovak ] = "zhora";
     };
     MetricField FLD_SEND_TOP
     {
@@ -500,6 +510,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     MenuButton BTN_SEND_EDIT
     {
@@ -534,6 +545,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "संपादन";
+        Text[ slovak ] = "Upraviť";
     };
     FixedLine FL_SIZE
     {
@@ -567,6 +579,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Velikost";
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
+        Text[ slovak ] = "Veľkosť";
     };
     FixedText TXT_SIZE_FORMAT
     {
@@ -601,6 +614,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "F~ormát";
     };
     ListBox BOX_SIZE_FORMAT
     {
@@ -643,6 +657,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौ~ड़ाई";
+        Text[ slovak ] = "~Šírka";
     };
     MetricField FLD_SIZE_WIDTH
     {
@@ -694,6 +709,7 @@ TabPage TP_ENV_FMT
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचा~ई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField FLD_SIZE_HEIGHT
     {
@@ -755,6 +771,7 @@ Menu MNU_EDIT
             TEXT[ czech ] = "Znak...";
             TEXT[ hebrew ] = "~Zeichen...";
             TEXT[ hindi ] = "अ~क्षर...";
+            TEXT[ slovak ] = "Z~nak...";
         };
         MenuItem
         {
@@ -787,9 +804,12 @@ Menu MNU_EDIT
             TEXT[ czech ] = "Odstavec...";
             TEXT[ hebrew ] = "‮פסקאות...‬";
             TEXT[ hindi ] = "प~रिच्छेद...";
+            TEXT[ slovak ] = "Odst~avec...";
         };
     };
 };
+
+
 
 
 
