@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:00:40 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:31:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ use Text::ParseWords;
 # Define known parameter exceptions
 %knownpara = ( 'echo', [ '/TEST', 'QQQ', 'CCC' ],
                'cl', [ '-clr:', '-Z' ],
-               'csc', [ '-target:', '-out:', '-reference:' ],
+               'csc', [ '-target:' ],
                'lib', [ 'OUT:', 'EXTRACT:','out:', 'def:', 'machine:' ],
                'link', [ 'BASE:', 'DEBUG', 'DLL', 'LIBPATH', 'MACHINE:',
                          'MAP', 'NODEFAULTLIB', 'OPT', 'PDB', 'RELEASE',
@@ -90,6 +90,42 @@ use Text::ParseWords;
 
 #---------------------------------------------------------------------------
 # procedures
+
+
+#----------------------------------------------------------
+# Function name: myCygpath
+# Description:   Transform POSIX path to DOS path
+# Arguments:     1. Variable (string) with one token
+#                2. optional - if set remove spaces and shorten to 8.3
+#                   representation.
+# Return value:  Reformatted String
+#----------------------------------------------------------
+sub myCygpath {
+    my $posixpath = shift;
+    my $shortenpath = shift || '';
+
+    my $dospath;
+
+    if ( $posixpath =~ / / and $shortenpath ) {
+        chomp( $dospath = qx{cygpath -d "$posixpath"} );
+        # "cygpath -d" returns "" if the file doesn't exist.
+        if ($dospath eq "") {
+            $dospath = ".";
+            print(STDERR "Error: guw.pl: Path: $posixpath:\nhas a problem! Probably nonexistent filename with space.\n");
+            if ( (defined $debug_light) or (defined $debug) ) {
+                die "exiting ...\n";
+            }
+        }
+    } else {
+        if ( $posixpath =~ /^\// ) {
+            chomp( $dospath = qx{cygpath -w "$posixpath"} );
+        } else {
+            $dospath = $posixpath;
+            $dospath =~ s/\//\\/g;
+        }
+    }
+    return $dospath;
+}
 
 #----------------------------------------------------------
 # Function name: WinFormat
@@ -103,47 +139,63 @@ sub WinFormat {
 
   $variable =~ s/(\$\w+)/$1/eeg ; # expand the variables
   $variable =~ s/(\$\w+)/$1/eeg ; # expand the variables twice!
-  $variable =~ s/:/;/g;
-  $variable =~ s/([;]|\A)(\w);/$1$2:/g; # get back the drives
-
-  # Search for posix path ;entry; and replace with cygpath -w entry, accept quotes.
-  # iz28717 Accept ',' as path seperator.
-  while ( $variable =~ /(?:[;,]|\A)[\'\"]?((?:\/[\w\.\- ~]+)+)[\'\"]?(?:[;,]|\Z)/ ) { # Normal paths
-    if ( defined $debug ) { print(STDERR "WinFormat:\nnormal path:\n$variable\n");};
-    $d1 = $1 ;
-    chomp( $d2 = qx{cygpath -w "$d1"} ) ;
-    $variable =~ s/$d1/$d2/ ;
-  }
 
   # Include paths or parameters with filenames
-  if ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
-      # This regex evaluates -X<path>, sometimes with quotes or "/" at the end
-      # option -> $1, filename without quotes -> $2
-      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (-X<path>) path:\n$variable\n"); }
-      $d1_prefix = $1;
-      $d1 = $2;
-  } elsif ( $variable =~ /\A(-?\w[\w\.]*=)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+  if ( $variable =~ /\A(-?\w[\w\.]*=)[\'\"]?((?:\/?[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
       # This regex evaluates [-]X<something>=<path>, sometimes with quotes or "/" at the end
       # option -> $1, filename without quotes -> $2
       if ( defined $debug ) { print(STDERR "WinFormat:\ninclude ([-]<something>=<path>) path:\n$variable\n"); }
       $d1_prefix = $1;
-      $d1 = $2;
+      $d1 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(-\w[\w\.]*:)[\'\"]?((?:\/?[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      # This regex evaluates -X<something>:<path>, sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\nFound (-<something>:<path>):\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(-\w+:)(.*)\Z/ ) {
+      # This regex evaluates -X<something>:<NO-path>, and prevents translating of these.
+      # option -> $1, rest -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\nFound (-<something>:<no-path>):\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(\w+:)[\'\"]?\/\/\/((?:\/?[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      # See iz35982 for the reason for the special treatment of this switch.
+      # This regex evaluates <something>:///<path>, sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\nFound (<something>:///<path>):\n$variable\n"); }
+      $d1_prefix = $1."///";
+      $d1 = myCygpath($2,1);
+      $d1 =~ s/\\/\//g ;
+  } elsif ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      # This regex evaluates -X<path>, sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (-X<path>) path:\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = myCygpath($2,1);
   } else {
       $d1 = "";
   }
   if ( $d1 ne "" ) {
-    # Some programs (e.g. rsc have problems with filenames with spaces), use short dos paths
-    if ( $d1 =~ / / ) {
-        chomp( $d1 = qx{cygpath -d "$d1"} );
-    } else {
-        chomp( $d1 = qx{cygpath -w "$d1"} );
+      # Found a parameter
+      $variable = $d1_prefix.$d1;
+  } else {
+    # Found no parameter, assume a path
+    $variable =~ s/:/;/g;
+    $variable =~ s/([;]|\A)(\w);/$1$2:/g; # get back the drives
+
+    # Search for posix path ;entry; (The regex accepts valid paths with at least one /)
+    # and replace with DOS path, accept quotes.
+    # iz28717 Accept ',' as path seperator.
+    while ( $variable =~ /(?:[;,]|\A)[\'\"]?([\w\.\- ~]*(?:\/[\w\.\- ~]+)+\/?)[\'\"]?(?:[;,]|\Z)/ ) {
+        # Normal paths
+        $d1 = $1;
+        $d2 = myCygpath($d1);
+        if ( defined $debug ) {
+            print(STDERR "WinFormat:\nFull path:\n$variable\nTranslated part:$d2\n");
+        }
+        $variable =~ s/$d1/$d2/ ;
     }
-    # "cygpath -d" returns "" if the file doesn't exist.
-    if ($d1 eq "") {
-      $d1 = ".";
-      print(STDERR "Error: guw.pl: Option:$variable:\nhas a problem! Probably nonexistent filename with space.\n");
-    }
-    $variable = $d1_prefix.$d1;
   }
 
   # Sanity check for -X<path>
@@ -151,14 +203,11 @@ sub WinFormat {
       print(STDERR "Error: guw.pl: WinFormat: Not converted -X/... type switch in :$variable:.\n");
       if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed -X/...\n"; }
   }
-  # Sanity check for [-]X<something>=<path> case
-  if ( $variable =~ /-?\w[\w\.]*=[\'\"]?(?:\/[\w\.\- ~]+)+/ ) {
-      print(STDERR "Error: guw.pl: WinFormat: Not converted [-]X<something>=<path> type switch in :$variable:.\n");
-      if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed [-]X<something>=/...\n"; }
+  # Sanity check for [-]X<something>(:|=)<path> case
+  if ( $variable =~ /\A-?\w[\w\.]*[=:][\'\"]?(?:\/[\w\.\- ~]+)+/ ) {
+      print(STDERR "Error: guw.pl: WinFormat: Not converted [-]X<something>(=|:)/<path> type switch in :$variable:.\n");
+      if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed [-]X<something>(=|:)/...\n"; }
   }
-
-  $variable =~ s/\//\\/g;       # Remaining \ come from e.g.: ../foo/baa
-  $variable =~ s/^\\$/\//g; # a single "/" needs to be preserved
 
   if ( defined $debug ) { print(STDERR "WinFormat:\nresult:$variable\n");};
   return $variable;
@@ -261,7 +310,9 @@ sub replace_cyg_env {
         'STAR_PACKMISC',
         'STAR_SOLARENVPATH',
         'STAR_INITROOT',
-        'STAR_STANDLST'
+        'STAR_STANDLST',
+        'CLASSPATH',
+        'JAVA_HOME'
     );
     foreach my $one_var ( @affected_vars )
     {
