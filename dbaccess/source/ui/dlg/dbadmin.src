@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 18:19:35 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 13:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,24 +82,24 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Size = MAP_APPFONT ( 60, 200 ) ;
         ClipChildren = TRUE;
 
-        // the following window is just to have a border. In a tab dialog, we can't use a window with border
-        // directly as view window
         PushButton PB_NEW_DATASOURCE
         {
             Pos = MAP_APPFONT ( 0, 0 ) ;
             Size = MAP_APPFONT ( 56, 14 ) ;
             Border = TRUE;
             SVLook = TRUE;
+            TabStop = TRUE ;
 
             Text = "Neue Datenquelle";
-            Text [ english ] = "New data source";
-            Text [ english_us ] = "New data source";
+            Text [ english ] = "Ne~w data source";
+            Text [ english_us ] = "Ne~w data source";
         };
         ListBox LB_DATASOURCES
         {
             Border = TRUE;
             SVLook = TRUE;
             AutoHScroll = TRUE;
+            TabStop = TRUE ;
             Pos = MAP_APPFONT ( 2, 22 ) ;
             Size = MAP_APPFONT ( 56, 196 ) ;
         };
@@ -1442,6 +1442,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/10/26 18:19:35  fs
+ *  BMP_DATABASE* -> IMG_DATABASE*
+ *
  *  Revision 1.6  2000/10/24 12:11:15  fs
  *  functionality added: browsing for system data sources (ODBC/Adabas/dbase/text)
  *
