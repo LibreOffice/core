@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BatchUpdateException.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     array of update counts corresponds to the order in which commands were added
     to the batch.</p>
  */
-exception BatchUpdateException: SQLException
+published exception BatchUpdateException: SQLException
 {
 
     // DocMerge from idl: field com::sun::star::sdbc::BatchUpdateException::UpdateCounts
