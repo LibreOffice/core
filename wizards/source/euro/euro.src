@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bc $ $Date: 2001-05-03 13:46:00 $
+ *  last change: $Author: bc $ $Date: 2001-05-03 14:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,7 +796,7 @@ Text[ english_us ] = "Entry of the ranges to be converted...";
 
 String STATUSLINE + 4
 {
-Text = "Tabellenschütze werden wieder hergestellt...";
+Text = "Jeder einzelne Tabellenschutz wird wieder hergestellt...";
 Text[English] = "Sheets are reprotected...";
 Text[ english_us ] = "Sheet protection will be restored...";
     Text[ portuguese ] = "A restaurar protecção das folhas...";
@@ -1122,7 +1122,7 @@ Text[ english_us ] = "Warning!";
 
 String MESSAGES + 11
 {
-Text = "Tabellenschutz wird nicht aufgehoben!";
+Text = "Schutz der Tabellen wird nicht aufgehoben!";
 Text[English] = "Sheets are not protected!";
 Text[ english_us ] = "Sheet cannot be unprotected";
     Text[ portuguese ] = "A protecção das folhas não será anulada!";
