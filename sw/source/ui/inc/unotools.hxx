@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 06:06:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,41 +104,41 @@
 /* -----------------09.06.99 14:36-------------------
  *
  * --------------------------------------------------*/
-class SwRenameXNamedDlg : public ModalDialog
-{
-    FixedText       aNewNameFT;
-    NoSpaceEdit     aNewNameED;
-    FixedLine       aNameFL;
-    OKButton        aOk;
-    CancelButton    aCancel;
-    HelpButton      aHelp;
-
-    String          sRemoveWarning;
-
-    STAR_REFERENCE( container::XNamed ) &   xNamed;
-    STAR_REFERENCE( container::XNameAccess ) & xNameAccess;
-    STAR_REFERENCE( container::XNameAccess )   xSecondAccess;
-    STAR_REFERENCE( container::XNameAccess )   xThirdAccess;
-
-    DECL_LINK(OkHdl, OKButton*);
-    DECL_LINK(ModifyHdl, NoSpaceEdit*);
-
-public:
-    SwRenameXNamedDlg( Window* pParent,
-                    STAR_REFERENCE( container::XNamed ) & xNamed,
-                    STAR_REFERENCE( container::XNameAccess ) & xNameAccess );
-
-    void    SetForbiddenChars( const String& rSet )
-        { aNewNameED.SetForbiddenChars( rSet ); }
-
-    void SetAlternativeAccess(
-            STAR_REFERENCE( container::XNameAccess ) & xSecond,
-            STAR_REFERENCE( container::XNameAccess ) & xThird )
-    {
-        xSecondAccess = xSecond;
-        xThirdAccess = xThird;
-    }
-};
+//CHINA001 class SwRenameXNamedDlg : public ModalDialog
+//CHINA001 {
+//CHINA001 FixedText        aNewNameFT;
+//CHINA001 NoSpaceEdit  aNewNameED;
+//CHINA001 FixedLine       aNameFL;
+//CHINA001 OKButton         aOk;
+//CHINA001 CancelButton     aCancel;
+//CHINA001 HelpButton       aHelp;
+//CHINA001
+//CHINA001 String           sRemoveWarning;
+//CHINA001
+//CHINA001 STAR_REFERENCE( container::XNamed ) &    xNamed;
+//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xNameAccess;
+//CHINA001 STAR_REFERENCE( container::XNameAccess )   xSecondAccess;
+//CHINA001 STAR_REFERENCE( container::XNameAccess )   xThirdAccess;
+//CHINA001
+//CHINA001 DECL_LINK(OkHdl, OKButton*);
+//CHINA001 DECL_LINK(ModifyHdl, NoSpaceEdit*);
+//CHINA001
+//CHINA001 public:
+//CHINA001 SwRenameXNamedDlg( Window* pParent,
+//CHINA001 STAR_REFERENCE( container::XNamed ) & xNamed,
+//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xNameAccess );
+//CHINA001
+//CHINA001 void SetForbiddenChars( const String& rSet )
+//CHINA001      { aNewNameED.SetForbiddenChars( rSet ); }
+//CHINA001
+//CHINA001 void SetAlternativeAccess(
+//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xSecond,
+//CHINA001 STAR_REFERENCE( container::XNameAccess ) & xThird )
+//CHINA001  {
+//CHINA001 xSecondAccess = xSecond;
+//CHINA001 xThirdAccess = xThird;
+//CHINA001  }
+//CHINA001 };
 /* -----------------------------15.12.99 09:55--------------------------------
 
  ---------------------------------------------------------------------------*/
