@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 08:22:11 $
+ *  last change: $Author: pb $ $Date: 2002-08-05 12:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ private:
     FixedLine           aActiveLine;
 
     TabControl          aTabCtrl;
-    Timer               aInitTimer;
+    Timer               aTimer;
 
     Link                aSelectFactoryLink;
     String              sKeyword;
@@ -358,6 +358,7 @@ private:
     DECL_LINK(          ActivatePageHdl, TabControl* );
     DECL_LINK(          SelectHdl, ListBox* );
     DECL_LINK(          InitHdl, Timer* );
+    DECL_LINK(          SelectFactoryHdl, Timer* );
     DECL_LINK(          KeywordHdl, IndexTabPage_Impl* );
 
 public:

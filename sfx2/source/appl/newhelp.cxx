@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 11:38:34 $
+ *  last change: $Author: pb $ $Date: 2002-08-05 12:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1554,9 +1554,9 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
         pIPage = new IndexTabPage_Impl( &aTabCtrl );
     pIPage->SetKeywordHdl( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) );
 
-    aInitTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
-    aInitTimer.SetTimeout( 200 );
-    aInitTimer.Start();
+    aTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
+    aTimer.SetTimeout( 200 );
+    aTimer.Start();
 }
 
 // -----------------------------------------------------------------------
@@ -1686,14 +1686,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
 {
-    String* pFactory = (String*)(ULONG)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
-    if ( pFactory )
-    {
-        String aFactory( *pFactory );
-        aFactory.ToLowerAscii();
-        SetFactory( aFactory, sal_False );
-        aSelectFactoryLink.Call( this );
-    }
+    aTimer.Start();
 
     return 0;
 }
@@ -1703,6 +1696,27 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
 IMPL_LINK( SfxHelpIndexWindow_Impl, InitHdl, Timer *, EMPTYARG )
 {
     Initialize();
+
+    // now use the timer for selection
+    aTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectFactoryHdl ) );
+    aTimer.SetTimeout( 1000 );
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpIndexWindow_Impl, SelectFactoryHdl, Timer *, EMPTYARG )
+{
+    String* pFactory = (String*)(ULONG)aActiveLB.GetEntryData( aActiveLB.GetSelectEntryPos() );
+    if ( pFactory )
+    {
+        String aFactory( *pFactory );
+        aFactory.ToLowerAscii();
+        SetFactory( aFactory, sal_False );
+        aSelectFactoryLink.Call( this );
+    }
+
     return 0;
 }
 
