@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:57:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XPASSWORDCONTAINER_HPP_
 #include "com/sun/star/task/XPasswordContainer.hpp"
+#endif
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
+#include "com/sun/star/task/ErrorCodeRequest.hpp"
+#endif
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEIOEXCEPTION_HPP_
+#include "com/sun/star/task/ErrorCodeIOException.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDNAMECLASHEXCEPTION_HPP_
 #include "com/sun/star/ucb/UnsupportedNameClashException.hpp"
@@ -585,7 +591,15 @@ UUIInteractionHandler::handle(
         star::task::ErrorCodeRequest aErrorCodeRequest;
         if (aAnyRequest >>= aErrorCodeRequest)
         {
-            handleGenericErrorRequest(aErrorCodeRequest,
+            handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
+                                        rRequest->getContinuations());
+            return;
+        }
+
+        star::task::ErrorCodeIOException aErrorCodeIOException;
+        if (aAnyRequest >>= aErrorCodeIOException )
+        {
+            handleGenericErrorRequest( aErrorCodeIOException.ErrCode,
                                         rRequest->getContinuations());
             return;
         }
@@ -2131,7 +2145,7 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
 
 void
 UUIInteractionHandler::handleGenericErrorRequest(
-    com::sun::star::task::ErrorCodeRequest const & rRequest,
+    sal_Int32 nErrorCode,
     com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
                 com::sun::star::task::XInteractionContinuation > > const &
@@ -2153,9 +2167,9 @@ UUIInteractionHandler::handleGenericErrorRequest(
 
     // Note: It's important to convert the transported long to the required unsigned long value.
     // Otherwhise using as flag field can fail ...
-    ErrCode  nError   = (ErrCode)rRequest.ErrCode;
+    ErrCode  nError   = (ErrCode)nErrorCode;
     sal_Bool bWarning = !ERRCODE_TOERROR(nError);
-    ErrorHandler::HandleError(rRequest.ErrCode);
+    ErrorHandler::HandleError(nErrorCode);
 
     if (xApprove.is() && bWarning)
         xApprove->select();
