@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:48:32 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,7 +771,9 @@ BOOL CheckLanguages( ByteString &rLanguages )
     BOOL bReturn = TRUE;
 
     ByteString sTmp( rLanguages );
-    if ( sTmp.ToUpperAscii() == "ALL" ) {
+    /* Using gcc-2.95.3 and STLport-4.5 .Equals() must
+     * be used.. using == causes a compile error */
+    if ( sTmp.ToUpperAscii().Equals("ALL") ) {
         rLanguages = "";
         for ( USHORT i = 0; i < LANGUAGES; i++ ) {
             if ( LANGUAGE_ALLOWED( i )) {
