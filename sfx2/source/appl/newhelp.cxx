@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-15 07:37:17 $
+ *  last change: $Author: pb $ $Date: 2001-10-17 11:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2230,7 +2230,10 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
         URL aURL;
         aURL.Complete = aEntry;
         PARSE_URL( aURL );
-        Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
+
+        Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
+        Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, String(), 0 )
+                                                   : Reference < XDispatch >();
         if ( xDisp.is() )
         {
             if ( !IsWait() )
@@ -2405,17 +2408,6 @@ void SfxHelpWindow_Impl::SetHelpURL( const String& rURL )
 {
     INetURLObject aObj( rURL );
     SetFactory( aObj.GetHost() );
-    pHelpInterceptor->SetStartURL( rURL );
-
-    URL aURL;
-    aURL.Complete = rURL;
-    PARSE_URL( aURL );
-
-    String aTarget( DEFINE_CONST_UNICODE("_self") );
-    Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
-    Reference < XDispatch > xDisp = xProv.is() ?
-        xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
-    AddURLListener( aURL, xDisp );
 }
 
 // -----------------------------------------------------------------------
