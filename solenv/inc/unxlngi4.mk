@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:33:03 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:46:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,11 +89,6 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 # flags for C and C++ Compiler
-# do not use standard header search paths
-# if installed elsewhere
-.IF "$(BUILD_SOSL)"!=""
-CFLAGS=
-.ENDIF
 CFLAGS+=-fmessage-length=0 -c $(INCLUDE) -g
 # flags for the C++ Compiler
 CFLAGSCC= -pipe -mcpu=pentiumpro
@@ -103,7 +98,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive -fno-rtti 
+CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive -fno-rtti
 
 # HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
 .IF "$(BUILD_SPECIAL)"==""
@@ -138,7 +133,7 @@ CFLAGSOUTOBJ=-o
 # Enable all warnings
 CFLAGSWALL=-Wall -Wfloat-equal -Weffc++ -Wold-style-cast -Woverloaded-virtual -Wshadow -Wpointer-arith -Wcast-align -Wsign-compare -Winline
 # Set default warn level
-CFLAGSDFLTWARN=-w
+CFLAGSDFLTWARN=
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
