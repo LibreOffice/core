@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:24:16 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,9 +352,11 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
         if ( xModel.is() )
         {
             SfxItemSet *pSet = GetMedium()->GetItemSet();
-            const SfxFilter* pFilter = GetFactory().GetFilter(0);
+/*
+            const SfxFilter* pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
             if ( pFilter )
                 pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
+*/
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             sal_Int32 nLength = aArgs.getLength();
@@ -980,7 +982,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         // if no filter was set, use the default filter
         // this should be changed in the feature, it should be an error!
-        pFilter = GetFactory().GetFilter(0);
+        DBG_ERROR("No filter set!");
+        pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
         rMedium.SetFilter(pFilter);
     }
 
@@ -1586,15 +1589,15 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         }
     }
 
-    ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aArgs(1);
-    ::com::sun::star::beans::PropertyValue aFilterProp;
-    aFilterProp.Name = DEFINE_CONST_UNICODE("FilterName");
-    aFilterProp.Value <<= aFilterName;
-    aArgs[0] <<= aFilterProp;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xLoader;
     if ( aFilterImplName.getLength() )
+    {
+        try{
         xLoader = ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter >
-            ( xFilterFact->createInstanceWithArguments( aTypeName, aArgs ), ::com::sun::star::uno::UNO_QUERY );
+            ( xFilterFact->createInstanceWithArguments( aFilterName, ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any >() ), ::com::sun::star::uno::UNO_QUERY );
+        }catch(const ::com::sun::star::uno::Exception&)
+            { xLoader.clear(); }
+    }
     if ( xLoader.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp( GetModel(), ::com::sun::star::uno::UNO_QUERY );
@@ -1662,11 +1665,14 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             }
         }
 
-        ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aArgs(1);
-        aArgs[0] <<= aFilterName;
         if ( aFilterImplName.getLength() )
+        {
+            try{
             xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter >
-                ( xFilterFact->createInstanceWithArguments( aTypeName, aArgs ), ::com::sun::star::uno::UNO_QUERY );
+                ( xFilterFact->createInstanceWithArguments( aFilterName, ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any >() ), ::com::sun::star::uno::UNO_QUERY );
+            }catch(const ::com::sun::star::uno::Exception&)
+                { xExporter.clear(); }
+        }
     }
 
     if ( xExporter.is() )
@@ -1902,7 +1908,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
         String aFilterName;
         const SfxFilter *pFilter = NULL;
         if ( pFilterItem )
-            pFilter = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
+            pFilter = SfxFilterMatcher( String::CreateFromAscii( GetFactory().GetShortName()) ).GetFilter4FilterName( aFilterName );
 
         SfxMedium *pMed = new SfxMedium(
             pSalvageItem->GetValue(), STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, pFilter );
@@ -2085,7 +2091,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     if ( aFilterName.Len() )
         pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) );
     else
-        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter(0) );
+        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT ) );
 
     // saving is alway done using a temporary file
     pNewFile->CreateTempFileNoCopy();
@@ -2242,7 +2248,7 @@ sal_Bool SfxObjectShell::CanReload_Impl()
 sal_Bool SfxObjectShell::IsInformationLost()
 {
     const SfxFilter *pFilt = GetMedium()->GetFilter();
-    if ( pFilt == GetFactory().GetFilterContainer()->GetFilter(0) )
+    if ( pFilt == GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT ) )
         return sal_False;
     return pFilt && pFilt->IsAlienFormat() && pImp->bDidDangerousSave && !(pFilt->GetFilterFlags() & SFX_FILTER_SILENTEXPORT);
 }
