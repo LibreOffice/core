@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:25:43 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,7 @@ void TestToolObj::InitTestToolObj()
 //              StartListening( pMyVars[i]->GetBroadcaster(), TRUE );
 
         pImpl->pControlsObj = new Controls( CUniString("ControlDummy").Append(String::CreateFromInt32(i) ) );
-        pImpl->pControlsObj -> SetType( SbxVARIANT );
+        pImpl->pControlsObj -> SetType( SbxOBJECT );
         Insert( pImpl->pControlsObj );                         // Hier so umständlich wegen Compilerfehlers
         pImpl->pControlsObj->ChangeListener();
         pImpl->pControlsObjs[i] = pImpl->pControlsObj;
@@ -2133,7 +2133,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         SbxVariable *pMember;
                         if ( ! (pMember = ((Controls*)pVar)->Find(CUniString("ID"),SbxCLASS_DONTCARE)) )
                         {
-                            pMember = new SbxProperty(CUniString("ID"),SbxULONG);
+                            pMember = new SbxProperty(CUniString("ID"),SbxVARIANT);
                             ((Controls*)pVar)->Insert(pMember);
                         }
                         pMember->PutULong(((Controls*)pVar)->pMethodVar->nValue);
@@ -2222,19 +2222,26 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         }
                     if ( !IsError() )
                     {
-                        if ( nUserData == ID_Control )
+                        SbxVariable *pMember;
+                        if ( ! (pMember = pVar->GetParent()->Find(CUniString("ID"),SbxCLASS_DONTCARE)) )
                         {
-                            In->GenCmdControl (pVar->GetParent()->GetULong(),
-                                (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                            aNextReturnId = SmartId( pVar->GetParent()->GetULong() );
+                            SetError( SbxERR_NAMED_NOT_FOUND );
                         }
                         else
                         {
-                            In->GenCmdControl (pVar->GetParent()->GetString(),
-                                (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
-                            aNextReturnId = SmartId( pVar->GetParent()->GetString() );
+                            if ( nUserData == ID_Control )
+                            {
+                                In->GenCmdControl (pMember->GetULong(),
+                                    (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
+                                aNextReturnId = SmartId( pMember->GetULong() );
+                            }
+                            else
+                            {
+                                In->GenCmdControl (pMember->GetString(),
+                                    (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar);
+                                aNextReturnId = SmartId( pMember->GetString() );
+                            }
                         }
-
 
                         if ( !IsError() && ((SbxTransportMethod*)pVar)->nValue & M_WITH_RETURN )
                         {
@@ -2748,18 +2755,21 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
             pImpl->pControlsObj = pImpl->pControlsObjs[nControlsObj++];
             pImpl->pControlsObj->SetName(pWhatName->pData->Kurzname);
 
+            // Will be set on method-child further down
             if ( pWhatName->pData->aUId.HasNumeric() )
-                pImpl->pControlsObj->PutULong(pWhatName->pData->aUId.GetNum());
+                pImpl->pControlsObj->SetUserData( ID_Control );
             else
-                pImpl->pControlsObj->PutString(pWhatName->pData->aUId.GetStr());
+                pImpl->pControlsObj->SetUserData( ID_StringControl );
 
             pShortNames->Insert(pWhatName->pData->Kurzname,pWhatName->pData->aUId,nSequence);
 
             SbxVariable *pMember;
             if ( ! (pMember = pImpl->pControlsObj->Find(CUniString("ID"),SbxCLASS_DONTCARE)) )
             {
-                pMember = new SbxProperty(CUniString("ID"),SbxULONG);
-                pImpl->pControlsObj->Insert(pMember);
+                SbxProperty* pID = new SbxProperty(CUniString("ID"),SbxVARIANT);
+                pImpl->pControlsObj->Insert(pID);
+                pImpl->pControlsObj->SetDfltProperty(pID);
+                pMember = pID;
             }
             if ( pWhatName->pData->aUId.HasNumeric() )
                 pMember->PutULong(pWhatName->pData->aUId.GetNum());
@@ -2836,7 +2846,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.14 $
+    // search $Revision: 1.15 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -4042,7 +4052,9 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, BOOL bWasControl )
         if ( !Controls::pClasses )                        // Ist static, wird also nur einmal geladen
             ReadFlatArray( Controls::arClasses, Controls::pClasses );
 
-        if ( Controls::pClasses && Controls::pClasses->Seek_Entry( &WhatName ) )
+        if ( Controls::pClasses && Controls::pClasses->Seek_Entry( &WhatName )
+            || rSymbol.EqualsIgnoreCaseAscii( "ID" )
+            || rSymbol.EqualsIgnoreCaseAscii( "Name" ) )
             return TT_METHOD;
         else
             return TT_NOMETHOD;
@@ -4131,10 +4143,7 @@ SbxVariable* Controls::Find( const String& Str, SbxClassType Type)
         ULONG nUId = pClasses->GetObject(nElement)->pData->aUId.GetNum();
         pMethodVar->nValue = nUId;
 
-        if ( SbxValue::GetType() == SbxSTRING )
-            pMethodVar->SetUserData( ID_StringControl );
-        else
-            pMethodVar->SetUserData( ID_Control );
+         pMethodVar->SetUserData( GetUserData() );
         return pMethodVar;
     }
     else
