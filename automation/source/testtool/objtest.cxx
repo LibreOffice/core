@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:08:52 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,9 @@ using namespace com::sun::star::devtools;
 #ifndef _SFXBRDCST_HXX
 #include <svtools/brdcst.hxx>
 #endif
-#ifndef _SBXCLASS_HXX //autogen
+//#ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
-#endif
+//#endif
 #include <com/sun/star/uno/Any.hxx>
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HXX_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -514,7 +514,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     String aST;
     GETSET( aST, "ServerTimeout", ByteString::CreateFromInt64(Time(0,0,45).GetTime()) );     // 45 Sekunden Initial
-    pImpl->aServerTimeout = Time(aST.ToInt64());
+    pImpl->aServerTimeout = Time(long(aST.ToInt64()));
 
     String aSOSE;
     aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
@@ -565,6 +565,10 @@ void TestToolObj::InitTestToolObj()
     pImpl->nErrorCount = 0;
     pImpl->nWarningCount = 0;
     pImpl->nIncludeFileWarningCount = 0;
+
+    pImpl->xErrorList = new SbxDimArray( SbxSTRING );
+    pImpl->xWarningList = new SbxDimArray( SbxSTRING );
+    pImpl->xIncludeFileWarningList = new SbxDimArray( SbxSTRING );
 
     pImpl->nTestCaseLineNr = 0;
 
@@ -645,6 +649,10 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "GetErrorCount", SbxCLASS_METHOD, SbxULONG, ID_GetErrorCount );
     MAKE_TT_KEYWORD( "GetWarningCount", SbxCLASS_METHOD, SbxULONG, ID_GetWarningCount );
     MAKE_TT_KEYWORD( "GetUseFileWarningCount", SbxCLASS_METHOD, SbxULONG, ID_GetUseFileWarningCount );
+
+    MAKE_TT_KEYWORD( "GetErrorList", SbxCLASS_METHOD, SbxOBJECT, ID_GetErrorList );
+    MAKE_TT_KEYWORD( "GetWarningList", SbxCLASS_METHOD, SbxOBJECT, ID_GetWarningList );
+    MAKE_TT_KEYWORD( "GetUseFileWarningList", SbxCLASS_METHOD, SbxOBJECT, ID_GetUseFileWarningList );
 
     MAKE_TT_KEYWORD( "GetTestCaseName", SbxCLASS_METHOD, SbxSTRING, ID_GetTestCaseName );
     MAKE_TT_KEYWORD( "GetTestCaseFileName", SbxCLASS_METHOD, SbxSTRING, ID_GetTestCaseFileName );
@@ -844,7 +852,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         pNewDef = new ControlDef("Active",0);
         if (! pUIds->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
         {
-            ADD_WARNING_LOG2( GEN_RES_STR1c( S_DOUBLE_NAME, "Active" ) , Filename, nLineNr );
+            ADD_WARNING_LOG2( GEN_RES_STR1c( S_DOUBLE_NAME, "Active" ), Filename, nLineNr );
             delete pNewDef;
         }
 
@@ -1121,7 +1129,7 @@ void TestToolObj::ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName )
         }
 
         aName = aLine.GetToken(0,cMyDelim);
-        aUId = TTUniqueId( aLine.GetToken(1,cMyDelim).ToInt64() );
+        aUId = TTUniqueId( (ULONG)aLine.GetToken(1,cMyDelim).ToInt64() );
 
         if ( bSortByName )
             pNewItem = new ControlDef( aName, aUId );
@@ -1253,7 +1261,7 @@ IMPL_LINK( TestToolObj, IdleHdl, Application*, pApp )
         nIdleCount++;
     if ( nIdleCount > 10 )  // d.h. Schon 10 mal hier gewesen und noch keinmal im WaitForAnswer
     {
-    GetpApp()->RemoveIdleHdl( LINK( this, TestToolObj, IdleHdl ) );
+        GetpApp()->RemoveIdleHdl( LINK( this, TestToolObj, IdleHdl ) );
         GetpApp()->PostUserEvent( LINK( this, TestToolObj, CallDialogHandler ) );
     }
     return 0;
@@ -1266,7 +1274,7 @@ IMPL_LINK( TestToolObj, CallDialogHandler, Application*, pApp )
     aDialogHandlerName.Erase();
 
     ULONG nRememberSequence = nSequence; // Da sich die Sequence im DialogHandler ändert
-    (StarBASIC*)GetParent()->Call( aName );
+    ((StarBASIC*)GetParent())->Call( aName );
     nSequence = nRememberSequence;
     // Die Sequenznummern werden dann zwar doppelt vergeben, aber wen kümmerts.
 
@@ -1397,6 +1405,8 @@ BOOL TestToolObj::Load( String aName, SbModule *pMod )
         }
         aText.ConvertLineEnd();
         pMod->SetName(CUniString("--").Append(aName));
+
+        pMod->SetComment( GetRevision( aText ) );
 
         SbModule* pOldModule = MyBasic::GetCompileModule();
         MyBasic::SetCompileModule( pMod );
@@ -1898,6 +1908,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
                         pImpl->nIncludeFileWarningCount = pImpl->nWarningCount;
                         pImpl->nWarningCount = 0;
+
+                        *pImpl->xIncludeFileWarningList = *pImpl->xWarningList;
+                        pImpl->xWarningList->SbxArray::Clear();
                     }
                     else
                         SetError( SbxERR_WRONG_ARGS );
@@ -1944,7 +1957,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 {
                                     bWasNewError = TRUE;
                                     ADD_ERROR_LOG( GET_ERROR()->aText, aThisEntry.GetModuleName(SbxNAME_SHORT_TYPES),
-                                        aThisEntry.GetLine(), aThisEntry.GetCol1(), aThisEntry.GetCol2() );
+                                        aThisEntry.GetLine(), aThisEntry.GetCol1(), aThisEntry.GetCol2(), aThisEntry.GetSourceRevision() );
                                 }
                                 ADD_CALL_STACK_LOG( String(aThisEntry.GetModuleName(SbxNAME_SHORT_TYPES))
                                     .AppendAscii(": ").Append(aThisEntry.GetMethodName(SbxNAME_SHORT_TYPES)),
@@ -1979,7 +1992,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             {
                                 bWasNewError = TRUE;
                                 ADD_ERROR_LOG( GET_ERROR()->aText, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
-                                    nErrLn, nCol1, nCol2 );
+                                    nErrLn, nCol1, nCol2, aRun.GetSourceRevision() );
                             }
                             ADD_CALL_STACK_LOG( String(aRun.GetModuleName(SbxNAME_SHORT_TYPES))
                                 .AppendAscii(": ").Append(aRun.GetMethodName(SbxNAME_SHORT_TYPES)),
@@ -1997,13 +2010,13 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             BasicErrorStackEntry aThisEntry = BasicRuntimeAccess::GetStackEntry( 0 );
                             ADD_ERROR_LOG( GET_ERROR()->aText, aThisEntry.GetModuleName(SbxNAME_SHORT_TYPES),
-                                aThisEntry.GetLine(), aThisEntry.GetCol1(), aThisEntry.GetCol2() );
+                                aThisEntry.GetLine(), aThisEntry.GetCol1(), aThisEntry.GetCol2(), aThisEntry.GetSourceRevision() );
                             BasicRuntimeAccess::DeleteStack();
                         }
                         else
                         {
                             ADD_ERROR_LOG( GET_ERROR()->aText, aRun.GetModuleName(SbxNAME_SHORT_TYPES),
-                                StarBASIC::GetErl(), aRun.GetCol1(), aRun.GetCol2() );
+                                StarBASIC::GetErl(), aRun.GetCol1(), aRun.GetCol2(), aRun.GetSourceRevision() );
                         }
                     }
                     break;
@@ -2162,7 +2175,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             BeginBlock();
                         if ( !IsError() )
                             In->GenCmdSlot ( (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar );
-                        pVar->PutInteger( ((SbxTransportMethod*)pVar)->nValue );
+                        pVar->PutULong( ((SbxTransportMethod*)pVar)->nValue );
                         if ( SingleCommandBlock )
                             EndBlock();
                     }
@@ -2456,6 +2469,27 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         pVar->PutULong( pImpl->nIncludeFileWarningCount );
                     }
                     break;
+                case ID_GetErrorList:
+                    {
+                        if ( ! pImpl->xErrorList->GetDims() )
+                            pImpl->xErrorList->AddDim( 1, 32000 );
+                        pVar->PutObject( pImpl->xErrorList );
+                    }
+                    break;
+                case ID_GetWarningList:
+                    {
+                        if ( ! pImpl->xWarningList->GetDims() )
+                            pImpl->xWarningList->AddDim( 1, 32000 );
+                        pVar->PutObject( pImpl->xWarningList );
+                    }
+                    break;
+                case ID_GetUseFileWarningList:
+                    {
+                        if ( ! pImpl->xIncludeFileWarningList->GetDims() )
+                            pImpl->xIncludeFileWarningList->AddDim( 1, 32000 );
+                        pVar->PutObject( pImpl->xIncludeFileWarningList );
+                    }
+                    break;
                 case ID_GetTestCaseName:
                     {
                         pVar->PutString( pImpl->aTestCaseName );
@@ -2502,6 +2536,11 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
             pImpl->nErrorCount = 0;
             pImpl->nWarningCount = 0;
             pImpl->nIncludeFileWarningCount = 0;
+
+            pImpl->xErrorList->SbxArray::Clear();   // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
+            pImpl->xWarningList->SbxArray::Clear(); // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
+            pImpl->xIncludeFileWarningList->SbxArray::Clear();  // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
+
             if (pFehlerListe)
                 delete pFehlerListe;
             pFehlerListe = new CErrors;
@@ -2533,6 +2572,10 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
             pImpl->nErrorCount = 0;
             pImpl->nWarningCount = 0;
             pImpl->nIncludeFileWarningCount = 0;
+
+            pImpl->xErrorList->SbxArray::Clear();   // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
+            pImpl->xWarningList->SbxArray::Clear(); // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
+            pImpl->xIncludeFileWarningList->SbxArray::Clear();  // call SbxArray::Clear because SbxVarArray::Clear only clears dimensions but no content
         }  // if( nHintId == SBX_HINT_BASICSTOP )
         WaitForAnswer();
         if ( IsError() && ( !IS_ERROR() || GET_ERROR()->nError != GetError() ) )
@@ -2656,6 +2699,16 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         }
     }
     return NULL;
+}
+
+String TestToolObj::GetRevision( String const &aSourceIn )
+{
+    // search $Revision: 1.8 $
+    xub_StrLen nPos;
+    if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
+        return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
+    else
+        return String::CreateFromAscii("No Revision found");
 }
 
 BOOL TestToolObj::CError( ULONG code, const String& rMsg, xub_StrLen l, xub_StrLen c1, xub_StrLen c2 )
@@ -3175,7 +3228,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
 
                         WinInfoRec *pWinInfo = new WinInfoRec;
                         pWinInfo->aUId = aUId;
-                        pWinInfo->nRType = nLNr1;
+                        pWinInfo->nRType = (USHORT)nLNr1;   // just ULONG for Transport, data is always USHORT
                         pWinInfo->aRName = aString1;
                         pWinInfo->bIsReset = bBool1;
                         pWinInfo->aKurzname.Erase();
@@ -3259,7 +3312,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             {
                                 case S_ProfileReset:    // nLNr1 = Anzahl Borders
                                 {
-                                    pImpl->nNumBorders = nLNr1;
+                                    pImpl->nNumBorders = (USHORT)nLNr1;     // Borders are 0 to 4
                                     USHORT i;
                                     for ( i=0 ; i<4 ; i++ )
                                         pImpl->naValBorders[i] = 0;
@@ -3503,7 +3556,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                         }
                         else
                         {   // we only have a Control
-                            USHORT i,j;
+                            USHORT i;
                             BOOL bFoundControl = FALSE;
                             // check for current kontext
                             for ( i = 0 ; !bFoundControl && i < aControls.GetTokenCount('/') ; i++ )
@@ -3745,7 +3798,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
             (nEnd = aText.Search(EndKenn,nGleich+1)) != STRING_NOTFOUND)
     {
         aType = aText.Copy(nStart,nGleich-nStart);
-        nNumber = aText.Copy(nGleich+1,nEnd-nGleich-1).ToInt64();
+        nNumber = (ULONG)aText.Copy(nGleich+1,nEnd-nGleich-1).ToInt64();
         bFound = FALSE;
         if ( aType.CompareTo(UIdKenn) == COMPARE_EQUAL )
         {
@@ -3799,7 +3852,7 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
         if ( aType.CompareTo(TabKenn ) == COMPARE_EQUAL )
         {
             if ( nNumber > nStart )
-                aResult.Fill( nNumber - nStart +1 );
+                aResult.Fill( (USHORT)nNumber - nStart +1 );
             else
                 aResult = CUniString(" ");
             bFound = TRUE;
