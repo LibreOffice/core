@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 13:58:22 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 13:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,37 +79,45 @@ using namespace ::com::sun::star::util;
 namespace {
     static sal_Bool isStorageCompatible(sal_Int32 _eType1, sal_Int32 _eType2)
     {
-        if (_eType1 == _eType2)
-            return sal_True;
+        sal_Bool bIsCompatible = sal_True;
 
-        switch (_eType1)
+        if (_eType1 != _eType2)
         {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                return  (DataType::CHAR     == _eType2)
-                    ||  (DataType::VARCHAR  == _eType2)
-                    ||  (DataType::DECIMAL  == _eType2)
-                    ||  (DataType::NUMERIC  == _eType2);
+            switch (_eType1)
+            {
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                    bIsCompatible = (DataType::CHAR     == _eType2)
+                                ||  (DataType::VARCHAR  == _eType2)
+                                ||  (DataType::DECIMAL  == _eType2)
+                                ||  (DataType::NUMERIC  == _eType2);
+                    break;
 
-            case DataType::DOUBLE:
-            case DataType::FLOAT:
-            case DataType::REAL:
-                return  (DataType::DOUBLE   == _eType2)
-                    ||  (DataType::FLOAT    == _eType2)
-                    ||  (DataType::REAL     == _eType2);
+                case DataType::DOUBLE:
+                case DataType::FLOAT:
+                case DataType::REAL:
+                    bIsCompatible = (DataType::DOUBLE   == _eType2)
+                                ||  (DataType::FLOAT    == _eType2)
+                                ||  (DataType::REAL     == _eType2);
+                    break;
 
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-            case DataType::LONGVARBINARY:
-            case DataType::LONGVARCHAR:
-                return  (DataType::BINARY           == _eType2)
-                    ||  (DataType::VARBINARY        == _eType2)
-                    ||  (DataType::LONGVARBINARY    == _eType2)
-                    ||  (DataType::LONGVARCHAR      == _eType2);
+                case DataType::BINARY:
+                case DataType::VARBINARY:
+                case DataType::LONGVARBINARY:
+                case DataType::LONGVARCHAR:
+                    bIsCompatible = (DataType::BINARY           == _eType2)
+                                ||  (DataType::VARBINARY        == _eType2)
+                                ||  (DataType::LONGVARBINARY    == _eType2)
+                                ||  (DataType::LONGVARCHAR      == _eType2);
+                    break;
+
+                default:
+                    bIsCompatible = sal_False;
+            }
         }
-        return sal_False;
+        return bIsCompatible;
     }
 }
 
