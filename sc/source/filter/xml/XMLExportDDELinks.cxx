@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 08:11:15 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 16:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,25 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
 #endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_XDDELINK_HPP_
+#include <com/sun/star/sheet/XDDELink.hpp>
+#endif
+
+class ScMatrix;
 
 using namespace com::sun::star;
 
@@ -96,6 +111,132 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 {
 }
 
-void ScXMLExportDDELinks::WriteDDELinks()
+sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
+                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue)
 {
+    if (bEmpty == bPrevEmpty)
+        if (bEmpty)
+            return sal_True;
+        else if (bString == bPrevString)
+            if (bString)
+                return (sPrevValue == sValue);
+            else
+                return (fPrevValue == fValue);
+        else
+            return sal_False;
+    else
+        return sal_False;
+}
+
+void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue, const sal_Int32 nRepeat)
+{
+    rtl::OUStringBuffer sBuffer;
+    if (!bEmpty)
+        if (bString)
+        {
+            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_string);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_string_value, rtl::OUString(sValue));
+        }
+        else
+        {
+            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_float);
+            rExport.GetMM100UnitConverter().convertNumber(sBuffer, fValue);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_string_value, sBuffer.makeStringAndClear());
+        }
+    if (nRepeat > 1)
+    {
+        rExport.GetMM100UnitConverter().convertNumber(sBuffer, nRepeat);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_number_columns_repeated, sBuffer.makeStringAndClear());
+    }
+    SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
+}
+
+void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
+{
+    sal_Int32 nRowCount;
+    sal_Int32 nColCount;
+    ScMatrix* pMatrix = NULL;
+    sal_uInt16 nuRow, nuCol;
+    if (rExport.GetDocument()->GetDdeLinkResultDimension(nPos, nuCol, nuRow, pMatrix))
+    {
+        nRowCount = nuRow;
+        nColCount = nuCol;
+        SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True);
+        rtl::OUStringBuffer sBuffer;
+        if (nColCount > 1)
+        {
+            rExport.GetMM100UnitConverter().convertNumber(sBuffer, nColCount);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_number_columns_repeated, sBuffer.makeStringAndClear());
+        }
+        {
+            SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True);
+        }
+        sal_Bool bPrevString(sal_True);
+        sal_Bool bPrevEmpty(sal_True);
+        double fPrevValue;
+        String sPrevValue;
+        sal_Int32 nRepeatColsCount(1);
+        for(sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
+        {
+            SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True);
+            for(sal_Int32 nColumn = 0; nColumn < nColCount; nColumn++)
+            {
+                if (nColumn == 0)
+                    bPrevEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, nColumn, nRow, sPrevValue, fPrevValue, bPrevString);
+                else
+                {
+                    double fValue;
+                    String sValue;
+                    sal_Bool bString(sal_True);
+                    sal_Bool bEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, nColumn, nRow, sPrevValue, fPrevValue, bPrevString);
+                    if (CellsEqual(bPrevEmpty, bPrevString, sPrevValue, fPrevValue,
+                                bEmpty, bString, sValue, fValue))
+                        nRepeatColsCount++;
+                    else
+                    {
+                        WriteCell(bPrevEmpty, bPrevString, sPrevValue, fPrevValue, nRepeatColsCount);
+                        nRepeatColsCount = 1;
+                        bPrevEmpty = bEmpty;
+                        fPrevValue = fValue;
+                        sPrevValue = sValue;
+                    }
+                }
+            }
+            WriteCell(bPrevEmpty, bPrevString, sPrevValue, fPrevValue, nRepeatColsCount);
+        }
+    }
+}
+
+void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocument>& xSpreadDoc)
+{
+    uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
+    if (xPropertySet.is())
+    {
+        uno::Any aDDELinks = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DDELINKS)));
+        uno::Reference<container::XIndexAccess> xIndex;
+        if (aDDELinks >>= xIndex)
+        {
+            sal_Int32 nCount = xIndex->getCount();
+            if (nCount)
+            {
+                SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_dde_links, sal_True, sal_True);
+                for (sal_Int32 nDDELink = 0; nDDELink < nCount; nDDELink++)
+                {
+                    uno::Any aDDELink = xIndex->getByIndex(nDDELink);
+                    uno::Reference<sheet::XDDELink> xDDELink;
+                    if (aDDELink >>= xDDELink)
+                    {
+                        SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_dde_link, sal_True, sal_True);
+                        {
+                            rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_application, xDDELink->getApplication());
+                            rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_topic, xDDELink->getTopic());
+                            rExport.AddAttribute(XML_NAMESPACE_OFFICE, sXML_dde_item, xDDELink->getItem());
+                            SvXMLElementExport(rExport, XML_NAMESPACE_OFFICE, sXML_dde_source, sal_True, sal_True);
+                        }
+                        WriteTable(nDDELink);
+                    }
+                }
+            }
+        }
+    }
 }

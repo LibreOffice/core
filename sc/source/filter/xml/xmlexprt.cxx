@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 08:11:15 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 16:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,6 +590,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
     sal_Bool bWasHeader (sal_False);
     sal_Bool bIsHeader (sal_False);
     sal_Bool bIsClosed (sal_True);
+    sal_Bool bIsFirst (sal_False);
     sal_Int32 nPrevIndex (-1);
     uno::Reference<table::XColumnRowRange> xColumnRowRange (xCurrentTable, uno::UNO_QUERY);
     if (xColumnRowRange.is())
@@ -617,6 +618,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                         {
                             if (bIsHeader)
                             {
+                                bIsFirst = sal_False;
                                 if (nColumn > 0)
                                 {
                                     WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
@@ -625,6 +627,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                                     bPrevIsVisible = bIsVisible;
                                     nPrevIndex = nIndex;
                                     nColsRepeated = 1;
+                                    bIsFirst = sal_True;
                                 }
                                 if(aGroupColumns.IsGroupStart(nColumn))
                                     aGroupColumns.OpenGroups(nColumn);
@@ -651,12 +654,14 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                                 aGroupColumns.OpenGroups(nColumn);
                             bPrevIsVisible = bIsVisible;
                             nPrevIndex = nIndex;
+                            bIsFirst = sal_True;
                         }
                         else if ((bIsVisible == bPrevIsVisible) && (nIndex == nPrevIndex) &&
                             !aGroupColumns.IsGroupStart(nColumn) && !aGroupColumns.IsGroupEnd(nColumn - 1))
                             nColsRepeated++;
                         else
                         {
+                            bIsFirst = sal_False;
                             WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
                             if (aGroupColumns.IsGroupEnd(nColumn - 1))
                                 aGroupColumns.CloseGroups(nColumn - 1);
@@ -675,7 +680,7 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                     }
                 }
             }
-            if (nColsRepeated > 1)
+            if (nColsRepeated > 1 || bIsFirst)
                 WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (!bIsClosed)
                 CloseHeaderColumn();
@@ -1164,7 +1169,7 @@ void ScXMLExport::_ExportContent()
         aExportDataPilot.WriteDataPilots(xSpreadDoc);
         WriteConsolidation();
         ScXMLExportDDELinks aExportDDELinks(*this);
-        aExportDDELinks.WriteDDELinks();
+        aExportDDELinks.WriteDDELinks(xSpreadDoc);
         GetProgressBarHelper()->SetValue(nProgressReference);
     }
 }

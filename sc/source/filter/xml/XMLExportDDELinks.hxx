@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 08:11:15 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 16:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,24 @@
 #ifndef _SC_XMLEXPORTDDELINKS_HXX
 #define _SC_XMLEXPORTDDELINKS_HXX
 
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#endif
+
 class ScXMLExport;
 
 class ScXMLExportDDELinks
 {
     ScXMLExport&        rExport;
 
+    sal_Bool            CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
+                                    const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue);
+    void                WriteCell(const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue, const sal_Int32 nRepeat);
+    void                WriteTable(const sal_Int32 nPos);
 public:
     ScXMLExportDDELinks(ScXMLExport& rExport);
     ~ScXMLExportDDELinks();
-    void WriteDDELinks();
+    void WriteDDELinks(::com::sun::star::uno::Reference <::com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
 };
 
 #endif
