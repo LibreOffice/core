@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:19:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ namespace pcr
         DEF_INFO_2( AUTOCOMPLETE,      AUTOCOMPLETE,       AUTOCOMPLETE,      FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_3( MULTILINE,         MULTILINE,          MULTILINE,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
         DEF_INFO_2( WORDBREAK,         WORDBREAK,          WORDBREAK,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_4( TEXTTYPE,          TEXTTYPE,           TEXTTYPE,          FORM_VISIBLE, VIRTUAL_PROP, ENUM, ACTUATING ),
         DEF_INFO_2( MULTISELECTION,    MULTISELECTION,     MULTISELECTION,    FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_4( SHOW_SCROLLBARS,   SHOW_SCROLLBARS,    SHOW_SCROLLBARS,   FORM_VISIBLE, DIALOG_VISIBLE, VIRTUAL_PROP, ENUM ),
         DEF_INFO_2( HSCROLL,           HSCROLL,            HSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
@@ -434,6 +435,9 @@ namespace pcr
                 break;
             case PROPERTY_ID_SHOW_SCROLLBARS:
                 nStringItemsResId = RID_RSC_ENUM_SCROLLBARS;
+                break;
+            case PROPERTY_ID_TEXTTYPE:
+                nStringItemsResId = RID_RSC_ENUM_TEXTTYPE;
                 break;
             default:
                 OSL_ENSURE( sal_False, "OFormPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
