@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:39:54 $
+ *  last change: $Author: sab $ $Date: 2002-05-03 12:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1463,6 +1463,8 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
                         bDoThis = bCircle;
                     else if ( eWhat == SC_DET_COMMENTS )
                         bDoThis = bCaption;
+                    else if ( eWhat == SC_DET_ARROWS )      // DetectiveRefresh
+                        bDoThis = !bCaption && !bCircle;    // don't include circles
                     else
                         DBG_ERROR("wat?");
                 }
