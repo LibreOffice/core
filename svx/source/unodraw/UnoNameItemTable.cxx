@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 15:55:00 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 15:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <set>
+
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
@@ -69,6 +71,10 @@
 
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
+#endif
+
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 #include "svdmodel.hxx"
@@ -86,7 +92,6 @@ using namespace ::cppu;
 SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw()
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : NULL ),
-  mpStylePool( ( pModel && pModel->GetStyleSheetPool()) ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
 {
     if( pModel )
@@ -107,8 +112,7 @@ void SvxUnoNameItemTable::dispose()
 
     while( aIter != aEnd )
     {
-        delete (*aIter).first;
-        delete (*aIter++).second;
+        delete (*aIter++);
     }
 
     maItemSetVector.clear();
@@ -136,17 +140,13 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
 
 void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )
 {
-    SfxItemSet* mpInSet1 = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
-    SfxItemSet* mpInSet2 = mpStylePool ? new SfxItemSet( *mpStylePool, mnWhich, mnWhich ) : NULL;
-    maItemSetVector.push_back( std::pair< SfxItemSet*, SfxItemSet*>( mpInSet1, mpInSet2 ) );
+    SfxItemSet* mpInSet = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
+    maItemSetVector.push_back( mpInSet );
 
     NameOrIndex* pNewItem = createItem();
     pNewItem->SetName( String( aName ) );
     pNewItem->PutValue( aElement, mnMemberId );
-
-    mpInSet1->Put( *pNewItem, mnWhich );
-    if( mpInSet2 )
-        mpInSet2->Put( *pNewItem, mnWhich );
+    mpInSet->Put( *pNewItem, mnWhich );
     delete pNewItem;
 }
 
@@ -179,11 +179,10 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
 
     while( aIter != aEnd )
     {
-        pItem = (NameOrIndex *)&((*aIter).first->Get( mnWhich ) );
+        pItem = (NameOrIndex *)&((*aIter)->Get( mnWhich ) );
         if( pItem->GetName() == aSearchName )
         {
-            delete (*aIter).first;
-            delete (*aIter).second;
+            delete (*aIter);
             maItemSetVector.erase( aIter );
             return;
         }
@@ -209,7 +208,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
 
     while( aIter != aEnd )
     {
-        pItem = (NameOrIndex *)&((*aIter).first->Get( mnWhich ) );
+        pItem = (NameOrIndex *)&((*aIter)->Get( mnWhich ) );
         if( pItem->GetName() == aSearchName )
         {
             NameOrIndex* pNewItem = createItem();
@@ -217,9 +216,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
             if( !pNewItem->PutValue( aElement, mnMemberId ) )
                 throw lang::IllegalArgumentException();
 
-            (*aIter).first->Put( *pNewItem );
-            if( (*aIter).second )
-                (*aIter).second->Put( *pNewItem );
+            (*aIter)->Put( *pNewItem );
             return;
         }
         aIter++;
@@ -232,19 +229,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     USHORT nCount = mpModelPool ? mpModelPool->GetItemCount( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
-        if( pItem && pItem->GetName() == aSearchName )
-        {
-            pItem->PutValue( aElement, mnMemberId );
-            bFound = sal_True;
-            break;
-        }
-    }
-
-    nCount = mpStylePool ? mpStylePool->GetItemCount( mnWhich ) : 0;
-    for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-    {
-        pItem = (NameOrIndex*)mpModelPool->GetItem( XATTR_LINESTART, nSurrogate);
+        pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, nSurrogate);
         if( pItem && pItem->GetName() == aSearchName )
         {
             pItem->PutValue( aElement, mnMemberId );
@@ -288,18 +273,6 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
                 return aAny;
             }
         }
-
-        nSurrogateCount = mpStylePool ? (sal_Int32)mpStylePool->GetItemCount( mnWhich ) : 0;
-        for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
-        {
-            pItem = (NameOrIndex*)mpStylePool->GetItem( mnWhich, (USHORT)nSurrogate );
-
-            if( pItem && pItem->GetName() == aSearchName )
-            {
-                pItem->QueryValue( aAny, mnMemberId );
-                return aAny;
-            }
-        }
     }
 
     throw container::NoSuchElementException();
@@ -309,77 +282,34 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
     throw( uno::RuntimeException )
 {
-    const sal_Int32 nSurrogateCount1 = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
-    const sal_Int32 nSurrogateCount2 = mpStylePool ? (sal_Int32)mpStylePool->GetItemCount( mnWhich ) : 0;
-
-    sal_Int32 nCount = 0;
-
-    uno::Sequence< OUString > aSeq( nSurrogateCount1 + nSurrogateCount2 );
-    OUString* pStrings = aSeq.getArray();
-    sal_Int32 nSurrogate;
+    std::set< OUString, comphelper::UStringLess > aNameSet;
 
     NameOrIndex *pItem;
+    OUString aApiName;
 
-    for( nSurrogate = 0; nSurrogate < nSurrogateCount1; nSurrogate++ )
+    const sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
+    sal_Int32 nSurrogate;
+    for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
 
         if( pItem == NULL || pItem->GetName().Len() == 0 )
             continue;
 
-        // check if there is already an item with this name
-        OUString aSearchName;
-        SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), aSearchName );
-
-        OUString* pStartNames = aSeq.getArray();
-        sal_Bool bFound = sal_False;
-        for( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            if( *pStartNames++ == aSearchName )
-            {
-                bFound = sal_True;
-                break;
-            }
-        }
-
-        if( !bFound )
-        {
-            nCount++;
-            *pStrings++ = aSearchName;
-        }
+        SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), aApiName );
+        aNameSet.insert( aApiName );
     }
 
-    for( nSurrogate = 0; nSurrogate < nSurrogateCount2; nSurrogate++ )
+    uno::Sequence< OUString > aSeq( aNameSet.size() );
+    OUString* pNames = aSeq.getArray();
+
+    std::set< OUString, comphelper::UStringLess >::iterator aIter( aNameSet.begin() );
+    const std::set< OUString, comphelper::UStringLess >::iterator aEnd( aNameSet.end() );
+
+    while( aIter != aEnd )
     {
-        pItem = (NameOrIndex*)mpStylePool->GetItem( mnWhich, (USHORT)nSurrogate );
-
-        if( pItem == NULL || pItem->GetName().Len() == 0 )
-            continue;
-
-        // check if there is already an item with this name
-        OUString aSearchName;
-        SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), aSearchName );
-
-        OUString* pStartNames = aSeq.getArray();
-        sal_Bool bFound = sal_False;
-        for( sal_Int32 i = 0; i < nCount; i++ )
-        {
-            if( *pStartNames++ == aSearchName )
-            {
-                bFound = sal_True;
-                break;
-            }
-        }
-
-        if( !bFound )
-        {
-            nCount++;
-            *pStrings++ = aSearchName;
-        }
+        *pNames++ = *aIter++;
     }
-
-    if( nCount < aSeq.getLength() )
-        aSeq.realloc( nCount );
 
     return aSeq;
 }
@@ -406,14 +336,6 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
             return sal_True;
     }
 
-    nCount = mpStylePool ? mpStylePool->GetItemCount( mnWhich ) : 0;
-    for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-    {
-        pItem = (NameOrIndex*)mpStylePool->GetItem( mnWhich, nSurrogate );
-        if( pItem && pItem->GetName() == aSearchName )
-            return sal_True;
-    }
-
     return sal_False;
 }
 
@@ -423,19 +345,10 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
     const NameOrIndex *pItem;
 
     sal_Int32 nSurrogate;
-    sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
+    const sal_Int32 nSurrogateCount = mpModelPool ? (sal_Int32)mpModelPool->GetItemCount( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
         pItem = (NameOrIndex*)mpModelPool->GetItem( mnWhich, (USHORT)nSurrogate );
-
-        if( pItem && pItem->GetName().Len() != 0 )
-            return sal_True;
-    }
-
-    nSurrogateCount = mpStylePool ? (sal_Int32)mpStylePool->GetItemCount( mnWhich ) : 0;
-    for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
-    {
-        pItem = (NameOrIndex*)mpStylePool->GetItem( mnWhich, (USHORT)nSurrogate );
 
         if( pItem && pItem->GetName().Len() != 0 )
             return sal_True;

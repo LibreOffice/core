@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 15:55:00 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 15:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,13 @@ class SdrModel;
 class SfxItemPool;
 class SfxItemSet;
 
-typedef std::vector< std::pair< SfxItemSet*, SfxItemSet*> > ItemPoolVector;
+typedef std::vector< SfxItemSet* > ItemPoolVector;
 class SvxUnoNameItemTable : public cppu::WeakImplHelper2< com::sun::star::container::XNameContainer, com::sun::star::lang::XServiceInfo >,
                             public SfxListener
 {
 private:
     SdrModel*       mpModel;
     SfxItemPool*    mpModelPool;
-    SfxItemPool*    mpStylePool;
     USHORT          mnWhich;
     BYTE            mnMemberId;
 
