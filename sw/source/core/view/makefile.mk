@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:46:56 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:52:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,33 +65,13 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=view
 
-AUTOSEG=true
-
-# future: DEMO\vprint.obj
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:128
-.ENDIF
-
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-    scrrect.cxx \
-    vdraw.cxx \
-    viewimp.cxx \
-    viewsh.cxx \
-        viewpg.cxx \
-        vnew.cxx \
-        vprint.cxx \
-        pagepreviewlayout.cxx
-
-
 
 SLOFILES =  \
     $(SLO)$/scrrect.obj \
