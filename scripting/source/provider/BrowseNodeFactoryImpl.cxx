@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:31:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 
@@ -143,7 +140,7 @@ public:
                 seqs.push_back( childs );
                 numChildren += childs.getLength();
             }
-            catch ( Exception& e )
+            catch ( Exception& )
             {
                 // some form of exception getting child nodes so they
                 // won't be displayed
@@ -180,7 +177,7 @@ public:
                         return sal_True;
                     }
                 }
-                catch ( Exception& e )
+                catch ( Exception& )
                 {
                     // some form of exception getting child nodes so move
                     // on to the next one
@@ -333,40 +330,8 @@ private:
     }
 };
 
-Sequence < ::rtl::OUString >
-tdocBugWorkAround( const Reference< XComponentContext >& xCtx )
+namespace
 {
-    Sequence < ::rtl::OUString > result;
-    Reference< lang::XMultiComponentFactory > mcf =
-            xCtx->getServiceManager();
-    Reference< frame::XDesktop > desktop (
-        mcf->createInstanceWithContext(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
-            UNO_QUERY );
-
-    Reference< container::XEnumerationAccess > componentsAccess =
-        desktop->getComponents();
-    Reference< container::XEnumeration > components =
-        componentsAccess->createEnumeration();
-    sal_Int32 docIndex = 0;
-    while (components->hasMoreElements())
-    {
-        Sequence< Any > args( 1 );
-
-        Reference< frame::XModel > model(
-            components->nextElement(), UNO_QUERY );
-        if ( model.is() )
-        {
-            ::rtl::OUString sTdocUrl = MiscUtils::xModelToTdocUrl( model );
-            if ( sTdocUrl.getLength() > 0 )
-            {
-                result.realloc( result.getLength() + 1 );
-                result[ docIndex++ ] = sTdocUrl;
-            }
-        }
-    }
-    return result;
-}
 
 Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
@@ -374,9 +339,8 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
             xCtx->getServiceManager();
 
         Sequence< ::rtl::OUString > openDocs =
+            MiscUtils::allOpenTDocUrls( xCtx );
 
-        //    MiscUtils::allOpenTDocUrls( xCtx );
-            tdocBugWorkAround( xCtx );
     Reference< provider::XScriptProviderFactory > xFac;
         sal_Int32 initialSize = openDocs.getLength() + 2;
         sal_Int32 mspIndex = 0;
@@ -394,6 +358,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         // TODO proper exception handling, should throw
         catch( Exception& e )
         {
+            e;
             OSL_TRACE("Caught Exception %s",
                 ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         locnBNs.realloc( mspIndex );
@@ -410,7 +375,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
             }
             catch( Exception& e )
             {
-
+                e;
                 OSL_TRACE("Caught Exception creating MSP for %s exception msg: %s",
                     ::rtl::OUStringToOString( openDocs[ i ] , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
                     ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
@@ -419,6 +384,8 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         }
     return locnBNs;
 }
+
+} // namespace
 
 typedef ::std::vector< Reference< browse::XBrowseNode > > vXBrowseNodes;
 
@@ -459,7 +426,7 @@ public:
                         m_xCtx  ), UNO_QUERY_THROW );
             m_xAggProxy = xProxyFac->createProxy( m_xWrappedBrowseNode );
         }
-        catch(  uno::Exception const & )
+        catch(  uno::Exception& )
         {
             OSL_ENSURE( false, "DefaultBrowseNode::DefaultBrowseNode: Caught exception!" );
         }
