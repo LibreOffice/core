@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericClipboard.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,13 @@ module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
 
-interface XClipboardEx;
-interface XClipboardNotifier;
+ published interface XClipboardEx;
+ published interface XClipboardNotifier;
 
 //=============================================================================
 /** A generic clipboard service is a simple container for transferable objects.
 */
-service GenericClipboard
+published service GenericClipboard
 {
     //-------------------------------------------------------------------------
     /** Provides access to the clipboard content.
