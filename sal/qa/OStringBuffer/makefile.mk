@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-08-07 15:09:48 $
+#   last change: $Author: kz $ $Date: 2003-11-18 16:36:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,13 +85,15 @@ SHL1OBJS= \
 
 SHL1TARGET= OStringBuffer
 SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+   $(SALLIB) \
+   $(CPPUNITLIB)
+
+# .IF "$(GUI)" == "WNT"
+# SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
+# .ENDIF
+# .IF "$(GUI)" == "UNX"
+# SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+# .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -108,4 +110,5 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
 
