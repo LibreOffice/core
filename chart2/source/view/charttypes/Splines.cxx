@@ -199,6 +199,9 @@ lcl_SplineCalculation::lcl_SplineCalculation(
 
 void lcl_SplineCalculation::Calculate()
 {
+    if( m_aPoints.size() <= 1 )
+        return;
+
     // n is the last valid index to m_aPoints
     const tPointVecType::size_type n = m_aPoints.size() - 1;
     ::std::vector< double > u( n );
@@ -385,7 +388,7 @@ void BVector(double x, sal_Int32 n, sal_Int32 k, double *b, const double *t)
     b [i0] = 1;
 
     for( sal_Int32 j=2; j<=k; j++ )
-        for( sal_Int32 i=0; i<=i0; i++ )
+        for( i=0; i<=i0; i++ )
             b[i] = TLeft(x, i, j, t) * b[i] + TRight(x, i, j, t) * b [i + 1];
 }
 
@@ -418,7 +421,7 @@ void SplineCalculater::CalculateCubicSplines(
 
     if( !rInput.SequenceX.getLength() )
         return;
-    if(!rInput.SequenceX[0].getLength())
+    if( rInput.SequenceX[0].getLength() <= 1 )
         return;
 
     drawing::PolyPolygonShape3D aSortedInput;
@@ -484,7 +487,7 @@ void SplineCalculater::CalculateBSplines(
 
     if( !rInput.SequenceX.getLength() )
         return;
-    if(!rInput.SequenceX[0].getLength())
+    if( rInput.SequenceX[0].getLength() <= 1 )
         return;
 
     drawing::PolyPolygonShape3D aSortedInput;
