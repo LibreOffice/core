@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
+ *  last change: $Author: fs $ $Date: 2001-03-07 08:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,8 @@ namespace dbaui
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
         DECL_LINK( OnListContextMenu, const CommandEvent* );
+
+        void implRemoveStatusListeners();
     };
 }
 #endif // _SBA_UNODATBR_HXX_
