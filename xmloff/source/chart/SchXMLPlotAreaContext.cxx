@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-27 13:24:19 $
+ *  last change: $Author: bm $ $Date: 2001-03-28 11:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
         mrCategoriesAddress( rCategoriesAddress ),
         mnDomainOffset( 0 ),
         mnSeries( 0 ),
-        mnMaxSeriesLength( 0 )
+        mnMaxSeriesLength( 0 ),
+        maSceneImportHelper( rImport )
 {
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );

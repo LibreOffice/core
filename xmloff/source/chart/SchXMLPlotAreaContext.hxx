@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-22 12:31:46 $
+ *  last change: $Author: bm $ $Date: 2001-03-28 11:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
+#endif
+#ifndef _XMLOFF_SHAPEIMPORT_HXX_
+#include "shapeimport.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
@@ -127,6 +130,7 @@ private:
     sal_Int32 mnDomainOffset;
     sal_Int32 mnSeries;
     sal_Int32 mnMaxSeriesLength;
+    SdXML3DSceneAttributesHelper maSceneImportHelper;
 
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
