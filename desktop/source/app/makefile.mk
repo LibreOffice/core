@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-10 16:26:34 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:02:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ OBJFILES = \
         $(OBJ)$/copyright_ascii_sun.obj		\
         $(OBJ)$/copyright_ascii_ooo.obj		\
         $(OBJ)$/lockfile.obj				\
+        $(OBJ)$/lockfile2.obj				\
         $(OBJ)$/intro.obj					\
         $(OBJ)$/officeipcthread.obj			\
         $(OBJ)$/appinit.obj					\
