@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="HtmlAutoPilotBasic" script:language="StarBasic">
-&apos; Variables must be declared
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="HtmlAutoPilotBasic" script:language="StarBasic">&apos; Variables must be declared
 Option Explicit
+
 
 Public bWithBackGraphic as Boolean
 Public oStyle as Object
@@ -17,7 +17,7 @@ Public NumberOfLayouts%, NumberOfStyles%
 Public Style(8, MaxStyles) as String
 
 &apos; Filled with title, file name
-Public Layout$(2, MaxLayouts%)
+Public Layout$(2, MaxLayouts)
 
 Public TextureDir$, BulletDir$, GraphicsDir$, GalleryDir$, PhotosDir$
 Public CurrentBullet$, CurrentPrev$, CurrentNext$, CurrentHome$, CurrentTop$
@@ -106,8 +106,8 @@ Dim CurInd as Integer
 	ToggleDialogControls(False)
 	oBaseDocument.LockControllers
 	&apos; Get selected list entry and corresponding file name
-	CurInd = GetCurIndex(DialogModel.lbTemplate, Layout$(), NumberofLayouts%, 2)
-	oCursor = oBaseDocument.Text.CreateTextCursor
+	CurInd = GetCurIndex(DialogModel.lbTemplate, Layout(), NumberofLayouts%, 2)
+	oCursor = oBaseDocument.Text.CreateTextCursor()
 	oCursor.GotoStart(False)
 	oCursor.GotoEnd(True)
 	oCursor.InsertDocumentfromURL(FileStr, NoArgs())
@@ -268,13 +268,12 @@ Dim sNewFileUrl as String
 End Function
 
 
+
 Function FillupWebListbox(oUcb as Object, sFileFilter as String, oDialog as Object, ListboxName as String, List() as String)
 Dim oDocInfo as Object
-Dim oComp as Object
-Dim oRealDocInfo as Object
 Dim oListboxControl as Object
+Dim Description as String
 Dim sField as String
-Dim sDescription as String
 Dim sFieldList() as String
 Dim bItemFound as Boolean
 Dim MaxIndex as Integer
@@ -282,7 +281,6 @@ Dim DirContent() as String
 Dim FileName as String
 Dim TemplatePath as String
 Dim FilterLen as Integer
-Dim MyArray()
 Dim i as Integer
 Dim m as Integer
 Dim n as Integer
@@ -290,56 +288,48 @@ Dim s as Integer
 Dim a as Integer
 Dim SelList(0) as Integer
 Dim LocMaxIndex as Integer
-Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
-	FileProperties(0).Name = &quot;Hidden&quot;
-	FileProperties(0).Value = True
+Dim InfoNames()
 	oListboxControl = oDialog.GetControl(ListboxName)
+	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
 	FilterLen = Len(sFileFilter)
 	bItemFound = False
 	TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
 	DirContent() = oUcb.GetFolderContents(TemplatePath,True)
-	
+        
 	LocMaxIndex = Ubound(DirContent())
-	
-	oDocInfo = createUNOService(&quot;com.sun.star.document.DocumentProperties&quot;)
-	
-	Dim SortList(LocMaxIndex,2)
+        
+	Dim SortList(LocMaxIndex,1)
 	For i = 0 to LocMaxIndex
 		SortList(i,0) = DirContent(i)
-		oDocInfo.read(DirContent(i))
-		SortList(i,1) = oDocInfo.Title
-		If  Left(FileNameOutOfPath(DirContent(i),getPathSeparator()),3) = &quot;stl&quot; Then
-			oComp = StarDesktop.LoadComponentFromURL(DirContent(i),&quot;_blank&quot;,0,FileProperties())
-			oRealDocInfo = oComp.getDocumentInfo()
-	   		SortList(i,2) = oRealDocInfo 
-	   		oComp.dispose()
-   		End If
-    	
+		SortList(i,1) = RetrieveDocTitle(oDocInfo, DirContent(i))
 	Next i
 	SortList() = BubbleSortList(SortList(),True)
-	
+	For i = 0 to LocMaxIndex
+		DirContent(i) = SortList(i,0)
+	Next i
 	a = 0
 	For i = 0 To LocMaxIndex
-		FileName = SortList(i,0)
+		FileName = DirContent(i)
 		If Instr(1,Filename, sFileFilter) Then
 			bItemFound = True
-			
-			sDescription = SortList(i,1)
-			oListboxControl.AddItem(sDescription,a)
+			Description = RetrieveDocTitle(oDocInfo, FileName)
+			oDocInfo.Read(FileName)
+			InfoNames = oDocInfo.ElementNames()
+			oListboxControl.AddItem(Description,a)
 			a = a + 1
-			List(1,i) = sDescription
+			List(1,i) = Description
 			If sFileFilter = &quot;/cnt&quot; Then
 				List(2,i) = Filename
 			Else
 				m = 2
 				For n = 0 To 3
-					sField = SortList(i,2).GetUserFieldValue(n)
+					sField = oDocInfo.GetByName(InfoNames(n))
 					sFieldList() = ArrayoutofString(sField, &quot; &quot;, MaxIndex)
 					For s = 0 To MaxIndex
 						If m &lt; 6 Then
-							List(m,i) = sFieldList(s) &amp; &quot;.gif&quot;
+					        List(m,i) = sFieldList(s) &amp; &quot;.gif&quot;
 						Else
-							List(m,i) = sFieldList(s)
+					        List(m,i) = sFieldList(s)
 						End If
 						m = m + 1
 					Next s
@@ -348,8 +338,6 @@ Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
 			End If
 		End If
 	Next i
-
-	&apos; No content template? Error message, close new empty document, stop execution
 	If Not bItemfound Then
 		MsgBox(WebWiz_gErrContentNotFound$ , 16, WebWiz_gWizardName$)
 		oBaseDocument.Dispose()
