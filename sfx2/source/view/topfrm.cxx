@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:03:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1539,7 +1539,10 @@ void SfxTopFrame::CheckMenuCloser_Impl( MenuBar* pMenuBar )
     // checks if there is more than one "real" (not help) task window
     // in this case a close button is inserted into the menubar
 
-    if ( !xFrame->getController().is() )
+    if ( !xFrame.is() )
+        DBG_ERROR("Attention: this bug is very hard to reproduce. Please try to remember how you triggered it!");
+
+    if ( !xFrame.is() || !xFrame->getController().is() )
         // dummy component
         return;
 
