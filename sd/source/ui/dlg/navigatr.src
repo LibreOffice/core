@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:58:06 $
+ *  last change: $Author: kz $ $Date: 2001-09-25 20:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,9 +368,10 @@ Window FLT_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokumente";
         QuickHelpText[ catalan ] = "Documentos";
-        QuickHelpText[ finnish ] = "Asiakirjat";
+        QuickHelpText[ finnish ] = "Asiakirjat!";
     };
 };
+
 
 
 
