@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:50:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ czech ] = "Zadat heslo";
         Text[ hebrew ] = "Kennwort ~festlegen";
         Text[ hindi ] = "~Enter password";
+        Text[ slovak ] = "Zadajt~e heslo";
     };
     Edit ED_PASSWORD_CRT
     {
@@ -146,6 +147,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ czech ] = "Potvrdit heslo";
         Text[ hebrew ] = "Kennwort ~bestätigen";
         Text[ hindi ] = "~कूटशब्द दृढ़ करो";
+        Text[ slovak ] = "Potvrďte ~heslo";
     };
     Edit ED_PASSWORD_REPEAT
     {
@@ -195,7 +197,10 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ czech ] = "Zadat hlavní heslo";
     Text[ hebrew ] = "‮נא להקליד את הסיסמה הראשית‬";
     Text[ hindi ] = "मास्टर कूटशब्द को प्रविष्ट करो";
+    Text[ slovak ] = "Heslo";
 };
+
+
 
 
 
