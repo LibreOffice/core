@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-27 09:03:18 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,61 +88,6 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
         OutputSize = TRUE ;
         PageList =
         {
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_STD ;
-                Text = "Schrift" ;
-                Text [ ENGLISH ] = "Character" ;
-                Text [ norwegian ] = "Character" ;
-                Text [ italian ] = "Carattere" ;
-                Text [ portuguese_brazilian ] = "Caractere" ;
-                Text [ portuguese ] = "Tipo de letra" ;
-                Text [ finnish ] = "Merkki" ;
-                Text [ danish ] = "Skrifttype" ;
-                Text [ french ] = "Police" ;
-                Text [ swedish ] = "Teckensnitt" ;
-                Text [ dutch ] = "Lettertype" ;
-                Text [ spanish ] = "Fuente" ;
-                Text [ english_us ] = "Font" ;
-                Text[ chinese_simplified ] = "×ÖÌå";
-                Text[ russian ] = "Øðèôò";
-                Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "Ì«ÝÄ";
-                Text[ chinese_traditional ] = "¦r«¬";
-                Text[ arabic ] = "ÇáÎØ";
-                Text[ greek ] = "ÃñáììáôïóåéñÜ";
-                Text[ korean ] = "±Û²Ã";
-                Text[ turkish ] = "Yazýtipi";
-                Text[ language_user1 ] = " ";
-            };
-            PageItem
-            {
-                Identifier = RID_SVXPAGE_CHAR_EXT ;
-                Text = "Schrifteffekt" ;
-                Text [ ENGLISH ] = "Character Extension" ;
-                Text [ norwegian ] = "Character Extension" ;
-                Text [ italian ] = "Effetto carattere" ;
-                Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
-                Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Merkin tehosteet" ;
-                Text [ danish ] = "Skrifteffekt" ;
-                Text [ french ] = "Effet de caractère" ;
-                Text [ swedish ] = "Teckensnittseffekt" ;
-                Text [ dutch ] = "Effecten" ;
-                Text [ spanish ] = "Efectos de fuente" ;
-                Text [ english_us ] = "Font Effects" ;
-                Text[ chinese_simplified ] = "×ÖÌåÐ§¹û";
-                Text[ russian ] = "Ýôôåêòû øðèôòà";
-                Text[ polish ] = "Efekty czcionek";
-                Text[ japanese ] = "Ì«ÝÄŒø‰Ê";
-                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
-                Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
-                Text[ greek ] = "ÅöÝ ÷áñáêôÞñùí";
-                Text[ korean ] = "±Û²Ã È¿°ú";
-                Text[ turkish ] = "Yazýtipi efektleri";
-                Text[ language_user1 ] = " ";
-            };
-#ifdef DEBUG
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
@@ -235,7 +180,6 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
             };
-#endif
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
@@ -318,6 +262,12 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
                 Text[ turkish ] = "Metin akýþý";
                 Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
             };
             PageItem
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2115,5 +2115,109 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, RadioButton *, pBtn )
         PageBreakPosHdl_Impl( &aBeforeBox );
     return 0;
 }
+/*-- 29.11.00 11:36:24---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
+    SfxTabPage(pParent, ResId( RID_SVXPAGE_PARA_ASIAN, DIALOG_MGR() ), rSet),
+    aOptionsGB(         this, ResId(GB_AS_OPTIONS       )),
+    aHangingPunctCB(    this, ResId(CB_AS_HANG_PUNC     )),
+    aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
+    aForbiddenRulesCB(  this, ResId(CB_AS_FORBIDDEN     ))
+{
+    FreeResource();
+}
+/*-- 29.11.00 11:36:24---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+SvxAsianTabPage::~SvxAsianTabPage()
+{
+}
+/*-- 29.11.00 11:36:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SfxTabPage* SvxAsianTabPage::Create(    Window* pParent, const SfxItemSet& rSet )
+{
+    return new SvxAsianTabPage(pParent, rSet);
+}
+/*-- 29.11.00 11:36:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+USHORT*     SvxAsianTabPage::GetRanges()
+{
+    static USHORT pRanges[] =
+    {
+        SID_ATTR_PARA_SCRIPTSPACE,
+        SID_ATTR_PARA_HANGPUNCTUATION,
+        SID_ATTR_PARA_FORBIDDEN_RULES,
+        0
+    };
+    return pRanges;
+}
+/*-- 29.11.00 11:36:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+BOOL        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
+{
+    BOOL bRet = FALSE;
+    SfxItemPool* pPool = rSet.GetPool();
+    if(aScriptSpaceCB.IsChecked() != aScriptSpaceCB.GetSavedValue())
+    {
+        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
+            pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone();
+        pNewItem->SetValue(aScriptSpaceCB.IsChecked());
+        rSet.Put(*pNewItem);
+        delete pNewItem;
+        bRet = TRUE;
+    }
+    if(aHangingPunctCB.IsChecked() != aHangingPunctCB.GetSavedValue())
+    {
+        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
+            pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone();
+        pNewItem->SetValue(aHangingPunctCB.IsChecked());
+        rSet.Put(*pNewItem);
+        delete pNewItem;
+        bRet = TRUE;
+    }
+    if(aForbiddenRulesCB.IsChecked() != aForbiddenRulesCB.GetSavedValue())
+    {
+        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
+            pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone();
+        pNewItem->SetValue(aForbiddenRulesCB.IsChecked());
+        rSet.Put(*pNewItem);
+        delete pNewItem;
+        bRet = TRUE;
+    }
+    return bRet;
+}
+/*-- 29.11.00 11:36:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
+{
+    SfxItemPool* pPool = rSet.GetPool();
+    USHORT nWhich = pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE);
+    SfxItemState eState = rSet.GetItemState(nWhich, TRUE);
+    if(eState < SFX_ITEM_AVAILABLE)
+        aScriptSpaceCB.Enable(FALSE);
+    else
+        aScriptSpaceCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
+
+    nWhich = pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION);
+    eState = rSet.GetItemState(nWhich, TRUE);
+    if(eState < SFX_ITEM_AVAILABLE)
+        aHangingPunctCB.Enable(FALSE);
+    else
+        aHangingPunctCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
+
+    nWhich = pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES);
+    eState = rSet.GetItemState(nWhich, TRUE);
+    if(eState < SFX_ITEM_AVAILABLE)
+        aForbiddenRulesCB.Enable(FALSE);
+    else
+        aForbiddenRulesCB.Check(((const SfxBoolItem&)rSet.Get(nWhich)).GetValue());
+
+    aScriptSpaceCB.SaveValue();
+    aHangingPunctCB.SaveValue();
+    aForbiddenRulesCB.SaveValue();
+}

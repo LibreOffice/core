@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-17 14:19:06 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ using namespace ::com::sun::star;
 #define ITEMID_HYPHENZONE   0
 #define ITEMID_SCRIPTSPACE  0
 #define ITEMID_HANGINGPUNCTUATION 0
+#define ITEMID_FORBIDDENRULE 0
 
 #include <tools/rtti.hxx>
 #include <svtools/sbx.hxx>
@@ -115,6 +116,7 @@ using namespace ::com::sun::star;
 #include "hyznitem.hxx"
 #include "scriptspaceitem.hxx"
 #include "hngpnctitem.hxx"
+#include "forbiddenruleitem.hxx"
 
 
 // xml stuff
@@ -162,7 +164,8 @@ TYPEINIT1_AUTOFACTORY(SvxTabStopItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxFmtSplitItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxPageModelItem, SfxStringItem);
 TYPEINIT1_AUTOFACTORY(SvxScriptSpaceItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxHangingPunctuationItem, SfxEnumItem);
+TYPEINIT1_AUTOFACTORY(SvxHangingPunctuationItem, SfxBoolItem);
+TYPEINIT1_AUTOFACTORY(SvxForbiddenRuleItem, SfxBoolItem);
 
 
 SV_IMPL_VARARR_SORT( SvxTabStopArr, SvxTabStop )
@@ -1823,6 +1826,66 @@ SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
             rText = SVX_RESSTR( !GetValue()
                                     ? RID_SVXITEMS_HNGPNCT_OFF
                                     : RID_SVXITEMS_HNGPNCT_ON );
+            return ePres;
+        }
+        break;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+//------------------------------------------------------------------------
+
+SvxForbiddenRuleItem::SvxForbiddenRuleItem(
+                                    sal_Bool bOn, const sal_uInt16 nId )
+    : SfxBoolItem( nId, bOn )
+{
+}
+/* -----------------------------29.11.00 11:23--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SvxForbiddenRuleItem( GetValue(), Which() );
+}
+/* -----------------------------29.11.00 11:23--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SfxPoolItem* SvxForbiddenRuleItem::Create(SvStream & rStrm, USHORT) const
+{
+    sal_Bool nValue;
+    rStrm >> nValue;
+    return new SvxForbiddenRuleItem( nValue, Which() );
+}
+/* -----------------------------29.11.00 11:23--------------------------------
+
+ ---------------------------------------------------------------------------*/
+USHORT SvxForbiddenRuleItem::GetVersion( USHORT nFFVer ) const
+{
+    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
+            SOFFICE_FILEFORMAT_40==nFFVer ||
+            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            "SvxForbiddenRuleItem: Gibt es ein neues Fileformat?" );
+
+    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+}
+/* -----------------------------29.11.00 11:23--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
+        SfxItemPresentation ePres,
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        String &rText, const International* pIntl ) const
+{
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            rText = SVX_RESSTR( !GetValue()
+                                    ? RID_SVXITEMS_FORBIDDEN_RULE_OFF
+                                    : RID_SVXITEMS_FORBIDDEN_RULE_ON );
             return ePres;
         }
         break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-27 09:18:44 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,12 +473,13 @@
 #define HID_CLB_LINGU_MODULES                   (HID_SVX_START + 384)
 #define HID_CLB_LINGU_OPTIONS                   (HID_SVX_START + 385)
 
+#define HID_SVXPAGE_PARA_ASIAN                  (HID_SVX_START + 386)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END     HID_SVXPAGE_CHAR_EFFECTS_CTRL
+#define ACT_SVX_HID_END     HID_SVXPAGE_PARA_ASIAN
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file

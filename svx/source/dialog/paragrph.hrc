@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,10 @@
 #define CB_REGISTER             84
 #define GB_REGISTER             85
 
-
+//asian typography
+#define GB_AS_OPTIONS           1
+#define CB_AS_HANG_PUNC         2
+#define CB_AS_SCRIPT_SPACE      3
+#define CB_AS_FORBIDDEN         4
 #endif
 

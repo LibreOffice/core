@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 17:10:32 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1961,4 +1961,44 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     Text[ turkish ] = "Metin akýþý";
     Text[ language_user1 ] = " ";
 };
+/*-- 29.11.00 11:36:24---------------------------------------------------
+  Asian typography
+  -----------------------------------------------------------------------*/
+TabPage RID_SVXPAGE_PARA_ASIAN
+{
+    HelpId = HID_SVXPAGE_PARA_ASIAN ;
+    Hide = TRUE ;
+    Text = "Asiatische Typographie" ;
+    Text [ English ] = "Asian typography" ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    GroupBox GB_AS_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 3 , 6 ) ;
+        Size = MAP_APPFONT ( 254 , 52 ) ;
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
+    };
+    CheckBox CB_AS_HANG_PUNC
+    {
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "Hängende Interpunktion zulassen" ;
+        Text [ ENGLISH ] = "Hanging punctuation" ;
+    };
+    CheckBox CB_AS_SCRIPT_SPACE
+    {
+        Pos = MAP_APPFONT ( 6 , 29 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden" ;
+        Text [ ENGLISH ] = "Apply distance between asian, latin and complex text" ;
+    };
+    CheckBox CB_AS_FORBIDDEN
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen" ;
+        Text [ ENGLISH ] = "Apply list of forbidden characters at line end and line start" ;
+    };
+};
+
  // ********************************************************************** EOF
