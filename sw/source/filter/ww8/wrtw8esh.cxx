@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-16 13:01:59 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 10:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1199,6 +1199,23 @@ void SwEscherEx::FinishEscher()
 
     delete pEscherStrm, pEscherStrm = 0;
     rWrt.GetStorage().Remove( sEscherStream );
+
+    /*#82587# Everytime MS 2000 creates an escher stream there is always an
+     ObjectPool dir (even if empty). It turns out that if a copy of MS 2000 is
+     used to open a document that contains escher graphics exported from
+     StarOffice without this empty dir then *if* that copy of MS Office has
+     never been used to open a MSOffice document that has escher graphics (and
+     an ObjectPool dir of course) and that copy of office has not been used to
+     draw escher graphics then our exported graphics do not appear. Once you
+     do open a ms document with escher graphics or draw an escher graphic with
+     that copy of word, then all documents from staroffice that contain escher
+     work from then on. Tricky to track down, some sort of late binding
+     trickery in MS where solely for first time initialization the existence
+     of an ObjectPool dir is necessary for triggering some magic. cmc*/
+    rWrt.GetStorage().OpenStorage(
+        String::CreateFromAscii(
+        RTL_CONSTASCII_STRINGPARAM("ObjectPool")),
+        STREAM_READWRITE|STREAM_SHARE_DENYALL);
 }
 
 
@@ -2299,11 +2316,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.7 2001-01-16 13:01:59 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.8 2001-01-18 10:59:22 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/01/16 13:01:59  obo
+      #65293# parse error linux compiler
+
       Revision 1.6  2000/12/13 14:13:35  sj
       AddWmf, AddGraphic had been removed from EscherEx, UniqueId from GraphicObject is now used to get the GraphicId
 
