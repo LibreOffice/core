@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:58:35 $
+ *  last change: $Author: oj $ $Date: 2001-05-14 13:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,7 +1305,27 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
                 {
                     SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
                     EntryType eType = getEntryType(pEntry);
-                    aReturn.bEnabled = ((eType == etTable || eType == etView || eType == etTableContainer) && isTableFormat());
+                    switch(eType)
+                    {
+                        case etQuery:
+                        case etQueryContainer:
+                        {
+#if SUPD < 631
+                            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+#else
+                            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+#endif
+                            aReturn.bEnabled = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                            break;
+                        }
+                        case etView:
+                        case etTable:
+                        case etTableContainer:
+                            aReturn.bEnabled = ((eType == etTable || eType == etView || eType == etTableContainer) && isTableFormat());
+                            break;
+                        default:
+                            aReturn.bEnabled = sal_False;
+                    }
                     break;
                 }// else run through
             default:
@@ -1420,14 +1440,27 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
         case ID_BROWSER_PASTE:
             if(m_pTreeView->HasChildPathFocus())
             {
-
 #if SUPD<631
                 TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
 #else
                 TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
 #endif
                 SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
-                implPasteTable( pEntry, aTransferData );
+                EntryType eType = getEntryType(pEntry);
+                switch(eType)
+                {
+                    case etQuery:
+                    case etQueryContainer:
+                        implPasteQuery(pEntry, aTransferData);
+                        break;
+
+                    case etView:
+                    case etTable:
+                    case etTableContainer:
+                        implPasteTable( pEntry, aTransferData );
+                    default:
+                        ;
+                }
                 break;
             }// else run through
         case ID_BROWSER_COPY:
@@ -2053,7 +2086,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         }
         else
         {
-            if (m_pTreeView->getListBox()->GetChildCount(pEntry) < ( xNames->getElementNames().getLength() - 1 ) )
+            if ((sal_Int32)m_pTreeView->getListBox()->GetChildCount(pEntry) < ( xNames->getElementNames().getLength() - 1 ) )
             {
                 // the item inserts its children on demand, but it has not been expanded yet. So ensure here and
                 // now that it has all items
@@ -2062,7 +2095,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
             else
             {
                 DBTreeListModel::DBTreeListUserData* pNewData = new DBTreeListModel::DBTreeListUserData;
-                _rEvent.Element >>= pNewData->xObject;// remember the new element
+                //  _rEvent.Element >>= pNewData->xObject;// remember the new element
                 pNewData->eType = pContainerData->eType == etQueryContainer ? etQuery : etBookmark;
 
                 sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType);
