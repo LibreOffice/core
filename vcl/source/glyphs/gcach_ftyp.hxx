@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:39:52 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 12:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public:
     const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
-    void                  ReleaseFaceFT();
+    void                  ReleaseFaceFT( FT_FaceRec_* );
 
     const ::rtl::OString* GetFontFileName() const { return mpFontFile->GetFileName(); }
     const ImplFontData&   GetFontData() const { return maFontData; }
