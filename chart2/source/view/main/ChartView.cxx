@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-08 22:51:06 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 19:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,7 +583,8 @@ void createLegend( const uno::Reference< XLegend > & xLegend
     {
         VLegend aVLegend( xLegend );
         aVLegend.init( xPageShapes, xShapeFactory );
-        aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ) );
+        aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ),
+                               rPageSize );
         aVLegend.changePosition( rOutSpaceLeft, rPageSize );
     }
 }

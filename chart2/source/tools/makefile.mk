@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: bm $ $Date: 2003-11-11 12:19:19 $
+#   last change: $Author: bm $ $Date: 2003-11-12 19:41:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SLOFILES=	\
                 $(SLO)$/OIndexContainer.obj \
                 $(SLO)$/OPropertySet.obj \
                 $(SLO)$/OStyle.obj \
+                $(SLO)$/RelativeSizeHelper.obj \
                 $(SLO)$/Scaling.obj \
                 $(SLO)$/ChartModelHelper.obj \
                 $(SLO)$/ChartTypeHelper.obj \

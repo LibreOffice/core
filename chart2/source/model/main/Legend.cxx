@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-29 09:49:09 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 19:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
 #include <drafts/com/sun/star/layout/Alignment.hpp>
@@ -106,7 +109,8 @@ enum
 {
     PROP_LEGEND_POSITION,
     PROP_LEGEND_PREFERRED_EXPANSION,
-    PROP_LEGEND_SHOW
+    PROP_LEGEND_SHOW,
+    PROP_LEGEND_REF_PAGE_SIZE
 };
 
 void lcl_AddPropertiesToVector(
@@ -132,6 +136,12 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "ReferencePageSize" ),
+                  PROP_LEGEND_REF_PAGE_SIZE,
+                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -144,6 +154,11 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_SHOW ));
     rOutMap[ PROP_LEGEND_SHOW ] =
         uno::makeAny( sal_True );
+
+    // todo: default is just for testing. should be void
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_REF_PAGE_SIZE ));
+    rOutMap[ PROP_LEGEND_REF_PAGE_SIZE ] =
+        uno::makeAny( awt::Size( 20000, 15000 ) );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()

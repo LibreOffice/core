@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-28 16:15:53 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 19:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,8 @@ public:
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
-    void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace );
+    void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace,
+                       const ::com::sun::star::awt::Size & rPageSize );
 
     /** Sets the position according to its internal anchor.
 

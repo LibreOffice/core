@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:45 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 19:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "chartview/ObjectIdentifier.hxx"
 #include "LayoutHelper.hxx"
 #include "ShapeFactory.hxx"
+#include "RelativeSizeHelper.hxx"
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
@@ -189,7 +190,8 @@ void lcl_getProperties(
     const uno::Reference< beans::XPropertySet > & xLegendProp,
     tPropertyValues & rOutLineFillProperties,
     tPropertyValues & rOutTextProperties,
-    sal_Int32 nMaxLabelWidth )
+    sal_Int32 nMaxLabelWidth,
+    const awt::Size & rReferenceSize )
 {
     // Get Line- and FillProperties from model legend
     if( xLegendProp.is())
@@ -216,6 +218,31 @@ void lcl_getProperties(
         aTextValueMap[ C2U("TextAutoGrowWidth") ] = uno::makeAny( sal_True );
         aTextValueMap[ C2U("TextHorizontalAdjust") ] = uno::makeAny( eHorizAdjust );
         aTextValueMap[ C2U("TextMaximumFrameWidth") ] = uno::makeAny( nMaxLabelWidth );
+
+        // recalculate font size
+        awt::Size aPropRefSize;
+        float fFontHeight;
+        if( (xLegendProp->getPropertyValue( C2U( "ReferencePageSize" )) >>= aPropRefSize) &&
+            (aPropRefSize.Height > 0) &&
+            (aTextValueMap[ C2U("CharHeight") ] >>= fFontHeight) )
+        {
+            aTextValueMap[ C2U("CharHeight") ] = uno::makeAny(
+                static_cast< double >(
+                    ::chart::RelativeSizeHelper::calculate( aPropRefSize, rReferenceSize, fFontHeight )));
+
+            if( aTextValueMap[ C2U("CharHeightAsian") ] >>= fFontHeight )
+            {
+                aTextValueMap[ C2U("CharHeightAsian") ] = uno::makeAny(
+                    static_cast< double >(
+                        ::chart::RelativeSizeHelper::calculate( aPropRefSize, rReferenceSize, fFontHeight )));
+            }
+            if( aTextValueMap[ C2U("CharHeightComplex") ] >>= fFontHeight )
+            {
+                aTextValueMap[ C2U("CharHeightComplex") ] = uno::makeAny(
+                    static_cast< double >(
+                        ::chart::RelativeSizeHelper::calculate( aPropRefSize, rReferenceSize, fFontHeight )));
+            }
+        }
 
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
             rOutTextProperties.first, rOutTextProperties.second, aTextValueMap );
@@ -592,7 +619,8 @@ bool VLegend::isVisible( const uno::Reference< chart2::XLegend > & xLegend )
 // ----------------------------------------
 
 void VLegend::createShapes(
-    const awt::Size & rAvailableSpace )
+    const awt::Size & rAvailableSpace,
+    const awt::Size & rPageSize )
 {
     if(! (m_xLegend.is() &&
           m_xShapeFactory.is() &&
@@ -640,7 +668,8 @@ void VLegend::createShapes(
             {
                 // limit the width of texts to 20% of the total available width
                 sal_Int32 nMaxLabelWidth = rAvailableSpace.Width / 5;
-                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, nMaxLabelWidth );
+                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, nMaxLabelWidth,
+                                   rPageSize );
 
                 // get Expansion property
                 xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-12 19:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -116,7 +119,8 @@ enum
     PROP_TITLE_PARA_IS_HYPHENATION,
 
     PROP_TITLE_TEXT_ROTATION,
-    PROP_TITLE_TEXT_STACKED
+    PROP_TITLE_TEXT_STACKED,
+    PROP_TITLE_REF_PAGE_SIZE
 };
 
 void lcl_AddPropertiesToVector(
@@ -183,6 +187,12 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "ReferencePageSize" ),
+                  PROP_TITLE_REF_PAGE_SIZE,
+                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -218,6 +228,11 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_TEXT_STACKED ));
     rOutMap[ PROP_TITLE_TEXT_STACKED ] =
         uno::makeAny( sal_Bool( sal_False ) );
+
+    // todo: default is just for testing. should be void
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_REF_PAGE_SIZE ));
+    rOutMap[ PROP_TITLE_REF_PAGE_SIZE ] =
+        uno::makeAny( awt::Size( 3000, 2000 ) );
 
     // override other defaults
     rOutMap[ ::chart::FillProperties::PROP_FILL_STYLE ] =
