@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:03:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,7 @@ Resource RID_BASIC_START
         Text [ dutch ] = "Foutieve DLL-oproepconventie" ;
         Text [ spanish ] = "Convención de la llamada DLL incorrecta" ;
         Text [ danish ] = "Forkert DLL-kaldkonvention" ;
-        Text [ swedish ] = "Fel DLL-anropningskonvention" ;
+        Text [ swedish ] = "Fel DLL-anropskonvention" ;
         Text [ finnish ] = "Bad DLL calling convention" ;
         Text [ english_us ] = "Wrong DLL call convention" ;
         Text[ chinese_simplified ] = "´íÎóµÄ DLLµ÷ÓÃÔ¼¶¨";
@@ -1068,7 +1068,7 @@ Resource RID_BASIC_START
         Text [ italian ] = "Impossibile rinominare su drive diversi" ;
         Text [ portuguese_brazilian ] = "No rename with different drive" ;
         Text [ portuguese ] = "Impossível mudar nome em várias unidades" ;
-        Text [ french ] = "Impossible de renommer sur des lecteurs différents" ;
+        Text [ french ] = "Impossible de renommer sur des unités différentes !" ;
         Text [ dutch ] = "Namen wijzigen op verschillende stations niet mogelijk" ;
         Text [ spanish ] = "No se puede cambiar nombre en distintas unidades" ;
         Text [ danish ] = "Omdøbning på forskellige drev er ikke mulig" ;
@@ -1214,7 +1214,7 @@ Resource RID_BASIC_START
         Text [ dutch ] = "Gebruik van nul niet toegestaan" ;
         Text [ spanish ] = "No se admite el uso del cero" ;
         Text [ danish ] = "Brug af nul er ikke tilladt" ;
-        Text [ swedish ] = "Användning av noll är ej tillåtet" ;
+        Text [ swedish ] = "Användning av null är ej tillåtet" ;
         Text [ finnish ] = "Invalid use of Null" ;
         Text [ english_us ] = "Use of zero not permitted" ;
         Text[ chinese_simplified ] = "²»ÔÊĞíÊ¹ÓÃÓÃÁãÖµ";
@@ -2134,7 +2134,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "¶ÔÏó²»Ö§³ÖÕâ¸öÊôĞÔ»ò·½·¨";
         Text[ russian ] = "Îáúåêò íå ïîääåğæèâàåò ıòî ñâîéñòâî èëè ìåòîä";
         Text[ polish ] = "Obiekt nie obs³uguje tej w³aœciwoœci lub metody";
-        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Í‚±‚ÌÌßÛÊßÃ¨‚Ü‚½‚Í•û–@‚ğx‰‡‚Å‚«‚Ü‚¹‚ñ";
+        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Í‚±‚Ì‘®«A‚ ‚é‚¢‚Í•û–@‚ğx‰‡‚µ‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "ª«¥ó¤£¤ä«ù³o­ÓÄİ©Ê©Î¤èªk";
         Text[ arabic ] = "áÇ íÏÚã ÇáßÇÆä åĞå ÇáÎÇÕíÉ Ãæ åĞÇ ÇáÃÓáæÈ";
         Text[ dutch ] = "Deze eigenschap of methode wordt niet ondersteund door het aangegeven object";
@@ -3122,7 +3122,7 @@ Resource RID_BASIC_START
         Text[ chinese_simplified ] = "À¨ºÅ×é´íÎó";
         Text[ russian ] = "Êğóãëûå ñêîáêè íå ñîîòâåòñòâóşò";
         Text[ polish ] = "B³¹d w ustawianiu nawiasów";
-        Text[ japanese ] = "Š‡ŒÊ•t‚¯‚Ì´×°";
+        Text[ japanese ] = "‚©‚Á‚±•t‚¯‚Ì´×°";
         Text[ chinese_traditional ] = "¬A¸¹²Õ¿ù»~";
         Text[ arabic ] = "ÎØÃ İí ÇáÃŞæÇÓ";
         Text[ dutch ] = "Fout in het plaatsen van haakjes";
@@ -3344,7 +3344,7 @@ Resource RID_BASIC_START
         Text [ dutch ] = "Dimensiegegevens passen niet bij elkaar" ;
         Text [ spanish ] = "Las dimensiones no coinciden" ;
         Text [ danish ] = "Dimensionsangivelserne svarer ikke til hinanden" ;
-        Text [ swedish ] = "Dimensionsspecificeringarna stämmer inte överens" ;
+        Text [ swedish ] = "Dimensionsangivelser stämmer inte överens" ;
         Text [ finnish ] = "Dimensions do not match" ;
         Text [ english_us ] = "Dimension specifications do not match" ;
         Text[ chinese_simplified ] = "¶¨³ß¶ÈµÄÉè¶¨²»Æ¥Åä";
@@ -3636,7 +3636,7 @@ String ERRCODE_BASMGR_MGROPEN & ERRCODE_RES_MASK
     Text [ italian ] = "Impossibile inizializzare il BASIC dal file '$(ARG1)'" ;
     Text [ spanish ] = "No se pudo inicializar el Basic del archivo '$(ARG1)'" ;
     Text [ french ] = "Impossible d'initialiser BASIC à partir du fichier '$(ARG1)'" ;
-    Text [ swedish ] = "BASIC från filen '$(ARG1)' kunde inte initialiseras" ;
+    Text [ swedish ] = "Det gick inte att initiera BASIC från filen '$(ARG1)'" ;
     Text [ danish ] = "Det var ikke muligt at initialisere BASIC fra filen '$(ARG1)'" ;
     Text [ portuguese ] = "Impossível inicializar BASIC do ficheiro '$(ARG1)'" ;
     Text [ portuguese_brazilian ] = "Das BASIC aus der Datei '$(ARG1)' konnte nicht initialisiert werden" ;
