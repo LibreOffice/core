@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtopwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:38:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
 #define _TOOLKIT_AWT_VCLXTOPWINDOW_HXX_
 
-
+#ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTWINDOWPEER_HPP_
+#include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
 #endif
@@ -85,14 +87,18 @@
 //  ----------------------------------------------------
 
 class VCLXTopWindow :   public ::com::sun::star::awt::XTopWindow,
+            public ::com::sun::star::awt::XSystemDependentWindowPeer,
                         public VCLXContainer
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar> mxMenuBar;
-
+    bool m_bWHWND;
 public:
-    VCLXTopWindow();
+    VCLXTopWindow(bool bWHWND = false);
     ~VCLXTopWindow();
+
+    // ::com::sun::star::awt::XSystemDependendtWindowPeer
+    ::com::sun::star::uno::Any SAL_CALL getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
