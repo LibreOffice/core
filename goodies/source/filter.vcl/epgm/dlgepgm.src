@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:42:44 $
+ *  last change: $Author: vg $ $Date: 2001-07-13 20:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ dutch ] = "~Binair";
         Text[ chinese_simplified ] = "∂˛‘™(~B)";
         Text[ greek ] = "ƒı·‰ÈÍ¸";
-        Text[ korean ] = "¿Ã¡¯(~B)";
+        Text[ korean ] = "πŸ¿Ã≥ ∏Æ(~B)";
         Text[ turkish ] = "›kili";
         Text[ catalan ] = "~Binario";
         Text[ finnish ] = "~Bin‰‰ri";
@@ -204,4 +204,5 @@ ModalDialog DLG_EXPORT_EPGM
     Text[ catalan ] = "Opciones PGM";
     Text[ finnish ] = "PGM-asetukset";
 };
+
 
