@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2001-08-27 11:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,7 +548,7 @@ SbiToken SbiTokenizer::Next()
         } while( delta );
         // Symbol? Wenn nicht >= Token
         sal_Unicode ch = aSym.GetBuffer()[0];
-        if( !isalpha( ch ) && !bSymbol )
+        if( !BasicSimpleCharClass::isAlpha( ch ) && !bSymbol )
             return eCurTok = (SbiToken) (ch & 0x00FF);
         return eCurTok = SYMBOL;
     }
