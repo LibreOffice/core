@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 14:00:58 $
+ *  last change: $Author: fs $ $Date: 2002-08-02 15:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,10 @@
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
+#endif
+
+#ifndef _UTLUI_HRC
+#include "utlui.hrc"
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -894,6 +898,9 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
     sHBFirst(   ResId(ST_HB_FIRST))
 {
     FreeResource();
+
+    aLeftPB.SetModeImage( Image( SW_RES( IMG_ALL_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    aRightPB.SetModeImage( Image( SW_RES( IMG_ALL_RIGHT_HC ) ), BMP_COLOR_HIGHCONTRAST );
 
     aOk.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     aLeftPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
@@ -3814,6 +3821,8 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
 {
     FreeResource();
     SetExchangeSupport( sal_True );
+
+    aAssignBT.SetModeImage( Image( SW_RES( IMG_ONE_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
 
     aEditStyleBT.SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
     aAssignBT.SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));
