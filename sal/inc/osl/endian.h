@@ -2,9 +2,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-12 12:28:18 $
+ *  last change: $Author: svesik $ $Date: 2001-04-08 20:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,17 @@ extern "C" {
 #   endif
 #endif
 
+#ifdef FREEBSD
+#   include <machine/endian.h>
+#   if BYTE_ORDER == LITTLE_ENDIAN
+#       define _LITTLE_ENDIAN
+#   elif BYTE_ORDER == BIG_ENDIAN
+#       define _BIG_ENDIAN
+#   elif BYTE_ORDER == PDP_ENDIAN
+#       define _PDP_ENDIAN
+#   endif
+#endif
+
 #ifdef SCO
 #   include <sys/types.h>
 #   include <sys/byteorder.h>
@@ -190,7 +201,7 @@ extern "C" {
     !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)   && \
     !defined(AIX)     && !defined(HPUX)   && !defined(S390)  && \
     !defined(SOLARIS) && !defined(IRIX)   && !defined(MACOS) && \
-    !defined(MACOSX)
+    !defined(MACOSX) && !defined(FREEBSD)
 #   error "Target plattform not specified !"
 #endif
 
