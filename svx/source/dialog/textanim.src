@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 22:15:00 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 18:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ spanish ] = "Efectos de animaciÛn de texto";
         Text[ finnish ] = "Tekstin animaatiotehosteet";
         Text[ italian ] = "Effetti di animazione";
-        Text[ danish ] = "Text Animation Effects";
+        Text[ danish ] = "Effekter i animeret tekst";
         Text[ swedish ] = "Effekter animerad text";
         Text[ polish ] = "Efekty: animacja tekstu";
         Text[ portuguese_brazilian ] = "Text Animation Effects";
@@ -174,7 +174,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ spanish ] = "Efecto";
         Text[ finnish ] = "Tehoste";
         Text[ italian ] = "Effetto";
-        Text[ danish ] = "Effect";
+        Text[ danish ] = "E~ffekt";
         Text[ swedish ] = "E~ffekt";
         Text[ polish ] = "Efekt";
         Text[ portuguese_brazilian ] = "Effect";
@@ -184,7 +184,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ chinese_traditional ] = "ÊïàÊûú(~F)";
         Text[ turkish ] = "Effect";
         Text[ arabic ] = "Effect";
-        Text[ catalan ] = "Effect";
+        Text[ catalan ] = "~Efectes";
     };
     ListBox LB_EFFECT
     {
@@ -363,7 +363,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     };
     StringList [ catalan ] =
     {
-            < "Sin efecto" ; Default ; > ;
+            < "Sense cap efecte" ; Default ; > ;
         < "Intermitente" ; Default ; > ;
         < "Continuo" ; Default ; > ;
         < "De un lado al otro" ; Default ; > ;
@@ -397,7 +397,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ spanish ] = "OrientaciÛn";
         Text[ finnish ] = "Suunta";
         Text[ italian ] = "Direzione";
-        Text[ danish ] = "Direction";
+        Text[ danish ] = "Retning";
         Text[ swedish ] = "Riktning";
         Text[ polish ] = "Orientacja";
         Text[ portuguese_brazilian ] = "Direction";
@@ -549,7 +549,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Ominaisuudet";
         Text[ italian ] = "Propriet‡";
-        Text[ danish ] = "Properties";
+        Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W≥aúciwoúci";
         Text[ portuguese_brazilian ] = "Properties";
@@ -559,7 +559,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ chinese_traditional ] = "Â±¨ÊÄß";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
-        Text[ catalan ] = "Properties";
+        Text[ catalan ] = "Propietats";
     };
 #define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
@@ -575,7 +575,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ spanish ] = "Texto visible al ~iniciar" ;
         Text [ french ] = "Texte visible au dÈpart" ;
         Text [ swedish ] = "Text synlig vid ~start" ;
-        Text [ danish ] = "Tekst synlig ved start" ;
+        Text [ danish ] = "Te~kst synlig ved start" ;
         Text [ portuguese ] = "Texto visÌvel ao ~iniciar" ;
         Text [ portuguese_brazilian ] = "Text sichtbar beim ~Starten" ;
         Text[ chinese_simplified ] = "Âú®ÂêØÂä®Êó∂ÊòæÁ§∫ÊñáÂ≠ó(~T)";
@@ -605,7 +605,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ spanish ] = "Texto visible al ~finalizar" ;
         Text [ french ] = "Texte visible ‡ l'arrÍt" ;
         Text [ swedish ] = "Text synlig vid a~vslutning" ;
-        Text [ danish ] = "Tekst synlig ved afslutning" ;
+        Text [ danish ] = "Tekst s~ynlig ved afslutning" ;
         Text [ portuguese ] = "Texto visÌvel ao ~finalizar" ;
         Text [ portuguese_brazilian ] = "Text sichtbar beim ~Beenden" ;
         Text[ chinese_simplified ] = "Âú®ÁªìÊùüÊó∂ÊòæÁ§∫ÊñáÂ≠ó";
@@ -635,7 +635,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ french ] = "Cycles d'animation" ;
         Text [ dutch ] = "Animatiecyclussen" ;
         Text [ swedish ] = "Antal" ;
-        Text [ danish ] = "Antal" ;
+        Text [ danish ] = "Animationsgentagelser" ;
         Text [ portuguese_brazilian ] = "Anzahl" ;
         Text [ portuguese ] = "Ciclos de animaÁ„o" ;
         Text[ chinese_simplified ] = "Âä®ÁîªÂæ™ÁéØÁöÑÊ¨°Êï∞";
@@ -678,7 +678,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ arabic ] = "»·« ‰Â«Ì…";
         Text[ turkish ] = "~Sonsuz";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Continuo";
+        Text[ catalan ] = "S~ense fi";
         Text[ finnish ] = "~Jatkuva";
     };
     NumericField NUM_FLD_COUNT
@@ -720,7 +720,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ arabic ] = "«· “«Ìœ";
         Text[ turkish ] = "Ad˝m";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Efecto";
+        Text[ catalan ] = "Import‡ncia";
         Text[ finnish ] = "Lis‰ys";
     };
 #define MA_CURR_Y7      MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
@@ -784,7 +784,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ french ] = "Temporisation" ;
         Text [ dutch ] = "Vertraging" ;
         Text [ swedish ] = "Fˆrdrˆjning" ;
-        Text [ danish ] = "Forsinkelse" ;
+        Text [ danish ] = "Trinforsinkelse" ;
         Text [ portuguese_brazilian ] = "Verzˆgerung" ;
         Text [ portuguese ] = "Retardar" ;
         Text[ chinese_simplified ] = "Âª∂Ëøü";
@@ -827,7 +827,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ arabic ] = " ·ﬁ«∆Ì";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Autom·tico";
+        Text[ catalan ] = "~Autom‡tic";
         Text[ finnish ] = "~Automaattinen";
     };
     MetricField MTR_FLD_DELAY
@@ -937,7 +937,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ arabic ] = "‰’ „ Õ—ﬂ";
                 Text[ turkish ] = "Metin canland˝rma";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "AnimaciÛn de texto";
+                Text[ catalan ] = "AnimaciÛ de text";
                 Text[ finnish ] = "Tekstianimaatio";
             };
         };
