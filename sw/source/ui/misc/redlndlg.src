@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:12:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,79 +81,25 @@
         Size = MAP_APPFONT ( WIDTH - XBORDER * 2 , HEIGHT - YBORDER * 2 ) ; \
         HelpID = HID_REDLINE_CTRL ; \
         TabStop = TRUE ; \
-    };\
+    };
 
 ModelessDialog DLG_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_ACCEPT ;
     /* ### ACHTUNG: Neuer Text in Resource? Änderungen akzeptieren oder verwerfen : Redlining */
-    Text = "Änderungen akzeptieren oder verwerfen" ;
-    Text [ English ] = "Accept or reject changes" ;
-    Text [ english_us ] = "Accept or Reject Changes" ;
-    Text [ portuguese_brazilian ] = "Aceitar ou Rejeitar Modificações" ;
-    Text [ swedish ] = "Acceptera eller ignorera ändringar" ;
-    Text [ danish ] = "Accepter eller afvis ændringer" ;
-    Text [ italian ] = "Accetta o annulla le modifiche" ;
-    Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
-    Text [ french ] = "Accepter ou rejeter les modifications" ;
-    Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
-    Text [ portuguese ] = "Aceitar ou rejeitar modificações" ;
+    Text [ de ] = "Änderungen akzeptieren oder verwerfen" ;
+    Text [ en-US ] = "Accept or Reject Changes" ;
     REDLNDLG
-    Text[ chinese_simplified ] = "æ¥å—æˆ–è€…èˆå¼ƒæ›´æ”¹å†…å®¹";
-    Text[ russian ] = "Ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
-    Text[ polish ] = "Akceptuj albo odrzuæ zmiany";
-    Text[ japanese ] = "å¤‰æ›´ã®æ‰¿èªã¾ãŸã¯å´ä¸‹";
-    Text[ chinese_traditional ] = "æ¥å—æˆ–æ¨æ£„è®Šæ›´å…§å®¹";
-    Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÇáÊÛííÑÇÊ";
-    Text[ greek ] = "Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
-    Text[ korean ] = "ë³€ê²½ ì‚¬í•­ ì ìš© ë˜ëŠ” ë¬´ì‹œ";
-    Text[ turkish ] = "Değişiklikleri onayla veyareddet";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Accepta o rebutja canvis";
-    Text[ finnish ] = "Hyväksy tai hylkää muutokset";
-    Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¸«à¸£à¸·à¸­à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
-    Text[ czech ] = "PÅ™ijmout nebo odmÃ­tnout zmÄ›ny";
-    Text[ hebrew ] = "Ã„nderungen akzeptieren oder verwerfen";
-    Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤…à¤¥à¤µà¤¾ à¤…à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤°à¥‹";
-    Text[ slovak ] = "PrijaÅ¥ alebo odmietnuÅ¥ zmeny";
-    Text[ hungarian ] = "VÃ¡ltoztatÃ¡sok elfogadÃ¡sa vagy elvetÃ©se";
-    Text[ slovenian ] = "Sprejmi ali zavrni spremembe";
+    Text [ x-comment ] = " ";
 };
 
 ModalDialog DLG_MOD_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_AUTOFMT_ACCEPT ;
-    Text = "AutoFormat: Änderungen akzeptieren oder verwerfen" ;
-    Text [ English ] = "Accept or reject AutoFormat changes" ;
+    Text [ de ] = "AutoFormat: Änderungen akzeptieren oder verwerfen" ;
     REDLNDLG
-    Text[ italian ] = "Formattazione automatica: accetta o annulla cambiamenti";
-    Text[ portuguese_brazilian ] = "Aceitar ou Rejeitar Modificações da AutoFormatação";
-    Text[ portuguese ] = "AutoFormato: aceitar ou rejeitar modificações";
-    Text[ danish ] = "Accepter eller afvis AutoFormat-ændringer";
-    Text[ french ] = "AutoFormat : Accepter ou rejeter les modifications";
-    Text[ swedish ] = "Acceptera eller ignorera AutoFormat-ändringar";
-    Text[ dutch ] = "AutoOpmaak: Wijzigingen accepteren of verwerpen";
-    Text[ spanish ] = "Aceptar o rechazar modificaciones del Formateado automático";
-    Text[ english_us ] = "Accept or Reject AutoFormat Changes";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼: æ¥å—æˆ–è€…èˆå¼ƒæ›´æ”¹å†…å®¹";
-    Text[ russian ] = "Àâòîôîğìàò: ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
-    Text[ polish ] = "Akceptuj albo odrzuæ zmiany Autoformatowania";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ: å¤‰æ›´ã®æ‰¿èªã¾ãŸã¯å´ä¸‹";
-    Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼: æ¥å—æˆ–æ¨æ£„è®Šæ›´å…§å®¹";
-    Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
-    Text[ greek ] = "Áõôüìáôç ìïñöïğïéçóç:Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
-    Text[ korean ] = "ìë™ ì„œì‹  ë³€ê²½ ì‚¬í•­ ì ìš© ë˜ëŠ” ë¬´ì‹œ";
-    Text[ turkish ] = "Otomatik formatlama: Değişiklikleri onayla ya da reddet";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoFormat: Accepta o rebutja canvis";
-    Text[ finnish ] = "Hyväksy tai hylkää automaattisen muotoilun muutokset";
-    Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¸«à¸£à¸·à¸­à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "PÅ™ijmout nebo odmÃ­tnout zmÄ›ny provedenÃ© automatickÃ½m formÃ¡tovÃ¡nÃ­m";
-    Text[ hebrew ] = "AutoFormat: Ã„nderungen akzeptieren oder verwerfen";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤°à¤šà¤¨à¤¾ à¤•à¥‡ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤…à¤¥à¤µà¤¾ à¤…à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤°à¥‹";
-    Text[ slovak ] = "PrijaÅ¥ alebo odmietnuÅ¥ zmeny vykonanÃ© automatickÃ½m formÃ¡tovanÃ­m";
-    Text[ hungarian ] = "Az automatikus formÃ¡zÃ¡s vÃ¡ltoztatÃ¡sainak elfogadÃ¡sa vagy elutasÃ­tÃ¡sa";
-    Text[ slovenian ] = "Sprejmi ali zavrni spremembe samooblikovanja";
+    Text [ en-US ] = "Accept or Reject AutoFormat Changes";
+    Text [ x-comment ] = " ";
 };
 
 Menu MN_REDLINE_POPUP
@@ -164,42 +110,14 @@ Menu MN_REDLINE_POPUP
         {
             Identifier = MN_EDIT_COMMENT ;
             HelpID = HID_EDIT_COMMENT ;
-            Text = "Kommentar bearbeiten..." ;
-            Text [ English ] = "Edit Comment..." ;
-            Text [ english_us ] = "Edit Comment..." ;
-            Text [ portuguese_brazilian ] = "Editar Comentário..." ;
-            Text [ swedish ] = "Redigera kommentar..." ;
-            Text [ danish ] = "Rediger kommentar..." ;
-            Text [ italian ] = "Modifica commento..." ;
-            Text [ spanish ] = "Editar comentario..." ;
-            Text [ french ] = "Éditer le commentaire..." ;
-            Text [ dutch ] = "Opmerkingen bewerken..." ;
-            Text [ portuguese ] = "Editar comentário..." ;
-            Text[ chinese_simplified ] = "ç¼–è¾‘æ³¨è§£...";
-            Text[ russian ] = "Ïğàâêà êîììåíòàğèÿ...";
-            Text[ polish ] = "Edytuj komentarz...";
-            Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®ç·¨é›†...";
-            Text[ language_user1 ] = " ";
-            Text[ chinese_traditional ] = "ç·¨è¼¯è¨»è§£...";
-            Text[ arabic ] = "ÊÍÑíÑ ÇáÊÚáíŞ...";
-            Text[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ...";
-            Text[ korean ] = "ì„¤ëª… í¸ì§‘...";
-            Text[ turkish ] = "Açıklamaları düzenle...";
-            Text[ catalan ] = "Edita el comentari...";
-            Text[ finnish ] = "Muokkaa huomautusta...";
-            Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™...";
-            Text[ czech ] = "Upravit komentÃ¡Å™...";
-            Text[ hebrew ] = "Kommentar bearbeiten...";
-            Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦ à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨...";
-            Text[ slovak ] = "UpraviÅ¥ komentÃ¡r...";
-            Text[ hungarian ] = "MegjegyzÃ©s szerkesztÃ©se...";
-            Text[ slovenian ] = "Uredi komentar...";
+            Text [ de ] = "Kommentar bearbeiten..." ;
+            Text [ en-US ] = "Edit Comment..." ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_SUB_SORT ;
-            Text = "Sortiere" ;
-            Text [ english ] = "Sort" ;
+            Text [ de ] = "Sortiere" ;
             RadioCheck = TRUE ;
             SubMenu = Menu
             {
@@ -209,212 +127,51 @@ Menu MN_REDLINE_POPUP
                     {
                         Identifier = MN_SORT_ACTION ;
                         HelpID = HID_SORT_ACTION ;
-                        Text = "Aktion" ;
-                        Text [ english ] = "Action" ;
+                        Text [ de ] = "Aktion" ;
                         RadioCheck = TRUE ;
-                        Text [ english_us ] = "Action" ;
-                        Text [ portuguese_brazilian ] = "Ação" ;
-                        Text [ swedish ] = "Åtgärd" ;
-                        Text [ danish ] = "Handling" ;
-                        Text [ italian ] = "Operazione" ;
-                        Text [ spanish ] = "Acción" ;
-                        Text [ french ] = "Action" ;
-                        Text [ dutch ] = "Activiteit" ;
-                        Text [ portuguese ] = "Acção" ;
-                        Text[ chinese_simplified ] = "æ“ä½œ";
-                        Text[ russian ] = "Äåéñòâèå";
-                        Text[ polish ] = "Akcja";
-                        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³";
-                        Text[ language_user1 ] = " ";
-                        Text[ chinese_traditional ] = "å‹•ä½œ";
-                        Text[ arabic ] = "ÅÌÑÇÁ";
-                        Text[ greek ] = "Åíİñãåéá";
-                        Text[ korean ] = "ì‘ë™";
-                        Text[ turkish ] = "İşlem";
-                        Text[ catalan ] = "Acció";
-                        Text[ finnish ] = "Toiminto";
-                        Text[ thai ] = "à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³";
-                        Text[ czech ] = "ÄŒinnost";
-                        Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";
-                        Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯";
-                        Text[ slovak ] = "ÄŒinnosÅ¥";
-                        Text[ hungarian ] = "MÅ±velet";
-                        Text[ slovenian ] = "Dejanje";
+                        Text [ en-US ] = "Action" ;
+                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_AUTHOR ;
                         HelpID = HID_SORT_AUTHOR ;
-                        Text = "Autor" ;
-                        Text [ english ] = "Author" ;
+                        Text [ de ] = "Autor" ;
                         RadioCheck = TRUE ;
-                        Text [ english_us ] = "Author" ;
-                        Text [ portuguese_brazilian ] = "Autor" ;
-                        Text [ swedish ] = "Författare" ;
-                        Text [ danish ] = "Forfatter" ;
-                        Text [ italian ] = "Autore" ;
-                        Text [ spanish ] = "Autor" ;
-                        Text [ french ] = "Auteur" ;
-                        Text [ dutch ] = "Auteur" ;
-                        Text [ portuguese ] = "Autor" ;
-                        Text[ chinese_simplified ] = "ä½œè€…";
-                        Text[ russian ] = "Àâòîğ";
-                        Text[ polish ] = "Autor";
-                        Text[ japanese ] = "ä½œæˆè€…";
-                        Text[ chinese_traditional ] = "ä½œè€…";
-                        Text[ arabic ] = "ÇáãÄáİ";
-                        Text[ greek ] = "ÓõíôÜêôçò";
-                        Text[ korean ] = "ì‘ì„±ì";
-                        Text[ turkish ] = "Yazar";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Autor";
-                        Text[ finnish ] = "Tekijä";
-                        Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
-                        Text[ czech ] = "Autor";
-                        Text[ hebrew ] = "â€®××—×‘×¨â€¬";
-                        Text[ hindi ] = "à¤²à¥‡à¤–à¤•";
-                        Text[ slovak ] = "Autor";
-                        Text[ hungarian ] = "SzerzÅ‘";
-                        Text[ slovenian ] = "Avtor";
+                        Text [ en-US ] = "Author" ;
+                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_DATE ;
                         HelpID = HID_SORT_DATE ;
-                        Text = "Datum" ;
-                        Text [ english ] = "Date" ;
+                        Text [ de ] = "Datum" ;
                         RadioCheck = TRUE ;
-                        Text [ english_us ] = "Date" ;
-                        Text [ portuguese_brazilian ] = "Data" ;
-                        Text [ swedish ] = "Datum" ;
-                        Text [ danish ] = "Dato" ;
-                        Text [ italian ] = "Data" ;
-                        Text [ spanish ] = "Fecha" ;
-                        Text [ french ] = "Date" ;
-                        Text [ dutch ] = "Datum" ;
-                        Text [ portuguese ] = "Data" ;
-                        Text[ chinese_simplified ] = "æ—¥æœŸ";
-                        Text[ russian ] = "Äàòà";
-                        Text[ polish ] = "Data";
-                        Text[ japanese ] = "æ—¥ä»˜";
-                        Text[ chinese_traditional ] = "æ—¥æœŸ";
-                        Text[ arabic ] = "ÇáÊÇÑíÎ";
-                        Text[ greek ] = "Çìåñïìçíßá";
-                        Text[ korean ] = "ë‚ ì§œ";
-                        Text[ turkish ] = "Tarih";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Data";
-                        Text[ finnish ] = "Päivämäärä";
-                        Text[ thai ] = "à¸§à¸±à¸™à¸—à¸µà¹ˆ";
-                        Text[ czech ] = "Datum";
-                        Text[ hebrew ] = "â€®×ª××¨×™×šâ€¬";
-                        Text[ hindi ] = "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•";
-                        Text[ slovak ] = "DÃ¡tum";
-                        Text[ hungarian ] = "DÃ¡tum";
-                        Text[ slovenian ] = "Datum";
+                        Text [ en-US ] = "Date" ;
+                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_COMMENT ;
                         HelpID = HID_SORT_COMMENT ;
-                        Text = "Beschreibung" ;
-                        Text [ english ] = "Comment" ;
+                        Text [ de ] = "Beschreibung" ;
                         RadioCheck = TRUE ;
-                        Text [ english_us ] = "Comment" ;
-                        Text [ portuguese_brazilian ] = "Comentário" ;
-                        Text [ swedish ] = "Beskrivning" ;
-                        Text [ danish ] = "Kommentar" ;
-                        Text [ italian ] = "Descrizione" ;
-                        Text [ spanish ] = "Descripción" ;
-                        Text [ french ] = "Description" ;
-                        Text [ dutch ] = "Beschrijving" ;
-                        Text [ portuguese ] = "Descrição" ;
-                        Text[ chinese_simplified ] = "è¯´æ˜";
-                        Text[ russian ] = "Êîììåíòàğèé";
-                        Text[ polish ] = "Komentarz";
-                        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
-                        Text[ chinese_traditional ] = "æè¿°";
-                        Text[ arabic ] = "ÊÚáíŞ";
-                        Text[ greek ] = "ĞåñéãñáöŞ";
-                        Text[ korean ] = "ì„¤ëª…";
-                        Text[ turkish ] = "Açıklama";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Comentari";
-                        Text[ finnish ] = "Huomautus";
-                        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
-                        Text[ czech ] = "KomentÃ¡Å™";
-                        Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
-                        Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦";
-                        Text[ slovak ] = "KomentÃ¡r";
-                        Text[ hungarian ] = "MegjegyzÃ©s";
-                        Text[ slovenian ] = "Komentar";
+                        Text [ en-US ] = "Comment" ;
+                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_POSITION ;
                         HelpID = HID_SW_SORT_POSITION ;
-                        Text = "Dokumentposition" ;
-                        Text [ english ] = "Document position" ;
+                        Text [ de ] = "Dokumentposition" ;
                         RadioCheck = TRUE ;
-                        Text [ english_us ] = "Document position" ;
-                        Text [ portuguese_brazilian ] = "Posição do documento" ;
-                        Text [ swedish ] = "Dokumentposition" ;
-                        Text [ danish ] = "Dokumentplacering" ;
-                        Text [ italian ] = "Posizione documento" ;
-                        Text [ spanish ] = "Posición del documento" ;
-                        Text [ french ] = "Emplacement dans le document" ;
-                        Text [ dutch ] = "Documentpositie" ;
-                        Text [ portuguese ] = "Posição no documento" ;
-                        Text[ chinese_simplified ] = "æ–‡æ¡£ä½ç½®";
-                        Text[ russian ] = "Ğàñïîëîæåíèå â äîêóìåíòå";
-                        Text[ polish ] = "Pozycja dokumentu";
-                        Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ä½ç½®";
-                        Text[ chinese_traditional ] = "æ–‡ä»¶ä½ç½®";
-                        Text[ arabic ] = "ÇáãæÖÚ İí ÇáãÓÊäÏ";
-                        Text[ greek ] = "Èİóç åããñÜöïõ";
-                        Text[ korean ] = "ë¬¸ì„œ ìœ„ì¹˜";
-                        Text[ turkish ] = "Belge konumu";
-                        Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Posició del documento";
-                        Text[ finnish ] = "Asiakirjan sijainti";
-                        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
-                        Text[ czech ] = "Pozice dokumentu";
-                        Text[ hebrew ] = "Dokumentposition";
-                        Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤¸à¥à¤¥à¤¾à¤¨";
-                        Text[ slovak ] = "PozÃ­cia dokumentu";
-                        Text[ hungarian ] = "DokumentumpozÃ­ciÃ³";
-                        Text[ slovenian ] = "PoloÅ¾aj dokumenta";
+                        Text [ en-US ] = "Document position" ;
+                        Text [ x-comment ] = " ";
                     };
                 };
             };
-            Text [ english_us ] = "Sort By" ;
-            Text [ portuguese_brazilian ] = "Ordenar por" ;
-            Text [ swedish ] = "Sortera efter" ;
-            Text [ danish ] = "Sorter efter" ;
-            Text [ italian ] = "Ordina" ;
-            Text [ spanish ] = "Ordenar" ;
-            Text [ french ] = "Trier" ;
-            Text [ dutch ] = "Sorteer" ;
-            Text [ portuguese ] = "Ordenar" ;
-            Text[ chinese_simplified ] = "æ’åº";
-            Text[ russian ] = "Ñîğòèğîâêà";
-            Text[ polish ] = "Sortuj wg";
-            Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆ";
-            Text[ chinese_traditional ] = "æ’åº";
-            Text[ arabic ] = "İÑÒ";
-            Text[ greek ] = "Ôáîéíüìçóç";
-            Text[ korean ] = "ì •ë ¬ ê¸°ì¤€";
-            Text[ turkish ] = "göre sıralanmış";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Ordena per";
-            Text[ finnish ] = "Lajitteluperuste";
-            Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¹‚à¸”à¸¢";
-            Text[ czech ] = "SeÅ™adit podle";
-            Text[ hebrew ] = "Sortiere";
-            Text[ hindi ] = "à¤¸à¥‡ à¤¸à¥‹à¤°à¥à¤Ÿ à¤•à¤°à¥‹";
-            Text[ slovak ] = "TriediÅ¥ podÄ¾a";
-            Text[ hungarian ] = "Rendezve";
-            Text[ slovenian ] = "Razvrsti po";
+            Text [ en-US ] = "Sort By" ;
+            Text [ x-comment ] = " ";
         };
     };
 };
