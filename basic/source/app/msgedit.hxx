@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:47:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ protected:
     BasicFrame      *pBasicFrame;
     void            InitEntry( SvLBoxEntry*, const String&, const Image&, const Image& );
     AppError        *pAppError;
+
+    BOOL JumpToSourcecode( SvLBoxEntry *pThisEntry );
+
 public:
     TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinStyle=0 );
     ~TTTreeListBox(){}
