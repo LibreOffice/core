@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-08-09 11:06:52 $
+ *  last change: $Author: er $ $Date: 2001-08-13 13:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,11 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
 
         dbtools::OCharsetMap aMap;
         dbtools::OCharsetMap::CharsetIterator aIter = aMap.find( (rtl_TextEncoding) eCharSet );
+        if ( aIter == aMap.end() )
+        {
+            DBG_ERRORFILE( "DBaseImport: dbtools::OCharsetMap doesn't know text encoding" );
+            return SCERR_IMPORT_CONNECT;
+        }
         rtl::OUString aCharSetStr = (*aIter).getIanaName();
 
         uno::Sequence<beans::PropertyValue> aProps(2);
@@ -803,6 +808,11 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
 
         dbtools::OCharsetMap aMap;
         dbtools::OCharsetMap::CharsetIterator aIter = aMap.find( (rtl_TextEncoding) eCharSet );
+        if ( aIter == aMap.end() )
+        {
+            DBG_ERRORFILE( "DBaseExport: dbtools::OCharsetMap doesn't know text encoding" );
+            return SCERR_EXPORT_CONNECT;
+        }
         rtl::OUString aCharSetStr = (*aIter).getIanaName();
 
         uno::Sequence<beans::PropertyValue> aProps(2);
