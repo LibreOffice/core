@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 14:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1469,6 +1469,12 @@ void FmFormShell::GetState(SfxItemSet &rSet)
     {
         switch( nWhich )
         {
+            case SID_FM_FILTER_EXECUTE:
+            case SID_FM_FILTER_EXIT:
+                if (!GetImpl()->isInFilterMode())
+                    rSet.DisableItem( nWhich );
+                break;
+
             case SID_FM_USE_WIZARDS:
                 if (!m_bDesignMode || !GetFormModel())
                     rSet.DisableItem( nWhich );
@@ -1637,14 +1643,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 GetFormState(rSet,nWhich);
                 break;
 
-            case SID_FM_FILTER_EXECUTE:
-            case SID_FM_FILTER_EXIT:
-                break;
-            /*case SID_FM_FILTER_REMOVE:
-            {
-                if (!m_pFormView || !GetImpl()->isInFilterMode())
-                    rSet.DisableItem( nWhich );
-            }   break;*/
             case SID_FM_CHANGECONTROLTYPE:
             {
                 if (!m_pFormView || !m_bDesignMode || !GetImpl()->getCurControl().is())
