@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:36:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 08:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,8 @@
 #define HID_RELDLG_KEYFIELDS                        (HID_DBACCESS_START + 156)
 #define HID_BROWSER_RELATION_DESIGN                 (HID_DBACCESS_START + 157)
 #define HID_TABLE_DESIGN_NO_CONNECTION              (HID_DBACCESS_START + 158)
+#define HID_DSADMIN_CREATEDATABASE                  (HID_DBACCESS_START + 159)
+#define HID_BROWSER_COLUMNINFO                      (HID_DBACCESS_START + 160)
 
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -255,6 +257,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/03/14 10:36:27  oj
+ *  new helpid
+ *
  *  Revision 1.23  2001/02/28 10:22:50  oj
  *  new helpids for relation design
  *
