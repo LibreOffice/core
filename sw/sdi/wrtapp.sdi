@@ -2,7 +2,7 @@
 
     $Workfile:   wrtapp.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wrtapp.sdi,v 1.1.1.1 2000-09-18 17:14:31 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wrtapp.sdi,v 1.2 2001-02-15 08:57:16 os Exp $
 
     Beschreibung:   IDL - File SwWriterApp - Shell fuer Sw3
 
@@ -90,7 +90,7 @@ interface StarWriter : Module
     FN_QRY_MERGE  // status()
     [
         ExecMethod = ExecDB ;
-        StateMethod = StateIsView ;
+        StateMethod = StateOther ;
         DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
     ]
 
@@ -248,6 +248,9 @@ shell SwModule
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:31  hr
+    initial import
+
     Revision 1.136  2000/05/26 07:06:20  os
     old SW Basic API Slots removed
 

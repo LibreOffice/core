@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:44:40 $
+ *  last change: $Author: os $ $Date: 2001-02-15 08:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,13 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 rSet.Put( SfxBoolItem( nWhich, pModuleConfig->
                                             IsInsTblFormatNum( bWebView )));
             break;
-
+            case FN_QRY_MERGE:
+            {
+                SwView *pView = ::GetActiveView();
+                if(!pView || !GetView()->GetWrtShell().GetDBName().Len())
+                    rSet.DisableItem(nWhich);
+            }
+            break;
             default:
                 DBG_ERROR("::StateOther: default");
         }
