@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:20:54 $
+#   last change: $Author: hr $ $Date: 2004-11-26 21:49:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,7 @@ TARGETTYPE=CUI
 SCP_PRODUCT_TYPE=osl
 PARFILES= \
         module_javafilter.par              \
-        file_javafilter.par                \
-        starregistryitem_javafilter.par
+        file_javafilter.par
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"=="TRUE"
