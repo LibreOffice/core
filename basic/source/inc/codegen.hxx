@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codegen.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,5 +97,9 @@ public:
     void IncForLevel( void ) { nForLevel++; }
     void DecForLevel( void ) { nForLevel--; }
 };
+
+// #111897 PARAM_INFO flags start at 0x00010000 to not
+// conflict with DefaultId in SbxParamInfo::nUserData
+#define PARAM_INFO_PARAMARRAY   0x0010000
 
 #endif
