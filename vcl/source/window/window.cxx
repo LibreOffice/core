@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-08 16:58:38 $
+ *  last change: $Author: sb $ $Date: 2002-04-09 08:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,10 @@
 #include <dndevdis.hxx>
 #include <frameacc.hxx>
 
+#include "com/sun/star/portal/client/XRmFrameWindow.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+
 #pragma hdrstop
 
 using namespace rtl;
@@ -205,6 +209,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::drafts::com::sun::star::accessibility::bridge;
+using namespace com::sun;
 
 using ::com::sun::star::awt::XTopWindow;
 
@@ -622,7 +627,12 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             nStyle = WB_SYSTEMFLOATWIN; // window corresponds to a float win on the server
 
         RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;;
-        RmFrameWindow* pFrame = new RmFrameWindow( this );
+        star::uno::Reference< star::portal::client::XRmFrameWindow >
+            xClientWindow;
+        star::uno::Any aToken;
+        if (!(aSystemWorkWindowToken >>= xClientWindow))
+            aToken = aSystemWorkWindowToken;
+        RmFrameWindow* pFrame = new RmFrameWindow(this, xClientWindow);
         if ( !pFrame->IsValid() )
         {
             delete pFrame;
@@ -632,7 +642,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         else
         {
             pFrame->Create( nStyle, pFrame->GetEventHdlInterface(),
-                            aSystemWorkWindowToken,
+                            aToken,
                             pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
         }
 #endif
