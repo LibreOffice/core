@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-19 12:15:59 $
+ *  last change: $Author: fme $ $Date: 2001-11-23 14:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             }
             if( pFrm->IsUndersized() && pCMS && !pFrm->GetNext() &&
                 rOrig.Bottom() == nUpperMaxY && pFrm->GetOfst() < nOffset &&
-                !pFrm->IsFollow() && !bNoScroll )
+                !pFrm->IsFollow() && !bNoScroll &&
+                pFrm->GetTxtNode()->GetTxt().Len() != nNextOfst )
                 bGoOn = lcl_ChangeOffset( pFrm, nNextOfst );
             else
                 bGoOn = sal_False;
