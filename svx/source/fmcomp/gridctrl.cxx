@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 15:07:34 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 15:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2689,7 +2689,8 @@ void DbGridControl::DataSourcePropertyChanged(const ::com::sun::star::beans::Pro
     // during update don't care about the modified state
     if (!IsUpdating() && evt.PropertyName.compareTo(FM_PROP_ISMODIFIED) == COMPARE_EQUAL)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSource(evt.Source, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XPropertySet > xSource(evt.Source, UNO_QUERY);
+        DBG_ASSERT( xSource.is(), "DbGridControl::DataSourcePropertyChanged: invalid event source!" );
         sal_Bool bIsNew = sal_False;
         if (xSource.is())
             bIsNew = ::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ISNEW));
@@ -2725,6 +2726,8 @@ void DbGridControl::DataSourcePropertyChanged(const ::com::sun::star::beans::Pro
         if (m_xCurrentRow.Is())
         {
             m_xCurrentRow->SetStatus(::comphelper::getBOOL(evt.NewValue) ? GRS_MODIFIED : GRS_CLEAN);
+            m_xCurrentRow->SetNew( bIsNew );
+            InvalidateStatusCell(m_nCurrentPos);
             TRACE_RANGE_MESSAGE1("modified flag changed, new state : %s", ROWSTATUS(m_xCurrentRow));
         }
     }
