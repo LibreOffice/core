@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 18:07:03 $
+ *  last change: $Author: nn $ $Date: 2001-03-20 16:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,10 @@ void ScTabViewShell::WindowChanged()
     FuPoor* pFunc = GetDrawFuncPtr();
     if (pFunc)
         pFunc->SetWindow(pWin);
+
+    //  when font from InputContext is used,
+    //  this must be moved to change of cursor position:
+    UpdateInputContext();
 }
 
 void ScTabViewShell::ExecDraw(SfxRequest& rReq)

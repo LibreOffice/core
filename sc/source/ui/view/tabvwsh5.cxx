@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:31:22 $
+ *  last change: $Author: nn $ $Date: 2001-03-20 16:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
                     SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly);
                     GetViewData()->GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
                                                 &aItem, 0L );
+
+                    UpdateInputContext();
                 }
                 break;
 

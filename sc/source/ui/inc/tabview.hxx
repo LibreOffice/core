@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: nn $ $Date: 2001-03-20 16:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,7 @@ public:
     void            CellContentChanged();
     void            SelectionChanged();
     void            CursorPosChanged();
+    void            UpdateInputContext();
 
     void            InvertHorizontal( ScVSplitPos eWhich, long nDragPos );
     void            InvertVertical( ScHSplitPos eWhich, long nDragPos );

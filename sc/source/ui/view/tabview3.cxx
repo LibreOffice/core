@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-19 19:00:53 $
+ *  last change: $Author: nn $ $Date: 2001-03-20 16:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2322,6 +2322,8 @@ void ScTabView::ActivateView( BOOL bActivate, BOOL bFirst )
         //  hier nicht mehr selber GrabFocus rufen!
         //  Wenn das Doc bearbeitet wird, ruft der Sfx selber GrabFocus am Fenster der Shell.
         //  Wenn es z.B. ein Mailbody ist, darf es den Focus nicht bekommen (Bug #43638#)
+
+        UpdateInputContext();
     }
     else
         pGridWin[aViewData.GetActivePart()]->ClickExtern();
@@ -2415,6 +2417,12 @@ void ScTabView::HideListBox()
             pGridWin[i]->ClickExtern();
 }
 
+void ScTabView::UpdateInputContext()
+{
+    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
+    if (pWin)
+        pWin->UpdateInputContext();
+}
 
 //  GetGridWidth - Breite eines Ausgabebereichs (fuer ViewData)
 

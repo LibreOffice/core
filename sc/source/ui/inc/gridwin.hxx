@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-26 18:56:59 $
+ *  last change: $Author: nn $ $Date: 2001-03-20 16:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,7 @@ public:
     void            ContinueDrag();
 
     void            StopMarking();
+    void            UpdateInputContext();
 
     void            CheckInverted()     { if (nPaintCount) bNeedsRepaint = TRUE; }
 

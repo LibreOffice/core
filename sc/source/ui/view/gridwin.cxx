@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-26 18:57:35 $
+ *  last change: $Author: nn $ $Date: 2001-03-20 16:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2312,6 +2312,19 @@ void ScGridWindow::StopMarking()
         pViewData->GetMarkData().SetMarking(FALSE);
         nMouseStatus = SC_GM_IGNORE;
     }
+}
+
+void ScGridWindow::UpdateInputContext()
+{
+    BOOL bReadOnly = pViewData->GetDocShell()->IsReadOnly();
+    ULONG nOptions = bReadOnly ? 0 : ( INPUTCONTEXT_TEXT | INPUTCONTEXT_EXTTEXTINPUT );
+
+    //  when font from InputContext is used,
+    //  it must be taken from the cursor position's cell attributes
+
+    InputContext aContext;
+    aContext.SetOptions( nOptions );
+    SetInputContext( aContext );
 }
 
 //--------------------------------------------------------
