@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:51:14 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ danish ] = "Tildel" ;
                 Text [ portuguese ] = "Aplicar" ;
                 Text [ portuguese_brazilian ] = "Zuweisen" ;
-                Text[ chinese_simplified ] = "Ó¦ÓÃ";
+                Text[ chinese_simplified ] = "Ö¸¶¨";
                 Text[ russian ] = "Ïðèìåíèòü";
                 Text[ polish ] = "Przypisz";
                 Text[ japanese ] = "“K—p";
@@ -759,7 +759,7 @@ FloatingWindow RID_SVXDLG_IMAP
         Text [ danish ] = "Tekst:" ;
         Text [ portuguese_brazilian ] = "Text:" ;
         Text [ portuguese ] = "Texto:" ;
-        Text[ chinese_simplified ] = "ÎÄ±¾:";
+        Text[ chinese_simplified ] = "ÎÄ×Ö£º";
         Text[ russian ] = "Òåêñò:";
         Text[ polish ] = "Tekst:";
         Text[ japanese ] = "Ã·½Ä:";
@@ -1409,6 +1409,7 @@ String STR_IMAPDLG_MODIFY
     Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
 };
 /******************************************************************************/
+
 
 
 
