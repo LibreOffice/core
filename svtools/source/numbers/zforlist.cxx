@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 19:09:28 $
+ *  last change: $Author: er $ $Date: 2001-05-09 15:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,10 +247,19 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 // static
 LanguageType SvNumberFormatter::GetProperLanguage( LanguageType eLang )
 {
-    if ( eLang == LANGUAGE_DONTKNOW )
-        eLang = UNKNOWN_SUBSTITUTE;
-    if ( eLang == LANGUAGE_NONE )
-        eLang = Application::GetAppInternational().GetLanguage();
+    switch ( eLang )
+    {
+        case LANGUAGE_DONTKNOW :
+            eLang = UNKNOWN_SUBSTITUTE;
+        break;
+        case LANGUAGE_NONE :
+            eLang = Application::GetAppInternational().GetLanguage();
+        break;
+        case LANGUAGE_PROCESS_OR_USER_DEFAULT :
+        case LANGUAGE_SYSTEM_DEFAULT :
+            eLang = LANGUAGE_SYSTEM;
+        break;
+    }
     if ( eLang == LANGUAGE_SYSTEM )
         eLang = International::GetRealLanguage( eLang );
     return eLang;
