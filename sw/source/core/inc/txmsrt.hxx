@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 10:53:11 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 16:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,35 +106,33 @@ SV_DECL_VARARR( SwTOXSources, SwTOXSource, 0, 10 )
 class SwTOXInternational
 {
     International* pIntl;
+    CollatorWrapper *pCollator, *pIgnCsCollator;
     CharClass* pCharClass;
     LanguageType eLang;
+    BOOL bNewCollator;
+
+    void Init();
 
 public:
     SwTOXInternational( LanguageType nLang );
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
 
+    sal_Int32 Compare( const String& rTxt1, const String& rTxt2,
+                        BOOL bIgnoreCase ) const;
     inline BOOL IsEqual( const String& rTxt1, const String& rTxt2,
-                            USHORT nFlags ) const
+                            BOOL bIgnoreCase ) const
     {
-        return COMPARE_EQUAL == pIntl->Compare( rTxt1, rTxt2, nFlags );
+        return 0 == Compare( rTxt1, rTxt2, bIgnoreCase );
     }
     inline BOOL IsLess( const String& rTxt1, const String& rTxt2,
-                            USHORT nFlags ) const
+                            BOOL bIgnoreCase ) const
     {
-        return COMPARE_LESS == pIntl->Compare( rTxt1, rTxt2, nFlags );
-    }
-    inline StringCompare Compare( const String& rTxt1, const String& rTxt2,
-                                    USHORT nFlags ) const
-    {
-        return pIntl->Compare( rTxt1, rTxt2, nFlags );
+        return -1 == Compare( rTxt1, rTxt2, bIgnoreCase );
     }
 
-    inline sal_Unicode GetIndexChar( const String& rTxt ) const
-    {   return pIntl->GetIndexChar( rTxt ); }
-
-    inline String GetFollowingText( USHORT nType ) const
-    {   return pIntl->GetFollowingText( (FollowingText)nType ); }
+    sal_Unicode GetIndexChar( const String& rTxt ) const;
+    String GetFollowingText( USHORT nType ) const;
 
     String ToUpper( const String& rStr, xub_StrLen nPos ) const;
     inline BOOL IsNumeric( const String& rStr ) const;
