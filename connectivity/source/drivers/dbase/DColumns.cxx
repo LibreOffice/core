@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DColumns.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 06:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,20 @@ void ODbaseColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementNa
 // -----------------------------------------------------------------------------
 Reference< XNamed > ODbaseColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    sdbcx::OColumn* pColumn = new sdbcx::OColumn(isCaseSensitive());
-    Reference<XPropertySet> xProp = pColumn;
-    ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    if(m_pTable->isNew())
+    {
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn(isCaseSensitive());
+        Reference<XPropertySet> xProp = pColumn;
+        ::comphelper::copyProperties(_xDescriptor,xProp);
+        Reference< XNamed > xName(xProp,UNO_QUERY);
+        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
+        return xName;
+    }
+
+    ::rtl::OUString sColumnName;
+    if(_xDescriptor.is())
+        _xDescriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColumnName;
+    return createObject(sColumnName);
 }
 // -----------------------------------------------------------------------------
 
