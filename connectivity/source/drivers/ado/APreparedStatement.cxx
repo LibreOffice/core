@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,9 +276,9 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
         WpADOParameter aParam(pParam);
         if(pParam)
         {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             ::rtl::OUString sParam = aParam.GetName();
-#endif // _DEBUG
+#endif // OSL_DEBUG_LEVEL
             CHECK_RETURN(aParam.PutValue(_Val));
         }
     }
