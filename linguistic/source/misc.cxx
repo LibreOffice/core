@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-08 09:37:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
                  nChgLen = 0;
         OUString aRplc;
         BOOL bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OUString aWord( rxHyphWord->getWord() );
 #endif
 
