@@ -2,9 +2,9 @@
  *
  *  $RCSfile: richtextcontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:12:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 14:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,6 @@ namespace frm
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::frame;
 
 #define FORWARD_TO_PEER_1( unoInterface, method, param1 )   \
@@ -382,7 +381,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const URL& _rURL, const ::rtl::OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_3_RET( Reference< XDispatch >, XDispatchProvider, queryDispatch, _rURL, _rTargetFrameName, _nSearchFlags );
     }
@@ -563,7 +562,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const URL& _rURL )
+    ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL )
     {
         RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
         OSL_PRECOND( pRichTextControl, "ORichTextPeer::implCreateDispatcher: invalid window!" );
@@ -736,7 +735,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const URL& _rURL, const ::rtl::OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
     {
         Reference< XDispatch > xReturn;
         SfxApplication* pApplication = SFX_APP();
