@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.7 $
+#	$Revision: 1.8 $
 #
-#	last change: $Author: kz $ $Date: 2003-08-25 15:42:03 $
+#	last change: $Author: rt $ $Date: 2004-05-21 11:39:49 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -71,11 +71,6 @@ AUTOSEG=true
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------------
-
-BMP=$(BIN)$/bmp
-
-IMGLST_SRS=$(SRS)$/filepicker.srs
-BMP_IN=$(PRJ)$/win$/res
 
 EXCEPTIONSFILES=\
         $(SLO)$/filepicker.obj		\
