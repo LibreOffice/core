@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:08:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2754,7 +2754,8 @@ void SfxMedium::SetDontCreateCancellable( )
 
 const SfxVersionTableDtor* SfxMedium::GetVersionList()
 {
-    if ( !pImp->pVersions && GetStorage().is() )
+    // if the medium has no name, then this medium should represent a new document and can have no version info
+    if ( !pImp->pVersions && ( aName.Len() || aLogicName.Len() ) && GetStorage().is() )
     {
         if ( pImp->bIsDiskSpannedJAR )
             return NULL;
@@ -3103,42 +3104,27 @@ void SfxMedium::SetCharset( ::rtl::OUString aChs )
 
 void SfxMedium::SignContents_Impl( sal_Bool bScriptingContent )
 {
+    DBG_ASSERT( GetStorage().is(), "SfxMedium::SignContents_Impl - Storage doesn't exist!" );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xD(
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), ::com::sun::star::uno::UNO_QUERY );
 
     if ( xD.is() && GetStorage().is() )
     {
-        sal_Bool bSigned = sal_False;
-
-        if ( !pImp->pTempFile )
-            CreateTempFile();
-
-        if ( pImp->pTempFile )
+        if ( bScriptingContent )
         {
-            // HACK: No Storage API before CWS MAV09
-            uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
-                    pImp->pTempFile->GetURL(), embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
-            if ( xStore.is() )
-            {
-                if ( bScriptingContent )
-                {
-                    if ( !IsReadOnly() )
-                        bSigned = xD->SignScriptingContent( xStore );
-                    else
-                        xD->ShowScriptingContentSignatures( xStore );
-                }
-                else
-                {
-                    if ( !IsReadOnly() )
-                        bSigned = xD->SignDocumentContent( xStore );
-                    else
-                        xD->ShowDocumentContentSignatures( xStore );
-                }
-            }
+            if ( !IsReadOnly() )
+                xD->SignScriptingContent( GetStorage() );
+            else
+                xD->ShowScriptingContentSignatures( GetStorage() );
         }
-
-        if ( bSigned )
-            Commit();
+        else
+        {
+            if ( !IsReadOnly() )
+                xD->SignDocumentContent( GetStorage() );
+            else
+                xD->ShowDocumentContentSignatures( GetStorage() );
+        }
     }
 }
 
