@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: abi $ $Date: 2001-04-24 13:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,7 @@ TaskManager::~TaskManager()
 void SAL_CALL
 TaskManager::startTask(
     sal_Int32 CommandId,
-    const uno::Reference< task::XInteractionHandler >& xIH,
-    const uno::Reference< XProgressHandler >& xPH )
+    const uno::Reference< XCommandEnvironment >& xCommandEnv )
     throw( CommandAbortedException )
 {
     vos::OGuard aGuard( m_aMutex );
@@ -99,7 +98,7 @@ TaskManager::startTask(
     {
         throw CommandAbortedException();
     }
-    m_aTaskMap[ CommandId ] = TaskHandling( xIH,xPH );
+    m_aTaskMap[ CommandId ] = TaskHandling( xCommandEnv );
 }
 
 
@@ -135,4 +134,30 @@ TaskManager::getCommandId( void )
 {
     vos::OGuard aGuard( m_aMutex );
     return ++m_nCommandId;
+}
+
+
+
+uno::Reference< task::XInteractionHandler > SAL_CALL
+TaskManager::getInteractionHandler( sal_Int32 CommandId )
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    if( it == m_aTaskMap.end() )
+        return uno::Reference< task::XInteractionHandler >( 0 );
+    else
+        return it->second.getInteractionHandler();
+}
+
+
+
+uno::Reference< XProgressHandler > SAL_CALL
+TaskManager::getProgressHandler( sal_Int32 CommandId )
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    if( it == m_aTaskMap.end() )
+        return uno::Reference< XProgressHandler >( 0 );
+    else
+        return it->second.getProgressHandler();
 }

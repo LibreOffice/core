@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:09 $
+ *  last change: $Author: abi $ $Date: 2001-04-24 13:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,17 +368,8 @@ BaseContent::execute( const Command& aCommand,
 {
     if( CommandId )
     {
-        uno::Reference< task::XInteractionHandler > xIH( 0 );
-        uno::Reference< ucb::XProgressHandler > xPH( 0 );
-
-        if( Environment.is() )
-        {
-            xIH = Environment->getInteractionHandler();
-            xPH = Environment->getProgressHandler();
-        }
         m_pMyShell->startTask( CommandId,
-                               xIH,
-                               xPH );
+                               Environment );
     }
 
     uno::Any aAny;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:56:39 $
+ *  last change: $Author: abi $ $Date: 2001-04-24 13:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XPROGRESSHANDLER_HPP_
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #endif
@@ -80,6 +83,17 @@
 
 namespace fileaccess
 {
+    /*
+     * This implementation is inherited by class fileaccess::shell.
+     * The relevant methods in this class all have as first argument the CommandId,
+     * so if necessary, every method has acess to its relevant XInteractionHandler and
+     * XProgressHandler, simply by calling directly the method
+     * getInteractionHandler( CommandId )
+     * and
+     * getProgressHandler();
+     */
+
+
     class TaskManager
     {
     protected:
@@ -99,20 +113,23 @@ namespace fileaccess
             sal_Bool m_bAbort;
             com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInteractionHandler;
             com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler >     m_xProgressHandler;
+            com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >  m_xCommandEnvironment;
 
         public:
             TaskHandling()
                 : m_xInteractionHandler( 0 ),
                   m_xProgressHandler( 0 ),
+                  m_xCommandEnvironment( 0 ),
                   m_bAbort( false )
             {
 
             }
+
             TaskHandling(
-                const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& m_xIH,
-                const com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler >& m_xPH )
-                : m_xInteractionHandler( m_xIH ),
-                  m_xProgressHandler( m_xPH ),
+                const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv )
+                : m_xInteractionHandler( 0 ),
+                  m_xProgressHandler( 0 ),
+                  m_xCommandEnvironment( xCommandEnv ),
                   m_bAbort( false )
             {
             }
@@ -120,6 +137,24 @@ namespace fileaccess
             void SAL_CALL setAbort()
             {
                 m_bAbort = true;
+            }
+
+            com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler > SAL_CALL
+            getProgressHandler()
+            {
+                if( ! m_xProgressHandler.is() && m_xCommandEnvironment.is() )
+                    m_xProgressHandler = m_xCommandEnvironment->getProgressHandler();
+
+                return m_xProgressHandler;
+            }
+
+            com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
+            getInteractionHandler()
+            {
+                if( ! m_xInteractionHandler.is() && m_xCommandEnvironment.is() )
+                    m_xInteractionHandler = m_xCommandEnvironment->getInteractionHandler();
+
+                return m_xInteractionHandler;
             }
 
         };
@@ -138,13 +173,18 @@ namespace fileaccess
 
         void SAL_CALL startTask(
             sal_Int32 CommandId,
-            const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xIH,
-            const com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler >& xPH )
+            const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >&  xCommandEnv )
             throw( com::sun::star::ucb::CommandAbortedException );
 
         void SAL_CALL endTask( sal_Int32 CommandId );
         sal_Int32 SAL_CALL getCommandId( void );
         void SAL_CALL abort( sal_Int32 CommandId );
+
+        com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
+        getInteractionHandler( sal_Int32 CommandId );
+
+        com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler > SAL_CALL
+        getProgressHandler( sal_Int32 CommandId );
     };
 
 } // end namespace TaskHandling
