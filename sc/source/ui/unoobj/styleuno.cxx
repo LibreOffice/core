@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:29:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,8 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTFTRCON), ATTR_PAGE_FOOTERRIGHT,&::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTHDRCON), ATTR_PAGE_HEADERRIGHT,&::getCppuType((const uno::Reference< sheet::XHeaderFooterContent >*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOPAG),  ATTR_PAGE_SCALETOPAGES,&::getCppuType((const sal_Int16*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOX),    ATTR_PAGE_SCALETO,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_SCALETOY),    ATTR_PAGE_SCALETO,  &::getCppuType((const sal_Int16*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_SHADOWFORM),  ATTR_SHADOW,        &::getCppuType((const table::ShadowFormat*)0),  0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_SIZE),        ATTR_PAGE_SIZE,     &::getCppuType((const awt::Size*)0),            0, MID_SIZE_SIZE | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_TOPBORDER),   ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
@@ -1417,6 +1419,15 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
                 aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->Get(nWhich)).
                                 GetValue() == VOBJ_MODE_SHOW );
                 break;
+            case ATTR_PAGE_SCALETO:
+                {
+                    const ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(nWhich));
+                    if (aString.EqualsAscii( SC_UNO_PAGE_SCALETOX ))
+                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
+                    else
+                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
+                }
+                break;
             default:
                 aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
         }
@@ -1792,6 +1803,20 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                     throw lang::IllegalArgumentException();
                             }
                             break;
+                        case ATTR_PAGE_SCALETO:
+                            {
+                                sal_Int16 nPages;
+                                if (*pValue >>= nPages)
+                                {
+                                    ScPageScaleToItem aItem = ((const ScPageScaleToItem&)rSet.Get(ATTR_PAGE_SCALETO));
+                                    if ( aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
+                                        aItem.SetWidth(static_cast<sal_uInt16>(nPages));
+                                    else
+                                        aItem.SetHeight(static_cast<sal_uInt16>(nPages));
+                                    rSet.Put( aItem );
+                                }
+                            }
+                            break;
                         default:
                             //  #65253# Default-Items mit falscher Slot-ID
                             //  funktionieren im SfxItemPropertySet3 nicht
@@ -1923,6 +1948,15 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                             aName = pPrinter->GetPaperBinName( nValue );
                     }
                     aAny <<= aName;
+                }
+                break;
+            case ATTR_PAGE_SCALETO:
+                {
+                    ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(ATTR_PAGE_SCALETO));
+                    if (aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
+                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
+                    else
+                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
                 }
                 break;
             default:
