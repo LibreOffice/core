@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2004-10-14 10:37:14 $
+#   last change: $Author: vg $ $Date: 2005-03-23 08:59:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,8 @@ JAVAFILES=  \
     OfficeWindow.java \
     OOoBean.java \
     SystemWindowException.java \
-    Wrapper.java
+    Wrapper.java \
+    CallWatchThread.java
 
 JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
