@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:12:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,10 @@ const sal_uInt16 EXC_ID_AUTOFILTERINFO      = 0x009D;
 // (0x009E) AUTOFILTER --------------------------------------------------------
 
 const sal_uInt16 EXC_ID_AUTOFILTER          = 0x009E;
+
+// (0x0160) USESELFS ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_USESELFS            = 0x0160;
 
 // (0x01AA,0x01AB) USERSVIEWBEGIN, USERSVIEWEND -------------------------------
 
