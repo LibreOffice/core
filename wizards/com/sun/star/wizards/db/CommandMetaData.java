@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CommandMetaData.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:19:19 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:29:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -62,7 +62,13 @@ package com.sun.star.wizards.db;
 
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.*;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.IndexOutOfBoundsException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbcx.KeyType;
+import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.beans.*;
 import com.sun.star.uno.UnoRuntime;
@@ -70,13 +76,14 @@ import java.util.*;
 import com.sun.star.lang.Locale;
 import com.sun.star.util.XNumberFormats;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.embed.EntryInitModes;
 import com.sun.star.frame.*;
 
 public class CommandMetaData extends DBMetaData {
     public Map FieldTitleSet;
     public String[] AllFieldNames;
     public FieldColumn[] DBFieldColumns;
-
     public String[] FieldNames = new String[] {};
     public String[] GroupFieldNames = new String[] {};
     public String[][] SortFieldNames = new String[][] {};
@@ -85,7 +92,10 @@ public class CommandMetaData extends DBMetaData {
     public String[] NumericFieldNames = new String[] {};
     public String[] NonAggregateFieldNames;
     public int[] FieldTypes;
-    public int CommandType;
+    private int CommandType;
+    private String Command;
+
+    private XIndexAccess xIndexKeys;
 
     public CommandMetaData(XMultiServiceFactory xMSF, Locale CharLocale, XNumberFormats NumberFormats) {
         super(xMSF, CharLocale, NumberFormats);
@@ -138,22 +148,23 @@ public class CommandMetaData extends DBMetaData {
         this.FieldNames = _FieldNames;
     }
 
-    public void getFieldNamesOfCommand(String _commandname, int _commandtype) {
+    public void getFieldNamesOfCommand(String _commandname, int _commandtype, boolean _bAppendMode) {
         try {
             Object oField;
             java.util.Vector ResultFieldNames = new java.util.Vector(10);
             String[] FieldNames;
             CommandObject oCommand = this.getCommandByName(_commandname, _commandtype);
             FieldNames = oCommand.xColumns.getElementNames();
-
-            java.util.Arrays.sort(FieldNames);
             if (FieldNames.length > 0) {
                 for (int n = 0; n < FieldNames.length; n++) {
                     oField = oCommand.xColumns.getByName(FieldNames[n]);
                     int iType = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Type"));
                     // BinaryFieldTypes are not included in the WidthList
                     if (JavaTools.FieldInIntTable(WidthList, iType) >= 0) {
-                        ResultFieldNames.addElement(_commandname + "." + FieldNames[n]);
+                        if (_bAppendMode)
+                            ResultFieldNames.addElement(_commandname + "." + FieldNames[n]);
+                        else
+                            ResultFieldNames.addElement(FieldNames[n]);
                     }
                 }
                 FieldNames = new String[FieldNames.length];
@@ -165,6 +176,35 @@ public class CommandMetaData extends DBMetaData {
             exception.printStackTrace(System.out);
         }
     }
+
+    /**
+     * @return Returns the command.
+     */
+    public String getCommand() {
+        return Command;
+    }
+    /**
+     * @param command The command to set.
+     */
+    public void setCommand(String _command) {
+        Command = _command;
+    }
+
+    /**
+     * @return Returns the commandType.
+     */
+    public int getCommandType() {
+        return CommandType;
+    }
+
+    /**
+     * @param commandType The commandType to set.
+     */
+    public void setCommandType(int _commandType) {
+        CommandType = _commandType;
+    }
+
+
 
     public boolean hasNumericalFields() {
         return hasNumericalFields(FieldNames);
@@ -317,5 +357,77 @@ public class CommandMetaData extends DBMetaData {
             exception.printStackTrace(System.out);
         }
     }
+
+
+    public String[] getReferencedTables(String _stablename, int _ncommandtype){
+        String[] sTotReferencedTables = new String[]{};
+        try {
+            if (_ncommandtype == com.sun.star.sdb.CommandType.TABLE){
+                if (xDBMetaData.supportsIntegrityEnhancementFacility()){
+                    java.util.Vector TableVector = new java.util.Vector();
+                    Object oTable = xTableNames.getByName(_stablename);
+                    XKeysSupplier xKeysSupplier = (XKeysSupplier) UnoRuntime.queryInterface(XKeysSupplier.class, oTable);
+                    xIndexKeys = xKeysSupplier.getKeys();
+                    for (int i = 0; i < xIndexKeys.getCount(); i++){
+                        XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xIndexKeys.getByIndex(i) );
+                        int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
+                        if (curtype == KeyType.FOREIGN){
+                            String sreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
+                            if (xTableNames.hasByName(sreftablename))
+                                TableVector.addElement(sreftablename);
+                        }
+                    }
+                    if (TableVector.size() > 0){
+                        sTotReferencedTables = new String[TableVector.size()];
+                        TableVector.copyInto(sTotReferencedTables);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
+        return sTotReferencedTables;
+    }
+
+
+    public String[][] getKeyColumns(String _sreferencedtablename){
+    String[][] skeycolumnnames = null;
+    try {
+        for (int i = 0; i < xIndexKeys.getCount(); i++){
+            XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xIndexKeys.getByIndex(i) );
+            int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
+            if (curtype == KeyType.FOREIGN){
+                String scurreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
+                if (xTableNames.hasByName(scurreftablename)){
+                    if (scurreftablename.equals(_sreferencedtablename)){
+                        XColumnsSupplier xColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xPropertySet);
+                        String[] smastercolnames = xColumnsSupplier.getColumns().getElementNames();
+                        skeycolumnnames = new String[2][smastercolnames.length];
+                        skeycolumnnames[1] = smastercolnames;
+                        skeycolumnnames[0] = new String[smastercolnames.length];
+                        for (int n = 0; n < smastercolnames.length; n++){
+                            XPropertySet xcolPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnsSupplier.getColumns().getByName(smastercolnames[n]));
+                            skeycolumnnames[0][n] = AnyConverter.toString(xcolPropertySet.getPropertyValue("RelatedColumn"));
+                        }
+                        return skeycolumnnames;
+                    }
+                }
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return skeycolumnnames;
+    }
+
+
+    public void openFormDocument(boolean _bReadOnly){
+    try {
+        Object oEmbeddedFactory = super.xMSF.createInstance("com.sun.star.embed.OOoEmbeddedObjectFactory");
+        int iEntryInitMode = EntryInitModes.DEFAULT_INIT;       //TRUNCATE_INIT???
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }}
+
 
 }
