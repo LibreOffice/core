@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_punct.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:43:30 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <parser/parserinfo.hxx>
 #include <s2_luidl/tokintpr.hxx>
 
 
