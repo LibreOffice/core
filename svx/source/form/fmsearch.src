@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:29:26 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "~Expresiуn comodнn";
         Text[ english_us ] = "Placeholder expression";
         Text[ chinese_simplified ] = "НЁЕд·ы±нґп";
-        Text[ russian ] = "Выражение метки-заполнителя";
+        Text[ russian ] = "Выражение местозаполнителя";
         Text[ polish ] = "Wyraїenie symbolu wieloznacznego";
         Text[ japanese ] = "ЬІЩДЮ¶°ДЮ‚М•\\Њ»";
         Text[ chinese_traditional ] = "іq°tІЕ-Єн№F";
