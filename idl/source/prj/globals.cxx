@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(define)
     A_ENTRY(SbxObject)
     A_ENTRY(Container)
-    A_ENTRY(PlugComm)
+    A_ENTRY(ImageRotation)
     A_ENTRY(IsCollection)
     A_ENTRY(ReadOnlyDoc)
     A_ENTRY(ConfigName)

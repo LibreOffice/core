@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_FastCall;
     SvStringHashEntryRef MM_SbxObject;
     SvStringHashEntryRef MM_Container;
-    SvStringHashEntryRef MM_PlugComm;
+    SvStringHashEntryRef MM_ImageRotation;
     SvStringHashEntryRef MM_IsCollection;
     SvStringHashEntryRef MM_ReadOnlyDoc;
     SvStringHashEntryRef MM_ConfigName;
@@ -253,7 +253,7 @@ HASH_INLINE(AllConfig)
 HASH_INLINE(FastCall)
 HASH_INLINE(SbxObject)
 HASH_INLINE(Container)
-HASH_INLINE(PlugComm)
+HASH_INLINE(ImageRotation)
 HASH_INLINE(IsCollection)
 HASH_INLINE(ReadOnlyDoc)
 HASH_INLINE(ConfigName)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-12 10:38:30 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void SvMetaSlot::Load( SvPersistStream & rStm )
     TEST_READ
     if( nMask & 0x4000 ) rStm >> aRecordAbsolute;
     TEST_READ
-    if( nMask & 0x8000 ) rStm >> aPlugComm;
+    if( nMask & 0x8000 ) rStm >> aImageRotation;
 
     nMask = 0;
     rStm >> nMask;
@@ -297,7 +297,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     if( aContainer.IsSet() )      nMask |= 0x1000;
     if( aSlotType.Is() )          nMask |= 0x2000;
     if( aRecordAbsolute.IsSet() ) nMask |= 0x4000;
-    if( aPlugComm.IsSet() )       nMask |= 0x8000;
+    if( aImageRotation.IsSet() )       nMask |= 0x8000;
 
     // Daten schreiben
     rStm << nMask;
@@ -332,7 +332,7 @@ void SvMetaSlot::Save( SvPersistStream & rStm )
     TEST_WRITE
     if( nMask & 0x4000 ) rStm << aRecordAbsolute;
     TEST_WRITE
-    if( nMask & 0x8000 ) rStm << aPlugComm;
+    if( nMask & 0x8000 ) rStm << aImageRotation;
 
     nMask = 0;
     if( aUnoName.IsSet() )  nMask |= 0x0001;
@@ -566,10 +566,10 @@ BOOL SvMetaSlot::GetContainer() const
     return ((SvMetaSlot *)GetRef())->GetContainer();
 }
 
-BOOL SvMetaSlot::GetPlugComm() const
+BOOL SvMetaSlot::GetImageRotation() const
 {
-    if( aPlugComm.IsSet() || !GetRef() ) return aPlugComm;
-    return ((SvMetaSlot *)GetRef())->GetPlugComm();
+    if( aImageRotation.IsSet() || !GetRef() ) return aImageRotation;
+    return ((SvMetaSlot *)GetRef())->GetImageRotation();
 }
 
 const ByteString& SvMetaSlot::GetUnoName() const
@@ -685,7 +685,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         SetAllConfig( aAllConfig ), bOk = TRUE;
     bOk |= aFastCall.ReadSvIdl( SvHash_FastCall(), rInStm );
     bOk |= aContainer.ReadSvIdl( SvHash_Container(), rInStm );
-    bOk |= aPlugComm.ReadSvIdl( SvHash_PlugComm(), rInStm );
+    bOk |= aImageRotation.ReadSvIdl( SvHash_ImageRotation(), rInStm );
     bOk |= aUnoName.ReadSvIdl( SvHash_UnoName(), rInStm );
 
     if( !bOk )
@@ -906,9 +906,9 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         ( aOut += aDel ) += aContainer.GetSvIdlString( SvHash_Container() );
         aDel = ", ";
     }
-    if( aPlugComm )
+    if( aImageRotation )
     {
-        ( aOut += aDel ) += aPlugComm.GetSvIdlString( SvHash_PlugComm() );
+        ( aOut += aDel ) += aImageRotation.GetSvIdlString( SvHash_ImageRotation() );
         aDel = ", ";
     }
 
@@ -1440,8 +1440,8 @@ void SvMetaSlot::WriteSlot( const ByteString & rShellName, USHORT nCount,
         rOutStm << MakeSlotName( SvHash_Container() ).GetBuffer() << '|';
     if ( GetReadOnlyDoc() )
         rOutStm << MakeSlotName( SvHash_ReadOnlyDoc() ).GetBuffer() << '|';
-    if( GetPlugComm() )
-        rOutStm << MakeSlotName( SvHash_PlugComm() ).GetBuffer() << '|';
+    if( GetImageRotation() )
+        rOutStm << MakeSlotName( SvHash_ImageRotation() ).GetBuffer() << '|';
 
     rOutStm << '0';
 
@@ -1873,8 +1873,8 @@ void SvMetaSlot::CompareSlotAttributes( SvMetaSlot* pSlot )
     if ( GetContainer() != pSlot->GetContainer() )
         aStr += "    Container\n";
 
-    if ( GetPlugComm() != pSlot->GetPlugComm() )
-        aStr += "    PlugComm\n";
+    if ( GetImageRotation() != pSlot->GetImageRotation() )
+        aStr += "    ImageRotation\n";
 
     if ( !GetPseudoPrefix().Equals( pSlot->GetPseudoPrefix() ) )
         aStr += "    PseudoPrefix\n";
