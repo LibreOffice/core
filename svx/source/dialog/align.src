@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,27 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Size = MAP_APPFONT ( 34 , 8 ) ;
         Text = "~Winkel" ;
         Text [ ENGLISH ] = "Angle" ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "De~grees";
+        Text[ portuguese ] = "~Graus";
+        Text[ russian ] = "Ãğàäóñ";
+        Text[ greek ] = "Ìïß~ñåò";
+        Text[ dutch ] = "Gra~den";
+        Text[ french ] = "~Degrés";
+        Text[ spanish ] = "~Grados";
+        Text[ finnish ] = "Degrees";
+        Text[ italian ] = "Gra~di";
+        Text[ danish ] = "grader";
+        Text[ swedish ] = "G~rader";
+        Text[ polish ] = "Stopieñ";
+        Text[ portuguese_brazilian ] = "Gra~d";
+        Text[ japanese ] = "“x(~G)";
+        Text[ korean ] = "µµ(~G)";
+        Text[ chinese_simplified ] = "½Ç¶È(~G)";
+        Text[ chinese_traditional ] = "¨¤«×(~G)";
+        Text[ turkish ] = "De~rece";
+        Text[ arabic ] = "ÏÑÌÉ/ÏÑÌÇÊ";
+        Text[ catalan ] = "~Grados";
     };
     NumericField NF_DEGREES
     {
@@ -281,7 +302,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese ] = "Borda de ~referência" ;
         Text[ chinese_simplified ] = "ÒıÓÃ±ß(~F)";
         Text[ russian ] = "Êğàé ññûëêè";
-        Text[ polish ] = "KrawêdŸ odniesienia";
+        Text[ polish ] = "Krawêd? odniesienia";
         Text[ japanese ] = "Šî€‚É‚È‚é‰(~F)";
         Text[ chinese_traditional ] = "°Ñ·ÓÃä(~F)";
         Text[ arabic ] = "ÇáÍÇİÉ ÇáãÑÌÚ";
@@ -553,7 +574,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ ENGLISH ] = "Linebrea~k" ;
         Text [ norwegian ] = "Linebrea~k" ;
         Text [ italian ] = "Testo a capo" ;
-        Text [ portuguese_brazilian ] = "Interrupç~ao de linha" ;
+        Text [ portuguese_brazilian ] = "Interrup?~ao de linha" ;
         Text [ portuguese ] = "Quebra de ~linha" ;
         Text [ finnish ] = "Rivinvaihto" ;
         Text [ danish ] = "Linjeskift" ;
