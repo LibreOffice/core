@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:26:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,21 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
     ::osl::MutexGuard aGuard(m_aMutex);
     if (OColumnDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    return this;
+
+    OColumn* pNewColumn = new OColumn(  m_Name,
+                                        m_TypeName,
+                                        m_DefaultValue,
+                                        m_IsNullable,
+                                        m_Precision,
+                                        m_Scale,
+                                        m_Type,
+                                        m_IsAutoIncrement,
+                                        m_IsRowVersion,
+                                        m_IsCurrency,
+                                        isCaseSensitive());
+    pNewColumn->m_Description = m_Description;
+    pNewColumn->setNew(sal_True);
+    return pNewColumn;
 }
 // -------------------------------------------------------------------------
 
