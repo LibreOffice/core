@@ -163,7 +163,7 @@
 
 #define STD_FILTER_FILE(id,name) \
     File id \
-        PACKED_FILTER_FILE_BODY; \
+        PACKED_LIB_FILE_BODY; \
         Name = FILTER_LIBNAME(name); \
     End
 
