@@ -397,13 +397,15 @@ $(SHL1TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL1VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL1VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL1VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL1TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -424,13 +426,13 @@ $(SHL1TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL1TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL1TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL1TARGETN:f) $(SHL1TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL1TARGETN:f:b:b) $(SHL1TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -857,13 +859,15 @@ $(SHL2TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL2VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL2VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL2VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL2TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -884,13 +888,13 @@ $(SHL2TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL2TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL2TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL2TARGETN:f) $(SHL2TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL2TARGETN:f:b:b) $(SHL2TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -1317,13 +1321,15 @@ $(SHL3TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL3VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL3VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL3VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL3TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -1344,13 +1350,13 @@ $(SHL3TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL3TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL3TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL3TARGETN:f) $(SHL3TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL3TARGETN:f:b:b) $(SHL3TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -1777,13 +1783,15 @@ $(SHL4TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL4VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL4VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL4VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL4TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -1804,13 +1812,13 @@ $(SHL4TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL4TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL4TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL4TARGETN:f) $(SHL4TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL4TARGETN:f:b:b) $(SHL4TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -2237,13 +2245,15 @@ $(SHL5TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL5VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL5VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL5VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL5TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2264,13 +2274,13 @@ $(SHL5TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL5TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL5TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL5TARGETN:f) $(SHL5TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL5TARGETN:f:b:b) $(SHL5TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -2697,13 +2707,15 @@ $(SHL6TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL6VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL6VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL6VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL6TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2724,13 +2736,13 @@ $(SHL6TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL6TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL6TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL6TARGETN:f) $(SHL6TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL6TARGETN:f:b:b) $(SHL6TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -3157,13 +3169,15 @@ $(SHL7TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL7VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL7VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL7VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL7TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3184,13 +3198,13 @@ $(SHL7TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL7TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL7TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL7TARGETN:f) $(SHL7TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL7TARGETN:f:b:b) $(SHL7TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -3617,13 +3631,15 @@ $(SHL8TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL8VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL8VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL8VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL8TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3644,13 +3660,13 @@ $(SHL8TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL8TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL8TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL8TARGETN:f) $(SHL8TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL8TARGETN:f:b:b) $(SHL8TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -4077,13 +4093,15 @@ $(SHL9TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL9VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL9VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL9VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL9TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -4104,13 +4122,13 @@ $(SHL9TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL9TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL9TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL9TARGETN:f) $(SHL9TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL9TARGETN:f:b:b) $(SHL9TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
@@ -4537,13 +4555,15 @@ $(SHL10TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL10VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL10VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL10VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL10TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -4564,13 +4584,13 @@ $(SHL10TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL10TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL10TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL10TARGETN:f) $(SHL10TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL10TARGETN:f:b:b) $(SHL10TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"

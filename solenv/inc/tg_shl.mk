@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-14 16:23:12 $
+#   last change: $Author: mh $ $Date: 2002-08-16 11:26:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -497,13 +497,15 @@ $(SHL$(TNR)TARGETN) : \
     @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
 .ENDIF
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
-    @strip -i -r -u -s $(SHL$(TNR)VERSIONMAP) $@
+.IF "$(DEBUG)"==""
+    @strip -i -r -u -S -s $(SHL$(TNR)VERSIONMAP) $@
 .ENDIF
-    @echo "Making: $@.framework"
+.ENDIF
+    @echo "Making: $@.jnilib"
     @create-bundle $@
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL$(TNR)TARGETN).framework
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -524,13 +526,13 @@ $(SHL$(TNR)TARGETN) : \
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b:b)
     +cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f:b:b) $(SHL$(TNR)TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
