@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-08 08:57:58 $
+ *  last change: $Author: os $ $Date: 2001-09-14 13:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,6 +950,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
                                         GetArgs()->Get(SID_ATTR_PARA_LRSPACE));
 
+        long nLDist = 0;
+        long nRDist = 0;
+
         if(nFrmType & FRMTYPE_FLY_ANY)
         {
 // os: Wegen #42444# wird hier der Umrandungsabstand eingefuegt
@@ -960,10 +963,30 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aCoreSet.Put( aBoxInfo );
             rSh.GetFlyFrmAttr( aCoreSet );
             const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
-            long nDist = rBox.GetDistance();
-            aParaMargin.SetRight( aParaMargin.GetRight() - nDist );
-            aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nDist);
+            nLDist = rBox.GetDistance(BOX_LINE_LEFT);
+            nRDist = rBox.GetDistance(BOX_LINE_RIGHT);
         }
+        else if ( IsTabColFromDoc() ||
+            ( rSh.GetTableFmt() && !bFrmSelection &&
+            !(nFrmType & FRMTYPE_COLSECT ) ) )
+        {
+            SfxItemSet aCoreSet( GetPool(),
+                                    RES_BOX, RES_BOX,
+                                    SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
+            SvxBoxInfoItem aBoxInfo;
+            aCoreSet.Put( aBoxInfo );
+            aBoxInfo.SetTable(FALSE);
+            aBoxInfo.SetDist((BOOL) TRUE);
+            aCoreSet.Put(aBoxInfo);
+            rSh.GetTabBorders( aCoreSet );
+            const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+            SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
+            nLDist = rBox.GetDistance(BOX_LINE_LEFT);
+            nRDist = rBox.GetDistance(BOX_LINE_RIGHT);
+        }
+        aParaMargin.SetRight( aParaMargin.GetRight() - nRDist );
+        aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nLDist);
+
         DEBUGPARAMARGIN(aParaMargin);
 
         aParaMargin.SetWhich( RES_LR_SPACE );
@@ -1328,15 +1351,29 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aLR = (const SvxLRSpaceItem&)aCoreSet.Get(RES_LR_SPACE);
                 DEBUGPARAMARGIN(aLR);
                 aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
+                rSet.Put(aLR);
+            }
+            break;
+        }
+        case SID_RULER_BORDER_DISTANCE:
+        {
+            if ( nSelectionType & SwWrtShell::SEL_GRF ||
+                    nSelectionType & SwWrtShell::SEL_FRM ||
+                    nSelectionType & SwWrtShell::SEL_OLE ||
+                    nFrmType == FRMTYPE_DRAWOBJ )
+                rSet.DisableItem(SID_RULER_BORDER_DISTANCE);
+            else
+            {
+                SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
                 if(nFrmType & FRMTYPE_FLY_ANY)
                 {
-// os: Wegen #42444# wird hier der Umrandungsabstand eingefuegt
-                    USHORT nDist;
+//                    USHORT nLDist, nRDist;
                     if( IsTabColFromDoc() )
                     {
                         const SwRect& rPrtRect = rSh.GetAnyCurRect(
                                         RECT_FLY_PRT_EMBEDDED, pPt );
-                        nDist = rPrtRect.Left();
+                        aDistLR.SetLeft(rPrtRect.Left());
+                        aDistLR.SetRight(rPrtRect.Left());
                     }
                     else
                     {
@@ -1347,15 +1384,33 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         aCoreSet.Put( aBoxInfo );
                         rSh.GetFlyFrmAttr( aCoreSet );
                         const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
-                        nDist = (USHORT)rBox.GetDistance();
+                        aDistLR.SetLeft((USHORT)rBox.GetDistance(BOX_LINE_LEFT ));
+                        aDistLR.SetRight((USHORT)rBox.GetDistance(BOX_LINE_RIGHT));
                     }
-                    aLR.SetRight(aLR.GetRight() + nDist);
-                    aLR.SetTxtLeft(aLR.GetTxtLeft() + nDist);
+                    rSet.Put(aDistLR);
                 }
-                rSet.Put(aLR);
+                else if ( IsTabColFromDoc() ||
+                    ( rSh.GetTableFmt() && !bFrmSelection &&
+                    !(nFrmType & FRMTYPE_COLSECT ) ) )
+                {
+                    SfxItemSet aCoreSet( GetPool(),
+                                            RES_BOX, RES_BOX,
+                                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
+                    SvxBoxInfoItem aBoxInfo;
+                    aCoreSet.Put( aBoxInfo );
+                    aBoxInfo.SetTable(FALSE);
+                    aBoxInfo.SetDist((BOOL) TRUE);
+                    aCoreSet.Put(aBoxInfo);
+                    rSh.GetTabBorders( aCoreSet );
+                    const SvxBoxItem& rBox = (const SvxBoxItem&)aCoreSet.Get(RES_BOX);
+                    SvxLRSpaceItem aDistLR(SID_RULER_BORDER_DISTANCE);
+                    aDistLR.SetLeft((USHORT)rBox.GetDistance(BOX_LINE_LEFT ));
+                    aDistLR.SetRight((USHORT)rBox.GetDistance(BOX_LINE_RIGHT));
+                    rSet.Put(aDistLR);
+                }
             }
-            break;
         }
+        break;
         case SID_RULER_BORDERS:
         {
             if ( IsTabColFromDoc() ||
@@ -1779,200 +1834,5 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         nWhich = aIter.NextWhich();
     }
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/02/16 12:28:39  ama
-    Fix #81084#: Negativ indent of paragraphs in flyframes
-
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.130  2000/09/18 16:06:14  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.129  2000/09/07 15:59:33  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.128  2000/08/29 13:59:32  ama
-    New: Negative margins
-
-    Revision 1.127  2000/08/23 12:49:45  kz
-    function Max (long, long)
-
-    Revision 1.126  2000/05/26 07:21:35  os
-    old SW Basic API Slots removed
-
-    Revision 1.125  2000/05/10 11:53:20  os
-    Basic API removed
-
-    Revision 1.124  2000/04/18 15:02:51  os
-    UNICODE
-
-    Revision 1.123  2000/01/17 13:32:55  jp
-    Bug #70616#: StateTabWin - if IsTabColFromDoc-Flag set then get/set info only over layoutpos
-
-    Revision 1.122  1999/11/23 14:56:37  os
-    #69106# LR_MIN_MAX in frames corrected
-
-    Revision 1.121  1999/06/21 07:20:54  OS
-    #66284##66928# correct display of frames with columns
-
-
-      Rev 1.120   21 Jun 1999 09:20:54   OS
-   #66284##66928# correct display of frames with columns
-
-      Rev 1.119   04 Jun 1999 09:29:22   OS
-   #66284# Rahmen nach Attributanwendung deselektieren
-
-      Rev 1.118   04 Jun 1999 09:00:04   OS
-   #66436# spaltige Bereiche auf spaltigen Seiten funktionieren jetzt auch
-
-      Rev 1.117   17 May 1999 13:06:14   OS
-   auch einspaltige Rahmen zeigen keine Spalten an
-
-      Rev 1.116   11 May 1999 21:51:06   JP
-   Task #66127#: Methoden rund ums Lineal verbessert und Schnittstellen veraendert/erweitert
-
-      Rev 1.115   28 Apr 1999 22:38:36   JP
-   Bug #65544#: StateTabWin: bei Tabellen in Bereichen mit den richtigen Werten arbeiten
-
-      Rev 1.114   23 Apr 1999 15:15:36   AMA
-   Fix #65252#: Nichtspaltige Bereiche in Tabellen in spaltigen Bereichen
-
-      Rev 1.113   20 Apr 1999 14:08:26   OS
-   #64974# Probleme mit spaltigen Bereichen beoben
-
-      Rev 1.112   06 Apr 1999 16:29:32   OS
-   #60062# spaltige Bereiche auch in Tabellen und spaltigen Rahmen fast richtig
-
-      Rev 1.111   10 Dec 1998 15:17:06   AMA
-   Fix #57749#: Fussnoten innerhalb von spaltigen Bereichen
-
-      Rev 1.110   03 Dec 1998 09:19:20   OS
-   #60062# LR_MIN_MAX fuer spaltige Bereiche sollte jetzt richtig sein
-
-      Rev 1.109   27 Nov 1998 14:57:32   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.108   18 Sep 1998 16:55:54   OS
-   #56584# WishWidth ueber USHRT_MAX verhindern
-
-      Rev 1.107   20 Aug 1998 13:30:46   OS
-   GetFrmType reicht fuer verkettete Rahmen nicht aus -> IsFrmSelected benutzen
-   Keine Absatzattribute fuer sel. Rahmen anzeigen #55277#,#55257#
-
-      Rev 1.106   01 Apr 1998 17:31:48   OM
-   #31111 Rahmen in protecteten Rahmen sind auch geschuetzt
-
-      Rev 1.105   04 Mar 1998 10:01:14   MH
-   chg: wg. internal Compilererrror
-
-      Rev 1.104   07 Feb 1998 10:38:12   OS
-   Set/GetStyle am Lineal fuer BrowseMode-Umschaltung #41371#
-
-      Rev 1.103   21 Nov 1997 15:00:24   MA
-   includes
-
-      Rev 1.102   15 Sep 1997 11:49:12   OS
-   zusaetzlicher Kommentar
-
-      Rev 1.101   15 Sep 1997 11:29:30   OS
-   Slotumleitung nicht ueber Dispatcher #43754#
-
-      Rev 1.100   12 Sep 1997 10:36:08   OS
-   ITEMID_* definiert
-
-      Rev 1.99   10 Sep 1997 16:55:32   OS
-   Rahmen: Absatzeinzuege innerhalb der Umrandung #42444#
-
-      Rev 1.98   15 Aug 1997 11:47:58   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.97   11 Aug 1997 10:28:32   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.96   07 Aug 1997 14:58:58   OM
-   Headerfile-Umstellung
-
-      Rev 1.95   06 Aug 1997 10:27:54   OS
-   Seitenraender richtig tauschen #42452#
-
-      Rev 1.94   30 Jul 1997 19:05:50   HJS
-   includes
-
-      Rev 1.93   29 Jul 1997 14:22:40   AMA
-   Fix #42203#: GPF durch nicht zurueckgesetztes bSetTabCol...
-
-      Rev 1.92   09 Jul 1997 12:54:30   OS
-   MinMaxItem im BrowseMode mit richtigen Raendern fuellen #41484#
-
-      Rev 1.91   17 Jun 1997 15:44:30   MA
-   DrawTxtShell nicht von BaseShell ableiten + Opts
-
-      Rev 1.90   09 Jun 1997 14:28:10   MA
-   chg: Browse-Flag nur noch am Doc
-
-      Rev 1.89   07 Apr 1997 19:06:32   MH
-   chg: header
-
-      Rev 1.88   12 Mar 1997 16:42:38   OS
-   AutoUpdate von Vorlagen: Absatzeinzuege, Tabulatoren
-
-      Rev 1.87   14 Feb 1997 09:13:42   JP
-   Bug #36135#: ExceTabWin - bei SetMouseTabCols die View locken
-
-      Rev 1.86   13 Feb 1997 12:06:14   MA
-   chg: Keine Tabulatoren im Lineal fuer Web
-
-      Rev 1.85   04 Feb 1997 08:14:32   OS
-   relative Rahmen richtig setzen
-
-      Rev 1.84   08 Jan 1997 10:55:00   OS
-   include fuer DEBUGLIN
-
-      Rev 1.83   28 Nov 1996 14:58:18   OS
-   keine Tabulatoren bei uneindeutigen Absatzeinzuegen
-
-      Rev 1.82   26 Nov 1996 16:55:20   OS
-   MinMax fuer Tabellen im BrowseMode korrigiert
-
-      Rev 1.81   21 Nov 1996 11:52:52   OS
-   Abstaende beruecksichtigen
-
-      Rev 1.80   04 Nov 1996 13:30:36   OS
-   UL-Spaces an Rahmen fuer das VLineal beruecksichtigen
-
-      Rev 1.79   24 Oct 1996 09:32:46   OS
-   Klammern vergessen...
-
-      Rev 1.78   21 Oct 1996 19:06:48   OS
-   ProtectItem vollstaendig senden; Exec-Methoden in der BrowseView stimmen jetzt
-
-      Rev 1.77   18 Oct 1996 08:57:42   OS
-   spaltige Rahmen und seiten wieder richtig anzeigen, ProtectItem fuer die Seitenraender mitschicken
-
-      Rev 1.76   25 Sep 1996 10:56:52   PL
-   Falsches Makro
-
-      Rev 1.75   24 Sep 1996 16:44:04   OS
-   letzter Bug in BrowseView
-
-      Rev 1.74   23 Sep 1996 19:38:32   HJS
-   add: viewopt.hxx
-
-      Rev 1.73   23 Sep 1996 15:36:32   MA
-   ViewWin vernichtet
-
-      Rev 1.72   23 Sep 1996 12:13:32   OS
-   richtige Raender in der BrowseView
-
-      Rev 1.71   12 Sep 1996 17:00:34   OS
-   GetAnyCurRect() ersetzt GetCur*Rect
-
-------------------------------------------------------------------------*/
-
 
 
