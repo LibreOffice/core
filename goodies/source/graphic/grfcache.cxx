@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-17 14:16:34 $
+ *  last change: $Author: ka $ $Date: 2001-11-20 13:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 // -----------
 
 #define RELEASE_TIMEOUT 10000
+#define MAX_BMP_EXTENT  4096
 
 // -----------
 // - statics -
@@ -508,7 +509,12 @@ ULONG GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& 
         const Size aOutSizePix( pOut->LogicToPixel( rSz ) );
         const long nBitCount = pOut->GetBitCount();
 
-        if( nBitCount )
+        if( ( aOutSizePix.Width() > MAX_BMP_EXTENT ) ||
+            ( aOutSizePix.Height() > MAX_BMP_EXTENT ) )
+        {
+            nNeededSize = ULONG_MAX;
+        }
+        else if( nBitCount )
         {
             nNeededSize = aOutSizePix.Width() * aOutSizePix.Height() * nBitCount / 8;
 
