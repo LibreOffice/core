@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:30:26 $
+ *  last change: $Author: cd $ $Date: 2001-09-19 11:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,10 @@ void Desktop::Main()
         catch( ::com::sun::star::configuration::InstallationIncompleteException& e )
         {
             HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, e.Message );
+        }
+        catch( ::com::sun::star::uno::Exception& e )
+        {
+            HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, e.Message );
         }
     }
 
