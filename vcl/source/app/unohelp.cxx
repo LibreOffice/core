@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 12:13:16 $
+ *  last change: $Author: mt $ $Date: 2002-11-04 13:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 
@@ -269,8 +273,17 @@ void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::drafts::com::su
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );
     if ( xExtToolkit.is() )
     {
-        // Method missing in interface, implement later!
+        // Only for focus events
+        sal_Int16 nType;
+        rEventObject.NewValue >>= nType;
+        if ( nType == ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
+            xExtToolkit->fireFocusGained( rEventObject.Source );
+        else
+        {
+            rEventObject.OldValue >>= nType;
+            if ( nType == ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
+                xExtToolkit->fireFocusLost( rEventObject.Source );
+        }
+
     }
 }
-
-
