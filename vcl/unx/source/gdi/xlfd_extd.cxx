@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:11:01 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,7 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
         switch( mpEncodingInfo[i].mnEncoding )
         {
             case RTL_TEXTENCODING_SYMBOL: // postscript symbol encoding
+                *(pRange++) = 0x0020; *(pRange++) = 0x0100;  // symbol aliasing
                 *(pRange++) = 0xF020; *(pRange++) = 0xF100;
                 break;
             case RTL_TEXTENCODING_ISO_8859_15:
