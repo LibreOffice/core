@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListItem.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Date: 2004-02-04 11:24:15 $
+ *  last change: $Date: 2004-11-02 12:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ public class AccessibleListItem extends TestCase {
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
 
-        //        at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         // obtaining 'Close' button
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
                                              "Close");
