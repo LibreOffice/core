@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:31:32 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 05:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,9 +575,9 @@ void OConnection::disposing()
 
 
     if(m_pTables)
-        m_pTables->disposing();
+        m_pTables->dispose();
     if(m_pViews)
-        m_pViews->disposing();
+        m_pViews->dispose();
     m_aQueries.dispose();
 
     for (OWeakRefArrayIterator j = m_aComposers.begin(); m_aComposers.end() != j; j++)
@@ -709,7 +709,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    refresh(m_pTables);
+    refresh(m_pViews);
 
     return m_pViews;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:33:53 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 05:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,7 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _WLDCRD_HXX
-#include <tools/wldcrd.hxx>
-#endif
+
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
 #endif
@@ -132,6 +130,9 @@
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -162,25 +163,14 @@ OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
                                  sal_Bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
                                  IWarningsContainer* _pWarningsContainer)
-    :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
-    ,m_bConstructed(sal_False)
-    ,m_xConnection(_xCon)
+    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
     ,m_aCommitLocation(_rCommitLocation)
     ,m_aTablesConfig(_rTablesConfig)
-    ,m_pWarningsContainer(_pWarningsContainer)
-    ,m_pRefreshListener(_pRefreshListener)
     ,m_bInAppend(sal_False)
     ,m_bInDrop(sal_False)
 {
     DBG_CTOR(OTableContainer, NULL);
     m_aTablesConfig.setEscape(m_aTablesConfig.isSetNode());
-    try
-    {
-        m_xMetaData = _xCon->getMetaData();
-    }
-    catch(SQLException&)
-    {
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -190,239 +180,12 @@ OTableContainer::~OTableContainer()
     DBG_DTOR(OTableContainer, NULL);
 }
 
-//------------------------------------------------------------------------------
-/** compare two strings
-*/
-extern int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-NameCompare( const void* pFirst, const void* pSecond)
-{
-    return reinterpret_cast< const ::rtl::OUString* >(pFirst)->compareTo(*reinterpret_cast< const ::rtl::OUString* >(pSecond));
-}
-// -------------------------------------------------------------------------
-void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContainer,
-                                const Sequence< ::rtl::OUString >& _rTableFilter,
-                                const Sequence< ::rtl::OUString >& _rTableTypeFilter)
-{
-    m_xMasterTables = _rxMasterContainer;
-
-    if(m_xMasterTables.is())
-    {
-        // we have to listen at the mastertables because it could happen that another inserts new tables
-        Reference<XContainer> xCont(m_xMasterTables,UNO_QUERY);
-        if(xCont.is())
-            xCont->addContainerListener(this);
-        sal_Int32   nTableFilterLen = _rTableFilter.getLength();
-
-        connectivity::TStringVector aTableNames;
-        sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
-        if(!bNoTableFilters)
-        {
-            Sequence< ::rtl::OUString > aTableFilter        = _rTableFilter;
-            Sequence< ::rtl::OUString > aTableTypeFilter    = _rTableTypeFilter;
-            // build sorted versions of the filter sequences, so the visibility decision is faster
-            qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
-
-            // as we want to modify nTableFilterLen, remember this
-
-            // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-            // for them
-            ::std::vector< WildCard > aWCSearch; // contains the wildcards for the table filter
-            ::rtl::OUString* pTableFilters = aTableFilter.getArray();
-            sal_Int32 nShiftPos = 0;
-            String sCurrentWCExpression;
-            for (sal_Int32 i=0; i<nTableFilterLen; ++i)
-            {
-                if (pTableFilters->indexOf('%') != -1)
-                {
-                    sCurrentWCExpression = sal_Unicode('*');
-                    sCurrentWCExpression += (const sal_Unicode*)pTableFilters[i].replace('%', '*');
-                    sCurrentWCExpression += sal_Unicode('*');
-                    aWCSearch.push_back(WildCard(sCurrentWCExpression));
-                }
-                else
-                {
-                    if (nShiftPos != i)
-                        pTableFilters[nShiftPos] = pTableFilters[i];
-                    ++nShiftPos;
-                }
-            }
-            // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
-            aTableFilter.realloc(nShiftPos);
-            nTableFilterLen = nShiftPos;
-            aTableNames.reserve(nShiftPos);
-
-            Sequence< ::rtl::OUString> aNames = m_xMasterTables->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
-            {
-                if(isNameValid(*pBegin,aTableFilter,aTableTypeFilter,aWCSearch))
-                    aTableNames.push_back(*pBegin);
-            }
-        }
-        else
-        {
-            // no filter so insert all names
-            Sequence< ::rtl::OUString> aNames = m_xMasterTables->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            aTableNames = connectivity::TStringVector(pBegin,pEnd);
-        }
-        reFill(aTableNames);
-        m_bConstructed = sal_True;
-    }
-    else
-    {
-        construct(_rTableFilter,_rTableTypeFilter);
-    }
-}
-//------------------------------------------------------------------------------
-void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
-{
-    // build sorted versions of the filter sequences, so the visibility decision is faster
-    Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
-    sal_Int32   nTableFilterLen = aTableFilter.getLength();
-
-    if (nTableFilterLen)
-        qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
-
-    sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
-        // as we want to modify nTableFilterLen, remember this
-
-    // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-    // for them
-    ::rtl::OUString* pTableFilters = aTableFilter.getArray();
-    ::std::vector< WildCard > aWCSearch;
-    sal_Int32 nShiftPos = 0;
-    String sCurrentWCExpression;
-    for (sal_Int32 i=0; i<nTableFilterLen; ++i)
-    {
-        if (pTableFilters->indexOf('%') != -1)
-        {
-            sCurrentWCExpression = sal_Unicode('*');
-            sCurrentWCExpression += (const sal_Unicode*)pTableFilters[i].replace('%', '*');
-            sCurrentWCExpression += sal_Unicode('*');
-            aWCSearch.push_back(WildCard(sCurrentWCExpression));
-        }
-        else
-        {
-            if (nShiftPos != i)
-                pTableFilters[nShiftPos] = pTableFilters[i];
-            ++nShiftPos;
-        }
-    }
-    // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
-    aTableFilter.realloc(nShiftPos);
-    nTableFilterLen = nShiftPos;
-
-    try
-    {
-        if (m_xMetaData.is())
-        {
-            static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-            Sequence< ::rtl::OUString > sTableTypes;
-            if(_rTableTypeFilter.getLength() == 0)
-            {
-                // we want all catalogues, all schemas, all tables
-                sTableTypes.realloc(3);
-
-                static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-                static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
-                sTableTypes[0] = s_sTableTypeView;
-                sTableTypes[1] = s_sTableTypeTable;
-                sTableTypes[2] = sAll;  // just to be sure to include anything else ....
-            }
-            else
-                sTableTypes = _rTableTypeFilter;
-
-            Reference< XResultSet > xTables = m_xMetaData->getTables(Any(), sAll, sAll, sTableTypes);
-            Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
-            if (xCurrentRow.is())
-            {
-
-                    // after creation the set is positioned before the first record, per definitionem
-
-                ::rtl::OUString sCatalog, sSchema, sName, sType;
-                ::rtl::OUString sComposedName;
-
-                // we first collect the names and construct the OTable objects later, as the ctor of the table may need
-                // another result set from the connection, and some drivers support only one statement per connection
-
-                String sWCCompare;
-                sal_Bool bFilterMatch;
-                while (xTables->next())
-                {
-                    sCatalog    = xCurrentRow->getString(1);
-                    sSchema     = xCurrentRow->getString(2);
-                    sName       = xCurrentRow->getString(3);
-                    // we're not interested in the "wasNull", as the getStrings would return an empty string in
-                    // that case, which is sufficient here
-
-                    composeTableName(m_xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
-                    bFilterMatch =  bNoTableFilters
-                                ||  ((nTableFilterLen != 0) && (NULL != bsearch(&sComposedName, aTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare)));
-                    // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-
-                    if (!bFilterMatch && aWCSearch.size())
-                    {   // or if one of the wildcrad expression matches
-                        sWCCompare += (const sal_Unicode*)sComposedName;
-                        for (   ::std::vector< WildCard >::const_iterator aLoop = aWCSearch.begin();
-                                aLoop != aWCSearch.end() && !bFilterMatch;
-                                ++aLoop
-                            )
-                            bFilterMatch = aLoop->Matches(sWCCompare);
-                    }
-
-                    if (bFilterMatch)
-                    {   // the table name is allowed (not filtered out)
-                        insertElement(sComposedName,NULL);
-                    }
-                }
-
-                // dispose the tables result set, in case the connection can handle only one concurrent statement
-                // (the table object creation will need it's own statements)
-                disposeComponent(xTables);
-            }
-            else
-                DBG_ERROR("OTableContainer::construct : did not get a XRow from the tables result set !");
-        }
-        else
-            DBG_ERROR("OTableContainer::construct : no connection meta data !");
-    }
-    catch (SQLException&)
-    {
-        DBG_ERROR("OTableContainer::construct : catched an SQL-Exception !");
-        disposing();
-        return;
-    }
-
-    m_bConstructed = sal_True;
-}
 // -----------------------------------------------------------------------------
-void OTableContainer::removeEventListener()
+void OTableContainer::removeMasterContainerListener()
 {
-    Reference<XContainer> xCont(m_xMasterTables,UNO_QUERY);
+    Reference<XContainer> xCont(m_xMasterContainer,UNO_QUERY);
     if(xCont.is())
         xCont->removeContainerListener(this);
-}
-//------------------------------------------------------------------------------
-void OTableContainer::disposing()
-{
-    MutexGuard aGuard(m_rMutex);
-    OCollection::disposing();
-    removeEventListener();
-
-    m_xMasterTables = NULL;
-    m_xMetaData     = NULL;
-    m_xConnection   = NULL;
-    m_pWarningsContainer = NULL;
-    m_bConstructed  = sal_False;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::flush(  ) throw(RuntimeException)
@@ -447,21 +210,7 @@ sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
                                         const Sequence< ::rtl::OUString >& _rTableTypeFilter,
                                         const ::std::vector< WildCard >& _rWCSearch) const
 {
-    sal_Int32 nTableFilterLen = _rTableFilter.getLength();
-
-    sal_Bool bFilterMatch = (NULL != bsearch(&_rName, _rTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare));
-    // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-    if (!bFilterMatch && _rWCSearch.size())
-    {   // or if one of the wildcrad expression matches
-        String sWCCompare = (const sal_Unicode*)_rName;
-        for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
-                aLoop != _rWCSearch.end() && !bFilterMatch;
-                ++aLoop
-            )
-            bFilterMatch = aLoop->Matches(sWCCompare);
-    }
-
-    if (bFilterMatch)
+    if ( OFilteredContainer::isNameValid(_rName,_rTableFilter,_rTableTypeFilter,_rWCSearch) )
     {// the table name is allowed (not filtered out)
         // no type filter
         if(!_rTableTypeFilter.getLength())
@@ -469,7 +218,7 @@ sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
 
         // this is expensive but there is no other way to get the type of the table
         Reference<XPropertySet> xTable;
-        ::cppu::extractInterface(xTable,m_xMasterTables->getByName(_rName));
+        ::cppu::extractInterface(xTable,m_xMasterContainer->getByName(_rName));
         ::rtl::OUString aTypeName;
         xTable->getPropertyValue(PROPERTY_TYPE) >>= aTypeName;
         const ::rtl::OUString* pTypeBegin   = _rTableTypeFilter.getConstArray();
@@ -483,24 +232,11 @@ sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
     return sal_False;
 }
 // -------------------------------------------------------------------------
-void OTableContainer::impl_refresh() throw(RuntimeException)
-{
-    if ( m_pRefreshListener )
-    {
-        m_bConstructed = sal_False;
-        removeEventListener();
-        Reference<XRefreshable> xRefresh(m_xMasterTables,UNO_QUERY);
-        if ( xRefresh.is() )
-            xRefresh->refresh();
-        m_pRefreshListener->refresh(this);
-    }
-}
-// -----------------------------------------------------------------------------
 Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
 {
     Reference<XPropertySet> xProp;
-    if(m_xMasterTables.is() && m_xMasterTables->hasByName(_rName))
-        m_xMasterTables->getByName(_rName) >>= xProp;
+    if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
+        m_xMasterContainer->getByName(_rName) >>= xProp;
     Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
 
     OConfigurationNode aTableConfig;
@@ -564,7 +300,7 @@ Reference< XPropertySet > OTableContainer::createEmptyObject()
     // frist we have to look if the master tables does support this
     // and if then create a table object as well with the master tables
     Reference<XColumnsSupplier > xMasterColumnsSup;
-    Reference<XDataDescriptorFactory> xDataFactory(m_xMasterTables,UNO_QUERY);
+    Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
     if(xDataFactory.is())
     {
         xMasterColumnsSup = Reference< XColumnsSupplier >( xDataFactory->createDataDescriptor(), UNO_QUERY );
@@ -580,7 +316,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
 {
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
-    if(m_xMasterTables.is() && m_xMasterTables->hasByName(aName))
+    if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(aName))
     {
         String sMessage(DBACORE_RESSTRING(RID_STR_TABLE_IS_FILTERED));
         sMessage.SearchAndReplaceAscii("$name$", aName);
@@ -590,7 +326,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
     m_bInAppend = sal_True;
     try
     {
-        Reference<XAppend> xAppend(m_xMasterTables,UNO_QUERY);
+        Reference<XAppend> xAppend(m_xMasterContainer,UNO_QUERY);
         if(xAppend.is())
         {
             xAppend->appendByDescriptor(descriptor);
@@ -883,7 +619,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
     m_bInDrop = sal_True;
     try
     {
-        Reference< XDrop > xDrop(m_xMasterTables,UNO_QUERY);
+        Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
         if(xDrop.is())
             xDrop->dropByName(_sElementName);
         else
@@ -931,16 +667,6 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
     }
     m_bInDrop = sal_False;
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OTableContainer::acquire() throw()
-{
-    m_rParent.acquire();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OTableContainer::release() throw()
-{
-    m_rParent.release();
-}
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
 {
@@ -948,7 +674,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     ::rtl::OUString sName;
     if(!m_bInAppend && (Event.Accessor >>= sName) && !hasByName(sName))
     {
-        if(!m_xMasterTables.is() || m_xMasterTables->hasByName(sName))
+        if(!m_xMasterContainer.is() || m_xMasterContainer->hasByName(sName))
         {
             Reference<XNamed> xName = createObject(sName);
             insertElement(sName,xName);
@@ -965,9 +691,9 @@ void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& Event ) thr
 {
     //  ::osl::MutexGuard aGuard(m_rMutex);
     //  ::rtl::OUString sName;
-//  if( !m_bInDrop && m_xMasterTables.is() && (Event.Accessor >>= sName) && hasByName(sName))
+//  if( !m_bInDrop && m_xMasterContainer.is() && (Event.Accessor >>= sName) && hasByName(sName))
 //  {
-//      if( || !m_xMasterTables->hasByName(sName))
+//      if( || !m_xMasterContainer->hasByName(sName))
 //          ;
 //  }
 }
@@ -1054,11 +780,32 @@ void OTableContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aCo
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OTableContainer::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+
+Sequence< ::rtl::OUString > OTableContainer::getTableTypeFilter(const Sequence< ::rtl::OUString >& _rTableTypeFilter) const
 {
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+    static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+    Sequence< ::rtl::OUString > sTableTypes;
+    if(_rTableTypeFilter.getLength() == 0)
+    {
+        // we want all catalogues, all schemas, all tables
+        sTableTypes.realloc(3);
+
+        static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+        static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+        sTableTypes[0] = s_sTableTypeView;
+        sTableTypes[1] = s_sTableTypeTable;
+        sTableTypes[2] = sAll;  // just to be sure to include anything else ....
+    }
+    else
+        sTableTypes = _rTableTypeFilter;
+    return sTableTypes;
 }
 // -----------------------------------------------------------------------------
-
+void OTableContainer::addMasterContainerListener()
+{
+    // we have to listen at the mastertables because it could happen that another inserts new tables
+    Reference<XContainer> xCont(m_xMasterContainer,UNO_QUERY);
+    if(xCont.is())
+        xCont->addContainerListener(this);
+}
+// -----------------------------------------------------------------------------

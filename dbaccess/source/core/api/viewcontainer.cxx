@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:33:54 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 05:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,20 +151,8 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent,
                                  sal_Bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
                                  IWarningsContainer* _pWarningsContainer)
-    :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
-    ,m_bConstructed(sal_False)
-    ,m_xConnection(_xCon)
-    ,m_pWarningsContainer(_pWarningsContainer)
-    ,m_pRefreshListener(_pRefreshListener)
+    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
 {
-    DBG_CTOR(OViewContainer, NULL);
-    try
-    {
-        m_xMetaData = _xCon->getMetaData();
-    }
-    catch(SQLException&)
-    {
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -173,281 +161,16 @@ OViewContainer::~OViewContainer()
     //  dispose();
     DBG_DTOR(OViewContainer, NULL);
 }
-// -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::acquire() throw()
-{
-    m_rParent.acquire();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::release() throw()
-{
-    m_rParent.release();
-}
 //------------------------------------------------------------------------------
-/** compare two strings
-*/
-extern int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC ) && defined( OS2 )
-_Optlink
-#endif
-NameCompare( const void* pFirst, const void* pSecond);
-// -------------------------------------------------------------------------
-void OViewContainer::construct(const Reference< XNameAccess >& _rxMasterContainer,
-                                const Sequence< ::rtl::OUString >& _rTableFilter,
-                                const Sequence< ::rtl::OUString >& _rTableTypeFilter)
-{
-    m_xMasterViews = _rxMasterContainer;
-
-    if(m_xMasterViews.is())
-    {
-        sal_Int32   nTableFilterLen = _rTableFilter.getLength();
-
-        sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
-        connectivity::TStringVector aViewNames;
-        if(!bNoTableFilters)
-        {
-            Sequence< ::rtl::OUString > aTableFilter        = _rTableFilter;
-            Sequence< ::rtl::OUString > aTableTypeFilter    = _rTableTypeFilter;
-            // build sorted versions of the filter sequences, so the visibility decision is faster
-            qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
-
-            // as we want to modify nTableFilterLen, remember this
-
-            // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-            // for them
-            ::std::vector< WildCard > aWCSearch; // contains the wildcards for the table filter
-            ::rtl::OUString* pTableFilters = aTableFilter.getArray();
-            sal_Int32 nShiftPos = 0;
-            String sCurrentWCExpression;
-            for (sal_Int32 i=0; i<nTableFilterLen; ++i)
-            {
-                if (pTableFilters->indexOf('%') != -1)
-                {
-                    sCurrentWCExpression = sal_Unicode('*');
-                    sCurrentWCExpression += (const sal_Unicode*)pTableFilters[i].replace('%', '*');
-                    sCurrentWCExpression += sal_Unicode('*');
-                    aWCSearch.push_back(WildCard(sCurrentWCExpression));
-                }
-                else
-                {
-                    if (nShiftPos != i)
-                        pTableFilters[nShiftPos] = pTableFilters[i];
-                    ++nShiftPos;
-                }
-            }
-            // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
-            aTableFilter.realloc(nShiftPos);
-            nTableFilterLen = nShiftPos;
-
-            aViewNames.reserve(nShiftPos);
-
-            Sequence< ::rtl::OUString> aNames = m_xMasterViews->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
-            {
-                if(isNameValid(*pBegin,aTableFilter,aTableTypeFilter,aWCSearch))
-                    aViewNames.push_back(*pBegin);
-            }
-        }
-        else
-        {
-            // no filter so insert all names
-            Sequence< ::rtl::OUString> aNames = m_xMasterViews->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            aViewNames = connectivity::TStringVector(pBegin,pEnd);
-
-        }
-        reFill(aViewNames);
-        m_bConstructed = sal_True;
-    }
-}
-// -----------------------------------------------------------------------------
-void OViewContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
-{
-    // build sorted versions of the filter sequences, so the visibility decision is faster
-    Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
-    sal_Int32   nTableFilterLen = aTableFilter.getLength();
-
-    if (nTableFilterLen)
-        qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
-
-    sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
-        // as we want to modify nTableFilterLen, remember this
-
-    // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-    // for them
-    ::rtl::OUString* pTableFilters = aTableFilter.getArray();
-    ::std::vector< WildCard > aWCSearch;
-    sal_Int32 nShiftPos = 0;
-    String sCurrentWCExpression;
-    for (sal_Int32 i=0; i<nTableFilterLen; ++i)
-    {
-        if (pTableFilters->indexOf('%') != -1)
-        {
-            sCurrentWCExpression = sal_Unicode('*');
-            sCurrentWCExpression += (const sal_Unicode*)pTableFilters[i].replace('%', '*');
-            sCurrentWCExpression += sal_Unicode('*');
-            aWCSearch.push_back(WildCard(sCurrentWCExpression));
-        }
-        else
-        {
-            if (nShiftPos != i)
-                pTableFilters[nShiftPos] = pTableFilters[i];
-            ++nShiftPos;
-        }
-    }
-    // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
-    aTableFilter.realloc(nShiftPos);
-    nTableFilterLen = nShiftPos;
-
-    try
-    {
-        if (m_xMetaData.is())
-        {
-            static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
-
-            if(_rTableTypeFilter.getLength() != 0)
-            {
-                const ::rtl::OUString* pBegin = _rTableTypeFilter.getConstArray();
-                const ::rtl::OUString* pEnd   = pBegin + _rTableTypeFilter.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                {
-                    if ( *pBegin == s_sTableTypeView )
-                        break;
-                }
-                if ( pBegin != pEnd )
-                { // view are filtered out
-                    m_bConstructed = sal_True;
-                    return;
-                }
-            }
-            // we want all catalogues, all schemas, all tables
-            Sequence< ::rtl::OUString > sTableTypes(1);
-            sTableTypes[0] = s_sTableTypeView;
-
-            static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-            Reference< XResultSet > xTables = m_xMetaData->getTables(Any(), sAll, sAll, sTableTypes);
-            Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
-            if (xCurrentRow.is())
-            {
-                // after creation the set is positioned before the first record, per definitionem
-
-                ::rtl::OUString sCatalog, sSchema, sName, sType;
-                ::rtl::OUString sComposedName;
-
-                // we first collect the names and construct the OTable objects later, as the ctor of the table may need
-                // another result set from the connection, and some drivers support only one statement per connection
-
-                String sWCCompare;
-                sal_Bool bFilterMatch;
-                while (xTables->next())
-                {
-                    sCatalog    = xCurrentRow->getString(1);
-                    sSchema     = xCurrentRow->getString(2);
-                    sName       = xCurrentRow->getString(3);
-                    // we're not interested in the "wasNull", as the getStrings would return an empty string in
-                    // that case, which is sufficient here
-
-                    composeTableName(m_xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
-                    bFilterMatch =  bNoTableFilters
-                                ||  ((nTableFilterLen != 0) && (NULL != bsearch(&sComposedName, aTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare)));
-                    // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-
-                    if (!bFilterMatch && aWCSearch.size())
-                    {   // or if one of the wildcrad expression matches
-                        sWCCompare += (const sal_Unicode*)sComposedName;
-                        for (   ::std::vector< WildCard >::const_iterator aLoop = aWCSearch.begin();
-                                aLoop != aWCSearch.end() && !bFilterMatch;
-                                ++aLoop
-                            )
-                            bFilterMatch = aLoop->Matches(sWCCompare);
-                    }
-
-                    if (bFilterMatch)
-                    {   // the table name is allowed (not filtered out)
-                        insertElement(sComposedName,NULL);
-                    }
-                }
-
-                // dispose the tables result set, in case the connection can handle only one concurrent statement
-                // (the table object creation will need it's own statements)
-                disposeComponent(xTables);
-            }
-            else
-                DBG_ERROR("OTableContainer::construct : did not get a XRow from the tables result set !");
-        }
-        else
-            DBG_ERROR("OTableContainer::construct : no connection meta data !");
-    }
-    catch (SQLException&)
-    {
-        DBG_ERROR("OTableContainer::construct : catched an SQL-Exception !");
-        disposing();
-        return;
-    }
-
-    m_bConstructed = sal_True;
-}
-//------------------------------------------------------------------------------
-void OViewContainer::disposing()
-{
-    MutexGuard aGuard(m_rMutex);
-    OCollection::disposing();
-
-    m_xMasterViews = NULL;
-    m_xMetaData     = NULL;
-    m_xConnection   = NULL;
-    m_pWarningsContainer = NULL;
-    m_bConstructed  = sal_False;
-}
 // XServiceInfo
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
-// -------------------------------------------------------------------------
-sal_Bool OViewContainer::isNameValid(   const ::rtl::OUString& _rName,
-                                        const Sequence< ::rtl::OUString >& _rTableFilter,
-                                        const Sequence< ::rtl::OUString >& _rTableTypeFilter,
-                                        const ::std::vector< WildCard >& _rWCSearch) const
-{
-    sal_Int32 nTableFilterLen = _rTableFilter.getLength();
-
-    sal_Bool bFilterMatch = (NULL != bsearch(&_rName, _rTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare));
-    // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
-    if (!bFilterMatch && _rWCSearch.size())
-    {   // or if one of the wildcrad expression matches
-        String sWCCompare = (const sal_Unicode*)_rName;
-        for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
-                aLoop != _rWCSearch.end() && !bFilterMatch;
-                ++aLoop
-            )
-            bFilterMatch = aLoop->Matches(sWCCompare);
-    }
-
-    return bFilterMatch;
-}
-// -------------------------------------------------------------------------
-void OViewContainer::impl_refresh() throw(RuntimeException)
-{
-    if ( m_pRefreshListener )
-    {
-        m_bConstructed = sal_False;
-        Reference<XRefreshable> xRefresh(m_xMasterViews,UNO_QUERY);
-        if ( xRefresh.is() )
-            xRefresh->refresh();
-        m_pRefreshListener->refresh(this);
-    }
-}
 // -----------------------------------------------------------------------------
 Reference< XNamed > OViewContainer::createObject(const ::rtl::OUString& _rName)
 {
     Reference< XNamed > xProp;
-    if(m_xMasterViews.is() && m_xMasterViews->hasByName(_rName))
-        m_xMasterViews->getByName(_rName) >>= xProp;
+    if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
+        m_xMasterContainer->getByName(_rName) >>= xProp;
 
     if ( !xProp.is() )
     {
@@ -476,7 +199,7 @@ Reference< XPropertySet > OViewContainer::createEmptyObject()
     // frist we have to look if the master tables does support this
     // and if then create a table object as well with the master tables
     Reference<XColumnsSupplier > xMasterColumnsSup;
-    Reference<XDataDescriptorFactory> xDataFactory(m_xMasterViews,UNO_QUERY);
+    Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
     if(xDataFactory.is())
         xRet = xDataFactory->createDataDescriptor();
     else
@@ -491,13 +214,13 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
 
-    Reference<XAppend> xAppend(m_xMasterViews,UNO_QUERY);
+    Reference<XAppend> xAppend(m_xMasterContainer,UNO_QUERY);
     Reference< XPropertySet > xProp = descriptor;
     if(xAppend.is())
     {
         xAppend->appendByDescriptor(descriptor);
-        if(m_xMasterViews->hasByName(aName))
-            m_xMasterViews->getByName(aName) >>= xProp;
+        if(m_xMasterContainer->hasByName(aName))
+            m_xMasterContainer->getByName(aName) >>= xProp;
     }
     else
     {
@@ -532,7 +255,7 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
 // XDrop
 void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    Reference< XDrop > xDrop(m_xMasterViews,UNO_QUERY);
+    Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
     if(xDrop.is())
         xDrop->dropByName(_sElementName);
     else
@@ -578,7 +301,7 @@ void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) thro
 {
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
@@ -586,11 +309,29 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& Event ) thr
 {
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OViewContainer::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+Sequence< ::rtl::OUString > OViewContainer::getTableTypeFilter(const Sequence< ::rtl::OUString >& _rTableTypeFilter) const
 {
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+    static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+
+    if(_rTableTypeFilter.getLength() != 0)
+    {
+        const ::rtl::OUString* pBegin = _rTableTypeFilter.getConstArray();
+        const ::rtl::OUString* pEnd   = pBegin + _rTableTypeFilter.getLength();
+        for(;pBegin != pEnd;++pBegin)
+        {
+            if ( *pBegin == s_sTableTypeView )
+                break;
+        }
+        if ( pBegin != pEnd )
+        { // view are filtered out
+            m_bConstructed = sal_True;
+            return Sequence< ::rtl::OUString >();
+        }
+    }
+    // we want all catalogues, all schemas, all tables
+    Sequence< ::rtl::OUString > sTableTypes(1);
+    sTableTypes[0] = s_sTableTypeView;
+    return sTableTypes;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-22 10:08:10 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 05:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,7 @@ void ORowSet::freeResources()
 
         if(m_pTables)
         {
-            m_pTables->disposing(); // clear all references
+            m_pTables->dispose(); // clear all references
             DELETEZ(m_pTables);
         }
 

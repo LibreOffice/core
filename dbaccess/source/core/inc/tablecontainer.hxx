@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:33:31 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 05:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include <connectivity/sdbcx/VCollection.hxx>
+#ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
+#include "FilteredContainer.hxx"
 #endif
 #ifndef DBA_CORE_WARNINGS_HXX
 #include "warnings.hxx"
@@ -114,8 +114,9 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-
-class WildCard;
+#ifndef DBACCESS_CORE_FILTERED_CONTAINER_HXX
+#include "FilteredContainer.hxx"
+#endif
 namespace dbaccess
 {
     typedef ::cppu::ImplHelper2< ::com::sun::star::util::XFlushable,
@@ -126,39 +127,33 @@ namespace dbaccess
     //==========================================================================
     class OTable;
 
-    class OTableContainer :  public ::connectivity::sdbcx::OCollection,
+    class OTableContainer :  public OFilteredContainer,
                              public OTableContainer_Base
     {
     protected:
 
         ::utl::OConfigurationTreeRoot   m_aCommitLocation; // need to commit new table nodes
         ::utl::OConfigurationNode       m_aTablesConfig;
-        IWarningsContainer*             m_pWarningsContainer;
-        IRefreshListener*               m_pRefreshListener;
-
-        // holds the original tables which where set in construct but they can be null
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
 
         sal_Bool m_bInAppend;               // true when we are in append mode
         sal_Bool m_bInDrop;                 // set when we are in the drop method
-        sal_Bool m_bConstructed : 1;        // late ctor called
 
 
-        void removeEventListener();
-        sal_Bool isNameValid(const ::rtl::OUString& _rName,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
-            const ::std::vector< WildCard >& _rWCSearch) const;
+        // OFilteredContainer
+        virtual void addMasterContainerListener();
+        virtual void removeMasterContainerListener();
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getTableTypeFilter(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter) const;
 
         // ::connectivity::sdbcx::OCollection
-        virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >     createObject(const ::rtl::OUString& _rName);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createEmptyObject();
         virtual void appendObject( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > cloneObject(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+
+        virtual sal_Bool isNameValid(const ::rtl::OUString& _rName,
+                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
+                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
+                                    const ::std::vector< WildCard >& _rWCSearch) const;
 
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
@@ -180,33 +175,8 @@ namespace dbaccess
             );
         virtual ~OTableContainer();
 
-        /** late ctor. The container will fill itself with the data got by the connection meta data, considering the
-            filters given (the connection is the parent object you passed in the ctor).
-        */
-        void construct(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
-            );
-
-        /** late ctor. The container will fill itself with wrapper objects for the tables returned by the given
-            name container.
-        */
-        void construct(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxMasterContainer,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
-            );
-
-        sal_Bool isInitialized() const { return m_bConstructed; }
-
-        /** tell the container to free all elements and all additional resources.<BR>
-            After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
-        */
-        virtual void SAL_CALL disposing();
-
-        // XInterface
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
+        inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
+        inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
