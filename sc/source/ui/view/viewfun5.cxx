@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:02:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             SvxDrawingLayerImport( pModel, xInputStream );
 
-            pModel->SetStreamingSdrModel(FALSE);
+//BFS04         pModel->SetStreamingSdrModel(FALSE);
 
                                         // set everything to right layer:
             ULONG nObjCount = 0;
