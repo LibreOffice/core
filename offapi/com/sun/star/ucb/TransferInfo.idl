@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransferInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
+ *  last change: $Author: kso $ $Date: 2001-04-19 13:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@ struct TransferInfo
         "foo.txt".
 
         <p>The value can be one of the <type>NameClash</type> constants.
+
+        <p>Implementations that are not able to detect whether there is a
+        clashing resource may ignore <member>NameClash::ERROR</member> and
+        <member>NameClash::RENAME</member> always write the new data.
     */
     long NameClash;
 
