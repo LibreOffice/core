@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:29:18 $
+ *  last change: $Author: dvo $ $Date: 2001-09-25 13:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,21 +634,18 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 #endif
 
         exportDoc( meClass );
-
-        return sal_True;
     }
     catch( uno::Exception e )
     {
         // We must catch exceptions, because according to the
         // API definition export must not throw one!
-#ifdef DEBUG
-        ByteString aError( "uno Exception catched while exporting:\n" );
-        aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
-#endif
+        Sequence<OUString> aSeq(0);
+        SetError( XMLERROR_FLAG_ERROR | XMLERROR_FLAG_SEVERE | XMLERROR_API,
+                  aSeq, e.Message, NULL );
     }
 
-    return sal_False;
+    // return true only if no error occured
+    return (GetErrorFlags() & (ERROR_DO_NOTHING|ERROR_ERROR_OCCURED)) == 0;
 }
 
 void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
