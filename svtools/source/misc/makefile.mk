@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-16 17:33:54 $
+#   last change: $Author: ka $ $Date: 2001-01-19 18:31:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,45 +118,54 @@ LIB2OBJFILES=\
 
 LIB3TARGET=$(SLB)$/misc2.lib
 LIB3OBJFILES=\
-    $(SLO)$/agprop.obj \
-    $(SLO)$/config.obj \
-    $(SLO)$/confitem.obj \
-    $(SLO)$/demo.obj \
-    $(SLO)$/ehdl.obj \
-    $(SLO)$/filearch.obj \
-    $(SLO)$/flbytes.obj \
+    $(SLO)$/agprop.obj		\
+    $(SLO)$/config.obj		\
+    $(SLO)$/confitem.obj	\
+    $(SLO)$/demo.obj		\
+    $(SLO)$/ehdl.obj		\
+    $(SLO)$/filearch.obj	\
+    $(SLO)$/flbytes.obj		\
     $(SLO)$/fstathelper.obj \
-    $(SLO)$/imap.obj \
-    $(SLO)$/imap2.obj \
-    $(SLO)$/imap3.obj \
-    $(SLO)$/iniman.obj \
-    $(SLO)$/iniprop.obj \
-    $(SLO)$/lngmisc.obj \
-    $(SLO)$/ownlist.obj \
-    $(SLO)$/pver.obj \
-    $(SLO)$/urihelper.obj \
-    $(SLO)$/vcldata.obj
+    $(SLO)$/imap.obj		\
+    $(SLO)$/imap2.obj		\
+    $(SLO)$/imap3.obj		\
+    $(SLO)$/iniman.obj		\
+    $(SLO)$/iniprop.obj		\
+    $(SLO)$/lngmisc.obj		\
+    $(SLO)$/ownlist.obj		\
+    $(SLO)$/pver.obj		\
+    $(SLO)$/urihelper.obj	\
+    $(SLO)$/vcldata.obj		\
+    $(SLO)$/transfer.obj	
 
 EXCEPTIONSFILES=\
     $(SLO)$/strmadpt.obj	\
-    $(SLO)$/iniman.obj
+    $(SLO)$/iniman.obj		\
+    $(SLO)$/transfer.obj	
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 UNOUCROUT=$(OUT)$/inc
 UNOTYPES=\
-    com.sun.star.io.XInputStream					\
-    com.sun.star.io.XOutputStream					\
-    com.sun.star.io.XSeekable						\
-    com.sun.star.uno.TypeClass						\
-    com.sun.star.uno.XWeak							\
-    com.sun.star.lang.XMultiServiceFactory			\
-    com.sun.star.lang.XSingleServiceFactory			\
-    com.sun.star.registry.MergeConflictException	\
-    com.sun.star.registry.XSimpleRegistry			\
-    com.sun.star.frame.XConfigManager
-
+    com.sun.star.io.XInputStream						\
+    com.sun.star.io.XOutputStream						\
+    com.sun.star.io.XSeekable							\
+    com.sun.star.uno.TypeClass							\
+    com.sun.star.uno.XWeak								\
+    com.sun.star.lang.XMultiServiceFactory				\
+    com.sun.star.lang.XSingleServiceFactory				\
+    com.sun.star.registry.MergeConflictException		\
+    com.sun.star.registry.XSimpleRegistry				\
+    com.sun.star.frame.XConfigManager					\
+    com.sun.star.datatransfer.XTransferable				\
+    com.sun.star.datatransfer.DataFlavor				\
+    com.sun.star.datatransfer.clipboard.XClipboard		\
+    com.sun.star.datatransfer.clipboard.XClipboardOwner	
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+
+
+
