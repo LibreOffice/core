@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:48:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Telt alle niet-lege cellen van een gegevensbereik waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊı¾İÇøÓòÄÚ·ûºÏËÑÑ°Ìõ¼şµÄÇÒ²»ÊÇ¿Õ°×µÄµ¥Ôª¸ñÊıÄ¿¡£";
             Text[ greek ] = "Áñéèìåß üëá ôá êåëéÜ ìéáò ğåñéï÷Şò äåäïìİíùí ôá ïğïßá äåí åßíáé êåíÜ êáé åêğëçñşíïõí ôá êñéôŞñéá áíáæŞôçóçò.";
-            Text[ korean ] = "³»¿ëÀÌ °Ë»ö ±âÁØ¿¡ »óÀÀÇÏ´Â µ¥ÀÌÅÍ¿µ¿ªÀÇ ºñ¾îÀÖÁö ¾ÊÀº ¼¿À» ¸ğµÎ ¼Á´Ï´Ù.";
+            Text[ korean ] = "³»¿ëÀÌ °Ë»ö ±âÁØ¿¡ »óÀÀÇÏ´Â, µ¥ÀÌÅÍ¿µ¿ªÀÇ ºñ¾îÀÖÁö ¾ÊÀº ¼¿À» ¸ğµÎ ¼Á´Ï´Ù.";
             Text[ turkish ] = "Veri aralığında bulunup içerikleri arama ölçütlerine uyan ve boş olmayan hücrelerini sayar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cuenta las celdas en un área de datos que no están en blanco cuyos contenidos coinciden con los criterios de búsqueda.";
@@ -1410,7 +1410,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Vermengvuldigt alle cellen in een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "Ò»¸öÊı¾İÇøÓòÄÚ·ûºÏËÑÑ°Ìõ¼şµÄËùÓĞµ¥Ôª¸ñµÄ³Ë»ı¡£";
             Text[ greek ] = "ĞïëëáğëáóéÜæåé üëá ôá êåëéÜ ôçò ğåñéï÷Şò äåäïìİíùí, ôùí ïğïßùí ôá ğåñéå÷üìåíá åêğëçñşíïõí ôá êñéôŞñéá áíáæŞôçóçò.";
-            Text[ korean ] = "°Ë»ö ±âÁØ¿¡ ¸Â´Â ³»¿ëÀÌ ÀÖ´Â µ¥ÀÌÅÍ ¿µ¿ªÀÇ ¸ğµç ¼¿À» °öÇÔ";
+            Text[ korean ] = "°Ë»ö ±âÁØ¿¡ »óÀÀÇÏ´Â ³»¿ëÀÌ ÀÖ´Â µ¥ÀÌÅÍ ¿µ¿ªÀÇ ¸ğµç ¼¿À» °öÇÔ";
             Text[ turkish ] = "Veri alanında olup içerikleri arama ölçütlerine uyan tüm hücreleri çarpar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Multiplica los valores de un campo de registros determinado que coinciden con los criterios de una base de datos.";
@@ -1624,7 +1624,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt de standaarddeviatievan alle cellen in een gegevensbereik, waarvan de inhoud voldoet aan de criteria.";
             Text[ chinese_simplified ] = "¹ÀËãÒ»¸öÊı¾İÇøÓòÄÚ·ûºÏËÑÑ°Ìõ¼şµÄËùÓĞµ¥Ôª¸ñÖĞ\nÊı¾İµÄ±ê×¼Æ«²î¡£";
             Text[ greek ] = "Ïñßæåé ôçí ôõğéêŞ áğüêëéóç üëùí ôùí êåëéşí ìéáò ğåñéï÷Şò äåäïìİíùí, ôá ğåñéå÷üìåíá ôùí ïğïßùí åêğëçñşíïõí ôá êñéôŞñéá áíáæŞôçóçò.";
-            Text[ korean ] = "°Ë»ö ±âÁØ¿¡ ¸Â´Â ³»¿ëÀÌ ÀÖ´Â µ¥ÀÌÅÍ ¿µ¿ª¾ÈÀÇ ¼¿ÀÇ Ç¥ÁØ ÆíÂ÷¸¦ °è»êÇÕ´Ï´Ù";
+            Text[ korean ] = "°Ë»ö ±âÁØ¿¡ ¸Â´Â ³»¿ëÀÌ ÀÖ´Â, µ¥ÀÌÅÍ ¿µ¿ª¾ÈÀÇ ¼¿ÀÇ Ç¥ÁØ ÆíÂ÷¸¦ °è»êÇÕ´Ï´Ù";
             Text[ turkish ] = "Veri aralığında olup içerikleri arama ölçütlerine uyan tüm hücrelerin standart sapmasını hesaplar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Calcula la desviación estándar basándose en una muestra de las entradas seleccionadas de una base de datos.";
@@ -5880,7 +5880,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent het aantal termijnen voor een investering op basis van periodieke, vaste betalingen en een vast rentepercentage.";
             Text[ chinese_simplified ] = "Ö§¸¶µÄ×ÜÖÜÆÚÊı¡£";
             Text[ greek ] = "ÄéÜñêåéá ğëçñùìŞò. Ôï óıíïëï ôùí ğåñéüäùí êáôÜ ôï ïğïßï èá ğëçñşíåôáé ôï ÷ñåùëıóéï (óıíôáîç).";
-            Text[ korean ] = "Áö±Ş±â°£.  ¿¬±İÀÌ¡¡Áö±ŞµÇ°ÔµÇ´Â¡¡±â°£ÀÇ¡¡ÃÑÈ½¼ö ";
+            Text[ korean ] = "Áö±Ş±â°£. ¿¬±İÀÌ Áö±ŞµÇ°Ô µÇ´Â ±â°£ÀÇ ÃÑÈ½¼ö";
             Text[ turkish ] = "Taksit sayısı. Annüite ödenen toplam dönem sayısı.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es el número total de períodos de pago en una anualidad.";
@@ -7448,7 +7448,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Huidige waarde. De huidige waarde is het totale bedrag dat een reeks toekomstige betalingen op dit moment waard is.";
             Text[ chinese_simplified ] = "ÏÖ½ğÖµ¡£Ò»ÏµÁĞÎ´À´Ö§¸¶µÄÄ¿Ç°¼ÛÖµ¡£";
             Text[ greek ] = "Ğáñïıóá áîßá. Ç ğáñïıóá áîßá ìéáò óåéñÜò ğëçñùìşí.";
-            Text[ korean ] = "  Çö±İ°¡Ä¡£¬Áö±ŞÈ½¼ö¿¡¡¡µû¸¥¡¡ÇöÀç°¡Ä¡ ";
+            Text[ korean ] = "Çö±İ°¡Ä¡£¬Áö±ŞÈ½¼ö¿¡ µû¸¥ ÇöÀç°¡Ä¡ ";
             Text[ turkish ] = "Bugünkü değer. Ödeme dizisinin bugünkü değerini verir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Es el valor actual de la inversión.";
@@ -7840,7 +7840,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Huidige waarde is het totaalbedrag dat een reeks toekomstige betalingen op dit moment waard is.";
             Text[ chinese_simplified ] = "ÏÖ½ğÖµ¡£Ò»ÏµÁĞÎ´À´Ö§¸¶µÄÄ¿Ç°¼ÛÖµ¡£";
             Text[ greek ] = "Ğáñïıóá áîßá. Ç ğáñïıóá áîßá ìéáò óåéñÜò ğëçñùìşí.";
-            Text[ korean ] = " Çö±İ°¡Ä¡£¬Áö±ŞÈ½¼ö¿¡¡¡µû¸¥¡¡ÇöÀç°¡Ä¡ ";
+            Text[ korean ] = "Çö±İ°¡Ä¡£¬Áö±ŞÈ½¼ö¿¡¡¡µû¸¥¡¡ÇöÀç°¡Ä¡ ";
             Text[ turkish ] = "Bugünkü değer. Ödeme dizisinin bugünkü değerini verir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Es el valor actual de la inversión.";
@@ -8870,7 +8870,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent de geometrisch-degressieve afschrijving voor een bepaalde termijn.";
             Text[ chinese_simplified ] = "¼ÆËãÖ¸¶¨ÆÚÏŞÄÚµÄ¼¸ºÎµİ¼õĞÍ(¹Ì¶¨Óà¶îµİ¼õ·¨)×Ê²úÕÛ¾É¶î¡£";
             Text[ greek ] = "Õğïëïãßæåé ôçí ãåùìåôñéêŞ-öèßíïõóá ôéìŞ ôçò áğüóâåóçò ìéáò óõãêåêñéìİíçò ğåñéüäïõ.";
-            Text[ korean ] = "Æ¯Á¤ÇÑ¡¡±â°£¿¡´ëÇÑ¡¡±âÇÏÇĞÀû£­Ã¼°¨¡¡°¨°¡»ó°¢¾×À»¡¡°è»êÇÕ´Ï´Ù";
+            Text[ korean ] = "Æ¯Á¤ÇÑ ±â°£¿¡ ´ëÇÑ ±âÇÏÇĞÀû£­Ã¼°¨ °¨°¡»ó°¢¾×À» °è»êÇÕ´Ï´Ù";
             Text[ turkish ] = "Belirli bir dönem için geometrik-azalan amortismanı hesaplar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve la amortización de un bien durante un período específico usando el método de amortización de saldo fijo";
@@ -9167,7 +9167,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Maanden. Het aantal maanden in het eerste jaar van de afschrijving.";
             Text[ chinese_simplified ] = "ÔÂ·İÊı¡£½øĞĞÕÛ¾É¼ÆËãµÄÊ×ÄêÔÂ·İÊı¡£";
             Text[ greek ] = "ÌŞíåò. Ôï ğëŞèïò ôùí ìçíşí óôïí ğñşôï ÷ñüíï ôçò áğüóâåóçò.";
-            Text[ korean ] = "¿ù: °¨°¡»ó°¢ ÀÇ Ã¹¹øÂ° ³âµµÀÇ °³¿ù¼ö";
+            Text[ korean ] = "¿ù: °¨°¡»ó°¢ÀÇ Ã¹¹øÂ° ³âµµÀÇ °³¿ù¼ö";
             Text[ turkish ] = "Ay. İlk amortisman yılındaki ay sayısı.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Es el número de meses del primer año; si se omite, se asume que es 12.";
@@ -10268,7 +10268,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Oblicza zmodyfikowan¹ wewnêtrzn¹ stopê procentow¹ szeregu inwestycji.";
             Text[ portuguese_brazilian ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
             Text[ japanese ] = "C³“à•”û‰v—¦‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
+            Text[ korean ] = "ÀÏ·ÃÀÇ ÅõÀÚ¿¡ ´ëÇÑ ¼öÁ¤µÈ ³»ºÎ ÀÌÀ²À» »êÃâÇÕ´Ï´Ù.";
             Text[ chinese_simplified ] = "¼ÆËãÒ»ÏµÁĞÍ¶×ÊµÄ±ä¶¯µÄÄÚ²¿ÀûÏ¢ÂÊ¡£";
             Text[ chinese_traditional ] = "­pºâ¤@¨t¦C§ë¸êªºÅÜ°Êªº¤º³¡§Q®§²v¡C";
             Text[ turkish ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
@@ -10299,13 +10299,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Wartoœci";
             Text[ portuguese_brazilian ] = "values";
             Text[ japanese ] = "”ÍˆÍ";
-            Text[ korean ] = "values";
+            Text[ korean ] = "°ª";
             Text[ chinese_simplified ] = "values";
             Text[ chinese_traditional ] = "values";
             Text[ turkish ] = "values";
             Text[ arabic ] = "ÇáŞíã";
             Text[ catalan ] = "Valores";
-            Text[ finnish ] = "Werte";
+            Text[ finnish ] = "Arvot";
         };
         String 3 // Description of Parameter 1
         {
@@ -10324,7 +10324,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Macierz lub odwo³anie komórek do komórek, których zawartoœci odpowiadaj¹ p³atnoœciom.  ";
             Text[ portuguese_brazilian ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
             Text[ japanese ] = "”’l‚ª“ü—Í‚³‚ê‚½”z—ñA‚Ü‚½‚Í¾Ù”ÍˆÍ‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
+            Text[ korean ] = "³»¿ëÀÌ ÁöºÒ¿¡ »óÀÀÇÏ´Â ¼¿ÀÇ Çà·Ä ¶Ç´Â ¼¿.";
             Text[ chinese_simplified ] = "·ûºÏÖ§¸¶½ğ¶îµÄµ¥Ôª¸ñ×é»òµ¥Ôª¸ñÒıÓÃ¡£";
             Text[ chinese_traditional ] = "²Å¦X¤ä¥Iª÷ÃBªºÀx¦s®æ¯x°}©ÎÀx¦s®æ°Ñ·Ó¡C ";
             Text[ turkish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
@@ -10349,7 +10349,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Inwestycja";
             Text[ portuguese_brazilian ] = "invest_rate";
             Text[ japanese ] = "ˆÀ‘S—˜—¦";
-            Text[ korean ] = "invest_rate";
+            Text[ korean ] = "ÅõÀÚ";
             Text[ chinese_simplified ] = "invest_rate";
             Text[ chinese_traditional ] = "invest_rate";
             Text[ turkish ] = "invest_rate";
@@ -10374,7 +10374,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Stopa procentowa inwestycji (negatywne wartoœci macierzy)";
             Text[ portuguese_brazilian ] = "interest rate of investments (the negative values in the array).";
             Text[ japanese ] = "x•¥Šzi•‰‚Ì·¬¯¼­ÌÛ°j‚É‘Î‚·‚é—˜—¦‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "interest rate of investments (the negative values in the array).";
+            Text[ korean ] = "ÅõÀÚ¿¡ ´ëÇÑ ÀÌÀÚÀ² (Çà·ÄÀÇ (-)°ª).";
             Text[ chinese_simplified ] = "Í¶×ÊµÄÀûÏ¢ÂÊ(¾ØÕóµÄ¸ºÖµ)¡£";
             Text[ chinese_traditional ] = "§ë¸êªº§Q®§²v(¯x°}ªº­t­È)¡C";
             Text[ turkish ] = "interest rate of investments (the negative values in the array).";
@@ -10399,7 +10399,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Reinwestycja";
             Text[ portuguese_brazilian ] = "reinvest_rate";
             Text[ japanese ] = "ŠëŒ¯—˜—¦";
-            Text[ korean ] = "reinvest_rate";
+            Text[ korean ] = "ÀçÅõÀÚ";
             Text[ chinese_simplified ] = "reinvest_rate";
             Text[ chinese_traditional ] = "reinvest_rate";
             Text[ turkish ] = "reinvest_rate";
@@ -10424,7 +10424,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Stopa procentowa reinwestycji (pozytywne wartoœci macierzy)";
             Text[ portuguese_brazilian ] = "interest rate of reinvestments (the positive values in the array).";
             Text[ japanese ] = "û‰vŠz(³‚Ì·¬¯¼­ÌÛ°j‚É‘Î‚·‚é—˜—¦‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "interest rate of reinvestments (the positive values in the array).";
+            Text[ korean ] = "ÀçÅõÀÚ¿¡ ´ëÇÑ ÀÌÀÚÀ² (Çà·ÄÀÇ (+)°ª).";
             Text[ chinese_simplified ] = "ÔÙÍ¶×ÊµÄÀûÏ¢ÂÊ(¾ØÕóµÄÕıÊıÖµ)¡£";
             Text[ chinese_traditional ] = "¦A§ë¸êªº§Q®§²v(¯x°}ªº¥¿¼Æ­È)¡C";
             Text[ turkish ] = "interest rate of reinvestments (the positive values in the array).";
@@ -10453,7 +10453,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Oblicza wysokoœæ odsetków w przypadku sta³ych rat amortyzacyjnych.";
             Text[ portuguese_brazilian ] = "Returns the amount of interest for constant redemption rates.";
             Text[ japanese ] = "Œ³‹à‹Ï“™•ÔÏ‚Ì”CˆÓ‚ÌŠú‚Ì—˜‘§‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "Returns the amount of interest for constant redemption rates.";
+            Text[ korean ] = "ÀÏÁ¤ÇÑ »óÈ¯À²¿¡¼­ ÀÌÀÚ¸¦ °è»ê.";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸ö·ÖÆÚ³¥»¹´û¿î½ğ¶îµÄ¹Ì¶¨²»±äµÄÀûÏ¢¡£";
             Text[ chinese_traditional ] = "­pºâ¤@­Ó¤À´ÁÀvÁÙ¶U´Úª÷ÃB©T©w¤£ÅÜªº§Q®§¡C";
             Text[ turkish ] = "Returns the amount of interest for constant redemption rates.";
@@ -10484,13 +10484,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Odsetek";
             Text[ portuguese_brazilian ] = "rate";
             Text[ japanese ] = "—˜—¦";
-            Text[ korean ] = "rate";
+            Text[ korean ] = "ÀÌÀÚÀ²";
             Text[ chinese_simplified ] = "rate";
             Text[ chinese_traditional ] = "rate";
             Text[ turkish ] = "rate";
             Text[ arabic ] = "rate";
             Text[ catalan ] = "rate";
-            Text[ finnish ] = "Zins";
+            Text[ finnish ] = "Korko";
         };
         String 3 // Description of Parameter 1
         {
@@ -10509,7 +10509,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Stopa procentowa raty amortyzacjynej.";
             Text[ portuguese_brazilian ] = "Interest rate of a single redemption rate.";
             Text[ japanese ] = "“Š‘ŠúŠÔ‚ğ’Ê‚¶‚Äˆê’è‚Ì—˜—¦‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "Interest rate of a single redemption rate.";
+            Text[ korean ] = "»óÈ¯À²ÀÇ ÀÌÀÚÀ².";
             Text[ chinese_simplified ] = "Ò»¸ö·ÖÆÚ³¥»¹´û¿îµÄÀûÏ¢ÂÊ¡£";
             Text[ chinese_traditional ] = "¤@­Ó¤À´ÁÀvÁÙ¶U´Úªº§Q®§²v¡C";
             Text[ turkish ] = "Interest rate of a single redemption rate.";
@@ -10534,13 +10534,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Okres";
             Text[ portuguese_brazilian ] = "period";
             Text[ japanese ] = "Šú";
-            Text[ korean ] = "period";
+            Text[ korean ] = "±â°£";
             Text[ chinese_simplified ] = "period";
             Text[ chinese_traditional ] = "period";
             Text[ turkish ] = "period";
             Text[ arabic ] = "period";
             Text[ catalan ] = "period";
-            Text[ finnish ] = "Zeitraum";
+            Text[ finnish ] = "Aikakehys";
         };
         String 5 // Description of Parameter 2
         {
@@ -10559,7 +10559,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Liczba okresów amortyzacji do obliczenia odsetków.";
             Text[ portuguese_brazilian ] = "Count of amortization periods for the calculation of the interest.";
             Text[ japanese ] = "‹à—˜x•¥Šz‚ğ‹‚ß‚éŠú‚ğ‚P`ŠúŠÔ‚Ì”ÍˆÍ‚Åw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "Count of amortization periods for the calculation of the interest.";
+            Text[ korean ] = "ÀÌÀÚ °è»êÀ» À§ÇÑ »óÈ¯±â°£ ¼ö.";
             Text[ chinese_simplified ] = "ÓÃÓÚ¼ÆËãÀûÏ¢ÂÊµÄ·ÖÆÚ³¥»¹´û¿îµÄÖÜÆÚÊıÄ¿¡£";
             Text[ chinese_traditional ] = "¥Î©ó­pºâ§Q®§²vªº¤À´ÁÀvÁÙ¶U´Úªº©P´Á¼Æ¥Ø¡C";
             Text[ turkish ] = "Count of amortization periods for the calculation of the interest.";
@@ -10584,7 +10584,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "suma_okresów";
             Text[ portuguese_brazilian ] = "total_periods";
             Text[ japanese ] = "ŠúŠÔ";
-            Text[ korean ] = "total_periods";
+            Text[ korean ] = "ÃÑ_±â°£";
             Text[ chinese_simplified ] = "total_periods";
             Text[ chinese_traditional ] = "total_periods";
             Text[ turkish ] = "total_periods";
@@ -10609,7 +10609,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "£¹czna suma okresów amortyzacji.";
             Text[ portuguese_brazilian ] = "Sum total of amortization periods.";
             Text[ japanese ] = "“Š‘ŠúŠÔ‘S‘Ì‚Å‚Ìx•¥‰ñ”‚Ì‡Œv‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "Sum total of amortization periods.";
+            Text[ korean ] = "»óÈ¯±â°£ÀÇ ÃÑ ¼ö.";
             Text[ chinese_simplified ] = "·ÖÆÚ³¥»¹´û¿îµÄÖÜÆÚ×ÜÊı¡£";
             Text[ chinese_traditional ] = "¤À´ÁÀvÁÙ¶U´Úªº©P´ÁÁ`¼Æ¡C";
             Text[ turkish ] = "Sum total of amortization periods.";
@@ -10634,7 +10634,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Inwestycja";
             Text[ portuguese_brazilian ] = "invest";
             Text[ japanese ] = "Œ»İ‰¿’l";
-            Text[ korean ] = "invest";
+            Text[ korean ] = "ÅõÀÚ";
             Text[ chinese_simplified ] = "invest";
             Text[ chinese_traditional ] = "invest";
             Text[ turkish ] = "invest";
@@ -10659,7 +10659,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Kwota inwestycji.";
             Text[ portuguese_brazilian ] = "Amount of the investment.";
             Text[ japanese ] = "Œ»İ‚Ì“Š‘Šz‚Ü‚½‚Í«—ˆs‚í‚ê‚éˆê˜A‚Ìx•¥‚¢‚ğAŒ»“_‚ÅˆêŠ‡•¥‚¢‚µ‚½ê‡‚Ì‡Œv‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "Amount of the investment.";
+            Text[ korean ] = "ÅõÀÚ ±İ¾×.";
             Text[ chinese_simplified ] = "Ò»ÏîÍ¶×Ê½ğ¶î¡£";
             Text[ chinese_traditional ] = "¤@¶µ§ë¸êª÷ÃB¡C";
             Text[ turkish ] = "Amount of the investment.";
@@ -11287,7 +11287,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "De waarde die u wilt testen.";
             Text[ chinese_simplified ] = "Òª¼ìÑéµÄÊıÖµ¡£";
             Text[ greek ] = "Ç ôéìŞ ç ïğïßá ğñüêåéôáé íá åëåã÷èåß";
-            Text[ korean ] = "£© Å×½ºÆ®µÇ¾î¾ßÇÒ¡¡°ª £®";
+            Text[ korean ] = "Å×½ºÆ®µÇ¾î¾ß ÇÒ °ª.";
             Text[ turkish ] = "Denetlenecek değer.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Es el valor que desea probar.";
@@ -12417,7 +12417,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Ustala adres, format lub zawartoœæ komórki.";
             Text[ portuguese_brazilian ] = "Determines information about address, formatting or contents of a cell.";
             Text[ japanese ] = "¾Ù‚Ì‘®İ’èAˆÊ’uA“à—e‚ÉŠÖ‚·‚éî•ñ‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "Determines information about address, formatting or contents of a cell.";
+            Text[ korean ] = "ÁÖ¼Ò, Æ÷¸ËÆÃ ¶Ç´Â ¼¿ ³»¿ë¿¡ ´ëÇÑ Á¤º¸¸¦ Á¶»çÇÕ´Ï´Ù.";
             Text[ chinese_simplified ] = "ÇóµÃÒ»¸öµ¥Ôª¸ñµÄµØÖ·£¬¸ñÊ½ºÍÄÚÈİ¡£";
             Text[ chinese_traditional ] = "±o¥X¤@­ÓÀx¦s®æªº¦a§}¡A®æ¦¡©M¤º®e¡C";
             Text[ turkish ] = "Determines information about address, formatting or contents of a cell.";
@@ -12448,7 +12448,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Rodzaj_informacji";
             Text[ portuguese_brazilian ] = "info_type";
             Text[ japanese ] = "ŒŸ¸‚Ìí—Ş@";
-            Text[ korean ] = "info_type";
+            Text[ korean ] = "Á¤º¸_À¯Çü";
             Text[ chinese_simplified ] = "info_type";
             Text[ chinese_traditional ] = "info_type";
             Text[ turkish ] = "info_type";
@@ -12473,7 +12473,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Ci¹g znaków definiuj¹cy rodzaj informacji.";
             Text[ portuguese_brazilian ] = "This text specifies the type of information.";
             Text[ japanese ] = "’²‚×‚½‚¢¾Ùî•ñ‚Ìí—Ş‚ğ•\\‚·•¶š—ñ’l‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "This text specifies the type of information.";
+            Text[ korean ] = "Á¤º¸ À¯ÇüÀ» °áÁ¤ÇÏ´Â ¹®ÀÚ¿­.";
             Text[ chinese_simplified ] = "È·¶¨Ä³Ò»Ñ¡ÏîÀàĞÍµÄ×Ö´®¡£";
             Text[ chinese_traditional ] = "ÚÌ©w¬Y¤@¿ï¶µÃş«¬ªº¦r¦ê¡C";
             Text[ turkish ] = "This text specifies the type of information.";
@@ -12498,13 +12498,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Odwo³anie";
             Text[ portuguese_brazilian ] = "reference";
             Text[ japanese ] = "‘ÎÛ”ÍˆÍ";
-            Text[ korean ] = "reference";
+            Text[ korean ] = "ÂüÁ¶";
             Text[ chinese_simplified ] = "reference";
             Text[ chinese_traditional ] = "reference";
             Text[ turkish ] = "reference";
             Text[ arabic ] = "reference";
             Text[ catalan ] = "Referencia";
-            Text[ finnish ] = "Referenz";
+            Text[ finnish ] = "Viite";
         };
         String 5 // Description of Parameter 2
         {
@@ -12523,7 +12523,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ polish ] = "Pozycja komórki, który ma byæ sprawdzona.";
             Text[ portuguese_brazilian ] = "The position of the cell you want to examine.";
             Text[ japanese ] = "’²‚×‚é¾Ù‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "The position of the cell you want to examine.";
+            Text[ korean ] = "Áø´ÜÇÏ°íÀÚ ÇÏ´Â ¼¿ÀÇ À§Ä¡.";
             Text[ chinese_simplified ] = "Òª¼ì²éµÄµ¥Ôª¸ñµÄÎ»ÖÃ¡£";
             Text[ chinese_traditional ] = "­nÀË¬dªºÀx¦s®æªº¦ì¸m¡C";
             Text[ turkish ] = "The position of the cell you want to examine.";
@@ -13153,7 +13153,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Logisch 1;Logisch 2;... zijn 1 tot 30 voorwaarden die moeten worden gecontroleerd en die ofwel WAAR of FOUT opleveren.";
             Text[ chinese_simplified ] = "Âß¼­Öµ 1;Âß¼­Öµ 2;... ÊÇ 1 ÖÁ 30 ¸ö´ı¼ì²éµÄÌõ¼şÖµ£¬\n½á¹ûÎª TRUE »ò FALSE ¡£";
             Text[ greek ] = "ËïãéêŞ ôéìŞ 1, ËïãéêŞ ôéìŞ 2;...åßíáé áğü 1 İùò 30 óõíèŞêåò ïé ïğïßåò ğñİğåé íá åëåã÷èïıí êáé äßíïõí Ş TRUE (ÁËÇÈÇÓ) Ş FALSE (ËÁÈÏÓ).";
-            Text[ korean ] = "Âü°ª 1, Âü°ª 2;...´Â Å×½ºÆ®µÇ´Â 1¿¡¼­ 30±îÁöÀÇ Á¶°ÇÀÔ´Ï´Ù. ±×¸®°í°¢°¢Àº  TRUE ¶Ç´Â FALSE¸¦ ¹İÈ¯ÇÕ´Ï´Ù.";
+            Text[ korean ] = "Âü°ª 1, Âü°ª 2;...´Â Å×½ºÆ®µÇ¾î¾ß ÇÏ´Â 1¿¡¼­ 30±îÁöÀÇ Á¶°ÇÀÌ¸ç, TRUE ¶Ç´Â FALSE¸¦ ¹İÈ¯ÇÕ´Ï´Ù.";
             Text[ turkish ] = "Mantıksal değer 1;Mantıksal değer 2;... kontrol edilmesi istenen, DOĞRU ya da YANLIŞ veren 1 - 30 arası koşuldur.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Valor lógico 1; Valor lógico 2;...son de 1 a 30 condiciones que desea comprobar y que pueden ser VERDADERO o FALSO.";
@@ -14724,7 +14724,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt het aantal combinaties voor een gegeven aantal objecten.";
             Text[ chinese_simplified ] = "ÔªËØµÄËùÓĞ¿ÉÄÜµÄ×éºÏÊıÄ¿(ÖØ¸´¼ÆËã)¡£";
             Text[ greek ] = "Õğïëïãßæåé ôï ğëŞèïò óõíäõáóìşí óôïé÷åßùí ìå åğáíÜëçøç.";
-            Text[ korean ] = "¿ä¼ÒÀÇ Á¶ÇÕ ¼ö¸¦ °è»ê£¨ ¹İº¹À» Æ÷ÇÔ£©";
+            Text[ korean ] = "¿ä¼ÒÀÇ Á¶ÇÕ ¼ö¸¦ °è»ê (¹İº¹ Æ÷ÇÔ)";
             Text[ turkish ] = "Yinelenen öğe kombinasyonlarının sayısını hesaplar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve el número de combinaciones de elementos incluyendo las repeticiones.";
@@ -14880,7 +14880,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft de boogcosinus van een getal.";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊıµÄ·´ÓàÏÒÖµ¡£";
             Text[ greek ] = "Õğïëïãßæåé ôï ôüîï óõíçìéôüíïõ åíüò áñéèìïı.";
-            Text[ korean ] = "ÇÑ¡¡¼öÀÇ ¾ÆÅ©ÄÚ»çÀÎÀ» °è»êÇÕ´Ï´Ù.";
+            Text[ korean ] = "ÇÑ ¼öÀÇ ¾ÆÅ©ÄÚ»çÀÎÀ» °è»êÇÕ´Ï´Ù.";
             Text[ turkish ] = "Bir sayının arksinüsünü verir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve el arco coseno de un número.";
@@ -15277,7 +15277,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent de boogcotangens van een getal.";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÊıµÄ·´ÓàÇĞÖµ¡£";
             Text[ greek ] = "Õğïëïãßæåé ôï ôüîï óõíåöáğôïìİíçò åíüò áñéèìïı.";
-            Text[ korean ] = "ÇÑ¡¡¼öÀÇ ¿ª ÄÚÅºÁ¨Æ®¸¦ °è»êÇÕ´Ï´Ù.";
+            Text[ korean ] = "ÇÑ¡¡¼öÀÇ ¾ÆÅ©ÄÚÅºÁ¨Æ®¸¦ °è»êÇÕ´Ï´Ù.";
             Text[ turkish ] = "Bir sayının ters kotanjantını verir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve el arco cotangente de un número.";
@@ -15342,7 +15342,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Waarde , waarvan de boogcotangens moet worden berekend.";
             Text[ chinese_simplified ] = "Ò»¸öÒª¼ÆËãÆä·´ÓàÇĞÖµµÄÊıÖµ¡£";
             Text[ greek ] = "Ç ôéìŞ ãéá ôçí ïğïßá èá õğïëïãéóôåß ôï ôüîï óõíåöáğôïìİíçò";
-            Text[ korean ] = "¾ÆÅ©ÄÚÅºÁ¨Æ®°¡¡¡°è»êµÇ¾î¾ßÇÒ¡¡°ª.";
+            Text[ korean ] = "¾ÆÅ©ÄÚÅºÁ¨Æ®°¡ °è»êµÇ¾î¾ß ÇÒ °ª.";
             Text[ turkish ] = "Ters kotanjantı hesaplanacak değer.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es el valor cuyo arco cotangente se desea calcular.";
@@ -15441,7 +15441,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Waarde, waarvan de boogtangens moet worden berekend.";
             Text[ chinese_simplified ] = "Òª¼ÆËãÆä·´ÕıÇĞÖµµÄÊıÖµ¡£";
             Text[ greek ] = "Ç ôéìŞ ãéá ôçí ïğïßá èá õğïëïãéóôåß ôï ôüîï ôçò åöáğôïìİíçò ôçò.";
-            Text[ korean ] = "¾ÆÅ©ÅºÁ¨Æ®°¡¡¡°è»êµÇ¾î¾ßÇÒ °ª";
+            Text[ korean ] = "¾ÆÅ©ÅºÁ¨Æ®°¡ °è»êµÇ¾î¾ßÇÒ °ª";
             Text[ turkish ] = "Arktanjantı hesaplanacak değer.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es el valor cuyo arco tangente se desea calcular.";
@@ -16466,7 +16466,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent de boogtangens van de aangegeven coördinaten.";
             Text[ chinese_simplified ] = "¼ÆËã¸ø¶¨×ø±êÖµµÄµãµÄ·´ÕıÇĞÖµ¡£";
             Text[ greek ] = "Õğïëïãßæåé ôï ôüîï åöáğôïìİíçò ôùí åéóçãìİíùí óõíôåôáãìİíùí.";
-            Text[ korean ] = "ÁöÁ¤µÈ ÁÂÇ¥¿¡ ´ëÇÑ ¾ÆÅ©ÅºÁ¨Æ® °è»êÇÕ´Ï´Ù";
+            Text[ korean ] = "ÁöÁ¤µÈ ÁÂÇ¥¿¡ ´ëÇÑ ¾ÆÅ©ÅºÁ¨Æ®¸¦ °è»êÇÕ´Ï´Ù";
             Text[ turkish ] = "Belirtilen koordinatların arktanjantını verir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve el arco tangente de las coordenadas especificadas.";
@@ -16821,7 +16821,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Berekent de exponentiële functie tot de basis e.";
             Text[ chinese_simplified ] = "¼ÆËãµ×ÊıÎª e µÄÖ¸Êıº¯ÊıÖµ¡£";
             Text[ greek ] = "Õğïëïãßæåé ôïí åêèİôç ôçò âÜóçò e.";
-            Text[ korean ] = "¹Ø eÀÇ Áö¼öÇÔ¼ö °è»êÇÕ´Ï´Ù";
+            Text[ korean ] = "¹Ø¼ö eÀÇ Áö¼öÇÔ¼ö¸¦ °è»êÇÕ´Ï´Ù";
             Text[ turkish ] = "Sayı e tabanının üssünü alır.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve 'e' elevada a la potencia del argumento número.";
@@ -16885,7 +16885,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "De exponent tot de basis e.";
             Text[ chinese_simplified ] = "µ×ÊıÎª e µÄÖ¸Êı¡£";
             Text[ greek ] = "Ï åêèİôçò ùò ğñïò ôç âÜóç e.";
-            Text[ korean ] = "¹Ø e¿¡ ´ëÇÑ¡¡Áö¼ö.";
+            Text[ korean ] = "¹Ø¼ö e¿¡ ´ëÇÑ¡¡Áö¼ö.";
             Text[ turkish ] = "Sayı e tabanına uygulanan üs.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Es el exponente aplicado a la base 'e'.";
@@ -22322,7 +22322,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Getal 1; Getal 2;... zijn maximaal 30 numerieke argumenten die resulteren uit een steekproef onder een populatie.";
             Text[ chinese_simplified ] = "Êı×Ö 1£»Êı×Ö 2£»ÊÇ 1 ÖÁ 30 ¸ö±íÊ¾Ò»¸ö³éÑùµÄÊı×ÖÔªËØ¡£";
             Text[ greek ] = "Áñéèìüò 1, Áñéèìüò2, ... åßíáé 1 İùò 30 áñéèìçôéêÜ ïñßóìáôá ôá ïğïßá áğïôåëïıí İíá äåßãìá ğëçèõóìïı.";
-            Text[ korean ] = "¼ö 1; ¼ö 2;... ´Â ¸ğÁı´Ü¿¡¼­ ÃßÃâÇÑ Ç¥º»À» ³ªÅ¸³»´Â  1¿¡¼­ 30±îÁöÀÇ ¼ıÀÚ µ¶¸³º¯¼öÀÔ´Ï´Ù.";
+            Text[ korean ] = "¼ö 1; ¼ö 2;... ´Â ¸ğÁı´Ü¿¡¼­ ÃßÃâÇÑ Ç¥º»À» ³ªÅ¸³»´Â 1¿¡¼­ 30±îÁöÀÇ ¼ıÀÚ µ¶¸³º¯¼öÀÔ´Ï´Ù.";
             Text[ turkish ] = "Sayı 1; sayı 2;... Popülasyondan alınmış bir örneği temsil eden 1 - 30 arası nümerik değişkendir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Número 1; número 2;...son de 1 a 30 argumentos numéricos que se corresponden con una muestra de población.";
@@ -22642,7 +22642,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent de standaarddeviatie op basis van een steekproef.";
             Text[ chinese_simplified ] = "¹ÀËã³éÑùµÄ±ê×¼Æ«²î¡£";
             Text[ greek ] = "Õğïëïãßæåé ôçí ôõğéêŞ áğüêëéóç, ìå âÜóç İíá äåßãìá.";
-            Text[ korean ] = "Ç¥º»¿¡ ±Ù°Å£¬ Ç¥ÁØ ÆíÂ÷¸¦ °è»êÇÕ´Ï´Ù";
+            Text[ korean ] = "Ç¥º»¿¡ ±Ù°Å£¬Ç¥ÁØ ÆíÂ÷¸¦ °è»êÇÕ´Ï´Ù";
             Text[ turkish ] = "Örneğe dayanarak standart sapmayı hesaplar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Calcula la desviación estándar de una muestra.";
@@ -26681,7 +26681,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De kans op een gunstige uitkomst";
             Text[ chinese_simplified ] = "Ã¿¸öÊÔÑéµÄ³É¹¦¸ÅÂÊ¡£";
             Text[ greek ] = "Ç ğéèáíüôçôá åğéôõ÷ßáò ìéáò äïêéìŞò.";
-            Text[ korean ] = "½ÇÇèÀÇ ¼º°ø È®·ü";
+            Text[ korean ] = "½ÃµµÀÇ ¼º°ø È®·ü";
             Text[ turkish ] = "Deneyin başarı olasılığı.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es la probabilidad de éxito en cada ensayo.";
@@ -27408,7 +27408,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "STDEV";
             Text[ chinese_simplified ] = "standard_dev";
             Text[ greek ] = "standard_dev";
-            Text[ korean ] = "Ç¥ÁØ_dev";
+            Text[ korean ] = "STD";
             Text[ turkish ] = "STDEV";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "desv_estándar";
@@ -27631,7 +27631,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De kans die overeenkomt met de inverse standaardnormale verdeling.";
             Text[ chinese_simplified ] = "±ê×¼ÕıÌ¬·Ö²¼µÄ¸ÅÂÊÖµ¡£";
             Text[ greek ] = "Ç ôéìŞ ôçò ğéèáíüôçôáò ãéá ôçí ïğïßá èá õğïëïãéóôåß ç áíôßóôñïöç ôõğéêŞ êáíïíéêŞ êáôáíïìŞ.";
-            Text[ korean ] = " ¿ª Ç¥ÁØÁ¤±ÔºĞÆ÷°¡¡¡ °è»êµÇ¾î¾ßÇÒ È®·ü°ª";
+            Text[ korean ] = " ¿ª Ç¥ÁØÁ¤±ÔºĞÆ÷°¡ °è»êµÇ¾î¾ßÇÒ È®·ü°ª";
             Text[ turkish ] = "Ters standart normal dağıtımı hesaplanacak olasılık değeri.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es una probabilidad que corresponde a la distribución normal.";
@@ -27815,7 +27815,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "STDEV";
             Text[ chinese_simplified ] = "standard_dev";
             Text[ greek ] = "standard_dev";
-            Text[ korean ] = "Ç¥ÁØ_dev";
+            Text[ korean ] = "STD";
             Text[ turkish ] = "STDEV";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "desv_estándar";
@@ -28028,7 +28028,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "STDEV";
             Text[ chinese_simplified ] = "standard_dev";
             Text[ greek ] = "standard_dev";
-            Text[ korean ] = "Ç¥ÁØ_dev";
+            Text[ korean ] = "STD";
             Text[ turkish ] = "STDEV";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "desv_estándar";
@@ -29611,7 +29611,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De waarde waarvan de Weibull-verdeling moet worden berekend.";
             Text[ chinese_simplified ] = "ÓÃÀ´¼ÆËãÎ¤²®·Ö²¼µÄÊıÖµ¡£";
             Text[ greek ] = "Ç ôéìŞ ãéá ôçí ïğïßá èá õğïëïãéóôåß ç êáôáíïìŞ Weibull.";
-            Text[ korean ] = "Weibull ºĞÆ÷°¡¡¡°è»êµÇ¾î¾ßÇÒ °ª";
+            Text[ korean ] = "Weibull ºĞÆ÷°¡ °è»êµÇ¾î¾ß ÇÒ °ª";
             Text[ turkish ] = "Weibull dağıtımı hesaplanacak değer.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es el valor al que desea evaluar la función.";
@@ -29669,7 +29669,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De parameter alfa van de Weibull-verdeling.";
             Text[ chinese_simplified ] = "Î¤²®·Ö²¼µÄ°¢¶û·¨²ÎÊı¡£";
             Text[ greek ] = "Ç ğáñÜìåôñïò ¢ëöá ôçò êáôáíïìŞò Weibull.";
-            Text[ korean ] = "Weibull ºĞÆ÷ÀÇ ÆÄ¶ó¹ÌÅÍ¡¡¾ËÆÄ.";
+            Text[ korean ] = "Weibull ºĞÆ÷ÀÇ ÆÄ¶ó¹ÌÅÍ ¾ËÆÄ.";
             Text[ turkish ] = "Weibull dağıtımının alfa parametresi.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es un parámetro de la distribución.";
@@ -30554,7 +30554,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Vrijheidsgraden_1";
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_1";
             Text[ greek ] = "Âáèìïß_åëåõèåñßáò 1";
-            Text[ korean ] = "ÀÚÀ¯_µµ 1";
+            Text[ korean ] = "ÀÚÀ¯µµ_1";
             Text[ turkish ] = "Özgürlük_dereceleri_1";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "grados_libertad 1";
@@ -30613,7 +30613,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Vrijheidsgraden_2";
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_2";
             Text[ greek ] = "Âáèìïß_åëåõèåñßáò 2";
-            Text[ korean ] = "ÀÚÀ¯_µµ2";
+            Text[ korean ] = "ÀÚÀ¯µµ_2";
             Text[ turkish ] = "Özgürlük_dereceleri_2";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "grados_libertad 2";
@@ -30768,7 +30768,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Vrijheidsgraden_1";
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_1";
             Text[ greek ] = "Âáèìïß_åëåõèåñßáò 1";
-            Text[ korean ] = "ÀÚÀ¯_µµ 1";
+            Text[ korean ] = "ÀÚÀ¯µµ_1";
             Text[ turkish ] = "Özgürlük_dereceleri_1";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "grados_libertad 1";
@@ -30827,7 +30827,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Vrijheidsgraden_2";
             Text[ chinese_simplified ] = "×ÔÓÉ¶È_2";
             Text[ greek ] = "Âáèìïß_åëåõèåñßáò 2";
-            Text[ korean ] = "ÀÚÀ¯_µµ 2";
+            Text[ korean ] = "ÀÚÀ¯µµ_2";
             Text[ turkish ] = "Özgürlük_dereceleri_2";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "grados_libertad 2";
@@ -31350,7 +31350,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "STDEV";
             Text[ chinese_simplified ] = "standard_dev";
             Text[ greek ] = "standard_dev";
-            Text[ korean ] = "Ç¥ÁØ_dev";
+            Text[ korean ] = "STD";
             Text[ turkish ] = "STDEV";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "desv_estándar";
@@ -31567,7 +31567,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent het aantal variaties van elementen met herhaling.";
             Text[ chinese_simplified ] = "ÔÚ¸ø¶¨ÔªËØ×ÜÊıµÄÇé¿öÏÂ¼ÆËãÑ¡È¡Èô¸ÉÔªËØµÄ\nÅÅÁĞÊı(ÔÊĞíÖØ¸´ÅÅÁĞ)¡£";
             Text[ greek ] = "Õğïëïãßæåé ôï ğëŞèïò ìåôáèİóåùí óôïé÷åßùí ìå åğáíÜëçøç.";
-            Text[ korean ] = "¿ä¼ÒÀÇ º¯ºĞ¡¡¼ö¸¦¡¡°è»ê(¹İº¹).";
+            Text[ korean ] = "¿ä¼ÒÀÇ º¯ºĞ ¼ö¸¦ °è»ê(¹İº¹).";
             Text[ turkish ] = "Yinelenen öğeler varyasyonları sayısını hesaplar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve la cantidad de permutaciones para un número determinado de elementos con repeticiones.";
@@ -32088,7 +32088,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "STDEV";
             Text[ chinese_simplified ] = "sigma";
             Text[ greek ] = "ó";
-            Text[ korean ] = "£Ó£Ô£Ä";
+            Text[ korean ] = "STD";
             Text[ turkish ] = "Sigma";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "sigma";
@@ -32732,7 +32732,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent de correlatiecoëfficiënt van Peorson in kwadraatvorm.";
             Text[ chinese_simplified ] = "¼ÆËã Pearson ³Ë»ı¾ØÏà¹ØÏµÊıµÄÆ½·½¡£";
             Text[ greek ] = "Õğïëïãßæåé ôï ôåôñÜãùíï ôïõ óõíôåëåóôŞ óõó÷İôéóçò ôïõ Pearson.";
-            Text[ korean ] = "Pearson ÀÇ »ó°ü°è¼öÀÇ Á¦°öÀ» °è»ê .";
+            Text[ korean ] = "Pearson ÀÇ »ó°ü°è¼öÀÇ Á¦°öÀ» °è»ê.";
             Text[ turkish ] = "Pearson korelasyon katsayısının karesini hesaplar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve el valor R cuadrado para una línea de regresión lineal creada con los datos de los argumentos matriz_x y matriz_y.";
@@ -33507,7 +33507,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent het correlatiecoëfficiënt";
             Text[ chinese_simplified ] = "¼ÆËãÏà¹ØÏµÊı¡£";
             Text[ greek ] = "Õğïëïãßæåé ôïí óõíôåëåóôŞ óõó÷İôéóçò.";
-            Text[ korean ] = "»ó°ü °è¼ö °è»ê.";
+            Text[ korean ] = "»ó°ü °è¼ö¸¦ °è»êÇÕ´Ï´Ù.";
             Text[ turkish ] = "Korelasyon katsayısını hesaplar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve el coeficiente de correlación entre dos conjuntos de datos.";
@@ -34749,7 +34749,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Bepaalt het interne werkbladnummer van een verwijzing of een tekenreeks.";
             Text[ chinese_simplified ] = "È·¶¨Ò»¸öÒıÓÃ»òÒ»¸ö×Ö´®µÄ¹¤×÷±íºÅÂë¡£";
             Text[ greek ] = "Ïñßæåé ôïí åóùôåñéêü áñéèìü ğßíáêá ìéáò áíáöïñÜò Ş ìéáò áêïëïõèßáò ÷áñáêôŞñùí.";
-            Text[ korean ] = "ÂüÁ¶¶Ç´Â ¹®ÀÚ¿­ÀÇ ³»ºÎ ½ÃÆ® ¹øÈ£¸¦ °áÁ¤";
+            Text[ korean ] = "ÂüÁ¶ ¶Ç´Â ¹®ÀÚ¿­ÀÇ ³»ºÎ ½ÃÆ® ¹øÈ£¸¦ °áÁ¤";
             Text[ turkish ] = "Referans ya da karakter zincirinin iç tablo numarasını verir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Establece el número interno de hoja de una referencia o de una cadena de caracteres.";
@@ -35037,7 +35037,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Bepaalt het aantal werkbladen van een verwijzing. Is er geen parameter aangegeven, dan wordt het aantal werkbladen van het document teruggegeven.";
             Text[ chinese_simplified ] = "È·¶¨Ò»¸öÒıÓÃµÄ¹¤×÷±íÊıÄ¿¡£Èç¹ûÃ»ÓĞ¸ø¶¨²ÎÊı£¬\nÄÇÃ´·´À¡µÄÊÇÎÄµµµÄ¹¤×÷±í×ÜÊı¡£";
             Text[ greek ] = "Ïñßæåé ôï ğëŞèïò ôùí ôùí ğéíÜêùí ìéáò áíáöïñÜò. Áí äåí ïñéóôåß ğáñÜìåôñïò, åğéóôñİöåé ï ğëŞèïò ğéíÜêùí åíüò åããñÜöïõ..";
-            Text[ korean ] = "ÂüÁ¶ÀÇ ½ÃÆ® °³¼ö ¸¦ ¹İÈ¯. ÀÔ·ÂµÈ ÆÄ¶ó¹ÌÅÍ°¡ ¾øÀ¸¸é,  ¹®¼­¿¡ ÀÖ´Â ½ÃÆ®ÀÇ ÀüÃ¼ °³¼ö°¡ ¹İÈ¯µË´Ï´Ù.";
+            Text[ korean ] = "ÂüÁ¶ÀÇ ½ÃÆ® °³¼ö¸¦ ¹İÈ¯. ÀÔ·ÂµÈ ÆÄ¶ó¹ÌÅÍ°¡ ¾øÀ¸¸é, ¹®¼­¿¡ ÀÖ´Â ½ÃÆ®ÀÇ ÀüÃ¼ ¼ö°¡ ¹İÈ¯µË´Ï´Ù.";
             Text[ turkish ] = "Referansın tablo sayısını belirler. Parametre girilmemişse, belgedeki toplam tablo sayısı verilir.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Determina la cantidad de hojas de una referencia. Si no existe parámetros, la cantidad de hojas de un documento será devuelta.";
@@ -35918,7 +35918,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De index van een bereik uit meer cellenbereiken.";
             Text[ chinese_simplified ] = "Èç¹ûÊÇÒ»¸ö¶àÖØÇøÓò£¬ÄÇ¾ÍÊÇÒ»¸ö²¿·ÖÇøÓòµÄË÷Òı¡£";
             Text[ greek ] = "Ôï åõñåôŞñéï ôïõ ôìŞìáôïò ôçò ğåñéï÷Şò, óôçí ğåñßğôùóç ğïõ ğñüêåéôáé ãéá ìéá ğïëëáğëŞ ğåñéï÷Ş.";
-            Text[ korean ] = "´ÙÁß±¸¿ª°ú °ü·ÃµÉ °æ¿ì ºÎºĞ±¸¿ªÀÇ »öÀÎ.";
+            Text[ korean ] = "´ÙÁß±¸¿ªÀÏ °æ¿ì ºÎºĞ±¸¿ªÀÇ »öÀÎ.";
             Text[ turkish ] = "Çoklu aralık olması durumunda kısmi aralığın indisi.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Selecciona un área en el argumento ref desde el cual se devolverá la intersección entre fila y columna dadas.";
@@ -35951,7 +35951,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Definieert de inhoud van een aangegeven cel die een verwijzing bevat in de vorm van tekst.";
             Text[ chinese_simplified ] = "È·¶¨Ò»¸öÒÔÎÄ×Ö¸ñÊ½ÊäÈëµÄµ¥Ôª¸ñÒıÓÃµÄÄÚÈİ¡£";
             Text[ greek ] = "Ïñßæåé ôï ğåñéå÷üìåíï åíüò êåëéïı ôï ïğïßï İ÷åé ïñéóôåß ùò áíáöïñÜ óå ìïñöŞ êåéìİíïõ.";
-            Text[ korean ] = "ÅØ½ºÆ® ¾ç½ÄÀÇ¡¡Á¤ÀÇµÈ ¼¿¿¡¼­  ³»¿ëÀ» ÂüÁ¶·Î¡¡°áÁ¤ÇÕ´Ï´Ù.";
+            Text[ korean ] = "ÅØ½ºÆ® ¾ç½ÄÀÇ¡¡Á¤ÀÇµÈ ¼¿ ³»¿ëÀ» ÂüÁ¶·Î¡¡°áÁ¤ÇÕ´Ï´Ù.";
             Text[ turkish ] = "Metin şeklinde referans alınan bir hücrenin içeriğini tanımlar.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Devuelve una referencia especificada por un valor de texto.";
@@ -36441,7 +36441,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Type kan de waarden 1, 0 of -1 aannemen en bepaalt volgens welke criteria er wordt vergeleken.";
             Text[ chinese_simplified ] = "ÎªÊıÖµ 1, 0 »ò -1£¬ÓÃÓÚÈ·¶¨±È½ÏµÄ¹æÔò¡£";
             Text[ greek ] = "Ï ôığïò ìğïñåß íá äå÷ôåß ôéò ôéìİò 1, 0 Ş -1 êáé ïñßæåé óıìöùíá ìå ğïéÜ êñéôŞñéá èá ãßíåé ç óıãêñéóç.";
-            Text[ korean ] = "TypeÀº 1£® 0 È¤Àº -1 °ªÀ» °¡Áú ¼ö ÀÖ°í ¾î´À ±âÁØ¿¡ µû¶ó ºñ±³µÉÁö¸¦¡¡°áÁ¤ÇÕ´Ï´Ù.";
+            Text[ korean ] = "Å¸ÀÔÀº 1£® 0 ¶Ç´Â -1 °ªÀ» °¡Áú ¼ö ÀÖ°í ¾î´À ±âÁØ¿¡ µû¶ó ºñ±³µÉÁö¸¦¡¡°áÁ¤ÇÕ´Ï´Ù.";
             Text[ turkish ] = "1, 0 ya da -1 değerlerini alabilen tip, yapılacak aramanın ölçütlerini belirler.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es el número -1, 0 ó 1.";
@@ -37485,7 +37485,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Converteert een getal naar tekst op basis van de valutanotatie.";
             Text[ chinese_simplified ] = "×ª»»ÎÄ±¾ÖĞµÄÊı×Ö³ÉÒ»¸ö»õ±Ò¸ñÊ½¡£";
             Text[ greek ] = "Ìåôáôñİğåé ìéá áñéèìçôéêŞ ôéìŞ óå İíá êåßìåíï ìå íïìéóìáôéêŞ ìïñöŞ.";
-            Text[ korean ] = "ÇöÀçÀÇ ¼­½Ä¿¡¼­ ¼ö°ªÀ» ÅØ½ºÆ®·Î º¯È¯";
+            Text[ korean ] = "È­ÆóÆ÷¸Ë¿¡¼­ ¼ö°ªÀ» ÅØ½ºÆ®·Î º¯È¯";
             Text[ turkish ] = "Sayı değerini, para birimi formatındaki bir metne dönüştürür.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Convierte un número en texto usando un formato monetario";
@@ -37550,7 +37550,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Waarde is een getal, een verwijzing naar een cel die een getal bevat, of een formule die een getal als resultaat te zien geeft.";
             Text[ chinese_simplified ] = "ÊÇÒ»¸öÊı×Ö£¬Ò»¸öº¬ÓĞÊı×ÖµÄµ¥Ôª¸ñÒıÓÃ£¬\n»òÕßÊÇÒ»¸ö¼ÆËãÊı×ÖµÄ¹«Ê½¡£";
             Text[ greek ] = "ÔéìŞ åßíáé İíáò áñéèìüò, ìéá áíáöïñÜ óå İíá êåëß ôï ïğïßá ğåñéİ÷åé İíáí áñéèìü, Ş İíáò ôığïò ğïõ İ÷åé ùò áğïôİëåóìá İíáí áñéèìü.";
-            Text[ korean ] = "°ªÀº ¼öÀÌ¸ç£¬ ¼ö¸¦ Æ÷ÇÔÇÏ´Â ¼¿ÀÌ³ª °è»ê°á°ú°¡¡¡¼ö°¡ ±¸ÇØÁö´Â ¼ö½Ä°ú¡¡°ü·ÃÀÌ¡¡ÀÖ½À´Ï´Ù.";
+            Text[ korean ] = "°ªÀº ¼öÀÌ¸ç£¬ ¼ö¸¦ Æ÷ÇÔÇÏ´Â ¼¿ ¶Ç´Â °è»ê°á°ú°¡¡¡¼ö°¡ ±¸ÇØÁö´Â ¼ö½Ä°ú¡¡°ü·ÃÀÌ¡¡ÀÖ½À´Ï´Ù.";
             Text[ turkish ] = "Değer, bir sayı, sayı içeren bir hücre referansı ya da sayı veren bir formüldür.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es un número, una referencia a una celda que contiene un número o una fórmula que evalúa un número.";
@@ -38307,7 +38307,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Zoekt een tekenreeks in een tekst (er wordt geen onderscheid gemaakt tussen hoofdletters en kleine letters).";
             Text[ chinese_simplified ] = "ÔÚ×Ö´®ÄÚ²éÕÒ×Ö·û»ò×Ö´®µÄÎ»ÖÃ£¬²»Çø·Ö´óĞ¡Ğ´¡£";
             Text[ greek ] = "Áíáæçôåß İíá ôìŞìá åíüò êåéìİíïõ ÷ùñßò íá äéáêñßíåé ìåôáîı êåöáëáßùí êáé ğåæşí.";
-            Text[ korean ] = "ÅØ½ºÆ®¿¡¼­¡¡¹İ´Ü¾î Ã£±â (´ë/¼Ò¹®ÀÚ ±¸º° ¾ÈÇÔ)";
+            Text[ korean ] = "ÅØ½ºÆ®¿¡¼­¡¡¹İ´Ü¾î Ã£±â (´ë/¼Ò¹®ÀÚ ±¸ºĞ ¾ÈÇÔ)";
             Text[ turkish ] = "Metin içinde metin öğesi arar (Büyük/küçük harf duyarlı değil).";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Busca un valor de texto dentro de otro sin reconocer mayúsculas o minúsculas.";
@@ -39013,7 +39013,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Converteert een getal overeenkomstig een opgegeven notatie naar tekst.";
             Text[ chinese_simplified ] = "°´¸ø¶¨µÄ¸ñÊ½×ª»»Ò»¸öÊı×Ö³ÉÎÄ×Ö¡£";
             Text[ greek ] = "Ìåôáôñİğåé İíáí áñéèìü óå êåßìåíï óıìöùíá ìå ôç ìïñöŞ ğïõ åğéëİãåôáé.";
-            Text[ korean ] = "¼ıÀÚ°¡ ÁöÁ¤µÈ Æ÷¸Ë¿¡ µû¶ó ÅØ½ºÆ®·Î º¯È¯µË´Ï´Ù.";
+            Text[ korean ] = "¼ıÀÚ´Â ÁöÁ¤µÈ Æ÷¸Ë¿¡ µû¶ó ÅØ½ºÆ®·Î º¯È¯µË´Ï´Ù.";
             Text[ turkish ] = "Sayıyı belirtilen formata göre metne dönüştürür.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Convierte un número en texto según un formato especificado.";
@@ -39135,7 +39135,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De tekst die de notatie weergeeft.";
             Text[ chinese_simplified ] = "ÒªÑ¡ÓÃµÄÓÃÎÄ×Ö±í´ïµÄ¸ñÊ½¡£";
             Text[ greek ] = "Ôï êåßìåíï ğïõ ğåñéãñÜöåé ôç ìïñöŞ";
-            Text[ korean ] = "Æ÷¸ËÀ»¡¡³ªÅ¸³»´Â ÅØ½ºÆ®";
+            Text[ korean ] = "Æ÷¸ËÀ» ³ªÅ¸³»´Â ÅØ½ºÆ®";
             Text[ turkish ] = "Formatı tanımlayan metin.";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "es un número de formato entre comillas del cuadro de diálogo Número.";
@@ -41357,7 +41357,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Zmienia liczbê na liczbê rzymsk¹.";
             Text[ portuguese_brazilian ] = "Converts a number to roman.";
             Text[ japanese ] = "±×ËŞ±”š‚ğAÛ°Ï”š‚ğ•\\‚·•¶š—ñ‚É•ÏŠ·‚µ‚Ü‚·B";
-            Text[ korean ] = "Converts a number to roman.";
+            Text[ korean ] = "¼ö¸¦ ·Î¸¶Ç¥±â·Î º¯È¯.";
             Text[ chinese_simplified ] = "½«Ò»¸öÊı×Ö×ª»»³ÉÂŞÂíÊı×Ö¡£";
             Text[ chinese_traditional ] = "±N¤@­Ó¼Æ¦rÂà´«¦¨Ã¹°¨¼Æ¦r¡C";
             Text[ turkish ] = "Converts a number to roman.";
@@ -41388,13 +41388,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Liczba";
             Text[ portuguese_brazilian ] = "number";
             Text[ japanese ] = "”’l";
-            Text[ korean ] = "number";
+            Text[ korean ] = "¼ö";
             Text[ chinese_simplified ] = "number";
             Text[ chinese_traditional ] = "number";
             Text[ turkish ] = "number";
             Text[ arabic ] = "number";
             Text[ catalan ] = "Número";
-            Text[ finnish ] = "Zahl";
+            Text[ finnish ] = "Luku";
         };
         String 3 // Description of Parameter 1
         {
@@ -41413,7 +41413,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Liczba, która ma byæ zamieniona na rzymsk¹, musi mieœciæ siê w zakresie 0 - 3999.";
             Text[ portuguese_brazilian ] = "The number to be converted to roman must be in the range 0 - 3999.";
             Text[ japanese ] = "Û°Ï”š‚É•ÏŠ·‚µ‚½‚¢ 0 ` 3999 ”ÍˆÍ‚Ì±×ËŞ±”š‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "The number to be converted to roman must be in the range 0 - 3999.";
+            Text[ korean ] = "·Î¸¶ ¼ıÀÚ·Î º¯È¯ÇØ¾ß ÇÏ´Â ¼ıÀÚ´Â ¹İµå½Ã 0 - 3999 ¹üÀ§³»¿¡ ÀÖ¾î¾ß ÇÕ´Ï´Ù.";
             Text[ chinese_simplified ] = "Òª×ª»»³ÉÂŞÂíÊı×ÖµÄÊı×Ö£¬Ëü±ØĞëÊÇÒ»¸ö 0 - 3999 Ö®¼äµÄÊı×Ö¡£";
             Text[ chinese_traditional ] = "­nÂà´«¦¨Ã¹°¨¼Æ¦rªº¼Æ¦r¡A¥¦¥²¶·¬O 0 ©M 3999 ¤§¶¡ªº¼Æ¦r¡C";
             Text[ turkish ] = "The number to be converted to roman must be in the range 0 - 3999.";
@@ -41438,13 +41438,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Tryb";
             Text[ portuguese_brazilian ] = "mode";
             Text[ japanese ] = "‘®";
-            Text[ korean ] = "mode";
+            Text[ korean ] = "¸ğµå";
             Text[ chinese_simplified ] = "mode";
             Text[ chinese_traditional ] = "mode";
             Text[ turkish ] = "mode";
             Text[ arabic ] = "mode";
             Text[ catalan ] = "Modo";
-            Text[ finnish ] = "Modus";
+            Text[ finnish ] = "Tila";
         };
         String 5 // Description of Parameter 2
         {
@@ -41463,7 +41463,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Im wy¿sza wartoœæ, tym bardziej uproszczona zostanie rzymska liczba. Wartoœæ musi siê mieœciæ w zakresie 0 - 4.";
             Text[ portuguese_brazilian ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4.";
             Text[ japanese ] = "‘®‚Ì’l‚ª‘å‚«‚­‚È‚é‚Ù‚ÇAÛ°Ï”š‚ÍŠÈ•Ö‚ÈŒ`®‚Å•\\¦‚³‚ê‚Ü‚·B”’l‚Í 0 ` 4 ”ÍˆÍ‚Åw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4.";
+            Text[ korean ] = "ÀÌ °ªÀÌ Áõ°¡µÇ¸é µÉ¼ö·Ï, ·Î¸¶½Ä ¼ıÀÚ´Â ´õ °£´ÜÇØÁı´Ï´Ù. °ªÀº ¹İµå½Ã 0 - 4 ¹üÀ§³»¿¡ ÀÖ¾î¾ß ÇÕ´Ï´Ù.";
             Text[ chinese_simplified ] = "Õâ¸öÊıÖµÔ½¸ß£¬ÂŞÂíÊı×Ö¾Í»áÔ½Ğ¡¡£Õâ¸öÊıÖµ±ØĞëÔÚ 0 - 4 Ö®¼äµÄÒ»¸öÊıÖµ¡£";
             Text[ chinese_traditional ] = "³o­Ó¼Æ­È¶V°ª¡AÃ¹°¨¼Æ¦r´N·|¶V¤p¡C³o­Ó¼Æ­È¥²¶·¬O 0 ©M 4 ¤§¶¡ªº¼Æ­È¡C";
             Text[ turkish ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4.";
@@ -41492,7 +41492,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Oblicza wartoœæ rzymskiej liczby.";
             Text[ portuguese_brazilian ] = "Calculates the value of a roman number.";
             Text[ japanese ] = "Û°Ï”š‚ğ•\\‚·•¶š—ñ‚ğ±×ËŞ±”š‚Å•Ô‚µ‚Ü‚·B";
-            Text[ korean ] = "Calculates the value of a roman number.";
+            Text[ korean ] = "·Î¸¶¼ıÀÚ °ªÀ» °è»ê.";
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸öÂŞÂíÊı×ÖµÄÊıÖµ¡£";
             Text[ chinese_traditional ] = "­pºâ¤@­ÓÃ¹°¨¼Æ¦rªº¼Æ­È¡C";
             Text[ turkish ] = "Calculates the value of a roman number.";
@@ -41523,13 +41523,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Tekst";
             Text[ portuguese_brazilian ] = "text";
             Text[ japanese ] = "•¶š—ñ";
-            Text[ korean ] = "text";
+            Text[ korean ] = "ÅØ½ºÆ®";
             Text[ chinese_simplified ] = "text";
             Text[ chinese_traditional ] = "text";
             Text[ turkish ] = "Metin";
             Text[ arabic ] = "äÕ";
             Text[ catalan ] = "Texto";
-            Text[ finnish ] = "Text";
+            Text[ finnish ] = "Teksti";
         };
         String 3 // Description of Parameter 1
         {
@@ -41548,7 +41548,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ polish ] = "Tekst przedstawiaj¹cy rzymsk¹ liczbê.";
             Text[ portuguese_brazilian ] = "The text that represents a roman number.";
             Text[ japanese ] = "Û°Ï”š‚ğ•\\‚·•¶š—ñ‚ğw’è‚µ‚Ü‚·B";
-            Text[ korean ] = "The text that represents a roman number.";
+            Text[ korean ] = "·Î¸¶¼ıÀÚ¸¦ ³ªÅ¸³»´Â ÅØ½ºÆ®.";
             Text[ chinese_simplified ] = "±íÊ¾Ò»¸öÂŞÂíÊı×ÖµÄÎÄ×Ö¡£";
             Text[ chinese_traditional ] = "ªí¥Ü¤@­ÓÃ¹°¨¼Æ¦rªº¤å¦r¡C";
             Text[ turkish ] = "The text that represents a roman number.";
