@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-08-23 11:51:42 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 12:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -80,8 +80,17 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
-
+using com::sun::star::beans::XPropertySetInfo;
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::beans::XPropertyChangeListener;
+using com::sun::star::beans::XVetoableChangeListener;
+using com::sun::star::beans::UnknownPropertyException;
+using com::sun::star::beans::PropertyVetoException;
+using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::registry::XRegistryKey;
 using com::sun::star::registry::InvalidRegistryException;
 using com::sun::star::uno::Any;
@@ -103,6 +112,7 @@ using com::sun::star::lang::XSingleServiceFactory;
 using cppu::OWeakObject;
 using rtl::OUString;
 using osl::FileBase;
+using osl::MutexGuard;
 using utl::TempFile;
 using namespace utl;
 
@@ -143,6 +153,7 @@ Any SAL_CALL XTempFile::queryInterface( const Type& rType )
                                 // my own interfaces
                                 static_cast< XInputStream*  > ( this ),
                                 static_cast< XOutputStream* > ( this ),
+                                static_cast< XPropertySet*  > ( this ),
                                 static_cast< XSeekable*     > ( this ) );
 }
 void SAL_CALL XTempFile::acquire(  )
@@ -163,7 +174,7 @@ sal_Int32 SAL_CALL XTempFile::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 
     if (nBytesToRead < 0)
         throw BufferSizeExceededException( OUString(), static_cast<XWeak*>(this));
 
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
 
     aData.realloc(nBytesToRead);
 
@@ -194,7 +205,7 @@ sal_Int32 SAL_CALL XTempFile::readSomeBytes( Sequence< sal_Int8 >& aData, sal_In
 void SAL_CALL XTempFile::skipBytes( sal_Int32 nBytesToSkip )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
     checkError();
     mpStream->SeekRel(nBytesToSkip);
     checkError();
@@ -202,7 +213,7 @@ void SAL_CALL XTempFile::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL XTempFile::available(  )
     throw (NotConnectedException, IOException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
     checkConnected();
 
     sal_uInt32 nPos = mpStream->Tell();
@@ -223,18 +234,18 @@ void SAL_CALL XTempFile::closeInput(  )
 }
 // XSeekable
 void SAL_CALL XTempFile::seek( sal_Int64 nLocation )
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+    throw (IllegalArgumentException, IOException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
     checkConnected();
 
     mpStream->Seek((sal_uInt32) nLocation);
     checkError();
 }
 sal_Int64 SAL_CALL XTempFile::getPosition(  )
-    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+    throw (IOException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
     checkConnected();
 
     sal_uInt32 nPos = mpStream->Tell();
@@ -242,9 +253,9 @@ sal_Int64 SAL_CALL XTempFile::getPosition(  )
     return (sal_Int64)nPos;
 }
 sal_Int64 SAL_CALL XTempFile::getLength(  )
-    throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+    throw (IOException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
     checkConnected();
 
     sal_uInt32 nCurrentPos = mpStream->Tell();
@@ -258,11 +269,12 @@ sal_Int64 SAL_CALL XTempFile::getLength(  )
 
     return (sal_Int64)nEndPos;
 }
+
 // XOutputStream
 void SAL_CALL XTempFile::writeBytes( const Sequence< sal_Int8 >& aData )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
     sal_uInt32 nWritten = mpStream->Write(aData.getConstArray(),aData.getLength());
     checkError();
     if  ( nWritten != (sal_uInt32)aData.getLength())
@@ -271,7 +283,7 @@ void SAL_CALL XTempFile::writeBytes( const Sequence< sal_Int8 >& aData )
 void SAL_CALL XTempFile::flush(  )
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    MutexGuard aGuard( maMutex );
     mpStream->Flush();
     checkError();
 }
@@ -288,6 +300,53 @@ void XTempFile::checkConnected () const
 {
     if (!mpStream)
         throw NotConnectedException ( OUString(), const_cast < XWeak * > ( static_cast < const XWeak* > (this ) ) );
+}
+Reference< XPropertySetInfo > SAL_CALL XTempFile::getPropertySetInfo(  )
+    throw (RuntimeException)
+{
+    return Reference < XPropertySetInfo > ();
+}
+void SAL_CALL XTempFile::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+    throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+{
+    // All properties are read-only
+    if ( aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ResourceName" ) ) ||
+         aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Uri" ) ) )
+        throw IllegalArgumentException();
+    else
+        throw UnknownPropertyException();
+}
+Any SAL_CALL XTempFile::getPropertyValue( const OUString& PropertyName )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    Any aRet;
+    if ( PropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "ResourceName" ) ) )
+        aRet <<= OUString ( mpTempFile->GetFileName() );
+    else if ( PropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Uri" ) ) )
+        aRet <<= OUString ( mpTempFile->GetURL() );
+    else
+        throw UnknownPropertyException();
+    return aRet;
+}
+void SAL_CALL XTempFile::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    DBG_ASSERT ( sal_False, "Listeners not implemented" );
+}
+void SAL_CALL XTempFile::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    DBG_ASSERT ( sal_False, "Listeners not implemented" );
+}
+void SAL_CALL XTempFile::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    DBG_ASSERT ( sal_False, "Listeners not implemented" );
+}
+void SAL_CALL XTempFile::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener )
+    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    DBG_ASSERT ( sal_False, "Listeners not implemented" );
 }
 
 OUString XTempFile::getImplementationName ()
