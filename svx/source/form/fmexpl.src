@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:14:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ korean ] = "¿ëÁö";
                         Text[ turkish ] = "Form";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Formulario";
                     };
                     MenuItem
                     {
@@ -136,6 +137,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ korean ] = "¼û°ÜÁø ÄÁÆ®·Ñ";
                         Text[ turkish ] = "Gizli komut alaný";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Control oculto";
                     };
                 };
             };
@@ -149,6 +151,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "»õ·Î(~N)";
             Text[ turkish ] = "~Yeni";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "N~uevo";
         };
         MenuItem
         {
@@ -174,6 +177,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "§ó´À¦¨";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Þununla deðiþtir...";
+            Text[ catalan ] = "Reemplazar con";
         };
         MenuItem
         {
@@ -200,6 +204,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "»èÁ¦(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Eliminar";
         };
         MenuItem
         {
@@ -226,6 +231,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "È°¼ºÈ­ ¼ø¼­...";
             Text[ turkish ] = "Etkinleþtirme sýrasý...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Secuencia de activación...";
         };
         MenuItem
         {
@@ -252,6 +258,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
             Text[ turkish ] = "Yeniden adlandýr";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Cambiar nombre";
         };
         MenuItem
         {
@@ -278,6 +285,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "µî·ÏÁ¤º¸(~I)";
             Text[ turkish ] = "Özellikler";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Propiedades";
         };
         MenuItem
         {
@@ -304,6 +312,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "¼³°è ¸ðµå¿¡¼­ ¿­±â";
             Text[ turkish ] = "Tasarým kipinde aç";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Abrir en modo diseño";
         };
         MenuItem
         {
@@ -329,6 +338,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "¦Û°Ê¹ï­ã±±¨î¶µ";
             Text[ turkish ] = "Automatic control focus";
             Text[ arabic ] = "ÊÑßíÒ ÊáÞÇÆí áÚäÕÑ ÇáÊÍßã";
+            Text[ catalan ] = "Foco automático de control";
         };
     };
 };
@@ -362,6 +372,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá äÕ";
             Text[ turkish ] = "Metin alaný";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Campo de texto";
         };
         MenuItem
         {
@@ -387,6 +398,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "«ö¶s(~B)";
             Text[ arabic ] = "ÒÑ ÖÛØ";
             Text[ turkish ] = "Düðme";
+            Text[ catalan ] = "~Botón";
         };
         MenuItem
         {
@@ -413,6 +425,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá ÚäæäÉ";
             Text[ turkish ] = "Etiket alaný";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Campo de etiqueta";
         };
         MenuItem
         {
@@ -438,6 +451,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "¸s²Õ®Ø(~R)";
             Text[ arabic ] = "ßÇÏÑ ÊÌãíÚ";
             Text[ turkish ] = "Grup çerçevesi";
+            Text[ catalan ] = "~Marco de grupo";
         };
         MenuItem
         {
@@ -464,6 +478,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ãÑÈÚ ÞÇÆãÉ";
             Text[ turkish ] = "Liste alaný";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "L~istado";
         };
         MenuItem
         {
@@ -489,6 +504,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô(~C)";
             Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
             Text[ turkish ] = "Seçme kutusu";
+            Text[ catalan ] = "~Casilla de verificación";
         };
         MenuItem
         {
@@ -515,6 +531,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÒÑ ÎíÇÑ";
             Text[ turkish ] = "Seçenek düðmesi";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Campo de opción";
         };
         MenuItem
         {
@@ -540,6 +557,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "²Õ¦X¤è®Ø(~X)";
             Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
             Text[ turkish ] = "Kombinasyon alaný";
+            Text[ catalan ] = "Ca~mpo combinado";
         };
         MenuItem
         {
@@ -565,6 +583,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "¹Ï§Î«ö¶s(~M)";
             Text[ arabic ] = "ãÝÊÇÍ ãÕæøÑ";
             Text[ turkish ] = "Grafiksel düðme";
+            Text[ catalan ] = "Botón g~ráfico";
         };
         MenuItem
         {
@@ -591,6 +610,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÇÎÊíÇÑ ÇáãáÝ";
             Text[ turkish ] = "Dosya seçimi";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Selec~ción de archivo";
         };
         MenuItem
         {
@@ -617,6 +637,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá ÇáÊÇÑíÎ";
             Text[ turkish ] = "Tarih alaný";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Campo de ~fecha";
         };
         MenuItem
         {
@@ -643,6 +664,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá ÇáæÞÊ";
             Text[ turkish ] = "Zaman alaný";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Campo ~horario";
         };
         MenuItem
         {
@@ -669,6 +691,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá ÑÞãí";
             Text[ turkish ] = "Sayýsal alan";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "C~ampo numérico";
         };
         MenuItem
         {
@@ -694,6 +717,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "³f¹ôÄæ(~U)";
             Text[ arabic ] = "ÍÞá ÇáÚãáÉ";
             Text[ turkish ] = "Para birimi alaný";
+            Text[ catalan ] = "Cam~po de moneda";
         };
         MenuItem
         {
@@ -719,6 +743,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "¾B¸nÄæ¦ì(~P)";
             Text[ arabic ] = "ÍÞá ãõÞäøóÚ";
             Text[ turkish ] = "Maskelenmiþ alan";
+            Text[ catalan ] = "Campo s~eleccionado";
         };
         MenuItem
         {
@@ -744,6 +769,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "¹Ï¦¡±±¨î¶µ(~G)";
             Text[ arabic ] = "ÚäÕÑ ÊÍßã ÑÓæãí";
             Text[ turkish ] = "Grafiksel komut alaný";
+            Text[ catalan ] = "Control de ima~gen";
         };
         MenuItem
         {
@@ -770,6 +796,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá ãõäÓøóÞ";
             Text[ turkish ] = "Formatlý alan";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Campo for~mateado";
         };
     };
 };
@@ -848,6 +875,7 @@ ModalDialog RID_SVXDLG_SETFORM
         Text[ korean ] = "°æ·Î";
         Text[ turkish ] = "Veri yolu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ruta";
     };
     FixedText FT_PATH
     {
@@ -891,6 +919,7 @@ ModalDialog RID_SVXDLG_SETFORM
     Text[ korean ] = "¿ëÁö ¼±ÅÃ";
     Text[ turkish ] = "Form seçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Selección de formulario";
 };
 DockingWindow RID_SVX_FMEXPLORER
 {
@@ -920,4 +949,5 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ korean ] = "¿ëÁö ³×ºñ°ÔÀÌÅÍ";
     Text[ turkish ] = "Form navigatörü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegador de formulario";
 };
