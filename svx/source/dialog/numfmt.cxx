@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 10:57:23 $
+ *  last change: $Author: er $ $Date: 2001-03-23 11:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,53 @@ void SvxNumberFormatTabPage::Init_Impl()
     {
         LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
             xLoc[i].Country );
-        aLbLanguage.InsertLanguage( eLang );
+        // Don't list ambigous locales where we won't be able to convert
+        // the LanguageType back to an identical Language_Country name and
+        // therefore couldn't load the i18n LocaleData.
+#ifndef PRODUCT
+        if ( eLang == LANGUAGE_DONTKNOW )
+        {
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage: unknown locale: " ) );
+            aMsg += ByteString( String( xLoc[i].Language ), RTL_TEXTENCODING_UTF8  );
+            if ( xLoc[i].Country.getLength() )
+            {
+                aMsg += '_';
+                aMsg += ByteString( String( xLoc[i].Country ), RTL_TEXTENCODING_UTF8  );
+            }
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+        }
+#endif
+        if ( eLang != LANGUAGE_DONTKNOW )
+        {
+            String aLanguage, aCountry;
+            ConvertLanguageToIsoNames( eLang, aLanguage, aCountry );
+            if ( String( xLoc[i].Language ) != aLanguage ||
+                    String( xLoc[i].Country ) != aCountry )
+            {
+#ifndef PRODUCT
+                ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambigous locale\n" ) );
+                aMsg += ByteString( String( xLoc[i].Language ), RTL_TEXTENCODING_UTF8  );
+                if ( xLoc[i].Country.getLength() )
+                {
+                    aMsg += '_';
+                    aMsg += ByteString( String( xLoc[i].Country ), RTL_TEXTENCODING_UTF8  );
+                }
+                aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "  ->  0x" ) );
+                aMsg += ByteString::CreateFromInt32( eLang, 16 );
+                aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "  ->  " ) );
+                aMsg += ByteString( aLanguage, RTL_TEXTENCODING_UTF8  );
+                if ( aCountry.Len() )
+                {
+                    aMsg += '_';
+                    aMsg += ByteString( aCountry, RTL_TEXTENCODING_UTF8  );
+                }
+                DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+                eLang = LANGUAGE_DONTKNOW;
+            }
+        }
+        if ( eLang != LANGUAGE_DONTKNOW )
+            aLbLanguage.InsertLanguage( eLang );
     }
 }
 
