@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 10:29:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 10:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
     const String& rMainURL = aURL.GetMainURL();
-    aBmp1.SetImage( SvImageManager::GetImage( aURL, TRUE ) );
+    aBmp1.SetImage( SvFileInformationManager::GetImage( aURL, TRUE ) );
 
     // Bestimmung von Groesse und Typ
     String aSizeText( aUnknownSize );
