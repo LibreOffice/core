@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:43:55 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 08:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@
 #include "mailmodel.hxx"
 #include "event.hxx"
 #include "appdata.hxx"
+#include "fcontnr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -182,6 +183,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+        case SID_MAIL_SENDDOCASPDF:
         case SID_MAIL_SENDDOC:
             if ( SvtInternalOptions().MailUIEnabled() )
             {
@@ -206,8 +208,13 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aModel.AddAddress( aRecipient, SfxMailModel_Impl::ROLE_TO );
                 }
 
-                sal_Bool bResult = aModel.Send();
-                if ( bResult == sal_False )
+                SfxMailModel_Impl::SendMailResult eResult = SfxMailModel_Impl::SEND_MAIL_ERROR;
+                if ( nId == SID_MAIL_SENDDOCASPDF )
+                    eResult = aModel.Send( SfxMailModel_Impl::TYPE_ASPDF );
+                else
+                    eResult = aModel.Send( SfxMailModel_Impl::TYPE_SELF );
+
+                if ( eResult == SfxMailModel_Impl::SEND_MAIL_ERROR )
                 {
                     InfoBox aBox( SFX_APP()->GetTopWindow(), SfxResId( MSG_ERROR_SEND_MAIL ));
                     aBox.Execute();
@@ -316,11 +323,31 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
             }
 
             // Mail-Funktionen
+            case SID_MAIL_SENDDOCASPDF:
             case SID_MAIL_SENDDOC:
             {
                 BOOL bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
                 if ( !bEnable )
                     rSet.DisableItem( nSID );
+                else if ( nSID == SID_MAIL_SENDDOCASPDF )
+                {
+                    SfxObjectShellRef xDocShell = GetViewFrame()->GetObjectShell();
+                    if ( xDocShell.Is() )
+                    {
+                        // Get PDF Filter from container
+                        SfxFactoryFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
+                        if ( pFilterContainer )
+                        {
+                            String aPDFExtension = String::CreateFromAscii( ".pdf" );
+                            const SfxFilter* pFilter = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
+                            if ( pFilter != NULL )
+                                break;
+                        }
+                    }
+
+                    rSet.DisableItem( nSID );
+                }
+
                 break;
             }
 
