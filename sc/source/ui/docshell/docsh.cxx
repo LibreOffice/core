@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:52:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,13 +691,11 @@ BOOL ScDocShell::SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Refer
     return bRet;
 }
 
-BOOL __EXPORT ScDocShell::Load( const uno::Reference < embed::XStorage >& xStor )
+BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
-
-    DBG_ASSERT( xStor.is(), "Load without storage?" );
 
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
@@ -705,12 +703,12 @@ BOOL __EXPORT ScDocShell::Load( const uno::Reference < embed::XStorage >& xStor 
 
     GetUndoManager()->Clear();
 
-    BOOL bRet = SfxObjectShell::Load( xStor );
+    BOOL bRet = SfxObjectShell::Load( rMedium );
     if( bRet )
     {
         if (GetMedium())
         {
-            SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+            SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
             nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
         }
 
@@ -721,15 +719,15 @@ BOOL __EXPORT ScDocShell::Load( const uno::Reference < embed::XStorage >& xStor 
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
 
-            bRet = LoadXML( GetMedium(), xStor );
+            bRet = LoadXML( &rMedium, NULL );
         }
     }
 
-    if (!bRet && !GetMedium()->GetError())
-        GetMedium()->SetError( SVSTREAM_FILEFORMAT_ERROR );
+    if (!bRet && !rMedium.GetError())
+        rMedium.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-    if (GetMedium()->GetError())
-        SetError( GetMedium()->GetError() );
+    if (rMedium.GetError())
+        SetError( rMedium.GetError() );
 
     InitItems();
     CalcOutputFactor();
@@ -784,13 +782,11 @@ void __EXPORT ScDocShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
     // Inhalte fuer Organizer laden
 
 
-BOOL __EXPORT ScDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xStor )
+BOOL __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
-
-    DBG_ASSERT( xStor.is(), "Nanu... LoadFrom ohne Storage?" );
 
     WaitObject aWait( GetDialogParent() );
 
@@ -798,16 +794,16 @@ BOOL __EXPORT ScDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xS
 
     if (GetMedium())
     {
-        SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
         nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
     }
 
     //  until loading/saving only the styles in XML is implemented,
     //  load the whole file
-    bRet = LoadXML( GetMedium(), xStor );
+    bRet = LoadXML( &rMedium, NULL );
     InitItems();
 
-    SfxObjectShell::LoadFrom( xStor );
+    SfxObjectShell::LoadFrom( rMedium );
 
     return bRet;
 }
@@ -987,7 +983,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     pInStream->SetStreamCharSet( aOptions.GetCharSet() );
                     pInStream->Seek( 0 );
-                    bRet = aImpEx.ImportStream( *pInStream );
+                    bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL() );
                     eError = bRet ? eERR_OK : SCERR_IMPORT_CONNECT;
                     aDocument.StartAllListeners();
                     aDocument.SetDirty();
@@ -1101,7 +1097,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (pInStream)
                 {
                     pInStream->Seek( 0 );
-                    bRet = aImpEx.ImportStream( *pInStream, SOT_FORMATSTR_ID_SYLK );
+                    bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SOT_FORMATSTR_ID_SYLK );
                     eError = bRet ? eERR_OK : SCERR_IMPORT_UNKNOWN;
                     aDocument.StartAllListeners();
                     aDocument.SetDirty();
@@ -1125,7 +1121,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     pInStream->Seek( 0 );
                     ScRange aRange;
-                    eError = ScImportRTF( *pInStream, &aDocument, aRange );
+                    eError = ScImportRTF( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange );
                     if (eError != eERR_OK)
                     {
                         if (!GetError())
@@ -1161,7 +1157,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     ScRange aRange;
                     // HTML macht eigenes ColWidth/RowHeight
                     CalcOutputFactor();
-                    eError = ScImportHTML( *pInStream, &aDocument, aRange,
+                    eError = ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
                                             GetOutputFactor(), !bWebQuery );
                     if (eError != eERR_OK)
                     {
@@ -1256,9 +1252,6 @@ BOOL __EXPORT ScDocShell::Save()
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    uno::Reference < embed::XStorage > xStor = GetStorage();
-    DBG_ASSERT( xStor.is(), "Save: no storage" );
-
     //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
 
     ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
@@ -1272,18 +1265,16 @@ BOOL __EXPORT ScDocShell::Save()
     //  wait cursor is handled with progress bar
     BOOL bRet = SfxObjectShell::Save();
     if( bRet )
-        bRet = SaveXML( NULL, xStor );
+        bRet = SaveXML( GetMedium(), NULL );
     return bRet;
 }
 
 
-BOOL __EXPORT ScDocShell::SaveAs( const uno::Reference < embed::XStorage >& xStor )
+BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
-
-    DBG_ASSERT( xStor.is(), "SaveAs without storage?" );
 
     //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
 
@@ -1296,9 +1287,9 @@ BOOL __EXPORT ScDocShell::SaveAs( const uno::Reference < embed::XStorage >& xSto
         SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
     //  wait cursor is handled with progress bar
-    BOOL bRet = SfxObjectShell::SaveAs( xStor );
+    BOOL bRet = SfxObjectShell::SaveAs( rMedium );
     if( bRet )
-        bRet = SaveXML( NULL, xStor );
+        bRet = SaveXML( &rMedium, NULL );
 
     return bRet;
 }
@@ -1951,7 +1942,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
             ScImportExport aImExport( &aDocument, aRange );
             aImExport.SetFormulas( TRUE );
-            bRet = aImExport.ExportStream( *pStream, SOT_FORMATSTR_ID_SYLK );
+            bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_SYLK );
         }
     }
     else if (aFltName.EqualsAscii(pFilterHtml))
@@ -1962,7 +1953,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             WaitObject aWait( GetDialogParent() );
             ScImportExport aImExport( &aDocument );
             aImExport.SetStreamPath( rMed.GetName() );
-            bRet = aImExport.ExportStream( *pStream, SOT_FORMATSTR_ID_HTML );
+            bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_HTML );
             if ( bRet && aImExport.GetNonConvertibleChars().Len() )
                 SetError( *new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
