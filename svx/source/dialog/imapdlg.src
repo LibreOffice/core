@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:58:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ Menu RID_SVXMN_IMAP
             Text[ chinese_traditional ] = "¥¨¶°(~M)...";
             Text[ arabic ] = "...ãÇßÑæ";
             Text[ greek ] = "Ìá~êñïåíôïëŞ...";
-            Text[ korean ] = "¸ÅÅ©·Î...";
+            Text[ korean ] = "¸ÅÅ©·Î(~M)...";
             Text[ turkish ] = "Makro...";
             Text[ language_user1 ] = " ";
         };
@@ -947,7 +947,7 @@ Menu RID_SVXMN_IMAP
                         Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";
                         Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";
                         Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";
-                        Text[ korean ] = "°è¼ÓÇØ¼­¡¡¾ÕÀ¸·Î";
+                        Text[ korean ] = "°è¼ÓÇØ¼­¡¡¾ÕÀ¸·Î(~F)";
                         Text[ turkish ] = "Bir öne getir";
                         Text[ language_user1 ] = " ";
                     };
@@ -974,7 +974,7 @@ Menu RID_SVXMN_IMAP
                         Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";
                         Text[ arabic ] = "ÅÑÓÇá ÎáİÇó";
                         Text[ greek ] = "~ÌåôáöïñÜ ğßóù";
-                        Text[ korean ] = "°è¼ÓÇØ¼­¡¡µÚ·Î";
+                        Text[ korean ] = "°è¼ÓÇØ¼­¡¡µÚ·Î(~W)";
                         Text[ turkish ] = "Bir alta gönder";
                         Text[ language_user1 ] = " ";
                     };
@@ -1001,7 +1001,7 @@ Menu RID_SVXMN_IMAP
                         Text[ chinese_traditional ] = "¸m©ó©³¼h(~S)";
                         Text[ arabic ] = "ÅÑÓÇá Åáì ÇáÎáİ";
                         Text[ greek ] = "ÌåôáöïñÜ óå ~äåıôåñï ğëÜíï";
-                        Text[ korean ] = "¸Ç µÚ·Î";
+                        Text[ korean ] = "¸Ç µÚ·Î(~S)";
                         Text[ turkish ] = "En alta gönder";
                         Text[ language_user1 ] = " ";
                     };
@@ -1047,7 +1047,7 @@ Menu RID_SVXMN_IMAP
             Text[ chinese_traditional ] = "¥ş³¡¿ï¨ú(~A)";
             Text[ arabic ] = "ÊÍÏíÏ Çáßá";
             Text[ greek ] = "ÅğéëïãŞ üë~ùí";
-            Text[ korean ] = "ÀüÃ¼ ¼±ÅÃ";
+            Text[ korean ] = "ÀüÃ¼ ¼±ÅÃ(~A)";
             Text[ turkish ] = "Tümünü seç";
             Text[ language_user1 ] = " ";
         };
@@ -1077,7 +1077,7 @@ Menu RID_SVXMN_IMAP
             Text[ chinese_traditional ] = "§R°£(~D)";
             Text[ arabic ] = "ÍĞİ";
             Text[ greek ] = "Äéáãñá~öŞ";
-            Text[ korean ] = "»èÁ¦";
+            Text[ korean ] = "»èÁ¦(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
         };
