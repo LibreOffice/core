@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
+ *  last change: $Author: tbe $ $Date: 2001-05-08 11:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1731,6 +1731,12 @@ void WindowElement::endElement()
 
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("help-text") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("help-url") ),
                               _xAttributes );
 
     ctx.importEvents( _events );

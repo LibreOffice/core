@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
+ *  last change: $Author: tbe $ $Date: 2001-05-08 11:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,6 +800,10 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":help-text") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":help-url") ) );
     readEvents();
 }
 
