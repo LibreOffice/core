@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_globalindex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:27:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 namespace
 {
 
+/**
+*/
 enum E_Types
 {
         t_service           = 0,
@@ -97,6 +99,8 @@ enum E_Types
         t_module            = 12,
         t_singleton         = 13,
         t_attribute         = 14,
+        t_siservice         = 15,
+        t_sisingleton       = 16,
         t_MAX
 };
 
@@ -123,17 +127,21 @@ uintt   G_nDummy;
     Constant            2012
     Singleton           2013
     Attribute           2014
+    SglIfcService       2015
+    SglIfcSingleton     2016
 */
-const int C_nNumberOfIdlTypes = 15;
+const int C_nNumberOfIdlTypes = 17;
 const char *    C_sTypeNames[C_nNumberOfIdlTypes] =
                     { "module ",    "interface ",   "function ",    "service ",     "property ",
                       "enum ",      "value ",       "typedef ",     "struct ",      "field ",
-                      "exception ", "constants group ", "constant ","singleton ",   "attribute "
+                      "exception ", "constants group ", "constant ","singleton ",   "attribute ",
+                      "service",    "singleton"
                     };
 const char *    C_sOwnerNames[C_nNumberOfIdlTypes] =
                     { "module ",    "module ",      "interface ",   "module ",      "service ",
                       "module ",    "enum ",        "module ",      "module ",      "", // could be struct or exception
-                      "module ",    "module ",      "constants group ", "module ",  "interface "
+                      "module ",    "module ",      "constants group ", "module ",  "interface ",
+                      "module",     "module"
                     };
 const intt C_nNamesArrayOffset = intt(ary::idl::Module::class_id);
 const int C_nIxField = 9;
