@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:01:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,7 +963,7 @@ FloatingWindow RID_3D_OBJECTS
     Text[ chinese_simplified ] = "3 η»΄ε―Ήθ±΅";
     Text[ russian ] = "Òπευμεπνϋε ξαϊεκςϋ";
     Text[ polish ] = "Obiekty 3D";
-    Text[ japanese ] = "3D δ½“γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
+    Text[ japanese ] = "η«‹δ½“γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
     Text[ chinese_traditional ] = "3D η‰©δ»¶";
     Text[ greek ] = "Αντικείμενα 3Δ";
     Text[ korean ] = "3οΌ¤ κ°μ²΄";
@@ -1437,6 +1437,7 @@ FloatingWindow RID_POSITION
     Text[ hindi ] = "ΰ¤•ΰ¥ΰ¤°ΰ¤® ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤°ΰ¤–ΰ¥‹";
     Text[ slovak ] = "UsporiadaΕ¥";
 };
+
 
 
 
