@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:36:27 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 16:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ ODatabaseMetaData::~ODatabaseMetaData()
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -113,7 +114,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -132,7 +134,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -145,7 +148,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -158,7 +162,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -171,7 +176,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -184,7 +190,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -197,7 +204,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -209,7 +217,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -305,7 +314,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -317,7 +327,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -329,7 +340,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -342,7 +354,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -355,7 +368,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -367,7 +381,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -381,7 +396,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
@@ -652,7 +668,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, 
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
     SQLHANDLE hStmt;
-    N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
