@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:16 $
+ *  last change: $Author: ssa $ $Date: 2002-08-15 14:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,3 +189,47 @@ const BitmapEx& ImageControl::GetModeBitmap( BmpColorMode eMode ) const
     else
         return maBmp;
 }
+
+// -----------------------------------------------------------------------
+
+void    ImageControl::Paint( const Rectangle& rRect )
+{
+    FixedImage::Paint( rRect );
+    if( HasFocus() )
+    {
+        Window *pWin = GetWindow( WINDOW_BORDER );
+
+        BOOL bFlat = (GetBorderStyle() == 2);
+        Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
+        Color oldLineCol = pWin->GetLineColor();
+        Color oldFillCol = pWin->GetFillColor();
+        pWin->SetFillColor();
+        pWin->SetLineColor( bFlat ? COL_WHITE : COL_BLACK );
+        pWin->DrawRect( aRect );
+        aRect.nLeft++;
+        aRect.nRight--;
+        aRect.nTop++;
+        aRect.nBottom--;
+        pWin->SetLineColor( bFlat ? COL_BLACK : COL_WHITE );
+        pWin->DrawRect( aRect );
+        pWin->SetLineColor( oldLineCol );
+        pWin->SetFillColor( oldFillCol );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void ImageControl::GetFocus()
+{
+    FixedImage::GetFocus();
+    GetWindow( WINDOW_BORDER )->Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+void ImageControl::LoseFocus()
+{
+    FixedImage::GetFocus();
+    GetWindow( WINDOW_BORDER )->Invalidate();
+}
+
