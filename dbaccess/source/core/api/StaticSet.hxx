@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:19:03 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace dbaccess
             , m_bEnd(sal_False)
         {}
 
-        virtual void fillValueRow(ORowSetRow& _rRow);
+        virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
         // ::com::sun::star::sdbcx::XRowLocate
         virtual ::com::sun::star::uno::Any SAL_CALL getBookmark( const ORowSetRow& _rRow ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -128,6 +128,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/17 10:19:03  oj
+    some changes for the rowset
+
     Revision 1.2  2000/10/11 11:18:11  fs
     replace unotools with comphelper
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 15:26:21 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,15 @@ using namespace ::cppu;
 //==========================================================================
 DBG_NAME(OTableContainer)
 //------------------------------------------------------------------------------
-OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon)
+OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
+                                 ::osl::Mutex& _rMutex,
+                                 const Reference< XConnection >& _xCon)
     :m_rParent(_rParent)
     ,m_rMutex(_rMutex)
     ,m_bConstructed(sal_False)
     ,m_xConnection(_xCon)
+    ,m_aTables(_xCon->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    ,m_xMetaData(_xCon->getMetaData())
 {
     DBG_CTOR(OTableContainer, NULL);
 }
@@ -256,11 +260,10 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
 
     try
     {
-        Reference< XDatabaseMetaData > xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
-        if (xMetaData.is())
+        if (m_xMetaData.is())
         {
             const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-            Reference< XResultSet > xTables = xMetaData->getTables(Any(), sAll, sAll, _rTableTypeFilter);
+            Reference< XResultSet > xTables = m_xMetaData->getTables(Any(), sAll, sAll, _rTableTypeFilter);
             Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
             if (xCurrentRow.is())
             {
@@ -284,7 +287,7 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
                     // we're not interested in the "wasNull", as the getStrings would return an empty string in
                     // that case, which is sufficient here
 
-                    composeTableName(xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
+                    composeTableName(m_xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
                     bFilterMatch =  bNoTableFilters
                                 ||  ((nTableFilterLen != 0) && (NULL != bsearch(&sComposedName, aTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare)));
                     // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
@@ -318,7 +321,7 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
                     Reference<XPropertySet> xTable;
                     try
                     {   // the ctor is allowed to throw an exception
-                        xTable = new ODBTable(m_xConnection, NULL,aCatalogs[i], aSchemas[i], aNames[i], aTypes[i], aDescs[i]);
+                        xTable = new ODBTable(m_xMetaData, NULL,aCatalogs[i], aSchemas[i], aNames[i], aTypes[i], aDescs[i]);
                     }
                     catch(SQLException&)
                     {
@@ -347,16 +350,22 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
 void OTableContainer::dispose()
 {
     MutexGuard aGuard(m_rMutex);
-//  for (ConstTablesIterator i = m_aTables.begin(); i != m_aTables.end(); ++i)
+//  for (TablesIterator i = m_aTables.begin(); i != m_aTables.end(); ++i)
 //  {
-//      i->second->dispose();
-//      i->second->release();
+//      if((*i).second.is())
+//      {
+//          Reference< XComponent > xComp2((*i).second, UNO_QUERY);
+//          if(xComp2.is())
+//              xComp2->dispose();
+//
+//          (*i).second = Reference< XPropertySet >();
+//      }
 //  }
     m_aTablesIndexed.clear();
         //  !!! do this before clearing the map which the vector elements refer to !!!
     m_aTables.clear();
     m_xMasterTables = NULL;
-    m_xConnection   = NULL;
+    m_xMetaData     = NULL;
     m_bConstructed  = sal_False;
 }
 
@@ -405,7 +414,7 @@ Any OTableContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsExcept
         m_xMasterTables->getByName(m_aTablesIndexed[_nIndex]->first) >>= xProp;
         Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
 
-        xReturn = new ODBTable(m_xConnection,
+        xReturn = new ODBTable(m_xMetaData,
                             xSup,
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_CATALOGNAME)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_SCHEMANAME)),
@@ -433,7 +442,7 @@ Any OTableContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElement
         m_xMasterTables->getByName(_rName) >>= xProp;
         Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
 
-        xReturn = new ODBTable(m_xConnection,
+        xReturn = new ODBTable(m_xMetaData,
                             xSup,
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_CATALOGNAME)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_SCHEMANAME)),
@@ -447,7 +456,7 @@ Any OTableContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElement
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OTableContainer::hasByName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OTableContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
 {
     return m_aTables.find(_rName) != m_aTables.end();
 }
@@ -470,8 +479,8 @@ Sequence< rtl::OUString > OTableContainer::getElementNames(void) throw( RuntimeE
 }
 // -------------------------------------------------------------------------
 sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
-                                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-                                        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
+                                        const Sequence< ::rtl::OUString >& _rTableFilter,
+                                        const Sequence< ::rtl::OUString >& _rTableTypeFilter,
                                         const ::std::vector< WildCard >& _rWCSearch) const
 {
     sal_Int32 nTableFilterLen = _rTableFilter.getLength();

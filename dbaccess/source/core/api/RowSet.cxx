@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-13 07:17:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1641,7 +1641,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
         Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
         xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
         xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
-        xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
+        if(m_nFetchDirection != FetchDirection::FORWARD)
+            xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
 
         {
             {
@@ -1698,6 +1699,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                 }
                 Reference< XResultSet> xRs = m_xStatement->executeQuery();
                 m_pCache = new ORowSetCache(xRs,m_xComposer,m_aUpdateTableName,m_bModified,m_bNew);
+                m_aCurrentRow = m_pCache->getEnd();
 
                 if(!m_xColumns.is())
                 {
@@ -2385,6 +2387,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent)
     //  m_pIterator     = rParent.m_pIterator;
     m_pCache        = rParent.m_pCache;
     m_aBookmark     = rParent.m_aBookmark;
+    m_aCurrentRow   = m_pCache->getEnd();
 
     //  m_pCache = rParent.m_pCache->createClone();
 

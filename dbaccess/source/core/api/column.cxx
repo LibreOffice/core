@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 16:09:32 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,6 +462,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
     ,m_bInitialized(sal_False)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
+    ,m_xDrvColumns(NULL)
 {
     //  m_pColMap = new OColumnMap(17, ::utl::UStringMixHash(_bCaseSensitive), ::utl::UStringMixEqual(_bCaseSensitive));
     DBG_CTOR(OColumns, NULL);
@@ -528,16 +529,14 @@ void OColumns::append(const ::rtl::OUString& rName, OColumn* pCol)
 void OColumns::clearColumns()
 {
     MutexGuard aGuard(m_rMutex);
-    //  m_aColArray.clear();
-    //  m_pColMap->clear();
-    m_aNameMap.clear();
-    m_aElements.clear();
+    disposing();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OColumns::disposing(void)
 {
-    OColumns_BASE::disposing();
+    MutexGuard aGuard(m_rMutex);
     m_xDrvColumns = NULL;
+    OColumns_BASE::disposing();
 }
 //------------------------------------------------------------------------------
 void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnFactory* _pColFactory)
@@ -690,7 +689,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
         return Reference< XNamed >();
 
     Reference< XNamed > xRet = NULL;
-    if(m_xDrvColumns.is())
+    if(m_xDrvColumns.is() && m_xDrvColumns->hasByName(_rName))
     {
         Reference<XPropertySet> xProp;
         m_xDrvColumns->getByName(_rName) >>= xProp;
@@ -698,15 +697,16 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
         sal_Int32 nPos = -1;
         if(xColumnLocate.is())
             nPos = xColumnLocate->findColumn(_rName);
-        else
-        {
-            Sequence< ::rtl::OUString> aNames = m_xDrvColumns->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(nPos = 0;pBegin != pEnd;++pBegin,++nPos)
-                if(*pBegin == _rName)
-                    break;
-        }
+        OSL_ENSHURE(nPos != -1,"OColumns::createObjectname not found!");
+//      else
+//      {
+//          Sequence< ::rtl::OUString> aNames = m_xDrvColumns->getElementNames();
+//          const ::rtl::OUString* pBegin   = aNames.getConstArray();
+//          const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+//          for(nPos = 0;pBegin != pEnd;++pBegin,++nPos)
+//              if(*pBegin == _rName)
+//                  break;
+//      }
 
         OTableColumnWrapper* pColumn = new OTableColumnWrapper(xProp,nPos);
         xRet = pColumn;
@@ -717,7 +717,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
         m_pTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
         m_pTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
 
-        Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(m_pTable->getPropertyValue(PROPERTY_CATALOGNAME),
+        Reference< XResultSet > xResult = m_pTable->getMetaData()->getColumns(m_pTable->getPropertyValue(PROPERTY_CATALOGNAME),
                 aSchema,aTable,_rName);
 
         if(xResult.is())
@@ -741,7 +741,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
                                                 nField7,
                                                 nField9,
                                                 nField5,
-                                                sal_False,sal_False,sal_False,sal_True);
+                                                sal_False,sal_False,sal_False,isCaseSensitive());
 
                     Reference<XPropertySet> xProp = pRet;
                     OTableColumnWrapper* pColumn = new OTableColumnWrapper(xProp,xRow->getInt(17));
@@ -812,7 +812,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
     if(m_pTable && !m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
         ::rtl::OUString aCatalog;
@@ -823,7 +823,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
         m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
 
         ::rtl::OUString aComposedName;
-        dbtools::composeTableName(m_pTable->getConnection()->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" ADD ");
@@ -839,7 +839,7 @@ void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& des
             sal_Int32 nPrec     = connectivity::getINT32(descriptor->getPropertyValue(PROPERTY_PRECISION));
             ::rtl::OUString aTypeName;
             //  sal_Int32 nScale    = getINT32(descriptor->getPropertyValue(PROPERTY_SCALE));
-            Reference<XResultSet> xTypes(m_pTable->getConnection()->getMetaData()->getTypeInfo());
+            Reference<XResultSet> xTypes(m_pTable->getMetaData()->getTypeInfo());
             Reference<XRow> xRow(xTypes,UNO_QUERY);
             while(xTypes->next())
             {
@@ -896,7 +896,7 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
     if(m_pTable && !m_pTable->isNew())
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
         ::rtl::OUString aCatalog;
@@ -907,7 +907,7 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
         m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
 
         ::rtl::OUString aComposedName;
-        dbtools::composeTableName(m_pTable->getConnection()->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" DROP ");

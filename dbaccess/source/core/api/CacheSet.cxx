@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,9 +439,14 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
     }
 }
 // -------------------------------------------------------------------------
-void OCacheSet::fillValueRow(ORowSetRow& _rRow)
+void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
-    connectivity::ORowVector< ORowSetValue >::iterator aIter = _rRow->begin() + 1;
+    connectivity::ORowVector< ORowSetValue >::iterator aIter = _rRow->begin();
+    Any aBookmark = getBookmark(_rRow);
+    if(!aBookmark.hasValue())
+        aBookmark = makeAny(_nPosition);
+    (*aIter) = aBookmark;
+    ++aIter;
     for(sal_Int32 i=1;aIter != _rRow->end();++aIter,++i)
     {
         sal_Int32 nType = m_xSetMetaData->getColumnType(i);
@@ -492,6 +497,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/11/03 14:32:31  oj
+    some problems with refcount resolved
+
     Revision 1.5  2000/10/25 07:30:24  oj
     make strings unique for lib's
 

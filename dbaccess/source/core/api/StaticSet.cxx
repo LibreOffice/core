@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::osl;
 
 // -------------------------------------------------------------------------
-void OStaticSet::fillValueRow(ORowSetRow& _rRow)
+void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
     _rRow = *m_aSetIter;
 }
@@ -146,7 +146,7 @@ sal_Bool OStaticSet::fetchRow()
         m_aSet.push_back(new connectivity::ORowVector< ORowSetValue >(m_xSetMetaData->getColumnCount()));
         m_aSetIter = m_aSet.end() - 1;
         (*(*m_aSetIter))[0] = (sal_Int32)(m_aSet.size() -1);
-        OCacheSet::fillValueRow(*m_aSetIter);
+        OCacheSet::fillValueRow(*m_aSetIter,(*(*m_aSetIter))[0]);
     }
     else
         m_bEnd = sal_True;
@@ -162,7 +162,7 @@ void OStaticSet::fillAllRows()
             ORowSetRow pRow = new connectivity::ORowVector< ORowSetValue >(m_xSetMetaData->getColumnCount());
             m_aSet.push_back(pRow);
             (*pRow)[0] = (sal_Int32)(m_aSet.size() -1);
-            OCacheSet::fillValueRow(pRow);
+            OCacheSet::fillValueRow(pRow,(*pRow)[0]);
         }
         m_bEnd = sal_True;
     }
@@ -392,6 +392,9 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/25 07:30:24  oj
+    make strings unique for lib's
+
     Revision 1.2  2000/10/11 11:18:11  fs
     replace unotools with comphelper
 

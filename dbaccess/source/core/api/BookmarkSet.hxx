@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace dbaccess
             m_xRowLocate = NULL;
         }
 
-        virtual void fillValueRow(ORowSetRow& _rRow);
+        virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
         // ::com::sun::star::sdbcx::XRowLocate
         virtual ::com::sun::star::uno::Any SAL_CALL getBookmark( const ORowSetRow& _rRow ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
@@ -142,6 +142,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/03 14:40:45  oj
+    some problems with refcount resolved
+
     Revision 1.3  2000/10/17 10:19:03  oj
     some changes for the rowset
 

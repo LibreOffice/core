@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:07:13 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,11 @@ namespace dbaccess
         }
     public:
         OPrivateColumns(const OSQLColumns& _rColumns,
+                        sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< ::rtl::OUString> &_rVector
-                        ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
+                    ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                         ,m_aColumns(_rColumns)
         {
         }
@@ -202,11 +203,12 @@ namespace dbaccess
             return NULL;
         }
     public:
-        OPrivateTables(const OSQLTables& _rTables,
+        OPrivateTables( const OSQLTables& _rTables,
+                        sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< ::rtl::OUString> &_rVector
-                        ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
+                    ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                         ,m_aTables(_rTables)
         {
         }
@@ -403,7 +405,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     ::std::vector< ::rtl::OUString> aNames;
     for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
         aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-    m_pColumns = new OPrivateColumns(*aCols,*this,m_aMutex,aNames);
+    m_pColumns = new OPrivateColumns(*aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     getTables();
 }
 // -------------------------------------------------------------------------
@@ -690,7 +692,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OQueryComposer::g
             aNames.push_back(xName->getName());
         }
 
-        m_pTables = new OPrivateTables(aTables,*this,m_aMutex,aNames);
+        m_pTables = new OPrivateTables(aTables,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
 
     return m_pTables;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:18:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,9 +142,9 @@ void SAL_CALL OBookmarkSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExce
 {
 }
 // -------------------------------------------------------------------------
-void OBookmarkSet::fillValueRow(ORowSetRow& _rRow)
+void OBookmarkSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
-    OCacheSet::fillValueRow(_rRow);
+    OCacheSet::fillValueRow(_rRow,_nPosition);
 
     (*_rRow->begin()) = m_xRowLocate->getBookmark();
 }
@@ -207,6 +207,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/11 11:18:10  fs
+    replace unotools with comphelper
+
     Revision 1.2  2000/09/29 15:20:51  oj
     rowset impl
 

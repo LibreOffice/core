@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-08 14:23:39 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,21 +132,21 @@ typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
 //==========================================================================
 DBG_NAME(ODBTable)
 //--------------------------------------------------------------------------
-ODBTable::ODBTable(const Reference< XConnection >& _rxConn,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
+ODBTable::ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+        const Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
         const ::rtl::OUString& _rCatalog,
         const ::rtl::OUString& _rSchema,
         const ::rtl::OUString& _rName,
         const ::rtl::OUString& _rType,
-        const ::rtl::OUString& _rDesc) throw(::com::sun::star::sdbc::SQLException)
-        : connectivity::sdbcx::OTable(_rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rName,_rType,_rDesc,_rSchema,_rCatalog)
-        ,m_aConnection(_rxConn)
+        const ::rtl::OUString& _rDesc) throw(SQLException)
+        : connectivity::sdbcx::OTable(_rxMetaData->storesMixedCaseQuotedIdentifiers(),_rName,_rType,_rDesc,_rSchema,_rCatalog)
         ,m_nPrivileges(0)
         ,m_xTable(_rxTable)
+        ,m_xMetaData(_rxMetaData)
 {
     DBG_CTOR(ODBTable, NULL);
     osl_incrementInterlockedCount( &m_refCount );
-    DBG_ASSERT(_rxConn.is(), "ODBTable::ODBTable : invalid conn !");
+    DBG_ASSERT(_rxMetaData.is(), "ODBTable::ODBTable : invalid conn !");
     DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
     // register our properties
     construct();
@@ -192,8 +192,8 @@ void SAL_CALL ODBTable::disposing()
 {
     OTable_Base::disposing();
     MutexGuard aGuard(m_aMutex);
-    m_aConnection = Reference< XConnection > ();
-    m_xTable = NULL;
+    m_xTable        = NULL;
+    m_xMetaData     = NULL;
 }
 
 //------------------------------------------------------------------------------
@@ -204,17 +204,15 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
         const_cast<ODBTable*>(this)->m_nPrivileges = 0; // don't allow anything if something goes wrong
         try
         {
-            Reference< XConnection > xConn(m_aConnection.get(), UNO_QUERY);
-            Reference< XDatabaseMetaData > xMetaData = xConn.is() ? xConn->getMetaData() : Reference< XDatabaseMetaData >();
             Any aVal;
             if(m_CatalogName.getLength())
                 aVal <<= m_CatalogName;
-            Reference< XResultSet > xPrivileges = xMetaData.is() ? xMetaData->getTablePrivileges(aVal, m_SchemaName, m_Name) : Reference< XResultSet >();
+            Reference< XResultSet > xPrivileges = m_xMetaData->getTablePrivileges(aVal, m_SchemaName, m_Name);
             Reference< XRow > xCurrentRow(xPrivileges, UNO_QUERY);
 
             if (xCurrentRow.is())
             {
-                ::rtl::OUString sUserWorkingFor = xMetaData->getUserName();
+                ::rtl::OUString sUserWorkingFor = m_xMetaData->getUserName();
                 xPrivileges->next();
                     // after creation the set is positioned before the first record, per definitionem
 
@@ -368,7 +366,7 @@ void ODBTable::refreshColumns()
         Any aVal;
         if(m_CatalogName.getLength())
             aVal <<= m_CatalogName;
-        Reference< XResultSet > xResult = Reference<XConnection>(m_aConnection)->getMetaData()->getColumns(aVal,
+        Reference< XResultSet > xResult = m_xMetaData->getColumns(aVal,
                                         m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
 
         if(xResult.is())
@@ -382,8 +380,8 @@ void ODBTable::refreshColumns()
     }
 
     OColumns* pCol = new OColumns(*this,m_aMutex,xNames,isCaseSensitive(),aVector,
-                                getConnection()->getMetaData()->supportsAlterTableWithAddColumn(),
-                                getConnection()->getMetaData()->supportsAlterTableWithDropColumn());
+                                m_xMetaData->supportsAlterTableWithAddColumn(),
+                                m_xMetaData->supportsAlterTableWithDropColumn());
     pCol->setParent(this);
 
     if(m_pColumns)
@@ -398,7 +396,7 @@ void ODBTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
     if(m_CatalogName.getLength())
         aVal <<= m_CatalogName;
 
-    Reference< XResultSet > xResult = Reference<XConnection>(m_aConnection)->getMetaData()->getPrimaryKeys(aVal,m_SchemaName,m_Name);
+    Reference< XResultSet > xResult = m_xMetaData->getPrimaryKeys(aVal,m_SchemaName,m_Name);
 
     if(xResult.is())
     {
@@ -417,7 +415,7 @@ void ODBTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
     if(m_CatalogName.getLength())
         aVal <<= m_CatalogName;
 
-    Reference< XResultSet > xResult = Reference<XConnection>(m_aConnection)->getMetaData()->getExportedKeys(aVal,m_SchemaName,m_Name);
+    Reference< XResultSet > xResult = m_xMetaData->getExportedKeys(aVal,m_SchemaName,m_Name);
 
     if(xResult.is())
     {
@@ -447,7 +445,7 @@ void ODBTable::refreshIndexes()
 
     ::std::vector< ::rtl::OUString> aVector;
     // fill indexes
-    Reference< XResultSet > xResult = Reference<XConnection>(m_aConnection)->getMetaData()->getIndexInfo(aVal,
+    Reference< XResultSet > xResult = m_xMetaData->getIndexInfo(aVal,
     m_SchemaName,m_Name,sal_False,sal_False);
 
     if(xResult.is())
@@ -471,10 +469,10 @@ void ODBTable::refreshIndexes()
     */
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODBTable::getName() throw(::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL ODBTable::getName() throw(RuntimeException)
 {
     ::rtl::OUString aVal;
-    dbtools::composeTableName(Reference<XConnection>(m_aConnection)->getMetaData(),m_CatalogName,m_SchemaName,m_Name,aVal,sal_False);
+    dbtools::composeTableName(m_xMetaData,m_CatalogName,m_SchemaName,m_Name,aVal,sal_False);
     return aVal;
 }
 // -----------------------------------------------------------------------------

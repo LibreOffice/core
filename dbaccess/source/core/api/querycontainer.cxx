@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,8 +212,10 @@ void OQueryContainer::dispose()
     Reference< XContainer > xContainer(m_xCommandDefinitions, UNO_QUERY);
     if (xContainer.is())
         xContainer->removeContainerListener(m_pCommandsListener);
-    m_pCommandsListener->release();
-    m_xCommandDefinitions = NULL;
+    if(m_pCommandsListener)
+        m_pCommandsListener->release();
+    m_pCommandsListener     = NULL;
+    m_xCommandDefinitions   = NULL;
 }
 
 // XServiceInfo
