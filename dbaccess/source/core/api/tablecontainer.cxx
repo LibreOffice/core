@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:06:33 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 14:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,10 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                                 sPreFix = xRow->getString (4);
                                 sPostFix = xRow->getString (5);
                                 ::rtl::OUString sCreateParams = xRow->getString(6);
+                                // first identical type will be used if typename is empty
+                                if ( !sTypeName.getLength() && nType == nDataType )
+                                    sTypeName = sTypeName2Cmp;
+
                                 if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && sCreateParams.getLength() && !xRow->wasNull())
                                 {
                                     bUseLiteral = sal_True;
