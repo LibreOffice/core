@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: tbe $ $Date: 2002-06-20 15:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1462,6 +1462,7 @@ void Edit::GetFocus()
                 maSelection.Min() = 0;
                 maSelection.Max() = maText.Len();
             }
+            ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
         }
 
         ImplShowCursor();
