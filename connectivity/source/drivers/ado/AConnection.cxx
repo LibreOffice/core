@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 10:05:54 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 10:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,6 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
 {
-    delete m_pAdoConnection;
-
     ModuleContext::ReleaseRef();
 }
 //-----------------------------------------------------------------------------
@@ -527,17 +525,24 @@ void OConnection::disposing()
 
     //  m_aTables.disposing();
     for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-    }
+        ::comphelper::disposeComponent(i->get());
     m_aStatements.clear();
 
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
+    m_xCatalog  = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>();
+    m_pDriver   = NULL;
 
     m_pAdoConnection->Close();
+
+    OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
+    for (; aIter != m_aTypeInfo.end(); ++aIter)
+        delete aIter->second;
+
+    m_aTypeInfo.clear();
+
+    delete m_pAdoConnection;
+    m_pAdoConnection = NULL;
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
