@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 09:59:38 $
+ *  last change: $Author: fs $ $Date: 2000-10-18 16:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _DBAUI_CURLEDIT_HXX_
 #include "curledit.hxx"
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -109,7 +112,13 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& _rNewSele
     if (!GetSubEdit())
         SetSubEdit(new Edit(this, 0));
     if (!m_pForcedPrefix)
-        m_pForcedPrefix = new FixedText(this);
+    {
+        m_pForcedPrefix = new FixedText(this, WB_VCENTER);
+
+        // we use a gray background for the fixed text
+        StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
+        m_pForcedPrefix->SetBackground(Wallpaper(aSystemStyle.GetDialogColor()));
+    }
 
     sal_Bool bIsEmpty = 0 == _rStr.Len();
     // calc the prefix
@@ -130,8 +139,8 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& _rNewSele
 
     // both subs have to be resized according to the text len of the prefix
     Size aMySize = GetSizePixel();
-    sal_Int32 nTextWidth = m_pForcedPrefix->GetTextWidth(sPrefix);
-    m_pForcedPrefix->SetPosSizePixel(Point(0, 1), Size(nTextWidth, aMySize.Height()));
+    sal_Int32 nTextWidth = m_pForcedPrefix->GetTextWidth(sPrefix) + 2;
+    m_pForcedPrefix->SetPosSizePixel(Point(0, -2), Size(nTextWidth, aMySize.Height()));
     GetSubEdit()->SetPosSizePixel(Point(nTextWidth, -2), Size(aMySize.Width() - nTextWidth - 4, aMySize.Height()));
         // -2 because the edit has a frame which is 2 pixel wide ... should not be necessary, but I don't fully understand this ....
 
@@ -158,6 +167,9 @@ String OConnectionURLEdit::GetText() const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 09:59:38  fs
+ *  edit control for connection urls
+ *
  *
  *  Revision 1.0 28.09.00 13:12:21  fs
  ************************************************************************/
