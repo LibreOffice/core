@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formhelpid.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:28:14 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 08:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@
 #define HID_PROP_DEFAULT_BUTTON                 (HID_FORMS_START +  95)
 #define HID_PROP_HIDDEN_VALUE                   (HID_FORMS_START +  96)
 #define HID_PROP_TRISTATE                       (HID_FORMS_START +  97)
-#define HID_PROP_NAVIGATIONBAR                  (HID_FORMS_START +  98)
 #define HID_PROP_FILTER_CRITERIA                (HID_FORMS_START +  99)
 #define HID_PROP_SORT_CRITERIA                  (HID_FORMS_START +  100)
 #define HID_PROP_DEFAULT_LONG_VALUE             (HID_FORMS_START +  101)
@@ -244,6 +243,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:28:14  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 09.01.01 15:59:13  fs
  ************************************************************************/
