@@ -1,0 +1,4 @@
+pd	padmin	:	psprint vcl NULL
+pd	padmin									usr1	-	all	pd_mkout NULL
+pd	padmin\source							nmake	-	u	pd_source NULL
+pd	padmin\script							nmake	-	u	pd_script NULL

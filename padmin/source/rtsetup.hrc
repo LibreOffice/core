@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ *  $RCSfile: rtsetup.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: pl $ $Date: 2001-05-08 11:56:38 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _PAD_RTSETUP_HRC_
+#define _PAD_RTSETUP_HRC_
+
+#define RID_RTS_RTSDIALOG                   4001
+#define RID_RTS_RTSDIALOG_INVALID_TXT       1
+#define RID_RTS_RTSDIALOG_FROMDRIVER_TXT    2
+#define RID_RTS_RTSDIALOG_TABCONTROL        3
+
+#define RID_RTS_OTHERPAGE                   4002
+#define RID_RTS_OTHER_LEFTMARGIN_TXT        1
+#define RID_RTS_OTHER_LEFTMARGIN_BOX        2
+#define RID_RTS_OTHER_TOPMARGIN_TXT     3
+#define RID_RTS_OTHER_TOPMARGIN_BOX     4
+#define RID_RTS_OTHER_RIGHTMARGIN_TXT       5
+#define RID_RTS_OTHER_RIGHTMARGIN_BOX       6
+#define RID_RTS_OTHER_BOTTOMMARGIN_TXT      7
+#define RID_RTS_OTHER_BOTTOMMARGIN_BOX      8
+#define RID_RTS_OTHER_COMMENT_TXT           9
+#define RID_RTS_OTHER_COMMENT_EDT           10
+#define RID_RTS_OTHER_DEFAULT_BTN           11
+
+#define RID_RTS_DEVICEPAGE                  4003
+#define RID_RTS_DEVICE_COLOR_TXT            1
+#define RID_RTS_DEVICE_GRAY_TXT         2
+#define RID_RTS_DEVICE_PPDKEY_TXT           3
+#define RID_RTS_DEVICE_PPDKEY_BOX           4
+#define RID_RTS_DEVICE_PPDVALUE_TXT     5
+#define RID_RTS_DEVICE_PPDVALUE_BOX     6
+#define RID_RTS_DEVICE_LEVEL_TXT            7
+#define RID_RTS_DEVICE_LEVEL_BOX            8
+#define RID_RTS_DEVICE_SPACE_TXT            9
+#define RID_RTS_DEVICE_SPACE_BOX            10
+#define RID_RTS_DEVICE_DEPTH_TXT            11
+#define RID_RTS_DEVICE_DEPTH_BOX            12
+#define RID_RTS_DEVICE_COMPRESS_BOX     13
+
+#define RID_RTS_PAPERPAGE                   4004
+#define RID_RTS_PAPER_PAPER_TXT         1
+#define RID_RTS_PAPER_PAPER_BOX         2
+#define RID_RTS_PAPER_ORIENTATION_TXT       3
+#define RID_RTS_PAPER_ORIENTATION_BOX       4
+#define RID_RTS_PAPER_DUPLEX_TXT            5
+#define RID_RTS_PAPER_DUPLEX_BOX            6
+#define RID_RTS_PAPER_SLOT_TXT              7
+#define RID_RTS_PAPER_SLOT_BOX              8
+#define RID_RTS_PAPER_SCALE_TXT         9
+#define RID_RTS_PAPER_SCALE_BOX         10
+
+#define RID_RTS_FONTSUBSTPAGE               4005
+#define RID_RTS_FS_SUBST_TXT                1
+#define RID_RTS_FS_SUBST_BOX                2
+#define RID_RTS_FS_FROM_TXT             3
+#define RID_RTS_FS_FROM_BOX             4
+#define RID_RTS_FS_TO_TXT                   5
+#define RID_RTS_FS_TO_BOX                   6
+#define RID_RTS_FS_ADD_BTN                  7
+#define RID_RTS_FS_REMOVE_BTN               8
+#define RID_RTS_FS_ENABLE_BTN               9
+
+#define RID_RTS_COMMANDPAGE                4006
+#define RID_RTS_CMD_TXT_PRTNAME         1
+#define RID_RTS_CMD_TXT_CONNECT         2
+#define RID_RTS_CMD_GROUP_DEFAULT           3
+#define RID_RTS_CMD_BTN_HELP                4
+#define RID_RTS_CMD_CB_COMMANDS         5
+#define RID_RTS_CMD_GROUP_INSTALL           6
+#define RID_RTS_CMD_TXT_CONFIGURE           7
+#define RID_RTS_CMD_LB_CONFIGURE            8
+#define RID_RTS_CMD_STR_CONFIGURE_PRINTER   9
+#define RID_RTS_CMD_STR_CONFIGURE_FAX       10
+#define RID_RTS_CMD_STR_CONFIGURE_PDF       11
+#define RID_RTS_CMD_STR_PRINTERHELP     12
+#define RID_RTS_CMD_STR_FAXHELP         13
+#define RID_RTS_CMD_STR_PDFHELP         14
+#define RID_RTS_CMD_BTN_REMOVE              15
+#define RID_RTS_CMD_EDT_PDFDIR              16
+#define RID_RTS_CMD_BTN_PDFDIR              17
+#define RID_RTS_CMD_TXT_PDFDIR              18
+#define RID_RTS_CMD_BOX_SWALLOWFAXNO        19
+
+#define RID_TXT_QUERYFAXNUMBER              4007
+
+#endif
