@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:33 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #endif
 #include "configexcept.hxx"
 
-#include <stl/algorithm>
+#include <algorithm>
 
 //..........................................................................
 namespace configmgr

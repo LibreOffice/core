@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpletest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:56 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,9 @@
  *
  ************************************************************************/
 
-#include <stl/memory>
-#include <stl/vector>
-#include <stl/stack>
+#include <memory>
+#include <vector>
+#include <stack>
 
 #ifndef _OSL_FILE_HXX_
 #include<osl/file.hxx>

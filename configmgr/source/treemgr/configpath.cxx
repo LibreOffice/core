@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 16:09:53 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include "configpath.hxx"
 #include "configexcept.hxx"
 
-#include <stl/algorithm>
+#include <algorithm>
 
 #define OLD_SETELEMENT_NAMES 1
 

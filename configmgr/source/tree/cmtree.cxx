@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 09:59:57 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,12 @@
 
 #include "cmtree.hxx"
 
-#include <stl/deque>
-#include <stl/vector>
+#include <deque>
+#include <vector>
 #include <iostream>
 #include <exception>
 #include <sal/types.h>
-#include <stl/set>
+#include <set>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
