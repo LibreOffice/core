@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:25:39 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,6 +527,7 @@ ODatabaseSource::ODatabaseSource(const Reference< XMultiServiceFactory >& _rxFac
             ,m_pSharedConnectionManager(NULL)
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
+            ,m_bDisposingSubStorages( sal_False )
             ,m_aModifyListeners(m_aMutex)
             ,m_aCloseListener(m_aMutex)
             ,m_aFlushListeners(m_aMutex)
@@ -560,6 +561,7 @@ ODatabaseSource::ODatabaseSource(
             ,m_pSharedConnectionManager(NULL)
             ,m_bModified(sal_False)
             ,m_bDocumentReadOnly(sal_False)
+            ,m_bDisposingSubStorages( sal_False )
             ,m_aModifyListeners(m_aMutex)
             ,m_aCloseListener(m_aMutex)
             ,m_aFlushListeners(m_aMutex)
@@ -707,11 +709,14 @@ void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObj
     }
     else // storage
     {
-        Reference<XStorage> xStorage(Source.Source,UNO_QUERY);
-        TStorages::iterator aFind = ::std::find_if(m_aStorages.begin(),m_aStorages.end(),
-                                            ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XStorage> >(),xStorage),::std::select2nd<TStorages::value_type>()));
-        if ( aFind != m_aStorages.end() )
-            m_aStorages.erase(aFind);
+        if ( !m_bDisposingSubStorages )
+        {
+            Reference<XStorage> xStorage(Source.Source,UNO_QUERY);
+            TStorages::iterator aFind = ::std::find_if(m_aStorages.begin(),m_aStorages.end(),
+                                                ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XStorage> >(),xStorage),::std::select2nd<TStorages::value_type>()));
+            if ( aFind != m_aStorages.end() )
+                m_aStorages.erase(aFind);
+        }
     }
 }
 // XServiceInfo
