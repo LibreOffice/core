@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:53:00 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,8 @@
 #pragma hdrstop
 
 #ifndef PCH
-#include <so3/ipenv.hxx>
 #include "scitems.hxx"
 
-#include <so3/ipenv.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/linkmgr.hxx>
@@ -105,20 +103,6 @@ struct ScStylePair
 //
 //  Ole
 //
-
-String ScDocShell::CreateObjectName( const String& rPrefix )
-{
-    String aStr( rPrefix );
-    USHORT i = 1;
-    aStr += String::CreateFromInt32( i );
-    while( Find( aStr ) )
-    {
-        i++;
-        aStr = rPrefix;
-        aStr += String::CreateFromInt32( i );
-    }
-    return aStr;
-}
 
 void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
@@ -169,7 +153,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
     }
     else
     {
-        Rectangle aOldVisArea = SfxInPlaceObject::GetVisArea();
+        Rectangle aOldVisArea = SfxObjectShell::GetVisArea();
         if ( bNegativePage )
             lcl_SetTopRight( aArea, aOldVisArea.TopRight() );
         else
@@ -183,15 +167,18 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
     if ( !aDocument.IsImportingXML() )
         aDocument.SnapVisArea( aArea );
 
+    //TODO/LATER: it's unclear which IPEnv is used here
+    /*
     SvInPlaceEnvironment* pEnv = GetIPEnv();
     if (pEnv)
     {
         Window* pWin = pEnv->GetEditWin();
         pEnv->MakeScale( aArea.GetSize(), MAP_100TH_MM,
                             pWin->LogicToPixel( aArea.GetSize() ) );
-    }
+    } */
 
-    SvInPlaceObject::SetVisArea( aArea );
+    //TODO/LATER: formerly in SvInplaceObject
+    SfxObjectShell::SetVisArea( aArea );
 
     if (bIsInplace)                     // Zoom in der InPlace View einstellen
     {
@@ -215,7 +202,8 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart 
         if (aOld != aNew)
             PostPaint(0,0,0,MAXCOL,MAXROW,MAXTAB,PAINT_GRID);
 
-        ViewChanged( ASPECT_CONTENT );          // auch im Container anzeigen
+        //TODO/LATER: currently not implemented
+        //ViewChanged( ASPECT_CONTENT );          // auch im Container anzeigen
     }
 }
 
@@ -234,7 +222,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
 
     DBG_ASSERT(pViewData,"pViewData==0 bei ScDocShell::UpdateOle");
 
-    Rectangle aOldArea = SfxInPlaceObject::GetVisArea();
+    Rectangle aOldArea = SfxObjectShell::GetVisArea();
     Rectangle aNewArea = aOldArea;
 
     BOOL bChange = FALSE;
@@ -420,7 +408,7 @@ void ScDocShell::UpdateLinks()
     for (USHORT k=nCount; k>0; )
     {
         --k;
-        ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
+        ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
@@ -488,7 +476,7 @@ BOOL ScDocShell::ReloadTabLinks()
     USHORT nCount = pLinkManager->GetLinks().Count();
     for (USHORT i=0; i<nCount; i++ )
     {
-        ::so3::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
+        ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
         if (pBase->ISA(ScTableLink))
         {
             ScTableLink* pTabLink = (ScTableLink*)pBase;
