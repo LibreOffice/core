@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:31:01 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 14:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,7 +1336,7 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
         }
     }
 
-    return NULL;
+    return SearchCreateResMgr( pPrefixName, nType );
 }
 
 // -----------------------------------------------------------------------
