@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:46:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@ namespace configmgr
                   ,m_pNewProviders(NULL)
                   ,m_aTreeManagerMutex()
                   ,m_pTreeManager(NULL)
-                  ,m_bEnableAsync(true)
     {
         OSL_ENSURE(_xContext.is(), "OProviderImpl : NULL context !");
 
@@ -267,9 +266,6 @@ namespace configmgr
         setTreeManager( xNewTreeManager.get() );
         OSL_ASSERT( xNewTreeManager.get() );
 
-        //Forward enableAsync setting to TreeManager now that it has been initialised
-        m_pTreeManager->enableAsync(m_bEnableAsync );
-
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
         m_pNewProviders   = new configapi::ApiProviderInstances(*this);
 
@@ -329,9 +325,7 @@ namespace configmgr
 
         if  (_rSettings.hasAsyncSetting())
         {
-
             m_aDefaultOptions.enableAsync( !!_rSettings.getAsyncSetting() );
-            m_bEnableAsync = _rSettings.getAsyncSetting();
         }
 
 
