@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-11 12:50:47 $
+ *  last change: $Author: mib $ $Date: 2002-02-14 10:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ void lcl_SwAccessibleContext_DbgMsg( SwAccessibleContext *pThisAcc,
 #define DBG_MSG( _msg )
 #define DBG_MSG_PARAM( _msg, _param )
 #define DBG_MSG_THIS_PARAM( _msg, _this, _param )
+#define DBG_MSG_CD( _msg )
 #endif
 
 using namespace ::com::sun::star;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-24 14:27:37 $
+#   last change: $Author: mib $ $Date: 2002-02-14 10:53:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ LIBFLAGS=$(LIBFLAGS) /p=256
 .IF "$(RC_SUBDIRS)" == ""
 SWSUBDIRS= \
     core_1st \
+    access \
     attr \
     bastyp \
     crsr \
@@ -132,6 +133,7 @@ SWSUBDIRS+= \
 .ENDIF
 
 SUBLIBS1= \
+        $(SLB)$/access.lib \
         $(SLB)$/graphic.lib \
         $(SLB)$/para.lib \
         $(SLB)$/attr.lib \

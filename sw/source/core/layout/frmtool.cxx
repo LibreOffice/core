@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-21 09:20:21 $
+ *  last change: $Author: mib $ $Date: 2002-02-14 10:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,11 @@
 #ifndef _LAYCACHE_HXX
 #include <laycache.hxx>
 #endif
+#ifdef ACCESSIBLE_LAYOUT
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
+#endif
+#endif
 
 #include "mdiexp.hxx"
 #include "statstr.hrc"
@@ -294,19 +299,23 @@ SwFrmNotify::~SwFrmNotify()
             pFrm->SetCompletePaint();
     }
 
-    //Auch die Flys wollen etwas von den Veraenderungen mitbekommen,
-    //FlyInCnts brauchen hier nicht benachrichtigt werden.
-    if ( pFrm->GetDrawObjs() )
-    {
 #ifdef VERTICAL_LAYOUT
-        const FASTBOOL bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
-        if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
-             bPrtWidth || bPrtHeight )
+    const FASTBOOL bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
+    if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
+         bPrtWidth || bPrtHeight )
 #else
-        const FASTBOOL bPrtP = aPrt.Pos() != pFrm->Prt().Pos();
-        const FASTBOOL bFrmS = aFrm.SSize()!= pFrm->Frm().SSize();
-        if ( bAbsP || bPrtP || bFrmS || bPrtS )
+    const FASTBOOL bPrtP = aPrt.Pos() != pFrm->Prt().Pos();
+    const FASTBOOL bFrmS = aFrm.SSize()!= pFrm->Frm().SSize();
+    if ( bAbsP || bPrtP || bFrmS || bPrtS )
 #endif
+    {
+#ifdef ACCESSIBLE_LAYOUT
+        aAccMap.MoveFrm( pFrm, aFrm );
+#endif
+
+        //Auch die Flys wollen etwas von den Veraenderungen mitbekommen,
+        //FlyInCnts brauchen hier nicht benachrichtigt werden.
+        if ( pFrm->GetDrawObjs() )
         {
             const SwDrawObjs &rObjs = *pFrm->GetDrawObjs();
             SwPageFrm *pPage = 0;

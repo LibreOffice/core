@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-24 16:20:58 $
+ *  last change: $Author: mib $ $Date: 2002-02-14 10:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,11 @@
 #endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
+#endif
+#ifdef ACCESSIBLE_LAYOUT
+#ifndef _ACCMAP_HXX
+#include <accmap.hxx>
+#endif
 #endif
 
 #ifdef VERTICAL_LAYOUT
@@ -371,6 +376,10 @@ void SwFrm::CheckDirChange()
 
 SwFrm::~SwFrm()
 {
+#ifdef ACCESSIBLE_LAYOUT
+    aAccMap.DisposeFrm( this );
+#endif
+
     if( pDrawObjs )
     {
         for ( USHORT i = pDrawObjs->Count(); i; )
