@@ -70,7 +70,8 @@ import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
+//import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
+import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
@@ -146,7 +147,7 @@ public final class DocumentDeserializerImpl
     org.w3c.dom.Document domDoc=null;
     DOMDocument docOut=null;
     DOMResult domTree=null;
-    SxwDocument doc = null;
+    GenericOfficeDocument doc = null;
 
     while (enum.hasMoreElements()) {
          docOut = (DOMDocument) enum.nextElement();
@@ -161,7 +162,7 @@ public final class DocumentDeserializerImpl
     catch(Exception e){
         System.out.println("The following error occurred:"+e);
     }
-    SxwDocument sxwDoc = new SxwDocument("output");
+    GenericOfficeDocument sxwDoc = new GenericOfficeDocument("output");
     sxwDoc.initContentDOM();
     sxwDoc.setContentDOM(domTree.getNode());
 

@@ -70,7 +70,7 @@ import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentSerializer;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
+import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
@@ -115,7 +115,7 @@ public final class DocumentSerializerImpl
 
 
     /** SXW <code>Document</code> object that this converter processes. */
-    private SxwDocument sxwDoc = null;
+    private GenericOfficeDocument sxwDoc = null;
 
     private PluginFactoryImpl pluginFactory = null;
 
@@ -127,7 +127,7 @@ public final class DocumentSerializerImpl
      */
     public DocumentSerializerImpl(PluginFactoryImpl pf,Document doc) {
     pluginFactory=pf;
-        sxwDoc = (SxwDocument) doc;
+        sxwDoc = (GenericOfficeDocument) doc;
     }
 
 
@@ -191,11 +191,12 @@ public final class DocumentSerializerImpl
 
           DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
           String teststr = ci.getXsltSerial();
+
           teststr= teststr.substring(0,6);
           org.w3c.dom.Document xslDoc=null;
               if ((teststr.equals("http:/"))||(teststr.equals("file:/"))
                                         ||(teststr.equals("jar://"))){
-              //System.out.println(ci.getXsltSerial());
+              System.out.println(ci.getXsltSerial());
               xslDoc= dBuilder.parse(ci.getXsltSerial());
 
           }
@@ -204,11 +205,9 @@ public final class DocumentSerializerImpl
               xslDoc = dBuilder.parse(
                   "jar:"+ci.getJarName()+"!/"+ci.getXsltSerial());
           }
+
           DOMSource xslDomSource = new DOMSource(xslDoc);
           DOMSource xmlDomSource = new DOMSource(domDoc);
-
-          //xmlDomSource.setSystemId("content.xml");
-          //xslDomSource.setSystemId("staroff.xsl");
 
           //call the tranformer using the XSL, Source and Result dom.
           TransformerFactory tFactory = TransformerFactory.newInstance();
