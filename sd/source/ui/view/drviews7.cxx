@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-19 20:32:39 $
+ *  last change: $Author: ka $ $Date: 2001-07-24 09:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,9 +573,7 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
             for( sal_uInt32 i = 0; i < aDataHelper.GetFormatCount(); i++ )
             {
-                ::com::sun::star::datatransfer::DataFlavor  aFlavor;
-                const SotFormatStringId                     aTestFormat = aDataHelper.GetFormat( i );
-                static SotFormatStringId                    aSupportedFormats[] =
+                static SotFormatStringId aSupportedFormats[] =
                 {
                     SOT_FORMATSTR_ID_EMBED_SOURCE,
                     SOT_FORMATSTR_ID_LINK_SOURCE,
@@ -589,17 +587,29 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                     SOT_FORMATSTR_ID_EDITENGINE
                 };
 
+                ::com::sun::star::datatransfer::DataFlavor  aFlavor;
+                const SotFormatStringId                     nTestFormat = aDataHelper.GetFormat( i );
+
                 for( sal_uInt32 n = 0, nCount = sizeof( aSupportedFormats ) / sizeof( SotFormatStringId ); n < nCount; n++ )
                 {
-                    if( aTestFormat == aSupportedFormats[ n ] )
+                    if( nTestFormat == aSupportedFormats[ n ] )
                     {
-                        if( ( SOT_FORMATSTR_ID_EMBED_SOURCE == aTestFormat ) ||
-                            ( SOT_FORMATSTR_ID_EMBED_SOURCE == aTestFormat ) )
+                        String aName;
+
+                        if( SOT_FORMATSTR_ID_EMBED_SOURCE == nTestFormat )
                         {
-                            aItem.AddClipbrdFormat( aTestFormat );
+                            TransferableObjectDescriptor aDesc;
+
+                            if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
+                                aName = aDesc.maTypeName;
                         }
                         else
-                            aItem.AddClipbrdFormat( aTestFormat, ( SotExchange::GetFormatDataFlavor( aTestFormat, aFlavor ), aFlavor.HumanPresentableName ) );
+                            aName = ( SotExchange::GetFormatDataFlavor( nTestFormat, aFlavor ), aFlavor.HumanPresentableName );
+
+                        if( aName.Len() )
+                            aItem.AddClipbrdFormat( nTestFormat, aName );
+                        else
+                            aItem.AddClipbrdFormat( nTestFormat );
                     }
                 }
             }
