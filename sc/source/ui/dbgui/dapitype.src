@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-17 14:24:08 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ russian ] = "Òθο";
         Text[ greek ] = "Τύπος";
         Text[ dutch ] = "~Type";
-        Text[ french ] = "~Type";
+        Text[ french ] = "Type";
         Text[ spanish ] = "~Tipo";
         Text[ italian ] = "Tipo";
         Text[ danish ] = "Type";
