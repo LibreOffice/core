@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:21:57 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@
 #define __USE_GNU
 #if GLIBC >= 2
 #   include <shadow.h>
-#   include <asm/sigcontext.h>
+#   if !defined(SPARC)
+#       include <asm/sigcontext.h>
+#   endif
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>
