@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-17 13:55:18 $
+ *  last change: $Author: nn $ $Date: 2000-10-31 17:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,6 +338,15 @@ double ScFormulaCell::GetValue()
     if ( !pCode->GetError() || pCode->GetError() == errDoubleRef)
         return nErgValue;
     return 0.0;
+}
+
+double ScFormulaCell::GetValueAlways()
+{
+    // for goal seek: return result value even if error code is set
+
+    if (bDirty && pDocument->GetAutoCalc())
+        Interpret();
+    return nErgValue;
 }
 
 void ScFormulaCell::GetString( String& rString )
