@@ -74,7 +74,7 @@
                needs.<br>
                In order to connect most of the following client programs to the running office server, 
                before running those programs, you should invoke the office with the following command:</p>
-	    <pre>soffice &quot;-accept=socket,host=localhost,port=8100;urp;&quot;</pre>
+	    <pre>soffice &quot;-accept=socket,host=localhost,port=2083;urp;&quot;</pre>
 	    <p>You could also customize the mentioned host and port to your needs.</p>
 	    <p>All examples marked with a <font color="#1C3BF9">*</font> are executables which can
 	    be executed using a run target in the makefile. The name of the binary (C++) can differ compared
@@ -1888,7 +1888,7 @@
       <p>This example uses a SQL data source in the Office named "OO_SDK_Demo_DB" with write access. Make
       sure that you have such a datasurce available in your office before you run the example.
       For running the FormLayer example you should start your office with the following command:<br>
-      <pre>soffice &quot;-accept=socket,host=localhost,port=8100;urp,ForceSynchronous=1,Negotiate=0;
+      <pre>soffice &quot;-accept=socket,host=localhost,port=2083;urp,ForceSynchronous=1,Negotiate=0;
       StarOffice.ServiceManager&quot;</pre><br>
       The additonal connection parameters are necessary to avoid snychronization problems.
       </p>
