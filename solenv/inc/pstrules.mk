@@ -8,8 +8,8 @@
 #*                      in makefile.mk
 #*
 #*    Ersterstellung    HJS 20.07.99
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:16 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-10-31 11:16:54 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/solar/inc/pstrules.mkv  $
 #*
@@ -222,4 +222,18 @@ $(UNOUCROUT)$/%.hpp : $(UNOUCRDEP)
 
 $(UNOUCROUT)$/%.hdl : $(UNOUCRDEP)
     +cppumaker $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL1TARGET)$(SHL2TARGET)$(SHL3TARGET)$(SHL4TARGET)$(SHL5TARGET)$(SHL6TARGET)$(SHL7TARGET)$(SHL8TARGET)$(SHL9TARGET)"!=""
+$(MISC)$/%_description.cxx : $(MISC)$/%.xml 
+    +xml2cmp -func $(MISC)$/$*_description.cxx $<
+    +$(RM) $<
+
+#fallback
+$(MISC)$/%.xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF			# "$(SHL1TARGET)$(SHL2TARGET)$(SHL3TARGET)$(SHL4TARGET)$(SHL5TARGET)$(SHL6TARGET)$(SHL7TARGET)$(SHL8TARGET)$(SHL9TARGET)"!=""
 
