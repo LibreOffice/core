@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:26:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ void BasicIDEShell::SetMDITitle()
     if ( m_aCurLibName.Len() )
     {
         LibraryLocation eLocation = BasicIDE::GetLibraryLocation( m_pCurShell, m_aCurLibName );
-        aTitle = BasicIDE::GetTitle( m_pCurShell, eLocation, SFX_TITLE_FILENAME );
+        aTitle = BasicIDE::GetTitle( m_pCurShell, eLocation, SFX_TITLE_CAPTION );
         aTitle += '.';
         aTitle += m_aCurLibName;
     }
@@ -202,7 +202,7 @@ void BasicIDEShell::SetMDITitle()
     if ( pViewFrame )
     {
         SfxObjectShell* pShell = pViewFrame->GetObjectShell();
-        if ( pShell && aTitle != pShell->GetTitle( SFX_TITLE_FILENAME ) )
+        if ( pShell && aTitle != pShell->GetTitle( SFX_TITLE_CAPTION ) )
         {
             pShell->SetTitle( aTitle );
             pShell->SetModified( FALSE );
