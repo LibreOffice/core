@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:41:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2598,8 +2598,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (nRenderer >= pDoc->GetPageCount())
         return uno::Sequence< beans::PropertyValue >();
 
-    Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1) ) );
-    DBG_ASSERT( aPgSize != Size(), "no page size" );
+    bool bSkipEmptyPages = false;
+    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+    {
+        if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "SkipEmptyPages" ) ) )
+            rxOptions[ nProperty].Value >>= bSkipEmptyPages;
+    }
+
+    Size aPgSize( pDoc->GetPageSize( sal_uInt16(nRenderer + 1), bSkipEmptyPages ) );
 
     awt::Size aPageSize( TWIP_TO_MM100( aPgSize.Width() ),
                          TWIP_TO_MM100( aPgSize.Height() ));
@@ -2683,7 +2689,9 @@ void SAL_CALL SwXTextDocument::render(
     uno::Reference< awt::XDevice >  xRenderDevice;
     bool bFirstPage = false;
     bool bLastPage = false;
-    const sal_Int32 nPageNumber = nRenderer + 1;
+    rtl::OUString aPages;
+    bool bSkipEmptyPages = false;
+
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
@@ -2692,7 +2700,12 @@ void SAL_CALL SwXTextDocument::render(
             rxOptions[ nProperty].Value >>= bFirstPage;
         else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ) )
             rxOptions[ nProperty].Value >>= bLastPage;
+        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) )
+            rxOptions[ nProperty].Value >>= aPages;
+        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "SkipEmptyPages" ) ) )
+            rxOptions[ nProperty].Value >>= bSkipEmptyPages;
     }
+
     OutputDevice*   pOut = 0;
     if (xRenderDevice.is())
     {
@@ -2739,7 +2752,7 @@ void SAL_CALL SwXTextDocument::render(
 
         if ( bFirstPage && pWrtShell )
         {
-            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut );
+            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPages, bSkipEmptyPages, sal_False );
         }
         // <--
 
@@ -2753,7 +2766,7 @@ void SAL_CALL SwXTextDocument::render(
         //
         if ( bLastPage && pWrtShell )
         {
-            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, sal_True );
+            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut, aPages, bSkipEmptyPages,  sal_True );
         }
         // <--
 
