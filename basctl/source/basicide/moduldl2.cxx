@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:43:09 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 11:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,32 +891,31 @@ void LibPage::InsertLib()
         {
             aModURLObj.setBase( aModBase );
             aDlgURLObj.setBase( aDlgBase );
+        }
 
-            ::rtl::OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
-            ::rtl::OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        if ( xMSF.is() )
+        {
+            Reference< XSimpleFileAccess > xSFA( xMSF->createInstance(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
 
-            if ( xMSF.is() )
+            if ( xSFA.is() )
             {
-                Reference< XSimpleFileAccess > xSFA( xMSF->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) ) ), UNO_QUERY );
-
-                if ( xSFA.is() )
+                ::rtl::OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                if ( xSFA->exists( aModURL ) )
                 {
-                    if ( xSFA->exists( aModURL ) )
-                    {
-                        Sequence <Any> aSeqModURL(1);
-                        aSeqModURL[0] <<= aModURL;
-                        xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
-                    }
+                    Sequence <Any> aSeqModURL(1);
+                    aSeqModURL[0] <<= aModURL;
+                    xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
+                }
 
-                    if ( xSFA->exists( aDlgURL ) )
-                    {
-                        Sequence <Any> aSeqDlgURL(1);
-                        aSeqDlgURL[0] <<= aDlgURL;
-                        xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
-                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
-                    }
+                ::rtl::OUString aDlgURL( aDlgURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                if ( xSFA->exists( aDlgURL ) )
+                {
+                    Sequence <Any> aSeqDlgURL(1);
+                    aSeqDlgURL[0] <<= aDlgURL;
+                    xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
                 }
             }
         }
