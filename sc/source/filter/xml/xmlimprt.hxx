@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,10 @@ enum ScXMLSortAttrTokens
 {
     XML_TOK_SORT_ATTR_BIND_STYLES_TO_CONTENT,
     XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS,
-    XML_TOK_SORT_ATTR_CASE_SENSITIVE
+    XML_TOK_SORT_ATTR_CASE_SENSITIVE,
+    XML_TOK_SORT_ATTR_LANGUAGE,
+    XML_TOK_SORT_ATTR_COUNTRY,
+    XML_TOK_SORT_ATTR_ALGORITHM
 };
 
 enum ScXMLSortSortByAttrTokens

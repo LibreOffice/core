@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-27 14:27:40 $
+ *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,49 +480,61 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
 void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::PropertyValue> aSortProperties)
 {
     uno::Sequence <util::SortField> aSortFields;
-    sal_Bool bBindFormatsToContent = sal_True;
-    sal_Bool bCopyOutputData = sal_False;
-    sal_Bool bIsCaseSensitive = sal_False;
-    sal_Bool bIsUserListEnabled = sal_False;
+    sal_Bool bBindFormatsToContent (sal_True);
+    sal_Bool bCopyOutputData (sal_False);
+    sal_Bool bIsCaseSensitive (sal_False);
+    sal_Bool bIsUserListEnabled (sal_False);
     table::CellAddress aOutputPosition;
     sal_Int32 nUserListIndex;
+    lang::Locale aCollatorLocale;
+    rtl::OUString sCollatorAlgorithm;
     sal_Int32 nProperties = aSortProperties.getLength();
     for (sal_Int32 i = 0; i < nProperties; i++)
     {
-        if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)))
+        if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_BINDFMT) == 0)
         {
             uno::Any aBindFormatsToContent = aSortProperties[i].Value;
             aBindFormatsToContent >>= bBindFormatsToContent;
         }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT)))
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COPYOUT) == 0)
         {
             uno::Any aCopyOutputData = aSortProperties[i].Value;
             aCopyOutputData >>= bCopyOutputData;
         }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)))
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISCASE) == 0)
         {
             uno::Any aIsCaseSensitive = aSortProperties[i].Value;
             aIsCaseSensitive >>= bIsCaseSensitive;
         }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISULIST)))
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_ISULIST) == 0)
         {
             uno::Any aIsUserListEnabled = aSortProperties[i].Value;
             aIsUserListEnabled >>= bIsUserListEnabled;
         }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)))
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_OUTPOS) == 0)
         {
             uno::Any aTempOutputPosition = aSortProperties[i].Value;
             aTempOutputPosition >>= aOutputPosition;
         }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_UINDEX)))
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_UINDEX) == 0)
         {
             uno::Any aUserListIndex = aSortProperties[i].Value;
             aUserListIndex >>= nUserListIndex;
         }
-        else if (aSortProperties[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SORTFLD)))
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_SORTFLD) == 0)
         {
             uno::Any aTempSortFields = aSortProperties[i].Value;
             aTempSortFields >>= aSortFields;
+        }
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLLOC) == 0)
+        {
+            uno::Any aTemp = aSortProperties[i].Value;
+            aTemp >>= aCollatorLocale;
+        }
+        else if (aSortProperties[i].Name.compareToAscii(SC_UNONAME_COLLALG) == 0)
+        {
+            uno::Any aTemp = aSortProperties[i].Value;
+            aTemp >>= sCollatorAlgorithm;
         }
     }
     sal_Int32 nSortFields = aSortFields.getLength();
@@ -538,6 +550,12 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
         }
         if (bIsCaseSensitive)
             rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
+        if (aCollatorLocale.Language.getLength())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_language, aCollatorLocale.Language);
+        if (aCollatorLocale.Country.getLength())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_country, aCollatorLocale.Country);
+        if (sCollatorAlgorithm.getLength())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_algorithm, sCollatorAlgorithm);
         SvXMLElementExport aElemS(rExport, XML_NAMESPACE_TABLE, sXML_sort, sal_True, sal_True);
         rExport.CheckAttrList();
         for (i = 0; i < nSortFields; i++)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -86,13 +89,6 @@
 #endif
 
 #define SC_USERLIST "UserList"
-#define SC_BINDFORMATSTOCONTENT "BindFormatstoContent"
-#define SC_COPYOUTPUTDATA "CopyOutputData"
-#define SC_ISCASESENSITIVE "IsCaseSensitive"
-#define SC_ISUSERLISTENABLED "IsUserListEnabled"
-#define SC_OUTPUTPOSITION "OutputPosition"
-#define SC_USERLISTINDEX "UserListIndex"
-#define SC_SORTFIELDS "SortFields"
 
 using namespace com::sun::star;
 
@@ -108,6 +104,9 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     bBindFormatsToContent(sal_True),
     bIsCaseSensitive(sal_False),
     bCopyOutputData(sal_False),
+    sCountry(),
+    sLanguage(),
+    sAlgorithm(),
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     pDatabaseRangeContext = pTempDatabaseRangeContext;
@@ -144,9 +143,18 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
             break;
             case XML_TOK_SORT_ATTR_CASE_SENSITIVE :
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
-                    bIsCaseSensitive = sal_False;
+                if (sValue.compareToAscii(sXML_true) == 0)
+                    bIsCaseSensitive = sal_True;
             }
+            break;
+            case XML_TOK_SORT_ATTR_LANGUAGE :
+                sLanguage = sValue;
+            break;
+            case XML_TOK_SORT_ATTR_COUNTRY :
+                sCountry = sValue;
+            break;
+            case XML_TOK_SORT_ATTR_ALGORITHM :
+                sCountry = sAlgorithm;
             break;
         }
     }
@@ -182,37 +190,62 @@ SvXMLImportContext *ScXMLSortContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLSortContext::EndElement()
 {
-    uno::Sequence <beans::PropertyValue> aSortDescriptor(7);
+    sal_Int32 nLangLength(sLanguage.getLength());
+    sal_Int32 nCountryLength(sCountry.getLength());
+    sal_Int32 nAlgoLength(sAlgorithm.getLength());
+    sal_uInt8 i (0);
+    if (nLangLength || nCountryLength)
+        i++;
+    if (nAlgoLength)
+        i++;
+    uno::Sequence <beans::PropertyValue> aSortDescriptor(7 + i);
     uno::Any aTemp;
     beans::PropertyValue aPropertyValue;
     aTemp = ::cppu::bool2any(bBindFormatsToContent);
-    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_BINDFORMATSTOCONTENT);
+    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_UNONAME_BINDFMT);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[0] = aPropertyValue;
     aTemp = ::cppu::bool2any(bCopyOutputData);
-    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_COPYOUTPUTDATA);
+    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_UNONAME_COPYOUT);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[1] = aPropertyValue;
     aTemp = ::cppu::bool2any(bIsCaseSensitive);
-    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_ISCASESENSITIVE);
+    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_UNONAME_ISCASE);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[2] = aPropertyValue;
     aTemp = ::cppu::bool2any(bEnabledUserList);
-    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_ISUSERLISTENABLED);
+    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_UNONAME_ISULIST);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[3] = aPropertyValue;
-    aTemp <<= nUserListIndex;
-    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_USERLISTINDEX);
+    aTemp <<= aOutputPosition;
+    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_UNONAME_OUTPOS);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[4] = aPropertyValue;
-    aTemp <<= aOutputPosition;
-    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_OUTPUTPOSITION);
+    aTemp <<= nUserListIndex;
+    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_UNONAME_UINDEX);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[5] = aPropertyValue;
     aTemp <<= aSortFields;
-    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_SORTFIELDS);
+    aPropertyValue.Name = rtl::OUString::createFromAscii(SC_UNONAME_SORTFLD);
     aPropertyValue.Value = aTemp;
     aSortDescriptor[6] = aPropertyValue;
+    if (nLangLength || nCountryLength)
+    {
+        lang::Locale aLocale;
+        aLocale.Language = sLanguage;
+        aLocale.Country = sCountry;
+        aTemp <<= aLocale;
+        aPropertyValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLLOC));
+        aPropertyValue.Value = aTemp;
+        aSortDescriptor[7] = aPropertyValue;
+    }
+    if (nAlgoLength)
+    {
+        aTemp <<= sAlgorithm;
+        aPropertyValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLALG));
+        aPropertyValue.Value = aTemp;
+        aSortDescriptor[6 + i] = aPropertyValue;
+    }
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
 }
 

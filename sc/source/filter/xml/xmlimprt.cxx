@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 10:51:36 $
+ *  last change: $Author: sab $ $Date: 2001-04-03 06:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,6 +632,9 @@ static __FAR_DATA SvXMLTokenMapEntry aSortAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_bind_styles_to_content, XML_TOK_SORT_ATTR_BIND_STYLES_TO_CONTENT    },
     { XML_NAMESPACE_TABLE, sXML_target_range_address,   XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS      },
     { XML_NAMESPACE_TABLE, sXML_case_sensitive,         XML_TOK_SORT_ATTR_CASE_SENSITIVE            },
+    { XML_NAMESPACE_TABLE, sXML_language,               XML_TOK_SORT_ATTR_LANGUAGE                  },
+    { XML_NAMESPACE_TABLE, sXML_country,                XML_TOK_SORT_ATTR_COUNTRY                   },
+    { XML_NAMESPACE_TABLE, sXML_algorithm,              XML_TOK_SORT_ATTR_ALGORITHM                 },
     XML_TOKEN_MAP_END
 };
 
