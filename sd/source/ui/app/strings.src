@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:17:41 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ String RID_PLUGINTOOLBOX
     Text = "PlugInleiste" ;
     Text [ ENGLISH ] = "Plugin toolbox" ;
     Text [ dutch ] = "PlugIn-balk" ;
-    Text [ english_us ] = "Plug-In Bar" ;
+    Text [ english_us ] = "Plug-in Bar" ;
     Text [ italian ] = "Barra degli oggetti per i PlugIn" ;
     Text [ spanish ] = "Barra de Plug-ins" ;
     Text [ french ] = "Barre de Plug-ins" ;
@@ -365,7 +365,7 @@ String STR_BEZIER_TOOLBOX
     Text [ dutch ] = "Werkbalk Bιzier" ;
     Text [ spanish ] = "Barra de objetos de Bιzier" ;
     Text [ english_us ] = "Bιzier object bar" ;
-    Text[ chinese_simplified ] = "Bιzier ¶ΤΟσΐΈ";
+    Text[ chinese_simplified ] = "ΗϊΠΞ¶ΤΟσΐΈ";
     Text[ russian ] = "Οΰνελό ξαϊεκςξβ Αεηόε";
     Text[ polish ] = "Pasek obiektσw Bιziera";
     Text[ japanese ] = "ΝήΌήª‹ΘόµΜήΌήªΈΔΚή°";
@@ -1874,7 +1874,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύΥβΈφΟίΜυΚ½ΡωΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςεόνξ υξςθςε σδΰλθςό ύςξς ρςθλό λθνθθ?";
     Text[ polish ] = "Czy chcesz na pewno usunΉζ styl linii?";
-    Text[ japanese ] = "ό‚Μν—ή‚π–{“–‚Ιν‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "ό‚Μν—ή‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το στυλ γραμμής;";
     Text[ korean ] = "Ό± ΐ―Ηόΐ» Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z―u­n§R°£½u±ψΌΛ¦΅΅H";
@@ -4703,7 +4703,7 @@ String STR_ASK_DELETE_ALL_PICTURES
     Text[ chinese_simplified ] = "ΔϊΥζÒªΙΎ³ύΘ«²ΏµΔΝΌΟρΒπ£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό βρε πθρσνκθ?";
     Text[ polish ] = "Czy na pewno usunΉζ wszystkie rysunki?";
-    Text[ japanese ] = "‚·‚Χ‚Δ‚Μ}‚π–{“–‚Ιν‚µ‚ά‚·‚©H";
+    Text[ japanese ] = "‚·‚Χ‚Δ‚Μ²Ò°Όή‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
     Text[ greek ] = "Θέλετε πραγματικά να διαγραφούν όλες οι εικόνες;";
     Text[ korean ] = "Έπµη ±ΧΈ²ΐ» Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z―u­n§R°£¥ώ³΅ªΊΌvΉ³΅H";
@@ -5951,7 +5951,7 @@ String STR_CLPBRD_CLEAR
     Text[ chinese_simplified ] = "ΤΪΌτΜω°εΔΪ΄ζΣΠÒ»Έφ½Ο΄σµΔΚύΎέ΅£\nΔϊÒªΘΓΥβΈφΚύΎέÒ²ΜαΉ©ΈψΖδΛϋΣ¦ΣΓ³ΜΠςΚΉΣΓ£Ώ";
     Text[ russian ] = "Βϋ οξμερςθλθ ρλθψκξμ αξλόψξε κξλθχερςβξ δΰννϋυ β αστεπ ξαμενΰ.\nΟπεδξρςΰβθςό ρξδεπζθμξε αστεπΰ ξαμενΰ δπσγθμ οπθλξζενθÿμ?";
     Text[ polish ] = "Umieci³e wiκksze iloci danych w schowku.\nCzy udostκpniζ zawartoζ schowka innym aplikacjom?";
-    Text[ japanese ] = "‘ε—Κ‚ΜΓή°ΐ‚ªΈΨ―ΜίΞή°Δή‚Ι•ΫΗ‚³‚κ‚Δ‚Ά‚ά‚·B\nΈΨ―ΜίΞή°Δή‚Μ“ΰ—e‚π•Κ‚Μ±ΜίΨΉ°Ό®έ‚Ιg—p‚µ‚Δ‚ΰ‚Ά‚Ά‚Ε‚·‚©?";
+    Text[ japanese ] = "‘ε—Κ‚ΜΓή°ΐ‚ªΈΨ―ΜίΞή°Δή‚Ι•ΫΗ‚³‚κ‚Δ‚Ά‚ά‚·B\nΈΨ―ΜίΞή°Δή‚Μ“ΰ—e‚π•Κ‚Μ±ΜίΨΉ°Ό®έ‚Ι‚ΰg—p‚µ‚ά‚·‚©B";
     Text[ greek ] = "Έχετε αποθηκεύσει μεγάλη ποσότητα δεδομένων στο πρόχειρο.\nΘέλετε τα δεδομένα αυτά να είναι διαθέσιμα και για άλλες εφαρμογές;";
     Text[ korean ] = "»ηΏλΐΪ΄Β΅΅Ε¬Έ³ΊΈµεΏ΅ ΈΉΐΊ ΎηΐΗ µ¥ΐΜΕΝΈ¦ ΐϊΐεΗΟΏ΄½ΐ΄Ο΄Ω.\nΕ¬Έ³ΊΈµεΐΗ ³»Ώλΐ» ΄ΩΈ¥ ΐΐΏλ ΗΑ·Ξ±Χ·¥Ώ΅Ό­µµ »ηΏλ°΅΄ΙΗΟ°ΤΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "¦b°Ε¶KΓ―¤Ί¦s¦³¤@­ΣΈϋ¤jªΊΈκ®Ζ΅C\n±z­nΕύ³o­ΣΈκ®Ζ¤]΄£¨ΡµΉ¨δ¥LªΊΐ³¥Ξµ{¦΅¨Ο¥Ξ΅H";
@@ -5974,7 +5974,7 @@ String STR_ASK_FOR_CONVERT_TO_BEZIER
     Text[ chinese_simplified ] = "ΔϊÒª½«Ρ΅ΦΠµΔ¶ΤΟσΧª»»³ΙÒ»ΈφΗϊΟίΒπ£Ώ";
     Text[ russian ] = "Οπεξαπΰηξβΰςό βϋδελεννϋι ξαϊεκς β κπθβσώ?";
     Text[ polish ] = "Czy przekszta³ciζ zaznaczony obiekt w krzywΉ?";
-    Text[ japanese ] = "‘I‘π‚µ‚½µΜήΌήªΈΔ‚π‹Θό‚Ι•Ο·‚µ‚ά‚·‚©?";
+    Text[ japanese ] = "‘I‘π‚µ‚½µΜήΌήªΈΔ‚π‹Θό‚Ι•Ο·‚µ‚ά‚·‚©B";
     Text[ greek ] = "Μετατροπή επιλεγμένου αντικειμένου σε καμπύλη;";
     Text[ korean ] = "Ό±ΕΓµΘ °³ΓΌΈ¦ °ξΌ±ΐΈ·Ξ Ί―Θ―ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z­n±NΏο¨ϊª«¥σΒΰ΄«¦¨¤@­Σ¦±½u΅H";
@@ -9646,7 +9646,7 @@ String STR_EFFECT_FAVOURITES
     Text [ spanish ] = "Favoritos" ;
     Text [ french ] = "Favoris" ;
     Text [ dutch ] = "Favorieten" ;
-    Text[ chinese_simplified ] = "ΚΥ²ΨΌΠ";
+    Text[ chinese_simplified ] = "ΚΥ²Ψ";
     Text[ russian ] = "Θηαπΰννϋε";
     Text[ polish ] = "Ulubione";
     Text[ japanese ] = "‚¨‹C‚Ι“ό‚θ";
@@ -9766,7 +9766,7 @@ String STR_EFFECT_OPEN_CLOSE
     Text[ chinese_simplified ] = "΄ςΏª/ΉΨ±Υ";
     Text[ russian ] = "Πΰρκπϋςό / Ηΰκπϋςό";
     Text[ polish ] = "Otwσrz / Zamknij";
-    Text[ japanese ] = "J‚­/•Β‚¶‚ι";
+    Text[ japanese ] = "J‚­E•Β‚¶‚ι";
     Text[ greek ] = "Άνοιγμα / Κλείσιμο";
     Text[ korean ] = "Ώ­±β / ΄έ±β";
     Text[ chinese_traditional ] = "¶}±Ò/Γφ³¬";
@@ -10264,7 +10264,7 @@ String STR_PUBLISH_NEXT
     Text [ ENGLISH ] = "Next" ;
     Text [ english_us ] = "Continue" ;
     Text [ italian ] = "Avanti" ;
-    Text [ spanish ] = "Siguiente" ;
+    Text [ spanish ] = "Avanzar" ;
     Text [ french ] = "Suivant" ;
     Text [ dutch ] = "Volgende" ;
     Text [ swedish ] = "Fortsδtt" ;
@@ -10581,7 +10581,7 @@ String STR_ASK_GALLERY_INSERT
     Text[ chinese_simplified ] = "ΔϊÒª½«ΥβΈφÒτΖµΌΣΘλ»­ΐΘ-ΦχΜβ£Ώ";
     Text[ russian ] = "Βϋ υξςθςε δξοξλνθςό Γΰλεπεώ ηβσκξμ?";
     Text[ polish ] = "Czy chcesz dodaζ dwiκk do galerii?";
-    Text[ japanese ] = "»³έΔή‚π·ή¬ΧΨ°Γ°Ο‚Ι‘}“ό‚µ‚Δ‚ΰ‚ζ‚λ‚µ‚Ά‚Ε‚·‚©?";
+    Text[ japanese ] = "»³έΔή‚π·ή¬ΧΨΓ°Ο‚Ι‘}“ό‚µ‚ά‚·‚©B";
     Text[ greek ] = "Θέλετε να εισαχθεί ο ήχος στο θέμα της Gallery;";
     Text[ korean ] = "»ηΏξµεΈ¦ °¶·―Έ® ΑΦΑ¦Ώ΅ Γί°΅ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_traditional ] = "±z­n±N³o­Σ­µΐW¥[¤Jµe΄Y¥DΓD΅H";
@@ -11962,7 +11962,7 @@ String STR_UNDO_APPLY_3D_FAVOURITE
     Text[ portuguese_brazilian ] = "Apply 3D favorite";
     Text[ japanese ] = "3D ‚π‚¨‹C‚Ι“ό‚θ‚Ι’Η‰Α";
     Text[ korean ] = "3£Δ Αρ°άΓ£±β ΐϋΏλ";
-    Text[ chinese_simplified ] = "ΚΉΣΓΘύΞ¬ΚΥ²ΨΌΠ";
+    Text[ chinese_simplified ] = "ΚΉΣΓΘύΞ¬ΚΥ²Ψ";
     Text[ chinese_traditional ] = "«ό©w 3D ³Μ·R";
     Text[ arabic ] = "ΚΨΘνή ΗαΞΥΗΖΥ ΛαΗΛνΙ ΗαΓΘΪΗΟ ΗαγυέΦαΙ";
     Text[ turkish ] = "Sύk kullanύlan 3B efekt uygula";
