@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 13:07:57 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
         {
             Reference< XColumnsSupplier> xTable;
             xNames->getByName(*pTabBegin) >>= xTable;
-            OSL_ENSHURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
+            OSL_ENSURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
             aRow[3] = *pTabBegin;
 
             Reference< XNameAccess> xColumns = xTable->getColumns();
@@ -285,7 +285,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
                     aRow[4] = *pBegin;
 
                     xColumns->getByName(*pBegin) >>= xColumn;
-                    OSL_ENSHURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
+                    OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
                     aRow[5] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
                     aRow[6] = ::comphelper::getString(xColumn->getPropertyValue(PROPERTY_TYPENAME));
                     aRow[7] = ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION));

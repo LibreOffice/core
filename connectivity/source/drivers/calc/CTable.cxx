@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:46:50 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
                     nIntTime /= 60;
                     aTime.Minutes = (sal_uInt16)( nIntTime % 60 );
                     nIntTime /= 60;
-                    OSL_ENSHURE( nIntTime < 24, "error in time calculation" );
+                    OSL_ENSURE( nIntTime < 24, "error in time calculation" );
                     aTime.Hours = (sal_uInt16) nIntTime;
                     rValue = aTime;
                 }
@@ -448,7 +448,7 @@ void lcl_SetValue( file::ORowSetValue& rValue, const Reference<XSpreadsheet>& xS
                     nIntTime /= 60;
                     aDateTime.Minutes = (sal_uInt16)( nIntTime % 60 );
                     nIntTime /= 60;
-                    OSL_ENSHURE( nIntTime < 24, "error in time calculation" );
+                    OSL_ENSURE( nIntTime < 24, "error in time calculation" );
                     aDateTime.Hours = (sal_uInt16) nIntTime;
 
                     ::Date aDate( rNullDate );
