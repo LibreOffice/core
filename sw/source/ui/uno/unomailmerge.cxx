@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:17:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ class DisposeHelper
 
 public:
     DisposeHelper() {}
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ~DisposeHelper();
 #else
     ~DisposeHelper()    { if (xC.is()) xC->dispose(); }
@@ -246,7 +246,7 @@ public:
     BOOL    SetInterface( uno::Reference< XInterface > &rxRef )  { return (xC = uno::Reference< XComponent >( rxRef, UNO_QUERY )).is(); }
 };
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 DisposeHelper::~DisposeHelper()
 {
     if (xC.is())
