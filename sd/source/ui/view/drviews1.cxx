@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 09:01:06 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,14 +379,15 @@ void DrawViewShell::SelectionHasChanged (void)
     {
         USHORT nObjBarId;
 
-        if (GetView()->GetContext() == SDRCONTEXT_POINTEDIT)
-            nObjBarId = RID_BEZIER_TOOLBOX;
-        else if (GetView()->GetContext() == SDRCONTEXT_GRAPHIC)
-            nObjBarId = RID_DRAW_GRAF_TOOLBOX;
-        else if (GetView()->GetContext() == SDRCONTEXT_TEXTEDIT)
-            nObjBarId = RID_DRAW_TEXT_TOOLBOX;  // #96124# Keep text bar when in textedit
-        else
-            nObjBarId = RID_DRAW_OBJ_TOOLBOX;
+        switch( pDrView->GetContext() )
+        {
+            case( SDRCONTEXT_POINTEDIT ): nObjBarId = RID_BEZIER_TOOLBOX; break;
+            case( SDRCONTEXT_GRAPHIC ): nObjBarId = RID_DRAW_GRAF_TOOLBOX; break;
+            case( SDRCONTEXT_TEXTEDIT ): nObjBarId = RID_DRAW_TEXT_TOOLBOX; break;
+            case( SDRCONTEXT_MEDIA ): nObjBarId = RID_DRAW_MEDIA_TOOLBOX; break;
+
+            default: nObjBarId = RID_DRAW_OBJ_TOOLBOX; break;
+        }
 
         GetObjectBarManager().SwitchObjectBar (nObjBarId);
     }
