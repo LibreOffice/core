@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-11 15:06:29 $
+ *  last change: $Author: pb $ $Date: 2002-04-11 09:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,14 @@
 
 // includes ******************************************************************
 
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
-
-#ifndef _IMAGE_HXX //autogen
+#ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
 #endif
+
+class INetURLObject;
 
 namespace svtools {
 
@@ -109,10 +110,18 @@ private:
     static String   GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
 
 public:
+    // depricated, because no high contrast mode
     static Image    GetImage( const INetURLObject& rURL, BOOL bBig = FALSE );
     static Image    GetFileImage( const INetURLObject& rURL, BOOL bBig = FALSE );
     static Image    GetImageNoDefault( const INetURLObject& rURL, BOOL bBig = FALSE );
     static Image    GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig = FALSE );
+
+    // now with high contrast mode
+    static Image    GetImage( const INetURLObject& rURL, BOOL bBig, BOOL bHighContrast );
+    static Image    GetFileImage( const INetURLObject& rURL, BOOL bBig, BOOL bHighContrast );
+    static Image    GetImageNoDefault( const INetURLObject& rURL, BOOL bBig, BOOL bHighContrast );
+    static Image    GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig, BOOL bHighContrast );
+
     static String   GetDescription( const INetURLObject& rObject );
     static String   GetFileDescription( const INetURLObject& rObject );
     static String   GetFolderDescription( const svtools::VolumeInfo& rInfo );

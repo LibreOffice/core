@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-11 15:10:03 $
+ *  last change: $Author: pb $ $Date: 2002-04-11 10:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #include "imagemgr.hxx"
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -122,9 +125,6 @@
 #define CONTENT_HELPER  ::utl::UCBContentHelper
 #define ASCII_STRING(s) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
 
-static ImageList* _pSmallImageList = NULL;
-static ImageList* _pBigImageList = NULL;
-
 struct SvtExtensionResIdMapping_Impl
 {
     char*   _pExt;
@@ -135,101 +135,101 @@ struct SvtExtensionResIdMapping_Impl
 
 static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
 {
-    "awk",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "bas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "bat",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP,
-    "bmk",   FALSE, STR_DESCRIPTION_BOOKMARKFILE,          0,
-    "bmp",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP,
-    "c",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "cfg",   FALSE, STR_DESCRIPTION_CFGFILE,               0,
-    "cmd",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP,
-    "cob",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "com",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP,
-    "cxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "dbf",   TRUE,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE,
-    "def",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "dll",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
-    "doc",   FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WORD,
-    "dxf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF,
-    "exe",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP,
-    "gif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF,
-    "h",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "hlp",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_HELP,
-    "hrc",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "htm",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
-    "html",  FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
-    "asp",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
-    "hxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "ini",   FALSE, STR_DESCRIPTION_CFGFILE,               0,
-    "java",  TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "jpeg",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG,
-    "jpg",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG,
-    "lha",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    { "awk",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "bas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "bat",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP },
+    { "bmk",   FALSE, STR_DESCRIPTION_BOOKMARKFILE,          0 },
+    { "bmp",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP },
+    { "c",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "cfg",   FALSE, STR_DESCRIPTION_CFGFILE,               0 },
+    { "cmd",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP },
+    { "cob",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "com",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP },
+    { "cxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "dbf",   TRUE,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE },
+    { "def",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "dll",   TRUE,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "doc",   FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WORD },
+    { "dxf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF },
+    { "exe",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP },
+    { "gif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF },
+    { "h",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "hlp",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_HELP },
+    { "hrc",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "htm",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "html",  FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "asp",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "hxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "ini",   FALSE, STR_DESCRIPTION_CFGFILE,               0 },
+    { "java",  TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "jpeg",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
+    { "jpg",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG },
+    { "lha",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
 #ifdef WNT
-    "lnk",   FALSE, 0,                                     0,
+    { "lnk",   FALSE, 0,                                     0 },
 #endif
-    "log",   TRUE,  STR_DESCRIPTION_LOGFILE,               0,
-    "lst",   TRUE,  STR_DESCRIPTION_LOGFILE,               0,
-    "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET,
-    "mml",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH,
-    "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD,
-    "pct",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT,
-    "pcx",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX,
-    "pl",    TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "png",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG,
-    "rar",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "sbl",   FALSE, 0,                                     IMG_MACROLIB,
-    "sch",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0,
-    "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW,
-    "sdb",   FALSE, 0,                                     IMG_DATABASE,
-    "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC,
-    "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS,
-    "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESSPACKED,
-    "sds",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART,
-    "sdw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER,
-    "sga",   FALSE, 0,                                     IMG_GALLERY,
-    "sgf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF,
-    "sgl",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC,
-    "sgv",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV,
-    "shtml", FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
-    "sim",   FALSE, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM,
-    "smf",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH,
-    "src",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
-    "svh",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_SVHELP,
-    "svm",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM,
-    "stc",   FALSE, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE,
-    "std",   FALSE, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE,
-    "sti",   FALSE, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE,
-    "stw",   FALSE, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE,
-    "sxc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC,
-    "sxd",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW,
-    "sxg",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC,
-    "sxi",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS,
-    "sxm",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH,
-    "sxs",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART,
-    "sxw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER,
-    "sys",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
-    "tif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF,
-    "tiff",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF,
-    "txt",   FALSE, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE,
-    "url",   FALSE, STR_DESCRIPTION_LINK,                  IMG_HTML,
-    "vor",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE,
-    "vxd",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
-    "wmf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF,
-    "xls",   FALSE, STR_DESCRIPTION_EXCEL_DOC,             IMG_EXCEL,
-    "xlt",   FALSE, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_EXCELTEMPLATE,
-    "uu",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "uue",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "z",     TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "zip",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "zoo",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "gz",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "ppt",   FALSE, STR_DESCRIPTION_POWERPOINT,            IMG_POWERPOINT,
-    "pot",   FALSE, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_POWERPOINTTEMPLATE,
-    "pps",   FALSE, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_POWERPOINT,
-    0, FALSE, 0, 0
+    { "log",   TRUE,  STR_DESCRIPTION_LOGFILE,               0 },
+    { "lst",   TRUE,  STR_DESCRIPTION_LOGFILE,               0 },
+    { "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET },
+    { "mml",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
+    { "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD },
+    { "pct",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT },
+    { "pcx",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX },
+    { "pl",    TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "png",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
+    { "rar",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "sbl",   FALSE, 0,                                     IMG_MACROLIB },
+    { "sch",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0 },
+    { "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
+    { "sdb",   FALSE, 0,                                     IMG_DATABASE },
+    { "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
+    { "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
+    { "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESSPACKED },
+    { "sds",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART },
+    { "sdw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
+    { "sga",   FALSE, 0,                                     IMG_GALLERY },
+    { "sgf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF },
+    { "sgl",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
+    { "sgv",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV },
+    { "shtml", FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML },
+    { "sim",   FALSE, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM },
+    { "smf",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
+    { "src",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
+    { "svh",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_SVHELP },
+    { "svm",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM },
+    { "stc",   FALSE, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE },
+    { "std",   FALSE, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE },
+    { "sti",   FALSE, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE },
+    { "stw",   FALSE, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE },
+    { "sxc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
+    { "sxd",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
+    { "sxg",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC },
+    { "sxi",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
+    { "sxm",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH },
+    { "sxs",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART },
+    { "sxw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER },
+    { "sys",   TRUE,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "tif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
+    { "tiff",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF },
+    { "txt",   FALSE, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE },
+    { "url",   FALSE, STR_DESCRIPTION_LINK,                  IMG_HTML },
+    { "vor",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE },
+    { "vxd",   TRUE,  STR_DESCRIPTION_SYSFILE,               0 },
+    { "wmf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF },
+    { "xls",   FALSE, STR_DESCRIPTION_EXCEL_DOC,             IMG_EXCEL },
+    { "xlt",   FALSE, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_EXCELTEMPLATE },
+    { "uu",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "uue",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "z",     TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "zip",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "zoo",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "gz",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
+    { "ppt",   FALSE, STR_DESCRIPTION_POWERPOINT,            IMG_POWERPOINT },
+    { "pot",   FALSE, STR_DESCRIPTION_POWERPOINT_TEMPLATE,   IMG_POWERPOINTTEMPLATE },
+    { "pps",   FALSE, STR_DESCRIPTION_POWERPOINT_SHOW,       IMG_POWERPOINT },
+    { 0, FALSE, 0, 0 }
 };
 
 #ifdef MAC
@@ -554,7 +554,7 @@ USHORT GetFolderDescriptionId_Impl( const String& rURL )
     return nRet;
 }
 
-Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig )
+Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 {
     if ( !bBig && IMG_FOLDER == nImageId )
         // return our new small folder image (256 colors)
@@ -562,17 +562,40 @@ Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig )
 
     ImageList* pList = NULL;
 
+    static ImageList* _pSmallImageList = NULL;
+    static ImageList* _pBigImageList = NULL;
+    static ImageList* _pSmallHCImageList = NULL;
+    static ImageList* _pBigHCImageList = NULL;
+
     if ( bBig )
     {
-        if ( !_pBigImageList )
-            _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
-        pList = _pBigImageList;
+        if ( bHighContrast )
+        {
+            if ( !_pBigHCImageList )
+                _pBigHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST ) );
+            pList = _pBigHCImageList;
+        }
+        else
+        {
+            if ( !_pBigImageList )
+                _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
+            pList = _pBigImageList;
+        }
     }
     else
     {
-        if ( !_pSmallImageList )
-            _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
-        pList = _pSmallImageList;
+        if ( bHighContrast )
+        {
+            if ( !_pSmallHCImageList )
+                _pSmallHCImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST ) );
+            pList = _pSmallHCImageList;
+        }
+        else
+        {
+            if ( !_pSmallImageList )
+                _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
+            pList = _pSmallImageList;
+        }
     }
 
     return pList->GetImage( nImageId );
@@ -663,19 +686,39 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
 
 Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig )
 {
-    USHORT nImage = GetImageId_Impl( rObject, sal_True );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImage( rObject, bBig, FALSE );
 }
 
 Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, BOOL bBig )
 {
-    USHORT nImage = GetImageId_Impl( rObject, sal_False );
-    DBG_ASSERT( nImage, "invalid ImageId" );
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetFileImage( rObject, bBig, FALSE );
 }
 
 Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, BOOL bBig )
+{
+    return GetImageNoDefault( rObject, bBig, FALSE );
+}
+
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig )
+{
+    return GetFolderImage( rInfo, bBig, FALSE );
+}
+
+Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig, BOOL bHighContrast )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_True );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+}
+
+Image SvFileInformationManager::GetFileImage( const INetURLObject& rObject, BOOL bBig, BOOL bHighContrast )
+{
+    USHORT nImage = GetImageId_Impl( rObject, sal_False );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
+}
+
+Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, BOOL bBig, BOOL bHighContrast )
 {
     USHORT nImage = GetImageId_Impl( rObject, sal_True );
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -683,10 +726,10 @@ Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject,
     if ( nImage == IMG_FILE )
         return Image();
 
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
 }
 
-Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig )
+Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo, BOOL bBig, BOOL bHighContrast )
 {
     USHORT nImage = IMG_FOLDER;
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -700,7 +743,7 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
     else if ( rInfo.m_bIsVolume )
         nImage = IMG_FIXEDDEV;
 
-    return GetImageFromList_Impl( nImage, bBig );
+    return GetImageFromList_Impl( nImage, bBig, bHighContrast );
 }
 
 String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
