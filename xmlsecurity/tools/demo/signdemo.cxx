@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signdemo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:15:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ int SAL_CALL main( int argc, char **argv )
         {
             fprintf( stdout, "[%d]\n%s\n",
                 i+1,
-                rtl::OUStringToOString( xSecurityEnvironment[i]->getSecurityEnvironmentInfo() , RTL_TEXTENCODING_ASCII_US ).getStr());
+                rtl::OUStringToOString( xSecurityEnvironment[i]->getSecurityEnvironmentInformation() , RTL_TEXTENCODING_ASCII_US ).getStr());
         }
 
         fprintf( stdout, "================================================================================\n" ) ;
