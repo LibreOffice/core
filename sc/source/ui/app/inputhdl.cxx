@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
+ *  last change: $Author: er $ $Date: 2000-10-17 12:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2459,7 +2459,7 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                     {
                         String aStrLoP;
 
-                        if ( bStartEdit && bCellHasPercentFormat && nChar >= '0' && nChar <= '9' )
+                        if ( bStartEdit && bCellHasPercentFormat && ((nChar >= '0' && nChar <= '9') || nChar == '-') )
                             aStrLoP = '%';
 
                         if (pTableView)
