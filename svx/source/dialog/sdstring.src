@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:46:55 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 23:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ String RID_SVXSTR_LINESTYLE
     Text[ chinese_traditional ] = "½u±ø¼Ë¦¡";
     Text[ arabic ] = "äãØ ÇáÎØ";
     Text[ greek ] = "Óôõë ãñáììŞò";
-    Text[ korean ] = "¼±ÀÇ À¯Çü";
+    Text[ korean ] = "¼± À¯Çü";
     Text[ turkish ] = "Çizgi biçimi";
     Text[ language_user1 ] = " ";
 };
@@ -586,7 +586,7 @@ String RID_SVXSTR_HATCH
     Text[ arabic ] = "äŞÔ";
     Text[ greek ] = "ÃñáììïóêéÜ";
     Text[ korean ] = "ÇØÄª";
-    Text[ turkish ] = "Desen";
+    Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
 };
 String RID_SVXSTR_DESC_HATCH
@@ -614,7 +614,7 @@ String RID_SVXSTR_DESC_HATCH
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ááäŞÔ åäÇ:";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå İíá üíïìá ãéá ôç ãñáììïóêéÜ:";
     Text[ korean ] = "¿©±â¿¡ ÇØÄªÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
-    Text[ turkish ] = "Desen için bir ad girin:";
+    Text[ turkish ] = "Tarama için bir ad girin:";
     Text[ language_user1 ] = " ";
 };
 String RID_SVXSTR_DEL_HATCH
@@ -642,7 +642,7 @@ String RID_SVXSTR_DEL_HATCH
     Text[ arabic ] = "ÍĞİ ÇáäŞÔ";
     Text[ greek ] = "ÄéáãñáöŞ ãñáììïóêéÜò";
     Text[ korean ] = "ÇØÄª »èÁ¦";
-    Text[ turkish ] = "Deseni sil";
+    Text[ turkish ] = "Taramayı sil";
     Text[ language_user1 ] = " ";
 };
 String RID_SVXSTR_ASK_DEL_HATCH
@@ -670,7 +670,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáäŞÔ¿";
     Text[ greek ] = "Èİëåôå íá äéáãñáöåß ç ãñáììïóêéÜ;";
     Text[ korean ] = "ÇØÄªÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
-    Text[ turkish ] = "Desen gerçekten silinsin mi?";
+    Text[ turkish ] = "Tarama gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
 };
 String RID_SVXSTR_ASK_CHANGE_HATCH
@@ -698,7 +698,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text[ arabic ] = "Êã ÊÛííÑ ÇáäŞÔ æáã íÊã ÍİÙå ÈÚÏ.\níãßäß ÊÛííÑ ÇáäŞÔ ÇáãÍÏÏ¡\nÃæ ÅÖÇİÉ äŞÔ ÌÏíÏ.";
     Text[ greek ] = "Ç ãñáììïóêéÜ ôñïğïğïéŞèçêå ÷ùñßò íá ãßíåé áğïèŞêåõóç. \nÌğïñåßôå íá áëëÜîåôå ôçí åğéëåãìİíç ãñáììïóêéÜ \nŞ íá ğñïóèİóåôå ìéá êáéíïıñéá ãñáììïóêéÜ.";
     Text[ korean ] = "ÇØÄªÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ÇØÄªÀ» º¯°æÇÏ°Å³ª \n»õ ÇØÄªÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
-    Text[ turkish ] = "Desen değiştirildi ancak kaydedilmedi.\nSeçili deseni değiştirebilir ya da\nyeni bir desen ekleyebilirsiniz.";
+    Text[ turkish ] = "Tarama değiştirildi ancak kaydedilmedi.\nSeçili deseni değiştirebilir ya da\nyeni bir tarama ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
 };
 String RID_SVXSTR_CHANGE
@@ -1023,7 +1023,7 @@ String RID_SVXSTR_LINEEND
     Text[ chinese_traditional ] = "½uºİ";
     Text[ arabic ] = "äåÇíÉ ÇáÎØ";
     Text[ greek ] = "Ôİëïò ãñáììŞò";
-    Text[ korean ] = "¼±ÀÇ ¾ç³¡";
+    Text[ korean ] = "¼± ³¡";
     Text[ turkish ] = "Çizgi ucu";
     Text[ language_user1 ] = " ";
 };
@@ -1051,7 +1051,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªº½uºİ¿é¤J¤@­Ó¦WºÙ¡G";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáäåÇíÉ ÇáÌÏíÏÉ ááÎØ åäÇ:";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå İíá üíïìá ãéá ôï íİï ôİëïò ôçò ãñáììŞò:";
-    Text[ korean ] = "¿©±â¿¡ »õ ¼±ÀÇ ¾ç³¡ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ korean ] = "¿©±â¿¡ »õ ¼± ³¡ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Yeni çizgi ucu için bir ad girin:";
     Text[ language_user1 ] = " ";
 };
@@ -1079,7 +1079,7 @@ String RID_SVXSTR_DEL_LINEEND
     Text[ chinese_traditional ] = "§R°£½uºİ";
     Text[ arabic ] = "ÍĞİ äåÇíÇÊ ÇáÎØæØ";
     Text[ greek ] = "ÄéáãñáöŞ ôİëïõò ãñáììŞò";
-    Text[ korean ] = "¼±ÀÇ ¾ç³¡ »èÁ¦";
+    Text[ korean ] = "¼± ³¡ »èÁ¦";
     Text[ turkish ] = "Çizgi ucunu sil";
     Text[ language_user1 ] = " ";
 };
@@ -1107,7 +1107,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó½uºİ¡H";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äåÇíÉ ÇáÎØ¿";
     Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ôï ôİëïò ôçò ãñáììŞò;";
-    Text[ korean ] = "¼±ÀÇ ¾ç³¡À» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "¼± ³¡À» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Çizgi ucu gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
 };
@@ -1133,7 +1133,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text[ chinese_traditional ] = "³o­Ó½uºİ¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C\n±z­n²{¦bÀx¦s³o­Ó½uºİ¡H";
     Text[ arabic ] = "Êã ÊÛííÑ äåÇíÉ ÇáÎØ æáã íÊã ÍİÙåÇ ÈÚÏ.\nåá ÊÑíÏ ÍİÙ äåÇíÉ ÇáÎØ ÇáÂä¿";
     Text[ greek ] = "Ôï ôİëïò ãñáììŞò ôñïğïğïéŞèçêå êáé äåí áğïèçêåıôçêå.\nÈİëåôå íá ôï áğïèçêåıóåôå ôşñá;";
-    Text[ korean ] = "¼±ÀÇ ¾ç³¡ÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù .\nÁö±İ ¼±ÀÇ ¾ç³¡À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "¼±ÀÇ ¾ç³¡ÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù .\nÁö±İ ¼± ³¡À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Çizgi ucu değiştirildi ancak kaydedilmedi.\nÇizgi ucunu şimdi kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
 };
@@ -1270,7 +1270,7 @@ String RID_SVXSTR_CYAN
     Text[ arabic ] = "ÊÑßæÇÒ";
     Text[ greek ] = "ÔïõñêïõÜæ";
     Text[ korean ] = "Ã»·Ï»ö";
-    Text[ turkish ] = "Türkuaz";
+    Text[ turkish ] = "Turkuaz";
     Text[ language_user1 ] = " ";
 };
 String RID_SVXSTR_RED
@@ -1859,7 +1859,7 @@ String RID_SVXSTR_GRAFMODE_GREYS
     Text[ polish ] = "Odcienie szaroœci";
     Text[ portuguese_brazilian ] = "Greyscales";
     Text[ japanese ] = "¸ŞÚ°½¹°Ù";
-    Text[ korean ] = "È¸»öÁ¶";
+    Text[ korean ] = "È¸»öµµ";
     Text[ chinese_simplified ] = "»Ò¶È";
     Text[ chinese_traditional ] = "¦Ç¶¥";
     Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
@@ -1906,7 +1906,7 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
     Text[ polish ] = "Znak wodny";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "“§‚©‚µ";
-    Text[ korean ] = "¿öÅÍ¸¶Å©";
+    Text[ korean ] = "Åõ¸í¡¡¹«´Ì";
     Text[ chinese_simplified ] = "Ë®Ó¡";
     Text[ chinese_traditional ] = "¥­·Æ";
     Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
@@ -1929,7 +1929,7 @@ String STR_INSERT_VIDEO_EXTFILTER_IVF
     Text[ polish ] = "Intel Indeo Video (*.ivf)";
     Text[ portuguese_brazilian ] = "Intel Indeo Video (*.ivf)";
     Text[ japanese ] = "Intel Indeo Video (*.ivf)";
-    Text[ korean ] = "Intel Indeo Video (*.ivf)";
+    Text[ korean ] = "Intel ÀÎµ¥¿À (*.ivf)";
     Text[ chinese_simplified ] = "Intel Indeo Video (*.ivf)";
     Text[ chinese_traditional ] = "Intel Indeo Video (*.ivf)";
     Text[ arabic ] = "Intel Indeo Video (*.ivf)";
@@ -1953,7 +1953,7 @@ String STR_INSERT_VIDEO_EXTFILTER_AVI
     Text[ polish ] = "Video dla Windows (*.avi)";
     Text[ portuguese_brazilian ] = "Video for Windows (*.avi)";
     Text[ japanese ] = "Video for Windows (*.avi)";
-    Text[ korean ] = "Video for Windows (*.avi)";
+    Text[ korean ] = "ºñµğ¿ÀÆ÷À©µµ (*.avi)";
     Text[ chinese_simplified ] = "Video for Windows (*.avi)";
     Text[ chinese_traditional ] = "Video for Windows (*.avi)";
     Text[ arabic ] = "İíÏíæ áÜ (*.avi) Windows";
@@ -1977,7 +1977,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MOV
     Text[ polish ] = "QuickTime Movie (*.mov)";
     Text[ portuguese_brazilian ] = "QuickTime Movie (*.mov)";
     Text[ japanese ] = "QuickTime Movie (*.mov)";
-    Text[ korean ] = "QuickTime Movie (*.mov)";
+    Text[ korean ] = "ÄüÅ¸ÀÓ¡¡¹«ºñ (*.mov)";
     Text[ chinese_simplified ] = "QuickTime Movie (*.mov)";
     Text[ chinese_traditional ] = "QuickTime Movie (*.mov)";
     Text[ arabic ] = "QuickTime Movie (*.mov)";
@@ -2001,7 +2001,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MPEG
     Text[ polish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ portuguese_brazilian ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ japanese ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
-    Text[ korean ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ korean ] = "MPEG - µ¿¿µ»ó¡¡Ç¥ÁØÈ­¡¡±×·ì (*.mpe;*.mpeg;*.mpg)";
     Text[ chinese_simplified ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ chinese_traditional ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ arabic ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
@@ -2125,7 +2125,7 @@ String RID_SVXSTR_BORDEAUX
     Text[ polish ] = "Bordowy";
     Text[ portuguese_brazilian ] = "Bordeaux";
     Text[ japanese ] = "‚¦‚ñ‚¶";
-    Text[ korean ] = "º¸¸£µµ»ö";
+    Text[ korean ] = "º¸¸£µµ";
     Text[ chinese_simplified ] = "ÉîºìÉ«";
     Text[ chinese_traditional ] = "²`¬õ¦â";
     Text[ arabic ] = "ÃÍãÑ ŞÇäò";
@@ -2296,7 +2296,7 @@ String RID_SVXSTR_TBLAFMT_3D
     Text[ polish ] = "3-W";
     Text[ portuguese_brazilian ] = "3D";
     Text[ japanese ] = "3D";
-    Text[ korean ] = "3Â÷¿ø";
+    Text[ korean ] = "3£Ä";
     Text[ chinese_simplified ] = "3 Î¬";
     Text[ chinese_traditional ] = "3 ·L";
     Text[ arabic ] = "ËáÇËí ÇáÃÈÚÇÏ";
@@ -2437,7 +2437,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ polish ] = "Waluta 3-W";
     Text[ portuguese_brazilian ] = "Currency 3D";
     Text[ japanese ] = "’Ê‰İ 3D";
-    Text[ korean ] = "ÅëÈ­ 3Â÷¿ø";
+    Text[ korean ] = "ÅëÈ­ 3£Ä";
     Text[ chinese_simplified ] = "»õ±Ò 3 Î¬";
     Text[ chinese_traditional ] = "³f¹ô 3 ºû";
     Text[ arabic ] = "ÚãáÉ ËáÇËíÉ ÇáÃÈÚÇÏ";
@@ -2510,7 +2510,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
     Text[ chinese_simplified ] = "»õ±Ò À¶ÓñÉ«";
     Text[ chinese_traditional ] = "³f¹ô ÂÅ¥É¦â";
     Text[ arabic ] = "ÚãáÉ ÊÑßæÇÒ";
-    Text[ turkish ] = "Para birimi türkuaz";
+    Text[ turkish ] = "Para birimi turkuaz";
 };
 String RID_SVXSTR_TBLAFMT_GRAY
 {
@@ -2625,7 +2625,7 @@ String RID_SVXSTR_TBLAFMT_TURQUOISE
     Text[ chinese_simplified ] = "À¶ÓñÉ«";
     Text[ chinese_traditional ] = "ÂÅ¥É¦â";
     Text[ arabic ] = "ÊÑßæÇÒ";
-    Text[ turkish ] = "Türkuaz";
+    Text[ turkish ] = "Turkuaz";
 };
 String RID_SVXSTR_TBLAFMT_YELLOW
 {
@@ -3241,7 +3241,7 @@ String RID_SVXSTR_HATCH0
     Text[ polish ] = "Czarny 45 stopni, rozci¹gniêty";
     Text[ portuguese_brazilian ] = "Black 45 Degrees Wide";
     Text[ japanese ] = "• 45“x •L";
-    Text[ korean ] = "°ËÀº»ö 45µµ ³ĞÀÌ";
+    Text[ korean ] = "°ËÀº»ö 45µµ¡¡³ĞÀº";
     Text[ chinese_simplified ] = "ºÚÉ« 45 ¶È(¿í¾à)";
     Text[ chinese_traditional ] = "¶Â¦â 45 «×¼e";
     Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ æÇÓÚ";
@@ -3264,7 +3264,7 @@ String RID_SVXSTR_HATCH1
     Text[ polish ] = "Czarny 45 stopni";
     Text[ portuguese_brazilian ] = "Black 45 Degrees";
     Text[ japanese ] = "• 45“x";
-    Text[ korean ] = "°ËÀº»ö 45µµ ³ĞÀÌ";
+    Text[ korean ] = "°ËÀº»ö 45µµ";
     Text[ chinese_simplified ] = "ºÚÉ« 45 ¶È";
     Text[ chinese_traditional ] = "¶Â¦â 45 «×";
     Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ";
@@ -3333,7 +3333,7 @@ String RID_SVXSTR_HATCH4
     Text[ polish ] = "Czerw. siatka 45 stopni";
     Text[ portuguese_brazilian ] = "Red Crossed 45 Degrees";
     Text[ japanese ] = "Ô È 45“x";
-    Text[ korean ] = "Àû»ö ¸Á 45µµ";
+    Text[ korean ] = "Àû»ö ³×Æ® 45µµ";
     Text[ chinese_simplified ] = "ºìÉ«Íø¸ñÏß 45 ¶È";
     Text[ chinese_traditional ] = "¬õºôª¬ 45 «×";
     Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 45 ÏÑÌÉ";
@@ -3356,7 +3356,7 @@ String RID_SVXSTR_HATCH5
     Text[ polish ] = "Czerw. siatka 0 stopni";
     Text[ portuguese_brazilian ] = "Red Crossed 0 Degrees";
     Text[ japanese ] = "Ô È 0“x";
-    Text[ korean ] = "Àû»ö ¸Á 0µµ";
+    Text[ korean ] = "Àû»ö ³×Æ® 0µµ";
     Text[ chinese_simplified ] = "ºìÉ«Íø¸ñÏß 0 ¶È";
     Text[ chinese_traditional ] = "¬õºô 0 «×";
     Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 0 ÏÑÌÉ";
@@ -3379,7 +3379,7 @@ String RID_SVXSTR_HATCH6
     Text[ polish ] = "Nieb. siatka 45 stopni";
     Text[ portuguese_brazilian ] = "Blue Crossed 45 Degrees";
     Text[ japanese ] = "Â È 45“x";
-    Text[ korean ] = "Ã»»ö ¸Á 45µµ";
+    Text[ korean ] = "Ã»»ö ³×Æ® 45µµ";
     Text[ chinese_simplified ] = "À¶É«Íø¸ñÏß 45 ¶È";
     Text[ chinese_traditional ] = "ÂÅºô 45 «×";
     Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ 45 ÏÑÌÉ";
@@ -3402,7 +3402,7 @@ String RID_SVXSTR_HATCH7
     Text[ polish ] = "Nieb. siatka 0 stopni";
     Text[ portuguese_brazilian ] = "Blue Crossed 0 Degrees";
     Text[ japanese ] = "Â È 0“x";
-    Text[ korean ] = "Ã»»ö ¸Á 0µµ";
+    Text[ korean ] = "Ã»»ö ³×Æ® 0µµ";
     Text[ chinese_simplified ] = "À¶É«Íø¸ñÏß 0 ¶È";
     Text[ chinese_traditional ] = "ÂÅºô 0 «×";
     Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ 0 ÏÑÌÉ";
@@ -3425,7 +3425,7 @@ String RID_SVXSTR_HATCH8
     Text[ polish ] = "Nieb. potrójna siatka 90 stopni";
     Text[ portuguese_brazilian ] = "Blue Triple 90 Degrees";
     Text[ japanese ] = "Â 3–{È 90“x";
-    Text[ korean ] = "Ã»»ö 3Áß¸Á 90µµ";
+    Text[ korean ] = "Ã»»ö 3Áß³×Æ® 90µµ";
     Text[ chinese_simplified ] = "À¶É«ÈıÖØÍø¸ñÏß 90 ¶È";
     Text[ chinese_traditional ] = "ÂÅ¦â¤Tºô 90 «×";
     Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ ËáÇËíÉ 90 ÏÑÌÉ";
@@ -3583,7 +3583,7 @@ String RID_SVXSTR_BMP0
     Text[ polish ] = "Pusty";
     Text[ portuguese_brazilian ] = "Blank";
     Text[ japanese ] = "‹ó”’";
-    Text[ korean ] = "¹éÁö";
+    Text[ korean ] = "°ø¹é";
     Text[ chinese_simplified ] = "¿Õ°×";
     Text[ chinese_traditional ] = "ªÅ¥Õ";
     Text[ arabic ] = "İÇÑÛ";
@@ -3905,7 +3905,7 @@ String RID_SVXSTR_BMP14
     Text[ polish ] = "Plecionka";
     Text[ portuguese_brazilian ] = "Pattern";
     Text[ japanese ] = "–ƒD•¨";
-    Text[ korean ] = "Æí¹°";
+    Text[ korean ] = "¿«¾îÂ§";
     Text[ chinese_simplified ] = "±àÖ¯Îï";
     Text[ chinese_traditional ] = "½sÂ´ª«";
     Text[ arabic ] = "ÔÈßÉ";
@@ -4243,7 +4243,7 @@ String RID_SVXSTR_DASH5
     Text[ polish ] = "Cienkie kreski (zmienne)";
     Text[ portuguese_brazilian ] = "Fine Dashed (var)";
     Text[ japanese ] = "×‚©‚¢”jü(‰Â•Ï)";
-    Text[ korean ] = "°¡´Â ´ë½Ã(À¯µ¿Àû)";
+    Text[ korean ] = "°¡´Â ´ë½Ã(°¡º¯Àû)";
     Text[ chinese_simplified ] = "Ï¸»®Ïß (¿É±ä)";
     Text[ chinese_traditional ] = "²ÓÂI¦E½u(¥iÅÜ)";
     Text[ arabic ] = "ÔõÑØ ÑİíÚÉ (ãÊÛíÑÉ)";
@@ -4266,7 +4266,7 @@ String RID_SVXSTR_DASH6
     Text[ polish ] = "3 kreski 3 kropki (zmienne)";
     Text[ portuguese_brazilian ] = "3 Dashes 3 Dots (var)";
     Text[ japanese ] = "O”jüO“_½ü(‰Â•Ï)";
-    Text[ korean ] = "3 ´ë½Ã 3 Á¡ (À¯µ¿Àû)";
+    Text[ korean ] = "3 ´ë½Ã 3 Á¡ (°¡º¯Àû)";
     Text[ chinese_simplified ] = "3 »® 3 µã (¿É±ä)";
     Text[ chinese_traditional ] = "3 ¦E½u 3 ÂI(¥iÅÜ)";
     Text[ arabic ] = "3 ÔõÑØ 3 äŞÇØ (ãÊÛíÑÉ)";
@@ -4289,7 +4289,7 @@ String RID_SVXSTR_DASH7
     Text[ polish ] = "Bardzo delikatne kropki (zmienne)";
     Text[ portuguese_brazilian ] = "Ultrafine Dotted (var)";
     Text[ japanese ] = "‹É×‚Ì“_ü(‰Â•Ï)";
-    Text[ korean ] = "¹Ì¼¼ÇÑ Á¡(À¯µ¿Àû)";
+    Text[ korean ] = "¹Ì¼¼ÇÑ Á¡(°¡º¯Àû)";
     Text[ chinese_simplified ] = "³¬Ï¸µãÏß (¿É±ä)";
     Text[ chinese_traditional ] = "¶W²ÓÂI(¥iÅÜ)";
     Text[ arabic ] = "äŞÇØ ÑİíÚÉ ÌÏÇğ (ãÊÛíÑÉ)";
