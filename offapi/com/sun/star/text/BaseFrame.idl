@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BaseFrame.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-06 15:56:24 $
+ *  last change: $Author: os $ $Date: 2001-03-12 12:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef __com_sun_star_table_ShadowFormat_idl__
 #include <com/sun/star/table/ShadowFormat.idl>
 #endif
+#ifndef __com_sun_star_text_XTextFrame_idl__
+#include <com/sun/star/text/XTextFrame.idl>
+#endif
 
 //=============================================================================
 
@@ -137,6 +140,12 @@ service BaseFrame
         <const>TextContentAnchorType::AT_PAGE</const>.</p>
      */
     [property] short AnchorPageNo;
+    //-------------------------------------------------------------------------
+    /** contains the text frame the current frame is anchored to.
+        <p> The value is valid only if the
+        AnchorType is <const>TextContentAnchorType::AT_FRAME</const>.</p>
+     */
+    [property] com::sun::star::text::XTextFrame AnchorFrame;
     //-------------------------------------------------------------------------
     /** contains the color of the background of the object.
      */
