@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include "docfunc.hxx"
 #include "attrib.hxx"
 #include "chgtrack.hxx"
+#include "transobj.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -906,7 +907,11 @@ void __EXPORT ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 //? Extra-Flags sichern ?
 
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->PasteFromClip( nFlags );
+    {
+        ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard();
+        if (pOwnClip)
+            ((ScTabViewTarget&)rTarget).GetViewShell()->PasteFromClip( nFlags, pOwnClip->GetDocument() );
+    }
 }
 
 BOOL __EXPORT ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
