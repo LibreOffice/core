@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:35:54 $
+ *  last change: $Author: dl $ $Date: 2001-05-15 08:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@
 #include "sdmod.hxx"
 #include "sddll.hxx"
 #include "sdresid.hxx"
-#include "docdlg.hxx"
 #include "optsitem.hxx"
 #include "docshell.hxx"
 #include "drawdoc.hxx"
@@ -165,49 +164,6 @@ SdModule::~SdModule()
 {
     delete pSearchItem;
 }
-
-
-/*************************************************************************
-|*
-|* DocFileDialog
-|*
-\************************************************************************/
-
-SfxFileDialog* SdModule::CreateDocFileDialog( ULONG nBits,
-                                              const SfxObjectFactory& rFact,
-                                              const SfxItemSet* pSet )
-{
-    SfxFileDialog*   pDlg;
-    SfxItemSet aSet( GetPool(),
-                     SID_DOC_READONLY, SID_DOC_READONLY,
-                     SID_PASSWORD, SID_PASSWORD,
-                     SID_LOAD_LAYOUT, SID_LOAD_LAYOUT,
-                     SID_FILE_FILTEROPTIONS, SID_FILE_FILTEROPTIONS,
-                     SID_FILE_NAME, SID_FILE_NAME, 0 );
-
-    if( pSet )
-        aSet.Put( *pSet );
-
-    if ( WB_SAVEAS == ( nBits & WB_SAVEAS ) )
-        nBits |= SFXWB_PASSWORD;
-    else
-    {
-        if ( SFXWB_INSERT != ( nBits & SFXWB_INSERT ) )
-            nBits |= SFXWB_READONLY;
-    }
-
-    // bei Open und SaveAs einen eigenen Dialog mit Filter-Button
-    // verwenden;
-    // bei SaveAs eigenen Dialog mit Checkbox verwenden
-    if ( WB_SAVEAS == ( nBits & WB_SAVEAS ) )
-        pDlg = new SdSaveAsDialog( NULL, nBits, rFact, aSet );
-    else
-        pDlg = new SdOpenDialog( NULL, nBits, rFact, aSet );
-
-
-    return pDlg;
-}
-
 
 
 /*************************************************************************

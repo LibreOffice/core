@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-11 09:13:01 $
+ *  last change: $Author: dl $ $Date: 2001-05-15 08:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,9 +146,6 @@ public:
     virtual void            Free();
 
     virtual void            FillStatusBar(StatusBar& rBar);
-    virtual SfxFileDialog*  CreateDocFileDialog( ULONG nBits,
-                                                 const SfxObjectFactory& rFact,
-                                                 const SfxItemSet* pSet );
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
     SvStorageStreamRef      GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );

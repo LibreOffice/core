@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:29:02 $
+ *  last change: $Author: dl $ $Date: 2001-05-15 08:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,6 @@
 #include "slidchld.hxx"
 //#include "3dchld.hxx"
 #include "app.hrc"
-#include "docdlg.hxx"
 #include "drviewsh.hxx"
 #include "grviewsh.hxx"
 

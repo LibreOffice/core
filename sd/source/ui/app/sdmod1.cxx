@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 16:24:45 $
+ *  last change: $Author: dl $ $Date: 2001-05-15 08:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,9 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
-
-#pragma hdrstop
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 
 #include <svx/dialogs.hrc>
 #include <offmgr/ofaids.hrc>
@@ -102,10 +103,6 @@
 #endif
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
-#endif
-
-#ifndef _SFXFILEDLG_HXX //au
-#include <sfx2/iodlg.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
@@ -327,12 +324,9 @@ void SdModule::Execute(SfxRequest& rReq)
                         String aFileToOpen = aDocPath;
                         if(aFileToOpen.Len() == 0)
                         {
-                            SfxFileDialog* pDlg = CreateDocFileDialog(WB_OPEN, SdDrawDocShell::Factory(), NULL );
-                            if( pDlg->Execute() != RET_CANCEL )
-                            {
-                                aFileToOpen = pDlg->GetPath();
-                            }
-                            delete pDlg;
+                            sfx2::FileDialogHelper aFileDlg( WB_OPEN, SdDrawDocShell::Factory() );
+                            if ( aFileDlg.Execute() == ERRCODE_NONE )
+                                aFileToOpen = aFileDlg.GetPath();
                         }
 
                         delete pPilotDlg;
