@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-29 09:28:06 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 10:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <io.h>
 #endif
 
+#include <string.h>
 #if defined(UNX)
 #include <stdlib.h>
 #include <unistd.h>
