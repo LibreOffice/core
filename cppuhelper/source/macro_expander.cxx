@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 10:12:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ static Sequence< OUString > const & s_get_service_names()
 typedef ::cppu::WeakComponentImplHelper3<
     util::XMacroExpander, lang::XServiceInfo, lang::XInitialization > t_uno_impl;
 
-#if defined(MACOSX)
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 // Initialize static template data here to break circular reference to libstatic
 
 cppu::ClassData3 cppu::WeakComponentImplHelper3< com::sun::star::util::XMacroExpander, com::sun::star::lang::XServiceInfo, com::sun::star::lang::XInitialization >::s_aCD(1);
