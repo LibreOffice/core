@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:02:09 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 10:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,19 +910,19 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
         const OUString& rName = pValues->Name;
         const uno::Any rValue = pValues->Value;
 
-        if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_top) ) )
+        if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaTop") ) )
         {
             rValue >>= aVisArea.Y;
         }
-        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_left) ) )
+        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaLeft") ) )
         {
             rValue >>= aVisArea.X;
         }
-        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_width) ) )
+        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaWidth") ) )
         {
             rValue >>= aVisArea.Width;
         }
-        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_visible_area_height) ) )
+        else if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("VisibleAreaHeight") ) )
         {
             rValue >>= aVisArea.Height;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 14:27:54 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 10:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2131,7 +2131,7 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     beans::PropertyValue* pProps = rProps.getArray();
     if(pProps)
     {
-        SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, sXML_view_settings, sal_True, sal_True);
+//      SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, sXML_view_settings, sal_True, sal_True);
 
         uno::Reference< beans::XPropertySet > xPropSet( GetModel(), uno::UNO_QUERY );
         if( !xPropSet.is() )
@@ -2145,13 +2145,13 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
 */
 
         sal_uInt16 i = 0;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_top));
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaTop"));
         pProps[i++].Value <<= aVisArea.Y;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_left));
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaLeft"));
         pProps[i++].Value <<= aVisArea.X;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_width));
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaWidth"));
         pProps[i++].Value <<= aVisArea.Width;
-        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible_area_height));
+        pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaHeight"));
         pProps[i++].Value <<= aVisArea.Height;
     }
 }
