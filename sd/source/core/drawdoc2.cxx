@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:29:37 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ void SdDrawDocument::UpdatePageObjectsInNotes(USHORT nStartPos)
                     DBG_ASSERTWARNING(nPage > 1, "Seitenobjekt darf nicht Handzettel darstellen");
 
                     if (nStartPos > 0 && nPage > 1)
-                        ((SdrPageObj*)pObj)->SetPageNum(nPage - 1);
+                        ((SdrPageObj*)pObj)->SetReferencedPage(GetPage(nPage - 1));
                 }
             }
         }
