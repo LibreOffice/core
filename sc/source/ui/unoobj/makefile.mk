@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-11 09:57:39 $
+#   last change: $Author: obo $ $Date: 2004-08-11 09:08:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,8 @@ SLO1FILES =  \
         $(SLO)$/addruno.obj \
         $(SLO)$/listenercalls.obj \
         $(SLO)$/cellvaluebinding.obj \
-        $(SLO)$/celllistsource.obj
+        $(SLO)$/celllistsource.obj \
+        $(SLO)$/warnpassword.obj
 
 SLO2FILES = \
     $(SLO)$/scdetect.obj								\
