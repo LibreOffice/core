@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-31 14:23:16 $
+ *  last change: $Author: ama $ $Date: 2002-02-05 15:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
 #endif
 #ifndef _NODE_HXX //autogen
 #include <node.hxx>
@@ -1336,14 +1339,13 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     if( rThis.IsInDocBody() )
     {
         const SwPageFrm* pPg = rThis.FindPageFrm();
-        long nGrid, nRuby, nLines;
-        BOOL bLower, bCell;
-        if( pPg && pPg->GetGrid( nGrid, nRuby, nLines, bLower, bCell ) )
+        GETGRID( pPg )
+        if( pGrid )
         {
             const SwFrm* pBody = pPg->FindBodyCont();
             if( pBody )
             {
-                long nSum = nGrid + nRuby;
+                long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
                 SWRECTFN( (&rThis) )
                 SwTwips nOrig = (pBody->*fnRect->fnGetPrtTop)();
                 SwTwips nTop = (rThis.Frm().*fnRect->fnGetTop)();
