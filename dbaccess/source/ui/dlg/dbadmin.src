@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:24:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2901,7 +2901,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ portuguese ] = "É necessário guardar a fonte de dados para poder gerir os respectivos $objects$.\nNo entanto, os parâmetros actuais não permitem guardar as modificações (há conflito de nomes).\n\nNão é possível gerir $objects$ enquanto estes conflitos não forem resolvidos e as modificações guardadas.";
     Message[ russian ] = "Äëÿ óïğàâëåíèÿ $objects$ èñòî÷íèêà äàííûõ íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ñîõğàíèòü èçìåíåíèÿ (èç-çà êîíôëèêòà èìåí).\n\nÄî òåõ ïîğ, ïîêà ıòîò êîíôëèêò íå óñòğàíåí, à èçìåíåíèÿ íå ñîõğàíåíû, óïğàâëåíèå $objects$ íåâîçìîæíî.";
     Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò äåäïìİíùí, áõôŞ èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÏé ôñİ÷ïõóåò åéóáãùãİò äåí åğéôñİğïõí üìùò ôçí áğïèŞêåõóç ôùí áëëáãşí åğåéäŞ õğÜñ÷ïõí äéåíİîåéò ïíïìÜôùí.\n\nÇ äéá÷åßñéóç ôùí åñùôçìÜôùí äåí åßíáé äõíáôŞ üóï óõíå÷ßæïõí íá õğÜñ÷ïõí áõôİò ïé äéåíİîåéò êáé äåí ìğïñïıí íá áğïèçêåõôïıí ïé áëëáãİò.";
-    Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de $objects$  niet beheren zolang deze moeilijkheden niet zijn opgelost en de wijzigingen niet werden opgeslagen.";
+    Message[ dutch ] = "Om de STR_QUERY_OBJECTS van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de STR_DOCUMENT_OBJECTS niet beheren zolang deze moeilijkheden niet zijn opgelost en de wijzigingen niet werden opgeslagen.";
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nLes paramètres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les modifications n'auront pas été enregistrées, la gestion des $objects$ sera impossible.";
     Message[ spanish ] = "Para administrar $objects$ de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar $objects$ mientras no solucione estos conflictos y mientras no guarde las modificaciones.";
     Message[ italian ] = "Per gestire i contenuti ($objects$) di una sorgente dati è necessario prima salvare la sorgente dati.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i nomi e salvato le modifiche sarà impossibile gestire $objects$.";
@@ -2914,7 +2914,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ chinese_simplified ] = "Òª¹ÜÀíÒ»¸ö×ÊÁÏÔ´µÄ $objects$ £¬±ØĞëÏÈ´¢´æËü¡£\nµ«ÊÇÏÖÔÚÄú²»¿ÉÒÔ´æÅÌ¸ü¸ÄµÄÄÚÈİ£¬ÒòÎª´æÔÚÒ»¸öÃû³Æ³åÍ»µÄ´íÎó¡£\n\nÔÚÅÅ³ı´íÎóÖ®Ç°ÄúÎŞ·¨´æÅÌ¸ü¸Ä $objects$ ¡£";
     Message[ chinese_traditional ] = "­nºŞ²z¤@­Ó¸ê®Æ·½ªº $objects$ ¡A¥²¶·¥ıÀx¦s¥¦¡C\n¦ı¬O²{¦b±z¤£¥i¥HÀx¦sÅÜ§ó¤º®e¡A¦]¬°¦s¦b¦WºÙ¨R¬ğ¿ù»~¡C\n\n¦b±Æ°£¿ù»~¤§«e±zµLªk¦sÀxÅÜ§ó $objects$ ¡C";
     Message[ turkish ] = "To administrate the queries of a data source, it must be saved.\nBut, the current settings do not allow to save the changes (there are name conflicts).\n\nYou won't be able to administrate the queries until these conflicts are resolved and the changes are saved.";
-    Message[ arabic ] = "áÅÏÇÑÉ ÇÓÊİÓÇÑÇÊ ãÕÏÑ ÈíÇäÇÊ¡ íÌÈ Ãä ÊŞæã ÃæáÇğ ÈÍİÙ åĞÇ ÇáãÕÏÑ¡\nÅáÇ Ãä ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ áÇ ÊÓãÍ ÈÍİÙ ÇáÊÛííÑÇÊ (ÈÓÈÈ æÌæÏ ÊÚÇÑÖ İí ÇáÃÓãÇ";
+    Message[ arabic ] = "áÅÏÇÑÉ $objects$ áãÕÏÑ ÈíÇäÇÊ ãÇ¡ íÌÈ Ãä ÊŞæã ÃæáÇğ ÈÍİÙ åĞÇ ÇáãÕÏÑ¡\nÅáÇ Ãä ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ áÇ ÊÓãÍ ÈÍİÙ ÇáÊÛííÑÇÊ (ÈÓÈÈ æÌæÏ ÊÚÇÑÖ İí ÇáÃÓãÇÁ).\n\náÇ íãßäß ÅÏÇÑÉ $objects$ ÅáÇ ÈÚÏ Íá åĞÇ ÇáÊÚÇÑÖ¡ æÍİÙ ÇáÊÛííÑÇÊ.";
     Message[ finnish ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\nAllerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\nSie können die $objects$ nicht administrieren, solange diese Konflikte nicht gelöst sind und die Änderungen gespeichert wurden.";
     Message[ catalan ] = "Para administrar consultas de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar las consultas mientras no solucione estos conflictos y mientras no guarde las modificaciones.";
 };
@@ -3217,6 +3217,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.56  2001/06/13 22:24:42  kz
+ *  Merge SRC633: 14.06.01 - 00:24:55
+ *
  *  Revision 1.55  2001/06/08 22:04:38  rt
  *  Merge SRC633: 09.06.01 - 00:05:04
  *
@@ -3273,6 +3276,7 @@ String STR_ADDRESSBOOK_LDAP
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
