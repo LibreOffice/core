@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:21:49 $
+ *  last change: $Author: obo $ $Date: 2000-12-04 10:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1857,7 +1857,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ chinese_simplified ] = "´íÎóµÄ¿ÚÁî¡£";
     MESSAGE[ russian ] = "Îøèáêà â ïàğîëå.";
     MESSAGE[ polish ] = "Nieprawid³owe has³o.";
-    MESSAGE[ japanese ] = "³‚µ‚­‚È‚¢Êß½Ü°ÄŞ";
+    MESSAGE[ japanese ] = "Êß½Ü°ÄŞ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
     MESSAGE[ chinese_traditional ] = "±K½XµL®Ä¡C";
     MESSAGE[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÇáÍÉ.";
     MESSAGE[ dutch ] = "Wachtwoord niet correct.";
@@ -2551,7 +2551,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
     Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?";
     Message[ chinese_simplified ] = "³·ÏûÃüÁî¹¦ÄÜĞèÒªºÜ¶àµÄÄÚ´æ¡£\nÄúÒªÊ§»î³·ÏûÃüÁî¹¦ÄÜÂğ£¿";
     Message[ greek ] = "Ç åêôİëåóç áõôŞò ôçò åíİñãåéáò áğáéôåß ìåãÜëç ğïóüôçôá ìíŞìçò.\nÈİëåôå íá áêõñşóåôå ôçí áíáßñåóç;";
-    Message[ korean ] = "ÀÌ ÀÛµ¿À» Ãë¼Ò¸¦ À§ÇÏ¿© ´ë¿ë·®ÀÇ ¸Ş¸ğ¸®°¡ ¿ä±¸µË´Ï´Ù.\n½ÇÇàÃë¼Ò¸¦ Ãë¼ÒÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ÀÌ ÀÛµ¿À» ½ÇÇàÃë¼ÒÇÏ±â À§ÇØ¼­´Â ´ë¿ë·®ÀÇ ¸Ş¸ğ¸®°¡ ¿ä±¸µË´Ï´Ù.\n½ÇÇàÃë¼Ò¸¦ Ãë¼ÒÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bu işlemde geri alma için büyük miktarda bellek gerekiyor.\nGeri alma işlevini kapatmak istiyor musunuz?";
     Message[ language_user1 ] = " ";
 };
@@ -2705,7 +2705,7 @@ String STR_REGION_DEFNAME
     Text[ dutch ] = "Bereik";
     Text[ chinese_simplified ] = "ÇøÓò";
     Text[ greek ] = "Åíüôçôá";
-    Text[ korean ] = "±¸¿ª";
+    Text[ korean ] = "¿µ¿ª";
     Text[ turkish ] = "Bölüm";
     Text[ language_user1 ] = " ";
 };
@@ -2868,7 +2868,7 @@ String STR_FDLG_TEMPLATE_BUTTON
     Text[ chinese_simplified ] = "ÑùÊ½";
     Text[ russian ] = "Øàáëîí";
     Text[ polish ] = "Szablon";
-    Text[ japanese ] = "ÃİÌßÚ°Ä";
+    Text[ japanese ] = "½À²Ù";
     Text[ chinese_traditional ] = "¼Ë¦¡";
     Text[ arabic ] = "äãØ";
     Text[ dutch ] = "Sjabloon";
@@ -2895,7 +2895,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ chinese_simplified ] = "µ±Ç°µÄÑùÊ½£º ";
     Text[ russian ] = "Òåêóùèé øàáëîí:  ";
     Text[ polish ] = "Aktualny szablon  ";
-    Text[ japanese ] = "ì‹Æ’†‚ÌÃİÌßÚ°ÄF ";
+    Text[ japanese ] = "Œ»İ‚Ì½À²ÙF ";
     Text[ chinese_traditional ] = "·í«eªº¼Ë¦¡¡G ";
     Text[ arabic ] = "ÇáäãØ ÇáÍÇáí: ";
     Text[ dutch ] = "Actuele sjabloon  ";
