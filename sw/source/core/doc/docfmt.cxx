@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:53:38 $
+ *  last change: $Author: os $ $Date: 2004-09-16 15:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1677,7 +1677,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
                                 fnCopyFmt, rDfltFmt );
 
     // erzeuge das Format und kopiere die Attribute
-    SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent );
+    SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, sal_False );
     pNewFmt->SetAuto( rFmt.IsAuto() );
     pNewFmt->CopyAttrs( rFmt, TRUE );           // kopiere Attribute
 
@@ -1837,7 +1837,7 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
                 MakeCondTxtFmtColl( pSrc->GetName(), (SwTxtFmtColl*)&rDfltFmt );
             else
-                (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt );
+                (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt, sal_False );
         }
     }
 
