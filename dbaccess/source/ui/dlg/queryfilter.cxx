@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-04 11:24:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,8 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         }
         else if(eColumnSearch == ColumnSearch::BASIC)
         {
-            for(xub_StrLen i=0;i<6;i++)
+            xub_StrLen i;
+            for( i = 0; i < 6; i++ )
                 pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
             for(i=8;i<aSTR_COMPARE_OPERATORS.GetTokenCount();i++)
                 pComp->InsertEntry(aSTR_COMPARE_OPERATORS.GetToken(i));
