@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:28:56 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 07:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ italian ] = "Area" ;
                 Text [ portuguese_brazilian ] = "Preenchimento" ;
                 Text [ portuguese ] = "Preenchimento" ;
-                Text [ finnish ] = "~Täytä" ;
+                Text [ finnish ] = "Alue" ;
                 Text [ danish ] = "Flade" ;
                 Text [ french ] = "Remplissage" ;
                 Text [ swedish ] = "Yta" ;
@@ -172,6 +172,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ turkish ] = "Gölge";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sombra";
+                Text[ finnish ] = "Varjo ";
             };
             PageItem
             {
@@ -197,6 +198,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ arabic ] = "ÔÝÇÝíÉ";
                 Text[ turkish ] = "Saydamlýk";
                 Text[ catalan ] = "Transparencia";
+                Text[ finnish ] = "Läpikuultavuus";
             };
             PageItem
             {
@@ -236,7 +238,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ italian ] = "Rientro e spaziatura" ;
                 Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -337,7 +339,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 Text [ italian ] = "Area" ;
                 Text [ portuguese_brazilian ] = "Preenchimento" ;
                 Text [ portuguese ] = "Preenchimento" ;
-                Text [ finnish ] = "~Täytä" ;
+                Text [ finnish ] = "Alue" ;
                 Text [ danish ] = "Flade" ;
                 Text [ french ] = "Remplissage" ;
                 Text [ swedish ] = "Yta" ;
@@ -411,7 +413,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ italian ] = "Rientro e spaziatura" ;
                 Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -456,6 +458,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ turkish ] = "Madde iþaretleri";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Viñetas";
+                Text[ finnish ] = "Luettelomerkit";
             };
             PageItem
             {
@@ -482,6 +485,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
                 Text[ catalan ] = "Tipo de numeración";
+                Text[ finnish ] = "Numerointityyppi";
             };
             PageItem
             {
@@ -508,6 +512,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Imágenes";
+                Text[ finnish ] = "Kuvat";
             };
             PageItem
             {
@@ -534,6 +539,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Opciones";
+                Text[ finnish ] = "Mukauta";
             };
         };
     };
