@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:07:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,8 @@ XMLPropertyMapEntry aXMLAdditionalTextDefaultsMap[] =
 
     // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
     MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION | MID_FLAG_NO_PROPERTY_IMPORT, 0 ),
+
+    MP_ED( "FontIndependentLineSpacing", STYLE, FONT_INDEPENDENT_LINE_SPACING, XML_TYPE_BOOL, 0 ),
 
     M_END()
 };
