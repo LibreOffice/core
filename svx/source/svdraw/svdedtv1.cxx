@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 11:02:15 $
+ *  last change: $Author: cl $ $Date: 2002-10-07 15:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,6 +749,27 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             }
         }
 #endif
+
+        // #103836# if the user thets character attributes to the complete shape,
+        //          we want to remove all hard set character attributes with same
+        //          which ids from the text. We do that later but here we remember
+        //          all character attribute which id's that are set.
+        std::vector<sal_uInt16> aCharWhichIds;
+        {
+            SfxItemIter aIter(rAttr);
+            const SfxPoolItem* pItem=aIter.FirstItem();
+            while( pItem!=NULL )
+            {
+                if (!IsInvalidItem(pItem))
+                {
+                    sal_uInt16 nWhich = pItem->Which();
+                    if (nWhich>=EE_CHAR_START && nWhich<=EE_CHAR_END)
+                        aCharWhichIds.push_back( nWhich );
+                }
+                pItem=aIter.NextItem();
+            }
+        }
+
         // Joe, 2.7.98: Damit Undo nach Format.Standard auch die Textattribute korrekt restauriert
         BOOL bHasEEItems=SearchOutlinerItems(rAttr,bReplaceAll);
         XubString aStr;
@@ -786,24 +807,29 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
         SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
         aAttr.Put(rAttr, TRUE);
 
-        for (ULONG nm=0; nm<nMarkAnz; nm++) {
+        for (ULONG nm=0; nm<nMarkAnz; nm++)
+        {
             SdrMark* pM=aMark.GetMark(nm);
+            SdrObject* pObj = pM->GetObj();
 
             // new geometry undo
             if(bPossibleGeomChange)
             {
                 // save position and size of obect, too
-                AddUndo(new SdrUndoGeoObj(*pM->GetObj()));
+                AddUndo(new SdrUndoGeoObj(*pObj));
             }
 
             // add attribute undo
-            AddUndo(new SdrUndoAttrObj(*pM->GetObj(),FALSE,bHasEEItems || bPossibleGeomChange));
+            AddUndo(new SdrUndoAttrObj(*pObj,FALSE,bHasEEItems || bPossibleGeomChange));
 
-            SdrBroadcastItemChange aItemChange(*pM->GetObj());
+            SdrBroadcastItemChange aItemChange(*pObj);
             if(bReplaceAll)
-                pM->GetObj()->ClearItem();
-            pM->GetObj()->SetItemSet(aAttr);
-            pM->GetObj()->BroadcastItemChange(aItemChange);
+                pObj->ClearItem();
+            if( (0 != aCharWhichIds.size() ) && pObj->ISA(SdrTextObj) )
+                ((SdrTextObj*)pObj)->RemoveOutlinerCharacterAttribs( aCharWhichIds );
+
+            pObj->SetItemSet(aAttr);
+            pObj->BroadcastItemChange(aItemChange);
         }
         // besser vorher checken, was gemacht werden soll:
         // pObj->SetAttr() oder SetNotPersistAttr()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-26 13:08:49 $
+ *  last change: $Author: cl $ $Date: 2002-10-07 15:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,6 +784,39 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
             OutlinerParaObject* pNewPara=rOutliner.CreateParaObject();
             NbcSetOutlinerParaObject(pNewPara);
             rOutliner.Clear();
+        }
+    }
+}
+
+/** #103836# iterates over the paragraphs of a given SdrObject and removes all
+             hard set character attributes with the which ids contained in the
+             given vector
+*/
+void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds )
+{
+    if(pOutlinerParaObject)
+    {
+        Outliner* pOutliner = pEdtOutl;
+
+        if(!pOutliner)
+        {
+            pOutliner = &ImpGetDrawOutliner();
+            pOutliner->SetText(*pOutlinerParaObject);
+        }
+
+        ESelection aSelAll( 0, 0, 0xffff, 0xffff );
+        std::vector<sal_uInt16>::const_iterator aIter( rCharWhichIds.begin() );
+        while( aIter != rCharWhichIds.end() )
+        {
+            pOutliner->RemoveAttribs( aSelAll, false, (*aIter++) );
+        }
+
+        if(!pEdtOutl)
+        {
+            const sal_uInt16 nParaCount = pOutliner->GetParagraphCount();
+            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+            pOutliner->Clear();
+            NbcSetOutlinerParaObject(pTemp);
         }
     }
 }
