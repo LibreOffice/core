@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:01:12 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,13 @@
 #endif
 
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 
 class ScDocShell;
 class SfxObjectShell;
 
-class ScAreaLink : public ::so3::SvBaseLink, public ScRefreshTimer
+class ScAreaLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     ScDocShell* pDocShell;      // Container
