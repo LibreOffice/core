@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ ByteChucker::ByteChucker(Reference<XOutputStream> xOstream)
 , nBufferSize ( n_ConstNonSpannableBufferSize )
 , nCurrentBufferPos ( 0 )
 , bSpannable ( sal_True )
-, bNextWriteIsAtomic ( sal_False )
 {
 }
 
@@ -155,25 +154,6 @@ sal_Int64 SAL_CALL ByteChucker::getLength(  )
         return xSeek->getLength();
     else
         throw IOException();
-}
-
-void ByteChucker::setSpannable ( sal_Bool bNewSpannable )
-{
-    // if current data isn't spannable, then it's been stored in the Buffer
-    // until we know how much of it there is. Once we start recieving
-    // spannable data again, we'll pass it on
-    if (!isSpannable() && bNewSpannable)
-    {
-        bNextWriteIsAtomic = sal_True;
-        sal_Int32 nOldLength = aBuffer.getLength();
-        aBuffer.realloc ( nCurrentBufferPos );
-        xStream->writeBytes( aBuffer );
-        aBuffer.realloc ( nOldLength );
-        pBuffer = aBuffer.getArray();
-        bNextWriteIsAtomic = sal_False;
-        nCurrentBufferPos = 0;
-    }
-    bSpannable = bNewSpannable;
 }
 
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
