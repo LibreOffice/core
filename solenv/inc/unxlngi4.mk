@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:46:57 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:02:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 # flags for C and C++ Compiler
-CFLAGS+=-fmessage-length=0 -c $(INCLUDE) -g
+CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
 # flags for the C++ Compiler
 CFLAGSCC= -pipe -mcpu=pentiumpro
 # Flags for enabling exception handling
