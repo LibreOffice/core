@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:35:36 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ private:
     const SdrView*      pView;
     USHORT              nAnchorCtrls;
 
+    Link                aValidateLink;
+
     virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
 
 public:
@@ -170,6 +172,9 @@ public:
                                     USHORT nAnchorTypes = 0 );
 
             ~SvxCaptionTabDialog();
+
+            //link for the Writer to validate positions
+            void SetValidateFramePosLink( const Link& rLink );
 };
 
 
