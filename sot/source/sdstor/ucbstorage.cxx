@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:13:10 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,8 @@
 #include "exchange.hxx"
 #include "formats.hxx"
 #include "clsids.hxx"
+
+#include "unostorageholder.hxx"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -549,6 +551,7 @@ public:
     BOOL                        m_bRepairPackage;
     Reference< XProgressHandler > m_xProgressHandler;
 
+    UNOStorageHolderList*       m_pUNOStorageHolderList;
                                 UCBStorage_Impl( const ::ucb::Content&, const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, BOOL );
@@ -1721,6 +1724,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& 
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
+    , m_pUNOStorageHolderList( NULL )
 
 {
     String aName( rName );
@@ -1755,6 +1759,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( bIsRepair )
     , m_xProgressHandler( xProgressHandler )
+    , m_pUNOStorageHolderList( NULL )
 {
     String aName( rName );
     if( !aName.Len() )
@@ -1803,6 +1808,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_bCommited( FALSE )
     , m_aClassId( SvGlobalName() )
     , m_bRepairPackage( FALSE )
+    , m_pUNOStorageHolderList( NULL )
 {
     // opening in direct mode is too fuzzy because the data is transferred to the stream in the Commit() call,
     // which will be called in the storages' dtor
@@ -1949,7 +1955,7 @@ void UCBStorage_Impl::CreateContent()
 
 void UCBStorage_Impl::ReadContent()
 {
-    if ( m_bListCreated )
+   if ( m_bListCreated )
         return;
 
     m_bListCreated = TRUE;
@@ -1962,6 +1968,7 @@ void UCBStorage_Impl::ReadContent()
     pProps[2] = ::rtl::OUString::createFromAscii( "MediaType" );
     pProps[3] = ::rtl::OUString::createFromAscii( "Size" );
     ::ucb::ResultSetInclude eInclude = ::ucb::INCLUDE_FOLDERS_AND_DOCUMENTS;
+
     try
     {
         GetContent();
@@ -2220,6 +2227,21 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
 
 UCBStorage_Impl::~UCBStorage_Impl()
 {
+    if ( m_pUNOStorageHolderList )
+    {
+        for ( UNOStorageHolderList::iterator aIter = m_pUNOStorageHolderList->begin();
+              aIter != m_pUNOStorageHolderList->end(); aIter++ )
+            if ( *aIter )
+            {
+                (*aIter)->InternalDispose();
+                (*aIter)->release();
+                (*aIter) = NULL;
+            }
+
+        m_pUNOStorageHolderList->clear();
+        DELETEZ( m_pUNOStorageHolderList );
+    }
+
     // first delete elements!
     UCBStorageElement_Impl* pElement = m_aChildrenList.First();
     while ( pElement )
@@ -2981,6 +3003,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
             aName += rEleName;  //  ???
             UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, FALSE, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStorage->pImp->m_bIsRoot = FALSE;
+            pStorage->pImp->m_bListCreated = sal_True; // the storage is pretty new, nothing to read
             pStorage->SetError( GetError() );
             return pStorage;
         }
@@ -3069,7 +3092,12 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
 
         UCBStorage_Impl* pStor = pImp->OpenStorage( pElement, nMode, bDirect );
         if ( pStor )
+        {
+            if ( pElement->m_bIsInserted )
+                pStor->m_bListCreated = sal_True; // the storage is pretty new, nothing to read
+
             return new UCBStorage( pStor );
+        }
     }
 
     return NULL;
@@ -3535,5 +3563,13 @@ BOOL UCBStorage::GetProperty( const String& rEleName, const String& rName, ::com
     }
 
     return FALSE;
+}
+
+UNOStorageHolderList* UCBStorage::GetUNOStorageHolderList()
+{
+    if ( !pImp->m_pUNOStorageHolderList )
+        pImp->m_pUNOStorageHolderList = new UNOStorageHolderList;
+
+    return pImp->m_pUNOStorageHolderList;
 }
 
