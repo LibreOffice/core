@@ -2,9 +2,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-02 11:04:14 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 10:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
     if ( sItem.Equals( COMMAND_SHELL ))
     {
         ByteString aComspec = GetEnv( "COMSPEC" );
-        if ( aComspec != "" )
+        if ( !aComspec.Equals(""))
             return aComspec;
     }
 
