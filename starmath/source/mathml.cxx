@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-25 09:08:35 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 18:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3139,7 +3139,7 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     pValue[nIndex++].Value <<= rRect.GetHeight();
 }
 
-#define SM_NUM_EXPORTED_ITEMS 55
+#define SM_NUM_EXPORTED_ITEMS 56
 void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & aProps)
 {
     uno::Reference <frame::XModel> xModel = GetModel();
