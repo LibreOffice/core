@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplpitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:03 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,21 @@
 
 #include "tplpitem.hxx"
 
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_TEMPLATE_HPP_
+#include <drafts/com/sun/star/frame/status/Template.hpp>
+#endif
+
+
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(SfxTemplateItem, SfxFlagItem);
+TYPEINIT1_AUTOFACTORY(SfxTemplateItem, SfxFlagItem);
 
 //=========================================================================
+
+SfxTemplateItem::SfxTemplateItem() :
+    SfxFlagItem()
+{
+}
 
 SfxTemplateItem::SfxTemplateItem
 (
@@ -111,6 +121,33 @@ int SfxTemplateItem::operator==( const SfxPoolItem& rCmp ) const
 SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 {
     return new SfxTemplateItem(*this);
+}
+
+//-------------------------------------------------------------------------
+sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    drafts::com::sun::star::frame::status::Template aTemplate;
+
+    aTemplate.Value = GetValue();
+    aTemplate.StyleName = aStyle;
+    rVal <<= aTemplate;
+
+    return sal_True;
+}
+
+//-------------------------------------------------------------------------
+sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    drafts::com::sun::star::frame::status::Template aTemplate;
+
+    if ( rVal >>= aTemplate )
+    {
+        SetValue( aTemplate.Value );
+        aStyle = aTemplate.StyleName;
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 //-------------------------------------------------------------------------
