@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2001-01-23 20:27:21 $
+#   last change: $Author: mtg $ $Date: 2001-07-19 16:21:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,55 +81,10 @@ PROJECTPCHSOURCE=..$/core_1st$/core_pch
 LIBFLAGS=/NOI /NOE /PAGE:512
 .ENDIF
 
-
-
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        acmplwrd.cxx \
-        doc.cxx \
-        docbasic.cxx \
-        docbm.cxx \
-        docchart.cxx \
-        doccomp.cxx \
-        doccorr.cxx \
-        docdde.cxx \
-        docdesc.cxx \
-        docdraw.cxx \
-        docedt.cxx \
-        docfld.cxx \
-        docfly.cxx \
-        docfmt.cxx \
-        docftn.cxx \
-        docglbl.cxx \
-        docglos.cxx \
-        doclay.cxx \
-        docnew.cxx \
-        docnum.cxx \
-        docredln.cxx \
-        docruby.cxx \
-        docsort.cxx \
-        docstat.cxx \
-        doctxm.cxx \
-        extinput.cxx \
-        fmtcol.cxx \
-        ftnidx.cxx \
-        gctable.cxx \
-        lineinfo.cxx \
-        notxtfrm.cxx \
-        number.cxx \
-        poolfmt.cxx \
-        sortopt.cxx \
-        swserv.cxx \
-        swtable.cxx \
-        tblafmt.cxx \
-        tblcpy.cxx \
-        tblrwcl.cxx \
-        visiturl.cxx \
-        htmltbl.cxx
-
-
 SLOFILES =	\
+        $(SLO)$/SwStyleNameMapper.obj \
         $(SLO)$/acmplwrd.obj \
         $(SLO)$/doc.obj \
         $(SLO)$/docbasic.obj \
