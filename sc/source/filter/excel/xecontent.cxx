@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:54 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,21 @@
 #ifndef SC_RANGENAM_HXX
 #include "rangenam.hxx"
 #endif
+#ifndef SC_STLPOOL_HXX
+#include "stlpool.hxx"
+#endif
+#ifndef SC_SCPATATR_HXX
+#include "patattr.hxx"
+#endif
 
 #ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
 #endif
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
+#endif
+#ifndef SC_XESTYLE_HXX
+#include "xestyle.hxx"
 #endif
 
 using ::rtl::OUString;
@@ -463,6 +472,320 @@ void XclExpLabelranges::WriteBody( XclExpStream& rStrm )
 }
 
 
+// Conditional formatting  ====================================================
+
+/** Represents a CF record that contains one condition of a conditional format. */
+class XclExpCF_Impl : protected XclExpRoot
+{
+public:
+    explicit                    XclExpCF_Impl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry );
+
+    /** Writes the body of the CF record. */
+    void                        WriteBody( XclExpStream& rStrm );
+
+private:
+    const ScCondFormatEntry&    mrFormatEntry;  /// Calc conditional format entry.
+    XclFontData                 maFontData;     /// Font formatting attributes.
+    XclExpCellBorder            maBorder;       /// Border formatting attributes.
+    XclExpCellArea              maArea;         /// Pattern formatting attributes.
+    sal_uInt32                  mnFontColorId;  /// Font color ID.
+    bool                        mbHeightUsed;   /// true = Font height used.
+    bool                        mbWeightUsed;   /// true = Font weight used.
+    bool                        mbColorUsed;    /// true = Font color used.
+    bool                        mbUnderlUsed;   /// true = Font underline type used.
+    bool                        mbItalicUsed;   /// true = Font posture used.
+    bool                        mbStrikeUsed;   /// true = Font strikeout used.
+    bool                        mbFontUsed;     /// true = Any font attribute used.
+    bool                        mbBorderUsed;   /// true = Border attribute used.
+    bool                        mbPattUsed;     /// true = Pattern attribute used.
+};
+
+
+// ----------------------------------------------------------------------------
+
+XclExpCF_Impl::XclExpCF_Impl( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry ) :
+    XclExpRoot( rRoot ),
+    mrFormatEntry( rFormatEntry ),
+    mnFontColorId( 0 ),
+    mbFontUsed( false ),
+    mbHeightUsed( false ),
+    mbWeightUsed( false ),
+    mbColorUsed( false ),
+    mbUnderlUsed( false ),
+    mbItalicUsed( false ),
+    mbStrikeUsed( false ),
+    mbBorderUsed( false ),
+    mbPattUsed( false )
+{
+    /*  Get formatting attributes here, and not in WriteBody(). This is needed to
+        correctly insert all colors into the palette. */
+
+    if( SfxStyleSheetBase* pStyleSheet = GetDoc().GetStyleSheetPool()->Find( mrFormatEntry.GetStyle(), SFX_STYLE_FAMILY_PARA ) )
+    {
+        const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
+
+        // font
+        mbHeightUsed = ScfTools::CheckItem( rItemSet, ATTR_FONT_HEIGHT,     true );
+        mbWeightUsed = ScfTools::CheckItem( rItemSet, ATTR_FONT_WEIGHT,     true );
+        mbColorUsed  = ScfTools::CheckItem( rItemSet, ATTR_FONT_COLOR,      true );
+        mbUnderlUsed = ScfTools::CheckItem( rItemSet, ATTR_FONT_UNDERLINE,  true );
+        mbItalicUsed = ScfTools::CheckItem( rItemSet, ATTR_FONT_POSTURE,    true );
+        mbStrikeUsed = ScfTools::CheckItem( rItemSet, ATTR_FONT_CROSSEDOUT, true );
+        mbFontUsed = mbHeightUsed || mbWeightUsed || mbColorUsed || mbUnderlUsed || mbItalicUsed || mbStrikeUsed;
+        if( mbFontUsed )
+        {
+            Font aFont;
+            ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW );
+            maFontData.FillFromFont( aFont );
+            mnFontColorId = GetPalette().InsertColor( aFont.GetColor(), xlColorCellText );
+        }
+
+        // border
+        mbBorderUsed = ScfTools::CheckItem( rItemSet, ATTR_BORDER, true );
+        if( mbBorderUsed )
+            maBorder.FillFromItemSet( rItemSet, GetPalette(), GetBiff() );
+
+        // pattern
+        mbPattUsed = ScfTools::CheckItem( rItemSet, ATTR_BACKGROUND, true );
+        if( mbPattUsed )
+            maArea.FillFromItemSet( rItemSet, GetPalette(), GetBiff() );
+    }
+}
+
+void XclExpCF_Impl::WriteBody( XclExpStream& rStrm )
+{
+    // *** mode and comparison operator ***
+
+    sal_uInt8 nType = EXC_CF_TYPE_CELL;
+    sal_uInt8 nOperator = EXC_CF_CMP_NONE;
+    bool bFmla2 = false;
+
+    switch( mrFormatEntry.GetOperation() )
+    {
+        case SC_COND_NONE:          nType = EXC_CF_TYPE_NONE;                               break;
+        case SC_COND_BETWEEN:       nOperator = EXC_CF_CMP_BETWEEN;         bFmla2 = true;  break;
+        case SC_COND_NOTBETWEEN:    nOperator = EXC_CF_CMP_NOT_BETWEEN;     bFmla2 = true;  break;
+        case SC_COND_EQUAL:         nOperator = EXC_CF_CMP_EQUAL;                           break;
+        case SC_COND_NOTEQUAL:      nOperator = EXC_CF_CMP_NOT_EQUAL;                       break;
+        case SC_COND_GREATER:       nOperator = EXC_CF_CMP_GREATER;                         break;
+        case SC_COND_LESS:          nOperator = EXC_CF_CMP_LESS;                            break;
+        case SC_COND_EQGREATER:     nOperator = EXC_CF_CMP_GREATER_EQUAL;                   break;
+        case SC_COND_EQLESS:        nOperator = EXC_CF_CMP_LESS_EQUAL;                      break;
+        case SC_COND_DIRECT:        nType = EXC_CF_TYPE_FMLA;                               break;
+        default:                    nType = EXC_CF_TYPE_NONE;
+            DBG_ERRORFILE( "XclExpCF::WriteBody - unknown condition type" );
+    }
+
+    rStrm << nType << nOperator;
+
+    // *** formulas ***
+
+    ::std::auto_ptr< ScTokenArray > pScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
+    EC_Codetype eDummy;
+    ::std::auto_ptr< ExcUPN > pXclTokArr1( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, TRUE ) );
+    sal_uInt16 nFmlaSize1 = pXclTokArr1->GetLen();
+
+    ::std::auto_ptr< ExcUPN > pXclTokArr2;
+    sal_uInt16 nFmlaSize2 = 0;
+    if( bFmla2 )
+    {
+        pScTokArr.reset( mrFormatEntry.CreateTokenArry( 1 ) );
+        pXclTokArr2.reset( new ExcUPN( mpRD, *pScTokArr, eDummy, NULL, TRUE ) );
+        nFmlaSize2 = pXclTokArr2->GetLen();
+    }
+
+    rStrm << nFmlaSize1 << nFmlaSize2;
+
+    // *** formatting blocks ***
+
+    if( mbFontUsed || mbBorderUsed || mbPattUsed )
+    {
+        sal_uInt32 nFlags = EXC_CF_ALLDEFAULT;
+
+        ::set_flag( nFlags, EXC_CF_BLOCK_FONT,   mbFontUsed );
+        ::set_flag( nFlags, EXC_CF_BLOCK_BORDER, mbBorderUsed );
+        ::set_flag( nFlags, EXC_CF_BLOCK_AREA,   mbPattUsed );
+
+        // attributes used -> set flags to 0.
+        ::set_flag( nFlags, EXC_CF_BORDER_ALL, !mbBorderUsed );
+        ::set_flag( nFlags, EXC_CF_AREA_ALL,   !mbPattUsed );
+
+        rStrm << nFlags << sal_uInt16( 0 );
+
+        if( mbFontUsed )
+        {
+            // font height, 0xFFFFFFFF indicates unused
+            sal_uInt32 nHeight = mbHeightUsed ? maFontData.mnHeight : 0xFFFFFFFF;
+            // font style: italic and strikeout
+            sal_uInt32 nStyle = 0;
+            ::set_flag( nStyle, EXC_CF_FONT_STYLE,     maFontData.mbItalic );
+            ::set_flag( nStyle, EXC_CF_FONT_STRIKEOUT, maFontData.mbStrikeout );
+            // font color, 0xFFFFFFFF indicates unused
+            sal_uInt32 nColor = mbColorUsed ? GetPalette().GetColorIndex( mnFontColorId ) : 0xFFFFFFFF;
+            // font used flags for italic, weight, and strikeout -> 0 = used, 1 = default
+            sal_uInt32 nFontFlags1 = EXC_CF_FONT_ALLDEFAULT;
+            ::set_flag( nFontFlags1, EXC_CF_FONT_STYLE, !(mbItalicUsed || mbWeightUsed) );
+            ::set_flag( nFontFlags1, EXC_CF_FONT_STRIKEOUT, !mbStrikeUsed );
+            // font used flag for underline -> 0 = used, 1 = default
+            sal_uInt32 nFontFlags3 = mbUnderlUsed ? 0 : EXC_CF_FONT_UNDERL;
+
+            rStrm.WriteZeroBytes( 64 );
+            rStrm   << nHeight
+                    << nStyle
+                    << maFontData.mnWeight
+                    << EXC_FONTESC_NONE
+                    << maFontData.mnUnderline;
+            rStrm.WriteZeroBytes( 3 );
+            rStrm   << nColor
+                    << sal_uInt32( 0 )
+                    << nFontFlags1
+                    << EXC_CF_FONT_ESCAPEM      // escapement never used -> set the flag
+                    << nFontFlags3;
+            rStrm.WriteZeroBytes( 16 );
+            rStrm   << sal_uInt16( 1 );         // must be 1
+        }
+
+        if( mbBorderUsed )
+        {
+            sal_uInt16 nLineStyle = 0;
+            sal_uInt32 nLineColor = 0;
+            maBorder.SetFinalColors( GetPalette() );
+            maBorder.FillToCF8( nLineStyle, nLineColor );
+            rStrm << nLineStyle << nLineColor << sal_uInt16( 0 );
+        }
+
+        if( mbPattUsed )
+        {
+            sal_uInt16 nPattern = 0, nColor = 0;
+            maArea.SetFinalColors( GetPalette() );
+            maArea.FillToCF8( nPattern, nColor );
+            rStrm << nPattern << nColor;
+        }
+    }
+    else
+    {
+        // no data blocks at all
+        rStrm << sal_uInt32( 0 ) << sal_uInt16( 0 );
+    }
+
+    // *** formulas ***
+
+    if( pXclTokArr1.get() )
+        rStrm.Write( pXclTokArr1->GetData(), pXclTokArr1->GetLen() );
+    if( pXclTokArr2.get() )
+        rStrm.Write( pXclTokArr2->GetData(), pXclTokArr2->GetLen() );
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclExpCF::XclExpCF( const XclExpRoot& rRoot, const ScCondFormatEntry& rFormatEntry ) :
+    XclExpRecord( EXC_ID_CF ),
+    XclExpRoot( rRoot ),
+    mpImpl( new XclExpCF_Impl( rRoot, rFormatEntry ) )
+{
+}
+
+XclExpCF::~XclExpCF()
+{
+}
+
+void XclExpCF::WriteBody( XclExpStream& rStrm )
+{
+    mpImpl->WriteBody( rStrm );
+}
+
+
+// ----------------------------------------------------------------------------
+
+XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat ) :
+    XclExpRecord( EXC_ID_CONDFMT ),
+    XclExpRoot( rRoot )
+{
+    GetDoc().FindConditionalFormat( rCondFormat.GetKey(), maRanges, GetScTab() );
+    CheckCellRangeList( maRanges );
+
+    if( maRanges.Count() )
+        for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
+            if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
+                maCFList.Append( new XclExpCF( GetRoot(), *pEntry ) );
+}
+
+XclExpCondfmt::~XclExpCondfmt()
+{
+}
+
+bool XclExpCondfmt::IsValid() const
+{
+    return !maCFList.Empty() && maRanges.Count();
+}
+
+void XclExpCondfmt::Save( XclExpStream& rStrm )
+{
+    if( IsValid() )
+    {
+        XclExpRecord::Save( rStrm );
+        maCFList.Save( rStrm );
+    }
+}
+
+void XclExpCondfmt::WriteBody( XclExpStream& rStrm )
+{
+    DBG_ASSERT( !maCFList.Empty(), "XclExpCondfmt::WriteBody - no CF records to write" );
+    DBG_ASSERT( maRanges.Count(), "XclExpCondfmt::WriteBody - no cell ranges found" );
+
+    // build the minimum range containing all conditionally formatted cells
+    ScAddress aMinPos( GetXclMaxPos() );
+    ScAddress aMaxPos( 0, 0, 0 );
+    for( const ScRange* pRange = maRanges.First(); pRange; pRange = maRanges.Next() )
+    {
+        if( pRange->aStart.Col() < aMinPos.Col() )
+            aMinPos.SetCol( pRange->aStart.Col() );
+        if( pRange->aStart.Row() < aMinPos.Row() )
+            aMinPos.SetRow( pRange->aStart.Row() );
+        if( pRange->aEnd.Col() > aMaxPos.Col() )
+            aMaxPos.SetCol( pRange->aEnd.Col() );
+        if( pRange->aEnd.Row() > aMaxPos.Row() )
+            aMaxPos.SetRow( pRange->aEnd.Row() );
+    }
+
+    rStrm   << static_cast< sal_uInt16 >( maCFList.Count() )
+            << sal_uInt16( 1 )
+            << static_cast< sal_uInt16 >( aMinPos.Row() )
+            << static_cast< sal_uInt16 >( aMaxPos.Row() )
+            << static_cast< sal_uInt16 >( aMinPos.Col() )
+            << static_cast< sal_uInt16 >( aMaxPos.Col() )
+            << maRanges;
+}
+
+// ----------------------------------------------------------------------------
+
+XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot )
+{
+    if( const ScConditionalFormatList* pCondFmtList = rRoot.GetDoc().GetCondFormList() )
+    {
+        if( const ScConditionalFormatPtr* ppCondFmt = pCondFmtList->GetData() )
+        {
+            const ScConditionalFormatPtr* ppCondEnd = ppCondFmt + pCondFmtList->Count();
+            for( ; ppCondFmt < ppCondEnd; ++ppCondFmt )
+            {
+                if( *ppCondFmt )
+                {
+                    ::std::auto_ptr< XclExpCondfmt > pCondfmtRec( new XclExpCondfmt( rRoot, **ppCondFmt ) );
+                    if( pCondfmtRec->IsValid() )
+                        maCondfmtList.Append( pCondfmtRec.release() );
+                }
+            }
+        }
+    }
+}
+
+void XclExpCondFormatBuffer::Save( XclExpStream& rStrm )
+{
+    maCondfmtList.Save( rStrm );
+}
+
+
 // Validation =================================================================
 
 /** Writes a formula for the DV record. */
@@ -488,7 +811,7 @@ void lcl_xecontent_WriteDvFormula( XclExpStream& rStrm, const XclExpString& rStr
 
 // ----------------------------------------------------------------------------
 
-XclExpDv::XclExpDv( const XclExpRoot& rRoot, sal_uInt32 nHandle ) :
+XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uInt32 nHandle ) :
     XclExpRecord( EXC_ID_DV ),
     XclExpRoot( rRoot ),
     mpValData( rRoot.GetDoc().GetValidationEntry( nHandle ) ),
@@ -496,20 +819,20 @@ XclExpDv::XclExpDv( const XclExpRoot& rRoot, sal_uInt32 nHandle ) :
 {
 }
 
-void XclExpDv::InsertCellRange( const ScRange& rRange )
+void XclExpDV::InsertCellRange( const ScRange& rRange )
 {
     maRanges.Join( rRange );
 }
 
-bool XclExpDv::CheckWriteRecord()
+bool XclExpDV::CheckWriteRecord()
 {
     CheckCellRangeList( maRanges );
     return mpValData && maRanges.Count();
 }
 
-void XclExpDv::WriteBody( XclExpStream& rStrm )
+void XclExpDV::WriteBody( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mpValData, "XclExpDv::WriteBody - missing core data" );
+    DBG_ASSERT( mpValData, "XclExpDV::WriteBody - missing core data" );
     if( !mpValData ) return;
 
     // prompt box - empty string represented by single NUL character
@@ -544,7 +867,7 @@ void XclExpDv::WriteBody( XclExpStream& rStrm )
         case SC_VALID_TIME:     nFlags |= EXC_DV_MODE_TIME;     break;
         case SC_VALID_TEXTLEN:  nFlags |= EXC_DV_MODE_TEXTLEN;  break;
         case SC_VALID_CUSTOM:   nFlags |= EXC_DV_MODE_CUSTOM;   break;
-        default:                DBG_ERRORFILE( "XclExpDv::SaveCont - unknown mode" );
+        default:                DBG_ERRORFILE( "XclExpDV::SaveCont - unknown mode" );
     }
     switch( mpValData->GetOperation() )
     {
@@ -557,7 +880,7 @@ void XclExpDv::WriteBody( XclExpStream& rStrm )
         case SC_COND_NOTEQUAL:  nFlags |= EXC_DV_COND_NOTEQUAL;     break;
         case SC_COND_BETWEEN:   nFlags |= EXC_DV_COND_BETWEEN;      break;
         case SC_COND_NOTBETWEEN:nFlags |= EXC_DV_COND_NOTBETWEEN;   break;
-        default:                DBG_ERRORFILE( "XclExpDv::SaveCont - unknown condition" );
+        default:                DBG_ERRORFILE( "XclExpDV::SaveCont - unknown condition" );
     }
     switch( eScErrorStyle )
     {
@@ -565,7 +888,7 @@ void XclExpDv::WriteBody( XclExpStream& rStrm )
         case SC_VALERR_WARNING: nFlags |= EXC_DV_ERROR_WARNING; break;
         case SC_VALERR_INFO:    nFlags |= EXC_DV_ERROR_INFO;    break;
         case SC_VALERR_MACRO:   bShowError = false;             break;
-        default:                DBG_ERRORFILE( "XclExpDv::SaveCont - unknown error style" );
+        default:                DBG_ERRORFILE( "XclExpDV::SaveCont - unknown error style" );
     }
     if( mpValData->IsIgnoreBlank() )
         nFlags |= EXC_DV_IGNOREBLANK;
@@ -664,29 +987,29 @@ void XclExpDv::WriteBody( XclExpStream& rStrm )
 XclExpDval::XclExpDval( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_DVAL, 18 ),
     XclExpRoot( rRoot ),
-    mpLastFoundDv( NULL )
+    mpLastFoundDV( NULL )
 {
 }
 
-XclExpDv& XclExpDval::SearchOrCreateDv( sal_uInt32 nHandle )
+XclExpDV& XclExpDval::SearchOrCreateDv( sal_uInt32 nHandle )
 {
     // test last found record
-    if( mpLastFoundDv && (mpLastFoundDv->GetHandle() == nHandle) )
-        return *mpLastFoundDv;
+    if( mpLastFoundDV && (mpLastFoundDV->GetHandle() == nHandle) )
+        return *mpLastFoundDV;
 
     // binary search
     sal_uInt32 nCurrIndex = 0;
-    if( !maDvList.Empty() )
+    if( !maDVList.Empty() )
     {
         sal_uInt32 nFirst = 0;
-        sal_uInt32 nLast = maDvList.Count() - 1;
+        sal_uInt32 nLast = maDVList.Count() - 1;
         bool bLoop = true;
         sal_uInt32 nCurrHandle;
         while( (nFirst <= nLast) && bLoop )
         {
             nCurrIndex = (nFirst + nLast) / 2;
-            mpLastFoundDv = maDvList.GetObject( nCurrIndex );
-            nCurrHandle = mpLastFoundDv->GetHandle();
+            mpLastFoundDV = maDVList.GetObject( nCurrIndex );
+            nCurrHandle = mpLastFoundDV->GetHandle();
             if( nCurrHandle == nHandle )
                 bLoop = false;
             else if( nCurrHandle < nHandle )
@@ -697,47 +1020,47 @@ XclExpDv& XclExpDval::SearchOrCreateDv( sal_uInt32 nHandle )
                 bLoop = false;
         }
         if( nCurrHandle == nHandle )
-            return *mpLastFoundDv;
+            return *mpLastFoundDV;
         else if( nCurrHandle < nHandle )
             ++nCurrIndex;
     }
 
     // create new DV record
-    mpLastFoundDv = new XclExpDv( *this, nHandle );
-    maDvList.Insert( mpLastFoundDv, nCurrIndex );
-    return *mpLastFoundDv;
+    mpLastFoundDV = new XclExpDV( *this, nHandle );
+    maDVList.Insert( mpLastFoundDV, nCurrIndex );
+    return *mpLastFoundDV;
 }
 
 void XclExpDval::InsertCellRange( const ScRange& rRange, sal_uInt32 nHandle )
 {
-    XclExpDv& rDvRec = SearchOrCreateDv( nHandle );
-    rDvRec.InsertCellRange( rRange );
+    XclExpDV& rDVRec = SearchOrCreateDv( nHandle );
+    rDVRec.InsertCellRange( rRange );
 }
 
 void XclExpDval::Save( XclExpStream& rStrm )
 {
     // check all records
-    sal_uInt32 nIndex = maDvList.Count();
+    sal_uInt32 nIndex = maDVList.Count();
     while( nIndex )
     {
         --nIndex;   // backwards to keep nIndex valid
-        XclExpDv* pDvRec = maDvList.GetObject( nIndex );
-        if( !pDvRec->CheckWriteRecord() )
-            maDvList.Delete( nIndex );
+        XclExpDV* pDVRec = maDVList.GetObject( nIndex );
+        if( !pDVRec->CheckWriteRecord() )
+            maDVList.Delete( nIndex );
     }
 
     // write the DVAL and the DV's
-    if( !maDvList.Empty() )
+    if( !maDVList.Empty() )
     {
         XclExpRecord::Save( rStrm );
-        maDvList.Save( rStrm );
+        maDVList.Save( rStrm );
     }
 }
 
 void XclExpDval::WriteBody( XclExpStream& rStrm )
 {
     rStrm.WriteZeroBytes( 10 );
-    rStrm << EXC_DVAL_NOOBJ << maDvList.Count();
+    rStrm << EXC_DVAL_NOOBJ << maDVList.Count();
 }
 
 
