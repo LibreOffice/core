@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:47:07 $
+#   last change: $Author: vg $ $Date: 2003-07-21 11:33:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -274,11 +274,6 @@ SHL1STDLIBS += -framework Cocoa
 .ENDIF
 
 .IF "$(GUIBASE)"=="unx"
-
-# search for freetype in systems dir at runtime
-.IF "$(OS)"=="LINUX"
-LINKFLAGSRUNPATH!:="-Wl,-rpath,/usr/lib" $(LINKFLAGSRUNPATH)
-.ENDIF
 
 # Solaris
 .IF "$(OS)"=="SOLARIS"
