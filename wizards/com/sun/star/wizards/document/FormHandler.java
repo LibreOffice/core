@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FormHandler.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:31:51 $
+*  last change: $Author: vg $ $Date: 2005-02-17 11:20:30 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -150,7 +150,7 @@ public class FormHandler {
         sModelServices[SONUMERICCONTROL] = "com.sun.star.form.component.FormattedField";
         sModelServices[SOGRIDCONTROL] = "com.sun.star.form.component.GridControl";
         sModelServices[SOIMAGECONTROL] = "com.sun.star.form.component.DatabaseImageControl";
-        oControlData = new ControlData[16];
+        oControlData = new ControlData[17];
         oControlData[0] = createControlData(DataType.BIT, SOCHECKBOX, "CheckBox", "CheckBox", false);
         oControlData[1] = createControlData(DataType.TINYINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
         oControlData[2] = createControlData(DataType.SMALLINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
@@ -167,6 +167,7 @@ public class FormHandler {
         oControlData[13] = createControlData(DataType.DATE, SODATECONTROL, "DateField", "DateField", false);
         oControlData[14] = createControlData(DataType.TIME, SOTIMECONTROL, "TimeField", "TimeField", false);
         oControlData[15] = createControlData(DataType.TIMESTAMP, SODATECONTROL, "DateField", "TextField", false);
+        oControlData[16] = createControlData(DataType.BOOLEAN, SOCHECKBOX, "CheckBox", "CheckBox", false);
         ControlData[] oImageControlData = new ControlData[4];
         oImageControlData[0] = createControlData(DataType.BINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
         oImageControlData[1] = createControlData(DataType.VARBINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
