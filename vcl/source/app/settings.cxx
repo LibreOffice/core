@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:27:37 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,10 +1220,12 @@ BOOL MiscSettings::GetEnableATToolSupport() const
 #ifdef UNX
         mpData->mnEnableATT = 0;
 
-        DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
+#if 0
+        DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
         if( ( pIntegrator && pIntegrator->GetDtType() == DtGNOME ) ||
             ( pEnv && *pEnv ) )
+#endif
         {
             char buf[16];
             // use 2 shells to suppress the eventual "gcontool-2 not found" message
