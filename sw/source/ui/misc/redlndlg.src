@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:38:29 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text[ korean ] = "변경 사항  적용 또는 취소";
     Text[ turkish ] = "De�i�iklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aceptar o rechazar modificaciones";
+    Text[ catalan ] = "Accepta o rebutja canvis";
     Text[ finnish ] = "Hyv�ksy tai hylk�� muutokset";
     Text[ thai ] = "ยอมรับหรือปฏิเสธการเปลี่ยนแปลง";
 };
@@ -139,7 +139,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ korean ] = "자동 서식： 변경 사항 적용 또는 취소";
     Text[ turkish ] = "Otomatik formatlama: De�i�iklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoFormato: Aceptar o rechazar cambios";
+    Text[ catalan ] = "AutoFormat: Accepta o rebutja canvis";
     Text[ finnish ] = "Hyv�ksy tai hylk�� automaattisen muotoilun muutokset";
     Text[ thai ] = "ยอมรับหรือปฏิเสธการเปลี่ยนแปลงรูปแบบอัตโนมัติ";
 };
@@ -173,7 +173,7 @@ Menu MN_REDLINE_POPUP
             Text[ greek ] = "����������� �������...";
             Text[ korean ] = "주석  편집...";
             Text[ turkish ] = "A��klamalar� d�zenle...";
-            Text[ catalan ] = "Modificar comentario...";
+            Text[ catalan ] = "Edita el comentari...";
             Text[ finnish ] = "Muokkaa huomautusta...";
             Text[ thai ] = "แก้ไขข้อคิดเห็น...";
         };
@@ -213,7 +213,7 @@ Menu MN_REDLINE_POPUP
                         Text[ greek ] = "��������";
                         Text[ korean ] = "동작";
                         Text[ turkish ] = "��lem";
-                        Text[ catalan ] = "Acci�n";
+                        Text[ catalan ] = "Acci�";
                         Text[ finnish ] = "Toiminto";
                         Text[ thai ] = "การกระทำ";
                     };
@@ -273,7 +273,7 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "일자";
                         Text[ turkish ] = "Tarih";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Fecha";
+                        Text[ catalan ] = "Data";
                         Text[ finnish ] = "P�iv�m��r�";
                         Text[ thai ] = "วันที่";
                     };
@@ -303,7 +303,7 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "설명";
                         Text[ turkish ] = "A��klama";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Descripci�n";
+                        Text[ catalan ] = "Comentari";
                         Text[ finnish ] = "Huomautus";
                         Text[ thai ] = "ข้อคิดเห็น";
                     };
@@ -333,7 +333,7 @@ Menu MN_REDLINE_POPUP
                         Text[ korean ] = "문서 위치";
                         Text[ turkish ] = "Belge konumu";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "Posici�n del documento";
+                        Text[ catalan ] = "Posici� del documento";
                         Text[ finnish ] = "Asiakirjan sijainti";
                         Text[ thai ] = "ตำแหน่งเอกสาร";
                     };
@@ -358,7 +358,7 @@ Menu MN_REDLINE_POPUP
             Text[ korean ] = "분류";
             Text[ turkish ] = "S�rala";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Ordenar";
+            Text[ catalan ] = "Ordena per";
             Text[ finnish ] = "Lajitteluperuste";
             Text[ thai ] = "เรียงโดย";
         };
