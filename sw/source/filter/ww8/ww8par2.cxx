@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
+ *  last change: $Author: cmc $ $Date: 2001-11-02 15:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,8 +1217,13 @@ static BOOL SearchRowEnd( BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap, WW8
         aRes.nStartPos = aRes.nEndPos;
         aRes.pMemPos = 0;
         //Seek to our next block of properties
-        pPap->SeekPos(aRes.nStartPos);
+        if (!(pPap->SeekPos(aRes.nStartPos)))
+        {
+            aRes.nEndPos = LONG_MAX;
+            pPap->SetDirty(TRUE);
+        }
         pPap->GetSprms(&aRes);
+        pPap->SetDirty(FALSE);
         //Update our aRes to get the new starting point of the next properties
         rStartCp = aRes.nEndPos;
     }
