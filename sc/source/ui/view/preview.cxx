@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:17:41 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
 
     SetHelpId( HID_SC_WIN_PREVIEW );
     SetUniqueId( HID_SC_WIN_PREVIEW );
+
+    SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
 }
 
 
