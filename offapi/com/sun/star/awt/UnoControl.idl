@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControl.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,26 @@
 #include <com/sun/star/lang/XComponent.idl>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
+#ifndef __com_sun_star_awt_XControl_idl__
+#include <com/sun/star/awt/XControl.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XView_idl__
+#include <com/sun/star/awt/XView.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessible_idl__
+#include <com/sun/star/accessibility/XAccessible.idl>
 #endif
 
 
 //=============================================================================
 
  module com {  module sun {  module star {  module awt {
-
-interface XView;
-interface XWindow;
-interface XControl;
 
 //=============================================================================
 
@@ -97,15 +105,19 @@ interface XControl;
  */
 service UnoControl
 {
-    [optional] interface com::sun::star::beans::XPropertySet;
-
     interface com::sun::star::lang::XComponent;
 
-    interface XControl;
+    interface com::sun::star::awt::XControl;
 
-    interface XWindow;
+    interface com::sun::star::awt::XWindow;
 
-    interface XView;
+    interface com::sun::star::awt::XView;
+
+    /** provides access to the accessible context associated with this object.
+
+        @since #108656#
+     */
+    [optional] interface com::sun::star::accessibility::XAccessible;
 
 };
 
