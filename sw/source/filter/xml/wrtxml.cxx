@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-30 14:13:15 $
+ *  last change: $Author: dvo $ $Date: 2001-05-03 15:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,130 +140,6 @@ __EXPORT SwXMLWriter::~SwXMLWriter()
 {
 }
 
-
-/// export through an XML exporter component (output stream version)
-sal_uInt32 WriteThroughComponent(
-    Reference<io::XOutputStream> xOutputStream,
-    Reference<XComponent> xComponent,
-    Reference<lang::XMultiServiceFactory> & rFactory,
-    const sal_Char* pComponentName,
-    const Sequence<Any> & rArguments,
-    const Sequence<beans::PropertyValue> & rMediaDesc,
-    sal_Bool bBlockMode )
-{
-    ASSERT(xOutputStream.is(), "I really need an output stream!");
-    ASSERT(xComponent.is(), "Need component!");
-    ASSERT(NULL != pComponentName, "Need component name!");
-
-    // get component
-    Reference< io::XActiveDataSource > xSaxWriter(
-        rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Writer") ),
-        UNO_QUERY );
-    ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
-    if(!xSaxWriter.is())
-        return ERR_SWG_WRITE_ERROR;
-
-    // connect XML writer to output stream
-    xSaxWriter->setOutputStream( xOutputStream );
-
-    // prepare arguments (prepend doc handler to given arguments)
-    Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
-    Sequence<Any> aArgs( 1 + rArguments.getLength() );
-    aArgs[0] <<= xDocHandler;
-    for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
-        aArgs[i+1] = rArguments[i];
-
-    // get filter component
-    Reference< document::XExporter > xExporter(
-        rFactory->createInstanceWithArguments(
-            OUString::createFromAscii(pComponentName), aArgs), UNO_QUERY);
-    ASSERT( xExporter.is(),
-            "can't instantiate export filter component" );
-    if( !xExporter.is() )
-        return ERR_SWG_WRITE_ERROR;
-
-    // set block mode (if appropriate)
-    if( bBlockMode )
-    {
-        Reference<XUnoTunnel> xFilterTunnel( xExporter, UNO_QUERY );
-        if (xFilterTunnel.is())
-        {
-            SwXMLExport *pFilter = (SwXMLExport *)xFilterTunnel->getSomething(
-                                            SwXMLExport::getUnoTunnelId() );
-            if (NULL != pFilter)
-                pFilter->setBlockMode();
-        }
-    }
-
-
-    // connect model and filter
-    xExporter->setSourceDocument( xComponent );
-
-    // filter!
-    Reference < XFilter > xFilter( xExporter, UNO_QUERY );
-    xFilter->filter( rMediaDesc );
-
-    return 0;
-}
-
-/// export through an XML exporter component (storage version)
-sal_uInt32 WriteThroughComponent(
-    SvStorage* pStorage,
-    Reference<XComponent> xComponent,
-    const sal_Char* pStreamName,
-    Reference<lang::XMultiServiceFactory> & rFactory,
-    const sal_Char* pComponentName,
-    const Sequence<Any> & rArguments,
-    const Sequence<beans::PropertyValue> & rMediaDesc,
-    sal_Bool bBlockMode,
-    sal_Bool bCompress=sal_True )
-{
-    ASSERT(NULL != pStorage, "Need storage!");
-    ASSERT(NULL != pStreamName, "Need stream name!");
-
-    Reference< io::XOutputStream > xOutputStream;
-    SvStorageStreamRef xDocStream;
-
-    // open stream
-    OUString sStreamName = OUString::createFromAscii(pStreamName);
-    xDocStream = pStorage->OpenStream( sStreamName,
-                                       STREAM_WRITE | STREAM_SHARE_DENYWRITE );
-    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
-    if (! xDocStream.Is())
-        return ERR_SWG_WRITE_ERROR;
-
-    xDocStream->SetSize( 0 );
-
-    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-    uno::Any aAny;
-    aAny <<= aMime;
-    xDocStream->SetProperty( aPropName, aAny );
-
-    if( !bCompress )
-    {
-        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Compressed") );
-        sal_Bool bFalse = sal_False;
-        aAny.setValue( &bFalse, ::getBooleanCppuType() );
-        xDocStream->SetProperty( aPropName, aAny );
-    }
-
-    // set buffer and create outputstream
-    xDocStream->SetBufferSize( 16*1024 );
-    xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
-
-    // write the stuff
-    sal_Int32 nRet = WriteThroughComponent(
-        xOutputStream, xComponent, rFactory,
-        pComponentName, rArguments, rMediaDesc, bBlockMode);
-
-    // finally, commit stream.
-    if( 0 == nRet )
-        xDocStream->Commit();
-
-    return nRet;
-}
 
 sal_uInt32 SwXMLWriter::_Write()
 {
@@ -411,25 +287,25 @@ sal_uInt32 SwXMLWriter::_Write()
         if( !bOrganizerMode &&
             SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
             WriteThroughComponent(
-                pStg, xModelComp, "meta.xml", xServiceFactory,
+                xModelComp, "meta.xml", xServiceFactory,
                 "com.sun.star.comp.Writer.XMLMetaExporter",
-                aEmptyArgs, aProps, bBlock, sal_False );
+                aEmptyArgs, aProps, sal_True );
 
         WriteThroughComponent(
-            pStg, xModelComp, "styles.xml", xServiceFactory,
+            xModelComp, "styles.xml", xServiceFactory,
             "com.sun.star.comp.Writer.XMLStylesExporter",
-            aFilterArgs, aProps, bBlock );
+            aFilterArgs, aProps, sal_False );
 
         WriteThroughComponent(
-            pStg, xModelComp, "settings.xml", xServiceFactory,
+            xModelComp, "settings.xml", xServiceFactory,
             "com.sun.star.comp.Writer.XMLSettingsExporter",
-            aFilterArgs, aProps, bBlock );
+            aFilterArgs, aProps, sal_False );
 
         if( !bOrganizerMode )
             WriteThroughComponent(
-                pStg, xModelComp, "content.xml", xServiceFactory,
+                xModelComp, "content.xml", xServiceFactory,
                 "com.sun.star.comp.Writer.XMLContentExporter",
-                aFilterArgs, aProps, bBlock );
+                aFilterArgs, aProps, sal_False );
 
     }
     else
@@ -440,7 +316,7 @@ sal_uInt32 SwXMLWriter::_Write()
         WriteThroughComponent(
             xOut, xModelComp, xServiceFactory,
             "com.sun.star.comp.Writer.XMLExporter",
-            aEmptyArgs, aProps, bBlock );
+            aEmptyArgs, aProps );
     }
 
     if( pGraphicHelper )
@@ -481,6 +357,137 @@ sal_Bool SwXMLWriter::IsStgWriter() const
     return !bPlain;
 }
 
+sal_uInt32 SwXMLWriter::WriteThroughComponent(
+    const Reference<XComponent> & xComponent,
+    const sal_Char* pStreamName,
+    const Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pServiceName,
+    const Sequence<Any> & rArguments,
+    const Sequence<beans::PropertyValue> & rMediaDesc,
+    sal_Bool bPlainStream )
+{
+    DBG_ASSERT( NULL != pStg, "Need storage!" );
+    DBG_ASSERT( NULL != pStreamName, "Need stream name!" );
+    DBG_ASSERT( NULL != pServiceName, "Need service name!" );
+
+    Reference< io::XOutputStream > xOutputStream;
+    SvStorageStreamRef xDocStream;
+
+    // open stream
+    OUString sStreamName = OUString::createFromAscii( pStreamName );
+    xDocStream = pStg->OpenStream( sStreamName,
+                                   STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
+    if (! xDocStream.Is())
+        return ERR_SWG_WRITE_ERROR;
+
+    xDocStream->SetSize( 0 );
+
+    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+    uno::Any aAny;
+    aAny <<= aMime;
+    xDocStream->SetProperty( aPropName, aAny );
+
+    if( bPlainStream )
+    {
+        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Compressed") );
+        sal_Bool bFalse = sal_False;
+        aAny.setValue( &bFalse, ::getBooleanCppuType() );
+        xDocStream->SetProperty( aPropName, aAny );
+    }
+    else
+    {
+        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
+        sal_Bool bTrue = sal_True;
+        aAny.setValue( &bTrue, ::getBooleanCppuType() );
+        xDocStream->SetProperty( aPropName, aAny );
+    }
+
+
+    // set buffer and create outputstream
+    xDocStream->SetBufferSize( 16*1024 );
+    xOutputStream = new utl::OOutputStreamWrapper( *xDocStream );
+
+    // write the stuff
+    sal_Int32 nRet = WriteThroughComponent(
+        xOutputStream, xComponent, rFactory,
+        pServiceName, rArguments, rMediaDesc );
+
+    // finally, commit stream.
+    if( 0 == nRet )
+        xDocStream->Commit();
+
+    return nRet;
+
+}
+
+sal_uInt32 SwXMLWriter::WriteThroughComponent(
+    const Reference<io::XOutputStream> & xOutputStream,
+    const Reference<XComponent> & xComponent,
+    const Reference<XMultiServiceFactory> & rFactory,
+    const sal_Char* pServiceName,
+    const Sequence<Any> & rArguments,
+    const Sequence<PropertyValue> & rMediaDesc )
+{
+    ASSERT( xOutputStream.is(), "I really need an output stream!" );
+    ASSERT( xComponent.is(), "Need component!" );
+    ASSERT( NULL != pServiceName, "Need component name!" );
+
+    // get component
+    Reference< io::XActiveDataSource > xSaxWriter(
+        rFactory->createInstance(
+            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
+                "com.sun.star.xml.sax.Writer")) ),
+        UNO_QUERY );
+    ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    if(!xSaxWriter.is())
+        return ERR_SWG_WRITE_ERROR;
+
+    // connect XML writer to output stream
+    xSaxWriter->setOutputStream( xOutputStream );
+
+    // prepare arguments (prepend doc handler to given arguments)
+    Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
+    Sequence<Any> aArgs( 1 + rArguments.getLength() );
+    aArgs[0] <<= xDocHandler;
+    for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
+        aArgs[i+1] = rArguments[i];
+
+    // get filter component
+    Reference< document::XExporter > xExporter(
+        rFactory->createInstanceWithArguments(
+            OUString::createFromAscii(pServiceName), aArgs), UNO_QUERY);
+    ASSERT( xExporter.is(),
+            "can't instantiate export filter component" );
+    if( !xExporter.is() )
+        return ERR_SWG_WRITE_ERROR;
+
+    // set block mode (if appropriate)
+    if( bBlock )
+    {
+        Reference<XUnoTunnel> xFilterTunnel( xExporter, UNO_QUERY );
+        if (xFilterTunnel.is())
+        {
+            SwXMLExport *pFilter = (SwXMLExport *)xFilterTunnel->getSomething(
+                                            SwXMLExport::getUnoTunnelId() );
+            if (NULL != pFilter)
+                pFilter->setBlockMode();
+        }
+    }
+
+
+    // connect model and filter
+    xExporter->setSourceDocument( xComponent );
+
+    // filter!
+    Reference<XFilter> xFilter( xExporter, UNO_QUERY );
+    xFilter->filter( rMediaDesc );
+
+    return 0;
+}
+
+
 // -----------------------------------------------------------------------
 
 void GetXMLWriter( const String& rName, WriterRef& xRet )
@@ -494,11 +501,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.26 2001-04-30 14:13:15 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.27 2001-05-03 15:49:03 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.26  2001/04/30 14:13:15  mib
+      Don't export doc info in OLE objects
+
       Revision 1.25  2001/04/23 14:41:38  dvo
       implemented MUST-change from SAB: number styles properties added
 

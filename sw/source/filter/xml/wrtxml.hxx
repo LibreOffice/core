@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
+ *  last change: $Author: dvo $ $Date: 2001-05-03 15:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,15 @@
 class SwDoc;
 class SwPaM;
 class SfxMedium;
+namespace com { namespace sun { namespace start {
+    namespace uno { template<class A> class Reference; }
+    namespace uno { template<class A> class Sequence; }
+    namespace uno { class Any; }
+    namespace lang { class XComponent; }
+    namespace lang { class XMultiServiceFactory; }
+    namespace beans { struct PropertyValue; }
+} } };
+
 
 class SwXMLWriter : public StgWriter
 {
@@ -88,6 +97,44 @@ public:
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
 
     virtual sal_Bool IsStgWriter() const;
+
+
+private:
+
+    // helper methods to write XML streams
+
+    /// write a single XML stream into the package
+    sal_uInt32 WriteThroughComponent(
+        /// the component we export
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XComponent> & xComponent,
+        const sal_Char* pStreamName,        /// the stream name
+        /// service factory for pServiceName
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        const sal_Char* pServiceName,       /// service name of the component
+        /// the argument (XInitialization)
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Any> & rArguments,
+        /// output descriptor
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue> & rMediaDesc,
+        sal_Bool bPlainStream );            /// neither compress nor encrypt
+
+    /// write a single output stream
+    /// (to be called either directly or by WriteThroughComponent(...))
+    sal_uInt32 WriteThroughComponent(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::io::XOutputStream> & xOutputStream,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XComponent> & xComponent,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory> & rFactory,
+        const sal_Char* pServiceName,
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Any> & rArguments,
+        const ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue> & rMediaDesc );
 };
 
 
