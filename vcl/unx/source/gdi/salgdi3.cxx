@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:46:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,22 +532,18 @@ SalDisplay::GetXlfdList()
             switch( eType )
             {
                 case eTypeScalable:
-
                     if ( pScalableFont == NULL )
                         pScalableFont = new ScalableXlfd;
                     pScalableFont->AddEncoding(pXlfdList + i);
-
                     break;
 
                 case eTypeBitmap:
-
                     aBitmapList.AddBitmapFont( pXlfdList + i );
-
                     break;
 
                 case eTypeScalableBitmap:
+                    // ignore scaled X11 bitmap fonts
                 default:
-
                     break;
             }
 
@@ -570,7 +566,8 @@ SalDisplay::GetXlfdList()
 // ---------------------------------------------------------------------------
 
 ExtendedFontStruct*
-SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont, int nPixelSize, sal_Bool bVertical )
+SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
+    const Size& rPixelSize, sal_Bool bVertical )
 {
     if( !pFontCache_ )
     {
@@ -583,7 +580,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont, int nPixelSize, sal_Boo
               pItem != NULL;
               pItem  = pFontCache_->Next() )
         {
-            if ( pItem->Match(pRequestedFont, nPixelSize, bVertical) )
+            if ( pItem->Match(pRequestedFont, rPixelSize, bVertical) )
             {
                 if( pFontCache_->GetCurPos() )
                 {
@@ -616,7 +613,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont, int nPixelSize, sal_Boo
     }
 
     ExtendedFontStruct *pItem = new ExtendedFontStruct( GetDisplay(),
-                                        nPixelSize, bVertical,
+                                        rPixelSize, bVertical,
                                         const_cast<ExtendedXlfd*>(pRequestedFont) );
     pFontCache_->Insert( pItem, 0UL );
     pItem->AddRef();
@@ -725,11 +722,11 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
 
 #ifdef HDU_DEBUG
     ByteString aName( pEntry->maName, osl_getThreadTextEncoding() );
-    fprintf( stderr, "setFont(lvl=%d,\"%s\",naa=%d,b=%d,i=%d)\n", nFallbackLevel, aName.GetBuffer(), pEntry->mbNonAntialiased, pEntry->meWeight, pEntry->meItalic );
+    fprintf( stderr, "SetFont(lvl=%d,\"%s\", %dx%d, naa=%d,b=%d,i=%d)\n", nFallbackLevel, aName.GetBuffer(), pEntry->mnWidth, pEntry->mnHeight, pEntry->mbNonAntialiased, pEntry->meWeight, pEntry->meItalic );
     if( pEntry->mpFontData )
     {
         aName = ByteString( pEntry->mpFontData->maName, osl_getThreadTextEncoding() );
-        fprintf( stderr, "\t(pFD=\"%s\",b=%d,i=%d)\n",aName.GetBuffer(),pEntry->mpFontData->meWeight,pEntry->mpFontData->meItalic);
+        fprintf( stderr, "\t(pFD=\"%s\",b=%d,i=%d)\n",aName.GetBuffer(), pEntry->mpFontData->meWeight, pEntry->mpFontData->meItalic);
     }
 #endif
 
@@ -765,32 +762,21 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
         return false;
 
     bFontGC_    = FALSE;
-    aScale_     = Fraction( 1, 1 );
     ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
     if( !pSysFont )
         return false;
-     static int nMaxFontHeight = GetMaxFontHeight();
-     USHORT nH, nW;
+     Size aReqSize( pEntry->mnWidth, pEntry->mnHeight );
      if( bWindow_ )
      {
          // see BugId #44528# FontWork (-> #45038#) and as well Bug #47127#
-         if( pEntry->mnHeight > nMaxFontHeight )
-             nH = nMaxFontHeight;
-         else if( pEntry->mnHeight > 2 )
-             nH = pEntry->mnHeight;
-         else
-             nH = 2;
-         nW = 0; // should be "pEntry->mnWidth", but for X11 fonts default looks better
-     }
-     else
-     {
-         nH = pEntry->mnHeight;
-         nW = pEntry->mnWidth;
+         static int nMaxFontHeight = GetMaxFontHeight();
+         if( aReqSize.Height() > nMaxFontHeight )
+             aReqSize.Height() = nMaxFontHeight;
+         else if( aReqSize.Height() < 2 )
+             aReqSize.Height() = 2;
      }
 
-     mXFont[ nFallbackLevel ] = GetDisplay()->GetFont( pSysFont, nH, bFontVertical_ );
-     if( pEntry->mnHeight > nMaxFontHeight || pEntry->mnHeight < 2 )
-         aScale_ = Fraction( pEntry->mnHeight, nH );
+     mXFont[ nFallbackLevel ] = GetDisplay()->GetFont( pSysFont, aReqSize, bFontVertical_ );
 
     return true;
 }
@@ -1911,34 +1897,12 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
         return;
     }
 
-    ExtendedFontStruct* pFont = mXFont[0];
-    if ( pFont != NULL )
+    ExtendedFontStruct* pFont = maGraphicsData.mXFont[0];
+    if( pFont != NULL )
     {
         pFont->ToImplFontMetricData( pMetric );
-        if ( bFontVertical_ )
+        if ( maGraphicsData.bFontVertical_ )
             pMetric->mnOrientation = 0;
-
-        long n = aScale_.GetNumerator();
-        if( n != 1 )
-        {
-            pMetric->mnWidth    *= n;
-            pMetric->mnAscent   *= n;
-            pMetric->mnDescent  *= n;
-            pMetric->mnIntLeading*= n;
-            pMetric->mnExtLeading*= n;
-            pMetric->mnSlant    *= n;
-        }
-
-        n = aScale_.GetDenominator();
-        if( n != 1 )
-        {
-            pMetric->mnWidth    = Divide( pMetric->mnWidth, n );
-            pMetric->mnAscent   = sal_DivideNeg( pMetric->mnAscent,  n );
-            pMetric->mnDescent  = sal_DivideNeg( pMetric->mnDescent, n );
-            pMetric->mnIntLeading = sal_DivideNeg( pMetric->mnIntLeading, n );
-            pMetric->mnExtLeading = sal_DivideNeg( pMetric->mnExtLeading, n );
-            pMetric->mnSlant    = sal_DivideNeg( pMetric->mnSlant,   n );
-        }
     }
 }
 
@@ -2130,7 +2094,7 @@ BOOL X11SalGraphics::CreateFontSubset(
 
 //--------------------------------------------------------------------------
 
-const void* X11SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* X11SalGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
 #ifndef _USE_PRINT_EXTENSION_
     // in this context the sysdata member of pFont should
@@ -2161,14 +2125,14 @@ const void* X11SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pW
     rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
 
     psp::CharacterMetric aMetrics[256];
-    sal_Unicode nFirstChar = 0;
-    sal_Unicode nLastChar = 255;
+    sal_Unicode aUnicodes[256];
     if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
     {
-        nFirstChar = 0xf000;
-        nLastChar = 0xf0ff;
+        for( int i = 0; i < 256; i++ )
+            aUnicodes[i] = pUnicodes[i] < 0x0100 ? pUnicodes[i] + 0xf000 : pUnicodes[i];
+        pUnicodes = aUnicodes;
     }
-    if( ! rMgr.getMetrics( aFont, nFirstChar, nLastChar, aMetrics ) )
+    if( ! rMgr.getMetrics( aFont, pUnicodes, 256, aMetrics ) )
         return NULL;
 
     OString aSysPath = rMgr.getFontFileSysPath( aFont );
