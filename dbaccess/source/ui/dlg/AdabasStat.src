@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:13:35 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ arabic ] = "гбЁ«  ё«Џѕ… »н«д« ";
         Text[ turkish ] = "Veritabanэ dosyalarэ";
         Text[ catalan ] = "Fitxers de la base de dades";
-        Text[ finnish ] = "Datenbankdateien";
+        Text[ finnish ] = "Tietokantatiedostot";
         Text[ thai ] = "аєБаЄЯаєЙаЄ°аЄРаЄ≤аЄЩаЄВаєЙаЄ≠аЄ°аЄєаЄ•";
     };
 
@@ -228,7 +228,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ portuguese ] = "Tamanhos de bases de dados";
         Text[ russian ] = "–азмеры базы данных";
         Text[ greek ] = "ћегЁиз в№узт дедпмЁнщн";
-        Text[ dutch ] = "Grootte van database";
+        Text[ dutch ] = "Grootte van databases";
         Text[ french ] = "Tailles de la base de donnйes";
         Text[ spanish ] = "Tamaсos de base de datos";
         Text[ italian ] = "Dimensioni database";
@@ -243,7 +243,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ arabic ] = "√Ќћ«г ё«Џѕ… «б»н«д« ";
         Text[ turkish ] = "Veritabanэ bьyьklьkleri";
         Text[ catalan ] = "Mida de la base de dades";
-        Text[ finnish ] = "Datenbankgrцяen";
+        Text[ finnish ] = "Tietokantojen koot";
         Text[ thai ] = "аЄВаЄЩаЄ≤аЄФаЄРаЄ≤аЄЩаЄВаєЙаЄ≠аЄ°аЄєаЄ•";
     };
 
@@ -255,7 +255,7 @@ ModalDialog DLG_ADABASSTAT
         Text [ ENGLISH ]    = "S~ize (MB):" ;
         Text[ english_us ] = "S~ize (MB):";
         Text[ portuguese ] = "~Tamanho (MB):";
-        Text[ russian ] = "–азмер (ћЅ):";
+        Text[ russian ] = "–азмер (ћб):";
         Text[ greek ] = "”хнплйкь мЁгеипт (MB):";
         Text[ dutch ] = "Totale gr~ootte (MB):";
         Text[ french ] = "~Taille totale (Mo) :";
@@ -293,7 +293,7 @@ ModalDialog DLG_ADABASSTAT
         Text [ ENGLISH ]    = "~Unused space (MB):" ;
         Text[ english_us ] = "~Free memory space (MB):";
         Text[ portuguese ] = "~Memуria livre (MB):";
-        Text[ russian ] = "—вободной пам€ти (ћЅ):";
+        Text[ russian ] = "—вободно пам€ти (ћб):";
         Text[ greek ] = "≈леэиесз мнёмз (MB):";
         Text[ dutch ] = "~Vrij geheugen (MB):";
         Text[ french ] = "Mйmoire ~libre (Mo) :";
@@ -331,7 +331,7 @@ ModalDialog DLG_ADABASSTAT
         Text [ ENGLISH ]    = "~Memory using (in %):" ;
         Text[ english_us ] = "~Memory utilization (in %):";
         Text[ portuguese ] = "~Memуria utilizada (em %):";
-        Text[ russian ] = "~«ан€той пам€ти (в %):";
+        Text[ russian ] = "~«ан€то пам€ти (в %):";
         Text[ greek ] = " бф№лзшз мнёмзт (уе %):";
         Text[ dutch ] = "~Gebruikt geheugen (in %):";
         Text[ french ] = "Mйmoire ~utilisйe (en %):";
@@ -373,9 +373,9 @@ ModalDialog DLG_ADABASSTAT
     Text [ ENGLISH ]    = "Database statistics" ;
     Text[ english_us ] = "Database Statistics";
     Text[ portuguese ] = "Estatнstica da base de dados";
-    Text[ russian ] = "—татистики базы данных";
+    Text[ russian ] = "—татистика базы данных";
     Text[ greek ] = "”фбфйуфйк№ в№узт дедпмЁнщн";
-    Text[ dutch ] = "Database statistieken";
+    Text[ dutch ] = "Databasestatistieken";
     Text[ french ] = "Statistiques de la base de donnйes";
     Text[ spanish ] = "Estadнsticas de la base de datos";
     Text[ italian ] = "Statistiche database";
@@ -400,7 +400,7 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text [ English ] = "Contains the system tables" ;
     Text[ english_us ] = "Contains the system tables";
     Text[ portuguese ] = "Contйm as tabelas do sistema";
-    Text[ russian ] = "—одержит системных таблиц";
+    Text[ russian ] = "—одержит системные таблицы";
     Text[ greek ] = "–есйЁчей фпхт рянбкет фпх ухуфёмбфпт";
     Text[ dutch ] = "Bevat de systeemtabellen";
     Text[ french ] = "Contient les tables systиme";
@@ -417,7 +417,7 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text[ turkish ] = "Contains the system tables";
     Text[ arabic ] = "нЌ жн Џбм ћѕ«жб «бдў«г";
     Text[ catalan ] = "Contй les taules del sistema";
-    Text[ finnish ] = "Sisдltдд jдrjestelmдtaulukot";
+    Text[ finnish ] = "Sisдltдд jдrjestelmдtaulut";
     Text[ thai ] = "аЄ°аЄµаЄХаЄ≤аЄ£аЄ≤аЄЗаЄ£аЄ∞аЄЪаЄЪ";
 };
 
@@ -510,7 +510,7 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ portuguese ] = "Memуria ainda disponнvel antes de criar um novo ficheiro Datadev.";
     Text[ russian ] = "ƒоступно пам€ти перед созданием нового файла datadev.";
     Text[ greek ] = "ЅрпмЁнпхуб мнёмз рсйн фзн дзмйпхсгяб еньт нЁпх бсчеяпх Datadev.";
-    Text[ dutch ] = "Noch beschikbare vrije ruimte voordat een nieuw Datadev-bestand wordt aangelegd.";
+    Text[ dutch ] = "Nog beschikbare vrije ruimte voordat een nieuw Datadev-bestand wordt gemaakt.";
     Text[ french ] = "Mйmoire encore disponible avant gйnйration d'un nouveau fichier Datadev.";
     Text[ spanish ] = "Memoria aъn disponible antes de crear un nuevo archivo datadev.";
     Text[ italian ] = "Memoria ancora disponibile prima di creare un nuovo file Datadev.";
@@ -535,7 +535,7 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text [ English ] = "Currently used memory" ;
     Text[ english_us ] = "Currently used memory";
     Text[ portuguese ] = "Memуria utilizada actualmente";
-    Text[ russian ] = "Ќа текущий момент пам€ти использовано";
+    Text[ russian ] = "»спользовано пам€ти на текущий момент";
     Text[ greek ] = "–спт фп рбсьн кбфелзммЁнз мнёмз";
     Text[ dutch ] = "Momenteel gebruikte vrije ruimte";
     Text[ french ] = "Mйmoire actuellement utilisйe";
@@ -562,12 +562,12 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text [ English ] = "Could no display the information. No access rights for system tables." ;
     Text[ english_us ] = "No information could be displayed because no access rights exist for the required system tables.";
     Text[ portuguese ] = "… impossнvel mostrar informaзхes. Os direitos de acesso аs tabelas do sistema necessбrias nгo existem.";
-    Text[ russian ] = "»з-за отсутствующих прав доступа к необходимым системным таблицам отобразить информацию невозможно.";
+    Text[ russian ] = "Ќевозможно отобразить информацию, так как нет прав доступа к необходимым системным таблицам.";
     Text[ greek ] = "Could no display the information. No access rights for system tables.";
-    Text[ dutch ] = "Er konden geen gegevens worden weergegeven, daar er geen toegangsrecht bestaat voor de benodigde systeemtabellen.";
+    Text[ dutch ] = "Er kunnen geen gegevens worden weergegeven omdat er geen toegangsrecht bestaat voor de vereiste systeemtabellen.";
     Text[ french ] = "Impossible d'afficher les informations : aucun droit d'accиs aux tables de systиme requises.";
     Text[ spanish ] = "No se puede mostrar ninguna informaciуn porque no existe derecho de acceso a las tablas de sistema necesarias.";
-    Text[ finnish ] = "Could no display the information. No access rights for system tables.";
+    Text[ finnish ] = "Tietoja ei voitu nдyttдд, koska vaadituille jдrjestelmдtauluille ei ole kдyttцoikeuksia.";
     Text[ italian ] = "Impossibile visualizzare le informazioni poichй manca l'autorizzazione alle tabelle di sistema richieste";
     Text[ danish ] = "Oplysninger kan ikke vises, da du ikke har adgangsrettigheder til de nшdvendige systemtabeller!";
     Text[ swedish ] = "Det gеr inte att visa nеgon information eftersom det saknas еtkomstbehцrighet till de nцdvдndiga systemtabellerna.";
