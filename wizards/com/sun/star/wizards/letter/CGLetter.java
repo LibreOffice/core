@@ -20,8 +20,8 @@ public class CGLetter extends ConfigGroup {
     public boolean cp_PrintBendMarks;
     public boolean cp_PrintGreeting;
     public boolean cp_PrintFooter;
-    public int cp_Salutation;
-    public int cp_Greeting;
+    public String cp_Salutation;
+    public String cp_Greeting;
     public int cp_SenderAddressType;
     public String cp_SenderCompanyName;
     public String cp_SenderStreet;
