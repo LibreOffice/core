@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:37:53 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #include <svtools/eitem.hxx>
 #endif
 
-#include <svtools/inethist.hxx>
 #include <svtools/saveopt.hxx>
 
 #ifndef GCC
@@ -250,8 +249,6 @@ void SfxApplication::Deinitialize()
     pAppDispat->Flush();
     bDowning = TRUE;
     pAppDispat->DoDeactivate_Impl( TRUE );
-
-    INetURLHistory::Delete();
 
     // call derived application-exit
     bInExit = TRUE;
