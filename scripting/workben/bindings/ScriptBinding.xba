@@ -597,15 +597,16 @@ sub evaluateForEvent( xmlline as string, lineCount as integer )
 	next n	
 end sub
 
-function isOKscriptProps( eventName as string ) 
+
+function isOKscriptProps( props() as Object, eventName as string ) as Boolean
 	On Error Goto ErrorHandler
-	scriptProps = ThisComponent.getEvents().getByName( eventName )
-	test = ubound( scriptProps )
-	isOKscriptProps = true
+	props  = ThisComponent.getEvents().getByName( eventName )
+	test = ubound( props() )
+	isOKscriptProps() = true
 	exit function
 	
 	ErrorHandler:
-	isOKscriptProps = false
+	isOKscriptProps() = false
 end function
 
 sub ReadEventsFromDoc()
@@ -613,8 +614,8 @@ sub ReadEventsFromDoc()
 	
 	eventSupplier = ThisComponent
 	for n = 0 to ubound( allEventTypes() )
-		scriptProps = eventSupplier.getEvents().getByName( allEventTypes( n ).Name )
-		if (isOKscriptProps(allEventTypes( n ).Name)) then
+		Dim scriptProps() as Object
+		if (isOKscriptProps( scriptProps(), allEventTypes( n ).Name) ) then
 			if ( ubound( scriptProps ) &gt; 0 ) then
 				if ( scriptProps(0).Value = &quot;Script&quot; ) then
 					&apos;Script binding
