@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-11 07:30:11 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 12:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,6 +478,31 @@ String GetDescriptionByFactory_Impl( const String& rFactory )
 
 //****************************************************************************
 
+
+Image SvFileInformationManager::GetImageNoDefault( const INetURLObject& rObject, BOOL bBig )
+{
+    USHORT nImage = GetImageId_Impl( rObject );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+
+    if ( nImage == IMG_FILE )
+        return Image();
+
+    ImageList* pList = NULL;
+    if ( bBig )
+    {
+        if ( !_pBigImageList )
+            _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
+        pList = _pBigImageList;
+    }
+    else
+    {
+        if ( !_pSmallImageList )
+            _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
+        pList = _pSmallImageList;
+    }
+
+    return pList->GetImage( nImage );
+}
 
 Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig )
 {
