@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:54:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
-#include <so3/pastedlg.hxx>
+#include <svx/svxdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/postattr.hxx>
 #include <svx/fontitem.hxx>
@@ -1457,8 +1457,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         USHORT nFormatCount = aFormats.Count();
                         if ( nFormatCount )
                         {
-                            SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
-
+                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                            SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pTabViewShell->GetDialogParent() );
+                            if ( pDlg )
+                            {
                             for (USHORT i=0; i<nFormatCount; i++)
                             {
                                 ULONG nFormatId = aFormats.GetClipbrdFormatId( i );
@@ -1471,7 +1473,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                             TransferableDataHelper aDataHelper(
                                 TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
-                            ULONG nFormat = pDlg->Execute( pTabViewShell->GetDialogParent(), aDataHelper.GetTransferable() );
+                            ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
                             if (nFormat > 0)
                             {
                                 {
@@ -1492,6 +1494,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             }
 
                             delete pDlg;
+                            }
                         }
                         else
                             rReq.SetReturnValue(SfxInt16Item(nSlot, 0));        // 0 = Fehler
