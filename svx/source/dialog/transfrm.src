@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 21:03:47 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ portuguese ] = "Posição" ;
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
-        Text [ french ] = "Fonction" ;
+        Text [ french ] = "Position" ;
         Text [ swedish ] = "Placering" ;
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "Posición" ;
@@ -211,10 +211,10 @@ TabPage RID_SVXPAGE_POSITION
         Text [ ENGLISH ] = "Base point" ;
         Text[ english_us ] = "Base point";
         Text[ portuguese ] = "Base point";
-        Text[ russian ] = "Base point";
+        Text[ russian ] = "Áàçèñíàÿ òî÷êà";
         Text[ greek ] = "Base point";
         Text[ dutch ] = "Base point";
-        Text[ french ] = "Base point";
+        Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
         Text[ finnish ] = "Base point";
         Text[ italian ] = "Base point";
@@ -222,7 +222,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ swedish ] = "Baspunkt";
         Text[ polish ] = "Punkt wyjœciowy";
         Text[ portuguese_brazilian ] = "Base point";
-        Text[ japanese ] = "Base point";
+        Text[ japanese ] = "Šî“_";
         Text[ korean ] = "Base point";
         Text[ chinese_simplified ] = "»ùµã";
         Text[ chinese_traditional ] = "°òÂI";
@@ -304,7 +304,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ english_us ] = "Anchor" ;
         Text [ italian ] = "Ancoraggio" ;
         Text [ spanish ] = "Anclaje" ;
-        Text [ french ] = "Ancrer" ;
+        Text [ french ] = "Ancrage" ;
         Text [ swedish ] = "Förankring" ;
         Text [ danish ] = "Forankring" ;
         Text [ portuguese_brazilian ] = "Verankerung" ;
@@ -988,10 +988,10 @@ TabPage RID_SVXPAGE_SIZE
         Text [ ENGLISH ] = "Base point" ;
         Text[ english_us ] = "Base point";
         Text[ portuguese ] = "Base point";
-        Text[ russian ] = "Base point";
+        Text[ russian ] = "Áàçèñíàÿ òî÷êà";
         Text[ greek ] = "Base point";
         Text[ dutch ] = "Base point";
-        Text[ french ] = "Base point";
+        Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
         Text[ finnish ] = "Base point";
         Text[ italian ] = "Base point";
@@ -999,7 +999,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ swedish ] = "Baspunkt";
         Text[ polish ] = "Punkt wyjœciowy";
         Text[ portuguese_brazilian ] = "Base point";
-        Text[ japanese ] = "Base point";
+        Text[ japanese ] = "Šî“_";
         Text[ korean ] = "Base point";
         Text[ chinese_simplified ] = "»ùµã";
         Text[ chinese_traditional ] = "°òÂI";
@@ -1117,7 +1117,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ swedish ] = "Anpassa";
         Text[ polish ] = "Dopasuj";
         Text[ portuguese_brazilian ] = "Adjust";
-        Text[ japanese ] = "“K‰";
+        Text[ japanese ] = "“K‡";
         Text[ korean ] = "Á¶Á¤";
         Text[ chinese_simplified ] = "µ÷Õû";
         Text[ chinese_traditional ] = "½Õ¾ã";
@@ -1341,7 +1341,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ ENGLISH ] = "Presets" ;
         Text[ english_us ] = "Presets";
         Text[ portuguese ] = "Presets";
-        Text[ russian ] = "Presets";
+        Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "Presets";
         Text[ dutch ] = "Presets";
         Text[ french ] = "Presets";
@@ -1352,7 +1352,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Presets";
-        Text[ japanese ] = "Presets";
+        Text[ japanese ] = "ÌßØ¾¯Ä";
         Text[ korean ] = "Presets";
         Text[ chinese_simplified ] = "Ô¤ÖÃ";
         Text[ chinese_traditional ] = "¹w¸m";
@@ -1496,7 +1496,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ ENGLISH ] = "Presets" ;
         Text[ english_us ] = "Presets";
         Text[ portuguese ] = "Presets";
-        Text[ russian ] = "Presets";
+        Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "Presets";
         Text[ dutch ] = "Presets";
         Text[ french ] = "Presets";
@@ -1507,7 +1507,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Presets";
-        Text[ japanese ] = "Presets";
+        Text[ japanese ] = "ÌßØ¾¯Ä";
         Text[ korean ] = "Presets";
         Text[ chinese_simplified ] = "Ô¤ÖÃ";
         Text[ chinese_traditional ] = "¹w¸m";
@@ -1524,12 +1524,12 @@ TabPage RID_SVXPAGE_ANGLE
         TabStop = TRUE ;
         QuickHelpText = "Drehwinkel" ;
         QuickHelpText [ ENGLISH ] = "Angle" ;
-        QuickHelpText[ english_us ] = "Angle";
+        QuickHelpText[ english_us ] = "Rotation Angle!";
         QuickHelpText[ portuguese ] = "Angle";
-        QuickHelpText[ russian ] = "Angle";
+        QuickHelpText[ russian ] = "Óãîë ïîâîğîòà!";
         QuickHelpText[ greek ] = "Angle";
         QuickHelpText[ dutch ] = "Angle";
-        QuickHelpText[ french ] = "Angle";
+        QuickHelpText[ french ] = "Angle de rotation!";
         QuickHelpText[ spanish ] = "Ángulo de rotación!";
         QuickHelpText[ finnish ] = "Angle";
         QuickHelpText[ italian ] = "Angle";
@@ -1537,7 +1537,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ swedish ] = "Rotationsvinkel!";
         QuickHelpText[ polish ] = "K¹t obrotu!";
         QuickHelpText[ portuguese_brazilian ] = "Angle";
-        QuickHelpText[ japanese ] = "Angle";
+        QuickHelpText[ japanese ] = "‰ñ“]“x!";
         QuickHelpText[ korean ] = "Angle";
         QuickHelpText[ chinese_simplified ] = "Ğı×ª½Ç¶È!";
         QuickHelpText[ chinese_traditional ] = "±ÛÂà¨¤«×!";
@@ -1590,7 +1590,7 @@ TabPage RID_SVXPAGE_SLANT
         Text [ portuguese_brazilian ] = "Eckenradius" ;
         Text [ portuguese ] = "Raio do ângulo" ;
         Text[ chinese_simplified ] = "½Ç°ë¾¶";
-        Text[ russian ] = "Ğàäèóñ çàêğóãëåííîãî óãëà";
+        Text[ russian ] = "Ğàäèóñ (çàêğóãëåííîãî) óãëà";
         Text[ polish ] = "Promieñ krzywizny";
         Text[ japanese ] = "Šp‚Ì”¼Œa";
         Text[ chinese_traditional ] = "¨¤¥b®|";
@@ -1661,7 +1661,7 @@ TabPage RID_SVXPAGE_SLANT
         Text [ portuguese_brazilian ] = "Schr?gstellen" ;
         Text [ portuguese ] = "Inclinações" ;
         Text[ chinese_simplified ] = "ÇãĞ±";
-        Text[ russian ] = "Íàêëîí";
+        Text[ russian ] = "Ïîä íàêëîíîì";
         Text[ polish ] = "Pochyl";
         Text[ japanese ] = "ŒXÎ‚³‚¹‚é";
         Text[ chinese_traditional ] = "¶É±×";
@@ -1911,3 +1911,4 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posición y tamaño";
 };
  // ********************************************************************** EOF
+
