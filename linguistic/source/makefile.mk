@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mh $ $Date: 2000-11-21 18:17:59 $
+#   last change: $Author: tl $ $Date: 2000-11-22 10:07:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,13 +167,16 @@ DEF1DES     =Linguistic main DLL
 .IF "$(GUI)"=="WNT"
 DEF1EXPORT1 = component_writeInfo
 DEF1EXPORT2 = component_getFactory
+DEF1EXPORT3 = component_getImplementationEnvironment
 .ELSE
 .IF "$(COM)"=="ICC"
 DEF1EXPORT1 = component_writeInfo
 DEF1EXPORT2 = component_getFactory
+DEF1EXPORT3 = component_getImplementationEnvironment
 .ELSE
 DEF1EXPORT1 = _component_writeInfo
 DEF1EXPORT2 = _component_getFactory
+DEF1EXPORT3 = _component_getImplementationEnvironment
 .ENDIF
 .ENDIF
 
