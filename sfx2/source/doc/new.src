@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:29:25 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "¿µ¿ª(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Áreas";
     };
     FixedText FT_TEMPLATE
     {
@@ -165,6 +166,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "¼­½ÄÆÄÀÏ(~T)";
         Text[ turkish ] = "~Þablon";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "P~lantillas";
     };
     ListBox LB_TEMPLATE
     {
@@ -204,6 +206,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "µ¡ºÙÀÓ(~M)";
         Text[ turkish ] = "~Araçlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Opciones";
     };
     Window WIN_PREVIEW
     {
@@ -241,6 +244,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "¹Ì¸®º¸±â(~V)";
         Text[ turkish ] = "Ö~nizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pre~visualización";
     };
     GroupBox GB_DOCINFO
     {
@@ -268,6 +272,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "¼³¸í";
         Text[ turkish ] = "Taným";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Descripción";
     };
     FixedText FT_TITLE
     {
@@ -297,6 +302,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "Á¦¸ñ(~T)";
         Text[ turkish ] = "~Baþlýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Título";
     };
     Edit ED_TITLE
     {
@@ -334,6 +340,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "ÁÖÁ¦";
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tema";
     };
     Edit ED_THEMA
     {
@@ -373,6 +380,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "Å°¿öµå(~K)";
         Text[ turkish ] = "A~nahtar sözcükler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Palabras ~clave";
     };
     Edit ED_KEYWORDS
     {
@@ -410,6 +418,7 @@ ModalDialog DLG_NEW_FILE
         Text[ korean ] = "¼³¸í(~D)";
         Text[ turkish ] = "~Taným";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Descripción";
     };
     MultiLineEdit ED_DESC
     {
@@ -435,5 +444,6 @@ ModalDialog DLG_NEW_FILE
     Text[ korean ] = "»õ·Î";
     Text[ turkish ] = "Yeni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nuevo";
 };
  // ********************************************************************** EOF
