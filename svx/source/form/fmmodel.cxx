@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-21 11:42:57 $
+ *  last change: $Author: fs $ $Date: 2002-10-14 08:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,13 @@ struct FmFormModelImplData
 {
     FmXUndoEnvironment*     pUndoEnv;
     XubString               sNextPageId;
+    sal_Bool                bOpenInDesignIsDefaulted;
+
+    FmFormModelImplData()
+        :pUndoEnv( NULL )
+        ,bOpenInDesignIsDefaulted( sal_True )
+    {
+    }
 };
 
 /*************************************************************************
@@ -299,7 +306,8 @@ void FmFormModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
         SdrDownCompat aCompat(rIn,STREAM_READ);
         sal_uInt8 nTemp = 0;
         rIn >> nTemp;
-        m_bOpenInDesignMode = nTemp ? sal_True : sal_False;
+
+        implSetOpenInDesignMode( nTemp ? sal_True : sal_False, sal_True );
 
         if (aCompat.GetBytesLeft())
         {   // it is a version which already wrote the AutoControlFocus flag
@@ -395,16 +403,34 @@ SdrLayerID FmFormModel::GetControlExportLayerId( const SdrObject& rObj ) const
 }
 
 //------------------------------------------------------------------------
+void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce )
+{
+    if( ( _bOpenDesignMode != m_bOpenInDesignMode ) || _bForce )
+    {
+        m_bOpenInDesignMode = _bOpenDesignMode;
+
+        if ( pObjShell )
+            pObjShell->SetModified( sal_True );
+    }
+    // no matter if we really did it or not - from now on, it does not count as defaulted anymore
+    m_pImpl->bOpenInDesignIsDefaulted = sal_False;
+}
+
+//------------------------------------------------------------------------
 void FmFormModel::SetOpenInDesignMode( sal_Bool bOpenDesignMode )
 {
 #ifndef SVX_LIGHT
-    if( bOpenDesignMode != m_bOpenInDesignMode )
-    {
-        m_bOpenInDesignMode = bOpenDesignMode;
-        pObjShell->SetModified( sal_True );
-    }
+    implSetOpenInDesignMode( bOpenDesignMode, sal_False );
 #endif
 }
+
+#ifndef SVX_LIGHT
+//------------------------------------------------------------------------
+sal_Bool FmFormModel::OpenInDesignModeIsDefaulted( )
+{
+    return m_pImpl->bOpenInDesignIsDefaulted;
+}
+#endif
 
 //------------------------------------------------------------------------
 void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
