@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1821,7 +1821,13 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                         aDescriptor[daConnection]   =   xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION);
                         aDescriptor[daCursor]       <<= xCursorClone;
                         if ( aSelection.getLength() )
-                            aDescriptor[daSelection]    <<= aSelection;
+                        {
+                            aDescriptor[daSelection]            <<= aSelection;
+                            aDescriptor[daBookmarkSelection]    <<= sal_False;
+                                // these are selection indicies
+                                // before we change this, all clients have to be adjusted
+                                // so that they recognize the new BookmarkSelection property!
+                        }
 
                         xDispatch->dispatch(aParentUrl, aDescriptor.createPropertyValueSequence());
                     }
