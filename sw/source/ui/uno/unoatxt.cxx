@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-06 09:50:54 $
+ *  last change: $Author: mtg $ $Date: 2001-08-31 15:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,13 +659,26 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     String sNewGroup(rName);
-    if(!pGlossaries || sName == rName)
+    if( !pGlossaries )
         throw uno::RuntimeException();
     if(STRING_NOTFOUND == sNewGroup.Search(GLOS_DELIM))
     {
         sNewGroup += GLOS_DELIM;
         sNewGroup += UniString::CreateFromInt32(0);
     }
+    // check value after delimiter...
+    OUString aNewSuffix (rName.copy ( 1 + rName.lastIndexOf ( GLOS_DELIM ) ) );
+    OUString aOldSuffix (sName.copy ( 1 + sName.lastIndexOf ( GLOS_DELIM ) ) );
+
+    sal_Int32 nNewNumeric = aNewSuffix.toInt32();
+    sal_Int32 nOldNumeric = aOldSuffix.toInt32();
+
+    OUString aNewPrefix (rName.copy ( 0, rName.lastIndexOf ( GLOS_DELIM ) ) );
+    OUString aOldPrefix (sName.copy ( 0, sName.lastIndexOf ( GLOS_DELIM ) ) );
+
+    if ( sName == rName ||
+       ( nNewNumeric == nOldNumeric && aNewPrefix == aOldPrefix ) )
+        return;
     //the name must be saved, the group may be invalidated while in RenameGroupDoc()
     SwGlossaries* pTempGlossaries = pGlossaries;
 
