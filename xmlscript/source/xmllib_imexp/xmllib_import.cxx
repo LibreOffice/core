@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 16:19:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ void LibraryElement::endElement()
 
 //##################################################################################################
 
-SAL_DLLEXPORT Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         SAL_THROW( (Exception) )
 {
@@ -378,7 +378,7 @@ SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
 
 //##################################################################################################
 
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibrary( LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) )
 {
