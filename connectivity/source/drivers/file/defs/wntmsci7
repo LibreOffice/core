@@ -2255,3 +2255,4 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ??_C@_0DB@OHBA@o?3?2SRC638?2wntmsci7?2inc?2comphelpe@
 ??_C@_0DG@BMEA@o?3?2SRC638?2wntmsci7?2inc?2comphelpe@
 ?throwUrlNotValid@OConnection@file@connectivity@@IAEXABVOUString@rtl@@0@Z
+?createStream_simpleError@OFileTable@file@connectivity@@SAPAVSvStream@@ABVString@@G@Z
