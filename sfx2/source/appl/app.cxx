@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:39:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 12:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,11 +412,12 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 #include "imagemgr.hxx"
 #include "accelinfo.hxx"
 
+::osl::Mutex SfxApplication::gMutex;
+
 SfxApplication* SfxApplication::GetOrCreate()
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
     // SFX on demand
+    ::osl::MutexGuard aGuard(SfxApplication::gMutex);
     if ( !pApp )
     {
         SfxApplication *pNew = new SfxApplication;
