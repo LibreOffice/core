@@ -2,9 +2,9 @@
  *
  *  $RCSfile: text.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _CPPCANVAS_TEXT_HXX
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <external/boost/shared_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #endif
 
 #ifndef _CPPCANVAS_CANVASGRAPHIC_HXX
