@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:37:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,27 +287,34 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
 
             if ( pICHelper )
             {
-                OInterfaceIteratorHelper iter( *pICHelper );
-                Reference< XTransferable > rXTransf = m_pImpl->getContents( );
-                ClipboardEvent aClipbEvent( static_cast< XClipboard* >( this ), rXTransf );
-
-                while( iter.hasMoreElements( ) )
+                try
                 {
-                    try
+                    OInterfaceIteratorHelper iter(*pICHelper);
+                    Reference<XTransferable> rXTransf(m_pImpl->getContents());
+                    ClipboardEvent aClipbEvent(static_cast<XClipboard*>(this), rXTransf);
+
+                    while(iter.hasMoreElements())
                     {
-                        Reference< XClipboardListener > xCBListener( iter.next( ), UNO_QUERY );
-                        if ( xCBListener.is( ) )
-                            xCBListener->changedContents( aClipbEvent );
+                        try
+                        {
+                            Reference<XClipboardListener> xCBListener(iter.next(), UNO_QUERY);
+                            if (xCBListener.is())
+                                xCBListener->changedContents(aClipbEvent);
+                        }
+                        catch(RuntimeException&)
+                        {
+                            OSL_ENSURE( false, "RuntimeException caught" );
+                        }
                     }
-                    catch( RuntimeException& )
-                    {
-                        OSL_ENSURE( false, "RuntimeException caught" );
-                    }
-                    catch( ... )
-                    {
-                        OSL_ENSURE( false, "Exception during event dispatching" );
-                    }
-                } // while
+                }
+                catch(const ::com::sun::star::lang::DisposedException&)
+                {
+                    OSL_ENSURE(false, "Service Manager disposed");
+
+                    // no further clipboard changed notifications
+                    m_pImpl->unregisterClipboardViewer();
+                }
+
             } // end if
         } // end if
     } // end if
