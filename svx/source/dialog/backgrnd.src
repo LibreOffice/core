@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:10:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     StringList [ greek ] =
     {
             < "Παράγραφος" ; > ;
-        < "Χαρακτήρες" ; > ;
+        < "Χαρακτήρ." ; > ;
     };
     StringList [ korean ] =
     {
@@ -734,9 +734,9 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ danish ] = "Transparens";
         Text[ swedish ] = "~Transparens";
         Text[ polish ] = "Przeroczystoζ";
-        Text[ portuguese_brazilian ] = "Tr~ansparκncia";
-        Text[ japanese ] = "ι€ιζ€§";
-        Text[ korean ] = "ν¬λª…ν™”";
+        Text[ portuguese_brazilian ] = "~Transparκncia";
+        Text[ japanese ] = "ι€ιζ€§(~T)";
+        Text[ korean ] = "ν¬λª…ν™”(~T)";
         Text[ chinese_simplified ] = "ι€ζ(~T)";
         Text[ chinese_traditional ] = "ι€ζ(~T)";
         Text[ turkish ] = "~Saydamlύk";
@@ -888,7 +888,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ spanish ] = "Tipo" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
-        Text [ danish ] = "Type" ;
+        Text [ danish ] = "F" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
         Text[ chinese_simplified ] = "η±»ε‹";
@@ -1170,6 +1170,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     Text[ slovak ] = "Pozadie";
 };
  // ********************************************************************** EOF
+
 
 
 
