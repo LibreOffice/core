@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:25:11 $
+ *  last change: $Author: jl $ $Date: 2001-03-19 10:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 
 #include <cppuhelper/servicefactory.hxx>
 
-#include <vos/dynload.hxx>
 
 #include <assert.h>
 
