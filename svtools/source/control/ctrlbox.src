@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-04 17:07:12 $
+ *  last change: $Author: rt $ $Date: 2002-11-27 16:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ String STR_SVT_COLLATE_ALPHANUMERIC
     Text[ dutch ] = "Alfanumeriek";
     Text[ french ] = "Alphanumйrique";
     Text[ spanish ] = "Alfanumйrico";
-    Text[ finnish ] = "Alphanumeric";
+    Text[ finnish ] = "Aakkosnumeerinen";
     Text[ italian ] = "Alfanumerico";
     Text[ danish ] = "Alfanumerisk";
     Text[ swedish ] = "Alfanumeriskt";
@@ -167,7 +167,7 @@ String STR_SVT_COLLATE_NORMAL
      Text [ ENGLISH ] = "Normal" ;
     Text[ english_us ] = "Normal";
     Text[ portuguese ] = "Normal";
-    Text[ russian ] = "Стандарт";
+    Text[ russian ] = "Нормальный";
     Text[ greek ] = "КбнпнйкЬ";
     Text[ dutch ] = "Normaal";
     Text[ french ] = "Normal";
@@ -195,9 +195,9 @@ String STR_SVT_COLLATE_CHARSET
      Text [ ENGLISH ] = "Character Set" ;
     Text[ english_us ] = "Character set";
     Text[ portuguese ] = "Conjunto de caracteres";
-    Text[ russian ] = "Набор знаков";
+    Text[ russian ] = "Кодировка";
     Text[ greek ] = "Уэнплп чбсбкфЮсщн";
-    Text[ dutch ] = "Charset";
+    Text[ dutch ] = "Tekenset";
     Text[ french ] = "Jeu de caractиres";
     Text[ spanish ] = "Juego de caracteres";
     Text[ italian ] = "Tipo di carattere";
@@ -307,9 +307,9 @@ String STR_SVT_COLLATE_RADICAL
     Text [ ENGLISH ] = "Radical" ;
     Text[ english_us ] = "Radical";
     Text[ portuguese ] = "Radical";
-    Text[ russian ] = "Корень";
+    Text[ russian ] = "Радикал";
     Text[ greek ] = "Radical";
-    Text[ dutch ] = "Radicaal";
+    Text[ dutch ] = "Radical";
     Text[ french ] = "Radical";
     Text[ spanish ] = "Radical";
     Text[ italian ] = "Radicale";
