@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:17:45 $
+ *  last change: $Author: cl $ $Date: 2001-03-07 14:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3223,6 +3223,11 @@ String RID_SVXSTR_HATCH9_DEF
 {
     Text = "Black 0 Degrees";
 };
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH10_DEF
+{
+    Text = "Hatch";
+};
 
 String RID_SVXSTR_HATCH0
 {
@@ -3454,6 +3459,32 @@ String RID_SVXSTR_HATCH9
     Text[ arabic ] = "√”Êœ 0 œ—Ã…";
     Text[ turkish ] = "Siyah 0 derece";
 };
+String RID_SVXSTR_HATCH10
+{
+    Text = "Schraffur" ;
+    Text [ ENGLISH ] = "Hatch" ;
+    Text [ norwegian ] = "Hatch" ;
+    Text [ italian ] = "Tratteggio" ;
+    Text [ portuguese_brazilian ] = "Sombreado" ;
+    Text [ portuguese ] = "Tracejado" ;
+    Text [ finnish ] = "Viivoitus" ;
+    Text [ danish ] = "Skravering" ;
+    Text [ french ] = "Hachure" ;
+    Text [ swedish ] = "Skraffering" ;
+    Text [ dutch ] = "Arcering" ;
+    Text [ spanish ] = "Trama" ;
+    Text [ english_us ] = "Hatching" ;
+    Text[ chinese_simplified ] = "“ı”∞œﬂ";
+    Text[ russian ] = "ÿÚËıÓ‚Í‡";
+    Text[ polish ] = "Kreskowanie";
+    Text[ japanese ] = " Ø¡›∏ﬁ";
+    Text[ chinese_traditional ] = "≥±ºvΩu";
+    Text[ arabic ] = "‰ﬁ‘";
+    Text[ greek ] = "√Ò·ÏÏÔÛÍÈ‹";
+    Text[ korean ] = "«ÿƒ™";
+    Text[ turkish ] = "Tarama";
+    Text[ language_user1 ] = " ";
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -3564,6 +3595,12 @@ String RID_SVXSTR_BMP19_DEF
 String RID_SVXSTR_BMP20_DEF
 {
     Text = "Roses";
+};
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP21_DEF
+{
+    Text = "Bitmape";
 };
 
 String RID_SVXSTR_BMP0
@@ -4050,6 +4087,12 @@ String RID_SVXSTR_BMP20
     Text[ turkish ] = "G¸l";
 };
 
+String RID_SVXSTR_BMP21
+{
+    Text = "Bitmap";
+    Text [ ENGLISH ] = "Bitmap";
+    Text [ english_us ] = "Bitmap";
+};
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Reference-strings for standard-dash-table
@@ -4109,6 +4152,11 @@ String RID_SVXSTR_DASH9_DEF
 String RID_SVXSTR_DASH10_DEF
 {
     Text = "Dashed (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH11_DEF
+{
+    Text = "Dash";
 };
 
 String RID_SVXSTR_DASH0
@@ -4363,6 +4411,12 @@ String RID_SVXSTR_DASH10
     Text[ chinese_traditional ] = "¬I¶EΩu(•i≈‹)";
     Text[ arabic ] = "‘ı—ÿ („ €Ì—…)";
     Text[ turkish ] = "Kesik Áizgili (dei˛ken)";
+};
+String RID_SVXSTR_DASH11
+{
+    Text = "Gestrichelt";
+    Text [ ENGLISH ] = "Dashed";
+    Text [ english_us ] = "Dashed";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
