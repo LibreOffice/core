@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:02:12 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 07:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1574,7 +1574,12 @@ void TextEngine::ImpBreakLine( ULONG nPara, TextLine* pLine, TextPortion* pPorti
     i18n::LineBreakResults aLBR = xBI->getLineBreak( pNode->GetText(), nMaxBreakPos, GetLocale(), pLine->GetStart(), aHyphOptions, aUserOptions );
     USHORT nBreakPos = (USHORT)aLBR.breakIndex;
     if ( nBreakPos <= pLine->GetStart() )
+    {
         nBreakPos = nMaxBreakPos;
+        if ( nBreakPos <= pLine->GetStart() )
+            nBreakPos = pLine->GetStart() + 1;  // Sonst Endlosschleife!
+    }
+
 
     // die angeknackste Portion ist die End-Portion
     pLine->SetEnd( nBreakPos );
