@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:29:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,6 +638,11 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
     }
     else
         pClipData = NULL;
+
+    // Options pointers exist (ImplCreateOptions) for any document.
+    // Must be copied for correct results in OLE objects (#i42666#).
+    SetDocOptions( pSourceDoc->GetDocOptions() );
+    SetViewOptions( pSourceDoc->GetViewOptions() );
 }
 
 SvNumberFormatter* ScDocument::GetFormatTable() const
