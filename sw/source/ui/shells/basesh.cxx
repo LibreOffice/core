@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-30 16:00:13 $
+ *  last change: $Author: os $ $Date: 2001-05-08 12:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1678,7 +1678,6 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                 if( (nSel & SwWrtShell::SEL_GRF) &&
                                             rSh.IsGrfSwapOut(TRUE))
                                 {
-                                    bDisable = TRUE;
                                     if( AddGrfUpdateSlot( nWhich ))
                                         rSh.GetGraphic(FALSE);  // start the loading
                                 }
