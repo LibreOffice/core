@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 17:15:09 $
+#   last change: $Author: vg $ $Date: 2003-05-27 10:29:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,6 @@ IDLFILES=\
     CachedDynamicResultSetFactory.idl\
     CachedDynamicResultSetStub.idl\
     CachedDynamicResultSetStubFactory.idl\
-    ChaosContent.idl\
-    ChaosContentProvider.idl\
     CHAOSProgressStart.idl\
     Command.idl\
     CommandAbortedException.idl\
@@ -112,7 +110,6 @@ IDLFILES=\
     CookiePolicy.idl\
     CookieRequest.idl\
     CrossReference.idl\
-    DataContainer.idl\
     DefaultHierarchyDataSource.idl\
     DocumentHeaderField.idl\
     DocumentStoreMode.idl\
@@ -169,8 +166,8 @@ IDLFILES=\
     LockEntry.idl\
     LockScope.idl\
     LockType.idl\
-     MissingInputStreamException.idl\
-     MissingPropertiesException.idl\
+    MissingInputStreamException.idl\
+    MissingPropertiesException.idl\
      NameClash.idl\
      NameClashException.idl\
      NameClashResolveRequest.idl\
@@ -189,7 +186,6 @@ IDLFILES=\
      PostCommandArgument2.idl\
      Priority.idl\
      PropertiesManager.idl\
-     PropertyMatcherFactory.idl\
      PropertySetRegistry.idl\
      PropertyValueInfo.idl\
      PropertyValueState.idl\
