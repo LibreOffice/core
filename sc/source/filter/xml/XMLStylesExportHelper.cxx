@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 18:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,7 +855,9 @@ sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal
 
 void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex)
 {
-    DBG_ASSERT(aTables[nTable].size() > static_cast<sal_uInt32>(nField), "wrong field index");
+    DBG_ASSERT(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
+    if (aTables[nTable].size() == static_cast<sal_uInt32>(nField))
+        aTables[nTable].push_back(nStringIndex);
     aTables[nTable][nField] = nStringIndex;
 }
 
