@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 12:37:09 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ class StarBASIC;
 #include "progress.hxx"
 #include "scitems.hxx"
 #include "editable.hxx"
+#include "compiler.hxx"
 
 #include "impex.hxx"
 
