@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:24:57 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1152,7 +1152,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
  * 2) FlyToRect() liefert groessere Werte als die Framedaten !
  *************************************************************************/
 
-void SwTxtFly::DrawFlyRect( OutputDevice *pOut, const SwRect &rRect,
+void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         const SwTxtPaintInfo &rInf, sal_Bool bNoGraphic )
 {
     SwRegionRects aRegion( rRect );
