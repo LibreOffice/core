@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.114 $
+#   $Revision: 1.115 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-21 13:12:04 $
+#   last change: $Author: obo $ $Date: 2002-07-01 15:21:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1150,9 +1150,6 @@ RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -DBUILD=$(BUILD) -D$
 .ELSE
 RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -DBUILD=$(BUILD) $(JAVADEF)
 .ENDIF
-# RSCLINKFLAGS=-lg$(RSCLANG) -l
-#RSCGLOINC=$(SOLARENV)$/res
-#RSCGLOINC=$(PRJ)$/..$/res
 
 .IF "$(rscres)"!=""
 RSCRES=$(rscres)
@@ -1160,9 +1157,7 @@ RSCRES=$(rscres)
 .IF "$(RSCRES)"!=""
 RSCGLOINC=$(RSCRES)
 .ELSE
-.IF "$(GUI)" != "UNX"
-RSCGLOINC=$(SOLARSRC)\res
-.ENDIF
+RSCGLOINC=$(SOLARSRC)$/res
 .ENDIF
 
 RSCLOCINC=$(PRJ)$/win$/res
