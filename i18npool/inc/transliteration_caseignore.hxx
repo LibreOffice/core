@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_caseignore.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 14:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@ public:
     sal_Int32 SAL_CALL compareString(
         const rtl::OUString& s1,
         const rtl::OUString& s2)
-    throw(com::sun::star::uno::RuntimeException);
-
-    sal_Unicode SAL_CALL getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e)
     throw(com::sun::star::uno::RuntimeException);
 
 protected:
