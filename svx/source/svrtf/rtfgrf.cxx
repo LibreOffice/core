@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:22:44 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ public:
 };
 
 GrfWindow::GrfWindow( const Graphic& rGrf )
-    : WorkWindow( GetpApp()->GetAppWindow() ),
+    : WorkWindow( NULL ),
     aGrf( rGrf )
 {
     SetPosSizePixel( Point( 100, 0 ), Size( 300, 300 ));
