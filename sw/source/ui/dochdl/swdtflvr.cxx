@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-13 07:48:30 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,8 @@ extern BOOL bExecuteDrag;
 
 using namespace ::svx;
 using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::datatransfer;
 
 #ifdef DDE_AVAILABLE
 
@@ -1046,6 +1048,10 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     return 1;
 }
 
+static inline Reference < XTransferable > * lcl_getTransferPointer ( Reference < XTransferable > &xRef )
+{
+    return &xRef;
+}
 // -----------------------------------------------------------------------
 
 BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
@@ -1067,7 +1073,7 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                                 nSourceOptions,             /* ?? */
                                 EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                 nFormat, nEventAction, 0,
-                                &rData.GetXTransferable() );
+                                lcl_getTransferPointer ( rData.GetXTransferable() ) );
 
     return EXCHG_INOUT_ACTION_NONE != nAction;
 }
@@ -1097,7 +1103,7 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
                                     nSourceOptions,             /* ?? */
                                     EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                     nFormat, nEventAction, 0,
-                                    &rData.GetXTransferable() );
+                                    lcl_getTransferPointer ( rData.GetXTransferable() ) );
     }
 
     return EXCHG_INOUT_ACTION_NONE != nAction &&
@@ -2608,7 +2614,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     nSourceOptions,             /* ?? */
                                     EXCHG_IN_ACTION_DEFAULT,    /* ?? */
                                     nFormat, nEventAction, nFormat,
-                                    &rData.GetXTransferable() );
+                                    lcl_getTransferPointer ( rData.GetXTransferable() ) );
 
         if( EXCHG_INOUT_ACTION_NONE != nAction )
             nRet = SwTransferable::PasteData( rData, rSh, nAction, nFormat,
@@ -2629,7 +2635,7 @@ int SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
                         nDestination, EXCHG_IN_ACTION_COPY,
                         EXCHG_IN_ACTION_COPY, nFormat,
                         nEventAction, nFormat,
-                        &rData.GetXTransferable() );
+                        lcl_getTransferPointer ( rData.GetXTransferable() ) );
     return EXCHG_INOUT_ACTION_NONE != nAction;
 }
 
