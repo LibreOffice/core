@@ -4,10 +4,10 @@
  <dlg:bulletinboard>
   <dlg:radiogroup>
    <dlg:radio dlg:id="OptAgenda1" dlg:tab-index="0" dlg:left="12" dlg:top="20" dlg:width="144" dlg:height="10" dlg:page="1" dlg:tag="TOP2;PT1" dlg:help-url="HID:34632" dlg:value="OptAgenda1">
-    <script:event script:event-name="on-itemstatechange" script:macro-name="Template.ModuleAgenda.GetOptionValues" script:language="StarBasic"/>
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:Template.ModuleAgenda.GetOptionValues?language=Basic&amp;location=application" script:language="Script"/>
    </dlg:radio>
    <dlg:radio dlg:id="OptAgenda2" dlg:tab-index="1" dlg:left="12" dlg:top="34" dlg:width="144" dlg:height="10" dlg:page="1" dlg:tag="TOP1;PT2" dlg:help-url="HID:34633" dlg:value="OptAgenda2">
-    <script:event script:event-name="on-itemstatechange" script:macro-name="Template.ModuleAgenda.GetOptionValues" script:language="StarBasic"/>
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:Template.ModuleAgenda.GetOptionValues?language=Basic&amp;location=application" script:language="Script"/>
    </dlg:radio>
   </dlg:radiogroup>
   <dlg:button dlg:id="CmdCorrGoOn" dlg:tab-index="2" dlg:left="164" dlg:top="11" dlg:width="50" dlg:height="14" dlg:page="2" dlg:help-url="HID:34637" dlg:value="CmdCorrGoOn">
