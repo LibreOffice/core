@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-03 16:11:07 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 11:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,7 +606,7 @@ void MediateClassData::createVTable( ClassDataBuffer* pBuffer, typelib_Interface
 }
 
 //==================================================================================================
-extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
+void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
     XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) throw ()
 {
     static MediateClassData * s_pMediateClassData = 0;

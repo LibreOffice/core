@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dbo $ $Date: 2001-08-01 11:23:13 $
+#   last change: $Author: dbo $ $Date: 2001-09-06 11:59:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,9 +76,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 .IF "$(COM)" == "MSC"
 
-# cant CFLAGS += /Ox here, because NOOPTFILES wont work then
-# product build does this anyway
-
 .IF "$(debug)" != ""
 CFLAGS += /Ob0
 .ENDIF
@@ -93,14 +90,14 @@ SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
     $(SLO)$/except.obj
-
 NOOPTFILES= \
     $(SLO)$/except.obj
 
 SHL1TARGET= $(TARGET)
 
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-SHL1IMPLIB= i$(TARGET)
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
+SHL1VERSIONMAP=..$/..$/bridge_exports.map
 
 SHL1OBJS= \
     $(SLO)$/cpp2uno.obj		\
@@ -114,17 +111,6 @@ SHL1STDLIBS= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'MS Visual C++ bridge for UNO'                >>$@
-    @echo DATA        READ WRITE NONSHARED                          >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo uno_initEnvironment @3                                    >>$@
-    @echo uno_ext_getMapping @4					    >>$@
-    @echo component_canUnload @5				    >>$@
 
 .ENDIF
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 11:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ inline static void cpp_call(
 }
 
 //==================================================================================================
-extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
+void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
     void * pReturn, void * pArgs[], uno_Any ** ppException ) throw ()
 {

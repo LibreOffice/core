@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-14 11:01:48 $
+#   last change: $Author: dbo $ $Date: 2001-09-06 11:59:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SHL1TARGET= $(TARGET)
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB= i$(TARGET)
+SHL1VERSIONMAP=..$/..$/bridge_exports.map
 
 SHL1OBJS= \
     $(SLO)$/cpp2uno.obj		\

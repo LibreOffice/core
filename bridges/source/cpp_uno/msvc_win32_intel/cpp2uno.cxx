@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-01 10:09:58 $
+ *  last change: $Author: dbo $ $Date: 2001-09-06 11:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ const void * MediateVtables::getMediateVtable( sal_Int32 nSize ) throw ()
 }
 
 //==================================================================================================
-extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
+void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
     XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) throw ()
 {
     static MediateVtables * s_pMediateVtables = 0;
