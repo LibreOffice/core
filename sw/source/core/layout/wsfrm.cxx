@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: ama $ $Date: 2002-05-16 15:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3144,8 +3144,25 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                     if( nType & nFixHeight )
                         pFrm->Frm().Height( Prt().Height() );
                     else if( rOldSize.Height() && !pFrm->IsFtnFrm() )
-                        pFrm->Frm().Height( (pFrm->Frm().Height() * Prt().Height()) /
-                                            rOldSize.Height() );
+                    {
+                        SwTwips nNewHeight = ( pFrm->Frm().Height()
+                                         * Prt().Height() ) / rOldSize.Height();
+                        if( !pFrm->GetNext() )
+                        {
+                            SwTwips nSum = Prt().Height();
+                            SwFrm* pTmp = Lower();
+                            while( pTmp->GetNext() )
+                            {
+                                if( !pTmp->IsFtnContFrm() || !pTmp->IsVertical() )
+                                    nSum -= pTmp->Frm().Height();
+                                pTmp = pTmp->GetNext();
+                            }
+                            if( nSum - nNewHeight == 1 &&
+                                nSum == pFrm->Frm().Height() )
+                                nNewHeight = nSum;
+                        }
+                        pFrm->Frm().Height( nNewHeight );
+                    }
                 }
             }
         }
