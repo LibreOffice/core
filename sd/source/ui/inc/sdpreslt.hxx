@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _SD_SDPRESLT_HXX_
-#define _SD_SDPRESLT_HXX_
+#ifndef SD_PRES_LAYOUT_DLG_HXX
+#define SD_PRES_LAYOUT_DLG_HXX
 
 #ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
@@ -77,16 +76,34 @@
 #endif
 
 class SfxItemSet;
-class SdViewShell;
-class SdDrawDocShell;
+
+namespace sd {
+class DrawDocShell;
+class ViewShell;
+}
 
 
 
-class SdPresLayoutDlg : public ModalDialog
+class SdPresLayoutDlg
+    : public ModalDialog
 {
+public:
+    SdPresLayoutDlg(
+        ::sd::DrawDocShell* pDocShell,
+        ::sd::ViewShell* pViewShell,
+        ::Window* pWindow,
+        const SfxItemSet& rInAttrs);
+
+    virtual ~SdPresLayoutDlg (void);
+
+    void                GetAttr(SfxItemSet& rOutAttrs);
+
+    DECL_LINK(ClickLayoutHdl, void *);
+    DECL_LINK(ClickLoadHdl, void *);
+
 private:
-    SdDrawDocShell*     pDocSh;
-    SdViewShell*        pViewSh;
+    ::sd::DrawDocShell*     pDocSh;
+    ::sd::ViewShell* pViewSh;
     FixedText           aFtLayout;
     ValueSet            aVS;
     OKButton            aBtnOK;
@@ -106,18 +123,7 @@ private:
 
     void                FillValueSet();
     void                Reset();
-
-public:
-                        SdPresLayoutDlg( SdDrawDocShell* pDocShell, SdViewShell* pViewShell, Window* pWindow,
-                                        const SfxItemSet& rInAttrs);
-
-                        ~SdPresLayoutDlg();
-
-    void                GetAttr(SfxItemSet& rOutAttrs);
-
-    DECL_LINK(ClickLayoutHdl, void *);
-    DECL_LINK(ClickLoadHdl, void *);
 };
 
-#endif // _SD_PRESLT_HXX_
+#endif
 
