@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 12:58:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,35 +431,20 @@ bool PlcDrawObj::Append(SwWW8Writer& rWrt, WW8_CP nCp, const SwFrmFmt& rFmt,
     return bRet;
 }
 
-class HasThisFrame: public std::unary_function<const DrawObj &, bool>
-{
-private:
-    const SwFrmFmt& mrFmt;
-public:
-    explicit HasThisFrame(const SwFrmFmt& rFmt) : mrFmt(rFmt) {}
-    bool operator()(const DrawObj &rIn) const
-    {
-        return (&rIn.mrCntnt == &mrFmt);
-    }
-private:
-    //No assignment
-    HasThisFrame& operator=(const HasThisFrame&);
-};
-
-void PlcDrawObj::SetShapeDetails( const SwFrmFmt& rFmt, UINT32 nId,
-    INT32 nThick )
+void PlcDrawObj::SetShapeDetails(const SwFrmFmt& rFmt, UINT32 nId,
+    INT32 nThick)
 {
     typedef ::std::vector<DrawObj>::iterator myiter;
     myiter aEnd = maDrawObjs.end();
-    myiter aIter = ::std::find_if(maDrawObjs.begin(), aEnd, HasThisFrame(rFmt));
-    if (aIter != aEnd)
+    for (myiter aIter = maDrawObjs.begin(); aIter != aEnd; ++aIter)
     {
-        aIter->mnShapeId = nId;
-        aIter->mnThick = nThick;
+        if (&(aIter->mrCntnt) == &rFmt)
+        {
+            aIter->mnShapeId = nId;
+            aIter->mnThick = nThick;
+        }
     }
 }
-
-/*  */
 
 bool WW8_WrPlcTxtBoxes::WriteTxt(SwWW8Writer& rWrt)
 {
@@ -2324,30 +2309,17 @@ Graphic wwUtility::MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj)
     return Graphic();
 #else
     Graphic aGraphic;
-    GDIMetaFile aGDIMtf;
-
     if (xObj.Is())
     {
-        VirtualDevice aVDev;
-        const MapMode aMap100(MAP_100TH_MM);
-        const Size& rSize = xObj->GetVisArea().GetSize();
-
-        aVDev.SetMapMode(aMap100);
-        aGDIMtf.Record(&aVDev);
-
-        xObj->DoDraw(&aVDev, Point(), rSize, JobSetup());
-
-        aGDIMtf.Stop();
-        aGDIMtf.WindStart();
-        aGDIMtf.SetPrefMapMode(aMap100);
-        aGDIMtf.SetPrefSize(rSize);
-        aGraphic = Graphic(aGDIMtf);
+        GDIMetaFile aMtf;
+        xObj->GetGDIMetaFile(aMtf);
+        Size aSize(xObj->GetVisArea().GetSize());
+        MapUnit aUnit(xObj->GetMapUnit());
+        aMtf.SetPrefSize(aSize);
+        aMtf.SetPrefMapMode(aUnit);
+        aGraphic = Graphic(aMtf);
     }
-
-    BitmapEx aBmpEx(aGraphic.GetBitmap(0));
-    aBmpEx.SetPrefMapMode(aGDIMtf.GetPrefMapMode());
-    aBmpEx.SetPrefSize(aGDIMtf.GetPrefSize());
-    return Graphic(aBmpEx);
+    return aGraphic;
 #endif
 }
 
@@ -2359,7 +2331,6 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
 
     USHORT n, nPos, nCnt = rSrcArr.size();
     SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
-    ASSERT(maDirections.empty(), "Impossible");
     maDirections.resize(nCnt);
     for( n = 0; n < nCnt; ++n )
     {
