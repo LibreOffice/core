@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:19:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,14 +182,14 @@ XclOcxConverter::~XclOcxConverter()
 {
 }
 
-void XclOcxConverter::SetCurrScTab( USHORT nScTab )
+void XclOcxConverter::SetCurrScTab( SCTAB nScTab )
 {
     /*  Invalidate SvxMSConvertOCXControls::xFormComps whenever sheet index changes,
         otherwise GetDrawPage() will not be called in SvxMSConvertOCXControls::GetFormComps(). */
     if( mnCurrScTab != nScTab )
         xFormComps = NULL;
 
-    mnCurrScTab = nScTab;
+    mnCurrScTab = static_cast<sal_uInt16>(nScTab);
 }
 
 const Reference< XDrawPage >& XclOcxConverter::GetDrawPage()
