@@ -24,8 +24,8 @@ SfxVoidItem CreateSWDrawView SID_CREATE_SW_DRAWVIEW
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem AcceptRedlining FN_REDLINE_ACCEPT
-()
+SfxBoolItem AcceptTrackedChanges FN_REDLINE_ACCEPT
+
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -49,8 +49,8 @@ SfxBoolItem AcceptRedlining FN_REDLINE_ACCEPT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ActivateRedlining FN_REDLINE_ON
-()
+SfxBoolItem TrackChanges FN_REDLINE_ON
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -991,7 +991,7 @@ SfxVoidItem ClosePreview FN_CLOSE_PAGEPREVIEW
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem CommentRedlining FN_REDLINE_COMMENT
+SfxVoidItem CommentChangeTracking FN_REDLINE_COMMENT
 ()
 [
     /* flags: */
@@ -5962,7 +5962,7 @@ SfxVoidItem NameGroup FN_NAME_GROUP
 
 //--------------------------------------------------------------------------
 SfxBoolItem NewGlobalDoc FN_NEW_GLOBAL_DOC
-()
+( SfxStringItem FileName FN_NEW_GLOBAL_DOC, SfxStringItem TemplateName SID_TEMPLATE_NAME )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5987,7 +5987,7 @@ SfxBoolItem NewGlobalDoc FN_NEW_GLOBAL_DOC
 
 //--------------------------------------------------------------------------
 SfxBoolItem NewHtmlDoc FN_NEW_HTML_DOC
-()
+( SfxStringItem FileName FN_NEW_HTML_DOC, SfxStringItem TemplateName SID_TEMPLATE_NAME )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7683,8 +7683,8 @@ SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ShowRedlining FN_REDLINE_SHOW
-()
+SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
+
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -9317,5 +9317,132 @@ SfxVoidItem JumpToFootnoteArea FN_TO_FOOTNOTE_AREA
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATOR;
+]
+
+SvxShadowItem BorderShadow SID_ATTR_BORDER_SHADOW
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SwFmtINetFmt HyperlinkAttributes FN_TXTATR_INET
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem InsertGlossary FN_INSERT_GLOSSARY
+( SfxStringItem Group FN_INSERT_GLOSSARY, SfxStringItem ShortName FN_PARAM_1 )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem NewGlossary FN_NEW_GLOSSARY
+( SfxStringItem Group FN_NEW_GLOSSARY, SfxStringItem Name FN_PARAM_1, SfxStringItem ShortName FN_PARAM_2 )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem SetActGlossaryGroup FN_SET_ACT_GLOSSARY
+( SfxStringItem Group FN_SET_ACT_GLOSSARY )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
 ]
 

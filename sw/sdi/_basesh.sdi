@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _basesh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:22:05 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@ interface BaseTextSelection : Selection
     Automation = FALSE;
 ]
 {
+    SID_ATTR_BRUSH
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_DELETE  // status(final|play)
     [
         ExecMethod = ExecDelete ;
@@ -324,6 +330,7 @@ interface BaseTextSelection : Selection
         ) ;
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
+        NoRecord;
         GroupId = GID_TEMPLATE ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

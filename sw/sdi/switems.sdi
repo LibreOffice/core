@@ -2,9 +2,9 @@
  *
  *  $RCSfile: switems.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:22:06 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,16 @@ struct SwLineNumber
     INT32   StartValue          MID_LINENUMBER_STARTVALUE;
 };
 item SwLineNumber SwFmtLineNumber;
+
+struct INetFmt
+{
+    String      URL             MID_URL_URL;
+    String      TargetFrame     MID_URL_TARGET;
+    String      HyperlinkName   MID_URL_HYPERLINKNAME;
+    String      VisitedFormat   MID_URL_VISITED_FMT;
+    String      UnvisitedFormat MID_URL_UNVISITED_FMT;
+};
+item INetFmt SwFmtINetFmt;
 
 /*
 enum SwHoriOrient
@@ -223,15 +233,6 @@ struct CropGrf
     INT32   Bottom  MID_4;
 };
 item CropGrf SwCropGrf;
-
-struct INetFmt
-{
-    String      URL             MID_1;
-    String      TargetFrame     MID_2;
-    String      VisitedFmt      MID_3;
-    String      UnvisitedFmt    MID_4;
-};
-item INetFmt SwFmtINetFmt;
 
 struct FmtSurround
 {
