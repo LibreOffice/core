@@ -1,6 +1,7 @@
 BASCTL_1.0 {
     global:
         basicide_choose_macro;
+        basicide_macro_organizer;
         basicide_handle_basic_error;
         component_getImplementationEnvironment;
         component_writeInfo;
