@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:54:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,14 @@
 #ifndef SVX_LIGHT
 
 #ifndef _LNKBASE_HXX
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 
 class SdPage;
 
 
 
-class SdPageLink : public ::so3::SvBaseLink
+class SdPageLink : public ::sfx2::SvBaseLink
 {
     SdPage* pPage;
 
