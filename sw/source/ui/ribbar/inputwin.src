@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:14:35 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,6 +1176,7 @@ String STR_FORMULA
         Text[ turkish ] = "Uygula";\
         Text[ catalan ] = "Aplicar";\
     };
+
 
 
 
