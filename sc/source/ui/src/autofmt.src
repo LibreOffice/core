@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:52:32 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 20:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "Add AutoFormat" ;
         Text[ chinese_simplified ] = "ĞÂÔö×Ô¶¯¸ñÊ½";
         Text[ russian ] = "Äîáàâèòü àâòîôîğìàò";
-        Text[ polish ] = "Dodaj autoformatowanie";
+        Text[ polish ] = "Dodaj Autoformat";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì’Ç‰Á";
         Text[ chinese_traditional ] = "·s¼W¦Û°Ê®æ¦¡";
         Text[ arabic ] = "ÅÖÇİÉ ÊäÓíŞ ÊáŞÇÆí";
@@ -543,7 +543,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ dutch ] = "AutoOpmaak nieuwe naam geven" ;
         Text[ chinese_simplified ] = "ÖØÃüÃû×Ô¶¯¸ñÊ½";
         Text[ russian ] = "Ïåğåèìåíîâàòü àâòîôîğìàò";
-        Text[ polish ] = "Zmieñ nazwê autoformatowania";
+        Text[ polish ] = "Zmieñ nazwê Autoformatu";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì–¼‘O‚Ì•ÏX";
         Text[ chinese_traditional ] = "­«·s©R¦W¦Û°Ê®æ¦¡";
         Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
@@ -599,7 +599,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "Delete AutoFormat" ;
         Text[ chinese_simplified ] = "É¾³ı×Ô¶¯¸ñÊ½";
         Text[ russian ] = "Óäàëèòü àâòîôîğìàò";
-        Text[ polish ] = "Usuñ autoformatowanie";
+        Text[ polish ] = "Usuñ Autoformat";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ìíœ";
         Text[ chinese_traditional ] = "§R°£¦Û°Ê®æ¦¡";
         Text[ arabic ] = "ÍĞİ ÊäÓíŞ ÊáŞÇÆí";
@@ -628,7 +628,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ english_us ] = "Do you really want to delete the # AutoFomat?" ;
         Text[ chinese_simplified ] = "ÄúÕæÒªÉ¾³ı×Ô¶¯¸ñÊ½ # ?";
         Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü àâòîôîğìàò #?";
-        Text[ polish ] = "Chcesz na pewno skasowaæ autoformatowanie #?";
+        Text[ polish ] = "Czy na pewno usun¹æ Autoformat #?";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä # ‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "±z¯u­n§R°£¦Û°Ê®æ¦¡ # ?";
         Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí #¿";
@@ -850,7 +850,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     };
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
     Text[ russian ] = "Àâòîôîğìàò";
-    Text[ polish ] = "Autoformatowanie";
+    Text[ polish ] = "Autoformat";
     Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
     Text[ arabic ] = "ÇáÊäÓíŞ ÇáÊáŞÇÆí";
