@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:10:05 $
+ *  last change: $Author: obo $ $Date: 2001-11-22 23:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ String STR_LAYER_BCKGRND
     Text[ korean ] = "Î∞∞Í≤Ω";
     Text[ turkish ] = "Artalan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fondo";
+    Text[ catalan ] = "Fons";
 };
 String STR_LAYER_BCKGRNDOBJ
 {
@@ -122,7 +122,7 @@ String STR_LAYER_BCKGRNDOBJ
     Text[ korean ] = "Î∞∞Í≤Ω Í∞úÏ≤¥";
     Text[ turkish ] = "Artalan nesneleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objetos de fondo";
+    Text[ catalan ] = "Objectes de fons";
 };
 String STR_LAYER_LAYOUT
 {
@@ -151,7 +151,7 @@ String STR_LAYER_LAYOUT
     Text[ korean ] = "Î†àÏù¥ÏïÑÏõÉ";
     Text[ turkish ] = "D¸zen";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "DiseÒo";
+    Text[ catalan ] = "Format";
 };
 String STR_LAYER_CONTROLS
 {
@@ -172,7 +172,7 @@ String STR_LAYER_CONTROLS
     Text[ russian ] = "›ÎÂÏÂÌÚ˚ ÛÔ‡‚ÎÂÌËˇ";
     Text[ polish ] = "Pola kontrolne";
     Text[ japanese ] = "ÔΩ∫ÔæùÔæÑÔæõÔΩ∞Ôæô";
-    Text[ chinese_traditional ] = "Êéß‰ª∂È†Ö";
+    Text[ chinese_traditional ] = "ÊéßÂà∂È†Ö";
     Text[ arabic ] = "⁄‰«’—  Õﬂ„";
     Text[ dutch ] = "Controles";
     Text[ chinese_simplified ] = "Êéß‰ª∂";
@@ -180,7 +180,7 @@ String STR_LAYER_CONTROLS
     Text[ korean ] = "Ïª®Ìä∏Î°§";
     Text[ turkish ] = "Komut alanlar˝";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Controles";
+    Text[ catalan ] = "Controls";
 };
 String STR_LAYER_MEASURELINES
 {
@@ -209,7 +209,7 @@ String STR_LAYER_MEASURELINES
     Text[ turkish ] = "÷lÁme Áizgileri";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Mittaviivat";
-    Text[ catalan ] = "LÌneas de dimensiones";
+    Text[ catalan ] = "LÌnies de dimensions";
 };
 String STR_PAGE
 {
@@ -238,7 +238,7 @@ String STR_PAGE
     Text[ korean ] = "Ïä¨ÎùºÏù¥Îìú";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "P·gina";
+    Text[ catalan ] = "Diapositiva";
 };
 String STR_MASTERPAGE
 {
@@ -267,7 +267,7 @@ String STR_MASTERPAGE
     Text[ korean ] = "Î∞∞Í≤Ω";
     Text[ turkish ] = "Artalan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fondo";
+    Text[ catalan ] = "Fons";
 };
 String STR_NOTES
 {
@@ -296,7 +296,7 @@ String STR_NOTES
     Text[ korean ] = "(Î©îÎ™®)";
     Text[ turkish ] = "(Notlar)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "(Notas)";
+    Text[ catalan ] = "(Notes)";
 };
 String STR_HANDOUT
 {
@@ -325,7 +325,7 @@ String STR_HANDOUT
     Text[ korean ] = "Ïú†Ïù∏Î¨º";
     Text[ turkish ] = "Sayfa s˝ralay˝c˝s˝";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Volante";
+    Text[ catalan ] = "Prospectes";
 };
 String STR_PRESOBJ_MPTITLE
 {
@@ -353,7 +353,7 @@ String STR_PRESOBJ_MPTITLE
     Text[ turkish ] = "Ana ba˛l˝k metnini d¸zenlemek iÁin t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa otsikon tekstimuotoa napsauttamalla";
-    Text[ catalan ] = "Pulse para editar el formato del texto de tÌtulo";
+    Text[ catalan ] = "Feu clic per editar el format del text del tÌtol";
 };
 String STR_PRESOBJ_MPOUTLINE
 {
@@ -381,7 +381,7 @@ String STR_PRESOBJ_MPOUTLINE
     Text[ turkish ] = "Anahat metninin formatlar˝n˝ d¸zenlemek iÁin t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa j‰sennyksen tekstimuotoa napsauttamalla";
-    Text[ catalan ] = "Pulse para editar los formatos del texto del esquema";
+    Text[ catalan ] = "Feu clic per editar el format del text del contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER2
 {
@@ -410,7 +410,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text[ korean ] = "2Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "›kinci anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Segundo nivel del esquema";
+    Text[ catalan ] = "Segon nivell de contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER3
 {
@@ -439,7 +439,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text[ korean ] = "3Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "‹Á¸nc¸ anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tercer nivel del esquema";
+    Text[ catalan ] = "Tercer nivell de contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER4
 {
@@ -468,7 +468,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text[ korean ] = "4Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "Dˆrd¸nc¸ anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cuarto nivel del esquema";
+    Text[ catalan ] = "Quart nivell de contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER5
 {
@@ -498,7 +498,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text[ korean ] = "5Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "Be˛inci anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Quinto nivel del esquema";
+    Text[ catalan ] = "CinquË nivell de contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER6
 {
@@ -527,7 +527,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text[ korean ] = "6Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "Alt˝nc˝ anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sexto nivel del esquema";
+    Text[ catalan ] = "SisË nivell de contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER7
 {
@@ -556,7 +556,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text[ korean ] = "7Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "Yedinci anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "SÈptimo nivel del esquema";
+    Text[ catalan ] = "SetË nivell de contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER8
 {
@@ -585,7 +585,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text[ korean ] = "8Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "Sekizinci anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Octavo nivel del esquema";
+    Text[ catalan ] = "VuitË nivell de contorn";
 };
 String STR_PRESOBJ_MPOUTLLAYER9
 {
@@ -614,7 +614,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text[ korean ] = "9Î≤àÏß∏ Îã§Îã®Í≥Ñ";
     Text[ turkish ] = "Dokuzuncu anahat d¸zeyi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Noveno nivel del esquema";
+    Text[ catalan ] = "NovË nivell de contorn";
 };
 String STR_PRESOBJ_MPNOTESTITLE
 {
@@ -642,7 +642,7 @@ String STR_PRESOBJ_MPNOTESTITLE
     Text[ turkish ] = "Sayfay˝ ta˛˝mak iÁin t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Siirr‰ diaa napsauttamalla";
-    Text[ catalan ] = "Pulse para desplazar la p·gina";
+    Text[ catalan ] = "Feu clic per moure la diapositiva";
 };
 String STR_PRESOBJ_MPNOTESTEXT
 {
@@ -670,7 +670,7 @@ String STR_PRESOBJ_MPNOTESTEXT
     Text[ turkish ] = "Notlar˝n format˝n˝ d¸zenlemek iÁin t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa huomautusmuotoa napsauttamalla";
-    Text[ catalan ] = "Pulse para editar el formato de las notas";
+    Text[ catalan ] = "Feu clic per editar el format de les notes";
 };
 String STR_PRESOBJ_TITLE
 {
@@ -699,7 +699,7 @@ String STR_PRESOBJ_TITLE
     Text[ turkish ] = "Ba˛l˝k eklemek iÁin t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ otsikko napsauttamalla";
-    Text[ catalan ] = "Pulse para aÒadir un tÌtulo";
+    Text[ catalan ] = "Feu clic per afegir un tÌtol";
 };
 String STR_PRESOBJ_OUTLINE
 {
@@ -728,7 +728,7 @@ String STR_PRESOBJ_OUTLINE
     Text[ turkish ] = "Anahat eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ j‰sennys napsauttamalla";
-    Text[ catalan ] = "Pulse para aÒadir un esquema";
+    Text[ catalan ] = "Feu clic per afegir un contorn";
 };
 String STR_PRESOBJ_TEXT
 {
@@ -757,7 +757,7 @@ String STR_PRESOBJ_TEXT
     Text[ turkish ] = "Metin eklemek iÁin t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ teksti napsauttamalla";
-    Text[ catalan ] = "Pulse para aÒadir texto";
+    Text[ catalan ] = "Feu clic per afegir el text";
 };
 String STR_PRESOBJ_NOTESTEXT
 {
@@ -786,7 +786,7 @@ String STR_PRESOBJ_NOTESTEXT
     Text[ turkish ] = "Not eklemek iÁin t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ huomautus napsauttamalla";
-    Text[ catalan ] = "Pulse para aÒadir notas";
+    Text[ catalan ] = "Feu clic per afegir les notes";
 };
 String STR_PRESOBJ_GRAPHIC
 {
@@ -815,7 +815,7 @@ String STR_PRESOBJ_GRAPHIC
     Text[ turkish ] = "Grafik eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ kuva kaksoisnapsauttamalla";
-    Text[ catalan ] = "Pulse dos veces para aÒadir una imagen";
+    Text[ catalan ] = "Feu doble clic per afegir una imatge";
 };
 String STR_PRESOBJ_OBJECT
 {
@@ -844,7 +844,7 @@ String STR_PRESOBJ_OBJECT
     Text[ turkish ] = "Nesne eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ objekti kaksoisnapsauttamalla";
-    Text[ catalan ] = "Pulse dos veces para aÒadir un objeto";
+    Text[ catalan ] = "Feu doble clic per afegir un objecte";
 };
 String STR_PRESOBJ_CHART
 {
@@ -873,7 +873,7 @@ String STR_PRESOBJ_CHART
     Text[ turkish ] = "ﬁema eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ kaavio kaksoisnapsauttamalla";
-    Text[ catalan ] = "Pulse dos veces para aÒadir un diagrama";
+    Text[ catalan ] = "Feu doble clic per afegir un diagrama";
 };
 String STR_PRESOBJ_ORGCHART
 {
@@ -902,7 +902,7 @@ String STR_PRESOBJ_ORGCHART
     Text[ turkish ] = "Organizasyon ˛emas˝ eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ organisaatiokaavio kaksoisnapsauttamalla";
-    Text[ catalan ] = "Pulse dos veces para aÒadir un organigrama";
+    Text[ catalan ] = "Feu doble clic per afegir un organigrama";
 };
 String STR_PRESOBJ_TABLE
 {
@@ -931,7 +931,7 @@ String STR_PRESOBJ_TABLE
     Text[ turkish ] = "Tablo eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ laskentataulukko kaksoisnapsauttamalla";
-    Text[ catalan ] = "Pulse dos veces para aÒadir una hoja";
+    Text[ catalan ] = "Feu doble clic per afegir una fulla de c‡lcul";
 };
 String STR_SLIDEVIEWSHELL
 {
@@ -960,7 +960,7 @@ String STR_SLIDEVIEWSHELL
     Text[ korean ] = "Ïä¨ÎùºÏù¥Îìú Î™®Îìú";
     Text[ turkish ] = "Slayt kipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modo diapositivas";
+    Text[ catalan ] = "Mode Diapositiva";
 };
 String STR_OUTLINEVIEWSHELL
 {
@@ -989,7 +989,7 @@ String STR_OUTLINEVIEWSHELL
     Text[ korean ] = "Îã§Îã®Í≥Ñ Î™®Îìú";
     Text[ turkish ] = "Anahat kipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modo Esquema";
+    Text[ catalan ] = "Vista Contorn";
 };
 String STR_DRAWVIEWSHELL
 {
@@ -1018,7 +1018,7 @@ String STR_DRAWVIEWSHELL
     Text[ korean ] = "Î¨∏Ïûê Î™®Îìú";
     Text[ turkish ] = "«izim kipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modo Dibujo";
+    Text[ catalan ] = "Vista Dibuix";
 };
 String STR_PRESVIEWSHELL
 {
@@ -1043,7 +1043,7 @@ String STR_PRESVIEWSHELL
     Text[ chinese_traditional ] = "Á∞°Â†±Ê®°Âºè";
     Text[ turkish ] = "Presentation mode";
     Text[ arabic ] = "Presentation mode";
-    Text[ catalan ] = "Presentation mode";
+    Text[ catalan ] = "Mode PresentaciÛ";
 };
 String STR_PREVIEWVIEWSHELL
 {
@@ -1097,7 +1097,7 @@ String STR_TEXTOBJECTBARSHELL
     Text[ korean ] = "ÌÖçÏä§Ìä∏ Î™®Îìú";
     Text[ turkish ] = "Metin kipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modo texto";
+    Text[ catalan ] = "Mode Text";
 };
 String STR_STDOBJECTBARSHELL
 {
@@ -1126,7 +1126,7 @@ String STR_STDOBJECTBARSHELL
     Text[ korean ] = "Î¨∏ÏÑú Î™®Îìú";
     Text[ turkish ] = "Belge kipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modo documentos";
+    Text[ catalan ] = "Mode Document";
 };
 String STR_BEZIEROBJECTBARSHELL
 {
@@ -1156,7 +1156,7 @@ String STR_BEZIEROBJECTBARSHELL
     Text[ korean ] = "Î≤†ÏßÄÏóê Î™®Îìú";
     Text[ turkish ] = "BÈzier kipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modo BÈzier";
+    Text[ catalan ] = "Mode BÈzier";
 };
 String STR_APPLICATIONOBJECTBAR
 {
@@ -1216,7 +1216,7 @@ String STR_GLUEPOINTSOBJECTBARSHELL
     Text[ turkish ] = "Yap˝˛t˝rma noktalar˝ kipi";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Liimapistetila";
-    Text[ catalan ] = "Modo de puntos de adhesiÛn";
+    Text[ catalan ] = "Mode de punts de cola";
 };
 /* nicht uebersetzen */
 String STR_LAYOUT_TITLE
@@ -1270,7 +1270,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text[ korean ] = "Í∏∞Î≥∏";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Predeterminado";
+    Text[ catalan ] = "Per defecte";
 };
 String STR_LAYOUT_DEFAULT_TITLE_NAME
 {
@@ -1298,7 +1298,7 @@ String STR_LAYOUT_DEFAULT_TITLE_NAME
     Text[ turkish ] = "Ba˛l˝k";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Otsikko";
-    Text[ catalan ] = "TÌtulo";
+    Text[ catalan ] = "TÌtol";
 };
 String STR_STANDARD_STYLESHEET_NAME
 {
@@ -1327,7 +1327,7 @@ String STR_STANDARD_STYLESHEET_NAME
     Text[ korean ] = "ÌëúÏ§Ä";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Predeterminado";
+    Text[ catalan ] = "Per defecte";
 };
 String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
 {
@@ -1357,7 +1357,7 @@ String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
     Text[ korean ] = "Ìå®Ïä§ÏõåÎìúÍ∞Ä ÌãÄÎ¶¨Í±∞ÎÇò ÌååÏùºÏù¥ ÏÜêÏÉÅÎêòÏóàÏäµÎãàÎã§.";
     Text[ turkish ] = "ﬁifre yanl˝˛ ya da dosya hasar gˆrm¸˛.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "La contraseÒa no es v·lida o el archivo est· deteriorado.";
+    Text[ catalan ] = "La contrasenya no Ès v‡lida o el fitxer est‡ corrupte.";
 };
 String STR_UNDO_MOVEPAGES
 {
@@ -1386,7 +1386,7 @@ String STR_UNDO_MOVEPAGES
     Text[ korean ] = "Ïä¨ÎùºÏù¥Îìú Ïù¥Îèô";
     Text[ turkish ] = "Sayfalar˝ ta˛˝";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desplazar p·ginas";
+    Text[ catalan ] = "Mou les diapositives";
 };
 String STR_NOT_ENOUGH_MEMORY
 {
@@ -1414,7 +1414,7 @@ String STR_NOT_ENOUGH_MEMORY
     Text[ turkish ] = "Disk alan˝ yeterli deil!\n›˛lem iptal edilecek.";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muisti ei riit‰!\nToiminto keskeytet‰‰n.";
-    Text[ catalan ] = "°Insuficiente espacio de memoria!\nSe cancela la acciÛn.";
+    Text[ catalan ] = "No hi ha prou memÚria!\nL'acciÛ no es pot executar.";
 };
 /* nicht uebersetzen */
 String STR_LAYOUT_SUBTITLE
@@ -1453,7 +1453,7 @@ String STR_POOLSHEET_MEASURE
     Text[ turkish ] = "÷lÁme Áizgisi";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Mittaviiva";
-    Text[ catalan ] = "LÌnea de dimensiones";
+    Text[ catalan ] = "LÌnia de dimensions";
 };
 String STR_POOLSHEET_OBJWITHARROW
 {
@@ -1481,7 +1481,7 @@ String STR_POOLSHEET_OBJWITHARROW
     Text[ turkish ] = "Oklu nesne";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Objekti ja nuoli";
-    Text[ catalan ] = "Objeto con punta de flecha";
+    Text[ catalan ] = "Objecte amb fletxa";
 };
 String STR_POOLSHEET_OBJWITHSHADOW
 {
@@ -1509,7 +1509,7 @@ String STR_POOLSHEET_OBJWITHSHADOW
     Text[ turkish ] = "Gˆlgeli nesne";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Objektia ja varjostus";
-    Text[ catalan ] = "Objeto con sombra";
+    Text[ catalan ] = "Objecte amb ombra";
 };
 String STR_POOLSHEET_OBJWITHOUTFILL_NT
 {
@@ -1542,7 +1542,7 @@ String STR_POOLSHEET_OBJWITHOUTFILL
     Text[ turkish ] = "Dolgusuz nesne";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Objekti ilman t‰yttˆ‰";
-    Text[ catalan ] = "Objeto sin relleno";
+    Text[ catalan ] = "Objecte sense emplenament";
 };
 String STR_POOLSHEET_TEXT
 {
@@ -1570,7 +1570,7 @@ String STR_POOLSHEET_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Teksti";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
 };
 String STR_POOLSHEET_TEXTBODY_NT
 {
@@ -1603,7 +1603,7 @@ String STR_POOLSHEET_TEXTBODY
     Text[ turkish ] = "Metin gˆvdesi";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Leip‰teksti";
-    Text[ catalan ] = "Cuerpo de texto";
+    Text[ catalan ] = "Cos del text";
 };
 String STR_POOLSHEET_TEXTBODY_JUSTIFY_NT
 {
@@ -1636,7 +1636,7 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY
     Text[ turkish ] = "Metin gˆvdesi (iki yana yasl˝)";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Leip‰tekstin tasaus";
-    Text[ catalan ] = "Cuerpo de texto justificado";
+    Text[ catalan ] = "Cos justificat del text";
 };
 String STR_POOLSHEET_TEXTBODY_INDENT_NT
 {
@@ -1697,7 +1697,7 @@ String STR_POOLSHEET_TITLE
     Text[ turkish ] = "Ana ba˛l˝k";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Otsikko";
-    Text[ catalan ] = "TÌtulo";
+    Text[ catalan ] = "TÌtol";
 };
 String STR_POOLSHEET_TITLE1
 {
@@ -1725,7 +1725,7 @@ String STR_POOLSHEET_TITLE1
     Text[ turkish ] = "Ana ba˛l˝k 1";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Otsikko1";
-    Text[ catalan ] = "TÌtulo1";
+    Text[ catalan ] = "TÌtol1";
 };
 String STR_POOLSHEET_TITLE2
 {
@@ -1753,7 +1753,7 @@ String STR_POOLSHEET_TITLE2
     Text[ turkish ] = "Ana ba˛l˝k 2";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Otsikko1";
-    Text[ catalan ] = "TÌtulo2";
+    Text[ catalan ] = "TÌtol2";
 };
 String STR_POOLSHEET_HEADLINE_NT
 {
@@ -1786,7 +1786,7 @@ String STR_POOLSHEET_HEADLINE
     Text[ turkish ] = "Ba˛l˝k";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Yl‰otsikko";
-    Text[ catalan ] = "Encabezado";
+    Text[ catalan ] = "EncapÁalament";
 };
 String STR_POOLSHEET_HEADLINE1_NT
 {
@@ -1819,7 +1819,7 @@ String STR_POOLSHEET_HEADLINE1
     Text[ turkish ] = "Ba˛l˝k 1";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Yl‰otsikko1";
-    Text[ catalan ] = "Encabezado1";
+    Text[ catalan ] = "EncapÁalament1";
 };
 String STR_POOLSHEET_HEADLINE2_NT
 {
@@ -1852,7 +1852,7 @@ String STR_POOLSHEET_HEADLINE2
     Text[ turkish ] = "Ba˛l˝k 2";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Yl‰otsikko2";
-    Text[ catalan ] = "Encabezado2";
+    Text[ catalan ] = "EncapÁalament2";
 };
 String STR_EMPTY_STYLESHEET_NAME
 {
@@ -1880,7 +1880,7 @@ String STR_EMPTY_STYLESHEET_NAME
     Text[ turkish ] = "Bo˛ ˛ablon";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tyhj‰ mallipohja";
-    Text[ catalan ] = "Plantilla vacÌa";
+    Text[ catalan ] = "Plantilla en blanc";
 };
 String STR_PSEUDOSHEET_TITLE
 {
@@ -1908,7 +1908,7 @@ String STR_PSEUDOSHEET_TITLE
     Text[ turkish ] = "Ba˛l˝k";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Otsikko";
-    Text[ catalan ] = "TÌtulo";
+    Text[ catalan ] = "TÌtol";
 };
 String STR_PSEUDOSHEET_SUBTITLE
 {
@@ -1936,7 +1936,7 @@ String STR_PSEUDOSHEET_SUBTITLE
     Text[ turkish ] = "Alt ba˛l˝k";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Alaotsikko";
-    Text[ catalan ] = "SubtÌtulo";
+    Text[ catalan ] = "SubtÌtol";
 };
 String STR_PSEUDOSHEET_OUTLINE
 {
@@ -1964,7 +1964,7 @@ String STR_PSEUDOSHEET_OUTLINE
     Text[ turkish ] = "Anahat";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "J‰sennys";
-    Text[ catalan ] = "Esquema";
+    Text[ catalan ] = "Contorn";
 };
 String STR_PSEUDOSHEET_BACKGROUNDOBJECTS
 {
@@ -1992,7 +1992,7 @@ String STR_PSEUDOSHEET_BACKGROUNDOBJECTS
     Text[ turkish ] = "Artalan nesneleri";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Taustaobjektit";
-    Text[ catalan ] = "Objetos de fondo";
+    Text[ catalan ] = "Objectes de fons";
 };
 String STR_PSEUDOSHEET_BACKGROUND
 {
@@ -2020,7 +2020,7 @@ String STR_PSEUDOSHEET_BACKGROUND
     Text[ turkish ] = "Artalan";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tausta";
-    Text[ catalan ] = "Fondo";
+    Text[ catalan ] = "Fons";
 };
 String STR_PSEUDOSHEET_NOTES
 {
@@ -2048,7 +2048,7 @@ String STR_PSEUDOSHEET_NOTES
     Text[ turkish ] = "Notlar";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Huomautukset";
-    Text[ catalan ] = "Notas";
+    Text[ catalan ] = "Notes";
 };
 String STR_GRAFOBJECTBARSHELL
 {
@@ -2073,7 +2073,7 @@ String STR_GRAFOBJECTBARSHELL
     Text[ arabic ] = "Ê÷⁄ «·’Ê—";
     Text[ turkish ] = "Grafik kipi";
     Text[ finnish ] = "Grafiikkatila";
-    Text[ catalan ] = "Modo gr·fico";
+    Text[ catalan ] = "Mode gr‡fic";
 };
 
 String STR_POWERPOINT_IMPORT
@@ -2099,7 +2099,7 @@ String STR_POWERPOINT_IMPORT
     Text[ turkish ] = "PowerPoint import";
     Text[ arabic ] = "PowerPoint «” Ì—«œ";
     Text[ finnish ] = "PowerPoint-tuonti";
-    Text[ catalan ] = "ImportaciÛn PowerPoint";
+    Text[ catalan ] = "ImportaciÛ de PowerPoint";
 };
 
 #ifdef STARIMAGE_AVAILABLE
@@ -2130,7 +2130,7 @@ String STR_PRESOBJ_IMAGE
     Text[ turkish ] = "Resim eklemek iÁin Áift t˝klay˝n";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis‰‰ kuva kaksoisnapsauttamalla";
-    Text[ catalan ] = "Pulse dos veces para aÒadir una imagen";
+    Text[ catalan ] = "Feu doble clic per afegir una imatge";
 };
 #endif
 
@@ -2159,7 +2159,7 @@ String STR_POOLSHEET_ARROW
     Text[ korean ] = "ÌôîÏÇ¥Ìëú";
     Text[ turkish ] = "Ok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Arrow";
+    Text[ catalan ] = "Fletxa";
 };
 
 
@@ -2188,7 +2188,7 @@ String STR_LOAD_DOC
     Text[ korean ] = "Î¨∏ÏÑú Î°úÎìú";
     Text[ turkish ] = "Belgeyi y¸kle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cargar documento";
+    Text[ catalan ] = "Carrega document";
 };
 String STR_SAVE_DOC
 {
@@ -2215,7 +2215,7 @@ String STR_SAVE_DOC
     Text[ korean ] = "Î¨∏ÏÑú Ï†ÄÏû•";
     Text[ turkish ] = "Belgeyi kaydet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Guardar documento";
+    Text[ catalan ] = "Desa document";
 };
 
 #define ERR_CODE( class, err )  (class | (err - ERROR_SD_BASE))
@@ -2300,6 +2300,7 @@ Resource RID_SD_ERRHDL
         Text[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe";
     };
 };
+
 
 
 
