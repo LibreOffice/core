@@ -35,6 +35,34 @@ LIB1 LIB2 LIB3 LIB4 LIB5 LIB6 LIB7 LIB8 LIB9:
 # unroll begin
 
 .IF "$(LIB$(TNR)TARGET)" != ""
+.IF "$(LIB$(TNR)ARCHIV)" != ""
+
+$(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
+    @echo Making: $@
+    @-+$(RM) $@ >& $(NULLDEV)
+.IF "$(GUI)"=="MAC"
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB$(TNR)ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+.ELSE                   # "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX"
+    @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+.IF "$(OS)" =="HPUX_FRAG_HR"
+    @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+    @source $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
+.ENDIF
+    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+.IF "$(OS)$(COM)"=="NETBSDGCC"
+    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+.ENDIF
+    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+.ELSE			# "$(GUI)"=="UNX"
+    @echo just a dummy > $@
+.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF          # "$(GUI)"=="MAC"
+
+.ENDIF			# "$(LIB$(TNR)ARCHIV)" != ""
 
 $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
                         $(LIB$(TNR)OBJFILES) \
@@ -54,35 +82,12 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @+cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
     @+nm `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
-.IF "$(LIB$(TNR)ARCHIV)" != ""
-    @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @source $(MISC)$/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-.ENDIF
-    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-.IF "$(OS)$(COM)"=="NETBSDGCC"
-    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-.ENDIF
-    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-    @source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
-.ENDIF			# "$(LIB$(TNR)ARCHIV)" != ""
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
     @+echo $(LIB$(TNR)OBJFILES) | sed s\#$(PRJ:s/./\./)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n 1 >> $@
-.IF "$(LIB$(TNR)ARCHIV)" != ""
-    @+$(RM) $(LIB$(TNR)ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB$(TNR)ARCHIV) `cat /dev/null $@ | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
-.ENDIF			# "$(LIB$(TNR)ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
-.IF "$(COM)" == "BLC"
-    @+-$(RM) $@ >& $(NULLDEV)
-    $(LIBMGR) $@ $(LIBFLAGS) +$(LIB$(TNR)FILES:+"\n+":^"&") -+$(LIB$(TNR)OBJFILES:+"\n+":^"&")
-.ELSE			# "$(COM)" == "BLC"
 .IF "$(GUI)"=="WNT"
 # wnt ist hier
 # $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(?:+"\n")) - warum ist das schrott?
@@ -100,7 +105,6 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES) $(LIB$(TNR)FILES) bla.lib
 .ENDIF
 .ENDIF          # "$(GUI)"=="WNT"
-.ENDIF			# "$(COM)" == "BLC"
 .ENDIF          # "$(GUI)"=="MAC"
 .ENDIF          # "$(GUI)"=="UNX"
 .ENDIF          # "$(LIB$(TNR)TARGET)" != ""
