@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
+ *  last change: $Author: arellano $ $Date: 2001-04-03 18:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** describes the type of a personal dictionary.
 
-    <P>This type defines the type of a dictionary.
+    <P>This defines the type of a dictionary.
     It may be positive or negative. A positive dictionary may hold
     only positive entries and a negative one only negative entries.</P>
 
