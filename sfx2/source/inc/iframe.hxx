@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 17:07:32 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
 #endif
 
