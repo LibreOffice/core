@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:33:35 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,6 +893,9 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
 //                  break;
                 case OBJ_UNO:
                     pRet = new SvxShapeControl( pObj );
+                    break;
+                case OBJ_CUSTOMSHAPE:
+                    pRet = new SvxCustomShape( pObj );
                     break;
                 default: // unbekanntes 2D-Objekt auf der Page
                     DBG_ERROR("Nicht implementierter Starone-Shape erzeugt! [CL]");
