@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:37:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ TabDialog DLG_ATTR
         Text [ italian ] = "Indietro" ;
         Text [ portuguese_brazilian ] = "Desfazer" ;
         Text [ portuguese ] = "~Anterior" ;
-        Text [ finnish ] = "~ZurÅck" ;
+        Text [ finnish ] = "~Zur?ck" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "~PrÈcÈdent" ;
         Text [ swedish ] = "~Tillbaka" ;
@@ -172,7 +172,7 @@ TabDialog DLG_ATTR
         Text [ ENGLISH ] = "Number" ;
         Text [ norwegian ] = "Number" ;
         Text [ italian ] = "Formato" ;
-        Text [ portuguese_brazilian ] = "N˙mero" ;
+        Text [ portuguese_brazilian ] = "N?ero" ;
         Text [ portuguese ] = "Formato" ;
         Text [ finnish ] = "Muotoile" ;
         Text [ danish ] = "Format" ;
