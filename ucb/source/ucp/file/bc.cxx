@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-02 15:50:13 $
+ *  last change: $Author: abi $ $Date: 2001-01-22 13:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,7 +1025,7 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier,
 void SAL_CALL
 BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                        const TransferInfo& aTransferInfo )
-    throw( CommandAbortedException )
+    throw( CommandAbortedException,InteractiveBadTransferURLException )
 {
 
     if( m_nState & Deleted )
@@ -1034,6 +1034,12 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     // No write access to route
     if( m_pMyShell->m_bFaked && m_aUncPath.compareToAscii( "//./" ) == 0 )
         throw CommandAbortedException();
+
+
+    rtl::OUString scheme = aTransferInfo.SourceURL.copy( 0,5 );
+    if( scheme.compareToAscii( "file:" ) != 0 )
+        throw InteractiveBadTransferURLException();
+
 
     sal_Unicode slash = '/';
     rtl::OUString srcUnc;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: abi $ $Date: 2001-01-22 13:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFERURLEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_SHELL_HXX_
 #include "shell.hxx"
@@ -392,7 +395,8 @@ namespace fileaccess {
         void SAL_CALL
         transfer( sal_Int32 nMyCommandIdentifier,
                   const com::sun::star::ucb::TransferInfo& aTransferInfo )
-            throw( com::sun::star::ucb::CommandAbortedException );
+            throw( com::sun::star::ucb::CommandAbortedException,
+                   com::sun::star::ucb::InteractiveBadTransferURLException );
 
         void SAL_CALL
         insert( sal_Int32 nMyCommandIdentifier,
