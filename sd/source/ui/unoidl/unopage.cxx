@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:42:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1987,7 +1987,7 @@ OUString SdDrawPage::getPageApiName( SdPage* pPage )
     return aPageName;
 }
 
-OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
+OUString getPageApiNameFromUiNameImpl( const String& rUIName )
 {
     OUString aApiName;
 
@@ -2007,7 +2007,12 @@ OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
     return aApiName;
 }
 
-String SdDrawPage::getUiNameFromPageApiName( const ::rtl::OUString& rApiName )
+OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
+{
+    return getPageApiNameFromUiNameImpl( rUIName );
+}
+
+String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName )
 {
     const String aDefPageName(RTL_CONSTASCII_USTRINGPARAM( sEmptyPageName ));
     if( rApiName.compareTo( aDefPageName, aDefPageName.Len() ) == 0 )
@@ -2043,6 +2048,11 @@ String SdDrawPage::getUiNameFromPageApiName( const ::rtl::OUString& rApiName )
     }
 
     return rApiName;
+}
+
+String SdDrawPage::getUiNameFromPageApiName( const ::rtl::OUString& rApiName )
+{
+    return getUiNameFromPageApiNameImpl( rApiName );
 }
 
 // XServiceInfo
