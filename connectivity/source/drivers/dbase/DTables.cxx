@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-08 12:55:13 $
+ *  last change: $Author: oj $ $Date: 2001-02-22 13:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ Reference< XNamed > ODbaseTables::createObject(const ::rtl::OUString& _rName)
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
 
     Reference< XNamed > xRet = pRet;
+    pRet->construct();
     if(!pRet->isValid())
     {
         ::comphelper::disposeComponent(xRet);
@@ -154,9 +155,11 @@ void SAL_CALL ODbaseTables::appendByDescriptor( const Reference< XPropertySet >&
     if(xTunnel.is())
     {
         ODbaseTable* pTable = (ODbaseTable*)xTunnel->getSomething(ODbaseTable::getUnoTunnelImplementationId());
-        if(pTable && pTable->CreateImpl())
+        if(pTable)
         {
-            ODbaseTables_BASE_BASE::appendByDescriptor(Reference< XPropertySet >(createObject(aName),UNO_QUERY));
+            pTable->setPropertyValue(PROPERTY_NAME,descriptor->getPropertyValue(PROPERTY_NAME));
+            if(pTable->CreateImpl())
+                ODbaseTables_BASE_BASE::appendByDescriptor(Reference< XPropertySet >(createObject(aName),UNO_QUERY));
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 07:22:50 $
+ *  last change: $Author: oj $ $Date: 2001-02-22 13:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,9 @@ void ODbaseTable::readHeader()
     {
         // no dbase file
         m_bValid = sal_False;
-        ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file ");
+        ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
         sMessage += getEntry();
-        sMessage += ::rtl::OUString::createFromAscii(" is no valid (or recognized) dBase file.");
+        sMessage += ::rtl::OUString::createFromAscii("' is no valid (or recognized) dBase file.");
         throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
     }
     else
@@ -218,11 +218,7 @@ void ODbaseTable::fillColumns()
         DBFColumn aDBFColumn;
         m_pFileStream->Read((char*)&aDBFColumn, sizeof(aDBFColumn));
 
-        // Info auslesen und in SdbColumn packen:
         String aColumnName((const char *)aDBFColumn.db_fnm,getConnection()->getTextEncoding());
-
-//      while (aOriginalColumns->ColumnNumber(aColumnName) != SDB_COLUMN_NOTFOUND)
-//          (aColumnName = aStrFieldName) += String::CreateFromsal_Int32(++nFieldCnt);
 
         sal_Int32 nPrecision = aDBFColumn.db_flng;
         sal_Int32 eType;
@@ -315,6 +311,10 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                 ,m_pMemoStream(NULL)
                 ,m_bWriteableMemo(sal_False)
                 ,m_bValid(sal_False)
+{
+}
+// -----------------------------------------------------------------------------
+void ODbaseTable::construct()
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
@@ -981,6 +981,7 @@ BOOL ODbaseTable::CreateImpl()
     if(!aName.Len())
     {
         ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
+        aIdent += ::rtl::OUString::createFromAscii("/");
         aIdent += m_Name;
         aName = aIdent.getStr();
     }
@@ -1102,13 +1103,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
         if (aName.getLength() > nMaxFieldLength)
         {
-//          String aText = String(SdbResId(STR_DBF_INVALIDFIELDNAMELENGTH));
-//          aText.SearchAndReplace(String::CreateFromAscii("#"),rColumn.GetName());
-//          aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(aText),
-//                      0, String() );
-            break;
+            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
+            sMsg += aName;
+            sMsg += ::rtl::OUString::createFromAscii("!");
+            throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
         }
 
         ByteString aCol(aName.getStr(),gsl_getSystemTextEncoding());
@@ -1143,11 +1141,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 break;
             default:
                 {
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_DBF_INVALIDFORMAT))),
-//                      0, String() );
-                    break;
+                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
+                    sMsg += aName;
+                    sMsg += ::rtl::OUString::createFromAscii("!");
+                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
                 }
         }
 
@@ -1165,13 +1162,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
                 if (nPrecision > 254)
                 {
-//                  String aText = String(SdbResId(STR_DBF_INVALIDFIELDLENGTH));
-//                  aText.SearchAndReplace(String::CreateFromAscii("#"),rColumn.GetName());
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                              String::CreateFromAscii("01000"),
-//                              aStatus.CreateErrorMessage(aText),
-//                              0, String() );
-                    //  break;
+                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid precision for column: ");
+                    sMsg += aName;
+                    sMsg += ::rtl::OUString::createFromAscii("!");
+                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
                 }
                 (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlänge
                 nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
@@ -1183,10 +1177,10 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                            "ODbaseTable::Create: Feldlänge muß größer Nachkommastellen sein!");
                 if (nPrecision <  nScale)
                 {
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_DBF_INVALIDFORMAT))),
-//                      0, String() );
+                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Precision is less than scale for column: ");
+                    sMsg += aName;
+                    sMsg += ::rtl::OUString::createFromAscii("!");
+                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
                     break;
                 }
                 if (getBOOL(xCol->getPropertyValue(PROPERTY_ISCURRENCY))) // Currency wird gesondert behandelt
@@ -1221,17 +1215,15 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 nRecLength += 10;
                 break;
             default:
-//              aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_DBF_INVALIDFORMAT))),
-//                      0, String() );
-                break;
+                {
+                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
+                    sMsg += aName;
+                    sMsg += ::rtl::OUString::createFromAscii("!");
+                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                }
         }
         m_pFileStream->Write(aBuffer, 14);
     }
-
-//  if (aStatus.IsError())
-//      return sal_False;
 
     (*m_pFileStream) << (BYTE)0x0d;                                     // kopf ende
     m_pFileStream->Seek(10L);
@@ -1709,15 +1701,8 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 if (pIndex->Find(0,rRow[nPos]))
                 {
                     // es existiert kein eindeutiger Wert
-//                  String aText = String(SdbResId(STR_VALUE_NOTUNIQUE));
-//                  aText.SearchAndReplace(String::CreateFromAscii("#"),pColumn->GetName());
-//                  String strDetailed = String(SdbResId(STR_DBF_DUPL_VALUE_INFO));
-//                  strDetailed.SearchAndReplace(String::CreateFromAscii("$col$"),pColumn->GetName());
-//                  aStatus.Set(SDB_STAT_ERROR,
-//                      String::CreateFromAscii("01000"),
-//                      aStatus.CreateErrorMessage(aText),
-//                      0, strDetailed );
-                    return sal_False;
+                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Dupilcate value found!");
+                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
                 }
             }
         }
@@ -1882,12 +1867,11 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         }
         catch ( ... )
         {
-//          String strError(SdbResId(STR_DBF_INVALID_FIELD_VALUE));
-//          strError.SearchAndReplace(String::CreateFromAscii("$name$"), pColumn->GetName());
-//          aStatus.Set(SDB_STAT_ERROR, String::CreateFromAscii("S1000"), aStatus.CreateErrorMessage(strError), 0, String());
+            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid value for column: ");
+            sMsg += aColName;
+            sMsg += ::rtl::OUString::createFromAscii("!");
+            throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
         }
-//      if (aStatus.IsError())
-//          break;
         // Und weiter ...
         nByteOffset += nLen;
     }

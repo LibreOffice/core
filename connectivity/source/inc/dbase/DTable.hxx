@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 07:09:33 $
+ *  last change: $Author: oj $ $Date: 2001-02-22 13:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,8 @@ namespace connectivity
                     const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString()
                 );
+
+            void construct(); // can throw any exception
 
             virtual sal_Int32 getCurrentLastPos() const {return m_aHeader.db_anz;}
             virtual sal_Bool seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
