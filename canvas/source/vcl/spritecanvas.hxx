@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2004-12-02 12:41:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,11 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XSpriteCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XSPRITECANVAS_HPP_
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP_
-#include <drafts/com/sun/star/rendering/XIntegerBitmap.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP_
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #endif
 
 #ifndef _CPPUHELPER_COMPBASE6_HXX_
@@ -117,8 +117,8 @@ namespace com { namespace sun { namespace star { namespace uno
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper6< ::drafts::com::sun::star::rendering::XSpriteCanvas,
-                                               ::drafts::com::sun::star::rendering::XIntegerBitmap,
+    typedef ::cppu::WeakComponentImplHelper6< ::com::sun::star::rendering::XSpriteCanvas,
+                                               ::com::sun::star::rendering::XIntegerBitmap,
                                               ::com::sun::star::awt::XWindow,
                                                ::com::sun::star::lang::XInitialization,
                                                ::com::sun::star::lang::XServiceInfo,
@@ -137,11 +137,11 @@ namespace vclcanvas
         virtual void SAL_CALL disposing();
 
         // XSpriteCanvas
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimation >& animation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XBitmap > >& animationBitmaps,
-                                                                                                                                           sal_Int8                                                                                                                   interpolationMode ) throw (::com::sun::star::lang::IllegalArgumentException, ::drafts::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( const ::drafts::com::sun::star::geometry::RealSize2D& spriteSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite > SAL_CALL createClonedSprite( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XSprite >& original ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > >& animationBitmaps,
+                                                                                                                                           sal_Int8                                                                                                                   interpolationMode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( const ::com::sun::star::geometry::RealSize2D& spriteSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite > SAL_CALL createClonedSprite( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >& original ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent (comes implicitely with XWindow)
