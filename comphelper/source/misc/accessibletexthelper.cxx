@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibletexthelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-26 17:01:21 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,11 @@ namespace comphelper
         ::rtl::OUString sResult;
         ::rtl::OUString sText( implGetText() );
         i18n::Boundary aBoundary;
+
+        // according to the interface definition, an index "length" is valid
+        // #103254# - 13.09.2002 - fs@openoffice.org
+        if ( sText.getLength() == nIndex )
+            return sResult;
 
         if ( !implIsValidIndex( nIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
