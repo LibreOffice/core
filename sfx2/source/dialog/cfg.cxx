@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:09:49 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,13 @@ static ::rtl::OUString FAMILY_NUMBERINGSTYLE = ::rtl::OUString::createFromAscii(
 static ::rtl::OUString CMDURL_SPART  = ::rtl::OUString::createFromAscii(".uno:StyleApply?Style:string=");
 static ::rtl::OUString CMDURL_FPART2 = ::rtl::OUString::createFromAscii("&FamilyName:string=");
 
-::rtl::OUString SfxStylesInfo_Impl::generateCommand(const ::rtl::OUString sFamily, ::rtl::OUString sStyle)
+static ::rtl::OUString CMDURL_STYLEPROT_ONLY = ::rtl::OUString::createFromAscii(".uno:StyleApply?");
+static ::rtl::OUString CMDURL_SPART_ONLY     = ::rtl::OUString::createFromAscii("Style:string=");
+static ::rtl::OUString CMDURL_FPART_ONLY     = ::rtl::OUString::createFromAscii("FamilyName:string=");
+
+static ::rtl::OUString STYLEPROP_UINAME = ::rtl::OUString::createFromAscii("DisplayName");
+
+::rtl::OUString SfxStylesInfo_Impl::generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle)
 {
     ::rtl::OUStringBuffer sCommand(1024);
     sCommand.append(CMDURL_SPART );
@@ -209,10 +215,88 @@ static ::rtl::OUString CMDURL_FPART2 = ::rtl::OUString::createFromAscii("&Family
     return sCommand.makeStringAndClear();
 }
 
+sal_Bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
+{
+    static sal_Int32 LEN_STYLEPROT = CMDURL_STYLEPROT_ONLY.getLength();
+    static sal_Int32 LEN_SPART     = CMDURL_SPART_ONLY.getLength();
+    static sal_Int32 LEN_FPART     = CMDURL_FPART_ONLY.getLength();
+
+    if (aStyle.sCommand.indexOf(CMDURL_STYLEPROT_ONLY, 0) != 0)
+        return sal_False;
+
+    aStyle.sFamily = ::rtl::OUString();
+    aStyle.sStyle  = ::rtl::OUString();
+
+    sal_Int32       nCmdLen  = aStyle.sCommand.getLength();
+    ::rtl::OUString sCmdArgs = aStyle.sCommand.copy(LEN_STYLEPROT, nCmdLen-LEN_STYLEPROT);
+    sal_Int32       i        = sCmdArgs.indexOf('&');
+    if (i<0)
+        return sal_False;
+
+    ::rtl::OUString sArg = sCmdArgs.copy(0, i);
+    if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
+        aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
+    else
+    if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
+        aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
+
+    sArg = sCmdArgs.copy(i+1, sCmdArgs.getLength()-i);
+    if (sArg.indexOf(CMDURL_SPART_ONLY) == 0)
+        aStyle.sStyle = sArg.copy(LEN_SPART, sArg.getLength()-LEN_SPART);
+    else
+    if (sArg.indexOf(CMDURL_FPART_ONLY) == 0)
+        aStyle.sFamily = sArg.copy(LEN_FPART, sArg.getLength()-LEN_FPART);
+
+    if (aStyle.sFamily.getLength() && aStyle.sStyle.getLength())
+        return sal_True;
+
+    return sal_False;
+}
+
+void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
+{
+    try
+    {
+        css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
+
+        css::uno::Reference< css::container::XNameAccess > xFamilies;
+        if (xModel.is())
+            xFamilies = xModel->getStyleFamilies();
+
+        css::uno::Reference< css::container::XNameAccess > xStyleSet;
+        if (xFamilies.is())
+            xFamilies->getByName(aStyle.sFamily) >>= xStyleSet;
+
+        css::uno::Reference< css::beans::XPropertySet > xStyle;
+        if (xStyleSet.is())
+            xStyleSet->getByName(aStyle.sStyle) >>= xStyle;
+
+        aStyle.sLabel = ::rtl::OUString();
+        if (xStyle.is())
+            xStyle->getPropertyValue(STYLEPROP_UINAME) >>= aStyle.sLabel;
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        { aStyle.sLabel = ::rtl::OUString(); }
+
+    if (!aStyle.sLabel.getLength())
+    {
+        aStyle.sLabel = aStyle.sCommand;
+        /*
+        #if OSL_DEBUG_LEVEL > 1
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("There is no UIName for the style command \"");
+        sMsg.append     (aStyle.sCommand                              );
+        sMsg.appendAscii("\". The UI will be invalid then ..."        );
+        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
+        #endif
+        */
+    }
+}
+
 ::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
 {
-    static ::rtl::OUString PROP_UINAME = ::rtl::OUString::createFromAscii("DisplayName");
-
     // Its an optional interface!
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
     if (!xModel.is())
@@ -238,7 +322,7 @@ static ::rtl::OUString CMDURL_FPART2 = ::rtl::OUString::createFromAscii("&Family
                 aFamilyInfo.sLabel = aFamilyInfo.sFamily;
             }
             else
-                xFamilyInfo->getPropertyValue(PROP_UINAME) >>= aFamilyInfo.sLabel;
+                xFamilyInfo->getPropertyValue(STYLEPROP_UINAME) >>= aFamilyInfo.sLabel;
         }
         catch(const css::uno::RuntimeException& exRun)
             { throw exRun; }
@@ -1331,13 +1415,15 @@ SfxConfigGroupListBox_Impl::getDocumentModel( Reference< XComponentContext >& xC
     if (!sUIName.getLength())
     {
         sUIName = sCommand;
-        #if OSL_DEBUG_LEVEL > 2
+        /*
+        #if OSL_DEBUG_LEVEL > 1
         ::rtl::OUStringBuffer sMsg(256);
         sMsg.appendAscii("There is no UIName for the internal command \"");
         sMsg.append     (sCommand                                        );
         sMsg.appendAscii("\". The UI will be invalid then ..."           );
         OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
         #endif
+        */
     }
 
     return sUIName;
