@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2000-12-13 08:14:57 $
+ *  last change: $Author: sb $ $Date: 2000-12-14 08:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,13 @@ sal_Bool lcl_IsLocalProperty(const OUString& rSubTree, const OUString& rProperty
     sProperty += rProperty;
 
     if(sProperty.equalsAsciiL( aLocalProperties[0], aLocalPropLen[0]) ||
-        sProperty.equalsAsciiL( aLocalProperties[1], aLocalPropLen[1]))
+        sProperty.equalsAsciiL( aLocalProperties[1], aLocalPropLen[1]) ||
+        sProperty.
+            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                             "Office.Common/Path/Current/OfficeInstall")) ||
+        sProperty.
+            equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                             "UserProfile/Office/InstallPath")))
         return sal_True;
 
     if(!sProperty.compareToAscii( aLocalProperties[2],  aLocalPropLen[2]))
