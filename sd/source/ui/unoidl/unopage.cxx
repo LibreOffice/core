@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-26 16:02:55 $
+ *  last change: $Author: ka $ $Date: 2001-04-03 13:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1576,8 +1576,12 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
     DBG_ASSERT(mpModel,"SdDrawPage hat kein Model??");
     if(mpModel && GetPage())
     {
-        uno::Reference< drawing::XDrawPages > xPages( mpModel->getMasterPages() );
-        uno::Reference< drawing::XDrawPage > xPage( (pPage->GetMasterPage(0))->getUnoPage(), uno::UNO_QUERY );
+        uno::Reference< drawing::XDrawPages >   xPages( mpModel->getMasterPages() );
+        uno::Reference< drawing::XDrawPage >    xPage;
+
+        if( pPage->GetMasterPageCount() )
+            xPage = uno::Reference< drawing::XDrawPage >( (pPage->GetMasterPage(0))->getUnoPage(), uno::UNO_QUERY );
+
         return xPage;
     }
     return NULL;
