@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:15:32 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@ namespace configmgr
             //ServiceFactory getServiceFactory() const
 
             virtual sal_Bool setImplementationProperty( OUString const & aName, uno::Any const & aValue);
+             /** Notify Backend of import */
+            sal_Bool        m_bSendNotification;
         private:
             // is pure virtual to allow different import services
             virtual InputHandler createImportHandler(Backend const & xBackend, OUString const & aEntity = OUString()) = 0;
@@ -174,6 +176,7 @@ namespace configmgr
             osl::Mutex      m_aMutex;
             Context         m_xContext;
             Backend         m_xDestinationBackend;
+
 
             ServiceInfoHelper m_aServiceInfo;
 
