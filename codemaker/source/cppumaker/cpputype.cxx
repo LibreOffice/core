@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:28:06 $
+ *  last change: $Author: jsc $ $Date: 2001-04-12 07:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,6 @@ void CppuType::dumpGetCppuType(FileStream& o)
         if (count)
         {
             o << indent() << "typelib_TypeDescriptionReference * aMemberRefs[" << count << "];\n";
-//            << indent() << "const sal_Char * aMemberNames[" << count << "];\n";
 
             sal_uInt32      fieldCount = m_reader.getFieldCount();
             RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -821,6 +820,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
             RTFieldAccess   access = RT_ACCESS_INVALID;
             OString         fieldType, fieldName;
             OString         scope = m_typeName.replace('/', '.');
+/*
             sal_Bool        bWithScope = sal_True;
 
             if ( m_reader.getTypeClass() == RT_TYPE_STRUCT ||
@@ -828,7 +828,7 @@ void CppuType::dumpCGetCppuType(FileStream& o)
             {
                 bWithScope = sal_False;
             }
-
+*/
             for (sal_uInt16 i=0; i < fieldCount; i++)
             {
                 access = m_reader.getFieldAccess(i);
@@ -842,8 +842,8 @@ void CppuType::dumpCGetCppuType(FileStream& o)
                 o << indent() << "::rtl::OUString sMemberType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
                   << fieldType.replace('/', '.') << "\") );\n";
                 o << indent() << "::rtl::OUString sMemberName" << i << "( RTL_CONSTASCII_USTRINGPARAM(\"";
-                if (bWithScope)
-                  o << scope << "::";
+//              if (bWithScope)
+//                o << scope << "::";
                 o << fieldName << "\") );\n";
                 o << indent() << "aMembers[" << i << "].eTypeClass = "
                   << "(typelib_TypeClass)" << getTypeClass(fieldType) << ";\n"
@@ -2104,7 +2104,7 @@ void InterfaceType::dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index)
 void InterfaceType::dumpCppuMethodRefs(FileStream& o, sal_uInt32& index)
 {
     sal_uInt32  methodCount = m_reader.getMethodCount();
-    OString     methodName; //, returnType, paramType, paramName;
+    OString     methodName;
     OString     scope = m_typeName.replace('/', '.');
 
     for (sal_uInt16 i = 0; i < methodCount; i++)
@@ -2243,8 +2243,7 @@ void InterfaceType::dumpCppuAttributes(FileStream& o, sal_uInt32& index)
 void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
 {
     sal_uInt32      methodCount = m_reader.getMethodCount();
-    OString         methodName, returnType, paramType, paramName;
-    OString         scope = m_typeName.replace('/', '.');
+    OString         returnType, paramType, paramName;
     sal_uInt32      paramCount = 0;
     sal_uInt32      excCount = 0;
     RTMethodMode    methodMode = RT_MODE_INVALID;
@@ -2258,7 +2257,6 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
 
         for (sal_uInt16 i=0; i < methodCount; i++)
         {
-            methodName = m_reader.getMethodName(i);
             returnType = checkRealBaseType(m_reader.getMethodReturnType(i), sal_True);
             paramCount = m_reader.getMethodParamCount(i);
             excCount = m_reader.getMethodExcCount(i);
@@ -2280,7 +2278,7 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
                 paramMode = m_reader.getMethodParamMode(i, j);
 
                 o << indent() << "::rtl::OUString sParamName" << j << "( RTL_CONSTASCII_USTRINGPARAM(\""
-                  << scope << "::" << paramName << "\") );\n";
+                  << paramName << "\") );\n";
                 o << indent() << "::rtl::OUString sParamType" << j << "( RTL_CONSTASCII_USTRINGPARAM(\""
                   << paramType.replace('/', '.') << "\") );\n";
                 o << indent() << "aParameters[" << j << "].pParamName = sParamName" << j << ".pData;\n";
