@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:01:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,7 +785,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
             if( aSize.Height() )
             {
                 aFmtSize.SetHeight( aSize.Height() );
-                aFmtSize.SetSizeType( ATT_FIX_SIZE );
+                aFmtSize.SetHeightSizeType( ATT_FIX_SIZE );
             }
         }
         pFmt->SetAttr( aFmtSize );
@@ -1407,7 +1407,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
 
                 //In der Hoehe soll der neue Varabel sein!
                 SwFmtFrmSize aFrmSize( pOldFmt->GetFrmSize() );
-                aFrmSize.SetSizeType( ATT_MIN_SIZE );
+                aFrmSize.SetHeightSizeType( ATT_MIN_SIZE );
                 pNewSet->Put( aFrmSize );
 
                 SwStartNode* pSttNd = GetNodes().MakeTextSection(
