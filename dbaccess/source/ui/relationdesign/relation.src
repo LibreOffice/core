@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:33:36 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 19:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ polish ] = "Dodaj tabele ...";
             Text[ portuguese_brazilian ] = "Add tables ...";
             Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á...";
-            Text[ korean ] = "Ç¥ Ãß°¡ ...";
+            Text[ korean ] = "Å×ÀÌºí Ãß°¡ ...";
             Text[ chinese_simplified ] = "Ôö¼Ó±í¸ñ...";
             Text[ chinese_traditional ] = "¼W¥[ªí®æ...";
             Text[ turkish ] = "Add tables ...";
@@ -363,7 +363,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ polish ] = "Baza danych nie obs³uguje relacji.";
     Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÍØÚ°¼®İ‚ğx‰‡‚µ‚Ü‚¹‚ñB";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º´Â ¾î¶°ÇÑ °ü°èµµ Áö¿øÇÏÁö ¾Ê½À´Ï´Ù. °ü°è µğÀÚÀÎÀº ´İÈü´Ï´Ù!";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º´Â ¾î¶°ÇÑ °ü°èµµ Áö¿øÇÏÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "Õâ¸öÊı¾İ¿â²»Ö§³Ö¹ØÏµ¹¦ÄÜ£¡";
     Text[ chinese_traditional ] = "³o­Ó¸ê®Æ®w¤£¤ä´©Ãö«Y¥\\¯à¡I";
     Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
