@@ -78,42 +78,13 @@
     </menu:menu>
     <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
         <menu:menupopup>
-            <menu:menuitem menu:id=".uno:Zoom" menu:helpid="10000" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
-            <menu:menuitem menu:id=".uno:ShowRuler" menu:helpid="27040" menu:label="" />
-            <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
-            <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
-            <menu:menuseparator/>
-            <menu:menu menu:id=".uno:WorkspaceMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:DrawingMode" menu:helpid="27009" menu:label="" />
-                    <menu:menuitem menu:id=".uno:OutlineMode" menu:helpid="27010" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DiaMode" menu:helpid="27011" menu:label="" />
-                    <menu:menuitem menu:id=".uno:NotesMode" menu:helpid="27069" menu:label="" />
-                    <menu:menuitem menu:id=".uno:HandoutMode" menu:helpid="27070" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:DisplayQualityMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:OutputQualityColor" menu:helpid="27366" menu:label="" />
-                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:helpid="27367" menu:label="" />
-                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:helpid="27368" menu:label="" />
-                    <menu:menuitem menu:id=".uno:OutputQualityContrast" menu:helpid="27400" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PreviewWindow" menu:helpid="27327" menu:label="" />
-            <menu:menu menu:id=".uno:PreviewDisplayQualityMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:PreviewQualityColor" menu:helpid="27369" menu:label="" />
-                    <menu:menuitem menu:id=".uno:PreviewQualityGrayscale" menu:helpid="27370" menu:label="" />
-                    <menu:menuitem menu:id=".uno:PreviewQualityBlackWhite" menu:helpid="27371" menu:label="" />
-                    <menu:menuitem menu:id=".uno:PreviewQualityContrast" menu:helpid="27401" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:PageMode" menu:helpid="27049" menu:label="" />
+            <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:helpid="10000" menu:label="" />
+            <menu:menuitem menu:id=".uno:OutlineMode" menu:helpid="27010" menu:label="" />
+            <menu:menuitem menu:id=".uno:DiaMode" menu:helpid="27011" menu:label="" />
+            <menu:menuitem menu:id=".uno:Presentation" menu:helpid="10157" menu:label="" />
+            <menu:menuitem menu:id=".uno:NotesMode" menu:helpid="27069" menu:label="" />
+            <menu:menuitem menu:id=".uno:HandoutMode" menu:helpid="27070" menu:label="" />
+               <menu:menuseparator/>
             <menu:menu menu:id=".uno:MasterPageMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SlideMasterPage" menu:helpid="27348" menu:label="" />
@@ -122,17 +93,19 @@
                     <menu:menuitem menu:id=".uno:HandoutMasterPage" menu:helpid="27349" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:MasterLayoutsMenu" menu:label="">
+            <menu:menu menu:id=".uno:DisplayQualityMenu" menu:label="" >
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MasterLayoutsSlide" menu:helpid="27408" menu:label="" />
-                    <menu:menuitem menu:id=".uno:MasterLayoutsNotes" menu:helpid="27409" menu:label="" />
-                    <menu:menuitem menu:id=".uno:MasterLayoutsHandouts" menu:helpid="27410" menu:label="" />
+                    <menu:menuitem menu:id=".uno:OutputQualityColor" menu:helpid="27366" menu:label="" />
+                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:helpid="27367" menu:label="" />
+                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:helpid="27368" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:LayerMode" menu:helpid="27050" menu:label="" />
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HeaderAndFooter" menu:helpid="27407" menu:label="" />
-            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:RightPaneChildWindow" menu:helpid="5910" menu:label="" />
+            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
+            <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
+            <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
+            <menu:menuitem menu:id=".uno:ShowRuler" menu:helpid="27040" menu:label="" />
             <menu:menu menu:id=".uno:GridMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:GridVisible" menu:helpid="27322" menu:label="" />
@@ -140,7 +113,6 @@
                     <menu:menuitem menu:id=".uno:GridFront" menu:helpid="27323" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
             <menu:menu menu:id=".uno:SnapLinesMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:HelplinesVisible" menu:helpid="27324" menu:label="" />
@@ -149,7 +121,18 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:LeftPaneChildWindow" menu:helpid="5910" menu:label="" />
+            <menu:menu menu:id=".uno:MasterLayoutsMenu" menu:label="">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:MasterLayoutsSlide" menu:helpid="27408" menu:label="" />
+                    <menu:menuitem menu:id=".uno:MasterLayoutsNotes" menu:helpid="27409" menu:label="" />
+                    <menu:menuitem menu:id=".uno:MasterLayoutsHandouts" menu:helpid="27410" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:HeaderAndFooter" menu:helpid="27407" menu:label="" />
             <menu:menuitem menu:id=".uno:FullScreen" menu:helpid="5627" menu:label="" />
+            <menu:menuitem menu:id=".uno:Zoom" menu:helpid="10000" menu:label="" />
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:InsertMenu" menu:label="" >
