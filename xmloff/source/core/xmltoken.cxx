@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
+ *  last change: $Author: bm $ $Date: 2001-08-13 15:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2068,6 +2068,7 @@ namespace xmloff { namespace token {
         TOKEN( "location" ),                   // XML_LOCATION
         TOKEN( "application" ),                // XML_APPLICATION
 
+        TOKEN( "symbol-image" ),               // XML_SYMBOL_IMAGE
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
