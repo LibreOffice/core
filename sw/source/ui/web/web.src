@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:07:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text [ danish ] = "StarOffice 4.0 HTML" ;
     Text [ italian ] = "HTML StarOffice 4.0" ;
     Text [ spanish ] = "HTML de StarOffice 4.0" ;
-    Text [ french ] = "HTML StarOffice 4.0" ;
+    Text [ french ] = "StarOffice 4.0 HTML" ;
     Text [ dutch ] = "StarOffice 4.0 HTML" ;
     Text [ portuguese ] = "HTML (StarOffice 4.0)" ;
     Text[ chinese_simplified ] = "StarOffice 4.0 HTML";
@@ -141,7 +141,7 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text [ danish ] = "StarOffice 5.0 HTML" ;
     Text [ italian ] = "HTML StarOffice 5.0" ;
     Text [ spanish ] = "HTML de StarOffice 5.0" ;
-    Text [ french ] = "HTML StarOffice 5.0" ;
+    Text [ french ] = "StarOffice 5.0 HTML" ;
     Text [ dutch ] = "StarOffice 5.0 HTML" ;
     Text [ portuguese ] = "HTML (StarOffice 5.0)" ;
     Text[ chinese_simplified ] = "StarOffice 5.0 HTML";
