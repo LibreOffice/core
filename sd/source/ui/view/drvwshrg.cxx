@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:19:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "glob.hrc"
+#include "SpellDialogChildWindow.hxx"
 #include "sdresid.hxx"
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "DrawDocShell.hxx"
@@ -167,8 +168,7 @@ SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
-    //AF    SFX_CHILDWINDOW_REGISTRATION(
-    //        ::sd::LayerDialogChildWindow::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
     SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
 }
@@ -209,6 +209,7 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
     SFX_CHILDWINDOW_REGISTRATION( SvxIMapDlgChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
+    SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
     SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
 }
