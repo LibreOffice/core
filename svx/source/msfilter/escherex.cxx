@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:13:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2005,7 +2005,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                 {
                     ::boost::shared_ptr< ExpressionNode > aExpressNode(
                         EnhancedCustomShapeFunctionParser::parseFunction( sEquationSource[ i ], aCustoShape2d ) );
-                    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations ) );
+                    drafts::com::sun::star::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, NULL, 0 ) );
                     if ( aPara.Type != drafts::com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
                     {
                         EnhancedCustomShapeEquation aEquation;
