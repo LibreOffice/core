@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIConfigurationManager.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-05-12 16:15:34 $
+ *  last change: $Date: 2004-11-02 12:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,17 @@ public class UIConfigurationManager extends TestCase {
             tEnv.addObjRelation("XUIConfigurationStorage.Storage", xSubStorage);
         }
         catch(com.sun.star.uno.Exception e) {
-            log.println("Could not create storage.");
+            log.println("Could not create storage: " + e.toString());
         }
         util.dbg.printInterfaces(xManager);
 
         tEnv.addObjRelation("XUIConfiguration.XUIConfigurationListenerImpl",
-        new ConfigurationListener(log, xManager, xMSF));
+            new ConfigurationListener(log, xManager, xMSF));
+
+        // the short cut manager service name
+        // 2do: correct the service name when it's no longer in drafts
+        tEnv.addObjRelation("XConfigurationManager.ShortCutManager",
+            "drafts.com.sun.star.ui.DocumentAcceleratorConfiguration");
         return tEnv;
     }
 
