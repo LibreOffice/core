@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:53:02 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:04:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/osl_Socket.obj
 
-SHL1TARGET=SocketOld
+SHL1TARGET=osl_SocketOld
 SHL1STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -102,7 +102,7 @@ SHL1VERSIONMAP = export.map
 # --- BEGIN --------------------------------------------------------
 SHL2OBJS=  \
     $(SLO)$/osl_Socket_tests.obj
-SHL2TARGET= Socket_tests
+SHL2TARGET= osl_Socket_tests
 SHL2STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -119,7 +119,7 @@ SHL3OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_StreamSocket.obj
 
-SHL3TARGET= StreamSocket
+SHL3TARGET= osl_StreamSocket
 SHL3STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -144,7 +144,7 @@ SHL4OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_DatagramSocket.obj
 
-SHL4TARGET= DatagramSocket
+SHL4TARGET= osl_DatagramSocket
 SHL4STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -169,7 +169,7 @@ SHL5OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_SocketAddr.obj
 
-SHL5TARGET= SocketAddr
+SHL5TARGET= osl_SocketAddr
 SHL5STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -194,7 +194,7 @@ SHL6OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_Socket2.obj
 
-SHL6TARGET= Socket2
+SHL6TARGET= osl_Socket2
 SHL6STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -219,7 +219,7 @@ SHL7OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_ConnectorSocket.obj
 
-SHL7TARGET= ConnectorSocket
+SHL7TARGET= osl_ConnectorSocket
 SHL7STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
@@ -244,7 +244,7 @@ SHL8OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_AcceptorSocket.obj
 
-SHL8TARGET= AcceptorSocket
+SHL8TARGET= osl_AcceptorSocket
 SHL8STDLIBS=\
     $(SALLIB) \
     $(CPPUNITLIB)
