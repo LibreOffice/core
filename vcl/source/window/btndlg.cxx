@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btndlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2000-12-05 15:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include <rc.h>
 #endif
 
-
 #pragma hdrstop
 
 // =======================================================================
@@ -117,7 +116,7 @@ ButtonDialog::ButtonDialog( WindowType nType ) :
 // -----------------------------------------------------------------------
 
 ButtonDialog::ButtonDialog( Window* pParent, WinBits nStyle ) :
-    Dialog( WINDOW_TABDIALOG )
+    Dialog( WINDOW_BUTTONDIALOG )
 {
     ImplInitData();
     ImplInit( pParent, nStyle );
@@ -385,7 +384,7 @@ void ButtonDialog::AddButton( const XubString& rText, USHORT nId,
     if ( rText.Len() )
         pItem->mpPushButton->SetText( rText );
 
-    // In die StarView-Liste eintragen
+    // In die Liste eintragen
     mpItemList->Insert( pItem, LIST_APPEND );
 
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
@@ -405,18 +404,27 @@ void ButtonDialog::AddButton( StandardButtonType eType, USHORT nId,
     pItem->mbOwnButton      = TRUE;
     pItem->mnSepSize        = nSepPixel;
 
-    if ( eType == BUTTON_HELP )
+    if ( eType == BUTTON_OK )
+        nBtnFlags |= BUTTONDIALOG_OKBUTTON;
+    else if ( eType == BUTTON_HELP )
         nBtnFlags |= BUTTONDIALOG_HELPBUTTON;
     else if ( (eType == BUTTON_CANCEL) || (eType == BUTTON_CLOSE) )
         nBtnFlags |= BUTTONDIALOG_CANCELBUTTON;
     pItem->mpPushButton = ImplCreatePushButton( nBtnFlags );
-    pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
-    pItem->mpPushButton->SetHelpText( Button::GetStandardHelpText( eType ) );
+
+    // Standard-Buttons have the right text already
+    if ( !((eType == BUTTON_OK)     && (pItem->mpPushButton->GetType() == WINDOW_OKBUTTON)) ||
+         !((eType == BUTTON_CANCEL) && (pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON)) ||
+         !((eType == BUTTON_HELP)   && (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
+    {
+        pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
+        pItem->mpPushButton->SetHelpText( Button::GetStandardHelpText( eType ) );
+    }
 
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
         mnFocusButtonId = nId;
 
-    // In die StarView-Liste eintragen
+    // In die Liste eintragen
     mpItemList->Insert( pItem, LIST_APPEND );
 
     mbFormat = TRUE;
@@ -437,7 +445,7 @@ void ButtonDialog::AddButton( PushButton* pBtn, USHORT nId,
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
         mnFocusButtonId = nId;
 
-    // In die StarView-Liste eintragen
+    // In die View-Liste eintragen
     mpItemList->Insert( pItem, LIST_APPEND );
 
     mbFormat = TRUE;
