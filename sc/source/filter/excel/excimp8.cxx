@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:07:36 $
+ *  last change: $Author: dr $ $Date: 2001-07-02 13:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2345,11 +2345,15 @@ void ImportExcel8::Hlink( void )
         pLongname = pShortname;
         pShortname = NULL;
     }
+    else if( !pLongname && pTextmark )
+        pLongname = new String;
 
     if( pLongname )
     {
         if( pTextmark )
         {
+            if( !pLongname->Len() )
+                pTextmark->SearchAndReplaceAll( '!', '.' );
             *pLongname += '#';
             *pLongname += *pTextmark;
         }
