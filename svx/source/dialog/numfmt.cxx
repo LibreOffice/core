@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-08-28 12:05:32 $
+ *  last change: $Author: gt $ $Date: 2002-06-11 08:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,10 +249,10 @@ void SvxNumberPreviewImpl::StateChanged( StateChangedType nType )
 
 void SvxNumberPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 {
+    Window::DataChanged( rDCEvt );
+
     if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
         InitSettings( TRUE, TRUE );
-    else
-        Window::DataChanged( rDCEvt );
 }
 
 // class SvxNumberFormatTabPage ------------------------------------------
@@ -311,7 +311,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aFlOptions      ( this, ResId( FL_OPTIONS ) ),
         aFtComment      ( this, ResId( FT_COMMENT ) ),
         aStrEurope      ( ResId( STR_EUROPE) ),
-        aIconList       ( ResId( IL_ICON ) ),
+//      aIconList       ( ResId( IL_ICON ) ),   -> done Init_Impl
         nInitFormat     ( ULONG_MAX ),
         pNumItem        ( NULL ),
         pNumFmtShell    ( NULL ),
@@ -363,6 +363,9 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 
 void SvxNumberFormatTabPage::Init_Impl()
 {
+    ImageList               aIconList( ResId( IL_ICON ) );
+    ImageList               aIconListHC( ResId( IL_ICON_HC ) );
+
     bNumItemFlag=TRUE;
     bOneAreaFlag=FALSE;
 
@@ -373,9 +376,14 @@ void SvxNumberFormatTabPage::Init_Impl()
     nStdFormatY     =aLbCurrency.GetPosPixel().Y();
     nStdFormatHeight=nCurFormatY-nStdFormatY+nCurFormatHeight;
 
-    aIbAdd.   SetImage(aIconList.GetImage(IID_ADD));
-    aIbRemove.SetImage(aIconList.GetImage(IID_REMOVE));
-    aIbInfo.  SetImage(aIconList.GetImage(IID_INFO));
+    aIbAdd.     SetImage( aIconList.GetImage( IID_ADD ) );
+    aIbAdd.     SetModeImage( aIconListHC.GetImage( IID_ADD ), BMP_COLOR_HIGHCONTRAST );
+
+    aIbRemove.  SetImage( aIconList.GetImage( IID_REMOVE ) );
+    aIbRemove.  SetModeImage( aIconListHC.GetImage( IID_REMOVE ), BMP_COLOR_HIGHCONTRAST );
+
+    aIbInfo.    SetImage( aIconList.GetImage( IID_INFO ) );
+    aIbInfo.    SetModeImage( aIconListHC.GetImage( IID_INFO ), BMP_COLOR_HIGHCONTRAST );
 
     aIbAdd.Enable(FALSE );
     aIbRemove.Enable(FALSE );
@@ -430,7 +438,6 @@ void SvxNumberFormatTabPage::Init_Impl()
         aLbLanguage.InsertLanguage( xLang[i] );
     }
 }
-
 
 /*************************************************************************
 #*  Methode:        GetRanges                               Datum:02.10.97
@@ -905,20 +912,6 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 }
 
 
-/*************************************************************************
-#*  Methode:        DeactivatePage                          Datum:02.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatTabPage
-#*
-#*  Funktion:   Deaktiviert die Seite
-#*
-#*  Input:      Pointer auf ItemSet
-#*
-#*  Output:     LEAVE_PAGE
-#*
-#************************************************************************/
-
 int SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* pSet )
 {
 /*  if ( (ULONG_MAX != nInitFormat) && pSet )
@@ -938,23 +931,6 @@ int SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* pSet )
     return LEAVE_PAGE;
 }
 
-
-/*************************************************************************
-#*  Methode:        SetInfoItem                             Datum:02.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatTabPage
-#*
-#*  Funktion:   Wenn die Klasse den NumInfoItem nicht ueber den
-#*              SfxItem beim Reset erhaelt MUSS ueber diese Funktion
-#*              der Item gesetzt werden.
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-
 void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )
 {
     if(pNumItem==NULL)
@@ -962,22 +938,6 @@ void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )
         pNumItem = (SvxNumberInfoItem*)rItem.Clone();
     }
 }
-
-
-/*************************************************************************
-#*  Methode:        FillFormatListBox_Impl                  Datum:02.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatTabPage
-#*
-#*  Funktion:   Fuellt die Format- Listbox mit den entsprechend
-#*              formatierten Zahlenwerten.
-#*
-#*  Input:      Liste der Formatstrings
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
 
 void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
 {
