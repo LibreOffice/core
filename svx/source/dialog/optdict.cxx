@@ -1,0 +1,868 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optdict.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:40:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#pragma hdrstop
+
+// include ---------------------------------------------------------------
+
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>
+#endif
+
+
+#ifndef _UNO_LINGU_HXX
+#include <unolingu.hxx>
+#endif
+#ifndef _SVX_DLGUTIL_HXX
+#include <dlgutil.hxx>
+#endif
+#ifndef _SFX_SFXUNO_HXX
+#include <sfx2/sfxuno.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+
+#define _SVX_OPTDICT_CXX
+
+#include "dialogs.hrc"
+#include "optdict.hrc"
+
+#define ITEMID_SPELLCHECK   0
+
+#include "optdict.hxx"
+#include "dialmgr.hxx"
+#include "svxerr.hxx"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::linguistic2;
+
+// static ----------------------------------------------------------------
+
+static const sal_uInt16 nNameLen    = 8;
+static const short  NOACTDICT   = -1;
+
+static long nStaticTabs[]=
+{
+    2,10,71,120
+};
+
+// static function -------------------------------------------------------
+
+static String getNormDicEntry_Impl( const String &rText )
+{
+    String aTmp( rText );
+    aTmp.EraseTrailingChars( '.' );
+    aTmp.EraseAllChars( '=' );
+    return aTmp;
+}
+
+
+// Compare Dictionary Entry  result
+enum CDE_RESULT { CDE_EQUAL, CDE_SIMILAR, CDE_DIFFERENT };
+
+static CDE_RESULT cmpDicEntry_Impl( const String &rText1, const String &rText2 )
+{
+    CDE_RESULT eRes = CDE_DIFFERENT;
+
+    if (rText1 == rText2)
+        eRes = CDE_EQUAL;
+    else
+    {   // similar = equal up to trailing '.' and hyphenation positions
+        // marked with '='
+        if (getNormDicEntry_Impl( rText1 ) == getNormDicEntry_Impl( rText2 ))
+            eRes = CDE_SIMILAR;
+    }
+
+    return eRes;
+}
+
+// class SvxNewDictionaryDialog -------------------------------------------
+
+SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
+        Reference< XSpellChecker1 >  &xSpl ) :
+
+    ModalDialog( pParent, SVX_RES( RID_SFXDLG_NEWDICT ) ),
+
+    aNameText       ( this, ResId( FT_DICTNAME ) ),
+    aNameEdit       ( this, ResId( ED_DICTNAME ) ),
+    aLanguageText   ( this, ResId( FT_DICTLANG ) ),
+    aLanguageLB     ( this, ResId( LB_DICTLANG ) ),
+    aExceptBtn      ( this, ResId( BTN_EXCEPT ) ),
+    aNewDictBox     ( this, ResId( GB_NEWDICT ) ),
+    aOKBtn          ( this, ResId( BTN_NEWDICT_OK ) ),
+    aCancelBtn      ( this, ResId( BTN_NEWDICT_ESC ) ),
+    aHelpBtn        ( this, ResId( BTN_NEWDICT_HLP ) ),
+    xSpell( xSpl )
+{
+    // Handler installieren
+    aNameEdit.SetModifyHdl(
+        LINK( this, SvxNewDictionaryDialog, ModifyHdl_Impl ) );
+    aOKBtn.SetClickHdl( LINK( this, SvxNewDictionaryDialog, OKHdl_Impl ) );
+
+    // Sprachen anzeigen
+    aLanguageLB.SetLanguageList( LANG_LIST_ALL, TRUE, TRUE );
+    aLanguageLB.SelectEntryPos(0);
+
+    FreeResource();
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
+{
+    String sDict = aNameEdit.GetText();
+    sDict.EraseTrailingChars();
+    // add extension for personal dictionaries
+    sDict.AppendAscii(".dic");
+
+    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+
+    Sequence< Reference< XDictionary >  > aDics;
+    if (xDicList.is())
+        aDics = xDicList->getDictionaries();
+    const Reference< XDictionary >  *pDic = aDics.getConstArray();
+    sal_Int32 nCount = (sal_uInt16) aDics.getLength();
+
+    sal_Bool bFound = sal_False;
+    sal_uInt16 i;
+    for (i = 0; !bFound && i < nCount; ++i )
+        if ( sDict.EqualsIgnoreCaseAscii( String(pDic[i]->getName()) ))
+            bFound = sal_True;
+
+    if ( bFound )
+    {
+        // Doppelte Namen?
+        InfoBox( this, SVX_RESSTR( RID_SVXSTR_OPT_DOUBLE_DICTS ) ).Execute();
+        aNameEdit.GrabFocus();
+        return 0;
+    }
+
+    // Erzeugen und hinzufuegen
+    sal_uInt16 nLang = aLanguageLB.GetSelectLanguage();
+    try
+    {
+        // create new dictionary
+        DictionaryType eType = aExceptBtn.IsChecked() ?
+                DictionaryType_NEGATIVE : DictionaryType_POSITIVE;
+        if (xDicList.is())
+        {
+            lang::Locale aLocale( SvxCreateLocale(nLang) );
+            String aURL( SvxGetDictionaryURL(sDict) );
+            xNewDic = Reference< XDictionary1 > (
+                    xDicList->createDictionary( sDict, aLocale, eType, aURL ) , UNO_QUERY );
+        }
+        DBG_ASSERT(xNewDic.is(), "NULL pointer");
+    }
+    catch(...)
+    {
+        xNewDic = NULL;
+
+        // Fehler: konnte neues W"orterbuch nicht anlegen
+        SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, String(),
+            this, RID_SVXERRCTX, DIALOG_MGR() );
+        ErrorHandler::HandleError( *new StringErrorInfo(
+                ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
+
+/* chaos raus
+           // delete object pointed to by util::URL
+        //! works only if it is in our own dictionary path
+        CntAnchorRef xAnchor = new CntAnchor( NULL, SvxGetDictionaryURL(sDict) );
+        xAnchor->Put( SfxBoolItem(WID_DELETE, sal_True) );
+*/
+
+        EndDialog( RET_CANCEL );
+    }
+
+    if (xDicList.is() && xNewDic.is())
+    {
+        xDicList->addDictionary( Reference< XDictionary > ( xNewDic, UNO_QUERY ) );
+
+        // refresh list of dictionaries
+        //! dictionaries may have been added/removed elsewhere too.
+        aDics = xDicList->getDictionaries();
+    }
+    pDic = aDics.getConstArray();
+    nCount = (sal_uInt16) aDics.getLength();
+
+
+    EndDialog( RET_OK );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK_INLINE_START( SvxNewDictionaryDialog, ModifyHdl_Impl, Edit *, EMPTYARG )
+{
+    if ( aNameEdit.GetText().Len() )
+        aOKBtn.Enable();
+    else
+        aOKBtn.Disable();
+    return 0;
+}
+IMPL_LINK_INLINE_END( SvxNewDictionaryDialog, ModifyHdl_Impl, Edit *, EMPTYARG )
+
+//==========================================================================
+//
+// class SvxEditDictionaryDialog -------------------------------------------
+//
+//==========================================================================
+
+SvxEditDictionaryDialog::SvxEditDictionaryDialog(
+            Window* pParent,
+            const String& rName,
+            Reference< XSpellChecker1 >  &xSpl ) :
+
+    ModalDialog( pParent, SVX_RES( RID_SFXDLG_EDITDICT ) ),
+
+    aBookFT         ( this, ResId( FT_BOOK ) ),
+    aAllDictsLB     ( this, ResId( LB_ALLDICTS ) ),
+    aLangFT         ( this, ResId( FT_DICTLANG ) ),
+    aLangLB         ( this, ResId( LB_DICTLANG ) ),
+    aWordFT         ( this, ResId( FT_WORD ) ),
+    aWordED         ( this, ResId( ED_WORD ) ),
+    aReplaceFT      ( this, ResId( FT_REPLACE ) ),
+    aReplaceED      ( this, ResId( ED_REPLACE ) ),
+    aWordsLB        ( this, ResId( TLB_REPLACE ) ),
+    aNewReplacePB   ( this, ResId( PB_NEW_REPLACE ) ),
+    aDeletePB       ( this, ResId( PB_DELETE_REPLACE ) ),
+    aEditDictsBox   ( this, ResId( GB_EDITDICTS ) ),
+    aCloseBtn       ( this, ResId( BTN_EDITCLOSE ) ),
+    aHelpBtn        ( this, ResId( BTN_EDITHELP ) ),
+    sModify         (ResId(STR_MODIFY)),
+    sNew            (aNewReplacePB.GetText()),
+    aDecoView       ( this),
+    bFirstSelect    (sal_True),
+    bDoNothing      (sal_False),
+    xSpell          ( xSpl ),
+    nOld            ( NOACTDICT )
+
+{
+    if (SvxGetDictionaryList().is())
+        aDics = SvxGetDictionaryList()->getDictionaries();
+
+    aWordsLB.SetSelectHdl(LINK(this, SvxEditDictionaryDialog, SelectHdl));
+    aWordsLB.SetTabs(nStaticTabs);
+
+    //! we use an algorithm of our own to insert elements sorted
+    aWordsLB.SetWindowBits(/*WB_SORT|*/WB_HSCROLL|WB_CLIPCHILDREN);
+
+
+    nWidth=aWordED.GetSizePixel().Width();
+    // Handler installieren
+    aNewReplacePB.SetClickHdl(
+        LINK( this, SvxEditDictionaryDialog, NewDelHdl));
+    aDeletePB.SetClickHdl(
+        LINK( this, SvxEditDictionaryDialog, NewDelHdl));
+
+    aLangLB.SetSelectHdl(
+        LINK( this, SvxEditDictionaryDialog, SelectLangHdl_Impl ) );
+    aAllDictsLB.SetSelectHdl(
+        LINK( this, SvxEditDictionaryDialog, SelectBookHdl_Impl ) );
+
+    aWordED.SetModifyHdl(LINK(this, SvxEditDictionaryDialog, ModifyHdl));
+    aReplaceED.SetModifyHdl(LINK(this, SvxEditDictionaryDialog, ModifyHdl));
+    aWordED.SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
+    aReplaceED.SetActionHdl(LINK(this, SvxEditDictionaryDialog, NewDelHdl));
+
+    // Listbox mit allen verfuegbaren WB's fuellen
+    const Reference< XDictionary >  *pDic = aDics.getConstArray();
+    sal_Int32 nCount = aDics.getLength();
+
+    String aLookUpEntry;
+    for ( sal_Int32 i = 0; i < nCount; ++i )
+    {
+        Reference< XDictionary1 >  xDic( pDic[i], UNO_QUERY );
+        if (xDic.is())
+        {
+            sal_Bool bNegative = xDic->getDictionaryType() == DictionaryType_NEGATIVE ?
+                                sal_True : sal_False;
+            String aDicName( xDic->getName() );
+            const String aTxt( ::GetDicInfoStr( aDicName, xDic->getLanguage(),
+                                                 bNegative ) );
+            aAllDictsLB.InsertEntry( aTxt );
+
+            if (rName == aDicName)
+                aLookUpEntry = aTxt;
+        }
+    }
+
+    aLangLB.SetLanguageList( LANG_LIST_ALL, TRUE, TRUE );
+
+    aReplaceED.SetSpaces(sal_True);
+    aWordED.SetSpaces(sal_True);
+
+    if ( nCount > 0 )
+    {
+        aAllDictsLB.SelectEntry( aLookUpEntry );
+        sal_uInt16 nPos = aAllDictsLB.GetSelectEntryPos();
+
+        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+        {
+            nPos = 0;
+            aAllDictsLB.SelectEntryPos( nPos );
+        }
+        Reference< XDictionary1 >  xDic;
+        if (nPos != LISTBOX_ENTRY_NOTFOUND)
+            xDic = Reference< XDictionary1 > ( aDics.getConstArray()[ nPos ], UNO_QUERY );
+        if (xDic.is())
+            SetLanguage_Impl( xDic->getLanguage() );
+
+        // check if dictionary is read-only
+        SetDicReadonly_Impl(xDic);
+        sal_Bool bEnable = !IsDicReadonly_Impl();
+        aNewReplacePB   .Enable( sal_False );
+        aDeletePB       .Enable( sal_False );
+        aLangFT.Enable( bEnable );
+        aLangLB.Enable( bEnable );
+        ShowWords_Impl( nPos );
+
+    }
+    else
+    {
+        aNewReplacePB.Disable();
+        aDeletePB    .Disable();
+    }
+    FreeResource();
+}
+
+// -----------------------------------------------------------------------
+
+SvxEditDictionaryDialog::~SvxEditDictionaryDialog()
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SvxEditDictionaryDialog::Paint( const Rectangle& rRect )
+{
+    ModalDialog::Paint(rRect );
+
+    Rectangle aRect(aEditDictsBox.GetPosPixel(),aEditDictsBox.GetSizePixel());
+
+    sal_uInt16 nStyle=BUTTON_DRAW_NOFILL;
+    aDecoView.DrawButton( aRect, nStyle);
+}
+
+// -----------------------------------------------------------------------
+
+void SvxEditDictionaryDialog::SetDicReadonly_Impl(
+            Reference< XDictionary1 >  &xDic )
+{
+    // enable or disable new and delete button according to file attributes
+    bDicIsReadonly = sal_True;
+    if (xDic.is())
+    {
+        Reference< frame::XStorable >  xStor( xDic, UNO_QUERY );
+        if (   !xStor.is()              // non persistent dictionary
+            || !xStor->hasLocation()    // not yet persistent
+            || !xStor->isReadonly() )
+        {
+            bDicIsReadonly = sal_False;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void SvxEditDictionaryDialog::SetLanguage_Impl( util::Language nLanguage )
+{
+    // select language
+    aLangLB.SelectLanguage( nLanguage );
+}
+
+USHORT SvxEditDictionaryDialog::GetLBInsertPos(const String &rDicWord)
+{
+    USHORT nPos = USHRT_MAX;
+
+    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
+    USHORT j;
+    for( j = 0; j < aWordsLB.GetEntryCount(); j++ )
+    {
+        SvLBoxEntry* pEntry = aWordsLB.GetEntry(j);
+        DBG_ASSERT( pEntry, "NULL pointer");
+        String aNormEntry( getNormDicEntry_Impl( rDicWord ) );
+        StringCompare eCmpRes = (StringCompare)pCollator->
+            compareString( aNormEntry, getNormDicEntry_Impl( aWordsLB.GetEntryText(pEntry, 0) ) );
+        if( COMPARE_LESS == eCmpRes )
+            break;
+    }
+    if (j < aWordsLB.GetEntryCount())   // entry found?
+        nPos = j;
+
+    return nPos;
+}
+
+void SvxEditDictionaryDialog::RemoveDictEntry(SvLBoxEntry* pEntry)
+{
+    sal_uInt16 nLBPos = aAllDictsLB.GetSelectEntryPos();
+
+    if ( pEntry != NULL && nLBPos != LISTBOX_ENTRY_NOTFOUND )
+    {
+        String sTmpShort(aWordsLB.GetEntryText(pEntry, 0));
+
+        Reference< XDictionary >  xDic = aDics.getConstArray()[ nLBPos ];
+        if (xDic->remove( sTmpShort ))  // sal_True on success
+        {
+            aWordsLB.GetModel()->Remove(pEntry);
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox *, EMPTYARG )
+{
+    sal_uInt16 nPos = aAllDictsLB.GetSelectEntryPos();
+
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+    {
+        aNewReplacePB.Enable( sal_False );
+        aDeletePB    .Enable( sal_False );
+        // Dictionary anzeigen
+        ShowWords_Impl( nPos );
+        // enable or disable new and delete button according to file attributes
+        Reference< XDictionary1 >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
+        if (xDic.is())
+            SetLanguage_Impl( xDic->getLanguage() );
+
+        SetDicReadonly_Impl(xDic);
+        sal_Bool bEnable = !IsDicReadonly_Impl();
+        aLangFT.Enable( bEnable );
+        aLangLB.Enable( bEnable );
+    }
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox *, EMPTYARG )
+{
+    sal_uInt16 nDicPos = aAllDictsLB.GetSelectEntryPos();
+    sal_uInt16 nLang = aLangLB.GetSelectLanguage();
+    Reference< XDictionary1 >  xDic( aDics.getConstArray()[ nDicPos ], UNO_QUERY );
+    INT16 nOldLang = xDic->getLanguage();
+
+    if ( nLang != nOldLang )
+    {
+        QueryBox aBox( this, SVX_RES( RID_SFXQB_SET_LANGUAGE ) );
+        String sTxt( aBox.GetMessText() );
+        sTxt.SearchAndReplaceAscii( "%1", aAllDictsLB.GetSelectEntry() );
+        aBox.SetMessText( sTxt );
+
+        if ( aBox.Execute() == RET_YES )
+        {
+            xDic->setLanguage( nLang );
+            sal_Bool bNegativ = xDic->getDictionaryType() == DictionaryType_NEGATIVE;
+
+            const String sName(
+                ::GetDicInfoStr( xDic->getName(),
+                                 xDic->getLanguage(),
+                                 bNegativ ) );
+            aAllDictsLB.RemoveEntry( nDicPos );
+            aAllDictsLB.InsertEntry( sName, nDicPos );
+            aAllDictsLB.SelectEntryPos( nDicPos );
+        }
+        else
+            SetLanguage_Impl( nOldLang );
+    }
+    return 1;
+}
+
+// -----------------------------------------------------------------------
+
+void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
+{
+    Reference< XDictionary >  xDic = aDics.getConstArray()[ nId ];
+
+    nOld = nId;
+    EnterWait();
+
+    String aStr;
+
+    aWordED.SetText(aStr);
+    aReplaceED.SetText(aStr);
+
+    if(xDic->getDictionaryType() != DictionaryType_POSITIVE)
+    {
+        nStaticTabs[0]=2;
+
+        // make controls for replacement text active
+        if(!aReplaceFT.IsVisible())
+        {
+            Size aSize=aWordED.GetSizePixel();
+            aSize.Width()=nWidth;
+            aWordED.SetSizePixel(aSize);
+            aReplaceFT.Show();
+            aReplaceED.Show();
+        }
+    }
+    else
+    {
+        nStaticTabs[0]=1;
+
+        // deactivate controls for replacement text
+        if(aReplaceFT.IsVisible())
+        {
+            Size aSize=aWordED.GetSizePixel();
+            aSize.Width()=aWordsLB.GetSizePixel().Width();
+            aWordED.SetSizePixel(aSize);
+            aReplaceFT.Hide();
+            aReplaceED.Hide();
+        }
+
+    }
+
+    aWordsLB.SetTabs(nStaticTabs);
+    aWordsLB.Clear();
+
+    Sequence< Reference< XDictionaryEntry >  > aEntries( xDic->getEntries() );
+    const Reference< XDictionaryEntry >  *pEntry = aEntries.getConstArray();
+    sal_Int32 nCount = aEntries.getLength();
+
+    for (sal_Int32 i = 0;  i < nCount;  i++)
+    {
+        aStr = String(pEntry[i]->getDictionaryWord());
+        INT16 nPos = GetLBInsertPos( aStr );
+        if(pEntry[i]->isNegative())
+        {
+            aStr += '\t';
+            aStr += String(pEntry[i]->getReplacementText());
+        }
+        aWordsLB.InsertEntry(aStr, nPos == USHRT_MAX ?
+                                        LIST_APPEND : (sal_uInt32) nPos);
+    }
+
+    if (aWordsLB.GetEntryCount())
+    {
+        aWordED   .SetText( aWordsLB.GetEntryText(0LU, 0) );
+        aReplaceED.SetText( aWordsLB.GetEntryText(0LU, 1) );
+    }
+
+    LeaveWait();
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
+{
+    if(!bDoNothing)
+    {
+        if(!bFirstSelect)
+        {
+            SvLBoxEntry* pEntry = pBox->FirstSelected();
+            String sTmpShort(pBox->GetEntryText(pEntry, 0));
+            // wird der Text ueber den ModifyHdl gesetzt, dann steht der Cursor
+            //sonst immer am Wortanfang, obwohl man gerade hier editiert
+            if(aWordED.GetText() != sTmpShort)
+                aWordED.SetText(sTmpShort);
+            aReplaceED.SetText(pBox->GetEntryText(pEntry, 1));
+        }
+        else
+            bFirstSelect = sal_False;
+
+        // entries in the list box should exactly correspond to those from the
+        // dictionary. Thus:
+        aNewReplacePB.Enable(sal_False);
+        aDeletePB    .Enable( sal_True && !IsDicReadonly_Impl() );
+    }
+    return 0;
+};
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
+{
+    SvLBoxEntry* pEntry = aWordsLB.FirstSelected();
+
+    if(pBtn == &aDeletePB)
+    {
+        DBG_ASSERT(pEntry, "keine Eintrag selektiert")
+        String aStr;
+
+        aWordED.SetText(aStr);
+        aReplaceED.SetText(aStr);
+        aDeletePB.Disable();
+
+        RemoveDictEntry(pEntry);    // remove entry from dic and list-box
+    }
+    if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
+    {
+        SvLBoxEntry* pEntry = aWordsLB.FirstSelected();
+        XubString aNewWord(aWordED.GetText());
+        String sEntry(aNewWord);
+        XubString aReplaceStr(aReplaceED.GetText());
+
+        sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
+        sal_uInt16 nPos = aAllDictsLB.GetSelectEntryPos();
+        if ( nPos != LISTBOX_ENTRY_NOTFOUND && aNewWord.Len() > 0)
+        {
+            DBG_ASSERT(nPos < aDics.getLength(), "invalid dictionary index");
+            Reference< XDictionary1 >  xDic( aDics.getConstArray()[ nPos ], UNO_QUERY );
+            if (xDic.is())
+            {
+                // make changes in dic
+
+                //! ...IsVisible should reflect wether the dictionary is a negativ
+                //! or not (hopefully...)
+                sal_Bool bIsNegEntry = aReplaceFT.IsVisible();
+                ::rtl::OUString aRplcText;
+                if(bIsNegEntry)
+                    aRplcText = aReplaceStr;
+
+                if (pEntry) // entry selected in aWordsLB ie action = modify entry
+                    xDic->remove( aWordsLB.GetEntryText( pEntry, 0 ) );
+                // if remove has failed the following add should fail too
+                // and thus a warning message should be triggered...
+
+                Reference<XDictionary> aXDictionary(xDic, UNO_QUERY);
+                nAddRes = SvxAddEntryToDic( aXDictionary,
+                            aNewWord, bIsNegEntry,
+                            aRplcText, xDic->getLanguage(), sal_False );
+             }
+        }
+        if (DIC_ERR_NONE != nAddRes)
+            SvxDicError( this, nAddRes );
+
+        if(DIC_ERR_NONE == nAddRes && sEntry.Len())
+        {
+            // insert new entry in list-box etc...
+
+            aWordsLB.SetUpdateMode(sal_False);
+            sal_uInt16 nPos = USHRT_MAX;
+
+            if(aReplaceFT.IsVisible())
+            {
+                sEntry += '\t';
+                sEntry += aReplaceStr;
+            }
+
+            SvLBoxEntry* pNewEntry = NULL;
+            if(pEntry) // entry selected in aWordsLB ie action = modify entry
+            {
+                aWordsLB.SetEntryText( sEntry, pEntry );
+                pNewEntry = pEntry;
+            }
+            else
+            {
+                nPos = GetLBInsertPos( aNewWord );
+                SvLBoxEntry* pInsEntry = aWordsLB.InsertEntry(sEntry,
+                            nPos == USHRT_MAX ? LIST_APPEND : (sal_uInt32)nPos);
+                pNewEntry = pInsEntry;
+            }
+
+            aWordsLB.MakeVisible( pNewEntry );
+            aWordsLB.SetUpdateMode(sal_True);
+            // falls der Request aus dem ReplaceEdit kam, dann Focus in das ShortEdit setzen
+            if(aReplaceED.HasFocus())
+                aWordED.GrabFocus();
+        }
+    }
+    else
+    {
+        // das kann nur ein Enter in einem der beiden Edit-Felder sein und das
+        // bedeutet EndDialog() - muss im KeyInput ausgewertet werden
+        return 0;
+    }
+    ModifyHdl(&aWordED);
+    return 1;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
+{
+    SvLBoxEntry* pFirstSel = aWordsLB.FirstSelected();
+    String rEntry = pEdt->GetText();
+
+    xub_StrLen nWordLen=rEntry.Len();
+    const String& rRepString = aReplaceED.GetText();
+
+    BOOL bEnableNewReplace  = FALSE;
+    BOOL bEnableDelete      = FALSE;
+    String aNewReplaceText  = sNew;
+
+    if(pEdt == &aWordED)
+    {
+        if(nWordLen>0)
+        {
+            sal_Bool bFound = sal_False;
+            sal_Bool bTmpSelEntry=sal_False;
+            CDE_RESULT eCmpRes = CDE_DIFFERENT;
+
+            for(sal_uInt16 i = 0; i < aWordsLB.GetEntryCount(); i++)
+            {
+                SvLBoxEntry*  pEntry = aWordsLB.GetEntry( i );
+                String aTestStr( aWordsLB.GetEntryText(pEntry, 0) );
+                eCmpRes = cmpDicEntry_Impl( rEntry, aTestStr );
+                if(CDE_DIFFERENT != eCmpRes)
+                {
+                    if(rRepString.Len())
+                        bFirstSelect = sal_True;
+                    bDoNothing=sal_True;
+                    aWordsLB.SetCurEntry(pEntry);
+                    bDoNothing=sal_False;
+                    pFirstSel = pEntry;
+                    aReplaceED.SetText(aWordsLB.GetEntryText(pEntry, 1));
+
+                    if (CDE_SIMILAR == eCmpRes)
+                    {
+                        aNewReplaceText = sModify;
+                        bEnableNewReplace = TRUE;
+                    }
+                    bFound= sal_True;
+                    break;
+                }
+                else if(getNormDicEntry_Impl(aTestStr).Search(
+                            getNormDicEntry_Impl( rEntry ) ) == 0
+                        && !bTmpSelEntry)
+                {
+                    bDoNothing=sal_True;
+                    aWordsLB.MakeVisible(pEntry);
+                    bDoNothing=sal_False;
+                    bTmpSelEntry=sal_True;
+
+                    aNewReplaceText = sNew;
+                    bEnableNewReplace = TRUE;
+                }
+            }
+
+            if(!bFound)
+            {
+                aWordsLB.SelectAll(sal_False);
+                pFirstSel = 0;
+
+                aNewReplaceText = sNew;
+                bEnableNewReplace = TRUE;
+            }
+            bEnableDelete = CDE_DIFFERENT != eCmpRes;
+        }
+        else if(aWordsLB.GetEntryCount()>0)
+        {
+            SvLBoxEntry*  pEntry = aWordsLB.GetEntry( 0 );
+            bDoNothing=sal_True;
+            aWordsLB.MakeVisible(pEntry);
+            bDoNothing=sal_False;
+        }
+    }
+    else if(pEdt == &aReplaceED)
+    {
+        String aReplaceText;
+        String aWordText;
+        if (pFirstSel)  // a aWordsLB entry is selected
+        {
+            aWordText    = aWordsLB.GetEntryText( pFirstSel, 0 );
+             aReplaceText = aWordsLB.GetEntryText( pFirstSel, 1 );
+
+            aNewReplaceText = sModify;
+            bEnableDelete = TRUE;
+        }
+        BOOL bIsChange =
+                CDE_EQUAL != cmpDicEntry_Impl(aWordED.GetText(), aWordText)
+             || CDE_EQUAL != cmpDicEntry_Impl(aReplaceED.GetText(), aReplaceText);
+        if (aWordED.GetText().Len()  &&  bIsChange)
+            bEnableNewReplace = TRUE;
+    }
+
+    aNewReplacePB.SetText( aNewReplaceText );
+    aNewReplacePB.Enable( bEnableNewReplace && !IsDicReadonly_Impl() );
+    aDeletePB    .Enable( bEnableDelete     && !IsDicReadonly_Impl() );
+
+    return 0;
+}
+
+//=========================================================
+//SvxDictEdit
+//=========================================================
+void SvxDictEdit::KeyInput( const KeyEvent& rKEvt )
+{
+    const KeyCode aKeyCode = rKEvt.GetKeyCode();
+    const sal_uInt16 nModifier = aKeyCode.GetModifier();
+    if( aKeyCode.GetCode() == KEY_RETURN )
+    {
+        //wird bei Enter nichts getan, dann doch die Basisklasse rufen
+        // um den Dialog zu schliessen
+        if(!nModifier && !aActionLink.Call(this))
+                 Edit::KeyInput(rKEvt);
+    }
+    else if(bSpaces || aKeyCode.GetCode() != KEY_SPACE)
+        Edit::KeyInput(rKEvt);
+}
+
+
