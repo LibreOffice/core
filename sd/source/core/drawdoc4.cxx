@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-12 15:28:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,16 +337,16 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SdrShadowXDistItem(300));         // 3 mm Schattendistanz
     rISet.Put(SdrShadowYDistItem(300));
 
-                    // Zeichenattribute (Edit Engine)
-    Font aLatinFont( OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE ), DEFAULTFONT_FLAGS_ONLYONE        ) );
+    Font aLatinFont, aCJKFont, aCTLFont;
+
+    getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
+
     SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
                               aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    Font aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CJK ), DEFAULTFONT_FLAGS_ONLYONE        ) );
     SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
                                  aCJKFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
 
-    Font aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), DEFAULTFONT_FLAGS_ONLYONE        ) );
     SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
@@ -1503,4 +1503,25 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
 
 
     }
+}
+
+void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont )
+{
+    LanguageType eLatin = GetLanguage( EE_CHAR_LANGUAGE );
+
+    //  #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+    //  be queried for Korean, too (the Latin language from the document can't be Korean).
+    //  This is the same logic as in SwDocShell::InitNew.
+    LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
+    switch( eUiLanguage )
+    {
+        case LANGUAGE_KOREAN:
+        case LANGUAGE_KOREAN_JOHAB:
+            eLatin = eUiLanguage;
+        break;
+    }
+
+    rLatinFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, eLatin, DEFAULTFONT_FLAGS_ONLYONE );
+    rCJKFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CJK ), DEFAULTFONT_FLAGS_ONLYONE );
+    rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), DEFAULTFONT_FLAGS_ONLYONE ) ;
 }
