@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-08 14:47:02 $
+ *  last change: $Author: od $ $Date: 2002-09-03 07:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,18 @@ public:
     BOOL IsInvalidCntnt() const { return (bInvalidCntnt || bInvalidFlyInCnt); }
     BOOL IsInvalidSpelling() const { return bInvalidSpelling; }
     BOOL IsInvalidAutoCompleteWords() const { return bInvalidAutoCmplWrds; }
+
+    /** SwPageFrm::GetDrawBackgrdColor - for #102450#
+
+        29.08.2002:
+        determine the color, that is respectively will be drawn as background
+        for the page frame.
+
+        @author OD
+
+        @return reference to an instance of class Color
+    */
+    const Color& GetDrawBackgrdColor() const;
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()
