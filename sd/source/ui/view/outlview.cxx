@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-03 14:30:33 $
+ *  last change: $Author: cl $ $Date: 2001-04-06 14:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
+#endif
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
@@ -1063,6 +1066,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
         SdrOutliner* pTempLiner = new SdrOutliner( pPool, OUTLINERMODE_OUTLINEOBJECT );
         pTempLiner->SetStyleSheetPool((SfxStyleSheetPool*)pDoc->GetStyleSheetPool());
         pTempLiner->SetEditTextObjectPool(pPool);
+        pTempLiner->SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
         SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
