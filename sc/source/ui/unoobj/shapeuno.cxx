@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 13:05:00 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 15:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 #include <tools/debug.hxx>
 #include <comphelper/uno3.hxx>
+#include <svtools/unoevent.hxx>
+#include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoshape.hxx>
 
@@ -77,9 +79,32 @@
 #include "cellsuno.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
+#include "userdat.hxx"
+#include "unonames.hxx"
 #include "unoguard.hxx"
 
 using namespace ::com::sun::star;
+
+//------------------------------------------------------------------------
+
+const SfxItemPropertyMap* lcl_GetShapeMap()
+{
+    static SfxItemPropertyMap aShapeMap_Impl[] =
+    {
+        {MAP_CHAR_LEN(SC_UNONAME_IMAGEMAP), 0, &getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
+        {0,0,0,0}
+    };
+    return aShapeMap_Impl;
+}
+
+const SvEventDescription* lcl_GetSupportedMacroItems()
+{
+    static const SvEventDescription aMacroDescriptionsImpl[] =
+    {
+        { 0, NULL }
+    };
+    return aMacroDescriptionsImpl;
+}
 
 //------------------------------------------------------------------------
 
@@ -165,14 +190,27 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    //! mix own and aggregated properties
-
+    //  mix own and aggregated properties:
     uno::Reference<beans::XPropertySetInfo> xRet;
     uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
     if ( xAggProp.is() )
-        xRet = xAggProp->getPropertySetInfo();
-
+    {
+        uno::Reference<beans::XPropertySetInfo> xAggInfo = xAggProp->getPropertySetInfo();
+        const uno::Sequence<beans::Property> aPropSeq = xAggInfo->getProperties();
+        xRet = new SfxExtItemPropertySetInfo( lcl_GetShapeMap(), aPropSeq );
+    }
     return xRet;
+}
+
+ScDocument* lcl_GetDocument( SdrObject* pObj )
+{
+    if( pObj )
+    {
+        ScDrawLayer* pModel = (ScDrawLayer*)pObj->GetModel();
+        if ( pModel )
+            return pModel->GetDocument();
+    }
+    return NULL;
 }
 
 void SAL_CALL ScShapeObj::setPropertyValue(
@@ -182,12 +220,39 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    String aNameString = aPropertyName;
 
-    //! mix own and aggregated properties
+    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    {
+        SdrObject* pObj = GetSdrObject();
+        if ( pObj )
+        {
+            ImageMap aImageMap;
+            uno::Reference< uno::XInterface > xImageMapInt;
+            aValue >>= xImageMapInt;
 
-    uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
-    if ( xAggProp.is() )
-        xAggProp->setPropertyValue( aPropertyName, aValue );
+            if( !xImageMapInt.is() || !SvUnoImageMap_fillImageMap( xImageMapInt, aImageMap ) )
+                throw lang::IllegalArgumentException();
+
+            ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo(pObj);
+            if( pIMapInfo )
+            {
+                // replace existing image map
+                pIMapInfo->SetImageMap( aImageMap );
+            }
+            else
+            {
+                // insert new user data with image map
+                pObj->InsertUserData(new ScIMapInfo(aImageMap) );
+            }
+        }
+    }
+    else
+    {
+        uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+        if ( xAggProp.is() )
+            xAggProp->setPropertyValue( aPropertyName, aValue );
+    }
 }
 
 uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyName )
@@ -195,13 +260,32 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-
-    //! mix own and aggregated properties
+    String aNameString = aPropertyName;
 
     uno::Any aAny;
-    uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
-    if ( xAggProp.is() )
-        aAny = xAggProp->getPropertyValue( aPropertyName );
+    if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
+    {
+        uno::Reference< uno::XInterface > xImageMap;
+        SdrObject* pObj = GetSdrObject();
+        if ( pObj )
+        {
+            ScIMapInfo* pIMapInfo = ScDrawLayer::GetIMapInfo(GetSdrObject());
+            if( pIMapInfo )
+            {
+                const ImageMap& rIMap = pIMapInfo->GetImageMap();
+                xImageMap = SvUnoImageMap_createInstance( rIMap, lcl_GetSupportedMacroItems() );
+            }
+            else
+                xImageMap = SvUnoImageMap_createInstance( lcl_GetSupportedMacroItems() );
+        }
+        aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
+    }
+    else
+    {
+        uno::Reference<beans::XPropertySet> xAggProp = lcl_GetPropertySet(mxShapeAgg);
+        if ( xAggProp.is() )
+            aAny = xAggProp->getPropertyValue( aPropertyName );
+    }
 
     return aAny;
 }
