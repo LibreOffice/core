@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpmread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-17 15:06:54 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,21 +75,21 @@
 
 XPMReader::XPMReader( SvStream& rStm, void* pCallData ) :
             mrIStm          ( rStm ),
-            mnIdentifier    ( XPMIDENTIFIER ),
-            mnTempAvail     ( 0 ),
-            mnStatus        ( 0 ),
-            mbTransparent   ( FALSE ),
-            mnCpp           ( 0 ),
+            mpAcc           ( NULL ),
+            mpMaskAcc       ( NULL ),
+            mnLastPos       ( rStm.Tell() ),
             mnWidth         ( 0 ),
             mnHeight        ( 0 ),
             mnColors        ( 0 ),
+            mnCpp           ( 0 ),
+            mbTransparent   ( FALSE ),
+            mbStatus        ( TRUE ),
+            mnStatus        ( 0 ),
+            mnIdentifier    ( XPMIDENTIFIER ),
             mcThisByte      ( 0 ),
-            mnLastPos       ( rStm.Tell() ),
+            mnTempAvail     ( 0 ),
             mpFastColorTable( NULL ),
-            mpColMap        ( NULL ),
-            mpAcc           ( NULL ),
-            mpMaskAcc       ( NULL ),
-            mbStatus        ( TRUE )
+            mpColMap        ( NULL )
 {
 
 }
@@ -436,7 +436,7 @@ BOOL XPMReader::ImplGetColKey( BYTE nKey )
             }
         }
         nPrev = *mpPara;
-        *mpPara++;
+        mpPara++;
     }
     if ( *mpPara )
     {
