@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:20 $
+ *  last change: $Author: aledoux $ $Date: 2002-09-25 09:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,21 +63,17 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
 
 #include "ScriptingContext.hxx"
 
-using namespace com::sun::star::uno;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 
 namespace func_provider
 {
-
 
 //*************************************************************************
 // XScriptingContext implementation
@@ -92,19 +88,23 @@ ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xCont
     //Setup internal hash map
     Any nullAny;
 
-    m_propertyMap[scripting_constants::DOC_REF] = nullAny;
+    /*m_propertyMap[scripting_constants::DOC_REF] = nullAny;
     m_propertyMap[scripting_constants::DOC_STORAGE_ID] = nullAny;
     m_propertyMap[scripting_constants::DOC_URI] = nullAny;
-    m_propertyMap[scripting_constants::RESOLVED_STORAGE_ID] = nullAny;
+    m_propertyMap[scripting_constants::RESOLVED_STORAGE_ID] = nullAny;*/
+    doc_ref = nullAny;
+    doc_storage_id = nullAny;
+    doc_uri = nullAny;
+    resolved_storage_id = nullAny;
 }
 
 //*************************************************************************
-bool ScriptingContext::validateKey( const ::rtl::OUString& key)
+/*bool ScriptingContext::validateKey( const ::rtl::OUString& key)
 {
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
 
     return ( m_propertyMap.find( key ) != m_propertyMap.end() );
-}
+}*/
 
 //*************************************************************************
 ScriptingContext::~ScriptingContext()
@@ -122,26 +122,53 @@ Reference< beans::XPropertySetInfo > SAL_CALL ScriptingContext::getPropertySetIn
 }
 
 //*************************************************************************
+
+
+
+
+
+
 void SAL_CALL ScriptingContext::setPropertyValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, RuntimeException)
 {
-    if ( !validateKey(aPropertyName) )
+    /*if ( !validateKey(aPropertyName) )
     {
         throw RuntimeException(OUSTR("ScriptingContext::setPropertyValue: invalid key"),
                                Reference< XInterface >());
-    }
+}*/
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-    m_propertyMap[ aPropertyName ] = aValue;
+    if ( aPropertyName.equals(scripting_constants::DOC_REF) )
+        doc_ref = aValue;
+    if ( aPropertyName.equals(scripting_constants::DOC_STORAGE_ID) )
+        doc_storage_id = aValue;
+    if ( aPropertyName.equals(scripting_constants::DOC_URI) )
+        doc_uri = aValue;
+    if ( aPropertyName.equals(scripting_constants::RESOLVED_STORAGE_ID) )
+        resolved_storage_id = aValue;
+    //m_propertyMap[ aPropertyName ] = aValue;
 }
 
 //*************************************************************************
+
+
+
 Any SAL_CALL ScriptingContext::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
 {
-    if ( !validateKey(PropertyName) )
+    Any temp;
+    /*if ( !validateKey(PropertyName) )
     {
         throw RuntimeException(OUSTR("ScriptingContext::getPropertyValue: invalid key"),
                                Reference< XInterface >());
-    }
-    return  m_propertyMap[ PropertyName ];
+}*/
+    if ( PropertyName.equals(scripting_constants::DOC_REF) )
+        return  doc_ref;
+    if ( PropertyName.equals(scripting_constants::DOC_STORAGE_ID) )
+        return  doc_storage_id;
+    if ( PropertyName.equals(scripting_constants::DOC_URI) )
+        return  doc_uri;
+    if ( PropertyName.equals(scripting_constants::RESOLVED_STORAGE_ID) )
+        return  resolved_storage_id;
+
+    return  temp;
 }
 
 //*************************************************************************

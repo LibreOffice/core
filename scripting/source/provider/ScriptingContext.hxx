@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:21 $
+ *  last change: $Author: aledoux $ $Date: 2002-09-25 09:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_PROTOCOLHANDLER_SCRIPTING_CONTEXT_HXX_
 #define _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_PROTOCOLHANDLER_SCRIPTING_CONTEXT_HXX_
 
-#include <hash_map>
+//#include <hash_map>
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring>
@@ -76,23 +76,27 @@ namespace func_provider
 
 //Typedefs
 //=============================================================================
-typedef ::std::hash_map < ::rtl::OUString, ::com::sun::star::uno::Any,
-::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
-ScriptingConext_hash;
-typedef ::std::vector< ::rtl::OUString >
-OUString_vec;
+//typedef ::std::hash_map < ::rtl::OUString, ::com::sun::star::uno::Any,
+//::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+//ScriptingConext_hash;
+//typedef ::std::vector< ::rtl::OUString >
+//OUString_vec;
 
 class ScriptingContext : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySet >
 {
 private:
     // to obtain other services if needed
-    ScriptingConext_hash m_propertyMap;
+    //ScriptingConext_hash m_propertyMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     osl::Mutex     m_mutex;
 
     // Private helper methods
-    bool validateKey( const ::rtl::OUString& key);
+    //bool validateKey( const ::rtl::OUString& key);
+    ::com::sun::star::uno::Any doc_ref;
+    ::com::sun::star::uno::Any doc_storage_id;
+    ::com::sun::star::uno::Any doc_uri;
+    ::com::sun::star::uno::Any resolved_storage_id;
 
 public:
     ScriptingContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext );
