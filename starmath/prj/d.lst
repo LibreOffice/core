@@ -1,3 +1,5 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\slb\ysm.lib %_DEST%\lib%_EXT%\ysm.lib
@@ -5,7 +7,6 @@
 ..\%__SRC%\bin\smath3.sym %_DEST%\bin%_EXT%\smath3.sym
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\xml\*.xml %_DEST%\xml\*.xml
-touch: ..\%__SRC%\misc\sm.hid %_DEST%\bin%_EXT%\sm.hid
 ..\%__SRC%\misc\smath3.csv %_DEST%\inc%_EXT%\smath3.csv
 ..\%__SRC%\bin\smslots.tlb %_DEST%\bin%_EXT%\smslots.tlb
 ..\%__SRC%\bin\sm?????.dll %_DEST%\bin%_EXT%\sm?????.dll
