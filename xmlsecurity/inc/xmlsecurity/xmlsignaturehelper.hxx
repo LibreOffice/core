@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:50:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,8 @@ public:
 
                 // Get the security environment
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > GetSecurityEnvironment();
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > GetSecurityEnvironmentByIndex(sal_Int32 nId);
+    sal_Int32 GetSecurityEnvironmentNumber();
 
                 // After signing/veryfieng, get information about signatures
     SignatureInformation  GetSignatureInformation( sal_Int32 nSecurityId ) const;
@@ -197,6 +199,7 @@ public:
     void        EndMission();
     sal_Int32   GetNewSecurityId();
     void        SetX509Certificate( sal_Int32 nSecurityId, const rtl::OUString& ouX509IssuerName, const rtl::OUString& ouX509SerialNumber);
+    void        SetX509Certificate( sal_Int32 nSecurityId, sal_Int32 nSecurityEnvironmentIndex, const rtl::OUString& ouX509IssuerName,  const rtl::OUString& ouX509SerialNumber);
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime );
 
     void        AddForSigning( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary );
