@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:42:29 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ using namespace ::com::sun::star::i18n;
 using ::rtl::OUString;
 using ::osl::FileBase;
 
-#ifdef MACOSX
+#if defined(MACOSX) && ( __GNUC__ < 3 )
 static cppu::ClassData27 cppu::ImplHelper27::s_aCD;
 static cppu::ClassData27 cppu::WeakImplHelper27::s_aCD;
 #endif
