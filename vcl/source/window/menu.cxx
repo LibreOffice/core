@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-23 15:47:53 $
+ *  last change: $Author: ssa $ $Date: 2002-10-25 14:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2904,6 +2904,25 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
+    if( pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
+    {
+        // #102461# remove highlight in parent
+        MenuItemData* pData;
+        USHORT i, nCount = (USHORT)pMenu->pStartedFrom->pItemList->Count();
+        for(i = 0; i < nCount; i++)
+        {
+            pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
+            if( pData && ( pData->pSubMenu == pMenu ) )
+                break;
+        }
+        if( i < nCount )
+        {
+            MenuFloatingWindow* pPWin = (MenuFloatingWindow*)pMenu->pStartedFrom->ImplGetWindow();
+            if( pPWin )
+                pPWin->HighlightItem( i, FALSE );
+        }
+    }
+
     // free the reference to the accessible component
     SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
 
@@ -3467,6 +3486,27 @@ void MenuFloatingWindow::ChangeHighlightItem( USHORT n, BOOL bStartPopupTimer )
     DBG_ASSERT( pMenu->ImplIsVisible( nHighlightedItem ) || nHighlightedItem == ITEMPOS_INVALID, "ChangeHighlightItem: Not visible!" );
     if( nHighlightedItem != ITEMPOS_INVALID )
     {
+        if( pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
+        {
+            // #102461# make sure parent entry is highlighted as well
+            MenuItemData* pData;
+            USHORT i, nCount = (USHORT)pMenu->pStartedFrom->pItemList->Count();
+            for(i = 0; i < nCount; i++)
+            {
+                pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
+                if( pData && ( pData->pSubMenu == pMenu ) )
+                    break;
+            }
+            if( i < nCount )
+            {
+                MenuFloatingWindow* pPWin = (MenuFloatingWindow*)pMenu->pStartedFrom->ImplGetWindow();
+                if( pPWin && pPWin->nHighlightedItem != i )
+                {
+                    pPWin->HighlightItem( i, TRUE );
+                    pPWin->nHighlightedItem = i;
+                }
+            }
+        }
         HighlightItem( nHighlightedItem, TRUE );
         pMenu->ImplCallHighlight( nHighlightedItem );
     }
