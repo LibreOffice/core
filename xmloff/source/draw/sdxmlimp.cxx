@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-15 13:09:03 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 12:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,6 +1005,8 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
 // written meta information. If no info is found, guess 10 draw objects
 void SdXMLImport::SetStatisticAttributes(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
+    SvXMLImport::SetStatisticAttributes(xAttrList);
+
     sal_uInt32 nCount(10);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
 
