@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:13:47 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,7 @@ void SvXMLExport::_InitCtor()
     // namespaces for documents
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
+        pNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
         pNamespaceMap->Add( GetXMLToken(XML_NP_TEXT), GetXMLToken(XML_N_TEXT), XML_NAMESPACE_TEXT );
         pNamespaceMap->Add( GetXMLToken(XML_NP_DRAW), GetXMLToken(XML_N_DRAW), XML_NAMESPACE_DRAW );
         pNamespaceMap->Add( GetXMLToken(XML_NP_DR3D), GetXMLToken(XML_N_DR3D), XML_NAMESPACE_DR3D );
@@ -1627,6 +1628,10 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool b
     if(pNumExport)
         sTemp = pNumExport->GetStyleName(nNumberFormat);
     return sTemp;
+}
+
+void SvXMLExport::exportAnnotationMeta(const uno::Reference<drawing::XShape>& xShape)
+{
 }
 
 sal_Int32 SvXMLExport::dataStyleForceSystemLanguage(sal_Int32 nFormat) const
