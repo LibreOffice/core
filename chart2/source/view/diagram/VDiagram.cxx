@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:16:48 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 18:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,12 +140,6 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
         createShapes_2d( rPos, rSize );
 }
 
-// const sal_Int32 nWallColor = 0xb0d8e8; //Color(COL_LIGHTGRAY).GetColor();
-// const sal_Int32 nWallColor = 0xf5fffa;  // mint cream
-// const sal_Int32 nWallColor = 0xc6e2ff;  // SlateGray1
-const sal_Int32 nWallColor = 0xe0eeee;  // azure2
-const sal_Int32 nWallTransparency = 90;
-
 namespace
 {
 tPropertyNameMap & lcl_GetWallPropertyMap()
@@ -195,26 +189,13 @@ void VDiagram::createShapes_2d( const awt::Point& rPos, const awt::Size& rSize )
         {
             try
             {
+                DBG_ASSERT( m_xDiagram.is(), "Invalid Diagram model" );
                 if( m_xDiagram.is() )
                 {
                     uno::Reference< beans::XPropertySet > xWallProp( m_xDiagram->getWall());
                     if( xWallProp.is())
                         PropertyMapper::setMappedProperties( xProp, xWallProp, lcl_GetWallPropertyMap() );
                 }
-                else
-                {
-                    DBG_ERROR( "Invalid Diagram model" );
-                    //Transparency
-                    xProp->setPropertyValue( C2U( UNO_NAME_FILL_TRANSPARENCE )
-                                             , uno::makeAny( (sal_Int16)nWallTransparency ) );
-                    //xProp->setPropertyValue( C2U( UNO_NAME_LINETRANSPARENCE )
-                    //    , uno::makeAny( (sal_Int16)100 ) );
-
-                    //FillColor
-                    xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
-                                             , uno::makeAny(nWallColor) );
-                }
-
                 //CID for selection handling
                 xProp->setPropertyValue( C2U( UNO_NAME_MISC_OBJ_NAME )
                     , uno::makeAny( C2U("CID/DiagramWall=XXX_CID") ) );
@@ -346,13 +327,21 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
 
     //add floor plate
     {
+        uno::Reference< beans::XPropertySet > xFloorProp( NULL );
+        if( m_xDiagram.is() )
+            xFloorProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getFloor());
+
         uno::Reference< drawing::XShape > xShape =
             m_pShapeFactory->createCube(xOuterGroup_Shapes,
             DataPointGeometry( drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0)
                               ,drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,FLOOR_THICKNESS,FIXED_SIZE_FOR_3D_CHART_VOLUME) )
-            , ShapeAppearance( Color(COL_LIGHTGRAY).GetColor(), 0 ) );
+            , xFloorProp, lcl_GetWallPropertyMap() );
         ShapeFactory::setShapeName( xShape, C2U("CID/DiagramFloor=XXX_CID") );
     }
+
+    uno::Reference< beans::XPropertySet > xWallProp( NULL );
+    if( m_xDiagram.is() )
+        xWallProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getWall());
 
     //add left wall
     {
@@ -362,8 +351,7 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
                   drawing::Position3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
                 , drawing::Direction3D(0,0,-FIXED_SIZE_FOR_3D_CHART_VOLUME)
                 , drawing::Direction3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) )
-            , ShapeAppearance( nWallColor, nWallTransparency )
-            , false );
+            , xWallProp, lcl_GetWallPropertyMap(), false );
         ShapeFactory::setShapeName( xShape, C2U("CID/DiagramWall=XXX_CID") );
     }
     //add back wall
@@ -374,8 +362,7 @@ void VDiagram::createShapes_3d( const awt::Point& rPos, const awt::Size& rSize )
                   drawing::Position3D(0,0,0)
                 , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
                 , drawing::Direction3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) )
-            , ShapeAppearance( nWallColor, nWallTransparency )
-            , false );
+            , xWallProp, lcl_GetWallPropertyMap(), false );
         ShapeFactory::setShapeName( xShape, C2U("CID/DiagramWall=XXX_CID") );
     }
     //---------------------------
