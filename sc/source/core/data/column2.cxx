@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <svx/editstat.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <math.h>
@@ -105,6 +106,14 @@
 inline BOOL CellVisible( const ScBaseCell* pCell )
 {
     return ( pCell->GetCellType() != CELLTYPE_NOTE || pCell->GetNotePtr() );
+}
+
+inline BOOL IsAmbiguousScript( BYTE nScript )
+{
+    //! move to a header file
+    return ( nScript != SCRIPTTYPE_LATIN &&
+             nScript != SCRIPTTYPE_ASIAN &&
+             nScript != SCRIPTTYPE_COMPLEX );
 }
 
 // -----------------------------------------------------------------------------------------
@@ -677,19 +686,24 @@ long ScColumn::GetNeededSize( USHORT nRow, OutputDevice* pDev,
                 nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
         }
 
-        //  SetFont auch bei Edit-Zellen, weil bGetFont evtl. nur einmal gesetzt ist
+        ScBaseCell* pCell = pItems[nIndex].pCell;
+        BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
+        if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+
+        //  also call SetFont for edit cells, because bGetFont may be set only once
+        //  bGetFont is set also if script type changes
         if (rOptions.bGetFont)
         {
             Fraction aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
             Font aFont;
-            pPattern->GetFont( aFont, pDev, &aFontZoom, pCondSet );
+            pPattern->GetFont( aFont, pDev, &aFontZoom, pCondSet, nScript );
             pDev->SetFont(aFont);
         }
 
         BOOL bAddMargin = TRUE;
-        ScBaseCell* pCell = pItems[nIndex].pCell;
         BOOL bEditEngine = ( pCell->GetCellType() == CELLTYPE_EDIT ||
-                                eOrient == SVX_ORIENTATION_STACKED );
+                                eOrient == SVX_ORIENTATION_STACKED ||
+                                IsAmbiguousScript( nScript ) );
 
         if (!bEditEngine)                                   // direkte Ausgabe
         {
@@ -999,13 +1013,18 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
         ScNeededSizeOptions aOptions;
         aOptions.bFormula = bFormula;
         const ScPatternAttr* pOldPattern = NULL;
+        BYTE nOldScript = 0;
 
         while (aDataIter.Next( nIndex ))
         {
             USHORT nRow = pItems[nIndex].nRow;
+
+            BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
+            if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+
             const ScPatternAttr* pPattern = GetPattern( nRow );
             aOptions.pPattern = pPattern;
-            aOptions.bGetFont = (pPattern != pOldPattern);
+            aOptions.bGetFont = (pPattern != pOldPattern || nScript != nOldScript);
             USHORT nThis = (USHORT) GetNeededSize( nRow, pDev, nPPTX, nPPTY,
                 rZoomX, rZoomY, TRUE, aOptions );
             pOldPattern = pPattern;
@@ -1028,6 +1047,30 @@ USHORT ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nP
     }
     else
         return nOldWidth;
+}
+
+USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId )
+{
+    USHORT nHeight = (USHORT) ((const SvxFontHeightItem&) rPattern.GetItem(nFontHeightId)).GetHeight();
+    const SvxMarginItem* pMargin = (const SvxMarginItem*) &rPattern.GetItem(ATTR_MARGIN);
+    nHeight += nHeight / 5;
+    //  gibt bei 10pt 240
+
+    if ( nHeight + 240 > ScGlobal::nDefFontHeight )
+    {
+        nHeight += ScGlobal::nDefFontHeight;
+        nHeight -= 240;
+    }
+
+    //  Standard-Hoehe: TextHeight + Raender - 23
+    //  -> 257 unter Windows
+
+    if (nHeight > STD_ROWHEIGHT_DIFF)
+        nHeight -= STD_ROWHEIGHT_DIFF;
+
+    nHeight += pMargin->GetTopMargin() + pMargin->GetBottomMargin();
+
+    return nHeight;
 }
 
 //  pHeight in Twips
@@ -1063,7 +1106,6 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
         else
         {
             USHORT nRow;
-            USHORT nHeight;
             BOOL bStdAllowed = ((const SvxOrientationItem&) pPattern->GetItem(ATTR_ORIENTATION)).
                                         GetValue() == (USHORT) SVX_ORIENTATION_STANDARD;
             BOOL bStdOnly = FALSE;
@@ -1087,7 +1129,7 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
             }
 
             if (bStdOnly)
-                if (HasEditCells(nStart,nEnd,nEditPos))
+                if (HasEditCells(nStart,nEnd,nEditPos))     // includes mixed script types
                 {
                     if (nEditPos == nStart)
                     {
@@ -1106,27 +1148,7 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
 
             if (bStdAllowed)
             {
-                nHeight = (USHORT) ((const SvxFontHeightItem&) pPattern->GetItem(ATTR_FONT_HEIGHT)).
-                                        GetHeight();
-                const SvxMarginItem* pMargin = (const SvxMarginItem*) &pPattern->GetItem(ATTR_MARGIN);
-                nHeight += nHeight / 5;
-                //  gibt bei 10pt 240
-
-                if ( nHeight + 240 > ScGlobal::nDefFontHeight )
-                {
-                    nHeight += ScGlobal::nDefFontHeight;
-                    nHeight -= 240;
-                }
-
-                //  Standard-Hoehe: TextHeight + Raender - 23
-                //  -> 257 unter Windows
-
-                if (nHeight > STD_ROWHEIGHT_DIFF)
-                    nHeight -= STD_ROWHEIGHT_DIFF;
-
-                nHeight += pMargin->GetTopMargin() + pMargin->GetBottomMargin();
-
-                        //! OS2: 1pt mehr ?? (+20)
+                USHORT nHeight = lcl_GetAttribHeight( *pPattern, ATTR_FONT_HEIGHT );
 
                 //  wenn eh alles schon groesser ist, muss die Schleife nicht mehr
                 //  ewig durchgenudelt werden
@@ -1137,6 +1159,37 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
                 for (nRow=nStart; nRow<=nStdEnd; nRow++)
                     if (nHeight > pHeight[nRow-nStartRow])
                         pHeight[nRow-nStartRow] = nHeight;
+
+                if ( bStdOnly )
+                {
+                    //  if cells are not handled individually below,
+                    //  check for cells with CJK or CTL script type
+
+                    USHORT nCjkHeight = 0;
+                    USHORT nCtlHeight = 0;
+
+                    USHORT nIndex;
+                    Search(nStart,nIndex);
+                    while ( nIndex < nCount && (nRow=pItems[nIndex].nRow) <= nEnd )
+                    {
+                        BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pItems[nIndex].pCell );
+                        if ( nScript == SCRIPTTYPE_ASIAN )
+                        {
+                            if ( nCjkHeight == 0 )
+                                nCjkHeight = lcl_GetAttribHeight( *pPattern, ATTR_CJK_FONT_HEIGHT );
+                            if (nCjkHeight > pHeight[nRow-nStartRow])
+                                pHeight[nRow-nStartRow] = nCjkHeight;
+                        }
+                        else if ( nScript == SCRIPTTYPE_COMPLEX )
+                        {
+                            if ( nCtlHeight == 0 )
+                                nCtlHeight = lcl_GetAttribHeight( *pPattern, ATTR_CTL_FONT_HEIGHT );
+                            if (nCtlHeight > pHeight[nRow-nStartRow])
+                                pHeight[nRow-nStartRow] = nCtlHeight;
+                        }
+                        ++nIndex;
+                    }
+                }
             }
 
             if (!bStdOnly)                      // belegte Zellen suchen
@@ -1152,7 +1205,7 @@ void ScColumn::GetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT* pHeig
                     if ( bShrink || !(pDocument->GetRowFlags(nRow, nTab) & CR_MANUALSIZE) )
                     {
                         aOptions.pPattern = pPattern;
-                        nHeight = (USHORT)
+                        USHORT nHeight = (USHORT)
                                 ( GetNeededSize( nRow, pDev, nPPTX, nPPTY,
                                                     rZoomX, rZoomY, FALSE, aOptions ) / nPPTY );
                         if (nHeight > pHeight[nRow-nStartRow])

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <svtools/poolcach.hxx>
 #include <svtools/zforlist.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <string.h>
 
 #include "scitems.hxx"
@@ -91,6 +92,15 @@
 inline BOOL CellVisible( const ScBaseCell* pCell )      //! an Zelle verschieben
 {
     return ( pCell->GetCellType() != CELLTYPE_NOTE || pCell->GetNotePtr() );
+}
+
+inline BOOL IsAmbiguousScriptNonZero( BYTE nScript )
+{
+    //! move to a header file
+    return ( nScript != SCRIPTTYPE_LATIN &&
+             nScript != SCRIPTTYPE_ASIAN &&
+             nScript != SCRIPTTYPE_COMPLEX &&
+             nScript != 0 );
 }
 
 // -----------------------------------------------------------------------------------------
@@ -2008,13 +2018,16 @@ void ScColumn::ResetChanged( USHORT nStartRow, USHORT nEndRow )
 
 BOOL ScColumn::HasEditCells(USHORT nStartRow, USHORT nEndRow, USHORT& rFirst) const
 {
+    //  used in GetOptimalHeight - ambiguous script type counts as edit cell
+
     USHORT nRow;
     USHORT nIndex;
     Search(nStartRow,nIndex);
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
-        if (pCell->GetCellType() == CELLTYPE_EDIT)
+        if ( pCell->GetCellType() == CELLTYPE_EDIT ||
+             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab, pCell) ) )
         {
             rFirst = nRow;
             return TRUE;
