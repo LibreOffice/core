@@ -17,12 +17,26 @@ endif
 ifeq "$(PLATFORM)" "CYGWIN_NT-5.0"
 PLATFORM = windows
 endif
+ifeq "$(PLATFORM)" "CYGWIN_NT-5.1"
+PLATFORM = windows
+endif
 endif
 
 # debug option, default is no debug
 DEBUG=no
 ifeq "$(MAKECMDGOALS)" "debug"
 DEBUG=yes
+endif
+
+###########################################################################
+#
+# Java settings
+#
+###########################################################################
+JAVAC_FLAGS=
+
+ifeq "$(DEBUG)" "yes"
+JAVAC_FLAGS+=-g
 endif
 
 
@@ -70,13 +84,13 @@ EMPTYSTRING=
 PATH_SEPARATOR=;
 
 # use this for release version
-CC_FLAGS=-c -GX
+CC_FLAGS=-c -GX -MT
 ifeq "$(DEBUG)" "yes"
-CC_FLAGS+=-Zi -MT
+CC_FLAGS+=-Zi
 endif
 
 CC_INCLUDES=-I. -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_STLPORT_HOME)/stlport
+STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
 SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/win32
 
 # define for used compiler necessary for UNO
@@ -158,7 +172,7 @@ ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-g
 endif
 CC_INCLUDES=-I. -I/usr/include -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_STLPORT_HOME)/stlport
+STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
 SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/solaris
 
 # define for used compiler necessary for UNO
@@ -254,7 +268,7 @@ endif
 
 SDK_JAVA_INCLUDES = -I$(OO_SDK_JAVA_HOME)/include -I$(OO_SDK_JAVA_HOME)/include/linux
 CC_INCLUDES=-I. -I/usr/include -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I$(OO_STLPORT_HOME)/stlport
+STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
 CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV)
 
 # define for used compiler necessary for UNO
