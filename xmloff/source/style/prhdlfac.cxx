@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-20 15:13:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,11 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLConstantsPropertyHandler(
                 aXML_WritingDirection_Enum,
                 XML_PAGE);
+            break;
+        case XML_TYPE_TEXT_HIDDEN_AS_DISPLAY:
+            pPropHdl = new XMLNamedBoolPropertyHdl(
+                GetXMLToken(XML_TRUE),
+                GetXMLToken(XML_NONE) );
             break;
     }
 
