@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XConsolidationDescriptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:30 $
+ *  last change:$Date: 2003-09-08 10:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+import util.ValueComparer;
+
 import com.sun.star.sheet.GeneralFunction;
 import com.sun.star.sheet.XConsolidationDescriptor;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.CellRangeAddress;
-import lib.MultiMethodTest;
-import util.ValueComparer;
 
 /**
 * Testing <code>com.sun.star.sheet.XConsolidationDescriptor</code>
@@ -208,7 +209,7 @@ public class _XConsolidationDescriptor extends MultiMethodTest {
     */
     public void _setSources() {
         requiredMethod("getSources()");
-        oObj.setSources(newCRaddr(CRaddr));
+        oObj.setSources(newCRaddr());
         CellRangeAddress[] CRaddr2 = oObj.getSources();
         tRes.tested("setSources()",!ValueComparer.equalValue(CRaddr, CRaddr2));
     }
@@ -276,7 +277,7 @@ public class _XConsolidationDescriptor extends MultiMethodTest {
     * @param CRaddr old cell range addresses
     * @return new cell range addresses
     */
-    public CellRangeAddress[] newCRaddr(CellRangeAddress[] CRaddr) {
+    public CellRangeAddress[] newCRaddr() {
 
         CellRangeAddress[] back = new CellRangeAddress[1];
 
