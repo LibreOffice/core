@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 16:31:33 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,17 +847,20 @@ long GenericSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
 
 // -----------------------------------------------------------------------
 
+// the text width is the maximum logical extent of all glyphs
 long GenericSalLayout::GetTextWidth() const
 {
     if( mnGlyphCount <= 0 )
         return 0;
 
-    const GlyphItem* pG = mpGlyphItems;
+    // initialize the extent
     long nMinPos = 0;
-    long nMaxPos = pG->maLinearPos.X() + pG->mnNewWidth;
-    for( int i = 1; i < mnGlyphCount; ++i )
+    long nMaxPos = 0;
+
+    const GlyphItem* pG = mpGlyphItems;
+    for( int i = mnGlyphCount; --i >= 0; ++pG )
     {
-        ++pG;
+        // update the text extent with the glyph extent
         long nXPos = pG->maLinearPos.X();
         if( nMinPos > nXPos )
             nMinPos = nXPos;
