@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SbaXGridControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 11:33:52 $
+ *  last change:$Date: 2003-02-27 12:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ public class SbaXGridControl extends TestCase {
 
         //Relations for XSelectionSupplier
         tEnv.addObjRelation("Selections", new Object[] {
-            new Integer[]{ new Integer(0) }, new Integer[]{ new Integer(1) }});
+            new Object[]{ new Integer(0) }, new Object[]{ new Integer(1) }});
         tEnv.addObjRelation("Comparer", new Comparator() {
             public int compare(Object o1, Object o2) {
                 return ((Integer)o1).compareTo(o2);
