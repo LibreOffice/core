@@ -2,9 +2,8 @@
 *
 *  $RCSfile: AgendaWizardDialogImpl.java,v $
 *
-*  $Revision: 1.2 $
-*
-*  last change: $Author: obo $  $Date: 2004-09-08 13:59:02 $
+*  $Revision: 1.3 $
+*  last change: $Author: kz $  $Date: 2004-11-27 09:04:30 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -106,7 +105,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     AgendaTemplate agendaTemplate;
     /**
      * the data model, read from the OOo configuration.
-     * (live synchronized, except for topics).
+     * (live synchronized: when the user changes the gui,
+     * the data model changes, except for topics).
      */
     private CGAgenda agenda;
 
@@ -127,6 +127,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     private String[][] agendaTemplates;
 
 
+    /** constructor */
     public AgendaWizardDialogImpl(XMultiServiceFactory xmsf)
     {
         super(xmsf);
@@ -153,7 +154,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             agenda.readConfiguration(root,"cp_");
 
             // initialize the agenda template
-            agendaTemplate = new AgendaTemplate(xMSF, agenda, resources);
+            agendaTemplate = new AgendaTemplate(xMSF, agenda, resources, this);
             initializeTemplates();
 
             agendaTemplate.load(agendaTemplates[1][agenda.cp_AgendaType] , new Vector());
@@ -216,7 +217,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     }
 
     /**
-     * bind controls to agenda memebr (DataAware model)
+     * bind controls to the agenda member (DataAware model)
      */
     private void makeDA() {
 
@@ -258,6 +259,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         });
     }
 
+    /** used in developement to start the wizard */
     public static void main(String args[])
     {
         String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //localhost
@@ -286,6 +288,9 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         }
     }*/
 
+    /**
+     * read the available agenda wizard templates.
+     */
     public boolean initializeTemplates() {
         try {
              String sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
@@ -334,6 +339,13 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
 
     private FileAccess fileAccess1;
+    /** convenience method.
+     *  instead of creating a FileAccess object every time
+     *  it is needed, I have a FileAccess object memeber.
+     *  the first time it is needed it will be created, and
+     *  then be reused...
+     * @return the FileAccess memeber object.
+     */
     private FileAccess getFileAccess() {
         if (fileAccess1 == null)
             try {
@@ -344,6 +356,12 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         return fileAccess1;
 
     }
+    /**
+     * indicates if the filename was changed by the user through
+     * the "save as" dialog.
+     * If it is so, one needs not warn the user
+     * upon overwrite, since she was already warned.
+     */
     private boolean filenameChanged = false;
 
     /**
@@ -374,8 +392,12 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     }
 
-    private static final int charsInFilename = 40;
-
+    /**
+     * is called when the user
+     * changes the path through the "save as" dialog.
+     * The path displayed is a translated, user-friendly, platform dependant path.
+     * @param url the new save url.
+     */
     private void setFilename(String url) {
         try {
             String path = getFileAccess().getPath(url,"");
@@ -387,25 +409,19 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     }
 
-    private int aaa = 0;
-
     public void insertRow() {
-        int a = aaa++;
         topicsControl.insertRow();
     }
 
     public void removeRow() {
-        int a = aaa++;
         topicsControl.removeRow();
     }
 
     public void rowUp() {
-        int a = aaa++;
         topicsControl.rowUp();
     }
 
     public void rowDown() {
-        int a = aaa++;
         topicsControl.rowDown();
     }
 
@@ -485,7 +501,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             } else {
                 loadValues[0].Value = Boolean.FALSE;
             }
-            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_blank", new PropertyValue[0]);
+            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_default", new PropertyValue[0]);
             xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
             XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
             ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
@@ -511,16 +527,16 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         }
     }
 
-
-
-
-
     /* ********************
      * Sub Classes
      * ********************
      */
 
 
+    /**
+     * this class is used to redraw an item's table when
+     * the user clicks one of the checkboxes in step 3 or 4.
+     */
     private class RedrawListener implements DataAware.Listener {
 
         private String itemName;
