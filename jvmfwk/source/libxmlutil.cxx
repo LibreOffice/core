@@ -2,9 +2,9 @@
  *
  *  $RCSfile: libxmlutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-27 15:22:15 $
+ *  last change: $Author: jl $ $Date: 2004-05-14 14:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,39 +160,6 @@ CXmlDocPtr::operator xmlDoc*()
 }
 
 //===========================================================
-// CXmlNsPtr::CXmlNsPtr(xmlNs* pNs)
-//     : _object(pNs)
-// {
-// }
-
-// CXmlNsPtr::CXmlNsPtr():_object(NULL)
-// {
-// }
-
-// CXmlNsPtr::~CXmlNsPtr()
-// {
-// //    xmlFreeNs(_object);
-// }
-// CXmlNsPtr & CXmlNsPtr::operator = (xmlNs* pObj)
-// {
-//     if (_object == pObj)
-//         return *this;
-//     xmlFreeNs(_object);
-//     _object = pObj;
-//     return *this;
-// }
-
-// xmlNs* CXmlNsPtr::operator ->()
-// {
-//     return _object;
-// }
-
-// CXmlNsPtr::operator xmlNs*()
-// {
-//     return _object;
-// }
-
-//===========================================================
 CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
     : _object(aChar)
 {
@@ -215,10 +182,6 @@ CXmlCharPtr & CXmlCharPtr::operator = (xmlChar* pObj)
     _object = pObj;
     return *this;
 }
-// xmlChar* CXmlCharPtr::operator ->()
-// {
-//     return _object;
-// }
 
 CXmlCharPtr::operator xmlChar*()
 {

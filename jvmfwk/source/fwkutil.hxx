@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 15:52:15 $
+ *  last change: $Author: jl $ $Date: 2004-05-14 14:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ rtl::OUString getBaseInstallation();
 rtl::OUString getVendorSettingsURL();
 
 rtl::OString getVendorSettingsPath();
+
+rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
 
 struct PluginLibrary;
 class VersionInfo;

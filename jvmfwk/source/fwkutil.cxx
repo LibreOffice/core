@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-13 11:15:02 $
+ *  last change: $Author: jl $ $Date: 2004-05-14 14:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,14 +414,34 @@ rtl::OUString getVendorSettingsURL()
 {
     //get the system path to the javavendors.xml file
     rtl::OUString sBaseDir = getBaseInstallation();
-    if (sBaseDir.getLength() == 0)
-        return rtl::OUString();
+    if (sBaseDir.getLength() != 0)
+    {
+        //We are run within office installation
+        rtl::OUStringBuffer sSettings(256);
+        sSettings.append(sBaseDir);
+        sSettings.appendAscii("/share/config/");
+        sSettings.appendAscii(VENDORSETTINGS);
+        return sSettings.makeStringAndClear();
+    }
+    else
+    {
+        //We are not in an office, try to find the javavendors.xml next to this
+        //library
+        rtl::OUString sLib;
+        if (osl_getModuleURLFromAddress((void *) & getVendorSettingsURL,
+                                        & sLib.pData) == sal_True)
+        {
+            rtl::OUStringBuffer sSettings(256);
+            sSettings.append(sLib);
+            sSettings.appendAscii("/");
+            sLib = getDirFromFile(sLib);
+            sSettings.appendAscii(VENDORSETTINGS);
+            return sSettings.makeStringAndClear();
+        }
+        else
+            return rtl::OUString();
 
-    rtl::OUStringBuffer sSettings(256);
-    sSettings.append(sBaseDir);
-    sSettings.appendAscii("/share/config/");
-    sSettings.appendAscii(VENDORSETTINGS);
-    return sSettings.makeStringAndClear();
+    }
 }
 
 rtl::OString getVendorSettingsPath()
@@ -757,12 +777,6 @@ void setJavaSelected()
     g_bJavaSet = true;
 }
 
-
-
-/** Determines if the currently selected Java was set in this process.
-
-    @see setProcessId()
- */
 bool wasJavaSelectedInSameProcess()
 {
     //g_setJavaProcId not set means no Java selected
@@ -771,26 +785,10 @@ bool wasJavaSelectedInSameProcess()
     return false;
 }
 
-// CProcessId::CProcessId():m_bValid(false)
-// {
-// }
+rtl::OUString getDirFromFile(const rtl::OUString& usFilePath)
+{
+    sal_Int32 index= usFilePath.lastIndexOf('/');
+    return rtl::OUString(usFilePath.getStr(), index);
+}
 
-// void CProcessId::set()
-// {
-//     rtl_getGlobalProcessId( m_arId);
-// }
-
-// bool CProcessId::operator == (const sal_uInt8 * arId) const
-// {
-//     if (arId == NULL || m_bValid == false)
-//         return false;
-//     if (memcmp(arId, m_arId, 16) == 0)
-//         return true;
-//     return false;
-// }
-
-// bool CProcessId::isValid() const
-// {
-//     return m_bValid;
-// }
 }
