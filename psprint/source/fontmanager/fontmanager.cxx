@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:51:02 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,7 +1170,8 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
         else
             delete pFont;
     }
-    else if( aExt.EqualsIgnoreCaseAscii( "ttf" ) )
+    else if( aExt.EqualsIgnoreCaseAscii( "ttf" )
+         ||  aExt.EqualsIgnoreCaseAscii( "otf" ) ) // #112957# allow GLYF-OTF
     {
         TrueTypeFontFile* pFont     = new TrueTypeFontFile();
         pFont->m_nDirectory         = nDirID;
