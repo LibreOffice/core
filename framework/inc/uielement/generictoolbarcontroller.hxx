@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:52:32 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 namespace framework
 {
 
+struct ExecuteInfo;
 class ToolBar;
 class GenericToolbarController : public svt::ToolboxController
 {
@@ -91,8 +92,13 @@ class GenericToolbarController : public svt::ToolboxController
         // XComponent
         virtual void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
 
+        // XToolbarController
+        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
+
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+
+         DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
 
     private:
         ToolBar*    m_pToolbar;
