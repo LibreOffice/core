@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,22 @@ UnoIDL_PE::SetDocu( DYN ary::info::CodeInformation * let_dpDocu )
 }
 
 void
+UnoIDL_PE::SetPublished()
+{
+    if (NOT pDocu)
+    {
+        pDocu = new ary::info::CodeInformation;
+    }
+    pDocu->SetPublished();
+}
+
+void
 UnoIDL_PE::SetOptional()
 {
     if (NOT pDocu)
     {
         pDocu = new ary::info::CodeInformation;
     }
-
     pDocu->SetOptional();
 }
 
