@@ -104,6 +104,7 @@ hedabu: ..\inc\XMLGraphicsDefaultStyle.hxx %_DEST%\inc%_EXT%\xmloff\XMLGraphicsD
 hedabu: ..\inc\XMLEmbeddedObjectExportFilter.hxx %_DEST%\inc%_EXT%\xmloff\XMLEmbeddedObjectExportFilter.hxx
 hedabu: ..\inc\XMLFilterServiceNames.h %_DEST%\inc%_EXT%\xmloff\XMLFilterServiceNames.h
 hedabu: ..\inc\XMLBase64Export.hxx %_DEST%\inc%_EXT%\xmloff\XMLBase64Export.hxx
+hedabu: ..\inc\XMLBase64ImportContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLBase64ImportContext.hxx
 hedabu: ..\inc\xmltoken.hxx %_DEST%\inc%_EXT%\xmloff\xmltoken.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
