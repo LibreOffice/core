@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-26 11:55:29 $
+ *  last change: $Author: pb $ $Date: 2000-10-09 11:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -63,9 +63,6 @@
 
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
@@ -306,7 +303,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     FreeResource();
 
     // Metrik einstellen
-    GET_MODULE_FIELDUNIT( eFUnit );
+    eFUnit = GetModuleFieldUnit();
     aMtrDepth.SetUnit( eFUnit );
     aMtrDistance.SetUnit( eFUnit );
     aMtrFocalLength.SetUnit( eFUnit );
@@ -554,7 +551,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         DBG_ASSERT( pPool, "Wo ist der Pool?" );
         ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
     }
-    GET_MODULE_FIELDUNIT( eFUnit );
+    eFUnit = GetModuleFieldUnit();
 
 
 // Segmentanzahl aenderbar ? und andere Stati
@@ -1783,7 +1780,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         DBG_ASSERT( pPool, "Wo ist der Pool?" );
         ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-        GET_MODULE_FIELDUNIT( eFUnit );
+        eFUnit = GetModuleFieldUnit();
     }
 
     // Anzahl Segmente (horizontal)
