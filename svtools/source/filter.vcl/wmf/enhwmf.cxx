@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:02:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,12 +956,15 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                                 >> aLogFont.lfUnderline >> aLogFont.lfStrikeOut >> aLogFont.lfCharSet >> aLogFont.lfOutPrecision >> aLogFont.lfClipPrecision
                                     >> aLogFont.lfQuality >> aLogFont.lfPitchAndFamily;
 
+                    sal_Unicode lfFaceName[ LF_FACESIZE ];
+
                     for ( int i = 0; i < LF_FACESIZE; i++ )
                     {
                         UINT16 nChar;
                         *pWMF >> nChar;
-                        aLogFont.lfFaceName[ i ] = (BYTE)nChar;
+                        lfFaceName[ i ] = nChar;
                     }
+                    aLogFont.alfFaceName = UniString( lfFaceName );
                     pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
                 }
             }
@@ -1002,6 +1005,21 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         pWMF->Read( pBuf, nLen );
                         aText = String( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
                         delete[] pBuf;
+
+                        if ( aText.Len() != nLen )
+                        {
+                            sal_uInt16 i, j, k;
+                            sal_Int32* pOldDx = pDX;
+                            pDX = new sal_Int32[ aText.Len() ];
+                            for ( i = 0, j = 0; i < aText.Len(); i++ )
+                            {
+                                ByteString aCharacter( aText.GetChar( i ), pOut->GetCharSet() );
+                                pDX[ i ] = 0;
+                                for ( k = 0; ( k < aCharacter.Len() ) && ( j < nLen ); k++ )
+                                    pDX[ i ] += pOldDx[ j++ ];
+                            }
+                            delete[] pOldDx;
+                        }
                     }
                     else
                     {
