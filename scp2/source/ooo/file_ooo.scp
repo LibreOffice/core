@@ -2162,6 +2162,13 @@ File gid_File_Xsl_Export_Common_Table_Table_Rows
     Name = "/xslt/export/common/table/table_rows.xsl";
 End
 
+File gid_File_Xsl_Export_Spreadsheetml_Formular
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
+    Name = "/xslt/export/spreadsheetml/formular.xsl";
+End
+
 File gid_File_Xsl_Export_Spreadsheetml_Ooo2spreadsheetml
     TXT_FILE_BODY;
     Styles = (PACKED);
