@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 09:56:17 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 10:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,9 +1490,10 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     //_____________________________________________________________________________________________________
     // A new component window doesn't know anything about current active/focus states.
     // Set this information on it!
-    if (xComponentWindow.is() && bHadFocus)
+    if ( xComponentWindow.is() && m_eActiveState == E_FOCUS )
     {
-        xComponentWindow->setFocus();
+        if ( bHadFocus )
+            xComponentWindow->setFocus();
 
         /* SOLAR SAFE { */
         ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
