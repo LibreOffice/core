@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:33:33 $
+ *  last change: $Author: jp $ $Date: 2001-08-15 08:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
 #endif
-#ifndef _SVX_TEXTCONV_HXX //autogen
-#include <svx/textconv.hxx>
-#endif
 #ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
 #endif
@@ -89,9 +86,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TEXTCONV_HXX //autogen
-#include <svx/textconv.hxx>
 #endif
 
 #ifndef _DOC_HXX

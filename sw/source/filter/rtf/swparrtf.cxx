@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:37:38 $
+ *  last change: $Author: jp $ $Date: 2001-08-15 08:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _TEXTCONV_HXX //autogen
-#include <svx/textconv.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>

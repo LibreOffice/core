@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:10:50 $
+ *  last change: $Author: jp $ $Date: 2001-08-15 08:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #endif
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef _TEXTCONV_HXX //autogen
-#include <svx/textconv.hxx>
 #endif
 #ifndef SMDLL0_HXX //autogen
 #include <starmath/smdll0.hxx>
