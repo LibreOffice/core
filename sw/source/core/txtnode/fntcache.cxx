@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:46:25 $
+ *  last change: $Author: ama $ $Date: 2001-07-02 08:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,15 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         else if( rInf.GetKern() )
         {
             long nTmpWidth = GetTextSize( rInf ).Width();
+            if( bChgColor && COL_AUTO == pTmpFont->GetColor().GetColor() )
+            {
+                Color aOldColor( pTmpFont->GetColor() );
+                Color aBlack( nNewColor );
+                pTmpFont->SetColor( aBlack );
+                if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
+                    rInf.GetOut().SetFont( *pTmpFont );
+                pTmpFont->SetColor( aOldColor );
+            }
             rInf.GetOut().DrawStretchText( aPos, (USHORT)nTmpWidth,
                                rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
         }
