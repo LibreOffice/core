@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg  fo dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:include href="ooo2wordml_custom_draw.xsl"/>
     <xsl:key name="stroke-dash-style" match="draw:stroke-dash" use="@draw:name"/>
     <xsl:key name="fill-image" match="draw:fill-image" use="@draw:name"/>
@@ -80,7 +80,7 @@
                           Since there is not a corresponding object in word, so we draw the text-box itself and its children separately. If it look like a Caption only frame
                           we'll adjust the text-box position to make it look pretty
              -->
-            <!-- skip all not force draw      children , must be first case -->
+            <!-- skip all not force draw children , must be first case -->
             <xsl:when test="ancestor::draw:text-box and $force-draw='false' "/>
             <xsl:when test="name() = 'draw:text-box'">
                 <!-- draw the text-box itself -->
@@ -88,7 +88,7 @@
                     <w:pict>
                         <xsl:variable name="text-y-adjust">
                             <xsl:choose>
-                                <xsl:when test="count(text:p/draw:*) = 1 and (string-length(text:p/draw:*[position()=1]/@svg:x) =0 or number(concat('0',translate(text:p/draw:*[position()=1]/@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))=0) and  (string-length(text:p/draw:*[position()=1]/@svg:y)=0 or  number(concat('0',translate(text:p/draw:*[position()=1]/@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))=0 ) ">
+                                <xsl:when test="count(text:p/draw:*) = 1 and (string-length(text:p/draw:*[position()=1]/@svg:x) =0 or number(concat('0',translate(text:p/draw:*[position()=1]/@svg:x,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ','') ))=0) and  (string-length(text:p/draw:*[position()=1]/@svg:y)=0 or  number(concat('0',translate(text:p/draw:*[position()=1]/@svg:x,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ','') ))=0 ) ">
                                     <xsl:variable name="pic-height">
                                         <xsl:choose>
                                             <xsl:when test="name(text:p/draw:*[position()=1]) = 'draw:g' or name(text:p/draw:*[position()=1]) = 'draw:a'">
@@ -99,37 +99,52 @@
                                                         <xsl:with-param name="y-adjust" select="$y-adjust"/>
                                                     </xsl:call-template>
                                                 </xsl:variable>
-                                                <xsl:value-of select="substring-after($BigestWindow,'y2:')  - substring-after(substring-before($BigestWindow,';x2'), 'y1:') + number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                                                <xsl:value-of select="substring-after($BigestWindow,'y2:')  - substring-after(substring-before($BigestWindow,';x2'), 'y1:') + number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ','')))"/>
                                             </xsl:when>
                                             <xsl:when test="text:p/draw:*[position()=1]/@svg:height">
-                                                <xsl:value-of select="number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))+  number(concat('0',translate(text:p/draw:*[position()=1]/@svg:height,'abcdefghijklmnopqrstuvwxyz','') ))"/>
+                                                <xsl:call-template name="Add-With-Measure">
+                                                    <xsl:with-param name="value1" select="text:p/draw:*[position()=1]/@svg:height"/>
+                                                    <xsl:with-param name="value2" select="$y-adjust"/>
+                                                </xsl:call-template>
                                             </xsl:when>
                                             <xsl:when test="text:p/draw:*[position()=1]/@fo:min-height">
-                                                <xsl:value-of select="number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate(text:p/draw:*[position()=1]/@fo:min-height,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                                                <xsl:call-template name="Add-With-Measure">
+                                                    <xsl:with-param name="value1" select="text:p/draw:*[position()=1]/@fo:min-height"/>
+                                                    <xsl:with-param name="value2" select="$y-adjust"/>
+                                                </xsl:call-template>
                                             </xsl:when>
                                             <xsl:when test="ancestor::draw:frame">
-                                                <xsl:value-of select="number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate(ancestor::draw:frame/@svg:height,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                                                <xsl:call-template name="Add-With-Measure">
+                                                    <xsl:with-param name="value1" select="ancestor::draw:frame/@svg:height"/>
+                                                    <xsl:with-param name="value2" select="$y-adjust"/>
+                                                </xsl:call-template>
                                             </xsl:when>
                                         </xsl:choose>
                                     </xsl:variable>
+                                    <xsl:variable name="min-height">
+                                        <xsl:call-template name="ConvertMeasure">
+                                            <xsl:with-param name="TargetMeasure" select="'in'"/>
+                                            <xsl:with-param name="value" select="@fo:min-height"/>
+                                        </xsl:call-template>
+                                    </xsl:variable>
                                     <xsl:choose>
-                                        <xsl:when test="number(concat('0',translate(@fo:min-height,'abcdefghijklmnopqrstuvwxyz','') ))- $pic-height &lt; 0.001">
+                                        <xsl:when test="$min-height - $pic-height &lt; 0.001">
                                             <!-- If control goes here, it much like that this text-box is used for containt graphic caption only -->
                                             <xsl:value-of select="$pic-height - 0.1"/>
                                         </xsl:when>
                                         <xsl:otherwise>
-                                            <xsl:value-of select="'0'"/>
+                                            <xsl:value-of select="$y-adjust"/>
                                         </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:value-of select="'0'"/>
+                                    <xsl:value-of select="$y-adjust"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:variable>
                         <xsl:variable name="shape-type">
                             <xsl:choose>
-                                <xsl:when test="$text-y-adjust = 0">
+                                <xsl:when test="$text-y-adjust = $y-adjust">
                                     <xsl:value-of select="'#_x0000_t202'"/>
                                 </xsl:when>
                             </xsl:choose>
@@ -147,8 +162,18 @@
                 <xsl:if test="./text:p/draw:*">
                     <xsl:apply-templates select="./text:p/draw:*">
                         <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                        <xsl:with-param name="x-adjust" select="number(concat('0',translate(@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($x-adjust,'abcdefghijklmnopqrstuvwxyz','') ))"/>
-                        <xsl:with-param name="y-adjust" select="number(concat('0',translate(@svg:y,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','') ))"/>
+                        <xsl:with-param name="x-adjust">
+                            <xsl:call-template name="Add-With-Measure">
+                                <xsl:with-param name="value1" select="@svg:x"/>
+                                <xsl:with-param name="value2" select="$x-adjust"/>
+                            </xsl:call-template>
+                        </xsl:with-param>
+                        <xsl:with-param name="y-adjust">
+                            <xsl:call-template name="Add-With-Measure">
+                                <xsl:with-param name="value1" select="@svg:y"/>
+                                <xsl:with-param name="value2" select="$y-adjust"/>
+                            </xsl:call-template>
+                        </xsl:with-param>
                         <xsl:with-param name="force-draw" select="'true'"/>
                     </xsl:apply-templates>
                 </xsl:if>
@@ -365,17 +390,39 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="x" select="number(concat('0',translate($CurrNode/@svg:x,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($x-adjust,'abcdefghijklmnopqrstuvwxyz','')))"/>
-                <xsl:variable name="y" select="number(concat('0',translate($CurrNode/@svg:y,'abcdefghijklmnopqrstuvwxyz','') ))+ number(concat('0',translate($y-adjust,'abcdefghijklmnopqrstuvwxyz','')))"/>
-                <xsl:variable name="width" select="number(concat('0',translate($CurrNode/@svg:width,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                <xsl:variable name="x">
+                    <xsl:call-template name="Add-With-Measure">
+                        <xsl:with-param name="value1" select="$CurrNode/@svg:x"/>
+                        <xsl:with-param name="value2" select="$x-adjust"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="y">
+                    <xsl:call-template name="Add-With-Measure">
+                        <xsl:with-param name="value1" select="$CurrNode/@svg:y"/>
+                        <xsl:with-param name="value2" select="$y-adjust"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="width">
+                    <xsl:call-template name="ConvertMeasure">
+                        <xsl:with-param name="value" select="$CurrNode/@svg:width"/>
+                        <xsl:with-param name="TargetMeasure" select="'in'"/>
+                    </xsl:call-template>
+                </xsl:variable>
                 <xsl:variable name="height">
                     <xsl:choose>
                         <xsl:when test="$CurrNode/@svg:height">
-                            <xsl:value-of select="number(concat('0',translate($CurrNode/@svg:height,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="$CurrNode/@svg:height"/>
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                            </xsl:call-template>
                         </xsl:when>
                         <xsl:when test="$CurrNode/@fo:min-height">
-                            <xsl:value-of select="number(concat('0',translate($CurrNode/@fo:min-height,'abcdefghijklmnopqrstuvwxyz','')))"/>
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="$CurrNode/@fo:min-height"/>
+                                <xsl:with-param name="TargetMeasure" select="'in'"/>
+                            </xsl:call-template>
                         </xsl:when>
+                        <xsl:otherwise>0</xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
                 <xsl:value-of select="concat('x1:' , $x, ';y1:' , $y, ';x2:' , string($x + $width), ';y2:', string($y + $height) ) "/>
@@ -434,29 +481,6 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:value-of select="concat('x1:' , $x1 , ';y1:' , $y1 , ';x2:' , $x2, ';y2:' , $y2)"/>
-    </xsl:template>
-    <xsl:template name="ConvertMeasure">
-        <xsl:param name="TargetMeasure" select="'pt'"/>
-        <xsl:param name="value"/>
-        <xsl:choose>
-            <!-- remove the measure mark, if the value is null, the result should be 0. Must be the first case  -->
-            <xsl:when test="string-length(translate($value,'abcdefghijklmnopqrstuvwxyz','')) = 0">0</xsl:when>
-            <xsl:when test="$TargetMeasure = 'pt'">
-                <xsl:call-template name="convert2pt">
-                    <xsl:with-param name="value" select="$value"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="$TargetMeasure = 'twip'">
-                <xsl:call-template name="convert2twip">
-                    <xsl:with-param name="value" select="$value"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="$TargetMeasure = 'in'">
-                <xsl:call-template name="convert2in">
-                    <xsl:with-param name="value" select="$value"/>
-                </xsl:call-template>
-            </xsl:when>
-        </xsl:choose>
     </xsl:template>
     <!-- convert percent value to x%  numeric x/100 -->
     <xsl:template name="ValueOfPercent">
@@ -835,8 +859,22 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="style_name2key">
+            <xsl:choose>
+                <xsl:when test="@draw:style-name">
+                    <xsl:value-of select="@draw:style-name"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:if test="ancestor::draw:frame/@draw:style-name">
+                        <xsl:value-of select="ancestor::draw:frame/@draw:style-name"/>
+                    </xsl:if>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="draw-fill-type" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill"/>
         <xsl:variable name="draw-gradient-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill-gradient-name"/>
+        <xsl:variable name="horizontal-pos" select="key('graphics-style', $style_name2key)/style:graphic-properties/@style:horizontal-pos"/>
+        <!--horizontal-pos attribute is for the placement of all the drawing elements-->
         <xsl:variable name="fill-image-name" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fill-image-name"/>
         <xsl:if test="$draw-fill-type = 'bitmap' ">
             <xsl:element name="w:binData">
@@ -941,20 +979,20 @@
         <xsl:variable name="leftmargin-pt">
             <xsl:call-template name="ConvertMeasure">
                 <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                <xsl:with-param name="value" select="key('page-layout',$pagemaster)/page-layout-properties/@fo:margin-left"/>
+                <xsl:with-param name="value" select="key('page-layout',$pagemaster)/style:page-layout-properties/@fo:margin-left"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="topmargin-pt">
             <xsl:call-template name="ConvertMeasure">
                 <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
-                <xsl:with-param name="value" select="key('page-layout',$pagemaster)/page-layout-properties/@fo:margin-top"/>
+                <xsl:with-param name="value" select="key('page-layout',$pagemaster)/style:page-layout-properties/@fo:margin-top"/>
             </xsl:call-template>
         </xsl:variable>
         <!-- addjust the x and y values of the page archored objects-->
         <xsl:variable name="x">
             <xsl:choose>
-                <xsl:when test="@text:anchor-type='page'">
-                    <xsl:value-of select="$org-x - $leftmargin-pt"/>
+                <xsl:when test="@text:anchor-type='page' or ancestor::draw:*/@text:anchor-type='page'">
+                    <xsl:value-of select="$org-x + $real-x-adjust - $leftmargin-pt"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="$org-x + $real-x-adjust"/>
@@ -963,8 +1001,8 @@
         </xsl:variable>
         <xsl:variable name="y">
             <xsl:choose>
-                <xsl:when test="@text:anchor-type='page'">
-                    <xsl:value-of select="$org-y - $topmargin-pt"/>
+                <xsl:when test="@text:anchor-type='page' or ancestor::draw:*/@text:anchor-type='page'">
+                    <xsl:value-of select="$org-y + $real-y-adjust - $topmargin-pt"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="$org-y + $real-y-adjust"/>
@@ -995,12 +1033,13 @@
                         <xsl:with-param name="value" select="@svg:height"/>
                     </xsl:call-template>
                 </xsl:when>
-                <xsl:when test="@fo:min-height">
+                <xsl:when test="@fo:min-height and string-length(text:p/text()) = 0 and not(text:p/draw:*)">
                     <xsl:call-template name="ConvertMeasure">
                         <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
                         <xsl:with-param name="value" select="@fo:min-height"/>
                     </xsl:call-template>
                 </xsl:when>
+                <xsl:otherwise>0</xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="borderstyle">
@@ -1009,7 +1048,7 @@
                 <xsl:with-param name="border-line-width" select="key('graphics-style', @draw:style-name)/style:graphic-properties/@style:border-line-width"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="stroke-weight-in-inch" select="number(concat('0',translate(key('graphics-style', @draw:style-name)/style:graphic-properties/@svg:stroke-width ,'abcdefghijklmnopqrstuvwxyz','') ))"/>
+        <xsl:variable name="stroke-weight-in-inch" select="number(concat('0',translate(key('graphics-style', @draw:style-name)/style:graphic-properties/@svg:stroke-width ,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ','') ))"/>
         <xsl:variable name="stroke-weight">
             <xsl:choose>
                 <xsl:when test="contains($borderstyle , 'strokeweight')">
@@ -1129,7 +1168,12 @@
                 <xsl:when test="name()='draw:polygon' or name()='draw:custom-shape'  or name() = 'draw:rect' or (name() = 'draw:ellipse' and not(  @draw:kind='arc') )">#00B8FF</xsl:when>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="position" select="concat('left:', $x ,$MeasureMark ,  ';top:' , $y ,$MeasureMark  , ';width:', $width ,$MeasureMark , ';height:', $height ,$MeasureMark  )"/>
+        <xsl:variable name="position">
+            <xsl:value-of select="concat('left:', $x ,$MeasureMark ,  ';top:' , $y ,$MeasureMark  , ';width:', $width ,$MeasureMark )"/>
+            <xsl:if test="not($height = 0)">
+                <xsl:value-of select="concat(';height:', $height ,$MeasureMark )"/>
+            </xsl:if>
+        </xsl:variable> 
         <xsl:variable name="flip">
             <xsl:choose>
                 <xsl:when test="@text:anchor-type='as-char' and $ooshapename='line'"/>
@@ -1146,6 +1190,12 @@
                 <xsl:when test="ancestor::draw:a"/>
                 <xsl:when test="@text:anchor-type = 'as-char' or @text:anchor-type = 'to-char'"/>
                 <xsl:otherwise>position:absolute</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="anchorlock">
+            <xsl:choose>
+                <xsl:when test="@text:anchor-type = 'as-char' or @text:anchor-type = 'to-char'">has</xsl:when>
+                <xsl:otherwise/>
             </xsl:choose>
         </xsl:variable>
         <!-- start line special -->
@@ -1175,41 +1225,41 @@
         </xsl:variable>
         <xsl:variable name="x1">
             <xsl:choose>
-                <xsl:when test="@text:anchor-type='page'">
-                    <xsl:value-of select="$org-x1 - $leftmargin-pt"/>
+                <xsl:when test="@text:anchor-type='page' or ancestor::draw:*/@text:anchor-type='page'">
+                    <xsl:value-of select="$org-x1 + $real-x-adjust - $leftmargin-pt"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$org-x1"/>
+                    <xsl:value-of select="$org-x1 + $real-x-adjust"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="y1">
             <xsl:choose>
-                <xsl:when test="@text:anchor-type='page'">
-                    <xsl:value-of select="$org-y1 - $topmargin-pt"/>
+                <xsl:when test="@text:anchor-type='page' or ancestor::draw:*/@text:anchor-type='page'">
+                    <xsl:value-of select="$org-y1 + $real-y-adjust - $topmargin-pt"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$org-y1"/>
+                    <xsl:value-of select="$org-y1 + $real-y-adjust"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="x2">
             <xsl:choose>
-                <xsl:when test="@text:anchor-type='page'">
-                    <xsl:value-of select="$org-x2 - $leftmargin-pt"/>
+                <xsl:when test="@text:anchor-type='page' or ancestor::draw:*/@text:anchor-type='page'">
+                    <xsl:value-of select="$org-x2  + $real-x-adjust - $leftmargin-pt"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$org-x2"/>
+                    <xsl:value-of select="$org-x2 + $real-x-adjust"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="y2">
             <xsl:choose>
-                <xsl:when test="@text:anchor-type='page'">
-                    <xsl:value-of select="$org-y2 - $topmargin-pt"/>
+                <xsl:when test="@text:anchor-type='page' or ancestor::draw:*/@text:anchor-type='page'">
+                    <xsl:value-of select="$org-y2 + $real-y-adjust - $topmargin-pt"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$org-y2"/>
+                    <xsl:value-of select="$org-y2 + $real-y-adjust"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -1229,6 +1279,11 @@
             </xsl:if>
             <xsl:if test="not($ooshapename = 'line')">
                 <xsl:value-of select="concat($position,';')"/>
+            </xsl:if>
+            <xsl:if test="ancestor::draw:frame and name()='draw:text-box'">
+                <xsl:if test="string-length($horizontal-pos) &gt; 0">
+                    <xsl:value-of select="concat('mso-position-horizontal:',$horizontal-pos,';')"/>
+                </xsl:if>
             </xsl:if>
         </xsl:variable>
         <!-- image special: convert oo base64 binary data (77char/line) to word base64 binary data(73char/line) , a workthrough is removing all line breaks -->
@@ -1330,7 +1385,7 @@
                             <xsl:value-of select="concat($x2,$MeasureMark ,',',$y2,$MeasureMark )"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="concat($x2,$MeasureMark ,',',$MeasureMark ,$y1)"/>
+                            <xsl:value-of select="concat($x2,$MeasureMark ,',' ,$y1,$MeasureMark)"/>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
@@ -1484,6 +1539,11 @@
                 </xsl:element>
             </xsl:if>
             <!-- end wrap type -->
+            <!-- start anchor to char specific element -->
+            <xsl:if test="string-length($anchorlock) &gt; 0">
+                <xsl:element name="w10:anchorlock"/>
+            </xsl:if>
+            <!-- end wrap type -->
             <!-- start fill image -->
             <xsl:if test="string-length($draw-fill-type ) &gt; 0">
                 <xsl:element name="v:fill">
@@ -1517,6 +1577,12 @@
                 </xsl:element>
             </xsl:if>
             <!-- end fill image -->
+            <xsl:if test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-style">
+                <xsl:call-template name="FontWork"/>
+            </xsl:if>
+            <xsl:if test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:shadow = 'visible'">
+                <xsl:call-template name="Shadow"/>
+            </xsl:if>
             <!-- only draw:g can have child graphic -->
             <xsl:choose>
                 <xsl:when test="name() = 'draw:g'">
@@ -1526,9 +1592,6 @@
                         <xsl:with-param name="y-adjust" select="$y-adjust"/>
                         <xsl:with-param name="force-draw" select="$force-draw"/>
                     </xsl:apply-templates>
-                </xsl:when>
-                <xsl:when test="key('graphics-style', @draw:style-name)/style:graphic-properties/@draw:fontwork-style">
-                    <xsl:call-template name="FontWork"/>
                 </xsl:when>
                 <xsl:when test="text:*/* | text:*/text()">
                     <xsl:element name="v:textbox">
@@ -1543,6 +1606,21 @@
                     </xsl:element>
                 </xsl:when>
             </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+    <xsl:template name="Shadow">
+        <xsl:element name="v:shadow">
+            <xsl:variable name="key-node" select="key('graphics-style', @draw:style-name)/style:graphic-properties"/>
+            <xsl:attribute name="on">true</xsl:attribute>
+            <xsl:attribute name="offset">
+                <xsl:value-of select="concat($key-node/@draw:shadow-offset-x,',' , $key-node/@draw:shadow-offset-y)"/>
+            </xsl:attribute>
+            <xsl:attribute name="color">
+                <xsl:value-of select="$key-node/@draw:shadow-color"/>
+            </xsl:attribute>
+            <xsl:attribute name="opacity">
+                <xsl:value-of select="$key-node/@draw:shadow-opacity"/>
+            </xsl:attribute>
         </xsl:element>
     </xsl:template>
     <xsl:template name="FontWork">
@@ -1640,5 +1718,106 @@
             <xsl:when test="$arrow-size &gt; 1">Medium</xsl:when>
             <xsl:when test="$arrow-size &gt; 0">Narrow</xsl:when>
         </xsl:choose>
+    </xsl:template>
+    <xsl:template name="ConvertMeasure">
+        <xsl:param name="TargetMeasure" select="'cm'"/>
+        <xsl:param name="TargetTruncate" select=" 'all' "/>
+        <xsl:param name="value"/>
+        <!-- When TargetTruncate ='all'  it returns the number whichsoever the return value is negative or positive
+               When TargetTruncate ='nonNegative' it only returns nonNegative number, all negative number to be returned as 0
+               When TargetTruncate ='positive" it only returns positive number, all nonPositive number to be returned as 1 -->
+        <xsl:variable name="return_value">
+            <xsl:choose>
+                <!-- remove the measure mark, if the value is null, the result should be 0. Must be the first case  -->
+                <xsl:when test="string-length(translate($value,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ','')) = 0">0</xsl:when>
+                <xsl:when test="string-length(translate($value,'- .0123456789','')) = 0">
+                    <xsl:value-of select="$value"/>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'cm'">
+                    <xsl:call-template name="convert2cm">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'pt'">
+                    <xsl:call-template name="convert2pt">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'twip'">
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <xsl:when test="$TargetMeasure = 'in'">
+                    <xsl:call-template name="convert2in">
+                        <xsl:with-param name="value" select="$value"/>
+                    </xsl:call-template>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$TargetTruncate = 'all' ">
+                <xsl:choose>
+                    <xsl:when test="number($TargetMeasure) = 'NaN' ">
+                        <xsl:value-of select=" '0' "/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$return_value"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="$TargetTruncate = 'nonNegative' ">
+                <xsl:choose>
+                    <xsl:when test="number($TargetMeasure) = 'NaN' ">
+                        <xsl:value-of select=" '0' "/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test=" $return_value &lt; 0  ">
+                                <xsl:value-of select=" '0' "/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$return_value"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="$TargetTruncate = 'positive' ">
+                <xsl:choose>
+                    <xsl:when test="number($TargetMeasure) = 'NaN' ">
+                        <xsl:value-of select=" '1' "/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test=" $return_value &lt;= 0 ">
+                                <xsl:value-of select=" '1' "/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$return_value"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="Add-With-Measure">
+        <xsl:param name="value1"/>
+        <xsl:param name="value2"/>
+        <xsl:param name="TargetMeasure" select="'in'"/>
+        <xsl:variable name="number-value1">
+            <xsl:call-template name="ConvertMeasure">
+                <xsl:with-param name="value" select="$value1"/>
+                <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="number-value2">
+            <xsl:call-template name="ConvertMeasure">
+                <xsl:with-param name="value" select="$value2"/>
+                <xsl:with-param name="TargetMeasure" select="$TargetMeasure"/>
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:value-of select="$number-value1 + $number-value2"/>
     </xsl:template>
 </xsl:stylesheet>
