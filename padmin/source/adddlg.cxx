@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
+ *  last change: $Author: pl $ $Date: 2001-12-19 15:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ void APChooseDriverPage::updateDrivers()
             aPath.AppendAscii( "/" );
         aPath.Append( String( RTL_CONSTASCII_USTRINGPARAM( PSPRINT_PPDDIR ) ) );
         if( access( ByteString( aPath, aEncoding ).GetBuffer(), F_OK ) )
-            return;
+            continue;
 
         ::std::list< String > aFiles;
         FindFiles( aPath, aFiles, String( RTL_CONSTASCII_USTRINGPARAM( "PS;PPD" ) ) );
