@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:38:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ XColorTable* ScDocument::GetColorTable()
     }
 }
 
-BOOL lcl_AdjustRanges( ScRangeList& rRanges, USHORT nSource, USHORT nDest, USHORT nTabCount )
+BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSource, SCTAB nDest, SCTAB nTabCount )
 {
     //! if multiple sheets are copied, update references into the other copied sheets?
 
@@ -162,12 +162,12 @@ BOOL lcl_AdjustRanges( ScRangeList& rRanges, USHORT nSource, USHORT nDest, USHOR
         }
         if ( pRange->aStart.Tab() >= nTabCount )
         {
-            pRange->aStart.SetTab( nTabCount ? ( nTabCount - 1 ) : 0 );
+            pRange->aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
             bChanged = TRUE;
         }
         if ( pRange->aEnd.Tab() >= nTabCount )
         {
-            pRange->aEnd.SetTab( nTabCount ? ( nTabCount - 1 ) : 0 );
+            pRange->aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
             bChanged = TRUE;
         }
     }
@@ -175,12 +175,12 @@ BOOL lcl_AdjustRanges( ScRangeList& rRanges, USHORT nSource, USHORT nDest, USHOR
     return bChanged;
 }
 
-void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, USHORT nSrcPos, USHORT nDestPos)
+void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos)
 {
     if (pDrawLayer && pSrcDoc->pDrawLayer)
     {
-        SdrPage* pOldPage = pSrcDoc->pDrawLayer->GetPage(nSrcPos);
-        SdrPage* pNewPage = pDrawLayer->GetPage(nDestPos);
+        SdrPage* pOldPage = pSrcDoc->pDrawLayer->GetPage(static_cast<sal_uInt16>(nSrcPos));
+        SdrPage* pNewPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nDestPos));
 
         if (pOldPage && pNewPage)
         {
@@ -240,11 +240,11 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, USHORT nSrcPos, USHORT nD
     }
 }
 
-void ScDocument::ClearDrawPage(USHORT nTab)
+void ScDocument::ClearDrawPage(SCTAB nTab)
 {
     if (pDrawLayer)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         if (pPage)
             pPage->Clear();
         else
@@ -272,8 +272,8 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         //  for preceding table numbers, even if the tables aren't allocated
         //  (important for clipboard documents).
 
-        USHORT nDrawPages = 0;
-        USHORT nTab;
+        SCTAB nDrawPages = 0;
+        SCTAB nTab;
         for (nTab=0; nTab<=MAXTAB; nTab++)
             if (pTab[nTab])
                 nDrawPages = nTab + 1;          // needed number of pages
@@ -368,11 +368,11 @@ void ScDocument::LoadDrawLayer(SvStream& rStream)
 
     //  nMaxTableNumber ist noch nicht initialisiert
 
-    USHORT nTableCount = 0;
+    sal_uInt16 nTableCount = 0;
     while ( nTableCount <= MAXTAB && pTab[nTableCount] )
         ++nTableCount;
 
-    USHORT nPageCount = pDrawLayer->GetPageCount();
+    sal_uInt16 nPageCount = pDrawLayer->GetPageCount();
     if ( nPageCount > nTableCount && nTableCount != 0 )
     {
         //  Manchmal sind beim Kopieren/Verschieben/Undo von Tabellen zuviele
@@ -380,7 +380,7 @@ void ScDocument::LoadDrawLayer(SvStream& rStream)
 
         DBG_ERROR("zuviele Draw-Pages in der Datei");
 
-        for (USHORT i=nTableCount; i<nPageCount; i++)
+        for (sal_uInt16 i=nTableCount; i<nPageCount; i++)
             pDrawLayer->DeletePage(nTableCount);
     }
 
@@ -389,7 +389,7 @@ void ScDocument::LoadDrawLayer(SvStream& rStream)
     //   wegen des fehlenden Layers in alten Dateien)
 
     nPageCount = pDrawLayer->GetPageCount();
-    for (USHORT i=0; i<nPageCount; i++)
+    for (sal_uInt16 i=0; i<nPageCount; i++)
     {
         SdrPage* pPage = pDrawLayer->GetPage(i);
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -444,24 +444,24 @@ void ScDocument::DrawCopyPage( USHORT nOldPos, USHORT nNewPos )
     pDrawLayer->ScCopyPage( nOldPos, nNewPos, FALSE );
 }
 
-void ScDocument::DeleteObjectsInArea( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
+void ScDocument::DeleteObjectsInArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         const ScMarkData& rMark )
 {
     if (!pDrawLayer)
         return;
 
-    USHORT nTabCount = GetTableCount();
-    for (USHORT nTab=0; nTab<=nTabCount; nTab++)
+    SCTAB nTabCount = GetTableCount();
+    for (SCTAB nTab=0; nTab<=nTabCount; nTab++)
         if (pTab[nTab] && rMark.GetTableSelect(nTab))
             pDrawLayer->DeleteObjectsInArea( nTab, nCol1, nRow1, nCol2, nRow2 );
 }
 
-void ScDocument::DeleteObjects( USHORT nTab )
+void ScDocument::DeleteObjects( SCTAB nTab )
 {
     if (!pDrawLayer)
         return;
 
-    if ( nTab<=MAXTAB && pTab[nTab] )
+    if ( ValidTab(nTab) && pTab[nTab] )
         pDrawLayer->DeleteObjects( nTab );
     else
         DBG_ERROR("DeleteObjects: falsche Tabelle");
@@ -482,22 +482,22 @@ BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
     if (!pDrawLayer)
         return FALSE;
 
-    USHORT nStartTab = 0;
-    USHORT nEndTab = MAXTAB;
+    SCTAB nStartTab = 0;
+    SCTAB nEndTab = MAXTAB;
     if ( !pTabMark )
     {
         nStartTab = rRange.aStart.Tab();
         nEndTab = rRange.aEnd.Tab();
     }
 
-    for (USHORT nTab = nStartTab; nTab <= nEndTab; nTab++)
+    for (SCTAB nTab = nStartTab; nTab <= nEndTab; nTab++)
     {
         if ( !pTabMark || pTabMark->GetTableSelect(nTab) )
         {
             Rectangle aMMRect = GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(),
                                             rRange.aEnd.Col(), rRange.aEnd.Row(), nTab );
 
-            SdrPage* pPage = pDrawLayer->GetPage(nTab);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
@@ -519,11 +519,11 @@ BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
 }
 
 
-void ScDocument::StopAnimations( USHORT nTab, Window* pWin )
+void ScDocument::StopAnimations( SCTAB nTab, Window* pWin )
 {
     if (!pDrawLayer)
         return;
-    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
         return;
@@ -543,11 +543,11 @@ void ScDocument::StopAnimations( USHORT nTab, Window* pWin )
     }
 }
 
-void ScDocument::StartAnimations( USHORT nTab, Window* pWin )
+void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
 {
     if (!pDrawLayer)
         return;
-    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
         return;
@@ -569,11 +569,11 @@ void ScDocument::StartAnimations( USHORT nTab, Window* pWin )
     }
 }
 
-BOOL ScDocument::HasNoteObject( USHORT nCol, USHORT nRow, USHORT nTab ) const
+BOOL ScDocument::HasNoteObject( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
     if (!pDrawLayer)
         return FALSE;
-    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
         return FALSE;
@@ -587,7 +587,7 @@ BOOL ScDocument::HasNoteObject( USHORT nCol, USHORT nRow, USHORT nTab ) const
         if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA( SdrCaptionObj ) )
         {
             ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
-            if ( pData && nCol == pData->aStt.nCol && nRow == pData->aStt.nRow )
+            if ( pData && nCol == pData->aStt.Col() && nRow == pData->aStt.Row() )
                 bFound = TRUE;
         }
         pObject = aIter.Next();
@@ -602,11 +602,11 @@ void ScDocument::RefreshNoteFlags()
         return;
 
     BOOL bAnyIntObj = FALSE;
-    USHORT nTab;
+    SCTAB nTab;
     ScPostIt aNote;
     for (nTab=0; nTab<=MAXTAB && pTab[nTab]; nTab++)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
         if (pPage)
         {
@@ -623,11 +623,11 @@ void ScDocument::RefreshNoteFlags()
                         ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
                         if ( pData )
                         {
-                            if ( GetNote( pData->aStt.nCol, pData->aStt.nRow, nTab, aNote ) )
+                            if ( GetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote))
                                 if ( !aNote.IsShown() )
                                 {
                                     aNote.SetShown(TRUE);
-                                    SetNote( pData->aStt.nCol, pData->aStt.nRow, nTab, aNote );
+                                    SetNote( pData->aStt.Col(), pData->aStt.Row(), nTab, aNote);
                                 }
                         }
                     }
@@ -648,7 +648,7 @@ void ScDocument::RefreshNoteFlags()
     }
 }
 
-BOOL ScDocument::HasBackgroundDraw( USHORT nTab, const Rectangle& rMMRect )
+BOOL ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect )
 {
     //  Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
     //  betroffen sind?
@@ -657,7 +657,7 @@ BOOL ScDocument::HasBackgroundDraw( USHORT nTab, const Rectangle& rMMRect )
 
     if (!pDrawLayer)
         return FALSE;
-    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
         return FALSE;
@@ -676,7 +676,7 @@ BOOL ScDocument::HasBackgroundDraw( USHORT nTab, const Rectangle& rMMRect )
     return bFound;
 }
 
-BOOL ScDocument::HasAnyDraw( USHORT nTab, const Rectangle& rMMRect )
+BOOL ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect )
 {
     //  Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
     //  betroffen sind?
@@ -684,7 +684,7 @@ BOOL ScDocument::HasAnyDraw( USHORT nTab, const Rectangle& rMMRect )
 
     if (!pDrawLayer)
         return FALSE;
-    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
         return FALSE;
@@ -709,14 +709,14 @@ void ScDocument::EnsureGraphicNames()
         pDrawLayer->EnsureGraphicNames();
 }
 
-SdrObject* ScDocument::GetObjectAtPoint( USHORT nTab, const Point& rPos )
+SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 {
     //  fuer Drag&Drop auf Zeichenobjekt
 
     SdrObject* pFound = NULL;
     if (pDrawLayer && pTab[nTab])
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
         if (pPage)
         {
@@ -748,8 +748,8 @@ SdrObject* ScDocument::GetObjectAtPoint( USHORT nTab, const Point& rPos )
     return pFound;
 }
 
-BOOL ScDocument::IsPrintEmpty( USHORT nTab, USHORT nStartCol, USHORT nStartRow,
-                                USHORT nEndCol, USHORT nEndRow, BOOL bLeftIsEmpty,
+BOOL ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow, BOOL bLeftIsEmpty,
                                 ScRange* pLastRange, Rectangle* pLastMM ) const
 {
     if (!IsBlockEmpty( nTab, nStartCol, nStartRow, nEndCol, nEndRow ))
@@ -765,7 +765,7 @@ BOOL ScDocument::IsPrintEmpty( USHORT nTab, USHORT nStartCol, USHORT nStartRow,
         aMMRect = *pLastMM;
 
         long nLeft = 0;
-        USHORT i;
+        SCCOL i;
         for (i=0; i<nStartCol; i++)
             nLeft += GetColWidth(i,nTab);
         long nRight = nLeft;
@@ -792,8 +792,8 @@ BOOL ScDocument::IsPrintEmpty( USHORT nTab, USHORT nStartCol, USHORT nStartRow,
         //  aehnlich wie in ScPrintFunc::AdjustPrintArea
         //! ExtendPrintArea erst ab Start-Spalte des Druckbereichs
 
-        USHORT nExtendCol = nStartCol - 1;
-        USHORT nTmpRow = nEndRow;
+        SCCOL nExtendCol = nStartCol - 1;
+        SCROW nTmpRow = nEndRow;
 
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
                             FALSE, TRUE );      // kein Refresh, incl. Attrs
@@ -810,7 +810,7 @@ BOOL ScDocument::IsPrintEmpty( USHORT nTab, USHORT nStartCol, USHORT nStartRow,
 
 void ScDocument::Clear()
 {
-    for (USHORT i=0; i<=MAXTAB; i++)
+    for (SCTAB i=0; i<=MAXTAB; i++)
         if (pTab[i])
         {
             delete pTab[i];
@@ -827,13 +827,13 @@ void ScDocument::Clear()
     }
 }
 
-BOOL ScDocument::HasControl( USHORT nTab, const Rectangle& rMMRect )
+BOOL ScDocument::HasControl( SCTAB nTab, const Rectangle& rMMRect )
 {
     BOOL bFound = FALSE;
 
     if (pDrawLayer)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
         if (pPage)
         {
@@ -856,11 +856,11 @@ BOOL ScDocument::HasControl( USHORT nTab, const Rectangle& rMMRect )
     return bFound;
 }
 
-void ScDocument::InvalidateControls( Window* pWin, USHORT nTab, const Rectangle& rMMRect )
+void ScDocument::InvalidateControls( Window* pWin, SCTAB nTab, const Rectangle& rMMRect )
 {
     if (pDrawLayer)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
         if (pPage)
         {
@@ -888,7 +888,7 @@ void ScDocument::InvalidateControls( Window* pWin, USHORT nTab, const Rectangle&
     }
 }
 
-BOOL ScDocument::HasDetectiveObjects(USHORT nTab) const
+BOOL ScDocument::HasDetectiveObjects(SCTAB nTab) const
 {
     //  looks for detective objects, annotations don't count
     //  (used to adjust scale so detective objects hit their cells better)
@@ -897,7 +897,7 @@ BOOL ScDocument::HasDetectiveObjects(USHORT nTab) const
 
     if (pDrawLayer)
     {
-        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page ?");
         if (pPage)
         {
