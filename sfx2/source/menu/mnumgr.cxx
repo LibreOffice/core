@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:44:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,13 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_EMBED_VERBDESCRIPTOR_HPP_
+#include <com/sun/star/embed/VerbDescriptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_VERBATTRIBUTES_HPP_
+#include <com/sun/star/embed/VerbAttributes.hpp>
+#endif
+
 #ifdef SOLARIS
 // HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
@@ -67,9 +74,6 @@
 #include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
 #include <cstdarg>  // std::va_list
 
-#ifndef _PSEUDO_HXX //autogen
-#include <so3/pseudo.hxx>
-#endif
 #ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
 #endif
@@ -112,6 +116,8 @@
 
 static const USHORT nCompatVersion = 4;
 static const USHORT nVersion = 5;
+
+using namespace com::sun::star;
 
 //=========================================================================
 
@@ -338,17 +344,22 @@ BOOL SfxMenuManager::Store( SvStream& rStream )
 }
 
 //-------------------------------------------------------------------------
-void InsertVerbs_Impl( const SvVerbList* pList, Menu* pMenu )
+void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs, Menu* pMenu )
 {
-    if ( pList )
+    SfxViewShell *pView = pBindings->GetDispatcher()->GetFrame()->GetViewShell();
+    if ( pView && aVerbs.getLength() )
     {
+        SfxObjectShell* pDoc = pView->GetObjectShell();
         pMenu->InsertSeparator();
         USHORT nr=0;
-        for ( USHORT n = 0; n < pList->Count(); ++n )
+        for ( USHORT n = 0; n < aVerbs.getLength(); ++n )
         {
-            // nicht alle Verbs landen im Men"u
-            const SvVerb& rVerb = (*pList)[n];
-            if ( !rVerb.IsOnMenu() )
+            // check for ReadOnly verbs
+            if ( pDoc->IsReadOnly() && !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
+                continue;
+
+            // check for verbs that shouldn't appear in the menu
+            if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                 continue;
 
             // neue Id vergeben
@@ -358,13 +369,13 @@ void InsertVerbs_Impl( const SvVerbList* pList, Menu* pMenu )
                 break;
 
             // einf"ugen
-            pMenu->InsertItem( nId, rVerb.GetName() );
+            pMenu->InsertItem( nId, aVerbs[n].VerbName );
             pMenu->SetHelpId( nId, (ULONG) nId );
         }
     }
 }
 
-void SfxMenuManager::InsertVerbs(const SvVerbList *pList)
+void SfxMenuManager::InsertVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs)
 
 /*  Man k"onnte hier auch einen Separator oder eine bestimmte Menu-Id
     als Kennung zu Einf"ugen benutzen, dann mu\s man aber das Items-Array
@@ -372,12 +383,8 @@ void SfxMenuManager::InsertVerbs(const SvVerbList *pList)
 */
 
 {
-    // hinten anh"angen
-    if ( !pList || !pList->Count() )
-        return;
-
     Menu *pMenu = GetMenu()->GetSVMenu();
-    InsertVerbs_Impl( pList, pMenu );
+    InsertVerbs_Impl( pBindings, aVerbs, pMenu );
 }
 
 //-------------------------------------------------------------------------
@@ -1581,7 +1588,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         }
     }
 
-    InsertVerbs_Impl( pFrame->GetViewShell()->GetVerbs(), pSVMenu );
+    InsertVerbs_Impl( &pFrame->GetBindings(), pFrame->GetViewShell()->GetVerbs(), pSVMenu );
     Menu* pMenu = NULL;
     ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
