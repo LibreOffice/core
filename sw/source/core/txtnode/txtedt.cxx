@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 09:29:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-24 09:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,7 +829,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
         // the words in the wrong list have to be checked
         SwScanner aScanner( *this,
                             WordType::DICTIONARY_WORD,
-                            nBegin, nEnd, FALSE, TRUE, TRUE /*clip result*/ );
+                            nBegin, nEnd );
         while( !rArgs.bConvTextFound && aScanner.NextWord() )
         {
             const XubString& rWord = aScanner.GetWord();
