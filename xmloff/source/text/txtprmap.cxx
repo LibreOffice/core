@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:36:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,19 +420,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 
 XMLPropertyMapEntry aXMLAdditionalTextDefaultsMap[] =
 {
-    // RES_ROW_SPLIT: only occurs in table rows, but we need to
-    // read/write the default for this item
-    MG_ED( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
-
     // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
-    MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL  | MID_FLAG_NO_PROPERTY_IMPORT, 0 ),
-
-    // RES_COLLAPSING_BORDERS: only occurs in tables, but we need to
-    // read/write the default for this item
-    MG_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_PROP_TABLE | XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
+    MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
 
     // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
-    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION | MID_FLAG_NO_PROPERTY_IMPORT, 0 ),
+    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
 
     MP_ED( "FontIndependentLineSpacing", STYLE, FONT_INDEPENDENT_LINE_SPACING, XML_TYPE_BOOL, 0 ),
 
@@ -873,6 +865,25 @@ XMLPropertyMapEntry aXMLRubyPropMap[] =
     M_END()
 };
 
+
+XMLPropertyMapEntry aXMLTableDefaultsMap[] =
+{
+    // RES_COLLAPSING_BORDERS: only occurs in tables, but we need to
+    // read/write the default for this item
+    _M_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_PROP_TABLE | XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
+
+    M_END()
+};
+
+XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
+{
+    // RES_ROW_SPLIT: only occurs in table rows, but we need to
+    // read/write the default for this item
+    _M_ED( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
+
+    M_END()
+};
+
 XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
 {
     XMLPropertyMapEntry *pMap = 0;
@@ -906,6 +917,12 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         break;
     case TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS:
         pMap = aXMLAdditionalTextDefaultsMap;
+        break;
+    case TEXT_PROP_MAP_TABLE_DEFAULTS:
+        pMap = aXMLTableDefaultsMap;
+        break;
+    case TEXT_PROP_MAP_TABLE_ROW_DEFAULTS:
+        pMap = aXMLTableRowDefaultsMap;
         break;
     }
     DBG_ASSERT( pMap, "illegal map type" );
