@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:16:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,11 +270,6 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
     }
 }
 
-#ifdef USED
-        IsFtnContFrm()
-        IsFtnFrm()
-#endif
-
 void LayOutPut( const SwFrm* pFrm )
 {
 #ifndef MAC
@@ -511,25 +506,7 @@ CONSTCHAR( pPOR_PAR, "PAR" );
 
 const char *GetPortionName( const MSHORT nType )
 {
-#ifdef USED
-    // Kurz und schmerzlos:
-    const char *ppNameArr[PORTYPE_END] = {
-      pPOR_LIN, pPOR_TXT, pPOR_HOLE, pPOR_SHADOW,
-      pPOR_TAB, pPOR_TABLEFT, pPOR_TABRIGHT, pPOR_TABCENTER, pPOR_TABDECIMAL,
-      pPOR_EXP, pPOR_HYPH, pPOR_HYPHSTR, pPOR_FLD,
-      pPOR_FIX, pPOR_FLY, pPOR_FLYCNT, pPOR_MARGIN,
-      pPOR_GLUE, pPOR_END, pPOR_BRK, pPOR_LAY,
-      pPOR_BLANK, pPOR_FTN, pPOR_FTNNUM,
-      pPOR_POSTITS, pPOR_SOFTHYPH, pPOR_SOFTHYPHSTR,
-      pPOR_TOX, pPOR_REF, pPOR_ISOTOX, pPOR_ISOREF,
-      pPOR_HIDDEN, pPOR_QUOVADIS, pPOR_ERGOSUM,
-      pPOR_NUMBER, pPOR_BULLET, pPOR_UNKW, pPOR_PAR
-    };
-    ASSERT( eType < PORTYPE_END, "GetPortionName: bad type" );
-    return( ppNameArr[eType] );
-#else
     return 0;
-#endif
 }
 
 CONSTCHAR( pPREP_CLEAR, "CLEAR" );
@@ -609,115 +586,10 @@ void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &rTxt, //$ ostr
     }
 }
 
-#ifdef USED
-CONSTCHAR( pRES_LNG_ALBANIAN, "ALBANIAN" );
-CONSTCHAR( pRES_LNG_ARABIC, "ARABIC" );
-CONSTCHAR( pRES_LNG_AUS_ENGLISH, "AUS_ENGLISH" );
-CONSTCHAR( pRES_LNG_BAHASA, "BAHASA" );
-CONSTCHAR( pRES_LNG_BELGIAN_DUTCH, "BELGIAN_DUTCH" );
-CONSTCHAR( pRES_LNG_BELGIAN_FRENCH, "BELGIAN_FRENCH" );
-CONSTCHAR( pRES_LNG_BRAZIL_PORT, "BRAZIL_PORT" );
-CONSTCHAR( pRES_LNG_BULGARIAN, "BULGARIAN" );
-CONSTCHAR( pRES_LNG_CANADA_FRENCH, "CANADA_FRENCH" );
-CONSTCHAR( pRES_LNG_CAST_SPANISH, "CAST_SPANISH" );
-CONSTCHAR( pRES_LNG_CATALAN, "CATALAN" );
-CONSTCHAR( pRES_LNG_CROATO_SERBIAN, "CROATO_SERBIAN" );
-CONSTCHAR( pRES_LNG_CZECH, "CZECH" );
-CONSTCHAR( pRES_LNG_DANISH, "DANISH" );
-CONSTCHAR( pRES_LNG_DUTCH, "DUTCH" );
-CONSTCHAR( pRES_LNG_FINNISH, "FINNISH" );
-CONSTCHAR( pRES_LNG_FRENCH, "FRENCH" );
-CONSTCHAR( pRES_LNG_GERMAN, "GERMAN" );
-CONSTCHAR( pRES_LNG_GREEK, "GREEK" );
-CONSTCHAR( pRES_LNG_HEBREW, "HEBREW" );
-CONSTCHAR( pRES_LNG_HUNGARIAN, "HUNGARIAN" );
-CONSTCHAR( pRES_LNG_ICELANDIC, "ICELANDIC" );
-CONSTCHAR( pRES_LNG_ITALIAN, "ITALIAN" );
-CONSTCHAR( pRES_LNG_JAPANESE, "JAPANESE" );
-CONSTCHAR( pRES_LNG_KOREAN, "KOREAN" );
-CONSTCHAR( pRES_LNG_MEXICAN_SPANISH, "MEXICAN_SPANISH" );
-CONSTCHAR( pRES_LNG_NORWEG_BOKMAL, "NORWEG_BOKMAL" );
-CONSTCHAR( pRES_LNG_NORWEG_NYNORSK, "NORWEG_NYNORSK" );
-CONSTCHAR( pRES_LNG_POLISH, "POLISH" );
-CONSTCHAR( pRES_LNG_PORTUGUESE, "PORTUGUESE" );
-CONSTCHAR( pRES_LNG_RHAETO_ROMANIC, "RHAETO_ROMANIC" );
-CONSTCHAR( pRES_LNG_ROMANIAN, "ROMANIAN" );
-CONSTCHAR( pRES_LNG_RUSSIAN, "RUSSIAN" );
-CONSTCHAR( pRES_LNG_SERBO_CROATIAN, "SERBO_CROATIAN" );
-CONSTCHAR( pRES_LNG_SIM_CHINESE, "SIM_CHINESE" );
-CONSTCHAR( pRES_LNG_SLOVAKIAN, "SLOVAKIAN" );
-CONSTCHAR( pRES_LNG_SWEDISH, "SWEDISH" );
-CONSTCHAR( pRES_LNG_SWISS_FRENCH, "SWISS_FRENCH" );
-CONSTCHAR( pRES_LNG_SWISS_GERMAN, "SWISS_GERMAN" );
-CONSTCHAR( pRES_LNG_SWISS_ITALIAN, "SWISS_ITALIAN" );
-CONSTCHAR( pRES_LNG_THAI, "THAI" );
-CONSTCHAR( pRES_LNG_TRD_CHINESE, "TRD_CHINESE" );
-CONSTCHAR( pRES_LNG_TURKISH, "TURKISH" );
-CONSTCHAR( pRES_LNG_UK_ENGLISH, "UK_ENGLISH" );
-CONSTCHAR( pRES_LNG_URDU, "URDU" );
-CONSTCHAR( pRES_LNG_US_ENGLISH, "US_ENGLISH" );
-CONSTCHAR( pRES_LNG_NOLANGUAGE, "NOLANGUAGE" );
-
-const char *GetLangName( const MSHORT nLang )
-{
-    switch( nLang )
-    {
-        case 0x041c : return pRES_LNG_ALBANIAN;
-        case 0x0401 : return pRES_LNG_ARABIC;
-        case 0x0c09 : return pRES_LNG_AUS_ENGLISH;
-        case 0x0421 : return pRES_LNG_BAHASA;
-        case 0x0813 : return pRES_LNG_BELGIAN_DUTCH;
-        case 0x080c : return pRES_LNG_BELGIAN_FRENCH;
-        case 0x0416 : return pRES_LNG_BRAZIL_PORT;
-        case 0x0402 : return pRES_LNG_BULGARIAN;
-        case 0x0c0c : return pRES_LNG_CANADA_FRENCH;
-        case 0x040a : return pRES_LNG_CAST_SPANISH;
-        case 0x0403 : return pRES_LNG_CATALAN;
-        case 0x041a : return pRES_LNG_CROATO_SERBIAN;
-        case 0x0405 : return pRES_LNG_CZECH;
-        case 0x0406 : return pRES_LNG_DANISH;
-        case 0x0413 : return pRES_LNG_DUTCH;
-        case 0x040b : return pRES_LNG_FINNISH;
-        case 0x040c : return pRES_LNG_FRENCH;
-        case 0x0407 : return pRES_LNG_GERMAN;
-        case 0x0408 : return pRES_LNG_GREEK;
-        case 0x040d : return pRES_LNG_HEBREW;
-        case 0x040e : return pRES_LNG_HUNGARIAN;
-        case 0x040f : return pRES_LNG_ICELANDIC;
-        case 0x0410 : return pRES_LNG_ITALIAN;
-        case 0x0411 : return pRES_LNG_JAPANESE;
-        case 0x0412 : return pRES_LNG_KOREAN;
-        case 0x080a : return pRES_LNG_MEXICAN_SPANISH;
-        case 0x0414 : return pRES_LNG_NORWEG_BOKMAL;
-        case 0x0814 : return pRES_LNG_NORWEG_NYNORSK;
-        case 0x0415 : return pRES_LNG_POLISH;
-        case 0x0816 : return pRES_LNG_PORTUGUESE;
-        case 0x0417 : return pRES_LNG_RHAETO_ROMANIC;
-        case 0x0418 : return pRES_LNG_ROMANIAN;
-        case 0x0419 : return pRES_LNG_RUSSIAN;
-        case 0x081a : return pRES_LNG_SERBO_CROATIAN;
-        case 0x0804 : return pRES_LNG_SIM_CHINESE;
-        case 0x041b : return pRES_LNG_SLOVAKIAN;
-        case 0x041d : return pRES_LNG_SWEDISH;
-        case 0x100c : return pRES_LNG_SWISS_FRENCH;
-        case 0x0807 : return pRES_LNG_SWISS_GERMAN;
-        case 0x0810 : return pRES_LNG_SWISS_ITALIAN;
-        case 0x041e : return pRES_LNG_THAI;
-        case 0x0404 : return pRES_LNG_TRD_CHINESE;
-        case 0x041f : return pRES_LNG_TURKISH;
-        case 0x0809 : return pRES_LNG_UK_ENGLISH;
-        case 0x0420 : return pRES_LNG_URDU;
-        case 0x0409 : return pRES_LNG_US_ENGLISH;
-        default     : return pRES_LNG_NOLANGUAGE;
-    }
-}
-#else
-
 const char *GetLangName( const MSHORT nLang )
 {
     return "???";
 }
-#endif
 
 SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
 {
