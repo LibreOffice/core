@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:44:05 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,22 +450,6 @@ sal_Bool ORelationController::Construct(Window* pParent)
     m_pView->Construct(NULL);
     m_pView->Show();
     return sal_True;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ORelationController::propertyChange(const PropertyChangeEvent& evt)
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ORelationController::elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ORelationController::elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ORelationController::elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ORelationController::suspend(sal_Bool bSuspend) throw( RuntimeException )

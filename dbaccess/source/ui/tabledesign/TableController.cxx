@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 13:05:34 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ void OTableController::startTableListening()
 {
     Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
     if (xComponent.is())
-        xComponent->addEventListener(static_cast<XPropertyChangeListener*>(this));
+        xComponent->addEventListener(static_cast<XModifyListener*>(this));
 }
 
 // -----------------------------------------------------------------------------
@@ -269,7 +269,7 @@ void OTableController::stopTableListening()
 {
     Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
     if (xComponent.is())
-        xComponent->removeEventListener(static_cast<XPropertyChangeListener*>(this));
+        xComponent->removeEventListener(static_cast<XModifyListener*>(this));
 }
 
 // -----------------------------------------------------------------------------
@@ -720,22 +720,6 @@ sal_Bool OTableController::Construct(Window* pParent)
     m_pView->Construct(NULL);
     m_pView->Show();
     return sal_True;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OTableController::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OTableController::elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OTableController::elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OTableController::elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeException )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:34:10 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,6 @@ namespace dbaui
         void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
         virtual sal_Bool Construct(Window* pParent);
-
-        // ::com::sun::star::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
-        // ::com::sun::star::container::XContainerListener
-        virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );

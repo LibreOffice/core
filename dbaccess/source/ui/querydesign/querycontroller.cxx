@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:43:37 $
+ *  last change: $Author: fs $ $Date: 2001-06-21 17:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,22 +769,6 @@ sal_Bool OQueryController::Construct(Window* pParent)
     //  getView()->Show();
     m_pWindow->Show();
     return sal_True;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OQueryController::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OQueryController::elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OQueryController::elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OQueryController::elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( RuntimeException )
-{
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeException )
