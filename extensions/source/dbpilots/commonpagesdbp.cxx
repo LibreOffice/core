@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:11:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,27 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
-
+#ifndef _SFX_DOCFILT_HACK_HXX
+#include <sfx2/docfilt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef SVTOOLS_FILENOTATION_HXX_
+#include <svtools/filenotation.hxx>
+#endif
 //.........................................................................
 namespace dbp
 {
@@ -132,6 +146,7 @@ namespace dbp
         ,m_aExplanation     (this, ResId(FT_EXPLANATION))
         ,m_aDatasourceLabel (this, ResId(FT_DATASOURCE))
         ,m_aDatasource      (this, ResId(LB_DATASOURCE))
+        ,m_aSearchDatabase  (this, ResId(PB_FORMDATASOURCE))
         ,m_aTableLabel      (this, ResId(FT_TABLE))
         ,m_aTable           (this, ResId(LB_TABLE))
     {
@@ -142,6 +157,7 @@ namespace dbp
         m_aDatasource.SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
         m_aTable.SetSelectHdl(LINK(this, OTableSelectionPage, OnListboxSelection));
         m_aTable.SetDoubleClickHdl(LINK(this, OTableSelectionPage, OnListboxDoubleClicked));
+        m_aSearchDatabase.SetClickHdl(LINK(this, OTableSelectionPage, OnSearchClicked));
 
         m_aDatasource.SetDropDownLineCount(10);
     }
@@ -178,9 +194,19 @@ namespace dbp
         {
             ::rtl::OUString sDataSourceName;
             rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+            Reference< XConnection > xConnection = ::dbtools::getActiveConnectionFromParent(rContext.xForm);
+            if ( xConnection.is() )
+            {
+                m_aDatasource.Hide();
+                m_aDatasourceLabel.Hide();
+                m_aSearchDatabase.Hide();
+                m_aTableLabel.SetPosPixel(m_aDatasourceLabel.GetPosPixel());
+                m_aTable.SetPosPixel(m_aDatasource.GetPosPixel());
+                m_aDatasource.InsertEntry(sDataSourceName);
+            }
             m_aDatasource.SelectEntry(sDataSourceName);
 
-            implFillTables();
+            implFillTables(xConnection);
 
             ::rtl::OUString sCommand;
             OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("Command") ) >>= sCommand );
@@ -206,7 +232,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OTableSelectionPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OTableSelectionPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OControlWizardPage::commitPage(_eReason))
             return sal_False;
@@ -237,6 +263,31 @@ namespace dbp
         return sal_True;
     }
 
+    //---------------------------------------------------------------------
+    IMPL_LINK( OTableSelectionPage, OnSearchClicked, PushButton*, _pButton )
+    {
+        ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
+        aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+
+        static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+        OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
+        if ( pFilter )
+        {
+            aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
+        }
+
+        if (0 == aFileDlg.Execute())
+        {
+            String sDataSourceName = aFileDlg.GetPath();
+            ::svt::OFileNotation aFileNotation(sDataSourceName);
+            sDataSourceName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
+            m_aDatasource.InsertEntry(sDataSourceName);
+            m_aDatasource.SelectEntry(sDataSourceName);
+            LINK(this, OTableSelectionPage, OnListboxSelection).Call(&m_aDatasource);
+        }
+        return 0L;
+    }
     //---------------------------------------------------------------------
     IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox*, _pBox )
     {
@@ -278,11 +329,9 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OTableSelectionPage::implFillTables()
+    void OTableSelectionPage::implFillTables(const Reference< XConnection >& _rxConn)
     {
         m_aTable.Clear();
-        if (!m_xDSContext.is())
-            return;
 
         WaitObject aWaitCursor(this);
         // get the default SDB interaction handler
@@ -307,24 +356,52 @@ namespace dbp
 
         // connect to the data source
         Any aSQLException;
-        try
+        Reference< XConnection > xConn = _rxConn;
+        if ( !xConn.is() )
         {
-            ::rtl::OUString sCurrentDatasource = m_aDatasource.GetSelectEntry();
-            if (sCurrentDatasource.getLength())
+            if (!m_xDSContext.is())
+                return;
+            // connect to the data source
+            try
             {
-                // obtain the DS object
-                Reference< XCompletedConnection > xDatasource;
-                Reference< XConnection > xConn;
-                if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
-                {   // connect
-                    xConn = xDatasource->connectWithCompletion(xHandler);
-                }
-                else
-                    DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
+                ::rtl::OUString sCurrentDatasource = m_aDatasource.GetSelectEntry();
+                if (sCurrentDatasource.getLength())
+                {
+                    // obtain the DS object
+                    Reference< XCompletedConnection > xDatasource;
+                    // check if I know this one otherwise transform it into a file URL
+                    if ( !m_xDSContext->hasByName(sCurrentDatasource) )
+                    {
+                        ::svt::OFileNotation aFileNotation(sCurrentDatasource);
+                        sCurrentDatasource = aFileNotation.get(::svt::OFileNotation::N_URL);
+                    }
 
+                    if (m_xDSContext->getByName(sCurrentDatasource) >>= xDatasource)
+                    {   // connect
+                        xConn = xDatasource->connectWithCompletion(xHandler);
+                        setFormConnection( xConn );
+                    }
+                    else
+                        DBG_ERROR("OTableSelectionPage::implFillTables: invalid data source object returned by the context");
+                }
+            }
+            catch(SQLContext& e) { aSQLException <<= e; }
+            catch(SQLWarning& e) { aSQLException <<= e; }
+            catch(SQLException& e) { aSQLException <<= e; }
+            catch (Exception&)
+            {
+                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
+            }
+        }
+
+        // will be the table tables of the selected data source
+        if ( xConn.is() )
+        {
+            try
+            {
                 // get the tables
                 Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
-                if (xSupplTables.is())
+                if ( xSupplTables.is() )
                 {
                     Reference< XNameAccess > xTables(xSupplTables->getTables(), UNO_QUERY);
                     if (xTables.is())
@@ -342,14 +419,15 @@ namespace dbp
 
                 setFormConnection( xConn );
             }
+            catch(SQLContext& e) { aSQLException <<= e; }
+            catch(SQLWarning& e) { aSQLException <<= e; }
+            catch(SQLException& e) { aSQLException <<= e; }
+            catch (Exception&)
+            {
+                DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
+            }
         }
-        catch(SQLContext& e) { aSQLException <<= e; }
-        catch(SQLWarning& e) { aSQLException <<= e; }
-        catch(SQLException& e) { aSQLException <<= e; }
-        catch (Exception&)
-        {
-            DBG_ERROR("OTableSelectionPage::implFillTables: could not fill the table list!");
-        }
+
 
         if (aSQLException.hasValue() && xHandler.is())
         {   // an SQLException (or derivee) was thrown ...
@@ -486,7 +564,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ODBFieldPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool ODBFieldPage::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OMaybeListSelectionPage::commitPage(_eReason))
             return sal_False;
