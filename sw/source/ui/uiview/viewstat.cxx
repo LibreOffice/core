@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:45:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,24 +361,24 @@ void SwView::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxBoolItem(nWhich, bCheck));
             }
             break;
-        case FN_REDLINE_ON:
-            rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & REDLINE_ON) != 0 ) );
+            case FN_REDLINE_ON:
+                rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & REDLINE_ON) != 0 ) );
+                break;
+            case FN_REDLINE_PROTECT :
+            {
+                rSet.Put( SfxBoolItem( nWhich, pWrtShell->GetDoc()->GetRedlinePasswd().getLength() > 0 ) );
+            }
             break;
-        case FN_REDLINE_PROTECT :
-        {
-            rSet.Put( SfxBoolItem( nWhich, pWrtShell->GetDoc()->GetRedlinePasswd().getLength() > 0 ) );
-        }
-        break;
-        case FN_REDLINE_SHOW:
+            case FN_REDLINE_SHOW:
             {
                 sal_uInt16 nMask = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
                 rSet.Put( SfxBoolItem( nWhich,
                     (pWrtShell->GetRedlineMode() & nMask) == nMask ));
             }
             break;
-        case SID_GALLERY :
-        case SID_AVMEDIA_PLAYER :
-        case FN_REDLINE_ACCEPT:
+            case SID_GALLERY :
+            case SID_AVMEDIA_PLAYER :
+            case FN_REDLINE_ACCEPT :
             {
                 SfxViewFrame* pVFrame = GetViewFrame();
                 if (pVFrame->KnowsChildWindow(nWhich))
@@ -406,6 +406,7 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case SID_HANGUL_HANJA_CONVERSION:
+            case SID_CHINESE_CONVERSION:
             {
                 if (!SvtCJKOptions().IsAnyEnabled())
                     rSet.DisableItem(nWhich);
