@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 14:06:42 $
+#   last change: $Author: rt $ $Date: 2004-11-16 13:32:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,11 +74,11 @@ INSTALLDIR=$(OUT)
 .INCLUDE: target.mk
 
 
-.IF "$(UPDATER)"!=""
-ALLTAR : updatepack
-.ELSE			# "$(UPDATER)"!=""
+.IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : openoffice
-.ENDIF			# "$(UPDATER)"!=""
+.ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
+ALLTAR : updatepack
+.ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 
 updatepack:
     +$(PERL) -w $(SOLARENV)$/bin$/packager.pl
