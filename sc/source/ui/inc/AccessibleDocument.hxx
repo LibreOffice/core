@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 09:22:31 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 11:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,7 @@ private:
     ScChildrenShapes* mpChildrenShapes;
     ScAccessibleEditObject* mpTempAccEdit;
     com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> mxTempAcc;
+    Rectangle maVisArea;
     sal_Bool mbCompleteSheetSelected;
 
 public:
@@ -365,6 +366,8 @@ private:
 
     rtl::OUString GetCurrentCellName() const;
     rtl::OUString GetCurrentCellDescription() const;
+
+    Rectangle GetVisibleArea_Impl() const;
 };
 
 
