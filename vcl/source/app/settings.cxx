@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-06-07 16:45:44 $
+ *  last change: $Author: th $ $Date: 2001-06-15 13:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1521,7 +1521,7 @@ SvStream& operator<<( SvStream& rOStream, const HelpSettings& rSet )
 
 // =======================================================================
 
-BOOL ImplCompareLocales( const ::com::sun::star::lang::Locale& L1, const ::com::sun::star::lang::Locale& L2 )
+static BOOL ImplCompareLocales( const ::com::sun::star::lang::Locale& L1, const ::com::sun::star::lang::Locale& L2 )
 {
     return ( ( L1.Language == L2.Language ) &&
              ( L1.Country == L2.Country ) &&
@@ -1717,33 +1717,26 @@ ULONG AllSettings::Update( ULONG nFlags, const AllSettings& rSet )
     {
         if ( mpData->maInternational != rSet.mpData->maInternational )
         {
-            CopyData();
-            mpData->maInternational = rSet.mpData->maInternational;
+            SetInternational( rSet.mpData->maInternational );
             nChangeFlags |= SETTINGS_INTERNATIONAL;
-            // Will be calculated in GetLocale();
-            mpData->maLocale = ::com::sun::star::lang::Locale();
-        }
-
-        // Da System-International-Klassen intern in der
-        // International-Klasse automatisch bei Systemaenderungen geaendert
-        // werden, wird der Status innerhalb einer System-International-
-        // Aenderung anders ermittelt, da ansonsten die App nicht
-        // mitbekommt, das sich etwas geaendert hat
-        if ( (mpData->maInternational.GetLanguage() == LANGUAGE_SYSTEM) ||
-             (mpData->maInternational.GetFormatLanguage() == LANGUAGE_SYSTEM) )
-        {
-            if ( ImplGetSVData()->maAppData.mbIntnChanged )
-                nChangeFlags |= SETTINGS_INTERNATIONAL;
         }
     }
 
     if ( nFlags & SETTINGS_LOCALE )
     {
-        if ( !ImplCompareLocales( mpData->maLocale, rSet.mpData->maLocale ) )
+        if ( mpData->meLanguage || rSet.mpData->meLanguage )
         {
-            CopyData();
-            mpData->maLocale = rSet.mpData->maLocale;
+            SetLanguage( rSet.mpData->meLanguage );
             nChangeFlags |= SETTINGS_LOCALE;
+        }
+    }
+
+    if ( nFlags & SETTINGS_UILOCALE )
+    {
+        if ( mpData->meUILanguage || rSet.mpData->meUILanguage )
+        {
+            SetUILanguage( rSet.mpData->meUILanguage );
+            nChangeFlags |= SETTINGS_UILOCALE;
         }
     }
 
@@ -1786,17 +1779,11 @@ ULONG AllSettings::GetChangeFlags( const AllSettings& rSet ) const
     if ( mpData->maInternational != rSet.mpData->maInternational )
         nChangeFlags |= SETTINGS_INTERNATIONAL;
 
-    // Da System-International-Klassen intern in der
-    // International-Klasse automatisch bei Systemaenderungen geaendert
-    // werden, wird der Status innerhalb einer System-International-
-    // Aenderung anders ermittelt, da ansonsten die App nicht
-    // mitbekommt, das sich etwas geaendert hat
-    if ( (mpData->maInternational.GetLanguage() == LANGUAGE_SYSTEM) ||
-         (mpData->maInternational.GetFormatLanguage() == LANGUAGE_SYSTEM) )
-    {
-        if ( ImplGetSVData()->maAppData.mbIntnChanged )
-            nChangeFlags |= SETTINGS_INTERNATIONAL;
-    }
+    if ( mpData->meLanguage || rSet.mpData->meLanguage )
+        nChangeFlags |= SETTINGS_LOCALE;
+
+    if ( mpData->meUILanguage || rSet.mpData->meUILanguage )
+        nChangeFlags |= SETTINGS_UILOCALE;
 
     return nChangeFlags;
 }
@@ -1837,16 +1824,113 @@ BOOL AllSettings::operator ==( const AllSettings& rSet ) const
 
 // -----------------------------------------------------------------------
 
+void AllSettings::SetInternational( const International& rIntn )
+{
+    CopyData();
+
+    mpData->maInternational = rIntn;
+
+    mpData->meLanguage = rIntn.GetFormatLanguage();
+    mpData->meUILanguage = rIntn.GetLanguage();
+    // Will be calculated in GetLocale()/GetUILocale()
+    mpData->maLocale = ::com::sun::star::lang::Locale();
+    mpData->maUILocale = ::com::sun::star::lang::Locale();
+}
+
+// -----------------------------------------------------------------------
+
+void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
+{
+    CopyData();
+
+    mpData->maLocale = rLocale;
+
+    mpData->meLanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+}
+
+// -----------------------------------------------------------------------
+
+void AllSettings::SeUILocale( const ::com::sun::star::lang::Locale& rLocale )
+{
+    CopyData();
+
+    mpData->maLocale = rLocale;
+
+    mpData->meUILanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+}
+
+// -----------------------------------------------------------------------
+
+void AllSettings::SetLanguage( LanguageType eLang )
+{
+    CopyData();
+
+    mpData->meLanguage = eLang;
+
+    // Will be calculated in GetLocale()
+    mpData->maLocale = ::com::sun::star::lang::Locale();
+    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+}
+
+// -----------------------------------------------------------------------
+
+void AllSettings::SetUILanguage( LanguageType eLang  )
+{
+    CopyData();
+
+    mpData->meUILanguage = eLang;
+
+    // Will be calculated in GetUILocale()
+    mpData->maUILocale = ::com::sun::star::lang::Locale();
+    mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
+}
+
+// -----------------------------------------------------------------------
+
 const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
 {
     if ( !mpData->maLocale.Language.getLength() )
     {
-        String aLanguage, aCountry;
-        ConvertLanguageToIsoNames( mpData->maInternational.GetLanguage(), aLanguage, aCountry );
+        String  aLanguage;
+        String  aCountry;
+        ConvertLanguageToIsoNames( mpData->meLanguage, aLanguage, aCountry );
         ((AllSettings*)this)->mpData->maLocale.Language = aLanguage;
         ((AllSettings*)this)->mpData->maLocale.Country = aCountry;
     }
+
     return mpData->maLocale;
+}
+
+// -----------------------------------------------------------------------
+
+const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
+{
+    if ( !mpData->maLocale.Language.getLength() )
+    {
+        String  aLanguage;
+        String  aCountry;
+        ConvertLanguageToIsoNames( mpData->meUILanguage, aLanguage, aCountry );
+        ((AllSettings*)this)->mpData->maLocale.Language = aLanguage;
+        ((AllSettings*)this)->mpData->maLocale.Country = aCountry;
+    }
+
+    return mpData->maUILocale;
+}
+
+// -----------------------------------------------------------------------
+
+LanguageType AllSettings::GetLanguage() const
+{
+    return mpData->meLanguage;
+}
+
+// -----------------------------------------------------------------------
+
+LanguageType AllSettings::GetUILanguage() const
+{
+    return mpData->meUILanguage;
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-06-11 09:56:51 $
+ *  last change: $Author: th $ $Date: 2001-06-15 13:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ sal_Unicode ImplMnemonicGenerator::ImplFindMnemonic( const XubString& rKey )
 
 void ImplMnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 {
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
@@ -169,7 +169,7 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
     if ( !rKey.Len() || ImplFindMnemonic( rKey ) )
         return FALSE;
 
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );

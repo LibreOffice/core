@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:21:28 $
+ *  last change: $Author: th $ $Date: 2001-06-15 13:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,8 +332,7 @@ static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode
     if ( !xCharClass.is() )
         xCharClass = vcl::unohelper::CreateCharacterClassification();
 
-    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetLocale();
-
+    const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     cCharCode = xCharClass->toUpper( String(cCharCode), 0, 1, rLocale )[0];
 
     if ( i < nFormEnd )
