@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 12:01:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,7 +1103,7 @@ void OServiceManager::disposing()
         }
         catch (RuntimeException & exc)
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "### RuntimeException occured upon disposing factory: %s", str.getStr() );
 #endif
@@ -1281,7 +1281,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     throw (Exception, RuntimeException)
 {
     check_undisposed();
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     Reference< beans::XPropertySet > xProps( xContext->getServiceManager(), UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     if (xProps.is())
@@ -1315,7 +1315,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                     Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
                     if (xFac.is())
                     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
                         OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
@@ -1326,7 +1326,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         }
         catch (lang::DisposedException & exc)
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
 #endif
@@ -1343,7 +1343,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     throw (Exception, RuntimeException)
 {
     check_undisposed();
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     Reference< beans::XPropertySet > xProps( xContext->getServiceManager(), UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     if (xProps.is())
@@ -1377,7 +1377,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                     Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
                     if (xFac.is())
                     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
                         OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
@@ -1388,7 +1388,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         }
         catch (lang::DisposedException & exc)
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
 #endif
@@ -1743,7 +1743,7 @@ private:
     Reference<XSimpleRegistry > m_xRegistry;    // readonly property Registry
     Reference<XRegistryKey >    m_xRootKey;
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     bool m_init;
 #endif
 };
@@ -1754,7 +1754,7 @@ private:
 ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext > const & xContext )
     : OServiceManager( xContext )
     , m_searchedRegistry(sal_False)
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     , m_init( false )
 #endif
 {
@@ -1916,7 +1916,7 @@ void ORegistryServiceManager::initialize(const Sequence< Any >& Arguments)
         m_xRootKey.clear();
         Arguments[ 0 ] >>= m_xRegistry;
     }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     // to find all bootstrapping processes to be fixed...
     OSL_ENSURE( !m_init, "### second init of service manager instance!" );
     m_init = true;
