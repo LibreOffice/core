@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:31:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_DBDOCFUN_HXX
 #define SC_DBDOCFUN_HXX
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
@@ -124,7 +128,7 @@ public:
                         ::com::sun::star::sdbc::XResultSet >& xResultSet,
                         const SbaSelectionList* pSelection );
 
-    BOOL            DoImport( USHORT nTab, const ScImportParam& rParam,
+    BOOL            DoImport( SCTAB nTab, const ScImportParam& rParam,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::sdbc::XResultSet >& xResultSet,
                         const SbaSelectionList* pSelection, BOOL bRecord,
@@ -136,13 +140,13 @@ public:
 
     static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 
-    BOOL            Sort( USHORT nTab, const ScSortParam& rSortParam,
+    BOOL            Sort( SCTAB nTab, const ScSortParam& rSortParam,
                             BOOL bRecord, BOOL bPaint, BOOL bApi );
 
-    BOOL            Query( USHORT nTab, const ScQueryParam& rQueryParam,
+    BOOL            Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                             const ScRange* pAdvSource, BOOL bRecord, BOOL bApi );
 
-    BOOL            DoSubTotals( USHORT nTab, const ScSubTotalParam& rParam,
+    BOOL            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                     const ScSortParam* pForceNewSort,
                                     BOOL bRecord, BOOL bApi );
 
