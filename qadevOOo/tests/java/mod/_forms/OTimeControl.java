@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTimeControl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:00 $
+ *  last change:$Date: 2003-05-27 12:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.awt.XControl;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
@@ -137,7 +138,7 @@ public class OTimeControl extends TestCase {
      * Creates a new text document.
      */
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -254,7 +255,7 @@ public class OTimeControl extends TestCase {
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
 
-        FormTools.switchDesignOf(Param.getMSF(),xTextDoc);
+        FormTools.switchDesignOf((XMultiServiceFactory)Param.getMSF(),xTextDoc);
         shortWait();
         return tEnv;
     } // finish method getTestEnvironment
