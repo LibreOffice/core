@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:52:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,18 +251,18 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
             else    // just a metafile
                 pCurrXclObj = new XclObjAny( rRoot );
         }
-        else if( nObjType == OBJ_CAPTION )  // #107540# ignore permanent note shapes
-        {
-            pCurrXclObj = NULL;
-        }
         else if( nObjType >= OBJ_FM_CONTROL )
         {
             pCurrXclObj = aOcxConverter.CreateCtrlObj( rShape );
             if( !pCurrXclObj )
                 pCurrXclObj = new XclObjAny( rRoot );   // just a metafile
         }
-        else
+        else if( pObj->GetLayer() != SC_LAYER_INTERN )
+        {
+            // #107540# ignore permanent note shapes
+            // #i12190# do not ignore callouts (do not filter by object type ID)
             pCurrXclObj = new XclObjAny( rRoot );   // just a metafile
+        }
     }
     if ( pCurrXclObj )
     {
@@ -285,15 +285,12 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
                         pAnchor->SetFlags( *pObj );
                         pCurrAppData->SetClientAnchor( pAnchor );
                     }
-                    const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
-                    if ( pTextObj )
-                    {
-                        const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
-                        if( pParaObj )
-                            pCurrAppData->SetClientTextbox(
-                                new XclEscherClientTextbox(
-                                rRootData, *pTextObj, pCurrXclObj ) );
-                    }
+                    // do not write additional text for callout objects
+                    if( pObj->GetObjIdentifier() != OBJ_CAPTION )
+                        if( const SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj ) )
+                            if( const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject() )
+                                pCurrAppData->SetClientTextbox(
+                                    new XclEscherClientTextbox( rRootData, *pTextObj, pCurrXclObj ) );
                 }
                 else
                 {
