@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscall.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,24 +71,19 @@
 #ifndef _RSCKEY_HXX
 #include <rsckey.hxx>
 #endif
-#ifndef _RSCHASH_HXX
-#include <rschash.hxx>
-#endif
 
-USHORT  nRsc_XYMAPMODEId;
-USHORT  nRsc_WHMAPMODEId;
-USHORT  nRsc_X;
-USHORT  nRsc_Y;
-USHORT  nRsc_WIDTH;
-USHORT  nRsc_HEIGHT;
-USHORT  nRsc_DELTALANG;
-USHORT  nRsc_DELTASYSTEM;
-USHORT  nRsc_EXTRADATA;
+Atom    nRsc_XYMAPMODEId = InvalidAtom;
+Atom    nRsc_WHMAPMODEId = InvalidAtom;
+Atom    nRsc_X = InvalidAtom;
+Atom    nRsc_Y = InvalidAtom;
+Atom    nRsc_WIDTH = InvalidAtom;
+Atom    nRsc_HEIGHT = InvalidAtom;
+Atom    nRsc_DELTALANG = InvalidAtom;
+Atom    nRsc_DELTASYSTEM = InvalidAtom;
+Atom    nRsc_EXTRADATA = InvalidAtom;
 
 void InitRscCompiler()
 {
-    pHS              = new HashString( 3271 );
-
     pStdParType      = new ByteString( "( const ResId & rResId, BOOL" );
     pStdPar1         = new ByteString( '(' );
     pStdPar2         = new ByteString( '(' );
@@ -97,7 +92,8 @@ void InitRscCompiler()
     pWinPar1         = new ByteString( "( pParent," );
     pWinPar2         = new ByteString( "( this," );
     nRefDeep         = 10;
-    nRsc_XYMAPMODEId = HASH_NONAME;
-    nRsc_WHMAPMODEId = HASH_NONAME;
+    nRsc_XYMAPMODEId = InvalidAtom;
+    nRsc_WHMAPMODEId = InvalidAtom;
+    pHS = new AtomContainer();
 };
 
