@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 07:47:48 $
+ *  last change: $Author: fme $ $Date: 2001-04-23 08:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,16 +1409,27 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
 #endif
         ;
 
-    if( bAlter && COMPARE_EQUAL !=
-        pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName ) )
+    sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
+            pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
+    sal_Bool bRotation = pFnt->GetOrientation();
+
+    if( bFamily || bRotation )
     {
         pNewFnt = new SwFont( *pFnt );
-        pNewFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
-        pNewFnt->SetName( XubString( sBulletFntName,
-                          RTL_TEXTENCODING_MS_1252 ), pFnt->GetActual() );
-        pNewFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
-        pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
-        pNewFnt->SetFixKerning( 0 );
+
+        if ( bFamily )
+        {
+            pNewFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
+            pNewFnt->SetName( XubString( sBulletFntName,
+                              RTL_TEXTENCODING_MS_1252 ), pFnt->GetActual() );
+            pNewFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
+            pNewFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
+            pNewFnt->SetFixKerning( 0 );
+        }
+
+        if ( bRotation )
+            pNewFnt->SetVertical( 0 );
+
         pInf = &((SwTxtSizeInfo&)rInf);
         pNewFnt->Invalidate();
         pInf->SetFont( pNewFnt );
