@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,6 @@ private:
 
 };
 
-#endif _SAL_I18N_INPUTCONTEXT_HXX
+#endif // _SAL_I18N_INPUTCONTEXT_HXX
 
 
