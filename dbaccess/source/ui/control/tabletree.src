@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:37:02 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,14 +145,48 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
 {
     Text = "Es konnte keine Verbindung zum SDBC-Treiber-Manager (#servicename#) hergestellt werden.";
     Text [ english ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
-    Text [ english_us ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
+    Text [ english_us ] = "Cannot connect to the SDBC driver manager (#servicename#).";
+    Text[ portuguese ] = "Impossível estabelecer ligação com o SDBC driver manager (#servicename#).";
+    Text[ russian ] = "Ñîçäàòü ñîåäèíåíèå ñ ìåíåäæåğîì äğàéâåğà SDBC (#servicename#) íå óäàåòñÿ.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé ç óıíäåóç ìå ôï ğñüãñáììá äéá÷åßñéóçò ôùí ğñïãñáììÜôùí ïäŞãçóçò SDBC (#servicename#).";
+    Text[ dutch ] = "Kan de verbinding met de SDBC-driver manager (#servicename#) niet tot stand brengen.";
+    Text[ french ] = "Impossible d'établir une connexion au gestionnaire de pilotes SDBC (#servicename#) !";
+    Text[ spanish ] = "No se pudo establecer una conexión al administrador de controladores SDBC (#servicename#).";
+    Text[ italian ] = "Non è possibile stabilire il collegamento al driver SDBC Manager (#servicename#).";
+    Text[ danish ] = "Det var ikke muligt at oprette en forbindelse til SDBC driver manageren (#servicename#).";
+    Text[ swedish ] = "Det gick inte att upprätta en förbindelse till SDBC-drivrutinsmanagern (#servicename#).";
+    Text[ polish ] = "Brak po³¹czenia z mened¿erem sterownika SDCB (#servicename#).";
+    Text[ portuguese_brazilian ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
+    Text[ japanese ] = "SDBC ÄŞ×²ÊŞÏÈ¼Ş¬°(#servicename#)‚ÖÚ‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
+    Text[ chinese_simplified ] = "ÎŞ·¨ºÍ SDBC Çı¶¯³ÌÊ½¹ÜÀíÆ÷(#servicename#)½¨Á¢Á¬½Ó¡£";
+    Text[ chinese_traditional ] = "µLªk³s½u¨ì SDBC ÅX°Êµ{¦¡ºŞ²z(#servicename#) ¡C";
+    Text[ turkish ] = "The connection to the SDBC driver manager (#servicename#) could not be established.";
+    Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇáÇÊÕÇá ÈÜ (#servicename#) SDBC Driver Manager .";
 };
 
 String STR_NOREGISTEREDDRIVER
 {
     Text = "Es ist kein Treiber für die URL #connurl# registriert!";
     Text [ english ] = "There is no registered driver for the URL #connurl#";
-    Text [ english_us ] = "There is no registered driver for the URL #connurl#";
+    Text [ english_us ] = "A driver is not registered for the URL #connurl#.";
+    Text[ portuguese ] = "Não existe nenhum controlador registado para o URL #connurl#.";
+    Text[ russian ] = "Äğàéâåğ äëÿ URL #connurl# íå çàğåãèñòğèğîâàí.";
+    Text[ greek ] = "Äåí õğÜñ÷åé äçëùìİíï ğñüãñáììá ïäŞãçóçò ãéá ôï URL #connurl#";
+    Text[ dutch ] = "Geen driver voor URL #connurl# geregistreerd.";
+    Text[ french ] = "Aucun pilote n'est inscrit pour l'URL #connurl# !";
+    Text[ spanish ] = "No existe un controlador registrado para la URL #connurl#";
+    Text[ italian ] = "Non esiste alcun driver registrato per l'URL #connurl#";
+    Text[ danish ] = "Der er ikke registeret en driver for URL'en #connurl#!";
+    Text[ swedish ] = "Det har inte registrerats någon drivrutin för URL:en #connurl#.";
+    Text[ polish ] = "Brak zarejestrowanego sterownika dla URL #connurl# !";
+    Text[ portuguese_brazilian ] = "There is no registered driver for the URL #connurl#";
+    Text[ japanese ] = "URL #connurl# ‚ÌÄŞ×²ÊŞ‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Text[ korean ] = "There is no registered driver for the URL #connurl#";
+    Text[ chinese_simplified ] = "Ã»ÓĞÎª URL #connurl# µÇ¼ÇÇı¶¯³ÌĞò¡£";
+    Text[ chinese_traditional ] = "¤£¦s¦b¥ô¦óµn°Oªº URL #connurl# ÅX°Êµ{§Ç¡C";
+    Text[ turkish ] = "There is no registered driver for the URL #connurl#";
+    Text[ arabic ] = "áÇ íæÌÏ ÈÑäÇãÌ ÊÔÛíá ãÓÌá ááÜ URL #connurl#!";
 };
 
 String STR_INVALIDREGISTEREDDRIVER
@@ -160,6 +194,23 @@ String STR_INVALIDREGISTEREDDRIVER
     Text = "Der registrierte Treiber für die URL #connurl# unterstuetzt ein notwendiges Interface (com.sun.star.sdbc.XDataDefinitionSupplier) nicht.";
     Text [ english ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
     Text [ english_us ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ portuguese ] = "O controlador registado para o URL #connurl# não suporta uma das interfaces exigidas (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ russian ] = "Çàğåãèñòğèğîâàííûé äğàéâåğ äëÿ URL #connurl# íå ïîääåğæèâàåò íåîáõîäèìîãî èíòåğôåéñà (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ greek ] = "Ôï ğñüãñáììá ïäŞãçóçò ğïõ İ÷åé äçëùèåß ãéá ôï URL #connurl# äåí õğïóôçñßæåé ìéá áğáéôïıìåíç äéáóıíäåóç (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ dutch ] = "De geregistreerde driver voor URL #connurl# ondersteunt geen noodzakelijk interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ french ] = "Le pilote inscrit pour l'URL #connurl# ne supporte pas une des interfaces requises (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ spanish ] = "El controlador registrado para la URL #connurl# no apoya una interfaz necesaria (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ italian ] = "Il driver registrato per l'URL #connurl# non supporta un'interfaccia necessaria (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ danish ] = "Den registrerede driver for URL'en #connurl# understøtter ikke et krævet interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ swedish ] = "Den registrerade drivrutinen för URL:en #connurl# understöder inte ett nödvändigt gränssnitt (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ polish ] = "Sterownik zarajestrowny dla URL #connurl# nie ob³uguje wymaganego interfejsu (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ portuguese_brazilian ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ japanese ] = "URL #connurl# —p‚É“o˜^‚³‚ê‚½ÄŞ×²ÊŞ‚Í—v‹‚³‚ê‚é²İÀ°Ìª²½(com.sun.star.sdbc.XDataDefinitionSupplier)‚ğx‰‡‚µ‚Ü‚¹‚ñB";
+    Text[ korean ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ chinese_simplified ] = "Îª URL#connurl# µÇ¼ÇµÄÇı¶¯³ÌĞò²»Ö§³Ö±ØĞèÒªµÄ½éÃæ(com.sun.star.sdbc.XDataDefinitionSupplier)¡£";
+    Text[ chinese_traditional ] = "¬° URL #connurl# µn°OªºÅX°Êµ{¦¡¤£¤ä´©¥²¤£¥i¤Öªº¤¶­±(com.sun.star.sdbc.XDataDefinitionSupplier)¡C";
+    Text[ turkish ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
+    Text[ arabic ] = "ÈÑäÇãÌ ÇáÊÔÛíá ÇáãÓÌá ááÜ URL #connurl# áÇ íÏÚã æÇÌåÉ ãØáæÈÉ (com.sun.star.sdbc.XDataDefinitionSupplier) .";
 };
 
 String STR_COULDNOTCONNECT
@@ -167,23 +218,77 @@ String STR_COULDNOTCONNECT
     Text = "Es konnte keine Verbindung für die URL #connurl# aufgebaut werden.";
     Text [ english ] = "A connection could not be established for URL #connurl#.";
     Text [ english_us ] = "A connection could not be established for URL #connurl#.";
+    Text[ portuguese ] = "Foi impossível estabelecer ligação para o URL #connurl#.";
+    Text[ russian ] = "Ñîçäàòü ñîåäèíåíèå ñ URL #connurl# íå óäàåòñÿ.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé ç óıíäåóç ìå ôï URL #connurl#.";
+    Text[ dutch ] = "Kon geen verbinding voor #connurl# opbouwen.";
+    Text[ french ] = "Impossible d'établir une connexion pour l'URL #connurl# !";
+    Text[ spanish ] = "No se pudo realizar ninguna conexión para la URL #connurl#.";
+    Text[ italian ] = "Non è possibile creare il collegamento all'URL #connurl#.";
+    Text[ danish ] = "Det var ikke muligt at oprette en forbindelse for URL'en #connurl#.";
+    Text[ swedish ] = "Det gick inte att upprätta någon förbindelse till URL:en #connurl#.";
+    Text[ polish ] = "Brak po³¹czenia z URL #connurl#.";
+    Text[ portuguese_brazilian ] = "A connection could not be established for URL #connurl#.";
+    Text[ japanese ] = "URL #connurl# ‚ÖÚ‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "A connection could not be established for URL #connurl#.";
+    Text[ chinese_simplified ] = "ÎŞ·¨ºÍ URL #connurl# ½¨Á¢Á¬½Ó¡£";
+    Text[ chinese_traditional ] = "µLªk³s½u¨ì URL #connurl# ¡C";
+    Text[ turkish ] = "A connection could not be established for URL #connurl#.";
+    Text[ arabic ] = "ÊÚĞÑ ÊÃÓíÓ ÇÊÕÇá ááÜ URL #connurl#..";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
     Text = "Bitte ueberpruefen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Passwort.";
     Text [ english ] = "Please check the current settings, e.g. with respect to user name and password.";
-    Text [ english_us ] = "Please check the current settings, e.g. with respect to user name and password.";
+    Text [ english_us ] = "Please check the current settings, e.g. regarding user name and password.";
+    Text[ portuguese ] = "Verifique as definições actuais, por exemplo, nome de utilizador e senha.";
+    Text[ russian ] = "Ïğîâåğüòå, ïîæàëóéñòà, âàøè òåêóùèå íàñòğîéêè, îòíîñèòåëüíî,  íàïğèìåğ, èìåíè è ïàğîëÿ ïîëüçîâàòåëÿ.";
+    Text[ greek ] = "Ğáñáêáëş åëİãîôå ôéò ôñİ÷ïõóåò ñõèìßóåéò, ğ.÷ ó÷åôéêÜ ìå ôï üíïìá ÷ñŞóôç êáé ôïí êùäéêü ğñüóâáóçò.";
+    Text[ dutch ] = "Controleer de actuele instellingen, bijv. wat betreft naam gebruiker en wachtwoord.";
+    Text[ french ] = "Vérifiez les paramètres actifs - par ex. ceux qui concernent le nom d'utilisateur et le mot de passe.";
+    Text[ spanish ] = "Compruebe la configuración actual, p.ej. el nombre de usuario y la contraseña.";
+    Text[ italian ] = "Verificare le impostazioni attuali; in particolare quelle in riferimento al nome utente e password.";
+    Text[ danish ] = "Kontroller venligst de aktuelle indstillinger, f.eks. med hensyn til brugernavn og adgangskode.";
+    Text[ swedish ] = "Kontrollera de aktuella inställningarna, t.ex. med avseende på användarnamn och lösenord.";
+    Text[ polish ] = "Proszê sprawdziæ aktualne konfiguracje, n.p. nazwê u¿ytkownika i has³o.";
+    Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
+    Text[ japanese ] = "Õ°»Ş°–¼‚âÊß½Ü°ÄŞ‚È‚ÇŒ»İİ’è‚³‚ê‚Ä‚¢‚é“à—e‚ğ‚à‚¤ˆê“xÁª¯¸‚µ‚Ä‚­‚¾‚³‚¢B";
+    Text[ korean ] = "Please check the current settings, e.g. with respect to user name and password.";
+    Text[ chinese_simplified ] = "ÇëÄú¼ì²éµ±Ç°µÄÉè¶¨£¬ÈçÊ¹ÓÃÃûºÍÃÜÂë¡£";
+    Text[ chinese_traditional ] = "½Ğ±zÀË¬d±zªº³]©w¡A¦p¨Ï¥ÎªÌ©M±K½X¡C";
+    Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
+    Text[ arabic ] = "ÇáÑÌÇÁ İÍÕ ÇáÅÚÏÇÏÇÊ ÇáÍÇáíÉ¡ ãËá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ Úáì ÓÈíá ÇáãËÇá.";
 };
 String STR_NOTABLEINFO
 {
     Text = "Die Verbindung wurde erfolgreich hergestellt, aber es konnten keine Informationen über Tabellen in der Datenbank ermittelt werden.";
     Text [ english ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
-    Text [ english_us ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
+    Text [ english_us ] = "Successfully connected, but information about databank tables is not available.";
+    Text[ portuguese ] = "A ligação foi estabelecida, mas foi impossível encontrar informações sobre tabelas na base de dados.";
+    Text[ russian ] = "Ñîåäèåíåíèå óñïåøíî ñîçäàíî, íî èíôîğìàöèÿ î òàáëèöàõ â áàçå äàííûõ íå äîñòóïíà.";
+    Text[ greek ] = "Ç óıíäåóç ğİôõ÷å áëëÜ äåí Şôáí äõíáôüí íá ğñïóäéïñéóôïıí ğëçñïöïñßåò ó÷åôéêÜ ìå ğßíáêåò óôç âÜóç äåäïìİíùí.";
+    Text[ dutch ] = "Verbinding werd tot stand gebracht, echter geen gegevens over tabellen in de database gevonden.";
+    Text[ french ] = "Connexion établie, mais aucune information concernant les tables et/ou vues n'a pu être détectée.";
+    Text[ spanish ] = "Se ha realizado una conexión satisfactoriamente, pero no se ha conseguido ninguna información sobre tablas en la base de datos.";
+    Text[ italian ] = "Il collegamento è stato realizzato tuttavia non è stato possibile trasmettere le informazioni relative alle tabelle nel database.";
+    Text[ danish ] = "Forbindelsen er blevet oprettet; men det var ikke muligt at hente informationer om tabeller i databasen.";
+    Text[ swedish ] = "Förbindelsen upprättades men det gick inte att få fram någon information om tabeller i databasen.";
+    Text[ polish ] = "Po³¹czenie zosta³o pomyœlnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
+    Text[ portuguese_brazilian ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
+    Text[ japanese ] = "³í‚ÉÚ‘±‚Å‚«‚Ü‚µ‚½‚ªAÃŞ°ÀÍŞ°½‚ÌÃ°ÌŞÙ‚ÉŠÖ‚·‚éî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB";
+    Text[ korean ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
+    Text[ chinese_simplified ] = "Á¬½ÓÒÑ¾­³É¹¦£¬µ«ÊÇÎŞ·¨»ñµÃÏà¹ØµÄÊı¾İ¿â±í¸ñÊı¾İ¡£";
+    Text[ chinese_traditional ] = "¤w¸g¦¨¥\\³s½u¡A¦ı¬O¨S¦³§ä¨ì¸ê®Æ®wªºªí®æ¤º®e¡C";
+    Text[ turkish ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
+    Text[ arabic ] = "Êã ÊÃÓíÓ ÇáÇÊÕÇá ÈäÌÇÍ¡ ÅáÇ Ãäå ÊÚĞÑ ÇáÍÕæá Úáì ãÚáæãÇÊ ÈÎÕæÕ ÌÏÇæá ŞÇÚÏÉ ÇáÈíÇäÇÊ.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:37:02  fs
+ *  STR_COULDNOTCONNECT
+ *
  *  Revision 1.1  2000/10/05 10:01:18  fs
  *  initial checkin
  *

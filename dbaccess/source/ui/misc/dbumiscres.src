@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 13:42:45 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,23 @@ Resource RSC_DATASOURCE_TYPES
         Text = "Adabas;JDBC;ODBC;dBase;Text" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;Text" ;
         Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;Text" ;
+        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;Texto";
+        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;“ÂÍÒÚ";
+        Text[ greek ] = "Adabas;JDBC;ODBC;dBase; ÂﬂÏÂÌÔ";
+        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;Tekst";
+        Text[ french ] = "Adabas;JDBC;ODBC;dBase;Texte";
+        Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;Texto";
+        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;Testo";
+        Text[ danish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
+        Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;Text";
+        Text[ polish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
+        Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
+        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;√∑Ωƒ";
+        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;Text";
+        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;Œƒ◊÷";
+        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;§Â¶r";
+        Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
+        Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;‰’";
     };
 };
 
@@ -109,7 +126,7 @@ Resource RSC_CHARSETS
         Text [ portuguese ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
         Text [ finnish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);J‰rjestelm‰" ;
         Text [ danish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-        Text [ french ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);SystËme" ;
+        Text [ french ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);SystËme" ;
         Text [ swedish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
         Text [ dutch ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeem" ;
         Text [ spanish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
@@ -118,8 +135,8 @@ Resource RSC_CHARSETS
         Text[ polish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
         Text[ japanese ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ºΩ√—";
         Text[ chinese_traditional ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);®t≤Œ";
-        Text[ arabic ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);‰Ÿ«„";
-        Text[ greek ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);”˝ÛÙÁÏ·";
+        Text[ arabic ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);‰Ÿ«„";
+        Text[ greek ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);”˝ÛÙÁÏ·";
         Text[ korean ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
         Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
         Text[ language_user1 ] = " ";
@@ -132,11 +149,31 @@ String STR_GENERAL_SDB_ERROR
     Text = "Fehler bei der Verbindung mit der Datenquelle";
     Text [ english ] = "Error while connecting to the data source";
     Text [ english_us ] = "Error while connecting to the data source";
+    Text[ portuguese ] = "Erro na ligaÁ„o ‡ fonte de dados";
+    Text[ russian ] = "Œ¯Ë·Í‡ ÔË ÒÓÂ‰ËÌÂÌËË Ò ËÒÚÓ˜ÌËÍÓÏ ‰‡ÌÌ˚ı";
+    Text[ greek ] = "–·ÒÔıÛÈ‹ÛÙÁÍÂ Ûˆ‹ÎÏ· Í·Ù‹ ÙÁ Û˝Ì‰ÂÛÁ ÏÂ ÙÁÌ ÒÔ›ÎÂıÛÁ Ù˘Ì ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ dutch ] = "Fout bij verbinding met gegevensbron";
+    Text[ french ] = "Erreur lors de la connexion ‡ la source de donnÈes";
+    Text[ spanish ] = "Error durante la conexiÛn con la fuente de datos";
+    Text[ italian ] = "Errore durante il collegamento alla sorgente dati";
+    Text[ danish ] = "Fejl under forbindelsen med datakilden";
+    Text[ swedish ] = "Fel under fˆbindelsen med datak‰llan";
+    Text[ polish ] = "B≥πd w ≥πczeniu ze ürÛd≥em danych";
+    Text[ portuguese_brazilian ] = "Error while connecting to the data source";
+    Text[ japanese ] = "√ﬁ∞¿ø∞ΩÇ÷ê⁄ë±éûÇÃ¥◊∞";
+    Text[ korean ] = "Error while connecting to the data source";
+    Text[ chinese_simplified ] = "‘⁄∫Õ ˝æ›‘¥¡¨Ω” ±∑¢…˙“ª∏ˆ¥ÌŒÛ";
+    Text[ chinese_traditional ] = "≥sΩu®Ï∏ÍÆ∆∑ΩÆ…µo•Õ§@≠”ø˘ª~";
+    Text[ turkish ] = "Error while connecting to the data source";
+    Text[ arabic ] = "Œÿ√ √À‰«¡ «·« ’«· »„’œ— «·»Ì«‰« ";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/19 13:42:45  fs
+ *  URL prefix for text files is sdbc:flat:file:, not sdbc:text:
+ *
  *  Revision 1.1  2000/10/05 10:09:02  fs
  *  initial checkin
  *
