@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 14:27:14 $
+ *  last change: $Author: nn $ $Date: 2001-10-30 17:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,12 +845,16 @@ USHORT lcl_FillOldFields( PivotField* pFields,
                 else
                     nCompCol = (short)(nDupSource+nColAdd);     //! seek source column from name
 
-                for (USHORT nOld=0; nOld<nOutCount; nOld++)
+                for (USHORT nOld=0; nOld<nOutCount && !bDupUsed; nOld++)
                     if ( pFields[nOld].nCol == nCompCol )
                     {
-                        pFields[nOld].nFuncMask |= nMask;
-                        pFields[nOld].nFuncCount = lcl_CountBits( pFields[nOld].nFuncMask );
-                        bDupUsed = TRUE;
+                        //  add to previous column only if new bits aren't already set there
+                        if ( ( pFields[nOld].nFuncMask & nMask ) == 0 )
+                        {
+                            pFields[nOld].nFuncMask |= nMask;
+                            pFields[nOld].nFuncCount = lcl_CountBits( pFields[nOld].nFuncMask );
+                            bDupUsed = TRUE;
+                        }
                     }
             }
 
@@ -1332,6 +1336,12 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
                 for (USHORT nRefRow=0; nRefRow<nRefRowCount; nRefRow++)
                     if (pRefRowFields[nRefRow].nCol == nCol)
                         bFirst = FALSE;
+
+            //  if set via api, a data column may occur several times
+            //  (if the function hasn't been changed yet) -> also look for duplicate data column
+            for (USHORT nPrevData=0; nPrevData<i; nPrevData++)
+                if (pFields[nPrevData].nCol == nCol)
+                    bFirst = FALSE;
 
             USHORT nMask = 1;
             for (USHORT nBit=0; nBit<16; nBit++)

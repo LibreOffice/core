@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-12 09:30:57 $
+ *  last change: $Author: nn $ $Date: 2001-10-30 17:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,8 +618,14 @@ void ScDPOutput::CalcSizes()
         nMemberStartRow = nTabStartRow + (USHORT) nHeaderSize;
         nDataStartCol = nMemberStartCol + (USHORT)nRowFieldCount;
         nDataStartRow = nMemberStartRow + (USHORT)nColFieldCount;
-        nTabEndCol = nDataStartCol + (USHORT)nColCount - 1;
-        nTabEndRow = nDataStartRow + (USHORT)nRowCount - 1;
+        if ( nColCount > 0 )
+            nTabEndCol = nDataStartCol + (USHORT)nColCount - 1;
+        else
+            nTabEndCol = nDataStartCol;     // single column will remain empty
+        if ( nRowCount > 0 )
+            nTabEndRow = nDataStartRow + (USHORT)nRowCount - 1;
+        else
+            nTabEndRow = nDataStartRow;     // single row will remain empty
         bSizesValid = TRUE;
     }
 }

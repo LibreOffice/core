@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2001-10-30 17:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,9 +941,13 @@ void ScPivot::GetDataFields(PivotField* pFieldArr, short& rCount) const
         for (short j=0; j<rCount && !bFound; j++)
             if (pFieldArr[j].nCol == aDataArr[i].nCol)
             {
-                pFieldArr[j].nFuncMask |= aDataArr[i].nFuncMask;
-                pFieldArr[j].nFuncCount++;
-                bFound = TRUE;
+                //  add to previous column only if new bits aren't already set there
+                if ( ( pFieldArr[j].nFuncMask & aDataArr[i].nFuncMask ) == 0 )
+                {
+                    pFieldArr[j].nFuncMask |= aDataArr[i].nFuncMask;
+                    pFieldArr[j].nFuncCount++;
+                    bFound = TRUE;
+                }
             }
         if (!bFound)
         {
