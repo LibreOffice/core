@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.86 $
+*  $Revision: 1.87 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-24 16:45:20 $
+*  last change: $Author: kz $ $Date: 2005-03-01 17:10:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1122,7 +1122,7 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE(GID_FILE_LIB_WPD,wpft)
+STD_UNO_LIB_FILE(gid_File_Lib_Wpft,wpft)
 
 #if !defined(MACOSX) && !defined(WITHOUT_MOZILLA)
 
