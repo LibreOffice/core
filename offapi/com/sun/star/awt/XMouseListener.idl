@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMouseListener.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:39:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,16 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
     //-------------------------------------------------------------------------
 
     /** is invoked when a mouse button has been pressed on a window.
-     */
+
+        <p>Since mouse presses are usually also used to indicate requests for popup menus
+        (also known as context menus) on objects, you might receive two events
+        for a single mouse press: For example, if, on your operating system,
+        pressing the right mouse button indicates the request for a context menu,
+        then you will receive one call to <member>mousePressed</member> indicating
+        the mouse click, and another one indicating the context menu request. For
+        the latter, the <member>MouseEvent::PopupTrigger</member> member of the
+        event will be set to <TRUE/>.</p>
+    */
     [oneway] void mousePressed( [in] com::sun::star::awt::MouseEvent e );
 
     //-------------------------------------------------------------------------
