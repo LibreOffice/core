@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: er $ $Date: 2001-06-21 18:17:10 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 16:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,22 +539,19 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
             SfxStringItem aFileName( SID_FILE_NAME, aName );
 
             // is it a template ?
+            const SfxPoolItem* pItem = NULL;
+            SfxBoolItem aTemplate( SID_TEMPLATE, TRUE );
             if ( IsTemplate_Impl( aName ) )
+                pItem = &aTemplate;
+
+            // open the document
+            if ( pItem || !DocAlreadyLoaded( aName, sal_True, sal_True, sal_False ) )
             {
-                // create new file from template
-                pAppDispat->Execute( SID_NEWDOC, SFX_CALLMODE_SYNCHRON, &aFileName, 0L );
-            }
-            else
-            {
-                // open the document
-                if ( !DocAlreadyLoaded( aName, sal_True, sal_True, sal_False ) )
-                {
-                    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
-                    SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-                    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:OpenEvent") );
-                    pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
-                            &aTargetName, &aFileName, &aNewView, &aReferer, 0L );
-                }
+                SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
+                SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
+                SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:OpenEvent") );
+                pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
+                        &aTargetName, &aFileName, &aNewView, &aReferer, pItem, 0L );
             }
         }
     }
