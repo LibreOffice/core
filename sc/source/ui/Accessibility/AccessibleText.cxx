@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-12 10:38:03 $
+ *  last change: $Author: sab $ $Date: 2002-06-13 12:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,19 +626,16 @@ SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
 
 SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool bCreate )
 {
-    if (bCreate)
+    if (!mpEditViewForwarder)
     {
-        if (!mpEditViewForwarder)
-        {
-            sal_uInt16 nCol, nRow;
-            EditView* pEditView;
-            mpViewShell->GetViewData()->GetEditView( meSplitPos, pEditView, nCol, nRow );
+        sal_uInt16 nCol, nRow;
+        EditView* pEditView;
+        mpViewShell->GetViewData()->GetEditView( meSplitPos, pEditView, nCol, nRow );
 
-            mpEditViewForwarder = new ScEditViewForwarder(pEditView, mpViewShell->GetWindowByPos(meSplitPos));
-        }
-        else
-            mpEditViewForwarder->GrabFocus();
+        mpEditViewForwarder = new ScEditViewForwarder(pEditView, mpViewShell->GetWindowByPos(meSplitPos));
     }
+    else if (bCreate)
+        mpEditViewForwarder->GrabFocus();
     return mpEditViewForwarder;
 }
 
@@ -733,14 +730,14 @@ SvxViewForwarder* ScAccessibleEditObjectTextData::GetViewForwarder()
 
 SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( sal_Bool bCreate )
 {
+    if (!mpEditViewForwarder && mpEditView)
+        mpEditViewForwarder = new ScEditViewForwarder(mpEditView, mpWindow);
     if (bCreate)
     {
         if (!mpEditView && mpEditViewForwarder)
         {
             DELETEZ(mpEditViewForwarder);
         }
-        else if (!mpEditViewForwarder && mpEditView)
-            mpEditViewForwarder = new ScEditViewForwarder(mpEditView, mpWindow);
         else if (mpEditViewForwarder)
             mpEditViewForwarder->GrabFocus();
     }
@@ -851,7 +848,7 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
 
 SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bool bCreate )
 {
-    DBG_ASSERT(!bCreate, "the focus should switch no into the editline, but this is not implemented yet");
+    DBG_ASSERT(!bCreate, "the focus should switch now into the editline, but this is not implemented yet");
 
     ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
 
@@ -872,6 +869,7 @@ void ScAccessibleEditLineTextData::ResetEditMode()
     mpEditEngine = NULL;
 
     DELETEZ(mpForwarder);
+    DELETEZ(mpEditViewForwarder);
     mbEditEngineCreated = sal_False;
 }
 
