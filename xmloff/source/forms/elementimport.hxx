@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _XMLOFF_FORMS_CONTROLELEMENT_HXX_
 #include "controlelement.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_VALUEPROPERTIES_HXX_
+#include "valueproperties.hxx"
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -175,14 +178,18 @@ namespace xmloff
     //=====================================================================
     /** helper class for importing the description of a single control
     */
-    class OControlImport : public OElementImport
+    class OControlImport
+                :public OElementImport
+                ,public OValuePropertiesMetaData
     {
-        ::rtl::OUString     m_sControlId;
-        IControlIdMap*      m_pIdCollector;
-
     protected:
-        OControlElement::ElementType
-                            m_eElementType;
+        ::rtl::OUString                 m_sControlId;
+        IControlIdMap*                  m_pIdCollector;
+        OControlElement::ElementType    m_eElementType;
+
+        PropertyValueArray              m_aValueProperties;
+        // the value properties (value, current-value, min-value, max-value) require some special
+        // handling
 
     protected:
         // for use by derived classes only
@@ -198,6 +205,8 @@ namespace xmloff
         );
 
         // SvXMLImportContext overridables
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
         virtual void    EndElement();
 
         // OPropertyImport overridables
@@ -207,6 +216,11 @@ namespace xmloff
 
     protected:
         void setElementType(OControlElement::ElementType _eType) { m_eElementType = _eType; }
+
+    protected:
+        void implTranslateValueProperty(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
+            ::com::sun::star::beans::PropertyValue& /* [in/out] */ _rPropValue);
     };
 
     //=====================================================================
@@ -262,9 +276,6 @@ namespace xmloff
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
-        // TODO: this list is quite too long ...
-        // should introduce an own ImportContext which can supply all the things which are always the same
-        // (attribute map, control id map, service factory, SvXMLImport)
 
         // SvXMLImportContext overridables
         virtual SvXMLImportContext* CreateChildContext(
@@ -483,6 +494,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.1  2000/12/06 17:31:12  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *

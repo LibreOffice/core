@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,28 @@
 #include <cppuhelper/extract.hxx>
 #endif
 
+#ifndef _DATE_HXX
+#include <tools/date.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
+#include <tools/time.hxx>
+#endif
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+#ifndef _UNOTOOLS_DATETIME_HXX_
+#include <unotools/datetime.hxx>
+#endif
+
 //.........................................................................
 namespace xmloff
 {
@@ -86,6 +108,13 @@ namespace xmloff
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml;
+
+    // NO using namespace ...util !!!
+    // need a tools Date/Time/DateTime below, which would conflict with the uno types then
+
+#define TYPE_DATE       1
+#define TYPE_TIME       2
+#define TYPE_DATETIME   3
 
     //=====================================================================
     //= OPropertyImport
@@ -155,70 +184,185 @@ namespace xmloff
             aNewValue.Name = pProperty->sPropertyName;
 
             // convert the value string into the target type
-            sal_Bool bEnumAsInt = sal_False;
-            switch (pProperty->aPropertyType.getTypeClass())
-            {
-                case TypeClass_BOOLEAN:
-                {
-                    sal_Bool bValue(sal_False);
-#ifdef _DEBUG
-                    sal_Bool bSuccess =
-#endif
-                    GetImport().GetMM100UnitConverter().convertBool(bValue, _rValue);
-                    OSL_ENSURE(bSuccess,
-                            ::rtl::OString("OPropertyImport::handleAttribute: could not convert the value of the \"")
-                        +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=  ::rtl::OString("\" attribute (\"")
-                        +=  ::rtl::OString(_rValue.getStr(), _rValue.getLength(), RTL_TEXTENCODING_ASCII_US));
-                        aNewValue.Value = ::cppu::bool2any(bValue);
-                }
-                break;
-                case TypeClass_STRING:
-                    aNewValue.Value <<= _rValue;
-                    break;
-                case TypeClass_SHORT:
-                case TypeClass_LONG:
-                    if (!pProperty->pEnumMap)
-                    {   // it's a real int32/16 property
-                        sal_Int32 nValue(0);
-#ifdef _DEBUG
-                        sal_Bool bSuccess =
-#endif
-                        GetImport().GetMM100UnitConverter().convertNumber(nValue, _rValue);
-                        OSL_ENSURE(bSuccess,
-                                ::rtl::OString("OPropertyImport::handleAttribute: could not convert the value of the \"")
-                            +=  ::rtl::OString(_rLocalName.getStr(), _rLocalName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                            +=  ::rtl::OString("\" attribute (\"")
-                            +=  ::rtl::OString(_rValue.getStr(), _rValue.getLength(), RTL_TEXTENCODING_ASCII_US));
-                        if (TypeClass_SHORT == pProperty->aPropertyType.getTypeClass())
-                            aNewValue.Value <<= (sal_Int16)nValue;
-                        else
-                            aNewValue.Value <<= (sal_Int32)nValue;
-                        break;
-                    }
-                    bEnumAsInt = sal_True;
-                    // NO BREAK! handle it as enum
-                case TypeClass_ENUM:
-                {
-                    sal_uInt16 nEnumValue;
-#ifdef _DEBUG
-                    sal_Bool bSuccess =
-#endif
-                    GetImport().GetMM100UnitConverter().convertEnum(nEnumValue, _rValue, pProperty->pEnumMap);
-                    OSL_ENSURE(bSuccess, "OPropertyImport::handleAttribute: could not convert to an enum value!");
-                    if (bEnumAsInt)
-                        aNewValue.Value <<= (sal_Int32)nEnumValue;
-                    else
-                        aNewValue.Value = ::cppu::int2enum((sal_Int32)nEnumValue, pProperty->aPropertyType);
-                }
-                break;
-                default:
-                    OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: unknown property value type!");
-            }
+            aNewValue.Value = convertString(GetImport(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap);
             m_aValues.push_back(aNewValue);
         }
         else
             OSL_ENSURE(sal_False, "OPropertyImport::handleAttribute: can't handle attributes which do not describe properties!");
+    }
+
+    //---------------------------------------------------------------------
+    Any OPropertyImport::convertString(SvXMLImport& _rImporter, const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap)
+    {
+        Any aReturn;
+        sal_Bool bEnumAsInt = sal_False;
+        switch (_rExpectedType.getTypeClass())
+        {
+            case TypeClass_BOOLEAN:     // sal_Bool
+            {
+                sal_Bool bValue;
+            #ifdef _DEBUG
+                sal_Bool bSuccess =
+            #endif
+                _rImporter.GetMM100UnitConverter().convertBool(bValue, _rReadCharacters);
+                OSL_ENSURE(bSuccess,
+                        ::rtl::OString("OPropertyImport::convertString: could not convert \"")
+                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=  ::rtl::OString("\" into a boolean!"));
+                aReturn = ::cppu::bool2any(bValue);
+            }
+            break;
+            case TypeClass_SHORT:       // sal_Int16
+            case TypeClass_LONG:        // sal_Int32
+                if (!_pEnumMap)
+                {   // it's a real int32/16 property
+                    sal_Int32 nValue(0);
+            #ifdef _DEBUG
+                    sal_Bool bSuccess =
+            #endif
+                    _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
+                    OSL_ENSURE(bSuccess,
+                            ::rtl::OString("OPropertyImport::convertString: could not convert \"")
+                        +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        +=  ::rtl::OString("\" into an integer!"));
+                    if (TypeClass_SHORT == _rExpectedType.getTypeClass())
+                        aReturn <<= (sal_Int16)nValue;
+                    else
+                        aReturn <<= (sal_Int32)nValue;
+                    break;
+                }
+                bEnumAsInt = sal_True;
+                // NO BREAK! handle it as enum
+            case TypeClass_ENUM:
+            {
+                sal_uInt16 nEnumValue;
+            #ifdef _DEBUG
+                sal_Bool bSuccess =
+            #endif
+                _rImporter.GetMM100UnitConverter().convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
+                OSL_ENSURE(bSuccess, "OPropertyImport::convertString: could not convert to an enum value!");
+                if (bEnumAsInt)
+                    aReturn <<= (sal_Int32)nEnumValue;
+                else
+                    aReturn = ::cppu::int2enum((sal_Int32)nEnumValue, _rExpectedType);
+            }
+            break;
+            case TypeClass_HYPER:
+            {
+                OSL_ENSURE(sal_False, "OPropertyImport::convertString: 64-bit integers not implemented yet!");
+            }
+            break;
+            case TypeClass_DOUBLE:
+            {
+                double nValue;
+            #ifdef _DEBUG
+                sal_Bool bSuccess =
+            #endif
+                _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
+                OSL_ENSURE(bSuccess,
+                        ::rtl::OString("OPropertyImport::convertString: could not convert \"")
+                    +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                    +=  ::rtl::OString("\" into a double!"));
+                aReturn <<= (double)nValue;
+            }
+            break;
+            case TypeClass_STRING:
+                aReturn <<= _rReadCharacters;
+                break;
+            case TypeClass_STRUCT:
+            {
+                // recognized structs:
+                static ::com::sun::star::uno::Type s_aDateType      = ::getCppuType(static_cast< ::com::sun::star::util::Date* >(NULL));
+                static ::com::sun::star::uno::Type s_aTimeType      = ::getCppuType(static_cast< ::com::sun::star::util::Time* >(NULL));
+                static ::com::sun::star::uno::Type s_aDateTimeType  = ::getCppuType(static_cast< ::com::sun::star::util::DateTime* >(NULL));
+                sal_Int32 nType = 0;
+                if  (   (_rExpectedType.equals(s_aDateType) && (nType = TYPE_DATE))
+                    ||  (_rExpectedType.equals(s_aTimeType) && (nType = TYPE_TIME))
+                    ||  (_rExpectedType.equals(s_aDateTimeType) && (nType = TYPE_DATETIME))
+                    )
+                {
+                    // first extract the double
+                    double nValue = 0;
+                #ifdef _DEBUG
+                    sal_Bool bSuccess =
+                #endif
+                    _rImporter.GetMM100UnitConverter().convertNumber(nValue, _rReadCharacters);
+                    OSL_ENSURE(bSuccess,
+                            ::rtl::OString("OPropertyImport::convertString: could not convert \"")
+                        +=  ::rtl::OString(_rReadCharacters.getStr(), _rReadCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        +=  ::rtl::OString("\" into a double!"));
+
+                    // then convert it into the target type
+                    switch (nType)
+                    {
+                        case TYPE_DATE:
+                        {
+                            OSL_ENSURE(((sal_uInt32)nValue) - nValue == 0,
+                                "OPropertyImport::convertString: a Date value with a fractional part?");
+                            aReturn <<= implGetDate(nValue);
+                        }
+                        break;
+                        case TYPE_TIME:
+                        {
+                            OSL_ENSURE(((sal_uInt32)nValue) == 0,
+                                "OPropertyImport::convertString: a Time value with more than a fractional part?");
+                            aReturn <<= implGetTime(nValue);
+                        }
+                        break;
+                        case TYPE_DATETIME:
+                        {
+                            ::com::sun::star::util::Time aTime = implGetTime(nValue);
+                            ::com::sun::star::util::Date aDate = implGetDate(nValue);
+
+                            ::com::sun::star::util::DateTime aDateTime;
+                            aDateTime.HundredthSeconds = aTime.HundredthSeconds;
+                            aDateTime.Seconds = aTime.Seconds;
+                            aDateTime.Minutes = aTime.Minutes;
+                            aDateTime.Hours = aTime.Hours;
+                            aDateTime.Day = aDate.Day;
+                            aDateTime.Month = aDate.Month;
+                            aDateTime.Year = aDate.Year;
+                            aReturn <<= aDateTime;
+                        }
+                        break;
+                    }
+                }
+                else
+                    OSL_ENSURE(sal_False, "OPropertyImport::convertString: unsupported property type!");
+            }
+            break;
+            default:
+                OSL_ENSURE(sal_False, "OPropertyImport::convertString: invalid type class!");
+        }
+
+        return aReturn;
+    }
+
+    //---------------------------------------------------------------------
+    ::com::sun::star::util::Time OPropertyImport::implGetTime(double _nValue)
+    {
+        ::com::sun::star::util::Time aTime;
+        sal_Int32 nIntValue = _nValue * 8640000.0;
+        nIntValue *= 8640000.0;
+        aTime.HundredthSeconds = nIntValue % 100;
+        nIntValue /= 100;
+        aTime.Seconds = nIntValue % 60;
+        nIntValue /= 60;
+        aTime.Minutes = nIntValue % 60;
+        nIntValue /= 60;
+        OSL_ENSURE(nIntValue < 24, "OPropertyImport::implGetTime: more than a day?");
+        aTime.Hours = nIntValue;
+
+        return aTime;
+    }
+
+    //---------------------------------------------------------------------
+    ::com::sun::star::util::Date OPropertyImport::implGetDate(double _nValue)
+    {
+        Date aToolsDate((sal_uInt32)_nValue);
+        ::com::sun::star::util::Date aDate;
+        ::utl::typeConvert(aToolsDate, aDate);
+        return aDate;
     }
 
     //=====================================================================
@@ -351,65 +495,7 @@ namespace xmloff
         {
             ::rtl::OUString sCharacters = m_xValueReader->getCharacters();
             // convert these characters into the property value target type
-            switch (m_aPropType.getTypeClass())
-            {
-                case TypeClass_BOOLEAN:     // sal_Bool
-                {
-                    sal_Bool bValue;
-                #ifdef _DEBUG
-                    sal_Bool bSuccess =
-                #endif
-                    GetImport().GetMM100UnitConverter().convertBool(bValue, sCharacters);
-                    OSL_ENSURE(bSuccess,
-                            ::rtl::OString("OSinglePropertyContext::EndElement: could not convert \"")
-                        +=  ::rtl::OString(sCharacters.getStr(), sCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=  ::rtl::OString("\" into a boolean!"));
-                    m_aPropValue.Value = ::cppu::bool2any(bValue);
-                }
-                break;
-                case TypeClass_SHORT:       // sal_Int16
-                case TypeClass_LONG:        // sal_Int32
-                {
-                    sal_Int32 nValue;
-                #ifdef _DEBUG
-                    sal_Bool bSuccess =
-                #endif
-                    GetImport().GetMM100UnitConverter().convertNumber(nValue, sCharacters);
-                    OSL_ENSURE(bSuccess,
-                            ::rtl::OString("OSinglePropertyContext::EndElement: could not convert \"")
-                        +=  ::rtl::OString(sCharacters.getStr(), sCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=  ::rtl::OString("\" into a ninteger!"));
-                    if (TypeClass_SHORT == m_aPropType.getTypeClass())
-                        m_aPropValue.Value <<= (sal_Int16)nValue;
-                    else
-                        m_aPropValue.Value <<= (sal_Int32)nValue;
-                }
-                break;
-                case TypeClass_HYPER:
-                {
-                    OSL_ENSURE(sal_False, "OSinglePropertyContext::EndElement: 64-bit integers not implemented yet!");
-                }
-                break;
-                case TypeClass_DOUBLE:
-                {
-                    double nValue;
-                #ifdef _DEBUG
-                    sal_Bool bSuccess =
-                #endif
-                    GetImport().GetMM100UnitConverter().convertNumber(nValue, sCharacters);
-                    OSL_ENSURE(bSuccess,
-                            ::rtl::OString("OSinglePropertyContext::EndElement: could not convert \"")
-                        +=  ::rtl::OString(sCharacters.getStr(), sCharacters.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=  ::rtl::OString("\" into a double!"));
-                    m_aPropValue.Value <<= (double)nValue;
-                }
-                break;
-                case TypeClass_STRING:
-                    m_aPropValue.Value <<= sCharacters;
-                    break;
-                default:
-                    OSL_ENSURE(sal_False, "OSinglePropertyContext::EndElement: invalid type class!");
-            }
+            m_aPropValue.Value = OPropertyImport::convertString(GetImport(), m_aPropType, sCharacters);
         }
 
         // now that we finally have our property value, add it to our parent object
@@ -438,6 +524,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.1  2000/12/06 17:31:52  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *

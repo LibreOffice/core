@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
 #include <com/sun/star/container/XNameContainer.hpp>
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
@@ -78,8 +75,8 @@
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
+#ifndef _XMLOFF_FORMS_IFACECOMPARE_HXX_
+#include "ifacecompare.hxx"
 #endif
 
 class SvXMLImport;
@@ -125,14 +122,17 @@ namespace xmloff
         SvXMLImport&                        m_rImporter;
         OAttribute2Property                 m_aAttributeMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                                            m_xForms;   // the forms of the currently handled page
+                                            m_xForms;   // the forms of the currently imported page
 
     protected:
         DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, MapString2PropertySet );
-        MapString2PropertySet   m_aControlIds;      // the control ids as got from registerControlId
+        DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapString2PropertySet, ODrawPageCompare, MapDrawPage2Map);
+
+        MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page
+        MapDrawPage2MapIterator m_aCurrentPageIds;      // ifs of the controls on the current page
 
         DECLARE_STL_VECTOR( ControlReference, ControlReferenceArray );
-        ControlReferenceArray   m_aControlReferences;
+        ControlReferenceArray   m_aControlReferences;   // control reference descriptions for current page
 
     public:
         // IControlIdMap
@@ -175,6 +175,11 @@ namespace xmloff
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 lookupControlId(const ::rtl::OUString& _rControlId);
+
+        /** seek to the given page
+        */
+        void seekPage(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
     };
 
 //.........................................................................
@@ -186,6 +191,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.1  2000/12/06 17:31:42  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport_impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:02:53 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,8 @@ template <class BASE>
     // no call of the base class. We have to use the grid column factory
     if (m_xColumnFactory.is())
     {
-        // split the service name. It's last component describes the grid column to create
-        sal_Int32 nLastSep = m_sServiceName.lastIndexOf('.');
-        OSL_ENSURE(-1 != nLastSep, "OColumnImport::createElement: invalid service name!");
-        ::rtl::OUString sColumnServiceName = m_sServiceName.copy(nLastSep + 1);
-
         // create the column
-        xReturn = m_xColumnFactory->createColumn(sColumnServiceName);
+        xReturn = m_xColumnFactory->createColumn(m_sServiceName);
         OSL_ENSURE(xReturn.is(), "OColumnImport::createElement: the factory returned an invalid object!");
     }
     return xReturn;
@@ -159,6 +154,9 @@ template <class BASE>
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/12 12:02:53  fs
+ *  initial checkin - implementations for the template classes in elementimport
+ *
  *
  *  Revision 1.0 12.12.00 08:33:20  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -97,8 +100,14 @@ namespace xmloff
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::xml;
     using namespace ::com::sun::star::util;
+
+#define PROPID_VALUE            1
+#define PROPID_CURRENT_VALUE    2
+#define PROPID_MIN_VALUE        3
+#define PROPID_MAX_VALUE        4
 
     //=====================================================================
     struct PropertyValueLess
@@ -362,13 +371,147 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
+        // the control id
         static const ::rtl::OUString s_sControlIdAttribute = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CONTROL_ID));
+
+        // the value attributes
+        static const ::rtl::OUString s_sValueAttribute          = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_VALUE));
+        static const ::rtl::OUString s_sCurrentValueAttribute   = ::rtl::OUString::createFromAscii(getCommonControlAttributeName(CCA_CURRENT_VALUE));
+        static const ::rtl::OUString s_sMinValueAttribute       = ::rtl::OUString::createFromAscii(getSpecialAttributeName(SCA_MIN_VALUE));
+        static const ::rtl::OUString s_sMaxValueAttribute       = ::rtl::OUString::createFromAscii(getSpecialAttributeName(SCA_MAX_VALUE));
+
         if (!m_sControlId.getLength() && (_rLocalName == s_sControlIdAttribute))
         {   // it's the control id
             m_sControlId = _rValue;
         }
         else
-            OElementImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+        {
+            sal_Int32 nHandle;
+            if  (   ((_rLocalName == s_sValueAttribute) && (nHandle = PROPID_VALUE))
+                ||  ((_rLocalName == s_sCurrentValueAttribute) && (nHandle = PROPID_CURRENT_VALUE))
+                ||  ((_rLocalName == s_sMinValueAttribute) && (nHandle = PROPID_MIN_VALUE))
+                ||  ((_rLocalName == s_sMaxValueAttribute) && (nHandle = PROPID_MAX_VALUE))
+                // it's no == in the second part, it's an assignment!!!!!
+                )
+            {
+                // for the moment, simply remember the name and the value
+                PropertyValue aProp;
+                aProp.Name = _rLocalName;
+                aProp.Handle = nHandle;
+                aProp.Value <<= _rValue;
+                m_aValueProperties.push_back(aProp);
+            }
+            else
+                OElementImport::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
+    {
+        // let the base class handle all the attributes
+        OElementImport::StartElement(_rxAttrList);
+
+        if (m_aValueProperties.size() && m_xElement.is())
+        {
+            // get the property set info
+            Reference< XPropertySetInfo > xPropsInfo = m_xElement->getPropertySetInfo();
+            if (!xPropsInfo.is())
+            {
+                OSL_ENSURE(sal_False, "OControlImport::StartElement: no PropertySetInfo!");
+                return;
+            }
+
+            const sal_Char* pValueProperty = NULL;
+            const sal_Char* pCurrentValueProperty = NULL;
+            const sal_Char* pMinValueProperty = NULL;
+            const sal_Char* pMaxValueProperty = NULL;
+
+            sal_Bool bRetrievedValues = sal_False;
+            sal_Bool bRetrievedValueLimits = sal_False;
+
+            // get the class id of our element
+            sal_Int16 nClassId = FormComponentType::CONTROL;
+            m_xElement->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
+
+            // translate the value properties we collected in handleAttributes
+            for (   PropertyValueArrayIterator aValueProps = m_aValueProperties.begin();
+                    aValueProps != m_aValueProperties.end();
+                    ++aValueProps
+                )
+            {
+                switch (aValueProps->Handle)
+                {
+                    case PROPID_VALUE:
+                    case PROPID_CURRENT_VALUE:
+                    {
+                        // get the property names
+                        if (!bRetrievedValues)
+                        {
+                            getValuePropertyNames(m_eElementType, nClassId, pCurrentValueProperty, pValueProperty);
+                            bRetrievedValues = sal_True;
+                        }
+                        OSL_ENSURE((PROPID_VALUE != aValueProps->Handle) || pValueProperty,
+                            "OControlImport::StartElement: the control does not have a value property!");
+                        OSL_ENSURE((PROPID_CURRENT_VALUE != aValueProps->Handle) || pCurrentValueProperty,
+                            "OControlImport::StartElement: the control does not have a current-value property!");
+
+                        // transfer the name
+                        if (PROPID_VALUE == aValueProps->Handle)
+                            aValueProps->Name = ::rtl::OUString::createFromAscii(pValueProperty);
+                        else
+                            aValueProps->Name = ::rtl::OUString::createFromAscii(pCurrentValueProperty);
+                    }
+                    break;
+                    case PROPID_MIN_VALUE:
+                    case PROPID_MAX_VALUE:
+                    {
+                        // get the property names
+                        if (!bRetrievedValueLimits)
+                        {
+                            getValueLimitPropertyNames(nClassId, pMinValueProperty, pMaxValueProperty);
+                            bRetrievedValueLimits = sal_True;
+                        }
+                        OSL_ENSURE((PROPID_MIN_VALUE != aValueProps->Handle) || pMinValueProperty,
+                            "OControlImport::StartElement: the control does not have a value property!");
+                        OSL_ENSURE((PROPID_MAX_VALUE != aValueProps->Handle) || pMaxValueProperty,
+                            "OControlImport::StartElement: the control does not have a current-value property!");
+
+                        // transfer the name
+                        if (PROPID_MIN_VALUE == aValueProps->Handle)
+                            aValueProps->Name = ::rtl::OUString::createFromAscii(pMinValueProperty);
+                        else
+                            aValueProps->Name = ::rtl::OUString::createFromAscii(pMaxValueProperty);
+                    }
+                    break;
+                }
+
+                // translate the value
+                implTranslateValueProperty(xPropsInfo, *aValueProps);
+                // add the property to the base class' array
+                implPushBackPropertyValue(*aValueProps);
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlImport::implTranslateValueProperty(const Reference< XPropertySetInfo >& _rxPropInfo,
+        PropertyValue& _rPropValue)
+    {
+        OSL_ENSURE(_rxPropInfo->hasPropertyByName(_rPropValue.Name),
+            "OControlImport::implTranslateValueProperty: invalid property name!");
+
+        // retrieve the type of the property
+        Property aProp = _rxPropInfo->getPropertyByName(_rPropValue.Name);
+        // the untranslated string value as read in handleAttribute
+        ::rtl::OUString sValue;
+    #ifdef DEBUG
+        sal_Bool bSuccess =
+    #endif
+        _rPropValue.Value >>= sValue;
+        OSL_ENSURE(bSuccess, "OControlImport::implTranslateValueProperty: supposed to be called with non-translated string values!");
+
+        _rPropValue.Value = convertString(GetImport(), aProp.Type, sValue);
     }
 
     //---------------------------------------------------------------------
@@ -791,6 +934,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.1  2000/12/06 17:31:03  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *

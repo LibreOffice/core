@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,14 @@
 #ifndef _XMLOFF_FORMS_LAYEREXPORT_HXX_
 #define _XMLOFF_FORMS_LAYEREXPORT_HXX_
 
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_IFACECOMPARE_HXX_
+#include "ifacecompare.hxx"
 #endif
 
 class SvXMLExport;
@@ -83,31 +77,6 @@ class SvXMLExport;
 namespace xmloff
 {
 //.........................................................................
-
-    //=====================================================================
-    //= OPropertySetCompare
-    //=====================================================================
-    /** is stl-compliant structure for comparing Reference< XPropertySet > instances
-    */
-    template < class IAFCE >
-    struct OInterfaceCompare
-        :public ::std::binary_function  <   ::com::sun::star::uno::Reference< IAFCE >
-                                        ,   ::com::sun::star::uno::Reference< IAFCE >
-                                        ,   bool
-                                        >
-    {
-        bool operator() (const ::com::sun::star::uno::Reference< IAFCE >& lhs, const ::com::sun::star::uno::Reference< IAFCE >& rhs) const
-        {
-            return lhs.get() < rhs.get();
-                // this does not make any sense if you see the semantics of the pointer returned by get:
-                // It's a pointer to a point in memory where an interface implementation lies.
-                // But for our purpose (provide a reliable less-operator which can be used with the STL), this is
-                // sufficient ....
-        }
-    };
-
-    typedef OInterfaceCompare< ::com::sun::star::beans::XPropertySet >  OPropertySetCompare;
-    typedef OInterfaceCompare< ::com::sun::star::drawing::XDrawPage >   ODrawPageCompare;
 
     //=====================================================================
     //= OFormLayerXMLExport_Impl
@@ -242,6 +211,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.3  2000/12/03 10:57:06  fs
  *  some changes to support more than one page to be examined/exported
  *

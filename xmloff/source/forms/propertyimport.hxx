@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+namespace com { namespace sun { namespace star { namespace util {
+    struct Time;
+    struct Date;
+} } } }
+
 //.........................................................................
 namespace xmloff
 {
@@ -137,6 +142,16 @@ namespace xmloff
         void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
         { m_aValues.push_back(_rProp); }
 
+        static ::com::sun::star::uno::Any convertString(
+            SvXMLImport& _rImporter,
+            const ::com::sun::star::uno::Type& _rExpectedType,
+            const ::rtl::OUString& _rReadCharacters,
+            const SvXMLEnumMapEntry* _pEnumMap = NULL
+            );
+
+    private:
+        static ::com::sun::star::util::Time implGetTime(double _nValue);
+        static ::com::sun::star::util::Date implGetDate(double _nValue);
     };
     SV_DECL_IMPL_REF( OPropertyImport )
 
@@ -223,6 +238,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.1  2000/12/06 17:32:01  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLImport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    {
+        m_pImpl->seekPage(_rxDrawPage);
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport::startPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         m_pImpl->startPage(_rxDrawPage);
@@ -127,6 +133,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.1  2000/12/06 17:31:22  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *

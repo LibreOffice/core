@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-12 12:01:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,8 @@ namespace xmloff
             OAttributeMetaData::getFormAttributeName(faTabbingCycle), PROPERTY_CYCLE,
             TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
             &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
+
+        m_aCurrentPageIds = m_aControlIds.end();
     }
 
     //---------------------------------------------------------------------
@@ -287,9 +289,11 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::registerControlId(const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rId)
     {
+        OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::registerControlId: no current page!");
         OSL_ENSURE(_rId.getLength(), "OFormLayerXMLImport_Impl::registerControlId: invalid (empty) control id!");
-        OSL_ENSURE(m_aControlIds.end() == m_aControlIds.find(_rId), "OFormLayerXMLImport_Impl::registerControlId: control id already used!");
-        m_aControlIds[_rId] = _rxControl;
+
+        OSL_ENSURE(m_aCurrentPageIds->second.end() == m_aCurrentPageIds->second.find(_rId), "OFormLayerXMLImport_Impl::registerControlId: control id already used!");
+        m_aCurrentPageIds->second[_rId] = _rxControl;
     }
 
     //---------------------------------------------------------------------
@@ -313,6 +317,12 @@ namespace xmloff
 
         m_xForms = Reference< XNameContainer >(xFormsSupp->getForms(), UNO_QUERY);
         OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::startPage: invalid forms collection!");
+
+        // add a new entry to our page map
+        ::std::pair< MapDrawPage2MapIterator, bool > aPagePosition =
+            m_aControlIds.insert(MapDrawPage2Map::value_type(_rxDrawPage, MapString2PropertySet()));
+        OSL_ENSURE(aPagePosition.second, "OFormLayerXMLImport_Impl::startPage: already imported this page!");
+        m_aCurrentPageIds = aPagePosition.first;
     }
 
     //---------------------------------------------------------------------
@@ -359,25 +369,27 @@ namespace xmloff
             OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
         }
 
-        // clear the structures for the control ids.
-        // Speaking strictly, this may not be necessary, but it may allow to find errors (such as controls referring
-        // to controls on other pages) much easier
-        m_aControlIds.clear();
+        // clear the structures for the control references.
         m_aControlReferences.clear();
 
-        // TODO: think about remembering this for later use. This would allow the clients to import all pages
-        // before doing their own knittings. But this would make it more expensive, too.
+        // and no we have no current page anymore
+        m_aCurrentPageIds = m_aControlIds.end();
     }
 
     //---------------------------------------------------------------------
     Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const ::rtl::OUString& _rControlId)
     {
-        ConstMapString2PropertySetIterator aPos = m_aControlIds.find(_rControlId);
-        if (m_aControlIds.end() != aPos)
-            return aPos->second;
-
-        OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
-        return Reference< XPropertySet >();
+        OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::lookupControlId: no current page!");
+        Reference< XPropertySet > xReturn;
+        if (m_aCurrentPageIds != m_aControlIds.end())
+        {
+            ConstMapString2PropertySetIterator aPos = m_aCurrentPageIds->second.find(_rControlId);
+            if (m_aCurrentPageIds->second.end() != aPos)
+                xReturn = aPos->second;
+            else
+                OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
+        }
+        return xReturn;
     }
 
     //---------------------------------------------------------------------
@@ -395,6 +407,14 @@ namespace xmloff
         return new OFormImport(*this, _nPrefix, _rLocalName, m_xForms );
     }
 
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
+    {
+        OSL_ENSURE(m_aCurrentPageIds == m_aControlIds.end(), "OFormLayerXMLImport_Impl::seekPage: importing another page currently! This will smash your import!");
+        m_aCurrentPageIds = m_aControlIds.find(_rxDrawPage);
+        OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::seekPage: did not find the given page (perhaps it has not been imported, yet?)!");
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -402,6 +422,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/12/12 12:01:05  fs
+ *  new implementations for the import - still under construction
+ *
  *  Revision 1.1  2000/12/06 17:31:31  fs
  *  initial checkin - implementations for formlayer import/export - still under construction
  *
