@@ -1,0 +1,8 @@
+LTH_1_0 {
+    global:
+        component_getFactory;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+    local:
+        *;
+};
