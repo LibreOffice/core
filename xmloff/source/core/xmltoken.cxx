@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:44:56 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2155,6 +2155,9 @@ namespace xmloff { namespace token {
         TOKEN( "selection" ),                  // XML_SELECTION
         TOKEN( "selection-indexes" ),          // XML_SELECTION_INDEXES
         TOKEN( "keep-together" ),              // XML_KEEP_TOGETHER
+
+        // DVO, OD 01.10.2003 #i18732#
+        TOKEN( "flow-with-text" ),   // XML_FLOW_WITH_TEXT
 
         // DVO, OD 01.10.2003 #i18732#
         TOKEN( "flow-with-text" ),   // XML_FLOW_WITH_TEXT
