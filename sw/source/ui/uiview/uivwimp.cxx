@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:24:11 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <cmdid.h>
 #include "globals.hrc"
 
+#include <tools/shl.hxx>
 
 #ifndef _COM_SUN_STAR_SCANNER_XSCANNERMANAGER_HPP_
 #include <com/sun/star/scanner/XScannerManager.hpp>
