@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:58:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,8 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
 
 sal_uInt16 AstScope::getNodeCount(NodeType nodeType)
 {
-    DeclList::iterator iter = getIteratorBegin();
-    DeclList::iterator end = getIteratorEnd();
+    DeclList::const_iterator iter = getIteratorBegin();
+    DeclList::const_iterator end = getIteratorEnd();
     AstDeclaration* pDecl = NULL;
     sal_uInt16 count = 0;
 
@@ -252,10 +252,10 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
     return pDecl;
 }
 
-AstDeclaration* AstScope::lookupByNameLocal(const OString& name)
+AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
 {
-    DeclList::iterator iter = getIteratorBegin();
-    DeclList::iterator end = getIteratorEnd();
+    DeclList::const_iterator iter(m_declarations.begin());
+    DeclList::const_iterator end(m_declarations.end());
     AstDeclaration* pDecl = NULL;
 
     while ( iter != end )
@@ -268,7 +268,7 @@ AstDeclaration* AstScope::lookupByNameLocal(const OString& name)
     return NULL;
 }
 
-AstDeclaration* AstScope::lookupInInherited(const OString& scopedName)
+AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
 {
     AstDeclaration* pDecl = NULL;
     AstInterface* pInterface = (AstInterface*)this;
@@ -283,19 +283,17 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName)
     }
 
     // OK, loop through inherited interfaces. Stop when you find it
-    if ( pInterface->nInheritedInterfaces() > 0 )
+    AstInterface::InheritedInterfaces::const_iterator iter(
+        pInterface->getAllInheritedInterfaces().begin());
+    AstInterface::InheritedInterfaces::const_iterator end(
+        pInterface->getAllInheritedInterfaces().end());
+    while ( iter != end )
     {
-        DeclList::const_iterator iter = pInterface->getInheritedInterfaces().begin();
-        DeclList::const_iterator end = pInterface->getInheritedInterfaces().end();
-
-        while ( iter != end )
-        {
-            if ( pDecl = ((AstInterface*)(*iter))->lookupByNameLocal(scopedName) )
-                return pDecl;
-            if ( pDecl = ((AstInterface*)(*iter))->lookupInInherited(scopedName) )
-                return pDecl;
-            ++iter;
-        }
+        if ( pDecl = iter->getInterface()->lookupByNameLocal(scopedName) )
+            return pDecl;
+        if ( pDecl = iter->getInterface()->lookupInInherited(scopedName) )
+            return pDecl;
+        ++iter;
     }
     // Not found
     return NULL;
