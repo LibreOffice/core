@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:01:59 $
+ *  last change: $Author: hr $ $Date: 2004-10-11 12:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,6 +870,8 @@ sal_Bool SvStream::ReadUniStringLine( String& rStr )
     {
         sal_Unicode cTemp;
         Read( (char*)&cTemp, sizeof(cTemp) );
+        if ( bSwap )
+            SwapUShort( cTemp );
         if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
             Seek( nOldFilePos );
     }
@@ -1084,8 +1086,9 @@ sal_Bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCha
 sal_Bool SvStream::StartWritingUnicodeText()
 {
     SetEndianSwap( FALSE );     // write native format
-    // some convention (whose? MS?)
-    // upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
+    // BOM, Byte Order Mark, U+FEFF, see
+    // http://www.unicode.org/faq/utf_bom.html#BOM
+    // Upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
     *this << sal_uInt16( 0xfeff );
     return nError == SVSTREAM_OK;
 }
@@ -1109,7 +1112,81 @@ sal_Bool SvStream::StartReadingUnicodeText()
             SetEndianSwap( !bSwap );
         break;
         default:
-            SeekRel( -((sal_Size)sizeof(nFlag)) );      // no flag, pure data
+            SeekRel( -((sal_Size)sizeof(nFlag)) );      // no BOM, pure data
+    }
+    return nError == SVSTREAM_OK;
+}
+
+/*************************************************************************
+|*
+|*    Stream::ReadCsvLine()
+|*
+*************************************************************************/
+
+// Precondition: pStr is guaranteed to be non-NULL and points to a 0-terminated
+// array.
+inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
+        sal_Unicode c )
+{
+    while (*pStr)
+    {
+        if (*pStr == c)
+            return pStr;
+        ++pStr;
+    }
+    return 0;
+}
+
+sal_Bool SvStream::ReadCsvLine( String& rStr, sal_Bool bEmbeddedLineBreak,
+        const String& rFieldSeparators, sal_Unicode cFieldQuote,
+        sal_Bool bAllowBackslashEscape)
+{
+    ReadUniOrByteStringLine( rStr);
+
+    if (bEmbeddedLineBreak)
+    {
+        const sal_Unicode* pSeps = rFieldSeparators.GetBuffer();
+        xub_StrLen nLastOffset = 0;
+        xub_StrLen nQuotes = 0;
+        while (!IsEof() && rStr.Len() < STRING_MAXLEN)
+        {
+            bool bBackslashEscaped = false;
+            const sal_Unicode *p, *pStart;
+            p = pStart = rStr.GetBuffer();
+            p += nLastOffset;
+            while (*p)
+            {
+                if (nQuotes)
+                {
+                    if (*p == cFieldQuote && !bBackslashEscaped)
+                        ++nQuotes;
+                    else if (bAllowBackslashEscape)
+                    {
+                        if (*p == '\\')
+                            bBackslashEscaped = !bBackslashEscaped;
+                        else
+                            bBackslashEscaped = false;
+                    }
+                }
+                else if (*p == cFieldQuote && (p == pStart ||
+                            lcl_UnicodeStrChr( pSeps, p[-1])))
+                    nQuotes = 1;
+                // A quote character inside a field content does not start
+                // a quote.
+                ++p;
+            }
+
+            if (nQuotes % 2 == 0)
+                break;
+            else
+            {
+                nLastOffset = rStr.Len();
+                String aNext;
+                ReadUniOrByteStringLine( aNext);
+                rStr += sal_Unicode(_LF);
+                rStr += aNext;
+            }
+        }
     }
     return nError == SVSTREAM_OK;
 }
