@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:36:09 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 13:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ Reference< XModel> getXModel(const Reference< XInterface>& xIface)
     while( xParent.is() && !xModel.is() )
     {
         Reference<XChild> xChild(xParent,UNO_QUERY);
-        xParent.set(xChild.is() ? xChild->getParent() : NULL,UNO_QUERY);
+        xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
         xModel.set(xParent,UNO_QUERY);
     }
     return xModel;
