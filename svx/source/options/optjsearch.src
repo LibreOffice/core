@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:47:38 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Traktuj w ten sam spos骲";
         Text[ portuguese_brazilian ] = "Treat as equal";
         Text[ japanese ] = "嬫暿偟側偄帤庬丒帤懱丒昞\婰";
-        Text[ korean ] = "Treat as equal";
+        Text[ korean ] = "悼老窍霸 贸府";
         Text[ chinese_simplified ] = "当作相等处理";
         Text[ chinese_traditional ] = "讽单矪瞶";
         Text[ turkish ] = "Treat as equal";
@@ -118,7 +118,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Wielkie i ma砮 litery";
         Text[ portuguese_brazilian ] = "Match case";
         Text[ japanese ] = "戝暥帤/彫暥帤";
-        Text[ korean ] = "Match case";
+        Text[ korean ] = "措/家巩磊";
         Text[ chinese_simplified ] = "字母大小写";
         Text[ chinese_traditional ] = "ダ糶";
         Text[ turkish ] = "Match case";
@@ -146,7 +146,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Zwyk砤/po硂wa szeroko渃i";
         Text[ portuguese_brazilian ] = "Match full/half width form";
         Text[ japanese ] = "慡妏/敿妏";
-        Text[ korean ] = "Match full/half width form";
+        Text[ korean ] = "傈气/馆气 屈侥";
         Text[ chinese_simplified ] = "日文全角和半角";
         Text[ chinese_traditional ] = "㎝";
         Text[ turkish ] = "Match full/half width form";
@@ -174,7 +174,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Hiragana/Katakana";
         Text[ portuguese_brazilian ] = "Match hiragana/katakana";
         Text[ japanese ] = "傂傜偑側/僇僞僇僫";
-        Text[ korean ] = "Match hiragana/katakana";
+        Text[ korean ] = "洒扼啊唱/啊促啊唱";
         Text[ chinese_simplified ] = "平假名和片假名";
         Text[ chinese_traditional ] = "キ安㎝安";
         Text[ turkish ] = "Match hiragana/katakana";
@@ -202,7 +202,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Kontrakcje (yo-on, sokuon)";
         Text[ portuguese_brazilian ] = "Match contractions (yo-on, sokuon)";
         Text[ japanese ] = "漍壒丄懀壒";
-        Text[ korean ] = "Match contractions (yo-on, sokuon)";
+        Text[ korean ] = "绵距 (yo-on, sokuon)";
         Text[ chinese_simplified ] = "日文缩写式(yo-on, sokuon)";
         Text[ chinese_traditional ] = "らゅ罽糶Α(yo-on, sokuon)";
         Text[ turkish ] = "Match contractions (yo-on, sokuon)";
@@ -230,7 +230,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Minus/my渓nik/cho-on";
         Text[ portuguese_brazilian ] = "Match minus/dash/cho-on";
         Text[ japanese ] = "儅僀僫僗/僴僀僼儞/挿壒[亅/乚/乕]";
-        Text[ korean ] = "Match minus/dash/cho-on";
+        Text[ korean ] = "付捞呈胶/措矫/cho-on";
         Text[ chinese_simplified ] = "负数符号/连字符/日文长音";
         Text[ chinese_traditional ] = "璽计才腹/硈才/らゅ";
         Text[ turkish ] = "Match minus/dash/cho-on";
@@ -258,7 +258,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Znaki powt髍ki";
         Text[ portuguese_brazilian ] = "Match 'repeat character' marks";
         Text[ japanese ] = "孞傝曉偟婰崋[丷丼乀乁乆]";
-        Text[ korean ] = "Match 'repeat character' marks";
+        Text[ korean ] = "馆汗 扁龋";
         Text[ chinese_simplified ] = "重复的字符";
         Text[ chinese_traditional ] = "確じ";
         Text[ turkish ] = "Match 'repeat character' marks";
@@ -286,7 +286,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Wariant kanji (itaiji)";
         Text[ portuguese_brazilian ] = "Match variant-form kanji (itaiji)";
         Text[ japanese ] = "娍帤昞\婰偺備傟(堎懱帤)";
-        Text[ korean ] = "Match variant-form kanji (itaiji)";
+        Text[ korean ] = "kanji 函屈 (itaiji)";
         Text[ chinese_simplified ] = "日文汉字(异体字)";
         Text[ chinese_traditional ] = "らゅ簙(钵砰)";
         Text[ turkish ] = "Match variant-form kanji (itaiji)";
@@ -314,7 +314,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Stare formy kana";
         Text[ portuguese_brazilian ] = "Match old kana forms";
         Text[ japanese ] = "怴媽偐側帤懱";
-        Text[ korean ] = "Match old kana forms";
+        Text[ korean ] = "捞傈 啊唱 屈侥";
         Text[ chinese_simplified ] = "旧式日文假名";
         Text[ chinese_traditional ] = "侣Αらゅ安";
         Text[ turkish ] = "Match old kana forms";
@@ -342,7 +342,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Di/zi, du/zu";
         Text[ portuguese_brazilian ] = "Match di/zi, du/zu";
         Text[ japanese ] = "僡/僕丄僤/僘";
-        Text[ korean ] = "Match di/zi, du/zu";
+        Text[ korean ] = "di/zi, du/zu";
         Text[ chinese_simplified ] = "di/zi, du/zu";
         Text[ chinese_traditional ] = "di/zi, du/zu";
         Text[ turkish ] = "Match di/zi, du/zu";
@@ -370,7 +370,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Ba/va, ha/fa";
         Text[ portuguese_brazilian ] = "Match ba/va, ha/fa";
         Text[ japanese ] = "僶/償傽丄僴/僼傽";
-        Text[ korean ] = "Match ba/va, ha/fa";
+        Text[ korean ] = "ba/va, ha/fa";
         Text[ chinese_simplified ] = "ba/va, ha/fa";
         Text[ chinese_traditional ] = "ba/va, ha/fa";
         Text[ turkish ] = "Match ba/va, ha/fa";
@@ -398,7 +398,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Tsi/thi/chi, dhi/zi";
         Text[ portuguese_brazilian ] = "Match tsi/thi/chi, dhi/zi";
         Text[ japanese ] = "僣傿/僥傿/僠丄僨傿/僕";
-        Text[ korean ] = "Match tsi/thi/chi, dhi/zi";
+        Text[ korean ] = "tsi/thi/chi, dhi/zi";
         Text[ chinese_simplified ] = "tsi/thi/chi, dhi/zi";
         Text[ chinese_traditional ] = "tsi/thi/chi, dhi/zi";
         Text[ turkish ] = "Match tsi/thi/chi, dhi/zi";
@@ -426,7 +426,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Hyu/fyu, byu/vyu";
         Text[ portuguese_brazilian ] = "Match hyu/fyu, byu/vyu";
         Text[ japanese ] = "僸儏/僼儏丄價儏/償儏";
-        Text[ korean ] = "Match hyu/fyu, byu/vyu";
+        Text[ korean ] = "hyu/fyu, byu/vyu";
         Text[ chinese_simplified ] = "hyu/fyu, byu/vyu";
         Text[ chinese_traditional ] = "hyu/fyu, byu/vyu";
         Text[ turkish ] = "Match hyu/fyu, byu/vyu";
@@ -454,7 +454,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Se/she, ze/je";
         Text[ portuguese_brazilian ] = "Match se/she, ze/je";
         Text[ japanese ] = "僙/僔僃丄僛/僕僃";
-        Text[ korean ] = "Match se/she, ze/je";
+        Text[ korean ] = "se/she, ze/je";
         Text[ chinese_simplified ] = "se/she, ze/je";
         Text[ chinese_traditional ] = "se/she, ze/je";
         Text[ turkish ] = "Match se/she, ze/je";
@@ -482,7 +482,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Ia/iya (piano/piyano)";
         Text[ portuguese_brazilian ] = "Match ia/iya (piano/piyano)";
         Text[ japanese ] = "僀抜丄僄抜偵懕偔傾/儎(僺傾僲/僺儎僲)";
-        Text[ korean ] = "Match ia/iya (piano/piyano)";
+        Text[ korean ] = "ia/iya (piano/piyano)";
         Text[ chinese_simplified ] = "ia/iya (piano/piyano)";
         Text[ chinese_traditional ] = "ia/iya (piano/piyano)";
         Text[ turkish ] = "Match ia/iya (piano/piyano)";
@@ -510,7 +510,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ portuguese_brazilian ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ japanese ] = "僒峴偺慜偺僉/僋 (僥僉僗僩/僥僋僗僩)";
-        Text[ korean ] = "Match ki/ku (tekisuto/tekusuto)";
+        Text[ korean ] = "ki/ku (tekisuto/tekusuto)";
         Text[ chinese_simplified ] = "ki/ku (tekisuto/tekusuto)";
         Text[ chinese_traditional ] = "ki/ku (tekisuto/tekusuto)";
         Text[ turkish ] = "Match ki/ku (tekisuto/tekusuto)";
@@ -538,7 +538,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Ignoruj";
         Text[ portuguese_brazilian ] = "Ignore";
         Text[ japanese ] = "柍帇偡傞婰崋丒暥帤";
-        Text[ korean ] = "Ignore";
+        Text[ korean ] = "公矫";
         Text[ chinese_simplified ] = "忽略";
         Text[ chinese_traditional ] = "┛菠";
         Text[ turkish ] = "Ignore";
@@ -565,7 +565,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Znak interpunkcji";
         Text[ portuguese_brazilian ] = "Punctuation characters";
         Text[ japanese ] = "嬫愗傝婰崋";
-        Text[ korean ] = "Punctuation characters";
+        Text[ korean ] = "备滴痢";
         Text[ chinese_simplified ] = "拼音和注音符号";
         Text[ chinese_traditional ] = "猔才腹";
         Text[ turkish ] = "Punctuation characters";
@@ -592,7 +592,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Znak spacji";
         Text[ portuguese_brazilian ] = "Whitespace characters";
         Text[ japanese ] = "嬻敀偲偟偰巊梡偝傟傞暥帤";
-        Text[ korean ] = "Whitespace characters";
+        Text[ korean ] = "牢尖拱 咯归 巩磊";
         Text[ chinese_simplified ] = "空格字符";
         Text[ chinese_traditional ] = "じ";
         Text[ turkish ] = "Whitespace characters";
@@ -619,7 +619,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Przed硊縪ne samog硂ski (cho-on)";
         Text[ portuguese_brazilian ] = "Prolonged soundmarks (cho-on)";
         Text[ japanese ] = "挿壒(曣壒偱偺偽偡壒) [乕]";
-        Text[ korean ] = "Prolonged soundmarks (cho-on)";
+        Text[ korean ] = "厘 葛澜 (cho-on)";
         Text[ chinese_simplified ] = "日语长音";
         Text[ chinese_traditional ] = "ら粂";
         Text[ turkish ] = "Prolonged soundmarks (cho-on)";
@@ -646,7 +646,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ polish ] = "Kropka po渞odku";
         Text[ portuguese_brazilian ] = "Middle dots";
         Text[ japanese ] = "拞崟";
-        Text[ korean ] = "Middle dots";
+        Text[ korean ] = "吝埃 痢";
         Text[ chinese_simplified ] = "中间点";
         Text[ chinese_traditional ] = "い丁翴";
         Text[ turkish ] = "Middle dots";
