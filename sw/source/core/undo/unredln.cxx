@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unredln.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:39:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,13 +460,23 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
         if( bJoinTxt )
             ::lcl_JoinText( *pPam, bJoinPrev );
 
-        if( pCSttNd && !pCEndNd )
+        if( pCSttNd && !pCEndNd)
         {
-            pPam->SetMark();
-            pPam->GetPoint()->nNode++;
-            pPam->GetBound( TRUE ).nContent.Assign( 0, 0 );
-            pPam->GetBound( FALSE ).nContent.Assign( 0, 0 );
-            pUnDel2 = new SwUndoDelete( *pPam, TRUE );
+            // #112139# Do not step behind the end of content.
+            SwNode * pTmp = pPam->GetNode(TRUE);
+            if (pTmp)
+            {
+                SwNode * pEnd = pDoc->GetNodes().DocumentSectionEndNode(pTmp);
+
+                if (pTmp != pEnd)
+                {
+                    pPam->SetMark();
+                    pPam->GetPoint()->nNode++;
+                    pPam->GetBound( TRUE ).nContent.Assign( 0, 0 );
+                    pPam->GetBound( FALSE ).nContent.Assign( 0, 0 );
+                    pUnDel2 = new SwUndoDelete( *pPam, TRUE );
+                }
+            }
         }
         pPam->DeleteMark();
     }
