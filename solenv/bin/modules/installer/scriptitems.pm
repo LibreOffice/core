@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:17:11 $
+#   last change: $Author: rt $ $Date: 2004-06-16 15:05:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -418,7 +418,7 @@ sub remove_non_existent_languages_in_productlists
 
 sub get_Directoryname_From_Directorygid
 {
-    my ($dirsarrayref ,$searchgid, $onelanguage) = @_;
+    my ($dirsarrayref ,$searchgid, $onelanguage, $oneitemgid) = @_;
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_Directoryname_From_Directorygid : $#{$dirsarrayref} : $searchgid : $onelanguage"); }
 
@@ -445,11 +445,21 @@ sub get_Directoryname_From_Directorygid
 
     if ( ! ( $onedirectory->{'ismultilingual'} ))   # the directory is not language dependent
     {
-        $directoryname = $onedirectory->{'HostName'};
+         $directoryname = $onedirectory->{'HostName'};
     }
     else
     {
         $directoryname = $onedirectory->{"HostName ($onelanguage)"};
+    }
+
+    # gid_Dir_Template_Wizard_Letter is defined as language dependent directory, but the file gid_Dir_Template_Wizard_Letter
+    # is not language dependent. Therefore $onelanguage is not defined. But which language is the correct language for the
+    # directory?
+    # Perhaps better solution: In scp it must be forbidden to have a language independent file in a language dependent directory.
+
+    if (( ! $directoryname ) && ( $onelanguage eq "" ))
+    {
+        installer::exiter::exit_program("ERROR (in scp): Directory $searchgid is language dependent, but not $oneitemgid inside this directory", "get_Directoryname_From_Directorygid");
     }
 
     return \$directoryname;
@@ -468,6 +478,7 @@ sub get_Destination_Directory_For_Item_From_Directorylist       # this is used f
     for ( my $i = 0; $i <= $#{$itemarrayref}; $i++ )
     {
         my $oneitem = ${$itemarrayref}[$i];
+        my $oneitemgid = $oneitem->{'gid'};
         my $directorygid = $oneitem->{'Dir'};       # for instance gid_Dir_Program
         my $netdirectorygid = "";
         my $onelanguage = $oneitem->{'specificlanguage'};
@@ -505,7 +516,7 @@ sub get_Destination_Directory_For_Item_From_Directorylist       # this is used f
 
         if ((!( $ispredefinedprogdir )) && (!( $ispredefinedconfigdir )))
         {
-            my $directorynameref = get_Directoryname_From_Directorygid($dirsarrayref, $searchdirgid, $onelanguage);
+            my $directorynameref = get_Directoryname_From_Directorygid($dirsarrayref, $searchdirgid, $onelanguage, $oneitemgid);
             $destfilename = $$directorynameref . $installer::globals::separator . $oneitemname;
         }
         else
@@ -881,7 +892,8 @@ sub remove_Setup_from_Installset
             ( $gid eq "gid_File_Extra_Cdewriter" ) ||
             ( $gid eq "gid_File_Extra_Cdecalc" ) ||
             ( $gid eq "gid_File_Extra_Cdedraw" ) ||
-            ( $gid eq "gid_File_Extra_Cdeimpress" ))
+            ( $gid eq "gid_File_Extra_Cdeimpress" ) ||
+            ( $gid eq "gid_File_Images_Zip_Setup" ))
         {
             $infoline = "ATTENTION: Removing setup item $oneitem->{'gid'} from the installation set.\n";
             push( @installer::globals::logfileinfo, $infoline);

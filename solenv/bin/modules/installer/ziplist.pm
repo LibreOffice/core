@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:18:15 $
+#   last change: $Author: rt $ $Date: 2004-06-16 15:05:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::logger;
+use installer::parameter;
 use installer::remover;
 
 #################################################
@@ -685,6 +686,44 @@ sub set_default_productversion_if_required
     if (!($allvariables->{'PRODUCTVERSION'}))
     {
         $allvariables->{'PRODUCTVERSION'} = 1;  # FAKE
+    }
+}
+
+####################################################
+# Removing .. in pathes
+####################################################
+
+sub simplify_path
+{
+    my ( $pathref ) = @_;
+
+    my $oldpath = $$pathref;
+
+    my $change = 0;
+
+    while ( $oldpath =~ /(^.*)(\Q$installer::globals::separator\E.*?)(\Q$installer::globals::separator\E\.\.)(\Q$installer::globals::separator\E.*$)/ )
+    {
+        my $part1 = $1;
+        my $part2 = $4;
+        $oldpath = $part1 . $part2;
+        $change = 1;
+    }
+
+    if ( $change ) { $$pathref = $oldpath . "\n"; }
+}
+
+####################################################
+# Removing ending separators in pathes
+####################################################
+
+sub resolve_relative_pathes
+{
+    my ( $patharrayref ) = @_;
+
+    for ( my $i = 0; $i <= $#{$patharrayref}; $i++ )
+    {
+        installer::parameter::make_path_absolute(\${$patharrayref}[$i]);
+        simplify_path(\${$patharrayref}[$i]);
     }
 }
 

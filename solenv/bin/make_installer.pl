@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:13:58 $
+#   last change: $Author: rt $ $Date: 2004-06-16 15:05:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -250,8 +250,11 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 installer::ziplist::replace_minor_in_pathes($includepatharrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray3.log" ,$includepatharrayref); }
 
-installer::ziplist::remove_ending_separator($includepatharrayref);
+installer::ziplist::resolve_relative_pathes($includepatharrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray3b.log" ,$includepatharrayref); }
+
+installer::ziplist::remove_ending_separator($includepatharrayref);
+if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allpatharray3c.log" ,$includepatharrayref); }
 
 ##############################################
 # Analyzing languages in zip.lst if required
@@ -474,6 +477,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     my $dirsinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($dirsinproductarrayref, $languagesarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories3.log", $dirsinproductlanguageresolvedarrayref); }
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories2a.log", $dirsinproductarrayref); }
 
     # A new directory array is needed ($dirsinproductlanguageresolvedarrayref instead of $dirsinproductarrayref)
     # because $dirsinproductarrayref is needed in get_Destination_Directory_For_Item_From_Directorylist
