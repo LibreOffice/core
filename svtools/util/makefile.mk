@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.50 $
+#*  $Revision: 1.51 $
 #*
-#*  last change: $Author: kz $ $Date: 2004-10-04 19:48:20 $
+#*  last change: $Author: hr $ $Date: 2004-11-26 20:40:16 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -144,6 +144,7 @@ LIB8FILES=	\
         $(SLB)$/misc1.lib	\
         $(SLB)$/notify.lib	\
         $(SLB)$/passwordcontainer.lib	\
+        $(SLB)$/fsstor.lib	\
         $(SLB)$/svarray.lib \
         $(SLB)$/svhtml1.lib \
         $(SLB)$/svrtf.lib	\
