@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:55:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,9 @@ void SwHTMLImageWatcher::clear()
     xComp->removeEventListener( xEvtLstnr );
 
     // Am ImageProducer abmelden
-    xSrc->getImageProducer()->removeConsumer( xThis );
+    Reference<awt::XImageProducer> xProd = xSrc->getImageProducer();
+    if( xProd.is() )
+        xProd->removeConsumer( xThis );
 }
 
 //------------------------------------------------------------------------------
