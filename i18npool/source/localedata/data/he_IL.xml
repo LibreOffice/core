@@ -27,8 +27,8 @@
 <Markers>
 <QuotationStart>‘</QuotationStart>
 <QuotationEnd>’</QuotationEnd>
-<DoubleQuotationStart>“</DoubleQuotationStart>
-<DoubleQuotationEnd>”</DoubleQuotationEnd>
+<DoubleQuotationStart>"</DoubleQuotationStart>
+<DoubleQuotationEnd>"</DoubleQuotationEnd>
 </Markers>
 <TimeAM>am</TimeAM>
 <TimePM>pm</TimePM>
@@ -228,32 +228,32 @@
 <Day>
 <DayID>sun</DayID>
 <DefaultAbbrvName>א</DefaultAbbrvName>
-<DefaultFullName>יום ראשון</DefaultFullName>
+<DefaultFullName>ראשון</DefaultFullName>
 </Day>
 <Day>
 <DayID>mon</DayID>
 <DefaultAbbrvName>ב</DefaultAbbrvName>
-<DefaultFullName>יום שני</DefaultFullName>
+<DefaultFullName>שני</DefaultFullName>
 </Day>
 <Day>
 <DayID>tue</DayID>
 <DefaultAbbrvName>ג</DefaultAbbrvName>
-<DefaultFullName>יום שלישי</DefaultFullName>
+<DefaultFullName>שלישי</DefaultFullName>
 </Day>
 <Day>
 <DayID>wed</DayID>
 <DefaultAbbrvName>ד</DefaultAbbrvName>
-<DefaultFullName>יום רביעי</DefaultFullName>
+<DefaultFullName>רביעי</DefaultFullName>
 </Day>
 <Day>
 <DayID>thu</DayID>
 <DefaultAbbrvName>ה</DefaultAbbrvName>
-<DefaultFullName>יום חמישי</DefaultFullName>
+<DefaultFullName>חמישי</DefaultFullName>
 </Day>
 <Day>
 <DayID>fri</DayID>
 <DefaultAbbrvName>ו</DefaultAbbrvName>
-<DefaultFullName>יום שישי</DefaultFullName>
+<DefaultFullName>שישי</DefaultFullName>
 </Day>
 <Day>
 <DayID>sat</DayID>
@@ -289,7 +289,7 @@
 </Month>
 <Month>
 <MonthID>jun</MonthID>
-<DefaultAbbrvName>יונ</DefaultAbbrvName>
+<DefaultAbbrvName>יון</DefaultAbbrvName>
 <DefaultFullName>יוני</DefaultFullName>
 </Month>
 <Month>
@@ -326,13 +326,13 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>לסה"נ</DefaultAbbrvName>
-<DefaultFullName>לסה"נ</DefaultFullName>
+<DefaultAbbrvName>לפנה"ס</DefaultAbbrvName>
+<DefaultFullName>לפנה"ס</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
-<DefaultAbbrvName>לפסה"נ</DefaultAbbrvName>
-<DefaultFullName>לפסה"נ</DefaultFullName>
+<DefaultAbbrvName>לסה"נ</DefaultAbbrvName>
+<DefaultFullName>לסה"נ</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek><DayID>sun</DayID></StartDayOfWeek>
@@ -343,32 +343,32 @@
 <Day>
 <DayID>sun</DayID>
 <DefaultAbbrvName>א</DefaultAbbrvName>
-<DefaultFullName>יום ראשון</DefaultFullName>
+<DefaultFullName>ראשון</DefaultFullName>
 </Day>
 <Day>
 <DayID>mon</DayID>
 <DefaultAbbrvName>ב</DefaultAbbrvName>
-<DefaultFullName>יום שני</DefaultFullName>
+<DefaultFullName>שני</DefaultFullName>
 </Day>
 <Day>
 <DayID>tue</DayID>
 <DefaultAbbrvName>ג</DefaultAbbrvName>
-<DefaultFullName>יום שלישי</DefaultFullName>
+<DefaultFullName>שלישי</DefaultFullName>
 </Day>
 <Day>
 <DayID>wed</DayID>
 <DefaultAbbrvName>ד</DefaultAbbrvName>
-<DefaultFullName>יום רביעי</DefaultFullName>
+<DefaultFullName>רביעי</DefaultFullName>
 </Day>
 <Day>
 <DayID>thu</DayID>
 <DefaultAbbrvName>ה</DefaultAbbrvName>
-<DefaultFullName>יום חמישי</DefaultFullName>
+<DefaultFullName>חמישי</DefaultFullName>
 </Day>
 <Day>
 <DayID>fri</DayID>
 <DefaultAbbrvName>ו</DefaultAbbrvName>
-<DefaultFullName>יום שישי</DefaultFullName>
+<DefaultFullName>שישי</DefaultFullName>
 </Day>
 <Day>
 <DayID>sat</DayID>
@@ -379,7 +379,7 @@
 <MonthsOfYear>
 <Month>
 <MonthID>Nissan</MonthID>
-<DefaultAbbrvName>ןסינ</DefaultAbbrvName>
+<DefaultAbbrvName>ניסן</DefaultAbbrvName>
 <DefaultFullName>ניסן</DefaultFullName>
 </Month>
 <Month>
@@ -414,13 +414,13 @@
 </Month>
 <Month>
 <MonthID>Heshvan</MonthID>
-<DefaultAbbrvName>>חשון</DefaultAbbrvName>
+<DefaultAbbrvName>חשון</DefaultAbbrvName>
 <DefaultFullName>חשון</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Kislev</MonthID>
-<DefaultAbbrvName>כסלו</DefaultAbbrvName>
-<DefaultFullName>כסלו</DefaultFullName>
+<DefaultAbbrvName>כסליו</DefaultAbbrvName>
+<DefaultFullName>כסליו</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Tevet</MonthID>
@@ -446,8 +446,8 @@
 <Eras>
 <Era>
 <EraID>before</EraID>
-<DefaultAbbrvName>לפנ"ה</DefaultAbbrvName>
-<DefaultFullName>לפנ"ה</DefaultFullName>
+<DefaultAbbrvName>לפנה"ס</DefaultAbbrvName>
+<DefaultFullName>לפנה"ס</DefaultFullName>
 </Era>
 <Era>
 <EraID>after</EraID>
@@ -461,10 +461,10 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>dollar</CurrencyID>
+<CurrencyID>N.I.S</CurrencyID>
 <CurrencySymbol>ש"ח</CurrencySymbol>
 <BankSymbol>ILS</BankSymbol>
-<CurrencyName>ILs dollar</CurrencyName>
+<CurrencyName>New Israeli Sheqel </CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 </LC_CURRENCY>
@@ -477,12 +477,12 @@
 <quarter2Word>2nd quarter</quarter2Word>
 <quarter3Word>3rd quarter</quarter3Word>
 <quarter4Word>4th quarter</quarter4Word>
-<aboveWord>above</aboveWord>
-<belowWord>below</belowWord>
-<quarter1Abbreviation>Q1</quarter1Abbreviation>
-<quarter2Abbreviation>Q2</quarter2Abbreviation>
-<quarter3Abbreviation>Q3</quarter3Abbreviation>
-<quarter4Abbreviation>Q4</quarter4Abbreviation>
+<aboveWord>למעלה</aboveWord>
+<belowWord>למטה</belowWord>
+<quarter1Abbreviation>רבעון ראשון</quarter1Abbreviation>
+<quarter2Abbreviation>רבעון שני</quarter2Abbreviation>
+<quarter3Abbreviation>רבעון שלישי</quarter3Abbreviation>
+<quarter4Abbreviation>רבעון רביעי</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel ref="en_US"/>
