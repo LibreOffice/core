@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:07:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,16 +314,6 @@ struct RefSaveItem
     RefSaveItem() { pNext = NULL; }
 };
 
-// #111851 Object class to store type
-class TypeHolderObject : public SbxObject
-{
-public:
-    TypeHolderObject( const String& rObjectType )
-        : SbxObject( rObjectType )
-    {}
-    TYPEINFO();
-};
-
 
 // #72732 Spezielle SbxVariable, die beim put/get prueft,
 // ob der Kontext fuer eine UnoClass sinnvoll ist. Sonst
@@ -459,6 +449,9 @@ class SbiRuntime
     // #56204 DIM-Funktionalitaet in Hilfsmethode auslagern (step0.cxx)
     void DimImpl( SbxVariableRef refVar );
 
+    // #115829
+    bool implIsClass( SbxObject* pObj, const String& aClass );
+
     // Die nachfolgenden Routinen werden vom Single Stepper
     // gerufen und implementieren die einzelnen Opcodes
     void StepNOP(),     StepEXP(),      StepMUL(),      StepDIV();
@@ -470,6 +463,7 @@ class SbiRuntime
     void StepCLONE(),   StepOLDBASED(), StepARGC();
     void StepARGV(),    StepINPUT(),    StepLINPUT(),   StepSTOP();
     void StepGET(),     StepSET(),      StepPUT(),      StepPUTC();
+    void StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar );
     void StepDIM(),     StepREDIM(),    StepREDIMP(),   StepERASE();
     void StepINITFOR(), StepNEXT(),     StepERROR(),    StepINITFOREACH();
     void StepCASE(),    StepENDCASE(),  StepSTDERROR();
@@ -484,7 +478,8 @@ class SbiRuntime
     void StepJUMPF( USHORT ),   StepONJUMP( USHORT );
     void StepGOSUB( USHORT ),   StepRETURN( USHORT );
     void StepTESTFOR( USHORT ), StepCASETO( USHORT ),   StepERRHDL( USHORT );
-    void StepRESUME( USHORT ),  StepCLASS( USHORT ),    StepLIB( USHORT );
+    void StepRESUME( USHORT ),  StepSETCLASS( USHORT ), StepTESTCLASS( USHORT ), StepLIB( USHORT );
+    bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors );
     void StepCLOSE( USHORT ),   StepPRCHAR( USHORT ),   StepARGTYP( USHORT );
     // Alle Opcodes mit zwei Operanden
     void StepRTL( USHORT, USHORT ),     StepPUBLIC( USHORT, USHORT );
