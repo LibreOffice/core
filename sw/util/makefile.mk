@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 15:28:03 $
+#   last change: $Author: obo $ $Date: 2005-03-15 10:07:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,7 +151,8 @@ SHL1STDLIBS+= \
     $(CPPULIB) \
     $(VOSLIB) \
     $(SALLIB) \
-        $(ICUUCLIB) \
+    $(SALHELPERLIB) \
+    $(ICUUCLIB) \
     $(I18NUTILLIB)	\
     $(AVMEDIALIB)
 
