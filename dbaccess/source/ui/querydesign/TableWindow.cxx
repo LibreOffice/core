@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: oj $ $Date: 2002-02-11 12:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ void OTableWindow::SetTitle( const ::rtl::OUString& rTit )
     ::rtl::OUString sOldTitle = m_aTitle.GetText();
     m_aTitle.SetText( rTit );
     if ( m_pAccessible )
-        m_pAccessible->notifyAccesibleEvent(6/* AccessibleEventId::ACCESSIBLE_NAME_EVENT */,makeAny(sOldTitle),makeAny(rTit));
+        m_pAccessible->notifyAccessibleEvent(6/* AccessibleEventId::ACCESSIBLE_NAME_EVENT */,makeAny(sOldTitle),makeAny(rTit));
 }
 
 //------------------------------------------------------------------------------
