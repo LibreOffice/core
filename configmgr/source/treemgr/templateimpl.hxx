@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 14:59:05 $
+ *  last change: $Author: jb $ $Date: 2001-03-16 17:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@ namespace configmgr
             , aModule()
             {}
 
-            TemplateName(UnoType const& aType)
+            TemplateName(UnoType const& aType, bool bLocalized)
             : aName(makeSimpleTypeName(aType))
-            , aModule(makeSimpleTypeModuleName())
+            , aModule(makeSimpleTypeModuleName(bLocalized))
             {}
 
             TemplateName(Name const& aName_)
@@ -136,10 +136,9 @@ namespace configmgr
                 return aName.isEmpty();
             }
 
-            bool isSimpleTypeName() const
-            {
-                return aModule == makeSimpleTypeModuleName();
-            }
+            bool isSimpleTypeName() const;
+
+            UnoType resolveToSimpleType() const;
             //-----------------------------------------------------------------
 
             bool operator<(TemplateName const& aOther) const
@@ -152,9 +151,18 @@ namespace configmgr
             //-----------------------------------------------------------------
             static TemplateName parseTemplateNames(OUString const& sName, OUString const& sModule);
             //-----------------------------------------------------------------
+            static UnoType resolveSimpleTypeName(Name const& aName);
+            //-----------------------------------------------------------------
             static Name makeSimpleTypeName(UnoType const& aType);
             //-----------------------------------------------------------------
-            static Name makeSimpleTypeModuleName();
+            static Name makeNativeTypeModuleName();
+            //-----------------------------------------------------------------
+            static Name makeLocalizedTypeModuleName();
+            //-----------------------------------------------------------------
+            static Name makeSimpleTypeModuleName(bool bLocalized)
+            {
+                return bLocalized ? makeLocalizedTypeModuleName() : makeNativeTypeModuleName();
+            }
             //-----------------------------------------------------------------
         };
     //-------------------------------------------------------------------------

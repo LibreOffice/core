@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-17 08:44:50 $
+ *  last change: $Author: jb $ $Date: 2001-03-16 17:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,6 @@ namespace configmgr
     }
 
 // *************************************************************************
-
     namespace
     {
 
@@ -381,5 +380,63 @@ namespace configmgr
         return getSequenceElementType(rType);
     }
 
+
+    // template names
+// *************************************************************************
+    ::rtl::OUString toTemplateName(const uno::Type& _rType)
+    {
+        bool bList;
+        uno::Type aBaseType = getBasicType(_rType,bList);
+        return toTemplateName(aBaseType.getTypeClass(), bList);
+    }
+
+    ::rtl::OUString toTemplateName(const uno::TypeClass& _rBasicType, bool bList)
+    {
+        return  toTemplateName(toTypeName(_rBasicType), bList);
+    }
+
+// *************************************************************************
+    uno::Type parseTemplateName(::rtl::OUString const& sTypeName)
+    {
+        ::rtl::OUString sBasicTypeName;
+        bool bList;
+        parseTemplateName(sTypeName, sBasicTypeName,bList);
+        return toType(sTypeName,bList);
+    }
+
+    void parseTemplateName(::rtl::OUString const& sTypeName, uno::TypeClass& _rType, bool& bList)
+    {
+        ::rtl::OUString sBasicTypeName;
+        parseTemplateName(sTypeName, sBasicTypeName,bList);
+        _rType = toTypeClass(sTypeName);
+    }
+
+// *************************************************************************
+    ::rtl::OUString toTemplateName(const ::rtl::OUString& _rBasicTypeName, bool bList)
+    {
+        ::rtl::OUString sName = _rBasicTypeName;
+        if (bList)
+            sName += TEMPLATE_LIST_SUFFIX;
+        return sName;
+    }
+
+    void parseTemplateName(::rtl::OUString const& sTypeName, ::rtl::OUString& _rBasicName, bool& bList)
+    {
+        ::rtl::OUString const sSuffix = TEMPLATE_LIST_SUFFIX;
+
+        sal_Int32 nIndex = sTypeName.lastIndexOf(sSuffix);
+        if (nIndex >= 0 && nIndex + sSuffix.getLength() == sTypeName.getLength())
+        {
+            bList = true;
+            _rBasicName = sTypeName.copy(0,nIndex);
+        }
+        else
+        {
+            bList = false;
+            _rBasicName = sTypeName;
+        }
+
+    }
+// *************************************************************************
 
 } // namespace configmgr

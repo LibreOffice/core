@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 14:59:05 $
+ *  last change: $Author: jb $ $Date: 2001-03-16 17:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ TemplateHolder locate(Name const& aName, Name const& aModule, TemplateProvider c
 
 TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs, TemplateProvider const& aProvider)
 {
-    TemplateName aNames(aType);
+    TemplateName aNames(aType,false);
     return TemplateImplHelper::makeTemplate( aNames, aProvider, aType, aAttrs);
 }
 //-----------------------------------------------------------------------------

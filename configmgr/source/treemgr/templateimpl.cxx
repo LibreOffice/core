@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 14:59:05 $
+ *  last change: $Author: jb $ $Date: 2001-03-16 17:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "treeprovider.hxx"
 
 #include "apitypes.hxx"
+#include "strdecl.hxx"
+#include "typeconverter.hxx"
 
 #include <vos/refernce.hxx>
 #include <map>
@@ -76,15 +78,54 @@ namespace configmgr
 
 Name TemplateName::makeSimpleTypeName(UnoType const& aType)
 {
-    OUString aTypeName = OUString(RTL_CONSTASCII_USTRINGPARAM("uno:")).concat(aType.getTypeName());
-    return Name(aTypeName, Name::NoValidate());
+    OUString sTypeName = toTemplateName(aType);
+    return Name(sTypeName, Name::NoValidate());
 }
 //-----------------------------------------------------------------------------
 
-Name TemplateName::makeSimpleTypeModuleName()
+UnoType TemplateName::resolveSimpleTypeName(Name const& aName)
 {
-    OUString aModuleName = OUString(RTL_CONSTASCII_USTRINGPARAM("cfg:native-types"));
+    OUString sTypeName = aName.toString();
+    return parseTemplateName(sTypeName);
+}
+//-----------------------------------------------------------------------------
+
+Name TemplateName::makeNativeTypeModuleName()
+{
+    OUString aModuleName = TEMPLATE_MODULE_NATIVE_VALUE;
     return Name(aModuleName, Name::NoValidate());
+}
+//-----------------------------------------------------------------------------
+Name TemplateName::makeLocalizedTypeModuleName()
+{
+    OUString aModuleName = TEMPLATE_MODULE_LOCALIZED_VALUE;
+    return Name(aModuleName, Name::NoValidate());
+}
+//-----------------------------------------------------------------------------
+bool TemplateName::isSimpleTypeName() const
+{
+    OUString aPrefix = TEMPLATE_MODULE_NATIVE_PREFIX;
+    if (aModule.toString().compareTo(aPrefix,aPrefix.getLength()) != 0)
+        return false;
+
+    OSL_ENSURE( aModule == makeNativeTypeModuleName() ||
+                aModule == makeLocalizedTypeModuleName(),
+                "ERROR: Invalid template module with native prefix found");
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+
+UnoType TemplateName::resolveToSimpleType() const
+{
+    UnoType aType;
+    if ( isSimpleTypeName() )
+    {
+        aType = resolveSimpleTypeName( aName );
+    }
+    else
+        OSL_ENSURE(false, "TemplateName::resolveToSimpleType must be called only for simple type name pairs");
+    return aType;
 }
 //-----------------------------------------------------------------------------
 #if 0
@@ -322,7 +363,15 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
     if (it == m_aRepository.end() || !it->second->isInstanceTypeKnown())
     {
         UnoType aType;
-        if (!detectElementType(aType,aSet))
+        if (aNames.isSimpleTypeName()) // native type found
+        {
+            aType = aNames.resolveToSimpleType();
+
+            if (aType == TemplateImplHelper::getNoTypeAvailable())
+                throw configuration::Exception("INTERNAL ERROR: Could not resolve native type");
+        }
+
+        else if (!detectElementType(aType,aSet))
         {
             std::auto_ptr<INode> pTemplateInstance;
             if (m_pProvider)
