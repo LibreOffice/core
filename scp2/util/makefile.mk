@@ -137,7 +137,9 @@ SCP1FILES +=                           \
              registryitem_impress.par  \
              folderitem_impress.par    \
              registryitem_math.par     \
-             folderitem_math.par
+             folderitem_math.par       \
+             module_quickstart.par     \
+             registryitem_quickstart.par
 
 .IF "$(NETTOOLKIT)"==""
 SCP1FILES +=                           \
