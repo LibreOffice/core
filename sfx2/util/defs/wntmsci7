@@ -7212,3 +7212,8 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?Out_DocInfo@SfxFrameHTMLWriter@@SAXAAVSvStream@@PBVSfxDocumentInfo@@PBDGPAVString@@@Z
 ?Out_FrameDescriptor@SfxFrameHTMLWriter@@SAXAAVSvStream@@PBVSfxFrameDescriptor@@EPAVSfxFrame@@GPAVString@@@Z
 ?Out_FrameSetDescriptor@SfxFrameHTMLWriter@@AAEXPBVSfxFrameSetDescriptor@@EPAVSfxFrame@@GPAVString@@@Z
+??0?$Reference@VXInteractionHandler@task@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??_DSvStorage@@QAEXXZ
+?implc_convertStringlistToString@@YA?AVOUString@rtl@@ABV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@ABGABV12@@Z
+?set@?$Reference@VXNameAccess@container@star@sun@com@@@uno@star@sun@com@@QAAEPAVXNameAccess@container@345@@Z
+?GetHelpTreeViewContents@SfxContentHelper@@SA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@ABVString@@@Z
