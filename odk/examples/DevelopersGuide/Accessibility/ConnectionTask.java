@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionTask.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:49:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -59,15 +59,6 @@ class ConnectionTask
 {
     public ConnectionTask (EventListenerProxy xListener)
     {
-        Init (xListener);
-    }
-
-
-
-    public ConnectionTask (EventListenerProxy xListener, int nPortNumber, String sHostName)
-    {
-        mnPortNumber = nPortNumber;
-        msHostName = sHostName;
         Init (xListener);
     }
 
@@ -150,8 +141,7 @@ class ConnectionTask
     */
     private XExtendedToolkit getToolkit ()
     {
-        // Connect to Office.
-        XMultiServiceFactory xFactory = connectToOffice (msHostName, mnPortNumber);
+        XMultiServiceFactory xFactory = connectToOffice();
 
         // Get toolkit.
         XExtendedToolkit xToolkit = null;
@@ -176,56 +166,38 @@ class ConnectionTask
 
 
 
-    /** Connect to a running (Star|Open)Office application that has
-        been started with a command line argument like
-        "-accept=socket,host=localhost,port=5678;urp;"
+    /** Connect to a running (Star|Open)Office application
     */
-    private XMultiServiceFactory connectToOffice (String hostname, int portnumber)
+    private XMultiServiceFactory connectToOffice ()
     {
-        //  Set up connection string.
-        String sConnectString = "uno:socket,host=" + hostname + ",port=" + portnumber
-                + ";urp;StarOffice.ServiceManager";
-
-
         // connect to a running office and get the ServiceManager
         try
         {
-            //  Create a URL Resolver.
-            XMultiServiceFactory aLocalServiceManager =
-                    com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
-            XUnoUrlResolver aURLResolver = (XUnoUrlResolver) UnoRuntime.queryInterface (
-                XUnoUrlResolver.class,
-                aLocalServiceManager.createInstance ("com.sun.star.bridge.UnoUrlResolver")
-                );
+            com.sun.star.uno.XComponentContext xCmpContext = null;
+
+            // get the remote office component context
+            xCmpContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+            if( xCmpContext != null )
+                System.out.println("Connected to a running office ...");
+
+            // get the remote office service manager
+            com.sun.star.lang.XMultiComponentFactory xMCF =
+                xCmpContext.getServiceManager();
+
             return (XMultiServiceFactory) UnoRuntime.queryInterface (
-                XMultiServiceFactory.class,
-                aURLResolver.resolve (sConnectString));
+                XMultiServiceFactory.class, xMCF);
         }
 
         catch (Exception e)
         {
             if ( ! mbInitialized)
-            {
                 MessageArea.println ("Could not connect to office");
-                MessageArea.println ("Please start OpenOffice/StarOffice with "
-                    + "\"-accept=socket,host=" + msHostName
-                    +",port=" + mnPortNumber
-                    + ";urp;\"");
-            }
             else
                 MessageArea.print (".");
         }
         mbInitialized = true;
         return null;
     }
-
-
-
-    /// Default port number.
-    private int mnPortNumber = 2083;
-
-    /// Default host name.
-    private String msHostName = "localhost";
 
     /** Time in milliseconds between two attempts to connect to an Office
          application.
