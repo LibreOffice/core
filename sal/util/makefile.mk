@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:45:18 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 09:16:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,8 +117,11 @@ LIB3FILES=	\
 #LIB3FILES+=$(LB)$/systoolsunx.lib
 #.ENDIF # UNX
 
-
+.IF "$(GUI)" == "WNT"
 SHL1TARGET= $(TARGET)
+.ELSE
+SHL1TARGET= uno_$(TARGET)
+.ENDIF
 SHL1IMPLIB= i$(TARGET)
 
 SHL1VERSIONMAP=	$(TARGET).map
