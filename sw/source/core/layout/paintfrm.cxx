@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 07:58:07 $
+ *  last change: $Author: od $ $Date: 2002-09-03 14:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,6 +1032,16 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh )
 {
     if( !rRect.HasArea() )
         return;
+
+    /// OD 03.09.2002 #102450#
+    /// Assure that view shell (parameter <pSh>) exists, if the output device
+    /// is taken from this view shell --> no output device, no alignment.
+    /// Output device taken from view shell <pSh>, if <bFlyMetafile> not set.
+    if ( !bFlyMetafile && !pSh )
+    {
+        return;
+    }
+
     const OutputDevice *pOut = bFlyMetafile ?
                         pFlyMetafileOut : pSh->GetOut();
     Rectangle aTmp( rRect.SVRect() );
