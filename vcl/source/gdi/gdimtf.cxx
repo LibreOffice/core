@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:38:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,6 +496,14 @@ void GDIMetaFile::Play( OutputDevice* pOut, ULONG nPos )
         if( nPos > nCount )
             nPos = nCount;
 
+        // #i23407# Set backwards-compatible text language and layout mode
+        // This is necessary, since old metafiles don't even know of these
+        // recent add-ons. Newer metafiles must of course explicitely set
+        // those states.
+        pOut->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
+        pOut->SetLayoutMode( 0 );
+        pOut->SetDigitLanguage( 0 );
+
         for( ULONG nCurPos = GetCurPos(); nCurPos < nPos; nCurPos++ )
         {
             if( !Hook() )
@@ -509,6 +517,8 @@ void GDIMetaFile::Play( OutputDevice* pOut, ULONG nPos )
 
             pAction = (MetaAction*) Next();
         }
+
+        pOut->Pop();
     }
 }
 
@@ -546,6 +556,13 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
             pOut->SetRelativeMapMode( aDrawMap );
         else
             pOut->SetMapMode( aDrawMap );
+
+        // #i23407# Set backwards-compatible text language and layout mode
+        // This is necessary, since old metafiles don't even know of these
+        // recent add-ons. Newer metafiles must of course explicitely set
+        // those states.
+        pOut->SetLayoutMode( 0 );
+        pOut->SetDigitLanguage( 0 );
 
         Play( pOut, nPos );
 
