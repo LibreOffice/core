@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 10:06:53 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 11:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ namespace dbaui
     }
     // -----------------------------------------------------------------------------
     void insertRows(const Reference<XResultSet>& xSrcRs,
-                   const ::std::vector<sal_Int32>& _rvColumns,
+                   const ODatabaseExport::TPositions& _rvColumns,
                    const Reference<XPropertySet>& _xDestTable,
                    const Reference<XDatabaseMetaData>& _xMetaData,
                    sal_Bool bIsAutoIncrement,
@@ -259,12 +259,16 @@ namespace dbaui
         Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
         const ::rtl::OUString* pBegin = aSeq.getConstArray();
         const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-        for(;pBegin != pEnd;++pBegin)
+        for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
         {
             // create the sql string
-            aSql += ::dbtools::quoteName( aQuote,*pBegin);
-            aSql += aComma;
-            aValues += aPara;
+            if ( _rvColumns.end() != ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
+                ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i),::std::select1st<ODatabaseExport::TPositions::value_type>())) )
+            {
+                aSql += ::dbtools::quoteName( aQuote,*pBegin);
+                aSql += aComma;
+                aValues += aPara;
+            }
         }
 
         aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
@@ -303,7 +307,7 @@ namespace dbaui
                 ::std::vector<sal_Int32>::const_iterator aPosIter = _rvColumns.begin();
                 for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter,++i)
                 {
-                    sal_Int32 nPos = *aPosIter;
+                    sal_Int32 nPos = aPosIter->second;
                     if(nPos == CONTAINER_ENTRY_NOTFOUND)
                         continue;
                     if(i == 1 && bIsAutoIncrement)
@@ -732,7 +736,7 @@ namespace dbaui
                                         ::rtl::OUString sDestName;
                                         ::dbaui::composeTableName(xDestConnection->getMetaData(),xTable,sDestName,sal_False);
 
-                                        ::std::vector<sal_Int32> aColumnMapping = aWizard.GetColumnPositions();
+                                        ODatabaseExport::TPositions aColumnMapping = aWizard.GetColumnPositions();
                                         // create the sql stmt
                                         if ( !xSrcRs.is() ) // if not already exists
                                             xSrcRs = createResultSet(this,
@@ -1301,6 +1305,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2002/05/10 10:06:53  oj
+ *  #95472# showError mesg when table isn't any longer in container
+ *
  *  Revision 1.39  2002/04/16 17:01:04  hr
  *  #65293#: syntax
  *
