@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 12:26:19 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,26 +106,25 @@ ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
 {
 }
 
-
 //___________________________________________________________________
 
-sal_Bool LessDetectiveOp(const ScMyImpDetectiveOp& rDetOp1, const ScMyImpDetectiveOp& rDetOp2)
+sal_Bool ScMyImpDetectiveOp::operator<(const ScMyImpDetectiveOp& rDetOp)
 {
-    return (rDetOp1.nIndex < rDetOp2.nIndex);
+    return (nIndex < rDetOp.nIndex);
 }
 
 void ScMyImpDetectiveOpArray::Sort()
 {
-    ::std::sort( aDetectiveOpVec.begin(), aDetectiveOpVec.end(), LessDetectiveOp );
+    aDetectiveOpList.sort();
 }
 
 sal_Bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
 {
-    if( !aDetectiveOpVec.size() )
+    if( aDetectiveOpList.empty() )
         return sal_False;
-    ScMyImpDetectiveOpVec::iterator aItr = aDetectiveOpVec.begin();
+    ScMyImpDetectiveOpList::iterator aItr = aDetectiveOpList.begin();
     rDetOp = *aItr;
-    aDetectiveOpVec.erase( aItr );
+    aDetectiveOpList.erase( aItr );
     return sal_True;
 }
 

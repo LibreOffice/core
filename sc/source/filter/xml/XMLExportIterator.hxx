@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 13:15:03 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#ifndef __SGI_STL_LIST
+#include <stl/list>
+#endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -118,14 +121,17 @@ struct ScMyShape
     ScAddress   aAddress;
     ScAddress   aEndAddress;
     sal_Int32   nIndex;
+
+    sal_Bool operator<(const ScMyShape& aShape);
 };
 
+typedef std::list<ScMyShape>    ScMyShapeList;
 typedef std::vector<ScMyShape>  ScMyShapeVec;
 
 class ScMyShapesContainer : ScMyIteratorBase
 {
 private:
-    ScMyShapeVec                aShapeVec;
+    ScMyShapeList               aShapeList;
 protected:
     virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
@@ -145,14 +151,15 @@ struct ScMyMergedRange
     com::sun::star::table::CellRangeAddress aCellRange;
     sal_Int32                   nRows;
     sal_Bool                    bIsFirst;
+    sal_Bool                    operator<(const ScMyMergedRange& aRange);
 };
 
-typedef std::vector<ScMyMergedRange>    ScMyMergedRangeVec;
+typedef std::list<ScMyMergedRange>  ScMyMergedRangeList;
 
 class ScMyMergedRangesContainer : ScMyIteratorBase
 {
 private:
-    ScMyMergedRangeVec          aRangeVec;
+    ScMyMergedRangeList         aRangeList;
 protected:
     virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
@@ -179,14 +186,15 @@ struct ScMyAreaLink
     inline sal_Int32            GetRowCount() const { return aDestRange.EndRow - aDestRange.StartRow + 1; }
 
     sal_Bool                    Compare( const ScMyAreaLink& rAreaLink ) const;
+    sal_Bool                    operator<(const ScMyAreaLink& rAreaLink );
 };
 
-typedef ::std::vector< ScMyAreaLink > ScMyAreaLinkVec;
+typedef ::std::list< ScMyAreaLink > ScMyAreaLinkList;
 
 class ScMyAreaLinksContainer : ScMyIteratorBase
 {
 private:
-    ScMyAreaLinkVec             aAreaLinkVec;
+    ScMyAreaLinkList                aAreaLinkList;
 protected:
     virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
@@ -194,7 +202,7 @@ public:
     virtual                     ~ScMyAreaLinksContainer();
 
     inline void                 AddNewAreaLink( const ScMyAreaLink& rAreaLink )
-                                    { aAreaLinkVec.push_back( rAreaLink ); }
+                                    { aAreaLinkList.push_back( rAreaLink ); }
 
                                 ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
@@ -203,12 +211,12 @@ public:
 
 //==============================================================================
 
-typedef std::vector<com::sun::star::table::CellRangeAddress> ScMyEmptyDatabaseRangeVec;
+typedef std::list<com::sun::star::table::CellRangeAddress> ScMyEmptyDatabaseRangeList;
 
 class ScMyEmptyDatabaseRangesContainer : ScMyIteratorBase
 {
 private:
-    ScMyEmptyDatabaseRangeVec   aDatabaseVec;
+    ScMyEmptyDatabaseRangeList  aDatabaseList;
 protected:
     virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
@@ -231,12 +239,13 @@ struct ScMyDetectiveObj
     sal_Bool                                    bHasError;
 };
 
+typedef ::std::list< ScMyDetectiveObj > ScMyDetectiveObjList;
 typedef ::std::vector< ScMyDetectiveObj > ScMyDetectiveObjVec;
 
 class ScMyDetectiveObjContainer : ScMyIteratorBase
 {
 private:
-    ScMyDetectiveObjVec         aDetectiveObjVec;
+    ScMyDetectiveObjList            aDetectiveObjList;
 protected:
     virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
@@ -263,19 +272,20 @@ struct ScMyDetectiveOp
     sal_Int32                               nIndex;
 };
 
+typedef ::std::list< ScMyDetectiveOp > ScMyDetectiveOpList;
 typedef ::std::vector< ScMyDetectiveOp > ScMyDetectiveOpVec;
 
 class ScMyDetectiveOpContainer : ScMyIteratorBase
 {
 private:
-    ScMyDetectiveOpVec          aDetectiveOpVec;
+    ScMyDetectiveOpList         aDetectiveOpList;
 protected:
     virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 public:
                                 ScMyDetectiveOpContainer();
     virtual                     ~ScMyDetectiveOpContainer();
 
-    void                        AddOperation( ScDetOpType eOpType, const ScAddress& rPosition );
+    void                        AddOperation( ScDetOpType eOpType, const ScAddress& rPosition, sal_uInt32 nIndex );
 
                                 ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );

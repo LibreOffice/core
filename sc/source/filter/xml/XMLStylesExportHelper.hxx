@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef __SGI_STL_VECTOR
 #include <stl/vector>
+#endif
+#ifndef __SGI_STL_LIST
+#include <stl/list>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
@@ -148,11 +151,12 @@ struct ScMyRowFormatRange
     ScMyRowFormatRange();
 };
 
-typedef std::vector<ScMyRowFormatRange> ScMyRowFormatRangesVec;
+typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;
 
 class ScRowFormatRanges
 {
-    ScMyRowFormatRangesVec      aRowFormatRanges;
+    ScMyRowFormatRangesList     aRowFormatRanges;
+    sal_uInt32                  nSize;
 
 public:
     ScRowFormatRanges();
@@ -178,12 +182,12 @@ struct ScMyFormatRange
     ScMyFormatRange();
 };
 
-typedef std::vector<ScMyFormatRange>            ScMyFormatRangeAddresses;
-typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeVectorVec;
+typedef std::list<ScMyFormatRange>          ScMyFormatRangeAddresses;
+typedef std::vector<ScMyFormatRangeAddresses*>  ScMyFormatRangeListVec;
 
 class ScFormatRangeStyles
 {
-    ScMyFormatRangeVectorVec    aTables;
+    ScMyFormatRangeListVec      aTables;
     ScMyOUStringVec             aStyleNames;
     ScMyOUStringVec             aAutoStyleNames;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-10 17:27:32 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,17 @@ ScMyColumnRowGroup::ScMyColumnRowGroup()
 {
 }
 
+sal_Bool ScMyColumnRowGroup::operator<(const ScMyColumnRowGroup& rGroup)
+{
+    if (rGroup.nField > nField)
+        return sal_True;
+    else
+        if (rGroup.nField == nField && rGroup.nLevel > nLevel)
+            return sal_True;
+        else
+            return sal_False;
+}
+
 ScMyOpenCloseColumnRowGroup::ScMyOpenCloseColumnRowGroup(ScXMLExport& rTempExport, const sal_Char *pName)
     : rExport(rTempExport),
     sName(rtl::OUString::createFromAscii(pName)),
@@ -123,17 +134,17 @@ void ScMyOpenCloseColumnRowGroup::AddGroup(const ScMyColumnRowGroup& aGroup, con
 sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
 {
     sal_Bool bGroupStart(sal_False);
-    if (aTableStart.size())
+    if (!aTableStart.empty())
     {
-        if (aTableStart[0].nField == nField)
+        if (aTableStart.begin()->nField == nField)
             bGroupStart = sal_True;
     }
     return bGroupStart;
 }
 
-void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup* pGroup)
+void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup& rGroup)
 {
-    if (!pGroup->bDisplay)
+    if (!rGroup.bDisplay)
         rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_false);
     rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
     rExport.GetDocHandler()->startElement( sName, rExport.GetXAttrList());
@@ -148,7 +159,7 @@ void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
     {
         if (aItr->nField == nField)
         {
-            OpenGroup(aItr);
+            OpenGroup(*aItr);
             aItr = aTableStart.erase(aItr);
         }
         else
@@ -159,9 +170,9 @@ void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
 sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupEnd(const sal_Int32 nField)
 {
     sal_Bool bGroupEnd(sal_False);
-    if (aTableEnd.size())
+    if (!aTableEnd.empty())
     {
-        if (aTableEnd[0] == nField)
+        if (*(aTableEnd.begin()) == nField)
             bGroupEnd = sal_True;
     }
     return bGroupEnd;
@@ -189,29 +200,18 @@ void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
     }
 }
 
-sal_Bool LessGroup(const ScMyColumnRowGroup& aGroup1, const ScMyColumnRowGroup& aGroup2)
-{
-    if (aGroup1.nField < aGroup2.nField)
-        return sal_True;
-    else
-        if (aGroup1.nField == aGroup2.nField && aGroup1.nLevel < aGroup2.nLevel)
-            return sal_True;
-        else
-            return sal_False;
-}
-
 sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
 {
     sal_Int32 maximum(-1);
-    for (sal_Int32 i = 0; i < aTableEnd.size(); i++)
-        if (aTableEnd[i] > maximum)
-            maximum = aTableEnd[i];
+    for (ScMyFieldGroupVec::iterator i = aTableEnd.begin(); i != aTableEnd.end(); i++)
+        if (*i > maximum)
+            maximum = *i;
     return maximum;
 }
 
 void ScMyOpenCloseColumnRowGroup::Sort()
 {
-    std::sort(aTableStart.begin(), aTableStart.end(), LessGroup);
-    std::sort(aTableEnd.begin(), aTableEnd.end());
+    aTableStart.sort();
+    aTableEnd.sort();
 }
 

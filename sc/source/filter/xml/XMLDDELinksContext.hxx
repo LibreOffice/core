@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <xmloff/xmlictxt.hxx>
 #endif
 
-#ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#ifndef __SGI_STL_LIST
+#include <stl/list>
 #endif
 
 class ScXMLImport;
@@ -100,7 +100,7 @@ struct ScDDELinkCell
     sal_Bool bEmpty;
 };
 
-typedef std::vector<ScDDELinkCell> ScDDELinkCells;
+typedef std::list<ScDDELinkCell> ScDDELinkCells;
 
 class ScXMLDDELinkContext : public SvXMLImportContext
 {

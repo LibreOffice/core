@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-14 18:15:26 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include "detdata.hxx"
 #endif
 
+#ifndef __SGI_STL_LIST
+#include <stl/list>
+#endif
+
 class ScXMLImport;
 
 
@@ -103,21 +107,22 @@ struct ScMyImpDetectiveOp
     sal_Int32                   nIndex;
 
     inline                      ScMyImpDetectiveOp() : nIndex( -1 ) {}
+    sal_Bool                    operator<(const ScMyImpDetectiveOp& rDetOp);
 };
 
-typedef ::std::vector< ScMyImpDetectiveOp > ScMyImpDetectiveOpVec;
+typedef ::std::list< ScMyImpDetectiveOp > ScMyImpDetectiveOpList;
 
 class ScMyImpDetectiveOpArray
 {
 private:
-    ScMyImpDetectiveOpVec       aDetectiveOpVec;
+    ScMyImpDetectiveOpList      aDetectiveOpList;
 
 public:
     inline                      ScMyImpDetectiveOpArray() :
-                                    aDetectiveOpVec()   {}
+                                    aDetectiveOpList()  {}
 
     inline void                 AddDetectiveOp( const ScMyImpDetectiveOp& rDetOp )
-                                    { aDetectiveOpVec.push_back( rDetOp ); }
+                                    { aDetectiveOpList.push_back( rDetOp ); }
 
     void                        Sort();
     sal_Bool                    GetFirstOp( ScMyImpDetectiveOp& rDetOp );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,11 +213,11 @@ void ScXMLDDELinkContext::EndElement()
         {
             if (pMatrix)
             {
-                sal_Int32 nSize = aDDELinkTable.size();
-                DBG_ASSERT(nColumns * nRows == nSize, "there is a wrong cells count");
+                DBG_ASSERT(nColumns * nRows == aDDELinkTable.size(), "there is a wrong cells count");
                 sal_Int32 nCol(0);
                 sal_Int32 nRow(-1);
-                for (sal_Int32 nIndex = 0; nIndex < nSize; nIndex++)
+                sal_Int32 nIndex(0);
+                for (ScDDELinkCells::iterator aItr = aDDELinkTable.begin(); aItr != aDDELinkTable.end(); aItr++)
                 {
                     if (nIndex % nColumns == 0)
                     {
@@ -226,10 +226,11 @@ void ScXMLDDELinkContext::EndElement()
                     }
                     else
                         nCol++;
-                    String sValue(aDDELinkTable[nIndex].sValue);
+                    String sValue(aItr->sValue);
                     GetScImport().GetDocument()->SetDdeLinkResult(pMatrix, nCol, nRow, sValue,
-                        aDDELinkTable[nIndex].fValue, aDDELinkTable[nIndex].bString,
-                        aDDELinkTable[nIndex].bEmpty);
+                        aItr->fValue, aItr->bString,
+                        aItr->bEmpty);
+                    nIndex++;
                 }
             }
         }

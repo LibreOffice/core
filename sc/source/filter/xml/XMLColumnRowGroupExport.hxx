@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:10:23 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _SC_XMLCOLUMNROWGROUPEXPORT_HXX
 #define _SC_XMLCOLUMNROWGROUPEXPORT_HXX
 
-#ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#ifndef __SGI_STL_LIST
+#include <stl/list>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
@@ -80,10 +80,11 @@ struct ScMyColumnRowGroup
     sal_Bool    bDisplay;
 
     ScMyColumnRowGroup();
+    sal_Bool operator< (const ScMyColumnRowGroup& rGroup);
 };
 
-typedef std::vector <ScMyColumnRowGroup> ScMyColumnRowGroupVec;
-typedef std::vector <sal_Int32> ScMyFieldGroupVec;
+typedef std::list <ScMyColumnRowGroup> ScMyColumnRowGroupVec;
+typedef std::list <sal_Int32> ScMyFieldGroupVec;
 
 class ScXMLExport;
 class ScMyOpenCloseColumnRowGroup
@@ -94,7 +95,7 @@ class ScMyOpenCloseColumnRowGroup
     ScMyFieldGroupVec           aTableEnd;
     sal_Bool                    bNamespaced;
 
-    void OpenGroup(const ScMyColumnRowGroup* pGroup);
+    void OpenGroup(const ScMyColumnRowGroup& rGroup);
     void CloseGroup();
 public:
     ScMyOpenCloseColumnRowGroup(ScXMLExport& rExport, const sal_Char *pName);

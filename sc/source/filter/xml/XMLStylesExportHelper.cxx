@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
+ *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,8 @@ ScMyRowFormatRange::ScMyRowFormatRange()
 }
 
 ScRowFormatRanges::ScRowFormatRanges()
-    : aRowFormatRanges()
+    : aRowFormatRanges(),
+    nSize(0)
 {
 }
 
@@ -471,20 +472,23 @@ ScRowFormatRanges::~ScRowFormatRanges()
 void ScRowFormatRanges::Clear()
 {
     aRowFormatRanges.clear();
+    nSize = 0;
 }
 
 void ScRowFormatRanges::AddRange(const ScMyRowFormatRange& aFormatRange)
 {
     aRowFormatRanges.push_back(aFormatRange);
+    nSize++;
 }
 
 sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
 {
-    ScMyRowFormatRangesVec::iterator aItr = aRowFormatRanges.begin();
+    ScMyRowFormatRangesList::iterator aItr = aRowFormatRanges.begin();
     if (aItr != aRowFormatRanges.end())
     {
         aFormatRange = (*aItr);
         aRowFormatRanges.erase(aItr);
+        nSize--;
         return sal_True;
     }
     return sal_False;
@@ -492,7 +496,7 @@ sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
 
 sal_Int32 ScRowFormatRanges::GetMaxRows()
 {
-    ScMyRowFormatRangesVec::iterator aItr = aRowFormatRanges.begin();
+    ScMyRowFormatRangesList::iterator aItr = aRowFormatRanges.begin();
     sal_Int32 nMaxRows = MAXROW + 1;
     if (aItr != aRowFormatRanges.end())
         while (aItr != aRowFormatRanges.end())
@@ -508,7 +512,7 @@ sal_Int32 ScRowFormatRanges::GetMaxRows()
 
 sal_Int32 ScRowFormatRanges::GetSize()
 {
-    return aRowFormatRanges.size();
+    return nSize;
 }
 
 sal_Bool LessRowFormatRange (const ScMyRowFormatRange& aRange1, const ScMyRowFormatRange& aRange2)
@@ -518,7 +522,7 @@ sal_Bool LessRowFormatRange (const ScMyRowFormatRange& aRange1, const ScMyRowFor
 
 void ScRowFormatRanges::Sort()
 {
-    std::sort(aRowFormatRanges.begin(), aRowFormatRanges.end(), LessRowFormatRange);
+    aRowFormatRanges.sort(LessRowFormatRange);
 }
 
 // ============================================================================
@@ -544,7 +548,13 @@ ScFormatRangeStyles::~ScFormatRangeStyles()
         delete *i;
         i++;
     }
-    ScMyFormatRangeVectorVec::iterator j = aTables.begin();
+    i = aAutoStyleNames.begin();
+    while (i != aAutoStyleNames.end())
+    {
+        delete *i;
+        i++;
+    }
+    ScMyFormatRangeListVec::iterator j = aTables.begin();
     while (j != aTables.end())
     {
         delete *j;
@@ -608,7 +618,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
         sal_Bool bFound(sal_False);
         while (!bFound && i < aStyleNames.size())
         {
-            if (aStyleNames.at(i)->equals(rString))
+            if (aStyleNames[i]->equals(rString))
                 bFound = sal_True;
             else
                 i++;
@@ -623,7 +633,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
             i = 0;
             while (!bFound && i < aAutoStyleNames.size())
             {
-                if (aAutoStyleNames.at(i)->equals(rString))
+                if (aAutoStyleNames[i]->equals(rString))
                     bFound = sal_True;
                 else
                     i++;
@@ -772,8 +782,8 @@ void ScFormatRangeStyles::Sort()
 {
     sal_Int16 nTables = aTables.size();
     for (sal_Int16 i = 0; i < nTables; i++)
-        if (aTables[i]->size() > 1)
-            std::sort(aTables[i]->begin(), aTables[i]->end(), LessFormatRange);
+        if (!aTables[i]->empty())
+            aTables[i]->sort(LessFormatRange);
 }
 
 //===========================================================================
@@ -839,14 +849,15 @@ sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, c
 sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField)
 {
     if (nField < aTables[nTable].size())
-        return aTables[nTable].at(nField);
+        return aTables[nTable][nField];
     else
-        return aTables[nTable].at(aTables[nTable].size() - 1);
+        return aTables[nTable][aTables[nTable].size() - 1];
 }
 
 void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex)
 {
-    aTables[nTable].at(nField) = nStringIndex;
+    DBG_ASSERT(aTables[nTable].size() > nField, "wrong field index");
+    aTables[nTable][nField] = nStringIndex;
 }
 
 rtl::OUString* ScColumnRowStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nField)
