@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:37:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 #pragma hdrstop
 
 #ifndef _SV_MSGBOX_HXX //autogen
@@ -93,6 +97,12 @@
 #include "table.hrc"
 #include "convert.hrc"
 #include "swabstdlg.hxx" //CHINA001
+
+namespace swui
+{
+    SwAbstractDialogFactory * GetFactory();
+}
+
 //keep the state of the buttons on runtime
 static int nSaveButtonState = -1; // 0: tab, 1: semicolon, 2: paragraph, 3: other, -1: not yet used
 static sal_Bool bIsKeepColumn = sal_True;
@@ -255,7 +265,7 @@ SwConvertTableDlg:: ~SwConvertTableDlg()
 IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
 {
     //CHINA001 SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
     AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell,ResId( DLG_AUTOFMT_TABLE ), FALSE, pTAutoFmt);
