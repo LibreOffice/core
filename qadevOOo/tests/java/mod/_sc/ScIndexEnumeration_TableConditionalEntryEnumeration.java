@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_TableConditionalEntryEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:20 $
+ *  last change:$Date: 2003-02-03 16:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 import util.utils;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCase {
     XSpreadsheetDocument xSpreadsheetDoc = null;
 
@@ -125,11 +128,15 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
             UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
         try {
-            oSheet = (XSpreadsheet)oIndexAccess.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexAccess.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't get a spreadsheet", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
