@@ -5,7 +5,7 @@
   <node oor:name="States">
    <node oor:name="private:resource/toolbar/macrobar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
-     <value>259,0</value>
+     <value>0,1</value>
     </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
