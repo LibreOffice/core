@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:22:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Zadejte, prosím, název vytvářeného objektu:";
         Text[ hebrew ] = "Bitte geben Sie einen Namen für das anzulegende Object an:";
         Text[ hindi ] = "कृपया उत्पन्न करनेवाला वस्तु केलिए एक नाम को प्रविष्ट कीजिए:";
+        Text[ slovak ] = "Prosím zadajte názov vytváraného objektu:";
     };
 
     FixedText FT_CATALOG
@@ -143,6 +144,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Katalog";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "~सूचीपत्र";
+        Text[ slovak ] = "~Katalóg";
     };
     ComboBox ET_CATALOG
     {
@@ -172,7 +174,7 @@ ModalDialog DLG_SAVE_AS
         Text[ swedish ] = "~Schema";
         Text[ polish ] = "~Schemat";
         Text[ portuguese_brazilian ] = "~Esquema";
-        Text[ japanese ] = "ひな型(~S)";
+        Text[ japanese ] = "スキーマ(~S)";
         Text[ korean ] = "구성표(~S)";
         Text[ chinese_simplified ] = "略图(~S)";
         Text[ chinese_traditional ] = "略圖(~S)";
@@ -184,6 +186,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Schéma";
         Text[ hebrew ] = "~Schema";
         Text[ hindi ] = "~स्कीमा";
+        Text[ slovak ] = "~Schéma";
     };
     ComboBox ET_SCHEMA
     {
@@ -257,6 +260,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Název tabulky";
         Text[ hebrew ] = "~Name der Tabelle";
         Text[ hindi ] = "~सारणी नाम";
+        Text[ slovak ] = "Názov ~tabuľky";
     };
     String STR_VW_LABEL
     {
@@ -286,6 +290,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Název pohledu";
         Text[ hebrew ] = "~Name der Tabellensicht";
         Text[ hindi ] = "~सारणी दृश्य का नाम";
+        Text[ slovak ] = "~Názov pohľadu na tabuľku";
     };
     String STR_QRY_LABEL
     {
@@ -315,6 +320,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Název dotazu";
         Text[ hebrew ] = "~Name der Abfrage";
         Text[ hindi ] = "~जानकारी नाम";
+        Text[ slovak ] = "Názov ~dotazu";
     };
     String STR_FRM_LABEL
     {
@@ -344,6 +350,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Název formuláře";
         Text[ hebrew ] = "~Name des Formulars";
         Text[ hindi ] = "~फ़ॉर्म का नाम";
+        Text[ slovak ] = "Názov f~ormulára";
     };
     String STR_RPT_LABEL
     {
@@ -373,6 +380,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Název zprávy";
         Text[ hebrew ] = "~Name des Berichts";
         Text[ hindi ] = "~रिपोर्ट नाम";
+        Text[ slovak ] = "Názov sp~rávy";
     };
     String STR_OBJECT_EXISTS_ALREADY
     {
@@ -403,6 +411,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Název '$Name: not supported by cvs2svn $' již existuje.\nZadejte, prosím, jiný název.";
         Text[ hebrew ] = "Der Name '$name$:  $' existiert bereits.\nBitte geben Sie einen neuen Namen an.";
         Text[ hindi ] = "'$Name: not supported by cvs2svn $' नाम पहिले से ही अस्तित्व में है ।\nकृपया दूसरा नाम को प्रविष्ट कीजिए ।";
+        Text[ slovak ] = "Názov '$Name: not supported by cvs2svn $' už existuje\nProsím zadajte iný názov.";
     };
     String STR_OBJECT_EXISTS_ALREADY_OVERWRITE
     {
@@ -433,6 +442,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Název '$Name: not supported by cvs2svn $' již existuje.\nChcete jej přepsat?";
         Text[ hebrew ] = "Der Name '$name$:  $' existiert bereits.\nWollen Sie es überschreiben?";
         Text[ hindi ] = "'$Name: not supported by cvs2svn $' नाम पहिले से ही अस्तित्व में है ।\nआप ओवररइट् करना चाहते है ?";
+        Text[ slovak ] = "Názov '$Name: not supported by cvs2svn $' už existuje\nChcete ho prepísať?";
     };
     String STR_TITLE_PASTE_AS
     {
@@ -462,6 +472,7 @@ ModalDialog DLG_SAVE_AS
         Text[ czech ] = "Vložit jako";
         Text[ hebrew ] = "Einfügen als";
         Text[ hindi ] = "जोड़ो जैसे";
+        Text[ slovak ] = "Vložiť ako";
     };
     Text [ portuguese_brazilian ] = "Salvar como" ;
     Text [ swedish ] = "Spara som" ;
@@ -486,7 +497,10 @@ ModalDialog DLG_SAVE_AS
     Text[ czech ] = "Uložit jako";
     Text[ hebrew ] = "‮שמירה בשם‬";
     Text[ hindi ] = "संचित करो जैसे";
+    Text[ slovak ] = "Uložiť ako";
 };
+
+
 
 
 
