@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:54:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 /** Specify the document service of the text module.
  */
-service TextDocument
+published service TextDocument
 {
     /** Provides the functionality of such text document. */
     service GenericTextDocument;
