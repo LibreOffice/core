@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: thb $ $Date: 2002-05-17 17:40:05 $
+#   last change: $Author: thb $ $Date: 2002-06-07 12:13:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ CXXFILES =								\
     AccessibleSelectionBase.cxx			\
     AccessibleShapeTreeInfo.cxx			\
     AccessibleTextHelper.cxx			\
+    AccessibleStaticTextBase.cxx		\
     AccessibleParaManager.cxx			\
     AccessibleEditableTextPara.cxx		\
     AccessibleImageBullet.cxx			\
@@ -112,6 +113,7 @@ SLOFILES =	\
     $(SLO)$/AccessibleShapeInfo.obj				\
     $(SLO)$/AccessibleShapeTreeInfo.obj			\
     $(SLO)$/AccessibleTextHelper.obj			\
+    $(SLO)$/AccessibleStaticTextBase.obj		\
     $(SLO)$/AccessibleParaManager.obj			\
     $(SLO)$/AccessibleEditableTextPara.obj		\
     $(SLO)$/AccessibleImageBullet.obj			\

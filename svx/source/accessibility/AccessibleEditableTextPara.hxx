@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
+ *  last change: $Author: thb $ $Date: 2002-06-07 12:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,30 +280,6 @@ namespace accessibility
 
         static Rectangle LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder );
 
-    private:
-
-        // declared, but not defined
-        AccessibleEditableTextPara( const AccessibleEditableTextPara& );
-        AccessibleEditableTextPara& operator= ( const AccessibleEditableTextPara& );
-
-        // syntactic sugar for FireEvent
-        void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
-        void LostPropertyEvent( const ::com::sun::star::uno::Any& rOldValue, const sal_Int16 nEventId ) const;
-
-        /** Query the visibility state
-
-            @attention This method does not lock the SolarMutex,
-            leaving that to the calling code. This is because only
-            there potential deadlock situations can be resolved. Thus,
-            make sure SolarMutex is locked when calling this.
-
-            @return the visibility state. Per definition, a defunc object is no longer visible
-         */
-        sal_Bool IsVisible() const;
-
-        // retrieve text interface for given paragraph index
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleText > GetParaInterface( sal_Int32 nIndex );
-
         SvxEditSourceAdapter& GetEditSource() const throw (::com::sun::star::uno::RuntimeException);
 
         /** Query the SvxTextForwarder for EditEngine access.
@@ -341,6 +317,30 @@ namespace accessibility
             make sure SolarMutex is locked when calling this.
          */
         SvxAccessibleTextEditViewAdapter& GetEditViewForwarder( sal_Bool bCreate = sal_False ) const throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+
+        // declared, but not defined
+        AccessibleEditableTextPara( const AccessibleEditableTextPara& );
+        AccessibleEditableTextPara& operator= ( const AccessibleEditableTextPara& );
+
+        // syntactic sugar for FireEvent
+        void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
+        void LostPropertyEvent( const ::com::sun::star::uno::Any& rOldValue, const sal_Int16 nEventId ) const;
+
+        /** Query the visibility state
+
+            @attention This method does not lock the SolarMutex,
+            leaving that to the calling code. This is because only
+            there potential deadlock situations can be resolved. Thus,
+            make sure SolarMutex is locked when calling this.
+
+            @return the visibility state. Per definition, a defunc object is no longer visible
+         */
+        sal_Bool IsVisible() const;
+
+        // retrieve text interface for given paragraph index
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleText > GetParaInterface( sal_Int32 nIndex );
 
         /// Do we have children? This is the case for image bullets
         sal_Bool HaveChildren();

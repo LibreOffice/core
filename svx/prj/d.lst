@@ -526,6 +526,7 @@ hedabu: ..\inc\unotext.hxx %_DEST%\inc%_EXT%\svx\unotext.hxx
 hedabu: ..\inc\unofield.hxx %_DEST%\inc%_EXT%\svx\unofield.hxx
 hedabu: ..\source\inc\mutxhelp.hxx %_DEST%\inc%_EXT%\svx\mutxhelp.hxx
 hedabu: ..\inc\AccessibleTextHelper.hxx %_DEST%\inc%_EXT%\svx\AccessibleTextHelper.hxx
+hedabu: ..\inc\AccessibleStaticTextBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleStaticTextBase.hxx
 hedabu: ..\inc\unoviwed.hxx %_DEST%\inc%_EXT%\svx\unoviwed.hxx
 hedabu: ..\inc\unoviwou.hxx %_DEST%\inc%_EXT%\svx\unoviwou.hxx
 hedabu: ..\inc\unoedsrc.hxx %_DEST%\inc%_EXT%\svx\unoedsrc.hxx
