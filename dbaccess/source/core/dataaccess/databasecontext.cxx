@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:08:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,11 +359,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         OSL_ENSURE(0,"Exception catched!");
     }
 
-    Reference<XImporter> xImporter(m_xServiceManager->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.DBFilter"))),UNO_QUERY);
     Reference< XInterface > xExistent = *(new ODatabaseSource(*this, _rName, m_xServiceManager,this));
-    xImporter->setTargetDocument(Reference<XComponent>(xExistent,UNO_QUERY));
-
-    Reference<XFilter> xFilter(xImporter,UNO_QUERY);
 
     Sequence< PropertyValue > aArgs(1);
     aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
@@ -371,8 +367,6 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
 
     Reference<XModel> xModel(xExistent,UNO_QUERY);
     xModel->attachResource(_sURL,aArgs);
-
-    xFilter->filter(aArgs);
 
     // check if we have any session persistent properties to initialize the new object with
     if ( m_aDatasourceProperties.end() != m_aDatasourceProperties.find(_sURL) )
