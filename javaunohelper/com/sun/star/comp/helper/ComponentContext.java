@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentContext.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-21 14:48:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 package com.sun.star.comp.helper;
 
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.Any;
 
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -129,14 +130,10 @@ public class ComponentContext implements XComponentContext, XComponent
         {
             if (o instanceof ComponentContextEntry)
             {
-                m_xSMgr = (XMultiComponentFactory)UnoRuntime.queryInterface(
-                    XMultiComponentFactory.class, ((ComponentContextEntry)o).m_value );
+                o = ((ComponentContextEntry)o).m_value;
             }
-            else
-            {
-                m_xSMgr = (XMultiComponentFactory)UnoRuntime.queryInterface(
-                    XMultiComponentFactory.class, o );
-            }
+            m_xSMgr = (XMultiComponentFactory)UnoRuntime.queryInterface(
+                XMultiComponentFactory.class, o );
         }
         if (m_xSMgr != null)
         {
@@ -187,8 +184,9 @@ public class ComponentContext implements XComponentContext, XComponent
                         }
                         else
                         {
-                            XSingleComponentFactory xCompFac = (XSingleComponentFactory)UnoRuntime.queryInterface(
-                                XSingleComponentFactory.class, entry.m_lateInit );
+                            XSingleComponentFactory xCompFac =
+                                (XSingleComponentFactory)UnoRuntime.queryInterface(
+                                    XSingleComponentFactory.class, entry.m_lateInit );
                             if (xCompFac != null)
                             {
                                 xInstance = xCompFac.createInstanceWithContext( this );
@@ -246,7 +244,7 @@ public class ComponentContext implements XComponentContext, XComponent
         }
         else
         {
-            return null;
+            return Any.VOID;
         }
     }
     //______________________________________________________________________________________________
@@ -280,20 +278,13 @@ public class ComponentContext implements XComponentContext, XComponent
             String name = (String)keys.nextElement();
             if (! name.equals( SMGR_NAME ))
             {
-                XComponent xComp;
-
                 Object o = m_table.get( name );
                 if (o instanceof ComponentContextEntry)
                 {
-                    xComp = (XComponent)UnoRuntime.queryInterface(
-                        XComponent.class, ((ComponentContextEntry)o).m_value );
-                }
-                else // direct value in
-                {
-                    xComp = (XComponent)UnoRuntime.queryInterface(
-                        XComponent.class, o );
+                    o = ((ComponentContextEntry)o).m_value;
                 }
 
+                XComponent xComp = (XComponent)UnoRuntime.queryInterface( XComponent.class, o );
                 if (xComp != null)
                 {
                     if (name.equals( TDMGR_NAME ))

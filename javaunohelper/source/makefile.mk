@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-11 16:34:05 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:23:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,15 +59,14 @@
 #
 #
 #*************************************************************************
-
 PRJ=..
 
-PRJNAME=		juhelper
-TARGET=			juh
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+PRJNAME=javaunohelper
+TARGET=juh
+USE_DEFFILE=TRUE
+NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=TRUE
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -77,58 +76,80 @@ BOOTSTRAP_SERVICE=TRUE
 
 # ------------------------------------------------------------------
 
-UNOUCRDEP=	$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
-UNOUCROUT=	$(OUT)$/inc$/comprehensive
-INCPRE+=	$(OUT)$/inc$/comprehensive
-CPPUMAKERFLAGS += -C
-.ELSE
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc
-.ENDIF
+UNOUCROUT=$(OUT)$/inc$/comprehensive
+INCPRE+=$(OUT)$/inc$/comprehensive
+CPPUMAKERFLAGS+=-C
 
 UNOTYPES= \
-        com.sun.star.container.XHierarchicalNameAccess	\
-        com.sun.star.loader.XImplementationLoader	\
+        com.sun.star.container.XHierarchicalNameAccess		\
+        com.sun.star.loader.XImplementationLoader		\
         com.sun.star.registry.XRegistryKey			\
         com.sun.star.registry.XSimpleRegistry			\
         com.sun.star.beans.XPropertySet				\
-        com.sun.star.lang.IllegalArgumentException	\
+        com.sun.star.lang.IllegalArgumentException		\
         com.sun.star.lang.XTypeProvider				\
         com.sun.star.lang.XServiceInfo				\
-        com.sun.star.lang.XMultiServiceFactory		\
+        com.sun.star.lang.XMultiServiceFactory			\
         com.sun.star.lang.XMultiComponentFactory		\
-        com.sun.star.lang.XSingleServiceFactory		\
-            com.sun.star.lang.XSingleComponentFactory   \
-        com.sun.star.uno.TypeClass					\
-        com.sun.star.uno.XWeak						\
+        com.sun.star.lang.XSingleServiceFactory			\
+        com.sun.star.lang.XSingleComponentFactory   		\
+        com.sun.star.uno.TypeClass				\
+        com.sun.star.uno.XWeak					\
         com.sun.star.uno.XAggregation				\
-            com.sun.star.uno.XComponentContext          \
-        com.sun.star.lang.XInitialization           \
+            com.sun.star.uno.XComponentContext          		\
+        com.sun.star.lang.XInitialization           		\
         com.sun.star.lang.XComponent
 
 SLOFILES= \
-        $(SLO)$/javaunohelper.obj		\
+        $(SLO)$/javaunohelper.obj				\
+        $(SLO)$/bootstrap.obj					\
+        $(SLO)$/preload.obj
+
+# ------------------------------------------------------------------
+
+LIB1TARGET=$(SLB)$/$(SHL1TARGET).lib
+LIB1OBJFILES=\
+        $(SLO)$/javaunohelper.obj				\
         $(SLO)$/bootstrap.obj
 
-SHL1TARGET=	$(TARGET)
+SHL1TARGET=juhx
 
 SHL1STDLIBS= \
         $(JVMACCESSLIB)		\
         $(SALHELPERLIB)		\
-        $(CPPUHELPERLIB)	\
+        $(SALLIB)		\
         $(CPPULIB)		\
-        $(SALLIB)
+        $(CPPUHELPERLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(SHL1TARGET)
+SHL1LIBS=$(LIB1TARGET)
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+DEF1NAME=$(SHL1TARGET)
+DEF1EXPORTFILE=exports.dxp
+
+# ------------------------------------------------------------------
+
+LIB2TARGET=$(SLB)$/$(SHL2TARGET).lib
+LIB2OBJFILES=\
+        $(SLO)$/preload.obj
+
+SHL2TARGET=juh
+
+SHL2STDLIBS= \
+        $(SALLIB)
+
+SHL2DEPN=
+SHL2IMPLIB=i$(SHL2TARGET)
+SHL2LIBS=$(LIB2TARGET)
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+
+DEF2NAME=$(SHL2TARGET)
+DEF2EXPORTFILE=exports.dxp
 
 # --- Targets ------------------------------------------------------
 

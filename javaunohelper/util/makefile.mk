@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jl $ $Date: 2002-10-25 06:42:43 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:23:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,13 @@ JARCLASSDIRS	= \
 JARTARGET		= $(TARGET).jar
 JARCOMPRESS		= TRUE
 
+# Special work necessary for building java reference with javadoc.
+# The source of puplic APIs must be delivered and used later in the
+# odk module.
+ZIP1TARGET=$(TARGET)_src
+ZIP1FLAGS=-u -r
+ZIP1DIR=$(PRJ)
+ZIP1LIST=com -x "*makefile.mk"
 
 # --- Targets ------------------------------------------------------
     

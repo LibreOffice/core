@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,6 @@ Reference< XInterface > SingletonFactory::createInstanceWithContext(
 {
     sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
     Any arg( makeAny( handle ) );
-    OSL_ENSURE( 0, "unexpected: getting vm service using explicit parameters!" );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         OUSTR("com.sun.star.java.JavaVirtualMachine"), Sequence< Any >( &arg, 1 ), xContext );
 }
@@ -137,7 +136,6 @@ Reference< XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
     Sequence< Any > const & args, Reference< XComponentContext > const & xContext )
     throw (Exception)
 {
-    OSL_ENSURE( 0, "unexpected: getting vm service using explicit parameters!" );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         OUSTR("com.sun.star.java.JavaVirtualMachine"), args, xContext );
 }

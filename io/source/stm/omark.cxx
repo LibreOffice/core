@@ -2,9 +2,9 @@
  *
  *  $RCSfile: omark.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2002-09-18 10:02:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 12:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,6 +760,12 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
             BufferSizeExceededException,
             RuntimeException)
 {
+    if ( nBytesToSkip < 0 )
+        throw BufferSizeExceededException(
+            ::rtl::OUString::createFromAscii( "precondition not met: XInputStream::skipBytes: non-negative integer required!" ),
+            *this
+        );
+
     // this method is blocking
     sal_Int32 nRead;
     Sequence<sal_Int8> seqDummy( nBytesToSkip );
