@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2001-03-20 10:43:03 $
+ *  last change: $Author: th $ $Date: 2001-07-25 11:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,15 +179,15 @@ void SAL_CALL SalYieldMutex::release()
         OMutex::release();
     else
     {
-        // If we don't call these message, the Output from the
-        // Java clients doesn't come in the right order
-        GdiFlush();
-
         SalData* pSalData = GetSalData();
         if ( pSalData->mnAppThreadId != nThreadId )
         {
             if ( mnCount == 1 )
             {
+                // If we don't call these message, the Output from the
+                // Java clients doesn't come in the right order
+                GdiFlush();
+
                 mpInstData->mpSalWaitMutex->acquire();
                 if ( mpInstData->mnYieldWaitCount )
                     ImplPostMessage( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
@@ -311,7 +311,10 @@ void ImplSalYieldMutexRelease()
 {
     SalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( pInst )
+    {
+        GdiFlush();
         pInst->maInstData.mpSalYieldMutex->release();
+    }
 }
 
 // -----------------------------------------------------------------------
