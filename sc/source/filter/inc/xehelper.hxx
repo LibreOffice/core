@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:58:51 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,20 +150,26 @@ public:
     explicit                    XclExpHFConverter( const XclExpRoot& rRoot );
 
     /** Generates the header/footer string from the passed edit engine text objects. */
-    String                      GenerateString(
-                                    const EditTextObject* pLeftObj,
-                                    const EditTextObject* pCenterObj,
-                                    const EditTextObject* pRightObj );
+    void                GenerateString(
+                            const EditTextObject* pLeftObj,
+                            const EditTextObject* pCenterObj,
+                            const EditTextObject* pRightObj );
+
+    /** Returns the last generated header/footer string. */
+    inline const String& GetHFString() const { return maHFString; }
+    /** Returns the total height of the last generated header/footer in twips. */
+    inline sal_Int32    GetTotalHeight() const { return mnTotalHeight; }
 
 private:
     /** Converts the text object contents and stores it in the passed string. */
     void                        AppendPortion(
-                                    String& rHFString,
                                     const EditTextObject* pTextObj,
                                     sal_Unicode cPortionCode );
 
 private:
     EditEngine&                 mrEE;           /// The header/footer edit engine.
+    String              maHFString;     /// The last generated header/footer string.
+    sal_Int32           mnTotalHeight;  /// Total height of the last header/footer (twips).
 };
 
 
