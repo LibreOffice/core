@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 10:37:02 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ russian ] = "Οπθβÿηκΰ ξςνξρθςρÿ κΰκ κ ρξηδΰνθώ, ςΰκ θ κ οεπεδβθζενθώ γπΰτθχερκθυ ξαϊεκςξβ.";
         Text[ polish ] = "Zaczepianie odnosi siκ zarσwno do tworzenia jak i do przemieszczania obiektσw graficznych.";
         Text[ japanese ] = "½Ε―Μί‚·‚ι‹@”\\‚ΝΈήΧΜ¨―Έ µΜήΌήªΈΔ‚Μμ¬‚ΖΪ“®‚Εg‚¦‚ά‚·B";
-        Text[ chinese_traditional ] = "Ήο»τ¦μΈm¤£¶ΘΎA¥Ξ©σ¥Ν¦¨ΉΟ§Ξª«¥σ΅M¦Σ¥B¤]ΎA¥Ξ©σ²Ύ°ΚΉΟ§Ξª«¥σ΅C";
+        Text[ chinese_traditional ] = "Ήο»τ¦μΈm¤£¶ΘΎA¥Ξ©σ²£¥ΝΉΟ§Ξª«¥σ΅M¦Σ¥B¤]ΎA¥Ξ©σ²Ύ°ΚΉΟ§Ξª«¥σ΅C";
         Text[ arabic ] = "νδΨΘή ΗαΝΘΣ Ϊαμ ία γδ ΕδΤΗΑ ζΚΝΡνί ίΗΖδΗΚ ΗαΡΣγ.";
         Text[ greek ] = "Η 'προσκόλληση' αναφέρεται τόσο στη δημιουργία, όσο και στη μετακίνηση των αντικειμένων γραφικών.";
         Text[ korean ] = "ΈΒΓί±β΄Β ±Χ·΅ΗΘ °³ΓΌ ΐΫΌΊ/ΐΜµΏ ΈπµΞΏΝ °ό·ΓΐΜ ΐΦ½ΐ΄Ο΄Ω.";
@@ -160,7 +160,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ russian ] = "Κ λθνθÿμ οπθβÿηκθ";
         Text[ polish ] = "Przy liniach zaczep~u";
         Text[ japanese ] = "½Ε―ΜίΧ²έ‚Ι(~O)";
-        Text[ chinese_traditional ] = "§¤ΌΠ½u(~O)";
+        Text[ chinese_traditional ] = "®yΌΠ½u(~O)";
         Text[ arabic ] = "έν ΞΨζΨ ΗαΝΘΣ";
         Text[ greek ] = "Σε γραμμές προσκόλλησης";
         Text[ korean ] = "°³ΓΌ ΎΘ³»Ό±(~N)";
@@ -398,7 +398,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ russian ] = "Οπθ ρξηδΰνθθ θ οεπεμεωενθθ ξαϊεκςΰ";
         Text[ polish ] = "Przy tworzeniu i przenoszeniu";
         Text[ japanese ] = "μ¬‚ά‚½‚ΝΪ“®(~W)";
-        Text[ chinese_traditional ] = "¦b¥Ν¦¨©M²Ύ°Κª«¥σ®Ι(~W)";
+        Text[ chinese_traditional ] = "²£¥Ν©M²Ύ°Κª«¥σ®Ι(~W)";
         Text[ arabic ] = "ΓΛδΗΑ ΗαΕδΤΗΑ Γζ ΗαΚΝΡνί";
         Text[ greek ] = "Κατά την δημιουργία και μετακίνηση";
         Text[ korean ] = "ΐΫΌΊ½ΓΏΝ  ΐΜµΏ½ΓΏ΅(~W)";
@@ -900,7 +900,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ DUTCH ] = "~Externe afbeeldingen aanduiden" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Fremdgrafiken andeuten" ;
         Text [ SWEDISH ] = "Antyd extern gra~fik" ;
-        Text [ PORTUGUESE ] = "Separadores de imagens e~xternas" ;
+        Text [ PORTUGUESE ] = "Delinear imagens e~xternas" ;
         Text[ chinese_simplified ] = "ΟΤΚΎΝβ²ΏΝΌΠΞΏς(~P)";
         Text[ russian ] = "Ξαξηνΰχθςό βνεψνθε πθρσνκθ";
         Text[ polish ] = "Wskazaζ na obce grafiki";
@@ -1248,11 +1248,11 @@ TabPage TP_OPTIONS_MISC
         Text [ danish ] = "Brug cache til baggrunden" ;
         Text [ portuguese ] = "Usar cache para plano de f~undo" ;
         Text [ portuguese_brazilian ] = "Cache fόr Hintergrund benutzen" ;
-        Text[ chinese_simplified ] = "²ΙΣΓ±³Ύ°»Ί³εΗψΔ£Κ½";
+        Text[ chinese_simplified ] = "²ΙΣΓΊσΜ¨Κ½»Ί³εΗψΔ£Κ½";
         Text[ russian ] = "~Θροξλόηξβΰςό κύψ δλÿ τξνΰ";
         Text[ polish ] = "UΏyj pamiκci podrκcznej dla t³a";
         Text[ japanese ] = "·¬―Ό­‚π”wi‚Ιg‚¤";
-        Text[ chinese_traditional ] = "±Δ¥Ξ­I΄Ί½w¨R°ΟΌÒ¦΅";
+        Text[ chinese_traditional ] = "±Δ¥Ξ¦Z¥x½w½Δ°ΟΌÒ¦΅";
         Text[ arabic ] = "ΗΣΚΞΟΗγ ζΝΟΙ ΗαΚΞÒνδ ΗαγΔήΚ ααΞαένΙ";
         Text[ greek ] = "Χρήση κρυφής μνήμης φόντου";
         Text[ korean ] = "Ήθ°ζ Δ³½Γ »ηΏλ";
@@ -1279,7 +1279,7 @@ TabPage TP_OPTIONS_MISC
         Text[ russian ] = "~Κξοθÿ οπθ οεπεμεωενθθ";
         Text[ polish ] = "Kopiuj przy przenoszeniu";
         Text[ japanese ] = "Ϊ“®‚³‚Ή‚ι‚Ζ‚«‚ΙΊΛί°";
-        Text[ chinese_traditional ] = "¦b²Ύ°Κ®Ι¥Ν¦¨½Ζ»s¥σ";
+        Text[ chinese_traditional ] = "²Ύ°Κ®Ι²£¥Ν½Ζ»s¥σ";
         Text[ arabic ] = "Ϊγα δΣΞΙ ΓΛδΗΑ ΗαΕÒΗΝΙ";
         Text[ greek ] = "Αντίγραφο κατά την μετα~κίνηση";
         Text[ korean ] = "ΐΜµΏ½Γ ΊΉ»η";
