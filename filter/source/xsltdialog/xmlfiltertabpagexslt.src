@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:52:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:08:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "DocType";
         Text[ chinese_simplified ] = "æ–‡ä»¶ç±»å‹";
         Text[ chinese_traditional ] = "æª”æ¡ˆé¡å‹";
+        Text[ slovak ] = "Doc typ";
     };
 
     Edit ED_XML_DOCTYPE
@@ -131,6 +132,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "DTD";
         Text[ chinese_simplified ] = "DTD";
         Text[ chinese_traditional ] = "DTD";
+        Text[ slovak ] = "DTD";
     };
 
     ComboBox ED_XML_DTD_SCHEMA
@@ -157,6 +159,21 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "ì°¾ì•„ë³´ê¸°...";
         Text[ chinese_simplified ] = "æµè§ˆ...";
         Text[ chinese_traditional ] = "ç€è¦½...";
+        Text[ portuguese ] = "Pesquisar...";
+        Text[ russian ] = "Îáçîğ...";
+        Text[ greek ] = "ÁíáæŞôçóç...";
+        Text[ dutch ] = "Bladeren...";
+        Text[ finnish ] = "Selaa";
+        Text[ czech ] = "ProhlÃ­Å¾et...";
+        Text[ danish ] = "Gennemse...";
+        Text[ polish ] = "Przegl¹daj...";
+        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ turkish ] = "Tara...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ hebrew ] = "â€®×“×¤×“×•×£...â€¬";
+        Text[ catalan ] = "Navega...";
+        Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸à¸”à¸¹...";
+        Text[ slovak ] = "PrehliadaÅ¥...";
     };
 
     // Export XSLT ----------------------------------------------------
@@ -175,6 +192,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "ë‚´ë³´ë‚´ê¸°ìš© XSLT";
         Text[ chinese_simplified ] = "ç”¨äºè¾“å‡ºçš„ XSLT";
         Text[ chinese_traditional ] = "ç”¨æ–¼åŒ¯å‡ºçš„ XSLT";
+        Text[ slovak ] = "XSLT pre export";
     };
 
     ComboBox ED_XML_EXPORT_XSLT
@@ -200,6 +218,21 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "ì°¾ì•„ë³´ê¸°...";
         Text[ chinese_simplified ] = "æµè§ˆ...";
         Text[ chinese_traditional ] = "ç€è¦½...";
+        Text[ portuguese ] = "Pesquisar...";
+        Text[ russian ] = "Îáçîğ...";
+        Text[ greek ] = "ÁíáæŞôçóç...";
+        Text[ dutch ] = "Bladeren...";
+        Text[ finnish ] = "Selaa";
+        Text[ czech ] = "ProhlÃ­Å¾et...";
+        Text[ danish ] = "Gennemse...";
+        Text[ polish ] = "Przegl¹daj...";
+        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ turkish ] = "Tara...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ hebrew ] = "â€®×“×¤×“×•×£...â€¬";
+        Text[ catalan ] = "Navega...";
+        Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸à¸”à¸¹...";
+        Text[ slovak ] = "PrehliadaÅ¥...";
     };
 
     // Import XSLT ----------------------------------------------------
@@ -218,6 +251,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "ê°€ì ¸ì˜¤ê¸°ìš© XSLT";
         Text[ chinese_simplified ] = "ç”¨äºè¾“å…¥çš„ XSLT";
         Text[ chinese_traditional ] = "ç”¨æ–¼åŒ¯å…¥çš„ XSLT";
+        Text[ slovak ] = "XSLT pre import";
     };
 
     ComboBox ED_XML_IMPORT_XSLT
@@ -243,6 +277,21 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "ì°¾ì•„ë³´ê¸°...";
         Text[ chinese_simplified ] = "æµè§ˆ...";
         Text[ chinese_traditional ] = "ç€è¦½...";
+        Text[ portuguese ] = "Pesquisar...";
+        Text[ russian ] = "Îáçîğ...";
+        Text[ greek ] = "ÁíáæŞôçóç...";
+        Text[ dutch ] = "Bladeren...";
+        Text[ finnish ] = "Selaa";
+        Text[ czech ] = "ProhlÃ­Å¾et...";
+        Text[ danish ] = "Gennemse...";
+        Text[ polish ] = "Przegl¹daj...";
+        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ turkish ] = "Tara...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ hebrew ] = "â€®×“×¤×“×•×£...â€¬";
+        Text[ catalan ] = "Navega...";
+        Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸à¸”à¸¹...";
+        Text[ slovak ] = "PrehliadaÅ¥...";
     };
 
     // Import Template ------------------------------------------------
@@ -261,6 +310,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "ê°€ì ¸ì˜¤ê¸°ìš© ì„œì‹ íŒŒì¼";
         Text[ chinese_simplified ] = "ç”¨äºè¾“å…¥çš„æ–‡æ¡£æ ·å¼";
         Text[ chinese_traditional ] = "ç”¨æ–¼åŒ¯å…¥çš„æ–‡ä»¶æ¨£å¼";
+        Text[ slovak ] = "Å ablÃ³na pre import";
     };
 
     ComboBox ED_XML_IMPORT_TEMPLATE
@@ -286,15 +336,35 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ korean ] = "ì°¾ì•„ë³´ê¸°...";
         Text[ chinese_simplified ] = "æµè§ˆ...";
         Text[ chinese_traditional ] = "ç€è¦½...";
+        Text[ portuguese ] = "Pesquisar...";
+        Text[ russian ] = "Îáçîğ...";
+        Text[ greek ] = "ÁíáæŞôçóç...";
+        Text[ dutch ] = "Bladeren...";
+        Text[ finnish ] = "Selaa";
+        Text[ czech ] = "ProhlÃ­Å¾et...";
+        Text[ danish ] = "Gennemse...";
+        Text[ polish ] = "Przegl¹daj...";
+        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ turkish ] = "Tara...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ hebrew ] = "â€®×“×¤×“×•×£...â€¬";
+        Text[ catalan ] = "Navega...";
+        Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸à¸”à¸¹...";
+        Text[ slovak ] = "PrehliadaÅ¥...";
     };
     Text[ french ] = "Transformation";
     Text[ spanish ] = "Transformación";
     Text[ italian ] = "Trasformazione";
-    Text[ swedish ] = "Omvandling";
+    Text[ swedish ] = "Transformering";
     Text[ japanese ] = "å¤‰æ›";
     Text[ korean ] = "ë³€í™˜";
     Text[ chinese_simplified ] = "è½¬æ¢";
     Text[ chinese_traditional ] = "è½‰æ›";
+    Text[ slovak ] = "TransformÃ¡cia";
 };
+
+
+
+
 
 
