@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 14:15:43 $
+#   last change: $Author: rt $ $Date: 2004-01-05 11:33:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 PRJNAME=svx
 TARGET=dialogs
 VERSION=$(UPD)
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -255,7 +256,10 @@ SLOFILES=\
         $(SLO)$/grfflt.obj	\
         $(SLO)$/frmdirlbox.obj \
         $(SLO)$/commonlingui.obj \
-        $(SLO)$/hangulhanjadlg.obj
+        $(SLO)$/hangulhanjadlg.obj \
+     $(SLO)$/cuiexp.obj     \
+     $(SLO)$/dlgfact.obj     \
+    $(SLO)$/svxdlg.obj
 
 
 .IF "$(COM)" == "C50"
@@ -264,8 +268,126 @@ EXCEPTIONSNOOPTFILES=$(SLO)$/impgrf.obj
 EXCEPTIONSFILES+=$(SLO)$/impgrf.obj
 .ENDIF
 
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES= \
+        $(SLO)$/charmap.obj     \
+        $(SLO)$/_bmpmask.obj    \
+        $(SLO)$/frmsel.obj   \
+        $(SLO)$/hltpbase.obj    \
+        $(SLO)$/hldocntp.obj    \
+        $(SLO)$/hlmarkwn.obj    \
+        $(SLO)$/opengrf.obj     \
+        $(SLO)$/hyphen.obj      \
+        $(SLO)$/rubydialog.obj  \
+        $(SLO)$/thesdlg.obj     \
+        $(SLO)$/spldlg.obj      \
+        $(SLO)$/numpages.obj    \
+        $(SLO)$/splwrap.obj     \
+        $(SLO)$/hangulhanja.obj \
+        $(SLO)$/_contdlg.obj\
+        $(SLO)$/iconcdlg.obj\
+        $(SLO)$/connect.obj \
+        $(SLO)$/connctrl.obj \
+        $(SLO)$/contwnd.obj	\
+        $(SLO)$/fontlb.obj   \
+        $(SLO)$/graphctl.obj \
+        $(SLO)$/hyperdlg.obj \
+        $(SLO)$/hlinettp.obj \
+        $(SLO)$/hlmailtp.obj \
+        $(SLO)$/hldoctp.obj \
+        $(SLO)$/imapdlg.obj \
+        $(SLO)$/imapwnd.obj \
+        $(SLO)$/measure.obj \
+        $(SLO)$/dstribut.obj \
+        $(SLO)$/measctrl.obj \
+        $(SLO)$/passwd.obj \
+        $(SLO)$/strarray.obj \
+        $(SLO)$/align.obj    \
+        $(SLO)$/backgrnd.obj \
+        $(SLO)$/bbdlg.obj    \
+        $(SLO)$/border.obj   \
+        $(SLO)$/chardlg.obj  \
+        $(SLO)$/checklbx.obj \
+        $(SLO)$/ctrdial.obj    \
+        $(SLO)$/ctredlin.obj \
+        $(SLO)$/dlgctrl.obj \
+        $(SLO)$/dlgctl3d.obj \
+        $(SLO)$/dlgname.obj \
+        $(SLO)$/dlgutil.obj  \
+        $(SLO)$/fntctrl.obj  \
+        $(SLO)$/fontwork.obj \
+        $(SLO)$/grfpage.obj \
+        $(SLO)$/hdft.obj     \
+        $(SLO)$/impgrf.obj   \
+        $(SLO)$/labdlg.obj \
+        $(SLO)$/langtab.obj \
+        $(SLO)$/langbox.obj \
+        $(SLO)$/linelink.obj \
+        $(SLO)$/nforient.obj    \
+        $(SLO)$/numfmt.obj   \
+        $(SLO)$/page.obj     \
+        $(SLO)$/pagectrl.obj \
+        $(SLO)$/paragrph.obj \
+        $(SLO)$/paraprev.obj \
+        $(SLO)$/pfiledlg.obj \
+        $(SLO)$/postdlg.obj  \
+        $(SLO)$/prtqry.obj \
+        $(SLO)$/relfld.obj   \
+        $(SLO)$/rlrcitem.obj \
+        $(SLO)$/rulritem.obj \
+        $(SLO)$/simptabl.obj \
+        $(SLO)$/srchxtra.obj \
+        $(SLO)$/srchctrl.obj \
+        $(SLO)$/srchdlg.obj  \
+        $(SLO)$/stddlg.obj   \
+        $(SLO)$/svxbox.obj   \
+        $(SLO)$/svxruler.obj \
+        $(SLO)$/tabarea.obj \
+        $(SLO)$/tabline.obj \
+        $(SLO)$/tabstpge.obj \
+        $(SLO)$/textattr.obj \
+        $(SLO)$/textanim.obj \
+        $(SLO)$/tparea.obj   \
+        $(SLO)$/tpbitmap.obj \
+        $(SLO)$/tpcolor.obj  \
+        $(SLO)$/tpgradnt.obj \
+        $(SLO)$/tphatch.obj  \
+        $(SLO)$/tpline.obj \
+        $(SLO)$/tplneend.obj \
+        $(SLO)$/tplnedef.obj \
+        $(SLO)$/tpshadow.obj   \
+        $(SLO)$/transfrm.obj \
+        $(SLO)$/worient.obj    \
+        $(SLO)$/txenctab.obj \
+        $(SLO)$/txencbox.obj \
+        $(SLO)$/zoom.obj	 \
+        $(SLO)$/grfflt.obj	\
+        $(SLO)$/frmdirlbox.obj \
+        $(SLO)$/commonlingui.obj \
+        $(SLO)$/hangulhanjadlg.obj \
+    $(SLO)$/svxdlg.obj
+
+LIB2TARGET= $(SLB)$/cui.lib
+
+# dummy file to make lib available
+LIB2OBJFILES= \
+        $(SLO)$/textanim.obj
 
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+$(INCCOM)$/cuilib.hxx: makefile.mk
+.IF "$(GUI)"=="UNX"
+    $(RM) $@
+    +echo \#define DLL_NAME \"libcui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE
+.IF "$(USE_SHELL)"!="4nt"
+    +echo \#define DLL_NAME \"cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
+.ELSE          # "$(USE_SHELL)"!="4nt"
+    +echo #define DLL_NAME "cui$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
+.ENDIF          # "$(USE_SHELL)"!="4nt"
+.ENDIF
+
+$(SLO)$/svxdlg.obj : $(INCCOM)$/cuilib.hxx
