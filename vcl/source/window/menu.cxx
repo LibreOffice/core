@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-22 16:28:57 $
+ *  last change: $Author: tbe $ $Date: 2002-07-23 12:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1696,9 +1696,29 @@ void Menu::SelectItem( USHORT nItemId )
 {
     if ( !mxAccessible.is() )
     {
-        UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-        if ( pWrapper )
-            mxAccessible = pWrapper->CreateAccessible( this, bIsMenuBar );
+        if ( pStartedFrom )
+        {
+            for ( sal_uInt16 i = 0, nCount = pStartedFrom->GetItemCount(); i < nCount; ++i )
+            {
+                sal_uInt16 nItemId = pStartedFrom->GetItemId( i );
+                if ( static_cast< Menu* >( pStartedFrom->GetPopupMenu( nItemId ) ) == this )
+                {
+                    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent = pStartedFrom->GetAccessible();
+                    if ( xParent.is() )
+                    {
+                        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
+                        if ( xParentContext.is() )
+                            mxAccessible = xParentContext->getAccessibleChild( i );
+                    }
+                }
+            }
+        }
+        else
+        {
+            UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+            if ( pWrapper )
+                mxAccessible = pWrapper->CreateAccessible( this, bIsMenuBar );
+        }
     }
 
     return mxAccessible;
