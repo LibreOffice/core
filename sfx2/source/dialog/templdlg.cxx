@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-02-04 10:42:14 $
+ *  last change: $Author: os $ $Date: 2002-02-26 12:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2066,7 +2066,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
         if(ISA(SfxTemplateCatalog_Impl))
             ((SfxTemplateCatalog_Impl*) this)->pReal->EndDialog(RET_OK);
     }
-//  ResetFocus();
+    ResetFocus();
     return 0;
 }
 
