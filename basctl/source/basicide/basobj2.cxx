@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:29:43 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,9 +626,7 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
     BOOL bError = FALSE;
     SbMethod* pMethod = NULL;
 
-    Window* pParent = Application::GetDefDialogParent();
-
-    MacroChooser* pChooser = new MacroChooser( pParent, TRUE );
+    MacroChooser* pChooser = new MacroChooser( NULL, TRUE );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
