@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:06:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,9 @@
 #define PAGE_DBWIZARD_ODBC                      RID_PAGE_START + 51
 #define PAGE_DBWIZARD_SPREADSHEET               RID_PAGE_START + 52
 #define PAGE_DBWIZARD_AUTHENTIFICATION          RID_PAGE_START + 53
-#define PAGE_DBWIZARD_MYSQL_JDBC                 RID_PAGE_START + 54
+#define PAGE_DBWIZARD_MYSQL_JDBC                RID_PAGE_START + 54
 #define PAGE_DBWIZARD_FINAL                     RID_PAGE_START + 55
+#define PAGE_DBWIZARD_USERDEFINED               RID_PAGE_START + 56
 
 //========================================================================
 // error boxes
@@ -210,7 +211,7 @@
 #define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  2
 #define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  3
 #define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START +  4
-#define ERR_CANTADMINQUERIES            RID_ERRORBOX_START +  5
+    // FREE
 #define ERR_INVALID_LISTBOX_ENTRY       RID_ERRORBOX_START +  6
 #define ERROR_INVALID_TABLE_NAME        RID_ERRORBOX_START +  7
 #define ERR_NEED_INDEX_FIELDS           RID_ERRORBOX_START +  8
@@ -233,7 +234,7 @@
 #define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
 #define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
 #define RELATION_DESIGN_SAVEMODIFIED    RID_QUERYBOX_START +  9
-#define QUERY_NEED_TO_SAVE_FILTER       RID_QUERYBOX_START + 10
+    // FREE
 #define APP_CLOSEDOCUMENTS              RID_QUERYBOX_START + 11
 #define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
 #define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
@@ -244,7 +245,6 @@
 //========================================================================
 // warning boxes
 
-#define WARN_SAVEFORQUERIES             RID_WARN_START +  1
 
 //========================================================================
 // toolboxes
