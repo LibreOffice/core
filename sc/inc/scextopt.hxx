@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: gt $ $Date: 2000-09-28 09:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ public:
     // Cursor
     UINT16                  nCurCol;        // aktuelle Cursor-Position
     UINT16                  nCurRow;
+    double                  fColScale;      // <= 0 -> invalid
     // -------------------------------------------------------------------
                             ScExtDocOptions( void );
                             ~ScExtDocOptions();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+ *  last change: $Author: gt $ $Date: 2000-09-28 09:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2874,7 +2874,9 @@ void ImportExcel::PostDocLoad( void )
     aDocOpt.SetIgnoreCase( TRUE );      // immer in Excel
     pD->SetDocOptions( aDocOpt );
 
+    pExcRoot->pExtDocOpt->fColScale = pExcRoot->fColScale;
     pD->SetExtDocOptions( pExcRoot->pExtDocOpt );
+    pExcRoot->pExtDocOpt = NULL;
 
     EndAllChartObjects();
 

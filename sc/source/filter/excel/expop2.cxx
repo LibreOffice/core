@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
+ *  last change: $Author: gt $ $Date: 2000-09-28 09:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,19 +140,25 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
 
     // Optionen aus INI-File
     SfxIniManager*          pIniManager = SFX_INIMANAGER();
-    String                  aColScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELCOLSCALE" ) );
     String                  aRowScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELROWSCALE" ) );
     const International&    rIntl = *ScGlobal::pScInternational;
     DBG_ASSERT( ScGlobal::pScInternational, "-ExportBiff5::ExportBiff5(): International puddemacht?!" );
     int                     nDummy;
 
-    pExcRoot->fColScale = SolarMath::StringToDouble( aColScale.GetBuffer(), rIntl, nDummy );
-    if( pExcRoot->fColScale <= 0.0 )
-        pExcRoot->fColScale = 1.0;
-
     pExcRoot->fRowScale = SolarMath::StringToDouble( aRowScale.GetBuffer(), rIntl, nDummy );
     if( pExcRoot->fRowScale <= 0.0 )
         pExcRoot->fRowScale = 1.0;
+
+    double                  fColScale = pExcRoot->pExtDocOpt->fColScale;
+    if( fColScale <= 0.0 )
+    {
+        String              aColScale = pIniManager->Get( SFX_GROUP_COMMON, _STRINGCONST( "EXCELCOLSCALE" ) );
+        fColScale = SolarMath::StringToDouble( aColScale.GetBuffer(), rIntl, nDummy );
+        if( fColScale <= 0.0 )
+            fColScale = 1.027027027027;
+    }
+
+    pExcRoot->fColScale = fColScale;
 
     pExcDoc = new ExcDocument( pExcRoot );
 }
