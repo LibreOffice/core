@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:09:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 12:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,39 +362,46 @@ BOOL ORelationTableConnectionData::Update()
 {
     ////////////////////////////////////////////////////////////
     // Alte Relation loeschen
+    {
+        Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
+        Reference< XIndexAccess> xKeys;
+        if(xSup.is() )
+            xKeys = xSup->getKeys();
+        else
+            return FALSE;
+
+        if( m_aConnName.Len() && xKeys.is() )
+        {
+            for(sal_Int32 i=0;i<xKeys->getCount();++i)
+            {
+                Reference< XPropertySet> xKey;
+                xKeys->getByIndex(i) >>= xKey;
+                OSL_ENSURE(xKey.is(),"Key is not valid!");
+                if(xKey.is())
+                {
+                    ::rtl::OUString sName;;
+                    xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
+                    if(sName == ::rtl::OUString(m_aConnName))
+                    {
+                        Reference< XDrop> xDrop(xKeys,UNO_QUERY);
+                        OSL_ENSURE(xDrop.is(),"can't drop key because we haven't a drop interface!");
+                        if(xDrop.is())
+                            xDrop->dropByIndex(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if( !IsConnectionPossible() )
+            return FALSE;
+    }
+
+    // reassign the keys because the orientaion could be changed
     Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
     Reference< XIndexAccess> xKeys;
     if(xSup.is() )
         xKeys = xSup->getKeys();
-    else
-        return FALSE;
-
-    if( m_aConnName.Len() && xKeys.is() )
-    {
-        for(sal_Int32 i=0;i<xKeys->getCount();++i)
-        {
-            Reference< XPropertySet> xKey;
-            xKeys->getByIndex(i) >>= xKey;
-            OSL_ENSURE(xKey.is(),"Key is not valid!");
-            if(xKey.is())
-            {
-                ::rtl::OUString sName;;
-                xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
-                if(sName == ::rtl::OUString(m_aConnName))
-                {
-                    Reference< XDrop> xDrop(xKeys,UNO_QUERY);
-                    OSL_ENSURE(xDrop.is(),"can't drop key because we haven't a drop interface!");
-                    if(xDrop.is())
-                        xDrop->dropByIndex(i);
-                    break;
-                }
-            }
-        }
-    }
-
-    if( !IsConnectionPossible() )
-        return FALSE;
-
     ////////////////////////////////////////////////////////////
     // Neue Relation erzeugen
     Reference<XDataDescriptorFactory> xKeyFactory(xKeys,UNO_QUERY);
