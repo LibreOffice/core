@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.89 $
- *  last change: $Author: rt $ $Date: 2003-04-17 15:18:42 $
+ *  $Revision: 1.90 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 10:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,16 +677,24 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
     if( pOS2 && (~pOS2->version != 0) )
     {
-        const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
-        long nAscent = (long)pOS2->usWinAscent;
-        long nDescent = (long)pOS2->usWinDescent;
-        // sanity check, some fonts treat this as negative signed !!!
+        // #108862# sanity check, some fonts treat descent as signed !!!
+        int nDescent = pOS2->usWinDescent;
         if( nDescent > 5*maFaceFT->units_per_EM )
-            nDescent = (long)(short)pOS2->usWinDescent;
+            nDescent = (short)pOS2->usWinDescent;  // interpret it as signed!
 
-        rTo.mnAscent        = (long)( +nAscent * fScale + 0.5 );
+        const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
+        rTo.mnAscent        = (long)( +pOS2->usWinAscent * fScale + 0.5 );
         rTo.mnDescent       = (long)( +nDescent * fScale + 0.5 );
-        rTo.mnLeading       = (long)( (+nAscent + nDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
+        rTo.mnLeading       = (long)( (+pOS2->usWinAscent + pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
+
+        // Check for CJK capabilities of the current font
+        // #107888# workaround for Asian...
+        BOOL bCJKCapable = ((( pOS2->ulUnicodeRange2 & 0x2fff0000 ) | ( pOS2->ulUnicodeRange3 & 0x00000001 )) != 0 );
+        if ( bCJKCapable )
+        {
+            rTo.mnAscent    += (long)(+pOS2->sTypoLineGap * fScale + 0.5 );
+            rTo.mnLeading   += (long)(+pOS2->sTypoLineGap * fScale + 0.5 );
+        }
 
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
         rTo.mnLastChar      = pOS2->usLastCharIndex;
