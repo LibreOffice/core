@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:12:03 $
+ *  last change: $Author: ama $ $Date: 2001-12-17 16:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     //Bei Absatzgebundenen Flys muss ausgehend von der neuen Position ein
     //neuer Anker gesetzt werden. Anker und neue RelPos werden vom Fly selbst
     //berechnet und gesetzt.
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( GetFlyFrm()->GetAnchor() )
+#endif
     if( GetFlyFrm()->IsFlyAtCntFrm() )
         ((SwFlyAtCntFrm*)GetFlyFrm())->SetAbsPos( aNewPos );
     else
@@ -493,9 +496,28 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         if( rHori.IsPosToggle() && HORI_NONE == eHori &&
             !GetFlyFrm()->FindPageFrm()->OnRightPage() )
             lXDiff = -lXDiff;
-        const long lYDiff = aNewPos.Y() - aOldPos.Y();
+        long lYDiff = aNewPos.Y() - aOldPos.Y();
+#ifdef VERTICAL_LAYOUT
+        if( bVert )
+        {
+            if( !bRev )
+            {
+                lXDiff = -lXDiff;
+                lXDiff += GetFlyFrm()->Frm().Width();
+            }
+            lXDiff += rVert.GetPos();
+            lYDiff += rHori.GetPos();
+        }
+        else
+        {
+            lXDiff += rHori.GetPos();
+            lYDiff += rVert.GetPos();
+        }
+        const Point aTmp( lXDiff, lYDiff );
+#else
         const Point aTmp( rHori.GetPos() + lXDiff,
                           rVert.GetPos() + lYDiff );
+#endif
         GetFlyFrm()->ChgRelPos( aTmp );
     }
 

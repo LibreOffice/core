@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-07 15:58:37 $
+ *  last change: $Author: ama $ $Date: 2001-12-17 16:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,10 +441,19 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
     {
         //Damit ggf. ein Textfluss zustande kommt muss invalidiert werden.
         SwFrm *pInva = pMaster->FindLastLower();
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pMaster )
+        const long nBottom = (pMaster->*fnRect->fnGetPrtBottom)();
+#else
         const long nBottom = pMaster->Prt().Bottom() + pMaster->Frm().Top();
+#endif
         while ( pInva )
         {
+#ifdef VERTICAL_LAYOUT
+            if( (pInva->Frm().*fnRect->fnBottomDist)( nBottom ) <= 0 )
+#else
             if ( pInva->Frm().Bottom() >= nBottom )
+#endif
             {
                 pInva->InvalidateSize();
                 pInva->Prepare( PREP_CLEAR );
@@ -1025,7 +1034,15 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
     if ( GetCurRelPos() != rNewPos )
     {
         SwFrmFmt *pFmt = GetFmt();
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( GetAnchor() )
+        SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
+        SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
+        if( bVert && !bRev )
+            nTmpY -= Frm().Width();
+#else
         SwTwips nTmpY = rNewPos.Y() == LONG_MAX ? 0 : rNewPos.Y();
+#endif
         SfxItemSet aSet( pFmt->GetDoc()->GetAttrPool(),
                          RES_VERT_ORIENT, RES_HORI_ORIENT);
 
@@ -1035,7 +1052,11 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         {
             if( REL_CHAR == aVert.GetRelationOrient() && IsAutoPos() )
             {
+#ifdef VERTICAL_LAYOUT
+                if( LONG_MAX != nNewY )
+#else
                 if( LONG_MAX != rNewPos.Y() )
+#endif
                 {
                     aVert.SetVertOrient( VERT_NONE );
                     xub_StrLen nOfs =
@@ -1068,14 +1089,23 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         //den sie ist stets 0.
         if ( !IsFlyInCntFrm() )
         {
+#ifdef VERTICAL_LAYOUT
+            SwTwips nNewX = bVert ? rNewPos.Y() : rNewPos.X();
+            SwTwips nTmpX = nNewX == LONG_MAX ? 0 : nNewX;
+#else
             SwTwips nTmpX = rNewPos.X() == LONG_MAX ? 0 : rNewPos.X();
+#endif
             SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
             if( IsFlyAtCntFrm() || HORI_NONE != aHori.GetHoriOrient() )
             {
                 aHori.SetHoriOrient( HORI_NONE );
                 if( REL_CHAR == aHori.GetRelationOrient() && IsAutoPos() )
                 {
+#ifdef VERTICAL_LAYOUT
+                    if( LONG_MAX != nNewX )
+#else
                     if( LONG_MAX != rNewPos.X() )
+#endif
                     {
                         if( !pAutoFrm )
                         {
