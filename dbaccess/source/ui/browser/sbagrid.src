@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:31:21 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:09:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,12 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ swedish ] = "Kolumn~formatering..." ;
             Text [ dutch ] = "~Kolomopmaak..." ;
             Text [ spanish ] = "Formateado de ~columnas..." ;
-            Text [ english_us ] = "Column Format..." ;
+            Text [ english_us ] = "Column ~Format..." ;
             Text[ chinese_simplified ] = "ÁĞ¸ñÊ½...";
             Text[ russian ] = "Ôîğìàò êîëîíîê...";
             Text[ polish ] = "Formatowanie kolumn...";
-            Text[ japanese ] = "—ñ‚Ì‘®...";
-            Text[ chinese_traditional ] = "Äæ®æ¦¡...";
+            Text[ japanese ] = "—ñ‚Ì‘®(~F)...";
+            Text[ chinese_traditional ] = "Äæ®æ¦¡(~F)...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
             Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
             Text[ korean ] = "¿­ ¼­½Ä...";
@@ -109,17 +109,17 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ swedish ] = "Kolumn~bredd..." ;
             Text [ dutch ] = "K~olombreedte..." ;
             Text [ spanish ] = "Anc~ho de columna..." ;
-            Text [ english_us ] = "Column Width..." ;
+            Text [ english_us ] = "Column ~Width..." ;
             Text [ italian ] = "~Larghezza colonna..." ;
             Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
             Text [ portuguese ] = "~Largura de coluna..." ;
             Text[ chinese_simplified ] = "ÁĞ¿í...";
             Text[ russian ] = "Øèğèíà êîëîíîê...";
             Text[ polish ] = "Szerokoœæ kolumn...";
-            Text[ japanese ] = "—ñ•...";
-            Text[ chinese_traditional ] = "Äæ¼e...";
+            Text[ japanese ] = "—ñ•(~W)...";
+            Text[ chinese_traditional ] = "Äæ¼e(~W)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
-            Text[ greek ] = "~ĞëÜôïò óôŞëçò...";
+            Text[ greek ] = "ĞëÜôïò óôŞëçò...";
             Text[ korean ] = "¿­ ³Êºñ...";
             Text[ turkish ] = "Sütun genişliği...";
         };
@@ -150,7 +150,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ polish ] = "Formatowanie tabeli...";
             Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘®...";
             Text[ chinese_traditional ] = "¤u§@ªí®æ¦¡...";
-            Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
+            Text[ arabic ] = "ÊäÓíŞ ÇáÌÏæá...";
             Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá...";
             Text[ korean ] = "Å×ÀÌºí ¼­½Ä...";
             Text[ turkish ] = "Tablo formatı...";
@@ -189,7 +189,7 @@ String RID_STR_UNDO_MODIFY_RECORD
 {
     Text = "Rückgängig: Dateneingabe" ;
     Text [ ENGLISH ] = "Undo: input data";
-    Text [ english_us ] = "Undo: Data input";
+    Text [ english_us ] = "Undo: Data Input";
     Text[ portuguese ] = "Anular: entrada de dados";
     Text[ russian ] = "Îòìåíèòü: ââîä äàííûõ";
     Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí";
@@ -201,10 +201,10 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ swedish ] = "Ångra: datainmatning";
     Text[ polish ] = "Cofniêcie: wpisywania danych";
     Text[ portuguese_brazilian ] = "Undo: input data";
-    Text[ japanese ] = "Œ³‚É–ß‚·: ÃŞ°À“ü—Í";
+    Text[ japanese ] = "Œ³‚É–ß‚·: ÃŞ°À‚Ì“ü—Í";
     Text[ korean ] = "½ÇÇàÃë¼Ò: µ¥ÀÌÅÍ ÀÔ·Â";
     Text[ chinese_simplified ] = "³·ÏúÃüÁî£ºÊäÈëÊı¾İ";
-    Text[ chinese_traditional ] = "´_­ì¡G¼ÆÕu¿é¤J";
+    Text[ chinese_traditional ] = "´_­ì¡G¿é¤J¸ê®Æ";
     Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
     Text[ turkish ] = "Geri al: Veri girişi";
 };
@@ -216,21 +216,21 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ english_us ] = "Save current record";
     Text[ portuguese ] = "Guardar registo de dados activo";
     Text[ russian ] = "Ñîõğàíèòü òåêóùóş çàïèñü";
-    Text[ dutch ] = "actuele record opslaan";
-    Text[ french ] = "enregistrer l'enregistrement actif";
+    Text[ dutch ] = "Actuele record opslaan";
+    Text[ french ] = "Enregistrer l'enregistrement actif";
     Text[ spanish ] = "guardar registro actual";
     Text[ italian ] = "Salva record di dati attuale";
     Text[ danish ] = "Gem aktuel datapost";
     Text[ swedish ] = "Spara aktuell datapost";
     Text[ polish ] = "Zapisz bie¿¹cy rekord";
     Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern";
-    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚Ì•Û‘¶";
+    Text[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚ğ•Û‘¶";
     Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";
-    Text[ chinese_traditional ] = "«O¦s·í«eªº¸ê®Æ±ø¥Ø";
+    Text[ chinese_traditional ] = "Àx¦s·í«eªº¸ê®Æ±ø¥Ø";
     Text[ arabic ] = "ÍİÙ ÇáÓÌá ÇáÍÇáí";
-    Text[ dutch ] = "actuele record opslaan";
+    Text[ dutch ] = "Actuele record opslaan";
     Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";
-    Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò äåäïìİíùí";
+    Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò";
     Text[ korean ] = "ÇöÀç ·¹ÄÚµå ÀúÀå";
     Text[ turkish ] = "Yürürlükteki verileri kaydet";
 };
@@ -283,7 +283,7 @@ String STR_TBL_TITLE
     Text[ greek ] = "Ğßíáêáò #";
     Text[ korean ] = "Å×ÀÌºí #";
     Text[ chinese_traditional ] = "ªí®æ #";
-    Text[ arabic ] = "ÌÏæá #";
+    Text[ arabic ] = "ÇáÌÏæá #";
     Text[ turkish ] = "Tablo #";
     Text[ language_user1 ] = " ";
 };
