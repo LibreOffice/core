@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 12:23:41 $
+ *  last change: $Author: os $ $Date: 2002-08-22 14:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,12 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
 {
     FreeResource();
+    //task #97066# mailing of form letters is currently not supported
+    aMailingRB.Show(FALSE);
+    Point aMailPos = aMailingRB.GetPosPixel();
+    Point aFilePos = aFileRB.GetPosPixel();
+    aFilePos.X() -= (aFilePos.X() - aMailPos.X()) /2;
+    aFileRB.SetPosPixel(aFilePos);
     if(pSelection)
     {
         m_aSelection = *pSelection;
