@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:48:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,9 +355,21 @@ UINT32 SwMSDffManager::GetFilterFlags()
  *
  * cmc
  */
-SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
-                                        const Rectangle& rBoundRect ) const
+// --> OD 2004-12-14 #i32596# - consider new parameter <_nCalledByGroup>
+SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
+                                      const Graphic& rGrf,
+                                      const Rectangle& rBoundRect,
+                                      const int _nCalledByGroup ) const
 {
+    // --> OD 2004-12-14 #i32596# - no import of OLE object, if it's inside a group.
+    // NOTE: This can be undone, if grouping of Writer fly frames is possible or
+    // if drawing OLE objects are allowed in Writer.
+    if ( _nCalledByGroup > 0 )
+    {
+        return 0L;
+    }
+    // <--
+
     SdrObject* pRet = 0;
     String sStorageName;
     SotStorageRef xSrcStg;
@@ -4697,52 +4709,59 @@ BOOL SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
         // sein. Wir brauchen hier aber nur das Sprm fuer die Picture Id
         long nOldPos = rReader.pStrm->Tell();
         {
+            // --> OD 2004-12-08 #i32596# - consider return value of method
+            // <rReader.GetTxbxTextSttEndCp(..)>. If it returns false, method
+            // wasn't successful. Thus, continue in this case.
+            // Note: Ask MM for initialization of <nStartCp> and <nEndCp>.
+            // Note: Ask MM about assertions in method <rReader.GetTxbxTextSttEndCp(..)>.
             long nStartCp, nEndCp;
-            rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
-                static_cast<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
-                static_cast<sal_uInt16>(nOLEId & 0xFFFF));
-
-            WW8PLCFxSaveAll aSave;
-            memset( &aSave, 0, sizeof( aSave ) );
-            rReader.pPlcxMan->SaveAllPLCFx( aSave );
-
-            nStartCp += rReader.nDrawCpO;
-            nEndCp   += rReader.nDrawCpO;
-            WW8PLCFx_Cp_FKP* pChp = rReader.pPlcxMan->GetChpPLCF();
-            wwSprmParser aSprmParser(rReader.pWwFib->nVersion);
-            while (nStartCp <= nEndCp && !nPictureId)
+            if ( rReader.GetTxbxTextSttEndCp(nStartCp, nEndCp,
+                            static_cast<sal_uInt16>((nOLEId >> 16) & 0xFFFF),
+                            static_cast<sal_uInt16>(nOLEId & 0xFFFF)) )
             {
-                WW8PLCFxDesc aDesc;
-                pChp->SeekPos( nStartCp );
-                pChp->GetSprms( &aDesc );
+                WW8PLCFxSaveAll aSave;
+                memset( &aSave, 0, sizeof( aSave ) );
+                rReader.pPlcxMan->SaveAllPLCFx( aSave );
 
-                if (aDesc.nSprmsLen && aDesc.pMemPos)   // Attribut(e) vorhanden
+                nStartCp += rReader.nDrawCpO;
+                nEndCp   += rReader.nDrawCpO;
+                WW8PLCFx_Cp_FKP* pChp = rReader.pPlcxMan->GetChpPLCF();
+                wwSprmParser aSprmParser(rReader.pWwFib->nVersion);
+                while (nStartCp <= nEndCp && !nPictureId)
                 {
-                    long nLen = aDesc.nSprmsLen;
-                    const BYTE* pSprm = aDesc.pMemPos;
+                    WW8PLCFxDesc aDesc;
+                    pChp->SeekPos( nStartCp );
+                    pChp->GetSprms( &aDesc );
 
-                    while (nLen >= 2 && !nPictureId)
+                    if (aDesc.nSprmsLen && aDesc.pMemPos)   // Attribut(e) vorhanden
                     {
-                        USHORT nId = aSprmParser.GetSprmId(pSprm);
-                        USHORT nSL = aSprmParser.GetSprmSize(nId, pSprm);
+                        long nLen = aDesc.nSprmsLen;
+                        const BYTE* pSprm = aDesc.pMemPos;
 
-                        if( nLen < nSL )
-                            break;              // nicht mehr genug Bytes uebrig
-
-                        if( 0x6A03 == nId && 0 < nLen )
+                        while (nLen >= 2 && !nPictureId)
                         {
-                            nPictureId = SVBT32ToLong(pSprm +
-                                aSprmParser.DistanceToData(nId));
-                            bRet = true;
-                        }
-                        pSprm += nSL;
-                        nLen -= nSL;
-                    }
-                }
-                nStartCp = aDesc.nEndPos;
-            }
+                            USHORT nId = aSprmParser.GetSprmId(pSprm);
+                            USHORT nSL = aSprmParser.GetSprmSize(nId, pSprm);
 
-            rReader.pPlcxMan->RestoreAllPLCFx( aSave );
+                            if( nLen < nSL )
+                                break;              // nicht mehr genug Bytes uebrig
+
+                            if( 0x6A03 == nId && 0 < nLen )
+                            {
+                                nPictureId = SVBT32ToLong(pSprm +
+                                    aSprmParser.DistanceToData(nId));
+                                bRet = true;
+                            }
+                            pSprm += nSL;
+                            nLen -= nSL;
+                        }
+                    }
+                    nStartCp = aDesc.nEndPos;
+                }
+
+                rReader.pPlcxMan->RestoreAllPLCFx( aSave );
+            }
+            // <--
         }
         rReader.pStrm->Seek( nOldPos );
     }
