@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
+#   last change: $Author: obo $ $Date: 2001-04-18 13:47:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/oslstream.obj	\
         $(SLO)$/attributelist.obj	\
         $(SLO)$/confname.obj	\
+        $(SLO)$/filehelper.obj	\
         $(SLO)$/configunoreg.obj
 
 #		$(SLO)$/configmodule.obj	\
