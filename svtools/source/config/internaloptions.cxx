@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
+ *  last change: $Author: as $ $Date: 2000-12-18 14:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef __SGI_STL_STACK
+#include <stl/stack>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -94,27 +102,66 @@
 using namespace ::utl                   ;
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
+using namespace ::std                   ;
 using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::beans ;
 
 //_________________________________________________________________________________________________________________
 //  const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_INTERNAL               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Internal"   ))
-#define DEFAULT_SLOTCFG                 sal_False
-#define DEFAULT_SENDCRASHMAIL           sal_False
+#define ROOTNODE_INTERNAL                   OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Internal"   ))
+#define DEFAULT_SLOTCFG                     sal_False
+#define DEFAULT_SENDCRASHMAIL               sal_False
 
-#define PROPERTYNAME_SLOTCFG            OUString(RTL_CONSTASCII_USTRINGPARAM("Slot"                     ))
-#define PROPERTYNAME_SENDCRASHMAIL      OUString(RTL_CONSTASCII_USTRINGPARAM("SendCrashMail"            ))
+#define FIXPROPERTYNAME_SLOTCFG             OUString(RTL_CONSTASCII_USTRINGPARAM("Slot"                     ))
+#define FIXPROPERTYNAME_SENDCRASHMAIL       OUString(RTL_CONSTASCII_USTRINGPARAM("SendCrashMail"            ))
 
-#define PROPERTYHANDLE_SLOTCFG          0
-#define PROPERTYHANDLE_SENDCRASHMAIL    1
+#define FIXPROPERTYHANDLE_SLOTCFG           0
+#define FIXPROPERTYHANDLE_SENDCRASHMAIL     1
 
-#define PROPERTYCOUNT                   2
+#define FIXPROPERTYCOUNT                    2
+
+#define PROPERTYNAME_RECOVERYLIST           OUString(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"             ))
+#define PROPERTYNAME_URL                    OUString(RTL_CONSTASCII_USTRINGPARAM("URL"                      ))
+#define PROPERTYNAME_FILTER                 OUString(RTL_CONSTASCII_USTRINGPARAM("Filter"                   ))
+#define PROPERTYNAME_TEMPNAME               OUString(RTL_CONSTASCII_USTRINGPARAM("TempName"                 ))
+
+#define OFFSET_URL                          0
+#define OFFSET_FILTER                       1
+#define OFFSET_TEMPNAME                     2
+
+#define PATHDELIMITER                       OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
+#define FIXR                                OUString(RTL_CONSTASCII_USTRINGPARAM("r"                        ))
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
 //_________________________________________________________________________________________________________________
+
+struct tIMPL_RecoveryEntry
+{
+    OUString    sURL        ;
+    OUString    sFilter     ;
+    OUString    sTempName   ;
+
+    tIMPL_RecoveryEntry()
+    {
+        sURL        =   OUString();
+        sFilter     =   OUString();
+        sTempName   =   OUString();
+    }
+
+    tIMPL_RecoveryEntry(    const   OUString&   sNewURL         ,
+                            const   OUString&   sNewFilter      ,
+                            const   OUString&   sNewTempName    )
+    {
+        sURL        =   sNewURL         ;
+        sFilter     =   sNewFilter      ;
+        sTempName   =   sNewTempName    ;
+    }
+};
+
+typedef stack< tIMPL_RecoveryEntry > tIMPL_RecoveryStack;
 
 class SvtInternalOptions_Impl : public ConfigItem
 {
@@ -141,8 +188,6 @@ class SvtInternalOptions_Impl : public ConfigItem
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
-            @ATTENTION  We don't implement these method - because we support readonly values at runtime only!
-
             @seealso    baseclass ConfigItem
 
             @param      "seqPropertyNames" is the list of properties which should be updated.
@@ -153,15 +198,13 @@ class SvtInternalOptions_Impl : public ConfigItem
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames )
         {
-            DBG_ASSERT( sal_False, "SvtInternalOptions_Impl::Notify()\nNot implemented yet - we support readonly values only!\n" );
+            DBG_ASSERT( sal_False, "SvtInternalOptions::Notify()\nNot used yet ... but called!?\n" );
         }
 
         /*-****************************************************************************************************//**
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
-
-            @ATTENTION  We don't implement these method - because we support readonly values at runtime only!
 
             @seealso    baseclass ConfigItem
 
@@ -171,10 +214,7 @@ class SvtInternalOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void Commit()
-        {
-            DBG_ASSERT( sal_False, "SvtInternalOptions_Impl::Commit()\nNot implemented yet - we support readonly values only!\n" );
-        }
+        virtual void Commit();
 
         //---------------------------------------------------------------------------------------------------------
         //  public interface
@@ -193,8 +233,15 @@ class SvtInternalOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool SlotCFGEnabled     () const;
-        sal_Bool CrashMailEnabled   () const;
+        sal_Bool    SlotCFGEnabled      (                                   ) const;
+        sal_Bool    CrashMailEnabled    (                                   ) const;
+        void        PushRecoveryItem    (   const   OUString&   sURL        ,
+                                            const   OUString&   sFilter     ,
+                                             const  OUString&   sTempName   );
+        void        PopRecoveryItem     (           OUString&   sURL        ,
+                                                    OUString&   sFilter     ,
+                                                    OUString&   sTempName   );
+        sal_Bool    IsRecoveryListEmpty (                                   ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -216,7 +263,7 @@ class SvtInternalOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        static Sequence< OUString > impl_GetPropertyNames();
+        Sequence< OUString > impl_GetPropertyNames();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
@@ -224,8 +271,9 @@ class SvtInternalOptions_Impl : public ConfigItem
 
     private:
 
-        sal_Bool    m_bSlotCFG          ;   /// cache "Slot" of Internal section
-        sal_Bool    m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
+        sal_Bool                m_bSlotCFG          ;   /// cache "Slot" of Internal section
+        sal_Bool                m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
+        tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
 };
 
 //_________________________________________________________________________________________________________________
@@ -242,8 +290,18 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     ,   m_bSlotCFG          ( DEFAULT_SLOTCFG       )
     ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL )
 {
-    // Use our static list of configuration keys to get his values.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames();
+    // Use our list of configuration keys to get his values.
+    // structure of internal section: (first 2 entries are fixed - all other are member of a set!)
+    //      "Slot"
+    //      "SendCrashMail"
+    //      "RecoveryList/r1/URL"
+    //      "RecoveryList/r1/Filter"
+    //      "RecoveryList/r1/TempName"
+    //      "RecoveryList/r2/URL"
+    //      "RecoveryList/r2/Filter"
+    //      "RecoveryList/r2/TempName"
+    //      "RecoveryList/.."
+    Sequence< OUString >    seqNames    = impl_GetPropertyNames()   ;
     Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
 
     // Safe impossible cases.
@@ -251,32 +309,33 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to ouer internal member.
-    sal_Int32 nPropertyCount    =   seqValues.getLength()   ;
-    sal_Int32 nProperty         =   0                       ;
-    for( nProperty=0; nProperty<nPropertyCount; ++nProperty )
-    {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nInvalid property value for property detected!\n" );
-        switch( nProperty )
-        {
-            case PROPERTYHANDLE_SLOTCFG         :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\Slot\"?" );
-                                                        seqValues[nProperty] >>= m_bSlotCFG;
-                                                    }
-                                                    break;
+    // Read fixed values first!
+    DBG_ASSERT(!(seqValues[FIXPROPERTYHANDLE_SLOTCFG].getValueTypeClass()!=TypeClass_BOOLEAN)       , "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\Slot\"?"            );
+    DBG_ASSERT(!(seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].getValueTypeClass()!=TypeClass_BOOLEAN) , "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\SendCrashMail\"?"   );
+    seqValues[FIXPROPERTYHANDLE_SLOTCFG         ] >>= m_bSlotCFG        ;
+    seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL   ] >>= m_bSendCrashMail  ;
 
-            case PROPERTYHANDLE_SENDCRASHMAIL   :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\SendCrashMail\"?" );
-                                                        seqValues[nProperty] >>= m_bSendCrashMail;
-                                                    }
-                                                    break;
-        }
+    // Read dynamical set "RecoveryList" then.
+    // 3 subkeys for every item!
+    // Attention: Start at next element after last fixed entry! We must ignore "Slot" and "SendCrashMail" ...
+    tIMPL_RecoveryEntry aEntry;
+    sal_uInt32 nCount       = seqValues.getLength() ;
+    sal_uInt32 nPosition    = FIXPROPERTYCOUNT      ;
+
+    while( nPosition<nCount )
+    {
+        seqValues[nPosition] >>= aEntry.sURL        ;
+        ++nPosition;
+        seqValues[nPosition] >>= aEntry.sFilter     ;
+        ++nPosition;
+        seqValues[nPosition] >>= aEntry.sTempName   ;
+        ++nPosition;
+        m_aRecoveryList.push( aEntry );
     }
 
-    // Don't enable notification mechanism of ouer baseclass!
-    // We support readonly variables in the moment.
+    // We don't need any notifications here.
+    // "Slot" and "SendCrashMail" are readonly(!) and our recovery list should not modified during runtime - it's used
+    // by our crash guard only ... otherwise we have a big problem.
 }
 
 //*****************************************************************************************************************
@@ -284,6 +343,42 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
 //*****************************************************************************************************************
 SvtInternalOptions_Impl::~SvtInternalOptions_Impl()
 {
+    if( IsModified() == sal_True )
+    {
+        Commit();
+    }
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtInternalOptions_Impl::Commit()
+{
+    // Our fix properties are readonly values(!) - don't write it back.
+
+    // Write set of dynamic properties then.
+    ClearNodeSet( PROPERTYNAME_RECOVERYLIST );
+
+    tIMPL_RecoveryEntry         aItem                   ;
+    OUString                    sNode                   ;
+    Sequence< PropertyValue >   seqPropertyValues( 3 )  ;   // Every node in set has 3 sub-nodes!( url, filter, tempname )
+
+    // Copy list entries to save-list and write it to configuration.
+    sal_uInt32 nCount = m_aRecoveryList.size();
+    for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
+    {
+        aItem = m_aRecoveryList.top();
+        m_aRecoveryList.pop();
+        sNode = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + FIXR + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
+        seqPropertyValues[OFFSET_URL        ].Name  =   sNode + PROPERTYNAME_URL        ;
+        seqPropertyValues[OFFSET_FILTER     ].Name  =   sNode + PROPERTYNAME_FILTER     ;
+        seqPropertyValues[OFFSET_TEMPNAME   ].Name  =   sNode + PROPERTYNAME_TEMPNAME   ;
+        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                      ;
+        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                   ;
+        seqPropertyValues[OFFSET_TEMPNAME   ].Value <<= aItem.sTempName                 ;
+
+        SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
+    }
 }
 
 //*****************************************************************************************************************
@@ -303,20 +398,72 @@ sal_Bool SvtInternalOptions_Impl::CrashMailEnabled() const
 }
 
 //*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
+                                                const   OUString&   sFilter     ,
+                                                const   OUString&   sTempName   )
+{
+    tIMPL_RecoveryEntry aEntry( sURL, sFilter, sTempName );
+    m_aRecoveryList.push( aEntry );
+    SetModified();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtInternalOptions_Impl::PopRecoveryItem(  OUString&   sURL        ,
+                                                OUString&   sFilter     ,
+                                                OUString&   sTempName   )
+{
+    tIMPL_RecoveryEntry aEntry = m_aRecoveryList.top();
+    m_aRecoveryList.pop();
+    SetModified();  // Don't forget it - we delete an entry here!
+    sURL        = aEntry.sURL       ;
+    sFilter     = aEntry.sFilter    ;
+    sTempName   = aEntry.sTempName  ;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtInternalOptions_Impl::IsRecoveryListEmpty() const
+{
+    return ( m_aRecoveryList.empty() );
+}
+
+//*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
 Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // First get ALL names of current existing list items in configuration!
+    Sequence< OUString > seqRecoveryItems = GetNodeNames( PROPERTYNAME_RECOVERYLIST );
+    // Get information about list counts ...
+    sal_Int32 nRecoveryCount = seqRecoveryItems.getLength();
+    // ... and create a property list with right size! (+2...for fix properties!) (*3 ... = sub nodes for every set node!)
+    Sequence< OUString > seqProperties( FIXPROPERTYCOUNT + (nRecoveryCount*3) );
+
+    // Add names of fix properties to list.
+    seqProperties[FIXPROPERTYHANDLE_SLOTCFG         ]   =   FIXPROPERTYNAME_SLOTCFG         ;
+    seqProperties[FIXPROPERTYHANDLE_SENDCRASHMAIL   ]   =   FIXPROPERTYNAME_SENDCRASHMAIL   ;
+
+    sal_uInt32 nPosition = FIXPROPERTYCOUNT;
+    // Add names for recovery list to list.
+    // 3 subkeys for every item!
+    // nPosition is the start point of an list item, nItem an index into right list of node names!
+    for( sal_Int32 nItem=0; nItem<nRecoveryCount; ++nItem )
     {
-        PROPERTYNAME_SLOTCFG        ,
-        PROPERTYNAME_SENDCRASHMAIL  ,
-    };
-    // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    // ... and return it.
-    return seqPropertyNames;
+        seqProperties[nPosition] = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + seqRecoveryItems[nItem] + PATHDELIMITER + PROPERTYNAME_URL       ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + seqRecoveryItems[nItem] + PATHDELIMITER + PROPERTYNAME_FILTER    ;
+        ++nPosition;
+        seqProperties[nPosition] = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + seqRecoveryItems[nItem] + PATHDELIMITER + PROPERTYNAME_TEMPNAME  ;
+        ++nPosition;
+    }
+
+    // Return result.
+    return seqProperties;
 }
 
 //*****************************************************************************************************************
@@ -325,7 +472,7 @@ Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
 //  see definition for further informations
 //*****************************************************************************************************************
 SvtInternalOptions_Impl*    SvtInternalOptions::m_pDataContainer    = NULL  ;
-sal_Int32                   SvtInternalOptions::m_nRefCount     = 0     ;
+sal_Int32                   SvtInternalOptions::m_nRefCount         = 0     ;
 
 //*****************************************************************************************************************
 //  constructor
@@ -377,6 +524,37 @@ sal_Bool SvtInternalOptions::CrashMailEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->CrashMailEnabled();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtInternalOptions::PushRecoveryItem(  const   OUString&   sURL        ,
+                                            const   OUString&   sFilter     ,
+                                            const   OUString&   sTempName   )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->PushRecoveryItem( sURL, sFilter, sTempName );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtInternalOptions::PopRecoveryItem(   OUString&   sURL        ,
+                                            OUString&   sFilter     ,
+                                            OUString&   sTempName   )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->PopRecoveryItem( sURL, sFilter, sTempName );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtInternalOptions::IsRecoveryListEmpty() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsRecoveryListEmpty();
 }
 
 //*****************************************************************************************************************
