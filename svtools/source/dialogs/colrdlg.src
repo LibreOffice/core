@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:09:17 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ ModalDialog DLG_COLOR
         Text = "~Key" ;
         Text [ ENGLISH ] = "~Key" ;
         Text [ english_us ] = "~Key" ;
-        Text [ portuguese_brazilian ] = "~Chave" ;
+        Text [ portuguese_brazilian ] = "~Preto" ;
         Text [ swedish ] = "~Nyckel" ;
         Text [ danish ] = "Nøgle" ;
         Text [ italian ] = "Chiave" ;
@@ -345,7 +345,7 @@ ModalDialog DLG_COLOR
         Text = "~Grün" ;
         Text [ ENGLISH ] = "~Green" ;
         Text [ english_us ] = "~Green" ;
-        Text [ portuguese_brazilian ] = "~Verde" ;
+        Text [ portuguese_brazilian ] = "Ver~de" ;
         Text [ swedish ] = "~Grönt" ;
         Text [ danish ] = "Grøn" ;
         Text [ italian ] = "~Verde" ;
@@ -380,7 +380,7 @@ ModalDialog DLG_COLOR
         Text = "~Blau" ;
         Text [ ENGLISH ] = "~Blue" ;
         Text [ english_us ] = "~Blue" ;
-        Text [ portuguese_brazilian ] = "~Azul" ;
+        Text [ portuguese_brazilian ] = "A~zul" ;
         Text [ swedish ] = "~Blått" ;
         Text [ danish ] = "Blå" ;
         Text [ italian ] = "~Blu" ;
@@ -448,7 +448,7 @@ ModalDialog DLG_COLOR
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "H~ue" ;
         Text [ english_us ] = "H~ue" ;
-        Text [ portuguese_brazilian ] = "~Matiz" ;
+        Text [ portuguese_brazilian ] = "Ma~tiz" ;
         Text [ swedish ] = "~Färg" ;
         Text [ danish ] = "Farve" ;
         Text [ italian ] = "Colore" ;
@@ -627,6 +627,7 @@ ModalDialog DLG_COLOR
     Text[ hindi ] = "à¤°à¤‚à¤—";
     Text[ slovak ] = "Farba";
 };
+
 
 
 

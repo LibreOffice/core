@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:09:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ String STR_FILEDLG_GOUP
     Text [ English ] = "Go up" ;
     Text [ portuguese ] = "Um nível acima" ;
     Text [ english_us ] = "Up One Level" ;
-    Text [ portuguese_brazilian ] = "Um Nível Acima" ;
+    Text [ portuguese_brazilian ] = "Subir um nível" ;
     Text [ swedish ] = "En nivå högre" ;
     Text [ danish ] = "Et niveau op" ;
     Text [ italian ] = "Un livello più alto" ;
@@ -525,6 +525,7 @@ String STR_FILEDLG_ASKNEWDIR
     Text[ hindi ] = "Do you want the directory %s to be created ?";
     Text[ slovak ] = "Prajete si vytvoriÅ¥ adresÃ¡r %s?";
 };
+
 
 
 
