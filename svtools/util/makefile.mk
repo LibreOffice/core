@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.11 $
+#*  $Revision: 1.12 $
 #*
-#*  last change: $Author: jp $ $Date: 2000-11-20 09:31:19 $
+#*  last change: $Author: rt $ $Date: 2000-11-22 15:07:58 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -142,7 +142,7 @@ LIB7FILES+= \
 
 LIB8TARGET= $(SLB)$/svl.lib
 #LIB8ARCHIV= $(LB)$/libsvl$(UPD)$(DLLPOSTFIX).a
-LIB8OBJFILES= $(OBJ)$/svtdata.obj
+LIB8OBJFILES= $(SLO)$/svtdata.obj
 LIB8FILES=	\
         $(SLB)$/config.lib	\
         $(SLB)$/filerec.lib \
