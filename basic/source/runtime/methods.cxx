@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: ab $ $Date: 2001-10-26 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,6 @@ static Reference< XSimpleFileAccess > getFileAccess( void )
     }
     return xSFI;
 }
-
 
 
 
@@ -1468,6 +1467,106 @@ RTLFUNC(Val)
     }
 }
 
+
+// Helper functions for date conversion
+INT16 implGetDateDay( double aDate )
+{
+    aDate -= 2.0; // normieren: 1.1.1900 => 0.0
+    Date aRefDate( 1, 1, 1900 );
+    if ( aDate >= 0.0 )
+    {
+        aDate = floor( aDate );
+        aRefDate += (ULONG)aDate;
+    }
+    else
+    {
+        aDate = ceil( aDate );
+        aRefDate -= (ULONG)(-1.0 * aDate);
+    }
+
+    INT16 nRet = (INT16)( aRefDate.GetDay() );
+    return nRet;
+}
+
+INT16 implGetDateMonth( double aDate )
+{
+    Date aRefDate( 1,1,1900 );
+    long nDays = (long)aDate;
+    nDays -= 2; // normieren: 1.1.1900 => 0.0
+    aRefDate += nDays;
+    INT16 nRet = (INT16)( aRefDate.GetMonth() );
+    return nRet;
+}
+
+INT16 implGetDateYear( double aDate )
+{
+    Date aRefDate( 1,1,1900 );
+    long nDays = (long) aDate;
+    nDays -= 2; // normieren: 1.1.1900 => 0.0
+    aRefDate += nDays;
+    INT16 nRet = (INT16)( aRefDate.GetYear() );
+    return nRet;
+}
+
+BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet )
+{
+    if ( nYear < 100 )
+        nYear += 1900;
+    if ((nYear < 100 || nYear > 9999)   ||
+        (nMonth < 1 || nMonth > 12 )    ||
+        (nDay < 1 || nDay > 31 ))
+    {
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        return FALSE;
+    }
+
+    Date aCurDate( nDay, nMonth, nYear );
+    long nDiffDays = GetDayDiff( aCurDate );
+    rdRet = (double)nDiffDays;
+    return TRUE;
+}
+
+// Function to convert date to ISO 8601 date format
+RTLFUNC(CDateToIso)
+{
+    static String aZeroStr = String::CreateFromAscii( "0" );
+
+    if ( rPar.Count() == 2 )
+    {
+        double aDate = rPar.Get(1)->GetDate();
+        String aYearStr  = String::CreateFromInt32( implGetDateYear( aDate ) );
+        while( aYearStr.Len() < 4 )
+            aYearStr = aZeroStr + aYearStr;
+        String aMonthStr = String::CreateFromInt32( implGetDateMonth( aDate ) );
+        String aDayStr   = String::CreateFromInt32( implGetDateDay( aDate ) );
+        String aRetStr = aYearStr;
+        aRetStr += aMonthStr;
+        aRetStr += aDayStr;
+        rPar.Get(0)->PutString( aRetStr );
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+}
+
+// Function to convert date from ISO 8601 date format
+RTLFUNC(CDateFromIso)
+{
+    if ( rPar.Count() == 2 )
+    {
+        String aStr = rPar.Get(1)->GetString();
+        INT16 iMonthStart = aStr.Len() - 4;
+        String aYearStr  = aStr.Copy( 0, iMonthStart );
+        String aMonthStr = aStr.Copy( iMonthStart, 2 );
+        String aDayStr   = aStr.Copy( iMonthStart+2, 2 );
+
+        double dDate;
+        if( implDateSerial( aYearStr.ToInt32(), aMonthStr.ToInt32(), aDayStr.ToInt32(), dDate ) )
+            rPar.Get(0)->PutDate( dDate );
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+}
+
 RTLFUNC(DateSerial)
 {
     if ( rPar.Count() < 4 )
@@ -1478,19 +1577,10 @@ RTLFUNC(DateSerial)
     INT16 nYear = rPar.Get(1)->GetInteger();
     INT16 nMonth = rPar.Get(2)->GetInteger();
     INT16 nDay = rPar.Get(3)->GetInteger();
-    if ( nYear < 100 )
-        nYear += 1900;
-    if ((nYear < 100 || nYear > 9999)   ||
-        (nMonth < 1 || nMonth > 12 )    ||
-        (nDay < 1 || nDay > 31 ))
-    {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
-        return;
-    }
 
-    Date aCurDate( nDay, nMonth, nYear );
-    long nDiffDays = GetDayDiff( aCurDate );
-    rPar.Get(0)->PutDate( (double)nDiffDays ); // JSM
+    double dDate;
+    if( implDateSerial( nYear, nMonth, nDay, dDate ) )
+        rPar.Get(0)->PutDate( dDate );
 }
 
 RTLFUNC(TimeSerial)
@@ -1608,21 +1698,10 @@ RTLFUNC(Day)
     else
     {
         SbxVariableRef pArg = rPar.Get( 1 );
-        double aDouble = pArg->GetDate();
-        aDouble -= 2.0; // normieren: 1.1.1900 => 0.0
-        Date aRefDate( 1, 1, 1900 );
-        // aDouble = Fix( aDouble );
-        if ( aDouble >= 0.0 )
-        {
-            aDouble = floor( aDouble );
-            aRefDate += (ULONG)aDouble;
-        }
-        else
-        {
-            aDouble = ceil( aDouble );
-            aRefDate -= (ULONG)(-1.0 * aDouble);
-        }
-        rPar.Get(0)->PutInteger( (INT16)(aRefDate.GetDay()));
+        double aDate = pArg->GetDate();
+
+        INT16 nDay = implGetDateDay( aDate );
+        rPar.Get(0)->PutInteger( nDay );
     }
 }
 
@@ -1652,11 +1731,8 @@ RTLFUNC(Year)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        Date aRefDate( 1,1,1900 );
-        long nDays = (long) rPar.Get(1)->GetDate();
-        nDays -= 2; // normieren: 1.1.1900 => 0.0
-        aRefDate += nDays;
-        rPar.Get(0)->PutInteger( (INT16)(aRefDate.GetYear()) );
+        INT16 nYear = implGetDateYear( rPar.Get(1)->GetDate() );
+        rPar.Get(0)->PutInteger( nYear );
     }
 }
 
@@ -1702,11 +1778,8 @@ RTLFUNC(Month)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        Date aRefDate( 1,1,1900 );
-        long nDays = (long) rPar.Get(1)->GetDate();
-        nDays -= 2; // normieren: 1.1.1900 => 0.0
-        aRefDate += nDays;
-        rPar.Get(0)->PutInteger( (INT16)(aRefDate.GetMonth()) );
+        INT16 nMonth = implGetDateMonth( rPar.Get(1)->GetDate() );
+        rPar.Get(0)->PutInteger( nMonth );
     }
 }
 
