@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:53:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,8 +947,8 @@ Menu MN_GRF_POPUPMENU
         {
             Identifier = FN_FORMAT_GRAFIC_DLG ;
             HelpID = FN_FORMAT_GRAFIC_DLG ;
-            Text [ de ] = "~Grafik..." ;
-            Text [ en-US ] = "~Graphics..." ;
+            Text [ de ] = "~Bild..." ;
+            Text [ en-US ] = "~Picture..." ;
         };
         MN_FRM_CAPTION_ITEM
         MenuItem
