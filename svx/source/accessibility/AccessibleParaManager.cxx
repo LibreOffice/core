@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:10:49 $
+ *  last change: $Author: thb $ $Date: 2002-05-21 14:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,8 @@ namespace accessibility
 
     void AccessibleParaManager::SetEEOffset( const Point& rOffset )
     {
-        ForEach( SetChildrenEEOffset( rOffset ) );
+        SetChildrenEEOffset aFunctor( rOffset );
+        ForEach( aFunctor );
     }
 
     // TODO: refactor these functors to a single template
@@ -230,7 +231,8 @@ namespace accessibility
 
     void AccessibleParaManager::SetEditSource( SvxEditSourceAdapter* pEditSource )
     {
-        ForEach( SetChildrenEditSource( pEditSource ) );
+        SetChildrenEditSource aFunctor( pEditSource );
+        ForEach( aFunctor );
     }
 
     // TODO: refactor these functors to a single template (EffSTL or MExC++)
@@ -261,13 +263,15 @@ namespace accessibility
                                            const uno::Any& rNewValue,
                                            const uno::Any& rOldValue ) const
     {
-        VectorOfChildren::const_iterator begin = maChildren.begin();
-        VectorOfChildren::const_iterator end = begin;
+        VectorOfChildren::const_iterator front = maChildren.begin();
+        VectorOfChildren::const_iterator back = front;
 
-        ::std::advance< VectorOfChildren::const_iterator, sal_Int32 >( begin, nStartPara );
-        ::std::advance< VectorOfChildren::const_iterator, sal_Int32 >( end, nEndPara );
+        ::std::advance( front, nStartPara );
+        ::std::advance( back, nEndPara );
 
-        ::std::for_each( begin, end, AccessibleParaManager::WeakChildAdapter< StateChangeEvent > (StateChangeEvent( nEventId, rNewValue, rOldValue )) );
+    StateChangeEvent aFunctor( nEventId, rNewValue, rOldValue );
+
+        ::std::for_each( front, back, AccessibleParaManager::WeakChildAdapter< StateChangeEvent > ( aFunctor ) );
     }
 
     class ReleaseChild : public ::std::unary_function< const AccessibleParaManager::WeakChild&, AccessibleParaManager::WeakChild >
@@ -284,13 +288,13 @@ namespace accessibility
 
     void AccessibleParaManager::Release( sal_Int32 nStartPara, sal_Int32 nEndPara )
     {
-        VectorOfChildren::iterator begin = maChildren.begin();
-        VectorOfChildren::iterator end = begin;
+        VectorOfChildren::iterator front = maChildren.begin();
+        VectorOfChildren::iterator back = front;
 
-        ::std::advance< VectorOfChildren::iterator, sal_Int32 >( begin, nStartPara );
-        ::std::advance< VectorOfChildren::iterator, sal_Int32 >( end, nEndPara );
+        ::std::advance< VectorOfChildren::iterator, sal_Int32 >( front, nStartPara );
+        ::std::advance< VectorOfChildren::iterator, sal_Int32 >( back, nEndPara );
 
-        ::std::transform( begin, end, begin, ReleaseChild() );
+        ::std::transform( front, back, front, ReleaseChild() );
     }
 
     void AccessibleParaManager::ShutdownPara( const WeakChild& rChild )

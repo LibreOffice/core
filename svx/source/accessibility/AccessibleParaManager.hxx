@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-16 16:10:41 $
+ *  last change: $Author: thb $ $Date: 2002-05-21 14:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ namespace accessibility
 
         WeakCppRef() : maWeakRef(), maUnsafeRef( NULL ) {}
         WeakCppRef( InterfaceType& rImpl ) :
-            maWeakRef( ::com::sun::star::uno::Reference< UnoInterfaceType >( rImpl, uno::UNO_QUERY ) ),
+            maWeakRef( ::com::sun::star::uno::Reference< UnoInterfaceType >( rImpl, ::com::sun::star::uno::UNO_QUERY ) ),
             maUnsafeRef( &rImpl )
         {
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:09:14 $
+ *  last change: $Author: thb $ $Date: 2002-05-21 14:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,8 @@ namespace accessibility
         maParaManager.SetEditSource( NULL );
 
         // loosing all children
-        maParaManager.ForEach( AccessibleTextHelper_SendAccessibleChildEvent( *this ) );
+        AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
+        maParaManager.ForEach( aFunctor );
         maParaManager.SetNum(0);
 
         // quit listen on stale edit source
@@ -565,7 +566,8 @@ namespace accessibility
             mnFirstVisibleChild = -1;
             mnLastVisibleChild = -2;
 
-            maParaManager.ForEach( AccessibleTextHelper_SendAccessibleChildEvent( *this ) );
+            AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
+            maParaManager.ForEach( aFunctor );
             maParaManager.SetNum(0);
         }
     }
@@ -613,10 +615,11 @@ namespace accessibility
         ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
         ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-        ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( begin, mnFirstVisibleChild );
-        ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( end, mnLastVisibleChild );
+        ::std::advance( begin, mnFirstVisibleChild );
+        ::std::advance( end, mnLastVisibleChild );
 
-        ::std::for_each( begin, end, AccessibleTextHelper_UpdateChildBounds( *this ) );
+        AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
+        ::std::for_each( begin, end, aFunctor );
     }
 
 #ifdef DBG_UTIL
@@ -731,12 +734,14 @@ namespace accessibility
                                 ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
                                 ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-                                ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( begin, nFirst );
-                                ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( end, nLast );
+                                ::std::advance( begin, nFirst );
+                                ::std::advance( end, nLast );
+
+                                AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
 
                                 ::std::for_each( begin, end,
                                                  ::accessibility::AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_SendAccessibleChildEvent >
-                                                 (AccessibleTextHelper_SendAccessibleChildEvent( *this )) );
+                                                 ( aFunctor ) );
                             }
 #ifdef DBG_UTIL
                             else
@@ -807,12 +812,13 @@ namespace accessibility
                             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
                             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-                            ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( begin, pTextHint->GetValue() );
-                            ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( end, nParas );
+                            ::std::advance( begin, pTextHint->GetValue() );
+                            ::std::advance( end, nParas );
 
+                        AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
                             ::std::for_each( begin, end,
                                              ::accessibility::AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_SendAccessibleChildEvent >
-                                             (AccessibleTextHelper_SendAccessibleChildEvent( *this )) );
+                                             ( aFunctor ) );
                             break;
                         }
 
@@ -835,12 +841,13 @@ namespace accessibility
                             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
                             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
 
-                            ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( begin, pTextHint->GetValue() );
-                            ::std::advance< ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator, sal_Int32 >( end, nParas );
+                            ::std::advance( begin, pTextHint->GetValue() );
+                            ::std::advance( end, nParas );
 
+                            AccessibleTextHelper_SendAccessibleChildEvent aFunctor( *this );
                             ::std::for_each( begin, end,
                                              ::accessibility::AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_SendAccessibleChildEvent >
-                                             (AccessibleTextHelper_SendAccessibleChildEvent( *this )) );
+                                             ( aFunctor ) );
 
                             // resize child vector to the current child count
                             maParaManager.SetNum( nParas );
@@ -1092,7 +1099,7 @@ namespace accessibility
 
         mpImpl->CheckInvariants();
 #else
-        mpImpl->StateChangeEvent( nEventId, rNewValue, rOldValue );
+        mpImpl->FireEvent( nEventId, rNewValue, rOldValue );
 #endif
     }
 
