@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:13:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,17 +227,17 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 };
 String RID_SVXSTR_CLEARFORM
 {
-    Text = "Formatierung löschen";
+    Text [ de ] = "Formatierung löschen";
     Text [ en-US ] = "Clear formatting";
 };
 String RID_SVXSTR_MORE
 {
-    Text = "Weitere...";
+    Text [ de ] = "Weitere...";
     Text [ en-US ] = "More...";
 };
 StringArray RID_SVXSTRARRAY_DEFAULTSTYLES
 {
-    ItemList =
+    ItemList [ de ] =
     {
         < "Standard" ; 0 ; > ;
         < "Überschrift 1" ; 0 ; > ;
