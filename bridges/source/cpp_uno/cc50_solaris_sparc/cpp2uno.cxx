@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:25:00 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,8 +542,15 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     return code;
 }
 
+extern "C" void doFlushCode(unsigned long address, unsigned long count);
+
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
-    unsigned char const *, unsigned char const *)
+    unsigned char const * begin, unsigned char const * end)
 {
-    //TODO: flush the instruction cache (there probably is OS support for this)
+    unsigned long n = end - begin;
+    if (n != 0) {
+        unsigned long adr = reinterpret_cast< unsigned long >(begin);
+        unsigned long off = adr & 7;
+        doFlushCode(adr - off, (n + off + 7) >> 3);
+    }
 }
