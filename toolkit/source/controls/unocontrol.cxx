@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-13 15:42:53 $
+ *  last change: $Author: mt $ $Date: 2001-04-11 15:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@ UnoControl::UnoControl()
     mbUpdatingModel = sal_False;
     mbDisposePeer = sal_True;
     mbRefeshingPeer = sal_False;
+#if SUPD >= 629
+    mbCreatingPeer = sal_False;
+#endif
     mbCreatingCompatiblePeer = sal_False;
     mbDesignMode = sal_False;
 }
@@ -337,7 +340,11 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
             if ( bOwnModel )
             {
                 sal_uInt16 nPType = GetPropertyId( rEvt.PropertyName );
-                if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer )
+#if SUPD < 629
+                if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingCompatiblePeer )
+#else
+                if ( nPType && mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
+#endif
                 {
                     // Im Design-Mode koennen sich Props aendern, die eine
                     // Neuerzeugung der Peer erfordern...
@@ -371,11 +378,13 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xParent = getParentPeer();
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xThis( (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this, ::com::sun::star::uno::UNO_QUERY );
-            // call createPeer via a interface got from queryInterface, so the aggregating class can intercept it
+        // call createPeer via a interface got from queryInterface, so the aggregating class can intercept it
+
+        DBG_ASSERT( !bNeedNewPeer || xParent.is(), "Need new peer, but don't have a parent!" );
 
         aGuard.clear();
-            // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
-            // 82300 - 12/21/00 - FS
+        // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
+        // 82300 - 12/21/00 - FS
         if (bNeedNewPeer && xParent.is())
         {
             NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex() );
@@ -391,6 +400,7 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP( xParent, ::com::sun::star::uno::UNO_QUERY );
             xThis->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), xP );
             mbRefeshingPeer = sal_False;
+            aPeerPropertiesToSet.clear();
         }
 
         // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
@@ -710,6 +720,10 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
 
     if( !mxPeer.is() )
     {
+#if SUPD >= 629
+        mbCreatingPeer = sal_True;
+#endif
+
         ::com::sun::star::awt::WindowClass eType;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >  xToolkit = rxToolkit;
         if( rParentPeer.is() && mxContext.is() )
@@ -901,6 +915,10 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
             xW->addPaintListener( &maPaintListeners );
 
         xV->setGraphics( xGraphics );
+
+#if SUPD >= 629
+        mbCreatingPeer = sal_False;
+#endif
     }
 }
 
