@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:14:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ class   SdrViewUserMarker;
 class   SdrObject;
 class   SwShadowCursor;
 class   DataChangedEvent;
-class   OfaAutoCorrCfg;
+class   SvxAutoCorrCfg;
 class   SvxAutoCorrect;
 struct  SwApplyTemplate;
 struct  QuickHelpData;
@@ -237,7 +237,7 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-    void    ShowAutoTextCorrectQuickHelp( const String& rWord, OfaAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr );
+    void    ShowAutoTextCorrectQuickHelp( const String& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr );
 public:
 
     void            UpdatePointer(const Point &, USHORT nButtons = 0);
