@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:00:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,11 +413,11 @@ namespace pcr
 
         /** called to update properties which depend on a given properties's value
 
-        @param _bIsRealPropertyChange
-            if set to <TRUE/>, this is a real change in the property value, not just a call
-            for purposes of initialization
+        @param _bFirstTimeInit
+            if set to <FALSE/>, this is a real change in the property value, not just a call
+            for purposes of initialization.
         */
-        void    updateDependentProperties( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, bool _bIsRealPropertyChange = true );
+        void    actuatingPropertyChanged( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, bool _bFirstTimeInit );
 
         /** updates the state of a property which depends on more than one other property value
         */
