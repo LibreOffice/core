@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-12 14:23:56 $
+ *  last change: $Author: tra $ $Date: 2002-11-14 12:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,37 @@ static oslFileError osl_setup_base_directory_impl_(
 }
 
 /*****************************************************************
+ * osl_setup_createTempFile_impl
+ * validate input parameter, setup variables
+ ****************************************************************/
+
+ static oslFileError osl_setup_createTempFile_impl_(
+     rtl_uString*   pustrDirectoryURL,
+    oslFileHandle* pHandle,
+    rtl_uString**  ppustrTempFileURL,
+    rtl_uString**  ppustr_base_dir,
+    sal_Bool*      b_delete_on_close)
+ {
+     oslFileError osl_error;
+
+    OSL_PRECOND(((0 != pHandle) || (0 != ppustrTempFileURL)), "Invalid parameter!");
+
+    if ((0 == pHandle) && (0 == ppustrTempFileURL))
+    {
+        osl_error = osl_File_E_INVAL;
+    }
+    else
+    {
+        osl_error = osl_setup_base_directory_impl_(
+            pustrDirectoryURL, ppustr_base_dir);
+
+        *b_delete_on_close = (0 == ppustrTempFileURL);
+    }
+
+    return osl_error;
+ }
+
+/*****************************************************************
  * Create a unique file in the specified directory and return
  * it's name
  ****************************************************************/
@@ -322,10 +353,15 @@ oslFileError SAL_CALL osl_createTempFile(
     rtl_uString*  base_directory     = 0;
     rtl_uString*  temp_file_name     = 0;
     oslFileHandle temp_file_handle;
+    sal_Bool      b_delete_on_close;
     oslFileError  osl_error;
 
-    osl_error = osl_setup_base_directory_impl_(
-        pustrDirectoryURL, &base_directory);
+    osl_error = osl_setup_createTempFile_impl_(
+        pustrDirectoryURL,
+        pHandle,
+        ppustrTempFileURL,
+        &base_directory,
+        &b_delete_on_close);
 
     if (osl_File_E_None != osl_error)
         return osl_error;
@@ -335,13 +371,32 @@ oslFileError SAL_CALL osl_createTempFile(
 
     if (osl_File_E_None == osl_error)
     {
-        if (0 == pHandle)
-            osl_closeFile(temp_file_handle);
-        else
-            *pHandle = temp_file_handle;
+        rtl_uString* temp_file_url = 0;
 
-        osl_getFileURLFromSystemPath(
-            temp_file_name, ppustrTempFileURL);
+        /* assuming this works */
+        osl_getFileURLFromSystemPath(temp_file_name, &temp_file_url);
+
+        if (b_delete_on_close)
+        {
+            osl_error = osl_removeFile(temp_file_url);
+
+            if (osl_File_E_None == osl_error)
+                *pHandle = temp_file_handle;
+            else
+                osl_closeFile(temp_file_handle);
+        }
+        else
+        {
+            if (pHandle)
+                *pHandle = temp_file_handle;
+            else
+                osl_closeFile(temp_file_handle);
+
+            rtl_uString_assign(ppustrTempFileURL, temp_file_url);
+        }
+
+        if (temp_file_url)
+            rtl_uString_release(temp_file_url);
 
         if (temp_file_name)
             rtl_uString_release(temp_file_name);
