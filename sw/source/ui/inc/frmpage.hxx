@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 08:52:39 $
+ *  last change: $Author: os $ $Date: 2002-08-12 13:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ class SwFrmPage: public SfxTabPage
     BOOL            bNew;
     BOOL            bHtmlMode;
     BOOL            bNoModifyHdl;
+    BOOL            bVerticalChanged;  //check done whether frame is in vertical environment
+    BOOL            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
     USHORT          nHtmlMode;
     USHORT          nDlgType;
     Size            aGrfSize;

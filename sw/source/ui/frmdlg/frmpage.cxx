@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 08:53:01 $
+ *  last change: $Author: os $ $Date: 2002-08-12 13:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,8 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aRealSizeBT     (this, SW_RES(BT_REALSIZE)),
     aExampleWN      (this, SW_RES(WN_BSP)),
     bFormat(FALSE),
+    bVerticalChanged(FALSE),
+    bIsVerticalFrame(FALSE),
     bNew(TRUE),
     nDlgType(0),
     nUpperBorder(0),
@@ -717,8 +719,18 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         aTypeFL.Enable( FALSE );
         aFixedRatioCB.Enable(FALSE);
     }
-    else if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
-        aAnchorAtFrameRB.Hide();
+    else
+    {
+        if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
+            aAnchorAtFrameRB.Hide();
+        if(!bVerticalChanged && pSh->IsFrmInVertical())
+        {
+            String sHLabel = aHorizontalFT.GetText();
+            aHorizontalFT.SetText(aVerticalFT.GetText());
+            aVerticalFT.SetText(sHLabel);
+            bIsVerticalFrame = TRUE;
+        }
+    }
 
     if ( nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE )
     {
@@ -1151,6 +1163,38 @@ USHORT SwFrmPage::FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB)
 //      if (!bFormat || (pMap[i].nStrId != STR_FROMLEFT && pMap[i].nStrId != STR_FROMTOP))
         {
             USHORT nResId = aMirrorPagesCB.IsChecked() ? pMap[i].nMirrorStrId : pMap[i].nStrId;
+            if(bIsVerticalFrame)
+            {
+                //exchange horizontal strings with vertical strings and vice versa
+                struct ResIdPair
+                {
+                    USHORT nHori;
+                    USHORT nVert;
+                };
+                ResIdPair aHoriVertIds[] =
+                {
+                    {STR_LEFT,           STR_TOP},
+                    {STR_RIGHT,          STR_BOTTOM},
+                    {STR_CENTER_HORI,    STR_CENTER_VERT},
+                    {STR_FROMLEFT,       STR_FROMTOP},
+                    {0, 0}
+                };
+                USHORT nIndex = 0;
+                while(aHoriVertIds[nIndex].nHori)
+                {
+                    if(aHoriVertIds[nIndex].nHori == nResId)
+                    {
+                        nResId = aHoriVertIds[nIndex].nVert;
+                        break;
+                    }
+                    else if(aHoriVertIds[nIndex].nVert == nResId)
+                    {
+                        nResId = aHoriVertIds[nIndex].nHori;
+                        break;
+                    }
+                    nIndex++;
+                }
+            }
             String sEntry(SW_RES(nResId));
             sEntry.EraseAllChars( '~' );
             if (rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
