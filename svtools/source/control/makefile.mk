@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cp $ $Date: 2001-03-12 16:00:38 $
+#   last change: $Author: hro $ $Date: 2001-07-03 12:57:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@ CXXFILES=	ctrltool.cxx		\
             filectrl.cxx		\
             scrwin.cxx			\
             reginfo.cxx			\
-            groupset.cxx		\
             collatorres.cxx		\
             fmtfield.cxx
 
@@ -120,7 +119,6 @@ SLOFILES=	$(SLO)$/ctrltool.obj \
             $(SLO)$/filectrl.obj \
             $(SLO)$/scrwin.obj	 \
             $(SLO)$/reginfo.obj	\
-            $(SLO)$/groupset.obj \
             $(SLO)$/collatorres.obj \
             $(SLO)$/fmtfield.obj
 
