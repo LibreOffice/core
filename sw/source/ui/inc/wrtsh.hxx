@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:15:16 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,9 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     void    MoveCrsr( FASTBOOL bWithSelect = FALSE );
 
     // Eingabefelder updaten
-    BOOL    StartInputFldDlg(SwField*, BOOL bNextButton);
+    BOOL    StartInputFldDlg(SwField*, BOOL bNextButton, ByteString* pWindowState = 0);
+    // update DropDown fields
+    BOOL    StartDropDownFldDlg(SwField*, BOOL bNextButton, ByteString* pWindowState = 0);
 
     //"Handler" fuer Anederungen an der DrawView - fuer Controls.
     virtual void DrawSelChanged( SdrView * );
