@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp5.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:59:30 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ again:  ;
         opp--;              /* Unstack :        */
         if (opp->op != OP_QUE) {    /* Matches ? on stack?  */
             cerror("Misplaced '?' or ':', previous operator is %s",
-            opname[opp->op]);
+                   opname[(int)opp->op]);
             return (1);
         }
         /*
