@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:58 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,29 +716,44 @@ void ScDPSource::CreateRes_Impl()
         {
             ScDPItemData aColData[SC_DAPI_MAXFIELDS];
             ScDPItemData aRowData[SC_DAPI_MAXFIELDS];
+            ScDPItemData aPageData[SC_DAPI_MAXFIELDS];
             ScDPValueData aValues[SC_DAPI_MAXFIELDS];
 
             ScDPTableIteratorParam aIterPar(
                         nColLevelCount,  nColLevelDims,  aColData,
                         nRowLevelCount,  nRowLevelDims,  aRowData,
-                        nDataDimCount, nDataSrcCols, aValues );
+                        nPageDimCount,   nPageDims,      aPageData,
+                        nDataDimCount,   nDataSrcCols,   aValues );
 
             pData->ResetIterator();
             while ( pData->GetNextRow( aIterPar ) )
             {
-                pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData );
-                pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData );
-
-                //  test for filtered entries
-                //! test child dimensions for null !!!
-                if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&
-                     ( !pRowResRoot->GetChildDimension() || pRowResRoot->GetChildDimension()->IsValidEntry( aRowData ) ) )
+                // test page fields ----------------------------
+                BOOL bValidPage = TRUE;
+                for (i=0; i<nPageDimCount; i++)
                 {
-                    //! single process method with ColMembers, RowMembers and data !!!
-                    if (pColResRoot->GetChildDimension())
-                        pColResRoot->GetChildDimension()->ProcessData( aColData, NULL, NULL, aValues );
+                    ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nPageDims[i] );
+                    if ( !pDim->IsValidPage( aPageData[i] ) )
+                        bValidPage = FALSE;
+                }
+                // end of page fields --------------------------
 
-                    pRowResRoot->ProcessData( aRowData, pColResRoot->GetChildDimension(), aColData, aValues );
+                if ( bValidPage )
+                {
+                    pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData );
+                    pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData );
+
+                    //  test for filtered entries
+                    //! test child dimensions for null !!!
+                    if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&
+                         ( !pRowResRoot->GetChildDimension() || pRowResRoot->GetChildDimension()->IsValidEntry( aRowData ) ) )
+                    {
+                        //! single process method with ColMembers, RowMembers and data !!!
+                        if (pColResRoot->GetChildDimension())
+                            pColResRoot->GetChildDimension()->ProcessData( aColData, NULL, NULL, aValues );
+
+                        pRowResRoot->ProcessData( aRowData, pColResRoot->GetChildDimension(), aColData, aValues );
+                    }
                 }
             }
         }
@@ -1071,7 +1086,9 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pHierarchies( NULL ),
     nUsedHier( 0 ),
     nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
-    nSourceDim( -1 )
+    nSourceDim( -1 ),
+    bHasSelectedPage( FALSE ),
+    pSelectedData( NULL )
 {
     //! hold pSource
 }
@@ -1082,6 +1099,8 @@ ScDPDimension::~ScDPDimension()
 
     if ( pHierarchies )
         pHierarchies->release();    // ref-counted
+
+    delete pSelectedData;
 }
 
 ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
@@ -1184,6 +1203,47 @@ BOOL ScDPDimension::isDuplicated() const
     return (nSourceDim >= 0);
 }
 
+BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
+{
+    if ( bHasSelectedPage )
+    {
+        if ( !pSelectedData )
+        {
+            // find the named member to initialize pSelectedData from it, with name and value
+
+            long nLevel = 0;        // same as in ScDPObject::FillPageList
+
+            long nHierarchy = getUsedHierarchy();
+            if ( nHierarchy >= GetHierarchiesObject()->getCount() )
+                nHierarchy = 0;
+            ScDPLevels* pLevels = GetHierarchiesObject()->getByIndex(nHierarchy)->GetLevelsObject();
+            long nLevCount = pLevels->getCount();
+            if ( nLevel < nLevCount )
+            {
+                ScDPMembers* pMembers = pLevels->getByIndex(nLevel)->GetMembersObject();
+
+                //! merge with ScDPMembers::getByName
+                long nCount = pMembers->getCount();
+                for (long i=0; i<nCount && !pSelectedData; i++)
+                {
+                    ScDPMember* pMember = pMembers->getByIndex(i);
+                    if ( pMember->GetNameStr() == aSelectedPage )
+                    {
+                        pSelectedData = new ScDPItemData();
+                        pMember->FillItemData( *pSelectedData );
+                    }
+                }
+            }
+
+            if ( !pSelectedData )
+                pSelectedData = new ScDPItemData( aSelectedPage, 0.0, FALSE );      // default - name only
+        }
+
+        return rData.IsCaseInsEqual( *pSelectedData );
+    }
+    return TRUE;        // no selection -> all data
+}
+
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()
@@ -1193,6 +1253,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 
     static SfxItemPropertyMap aDPDimensionMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNO_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_ISDATALA), 0,  &getBooleanCppuType(),                      beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_NUMBERFO), 0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0 },
@@ -1237,6 +1298,37 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         if (aValue >>= eEnum)
             setFunction( eEnum );
     }
+    else if ( aNameStr.EqualsAscii( SC_UNO_FILTER ) )
+    {
+        BOOL bDone = FALSE;
+        uno::Sequence<sheet::TableFilterField> aSeq;
+        if (aValue >>= aSeq)
+        {
+            sal_Int32 nLength = aSeq.getLength();
+            if ( nLength == 0 )
+            {
+                aSelectedPage.Erase();
+                bHasSelectedPage = FALSE;
+                bDone = TRUE;
+            }
+            else if ( nLength == 1 )
+            {
+                const sheet::TableFilterField& rField = aSeq[0];
+                if ( rField.Field == 0 && rField.Operator == sheet::FilterOperator_EQUAL && !rField.IsNumeric )
+                {
+                    aSelectedPage = rField.StringValue;
+                    bHasSelectedPage = TRUE;
+                    bDone = TRUE;
+                }
+            }
+        }
+        if ( !bDone )
+        {
+            DBG_ERROR("Filter property is not a single string");
+            throw lang::IllegalArgumentException();
+        }
+        DELETEZ( pSelectedData );       // invalid after changing aSelectedPage
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -1275,6 +1367,18 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         if (nSourceDim >= 0)
             xOriginal = pSource->GetDimensionsObject()->getByIndex(nSourceDim);
         aRet <<= xOriginal;
+    }
+    else if ( aNameStr.EqualsAscii( SC_UNO_FILTER ) )
+    {
+        if ( bHasSelectedPage )
+        {
+            // single filter field: first field equal to selected string
+            sheet::TableFilterField aField( sheet::FilterConnection_AND, 0,
+                    sheet::FilterOperator_EQUAL, sal_False, 0.0, aSelectedPage );
+            aRet <<= uno::Sequence<sheet::TableFilterField>( &aField, 1 );
+        }
+        else
+            aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else
     {
@@ -2042,6 +2146,15 @@ BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
     }
 
     return r.IsCaseInsEqual( ScDPItemData( aName, fValue, bHasValue ) );
+}
+
+void ScDPMember::FillItemData( ScDPItemData& rData ) const
+{
+    //! handle date hierarchy...
+
+    rData.aString   = aName;
+    rData.fValue    = fValue;
+    rData.bHasValue = bHasValue;
 }
 
 String ScDPMember::GetNameStr() const
