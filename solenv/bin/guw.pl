@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-22 13:32:30 $
+#   last change: $Author: hjs $ $Date: 2002-10-25 13:16:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,15 +64,16 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #*************************************************************************
 # Description: ??
 
-# Attention!!! Avoid dos-style lineendings (\r\n) in parameter files (@filename)
-# No, replace_cyg takes care for this.
-
 #---------------------------------------------------------------------------
+# external modules
+use Text::ParseWords;
+
 # global vars
 @params = ();
 
 # set debug mode here:
 #$debug="true";
+$debug_light="true";
 
 #---------------------------------------------------------------------------
 # Define known parameter exceptions
@@ -91,34 +92,50 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #----------------------------------------------------------
 # Function name: WinFormat
 # Description:   Format variables to Windows Format.
-# Arguments:     1. Variable (string)
+# Arguments:     1. Variable (string) with one token
 # Return value:  Reformatted String
 #----------------------------------------------------------
 sub WinFormat {
   my $variable = shift @_;
-  my( $d1, $d2 );
+  my( $d1, $d1_prefix, $d2 );
+
   $variable =~ s/(\$\w+)/$1/eeg ; # expand the variables
   $variable =~ s/(\$\w+)/$1/eeg ; # expand the variables twice!
   $variable =~ s/:/;/g;
   $variable =~ s/([;]|\A)(\w);/$1$2:/g; # get back the drives
   # Search for posix path ;entry; and replace with cygpath -w entry
-#  while ( $variable =~ /(?:[;]|\A)((?:\/[\w\.~]+)+(?:[;]|\Z))/ ) { # Normal paths
-  while ( $variable =~ /(?:[;]|\A)((?:\/[\w\.\-~]+)+(?:[;]|\Z))/ ) { # Normal paths
+  while ( $variable =~ /(?:;|\A)((?:\/[\w\.\- ~]+)+(?:;|\Z))/ ) { # Normal paths
     if ( defined $debug ) { print(STDERR "WinFormat:\nnormal path:\n$variable\n");};
     $d1 = $1 ;
     chomp( $d2 = qx{cygpath -w "$d1"} ) ;
     $variable =~ s/$d1/$d2/ ;
   }
-  while ( $variable =~ /(?:-\w)((?:\/[\w\.\-~]+)+(?:\s|\Z))/ ) { # Include paths
+  if ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) { # Include paths (sometimes with "/" at the end)
+    # This regex: option -> $1, filename without quotes -> $2
     if ( defined $debug ) { print(STDERR "WinFormat:\ninclude path:\n$variable\n");};
-    $d1 = $1 ;
-    chomp( $d2 = qx{cygpath -w "$d1"} ) ;
-    $variable =~ s/$d1/$d2/ ;
+    $d1_prefix = $1;
+    $d1 = $2;
+    # Some programs (e.g. rsc have problems with filenames with spaces), use short dos paths
+    if ( $d1 =~ / / ) {
+        chomp( $d1 = qx{cygpath -d "$d1"} );
+    } else {
+        chomp( $d1 = qx{cygpath -w "$d1"} );
+    }
+    # "cygpath -d" returns "" if the file doesn't exist.
+    if ($d1 eq "") {
+      $d1 = ".";
+      print(STDERR "Error: guw.pl: Option:$variable:\nhas a problem! Probably nonexistent filename with space.\n");
+    }
+    $variable = $d1_prefix.$d1;
   }
-  $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
+  if ( $variable =~ /-\w[\'\"]?(?:(?:\/[\w\.\- ~]+)+)/ ) {
+      print(STDERR "Error: guw.pl: WinFormat: Not converted -X/... type switch in :$variable:.\n");
+      if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed -X/...\n"; }
+  }
+  $variable =~ s/\//\\/g;       # Remaining \ come from e.g.: ../foo/baa
   $variable =~ s/^\\$/\//g; # a single "/" needs to be preserved
 
-  if ( defined $debug ) { print(STDERR "WinFormat:\nresult:\n$variable\n");};
+  if ( defined $debug ) { print(STDERR "WinFormat:\nresult:$variable\n");};
   return $variable;
 }
 
@@ -130,7 +147,7 @@ sub WinFormat {
 #----------------------------------------------------------
 sub replace_cyg {
     my $args = shift;
-    my @cmd_file;
+    my( @cmd_file, @cmd_temp );
     foreach my $para ( @$args )
       {
         if ( $para =~ "^@" ) {
@@ -144,8 +161,14 @@ sub replace_cyg {
           while ( <CMD> ) {
             # Remove DOS lineendings. Bug in Cygwin / Perl?
             $_ =~ s/\r//g;
+            # Remove lineendings and trailing spaces. ( Needed by &parse_line )
+            $_ =~ s/\n$//g;
+            $_ =~ s/\s+$//g;
             # Fill all tokens into array
-            push( @cmd_file, split(/[ \t\n]+/,$_));
+            @cmd_temp = &parse_line('\s+', 1, $_ );
+            if ( $#cmd_temp > -1 ) {
+                push( @cmd_file, @cmd_temp);
+            }
           }
           close(CMD);
           # reformat all tokens
@@ -159,9 +182,10 @@ sub replace_cyg {
           # write all tokens back into this file
           print(CMD join(' ', @cmd_file));
           close(CMD);
-          # convert filename to dos style
+          # convert '@filename' to dos style
           $para = WinFormat( $para );
           if ( defined $debug ) { print(STDERR "----------------------------\n");};
+          if ( (defined $debug_light) or (defined $debug) ) { print(STDERR "\nParameter in File:".join(' ', @cmd_file).":\n");}
           $para = "@".$para;
         } else {
           # it's just a parameter
@@ -235,6 +259,5 @@ while ( $command =~ /^-/ )
 print( STDERR "Command: $command\n" );
 
 replace_cyg(\@params);
-if ( defined $debug ) { print(STDERR "\n---------------------\nExecute: $command @params\n");};
-#print( STDERR "$command", @params);
+if ( (defined $debug_light) or (defined $debug) ) { print(STDERR "\n---------------------\nExecute: $command @params\n----------------\n");};
 exec( "$command", @params);
