@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:45:26 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,58 +417,42 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
 void FatalErrorExit(OUString const & aMessage)
 {
-    if ( Application::IsRemoteServer() )
+    OUString aProductKey = ::utl::Bootstrap::getProductKey();
+
+    if (!aProductKey.getLength())
     {
-        OString aTmpStr = OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US );
-        fprintf( stderr, aTmpStr.getStr() );
+        ::vos::OStartupInfo aInfo;
+        aInfo.getExecutableFile( aProductKey );
+
+        sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
+        if ( lastIndex > 0 )
+            aProductKey = aProductKey.copy( lastIndex+1 );
     }
-    else
-    {
-        OUString aProductKey = ::utl::Bootstrap::getProductKey();
 
-        if (!aProductKey.getLength())
-        {
-            ::vos::OStartupInfo aInfo;
-            aInfo.getExecutableFile( aProductKey );
-
-            sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
-            if ( lastIndex > 0 )
-                aProductKey = aProductKey.copy( lastIndex+1 );
-        }
-
-        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
-        aBootstrapFailedBox.SetText( aProductKey );
-        aBootstrapFailedBox.Execute();
-    }
+    ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
+    aBootstrapFailedBox.SetText( aProductKey );
+    aBootstrapFailedBox.Execute();
 
     _exit( 333 );
 }
 
 void FatalError(OUString const & aMessage)
 {
-    if ( Application::IsRemoteServer() )
+    OUString aProductKey = ::utl::Bootstrap::getProductKey();
+
+    if (!aProductKey.getLength())
     {
-        OString aTmpStr = OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US );
-        fprintf( stderr, aTmpStr.getStr() );
+        ::vos::OStartupInfo aInfo;
+        aInfo.getExecutableFile( aProductKey );
+
+        sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
+        if ( lastIndex > 0 )
+            aProductKey = aProductKey.copy( lastIndex+1 );
     }
-    else
-    {
-        OUString aProductKey = ::utl::Bootstrap::getProductKey();
 
-        if (!aProductKey.getLength())
-        {
-            ::vos::OStartupInfo aInfo;
-            aInfo.getExecutableFile( aProductKey );
-
-            sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
-            if ( lastIndex > 0 )
-                aProductKey = aProductKey.copy( lastIndex+1 );
-        }
-
-        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
-        aBootstrapFailedBox.SetText( aProductKey );
-        aBootstrapFailedBox.Execute();
-    }
+    ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
+    aBootstrapFailedBox.SetText( aProductKey );
+    aBootstrapFailedBox.Execute();
 }
 
 CommandLineArgs* Desktop::GetCommandLineArgs()
@@ -588,36 +572,33 @@ void Desktop::Init()
 
     ::comphelper::setProcessServiceFactory( rSMgr );
 
-    if ( !Application::IsRemoteServer() )
-    {
-        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
+    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 #ifdef UNX
-        //  check whether we need to print cmdline help
-        if ( pCmdLineArgs->IsHelp() ) {
-            displayCmdlineHelp();
-            _exit(0);
-        }
-#endif
-        // start ipc thread only for non-remote offices
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
-        OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
-        if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
-        {
-            SetBootstrapError( BE_PATHINFO_MISSING );
-        }
-        else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
-        {
-            // 2nd office startup should terminate after sending cmdlineargs through pipe
-            _exit( 0 );
-        }
-        else if ( pCmdLineArgs->IsHelp() )
-        {
-            // disable IPC thread in an instance that is just showing a help message
-            OfficeIPCThread::DisableOfficeIPCThread();
-        }
-
-        pSignalHandler = new SalMainPipeExchangeSignalHandler;
+    //  check whether we need to print cmdline help
+    if ( pCmdLineArgs->IsHelp() ) {
+        displayCmdlineHelp();
+        _exit(0);
     }
+#endif
+    // start ipc thread only for non-remote offices
+    RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
+    OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
+    if ( aStatus == OfficeIPCThread::IPC_STATUS_BOOTSTRAP_ERROR )
+    {
+        SetBootstrapError( BE_PATHINFO_MISSING );
+    }
+    else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
+    {
+        // 2nd office startup should terminate after sending cmdlineargs through pipe
+        _exit( 0 );
+    }
+    else if ( pCmdLineArgs->IsHelp() )
+    {
+        // disable IPC thread in an instance that is just showing a help message
+        OfficeIPCThread::DisableOfficeIPCThread();
+    }
+
+    pSignalHandler = new SalMainPipeExchangeSignalHandler;
 }
 
 void Desktop::DeInit()
@@ -635,12 +616,9 @@ void Desktop::DeInit()
         if (m_pLockfile != NULL)
             m_pLockfile->clean();
 
-        if( !Application::IsRemoteServer() )
-        {
-            OfficeIPCThread::DisableOfficeIPCThread();
-            if( pSignalHandler )
-                DELETEZ( pSignalHandler );
-        }
+        OfficeIPCThread::DisableOfficeIPCThread();
+        if( pSignalHandler )
+            DELETEZ( pSignalHandler );
     } catch (RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind..
@@ -755,59 +733,31 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
                 bWorkstationInstallation = sal_True;
         }
 
-        if ( Application::IsRemoteServer() )
-        {
-            OString aTmpStr = OUStringToOString( aDiagnosticMessage, RTL_TEXTENCODING_ASCII_US );
-            fprintf( stderr, aTmpStr.getStr() );
-        }
-        else
-        {
-            OUString        aMessage;
-            OUStringBuffer    aBuffer( 100 );
-            aBuffer.append( aDiagnosticMessage );
+        OUString        aMessage;
+        OUStringBuffer    aBuffer( 100 );
+        aBuffer.append( aDiagnosticMessage );
 
-            aBuffer.appendAscii( "\n" );
+        aBuffer.appendAscii( "\n" );
 
-            if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
+        if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
+        {
+            // Check installation mode to suppress error message if we are currently running with a network installation.
+            OUString aInstallMode( RTL_CONSTASCII_USTRINGPARAM( INSTALLMODE_STANDALONE ));
+
+            aInstallMode = utl::Bootstrap::getInstallMode( aInstallMode );
+            if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ))
             {
-                // Check installation mode to suppress error message if we are currently running with a network installation.
-                OUString aInstallMode( RTL_CONSTASCII_USTRINGPARAM( INSTALLMODE_STANDALONE ));
-
-                aInstallMode = utl::Bootstrap::getInstallMode( aInstallMode );
-                if ( aInstallMode.equalsIgnoreAsciiCaseAscii( INSTALLMODE_NETWORK ))
-                {
-                    // network installation => start setup without error message
-                    OUString aParameters;
-                    StartSetup( aParameters );
-                }
-                else
-                {
-                    OUString aAskSetupStr( GetMsgString(
-                        STR_ASK_START_SETUP,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to check installation?" )) ));
-
-                    aBuffer.append( aAskSetupStr );
-                    aMessage = aBuffer.makeStringAndClear();
-
-                    ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
-                    aBootstrapFailedBox.SetText( aProductKey );
-                    int nResult = aBootstrapFailedBox.Execute();
-
-                    if ( nResult == RET_YES )
-                    {
-                        OUString aParameters;
-                        StartSetup( aParameters );
-                    }
-                }
+                // network installation => start setup without error message
+                OUString aParameters;
+                StartSetup( aParameters );
             }
-            else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
-                     ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )     )
+            else
             {
-                OUString aAskSetupRepairStr( GetMsgString(
-                    STR_ASK_START_SETUP_REPAIR,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair installation?" )) ));
+                OUString aAskSetupStr( GetMsgString(
+                    STR_ASK_START_SETUP,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to check installation?" )) ));
 
-                aBuffer.append( aAskSetupRepairStr );
+                aBuffer.append( aAskSetupStr );
                 aMessage = aBuffer.makeStringAndClear();
 
                 ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
@@ -816,13 +766,31 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
                 if ( nResult == RET_YES )
                 {
-                     OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
+                    OUString aParameters;
                     StartSetup( aParameters );
                 }
             }
         }
+        else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
+                    ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )     )
+        {
+            OUString aAskSetupRepairStr( GetMsgString(
+                STR_ASK_START_SETUP_REPAIR,
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair installation?" )) ));
 
-        // _exit( 333 );
+            aBuffer.append( aAskSetupRepairStr );
+            aMessage = aBuffer.makeStringAndClear();
+
+            ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+            aBootstrapFailedBox.SetText( aProductKey );
+            int nResult = aBootstrapFailedBox.Execute();
+
+            if ( nResult == RET_YES )
+            {
+                    OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
+                StartSetup( aParameters );
+            }
+        }
     }
 }
 
@@ -979,50 +947,33 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         // Uno service manager is not available. VCL needs a uno service manager to display a message box!!!
         // Currently we are not able to display a message box with a service manager due to this limitations inside VCL.
 
-        if ( Application::IsRemoteServer() )
-        {
-            OStringBuffer aErrorMsgBuffer( 50 );
+        // First sentence. We cannot bootstrap office further!
+        OUString            aMessage;
+        OUStringBuffer        aDiagnosticMessage( 100 );
 
-            aErrorMsgBuffer.append( "The program cannot be started. " );
+        OUString aErrorMsg;
 
-            if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
-                aErrorMsgBuffer.append( "The service manager is not available.\n" );
-            else
-                aErrorMsgBuffer.append( "The configuration service is not available.\n" );
-
-            OString aErrorMsg = aErrorMsgBuffer.makeStringAndClear();
-            fprintf( stderr, aErrorMsg.getStr() );
-        }
+        if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
+            aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SERVICE,
+                            OUString( RTL_CONSTASCII_USTRINGPARAM( "The service manager is not available." )) );
         else
-        {
-            // First sentence. We cannot bootstrap office further!
-            OUString            aMessage;
-            OUStringBuffer        aDiagnosticMessage( 100 );
+            aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_CFG_SERVICE,
+                            OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration service is not available." )) );
 
-            OUString aErrorMsg;
+        aDiagnosticMessage.append( aErrorMsg );
+        aDiagnosticMessage.appendAscii( "\n" );
 
-            if ( aBootstrapError == BE_UNO_SERVICEMANAGER )
-                aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_SERVICE,
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "The service manager is not available." )) );
-            else
-                aErrorMsg = GetMsgString( STR_BOOTSTRAP_ERR_NO_CFG_SERVICE,
-                                OUString( RTL_CONSTASCII_USTRINGPARAM( "The configuration service is not available." )) );
+        // Due to the fact the we haven't a backup applicat.rdb file anymore it is not possible to
+        // repair the installation with the setup executable besides the office executable. Now
+        // we have to ask the user to start the setup on CD/installation directory manually!!
+        OUString aStartSetupManually( GetMsgString(
+            STR_ASK_START_SETUP_MANUALLY,
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair the installation from CD, or the folder containing the installation packages." )) ));
 
-            aDiagnosticMessage.append( aErrorMsg );
-            aDiagnosticMessage.appendAscii( "\n" );
+        aDiagnosticMessage.append( aStartSetupManually );
+        aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
 
-            // Due to the fact the we haven't a backup applicat.rdb file anymore it is not possible to
-            // repair the installation with the setup executable besides the office executable. Now
-            // we have to ask the user to start the setup on CD/installation directory manually!!
-            OUString aStartSetupManually( GetMsgString(
-                STR_ASK_START_SETUP_MANUALLY,
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair the installation from CD, or the folder containing the installation packages." )) ));
-
-            aDiagnosticMessage.append( aStartSetupManually );
-            aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
-
-            FatalError( aMessage);
-        }
+        FatalError( aMessage);
     }
     else if ( aBootstrapError == BE_USERINSTALL_FAILED )
     {
@@ -1174,7 +1125,7 @@ USHORT Desktop::Exception(USHORT nError)
 
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
-    Application::SetDefModalDialogParent( NULL );
+    Application::SetDefDialogParent( NULL );
 
     if ( bInException )
     {
@@ -1232,7 +1183,7 @@ USHORT Desktop::Exception(USHORT nError)
                 _exit( 333 );
             }
 
-            if( bRecovery && !Application::IsRemoteServer() )
+            if( bRecovery )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
@@ -1327,11 +1278,8 @@ void Desktop::Main()
 
     com::sun::star::uno::ContextLayer layer( com::sun::star::uno::getCurrentContext() );
 
-    if ( !Application::IsRemoteServer() )
-    {
-        com::sun::star::uno::setCurrentContext(
-            new JavaContext( com::sun::star::uno::getCurrentContext() ) );
-    }
+    com::sun::star::uno::setCurrentContext(
+        new JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
     // ----  Startup screen ----
     // OpenSplashScreen();
@@ -1540,37 +1488,34 @@ void Desktop::Main()
     if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
         InitializeQuickstartMode( xSMgr );
 
-    if ( !Application::IsRemoteServer() )
+    // Create TypeDetection service to have filter informations for quickstart feature
+    RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
+    try
     {
-        // Create TypeDetection service to have filter informations for quickstart feature
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.document.TypeDetection" );
-        try
-        {
-            Reference< XTypeDetection >
-                xTypeDetection( xSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))), UNO_QUERY );
-            SetSplashScreenProgress(85);
-            Reference< XDesktop > xDesktop( xSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-            if ( xDesktop.is() )
-                xDesktop->addTerminateListener( new OfficeIPCThreadController );
-            SetSplashScreenProgress(100);
-        }
-        catch ( com::sun::star::uno::Exception& e )
-        {
-            FatalError( MakeStartupErrorMessage(e.Message) );
-            return;
-        }
-        /*
-        catch ( ... )
-        {
-            FatalError( MakeStartupErrorMessage(
-                OUString::createFromAscii(
-                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
-            return;
-        }
-        */
+        Reference< XTypeDetection >
+            xTypeDetection( xSMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))), UNO_QUERY );
+        SetSplashScreenProgress(85);
+        Reference< XDesktop > xDesktop( xSMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+        if ( xDesktop.is() )
+            xDesktop->addTerminateListener( new OfficeIPCThreadController );
+        SetSplashScreenProgress(100);
     }
+    catch ( com::sun::star::uno::Exception& e )
+    {
+        FatalError( MakeStartupErrorMessage(e.Message) );
+        return;
+    }
+    /*
+    catch ( ... )
+    {
+        FatalError( MakeStartupErrorMessage(
+            OUString::createFromAscii(
+            "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
+        return;
+    }
+    */
 
     // Release solar mutex just before we wait for our client to connect
     int nAcquireCount = 0;
@@ -2372,8 +2317,7 @@ void Desktop::OpenSplashScreen()
     CommandLineArgs*    pCmdLine = GetCommandLineArgs();
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
-    if ( !Application::IsRemoteServer() &&
-         !pCmdLine->IsInvisible() &&
+    if ( !pCmdLine->IsInvisible() &&
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
          !pCmdLine->IsNoLogo() &&
