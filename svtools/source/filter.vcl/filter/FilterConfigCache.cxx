@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-03 14:08:29 $
+ *  last change: $Author: sj $ $Date: 2001-08-07 13:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,17 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::IsValid()
     return sFilterName.Len() != 0;
 }
 
+sal_Bool FilterConfigCache::bInitialized = sal_False;
+sal_Int32 FilterConfigCache::nIndType = -1;
+sal_Int32 FilterConfigCache::nIndUIName = -1;
+sal_Int32 FilterConfigCache::nIndDocumentService = -1;
+sal_Int32 FilterConfigCache::nIndFilterService = -1;
+sal_Int32 FilterConfigCache::nIndFlags = -1;
+sal_Int32 FilterConfigCache::nIndUserData = -1;
+sal_Int32 FilterConfigCache::nIndFileFormatVersion = -1;
+sal_Int32 FilterConfigCache::nIndTemplateName = -1;
+
+
 sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
     bIsPixelFormat = bIsInternalFilter = sal_False;
@@ -150,6 +161,18 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
     return sFilterName.Len() != 0;
 }
 
+String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
+{
+    String aShortName;
+    if ( lExtensionList.getLength() )
+    {
+        aShortName = lExtensionList[ 0 ];
+        if ( aShortName.SearchAscii( "*.", 0 ) == 0 )
+            aShortName.Erase( 0, 2 );
+    }
+    return aShortName;
+}
+
 sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rFilterProperties )
 {
     static OUString sUserData   ( RTL_CONSTASCII_USTRINGPARAM( "UserData" ) );
@@ -174,64 +197,52 @@ sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rF
     return bIsOwn;
 }
 
-sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >& rFilterProperties,
+sal_Bool FilterConfigCache::ImplAddFilterEntry( sal_Int32& nFlags,
+                                                const Sequence< PropertyValue >& rFilterProperties,
                                                     const Reference< XNameAccess >& xTypeAccess )
 {
-    static OUString sType               ( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
-    static OUString sUIName             ( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) );
-    static OUString sDocumentService    ( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ) );
-    static OUString sFilterService      ( RTL_CONSTASCII_USTRINGPARAM( "FilterService" ) );
-    static OUString sFlags              ( RTL_CONSTASCII_USTRINGPARAM( "Flags" ) );
-    static OUString sUserData           ( RTL_CONSTASCII_USTRINGPARAM( "UserData" ) );
-    static OUString sFileFormatVersion  ( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion" ) );
-    static OUString sTemplateName       ( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" ) );
-
     static OUString sExtensions         ( RTL_CONSTASCII_USTRINGPARAM( "Extensions" ) );
     static OUString sMediaType          ( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
 
     static OUString sTrue               ( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
 
     sal_Bool bFilterEntryCreated = sal_False;
-    FilterConfigCacheEntry  aEntry;
 
     try
     {
-        sal_Int32 i, nCount = rFilterProperties.getLength();
-        for ( i = 0; i < nCount; i++ )
+        FilterConfigCacheEntry aEntry;
+
+        if ( nIndType >= 0 )
+            rFilterProperties[ nIndType ].Value >>= aEntry.sType;
+        if ( nIndUIName >= 0 )
+            rFilterProperties[ nIndUIName ].Value >>= aEntry.sUIName;
+        if ( nIndDocumentService >= 0 )
+            rFilterProperties[ nIndDocumentService ].Value >>= aEntry.sDocumentService;
+        if ( nIndFilterService >= 0 )
+            rFilterProperties[ nIndFilterService ].Value >>= aEntry.sFilterService;
+        if ( nIndFlags >= 0 )
+            rFilterProperties[ nIndFlags ].Value >>= aEntry.nFlags;
+        if ( nIndUserData >= 0 )
         {
-            PropertyValue aPropValue( rFilterProperties[ i ] );
-            if ( aPropValue.Name.equals( sType ) )
-                aPropValue.Value >>= aEntry.sFilterType;
-            else if ( aPropValue.Name.equals( sUIName ) )
-                aPropValue.Value >>= aEntry.sUIName;
-            else if ( aPropValue.Name.equals( sDocumentService ) )
-                aPropValue.Value >>= aEntry.sDocumentService;
-            else if ( aPropValue.Name.equals( sFilterService ) )
-                aPropValue.Value >>= aEntry.sFilterService;
-            else if ( aPropValue.Name.equals( sFlags ) )
-                aPropValue.Value >>= aEntry.nFlags;
-            else if ( aPropValue.Name.equals( sUserData ) )
+            Sequence < OUString > lUserData;
+            rFilterProperties[ nIndUserData ].Value >>= lUserData;
+            if ( lUserData.getLength() == TOKEN_COUNT_FOR_OWN_FILTER )
             {
-                Sequence < OUString > lUserData;
-                aPropValue.Value >>= lUserData;
-                if ( lUserData.getLength() == TOKEN_COUNT_FOR_OWN_FILTER )
-                {
-                    aEntry.bHasDialog = lUserData[ TOKEN_INDEX_FOR_HASDIALOG ].equalsIgnoreAsciiCase( sTrue );
-                    aEntry.CreateFilterName( lUserData[ TOKEN_INDEX_FOR_FILTER ] );
-                }
+                aEntry.bHasDialog = lUserData[ TOKEN_INDEX_FOR_HASDIALOG ].equalsIgnoreAsciiCase( sTrue );
+                aEntry.CreateFilterName( lUserData[ TOKEN_INDEX_FOR_FILTER ] );
             }
-            else if ( aPropValue.Name.equals( sFileFormatVersion ) )
-                aPropValue.Value >>= aEntry.nFileFormatVersion;
-            else if ( aPropValue.Name.equals( sTemplateName ) )
-                aPropValue.Value >>= aEntry.sTemplateName;
         }
+        if ( nIndFileFormatVersion >= 0 )
+            rFilterProperties[ nIndFileFormatVersion ].Value >>= aEntry.nFileFormatVersion;
+        if ( nIndTemplateName >= 0 )
+            rFilterProperties[ nIndTemplateName ].Value >>= aEntry.sTemplateName;
 
         if ( aEntry.IsValid() )
         {
             // trying to get the corresponding type for this filter
-            if ( xTypeAccess->hasByName( aEntry.sFilterType ) )
+            if ( xTypeAccess->hasByName( aEntry.sType ) )
             {
-                Any aTypePropertySet = xTypeAccess->getByName( aEntry.sFilterType );
+                Any aTypePropertySet = xTypeAccess->getByName( aEntry.sType );
                 Sequence< PropertyValue > lProperties;
                 aTypePropertySet >>= lProperties;
                 sal_Int32 j, nCount = lProperties.getLength();
@@ -244,27 +255,19 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
                     else if ( aPropValue.Name.equals( sMediaType ) )
                         aPropValue.Value >>= aEntry.sMediaType;
                 }
-                sal_Int32 nExtensionCount = aEntry.lExtensionList.getLength();
-                if ( nExtensionCount )
+                // The first extension will be used
+                // to generate our internal FilterType ( BMP, WMF ... )
+
+                String aExtension( aEntry.GetShortName() );
+                if ( aExtension.Len() == 3 )
                 {
-                    // The first extension will be used
-                    // to generate our internal FilterType ( BMP, WMF ... )
-
-                    String aExtension( aEntry.lExtensionList[ 0 ] );
-                    if ( aExtension.SearchAscii( "*.", 0 ) == 0 )
-                        aExtension.Erase( 0, 2 );
-
-                    if ( aExtension.Len() == 3 )
-                    {
-                        aEntry.sType = aExtension;
-
-                        if ( aEntry.nFlags & 1 )
-                            aImport.push_back( aEntry );
-                        if ( aEntry.nFlags & 2 )
-                            aExport.push_back( aEntry );
-                        if ( aEntry.nFlags & 3 )
-                            bFilterEntryCreated = sal_True;
-                    }
+                    if ( aEntry.nFlags & 1 )
+                        aImport.push_back( aEntry );
+                    if ( aEntry.nFlags & 2 )
+                        aExport.push_back( aEntry );
+                    if ( aEntry.nFlags & 3 )
+                        bFilterEntryCreated = sal_True;
+                    nFlags = aEntry.nFlags;
                 }
             }
         }
@@ -278,6 +281,8 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( const Sequence< PropertyValue >&
 
 void FilterConfigCache::ImplInit()
 {
+    static OUString sType ( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
+
     // get global uno service manager
     Reference< XMultiServiceFactory > xSMGR = getProcessServiceFactory();
 
@@ -290,18 +295,77 @@ void FilterConfigCache::ImplInit()
     Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
     sal_Int32 nAllFilterCount = lAllFilter.getLength();
 
-    sal_Int32 i;
+    sal_Int32 i, j;
 
-    for ( i =  0; i < nAllFilterCount; i++ )
+    for ( i = 0; i < nAllFilterCount; i++ )
     {
         OUString sInternalTypeName = lAllFilter[ i ];
         Any aTypePropertySet = xFilterAccess->getByName( sInternalTypeName );
 
         Sequence< PropertyValue > lProperties;
         aTypePropertySet >>= lProperties;
-
+        if ( !bInitialized )
+        {
+            sal_Int32 i, nCount = lProperties.getLength();
+            for ( i = 0; i < nCount; i++ )
+            {
+                PropertyValue aPropValue( lProperties[ i ] );
+                if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) )
+                    nIndType = i;
+                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) ) ) )
+                    nIndUIName = i;
+                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ) ) ) )
+                    nIndDocumentService = i;
+                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterService" ) ) ) )
+                    nIndFilterService = i;
+                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Flags" ) ) ) )
+                    nIndFlags = i;
+                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserData" ) ) ) )
+                    nIndUserData = i;
+                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion" ) ) ) )
+                    nIndFileFormatVersion = i;
+                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" ) ) ) )
+                    nIndTemplateName = i;
+            }
+            bInitialized = sal_True;
+        }
         if ( ImplIsOwnFilter( lProperties ) )
-            ImplAddFilterEntry( lProperties, xTypeAccess );
+        {
+            sal_Int32 nFlags = 0;
+            if ( ImplAddFilterEntry( nFlags, lProperties, xTypeAccess ) )
+            {
+                if ( ( nFlags & 1 ) && ( nIndType >= 0 )  )  // import filter ?
+                {
+                    CacheVector::iterator aIter( aImport.end() - 1 );
+                    for ( j = 0; j < nAllFilterCount; j++ )
+                    {
+                        if ( i != j )
+                        {
+                            OUString sInternalTypeName = lAllFilter[ j ];
+                            Any aTypePropertySet = xFilterAccess->getByName( sInternalTypeName );
+                            Sequence< PropertyValue > l2Properties;
+                            aTypePropertySet >>= l2Properties;
+                            sal_Int32 n2Flags;
+                            l2Properties[ nIndFlags ].Value >>= n2Flags;
+                            if ( n2Flags & 1 )
+                            {
+                                OUString s2Type;
+                                l2Properties[ nIndType ].Value >>= s2Type;
+                                if ( s2Type.equals( aIter->sType ) )
+                                {
+                                    sal_Int32 nIndex = sInternalTypeName.lastIndexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( ": " ) ) );
+                                    if ( nIndex >= 0 )
+                                        aIter->sFilterType = sInternalTypeName.copy( nIndex + 2 );
+                                    else
+                                        aIter->sFilterType = sInternalTypeName;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 };
 
@@ -430,7 +494,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForShortName( const String& r
     CacheVector::iterator aIter( aImport.begin() );
     while ( aIter != aImport.end() )
     {
-        if ( aIter->sType.equalsIgnoreAsciiCase( rShortName ) )
+        if ( aIter->GetShortName().EqualsIgnoreCaseAscii( rShortName ) )
             break;
         aIter++;
     }
@@ -460,7 +524,7 @@ String FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
     CacheVector::iterator aIter( aImport.begin() + nFormat );
     String aType;
     if ( aIter < aImport.end() )
-        aType = aIter->sType;
+        aType = aIter->GetShortName();
     aType.ToUpperAscii();
     return aType;
 }
@@ -475,6 +539,15 @@ String FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int3
             aExtension = aIter->lExtensionList[ nEntry ];
     }
     return aExtension;
+}
+
+String FilterConfigCache::GetImportFilterType( sal_uInt16 nFormat )
+{
+    CacheVector::iterator aIter( aImport.begin() + nFormat );
+    String aType;
+    if ( aIter < aImport.end() )
+        aType = aIter->sType;
+    return aType;
 }
 
 String FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
@@ -549,7 +622,7 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForShortName( const String& r
     CacheVector::iterator aIter( aExport.begin() );
     while ( aIter != aExport.end() )
     {
-        if ( aIter->sType.equalsIgnoreAsciiCase( rShortName ) )
+        if ( aIter->GetShortName().EqualsIgnoreCaseAscii( rShortName ) )
             break;
         aIter++;
     }
@@ -579,7 +652,7 @@ String FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
     CacheVector::iterator aIter( aExport.begin() + nFormat );
     String aType;
     if ( aIter < aExport.end() )
-        aType = aIter->sType;
+        aType = aIter->GetShortName();
     aType.ToUpperAscii();
     return aType;
 }

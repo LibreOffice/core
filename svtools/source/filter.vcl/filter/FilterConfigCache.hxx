@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-03 14:08:52 $
+ *  last change: $Author: sj $ $Date: 2001-08-07 13:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ class FilterConfigCache
 
             sal_Bool        IsValid();
             sal_Bool        CreateFilterName( const ::rtl::OUString& rUserDataEntry );
+            String          GetShortName( );
 
             static const char* InternalPixelFilterNameList[];
             static const char* InternalVectorFilterNameList[];
@@ -119,13 +120,23 @@ class FilterConfigCache
         CacheVector         aExport;
         sal_Bool            bUseConfig;
 
-
         sal_Bool            ImplIsOwnFilter( const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties );
-        sal_Bool            ImplAddFilterEntry( const ::com::sun::star::uno::Sequence<
+        sal_Bool            ImplAddFilterEntry( sal_Int32& nFlags,
+                                                const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::beans::PropertyValue >& rFilterProperties,
                                                     const ::com::sun::star::uno::Reference<
                                                         ::com::sun::star::container::XNameAccess >& xTypeAccess );
+
+        static sal_Bool   bInitialized;
+        static sal_Int32  nIndType;
+        static sal_Int32  nIndUIName;
+        static sal_Int32  nIndDocumentService;
+        static sal_Int32  nIndFilterService;
+        static sal_Int32  nIndFlags;
+        static sal_Int32  nIndUserData;
+        static sal_Int32  nIndFileFormatVersion;
+        static sal_Int32  nIndTemplateName;
 
         static const char*  InternalFilterListForSvxLight[];
 
@@ -144,6 +155,7 @@ class FilterConfigCache
         String      GetImportFormatMediaType( sal_uInt16 nFormat );
         String      GetImportFormatShortName( sal_uInt16 nFormat );
         String      GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
+        String      GetImportFilterType( sal_uInt16 nFormat );
         String      GetImportFilterTypeName( sal_uInt16 nFormat );
 
         sal_Bool    IsImportInternalFilter( sal_uInt16 nFormat );
