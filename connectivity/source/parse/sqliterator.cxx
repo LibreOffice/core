@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 14:51:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 08:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,16 +247,35 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                 if(!aSchema.getLength())
                     aSchema = ::rtl::OUString::createFromAscii("%");
 
-                Sequence< ::rtl::OUString > aSeq;
-                Reference< XResultSet> xRes = m_xDatabaseMetaData->getTables(aCatalog,aSchema,aTableName,aSeq);
+                static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+                static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+
+                // we want all catalogues, all schemas, all tables
+                Sequence< ::rtl::OUString > sTableTypes(3);
+                static const ::rtl::OUString sWildcard = ::rtl::OUString::createFromAscii("%");
+                sTableTypes[0] = s_sTableTypeView;
+                sTableTypes[1] = s_sTableTypeTable;
+                sTableTypes[2] = sWildcard; // just to be sure to include anything else ....
+
+                Reference< XResultSet> xRes = m_xDatabaseMetaData->getTables(aCatalog,aSchema,aTableName,sTableTypes);
                 aComposedName = ::rtl::OUString(); // now clear the name to avoid reassignment
                 if(xRes.is() && xRes->next())
                 {
                     ::rtl::OUString sCatalog, sSchema, sName;
                     Reference< XRow > xCurrentRow(xRes, UNO_QUERY);
-                    ::dbtools::composeTableName(m_xDatabaseMetaData, xCurrentRow->getString(1),
-                                                                     xCurrentRow->getString(2),
-                                                                     xCurrentRow->getString(3),
+                    sCatalog    = xCurrentRow->getString(1);
+                    if(xCurrentRow->wasNull())
+                        sCatalog= ::rtl::OUString();
+
+                    sSchema     = xCurrentRow->getString(2);
+                    if(xCurrentRow->wasNull())
+                        sSchema= ::rtl::OUString();
+                    sName       = xCurrentRow->getString(3);
+                    if(xCurrentRow->wasNull())
+                        sName= ::rtl::OUString();
+                    ::dbtools::composeTableName(m_xDatabaseMetaData, sCatalog,
+                                                                     sSchema,
+                                                                     sName,
                                                                      aComposedName,
                                                                      sal_False);
                 }
@@ -546,7 +565,7 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 
     //  aIteratorStatus.Clear();
 
-    if (!pSelectNode || m_eStatementType != SQL_STATEMENT_SELECT || !m_aTables.size())
+    if (!pSelectNode || m_eStatementType != SQL_STATEMENT_SELECT || m_aTables.empty())
     {
         if(m_pParser)
             appendWarning(m_pParser->getContext().getErrorMessage(OParseContext::ERROR_GENERAL));
@@ -1559,7 +1578,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getGroupByTree() const
     OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp),"OSQLParseTreeIterator: Fehler im Parse Tree");
     OSL_ENSURE(pTableExp->count() == 5,"OSQLParseTreeIterator: Fehler im Parse Tree");
 
-    pGroupClause = pTableExp->getChild(3);
+    pGroupClause = pTableExp->getChild(2);
     // Wenn es aber eine order_by ist, dann darf sie nicht leer sein:
     if(pGroupClause->count() != 3)
         pGroupClause = NULL;
