@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:31:29 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,9 @@
     Text[ czech ] = "Uložit";  \
     Text[ hebrew ] = "‮שמירה‬";    \
     Text[ hindi ] = "संचित करो";    \
-    Text[ slovak ] = "Uložiť";
+    Text[ slovak ] = "Uložiť"; \
+    Text[ hungarian ] = "Mentés";\
+    Text[ slovenian ] = "Shrani";
 
 TabPage RID_SFXPAGE_SAVE
 {
@@ -134,6 +136,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮טעינה‬";
         Text[ hindi ] = "लोड़ करो";
         Text[ slovak ] = "Načítať";
+        Text[ hungarian ] = "Betöltés";
+        Text[ slovenian ] = "Naloži";
     };
     CheckBox CB_LOAD_SETTINGS
     {
@@ -150,7 +154,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ spanish ] = "Cargar la configuraci�n de usuario al cargar el documento";
         Text[ finnish ] = "Lataa k�ytt�j�n m��ritt�m�t asetukset asiakirjan kanssa";
         Text[ italian ] = "Carica le impostazioni personalizzate insieme al documento";
-        Text[ danish ] = "Indl�s ~brugerspecifikke indstillinger sammen med dokumentet";
+        Text[ danish ] = "Indl�s brugerspecifikke indstillinger sammen med dokumentet";
         Text[ swedish ] = "Ladda ~anv�ndarspecifika inst�llningar med dokumentet";
         Text[ polish ] = "�aduj dokument ��cznie z ustawieniami indywidualnymi";
         Text[ portuguese_brazilian ] = "Carregar configura��es personalizadas com o documento";
@@ -166,6 +170,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮טעינת קביעות המשתמש ביחד עם המסמך‬";
         Text[ hindi ] = "लेखपत्र के साथ उपभोक्ता-निर्दिष्ट निर्धारण को लोड़ करो";
         Text[ slovak ] = "S dokumentom načítať nastavenia špecifické pre užívateľa";
+        Text[ hungarian ] = "Felhasználói beállítások betöltése a dokumentummal együtt";
+        Text[ slovenian ] = "Z dokumentom naloži tudi uporabniško določene nastavitve";
     };
     FixedLine GB_SAVE
     {
@@ -199,6 +205,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮שמירה‬";
         Text[ hindi ] = "संचित करो";
         Text[ slovak ] = "Uložiť";
+        Text[ hungarian ] = "Mentés";
+        Text[ slovenian ] = "Shrani";
     };
     CheckBox BTN_DOCINFO
     {
@@ -211,7 +219,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese_brazilian ] = "~Editar propriedades do documento antes de salvar" ;
         Text [ portuguese ] = "~Editar propriedades do documento antes de guardar" ;
         Text [ finnish ] = "~Muokkaa asiakirjan ominaisuuksia ennen tallennusta" ;
-        Text [ danish ] = "Rediger egenskaber forinden" ;
+        Text [ danish ] = "~Rediger dokumentegenskaber f�r der gemmes" ;
         Text [ french ] = "�diter les propri�t�s avant l'enregistrement" ;
         Text [ swedish ] = "Redigera egenskaper ~innan" ;
         Text [ dutch ] = "~Eigenschappen eerst bewerken" ;
@@ -233,6 +241,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮עריכת תכונות המסמך לפני שמירה‬";
         Text[ hindi ] = "संचित करने से पहिले लेखपत्र विशेषतों का ~संपादन करो";
         Text[ slovak ] = "~Upraviť vlastnosti dokumentu pred uložením";
+        Text[ hungarian ] = "~Dokumentumjellemzők szerkesztése mentés előtt";
+        Text[ slovenian ] = "~Uredi lastnosti dokumenta, preden jih shraniš";
     };
     CheckBox BTN_BACKUP
     {
@@ -266,6 +276,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮יצירת עותק לגיבוי תמיד‬";
         Text[ hindi ] = "हमे~शा बैकअप् प्रतिलिपि उत्पन्न करो";
         Text[ slovak ] = "~Vždy vytvoriť záložnú kópiu";
+        Text[ hungarian ] = "~Mindig készítsen biztonsági másolatot";
+        Text[ slovenian ] = "Ve~dno ustvari varnostno kopijo";
     };
 
     CheckBox BTN_AUTOSAVE
@@ -279,7 +291,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese_brazilian ] = "Salvar ~automaticamente a cada" ;
         Text [ portuguese ] = "Guardar ~automaticamente cada" ;
         Text [ finnish ] = "~Automaattinen tallennusv�li" ;
-        Text [ danish ] = "Gem automatisk alle" ;
+        Text [ danish ] = "~Gem automatisk hvert" ;
         Text [ french ] = "~Enregistrer automat. toutes les " ;
         Text [ swedish ] = "Spara automatiskt var" ;
         Text [ dutch ] = "~Automatisch opslaan alle" ;
@@ -300,6 +312,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮שמירה אוטומטית בכל‬";
         Text[ hindi ] = "स्व~यं संचित करो";
         Text[ slovak ] = "Ukl~adať každých";
+        Text[ hungarian ] = "~Automatikus mentés minden";
+        Text[ slovenian ] = "S~amodejno shrani vsake";
     };
     NumericField ED_AUTOSAVE
     {
@@ -328,7 +342,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese_brazilian ] = "Minutos" ;
         Text [ portuguese ] = "Minutos" ;
         Text [ finnish ] = "P�yt�kirja" ;
-        Text [ danish ] = "minutter" ;
+        Text [ danish ] = ". minut" ;
         Text [ french ] = "minutes" ;
         Text [ swedish ] = "minut" ;
         Text [ dutch ] = "Minuten" ;
@@ -349,6 +363,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮דקות‬";
         Text[ hindi ] = "मिनटें";
         Text[ slovak ] = "Minúty";
+        Text[ hungarian ] = "percben";
+        Text[ slovenian ] = "minut";
     };
     CheckBox BTN_AUTOSAVEPROMPT
     {
@@ -361,7 +377,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese_brazilian ] = "~Avisar antes de salvar" ;
         Text [ portuguese ] = "~Pronta para guardar" ;
         Text [ finnish ] = "~Kehota tallentamaan" ;
-        Text [ danish ] = "Sp�rg f�rst" ;
+        Text [ danish ] = "~Sp�rg f�r der gemmes" ;
         Text [ french ] = "Avec confirmation" ;
         Text [ swedish ] = "Bek~r�fta f�re spara" ;
         Text [ dutch ] = "~Met bevestiging" ;
@@ -382,6 +398,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮תיזכורת לשמור‬";
         Text[ hindi ] = "संचित करने केलिए ~उत्तेजित करो";
         Text[ slovak ] = "~Pýtať sa pred uložením";
+        Text[ hungarian ] = "~Figyelmeztessen a mentésre";
+        Text[ slovenian ] = "~Opozori na shranjevanje";
     };
 
     CheckBox BTN_NOPRETTYPRINTING
@@ -415,6 +433,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮אופטימיזצית גודל עבור צורת XML (ללא הדפסה מעוצבת)‬";
         Text[ hindi ] = "XML फाइलों केलिए परिमाण योग्य बनाना (कोई सुन्दर छपाई नहीं)";
         Text[ slovak ] = "Optimalizácia na veľkosť pre XML formát (nepekná tlač)";
+        Text[ hungarian ] = "Az XML formátum méretének optimalizálása (nincs szép formázás)";
+        Text[ slovenian ] = "Optimizacija velikosti za obliko XML (brez posebnega tiskanja)";
     };
 
     FixedLine GB_RELATIVE
@@ -429,7 +449,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ french ] = "Enregistrement relatif des URL" ;
         Text [ dutch ] = "URL's relatief opslaan" ;
         Text [ swedish ] = "Spara URL:er relativt" ;
-        Text [ danish ] = "Gem URL'er relativt" ;
+        Text [ danish ] = "Gem URL'er relativt til" ;
         Text [ portuguese_brazilian ] = "Salvar URLs relativas a" ;
         Text [ portuguese ] = "Guardar URLs relativamente" ;
         Text[ chinese_simplified ] = "存盘相对的URL地址";
@@ -448,6 +468,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮שמירת URL ים יחסית ל ‬";
         Text[ hindi ] = "से संबन्धित URL को संचित करो";
         Text[ slovak ] = "Uložiť URL odkazy relatívne k";
+        Text[ hungarian ] = "Az URL-ek relatív mentése";
+        Text[ slovenian ] = "Shrani URL-je glede na";
     };
     CheckBox BTN_RELATIVE_FSYS
     {
@@ -462,7 +484,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ french ] = "~Syst�me de fichiers" ;
         TabStop = TRUE ;
         Text [ swedish ] = "i fils~ystem" ;
-        Text [ danish ] = "i filsystemet" ;
+        Text [ danish ] = "~Filsystem" ;
         Text [ portuguese_brazilian ] = "Sistema de a~rquivo" ;
         Text [ portuguese ] = "No sistema de ~ficheiros" ;
         Text[ chinese_simplified ] = "在文件系统内(~F)";
@@ -482,6 +504,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮מערכת קבצים‬";
         Text[ hindi ] = "~फाइल सिस्टम";
         Text[ slovak ] = "~Súborovému systému";
+        Text[ hungarian ] = "a fájl~rendszerhez képest";
+        Text[ slovenian ] = "~Datotečni sistem";
     };
     CheckBox BTN_RELATIVE_INET
     {
@@ -495,7 +519,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ french ] = "Sur ~Internet" ;
         Text [ dutch ] = "~in Internet" ;
         Text [ swedish ] = "p� Int~ernet" ;
-        Text [ danish ] = "p� Internettet" ;
+        Text [ danish ] = "~Internet" ;
         Text [ portuguese_brazilian ] = "Int~ernet" ;
         Text [ portuguese ] = "Na Int~ernet" ;
         Text[ chinese_simplified ] = "在国际互联网内(~I)";
@@ -514,6 +538,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮אינטרנט‬";
         Text[ hindi ] = "~इन्टरनेट्";
         Text[ slovak ] = "~Internetu";
+        Text[ hungarian ] = "az ~internethez képest";
+        Text[ slovenian ] = "~Internet";
     };
     FixedLine FL_FILTER
     {
@@ -546,6 +572,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮צורת קובץ רגיל‬";
         Text[ hindi ] = "स्टान्डर्ड फाइल रचना";
         Text[ slovak ] = "Štandardný formát súboru";
+        Text[ hungarian ] = "Alapértelmezett fájlformátum";
+        Text[ slovenian ] = "Standardna oblika zapisa datoteke";
     };
     FixedText FT_APP
     {
@@ -578,6 +606,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮סוג מסמך‬";
         Text[ hindi ] = "ले~खपत्र वर्ग";
         Text[ slovak ] = "Typ d~okumentu";
+        Text[ hungarian ] = "Dokumentum ~típusa";
+        Text[ slovenian ] = "Vrsta d~okumenta";
     };
     FixedText FT_FILTER
     {
@@ -610,6 +640,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ hebrew ] = "‮לשמור תמיד כ‬";
         Text[ hindi ] = "हमेशा संचित ~करो जैसे";
         Text[ slovak ] = "~Vždy ukladať ako";
+        Text[ hungarian ] = "Mi~ndig az alábbi formátumban mentse:";
+        Text[ slovenian ] = "Vedno s~hrani kot";
     };
     ListBox LB_APP
     {
@@ -868,6 +900,24 @@ TabPage RID_SFXPAGE_SAVE
         < "Kresba" ;        APP_DRAW      ; > ;
         < "Vzorec" ;           APP_MATH      ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Szöveges dokumentum" ;     APP_WRITER    ; > ;
+        < "HTML-dokumentum" ;    APP_WRITER_WEB;  > ;
+            < "Munkafüzet" ; APP_CALC      ; > ;
+            < "Bemutató" ;     APP_IMPRESS   ; > ;
+            < "Rajz" ;        APP_DRAW      ; > ;
+            < "Képlet" ;           APP_MATH      ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "Dokument z besedilom" ;     APP_WRITER    ; > ;
+        < "HTML dokument" ;    APP_WRITER_WEB;  > ;
+            < "Preglednica" ; APP_CALC      ; > ;
+            < "Predstavitev" ;     APP_IMPRESS   ; > ;
+            < "Risba" ;        APP_DRAW      ; > ;
+            < "Formula" ;           APP_MATH      ; > ;
+        };
     };
     ListBox LB_FILTER
     {
@@ -912,7 +962,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una p�rdida de informaci�n.\n";
         Text[ finnish ] = "Jos oletustiedostomuotona k�ytet��n muotoa \"%1\", tietoja voi h�vit�.\n";
         Text[ italian ] = "L'uso di \"%1\" quale formato standard pu� causare la perdita di dati.\n";
-        Text[ danish ] = "\"Brug af \"\"%1\"\" som standard-filformat kan medf�re datatab.\n\"";
+        Text[ danish ] = "Brug af \"%1\" som standard filformat kan medf�re informationstab.\n";
         Text[ swedish ] = "Att anv�nda \"%1\" som standardfilformat kan leda till att information g�r f�rlorad.\n";
         Text[ polish ] = "U�ycie \"%1\" jako domy�lnego formatu plik�w mo�e skutkowa� utrat� informacji.\n";
         Text[ portuguese_brazilian ] = "Usar '%1' como formato de arquivo padr�o pode causar perda de informa��es.\n";
@@ -928,6 +978,8 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ hebrew ] = "‮יתכן ששימוש ב \"%1\" כצורת קובץ ברירת המחדל יגרום לאובדן נתונים.\n‬";
         Text[ hindi ] = "Using \"%1\" as default file format may cause information loss.\n";
         Text[ slovak ] = "Použitie \"%1\" ako východzieho formátu súboru môže spôsobiť stratu informácií.\n";
+        Text[ hungarian ] = "A \"%1\" használata alapértelmezett fájlformátumként információvesztéshez vezethet.\n";
+        Text[ slovenian ] = "Uporabljanje \"%1\" kot privzeto obliko zapisa datoteke lahko povzroči izgubo informacij.\n";
     };
 /*    CheckBox CB_DONT_SHOW_AGAIN
     {
@@ -949,6 +1001,12 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
+
+
+
+
+
 
 
 
