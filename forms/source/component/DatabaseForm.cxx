@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-14 13:47:20 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 16:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ enum DatabaseCursorType
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 #endif
 
-#define DATABASEFORM_IMPLEMENTATION_NAME    ::rtl::OUString::createFromAscii("com.sun.star.form.component.ODatabaseForm")
+#define DATABASEFORM_IMPLEMENTATION_NAME    ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.ODatabaseForm")
 
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
@@ -3685,12 +3685,18 @@ void SAL_CALL ODatabaseForm::clearParameters() throw( SQLException, RuntimeExcep
 StringSequence SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( RuntimeException )
 {
     StringSequence aServices;
-    aServices.realloc(5);
-    aServices.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponent");
-    aServices.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponents");
-    aServices.getArray()[2] = FRM_SUN_COMPONENT_FORM;
-    aServices.getArray()[3] = FRM_SUN_COMPONENT_HTMLFORM;
-    aServices.getArray()[4] = FRM_SUN_COMPONENT_DATAFORM;
+    Reference<com::sun::star::lang::XServiceInfo> xInfo;
+    if (query_aggregation(m_xAggregate, xInfo))
+        aServices = xInfo->getSupportedServiceNames();
+
+    sal_Int32 nOldLen = aServices.getLength();
+    aServices.realloc(nOldLen + 6);
+    ::rtl::OUString* pAdditionalServices = aServices.getArray() + nOldLen;
+    *pAdditionalServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponent");
+    *pAdditionalServices++ = ::rtl::OUString::createFromAscii("com.sun.star.form.FormComponents");
+    *pAdditionalServices++ = FRM_SUN_COMPONENT_FORM;
+    *pAdditionalServices++ = FRM_SUN_COMPONENT_HTMLFORM;
+    *pAdditionalServices++ = FRM_SUN_COMPONENT_DATAFORM;
     return aServices;
 }
 
