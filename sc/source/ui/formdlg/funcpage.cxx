@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,11 +171,11 @@ void ScFuncPage::UpdateFunctionList()
     {
         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
 
-        ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
+        const ScFuncDesc*   pDesc = pFuncMgr->First( nCategory );
         while ( pDesc )
         {
             aLbFunction.SetEntryData(
-                aLbFunction.InsertEntry(*(pDesc->pFuncName) ),pDesc );
+                aLbFunction.InsertEntry(*(pDesc->pFuncName) ),(void*)pDesc );
             pDesc = pFuncMgr->Next();
         }
     }
@@ -183,9 +183,9 @@ void ScFuncPage::UpdateFunctionList()
     {
         for ( USHORT i=0; i<LRU_MAX && aLRUList[i]; i++ )
         {
-            ScFuncDesc* pDesc = aLRUList[i];
+            const ScFuncDesc*   pDesc = aLRUList[i];
             aLbFunction.SetEntryData(
-                aLbFunction.InsertEntry( *(pDesc->pFuncName) ),pDesc );
+                aLbFunction.InsertEntry( *(pDesc->pFuncName) ),(void*)pDesc );
         }
     }
 
@@ -246,13 +246,13 @@ USHORT ScFuncPage::GetFunctionEntryCount()
     return aLbFunction.GetSelectEntryCount();
 }
 
-ScFuncDesc* ScFuncPage::GetFuncDesc( USHORT nPos ) const
+const ScFuncDesc*   ScFuncPage::GetFuncDesc( USHORT nPos ) const
 {
     // nicht schoen, aber hoffentlich selten
-    return (ScFuncDesc*) aLbFunction.GetEntryData(nPos);
+    return (const ScFuncDesc*) aLbFunction.GetEntryData(nPos);
 }
 
-USHORT ScFuncPage::GetFuncPos(ScFuncDesc* pFuncDesc)
+USHORT ScFuncPage::GetFuncPos(const ScFuncDesc* pFuncDesc)
 {
     if(pFuncDesc!=NULL && pFuncDesc->pFuncName!=NULL)
     {
