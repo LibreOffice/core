@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:29:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #include <poly.hxx>
 #endif // _SV_POLY_HXX
 
+#include <tools/lang.hxx>
+
 #include <limits.h>
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>
@@ -177,38 +179,98 @@ sal_Unicode GetMirroredChar( sal_Unicode nChar )
 
 // -----------------------------------------------------------------------
 
-sal_Unicode GetLocalizedChar( sal_Unicode nChar, int nLocalFlags )
+sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
 {
     // currently only conversion from ASCII digits is interesting
     if( (nChar < '0') || ('9' < nChar) )
         return nChar;
 
     sal_Unicode nOffset;
-    switch( nLocalFlags )
+    switch( eLang )
     {
-        case  0: nOffset = 0x0000; break;  // western
-        case  1: nOffset = 0x0660; break;  // persian/urdu
-        case  2: nOffset = 0x09E6; break;  // bengali
-        case  3: nOffset = 0x0966; break;  // devanagari
-        case  4: nOffset = 0x1369; break;  // ethiopic
-        case  5: nOffset = 0x0AE6; break;  // gujarati
-        case  6: nOffset = 0x0A66; break;  // gurmukhi
-        case  7: nOffset = 0x0CE6; break;  // kannada
-        case  8: nOffset = 0x17E0; break;  // khmer
-        case  9: nOffset = 0x0ED0; break;  // lao
-        case 10: nOffset = 0x0D66; break;  // malayalam
-        case 11: nOffset = 0x1810; break;  // mongolian
-        case 12: nOffset = 0x1040; break;  // myanmar
-        case 13: nOffset = 0x0B66; break;  // oriya
-        case 14: nOffset = 0x0BE7; break;  // tamil
-        case 15: nOffset = 0x0C66; break;  // telugu
-        case 16: nOffset = 0x0E50; break;  // thai
-        case 17: nOffset = 0x0F20; break;  // tibetan
-
-        case 90: nOffset = 0x2776; break;  // dingbat circled
-        case 91: nOffset = 0x2070; break;  // superscript
-        case 92: nOffset = 0x2080; break;  // subscript
-        default: nOffset = 0; break;
+        default:
+            nOffset = 0;
+            break;
+        case LANGUAGE_ARABIC:
+        case LANGUAGE_ARABIC_SAUDI_ARABIA:
+        case LANGUAGE_ARABIC_IRAQ:
+        case LANGUAGE_ARABIC_EGYPT:
+        case LANGUAGE_ARABIC_LIBYA:
+        case LANGUAGE_ARABIC_ALGERIA:
+        case LANGUAGE_ARABIC_MOROCCO:
+        case LANGUAGE_ARABIC_TUNISIA:
+        case LANGUAGE_ARABIC_OMAN:
+        case LANGUAGE_ARABIC_YEMEN:
+        case LANGUAGE_ARABIC_SYRIA:
+        case LANGUAGE_ARABIC_JORDAN:
+        case LANGUAGE_ARABIC_LEBANON:
+        case LANGUAGE_ARABIC_KUWAIT:
+        case LANGUAGE_ARABIC_UAE:
+        case LANGUAGE_ARABIC_BAHRAIN:
+        case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_URDU:
+        case LANGUAGE_URDU_PAKISTAN:
+        case LANGUAGE_URDU_INDIA:
+        case LANGUAGE_PUNJABI: //???
+            nOffset = 0x0660 - '0';  // arabic/persian/urdu
+            break;
+        case LANGUAGE_BENGALI:
+            nOffset = 0x09E6 - '0';  // bengali
+            break;
+        case LANGUAGE_HINDI:
+            nOffset = 0x0966 - '0';  // devanagari
+            break;
+        // TODO case:
+            nOffset = 0x1369 - '0';  // ethiopic
+            break;
+        case LANGUAGE_GUJARATI:
+            nOffset = 0x0AE6 - '0';  // gujarati
+            break;
+        // TODO case:
+            nOffset = 0x0A66 - '0';  // gurmukhi
+            break;
+        case LANGUAGE_KANNADA:
+            nOffset = 0x0CE6 - '0';  // kannada
+            break;
+        case LANGUAGE_KHMER:
+            nOffset = 0x17E0 - '0';  // khmer
+            break;
+        case LANGUAGE_LAO:
+            nOffset = 0x0ED0 - '0';  // lao
+            break;
+        case LANGUAGE_MALAYALAM:
+            nOffset = 0x0D66 - '0';   // malayalam
+            break;
+        case LANGUAGE_MONGOLIAN:
+            nOffset = 0x1810 - '0';   // mongolian
+            break;
+        // TODO case:
+            nOffset = 0x1040 - '0';   // myanmar
+            break;
+        case LANGUAGE_ORIYA:
+            nOffset = 0x0B66 - '0';   // oriya
+            break;
+        case LANGUAGE_TAMIL:
+            nOffset = 0x0BE7 - '0';   // tamil
+            break;
+        case LANGUAGE_TELUGU:
+            nOffset = 0x0C66 - '0';   // telugu
+            break;
+        case LANGUAGE_THAI:
+            nOffset = 0x0E50 - '0';   // thai
+            break;
+        case LANGUAGE_TIBETAN:
+            nOffset = 0x0F20 - '0';   // tibetan
+            break;
+        // TODO case:
+            nOffset = 0x2776 - '0';   // dingbat circled
+            break;
+        // TODO case:
+            nOffset = 0x2070 - '0';   // superscript
+            break;
+        // TODO case:
+            nOffset = 0x2080 - '0';   // subscript
+            break;
     }
 
     nChar += nOffset;
@@ -595,9 +657,11 @@ bool SalLayout::IsSpacingGlyph( long nGlyph ) const
 
 GenericSalLayout::GenericSalLayout()
 :   mnGlyphCount(0),
-    mnGlyphCapacity(0),
-    mpGlyphItems(0)
-{}
+    mnGlyphCapacity(256),
+    mpGlyphItems(NULL)
+{
+    mpGlyphItems = new GlyphItem[ mnGlyphCapacity ];
+}
 
 // -----------------------------------------------------------------------
 
