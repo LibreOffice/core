@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-15 12:39:12 $
+ *  last change: $Author: tra $ $Date: 2001-09-06 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,10 +282,12 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable( )
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(text/plain;charset=utf-16), EMPTY_OUSTR, CF_UNICODETEXT, OUSTR(Unicode-Text), CPPUTYPE_OUSTR) );
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Locale), CF_LOCALE ) );
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Image WMF), CF_METAFILEPICT ) );// SOT_FORMAT_WMF
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(FileList), CF_HDROP ) );// SOT_FORMAT_FILE_LIST
+
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(GDIMetaFile) ) );// SOT_FORMAT_GDIMETAFILE
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Private) ) );// SOT_FORMAT_PRIVATE
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(FileName) ) );// SOT_FORMAT_FILE
-    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(FileList) ) );// SOT_FORMAT_FILE_LIST
+
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(text/richtext), OUSTR(Rich Text Format) ) );// SOT_FORMAT_RTF
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Drawing Format) ) ); // SOT_FORMATSTR_ID_DRAWING
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(SVXB (StarView Bitmap/Animation)) ) );// SOT_FORMATSTR_ID_SVXB
