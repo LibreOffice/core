@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XStyleFamiliesSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:49 $
+ *  last change:$Date: 2003-09-08 11:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.style;
 
-import com.sun.star.style.XStyleFamiliesSupplier;
 import lib.MultiMethodTest;
+
+import com.sun.star.style.XStyleFamiliesSupplier;
 
 /**
 * Testing <code>com.sun.star.style.XStyleFamiliesSupplier</code>
