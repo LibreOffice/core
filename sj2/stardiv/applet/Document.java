@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Document.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:54:03 $
+ *  last change: $Author: jl $ $Date: 2002-11-14 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,22 @@ class Document implements LiveConnectable {
     private java.awt.Toolkit toolkit;
 
     Document(URL url, java.awt.Toolkit toolkit) {
-        documentBase = url;
+    // Create the document base.
+    //For example, suppose an applet is contained within the document:
+    //http://java.sun.com/products/jdk/1.2/index.html
+    //The document base is:
+    //http://java.sun.com/products/jdk/1.2/
+
+        String s= url.toString();
+        int index= s.lastIndexOf('/');
+        if( index != -1)
+        {
+            s=s.substring(0, index + 1);
+        }
+        try{
+            documentBase = new URL(s);
+        }catch(Exception e){
+        }
         this.toolkit = toolkit;
     }
 
