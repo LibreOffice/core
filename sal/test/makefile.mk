@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kr $ $Date: 2001-07-25 08:18:39 $
+#   last change: $Author: jbu $ $Date: 2001-08-17 12:52:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,9 @@ APP1OBJS=	\
                 $(OBJ)$/testbyteseq.obj		\
                 $(OBJ)$/testuri.obj			\
                 $(OBJ)$/test.obj			\
-                $(OBJ)$/testlogfile.obj
+                $(OBJ)$/testlogfile.obj		\
+                $(OBJ)$/test_file.obj
+
 OBJFILES= \
     $(APP1OBJS) \
     $(APP2OBJS) 
@@ -114,8 +116,7 @@ ALL : ALLTAR \
       $(BIN)$/bootstraptest.ini  \
       $(BIN)$/testbootstrap.bin  \
       $(BIN)$/testbootstrap.Bin  \
-      $(BIN)$/testbootstrap.Exe
-
+      $(BIN)$/testbootstrap.Exe  
 
 .IF "$(GUI)"=="UNX"
 ALL:  $(BIN)$/testbootstrap.exe
