@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:21:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1880,26 +1880,11 @@ namespace svxform
         if (!pFormModel)
             return;
 
-        // die Undo-Beschreibung
-        UniString aUndoStr = SVX_RES(RID_STR_UNDO_DELETE_LOGICAL);
-    /*  falls irgendwann mal Ordnung in das Undo kommt (so dass wir wirklich die aeusserste Klammer sind und beim Loeschen nur
-    //  eine, nicht zwei UndoActions erzeugen), koennen wir folgenden Code ja wieder benutzen ...
-        if (m_arrCurrentSelection.Count() == 1)
-        {
-            aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE);
-            if (m_nFormsSelected)
-                aUndoStr.SearchAndReplace("#", SVX_RES(RID_STR_FORM));
-            else
-                // bei selektierter Root war loeschen nicht erlaubt, also ist es ein Control
-                aUndoStr.SearchAndReplace("#", SVX_RES(RID_STR_CONTROL));
-        }
-        else
-        {
-            aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
-            aUndoStr.SearchAndReplace("#", UniString(::rtl::OUString(m_arrCurrentSelection.Count())));
-                // der Umweg ueber den ::rtl::OUString ist notwendig, da nur der den Constructor hat, der gleich eine Zahl formatiert
-        }
-    */
+        // jetzt muss ich noch die DeleteList etwas absichern : wenn man ein Formular und ein abhaengiges
+        // Element loescht - und zwar in dieser Reihenfolge - dann ist der SvLBoxEntryPtr des abhaengigen Elementes
+        // natuerlich schon ungueltig, wenn es geloescht werden soll ... diesen GPF, den es dann mit Sicherheit gibt,
+        // gilt es zu verhindern, also die 'normalisierte' Liste
+        CollectSelectionData( SDI_NORMALIZED );
 
         // see below for why we need this mapping from models to shapes
         FmFormView*     pFormView       = pFormShell->GetFormView();
@@ -1911,18 +1896,13 @@ namespace svxform
         if ( pPage )
             collectShapeModelMapping( pPage, aModelShapes );
 
-        // jetzt muss ich noch die DeleteList etwas absichern : wenn man ein Formular und ein abhaengiges
-        // Element loescht - und zwar in dieser Reihenfolge - dann ist der SvLBoxEntryPtr des abhaengigen Elementes
-        // natuerlich schon ungueltig, wenn es geloescht werden soll ... diesen GPF, den es dann mit Sicherheit gibt,
-        // gilt es zu verhindern, also die 'normalisierte' Liste
-        CollectSelectionData(SDI_NORMALIZED);
-
-        // folgendes Problem : ich muss das ExplorerModel::Remove verwenden, da nur dieses sich um das korrekte Loeschen von Form-
-        // Objekten kuemmert. Andererseits muss ich die Controls selber ueber DeleteMarked loeschen (irgendwo im Writer gibt
-        // es sonst Probleme). Wenn ich erst die Struktur, dann die Controls loesche, klappt das Undo nicht (da dann erst die Controls
-        // eingefuegt werden, dann die Struktur, sprich ihr Parent-Formular). Andersrum sind die EntryDatas ungueltig, wenn ich die
-        // Controls geloescht habe und zur Struktur gehe. Also muss ich die Formulare NACH den normalen Controls loeschen, damit sie
-        // beim Undo VOR denen wiederhergestellt werden.
+        // problem: we have to use ExplorerModel::Remove, since only this one properly deletes Form objects.
+        // But, the controls themself must be deleted via DeleteMarked (else, the Writer has some problems
+        // somewhere). In case I'd first delete the structure, then the controls, the UNDO would not work
+        // (since UNDO then would mean to first restore the controls, then the structure, means their parent
+        // form). The other way round, the EntryDatas would be invalid, if I'd first delete the controls and
+        // then go on to the strucure. This means I have to delete the forms *after* the normal controls, so
+        // that during UNDO, they're restored in the proper order.
         pFormShell->GetImpl()->EnableTrackProperties(sal_False);
         int i;
         for (i = m_arrCurrentSelection.Count()-1; i>=0; --i)
@@ -1944,37 +1924,63 @@ namespace svxform
             // Forms und hidden Controls muss ich behalten, alles andere nicht
             if (!bIsForm && !bIsHidden)
             {
-                // well, not form and no hidden control -> we can remove it from m_arrCurrentSelection, as it will
+                // well, no form and no hidden control -> we can remove it from m_arrCurrentSelection, as it will
                 // be deleted automatically. This is because for every model (except forms and hidden control models)
                 // there exist a shape, which is marked _if_and_only_if_ the model is selected in our tree.
-                // This is the theory.
-                // Now the practice. There may be models which do not have a shape at all. This may be because of
-                // explicit API programming (in this case it was intentional by the user, or a failuer, but this
-                // does not matter), or by bugs :). One of these bugs is 103597.
-                // Because of this "dead" models (means not connected to a shape), we have to do an extra test
-                // 103597 - 2002-09-25 - fs@openoffice.org
-
-                if ( isModelShapeMarked( pCurrent, aModelShapes, pFormView ) )
-                    // there indeed is a _marked_ shape for this model
+                if ( aModelShapes.find( pCurrent->GetElement() ) != aModelShapes.end() )
+                {
+                    // if there's a shape for the current entry, then either it is marked or it is in a
+                    // hidden layer (#i28502#), or something like this.
+                    // In the first case, it will be deleted below, in the second case, we currently don't
+                    // delete it, as there's no real (working!) API for this, neither in UNO nor in non-UNO.
                     m_arrCurrentSelection.Remove( (sal_uInt16)i, 1 );
+                }
+                // In case there is no shape for the current entry, we keep the entry in m_arrCurrentSelection,
+                // since then we can definately remove it.
+                // #103597#
             }
         }
         pFormShell->GetImpl()->EnableTrackProperties(sal_True);
 
-        // und jetzt das eigentliche Loeschen
-        // die Controls wech
+        // let the view delete the marked controls
         pFormShell->GetFormView()->DeleteMarked();
 
-        // das UNDO beginne ich erst jetzt : Das DeleteMarked erzeugt eine eigene Undo-Action, in die ich mich eigentlich einklinken
-        // muesste, was leider nicht geht (das laeuft irgendwo im SwDoc), also erzeuge ich eine zweite, mit der man das Loeschen der
-        // logischen Struktur zuruecknehmen kann (das ist nicht schoen, dass eine eigentlich atomare Aktion zwei UndoActions erzeugt,
-        // aber das einzige, was wir gefunden haben)
-        pFormModel->BegUndo(aUndoStr);
+        // start UNDO at this point. Unfortunately, this results in 2 UNDO actions, since DeleteMarked is
+        // creating an own one. However, if we'd move it before DeleteMarked, Writer does not really like
+        // this ... :(
+        // 2004-07-05 - #i31038# - fs@openoffice.org
+        {
+            // ---------------
+            // initialize UNDO
+            String aUndoStr;
+            if ( m_arrCurrentSelection.Count() == 1 )
+            {
+                aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE);
+                if (m_nFormsSelected)
+                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RES( RID_STR_FORM ) );
+                else
+                    // it must be a control (else the root would be selected, but it cannot be deleted)
+                    aUndoStr.SearchAndReplaceAscii( "#", SVX_RES( RID_STR_CONTROL ) );
+            }
+            else
+            {
+                aUndoStr = SVX_RES(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
+                aUndoStr.SearchAndReplaceAscii( "#", String::CreateFromInt32( m_arrCurrentSelection.Count() ) );
+            }
+            pFormModel->BegUndo(aUndoStr);
+        }
 
-        // die Struktur wech
+        // remove remaining structure
         for (i=0; i<m_arrCurrentSelection.Count(); ++i)
         {
             FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i)->GetUserData());
+
+            // if the entry still has children, we skipped deletion of one of those children.
+            // This may for instance be because the shape is in a hidden layer, where we're unable
+            // to remove it
+            if ( pCurrent->GetChildList()->Count() )
+                continue;
+
             // noch ein kleines Problem, bevor ich das ganz loesche : wenn es eine Form ist und die Shell diese als CurrentObject
             // kennt, dann muss ich ihr das natuerlich ausreden
             if (pCurrent->ISA(FmFormData))
@@ -2300,7 +2306,8 @@ namespace svxform
                         ::Rectangle aMarkRect( pFormView->GetAllMarkedRect());
 
                         for( sal_uInt16 i=0; i<pFormView->GetWinCount(); i++ )
-                            pFormView->MakeVisible( aMarkRect, *(Window*)pFormView->GetWin(i) );
+                            if ( !aMarkRect.IsEmpty() )
+                                pFormView->MakeVisible( aMarkRect, *(Window*)pFormView->GetWin(i) );
                     }
                 }
             }
