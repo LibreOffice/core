@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-24 10:15:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,15 +122,14 @@ ScXMLTextTContext::ScXMLTextTContext( ScXMLImport& rImport,
 {
     if (pTextPContext)
     {
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         rtl::OUString aLocalName;
-        rtl::OUString sValue;
         sal_Int32 nCount(1);
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
-                                                xAttrList->getNameByIndex( i ), &aLocalName );
-            sValue = xAttrList->getValueByIndex( i );
+            sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                                xAttrList->getNameByIndex( i ), &aLocalName ));
+            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
             if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
                 nCount = sValue.toInt32();
@@ -181,7 +180,7 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList )
 {
-    SvXMLImportContext *pContext = NULL;
+    SvXMLImportContext *pContext(NULL);
     if (!pTextPContext &&
         (nTempPrefix == XML_NAMESPACE_TEXT) &&
         IsXMLToken(rLName, XML_S))
