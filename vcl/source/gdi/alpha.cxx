@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alpha.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:26:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ const Bitmap& AlphaMask::ImplGetBitmap() const
 
 void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )
 {
+    DBG_ASSERT( ( 8 == rBitmap.GetBitCount() ) && rBitmap.HasGreyPalette(), "AlphaMask::ImplSetBitmap: invalid bitmap" );
     *(Bitmap*) this = rBitmap;
 }
 
