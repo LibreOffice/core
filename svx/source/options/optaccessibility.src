@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:23:47 $
+ *  last change: $Author: rt $ $Date: 2002-12-09 09:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,15 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "Miscellaneous options";
         Text[ turkish ] = "Miscellaneous options";
         Text[ thai ] = "Miscellaneous options";
+        Text[ greek ] = "Miscellaneous options";
+        Text[ dutch ] = "Miscellaneous options";
+        Text[ french ] = "Miscellaneous options";
+        Text[ finnish ] = "Miscellaneous options";
+        Text[ danish ] = "Miscellaneous options";
+        Text[ chinese_simplified ] = "Miscellaneous options";
+        Text[ chinese_traditional ] = "Miscellaneous options";
+        Text[ arabic ] = "Miscellaneous options";
+        Text[ catalan ] = "Miscellaneous options";
     };
     CheckBox CB_ACCESSIBILITY_TOOL
     {
@@ -322,6 +331,15 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "Options for high contrast appearance";
         Text[ turkish ] = "Options for high contrast appearance";
         Text[ thai ] = "Options for high contrast appearance";
+        Text[ greek ] = "Options for high contrast appearance";
+        Text[ dutch ] = "Options for high contrast appearance";
+        Text[ french ] = "Options for high contrast appearance";
+        Text[ finnish ] = "Options for high contrast appearance";
+        Text[ danish ] = "Options for high contrast appearance";
+        Text[ chinese_simplified ] = "Options for high contrast appearance";
+        Text[ chinese_traditional ] = "Options for high contrast appearance";
+        Text[ arabic ] = "Options for high contrast appearance";
+        Text[ catalan ] = "Options for high contrast appearance";
     };
     CheckBox CB_AUTO_DETECT_HC
     {
@@ -330,7 +348,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text = "~Kontrastdarstellungsmodus des Betriebssystems automatisch erkennen" ;
         Text [ english ] = "Automatically detect high contrast mode of operating system" ;
-        Text [ english_us ] = "Automatically detect high contrast mode of operating system";
+        Text [ english_us ] = "Automatically ~detect high contrast mode of operating system";
         Text[ portuguese ] = "Automatically detect high contrast mode of operating system";
         Text[ russian ] = "Automatically detect high contrast mode of operating system";
         Text[ spanish ] = "Automatically detect high contrast mode of operating system";
@@ -342,6 +360,15 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ korean ] = "Automatically detect high contrast mode of operating system";
         Text[ turkish ] = "Automatically detect high contrast mode of operating system";
         Text[ thai ] = "Automatically detect high contrast mode of operating system";
+        Text[ greek ] = "Automatically detect high contrast mode of operating system";
+        Text[ dutch ] = "Automatically detect high contrast mode of operating system";
+        Text[ french ] = "Automatically detect high contrast mode of operating system";
+        Text[ finnish ] = "Automatically detect high contrast mode of operating system";
+        Text[ danish ] = "Automatically detect high contrast mode of operating system";
+        Text[ chinese_simplified ] = "Automatically detect high contrast mode of operating system";
+        Text[ chinese_traditional ] = "Automatically detect high contrast mode of operating system";
+        Text[ arabic ] = "Automatically detect high contrast mode of operating system";
+        Text[ catalan ] = "Automatically detect high contrast mode of operating system";
     };
     CheckBox CB_AUTOMATIC_FONT_COLOR
     {
@@ -350,7 +377,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text = "Automatische Schrift~farbe für Bildschirmdarstellung verwenden" ;
         Text [ ENGLISH ] = "Always use automatic font ~color for screen display" ;
-        Text[ english_us ] = "Always use automatic font ~color for screen display";
+        Text[ english_us ] = "Use automatic font ~color for screen display";
     };
     CheckBox CB_PAGE_PREVIEWS
     {
