@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-13 12:18:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Aktualizace";
         Text[ hebrew ] = "‮עידכון‬";
         Text[ hindi ] = "अपडेट्";
+        Text[ slovak ] = "Aktualizácia";
     };
     FixedText FT_LINK
     {
@@ -136,6 +137,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Aktualizovat odkazy při načítání";
         Text[ hebrew ] = "Verknüpfungen beim Laden aktualisieren";
         Text[ hindi ] = "लोड़ करने से समय लिंक्स अपडेट् करो";
+        Text[ slovak ] = "Aktualizovať odkazy pri načítaní";
     };
     RadioButton RB_ALWAYS
     {
@@ -169,6 +171,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Vždy";
         Text[ hebrew ] = "~Immer";
         Text[ hindi ] = "~हमेशा";
+        Text[ slovak ] = "~Vždy";
     };
     RadioButton RB_REQUEST
     {
@@ -202,6 +205,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Dotazovat se";
         Text[ hebrew ] = "Auf Nach~frage";
         Text[ hindi ] = "निवे~दन पर";
+        Text[ slovak ] = "~Opýtať sa";
     };
     RadioButton RB_NEVER
     {
@@ -235,6 +239,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Nikdy";
         Text[ hebrew ] = "~Nie";
         Text[ hindi ] = "~कभी नहीं";
+        Text[ slovak ] = "~Nikdy";
     };
     FixedText FT_FIELD
     {
@@ -267,6 +272,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטית‬";
         Text[ hindi ] = "स्वचालित प्रकार से";
+        Text[ slovak ] = "Automaticky";
     };
     CheckBox CB_AUTO_UPDATE_FIELDS
     {
@@ -299,6 +305,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Pole";
         Text[ hebrew ] = "‮שדות‬";
         Text[ hindi ] = "~क्षेत्र";
+        Text[ slovak ] = "~Pole";
     };
     CheckBox CB_AUTO_UPDATE_CHARTS
     {
@@ -331,6 +338,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Grafy";
         Text[ hebrew ] = "Dia~gramme";
         Text[ hindi ] = "~चार्ट";
+        Text[ slovak ] = "~Grafy";
     };
     FixedLine FL_CAPTION
     {
@@ -363,6 +371,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Popisek";
         Text[ hebrew ] = "Beschriftung";
         Text[ hindi ] = "कॉप्शन्";
+        Text[ slovak ] = "Popisok";
     };
     CheckBox CB_CAPTION
     {
@@ -396,6 +405,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्वचालित";
+        Text[ slovak ] = "Automaticky";
     };
     FixedText TXT_OPTIONS
     {
@@ -429,6 +439,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Výběr objektu:";
         Text[ hebrew ] = "~Objektauswahl:";
         Text[ hindi ] = "वस्तु चुनाव:";
+        Text[ slovak ] = "Výber objektu:";
     };
     PushButton PB_OPTIONS
     {
@@ -466,6 +477,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     FixedText FT_METRIC
     {
@@ -499,6 +511,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Jednotka míry";
         Text[ hebrew ] = "~Maßeinheit";
         Text[ hindi ] = "नाप यूनिट्";
+        Text[ slovak ] = "Jednotka miery";
     };
     ListBox LB_METRIC
     {
@@ -540,6 +553,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Kroky tabulátoru";
         Text[ hebrew ] = "‮עצירות טאב‬";
         Text[ hindi ] = "टॉब रुकावट";
+        Text[ slovak ] = "Kroky tabulátora";
     };
     MetricField MF_TAB
     {
@@ -566,19 +580,19 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "Compatibilidade";
         Text[ russian ] = "�������������";
         Text[ dutch ] = "Compatibiliteit";
-        Text[ french ] = "compatibilit� (param�tres document)";
-        Text[ spanish ] = "Compatibilidad (configuraci�n espec�fica del documento)";
-        Text[ italian ] = "Compatibilit� (parametri documento)";
+        Text[ french ] = "Compatibilit�";
+        Text[ spanish ] = "Compatibilidad";
+        Text[ italian ] = "Compatibilit�";
         Text[ danish ] = "Kompatibilitet";
-        Text[ swedish ] = "Kompatibilitet (dokumentspecifika inst�llningar)";
+        Text[ swedish ] = "Kompatibilitet";
         Text[ polish ] = "Zgodno��";
         Text[ portuguese_brazilian ] = "Compatibilidade";
-        Text[ japanese ] = "互換性（ドキュメントの特殊設定）";
-        Text[ chinese_simplified ] = "兼容性(文档特殊的设定)";
-        Text[ chinese_traditional ] = "相容性(文件特殊的設定)";
+        Text[ japanese ] = "互換性";
+        Text[ chinese_simplified ] = "兼容性";
+        Text[ chinese_traditional ] = "相容性";
     Text[ arabic ] = "�����";
     Text[ greek ] = "�����������";
-    Text[ korean ] = "호환성(문서의 특수 설정)";
+    Text[ korean ] = "호환성";
     Text[ turkish ] = "Uyumluluk";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Yhteensopivuus";
@@ -587,6 +601,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Kompatibilita";
         Text[ hebrew ] = "Kompatibilität";
         Text[ hindi ] = "योग्यता";
+        Text[ slovak ] = "Kompatibilita";
     };
     CheckBox CB_PRINTER_METRICS
     {
@@ -602,6 +617,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ korean ] = "프린터 메트릭스로 문서의 서식 설정";
         Text[ chinese_simplified ] = "文档格式采用打印机的字体尺度(~E)";
         Text[ chinese_traditional ] = "文件使用印表機的字型尺度(~E)";
+        Text[ slovak ] = "Použiť mi~erky tlačiarne pri formátovaní textu";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -613,19 +629,19 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "Somar ~espa�amento entre par�grafos e tabelas no documento activo";
         Text[ russian ] = "�������� � ������� �������� ��������� ������� � ������";
         Text[ dutch ] = "~In het huidige document alle afstanden tussen alinea's en tabellen optellen";
-        Text[ french ] = "Additionner les espaces entre paragraphes et tableaux dans le document actif";
-        Text[ spanish ] = "Sumar ~espacios de p�rrafos y tablas en el documento actual";
-        Text[ italian ] = "Aggiungi distanze tra i paragrafi e le tabelle nel documento attuale";
+        Text[ french ] = "Additionner les espacements entre paragraphes et tableaux (document actif)";
+        Text[ spanish ] = "A�adir los ~espacios entre p�rrafos y tablas (en el documento actual)";
+        Text[ italian ] = "Aggiungi distanze tra paragrafi e tabelle nel documento attuale";
         Text[ danish ] = "Adder alle afsnits- og tabelafstande i det aktuelle do~kument";
-        Text[ swedish ] = "Addera alla stycke- och tabellavst�nd i det aktuella ~dokumentet";
+        Text[ swedish ] = "Addera avst�nd mellan stycken och tabeller (i det aktuella ~dokumentet)";
         Text[ polish ] = "Dodaj odst�py mi�dzy akapitami a tabelami w bie��cym dokumencie";
         Text[ portuguese_brazilian ] = "Afastar par�grafos das tabelas no documento atual";
         Text[ japanese ] = "現在のドキュメントの段落間隔と表間隔を加算する";
-        Text[ chinese_simplified ] = "当前文档之中所有段落的及表格的间隔相加";
+        Text[ chinese_simplified ] = "当前文档之中所有段落的及表格的间隔相加(在当前的文档内)";
         Text[ chinese_traditional ] = "已開啓文件的所有段落間隔及表格間隔相加";
         Text[ arabic ] = "����� ����� ������� ��� �� ����� ������ ������� ������";
         Text[ greek ] = "�������� ���� ��� ~���������� ��� ���������� ��� ��� ������� ��� ������ �������";
-        Text[ korean ] = "현재 문서에서 단락과 표 사이에 있는 모든 간격을 추가";
+        Text[ korean ] = "현재 문서에서 단락과 표 사이에 있는 모든 간격을 합산";
         Text[ turkish ] = "G�ncel belgede paragraf ve tablolar aras�na bo�luk ekle";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Lis�� v�lit k�yt�ss� olevan asiakirjan kappaleiden ja taulukoiden v�liin";
@@ -634,6 +650,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Vložit mezeru mezi odstavce a tabulky v aktuálním dokumentu";
         Text[ hebrew ] = "Im aktuellen ~Dokument alle Absatz- und Tabellenabstände addieren";
         Text[ hindi ] = "वर्तमान लेखपत्र में परिच्छेद और सारणीयों के बीच में अंतर जोड़ो";
+        Text[ slovak ] = "Vložiť medzeru medzi odstavce a tabuľky v aktuálnom dokumente";
     };
     CheckBox CB_MERGE_PARA_DIST_PAGESTART
     {
@@ -646,17 +663,17 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "�������� ��������� ������� � ������ � ������ ��������";
         Text[ greek ] = "�������� ��� ���������� ��� ���������� ��� ��� ������� ���� ���� ��� �������";
         Text[ dutch ] = "A~linea- en tabellenafstanden invoegen aan paginabegin.";
-        Text[ french ] = "Additionner les ~espaces entre paragraphes et tableaux en d�but de page";
-        Text[ spanish ] = "Su~mar espacios de tablas y p�rrafos en los comienzos de p�ginas";
-        Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina.";
+        Text[ french ] = "Additionner les espacements entre paragraphes et tableaux en d�but de page (document actif)";
+        Text[ spanish ] = "A�adir los ~espacios entre tablas y p�rrafos al principio de las p�ginas (en el documento actual)";
+        Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina nel documento attuale";
         Text[ danish ] = "Adder a~fsnits- og tabelafstande p� nye sider";
-        Text[ swedish ] = "L�gg till stycke- och ta~bellavst�nd i b�rjan av sidor";
+        Text[ swedish ] = "Addera stycke- och ta~bellavst�nd i b�rjan av sidor (i det aktuella dokumentet)";
         Text[ polish ] = "Dodaj odst�py od akapit�w i tabel na pocz�tku stron";
         Text[ portuguese_brazilian ] = "Adicionar espa�o de par�grafos e tabelas no topo das p�ginas";
-        Text[ japanese ] = "ページの始めに段落間隔と表間隔を付ける";
-        Text[ korean ] = "페이지 시작 부분으로 단락과 표의 간격을 추가";
-        Text[ chinese_simplified ] = "在页首位置加入段落和表格的间隔";
-        Text[ chinese_traditional ] = "在頁首位置加入段落與表格之間的間隔";
+        Text[ japanese ] = "現在のドキュメントのページ始めに段落間隔と表間隔を加算する";
+        Text[ korean ] = "현재 문서의 페이지 시작 부분으로 단락과 표의 간격을 합산";
+        Text[ chinese_simplified ] = "在页首位置加入段落和表格的间隔(在当前的文档内)";
+        Text[ chinese_traditional ] = "在頁首位置加入段落與表格之間的間隔 (在目前的文件之内)";
         Text[ arabic ] = "����� ������ ������ ������� ��� ����� �������";
         Text[ turkish ] = "Sayfan�n ba��na paragraf ve tablo bo�lu�u ekle";
         Text[ language_user1 ] = " ";
@@ -666,6 +683,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Přidat odsazení odstavce a tabulky na vrcholu stránky";
         Text[ hebrew ] = "A~bsatz- und Tabellenabstände an Seitenanfängen addieren";
         Text[ hindi ] = "पृष्ठों के ऊपरी भाग में परिच्छेद और सारणी के बीच में अंतर जोड़ो";
+        Text[ slovak ] = "Pridať odsadenie odstavca a tabuľky na vrchu stránky";
     };
     CheckBox CB_TAB_ALIGNMENT
     {
@@ -678,17 +696,17 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "��������� ������� ���������";
         Text[ greek ] = "�~������� ����� ���������";
         Text[ dutch ] = "Ta~bpositie defini�ren";
-        Text[ french ] = "Aligner la position de tabulation";
-        Text[ spanish ] = "~Ajustar la posici�n de los tabuladores";
-        Text[ italian ] = "Allinea posizione tabulazione";
+        Text[ french ] = "Aligner la position des tabulations (document actif)";
+        Text[ spanish ] = "~Ajustar la posici�n de los tabuladores (en el documento actual)";
+        Text[ italian ] = "Allinea la posizione di tabulazione nel documento corrente";
         Text[ danish ] = "~Juster tabulatorposition";
-        Text[ swedish ] = "Justera tab~ulatorposition";
+        Text[ swedish ] = "Justera tab~ulatorposition (i det aktuella dokumentet)";
         Text[ polish ] = "Wy~r�wnaj pozycje tabulatora";
         Text[ portuguese_brazilian ] = "Alinhar posi��o da tabula��o";
-        Text[ japanese ] = "タブの位置を揃える";
-        Text[ korean ] = "탭 위치를 맞춤";
-        Text[ chinese_simplified ] = "调整制表键位置";
-        Text[ chinese_traditional ] = "調整定位鍵位置";
+        Text[ japanese ] = "現在のドキュメントのタブ位置を揃える";
+        Text[ korean ] = "현재 문서에서 탭 위치를 맞춤";
+        Text[ chinese_simplified ] = "调整制表键位置(在当前的文档内)";
+        Text[ chinese_traditional ] = "調整定位鍵位置 (在目前的文件)";
         Text[ turkish ] = "Sekme noktas�n� hizala";
         Text[ arabic ] = "Align tab stop position";
         Text[ catalan ] = "Alinia la posici� d'aturada dels tabuladors";
@@ -697,6 +715,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ czech ] = "Zarovnání kroku tabulátoru";
         Text[ hebrew ] = "~Tabulatorposition ausrichten";
         Text[ hindi ] = "टॉब रुकावट स्थान का पंक्तिकरण";
+        Text[ slovak ] = "Zarovnanie kroku tabulátora";
     };
 };
 /**************************************************************************/
@@ -758,6 +777,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Tabulka %PRODUCTNAME Writer";
         Text[ hebrew ] = "%PRODUCTNAME Writer Tabelle";
         Text[ hindi ] = "%PRODUCTNAME लेखक सारणी";
+        Text[ slovak ] = "Tabuľka %PRODUCTNAME Writer";
     };
     String STR_FRAME
     {
@@ -788,6 +808,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Rámec %PRODUCTNAME Writer";
         Text[ hebrew ] = "%PRODUCTNAME Writer Rahmen";
         Text[ hindi ] = "%PRODUCTNAME लेखक फ्रेम ";
+        Text[ slovak ] = "Rámec %PRODUCTNAME Writer";
     };
     String STR_GRAPHIC
     {
@@ -818,6 +839,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Obrázek %PRODUCTNAME Writer";
         Text[ hebrew ] = "%PRODUCTNAME Writer Grafik";
         Text[ hindi ] = "%PRODUCTNAME लेखक सुचित्र";
+        Text[ slovak ] = "Obrázok %PRODUCTNAME Writer";
     };
     String STR_OLE
     {
@@ -848,6 +870,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Další OLE objekty";
         Text[ hebrew ] = "Weitere OLE-Objekte";
         Text[ hindi ] = "अतिरिक्त OLE वस्तु";
+        Text[ slovak ] = "Ďalšie OLE objekty";
     };
 
     FixedText TXT_CATEGORY
@@ -883,6 +906,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "~Kategorie";
         Text[ hindi ] = "समान वर्ग";
+        Text[ slovak ] = "Kategórie";
     };
     ComboBox BOX_CATEGORY
     {
@@ -925,6 +949,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "~संख्या देना";
+        Text[ slovak ] = "Čí~slovanie";
     };
     ListBox BOX_FORMAT
     {
@@ -967,6 +992,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Popisek";
         Text[ hebrew ] = "~Beschriftung";
         Text[ hindi ] = "कॉप्शन्";
+        Text[ slovak ] = "Popisok";
     };
     Edit EDT_TEXT
     {
@@ -1009,6 +1035,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     ListBox BOX_POS
     {
@@ -1049,6 +1076,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Úroveň";
         Text[ hebrew ] = "E~bene";
         Text[ hindi ] = "स्तर";
+        Text[ slovak ] = "Úroveň";
     };
     ListBox LB_LEVEL
     {
@@ -1165,6 +1193,10 @@ TabPage TP_OPTCAPTION_PAGE
     {
          < "कोई नहीं" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Žiadne" ; > ;
+    };
     };
     FixedText FT_SEPARATOR
     {
@@ -1197,6 +1229,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Oddělovač";
         Text[ hebrew ] = "~Trenner";
         Text[ hindi ] = "अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač";
     };
     Edit ED_SEPARATOR
     {
@@ -1245,6 +1278,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     String STR_BEGINNING
     {
@@ -1276,6 +1310,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Na začátku";
         Text[ hebrew ] = "Am Anfang";
         Text[ hindi ] = "के प्रारंभ में";
+        Text[ slovak ] = "Na začiatku";
     };
     String STR_END
     {
@@ -1307,6 +1342,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Na konci";
         Text[ hebrew ] = "Am Ende";
         Text[ hindi ] = "के अंत में";
+        Text[ slovak ] = "Na konci";
     };
     String STR_ABOVE
     {
@@ -1338,6 +1374,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Výše";
         Text[ hebrew ] = "Oberhalb";
         Text[ hindi ] = "ऊपर";
+        Text[ slovak ] = "Nad";
     };
     String STR_CP_BELOW
     {
@@ -1369,6 +1406,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ czech ] = "Níže";
         Text[ hebrew ] = "Unterhalb";
         Text[ hindi ] = "नीचे";
+        Text[ slovak ] = "Pod";
     };
     Text[ chinese_simplified ] = "标签";
     Text[ russian ] = "��������";
@@ -1385,6 +1423,7 @@ TabPage TP_OPTCAPTION_PAGE
     Text[ czech ] = "Popisek";
     Text[ hebrew ] = "Beschriftung";
     Text[ hindi ] = "कॉप्शन्";
+    Text[ slovak ] = "Popisok";
 };
 
 StringArray STR_ARR_METRIC
@@ -1725,7 +1764,23 @@ ItemList [ catalan ] =
         < "पिका" ; FUNIT_PICA ; > ;
         < "बिन्दु" ; FUNIT_POINT ; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "Milimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Palec" ; FUNIT_INCH ; > ;
+        < "Stopa" ; FUNIT_FOOT ; > ;
+        < "Míle" ; FUNIT_MILE ; > ;
+        < "Pika" ; FUNIT_PICA ; > ;
+        < "Bod" ; FUNIT_POINT ; > ;
     };
+    };
+
+
+
+
 
 
 
