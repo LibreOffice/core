@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-21 10:12:35 $
+ *  last change: $Author: nn $ $Date: 2002-11-05 14:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,14 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
     if ( bGridFirst && ( bGrid || bPage ) )
         aOutputData.DrawGrid( bGrid, bPage );
     if ( bPageMode )
-        DrawPagePreview(nX1,nY1,nX2,nY2);
+    {
+        // #87655# DrawPagePreview draws complete lines/page numbers, must always be clipped
+        if ( aOutputData.SetChangedClip() )
+        {
+            DrawPagePreview(nX1,nY1,nX2,nY2);
+            SetClipRegion();
+        }
+    }
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
     if ( !bTextWysiwyg )
