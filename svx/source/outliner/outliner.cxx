@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-28 11:24:50 $
+ *  last change: $Author: mt $ $Date: 2001-12-13 13:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,7 +1971,7 @@ IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
     if ( pInfos->nAction == EE_ACTION_PASTE )
     {
         bPasting = FALSE;
-        ImpTextPasted( pInfos->nStartPara, pInfos->nStartPara - pInfos->nEndPara + 1 );
+        ImpTextPasted( pInfos->nStartPara, pInfos->nEndPara - pInfos->nStartPara + 1 );
     }
 
     BOOL bCheckStyles = ( ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT ) || ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW ) );
