@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:14:29 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >
 {
     DBG_CTOR(DBTreeView,NULL);
 
-    m_pTreeListBox = new DBTreeListBox(this, _rxORB ,WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);
+    m_pTreeListBox = new DBTreeListBox(this, _rxORB ,WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT,sal_True);
     m_pTreeListBox->EnableCheckButton(NULL);
     m_pTreeListBox->SetDragDropMode( 0 );
     m_pTreeListBox->EnableInplaceEditing( sal_True );
@@ -103,6 +103,7 @@ DBTreeView::DBTreeView( Window* pParent, const Reference< XMultiServiceFactory >
 
 DBTreeView::~DBTreeView()
 {
+    DBG_DTOR(DBTreeView,NULL);
     if (m_pTreeListBox)
     {
         if (m_pTreeListBox->GetModel())
@@ -110,11 +111,9 @@ DBTreeView::~DBTreeView()
             m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
             m_pTreeListBox->DisconnectFromModel();
         }
-        Window* pDeleteIt = m_pTreeListBox;
+        ::std::auto_ptr<Window> aTemp(m_pTreeListBox);
         m_pTreeListBox = NULL;
-        delete pDeleteIt;
     }
-    DBG_DTOR(DBTreeView,NULL);
 }
 
 // -----------------------------------------------------------------------------
