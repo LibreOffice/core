@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-20 15:17:50 $
+ *  last change: $Author: tra $ $Date: 2001-10-19 09:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,8 @@ static sal_Int32 processMessage(oslPipe pPipe, HWND Sender, COPYDATASTRUCT *pDat
         case MSG_DATA:
             if (pData->cbData > 0)
             {
-                oslPipePacket *pPacket = calloc(1, sizeof(oslPipePacket) + pData->cbData);
+                // #93464# replaced calloc(1, sizeof(oslPipePacket) + pData->cbData) with rtl_allocateZeroMemory
+                oslPipePacket *pPacket = rtl_allocateZeroMemory( sizeof(oslPipePacket) + pData->cbData );
 
                 if (pPacket)
                 {
