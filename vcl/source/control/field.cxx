@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-29 10:39:19 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,20 @@
 
 using namespace ::com::sun::star;
 
+// -----------------------------------------------------------------------
+
+// Here again, only for the next update!
+void FormatterBase::SetInternational( const International& )
+{
+}
+
+const International& FormatterBase::GetInternational() const
+{
+    static International* pInt = NULL;
+    if ( !pInt )
+        pInt = new International;
+    return *pInt;
+}
 
 // -----------------------------------------------------------------------
 
@@ -278,21 +292,6 @@ FormatterBase::~FormatterBase()
 {
     delete mpLocaleDataWrapper;
 }
-
-
-// Here again, only for the next update!
-void FormatterBase::SetInternational( const International& )
-{
-}
-
-const International& FormatterBase::GetInternational() const
-{
-    static International* pInt = NULL;
-    if ( !pInt )
-        pInt = new International;
-    return *pInt;
-}
-
 
 // -----------------------------------------------------------------------
 
