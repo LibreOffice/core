@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:01:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ InfoBox MSG_NO_RULER
     Message[ arabic ] = "αΗ ΚζΜΟ ΓνΙ ΥζΡ έν γζΦζΪ ΗαΜΗανΡν 'γΣΗΨΡ'.";
     Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
     Message[ chinese_simplified ] = "ε¨η”»ε»δΈ»ιΆ'ι•Ώζ΅ε½Ά'ε†…ζ— δ»»δ½•ε›Ύε½Άγ€‚";
-    Message[ greek ] = "Δεν υπάρχουν γραφικά στη συλλογή με θέμα 'Rulers'.";
+    Message[ greek ] = "Δεν υπάρχουν γραφικά στη Συλλογή με θέμα 'Rulers'.";
     Message[ korean ] = "κ°¤λ¬λ¦¬ μ£Όμ  'λκΈμ'μ— κ·Έλ¦Όμ΄ μ—†μµλ‹λ‹¤.";
     Message[ turkish ] = "'Cetvel' galeri konusunda bit eώlem grafik mevcut deπil.";
     Message[ language_user1 ] = " ";
@@ -291,7 +291,7 @@ String STR_GRFILTER_TOOBIG
     Text[ arabic ] = "αΗ νζΜΟ ΠΗίΡΙ ίΗένΙ αΕΟΡΗΜ ΗαΡΣγ";
     Text[ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding";
     Text[ chinese_simplified ] = "ε†…ε­δΈε¤οΌζ— ζ³•ζ’ε…¥ε›Ύε½Ά";
-    Text[ greek ] = "Η μνήμη δεν επαρκεί για την προσθήκη του γραφικού.";
+    Text[ greek ] = "Η μνήμη δεν επαρκεί για την εισαγωγή του γραφικού.";
     Text[ korean ] = "λ©”λª¨λ¦¬κ°€ λ¶€μ΅±ν•μ—¬ κ·Έλν”½μ„ μ‚½μ…ν•  μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Grafiπin eklenmesi iηin yeterli bellek yok";
     Text[ language_user1 ] = " ";
@@ -325,7 +325,7 @@ String STR_INSERT_GRAPHIC
     Text[ arabic ] = "ΕΟΡΗΜ ΥζΡΙ";
     Text[ dutch ] = "Afbeelding invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥ε›Ύε½Ά";
-    Text[ greek ] = "Προσθήκη γραφικού";
+    Text[ greek ] = "Εισαγωγή γραφικού";
     Text[ korean ] = "κ·Έλ¦Ό μ‚½μ…";
     Text[ turkish ] = "Grafik ekle";
     Text[ language_user1 ] = " ";
@@ -357,7 +357,7 @@ String STR_NO_ADDRESSBOOK
     Text[ arabic ] = "αΗ νζΜΟ ΟέΚΡ ΪδΗζνδ";
     Text[ dutch ] = "Geen adresboek beschikbaar";
     Text[ chinese_simplified ] = "ι€θ®―η°ΏδΈε­ε¨";
-    Text[ greek ] = "Δεν υπάρχει ατζέντα";
+    Text[ greek ] = "Δεν υπάρχει βιβλίο διευθύνσεων";
     Text[ korean ] = "μ£Όμ†λ΅μ΄ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Adres defteri mevcut deπil";
     Text[ language_user1 ] = " ";
@@ -392,7 +392,7 @@ String STR_NOTIZ_INSERT
     TEXT[ arabic ] = "ΕΟΡΗΜ γαΗΝΩΙ";
     TEXT[ dutch ] = "Aantekening invoegen";
     TEXT[ chinese_simplified ] = "ζ’ε…¥ε¤‡ζ³¨";
-    TEXT[ greek ] = "Προσθήκη σημείωσης";
+    TEXT[ greek ] = "Εισαγωγή σημείωσης";
     TEXT[ korean ] = "λ©”λª¨ μ‚½μ…";
     TEXT[ turkish ] = "Not ekle";
     TEXT[ language_user1 ] = " ";
@@ -457,7 +457,7 @@ String STR_REDLINE_INSERTED
     Text[ arabic ] = "ΕΟΡΗΜ";
     Text[ dutch ] = "Invoeging";
     Text[ chinese_simplified ] = "ζ’ε…¥";
-    Text[ greek ] = "Προσθήκη";
+    Text[ greek ] = "Εισαγωγή";
     Text[ korean ] = "μ‚½μ…";
     Text[ turkish ] = "Ekleme";
     Text[ language_user1 ] = " ";
@@ -523,7 +523,7 @@ String STR_REDLINE_AUTOFMT
     TEXT[ arabic ] = "ΚδΣνή ΚαήΗΖν";
     TEXT[ dutch ] = "AutoOpmaak";
     TEXT[ chinese_simplified ] = "θ‡ªε¨ζ ΌεΌ";
-    TEXT[ greek ] = "ΑυτοΜορφή";
+    TEXT[ greek ] = "Αυτόματη μορφοποίηση";
     TEXT[ korean ] = "μλ™ μ„μ‹";
     TEXT[ turkish ] = "Otomatik formatlama";
     TEXT[ language_user1 ] = " ";
@@ -557,7 +557,7 @@ String STR_REDLINE_FORMATED
     Text[ language_user1 ] = " ";
     Text[ dutch ] = "Opmaak";
     Text[ chinese_simplified ] = "ε±ζ€§";
-    Text[ greek ] = "Μορφοποίηση";
+    Text[ greek ] = "Μορφές";
     Text[ korean ] = "μ†μ„±";
     Text[ turkish ] = "Formatlar";
     Text[ catalan ] = "Formats";
@@ -655,7 +655,7 @@ String STR_REDLINE_TITLE
     Text[ arabic ] = "ΚδΣνή ΚαήΗΖν";
     Text[ dutch ] = "AutoOpmaak";
     Text[ chinese_simplified ] = "θ‡ªε¨ζ ΌεΌ";
-    Text[ greek ] = "ΑυτοΜορφή";
+    Text[ greek ] = "Αυτόματη μορφοποίηση";
     Text[ korean ] = "μλ™ μ„μ‹";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
@@ -688,7 +688,7 @@ String STR_REDLINE_MSG
     Text[ arabic ] = "ΚγψσΚ ΪγανΙ ΗαΚδΣνή ΗαΚαήΗΖν.\nνγίδί ΗαΒδ ήΘζα Γζ ΡέΦ ΗαΚΫννΡΗΚ ίαεΗ΅\nΓζ ήΘζα Γζ ΡέΦ ία ΚΫννΡ Ϊαμ ΝΟε.";
     Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
     Text[ chinese_simplified ] = "ε·²η»ε®ζθ‡ªε¨ζ ΌεΌγ€‚\nζ‚¨η°ε¨θƒ½ε¤ζ¥ε—ζ–ζ‹’η»ζ‰€ζ‰η„ζ›΄ζ”ΉοΌζ–θ€…\nζ¥ε—ζ–ζ‹’η»ε•δΈªζ›΄ζ”Ήγ€‚";
-    Text[ greek ] = "Η ΑυτοΜορφή ολοκληρώθηκε.\nΜπορείτε να αποδεχτείτε ή να απορρίψετε όλες\nή μεμονωμένες αλλαγές.";
+    Text[ greek ] = "Η Αυτόματη μορφοποίηση ολοκληρώθηκε.\nΜπορείτε να αποδεχτείτε ή να απορρίψετε όλες\nή μεμονωμένες αλλαγές.";
     Text[ korean ] = "μλ™ μ„μ‹μ΄ μΆ…λ£λμ—μµλ‹λ‹¤.\nμ§€κΈ λ³€κ²½ μ‚¬ν•­μ„ λª¨λ‘ μ μ©ν•κ±°λ‚ μ·¨μ†ν•  μ μμΌλ©°\nνΉμ€ κ°λ³„μ μΌλ΅ μ μ©ν•κ±°λ‚ μ·¨μ†ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Otomatik formatlama tamamlandύ.\nήimdi deπiώiklikleri tόmden veya tek tek\n kabul veya red edebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -2255,7 +2255,7 @@ String STR_SHELLNAME_FRAME
     Text[ arabic ] = "ίΗΟΡ";
     Text[ dutch ] = "Kader";
     Text[ chinese_simplified ] = "ζ΅†";
-    Text[ greek ] = "Περίγραμμα";
+    Text[ greek ] = "Πλαίσιο";
     Text[ korean ] = "ν”„λ μ„";
     Text[ turkish ] = "Ηerηeve";
     Text[ language_user1 ] = " ";
@@ -2619,7 +2619,7 @@ String STR_SWBG_FRAME
     Text[ arabic ] = "ίΗΟΡ";
     Text[ dutch ] = "Kader";
     Text[ chinese_simplified ] = "ζ΅†";
-    Text[ greek ] = "Περίγραμμα";
+    Text[ greek ] = "Πλαίσιο";
     Text[ korean ] = "ν”„λ μ„";
     Text[ turkish ] = "Ηerηeve";
     Text[ language_user1 ] = " ";
@@ -2856,7 +2856,7 @@ String STR_NAME_GROUP_LABEL
     Text[ thai ] = "ΰΈΰΈ£ΰΈΈΰΈ“ΰΈ²ΰΉƒΰΈªΰΉΰΈΰΈ·ΰΉΰΈ­ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈ";
     Text[ czech ] = "JmΓ©no";
     Text[ hebrew ] = "Name";
-    Text[ portuguese_brazilian ] = "Name";
+    Text[ portuguese_brazilian ] = "Nome";
     Text[ hindi ] = "Name";
     Text[ slovak ] = "NΓ΅zov";
 };
@@ -2886,10 +2886,11 @@ String STR_NAME_GROUP_DIALOG
     Text[ thai ] = "ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈΰΈΰΈ·ΰΉΰΈ­";
     Text[ czech ] = "Pojmenovat objekt";
     Text[ hebrew ] = "Objekt benennen";
-    Text[ portuguese_brazilian ] = "Name object";
+    Text[ portuguese_brazilian ] = "Nomear o objeto";
     Text[ hindi ] = "Name object";
     Text[ slovak ] = "NΓ΅zov objektu";
 };
+
 
 
 
