@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:19:03 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ english_us ] = "Text animation effects" ;
         Text[ portuguese ] = "Efeitos de animaηγo de texto";
         Text[ russian ] = "έττεκςϋ ΰνθμΰφθθ ςεκρςΰ";
-        Text[ greek ] = "Text animation effects";
+        Text[ greek ] = "Εφέ κίνησης κειμένου";
         Text[ dutch ] = "Tekstanimatie effecten";
         Text[ french ] = "Effets d'animation de texte";
         Text[ spanish ] = "Efectos de animaciσn de texto";
@@ -173,7 +173,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ english_us ] = "E~ffect" ;
         Text[ portuguese ] = "E~feito";
         Text[ russian ] = "έττεκς";
-        Text[ greek ] = "Effect";
+        Text[ greek ] = "Ε~φέ";
         Text[ dutch ] = "~Effect";
         Text[ french ] = "Effet";
         Text[ spanish ] = "Efecto";
@@ -441,7 +441,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ english_us ] = "Direction" ;
         Text[ portuguese ] = "Orientaηγo";
         Text[ russian ] = "Νΰοπΰβλενθε";
-        Text[ greek ] = "Κατεύθυνση ροής";
+        Text[ greek ] = "Κατεύθυνση";
         Text[ dutch ] = "Looprichting";
         Text[ french ] = "Direction";
         Text[ spanish ] = "Direcciσn";
@@ -733,7 +733,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ polish ] = "Cykle animacji";
         Text[ japanese ] = "ε›ζ•°";
         Text[ chinese_traditional ] = "ε‹•η•«εΎªη’°η„ζ¬΅ζ•Έ";
-        Text[ greek ] = "Πλήθος";
+        Text[ greek ] = "Κύκλοι κίνησης";
         Text[ korean ] = "ν¨κ³Ό μ£ΌκΈ°";
         Text[ arabic ] = "ΗαΪΟΟ";
         Text[ turkish ] = "Canlandύrma Devirleri";
@@ -1084,6 +1084,7 @@ TabDialog RID_SVXDLG_TEXT
     Text[ slovak ] = "Text";
 };
  // ******************************************************************* EOF
+
 
 
 
