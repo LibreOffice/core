@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-02 14:36:22 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 08:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,8 @@ IMPL_LINK( ListBox, ImplPopupModeEndHdl, void*, p )
 {
     if( mpFloatWin->IsPopupModeCanceled() )
     {
-        if ( !IsEntryPosSelected( mpFloatWin->GetPopupModeStartSaveSelection() ) )
+        if ( ( mpFloatWin->GetPopupModeStartSaveSelection() != LISTBOX_ENTRY_NOTFOUND )
+                && !IsEntryPosSelected( mpFloatWin->GetPopupModeStartSaveSelection() ) )
         {
             mpImplLB->SelectEntry( mpFloatWin->GetPopupModeStartSaveSelection(), TRUE );
             BOOL bTravelSelect = mpImplLB->IsTravelSelect();
