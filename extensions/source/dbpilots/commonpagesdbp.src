@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,23 @@ TabPage RID_PAGE_TABLESELECTION
         Text = "Daten";
         Text [ english ] = "Data";
         Text [ english_us ] = "Data";
+        Text[ portuguese ] = "Dados";
+        Text[ russian ] = "Äàííûå";
+        Text[ greek ] = "Äåäïìİíá";
+        Text[ dutch ] = "Data";
+        Text[ french ] = "Data";
+        Text[ spanish ] = "Datos";
+        Text[ italian ] = "Data";
+        Text[ danish ] = "Data";
+        Text[ swedish ] = "Data";
+        Text[ polish ] = "Dane";
+        Text[ portuguese_brazilian ] = "Data";
+        Text[ japanese ] = "”z—ñ";
+        Text[ korean ] = "Data";
+        Text[ chinese_simplified ] = "Data";
+        Text[ chinese_traditional ] = "¸ê®Æ";
+        Text[ turkish ] = "Data";
+        Text[ arabic ] = "ÇáÈíÇäÇÊ";
     };
     FixedText FT_EXPLANATION
     {
@@ -87,13 +104,28 @@ TabPage RID_PAGE_TABLESELECTION
         Group = TRUE;
         Text = "Das Formular, zu dem das Kontrollfeld gehört, ist im Augenblick noch nicht (oder noch nicht vollständig) an eine Datenquelle gebunden.\n\n"
             "Bitte wählen Sie eine Datenquelle und eine Tabelle aus.\n\n\n"
-            "Bitte beachten Sie, daß die Einstellungen, die sie auf dieser Seiter für das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
+            "Bitte beachten Sie, dass die Einstellungen, die sie auf dieser Seiter für das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
         Text [ english ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\n"
             "Please choose a data source and a table.\n\n\n"
             "Please note that the settings made on this page will take effect immediately upon leaving the page.";
-        Text [ english_us ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\n"
-            "Please choose a data source and a table.\n\n\n"
-            "Please note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text [ english_us ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ portuguese ] = "O formulário do controlo ainda não está ligado (ou então só parcialmente) a nenhuma fonte de dados.\n\nSeleccione uma fonte de dados e uma tabela.\n\n\nNão esqueça que a configuração do formulário efectuada nesta página passa a estar activa logo que sair dela.";
+        Text[ russian ] = "Ôîğìóëÿğ, ê êîòîğîìó îòíîñèòñÿ ıëåìåíò óïğàâëåíèÿ, â íàñòîÿùèé ìîìåíò íå ñâÿçàí (èëè íåïîëíîñòüş ñâÿçàí) ñ èñòî÷íèêîì áàçû äàííûõ. \n\nÂûáåğèòå, ïîæàëóéñòà, èñòî÷íèê äàííûõ èëè òàáëèöó.\n\n\nÎáğàòèòå âíèìàíèå íà òî, ÷òî èçìåíåíèÿ, âûïîëíåííûå íà ıòîé ñòğàíèöå, âñòóïàşò â ñèëó ñğàçó æå ïîñëå óõîäà ñ ıòîé ñòğàíèöû.";
+        Text[ greek ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ dutch ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ french ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ spanish ] = "De momento, el formulario al que pertenece el campo de control no está (quizás no totalmente) conectado a una fuente de datos.\n\nSeleccione una fuente de datos y una tabla.\n\n\nNo olvide que la configuración que realice en este registro tendrá validez inmediatamente después de que abandone el registro.";
+        Text[ italian ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ danish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ swedish ] = "Formuläret som kontrollfältet tillhör är för närvarande ännu inte (eller inte fullständigt) knutet till en datakälla.\n\nVälj ut en datakälla och en tabell.\n\n\nObservera att inställningarna som du gör på den här sidan för formuläret får effekt såfort du lämnar sidan.";
+        Text[ polish ] = "Formularz, który nale¿y do pola kontrolnego, nie jest na razie (lub nie jest ca³kowicie) pod³¹czony do Ÿród³a danych.\n\nNale¿y wybraæ Ÿród³o danych lub tabelê.\n\nNale¿y uwzglêdniæ, ¿e ustawienia formularza, dokonane na tej stronie, bêd¹ aktualne natychmiast po opuszczeniu strony.";
+        Text[ portuguese_brazilian ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ japanese ] = "ºİÄÛ°Ù‚É‘®‚·‚éÌ«°Ñ‚ÍAŒ»“_‚Å‚Ü‚¾ÃŞ°À¿°½‚ÉÚ‘±‚³‚ê‚Ä‚¢‚È‚¢‚©A‚ ‚é‚¢Ú‘±‚ªŠ®‘S‚ÉI‚í‚Á‚Ä‚¢‚Ü‚¹‚ñB\n\nÃŞ°À¿°½‚ÆÃ°ÌŞÙ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n\n‚Ü‚½A‚±‚ÌÍß°¼Ş‚ÅÌ«°Ñ‚Ìİ’è‚ğs‚¤‚ÆAÍß°¼Ş‚ğ•Â‚¶‚½‚ ‚Æ‚·‚®‚É—LŒø‚É‚È‚è‚Ü‚·‚Ì‚ÅA‚²’ˆÓ‚­‚¾‚³‚¢B";
+        Text[ korean ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ chinese_simplified ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ chinese_traditional ] = "·í«e±qÄİ©ó³o­Óªí³æªº±±¨î¶µ©|¥¼(©Î¨S¦³§¹¥ş)©M¤@­Ó¸ê®Æ·½³sµ²¡C\n\n\n½Ğ±z¿ï¾Ü¤@­Ó¸ê®Æ·½©M¤@­Ó¸ê®Æªí®æ¡C\n\n\n½Ğª`·N¡GÖÃ¶}³o­Óªí³æ­¶­±®É©Ò¦³ªº·s³]©w´N·|¥ß¨è¥Í®Ä¡C";
+        Text[ turkish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
+        Text[ arabic ] = "ÇáÇÓÊãÇÑÉ ÇáÊí íäÊãí ÅáíåÇ ÚäÕÑ ÇáÊÍßã ÛíÑ ãÑÊÈØÉ ÇáÂä ÈãÕÏÑ ÈíÇäÇÊ¡ Ãæ áã ÊßÊãá ÚãáíÉ ÇÑÊÈÇØåÇ ÈÚÏ.\n\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÕÏÑ ÈíÇäÇÊ æÌÏæá.\n\n\nÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇÚÏÇÏÇÊ ÇáÇÓÊãÇÑÉ ÇáÊí ÊŞæã ÈåÇ Úáì åĞå ÇáÕİÍÉ Óæİ ÊÕÈÍ ÓÇÑíÉ ÇáãİÚæá ÈãÌÑÏ ãÛÇÏÑÉ ÇáÕİÍÉ.";
     };
     FixedText FT_DATASOURCE
     {
@@ -103,6 +135,23 @@ TabPage RID_PAGE_TABLESELECTION
         Text = "~Datenquelle:";
         Text [ english ] = "~Data source:";
         Text [ english_us ] = "~Data source:";
+        Text[ portuguese ] = "~Fonte de dados:";
+        Text[ russian ] = "~Èñòî÷íèê äàííûõ:";
+        Text[ greek ] = "Ğñïİëåõóç ~äåäïìİíùí:";
+        Text[ dutch ] = "~Data source:";
+        Text[ french ] = "~Data source:";
+        Text[ spanish ] = "~Fuente de datos:";
+        Text[ italian ] = "~Data source:";
+        Text[ danish ] = "~Data source:";
+        Text[ swedish ] = "~Datakälla:";
+        Text[ polish ] = "ród³o danych:";
+        Text[ portuguese_brazilian ] = "~Data source:";
+        Text[ japanese ] = "ÃŞ°À¿°½(~D):";
+        Text[ korean ] = "~Data source:";
+        Text[ chinese_simplified ] = "~Data source:";
+        Text[ chinese_traditional ] = "¸ê®Æ·½¡G";
+        Text[ turkish ] = "~Data source:";
+        Text[ arabic ] = "äæÚ ãÕÏÑ ÇáÈíÇäÇÊ:";
     };
     ListBox LB_DATASOURCE
     {
@@ -121,6 +170,23 @@ TabPage RID_PAGE_TABLESELECTION
         Text = "~Tabelle:";
         Text [ english ] = "~Table:";
         Text [ english_us ] = "~Table:";
+        Text[ portuguese ] = "~Tabela:";
+        Text[ russian ] = "Òàáëèöà:";
+        Text[ greek ] = "Ğßíáêáò:";
+        Text[ dutch ] = "~Table:";
+        Text[ french ] = "~Table:";
+        Text[ spanish ] = "~Tabla:";
+        Text[ italian ] = "~Table:";
+        Text[ danish ] = "~Table:";
+        Text[ swedish ] = "~Tabell:";
+        Text[ polish ] = "Tabela:";
+        Text[ portuguese_brazilian ] = "~Table:";
+        Text[ japanese ] = "Ã°ÌŞÙ(~T):";
+        Text[ korean ] = "~Table:";
+        Text[ chinese_simplified ] = "~Table:";
+        Text[ chinese_traditional ] = "ªí®æ";
+        Text[ turkish ] = "~Table:";
+        Text[ arabic ] = "ÌÏæá:";
     };
     ListBox LB_TABLE
     {
@@ -130,6 +196,23 @@ TabPage RID_PAGE_TABLESELECTION
         Border = TRUE ;
         AutoHScroll = TRUE ;
     };
+    Text[ portuguese ] = "Dados";
+    Text[ russian ] = "Äàííûå";
+    Text[ greek ] = "Äåäïìİíá";
+    Text[ dutch ] = "Data";
+    Text[ french ] = "Data";
+    Text[ spanish ] = "Datos";
+    Text[ italian ] = "Data";
+    Text[ danish ] = "Data";
+    Text[ swedish ] = "Data";
+    Text[ polish ] = "Dane";
+    Text[ portuguese_brazilian ] = "Data";
+    Text[ japanese ] = "”z—ñ";
+    Text[ korean ] = "Data";
+    Text[ chinese_simplified ] = "Data";
+    Text[ chinese_traditional ] = "¸ê®Æ";
+    Text[ turkish ] = "Data";
+    Text[ arabic ] = "ÇáÈíÇäÇÊ";
 };
 
 TabPage RID_PAGE_OPTION_DBFIELD
@@ -186,7 +269,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ italian ] = "Volete salvare il valore in un campo database ?";
         Text [ danish ] = "Vil du gemme værdien i et databasefelt?";
         Text [ swedish ] = "Vill Du spara värdet i ett databasfält ?";
-        Text [ polish ] = "Czy zapisaæ tê wartoœæ w polu bazy danych ?";
+        Text [ polish ] = "Czy zapisaæ wartoœæ w polu bazy danych ?";
         Text [ portuguese_brazilian ] = "Möchten Sie den Wert in einem Datenbankfeld speichern ?";
         Text [ japanese ] = "’l‚ğÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É•Û‘¶‚µ‚Ü‚·‚©B";
         Text [ chinese_simplified ] = "ÄúÒª½«Õâ¸öÊıÖµ´æÅÌµ½Ò»¸öÊı¾İ¿âÀ¸ÄÚ£¿";
@@ -215,7 +298,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ italian ] = "Sì, nel seguente campo database :";
         Text [ danish ] = "Ja, den skal gemmes i følgende databasefelt:";
         Text [ swedish ] = "Ja, i följande databasfält :";
-        Text [ polish ] = "Tak, jest to mo¿liwe w nastêpuj¹cym polu bazy danych :";
+        Text [ polish ] = "Tak, a mianowicie w nastêpuj¹cym polu bazy danych:";
         Text [ portuguese_brazilian ] = "Ja, und zwar in folgendem Datenbankfeld :";
         Text [ japanese ] = "‚Í‚¢AŸ‚ÌÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚É‚É‚µ‚Ü‚·:";
         Text [ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊı¾İ¿âÀ¸£º";
@@ -249,11 +332,11 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ russian ] = "Íåò. Ñîõğàíèòü ıòî çíà÷åíèå òîëüêî â ôîğìóëÿğå";
         Text [ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
         Text [ french ] = "Non, je souhaite enregistrer la valeur uniquement dans le formulaire.";
-        Text [ spanish ] = "No, deseo guardar el valor solo en el formulario.";
+        Text [ spanish ] = "No, deseo guardar el valor sólo en el formulario.";
         Text [ italian ] = "Salva il valore solo nel formulario.";
         Text [ danish ] = "Nej, jeg vil kun gemme værdien i formularen.";
         Text [ swedish ] = "Nej, jag vill bara spara värdet i formuläret.";
-        Text [ polish ] = "Nie, ja chcia³bym zapisaæ tê wartoœæ tylko w formularzu.";
+        Text [ polish ] = "Nie, zapisz wartoœæ tylko w formularzu.";
         Text [ portuguese_brazilian ] = "Nein, ich möchte den Wert nur im Formular speichern.";
         Text [ japanese ] = "‚¢‚¢‚¦A’l‚ÍÌ«°Ñ‚É•Û‘¶‚µ‚Ü‚·B";
         Text [ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊıÖµ´æÈë±íµ¥¡£";
@@ -269,6 +352,9 @@ TabPage RID_PAGE_OPTION_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/28 09:18:30  fs
+ *  finalized the list/combo wizard
+ *
  *  Revision 1.2  2001/02/23 15:19:08  fs
  *  some changes / centralizations - added the list-/combobox wizard
  *
