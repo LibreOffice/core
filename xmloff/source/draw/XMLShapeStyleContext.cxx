@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-11 12:18:09 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         for( property = rProperties.begin(); property != end; property++ )
         {
             // find properties with context
-            if( rMapper->GetEntryContextId( property->mnIndex ) == CTF_SD_NUMBERINGRULES_NAME )
+            if( (property->mnIndex != -1) && (rMapper->GetEntryContextId( property->mnIndex ) == CTF_SD_NUMBERINGRULES_NAME) )
                 break;
         }
 
