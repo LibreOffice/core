@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-10 13:22:42 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,11 +406,14 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
         // some dbs doesn't support this type so we should ask if a XViewsSupplier is supported
         if(!m_bSupportsViews)
         {
-            Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-            Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
+//          Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+//          Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
+//          // if we don't get the catalog from the original driver we have to try them all.
+//          if ( !xSupp.is() )
+//          {
+//          }
             Reference< XViewsSupplier > xMaster;
-            if(xSupp.is())
-                m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+            m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(m_xConnection->getMetaData()->getURL(),m_xMasterConnection,m_xORB);
             xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
 
             if (xMaster.is() && xMaster->getViews().is())
@@ -650,12 +653,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
             {
                 try
                 {
-                    Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                    Reference< XDriver > xDriver = xManager->getDriverByURL(m_xConnection->getMetaData()->getURL());
-                    OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
-                    Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
-                    if(xSupp.is())
-                        m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+                    m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(m_xConnection->getMetaData()->getURL(),m_xMasterConnection,m_xORB);
                 }
                 catch(SQLException&)
                 {
@@ -683,11 +681,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
             {
                 try
                 {
-                    Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                    Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
-
-                    if(xSupp.is())
-                        m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+                    m_xMasterTables = ::dbtools::getDataDefinitionByURLAndConnection(m_xConnection->getMetaData()->getURL(),m_xMasterConnection,m_xORB);
                     xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
                 }
                 catch(SQLException&)
