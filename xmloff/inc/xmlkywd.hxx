@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-28 12:23:26 $
+ *  last change: $Author: cl $ $Date: 2000-11-28 14:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1546,9 +1546,9 @@ XML_CONSTASCII_ACTION( sXML_guide_distance, "guide-distance" );
 XML_CONSTASCII_ACTION( sXML_start_guide, "start-guide" );
 XML_CONSTASCII_ACTION( sXML_end_guide, "end-guide" );
 
-XML_CONSTASCII_ACTION( sXML_dots, "dots" );
-XML_CONSTASCII_ACTION( sXML_dots_length, "dots-length" );
-XML_CONSTASCII_ACTION( sXML_dashes, "dashes" );
-XML_CONSTASCII_ACTION( sXML_dashes_length, "dashes-length" );
+XML_CONSTASCII_ACTION( sXML_dots1, "dots1" );
+XML_CONSTASCII_ACTION( sXML_dots1_length, "dots1-length" );
+XML_CONSTASCII_ACTION( sXML_dots2, "dots2" );
+XML_CONSTASCII_ACTION( sXML_dots2_length, "dots2-length" );
 
 #endif
