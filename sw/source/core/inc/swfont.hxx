@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-12 12:20:14 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,6 @@ class SwFont
     BOOL bPaintWrong    :1;  // Flag fuer Rechtschreibfehler
     BOOL bGreyWave      :1;  // Fuers extended TextInput: Graue Wellenlinie
     BOOL bNoColReplace  :1;  // Replacement without colormanipulation
-    BOOL bAutomaticCol  :1;  // White/black color depending on background color
-
 
     BOOL operator==( const SwFont &rFnt ) const;
 
@@ -269,7 +267,7 @@ public:
     inline void SetFntChg( const BOOL bNew ) { bFntChg = bNew; }
 
     // die gekapselten SV-Font-Methoden (setzen bFntChg auf TRUE)
-    inline void SetColor( const Color& rColor, BOOL bCheckAuto = TRUE );
+    inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
     inline void SetAlign( const FontAlign eAlign );
     inline void SetUnderline( const FontUnderline eUnderline );
@@ -307,8 +305,6 @@ public:
     inline BOOL IsNoHyph() const { return bNoHyph; }
     inline void SetBlink( const BOOL bBlink );
     inline BOOL IsBlink() const { return bBlink; }
-    inline void SetAutomaticCol( const BOOL bAutomaticCol );
-    inline BOOL IsAutomaticCol() const { return bAutomaticCol; }
     inline BYTE &GetTox() { return nToxCnt; }
     inline BYTE GetTox() const { return nToxCnt; }
     inline BOOL IsTox() const { return ( 0 != nToxCnt ); }
@@ -466,14 +462,12 @@ public:
         { bFntChg = bOrgChg = TRUE; }
 };
 
-inline void SwFont::SetColor( const Color& rColor, BOOL bCheckAuto )
+inline void SwFont::SetColor( const Color& rColor )
 {
     bFntChg = TRUE;
     aSub[0].SetColor( rColor );
     aSub[1].SetColor( rColor );
     aSub[2].SetColor( rColor );
-    if( bCheckAuto )
-        SetAutomaticCol( COL_AUTO == rColor.GetColor() );
 }
 
 // gekapselte SV-Font-Methode
@@ -857,11 +851,6 @@ inline void SwFont::SetNoHyph( const BOOL bNew )
 inline void SwFont::SetBlink( const BOOL bNew )
 {
     bBlink = bNew;
-}
-
-inline void SwFont::SetAutomaticCol( const BOOL bNew )
-{
-    bAutomaticCol = bNew;
 }
 
 inline void SwFont::SetURL( const BOOL bNew )

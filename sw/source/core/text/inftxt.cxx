@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-12 12:22:35 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,28 +491,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         if( !pBlink->IsVisible() )
             return;
     }
-    Color *pOldCol;
-    if( GetFont()->IsAutomaticCol() )
-    {
-        pOldCol = new Color( GetFont()->GetColor() );
-        const Color* pCol = GetFont()->GetBackColor();
-        BOOL bBlack = TRUE;
-        if( !pCol )
-        {
-            const SvxBrushItem* pItem;
-            SwRect aOrigBackRect;
-            if( GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect,
-                FALSE ) && !pItem->GetColor().GetTransparency() )
-                pCol = &pItem->GetColor();
-        }
-        if( pCol &&
-            DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() )
-            bBlack = FALSE;
-        Color aCol( bBlack ? COL_BLACK : COL_WHITE );
-        GetFont()->SetColor( aCol, FALSE );
-    }
-    else
-        pOldCol = NULL;
 
     short nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
                         rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
@@ -526,6 +504,24 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     aDrawInf.SetRight( GetPaintRect().Right() );
     aDrawInf.SetSpecialUnderline( bSpecialUnderline );
     aDrawInf.SetSpace( nSpaceAdd );
+
+    if( COL_AUTO == GetFont()->GetColor().GetColor() )
+    {
+        const Color* pCol = GetFont()->GetBackColor();
+        if( !pCol || COL_TRANSPARENT == pCol->GetColor() )
+        {
+            const SvxBrushItem* pItem;
+            SwRect aOrigBackRect;
+            if( GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect,
+                FALSE ) && !pItem->GetColor().GetTransparency() )
+                pCol = &pItem->GetColor();
+            else
+                pCol = NULL;
+        }
+        aDrawInf.SetDarkBack( pCol &&
+            DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() );
+    }
+
     if( !pPrt )
         aDrawInf.GetZoom() = GetParaPortion()->GetZoom();
 
@@ -555,11 +551,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
             aDrawInf.SetSpace( nSpaceAdd );
             pFnt->_DrawText( aDrawInf );
         }
-    }
-    if( pOldCol )
-    {
-        GetFont()->SetColor( *pOldCol );
-        delete pOldCol;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-07 11:46:17 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,11 +619,25 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         }
         aPos.X() += nPixWidth;
     }
-    Color aOldColor;
-    if( bPrt && rInf.GetShell()->GetViewOptions()->IsBlackFont() &&
-        COL_BLACK != (aOldColor = pTmpFont->GetColor()).GetColor() )
+    BOOL bChgColor = FALSE;
+    ColorData nNewColor;
+    if( bPrt && rInf.GetShell()->GetViewOptions()->IsBlackFont() )
     {
-        Color aBlack( COL_BLACK );
+        if( COL_BLACK != pTmpFont->GetColor().GetColor() )
+        {
+            nNewColor = COL_BLACK;
+            bChgColor = TRUE;
+        }
+    }
+    else if( COL_AUTO == pTmpFont->GetColor().GetColor() )
+    {
+        nNewColor = rInf.GetDarkBack() ? COL_WHITE : COL_BLACK;
+        bChgColor = TRUE;
+    }
+    if( bChgColor )
+    {
+        Color aOldColor( pTmpFont->GetColor() );
+        Color aBlack( nNewColor );
         pTmpFont->SetColor( aBlack );
         if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *pTmpFont );

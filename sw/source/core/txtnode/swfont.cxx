@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-12 09:58:19 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,6 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
         SetFixKerning( pAttrSet->GetKerning().GetValue() );
         bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
         bBlink = pAttrSet->GetBlink().GetValue();
-        bAutomaticCol = FALSE; //pAttrSet->Get???().GetValue();
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
             TRUE, &pItem ))
@@ -363,7 +362,6 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
         Invalidate();
         bNoHyph = FALSE;
         bBlink = FALSE;
-        bAutomaticCol = FALSE;
     }
     bPaintBlank = FALSE;
     bPaintWrong = FALSE;
@@ -533,16 +531,12 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BLINK,
             TRUE, &pItem ))
             SetBlink( ((SvxBlinkItem*)pItem)->GetValue() );
-        //if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_???,
-        //  TRUE, &pItem ))
-            SetAutomaticCol( FALSE /*((Svx???Item*)pItem)->GetValue()*/ );
     }
     else
     {
         Invalidate();
         bNoHyph = FALSE;
         bBlink = FALSE;
-        bAutomaticCol = FALSE;
     }
     bPaintBlank = FALSE;
     bPaintWrong = FALSE;
@@ -571,7 +565,6 @@ SwFont::SwFont( const SwFont &rFont )
     bNoColReplace = rFont.bNoColReplace;
     bNoHyph = rFont.bNoHyph;
     bBlink = rFont.bBlink;
-    bAutomaticCol = rFont.bAutomaticCol;
 }
 
 SwFont::SwFont( const SwAttrSet* pAttrSet )
@@ -585,7 +578,6 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
     bNoColReplace = FALSE;
     bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
     bBlink = pAttrSet->GetBlink().GetValue();
-    bAutomaticCol = FALSE; // pAttrSet->Get???().GetValue();
     {
         const SvxFontItem& rFont = pAttrSet->GetFont();
         aSub[SW_LATIN].SetFamily( rFont.GetFamily() );
@@ -678,7 +670,6 @@ SwFont::SwFont( const SwAttrHandler& rAttrHandler )
                 rAttrHandler.GetDefault( RES_CHRATR_NOHYPHEN ) ).GetValue();
     bBlink = ( (SvxBlinkItem&)
                 rAttrHandler.GetDefault( RES_CHRATR_BLINK ) ).GetValue();
-    bAutomaticCol = FALSE; // ( (Svx???Item&)rAttrHandler.GetDefault( ??? ) ).GetValue();
     {
         const SvxFontItem& rFont = (SvxFontItem&)
                                     rAttrHandler.GetDefault( RES_CHRATR_FONT );
@@ -817,7 +808,6 @@ SwFont& SwFont::operator=( const SwFont &rFont )
     bNoColReplace = rFont.bNoColReplace;
     bNoHyph = rFont.bNoHyph;
     bBlink = rFont.bBlink;
-    bAutomaticCol = rFont.bAutomaticCol;
     return *this;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-07 11:44:15 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ class SwDrawTextInfo
     BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
     BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
     BOOL bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
+    BOOL bDarkBack : 1; // Dark background sets automatic font color to white
     SwDrawTextInfo();       // nicht zulaessig
 public:
 #ifndef PRODUCT
@@ -132,7 +133,7 @@ public:
                     const XubString &rSt, xub_StrLen nI, xub_StrLen nL,
                     USHORT nW, BOOL bB )
     {   pSh = pS; pOut = &rO; pText = &rSt; nIdx = nI; nLen = nL; nWidth = nW;
-        bBullet = bB; bSpecialUnderline = bGreyWave = FALSE;
+        bBullet = bB; bSpecialUnderline = bGreyWave = bDarkBack = FALSE;
 #ifndef PRODUCT
         bOut = bText = bIdx = bLen = bWidth = bBull = bSpec = bGreyWv = TRUE;
         bPos = bWrong = bSize = bFnt = bAscent = bKern = bSpace = bUppr =
@@ -232,6 +233,9 @@ public:
     BOOL GetGreyWave() const {
         ASSERT( bGreyWv, "DrawTextInfo: Undefined GreyWave" );
         return bGreyWave;
+    }
+    BOOL GetDarkBack() const {
+        return bDarkBack;
     }
 
     void SetOut( OutputDevice &rNew ){ pOut = &rNew;
@@ -344,6 +348,7 @@ public:
         bGreyWv = TRUE;
 #endif
     }
+    void SetDarkBack( BOOL bNew ){ bDarkBack = bNew; }
     void ShiftX()
     {
         ASSERT( bPos, "DrawTextInfo: Undefined Position" );
