@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlencryption_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:58:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #endif
 
-#ifndef _XMLSECURITYCONTEXT_MSCRYPTIMPL_HXX_
-#include "xmlsecuritycontext_mscryptimpl.hxx"
+#ifndef _SECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
+#include "securityenvironment_mscryptimpl.hxx"
 #endif
 
 #ifndef _ERRORCALLBACK_XMLSECIMPL_HXX_
@@ -120,7 +120,7 @@ XMLEncryption_MSCryptImpl :: ~XMLEncryption_MSCryptImpl() {
 Reference< XXMLEncryptionTemplate >
 SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
-    const Reference< XXMLSecurityContext >& aSecurityCtx
+    const Reference< XSecurityEnvironment >& aEnvironment
 ) throw( com::sun::star::xml::crypto::XMLEncryptionException,
          com::sun::star::uno::SecurityException )
 {
@@ -133,17 +133,17 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     if( !aTemplate.is() )
         throw RuntimeException() ;
 
-    if( !aSecurityCtx.is() )
+    if( !aEnvironment.is() )
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aSecurityCtx , UNO_QUERY ) ;
+    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
     if( !xSecTunnel.is() ) {
          throw RuntimeException() ;
     }
 
-    XMLSecurityContext_MSCryptImpl* pSecCtxt = ( XMLSecurityContext_MSCryptImpl* )xSecTunnel->getSomething( XMLSecurityContext_MSCryptImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
+    SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
+    if( pSecEnv == NULL )
         throw RuntimeException() ;
 
     //Get the encryption template
@@ -210,23 +210,27 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
         isParentRef = sal_False;
     }
 
-    pMngr = pSecCtxt->keysManager() ;
-
      setErrorRecorder( aTemplate );
+
+    pMngr = pSecEnv->createKeysManager() ; //i39448
+    if( !pMngr ) {
+        throw RuntimeException() ;
+    }
 
     //Create Encryption context
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
     {
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
     }
 
-
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
@@ -234,6 +238,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     }
 
     xmlSecEncCtxDestroy( pEncCtx ) ;
+    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
     //get the new EncryptedData element
     if (isParentRef)
@@ -268,13 +273,16 @@ XMLEncryption_MSCryptImpl :: decrypt(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aSecurityCtx , UNO_QUERY ) ;
+    Reference< XSecurityEnvironment > xSecEnv
+        = aSecurityCtx->getSecurityEnvironmentByIndex(
+            aSecurityCtx->getDefaultSecurityEnvironmentIndex());
+    Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY ) ;
     if( !xSecTunnel.is() ) {
          throw RuntimeException() ;
     }
 
-    XMLSecurityContext_MSCryptImpl* pSecCtxt = ( XMLSecurityContext_MSCryptImpl* )xSecTunnel->getSomething( XMLSecurityContext_MSCryptImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
+    SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
+    if( pSecEnv == NULL )
         throw RuntimeException() ;
 
     //Get the encryption template
@@ -310,14 +318,18 @@ XMLEncryption_MSCryptImpl :: decrypt(
         isParentRef = sal_False;
     }
 
-    pMngr = pSecCtxt->keysManager() ;
-
      setErrorRecorder( aTemplate );
+
+    pMngr = pSecEnv->createKeysManager() ; //i39448
+    if( !pMngr ) {
+        throw RuntimeException() ;
+    }
 
     //Create Encryption context
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
     {
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -326,6 +338,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
     //Decrypt the template
     if( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
@@ -355,6 +368,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
 
     //Destroy the encryption context
     xmlSecEncCtxDestroy( pEncCtx ) ;
+    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
     //get the decrypted element
     XMLElementWrapper_XmlSecImpl * ret = new XMLElementWrapper_XmlSecImpl(isParentRef?
