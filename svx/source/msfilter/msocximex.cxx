@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:08:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-23 09:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5325,12 +5325,6 @@ sal_Bool OCX_Image::Import( uno::Reference< beans::XPropertySet > &rPropSet )
         aTmp <<= sImageUrl;
         rPropSet->setPropertyValue( WW8_ASCII2STR("ImageURL"), aTmp);
     }
-    return sal_True;
-}
-
-sal_Bool OCX_Image::ReadFontData( SvStorageStream *pS )
-{
-    // image does not support font data
     return sal_True;
 }
 
