@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwPortionHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-21 14:55:30 $
+ *  last change: $Author: dvo $ $Date: 2002-02-28 13:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ public:
      * model string.
      */
     virtual void Text(
-        USHORT nLength       /// length of this portion in the model string
+        USHORT nLength,      /// length of this portion in the model string
+        USHORT nType         /// type of this portion
         ) = 0;
 
     /** special portion. This method is called for every non-text
@@ -105,7 +106,7 @@ public:
     virtual void Special(
         USHORT nLength,      /// length of this portion in the model string
         const String& rText, /// text which is painted on-screen
-        USHORT nType     /// type of this portion
+        USHORT nType         /// type of this portion
         ) = 0;
 
     /** line break. This method is called whenever a line break in the
