@@ -560,6 +560,8 @@ hedabu: ..\inc\scripttypeitem.hxx %_DEST%\inc%_EXT%\svx\scripttypeitem.hxx
 hedabu: ..\inc\scriptspaceitem.hxx %_DEST%\inc%_EXT%\svx\scriptspaceitem.hxx
 hedabu: ..\inc\hngpnctitem.hxx %_DEST%\inc%_EXT%\svx\hngpnctitem.hxx
 hedabu: ..\inc\forbiddenruleitem.hxx %_DEST%\inc%_EXT%\svx\forbiddenruleitem.hxx
+hedabu: ..\inc\charscaleitem.hxx %_DEST%\inc%_EXT%\svx\charscaleitem.hxx
+hedabu: ..\inc\charrotateitem.hxx %_DEST%\inc%_EXT%\svx\charrotateitem.hxx
 hedabu: ..\inc\xmlgrhlp.hxx %_DEST%\inc%_EXT%\svx\xmlgrhlp.hxx
 hedabu: ..\inc\xmleohlp.hxx %_DEST%\inc%_EXT%\svx\xmleohlp.hxx
 

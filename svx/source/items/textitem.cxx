@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 15:25:14 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 20:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #define ITEMID_BLINK            0
 #define ITEMID_EMPHASISMARK     0
 #define ITEMID_TWOLINES         0
+#define ITEMID_CHARROTATE       0
+#define ITEMID_CHARSCALE_W      0
 
 #include <svtools/sbx.hxx>
 #define GLOBALOVERFLOW3
@@ -214,6 +216,8 @@
 #include "emphitem.hxx"
 #include "twolinesitem.hxx"
 #include "scripttypeitem.hxx"
+#include "charrotateitem.hxx"
+#include "charscaleitem.hxx"
 #include "itemtype.hxx"
 #include "dialmgr.hxx"
 #include "langtab.hxx"
@@ -257,7 +261,8 @@ TYPEINIT1_AUTOFACTORY(SvxBlinkItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxEmphasisMarkItem, SfxUInt16Item);
 TYPEINIT1_AUTOFACTORY(SvxTwoLinesItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxScriptTypeItem, SfxUInt16Item);
-
+TYPEINIT1_AUTOFACTORY(SvxCharRotateItem, SfxUInt16Item);
+TYPEINIT1_AUTOFACTORY(SvxCharScaleWidthItem, SfxUInt16Item);
 
 TYPEINIT1(SvxScriptSetItem, SfxSetItem );
 
@@ -4053,6 +4058,166 @@ USHORT SvxTwoLinesItem::GetVersion( USHORT nFFVer ) const
 
 
 /*************************************************************************
+|*    class SvxCharRotateItem
+*************************************************************************/
+
+SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
+                                       sal_Bool bFitIntoLine,
+                                       const sal_uInt16 nW )
+    : SfxUInt16Item( nW, nValue ), bFitToLine( bFitIntoLine )
+{
+}
+
+SfxPoolItem* SvxCharRotateItem::Clone( SfxItemPool* ) const
+{
+    return new SvxCharRotateItem( GetValue(), IsFitToLine(), Which() );
+}
+
+SfxPoolItem* SvxCharRotateItem::Create( SvStream& rStrm, USHORT ) const
+{
+    sal_uInt16 nVal;
+    sal_Bool b;
+    rStrm >> nVal >> b;
+    return new SvxCharRotateItem( nVal, b, Which() );
+}
+
+SvStream& SvxCharRotateItem::Store( SvStream & rStrm, USHORT ) const
+{
+    sal_Bool bFlag = IsFitToLine();
+    rStrm << GetValue() << bFlag;
+    return rStrm;
+}
+
+USHORT SvxCharRotateItem::GetVersion( USHORT nFFVer ) const
+{
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
+}
+
+SfxItemPresentation SvxCharRotateItem::GetPresentation(
+        SfxItemPresentation ePres,
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        String &rText, const International*  ) const
+{
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            if( !GetValue() )
+                rText = SVX_RESSTR( RID_SVXITEMS_CHARROTATE_OFF );
+            else
+            {
+                rText = SVX_RESSTR( RID_SVXITEMS_CHARROTATE );
+                rText.SearchAndReplaceAscii( "$(ARG1)",
+                            String::CreateFromInt32( GetValue() ));
+                if( IsFitToLine() )
+                    rText += SVX_RESSTR( RID_SVXITEMS_CHARROTATE_FITLINE );
+            }
+            return ePres;
+        }
+        break;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+sal_Bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
+                                BYTE nMemberId ) const
+{
+    sal_Bool bRet = sal_True;
+    switch( nMemberId )
+    {
+    case MID_ROTATE:
+        rVal <<= GetValue();
+        break;
+    case MID_FITTOLINE:
+        rVal = Bool2Any( IsFitToLine() );
+        break;
+    default:
+        bRet = sal_False;
+        break;
+    }
+    return bRet;
+}
+
+sal_Bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
+                                    BYTE nMemberId )
+{
+    sal_Bool bRet = sal_False;
+    sal_uInt16 nVal;
+    switch( nMemberId )
+    {
+    case MID_ROTATE:
+        rVal >>= nVal;
+        SetValue( nVal );
+        break;
+
+    case MID_FITTOLINE:
+        SetFitToLine( Any2Bool( rVal ) );
+        bRet = sal_True;
+        break;
+    }
+    return bRet;
+}
+
+/*************************************************************************
+|*    class SvxCharScaleItem
+*************************************************************************/
+
+SvxCharScaleWidthItem::SvxCharScaleWidthItem( sal_uInt16 nValue,
+                                               const sal_uInt16 nW )
+    : SfxUInt16Item( nW, nValue )
+{
+}
+
+SfxPoolItem* SvxCharScaleWidthItem::Clone( SfxItemPool* ) const
+{
+    return new SvxCharScaleWidthItem( GetValue(), Which() );
+}
+
+SfxPoolItem* SvxCharScaleWidthItem::Create( SvStream& rStrm, USHORT ) const
+{
+    sal_uInt16 nVal;
+    rStrm >> nVal;
+    return new SvxCharScaleWidthItem( nVal, Which() );
+}
+
+USHORT SvxCharScaleWidthItem::GetVersion( USHORT nFFVer ) const
+{
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
+}
+
+SfxItemPresentation SvxCharScaleWidthItem::GetPresentation(
+        SfxItemPresentation ePres,
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        String &rText, const International*  ) const
+{
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            if( !GetValue() )
+                rText = SVX_RESSTR( RID_SVXITEMS_CHARSCALE_OFF );
+            else
+            {
+                rText = SVX_RESSTR( RID_SVXITEMS_CHARSCALE );
+                rText.SearchAndReplaceAscii( "$(ARG1)",
+                            String::CreateFromInt32( GetValue() ));
+            }
+            return ePres;
+        }
+        break;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+/*************************************************************************
 |*    class SvxScriptTypeItemItem
 *************************************************************************/
 
@@ -4066,7 +4231,7 @@ SfxPoolItem* SvxScriptTypeItem::Clone( SfxItemPool *pPool ) const
 }
 
 /*************************************************************************
-|*    class SvxScriptTypeItemItem
+|*    class SvxScriptSetItem
 *************************************************************************/
 
 SvxScriptSetItem::SvxScriptSetItem( USHORT nSlotId, SfxItemPool& rPool )
