@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-31 13:06:33 $
+ *  last change: $Author: nn $ $Date: 2001-07-17 17:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,6 +872,10 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     pRedlinTable(NULL)
 {
     FreeResource();
+
+    aDfDate.SetShowDateCentury( TRUE );
+    aDfDate2.SetShowDateCentury( TRUE );
+
     aRangeStr=aCbRange.GetText();
     aLbDate.SelectEntryPos(0);
     aLbDate.SetSelectHdl( LINK( this, SvxTPFilter, SelDateHdl ) );
