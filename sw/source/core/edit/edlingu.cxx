@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:49:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,28 +510,15 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         pSh->GetDoc()->Spell( *pSh->GetCrsr(),
                     xEmpty, pPageCnt, pPageSt, sal_True ) >>= aConvText;
 
-        sal_Bool bRev = sal_False;  // currently no wrap reverse wanted
         bGoOn = GetCrsrCnt() > 1;
         if( aConvText.getLength() )
         {
             bGoOn = sal_False;
             SwPosition* pNewPoint = new SwPosition( *pCrsr->GetPoint() );
             SwPosition* pNewMark = new SwPosition( *pCrsr->GetMark() );
-            if( bRev )
-            {
-                SetCurr( pNewMark );
-                // Noch steht der sdbcx::Index zwar am Anfang des falschen Wortes,
-                // wenn dies ersetzt wird (Delete,Insert), ist der sdbcx::Index
-                // hinter diesem und das Wort wird erneut geprueft (51308)
-                if( pNewPoint->nContent.GetIndex() )
-                    --pNewPoint->nContent;
-                SetCurrX( pNewPoint );
-            }
-            else
-            {
-                SetCurr( pNewPoint );
-                SetCurrX( pNewMark );
-            }
+
+            SetCurr( pNewPoint );
+            SetCurrX( pNewMark );
         }
         if( bGoOn )
         {
@@ -543,7 +530,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
             SetStart( pNew );
             pNew = new SwPosition( *pCrsr->GetMark() );
             SetEnd( pNew );
-            pNew = new SwPosition( bRev ? *GetEnd() : *GetStart() );
+            pNew = new SwPosition( *GetStart() );
             SetCurr( pNew );
             pNew = new SwPosition( *pNew );
             SetCurrX( pNew );
