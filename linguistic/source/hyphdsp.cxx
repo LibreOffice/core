@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-19 11:56:48 $
+ *  last change: $Author: tl $ $Date: 2002-09-24 13:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,24 +301,26 @@ Reference< XHyphenatedWord > SAL_CALL
 
     Reference< XHyphenatedWord >    xRes;
 
+    INT32 nWordLen = rWord.getLength();
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    if (nLanguage == LANGUAGE_NONE  || !rWord.getLength())
+    if (nLanguage == LANGUAGE_NONE  || !nWordLen ||
+        nMaxLeading == 0 || nMaxLeading == nWordLen)
         return xRes;
 
     // search for entry with that language
     LangSvcEntry_Hyph *pEntry = aSvcList.Get( nLanguage );
 
     BOOL bWordModified = FALSE;
-    if (!pEntry)
+    if (!pEntry || (nMaxLeading < 0 || nMaxLeading > nWordLen))
     {
 #ifdef LINGU_EXCEPTIONS
         throw IllegalArgumentException();
+#else
+        return NULL;
 #endif
     }
     else
     {
-        DBG_ASSERT( nMaxLeading < rWord.getLength(), "illegal argument combination" );
-
         OUString aChkWord( rWord );
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
@@ -420,24 +422,25 @@ Reference< XHyphenatedWord > SAL_CALL
 
     Reference< XHyphenatedWord >    xRes;
 
+    INT32 nWordLen = rWord.getLength();
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    if (nLanguage == LANGUAGE_NONE  || !rWord.getLength())
+    if (nLanguage == LANGUAGE_NONE  || !nWordLen)
         return xRes;
 
     // search for entry with that language
     LangSvcEntry_Hyph *pEntry = aSvcList.Get( nLanguage );
 
     BOOL bWordModified = FALSE;
-    if (!pEntry)
+    if (!pEntry || !(0 <= nIndex && nIndex <= nWordLen - 2))
     {
 #ifdef LINGU_EXCEPTIONS
         throw IllegalArgumentException();
+#else
+        return NULL;
 #endif
     }
     else
     {
-        DBG_ASSERT( nIndex < rWord.getLength(), "illegal argument combination" );
-
         OUString aChkWord( rWord );
         bWordModified |= RemoveHyphens( aChkWord );
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
