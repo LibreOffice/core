@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-23 07:01:44 $
+ *  last change: $Author: cd $ $Date: 2001-08-03 17:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,7 +745,9 @@ throw ( SAXException, RuntimeException )
 
     WriteMenu( m_pMenuBar );
 
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUBAR )) );
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endDocument();
 }
 
@@ -822,6 +824,7 @@ throw ( SAXException, RuntimeException )
                                              m_aAttributeType,
                                              pMenu->GetItemText( nItemId ) );
 
+                m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )), xListMenu );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )), m_xEmptyList );
@@ -829,6 +832,7 @@ throw ( SAXException, RuntimeException )
 
                 WriteMenu( pPopupMenu );
 
+                m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
                 m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
@@ -880,6 +884,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
                              m_aAttributeType,
                              pMenu->GetItemText( nItemId ));
 
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUITEM )), xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUITEM )) );
@@ -888,6 +893,7 @@ void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
 
 void OWriteMenuDocumentHandler::WriteMenuSeparator()
 {
+    m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUSEPARATOR )), m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUSEPARATOR )) );
