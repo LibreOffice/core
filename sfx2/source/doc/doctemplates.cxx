@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 11:40:15 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 10:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ DECLARE_LIST( GroupList_Impl, GroupData_Impl* );
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::init_Impl()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    ::osl::ClearableMutexGuard aGuard( maMutex );
 
     if ( !mbLocaleSet )
         getDefaultLocale();
@@ -453,8 +453,20 @@ void SfxDocTplService_Impl::init_Impl()
             ;   // update( sal_False );
         else
         {
-            WaitWindow_Impl aMsgWin;
+            aGuard.clear();
+            ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+
+            WaitWindow_Impl* pWin = new WaitWindow_Impl();
+
+            aSolarGuard.clear();
+            ::osl::ClearableMutexGuard anotherGuard( maMutex );
+
             update( sal_True );
+
+            anotherGuard.clear();
+            ::vos::OGuard aSecondSolarGuard( Application::GetSolarMutex() );
+
+            delete pWin;
         }
     }
     else
