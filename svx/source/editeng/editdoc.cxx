@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 12:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,6 +1205,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
+        rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() ) );
         rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
         rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
@@ -1317,7 +1318,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
     USHORT nLastNode = nNodes-1;
     for ( USHORT nNode = 0; nNode < nNodes; nNode++ )
     {
-        XubString aTmp( GetParaAsString( nNode ) );
+        XubString aTmp( GetParaAsString( GetObject(nNode) ) );
         memcpy( pCur, aTmp.GetBuffer(), aTmp.Len()*sizeof(sal_Unicode) );
         pCur += aTmp.Len();
         if ( nSepSize && ( nNode != nLastNode ) )
@@ -1334,28 +1335,15 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
 
 XubString EditDoc::GetParaAsString( USHORT nNode ) const
 {
-    ContentNode* pNode = GetObject( nNode );
-    DBG_ASSERT( pNode, "Node nicht gefunden: GetParaAsString" );
-    return GetParaAsString( pNode, 0, pNode->Len() );
+    return GetParaAsString( SaveGetObject( nNode ) );
 }
 
-XubString EditDoc::GetParaAsString( ContentNode* pNode ) const
+XubString EditDoc::GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos, BOOL bResolveFields ) const
 {
-    return GetParaAsString( pNode, 0, pNode->Len() );
-}
+    if ( nEndPos > pNode->Len() )
+        nEndPos = pNode->Len();
 
-XubString EditDoc::GetParaAsString( USHORT nNode, USHORT nStartPos, USHORT nEndPos ) const
-{
-    ContentNode* pNode = SaveGetObject( nNode );
-    DBG_ASSERT( pNode, "Node nicht gefunden: GetParaAsString( nNode )" );
-    return GetParaAsString( pNode, nStartPos, nEndPos );
-}
-
-XubString EditDoc::GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos ) const
-{
-    DBG_ASSERT( pNode, "Node nicht gefunden: GetParaAsString" );
     DBG_ASSERT( nStartPos <= nEndPos, "Start und Ende vertauscht?" );
-    DBG_ASSERT( nEndPos <= pNode->Len(), "Ende existiert nicht!" );
 
     USHORT nIndex = nStartPos;
     XubString aStr;
@@ -1380,7 +1368,8 @@ XubString EditDoc::GetParaAsString( ContentNode* pNode, USHORT nStartPos, USHORT
                 break;
                 case EE_FEATURE_LINEBR: aStr += '\x0A';
                 break;
-                case EE_FEATURE_FIELD:  aStr += ((EditCharAttribField*)pNextFeature)->GetFieldValue();
+                case EE_FEATURE_FIELD:  if ( bResolveFields )
+                                            aStr += ((EditCharAttribField*)pNextFeature)->GetFieldValue();
                 break;
                 default:    DBG_ERROR( "Was fuer ein Feature ?" );
             }
