@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:14:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,15 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     {
         // vor dem Dialog wird der HtmlMode an der DocShell versenkt
         USHORT nHtmlMode = ::GetHtmlMode(this);
+
+        // In HTML mode, we do not always have a printer. In order to show
+        // the correct page size in the Format - Page dialog, we have to
+        // get one here.
+        SwWrtShell* pCurrShell = ( pActShell ? pActShell : pWrtShell );
+        if( ( HTMLMODE_ON & nHtmlMode ) &&
+            !pCurrShell->GetDoc()->GetPrt() )
+            pCurrShell->InitPrt( pCurrShell->GetPrt( sal_True ) );
+
         PutItem(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
         SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
