@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:14:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,8 +702,8 @@ TabPage PAGE_DBWIZARD_ORACLE
 
 
     String STR_ORACLE_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie die benötigten Information ein, um per JDBC eine Verbindung zu einer Oracle-Datenbank herzustellen.Bitte beachsten Sie, dass  eine JDBC-Treiberklasse auf ihrem System installiert und %PRODUCTNAME bekannt sein muss.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
-        Text[ en-US ] = "Please enter the required information to connect to an Oracle database. Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
+        Text[ de ] = "Bitte geben Sie die benötigten Information ein, um per JDBC eine Verbindung zu einer Oracle-Datenbank herzustellen. Bitte beachten Sie, dass  eine JDBC-Treiberklasse auf ihrem System installiert und %PRODUCTNAME bekannt sein muss.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
+        Text[ en-US ] = "Please enter the required information to connect to an Oracle database.Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
     AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME)
@@ -725,8 +725,8 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
 
 
     String STR_SPREADSHEET_HELPTEXT{
-        Text[ de ] = "Klicken Sie auf 'Suchen' um auf Daten aus %PRODUCTNAME Tabellen-Dokumente oder Microsoft Excel Arbeitsmappen zu zugreifen.\n%PRODUCTNAME greift auf die Daten der Tabellendokumente nur lesend zu.";
-        Text[ en-US ] = "Click 'Browse' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
+        Text[ de ] = "Klicken Sie auf 'Durchsuchen...' um auf Daten aus %PRODUCTNAME Tabellen-Dokumente oder Microsoft Excel Arbeitsmappen zu zugreifen.\n%PRODUCTNAME greift auf die Daten der Tabellendokumente nur lesend zu.";
+        Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
     };
 
 
