@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-08-30 08:47:33 $
+ *  last change: $Author: os $ $Date: 2002-09-09 14:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,13 +1718,13 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 
     if (bHori)
     {
-        BOOL bEnable = HORI_NONE == nAlign && !bFormat;
+        BOOL bEnable = HORI_NONE == nAlign;
         aAtHorzPosED.Enable( bEnable );
         aAtHorzPosFT.Enable( bEnable );
     }
     else
     {
-        BOOL bEnable = SVX_VERT_NONE == nAlign && !bFormat;
+        BOOL bEnable = SVX_VERT_NONE == nAlign;
         aAtVertPosED.Enable( bEnable );
         aAtVertPosFT.Enable( bEnable );
     }

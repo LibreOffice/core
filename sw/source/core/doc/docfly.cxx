@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-08-13 13:18:23 $
+ *  last change: $Author: os $ $Date: 2002-09-09 14:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,19 +624,14 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     //wieder hineinstopfen.
     //JP 09.06.98: beim Update der RahmenVorlage sollte der Fly NICHT
     //              seine Orientierng verlieren (diese wird nicht geupdatet!)
+    //OS: #96584# HORI_NONE and VERT_NONE are allowed now
     if( !bKeepOrient )
     {
         const SwFmtVertOrient &rVert = rNewFmt.GetVertOrient();
-        if ( VERT_NONE != rVert.GetVertOrient()  )
-            rFmt.ResetAttr( RES_VERT_ORIENT );
-        else
-            rFmt.SetAttr( aVert );
+        rFmt.ResetAttr( RES_VERT_ORIENT );
 
         const SwFmtHoriOrient &rHori = rNewFmt.GetHoriOrient();
-        if ( HORI_NONE != rHori.GetHoriOrient() )
-            rFmt.ResetAttr( RES_HORI_ORIENT );
-        else
-            rFmt.SetAttr( aHori );
+        rFmt.ResetAttr( RES_HORI_ORIENT );
     }
 
     rFmt.ResetAttr( RES_PRINT, RES_SURROUND );
