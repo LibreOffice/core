@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-11-02 13:04:08 $
+ *  last change: $Author: os $ $Date: 2002-01-29 14:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,7 @@ public:
                     const SwFormToken& rToken, const HelpEvent& );
 
     virtual void        Resize();
+    virtual void        GetFocus();
 };
 /* -----------------------------23.12.99 14:16--------------------------------
 
@@ -435,8 +436,8 @@ public:
  --------------------------------------------------*/
 class SwTOXEntryTabPage : public SfxTabPage
 {
-    SwIdxTreeListBox    aLevelLB;
     FixedText           aLevelFT;
+    SwIdxTreeListBox    aLevelLB;
 
     SwTokenWindow   aTokenWIN;
     PushButton      aAllLevelsPB;

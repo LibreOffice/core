@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-12-06 14:48:03 $
+ *  last change: $Author: os $ $Date: 2002-01-29 14:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2997,6 +2997,7 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
         pActiveCtrl(0),
         sCharStyle(ResId(STR_CHARSTYLE))
 {
+    SetStyle(GetStyle()|WB_TABSTOP);
     SetHelpId(HID_TOKEN_WINDOW);
     for(sal_uInt16 i = 0; i < TOKEN_END; i++)
     {
@@ -3118,9 +3119,6 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
 {
     if( pSet != pActiveCtrl )
     {
-        if( pActiveCtrl && WINDOW_EDIT == pActiveCtrl->GetType() )
-            ((SwTOXEdit*)pActiveCtrl)->SetControlBackground( COL_WHITE );
-
         pActiveCtrl = pSet;
         if( pActiveCtrl )
         {
@@ -3128,10 +3126,7 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
             //it must be a SwTOXEdit
             const SwFormToken* pFToken;
             if( WINDOW_EDIT == pActiveCtrl->GetType() )
-            {
-                ((SwTOXEdit*)pActiveCtrl)->SetControlBackground(COL_LIGHTGRAY);
                 pFToken = &((SwTOXEdit*)pActiveCtrl)->GetFormToken();
-            }
             else
                 pFToken = &((SwTOXButton*)pActiveCtrl)->GetFormToken();
 
@@ -3178,7 +3173,8 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
         aControlList.Insert(pButton, aControlList.Count());
          Size aEditSize(aControlSize);
         aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
-        pButton->SetControlBackground(Color(COL_WHITE));
+//        pButton->SetControlBackground(aCtrlColor);
+//        pButton->SetControlForeground(aTextColor);
         pButton->SetSizePixel(aEditSize);
         pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
         pButton->SetGetFocusLink(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
@@ -3344,10 +3340,10 @@ void    SwTokenWindow::InsertAtSelection(
         pActiveCtrl->Hide();
         delete pActiveCtrl;
     }
+
     //now the new button
     SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, aToInsertToken);
     aControlList.Insert(pButton, nInsertPos);
-    pButton->SetControlBackground(Color(COL_WHITE));
     pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
     pButton->SetGetFocusLink(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
     if(TOKEN_AUTHORITY != aToInsertToken.eTokenType)
@@ -3774,7 +3770,22 @@ IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
     SetActiveControl(pBtn);
     return 0;
 }
+/* -----------------------------28.01.2002 12:22------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SwTokenWindow::GetFocus()
+{
+    if(GETFOCUS_TAB & GetGetFocusFlags())
+    {
+       Control* pFirst = aControlList.First();
+       if(pFirst)
+       {
+            pFirst->GrabFocus();
+            SetActiveControl(pFirst);
+            AdjustScrolling();
+       }
+    }
+}
 /* -----------------25.03.99 15:17-------------------
  *
  * --------------------------------------------------*/
