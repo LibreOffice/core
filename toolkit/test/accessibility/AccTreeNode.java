@@ -292,8 +292,7 @@ class AccTreeNode
         return null;
     }
 
-    /** Update the specified handlers.  This results in re-reading the
-        information regarding the XAccessibleComponentInterface.
+    /** Update the specified handlers.
         @return
             The returned array containes the indices of the updated children
             and can be used to create a TreeModelEvent.
