@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:26 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,20 +91,51 @@
 #include "glob.hxx"
 
 #ifndef SVX_LIGHT
+
 #ifndef MAC
-#include "../ui/inc/viewshel.hxx"
-#include "../ui/inc/sdview.hxx"
-#include "../ui/inc/tabcontr.hxx"
-#include "../ui/inc/layertab.hxx"
-#include "../ui/inc/viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "../ui/inc/ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "../ui/inc/View.hxx"
+#endif
+#ifndef SD_TAB_CONTROL_HXX
+#include "../ui/inc/TabControl.hxx"
+#endif
+#ifndef SD_LAYER_TAB_BAR_HXX
+#include "../ui/inc/LayerTabBar.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "../ui/inc/drawview.hxx"
-#include "../ui/inc/drviewsh.hxx"
-#include "../ui/inc/docshell.hxx"
-#include "../ui/inc/outlview.hxx"
-#include "../ui/inc/outlnvsh.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "../ui/inc/DrawViewShell.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../ui/inc/DrawDocShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "../ui/inc/OutlineView.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "../ui/inc/OutlineViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "../ui/inc/ViewShellBase.hxx"
+#endif
+
 #else
-#include "drviewsh.hxx"
-#include "outlnvsh.hxx"
+
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+
 #endif
 #endif // !SVX_LIGHT
 
@@ -355,17 +386,22 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     SdDrawDocument* pDoc = ((SdStyleSheetPool&) rPool).GetDoc();
 
 #ifndef SVX_LIGHT
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-
-    if (pViewShell && pViewShell->ISA(SdViewShell) &&
-        ((SdViewShell*) pViewShell)->GetDoc() == pDoc)
+    SfxViewShell* pViewShellBase = SfxViewShell::Current();
+    if (pViewShellBase!=NULL && pViewShellBase->ISA(::sd::ViewShellBase))
     {
-        SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
-        DBG_ASSERT(pPage, "aktuelle Seite nicht gefunden");
-        aRealStyle = pPage->GetLayoutName();
-        // hinter dem Separator abschneiden
-        aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
+        ::sd::ViewShell* pViewShell = ::sd::ViewShellBase::GetMainViewShell(
+            pViewShellBase->GetViewFrame());
+        if (pViewShell != NULL && pViewShell->GetDoc() == pDoc)
+        {
+            SdPage* pPage =
+                static_cast< ::sd::DrawViewShell*>(pViewShell)->GetActualPage();
+            DBG_ASSERT(pPage, "aktuelle Seite nicht gefunden");
+            aRealStyle = pPage->GetLayoutName();
+            // hinter dem Separator abschneiden
+            aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
+        }
     }
+
 #else
     SdrPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
     if( pPage )
