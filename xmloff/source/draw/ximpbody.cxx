@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
+ *  last change: $Author: aw $ $Date: 2001-04-09 14:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,24 +256,32 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     // set MasterPage?
     if(maMasterPageName.getLength())
     {
-        const SdXMLMasterStylesContext* pStyles = GetSdImport().GetMasterStylesContext();
-        if(pStyles)
+        // #85906# Code for setting masterpage needs complete rework
+        // since GetSdImport().GetMasterStylesContext() gives always ZERO
+        // because of content/style file split. Now the nechanism is to
+        // compare the wanted masterpage-name with the existing masterpages
+        // which were loaded and created in the styles section loading.
+        uno::Reference< drawing::XDrawPages > xMasterPages(GetSdImport().GetLocalMasterPages(), uno::UNO_QUERY);
+        uno::Reference < drawing::XMasterPageTarget > xDrawPage(rShapes, uno::UNO_QUERY);
+        uno::Reference< drawing::XDrawPage > xMasterPage;
+
+        if(xDrawPage.is())
         {
             sal_Bool bDone(FALSE);
 
-            for(sal_uInt32 a(0L); !bDone && a < pStyles->GetMasterPageList().Count(); a++)
+            for(sal_uInt32 a(0); !bDone && a < xMasterPages->getCount(); a++)
             {
-                const SdXMLMasterPageContext* pMaster = pStyles->GetMasterPageList().GetObject(a);
+                uno::Any aAny(xMasterPages->getByIndex(a));
+                aAny >>= xMasterPage;
 
-                if(pMaster && pMaster->GetName().getLength() && pMaster->GetName().equals(maMasterPageName))
+                if(xMasterPage.is())
                 {
-                    uno::Reference < drawing::XMasterPageTarget > xDrawPage(rShapes, uno::UNO_QUERY);
-                    if(xDrawPage.is())
+                    uno::Reference < container::XNamed > xMasterNamed(xMasterPage, uno::UNO_QUERY);
+                    if(xMasterNamed.is())
                     {
-                        uno::Reference< drawing::XDrawPage > xMasterPage(
-                            pMaster->GetLocalShapesContext(), uno::UNO_QUERY);
+                        OUString sMasterPageName = xMasterNamed->getName();
 
-                        if(xMasterPage.is())
+                        if(sMasterPageName.getLength() && sMasterPageName.equals(maMasterPageName))
                         {
                             xDrawPage->setMasterPage(xMasterPage);
                             bDone = TRUE;
