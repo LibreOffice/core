@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-04-19 09:17:26 $
+ *  last change: $Author: os $ $Date: 2001-07-10 11:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,12 +482,27 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
                 if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
                     ((SvxCharNamePage&)rPage).EnableRelativeMode();
+                if( SFX_STYLE_FAMILY_CHAR == nType )
+                    ((SvxCharNamePage&)rPage).SetPreviewBackgroundToCharacter();
             }
             break;
 
         case TP_CHAR_EXT:
             ((SvxCharEffectsPage&)rPage).EnableFlash();
+            if( SFX_STYLE_FAMILY_CHAR == nType )
+                ((SvxCharEffectsPage&)rPage).SetPreviewBackgroundToCharacter();
+
             break;
+
+        case TP_CHAR_POS:
+            if( SFX_STYLE_FAMILY_CHAR == nType )
+                ((SvxCharPositionPage&)rPage).SetPreviewBackgroundToCharacter();
+        break;
+
+        case TP_CHAR_TWOLN:
+            if( SFX_STYLE_FAMILY_CHAR == nType )
+                ((SvxCharTwoLinesPage&)rPage).SetPreviewBackgroundToCharacter();
+        break;
 
         case TP_PARA_STD:
             if( rPage.GetItemSet().GetParent() )
@@ -610,58 +625,5 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     }
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/03/05 08:55:35  os
-    #80346# enable negative mode
-
-    Revision 1.3  2000/11/29 17:26:27  os
-    #80913# forbidden rules
-
-    Revision 1.2  2000/11/27 08:58:18  jp
-    Task #80425#: new tabpages
-
-    Revision 1.1.1.1  2000/09/18 17:14:37  hr
-    initial import
-
-    Revision 1.88  2000/09/18 16:05:31  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.87  2000/07/27 21:15:53  jp
-    opt: get template names direct from the doc and don't load it from the resource
-
-    Revision 1.86  2000/02/11 14:47:00  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.85  1999/01/05 09:11:44  OS
-    #60606# #52654# Numerierungsregel an Styles wieder korrekt
-
-
-      Rev 1.84   05 Jan 1999 10:11:44   OS
-   #60606# #52654# Numerierungsregel an Styles wieder korrekt
-
-      Rev 1.83   17 Nov 1998 10:51:44   OS
-   #58263# Numerierungs-Tabseiten aus dem Svx
-
-      Rev 1.82   17 Jul 1998 10:18:28   OS
-   SfxxSmallMacroTabPage einsetzen #52809#
-
-      Rev 1.81   01 Jul 1998 17:41:16   OS
-   keine rel. FontHeight im Html #51938#
-
-      Rev 1.80   24 Apr 1998 11:06:24   OS
-   Format-Flag fuer Spalten-Page setzen
-
-      Rev 1.79   22 Apr 1998 13:35:04   OS
-   PrintingExtensions im HTML
-
-      Rev 1.78   16 Apr 1998 15:56:40   OS
-   kein RegisterMode im HTML
-
-      Rev 1.77   31 Mar 1998 10:20:56   OM
-   #45776 Per default kein Size-Item in Rahmenvorlagen
-
-------------------------------------------------------------------------*/
 
 

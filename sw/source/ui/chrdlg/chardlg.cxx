@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 13:02:29 $
+ *  last change: $Author: os $ $Date: 2001-07-10 11:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,13 +222,24 @@ void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         case TP_CHAR_STD:
             ((SvxCharNamePage&)rPage).SetFontList( *( (SvxFontListItem*)
                ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
+                if(!bIsDrwTxtMode)
+                    ((SvxCharNamePage&)rPage).SetPreviewBackgroundToCharacter();
             break;
         case TP_CHAR_EXT:
             if(bIsDrwTxtMode)
                 ((SvxCharEffectsPage&)rPage).DisableControls(DISABLE_CASEMAP);
             else
+            {
+                ((SvxCharEffectsPage&)rPage).SetPreviewBackgroundToCharacter();
                 ((SvxCharEffectsPage&)rPage).EnableFlash();
+            }
             break;
+        case TP_CHAR_POS:
+            ((SvxCharPositionPage&)rPage).SetPreviewBackgroundToCharacter();
+        break;
+        case TP_CHAR_TWOLN:
+            ((SvxCharTwoLinesPage&)rPage).SetPreviewBackgroundToCharacter();
+        break;
     }
 }
 
