@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:02:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,35 +475,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             if ( pHelp )
             {
                 ULONG nHelpId = ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE ) ? 66056 : 0;
-                // --> PB 2004-11-25 #118595# HACK!!! only for SO8 Beta
-                rtl::OUString sProduct;
-                utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::PRODUCTNAME ) >>= sProduct;
-                if ( nHelpId > 0 &&
-                    ( sProduct.equalsAscii( "StarOffice" ) || sProduct.equalsAscii( "StarSuite" ) ) )
-                {
-                    Reference< XSystemShellExecute > xSystemShellExecute(
-                        ::comphelper::getProcessServiceFactory()->createInstance(
-                            DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), UNO_QUERY );
-                    if ( xSystemShellExecute.is() )
-                    {
-                        try
-                        {
-                            xSystemShellExecute->execute(
-                                DEFINE_CONST_UNICODE("http://www.support-central.de/betaforum"),
-                                ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                        }
-                        catch (IllegalArgumentException&)
-                        {
-                            DBG_ERRORFILE( "xSystemShellExecute->execute(): illegal arguments" );
-                        }
-                        catch (SystemShellExecuteException&)
-                        {
-                            DBG_ERRORFILE( "xSystemShellExecute->execute(): general error" );
-                        }
-                    }
-                }
-                // <--
-                else if ( 66056 == nHelpId )
+                if ( 66056 == nHelpId )
                 {
                     // show Support page with new URL
                     String sHelpURL = SfxHelp::CreateHelpURL( nHelpId, String() );
