@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:15 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,7 @@ class OEditModel
     sal_Bool                    m_bNumericField : 1;
         // are we bound to some kind of numeric field?
 
-    static sal_Int32            nTextHandle;
-
 protected:
-    virtual void _onValueChanged();
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
     DECLARE_DEFAULT_LEAF_XTOR( OEditModel );
@@ -111,9 +108,6 @@ protected:
 
 public:
     virtual void SAL_CALL disposing();
-
-// ::com::sun::star::form::XBoundComponent
-    virtual sal_Bool _commit();
 
     // XPropertySet
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
@@ -130,13 +124,6 @@ public:
     IMPLEMENTATION_NAME(OEditModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-// ::com::sun::star::form::XLoadListener
-    virtual void _loaded(const ::com::sun::star::lang::EventObject& rEvent);
-    virtual void _unloaded();
-
-// ::com::sun::star::form::XReset
-    virtual void _reset();
-
 // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
@@ -144,6 +131,19 @@ public:
         ) const;
     IMPLEMENT_INFO_SERVICE()
 
+protected:
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
+
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            onDisconnectedDbColumn();
+
+    virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
 protected:
     virtual sal_Int16 getPersistenceFlags() const;
 
