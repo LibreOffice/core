@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-19 18:03:12 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1465,20 +1465,20 @@ Resource RID_LOCALIZED_NAMES
         < "ETA" ; > ;
         < "theta" ; > ;
         < "THETA" ; > ;
-        < "jota" ; > ;
-        < "JOTA" ; > ;
+        < "iota" ; > ;
+        < "IOTA" ; > ;
         < "kappa" ; > ;
         < "KAPPA" ; > ;
         < "lambda" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
-        < "MY" ; > ;
-        < "ny" ; > ;
-        < "NY" ; > ;
+        < "mu" ; > ;
+        < "MU" ; > ;
+        < "nu" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
-        < "omikron" ; > ;
-        < "OMIKRON" ; > ;
+        < "omicron" ; > ;
+        < "OMICRON" ; > ;
         < "pi" ; > ;
         < "PI" ; > ;
         < "rho" ; > ;
@@ -1487,8 +1487,8 @@ Resource RID_LOCALIZED_NAMES
         < "SIGMA" ; > ;
         < "tau" ; > ;
         < "TAU" ; > ;
-        < "ypsilon" ; > ;
-        < "YPSILON" ; > ;
+        < "upsilon" ; > ;
+        < "UPSILON" ; > ;
         < "phi" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -2001,6 +2001,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
