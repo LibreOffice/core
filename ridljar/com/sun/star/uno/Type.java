@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:23:42 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,10 +399,13 @@ public class Type {
                 Class c1 = getZClass();
                 Class c2 = type.getZClass();
                 return c1 != null && c2 != null && c1.isAssignableFrom(c2);
+            } else {
+                return false;
             }
-            break;
+
+        default:
+            return this.equals(type);
         }
-        return false;
     }
 
     // @see java.lang.Object#equals
