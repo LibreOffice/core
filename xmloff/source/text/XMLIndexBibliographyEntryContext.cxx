@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyEntryContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: dvo $ $Date: 2002-01-18 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,8 @@ const SvXMLEnumMapEntry aBibliographyDataFieldMap[] =
     { XML_ADDRESS,              BibliographyDataField::ADDRESS },
     { XML_ANNOTE,               BibliographyDataField::ANNOTE },
     { XML_AUTHOR,               BibliographyDataField::AUTHOR },
+    { XML_BIBLIOGRAPHY_TYPE,    BibliographyDataField::BIBILIOGRAPHIC_TYPE },
+    // #96658#: also read old documents (bib*i*liographic...)
     { XML_BIBILIOGRAPHIC_TYPE,  BibliographyDataField::BIBILIOGRAPHIC_TYPE },
     { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
     { XML_CHAPTER,              BibliographyDataField::CHAPTER },

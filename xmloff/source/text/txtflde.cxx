@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-11 16:42:22 $
+ *  last change: $Author: dvo $ $Date: 2002-01-18 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2547,7 +2547,7 @@ void XMLTextFieldExport::ProcessBibliographyData(
                                                 aBibliographyDataTypeMap))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     XML_BIBILIOGRAPHIC_TYPE,
+                                     XML_BIBLIOGRAPHY_TYPE,
                                      sBuf.makeStringAndClear());
             }
             // else: ignore this argument
@@ -3057,7 +3057,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
     else if (sName.equalsAsciiL("BibiliographicType",
                                 sizeof("BibiliographicType")-1))
     {
-        eName = XML_BIBILIOGRAPHIC_TYPE;
+        eName = XML_BIBLIOGRAPHY_TYPE;
     }
     else if (sName.equalsAsciiL("Address", sizeof("Address")-1))
     {

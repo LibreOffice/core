@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-11 16:42:22 $
+ *  last change: $Author: dvo $ $Date: 2002-01-18 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3465,8 +3465,10 @@ void XMLBibliographyFieldImportContext::StartElement(
                 MapBibliographyFieldName(sLocalName));
             Any aAny;
 
-            // special treatment for bibliographic type
-            if (IsXMLToken(sLocalName, XML_BIBILIOGRAPHIC_TYPE))
+            // special treatment for bibliography type
+            // biblio vs bibilio: #96658#; also read old documents
+            if (IsXMLToken(sLocalName, XML_BIBILIOGRAPHIC_TYPE) ||
+                IsXMLToken(sLocalName, XML_BIBLIOGRAPHY_TYPE)    )
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(
@@ -3526,8 +3528,10 @@ const sal_Char* XMLBibliographyFieldImportContext::MapBibliographyFieldName(
     {
         pName = "Identifier";
     }
-    else if (IsXMLToken(sName, XML_BIBILIOGRAPHIC_TYPE))
+    else if (IsXMLToken(sName, XML_BIBILIOGRAPHIC_TYPE) ||
+             IsXMLToken(sName, XML_BIBLIOGRAPHY_TYPE)     )
     {
+        // biblio... vs bibilio...: #96658#: also read old documents
         pName = "BibiliographicType";
     }
     else if (IsXMLToken(sName, XML_ADDRESS))

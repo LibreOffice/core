@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-09 12:57:21 $
+ *  last change: $Author: dvo $ $Date: 2002-01-18 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,7 +1294,7 @@ SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
     { XML_ADDRESS,              BibliographyDataField::ADDRESS },
     { XML_ANNOTE,               BibliographyDataField::ANNOTE },
     { XML_AUTHOR,               BibliographyDataField::AUTHOR },
-    { XML_BIBILIOGRAPHIC_TYPE,  BibliographyDataField::BIBILIOGRAPHIC_TYPE },
+    { XML_BIBLIOGRAPHY_TYPE,    BibliographyDataField::BIBILIOGRAPHIC_TYPE },
     { XML_BOOKTITLE,            BibliographyDataField::BOOKTITLE },
     { XML_CHAPTER,              BibliographyDataField::CHAPTER },
     { XML_CUSTOM1,              BibliographyDataField::CUSTOM1 },
