@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:07:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_ROW_HEIGHT
     Text [ italian ] = "Altezza riga" ;
     Text [ portuguese_brazilian ] = "Altura da célula" ;
     Text [ portuguese ] = "Altura da linha" ;
-    Text [ finnish ] = "Solun korkeus" ;
+    Text [ finnish ] = "Rivin korkeus" ;
     Text [ danish ] = "Rækkehøjde" ;
     Text [ french ] = "Hauteur de ligne" ;
     Text [ swedish ] = "Radhöjd" ;
@@ -147,6 +147,7 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ korean ] = "Å©±â¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "i~çerik boyuna uydur";
         Text[ catalan ] = "~ajuste dinámico";
+        Text[ finnish ] = "~Sovita kokoon";
     };
     GroupBox GB_HEIGHT
     {
