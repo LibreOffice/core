@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: hjs $ $Date: 2004-09-21 15:37:56 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:58:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -251,9 +251,9 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="IRIX"
-SHL$(TNR)SONAME=$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:b:b)
+SHL$(TNR)SONAME=$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:f)
 .ELSE
-SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:b:b)\"
+SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:f)\"
 .ENDIF
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
@@ -470,10 +470,8 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
 .IF "$(UNIXVERSIONNAMES)"!=""
-    +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)
-    +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b:b)
-    +cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f:b:b) $(SHL$(TNR)TARGETN:b:b:b)
+    +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b)
+    +cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
