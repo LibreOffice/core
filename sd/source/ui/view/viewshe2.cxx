@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:56:22 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #include <sot/clsids.hxx>
@@ -1059,23 +1062,29 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if( aName.EqualsAscii( "StarChart" ))
         {
-            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
+            if( SvtModuleOptions().IsChart() )
+                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
         }
         else if( aName.EqualsAscii( "StarOrg" ))
         {
-            // z.Z noch Nummer vom StarChart!
-            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
+            if( SvtModuleOptions().IsChart() )
+                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
         }
         else if( aName.EqualsAscii( "StarCalc" ))
         {
-            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SC_CLASSID ) );
+            if( SvtModuleOptions().IsCalc() )
+                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SC_CLASSID ) );
         }
         else if( aName.EqualsAscii( "StarMath" ))
         {
-            aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SM_CLASSID ) );
+            if( SvtModuleOptions().IsMath() )
+                aNewIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SM_CLASSID ) );
         }
-        else
+
+        if( !aNewIPObj.Is() )
         {
+            aName = String();
+
             // Dialog "OLE-Objekt einfuegen" aufrufen
             GetDocSh()->SetWaitCursor( FALSE );
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
@@ -1090,7 +1099,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             }
         }
 
-        if ( aNewIPObj.Is() )
+        if( aNewIPObj.Is() )
         {
             /******************************************************
             * OLE-Objekt ist nicht mehr leer
@@ -1134,7 +1143,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         }
     }
 
-    if ( aErrCode == 0  )
+    if( aErrCode == 0 )
     {
         ::sd::View* pView = GetView();
 
@@ -1195,14 +1204,7 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         ErrorHandler::HandleError(* new StringErrorInfo(aErrCode, String() ) );
     }
 
-    BOOL bActivated = FALSE;
-
-    if (aErrCode == 0)
-    {
-        bActivated = TRUE;
-    }
-
-    return(bActivated);
+    return aErrCode == 0;
 }
 
 /*************************************************************************
