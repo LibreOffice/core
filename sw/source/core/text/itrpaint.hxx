@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:03:46 $
+ *  last change: $Author: fme $ $Date: 2002-11-14 08:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,8 @@ class SwTxtPainter : public SwTxtCursor
     sal_Bool bPaintDrop;
 
     SwLinePortion *CalcPaintOfst( const SwRect &rPaint );
-    void CheckSpecialUnderline( const SwLinePortion* pPor );
+    void CheckSpecialUnderline( const SwLinePortion* pPor,
+                                long nAdjustBaseLine = 0 );
 protected:
     void CtorInit( SwTxtFrm *pFrm, SwTxtPaintInfo *pInf );
     inline SwTxtPainter() { }

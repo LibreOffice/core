@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-04 12:25:54 $
+ *  last change: $Author: fme $ $Date: 2002-11-14 08:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,11 @@ public:
     // vertical alignment
     inline USHORT GetVertAlign() const { return nVertAlign; }
 #ifdef BIDI
-    inline sal_Bool HasSpecialAlign() const
-        { return SvxParaVertAlignItem::BASELINE  != nVertAlign &&
-                 SvxParaVertAlignItem::AUTOMATIC != nVertAlign; }
+    inline sal_Bool HasSpecialAlign( sal_Bool bVert ) const
+        { return bVert ?
+                 ( SvxParaVertAlignItem::BASELINE  != nVertAlign ) :
+                 ( SvxParaVertAlignItem::BASELINE  != nVertAlign &&
+                   SvxParaVertAlignItem::AUTOMATIC != nVertAlign ); }
 #else
     inline sal_Bool HasSpecialAlign() const
         { return SvxParaVertAlignItem::BASELINE  != nVertAlign ||
@@ -221,7 +223,7 @@ protected:
     OutputDevice *pWin;
     OutputDevice *pPrt;
     SwFont *pFnt;
-    SwFont *pUnderFnt; // Font for underlining
+    SwUnderlineFont *pUnderFnt; // Font for underlining
     SwTxtFrm *pFrm;
     const SwViewOption *pOpt;
     const XubString *pTxt;
@@ -321,8 +323,8 @@ public:
     inline const SwFont *GetFont() const { return pFnt; }
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     void SelectFont();
-    inline void SetUnderFnt( SwFont* pNew ) { pUnderFnt = pNew; }
-    inline SwFont* GetUnderFnt() const { return pUnderFnt; }
+    inline void SetUnderFnt( SwUnderlineFont* pNew ) { pUnderFnt = pNew; }
+    inline SwUnderlineFont* GetUnderFnt() const { return pUnderFnt; }
     inline void SelectOut() const
     { if( pVsh ) ((SwTxtSizeInfo*)this)->_SelectOut(); }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-20 08:23:56 $
+ *  last change: $Author: fme $ $Date: 2002-11-14 08:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ class ViewShell;
 class SwTxtNode;
 class SwAttrHandler;
 class SwTxtFrm;
+class SwUnderlineFont;
 
 /*************************************************************************
  *                class SwScanner
@@ -338,7 +339,7 @@ class SwDrawTextInfo
     const SwWrongList* pWrong;
     const Size* pSize;
     SwFont *pFnt;
-    SwFont* pUnderFnt;
+    SwUnderlineFont* pUnderFnt;
     xub_StrLen* pHyphPos;
     Fraction aZoom;
     long nLeft;
@@ -457,7 +458,7 @@ public:
         ASSERT( bFnt, "DrawTextInfo: Undefined Font" );
         return pFnt;
     }
-    SwFont* GetUnderFnt() const {
+    SwUnderlineFont* GetUnderFnt() const {
         ASSERT( bSpec, "DrawTextInfo: Undefined Underlinefont" );
         return pUnderFnt;
     }
@@ -648,7 +649,7 @@ public:
         bBull = TRUE;
 #endif
     }
-    void SetUnderFnt( SwFont* pFnt ){ pUnderFnt = pFnt;
+    void SetUnderFnt( SwUnderlineFont* pFnt ){ pUnderFnt = pFnt;
 #ifndef PRODUCT
         bSpec = TRUE;
 #endif

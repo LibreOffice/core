@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:31:04 $
+ *  last change: $Author: fme $ $Date: 2002-11-14 08:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,7 +967,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
         rInf.SetLen( nLn );
 
     FontUnderline nOldUnder;
-    SwFont* pUnderFnt = 0;
+    SwUnderlineFont* pUnderFnt = 0;
 
     if( rInf.GetUnderFnt() )
     {
@@ -1004,9 +1004,8 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
             rInf.SetText( rOldStr );
         }
     }
-    rInf.SetPos( rOld );
 
-    if( rInf.GetUnderFnt() && nOldUnder != UNDERLINE_NONE )
+    if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         Size aSize = _GetTxtSize( rInf );
@@ -1039,20 +1038,26 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             nSpace *= rInf.GetSpace();
         }
+
+        rInf.SetWidth( USHORT(aSize.Width() + nSpace) );
         rInf.SetText( aStr );
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
         SetUnderline( nOldUnder );
-        rInf.SetWidth( USHORT(aSize.Width() + nSpace) );
         rInf.SetUnderFnt( 0 );
 
-        pUnderFnt->_DrawStretchText( rInf );
+        // set position for underline font
+        rInf.SetPos( pUnderFnt->GetPos() );
+
+        pUnderFnt->GetFont()._DrawStretchText( rInf );
 
         rInf.SetUnderFnt( pUnderFnt );
         rInf.SetText( rOldStr );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
     }
+
+    rInf.SetPos( rOld );
 }
 
 void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
@@ -1061,7 +1066,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         return;
 
     FontUnderline nOldUnder;
-    SwFont* pUnderFnt = 0;
+    SwUnderlineFont* pUnderFnt = 0;
 
     if( rInf.GetUnderFnt() )
     {
@@ -1081,20 +1086,14 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         CalcEsc( rInf, aPos );
 
     rInf.SetKern( CheckKerning() + rInf.GetSperren() );
+    const Point &rOld = rInf.GetPos();
+    rInf.SetPos( aPos );
 
     if( IsCapital() )
-    {
-        const Point &rOld = rInf.GetPos();
-        rInf.SetPos( aPos );
         DrawStretchCapital( rInf );
-        rInf.SetPos( rOld );
-    }
     else
     {
         SV_STAT( nDrawStretchText );
-
-        const Point &rOld = rInf.GetPos();
-        rInf.SetPos( aPos );
 
         if ( rInf.GetFrm() )
         {
@@ -1113,11 +1112,9 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
         else
             rInf.GetOut().DrawStretchText( aPos, rInf.GetWidth(), CalcCaseMap(
                             rInf.GetText() ), rInf.GetIdx(), rInf.GetLen() );
-
-        rInf.SetPos( rOld );
     }
 
-    if( rInf.GetUnderFnt() && nOldUnder != UNDERLINE_NONE )
+    if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         const XubString &rOldStr = rInf.GetText();
@@ -1130,13 +1127,18 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         SetUnderline( nOldUnder );
         rInf.SetUnderFnt( 0 );
 
-        pUnderFnt->_DrawStretchText( rInf );
+        // set position for underline font
+        rInf.SetPos( pUnderFnt->GetPos() );
+
+        pUnderFnt->GetFont()._DrawStretchText( rInf );
 
         rInf.SetUnderFnt( pUnderFnt );
         rInf.SetText( rOldStr );
         rInf.SetIdx( nOldIdx );
         rInf.SetLen( nOldLen );
     }
+
+    rInf.SetPos( rOld );
 }
 
 /*************************************************************************
@@ -1276,5 +1278,21 @@ void SwDrawTextInfo::Shift( USHORT nDir )
         ((Point*)pPos)->Y() += GetSize().Width();
         break;
     }
+}
+
+/*************************************************************************
+ *                      SwUnderlineFont::~SwUnderlineFont
+ *
+ * Used for the "continuous underline" feature.
+ *************************************************************************/
+
+SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, const Point& rPoint )
+        : pFnt( &rFnt ), aPos( rPoint )
+{
+};
+
+SwUnderlineFont::~SwUnderlineFont()
+{
+     delete pFnt;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-09 09:25:49 $
+ *  last change: $Author: fme $ $Date: 2002-11-14 08:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1731,8 +1731,14 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         else
         {
             CheckSpecialUnderline( pPor );
-            if ( GetInfo().GetUnderFnt() && rMulti.IsDouble() )
-                 GetInfo().GetUnderFnt()->SetProportion( 50 );
+            SwUnderlineFont* pUnderLineFnt = GetInfo().GetUnderFnt();
+
+            if ( pUnderLineFnt )
+            {
+                if ( rMulti.IsDouble() )
+                    pUnderLineFnt->GetFont().SetProportion( 50 );
+                pUnderLineFnt->SetPos( GetInfo().GetPos() );
+            }
         }
 
 #ifdef BIDI

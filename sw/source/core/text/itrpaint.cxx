@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-19 11:52:48 $
+ *  last change: $Author: fme $ $Date: 2002-11-14 08:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,11 +348,12 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
     GETGRID( GetTxtFrm()->FindPageFrm() )
-    const sal_Bool bAdjustBaseLine = GetLineInfo().HasSpecialAlign() ||
-                                     GetTxtFrm()->IsVertical() ||
-                                     ( 0 != pGrid );
+    const sal_Bool bAdjustBaseLine =
+        GetLineInfo().HasSpecialAlign( GetTxtFrm()->IsVertical() ) ||
+        ( 0 != pGrid );
+    const SwTwips nLineBaseLine = GetInfo().GetPos().Y() + nTmpAscent;
     if ( ! bAdjustBaseLine )
-        GetInfo().Y( GetInfo().GetPos().Y() + nTmpAscent );
+        GetInfo().Y( nLineBaseLine );
 
     // 7529: PostIts prepainten
     if( GetInfo().OnWin() && pPor && !pPor->Width() )
@@ -447,7 +448,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         // Portions, die "unter" dem Text liegen wie PostIts
         SwLinePortion *pNext = pPor->GetPortion();
-        if(GetInfo().OnWin() && pNext && !pNext->Width() )
+        if( GetInfo().OnWin() && pNext && !pNext->Width() )
         {
             // Fix 11289: Felder waren hier ausgeklammert wg. Last!=Owner beim
             // Laden von Brief.sdw. Jetzt sind die Felder wieder zugelassen,
@@ -467,10 +468,21 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().SetUnderFnt( 0 );
         }
         else
-            CheckSpecialUnderline( pPor );
+        {
+            CheckSpecialUnderline( pPor, bAdjustBaseLine ? nOldY : 0 );
+            SwUnderlineFont* pUnderLineFnt = GetInfo().GetUnderFnt();
+            if ( pUnderLineFnt )
+            {
+                const Point aTmpPoint( GetInfo().X(),
+                                       bAdjustBaseLine ?
+                                       pUnderLineFnt->GetPos().Y() :
+                                       nLineBaseLine );
+                pUnderLineFnt->SetPos( aTmpPoint );
+            }
+        }
 
         // in extended input mode we do not want a common underline font.
-        SwFont* pOldUnderLineFnt = 0;
+        SwUnderlineFont* pOldUnderLineFnt = 0;
         if ( GetRedln() && GetRedln()->ExtOn() )
         {
             pOldUnderLineFnt = GetInfo().GetUnderFnt();
@@ -559,9 +571,11 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         rClip.ChgClip( rPaint, pFrm );
 }
 
-void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
+void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
+                                          long nAdjustBaseLine )
 {
     SwFont* pUnderlineFnt = 0;
+    Point aCommonBaseLine;
 
     Range aRange( 0, GetInfo().GetTxt().Len() );
     MultiSelection aUnderMulti( aRange );
@@ -634,8 +648,8 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
 
     MSHORT i;
     xub_StrLen nIndx = GetInfo().GetIdx();
-    xub_StrLen nUnderStart = 0;
-    xub_StrLen nUnderEnd = 0;
+    long nUnderStart = 0;
+    long nUnderEnd = 0;
     MSHORT nCnt = (MSHORT)aUnderMulti.GetRangeCount();
 
     // find the underline range the current portion is contained in
@@ -686,6 +700,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         ULONG nSumHeight = 0;
         ULONG nBold = 0;
         const ULONG nPorWidth = pPor->Width();
+        USHORT nMaxBaseLineOfst = 0;
 
         while( nTmpIdx <= nUnderEnd && pPor )
         {
@@ -702,12 +717,26 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
 
             if ( ! aIter.GetFnt()->GetEscapement() )
             {
-                const ULONG nSize = pPor->Width();
-                nSumWidth += nSize;
-                // weighted sum of font heights
-                nSumHeight += nSize * aIter.GetFnt()->GetHeight();
+                nSumWidth += pPor->Width();
+                const ULONG nFontHeight = aIter.GetFnt()->GetHeight();
+
+                // If we do not have a common baseline we take the baseline
+                // and the font of the lowest portion.
+                if ( nAdjustBaseLine )
+                {
+                    USHORT nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
+                    if ( nMaxBaseLineOfst < nTmpBaseLineOfst )
+                    {
+                        nMaxBaseLineOfst = nTmpBaseLineOfst;
+                        nSumHeight = nFontHeight;
+                    }
+                }
+                // in horizontal layout we build a weighted sum of the heights
+                else
+                    nSumHeight += pPor->Width() * nFontHeight;
+
                 if ( WEIGHT_NORMAL != aIter.GetFnt()->GetWeight() )
-                    nBold += nSize;
+                    nBold += pPor->Width();
             }
 
             nTmpIdx += pPor->GetLen();
@@ -717,20 +746,25 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         // resulting height
         if ( nSumWidth && nSumWidth != nPorWidth )
         {
-            const ULONG nAverageHeight = nSumHeight / nSumWidth;
+            const ULONG nNewFontHeight = nAdjustBaseLine ?
+                                         nSumHeight :
+                                         nSumHeight / nSumWidth;
 
             pUnderlineFnt = new SwFont( *GetInfo().GetFont() );
 
             // font height
             const BYTE nActual = pUnderlineFnt->GetActual();
             pUnderlineFnt->SetSize( Size( pUnderlineFnt->GetSize( nActual ).Width(),
-                                          nAverageHeight ), nActual );
+                                          nNewFontHeight ), nActual );
 
             // font weight
             if ( 2 * nBold > nSumWidth )
                 pUnderlineFnt->SetWeight( WEIGHT_BOLD, nActual );
             else
                 pUnderlineFnt->SetWeight( WEIGHT_NORMAL, nActual );
+
+            // common base line
+            aCommonBaseLine.Y() = nAdjustBaseLine + nMaxBaseLineOfst;
         }
     }
 
@@ -749,7 +783,8 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor )
         const Color aFillColor( COL_TRANSPARENT );
         pUnderlineFnt->SetFillColor( aFillColor );
 
-        GetInfo().SetUnderFnt( pUnderlineFnt );
+        GetInfo().SetUnderFnt( new SwUnderlineFont( *pUnderlineFnt,
+                                                     aCommonBaseLine ) );
     }
     else
         // I'm sorry, we do not have a special underlining font for you.

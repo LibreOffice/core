@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:27:11 $
+ *  last change: $Author: fme $ $Date: 2002-11-14 08:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,6 +842,34 @@ inline void SwSubFont::SetVertical( const USHORT nDir )
     Font::SetVertical( nDir > 1000 );
     Font::SetOrientation( nDir );
 }
+
+
+/*************************************************************************
+ *                      class SwUnderlineFont
+ *
+ * Used for the "continuous underline" feature.
+ *************************************************************************/
+
+class SwUnderlineFont
+{
+    Point aPos;
+    SwFont* pFnt;
+
+public:
+    // sets the font which should paint the common baseline
+    // and the starting point of the common baseline
+    SwUnderlineFont( SwFont& rFnt, const Point& rPoint );
+    ~SwUnderlineFont();
+
+    SwFont& GetFont()
+    {
+        ASSERT( pFnt, "No underline font" )
+        return *pFnt;
+    }
+    const Point& GetPos() const { return aPos; }
+    // the x coordinate of the starting point has to be set for each portion
+    void SetPos( const Point& rPoint ) { aPos = rPoint;  }
+};
 
 
 /*************************************************************************
