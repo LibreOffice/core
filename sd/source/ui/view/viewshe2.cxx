@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:30:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,10 +779,16 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 
     if (pViewShell->GetWindow() != pWin)
     {
-        if (pWin)
-        {
-            pWin->EnableChildTransparentMode();
-        }
+        // #i31551#
+        // This flag was not used in VCL up to now, but with the new native controls
+        // it is used now. Setting it leads to child windows being overpainted, e.g.
+        // FormControls. DL added this in 1996, comment was only EnableChildTransparentMode().
+        // I think it is not used correctly and can be removed since it leads to errors.
+        //
+        //if (pWin)
+        //{
+        //  pWin->EnableChildTransparentMode();
+        //}
 
         // The ViewShellBase is informed only about the center window.  The
         // windows of the other panes are not its business.
