@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:21:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,10 @@
 #ifndef DBAUI_COLLECTIONVIEW_HXX
 #include "CollectionView.hxx"
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
+
 
 //==========================================================================
 
@@ -297,7 +301,9 @@ namespace dbaui
             nFlags |= LF_USERNAME_READONLY;
 
         // create the dialog
-        ::svt::LoginDialog aLogin(NULL, nFlags, _rAuthRequest.ServerName, sRealm.Len() ? &sRealm : NULL);
+        ::rtl::OUString sName = _rAuthRequest.ServerName;
+        sName = ::dbaui::getStrippedDatabaseName(NULL,sName);
+        ::svt::LoginDialog aLogin(NULL, nFlags, sName, sRealm.Len() ? &sRealm : NULL);
 
         // initialize it
         aLogin.SetErrorText(_rAuthRequest.Diagnostic.getStr());
@@ -312,12 +318,15 @@ namespace dbaui
         aLogin.SetSavePassword(bRemember);
         aLogin.SetSavePasswordText(ModuleRes(bRememberPersistent ? STR_REMEMBERPASSWORD_PERSISTENT : STR_REMEMBERPASSWORD_SESSION));
 
-        if (_rAuthRequest.ServerName.getLength())
+        String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
+        if (sName.getLength())
+               sLoginRequest.SearchAndReplaceAscii("$name$", sName.getStr());
+        else
         {
-            String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
-            sLoginRequest.SearchAndReplaceAscii("$name$", _rAuthRequest.ServerName.getStr()),
-            aLogin.SetLoginRequestText(sLoginRequest);
+            sLoginRequest.SearchAndReplaceAscii("\"$name$\"", String());
+            sLoginRequest.SearchAndReplaceAscii("$name$", String()); // just to be sure that in other languages the string will be deleted
         }
+        aLogin.SetLoginRequestText(sLoginRequest);
 
         // execute
         sal_Int32 nResult = aLogin.Execute();
