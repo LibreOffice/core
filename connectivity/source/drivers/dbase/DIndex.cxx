@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-10 14:30:43 $
+ *  last change: $Author: rt $ $Date: 2001-05-11 09:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,8 +704,9 @@ BOOL ODbaseIndex::CreateImpl()
         nRowsLeft = xSet->getRow();
 
         xSet->beforeFirst();
-        ONDXKey aKey(ORowSetValue(), nType, 0);
-        ONDXKey aInsertKey(ORowSetValue(), nType, 0);
+        ORowSetValue    atmpValue=ORowSetValue();
+        ONDXKey aKey(atmpValue, nType, 0);
+        ONDXKey aInsertKey(atmpValue, nType, 0);
         // Erzeugen der Indexstruktur
         while (xSet->next())
         {
