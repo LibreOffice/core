@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:48:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 16:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
                 <node oor:name="com.sun.star.text.TextDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Textdokumente</value>
-                        <value xml:lang="en">Text Documents</value>
                         <value xml:lang="en-US">Text documents</value>
                         <value xml:lang="x-comment">Text documents</value>
                         <value xml:lang="pt">Documentos de texto</value>
@@ -104,7 +103,6 @@
                 <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Tabellendokumente</value>
-                        <value xml:lang="en">Spreadsheets</value>
                         <value xml:lang="en-US">Spreadsheets</value>
                         <value xml:lang="x-comment">Table documents</value>
                         <value xml:lang="pt">Table documents</value>
@@ -141,7 +139,6 @@
                 <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Präsentationen</value>
-                        <value xml:lang="en">Presentations</value>
                         <value xml:lang="en-US">Presentations</value>
                         <value xml:lang="x-comment">Presentations</value>
                         <value xml:lang="pt">Apresentações</value>
@@ -178,7 +175,6 @@
                 <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Zeichnungen</value>
-                        <value xml:lang="en">Drawings</value>
                         <value xml:lang="en-US">Drawings</value>
                         <value xml:lang="x-comment">Drawings</value>
                         <value xml:lang="pt">Desenhos</value>
@@ -215,7 +211,6 @@
                 <node oor:name="com.sun.star.text.WebDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Webseiten</value>
-                        <value xml:lang="en">Web Pages</value>
                         <value xml:lang="en-US">Web pages</value>
                         <value xml:lang="x-comment">web pages</value>
                         <value xml:lang="pt">Web pages</value>
@@ -252,7 +247,6 @@
                 <node oor:name="com.sun.star.text.GlobalDocument" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Globaldokumente</value>
-                        <value xml:lang="en">Master Documents</value>
                         <value xml:lang="en-US">Master documents</value>
                         <value xml:lang="x-comment">Master documents</value>
                         <value xml:lang="pt">Documentos-mestre</value>
@@ -289,7 +283,6 @@
                 <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Formeln</value>
-                        <value xml:lang="en">Formulas</value>
                         <value xml:lang="en-US">Formulas</value>
                         <value xml:lang="x-comment">Formulas</value>
                         <value xml:lang="pt">Formulas</value>
@@ -328,7 +321,6 @@
                 <node oor:name="msword956" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Microsoft Word 6.0 / 95</value>
-                        <value xml:lang="en">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="en-US">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="x-comment">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="pt">Microsoft Word 6.0 / 95</value>
@@ -365,7 +357,6 @@
                 <node oor:name="sw3to5" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarWriter 3.0 - 5.0</value>
-                        <value xml:lang="en">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="en-US">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="x-comment">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="pt">StarWriter 3.0 - 5.0</value>
@@ -402,7 +393,6 @@
                 <node oor:name="sw3to5templ" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarWriter 3.0 - 5.0 Vorlagen</value>
-                        <value xml:lang="en">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="en-US">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="x-comment">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="pt">StarWriter 3.0 - 5.0 Templates</value>
@@ -439,7 +429,6 @@
                 <node oor:name="text" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Text</value>
-                        <value xml:lang="en">Text</value>
                         <value xml:lang="en-US">Text</value>
                         <value xml:lang="x-comment">Text</value>
                         <value xml:lang="pt">Texto</value>
@@ -476,7 +465,6 @@
                 <node oor:name="excel456" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Microsoft Excel 4.x - 5.0 / 95</value>
-                        <value xml:lang="en">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="x-comment">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="pt">Microsoft Excel 4.x - 5.0 / 95</value>
@@ -513,7 +501,6 @@
                 <node oor:name="excel456templ" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Microsoft Excel 4.x - 5.0 / 95 Vorlagen</value>
-                        <value xml:lang="en">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="x-comment">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="pt">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
@@ -550,7 +537,6 @@
                 <node oor:name="sc345" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarCalc 3.0 - 5.0</value>
-                        <value xml:lang="en">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="en-US">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="x-comment">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="pt">StarCalc 3.0 - 5.0</value>
@@ -587,7 +573,6 @@
                 <node oor:name="sc345templ" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarCalc 3.0 - 5.0 Vorlagen</value>
-                        <value xml:lang="en">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="en-US">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="x-comment">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="pt">StarCalc 3.0 - 5.0 Templates</value>
@@ -624,7 +609,6 @@
                 <node oor:name="sd35_i" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarDraw 3.0 / 5.0 (StarImpress)</value>
-                        <value xml:lang="en">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="x-comment">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0 (StarImpress)</value>
@@ -661,7 +645,6 @@
                 <node oor:name="sd35_itempl" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarDraw 3.0 / 5.0 Vorlagen (StarImpress)</value>
-                        <value xml:lang="en">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
                         <value xml:lang="x-comment">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0 (StarImpress)</value>
@@ -698,7 +681,6 @@
                 <node oor:name="si45" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarImpress 4.0 / 5.0</value>
-                        <value xml:lang="en">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="en-US">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="x-comment">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="pt">StarImpress 4.0 / 5.0</value>
@@ -735,7 +717,6 @@
                 <node oor:name="si45templ" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarImpress 4.0 / 5.0 Vorlagen</value>
-                        <value xml:lang="en">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="en-US">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="x-comment">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="pt">StarImpress 4.0 / 5.0 Templates</value>
@@ -773,7 +754,6 @@
                 <node oor:name="sd35" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarDraw 3.0 / 5.0</value>
-                        <value xml:lang="en">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="x-comment">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0</value>
@@ -810,7 +790,6 @@
                 <node oor:name="sd35templ" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarDraw 3.0 / 5.0 Vorlagen</value>
-                        <value xml:lang="en">StarDraw 3.0 / 5.0 Vorlagen</value>
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates</value>
                         <value xml:lang="x-comment">StarDraw 3.0 / 5.0 Vorlagen</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0 Templates</value>
@@ -847,7 +826,6 @@
                 <node oor:name="sww45templ" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarWriter/Web 4.0 / 5.0 Vorlagen</value>
-                        <value xml:lang="en">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="en-US">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="x-comment">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="pt">StarWriter/Web 4.0 / 5.0 Templates</value>
@@ -884,7 +862,6 @@
                 <node oor:name="sww345" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarWriter/Web 3.0 - 5.0</value>
-                        <value xml:lang="en">StarWriter/Web 3.0 / 5.0</value>
                         <value xml:lang="en-US">StarWriter/Web 3.0 - 5.0</value>
                         <value xml:lang="x-comment">StarWriter/Web 3.0 / 5.0</value>
                         <value xml:lang="pt">StarWriter/Web 3.0 / 5.0</value>
@@ -921,7 +898,6 @@
                 <node oor:name="swwtext" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Text (StarWriter/Web)</value>
-                        <value xml:lang="en">Text (StarWriter/Web)</value>
                         <value xml:lang="en-US">Text (StarWriter/Web)</value>
                         <value xml:lang="x-comment">Text (StarWriter/Web)</value>
                         <value xml:lang="pt">Text (StarWriter/Web)</value>
@@ -958,7 +934,6 @@
                 <node oor:name="sw45glob" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarWriter 4.0 / 5.0 Globaldokumente</value>
-                        <value xml:lang="en">StarWriter 4.0 / 5.0 Master Documents</value>
                         <value xml:lang="en-US">StarWriter 4.0 / 5.0 Master Documents</value>
                         <value xml:lang="x-comment">StarWriter 4.0 / 5.0 Master Documents</value>
                         <value xml:lang="pt">StarWriter4.0/ 5.0 Master Documents</value>
@@ -995,7 +970,6 @@
                 <node oor:name="sm2to5" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">StarMath 2.0 - 5.0</value>
-                        <value xml:lang="en">StarMath 2.0 - 5.0</value>
                         <value xml:lang="en-US">StarMath 2.0 - 5.0</value>
                         <value xml:lang="x-comment">StarMath 2.0 - 5.0</value>
                         <value xml:lang="pt">StarMath 2.0 - 5.0</value>
@@ -1032,7 +1006,6 @@
                 <node oor:name="wpw67" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">WordPerfect (Win) 6.0 - 7.0</value>
-                        <value xml:lang="en">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="en-US">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="x-comment">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="pt">WordPerfect (Win) 6.0 - 7.0</value>
