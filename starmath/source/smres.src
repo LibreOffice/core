@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-15 07:49:02 $
+ *  last change: $Author: fme $ $Date: 2001-06-15 07:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2106,7 +2106,7 @@ ModalDialog RID_SYMBOLDIALOG
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Symbolset" ;
         Left = TRUE ;
-        Text [ english_us ] = "~Symbol Set" ;
+        Text [ English ] = "~Symbolset" ;
     };
     ListBox 1
     {
@@ -2299,29 +2299,8 @@ ModalDialog RID_SYMDEFINEDIALOG
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Left = TRUE ;
-        Text = "~Altes Symbol:" ;
-        Text [ English ] = "~Old Symbol:" ;
-        Text[ english_us ] = "~Old symbol:";
-        Text[ portuguese ] = "~Símbolo anterior:";
-        Text[ russian ] = "~Ñèìâîë:";
-        Text[ dutch ] = "~Oud symbool:";
-        Text[ french ] = "Actuel :";
-        Text[ spanish ] = "~Símbolo anterior:";
-        Text[ italian ] = "Simbolo:";
-        Text[ danish ] = "Oprindeligt symbol:";
-        Text[ swedish ] = "~Gammal symbol:";
-        Text[ polish ] = "Stary symbol:";
-        Text[ portuguese_brazilian ] = "~Symbol:";
-        Text[ japanese ] = "Šù‘¶‚Ì‹L†(~O):";
-        Text[ chinese_simplified ] = "¾ÉÍ¼±ê(~O)";
-        Text[ chinese_traditional ] = "ÂÂ¹Ï¥Ü(~O)";
-        Text[ arabic ] = ":ÑãÒ ŞÏíã";
-        Text[ greek ] = "Ğ~áëéü óıìâïëï:";
-        Text[ korean ] = "ÀÌÀü ±âÈ£(~O):";
-        Text[ turkish ] = "Eski simge:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Símbolo anterior:";
-        Text[ finnish ] = "~Vanha merkki:";
+        Text = "~Altes Symbol" ;
+        Text [ English ] = "~Old Symbol" ;
     };
     ComboBox 1
     {
@@ -2336,29 +2315,8 @@ ModalDialog RID_SYMDEFINEDIALOG
         Pos = MAP_APPFONT ( 150 , 8 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Left = TRUE ;
-        Text = "Alt~es Symbolset:" ;
-        Text [ English ] = "Ol~d Symbolset:" ;
-        Text[ english_us ] = "O~ld symbol set:";
-        Text[ portuguese ] = "Co~njunto anterior:";
-        Text[ russian ] = "Ïğåæíèé íàáîğ:";
-        Text[ dutch ] = "Oud s~ymbolenset:";
-        Text[ french ] = "Jeu actuel :";
-        Text[ spanish ] = "Conjunto ~anterior:";
-        Text[ italian ] = "Gamma simboli:";
-        Text[ danish ] = "Oprindeligt symbolsæt:";
-        Text[ swedish ] = "Gammalt s~ymbolset:";
-        Text[ polish ] = "Stary zbiór symboli:";
-        Text[ portuguese_brazilian ] = "S~ymbolset:";
-        Text[ japanese ] = "Šù‘¶‚Ì‹L†¾¯Ä(~D):";
-        Text[ chinese_simplified ] = "¾ÉÍ¼±ê×é(~D)";
-        Text[ chinese_traditional ] = "ÂÂ¹Ï¥Ü¶°(~D)";
-        Text[ arabic ] = ":ãÌãæÚÉ ÑãæÒ ŞÏíãÉ";
-        Text[ greek ] = "ĞáëéÜ ó~åéñÜ óõìâüëùí:";
-        Text[ korean ] = "ÀÌÀü ±âÈ£ ¼¼Æ®(~D):";
-        Text[ turkish ] = "Eski simge kümesi:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Conjunto ~anterior:";
-        Text[ finnish ] = "Va~nha merkkijoukko:";
+        Text = "Alt~es Symbolset" ;
+        Text [ English ] = "Ol~d Symbolset" ;
     };
     ComboBox 2
     {
@@ -2379,30 +2337,9 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Pos = MAP_APPFONT ( 6 , 113 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "~Symbol:" ;
-        Text [ English ] = "~Symbol:" ;
+        Text = "~Symbol" ;
+        Text [ English ] = "~Symbol" ;
         Left = TRUE ;
-        Text [ portuguese ] = "~Símbolo:" ;
-        Text [ english_us ] = "~Symbol:" ;
-        Text [ portuguese_brazilian ] = "~Symbol:" ;
-        Text [ swedish ] = "~Symbol:" ;
-        Text [ danish ] = "Symbol:" ;
-        Text [ italian ] = "Simbolo:" ;
-        Text [ spanish ] = "Sím~bolo:" ;
-        Text [ french ] = "~Symbole :" ;
-        Text [ dutch ] = "~Symbool:" ;
-        Text[ chinese_simplified ] = "Í¼±ê(~S)";
-        Text[ russian ] = "Ñèìâîë:";
-        Text[ polish ] = "Symbol:";
-        Text[ japanese ] = "‹L†(~S):";
-        Text[ chinese_traditional ] = "¹Ï¥Ü(~S)";
-        Text[ arabic ] = ":ÑãÒ";
-        Text[ greek ] = "Óıìâïëï:";
-        Text[ korean ] = "±âÈ£(~S):";
-        Text[ turkish ] = "Simge:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sím~bolo:";
-        Text[ finnish ] = "~Symboli:";
     };
     ComboBox 4
     {
@@ -2417,29 +2354,8 @@ ModalDialog RID_SYMDEFINEDIALOG
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 128 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "S~ymbolset:" ;
-        Text [ English ] = "S~ymbolset:" ;
-        Text[ chinese_simplified ] = "Í¼±ê×é(~E)";
-        Text[ chinese_traditional ] = "¹Ï¥Ü¶°(~E)";
-        Text[ russian ] = "Íàáîğ ñèìâîëîâ:";
-        Text[ polish ] = "Zbiór symboli:";
-        Text[ japanese ] = "‹L†¾¯Ä(~E)";
-        Text[ arabic ] = ":ãÌãæÚÉ ÑãæÒ";
-        Text [ portuguese ] = "Conjunto de ~símbolos:" ;
-        Text [ english_us ] = "Symbol s~et:" ;
-        Text [ portuguese_brazilian ] = "S~ymbolset:" ;
-        Text [ swedish ] = "S~ymbolset:" ;
-        Text [ danish ] = "Symbolsæt:" ;
-        Text [ italian ] = "Simboli:" ;
-        Text [ spanish ] = "Con~junto de símbolos:" ;
-        Text [ french ] = "Jeu :" ;
-        Text [ dutch ] = "S~ymbolenset:" ;
-        Text[ greek ] = "Óıíïëï óõìâüëùí:";
-        Text[ korean ] = "±âÈ£ ¼¼Æ®(~E):";
-        Text[ turkish ] = "Simge kümesi:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Con~junto de símbolos:";
-        Text[ finnish ] = "~Symbolijoukko:";
+        Text = "S~ymbolset" ;
+        Text [ English ] = "S~ymbolset" ;
     };
     ComboBox 5
     {
@@ -2454,30 +2370,8 @@ ModalDialog RID_SYMDEFINEDIALOG
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 143 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "Schri~ftart:" ;
-        Text [ ENGLISH ] = "~Font:" ;
-        Text[ chinese_simplified ] = "×ÖÌå(~F)£º";
-        Text[ chinese_traditional ] = "¦r«¬(~F)";
-        Text[ russian ] = "Òèï øğèôòà:";
-        Text[ polish ] = "Czcionka:";
-        Text[ japanese ] = "Ì«İÄ(~F):";
-        Text[ arabic ] = ":äæÚ ÇáÎØ";
-        Text [ norwegian ] = "~Font:" ;
-        Text [ italian ] = "~Tipo di carattere:" ;
-        Text [ portuguese_brazilian ] = "~Fonte:" ;
-        Text [ portuguese ] = "Tipo de letra:" ;
-        Text [ finnish ] = "~Fontti:" ;
-        Text [ danish ] = "Skrifttype:" ;
-        Text [ french ] = "~Police :" ;
-        Text [ swedish ] = "Te~ckensnitt:" ;
-        Text [ dutch ] = "~Lettertype:" ;
-        Text [ spanish ] = "~Fuente:" ;
-        Text [ english_us ] = "~Font:" ;
-        Text[ greek ] = "ÃñáììáôïóåéñÜ:";
-        Text[ korean ] = "±Û²Ã(~F):";
-        Text[ turkish ] = "Yazıtipi:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fuente:";
+        Text = "Schri~ftart" ;
+        Text [ ENGLISH ] = "~Font" ;
     };
     ListBox 1
     {
@@ -2493,29 +2387,8 @@ ModalDialog RID_SYMDEFINEDIALOG
         Left = TRUE ;
         Pos = MAP_APPFONT ( 6 , 158 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text = "Schriftschni~tt:" ;
-        Text [ ENGLISH ] = "S~tyle:" ;
-        Text[ italian ] = "S~tile:";
-        Text[ portuguese_brazilian ] = "Schriftschni~tt:";
-        Text[ portuguese ] = "~Tipo:";
-        Text[ danish ] = "Typografi:";
-        Text[ french ] = "Type~ :";
-        Text[ swedish ] = "Teckens~til:";
-        Text[ dutch ] = "~Type:";
-        Text[ spanish ] = "~Estilo:";
-        Text[ english_us ] = "~Typeface:";
-        Text[ chinese_simplified ] = "×ÖÌå(~T)£º";
-        Text[ chinese_traditional ] = "¦r«¬(~T)¡G";
-        Text[ russian ] = "~Íà÷åğòàíèå øğèôòà:";
-        Text[ polish ] = "Krój czcionki:";
-        Text[ japanese ] = "Ì«İÄ‚Ì½À²Ù(~T):";
-        Text[ arabic ] = "äãØ ÇáÎØ:";
-        Text[ greek ] = "~Ôığïò ãñáöŞò:";
-        Text[ korean ] = "À¯Çü(~T):";
-        Text[ turkish ] = "Yazıtipi varyantı:";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Estilo:";
-        Text[ finnish ] = "~Tyyppi:";
+        Text = "Schriftschni~tt" ;
+        Text [ ENGLISH ] = "S~tyle" ;
     };
     ComboBox 3
     {
