@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 14:59:41 $
+ *  last change: $Author: oj $ $Date: 2002-11-27 09:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     OJoinController::initialize(aArguments);
 
     PropertyValue aValue;

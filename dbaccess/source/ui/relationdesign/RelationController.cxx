@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-07 14:05:05 $
+ *  last change: $Author: oj $ $Date: 2002-11-27 09:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #ifndef _DBU_REL_HRC_
 #include "dbu_rel.hrc"
 #endif
-
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
@@ -335,6 +337,7 @@ void ORelationController::Execute(sal_uInt16 _nId)
 // -----------------------------------------------------------------------------
 void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     OJoinController::initialize(aArguments);
 
     //  m_pWindow->initialize(m_xCurrentFrame);
