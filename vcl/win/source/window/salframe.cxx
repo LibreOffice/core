@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: th $ $Date: 2001-08-23 14:16:11 $
+ *  last change: $Author: th $ $Date: 2001-08-27 11:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,35 +238,39 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
     pFrame->maFrameData.mnStyle = nSalFrameStyle;
 
     // determine show style
-    if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
+    pFrame->maFrameData.mnShowState = SW_SHOWNORMAL;
+    if ( (nSysStyle & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME) )
     {
-        SalData* pSalData = GetSalData();
-        pFrame->maFrameData.mnShowState = pSalData->mnCmdShow;
-        if ( (pFrame->maFrameData.mnShowState != SW_SHOWMINIMIZED) &&
-             (pFrame->maFrameData.mnShowState != SW_MINIMIZE) &&
-             (pFrame->maFrameData.mnShowState != SW_SHOWMINNOACTIVE) )
-        {
-            if ( (pFrame->maFrameData.mnShowState == SW_SHOWMAXIMIZED) ||
-                 (pFrame->maFrameData.mnShowState == SW_MAXIMIZE) )
-                pFrame->maFrameData.mbOverwriteState = FALSE;
+        if ( GetSystemMetrics( SM_CXSCREEN ) <= 1024 )
             pFrame->maFrameData.mnShowState = SW_SHOWMAXIMIZED;
-        }
         else
-            pFrame->maFrameData.mbOverwriteState = FALSE;
-    }
-    else
-    {
-        pFrame->maFrameData.mnShowState = SW_SHOWNORMAL;
-
-        // Document Windows are also maximized, if the current Document Window
-        // is also maximized
-        if ( (nSysStyle & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME) )
         {
-            HWND hWnd = GetForegroundWindow();
-            if ( hWnd && IsMaximized( hWnd ) &&
-                 (GetWindowInstance( hWnd ) == pInst->maInstData.mhInst) &&
-                 ((GetWindowStyle( hWnd ) & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME)) )
-                pFrame->maFrameData.mnShowState = SW_SHOWMAXIMIZED;
+            if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
+            {
+                SalData* pSalData = GetSalData();
+                pFrame->maFrameData.mnShowState = pSalData->mnCmdShow;
+                if ( (pFrame->maFrameData.mnShowState != SW_SHOWMINIMIZED) &&
+                     (pFrame->maFrameData.mnShowState != SW_MINIMIZE) &&
+                     (pFrame->maFrameData.mnShowState != SW_SHOWMINNOACTIVE) )
+                {
+                    if ( (pFrame->maFrameData.mnShowState == SW_SHOWMAXIMIZED) ||
+                         (pFrame->maFrameData.mnShowState == SW_MAXIMIZE) )
+                        pFrame->maFrameData.mbOverwriteState = FALSE;
+                    pFrame->maFrameData.mnShowState = SW_SHOWMAXIMIZED;
+                }
+                else
+                    pFrame->maFrameData.mbOverwriteState = FALSE;
+            }
+            else
+            {
+                // Document Windows are also maximized, if the current Document Window
+                // is also maximized
+                HWND hWnd = GetForegroundWindow();
+                if ( hWnd && IsMaximized( hWnd ) &&
+                     (GetWindowInstance( hWnd ) == pInst->maInstData.mhInst) &&
+                     ((GetWindowStyle( hWnd ) & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME)) )
+                    pFrame->maFrameData.mnShowState = SW_SHOWMAXIMIZED;
+            }
         }
     }
 
