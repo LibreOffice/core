@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:03:03 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,8 @@ class BasicCheckBox : public SvTabListBox
 private:
     USHORT              nMode;
     SvLBoxButtonData*   pCheckButton;
-    BasicManager*       pBasMgr;
+    SfxObjectShell*     m_pShell;
     void                Init();
-
-protected:
-    //virtual void  CheckButtonHdl();
 
 public:
                     BasicCheckBox( Window* pParent, const ResId& rResId );
@@ -177,8 +174,7 @@ public:
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
     virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
-    void            SetBasicManager( BasicManager* pMgr )   { pBasMgr = pMgr; }
-    BasicManager*   GetBasicManager() const                 { return pBasMgr; }
+    void            SetShell( SfxObjectShell* pShell ) { m_pShell = pShell; }
 
     void            SetMode( USHORT n );
     USHORT          GetMode() const         { return nMode; }
@@ -213,13 +209,13 @@ public:
 class OrganizeDialog : public TabDialog
 {
 private:
-    TabControl      aTabCtrl;
+    TabControl              aTabCtrl;
+    BasicEntryDescriptor    m_aCurEntry;
 
 public:
-                    OrganizeDialog( Window* pParent, INT16 tabId );
+                    OrganizeDialog( Window* pParent, INT16 tabId, BasicEntryDescriptor& rDesc );
                     ~OrganizeDialog();
 
-    void            SetCurrentModule( const String& rMacroDescr );
     virtual short   Execute();
 
     DECL_LINK( ActivatePageHdl, TabControl * );
@@ -229,7 +225,6 @@ class ObjectPage: public TabPage
 {
 protected:
     FixedText           aLibText;
-//  Edit                aEdit;
     ExtBasicTreeListBox aBasicBox;
     PushButton          aEditButton;
     CancelButton        aCloseButton;
@@ -237,13 +232,10 @@ protected:
     PushButton          aNewDlgButton;
     PushButton          aDelButton;
 
-    String              aCurEntryDescr;
-
     DECL_LINK( BasicBoxHighlightHdl, BasicTreeListBox * );
-//  DECL_LINK( EditModifyHdl, Edit * );
     DECL_LINK( ButtonHdl, Button * );
     void                CheckButtons();
-    StarBASIC*          GetSelectedBasic();
+    bool                GetSelection( SfxObjectShell*& rpShell, String& rLibName );
     void                DeleteCurrent();
     void                NewModule();
     void                NewDialog();
@@ -251,16 +243,13 @@ protected:
 
     TabDialog*          pTabDlg;
 
-    void                ImplMarkCurrentModule();
-
-//  BOOL                UseEditText();
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
 
 public:
-                        ObjectPage( Window* pParent, USHORT nMode );
+                        ObjectPage( Window* pParent, const ResId& rResId, USHORT nMode );
 
-    void                SetCurrentModule( const String& rMacroDescr ) { aCurEntryDescr = rMacroDescr; ImplMarkCurrentModule(); }
+    void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 
@@ -281,11 +270,11 @@ protected:
     PushButton          aInsertLibButton;
     PushButton          aDelButton;
 
-    String              aCurBasMgr;
+    SfxObjectShell*     m_pCurShell;
+    LibraryLocation     m_eCurLocation;
 
     DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
     DECL_LINK( BasicSelectHdl, ListBox * );
-    //DECL_LINK( CheckBoxHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     DECL_LINK( CheckPasswordHdl, SvxPasswordDialog * );
     void                CheckButtons();
@@ -294,9 +283,9 @@ protected:
     void                InsertLib();
     void                EndTabDialog( USHORT nRet );
     void                FillListBox();
+    void                InsertListBoxEntry( SfxObjectShell* pShell, LibraryLocation eLocation );
     void                SetCurLib();
     SvLBoxEntry*        ImpInsertLibEntry( const String& rLibName, ULONG nPos );
-    //void              ActivateCurrentLibSettings();  // library preloading obsolete!
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
 
@@ -304,13 +293,14 @@ protected:
 
 public:
                         LibPage( Window* pParent );
+    virtual             ~LibPage();
 
     void                SetTabDlg( TabDialog* p ) { pTabDlg = p;}
 };
 
 // Helper functions
-SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell, StarBASIC* pLib,
-    BasicTreeListBox& rBasicBox, const String& aLibName, String aModName, bool bMain = false );
+SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell,
+    BasicTreeListBox& rBasicBox, const String& rLibName, String aModName, bool bMain = false );
 void createLibImpl( Window* pWin, SfxObjectShell* pShell,
                     BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
 
