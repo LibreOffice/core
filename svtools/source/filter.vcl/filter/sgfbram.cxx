@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgfbram.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:53:14 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <string.h>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <vcl/virdev.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"
