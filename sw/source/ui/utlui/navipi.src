@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:57:41 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ Window DLG_NAVIGATION_PI
                 Text[ russian ] = "Íàçàä";
                 Text[ polish ] = "Wstecz";
                 Text[ japanese ] = "–ß‚é";
-                Text[ chinese_traditional ] = "ªğ¦^";
+                Text[ chinese_traditional ] = "¦V«á";
                 Text[ arabic ] = "Åáì ÇáÎáİ";
                 Text[ greek ] = "Ğßóù";
                 Text[ korean ] = "µÚ·Î";
@@ -1365,7 +1365,7 @@ Window DLG_NAVIGATION_PI
         Text[ russian ] = "Âûäåëåíèå";
         Text[ polish ] = "Selekcja";
         Text[ japanese ] = "‘I‘ğ”ÍˆÍ";
-        Text[ chinese_traditional ] = "¿ï¤¤";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "ÅğéëïãŞ";
         Text[ korean ] = "¼±ÅÃ";
@@ -1577,7 +1577,7 @@ Window DLG_NAVIGATION_PI
         Text[ japanese ] = "“Ç‚İæ‚èê—p(~O)";
         Text[ korean ] = "ÀĞ±âÀü¿ë(~O)";
         Text[ chinese_simplified ] = "·À¸²Ğ´(~O)";
-        Text[ chinese_traditional ] = "¨¾ÂĞ¼g(~O)";
+        Text[ chinese_traditional ] = "°ßÅª(~O)";
         Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
         Text[ turkish ] = "Sa~lt okunur";
     };
