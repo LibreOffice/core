@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-20 14:42:32 $
+ *  last change: $Author: mtg $ $Date: 2001-11-22 17:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,9 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
-
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1210,7 +1212,17 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
                 else
                 {
-                    sGrfName = sTmp;
+                    INetURLObject aOld ( sGrfName ), aNew ( sTmp );
+                    if ( aNew.GetProtocol () == INET_PROT_NOT_VALID )
+                    {
+                        // if the new one doesn't have a valid protocol URL,
+                        // then it's a relative URL so convert it...
+                        bool bWasAbs = true;
+                        aNew = aOld.smartRel2Abs ( sTmp, bWasAbs );
+                        sGrfName = aNew.GetMainURL();
+                    }
+                    else
+                        sGrfName = sTmp;
                 }
             }
             else
