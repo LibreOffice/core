@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:29:22 $
+ *  last change: $Author: mt $ $Date: 2001-06-01 11:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,16 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 pButton->SetStyle( nStyle );
             }
             break;
+            case BASEPROPERTY_STATE:
+            {
+                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
+                {
+                    sal_Int16 n;
+                    if ( Value >>= n )
+                        ((PushButton*)pButton)->SetState( (TriState)n );
+                }
+            }
+            break;
             default:
             {
                 VCLXWindow::setProperty( PropertyName, Value );
@@ -301,6 +311,14 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_DEFAULTBUTTON:
             {
                 aProp <<= (sal_Bool) ( ( pButton->GetStyle() & WB_DEFBUTTON ) ? sal_True : sal_False );
+            }
+            break;
+            case BASEPROPERTY_STATE:
+            {
+                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
+                {
+                     aProp <<= (sal_Int16)((PushButton*)pButton)->GetState();
+                }
             }
             break;
             default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 07:59:47 $
+ *  last change: $Author: mt $ $Date: 2001-06-01 11:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,6 @@ UnoControlDialogModel::UnoControlDialogModel()
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_TITLE );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
     ImplRegisterProperty( BASEPROPERTY_SIZEABLE );
 
     uno::Any aBool;
@@ -810,7 +809,6 @@ UnoControlEditModel::UnoControlEditModel()
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
     ImplRegisterProperty( BASEPROPERTY_VSCROLL );
 }
 
@@ -1079,7 +1077,6 @@ UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
     ImplRegisterProperty( BASEPROPERTY_SPIN );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 
     uno::Any aTreatAsNumber;
     aTreatAsNumber <<= (sal_Bool) sal_True;
@@ -1171,7 +1168,6 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlFileControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -1235,8 +1231,8 @@ UnoControlButtonModel::UnoControlButtonModel()
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_STATE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 uno::Any UnoControlButtonModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
@@ -1754,7 +1750,6 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel()
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_STATE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlRadioButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -1957,7 +1952,6 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel()
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_STATE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
     ImplRegisterProperty( BASEPROPERTY_TRISTATE );
 }
 
@@ -2134,7 +2128,6 @@ UnoControlFixedTextModel::UnoControlFixedTextModel()
     ImplRegisterProperty( BASEPROPERTY_MULTILINE );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -2271,7 +2264,6 @@ UnoControlGroupBoxModel::UnoControlGroupBoxModel()
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlGroupBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -2346,7 +2338,6 @@ UnoControlListBoxModel::UnoControlListBoxModel()
     ImplRegisterProperty( BASEPROPERTY_SELECTEDITEMS );
     ImplRegisterProperty( BASEPROPERTY_STRINGITEMLIST );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
 }
 
@@ -2767,7 +2758,6 @@ UnoControlComboBoxModel::UnoControlComboBoxModel()
     ImplRegisterProperty( BASEPROPERTY_STRINGITEMLIST );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlComboBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -3032,7 +3022,6 @@ UnoControlDateFieldModel::UnoControlDateFieldModel()
     ImplRegisterProperty( BASEPROPERTY_SPIN );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlDateFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -3230,7 +3219,6 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel()
     ImplRegisterProperty( BASEPROPERTY_SPIN );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
     ImplRegisterProperty( BASEPROPERTY_TIME );
     ImplRegisterProperty( BASEPROPERTY_TIMEMAX );
     ImplRegisterProperty( BASEPROPERTY_TIMEMIN );
@@ -3420,7 +3408,6 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel()
     ImplRegisterProperty( BASEPROPERTY_SPIN );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
     ImplRegisterProperty( BASEPROPERTY_VALUEMAX_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUEMIN_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUESTEP_DOUBLE );
@@ -3615,7 +3602,6 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
     ImplRegisterProperty( BASEPROPERTY_SPIN );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
     ImplRegisterProperty( BASEPROPERTY_VALUEMAX_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUEMIN_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUESTEP_DOUBLE );
@@ -3812,7 +3798,6 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel()
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlPatternFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -4340,7 +4325,6 @@ UnoControlFixedLineModel::UnoControlFixedLineModel()
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_ORIENTATION );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
-    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
 ::rtl::OUString UnoControlFixedLineModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)

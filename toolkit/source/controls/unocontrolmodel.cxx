@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:43:39 $
+ *  last change: $Author: mt $ $Date: 2001-06-01 11:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
         {
             case BASEPROPERTY_TABSTOP:
             case BASEPROPERTY_TEXTCOLOR:
+            case BASEPROPERTY_TEXTLINECOLOR:
             case BASEPROPERTY_DATE:
             case BASEPROPERTY_DATESHOWCENTURY:
             case BASEPROPERTY_TIME:
@@ -302,8 +303,10 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_SCROLLVALUE:
             case BASEPROPERTY_VISIBLESIZE:
             case BASEPROPERTY_BACKGROUNDCOLOR:
-            case BASEPROPERTY_FILLCOLOR:            break;
+            case BASEPROPERTY_FILLCOLOR:            break;  // Void
 
+            case BASEPROPERTY_FONTRELIEF:
+            case BASEPROPERTY_FONTEMPHASISMARK:
             case BASEPROPERTY_MAXTEXTLEN:
             case BASEPROPERTY_STATE:
             case BASEPROPERTY_EXTDATEFORMAT:
@@ -399,6 +402,18 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun
 void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
 {
     ImplRegisterProperty( nPropId, ImplGetDefaultValue( nPropId ) );
+
+    if ( nPropId == BASEPROPERTY_FONTDESCRIPTOR )
+    {
+        // some properties are not included in the FontDescriptor, but everytime
+        // when we have a FontDescriptor we want to have these properties too.
+        // => Easier to register the here, istead everywhere where I register the FontDescriptor...
+
+        ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
+        ImplRegisterProperty( BASEPROPERTY_TEXTLINECOLOR );
+        ImplRegisterProperty( BASEPROPERTY_FONTRELIEF );
+        ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
+    }
 }
 
 // ::com::sun::star::uno::XInterface

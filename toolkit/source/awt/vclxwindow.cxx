@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 09:02:27 $
+ *  last change: $Author: mt $ $Date: 2001-06-01 11:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,6 +557,28 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
             }
             break;
+            case BASEPROPERTY_FONTRELIEF:
+            {
+                sal_Int16 n;
+                if ( Value >>= n )
+                {
+                    Font aFont = pWindow->GetControlFont();
+                    aFont.SetRelief( (FontRelief)n );
+                    pWindow->SetControlFont( aFont );
+                }
+            }
+            break;
+            case BASEPROPERTY_FONTEMPHASISMARK:
+            {
+                sal_Int16 n;
+                if ( Value >>= n )
+                {
+                    Font aFont = pWindow->GetControlFont();
+                    aFont.SetEmphasisMark( n );
+                    pWindow->SetControlFont( aFont );
+                }
+            }
+            break;
             case BASEPROPERTY_BACKGROUNDCOLOR:
                 if ( bVoid )
                 {
@@ -587,6 +609,21 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         Color aColor( nColor );
                         pWindow->SetTextColor( aColor );
                         pWindow->SetControlForeground( aColor );
+                    }
+                }
+            break;
+            case BASEPROPERTY_TEXTLINECOLOR:
+                if ( bVoid )
+                {
+                    pWindow->SetTextLineColor();
+                }
+                else
+                {
+                    sal_Int32 nColor;
+                    if ( Value >>= nColor )
+                    {
+                        Color aColor( nColor );
+                        pWindow->SetTextLineColor( aColor );
                     }
                 }
             break;
@@ -751,8 +788,17 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_BACKGROUNDCOLOR:
                 aProp <<= (sal_Int32) GetWindow()->GetControlBackground().GetColor();
             break;
+            case BASEPROPERTY_FONTRELIEF:
+                aProp <<= (sal_Int16) GetWindow()->GetControlFont().GetRelief();
+            break;
+            case BASEPROPERTY_FONTEMPHASISMARK:
+                aProp <<= (sal_Int16) GetWindow()->GetControlFont().GetEmphasisMark();
+            break;
             case BASEPROPERTY_TEXTCOLOR:
                 aProp <<= (sal_Int32) GetWindow()->GetControlForeground().GetColor();
+            break;
+            case BASEPROPERTY_TEXTLINECOLOR:
+                aProp <<= (sal_Int32) GetWindow()->GetTextLineColor().GetColor();
             break;
             case BASEPROPERTY_FILLCOLOR:
                 aProp <<= (sal_Int32) GetWindow()->GetFillColor().GetColor();
