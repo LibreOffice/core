@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:06:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,38 +62,9 @@
 #include "globdoc.hrc"
 String STR_HUMAN_SWGLOBDOC_NAME
 {
-    Text = "Globaldokument" ;
-    Text [ English ] = "Global Document" ;
-    Text [ english_us ] = "Master Document" ;
-    Text [ portuguese_brazilian ] = "Documento Mestre" ;
-    Text [ swedish ] = "Samlingsdokument" ;
-    Text [ danish ] = "Hoveddokument" ;
-    Text [ italian ] = "Documento master" ;
-    Text [ spanish ] = "Documento maestro" ;
-    Text [ french ] = "Document maÓtre" ;
-    Text [ dutch ] = "Masterdocument" ;
-    Text [ portuguese ] = "Documento-mestre" ;
-    Text[ chinese_simplified ] = "‰∏ªÊéßÊñáÊ°£";
-    Text[ russian ] = "—ÓÒÚ‡‚ÌÓÈ ‰ÓÍÛÏÂÌÚ";
-    Text[ polish ] = "Dokument g≥Ûwny";
-    Text[ japanese ] = "„Éû„Çπ„Çø„Éº„Éâ„Ç≠„É•„É°„É≥„Éà";
-    Text[ chinese_traditional ] = "‰∏ªÊéßÊñá‰ª∂";
-    Text[ arabic ] = "„” ‰œ ‘«„·";
-    Text[ dutch ] = "Masterdocument";
-    Text[ chinese_simplified ] = "‰∏ªÊéßÊñáÊ°£";
-    Text[ greek ] = "K˝ÒÈÔ ›„„Ò·ˆÔ";
-    Text[ korean ] = "ÎßàÏä§ÌÑ∞ Î¨∏ÏÑú";
-    Text[ turkish ] = "Ana belge";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Document mestre";
-    Text[ finnish ] = "Perusasiakirja";
-    Text[ thai ] = "‡πÄ‡∏≠‡∏Å‡∏™‡∏≤‡∏£‡∏ï‡πâ‡∏ô‡∏â‡∏ö‡∏±‡∏ö";
-    Text[ czech ] = "Hlavn√≠ dokument";
-    Text[ hebrew ] = "‚ÄÆ◊û◊°◊û◊ö ◊ê◊ë‚Ä¨";
-    Text[ hindi ] = "‡§Æ‡§æ‡§∏‡•ç‡§ü‡§∞ ‡§≤‡•á‡§ñ‡§™‡§§‡•ç‡§∞";
-    Text[ slovak ] = "Hlavn√Ω dokument";
-    Text[ hungarian ] = "F≈ëdokumentum";
-    Text[ slovenian ] = "Glavni dokument";
+    Text [ de ] = "Globaldokument" ;
+    Text [ en-US ] = "Master Document" ;
+    Text [ x-comment ] = " ";
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
@@ -105,35 +76,8 @@ String STR_WRITER_GLOBALDOC_FULLTYPE_50
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE
 {
-    Text = "%PRODUCTNAME %PRODUCTVERSION Globaldokument" ;
-    TEXT [ English ] = "%PRODUCTNAME %PRODUCTVERSION Master Document" ;
-    TEXT[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Master Document";
-    TEXT[ portuguese ] = "%PRODUCTNAME 6.0 Documento-mestre";
-    TEXT[ russian ] = "—ÓÒÚ‡‚ÌÓÈ ‰ÓÍÛÏÂÌÚ (%PRODUCTNAME 6.0)";
-    TEXT[ greek ] = "%PRODUCTNAME 6.0 -  ˝ÒÈÔ ›„„Ò·ˆÔ";
-    TEXT[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION Masterdocument";
-    TEXT[ french ] = "%PRODUCTNAME %PRODUCTVERSION Document maÓtre";
-    TEXT[ spanish ] = "Documento maestro %PRODUCTNAME %PRODUCTVERSION ";
-    TEXT[ italian ] = "%PRODUCTNAME %PRODUCTVERSION Documento master";
-    TEXT[ danish ] = "%PRODUCTNAME %PRODUCTVERSION-hoveddokument";
-    TEXT[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-samlingsdokument";
-    TEXT[ polish ] = "%PRODUCTNAME 6.0 - Dokument g≥Ûwny";
-    TEXT[ portuguese_brazilian ] = "Documento Mestre %PRODUCTNAME 6.0 ";
-    TEXT[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION „Éû„Çπ„Çø„Éº„Éâ„Ç≠„É•„É°„É≥„Éà";
-    TEXT[ korean ] = "%PRODUCTNAME %PRODUCTVERSION ÎßàÏä§ÌÑ∞ Î¨∏ÏÑú";
-    TEXT[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION ‰∏ªÊéßÊñáÊ°£";
-    TEXT[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION ‰∏ªÊéßÊñá‰ª∂";
-    TEXT[ turkish ] = "%PRODUCTNAME 6.0 Ana Belge";
-    TEXT[ arabic ] = "„” ‰œ ‘«„·%PRODUCTNAME %PRODUCTVERSION ";
-    TEXT[ catalan ] = "%PRODUCTNAME 6.0 Document mestre";
-    TEXT[ finnish ] = "%PRODUCTNAME 6.0 -perusasiakirja";
-    TEXT[ thai ] = "‡πÄ‡∏≠‡∏Å‡∏™‡∏≤‡∏£‡∏ï‡πâ‡∏ô‡∏â‡∏ö‡∏±‡∏ö %PRODUCTNAME 6.0 ";
-    TEXT[ czech ] = "Hlavn√≠ dokument %PRODUCTNAME %PRODUCTVERSION";
-    TEXT[ hebrew ] = "%PRODUCTNAME 6.0 Global Dokument";
-    TEXT[ hindi ] = "%PRODUCTNAME 6.0 ‡§Æ‡§æ‡§∏‡•ç‡§ü‡§∞ ‡§≤‡•á‡§ñ‡§™‡§§‡•ç‡§∞";
-    TEXT[ slovak ] = "Hlavn√Ω dokument %PRODUCTNAME %PRODUCTVERSION";
-    TEXT[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION-f≈ëdokumentum";
-    TEXT[ slovenian ] = "Glavni dokument programa %PRODUCTNAME 6.0";
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Globaldokument" ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Master Document";
 };
 
 #define MN_SW_GLOBAL
