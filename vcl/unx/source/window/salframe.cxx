@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-25 17:12:28 $
+ *  last change: $Author: ssa $ $Date: 2002-11-26 17:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2391,6 +2391,8 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     USHORT      nKeyCode;
     USHORT nModCode = 0;
     char        aDummy;
+    static USHORT nLastModKeyCode = 0;
+    static BOOL   bWaitForModKeyRelease = FALSE;
 
     if( pEvent->state & ShiftMask )
         nModCode |= KEY_SHIFT;
@@ -2409,6 +2411,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         ||  nKeySym == XK_Meta_L    || nKeySym == XK_Meta_R )
     {
         SalKeyModEvent aModEvt;
+        aModEvt.mnModKeyCode = 0;
 
         // pressing just the ctrl key leads to a keysym of XK_Control but
         // the event state does not contain ControlMask. In the release
@@ -2434,19 +2437,52 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         }
 
         // #105224# extended modkey event to distinguish right/left modifiers
-        aModEvt.mnModKeyCode = 0;
-        if ( nKeySym == XK_Control_L )
-            aModEvt.mnModKeyCode |= MODKEY_LMOD1;
-        if ( nKeySym == XK_Control_R )
-            aModEvt.mnModKeyCode |= MODKEY_RMOD1;
-        if ( nKeySym == XK_Alt_L )
-            aModEvt.mnModKeyCode |= MODKEY_LMOD2;
-        if ( nKeySym == XK_Alt_R )
-            aModEvt.mnModKeyCode |= MODKEY_RMOD2;
-        if ( nKeySym == XK_Shift_L )
-            aModEvt.mnModKeyCode |= MODKEY_LSHIFT;
-        if ( nKeySym == XK_Shift_R )
-            aModEvt.mnModKeyCode |= MODKEY_RSHIFT;
+        static USHORT tmpCode = 0;
+        if( pEvent->type == KeyRelease )
+        {
+            if ( nKeySym == XK_Control_L )
+                tmpCode &= ~MODKEY_LMOD1;
+            if ( nKeySym == XK_Control_R )
+                tmpCode &= ~MODKEY_RMOD1;
+            if ( nKeySym == XK_Alt_L )
+                tmpCode &= ~MODKEY_LMOD2;
+            if ( nKeySym == XK_Alt_R )
+                tmpCode &= ~MODKEY_RMOD2;
+            if ( nKeySym == XK_Shift_L )
+                tmpCode &= ~MODKEY_LSHIFT;
+            if ( nKeySym == XK_Shift_R )
+                tmpCode &= ~MODKEY_RSHIFT;
+        }
+        else
+        {
+            if ( nKeySym == XK_Control_L )
+                tmpCode |= MODKEY_LMOD1;
+            if ( nKeySym == XK_Control_R )
+                tmpCode |= MODKEY_RMOD1;
+            if ( nKeySym == XK_Alt_L )
+                tmpCode |= MODKEY_LMOD2;
+            if ( nKeySym == XK_Alt_R )
+                tmpCode |= MODKEY_RMOD2;
+            if ( nKeySym == XK_Shift_L )
+                tmpCode |= MODKEY_LSHIFT;
+            if ( nKeySym == XK_Shift_R )
+                tmpCode |= MODKEY_RSHIFT;
+        }
+
+        if( tmpCode < nLastModKeyCode )
+        {
+            aModEvt.mnModKeyCode = nLastModKeyCode;
+            nLastModKeyCode = 0;
+            bWaitForModKeyRelease = true;
+        }
+        else
+        {
+            if( !bWaitForModKeyRelease )
+                nLastModKeyCode = tmpCode;
+        }
+
+        if( !tmpCode )
+            bWaitForModKeyRelease = false;
 
         aModEvt.mnCode = nModCode;
         aModEvt.mnTime = pEvent->time;
@@ -2465,6 +2501,9 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         }
         return nRet;
     }
+
+    nLastModKeyCode = 0; // make sure no modkey messages are sent if they belong to a hotkey (see above)
+    bWaitForModKeyRelease = TRUE;
 
     // try to figure out the vcl code for the keysym
     nKeyCode = pDisplay_->GetKeyCode( nKeySym, &aDummy );
