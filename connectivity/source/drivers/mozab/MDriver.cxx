@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 12:57:28 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 07:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ MozabDriver::MozabDriver(
     ,s_hModule(NULL)
     ,s_pCreationFunc(NULL)
 {
-    registerClient();
 }
 // -----------------------------------------------------------------------------
 MozabDriver::~MozabDriver()
@@ -168,6 +167,7 @@ Sequence< ::rtl::OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) t
 Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     // create a new connection with the given properties and append it to our vector
+    registerClient();
     Reference< XConnection > xCon;
     if (s_pCreationFunc)
     {
