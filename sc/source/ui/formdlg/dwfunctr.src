@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:53:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,7 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText = "Funktion in Rechenblatt einfügen" ;
         QuickHelpText [ English ] = "Insert function into the spreedsheet." ;
         QuickHelpText [ english_us ] = "Insert Function into calculation sheet" ;
-        QuickHelpText [ portuguese_brazilian ] = "Funktion in Rechenblatt einfügen" ;
+        QuickHelpText [ portuguese_brazilian ] = "Funktion in Rechenblatt einf?en" ;
         QuickHelpText [ swedish ] = "Infoga funktion i beräkningsark" ;
         QuickHelpText [ danish ] = "Indsæt funktion i regneark" ;
         QuickHelpText [ italian ] = "Inserisci funzione nel foglio di calcolo" ;
@@ -581,7 +581,7 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText [ portuguese ] = "Insere função na folha de cálculo" ;
     QuickHelpText[ russian ] = "Âñòàâèòü ôóíêöèş â ëèñò";
         QuickHelpText[ polish ] = "Wstaw funkcjê do arkusza";
-        QuickHelpText[ japanese ] = "•\\‚ÉŠÖ”‚ğ‘}“ü";
+        QuickHelpText[ japanese ] = "•\\‚ÉŠÖ”‚ğ‘}“ü!";
         QuickHelpText[ chinese_simplified ] = "²åÈëº¯Êı";
         QuickHelpText[ chinese_traditional ] = "´¡¤J¨ç¼Æ";
         QuickHelpText[ arabic ] = "ÅÏÑÇÌ ÏÇáÉ";
