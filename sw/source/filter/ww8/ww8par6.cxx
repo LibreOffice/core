@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:05:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2337,25 +2337,31 @@ sal_uInt16 SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
     return nRetWidth;
 }
 
-bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
+WW8FlyPara *SwWW8ImplReader::ConstructApo(const BYTE* pSprm29,
     const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos)
 {
+    WW8FlyPara *pRet = 0;
     ASSERT(pSprm29 || pTabPos || pNowStyleApo,
         "If no frame found, *MUST* be in a table");
 
-    pWFlyPara = new WW8FlyPara(bVer67, pNowStyleApo);
+    pRet = new WW8FlyPara(bVer67, pNowStyleApo);
 
     // APO-Parameter ermitteln und Test auf bGrafApo
     if (pSprm29 || pNowStyleApo)
-        pWFlyPara->ReadFull( pSprm29, this );
+        pRet->ReadFull( pSprm29, this );
 
-    pWFlyPara->ApplyTabPos(pTabPos);
+    pRet->ApplyTabPos(pTabPos);
 
-    if (pWFlyPara->IsEmpty())
-    {
-        delete pWFlyPara, pWFlyPara = 0;
+    if (pRet->IsEmpty())
+        delete pRet, pRet = 0;
+    return pRet;
+}
+
+bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
+    const WW8FlyPara *pNowStyleApo, WW8_TablePos *pTabPos)
+{
+    if (!(pWFlyPara = ConstructApo(pSprm29, pNowStyleApo, pTabPos)))
         return false;
-    }
 
     pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara,
         maSectionManager.GetPageLeft(),
