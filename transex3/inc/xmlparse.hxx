@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:29:09 $
+ *  last change: $Author: hr $ $Date: 2004-10-11 13:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,11 @@
 
 #include <signal.h>
 //#include "osl/signal.h"
+#ifdef SYSTEM_EXPAT
+#include <expat.h>
+#else
 #include <external/expat/xmlparse.h>
+#endif
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "tools/string.hxx"
