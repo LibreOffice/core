@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:23:14 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "basis";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -1116,7 +1116,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
             Text[ finnish ] = "Luku";
-            Text[ italian ] = "Numero ";
+            Text[ italian ] = "Numero";
             Text[ danish ] = "Serienummer";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Testowana wartoœæ.";
@@ -1171,7 +1171,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
             Text[ finnish ] = "Luku";
-            Text[ italian ] = "Numero ";
+            Text[ italian ] = "Numero";
             Text[ danish ] = "Tal";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Liczba";
@@ -1197,7 +1197,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
             Text[ finnish ] = "Luku";
-            Text[ italian ] = "Numero ";
+            Text[ italian ] = "Numero";
             Text[ danish ] = "Sandsynlighed";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Testowana wartoœæ.";
@@ -6997,7 +6997,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Première période";
             Text[ spanish ] = "Primer periodo";
             Text[ finnish ] = "Ensimmäinen kausi";
-            Text[ italian ] = "Primo periodo ";
+            Text[ italian ] = "Primo periodo";
             Text[ danish ] = "First period";
             Text[ swedish ] = "Första period";
             Text[ polish ] = "Pierwszy okres";
@@ -7051,7 +7051,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Valeur résiduelle";
             Text[ spanish ] = "Valor residual";
             Text[ finnish ] = "Loppuarvo";
-            Text[ italian ] = "Valore residuo ";
+            Text[ italian ] = "Valore residuo";
             Text[ danish ] = "Salvage";
             Text[ swedish ] = "Restvärde";
             Text[ polish ] = "Odzysk";
@@ -7213,7 +7213,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Year base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -7405,7 +7405,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Première période";
             Text[ spanish ] = "Primer período";
             Text[ finnish ] = "Ensimmäinen kausi";
-            Text[ italian ] = "Primo periodo ";
+            Text[ italian ] = "Primo periodo";
             Text[ danish ] = "First period";
             Text[ swedish ] = "Första period";
             Text[ polish ] = "Pierwszy okres";
@@ -7459,7 +7459,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Valeur résiduelle";
             Text[ spanish ] = "Valor residual";
             Text[ finnish ] = "Loppuarvo";
-            Text[ italian ] = "Valore residuo ";
+            Text[ italian ] = "Valore residuo";
             Text[ danish ] = "Salvage";
             Text[ swedish ] = "Restvärde";
             Text[ polish ] = "Odzysk";
@@ -7621,7 +7621,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Year base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -7705,7 +7705,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Émission";
             Text[ spanish ] = "Emisión";
             Text[ finnish ] = "Julkistus";
-            Text[ italian ] = "Emissione ";
+            Text[ italian ] = "Emissione";
             Text[ danish ] = "Issue";
             Text[ swedish ] = "Emission";
             Text[ polish ] = "Emisja";
@@ -7759,7 +7759,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Premier coupon";
             Text[ spanish ] = "Primer plazo de interés";
             Text[ finnish ] = "Ensimmäinen korko";
-            Text[ italian ] = "Primo interesse ";
+            Text[ italian ] = "Primo interesse";
             Text[ danish ] = "First interest";
             Text[ swedish ] = "Första kupongdatum";
             Text[ polish ] = "Pierwsze odsetki";
@@ -7813,7 +7813,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -7867,7 +7867,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt nominal";
             Text[ spanish ] = "Interés nominal";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse nominale ";
+            Text[ italian ] = "Tasso interesse nominale";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Nominell ränta";
             Text[ polish ] = "Stopa";
@@ -7921,7 +7921,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Valeur nominale";
             Text[ spanish ] = "Valor nominal";
             Text[ finnish ] = "Nimellisarvo";
-            Text[ italian ] = "Valore nominale ";
+            Text[ italian ] = "Valore nominale";
             Text[ danish ] = "Par";
             Text[ swedish ] = "Nominellt värde";
             Text[ polish ] = "Cena nominalna";
@@ -7948,7 +7948,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Valeur nominale";
             Text[ spanish ] = "Valor nominal";
             Text[ finnish ] = "Joukkovelkakirjan nimellisarvo";
-            Text[ italian ] = "Valore nominale ";
+            Text[ italian ] = "Valore nominale";
             Text[ danish ] = "Par";
             Text[ swedish ] = "Nominellt värde";
             Text[ polish ] = "Wartoœæ nominalna papieru wartoœciowego.";
@@ -7975,7 +7975,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Maksut";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -8002,7 +8002,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "El número de cupones a pagar.";
             Text[ finnish ] = "Kiinteiden korkomaksujen määrä vuodessa";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Liczba kuponów p³atnych w ci¹gu roku.";
@@ -8029,7 +8029,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -8056,7 +8056,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Käytettävä kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -8113,7 +8113,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Émission";
             Text[ spanish ] = "Emisión";
             Text[ finnish ] = "Julkistus";
-            Text[ italian ] = "Emissione ";
+            Text[ italian ] = "Emissione";
             Text[ danish ] = "Issue";
             Text[ swedish ] = "Emission";
             Text[ polish ] = "Emisja";
@@ -8140,7 +8140,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Émission";
             Text[ spanish ] = "Emisión";
             Text[ finnish ] = "Joukkovelkakirjan julkaisupäivämäärä";
-            Text[ italian ] = "Emissione ";
+            Text[ italian ] = "Emissione";
             Text[ danish ] = "Issue";
             Text[ swedish ] = "Emission";
             Text[ polish ] = "Data emisji papieru wartoœciowego.";
@@ -8167,7 +8167,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -8221,7 +8221,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt nominal";
             Text[ spanish ] = "Interés nominal";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse nominale ";
+            Text[ italian ] = "Tasso interesse nominale";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Nominell ränta";
             Text[ polish ] = "Stopa";
@@ -8275,7 +8275,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Valeur nominale";
             Text[ spanish ] = "Valor nominal";
             Text[ finnish ] = "Nimellisarvo";
-            Text[ italian ] = "Valore nominale ";
+            Text[ italian ] = "Valore nominale";
             Text[ danish ] = "Par";
             Text[ swedish ] = "Nominellt värde";
             Text[ polish ] = "Cena nominalna";
@@ -8329,7 +8329,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -8356,7 +8356,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Käytettävä vuosien määrä";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -8413,7 +8413,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -8467,7 +8467,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Maksu";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -8521,7 +8521,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Investissement";
             Text[ spanish ] = "Inversión";
             Text[ finnish ] = "Sijoitus";
-            Text[ italian ] = "Investimento ";
+            Text[ italian ] = "Investimento";
             Text[ danish ] = "Investment";
             Text[ swedish ] = "Investering";
             Text[ polish ] = "Lokata";
@@ -8575,7 +8575,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Escompte";
             Text[ spanish ] = "TASA.DESC";
             Text[ finnish ] = "Tappio";
-            Text[ italian ] = "Sconto ";
+            Text[ italian ] = "Sconto";
             Text[ danish ] = "Discount";
             Text[ swedish ] = "Diskonteringsränta";
             Text[ polish ] = "Dyskonto";
@@ -8629,7 +8629,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -8656,7 +8656,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -8713,7 +8713,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -8767,7 +8767,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -8821,7 +8821,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Cotización";
             Text[ finnish ] = "Hinta";
-            Text[ italian ] = "Prezzo ";
+            Text[ italian ] = "Prezzo";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -8875,7 +8875,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -8929,7 +8929,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -8956,7 +8956,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -9013,7 +9013,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -9067,7 +9067,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -9121,7 +9121,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt nominal";
             Text[ spanish ] = "Interés nominal";
             Text[ finnish ] = "Kiinteä korko";
-            Text[ italian ] = "Tasso interesse nominale ";
+            Text[ italian ] = "Tasso interesse nominale";
             Text[ danish ] = "Coupon";
             Text[ swedish ] = "Nominell ränta";
             Text[ polish ] = "Kupon";
@@ -9175,7 +9175,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Rendement";
             Text[ spanish ] = "Rédito";
             Text[ finnish ] = "Tuotto";
-            Text[ italian ] = "Rendimento ";
+            Text[ italian ] = "Rendimento";
             Text[ danish ] = "Yield";
             Text[ swedish ] = "Avkastning";
             Text[ polish ] = "Rentownoœæ";
@@ -9229,7 +9229,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -9283,7 +9283,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -9310,7 +9310,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "El tipo de base en el que deben contarse los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -9365,7 +9365,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt nominal";
             Text[ spanish ] = "Interés nominal";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse nominale ";
+            Text[ italian ] = "Tasso interesse nominale";
             Text[ danish ] = "Nominalzins";
             Text[ swedish ] = "Nominell ränta";
             Text[ polish ] = "Stopa nominalna";
@@ -9391,7 +9391,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt nominal";
             Text[ spanish ] = "Interés nominal";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse nominale ";
+            Text[ italian ] = "Tasso interesse nominale";
             Text[ danish ] = "Nominalzins";
             Text[ swedish ] = "Nominell ränta";
             Text[ polish ] = "Nominalna stopa procentowa.";
@@ -9498,7 +9498,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "RENTE";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -9524,7 +9524,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "RENTE";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa procentowa.";
@@ -9550,7 +9550,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Npm";
             Text[ spanish ] = "NPER";
             Text[ finnish ] = "NPER";
-            Text[ italian ] = "Numero rate ";
+            Text[ italian ] = "Numero rate";
             Text[ danish ] = "NPER";
             Text[ swedish ] = "Perioder";
             Text[ polish ] = "Okresy";
@@ -9602,7 +9602,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "VA";
             Text[ spanish ] = "VA";
             Text[ finnish ] = "NA";
-            Text[ italian ] = "Valore attuale ";
+            Text[ italian ] = "Valore attuale";
             Text[ danish ] = "NV";
             Text[ swedish ] = "Nuvärde";
             Text[ polish ] = "WB";
@@ -9655,7 +9655,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de début";
             Text[ spanish ] = "Periodo de inicio";
             Text[ finnish ] = "Aloituskausi";
-            Text[ italian ] = "Periodo iniziale ";
+            Text[ italian ] = "Periodo iniziale";
             Text[ danish ] = "Startperiode";
             Text[ swedish ] = "Startperiod";
             Text[ polish ] = "Okres pocz¹tk.";
@@ -9707,7 +9707,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de fin";
             Text[ spanish ] = "Periodo final";
             Text[ finnish ] = "Viimeinen kausi";
-            Text[ italian ] = "Periodo finale ";
+            Text[ italian ] = "Periodo finale";
             Text[ danish ] = "Endperiode";
             Text[ swedish ] = "Slutperiod";
             Text[ polish ] = "Okres koñc.";
@@ -9840,7 +9840,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "RENTE";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -9892,7 +9892,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Npm";
             Text[ spanish ] = "NPER";
             Text[ finnish ] = "NPER";
-            Text[ italian ] = "Numero rate ";
+            Text[ italian ] = "Numero rate";
             Text[ danish ] = "NPER";
             Text[ swedish ] = "Perioder";
             Text[ polish ] = "Okresy";
@@ -9944,7 +9944,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "VA";
             Text[ spanish ] = "VA";
             Text[ finnish ] = "NA";
-            Text[ italian ] = "Valore attuale ";
+            Text[ italian ] = "Valore attuale";
             Text[ danish ] = "NV";
             Text[ swedish ] = "Nuvärde";
             Text[ polish ] = "WB";
@@ -9996,7 +9996,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de début";
             Text[ spanish ] = "Periodo inicial";
             Text[ finnish ] = "Aloituskausi";
-            Text[ italian ] = "Periodo iniziale ";
+            Text[ italian ] = "Periodo iniziale";
             Text[ danish ] = "Startperiode";
             Text[ swedish ] = "Startperiod";
             Text[ polish ] = "Okres pocz¹tk.";
@@ -10048,7 +10048,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Période de fin";
             Text[ spanish ] = "Periodo final";
             Text[ finnish ] = "Viimeinen kausi";
-            Text[ italian ] = "Periodo finale ";
+            Text[ italian ] = "Periodo finale";
             Text[ danish ] = "Endperiode";
             Text[ swedish ] = "Slutperiod";
             Text[ polish ] = "Okres koñc.";
@@ -10100,7 +10100,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Type";
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Tyyppi";
-            Text[ italian ] = "Tipo ";
+            Text[ italian ] = "Tipo";
             Text[ danish ] = "F";
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Rodzaj";
@@ -10183,7 +10183,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -10237,7 +10237,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -10453,7 +10453,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -10507,7 +10507,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -10534,7 +10534,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "El tipo de base para contar los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -10591,7 +10591,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -10645,7 +10645,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -10699,7 +10699,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Escompte";
             Text[ spanish ] = "Descuento";
             Text[ finnish ] = "Tappio";
-            Text[ italian ] = "Sconto ";
+            Text[ italian ] = "Sconto";
             Text[ danish ] = "Discount";
             Text[ swedish ] = "Diskonteringsränta";
             Text[ polish ] = "Dyskonto";
@@ -10807,7 +10807,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -10834,7 +10834,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "El tipo de base con el que se contarán los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -10891,7 +10891,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -10945,7 +10945,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -10999,7 +10999,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Émission";
             Text[ spanish ] = "Emisión";
             Text[ finnish ] = "Julkistus";
-            Text[ italian ] = "Emissione ";
+            Text[ italian ] = "Emissione";
             Text[ danish ] = "Issue";
             Text[ swedish ] = "Emission";
             Text[ polish ] = "Emisja";
@@ -11053,7 +11053,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -11107,7 +11107,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Rendement";
             Text[ spanish ] = "Rédito";
             Text[ finnish ] = "Tuotto";
-            Text[ italian ] = "Rendimento ";
+            Text[ italian ] = "Rendimento";
             Text[ danish ] = "Yield";
             Text[ swedish ] = "Avkastning";
             Text[ polish ] = "Rentownoœæ";
@@ -11245,7 +11245,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -11299,7 +11299,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -11353,7 +11353,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt nominal";
             Text[ spanish ] = "Interés nominal";
             Text[ finnish ] = "Kiinteä korko";
-            Text[ italian ] = "Tasso interesse nominale ";
+            Text[ italian ] = "Tasso interesse nominale";
             Text[ danish ] = "Coupon";
             Text[ swedish ] = "Nominell ränta";
             Text[ polish ] = "Kupon";
@@ -11407,7 +11407,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Rendement";
             Text[ spanish ] = "Rédito";
             Text[ finnish ] = "Tuotto";
-            Text[ italian ] = "Rendimento ";
+            Text[ italian ] = "Rendimento";
             Text[ danish ] = "Yield";
             Text[ swedish ] = "Avkastning";
             Text[ polish ] = "Rentownoœæ";
@@ -11461,7 +11461,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -11515,7 +11515,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -11542,7 +11542,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -11732,7 +11732,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
             Text[ finnish ] = "Valuutta desimaaleina";
-            Text[ italian ] = "Numero ";
+            Text[ italian ] = "Numero";
             Text[ danish ] = "Decimal dollar";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Wartoœæ dziesiêtna";
@@ -11786,7 +11786,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fraction";
             Text[ spanish ] = "Separador";
             Text[ finnish ] = "Murtoluku";
-            Text[ italian ] = "Divisore ";
+            Text[ italian ] = "Divisore";
             Text[ danish ] = "Fraction";
             Text[ swedish ] = "Nämnare";
             Text[ polish ] = "U³amek";
@@ -11870,7 +11870,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Nombre";
             Text[ spanish ] = "Número";
             Text[ finnish ] = "Valuutta murtolukuna";
-            Text[ italian ] = "Numero ";
+            Text[ italian ] = "Numero";
             Text[ danish ] = "Fractional dollar";
             Text[ swedish ] = "Tal";
             Text[ polish ] = "Wartoœæ u³amkowa";
@@ -11924,7 +11924,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fraction";
             Text[ spanish ] = "Separador";
             Text[ finnish ] = "Murtoluku";
-            Text[ italian ] = "Divisore ";
+            Text[ italian ] = "Divisore";
             Text[ danish ] = "Fraction";
             Text[ swedish ] = "Nämnare";
             Text[ polish ] = "U³amek";
@@ -12008,7 +12008,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -12062,7 +12062,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -12116,7 +12116,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -12170,7 +12170,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Cotización";
             Text[ finnish ] = "Hinta";
-            Text[ italian ] = "Prezzo ";
+            Text[ italian ] = "Prezzo";
             Text[ danish ] = "Par";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -12224,7 +12224,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -12278,7 +12278,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -12332,7 +12332,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -12359,7 +12359,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -12416,7 +12416,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -12470,7 +12470,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -12524,7 +12524,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Precio";
             Text[ finnish ] = "Hinta";
-            Text[ italian ] = "Prezzo ";
+            Text[ italian ] = "Prezzo";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -12578,7 +12578,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -12632,7 +12632,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -12659,7 +12659,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "El tipo de base según el cual deben ser contados los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -12716,7 +12716,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -12770,7 +12770,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -12824,7 +12824,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Émission";
             Text[ spanish ] = "Emisión";
             Text[ finnish ] = "Julkistus";
-            Text[ italian ] = "Emissione ";
+            Text[ italian ] = "Emissione";
             Text[ danish ] = "Issue";
             Text[ swedish ] = "Emission";
             Text[ polish ] = "Emisja";
@@ -12878,7 +12878,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -12932,7 +12932,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Cotización";
             Text[ finnish ] = "Hinta";
-            Text[ italian ] = "Prezzo ";
+            Text[ italian ] = "Prezzo";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -12986,7 +12986,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -13013,7 +13013,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "El tipo de base según el cual se contarán los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -13070,7 +13070,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -13124,7 +13124,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -13178,7 +13178,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Escompte";
             Text[ spanish ] = "Descuento";
             Text[ finnish ] = "Tappio";
-            Text[ italian ] = "Sconto ";
+            Text[ italian ] = "Sconto";
             Text[ danish ] = "Discount";
             Text[ swedish ] = "Diskonteringsränta";
             Text[ polish ] = "Dyskonto";
@@ -13262,7 +13262,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -13316,7 +13316,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -13370,7 +13370,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Escompte";
             Text[ spanish ] = "Descuento";
             Text[ finnish ] = "Tappio";
-            Text[ italian ] = "Sconto ";
+            Text[ italian ] = "Sconto";
             Text[ danish ] = "Discount";
             Text[ swedish ] = "Diskonteringsränta";
             Text[ polish ] = "Dyskonto";
@@ -13454,7 +13454,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -13508,7 +13508,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -13562,7 +13562,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Precio";
             Text[ finnish ] = "Hinta";
-            Text[ italian ] = "Prezzo ";
+            Text[ italian ] = "Prezzo";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -13646,7 +13646,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -13700,7 +13700,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -13754,7 +13754,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Émission";
             Text[ spanish ] = "Emisión";
             Text[ finnish ] = "Julkistus";
-            Text[ italian ] = "Emissione ";
+            Text[ italian ] = "Emissione";
             Text[ danish ] = "Issue";
             Text[ swedish ] = "Emission";
             Text[ polish ] = "Emisja";
@@ -13808,7 +13808,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Premier coupon";
             Text[ spanish ] = "Primer plazo de interés";
             Text[ finnish ] = "Ensimmäinen kiinteä korko";
-            Text[ italian ] = "Primo interesse ";
+            Text[ italian ] = "Primo interesse";
             Text[ danish ] = "First coupon";
             Text[ swedish ] = "Första kupongdatum";
             Text[ polish ] = "Pierwszy kupon";
@@ -13862,7 +13862,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -13916,7 +13916,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Rendement";
             Text[ spanish ] = "Rédito";
             Text[ finnish ] = "Tuotto";
-            Text[ italian ] = "Rendimento ";
+            Text[ italian ] = "Rendimento";
             Text[ danish ] = "Yield";
             Text[ swedish ] = "Avkastning";
             Text[ polish ] = "Rentownoœæ";
@@ -13970,7 +13970,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -14024,7 +14024,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -14078,7 +14078,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -14105,7 +14105,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -14162,7 +14162,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -14216,7 +14216,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -14270,7 +14270,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Émission";
             Text[ spanish ] = "Emisión";
             Text[ finnish ] = "Julkistus";
-            Text[ italian ] = "Emissione ";
+            Text[ italian ] = "Emissione";
             Text[ danish ] = "Issue";
             Text[ swedish ] = "Emission";
             Text[ polish ] = "Emisja";
@@ -14324,7 +14324,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Premier coupon";
             Text[ spanish ] = "Primer plazo de interés";
             Text[ finnish ] = "Ensimmäinen kiinteä korko";
-            Text[ italian ] = "Primo interesse ";
+            Text[ italian ] = "Primo interesse";
             Text[ danish ] = "First coupon";
             Text[ swedish ] = "Första kupongdatum";
             Text[ polish ] = "Pierwszy kupon";
@@ -14378,7 +14378,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -14432,7 +14432,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Cotización";
             Text[ finnish ] = "Hinta";
-            Text[ italian ] = "Prezzo ";
+            Text[ italian ] = "Prezzo";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -14486,7 +14486,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -14540,7 +14540,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -14594,7 +14594,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -14621,7 +14621,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Es el tipo de base según el cual se contarán los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -14678,7 +14678,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -14732,7 +14732,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -14786,7 +14786,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Dernier coupon";
             Text[ spanish ] = "Último plazo de interés";
             Text[ finnish ] = "Viimeinen korko";
-            Text[ italian ] = "Ultimo interesse ";
+            Text[ italian ] = "Ultimo interesse";
             Text[ danish ] = "Last interst";
             Text[ swedish ] = "Sista kupongdatum";
             Text[ polish ] = "Ostatnia wyp³ata";
@@ -14840,7 +14840,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -14894,7 +14894,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Rendement";
             Text[ spanish ] = "Rédito";
             Text[ finnish ] = "Tuotto";
-            Text[ italian ] = "Rendimento ";
+            Text[ italian ] = "Rendimento";
             Text[ danish ] = "Yield";
             Text[ swedish ] = "Avkastning";
             Text[ polish ] = "Rentownoœæ";
@@ -14948,7 +14948,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -15002,7 +15002,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -15056,7 +15056,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -15083,7 +15083,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Es el tipo de base según el cual se contarán los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -15140,7 +15140,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -15194,7 +15194,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -15248,7 +15248,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Dernier coupon";
             Text[ spanish ] = "Último plazo de interés";
             Text[ finnish ] = "Viimeinen korko";
-            Text[ italian ] = "Ultimo interesse ";
+            Text[ italian ] = "Ultimo interesse";
             Text[ danish ] = "Last interest";
             Text[ swedish ] = "Sista kupongdatum";
             Text[ polish ] = "Ostatnia wyp³ata";
@@ -15302,7 +15302,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -15356,7 +15356,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Prix";
             Text[ spanish ] = "Cotización";
             Text[ finnish ] = "Hinta";
-            Text[ italian ] = "Prezzo ";
+            Text[ italian ] = "Prezzo";
             Text[ danish ] = "Price";
             Text[ swedish ] = "Pris";
             Text[ polish ] = "Kurs";
@@ -15410,7 +15410,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Devolución";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -15464,7 +15464,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -15518,7 +15518,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -15545,7 +15545,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -15602,7 +15602,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Valeurs";
             Text[ spanish ] = "Valores";
             Text[ finnish ] = "Arvot";
-            Text[ italian ] = "Valori ";
+            Text[ italian ] = "Valori";
             Text[ danish ] = "Values";
             Text[ swedish ] = "Värden";
             Text[ polish ] = "Wartoœci";
@@ -15656,7 +15656,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Dates";
             Text[ spanish ] = "Fechas";
             Text[ finnish ] = "Päivämäärät";
-            Text[ italian ] = "Date ";
+            Text[ italian ] = "Date";
             Text[ danish ] = "Dates";
             Text[ swedish ] = "Tidpunkter";
             Text[ polish ] = "Daty";
@@ -15710,7 +15710,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Estimation";
             Text[ spanish ] = "Valor estimado";
             Text[ finnish ] = "Arvio";
-            Text[ italian ] = "Ipotesi ";
+            Text[ italian ] = "Ipotesi";
             Text[ danish ] = "Guess";
             Text[ swedish ] = "Gissning";
             Text[ polish ] = "Przypuszczenie";
@@ -15794,7 +15794,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêt";
             Text[ spanish ] = "Interés";
             Text[ finnish ] = "Korko";
-            Text[ italian ] = "Tasso interesse ";
+            Text[ italian ] = "Tasso interesse";
             Text[ danish ] = "Rate";
             Text[ swedish ] = "Ränta";
             Text[ polish ] = "Stopa";
@@ -15848,7 +15848,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Valeurs";
             Text[ spanish ] = "Valores";
             Text[ finnish ] = "Arvot";
-            Text[ italian ] = "Valori ";
+            Text[ italian ] = "Valori";
             Text[ danish ] = "Values";
             Text[ swedish ] = "Värden";
             Text[ polish ] = "Wartoœci";
@@ -15902,7 +15902,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Dates";
             Text[ spanish ] = "Fechas";
             Text[ finnish ] = "Päivämäärät";
-            Text[ italian ] = "Date ";
+            Text[ italian ] = "Date";
             Text[ danish ] = "Dates";
             Text[ swedish ] = "Tidpunkter";
             Text[ polish ] = "Daty";
@@ -15986,7 +15986,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -16040,7 +16040,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -16094,7 +16094,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Investissement";
             Text[ spanish ] = "Inversión";
             Text[ finnish ] = "Sijoitus";
-            Text[ italian ] = "Investimento ";
+            Text[ italian ] = "Investimento";
             Text[ danish ] = "Investment";
             Text[ swedish ] = "Investering";
             Text[ polish ] = "Lokata";
@@ -16148,7 +16148,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Remboursement";
             Text[ spanish ] = "Reembolso";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Rimborso ";
+            Text[ italian ] = "Rimborso";
             Text[ danish ] = "Redemption";
             Text[ swedish ] = "Inlösningsvärde";
             Text[ polish ] = "Wykup";
@@ -16202,7 +16202,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -16229,7 +16229,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Rodzaj podstawy wyliczania dni.";
@@ -16286,7 +16286,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -16340,7 +16340,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -16394,7 +16394,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -16448,7 +16448,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -16475,7 +16475,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Okreœlenie sposobu p³atnoœci.";
@@ -16532,7 +16532,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -16586,7 +16586,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -16640,7 +16640,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -16694,7 +16694,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -16721,7 +16721,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "El tipo de base según el cual deben contarse los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Okreœlenie typu p³atnoœci.";
@@ -16778,7 +16778,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -16832,7 +16832,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -16886,7 +16886,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -16940,7 +16940,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -16967,7 +16967,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Okreœlenie typu p³atnoœci.";
@@ -17024,7 +17024,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -17078,7 +17078,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -17132,7 +17132,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -17186,7 +17186,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -17213,7 +17213,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Tipo de base según el cual deben contarse los días.";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Okreœlenie typu p³atnoœci.";
@@ -17270,7 +17270,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -17324,7 +17324,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -17378,7 +17378,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -17432,7 +17432,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -17459,7 +17459,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Okreœlenie typu p³atnoœci.";
@@ -17516,7 +17516,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Liquidation";
             Text[ spanish ] = "Liquidación";
             Text[ finnish ] = "Lunastus";
-            Text[ italian ] = "Liquidazione ";
+            Text[ italian ] = "Liquidazione";
             Text[ danish ] = "Settlement";
             Text[ swedish ] = "Betalning";
             Text[ polish ] = "Rozliczenie";
@@ -17570,7 +17570,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Échéance";
             Text[ spanish ] = "Vencimiento";
             Text[ finnish ] = "Erääntyminen";
-            Text[ italian ] = "Scadenza ";
+            Text[ italian ] = "Scadenza";
             Text[ danish ] = "Maturity";
             Text[ swedish ] = "Förfallodag";
             Text[ polish ] = "Data sp³aty";
@@ -17624,7 +17624,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Fréquence";
             Text[ spanish ] = "Frecuencia";
             Text[ finnish ] = "Taajuus";
-            Text[ italian ] = "Frequenza ";
+            Text[ italian ] = "Frequenza";
             Text[ danish ] = "Frequency";
             Text[ swedish ] = "Frekvens";
             Text[ polish ] = "Czêstoœæ";
@@ -17678,7 +17678,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Podstawa";
@@ -17705,7 +17705,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Base";
             Text[ spanish ] = "Base";
             Text[ finnish ] = "Kantaluku";
-            Text[ italian ] = "Base ";
+            Text[ italian ] = "Base";
             Text[ danish ] = "Base";
             Text[ swedish ] = "Bas";
             Text[ polish ] = "Okreœlenie typu p³atnoœci.";
@@ -17762,7 +17762,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Capital";
             Text[ spanish ] = "Capital";
             Text[ finnish ] = "Pääoma";
-            Text[ italian ] = "Capitale ";
+            Text[ italian ] = "Capitale";
             Text[ danish ] = "Principal";
             Text[ swedish ] = "Kapital";
             Text[ polish ] = "Kapita³";
@@ -17816,7 +17816,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Intérêts";
             Text[ spanish ] = "Intereses";
             Text[ finnish ] = "Aikataulu";
-            Text[ italian ] = "Interessi ";
+            Text[ italian ] = "Interessi";
             Text[ danish ] = "Schedule";
             Text[ swedish ] = "Räntor";
             Text[ polish ] = "Stopy";
