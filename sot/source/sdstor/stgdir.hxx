@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgdir.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 12:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ class StgEntry;
 class StgDirEntry;
 class StgDirStrm;
 
+class BaseStorageStream;
 class StgDirEntry : public StgAvlNode
 {
     friend class StgIterator;
@@ -135,6 +136,7 @@ public:
     INT32 Read( void*, INT32 );
     INT32 Write( const void*, INT32 );
     void  Copy( StgDirEntry& );
+    void  Copy( BaseStorageStream& );
 };
 
 class StgDirStrm : public StgDataStrm
