@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:58:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ czech ] = "Nový...";
         Text[ hebrew ] = "‮חדש...‬";
         Text[ hindi ] = "~नया...";
+        Text[ slovak ] = "~Nové...";
     };
     PushButton BTN_EDIT
     {
@@ -139,6 +140,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
     PushButton BTN_REMOVE
     {
@@ -172,6 +174,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     PushButton BTN_COPY
     {
@@ -205,6 +208,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ czech ] = "Kopírovat";
         Text[ hebrew ] = "‮העתקה‬";
         Text[ hindi ] = "~प्रतिलिपि";
+        Text[ slovak ] = "~Kopírovať";
     };
     HelpButton BTN_HELP
     {
@@ -244,6 +248,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ czech ] = "Spustit";
         Text[ hebrew ] = "S~tarten";
         Text[ hindi ] = "~प्रारंभ";
+        Text[ slovak ] = "~Spustiť";
     };
     OKButton BTN_OK
     {
@@ -278,6 +283,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     ListBox LB_CUSTOMSHOWS
     {
@@ -318,6 +324,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ czech ] = "Použít vlastní prezentaci";
         Text[ hebrew ] = "~Individuelle Bildschirmpräsentation benutzen";
         Text[ hindi ] = "कस्टम स्लइ~ड दिखाव का उपयोग करो";
+        Text[ slovak ] = "Po~užiť vlastnú prezentáciu";
     };
     Text [ english_us ] = "Custom Slide Shows" ;
     Text [ portuguese_brazilian ] = "Apresenta��es de Slides Personalizadas" ;
@@ -344,6 +351,7 @@ ModalDialog DLG_CUSTOMSHOW
     Text[ czech ] = "Vlastní prezentace";
     Text[ hebrew ] = "Individuelle Bildschirmpräsentationen";
     Text[ hindi ] = "स्लइड प्रस्तुति को व्यवस्था करो";
+    Text[ slovak ] = "Vlastná prezentácia";
 };
 ModalDialog DLG_DEFINE_CUSTOMSHOW
 {
@@ -405,6 +413,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम्";
+        Text[ slovak ] = "Názov";
     };
     Edit EDT_NAME
     {
@@ -475,6 +484,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ czech ] = "Existující snímky";
         Text[ hebrew ] = "Seiten der Präsentation";
         Text[ hindi ] = "अस्तित्व में रहनेवाला स्लइडस";
+        Text[ slovak ] = "Existujúce snímky";
     };
     FixedText FT_CUSTOM_PAGES
     {
@@ -507,6 +517,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ czech ] = "Vybrané snímky";
         Text[ hebrew ] = "Individuelle Präsentation";
         Text[ hindi ] = "चुने हुए स्लइडस";
+        Text[ slovak ] = "Vybrané snímky";
     };
     Text [ english_us ] = "Define Custom Slide Show" ;
     Text [ portuguese_brazilian ] = "Definir Apresenta��o de Slides Personalizada" ;
@@ -533,7 +544,10 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ czech ] = "Definovat vlastní prezentaci";
     Text[ hebrew ] = "Individuelle Bildschirmpräsentation definieren";
     Text[ hindi ] = "कस्टम स्लइड दिखाव को परिभाषा दो";
+    Text[ slovak ] = "Definovať vlastnú prezentáciu";
 };
+
+
 
 
 
