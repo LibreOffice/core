@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-11 06:57:04 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "xmlcelli.hxx"
-#include "xmlconti.hxx"
 #include "xmlimprt.hxx"
 #include "xmltabi.hxx"
 #include "xmlstyli.hxx"
