@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:33:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
