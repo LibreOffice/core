@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:41:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
 {
     HelpID = FN_CONVERT_TEXT_TABLE ;
     OUTPUTSIZE = TRUE ;
-    Size = MAP_APPFONT ( 203 , 144 ) ;
+    Size = MAP_APPFONT ( 203 , 152 ) ;
     Text [ de ] = "Tabelle in Text umwandeln" ;
     Text [ en-US ] = "Convert Table to Text" ;
     MOVEABLE = TRUE ;
@@ -143,29 +143,29 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Size = MAP_APPFONT ( 123 , 10 ) ;
         Text [ de ] = "Übe~rschrift" ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Header";
+        Text [ en-US ] = "Heading";
         Text [ x-comment ] = " ";
     };
     CheckBox CB_REPEAT_HEADER
     {
         Pos = MAP_APPFONT ( 22 , 97 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "Auf jeder Seite ~wiederholen" ;
+        Text [ de ] = "Überschrift ~wiederholen" ;
+        Text [ en-US ] = "Repeat heading";
         TabStop = TRUE ;
-        Text [ en-US ] = "Re~peat header";
         Text [ x-comment ] = " ";
     };
     FixedText FT_REPEAT_HEADER
     {
-        Pos = MAP_APPFONT ( 125 , 88 ) ;
+        Pos = MAP_APPFONT ( 125 , 113 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
-        Text [ de ] = "~Spalten" ;
-        Text [ en-US ] = "Rows to repeat" ;
+        Text [ de ] = "Die ~ersten%POSITION_OF_CONTROLZeilen" ;
+        Text [ en-US ] = "The first%POSITION_OF_CONTROLrows" ;
     };
     NumericField NF_REPEAT_HEADER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 191 , 87 ) ;
+        Pos = MAP_APPFONT ( 191 , 112 ) ;
         Size = MAP_APPFONT ( 28 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -175,9 +175,14 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Maximum = 1000 ;
         First = 1 ;
     };
+    Window WIN_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 30 , 110 ) ;
+        Size = MAP_APPFONT ( 2 , 1 ) ;
+    };
     CheckBox CB_DONT_SPLIT
     {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
         Text [ de ] = "Tabelle ~nicht trennen" ;
         TabStop = TRUE ;
@@ -186,7 +191,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     };
     CheckBox CB_BORDER
     {
-        Pos = MAP_APPFONT ( 12 , 123 ) ;
+        Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
         Text [ de ] = "~Umrandung" ;
         TabStop = TRUE ;
@@ -238,43 +243,6 @@ ModalDialog DLG_CONV_TEXT_TABLE
     };
     Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
