@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-12 14:06:23 $
+ *  last change: $Author: jp $ $Date: 2001-06-20 16:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,7 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     SvtCJKOptions aCJKOptions;
     if(!aCJKOptions.IsJapaneseFindEnabled())
     {
+        aJapOptionsCB.Check( FALSE );
         aJapOptionsCB.Hide();
         aJapOptionsBtn.Hide();
     }
@@ -710,8 +711,9 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aRegExpBtn.Check( pSearchItem->GetRegExp() );
     if ( ( nModifyFlag & MODIFY_LAYOUT ) == 0 )
         aLayoutBtn.Check( pSearchItem->GetPattern() );
-    aSimilarityBox          .Check( pSearchItem->IsLevenshtein() );
-    aJapOptionsCB           .Check( pSearchItem->IsUseAsianOptions() );
+    aSimilarityBox.Check( pSearchItem->IsLevenshtein() );
+    if( aJapOptionsCB.IsVisible() )
+        aJapOptionsCB.Check( pSearchItem->IsUseAsianOptions() );
     ApplyTransliterationFlags_Impl( pSearchItem->GetTransliterationFlags() );
 
     FASTBOOL bDraw = FALSE;
