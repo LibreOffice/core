@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:13:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,8 +342,11 @@ private:
     virtual ::rtl::OUString SAL_CALL createAccessibleDescription()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Throws an exception, if the specified character position is invalid. */
+    /** Throws an exception, if the specified character position is invalid (outside 0..len-1). */
     void ensureValidIndex( sal_Int32 nIndex ) const
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException );
+    /** Throws an exception, if the specified character position is invalid (outside 0..len). */
+    void ensureValidIndexWithEnd( sal_Int32 nIndex ) const
         throw( ::com::sun::star::lang::IndexOutOfBoundsException );
     /** Throws an exception, if the specified character range [Start,End) is invalid.
         @descr  If Start>End, swaps Start and End before checking. */
