@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2001-11-09 16:01:58 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 13:59:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,7 +130,9 @@ CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimazations
-CFLAGSOPT=-O2
+# CFLAGSOPT=-O2
+# reduce to -O1 to avoid optimisation problems
+CFLAGSOPT=-O1
 # Compiler flags for disabling optimazations
 CFLAGSNOOPT=-O
 # Compiler flags for discibing the output path
