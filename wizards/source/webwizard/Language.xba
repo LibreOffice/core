@@ -5,19 +5,18 @@
 
 Sub LoadLanguage()
 	If InitResources(&quot;WebWizard&quot;,&quot;wwz&quot;) Then
-		DialogModel.Title = GetResText(1001)
-		DialogModel.cbCancel.Label = GetResText(1002)
-		DialogModel.cbGoOn.Label = GetResText(1003)
-&apos;		WebWiz_0_FrameControl = GetResText(1012)
-		DialogModel.lblTemplate.Label = GetResText(1004)
-		DialogModel.lblStyle.Label = GetResText(1005)
-		DialogModel.frmBackground.Label = GetResText(1006)
-
-		DialogModel.optTiled.Label = GetRestext(1007)
-		DialogModel.optArea.Label = GetResText(1008)
-&apos;		DialogModel.OptEditDocument.Label = GetResText(1009)
-
-		DialogModel.chkSaveasTemplate.Label = GetResText(1010)
+		With DialogModel
+			.cbHelp.Label = GetResText(1000)
+			.Title = GetResText(1001)
+			.cbCancel.Label = GetResText(1002)
+			.cbGoOn.Label = GetResText(1003)
+			.lblTemplate.Label = GetResText(1004)
+			.lblStyle.Label = GetResText(1005)
+			.hlnBackground.Label = GetResText(1006)
+			.optTiled.Label = GetRestext(1007)
+			.optArea.Label = GetResText(1008)
+			.chkSaveasTemplate.Label = GetResText(1010)
+		End With
 		WebWiz_gErrContentNotFound = GetResText(1101)
 		WebWiz_gErrStyleNotFound = GetResText(1102)
 		WebWiz_gErrMainTemplateError = GetResText(1103)
@@ -26,24 +25,6 @@ Sub LoadLanguage()
 		WebWiz_gErrMainDocumentError = GetResText(1106)
 		WebWiz_gErrMsg = GetResText(1107)
 	End If
-End Sub
-
-
-Sub LoadLibrary(sLibname as String)
-Dim oArg(0) as new com.sun.star.beans.PropertyValue
-Dim oUrl as new com.sun.star.util.URL
-Dim oTrans as Object
-Dim oDisp as Object
-
-	oArg(0).Name = &quot;LibraryName&quot;
-	oArg(0).Value = sLibname
-
-	oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
-	oUrl.Complete = &quot;slot:6517&quot;
-	oTrans.parsestrict(oUrl)
-
-	oDisp = StarDesktop.currentFrame.queryDispatch(oUrl, &quot;_self&quot;, 0)	
-	oDisp.dispatch(oUrl, oArg())
 End Sub
 
 

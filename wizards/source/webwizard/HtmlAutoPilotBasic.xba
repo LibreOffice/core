@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="HtmlAutoPilotBasic" script:language="StarBasic">&apos; Variables must be declared
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="HtmlAutoPilotBasic" script:language="StarBasic">
+&apos; Variables must be declared
 Option Explicit
 
+Public bWithBackGraphic as Boolean
+Public oStyle as Object
 &apos; Maximum number of content templates, style templates and bullets
 Const MaxLayouts = 50
 Const MaxStyles = 100
@@ -76,6 +79,7 @@ Sub Main
 	SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
 	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
 	DialogModel.ImagePreview.ImageURL = sBitmapPath
+	ToggleOptionButtons(bWithBackGraphic)
 	MainDialog.Execute
 
 GLOBALERRORHANDLER:
@@ -99,7 +103,7 @@ Sub ReloadCurrentDocument()
 Dim CurInd as Integer
 &apos;On Local Error Goto ErrorOcurred
 &apos; Todo:Check if the pointer is really disabled, when set to Hourglass
-	ToggleWindow(False)
+	ToggleDialogControls(False)
 	oBaseDocument.LockControllers
 	&apos; Get selected list entry and corresponding file name
 	CurInd = GetCurIndex(DialogModel.lbTemplate, Layout$(), NumberofLayouts%, 2)
@@ -115,14 +119,14 @@ ErrorOcurred:
 	End If
 	oBaseDocument.UnlockControllers
 	oViewCursor.GotoStart(False)
-	ToggleWindow(True)
+	ToggleDialogControls(True)
 End Sub
 
 
 
 Sub LoadWebPageStyles()
 Dim CurIndex as Integer
-	ToggleWindow(False)
+	ToggleDialogControls(False)
 	oBaseDocument.LockControllers
 	CurIndex = GetCurIndex(DialogModel.lbStyles, Style(), NumberofStyles%,8)
 	LoadNewStyles(oBaseDocument, DialogModel, CurIndex, FileStr, Style(), TextureDir)
@@ -141,7 +145,7 @@ Dim CurIndex as Integer
 	CheckControls(oBaseDocument.DrawPage)
 	oViewCursor.GotoStart(False)
 	oBaseDocument.UnlockControllers
-	ToggleWindow(True)
+	ToggleDialogControls(True)
 End Sub
 
 
@@ -203,7 +207,7 @@ Sub EndDialog()
 		&apos; Call the Store template dialog
 		DispatchSlot(5538)
 	Else
-		SetEvent
+		SetEvent()
 	End If
 	MainDialog.EndExecute()
 	MainDialog.Dispose()
@@ -224,10 +228,10 @@ Dim oDocument as Object
 &apos; from the AutoPilot or from a template. It is not possible to set these
 &apos; links for the template created by the AutoPilot because then it is not
 &apos; possible to modify the template.
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	AttachBasicMacroToEvent(oDocument,&quot;OnSaveDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
-	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
+	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)	
 End Sub
 
 
@@ -235,37 +239,25 @@ End Sub
 Sub CopyGraphics
 &apos; This sub copies all the graphics used in the document to the same directory the
 &apos; document has been copied into and changes the graphics links in the document.
-Dim oGraphicObjects, oGraphic as Object
+Dim oGraphicObjects as Object
+Dim oGraphic as Object
 Dim i as Integer
-Dim GraphicFilePath as String
-Dim SavePath$
-Dim GraphicFileName as String
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+Dim SavePath as String
+
+    BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	GetPaths()
 	oBaseDocument = StarDesktop.ActiveFrame.Controller.Model
-	Msgbox oBaseDocument.Url
-	SavePath = oBaseDocument.Url
-	oGraphicObjects = oBaseDocument.GraphicObjects
+	SavePath = DirectoryNameoutofPath(oBaseDocument.Url, &quot;/&quot;)
 
+	oGraphicObjects = oBaseDocument.GraphicObjects
 	For i = 0 to oGraphicObjects.Count-1
 		oGraphic = oGraphicObjects.GetbyIndex(i)
-		GraphicFilePath = oGraphic.GraphicURL
-		GraphicFileName = FileNameoutofPath(GraphicFilePath)
-		FileCopy GraphicFilePath, Savepath &amp; GraphicFileName
-		oGraphic.GraphicURL = Savepath &amp; GraphicFileName
+		oGraphic.GraphicUrl = CopyFile(oGraphic.GraphicURL, SavePath)
 	Next i
 
-	GraphicFileName = FileNameoutofPath(CurrentBullet)
-	FileCopy BulletDir &amp; GraphicFileName, SavePath &amp; GraphicFileName
-
-	SetBulletGraphics(GraphicFileName)
-
-&apos;	&apos; Copy background graphic
-&apos;	If ActiveWindow.Page.GrfFilename&lt;&gt;&quot;&quot; Then
-&apos;		&apos; Set new background graphic
-&apos;		ActiveWindow.Page.GrfFilename = SavePath$+GraphicFileName$
-&apos;		ActiveWindow.Page.GrfPosition = 11
-&apos;	End If
+	ChangeBackGraphicUrl(SavePath)
+	
+	BulletUrlsToSavePath(SavePath)
 
 	With oBaseDocument.DocumentInfo
 		.GetUserFieldValue(0) = &quot;&quot;
@@ -277,9 +269,19 @@ Dim GraphicFileName as String
 &apos;	&apos; Reset events
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveDone&quot;, &quot;&quot;)
 	AttachBasicMacroToEvent(oBaseDocument,&quot;OnSaveAsDone&quot;, &quot;&quot;)
-	AttachBasicMacroToEvent(oBaseDocument,&quot;OnCreate&quot;, &quot;&quot;)
+	AttachBasicMacroToEvent(oBaseDocument,&quot;OnNew&quot;, &quot;&quot;)
 	oBaseDocument.Store
 End Sub
+
+		
+Function CopyFile(ByVal SourceUrl as String, TargetDir as String)
+Dim sFileName as String
+Dim sNewFileUrl as String
+	sFileName = FileNameoutofPath(SourceUrl)
+	sNewFileUrl = TargetDir &amp; sFileName
+	FileCopy(SourceUrl, sNewFileUrl)
+	CopyFile() = sFileName
+End Function
 
 
 Function FillupWebListbox(oUcb as Object, sFileFilter as String, oDialog as Object, ListboxName as String, List() as String)
@@ -384,59 +386,6 @@ Dim bGetGraphic as Boolean
 End Sub
 
 
-
-Sub	ChangeBulletURL(sBulletUrl as String, oBookMarkCursor as Object)
-Dim n, m as Integer
-Dim oLevel()
-Dim oRules
-Dim bDoReplace as Boolean
-Dim oSize as New com.sun.star.awt.Size
-Dim oNumberingBuffer(0) as New com.sun.star.beans.PropertyValue
-Dim oNewBuffer(1) as New com.sun.star.beans.PropertyValue
-	oRules = oBookMarkCursor.NumberingRules
-	If Vartype(oRules()) = 9 Then
-		oNumberingBuffer(0).Name = &quot;NumberingType&quot;
-		oNumberingBuffer(0).Value = com.sun.star.style.NumberingType.BITMAP
-		For n = 0 To oRules.Count - 1
-			oLevel() = oRules.GetByIndex(n)
-			bDoReplace = ModifyPropertyValue(oLevel(), oNumberingBuffer())
-			If bDoReplace Then
-				oRules.ReplaceByIndex(n, oNumberingBuffer())
-			End If
-		Next n
-		oBookmarkCursor.NumberingRules = oRules
-		oNewBuffer(0).Name = &quot;GraphicURL&quot;
-		oNewBuffer(0).Value = sBulletUrl
-		oNewBuffer(1).Name = &quot;GraphicSize&quot;
-		oSize.Height = 300
-		oSize.Width = 300
-		oNewBuffer(1).Value = oSize
-		For n = 0 To oRules.Count - 1
-			oLevel() = oRules.GetByIndex(0)
-			bDoReplace = ModifyPropertyValue(oLevel(), oNewBuffer())
-			If bDoReplace Then
-				oRules.ReplaceByIndex(n, oNewBuffer())
-			End If
-		Next n
-		oBookmarkCursor.NumberingRules = oRules
-	End If
-End Sub
-
-
-Sub	SetBulletGraphics(sBulletUrl as String)
-Dim i as Integer
-Dim oBookMarkCursor as Object
-	oBookmarks = oBaseDocument.BookMarks
-	For i = 0 To oBookmarks.Count - 1
-		oBookMark = oBookmarks.GetbyIndex(i)
-		oBookMarkCursor = oBookMark.Anchor.Text.CreateTextCursorByRange(oBookMark.Anchor)
-		If oBookMarkCursor.PropertySetInfo.HasPropertybyName(&quot;NumberingRules&quot;) Then
-			ChangeBulletURL(sBulletUrl, oBookMarkCursor)
-		End If
-	Next i
-End Sub
-
-
 Sub CheckControls(oDrawPage as Object)
 Dim aForm as Object
 Dim m,n as integer
@@ -453,13 +402,12 @@ Dim oControl as Object
 	Next
 End Sub
 
-REM  *****  BASIC  *****
 
 Sub LoadNewStyles(oDocument as Object, oDialogModel as Object, CurIndex as Integer, SourceFile as String, Styles() as String, TextureDir as String)
 Dim BackGroundURL as String
 Dim oBackGraph as Object
 Dim i, BackColor as Long
-Dim oFamilies as Object, oFamily as Object, oStyle as Object
+Dim oFamilies as Object, oFamily as Object&apos;, oStyle as Object
 Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 
 	If SourceFile &lt;&gt; &quot;&quot; Then
@@ -472,14 +420,13 @@ Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 	BackgroundURL = Styles(7, CurIndex)
 	If Left(BackgroundURL, 1) &lt;&gt; &quot;#&quot; Then
 		BackgroundURL = TextureDir + BackgroundURL
-		ToggleOptionButtons(oDialogModel, 1)
+		bWithBackGraphic = True
 	Else
 		BackColor = clng(&quot;&amp;H&quot; &amp; Right(BackgroundURL, Len(BackgroundURL)-1))
-		ToggleOptionButtons(oDialogModel, 0)
+		bWithBackGraphic = False
 	End If
 	oFamilies = oDocument.StyleFamilies
 	oFamily = oFamilies.GetbyName(&quot;PageStyles&quot;)
-&apos;	oStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)
 	For i = 0 To oFamily.Count - 1
 		If oFamily.GetByIndex(i).IsInUse Then
 			oStyle = oFamily.GetbyIndex(i)
@@ -503,19 +450,10 @@ ErrorOcurred:
 End Sub
 
 
-
-Sub	ToggleOptionButtons(DialogModel as Object, bDoEnable as Integer)
-	DialogModel.optTiled.Enabled = bDoEnable
-	DialogModel.optArea.Enabled = bDoEnable
-	DialogModel.frmBackground.Enabled = bDoEnable
-End Sub
-
-
 Sub SetBackGraphicStyle(oEvent as Object)
 Dim oFamilies as Object
 Dim oFamily as Object
 Dim i as Integer
-Dim oStyle as Object
 Dim oOptModel as Object
 Dim iBackgroundValue as Integer
 Dim oLocDocument as Object
@@ -551,6 +489,48 @@ Dim Bitmap As Object
 Dim sBitmapPath as String
 	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
 	WebWzrd.ImagePreview.ImageURL = sBitmapPath
+End Sub
+
+
+Sub ChangeBackGraphicUrl(SavePath as String)
+Dim oPageFamily as Object
+Dim i as Integer
+	oPageFamily = oBaseDocument.StyleFamilies.GetbyName(&quot;PageStyles&quot;)
+	For i = 0 To oPageFamily.Count - 1
+		If oPageFamily.GetByIndex(i).IsInUse Then
+			oStyle = oPageFamily.GetbyIndex(i)
+			If oStyle.PropertySetInfo.HasPropertybyName(&quot;BackGraphicURL&quot;) Then
+				oStyleBack.GraphicUrl = CopyFile(oStyle.BackGraphicUrl, SavePath)
+				Exit Sub
+			End If
+		End If
+	Next i
+End Sub
+
+
+Sub ToggleDialogControls(ByVal bDoEnable as Boolean)
+	With DialogModel
+		.cbCancel.Enabled = bDoEnable
+		.cbGoOn.Enabled = bDoEnable
+		.cbHelp.Enabled = bDoEnable
+		.lblTemplate.Enabled = bDoEnable
+		.lblStyle.Enabled = bDoEnable
+		.chkSaveasTemplate.Enabled = bDoEnable
+		.lbTemplate.Enabled = bDoEnable
+		.lbStyles.Enabled = bDoEnable
+		If bDoEnable Then
+			&apos; Enable Controls referring to Background graphic only when this Property is set
+			bDoEnable = bWithBackGraphic
+		End If
+		ToggleOptionButtons(bDoEnable)
+	End With
+End Sub
+
+
+Sub	ToggleOptionButtons(bDoEnable as Integer)
+	DialogModel.optTiled.Enabled = bDoEnable
+	DialogModel.optArea.Enabled = bDoEnable
+	DialogModel.hlnBackground.Enabled = bDoEnable
 End Sub
 
 </script:module>

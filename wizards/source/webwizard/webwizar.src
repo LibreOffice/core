@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:41:53 $
+ *  last change: $Author: bc $ $Date: 2001-05-23 16:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 #define WEBDIALOG  1000
 #define WEBERROR 1100
 // --------------------------------------------------------------------
+
+String WEBDIALOG
+{
+    Text = "~Hilfe";
+    Text[English] = "~Help";
+    Text[ English_us ] = "~Help";
+};
+
 
 String WEBDIALOG + 1
 {
