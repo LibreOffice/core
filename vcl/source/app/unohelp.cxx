@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 07:22:27 $
+ *  last change: $Author: jbu $ $Date: 2001-05-11 16:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,12 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
     {
         TempFile aTempFile;
         OUString aTempFileName;
+#ifdef TF_FILEURL
+        osl::FileBase::getSystemPathFromFileURL( aTempFile.GetName(), aTempFileName );
+#else
         osl::FileBase::getNormalizedPathFromFileURL( aTempFile.GetName(), aTempFileName );
         osl::FileBase::getSystemPathFromNormalizedPath( aTempFileName, aTempFileName );
+#endif
         pSVData->maAppData.mpMSFTempFileName = new String(aTempFileName);
 
         pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
