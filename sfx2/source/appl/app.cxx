@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-12 09:53:16 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
 #include <svtools/ehdl.hxx>
 #endif
 
+#include "ucbhelp.hxx"                  // just for Init/DeInit
 #include <svtools/svdde.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
@@ -338,6 +339,8 @@ SfxApplication::SfxApplication()
     pSysLocaleOptions = new SvtSysLocaleOptions;
     SvtViewOptions::AcquireOptions();
 
+    UCB_Helper::Initialize();
+
 #if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create svtools option objects" );
 #endif
@@ -432,6 +435,8 @@ SfxApplication::~SfxApplication()
 
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
     SfxObjectFactory::RemoveAll_Impl();
+
+    UCB_Helper::Deinitialize();
 
     delete pCfgMgr;
     delete pImp;
