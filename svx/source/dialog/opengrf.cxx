@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: louis $ $Date: 2001-08-17 18:47:07 $
+ *  last change: $Author: thb $ $Date: 2001-08-20 20:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -30,7 +30,7 @@
  *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  Foundation, Inc., 59 Temple Place, Suite 330,  Boston,
  *  MA  02111-1307  USA
  *
  *
