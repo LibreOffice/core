@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:32:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     else
                         pTmpFrm = SfxViewFrame::GetFirst( this );
 
-                    pTmpFrm->GetDispatcher()->Execute( nSlotId, NULL, 0, SFX_CALLMODE_ASYNCHRON );
+                    pTmpFrm->GetDispatcher()->Execute( nSlotId, 0, 0, SFX_CALLMODE_ASYNCHRON );
                 }
 
                 rReq.SetReturnValue(SfxBoolItem(SID_PRINTPREVIEW, bSet ));
