@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:01:15 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,21 @@ namespace desktop {
 
     // initialize static members...
     // lock suffix
-    const OUString Lockfile::m_aSuffix = OUString::createFromAscii( "/.lock" );
+    const OUString Lockfile::Suffix()
+        { return OUString::createFromAscii( "/.lock" ); }
     // values for datafile
-    const ByteString Lockfile::m_aGroup( "Lockdata" );
-    const ByteString Lockfile::m_aUserkey( "User" );
-    const ByteString Lockfile::m_aHostkey( "Host" );
-    const ByteString Lockfile::m_aStampkey( "Stamp" );
-    const ByteString Lockfile::m_aTimekey( "Time" );
-    const ByteString Lockfile::m_aIPCkey( "IPCServer" );
+    const ByteString Lockfile::Group()
+        { return ByteString( "Lockdata" ); }
+    const ByteString Lockfile::Userkey()
+        { return ByteString( "User" ); }
+    const ByteString Lockfile::Hostkey()
+        { return ByteString( "Host" ); }
+    const ByteString Lockfile::Stampkey()
+        { return ByteString( "Stamp" ); }
+    const ByteString Lockfile::Timekey()
+        { return ByteString( "Time" ); }
+    const ByteString Lockfile::IPCkey()
+        { return ByteString( "IPCServer" ); }
 
     Lockfile::Lockfile( bool bIPCserver )
     :m_bRemove(sal_False)
@@ -102,7 +109,7 @@ namespace desktop {
         // build the file-url to use for the lock
         OUString aUserPath;
         Bootstrap::locateUserInstallation( aUserPath );
-        m_aLockname = aUserPath + m_aSuffix;
+        m_aLockname = aUserPath + Suffix();
 
         // generate ID
         const int nIdBytes = 16;
@@ -172,13 +179,13 @@ namespace desktop {
         // to assume that it is a stale lockfile which can be overwritten
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
-        aConfig.SetGroup(m_aGroup);
-        ByteString aIPCserver  = aConfig.ReadKey( m_aIPCkey );
+        aConfig.SetGroup(Group());
+        ByteString aIPCserver  = aConfig.ReadKey( IPCkey() );
         if (! aIPCserver.EqualsIgnoreCaseAscii( "true" ))
             return false;
 
-        ByteString aHost  = aConfig.ReadKey( m_aHostkey );
-        ByteString aUser  = aConfig.ReadKey( m_aUserkey );
+        ByteString aHost  = aConfig.ReadKey( Hostkey() );
+        ByteString aUser  = aConfig.ReadKey( Userkey() );
         // lockfile from same host?
         ByteString myHost;
 #ifdef WNT
@@ -214,7 +221,7 @@ namespace desktop {
     {
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
-        aConfig.SetGroup(m_aGroup);
+        aConfig.SetGroup(Group());
 
         // get information
         ByteString aHost;
@@ -243,12 +250,12 @@ namespace desktop {
         ByteString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
 
         // write information
-        aConfig.WriteKey( m_aUserkey,  aUser );
-        aConfig.WriteKey( m_aHostkey,  aHost );
-        aConfig.WriteKey( m_aStampkey, aStamp );
-        aConfig.WriteKey( m_aTimekey,  aTime );
+        aConfig.WriteKey( Userkey(),  aUser );
+        aConfig.WriteKey( Hostkey(),  aHost );
+        aConfig.WriteKey( Stampkey(), aStamp );
+        aConfig.WriteKey( Timekey(),  aTime );
         aConfig.WriteKey(
-            m_aIPCkey,
+            IPCkey(),
             m_bIPCserver ? ByteString("true") : ByteString("false") );
         aConfig.Flush( );
     }
