@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XModuleManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-02-25 18:10:45 $
+ *  last change:$Date: 2005-03-01 20:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,13 @@ package ifc.frame;
 
 import com.sun.star.beans.PropertyValue;
 
-import drafts.com.sun.star.frame.XModuleManager;
+import com.sun.star.frame.XModuleManager;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
 
 import com.sun.star.lang.IllegalArgumentException;
-import drafts.com.sun.star.frame.UnknownModuleException;
+import com.sun.star.frame.UnknownModuleException;
 
 
 /**
