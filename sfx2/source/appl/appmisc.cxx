@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 // class SfxApplication: Interface, Array-Impls und allerlei anderes
 //
 // Copyright 2000 Sun Microsystems, Inc. All rights reserved.
-// $Author: pb $ $Date: 2000-09-26 11:03:29 $ $Revision: 1.2 $
+// $Author: mba $ $Date: 2000-09-28 11:37:29 $ $Revision: 1.3 $
 // $Logfile:   T:/sfx2/source/appl/appmisc.cxv  $ $Workfile:   APPMISC.CXX  $
 //------------------------------------------------------------------
 
@@ -438,7 +438,7 @@ void SfxApplication::OpenClients()
         return;
 
 //(mba/task): neu zu implementieren
-//  if ( pOptions->IsSaveWorkingSet() )
+//  if ( SvtSaveOptions().IsSaveWorkingSet() )
 //            SfxTaskManager::RestoreWorkingSet();
 //  else
     {
@@ -1046,32 +1046,18 @@ SfxModule* SfxApplication::GetActiveModule( SfxViewFrame *pFrame ) const
     return pSh ? pSh->GetModule() : 0;
 }
 
-class AppISfxModule : public ISfxModule
+SfxModule* SfxApplication::GetModule_Impl()
 {
-    SfxApplication* pApp;
-public:
-    AppISfxModule( SfxApplication* pAppP ) : pApp( pAppP ) {}
-
-    virtual SfxFileDialog*      CreateDocFileDialog(
-        sal_uInt32 nBits, const SfxObjectFactory& rFact, const SfxItemSet* pSet = NULL ) {
-        return pApp->CreateDocFileDialog( nBits, rFact, pSet );
-    }
-    virtual ModalDialog*        CreateAboutDialog() {
-        return pApp->CreateAboutDialog();
-    }
-    virtual ResMgr*             GetResMgr() {
-        return Resource::GetResManager();
-    }
-};
-
-ISfxModule* SfxApplication::GetISfxModule( SfxViewFrame *pFrame )
-{
-    SfxModule* pModule = GetActiveModule( pFrame );
+    SfxModule* pModule = GetActiveModule();
+    if ( !pModule )
+        pModule = GetActiveModule( SfxViewFrame::GetFirst( FALSE ) );
     if( pModule )
         return pModule;
-    ISfxModule*& rpI = pAppData_Impl->pISfxModule;
-    if( !rpI ) rpI = new AppISfxModule( this );
-    return rpI;
+    else
+    {
+        DBG_ERROR( "No module!" );
+        return NULL;
+    }
 }
 
 
@@ -1135,15 +1121,17 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
     switch( nSID )
     {
         case SID_NEWDOCDIRECT:
-            ppMenu = &pNewMenu;         nKey = SFX_KEY_NEW_DIR;         break;
-        case SID_BOOKMARKS:
-            ppMenu = &pBookmarkMenu;    nKey = SFX_KEY_BOOKMARK_DIR;    break;
+            ppMenu = &pNewMenu;
+            nKey = SFX_KEY_NEW_DIR;
+            break;
         case SID_AUTOPILOTMENU:
-            ppMenu = &pAutoPilotMenu;   nKey = SFX_KEY_AUTOPILOT_DIR;   break;
-        case SID_STARTMENU:
-            ppMenu = &pStartMenu;       nKey = SFX_KEY_STARTMENU_DIR;   break;
+            ppMenu = &pAutoPilotMenu;
+            nKey = SFX_KEY_AUTOPILOT_DIR;
+            break;
         default:
             ppMenu = 0;
+            DBG_ERROR( "Menu ID unknown!" );
+            break;
     }
 
     if( ppMenu && ( !*ppMenu || bNew ) )

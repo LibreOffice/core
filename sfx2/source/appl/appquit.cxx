@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,9 @@
 #endif
 
 #include <svtools/inethist.hxx>
+#include <svtools/saveopt.hxx>
 
 #pragma hdrstop
-
-#ifndef _UTL_CONFIGMGR_HXX_
-#include <unotools/configmgr.hxx>
-#endif
 
 #include "app.hrc"
 #include "app.hxx"
@@ -125,6 +122,7 @@
 #include "doctempl.hxx"
 #include "viewfrm.hxx"
 #include "bmkmenu.hxx"
+#include "objsh.hxx"
 
 #ifndef PRODUCT
 DECLARE_LIST( SfxFrameWindowFactoryArray_Impl, SfxFrameWindowFactory* )
@@ -278,19 +276,11 @@ void SfxApplication::Deinitialize()
         SaveBasicManager();
 
     bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
-     // free Windows and Controllers
-    DELETEZ( pAppData_Impl->pExplorer );
 
     DELETEZ( pAppData_Impl->pTemplates );
 
-#ifdef TF_OFFLINEREADING
-    delete pAppData_Impl->pOfflineURLMgr;
-#endif
     delete pAppData_Impl->pStopButtonTimer;
-#if SUPD>603
-    utl::ConfigManager::RemoveConfigManager();
-#endif
-//(dv)    DELETEZ( pAppData_Impl->pAnchorJobList );
+
     SvFactory::ClearDemandObjects();
     DELETEZ(pImp->pTemplateDlg);
     SetViewFrame(0);
@@ -335,8 +325,6 @@ void SfxApplication::Deinitialize()
 
     // ab hier d"urfen keine SvObjects mehr existieren
     DELETEX(pAppData_Impl->pMatcher);
-    DELETEX(pAppData_Impl->pDataLockBytesFactory);
-    DELETEX(pAppData_Impl->pImageLockBytesFactory);
     DELETEX(pAppData_Impl->pSfxFrameObjectFactoryPtr);
     DELETEX(pAppData_Impl->pSfxPluginObjectFactoryPtr);
     SvFactory::DeInit();
