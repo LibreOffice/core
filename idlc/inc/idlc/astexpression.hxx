@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astexpression.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ struct AstExprValue
     ExprType et;
 };
 
-sal_Char* SAL_CALL exprTypeToString(ExprType t);
+const sal_Char* SAL_CALL exprTypeToString(ExprType t);
 
 class AstExpression
 {
