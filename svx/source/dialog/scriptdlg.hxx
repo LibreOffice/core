@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:49:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,7 @@ private:
     void delUserData( SvLBoxEntry* pEntry );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
-    ::rtl::OUString SFTreeListBox::xModelToDocTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
-    ::rtl::OUString SFTreeListBox::parseLocationName( const ::rtl::OUString& location );
+
 protected:
     void                    ExpandTree( SvLBoxEntry* pRootEntry );
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
@@ -195,7 +194,7 @@ public:
                     SFEntry( BYTE nT )              { nType = nT; loaded=false; }
                     SFEntry( BYTE nT, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes ) { nType = nT; nodes = entryNodes; loaded=false; }
                     SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
-    virtual         ~SFEntry() { OSL_TRACE("*** in SFEntry dtor ***" );}
+    virtual         ~SFEntry() {}
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
 
     BYTE            GetType() const                     { return nType; }
