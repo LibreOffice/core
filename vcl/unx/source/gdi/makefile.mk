@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 14:37:25 $
+#   last change: $Author: obo $ $Date: 2004-02-20 08:59:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,13 +88,13 @@ SLOFILES=	\
         $(SLO)$/salogl.obj		\
         $(SLO)$/dtint.obj		\
         $(SLO)$/kdeint.obj		\
-        $(SLO)$/gnomeint.obj	\
         $(SLO)$/salcvt.obj		\
         $(SLO)$/xfont.obj		\
         $(SLO)$/xlfd_attr.obj	\
         $(SLO)$/xlfd_extd.obj	\
         $(SLO)$/xlfd_smpl.obj	\
-        $(SLO)$/salgdi3.obj
+        $(SLO)$/salgdi3.obj		\
+        $(SLO)$/pspgraphics.obj
 
 .IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1
