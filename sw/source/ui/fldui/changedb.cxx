@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _FLDUI_HRC
 #include <fldui.hrc>
 #endif
+#ifndef _UTLUI_HRC
+#include <utlui.hrc>
+#endif
 #ifndef _CHANGEDB_HRC
 #include <changedb.hrc>
 #endif
@@ -153,11 +156,8 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aCancelBT   (this, SW_RES(BT_CANCEL     )),
     aHelpBT     (this, SW_RES(BT_HELP       )),
 //  aChangeBT   (this, SW_RES(BT_CHANGEDB    )),
-
-    aRootOpened     (SW_RES(BMP_ROOT_CLOSED)),
-    aRootClosed     (SW_RES(BMP_ROOT_OPENED)),
-    aDBBMP          (SW_RES(BMP_DB)),
-    aTableBMP       (SW_RES(BMP_TABLE)),
+    aImageList      (SW_RES(ILIST_DB_DLG    )),
+    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
 
     pMgr( new SwFldMgr() ),
     pSh(rVw.GetWrtShellPtr())
@@ -173,7 +173,11 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     aUsedDBTLB.SetFont(GetSettings().GetStyleSettings().GetAppFont());
     aUsedDBTLB.SetSpaceBetweenEntries(0);
-    aUsedDBTLB.SetNodeBitmaps( aRootOpened, aRootClosed );
+
+    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
+                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
+    aUsedDBTLB.SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
+                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
 
     Link aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
@@ -258,6 +262,11 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
     USHORT nParent = 0;
     USHORT nChild = 0;
 
+    BOOL bDark = aUsedDBTLB.GetDisplayBackground().GetColor().IsDark();
+    ImageList& rImgLst = bDark ?
+                    aImageListHC : aImageList;
+    Image& rTableImg = rImgLst.GetImage(IMG_DBTABLE);
+    Image& rDBImg = rImgLst.GetImage(IMG_DB);
     while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
     {
         if (sDBName == aUsedDBTLB.GetEntryText(pParent))
@@ -267,13 +276,13 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                 if (sTableName == aUsedDBTLB.GetEntryText(pChild))
                     return pChild;
             }
-            SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, aTableBMP, aTableBMP, pParent);
+            SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rTableImg, rTableImg, pParent);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
-    pParent = aUsedDBTLB.InsertEntry(sDBName, aDBBMP, aDBBMP);
-    SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, aTableBMP, aTableBMP, pParent);
+    pParent = aUsedDBTLB.InsertEntry(sDBName, rDBImg, rDBImg);
+    SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rTableImg, rTableImg, pParent);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }

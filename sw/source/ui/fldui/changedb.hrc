@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:27:13 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,11 @@
     Beschreibung: Bitmaps
  --------------------------------------------------------------------*/
 
-#define BMP_ROOT_CLOSED     1
-#define BMP_ROOT_OPENED     2
-#define BMP_DB              3
-#define BMP_TABLE           4
+#define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/
+#define IMG_EXPAND          18003  /*RID_SVXIMG_EXPANDEDNODE*/
+#define IMG_DB                  1
+#define IMG_DBTABLE             2
+#define IMG_DBQUERY             3
 
 #endif
 

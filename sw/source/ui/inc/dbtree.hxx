@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@ class SwDBTreeList_Impl;
 class SwWrtShell;
 class SwDBTreeList : public SvTreeListBox
 {
-    Bitmap          aRootOpened;
-    Bitmap          aRootClosed;
+    ImageList       aImageList;
+    ImageList       aImageListHC;
     Image           aDBBMP;
     Image           aTableBMP;
     Image           aQueryBMP;

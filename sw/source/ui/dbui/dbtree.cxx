@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 13:36:15 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,8 @@
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
-#ifndef _DBUI_HRC
-#include <dbui.hrc>
+#ifndef _UTLUI_HRC
+#include <utlui.hrc>
 #endif
 
 using namespace rtl;
@@ -305,13 +305,8 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
                         const String& rDefDBName, const BOOL bShowCol):
 
     SvTreeListBox   (pParent, rResId),
-
-    aRootClosed     (SW_RES(BMP_ROOT_CLOSED)),
-    aRootOpened     (SW_RES(BMP_ROOT_OPENED)),
-    aDBBMP          (SW_RES(BMP_DB)),
-    aTableBMP       (SW_RES(BMP_TABLE)),
-    aQueryBMP       (SW_RES(BMP_QUERY)),
-
+    aImageList      (SW_RES(ILIST_DB_DLG    )),
+    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
     sDefDBName      (rDefDBName),
     bShowColumns    (bShowCol),
     pImpl(new SwDBTreeList_Impl(rSh)),
@@ -344,10 +339,12 @@ void SwDBTreeList::InitTreeList()
     SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     // Font nicht setzen, damit der Font des Controls uebernommen wird!
     SetSpaceBetweenEntries(0);
-    SetNodeBitmaps( aRootClosed, aRootOpened );
+    SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
+                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
+    SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
+                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
 
     SetDragDropMode(SV_DRAGDROP_APP_COPY);
-
 
     GetModel()->SetCompareHdl(LINK(this, SwDBTreeList, DBCompare));
 
@@ -355,10 +352,14 @@ void SwDBTreeList::InitTreeList()
     const OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
 
+    BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+    ImageList& rImgLst = bDark ?
+                    aImageListHC : aImageList;
+    Image& rImg = rImgLst.GetImage(IMG_DB);
     for(long i = 0; i < nCount; i++)
     {
         String sDBName(pDBNames[i]);
-        InsertEntry(sDBName, aDBBMP, aDBBMP, NULL, TRUE);
+        InsertEntry(sDBName, rImg, rImg, NULL, TRUE);
     }
     String sDBName(sDefDBName.GetToken(0, DB_DELIM));
     String sTableName(sDefDBName.GetToken(1, DB_DELIM));
@@ -483,6 +484,9 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
             String sSourceName = GetEntryText(pParent);
             if(!pImpl->GetContext()->hasByName(sSourceName))
                 return;
+            BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+            ImageList& rImgLst = bDark ?
+                            aImageListHC : aImageList;
             Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
             if (xConnection.is())
             {
@@ -494,10 +498,11 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     String sTableName;
                     long nCount = aTblNames.getLength();
                     const OUString* pTblNames = aTblNames.getConstArray();
+                    Image& rImg = rImgLst.GetImage(IMG_DBTABLE);
                     for (long i = 0; i < nCount; i++)
                     {
                         sTableName = pTblNames[i];
-                        SvLBoxEntry* pTableEntry = InsertEntry(sTableName, aTableBMP, aTableBMP, pParent, bShowColumns);
+                        SvLBoxEntry* pTableEntry = InsertEntry(sTableName, rImg, rImg, pParent, bShowColumns);
                         //to discriminate between queries and tables the user data of table entries is set
                         pTableEntry->SetUserData((void*)0);
                     }
@@ -511,10 +516,11 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     String sQueryName;
                     long nCount = aQueryNames.getLength();
                     const OUString* pQueryNames = aQueryNames.getConstArray();
+                    Image& rImg = rImgLst.GetImage(IMG_DBQUERY);
                     for (long i = 0; i < nCount; i++)
                     {
                         sQueryName = pQueryNames[i];
-                        SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, aQueryBMP, aQueryBMP, pParent, bShowColumns);
+                        SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, rImg, rImg, pParent, bShowColumns);
                         pQueryEntry->SetUserData((void*)1);
                     }
                 }

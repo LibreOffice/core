@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,15 @@
 
 #define IMG_NAVI_ENTRYBMP           (RC_UTLUI_BEGIN + 4)
 #define IMG_NAVI_ENTRYBMPH          (RC_UTLUI_BEGIN + 5)
+#define ILIST_DB_DLG                (RC_UTLUI_BEGIN + 6)
+#define ILIST_DB_DLG_HC             (RC_UTLUI_BEGIN + 7)
+
+//local ids of the Database ImageLists
+#define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/
+#define IMG_EXPAND          18003  /*RID_SVXIMG_EXPANDEDNODE*/
+#define IMG_DB                  1
+#define IMG_DBTABLE             2
+#define IMG_DBQUERY             3
 
 #define UTLUI_ACT_END               RES_FRMEX_MENU
 
