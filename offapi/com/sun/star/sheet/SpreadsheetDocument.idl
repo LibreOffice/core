@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDocument.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-29 13:18:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a model component which consists of some settings and
     one or more spreadsheets.
  */
-service SpreadsheetDocument
+published service SpreadsheetDocument
 {
     //-------------------------------------------------------------------------
 
