@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-29 09:41:25 $
+ *  last change: $Author: cl $ $Date: 2001-07-11 13:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "deflt3d.hxx"
 #include "unoshprp.hxx"
 #include "editeng.hxx"
+#include "unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -138,23 +139,6 @@ void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 }
 
 //----------------------------------------------------------------------
-//-/void SvxItemPropertySet::Generate3DAttrDefaultItem(sal_uInt16 nWID, SfxItemSet& rSet)
-//-/{
-//-/    SfxItemSet aSet( *rSet.GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END);
-//-/    E3dDefaultAttributes a3DDefaultAttr;
-//-/    a3DDefaultAttr.TakeDefaultValues(aSet);
-//-/    const SfxPoolItem* pItem = 0;
-//-/    SfxPoolItem *pNewItem = 0;
-//-/    SfxItemState eState = aSet.GetItemState( nWID, sal_True, &pItem );
-//-/    if(eState >= SFX_ITEM_DEFAULT && pItem)
-//-/    {
-//-/        pNewItem = pItem->Clone();
-//-/        rSet.Put( *pNewItem, nWID );
-//-/        delete pNewItem;
-//-/    }
-//-/}
-
-//----------------------------------------------------------------------
 void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet,
   SfxItemSet& rSet, Reference< beans::XPropertySet > xSet )
 {
@@ -192,18 +176,8 @@ void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rProp
                         }
                         else
                         {
-                            // Eintrag sicherstellen in ItemSet
-//-/                            if(pDst->nWID >= SID_ATTR_3D_START && pDst->nWID <= SID_ATTR_3D_END)
-//-/                            {
-//-/                                // 3D-Attribut, eigenen Default
-//-/                                Generate3DAttrDefaultItem(pDst->nWID, rSet);
-//-/                            }
-//-/                            else
-//-/                            {
-                                // Default aus ItemPool holen
-                                if(rSet.GetPool()->IsWhich(pDst->nWID))
-                                    rSet.Put(rSet.GetPool()->GetDefaultItem(pDst->nWID));
-//-/                            }
+                            if(rSet.GetPool()->IsWhich(pDst->nWID))
+                                rSet.Put(rSet.GetPool()->GetDefaultItem(pDst->nWID));
 
                             // setzen
                             setPropertyValue(pDst, *pUsrAny, rSet);
@@ -227,24 +201,30 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, c
 
     // item holen
     const SfxPoolItem* pItem = 0;
+    SfxItemPool* pPool = rSet.GetPool();
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
 
-    if( NULL == pItem )
+    if( NULL == pItem && pPool )
     {
-        SfxItemPool* pPool = rSet.GetPool();
-        if( pPool )
-        {
-            pItem = &(pPool->GetDefaultItem( pMap->nWID ));
-        }
+        pItem = &(pPool->GetDefaultItem( pMap->nWID ));
     }
 
     // item-Wert als UnoAny zurueckgeben
     if(pItem)
     {
-        pItem->QueryValue( aVal, pMap->nMemberId );
+        pItem->QueryValue( aVal, pMap->nMemberId & (~SFX_METRIC_ITEM) );
 
-        // allgemeine SfxEnumItem Values in konkrete wandeln
-        if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
+        if( pMap->nMemberId & SFX_METRIC_ITEM )
+        {
+            // check for needed metric translation
+            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+            if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+            {
+                SvxUnoConvertToMM( eMapUnit, aVal );
+            }
+        }
+        // convert typeless SfxEnumItem to enum type
+        else if ( pMap->pType->getTypeClass() == uno::TypeClass_ENUM &&
               aVal.getValueType() == ::getCppuType((const sal_Int32*)0) )
         {
             sal_Int32 nEnum;
@@ -271,11 +251,11 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
     const SfxPoolItem* pItem = 0;
     SfxPoolItem *pNewItem = 0;
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
+    SfxItemPool* pPool = rSet.GetPool();
 
     // UnoAny in item-Wert stecken
     if(eState < SFX_ITEM_DEFAULT || pItem == NULL)
     {
-        SfxItemPool* pPool = rSet.GetPool();
         if( pPool == NULL )
         {
             DBG_ERROR( "No default item and no pool?" );
@@ -288,8 +268,20 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
     DBG_ASSERT( pItem, "Got no default for item!" );
     if( pItem )
     {
+        uno::Any aValue( rVal );
+
+        if( pMap->nMemberId & SFX_METRIC_ITEM )
+        {
+            // check for needed metric translation
+            const SfxMapUnit eMapUnit = pPool ? pPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+            if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+            {
+                SvxUnoConvertFromMM( eMapUnit, aValue );
+            }
+        }
+
         pNewItem = pItem->Clone();
-        if( pNewItem->PutValue( rVal, pMap->nMemberId ) )
+        if( pNewItem->PutValue( aValue, pMap->nMemberId & (~SFX_METRIC_ITEM) ) )
         {
             // neues item in itemset setzen
             rSet.Put( *pNewItem, pMap->nWID );
@@ -312,7 +304,6 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
     {
         // ItemPool generieren
         ((SvxItemPropertySet*)this)->pItemPool = new SdrItemPool;
-        // pItemPool->SetDefaultMetric(...eScaleUnit...);
         // Der Outliner hat keinen eigenen Pool, deshalb den der EditEngine
         SfxItemPool* pOutlPool=EditEngine::CreatePool();
         // OutlinerPool als SecondaryPool des SdrPool
@@ -321,12 +312,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
 
     uno::Any aVal;
     SfxItemSet aSet( *pItemPool, pMap->nWID, pMap->nWID);
-//-/    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
-//-/    {
-//-/        // 3D-Attribut, eigenen Default generieren
-//-/        ((SvxItemPropertySet*)this)->Generate3DAttrDefaultItem(pMap->nWID, aSet);
-//-/    }
-//-/    else
+
     if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
         // Default aus ItemPool holen
@@ -342,6 +328,16 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap ) 
         {
             pItem->QueryValue( aVal, pMap->nMemberId );
             ((SvxItemPropertySet*)this)->AddUsrAnyForID(aVal, pMap->nWID);
+        }
+    }
+
+    if( pMap->nMemberId & SFX_METRIC_ITEM )
+    {
+        // check for needed metric translation
+        const SfxMapUnit eMapUnit = pItemPool ? pItemPool->GetMetric((USHORT)pMap->nWID) : SFX_MAPUNIT_100TH_MM;
+        if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
+        {
+            SvxUnoConvertToMM( eMapUnit, aVal );
         }
     }
 
@@ -381,4 +377,87 @@ Reference< ::com::sun::star::beans::XPropertySetInfo >  SvxItemPropertySet::getP
 {
     Reference< ::com::sun::star::beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( _pMap ));
     return aRef;
+}
+
+//----------------------------------------------------------------------
+
+#ifndef TWIPS_TO_MM
+#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
+#endif
+#ifndef MM_TO_TWIPS
+#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
+#endif
+
+/** converts the given any with a metric to 100th/mm if needed */
+void SvxUnoConvertToMM( const SfxMapUnit eSourceMapUnit, com::sun::star::uno::Any & rMetric ) throw()
+{
+    // map the metric of the itempool to 100th mm
+    switch(eSourceMapUnit)
+    {
+        case SFX_MAPUNIT_TWIP :
+        {
+            switch( rMetric.getValueTypeClass() )
+            {
+            case uno::TypeClass_BYTE:
+                rMetric <<= (sal_Int8)(TWIPS_TO_MM(*(sal_Int8*)rMetric.getValue()));
+                break;
+            case uno::TypeClass_SHORT:
+                rMetric <<= (sal_Int16)(TWIPS_TO_MM(*(sal_Int16*)rMetric.getValue()));
+                break;
+            case uno::TypeClass_UNSIGNED_SHORT:
+                rMetric <<= (sal_uInt16)(TWIPS_TO_MM(*(sal_uInt16*)rMetric.getValue()));
+                break;
+            case uno::TypeClass_LONG:
+                rMetric <<= (sal_Int32)(TWIPS_TO_MM(*(sal_Int32*)rMetric.getValue()));
+                break;
+            case uno::TypeClass_UNSIGNED_LONG:
+                rMetric <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)rMetric.getValue()));
+                break;
+            default:
+                DBG_ERROR("AW: Missing unit translation to 100th mm!");
+            }
+            break;
+        }
+        default:
+        {
+            DBG_ERROR("AW: Missing unit translation to 100th mm!");
+        }
+    }
+}
+
+//----------------------------------------------------------------------
+
+/** converts the given any with a metric from 100th/mm to the given metric if needed */
+void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::uno::Any & rMetric ) throw()
+{
+    switch(eDestinationMapUnit)
+    {
+        case SFX_MAPUNIT_TWIP :
+        {
+            switch( rMetric.getValueTypeClass() )
+            {
+                case uno::TypeClass_BYTE:
+                    rMetric <<= (sal_Int8)(MM_TO_TWIPS(*(sal_Int8*)rMetric.getValue()));
+                    break;
+                case uno::TypeClass_SHORT:
+                    rMetric <<= (sal_Int16)(MM_TO_TWIPS(*(sal_Int16*)rMetric.getValue()));
+                    break;
+                case uno::TypeClass_UNSIGNED_SHORT:
+                    rMetric <<= (sal_uInt16)(MM_TO_TWIPS(*(sal_uInt16*)rMetric.getValue()));
+                    break;
+                case uno::TypeClass_LONG:
+                    rMetric <<= (sal_Int32)(MM_TO_TWIPS(*(sal_Int32*)rMetric.getValue()));
+                    break;
+                case uno::TypeClass_UNSIGNED_LONG:
+                    rMetric <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)rMetric.getValue()));
+                    break;
+                default:
+                    DBG_ERROR("AW: Missing unit translation to 100th mm!");
+            }
+        }
+        default:
+        {
+            DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
+        }
+    }
 }

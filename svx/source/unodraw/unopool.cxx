@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-30 15:10:45 $
+ *  last change: $Author: cl $ $Date: 2001-07-11 13:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@
 #include "editeng.hxx"
 #endif
 
+#include "unoapi.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -177,7 +179,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
             break;
         }
     default:
-        pPool->GetDefaultItem( (USHORT)pEntry->mnHandle ).QueryValue( rValue, pEntry->mnMemberId );
+        pPool->GetDefaultItem( (USHORT)pEntry->mnHandle ).QueryValue( rValue, pEntry->mnMemberId & (~SFX_METRIC_ITEM) );
     }
 
 
@@ -185,42 +187,10 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
     const SfxMapUnit eMapUnit = pPool->GetMetric((USHORT)pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
-        // map the metric of the itempool to 100th mm
-        switch(eMapUnit)
-        {
-        case SFX_MAPUNIT_TWIP :
-        {
-            switch( rValue.getValueTypeClass() )
-            {
-            case uno::TypeClass_BYTE:
-                rValue <<= (sal_Int8)(TWIPS_TO_MM(*(sal_Int8*)rValue.getValue()));
-                break;
-            case uno::TypeClass_SHORT:
-                rValue <<= (sal_Int16)(TWIPS_TO_MM(*(sal_Int16*)rValue.getValue()));
-                break;
-            case uno::TypeClass_UNSIGNED_SHORT:
-                rValue <<= (sal_uInt16)(TWIPS_TO_MM(*(sal_uInt16*)rValue.getValue()));
-                break;
-            case uno::TypeClass_LONG:
-                rValue <<= (sal_Int32)(TWIPS_TO_MM(*(sal_Int32*)rValue.getValue()));
-                break;
-            case uno::TypeClass_UNSIGNED_LONG:
-                rValue <<= (sal_uInt32)(TWIPS_TO_MM(*(sal_uInt32*)rValue.getValue()));
-                break;
-            default:
-                DBG_ERROR("AW: Missing unit translation to 100th mm!");
-            }
-            break;
-        }
-        default:
-        {
-            DBG_ERROR("AW: Missing unit translation to 100th mm!");
-        }
-        }
+        SvxUnoConvertToMM( eMapUnit, rValue );
     }
-
     // convert int32 to correct enum type if needed
-    if ( pEntry->mpType->getTypeClass() == TypeClass_ENUM && rValue.getValueType() == ::getCppuType((const sal_Int32*)0) )
+    else if ( pEntry->mpType->getTypeClass() == TypeClass_ENUM && rValue.getValueType() == ::getCppuType((const sal_Int32*)0) )
     {
         sal_Int32 nEnum;
         rValue >>= nEnum;
@@ -237,25 +207,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
     const SfxMapUnit eMapUnit = pPool->GetMetric((USHORT)pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
-        switch(eMapUnit)
-        {
-            case SFX_MAPUNIT_TWIP :
-            {
-                if( aValue.getValueType() == ::getCppuType(( const sal_Int32 *)0))
-                    aValue <<= (sal_Int32)(MM_TO_TWIPS(*(sal_Int32*)aValue.getValue()));
-                else if( aValue.getValueType() == ::getCppuType(( const sal_uInt32*)0))
-                    aValue <<= (sal_uInt32)(MM_TO_TWIPS(*(sal_uInt32*)aValue.getValue()));
-                else if( aValue.getValueType() == ::getCppuType(( const sal_uInt16*)0))
-                    aValue <<= (sal_uInt16)(MM_TO_TWIPS(*(sal_uInt16*)aValue.getValue()));
-                else
-                    DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
-                break;
-            }
-            default:
-            {
-                DBG_ERROR("AW: Missing unit translation to PoolMetrics!");
-            }
-        }
+        SvxUnoConvertFromMM( eMapUnit, aValue );
     }
 
     const sal_uInt16 nWhich = (sal_uInt16)pEntry->mnHandle;
@@ -283,7 +235,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 
     default:
         SfxPoolItem* pNewItem = pPool->GetDefaultItem( nWhich ).Clone();
-        if( !pNewItem->PutValue( aValue, pEntry->mnMemberId ) )
+        if( !pNewItem->PutValue( aValue, pEntry->mnMemberId & (~SFX_METRIC_ITEM) ) )
             throw IllegalArgumentException();
 
         pPool->SetPoolDefaultItem( *pNewItem );
