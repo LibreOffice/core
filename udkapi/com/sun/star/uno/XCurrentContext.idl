@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCurrentContext.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-12 16:43:44 $
+ *  last change: $Author: dbo $ $Date: 2000-12-13 12:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,44 +77,43 @@
 #include <com/sun/star/security/auth/login/XLoginContext.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
 module com {  module sun {  module star {  module uno {
 
 //=============================================================================
 
 /** Thread local execution context for UNO.
+    <p>
     Arbitrary values can be set and retrieved at the context.
+    </p>
 */
 [ uik(0F18C234-B3F2-4018-BE369BF4-3912C863), ident("XCurrentContext", 1.0) ]
-interface XCurrentContext : com::sun::star::uno::XInterface
+interface XCurrentContext : com::sun::star::beans::XPropertySet
 {
-    /** value of name: com.sun.star.ServiceManager
+    /** value of name:
+        <type scope="com::sun::star::lang">ServiceManager</type>
 
-        @return service manager to be used
+        @return
+                service manager to be used
     */
     com::sun::star::lang::XMultiServiceFactory getServiceManager();
-    /** value of name: com.sun.star.security.AccessController
+    /** value of name:
+        <type scope="com::sun::star::security">AccessController</type>
 
-        @return access controller to be used
+        @return
+                access controller to be used
     */
     com::sun::star::security::XAccessController getAccessController();
-    /** value of name: com.sun.star.security.auth.login.LoginContext
+    /** value of name:
+        <type scope="com::sun::star::security::auth::login">LoginContext</type>
 
-        @return login context to be used
+        @return
+                login context to be used
     */
     com::sun::star::security::auth::login::XLoginContext getLoginContext();
-
-    /** Retrieve value with given name.
-
-        @param Name name of value
-        @return value
-    */
-    any getValue( [in] string Name );
-    /** Set value giving a name.
-
-        @param Name name of value
-        @param Value value
-    */
-    void setValue( [in] string Name, [in] any Value );
 };
 
 //=============================================================================
