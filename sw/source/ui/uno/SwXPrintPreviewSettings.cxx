@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 13:25:47 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ SwXPrintPreviewSettings::SwXPrintPreviewSettings( SwDoc *pDoc)
 
   -----------------------------------------------------------------------*/
 SwXPrintPreviewSettings::~SwXPrintPreviewSettings()
+    throw()
 {
 }
 

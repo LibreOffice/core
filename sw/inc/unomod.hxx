@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 21:48:28 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ protected:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
 public:
     SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = NULL );
-    virtual ~SwXPrintSettings();
+    virtual ~SwXPrintSettings()
+        throw();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
@@ -213,7 +214,8 @@ protected:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
 public:
     SwXViewSettings(sal_Bool bWeb, SwView*  pView);
-    virtual ~SwXViewSettings();
+    virtual ~SwXViewSettings()
+        throw();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )

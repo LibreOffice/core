@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 21:43:36 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ protected:
 
 public:
     SwXDocumentSettings( SwXTextDocument* pModel );
-    virtual ~SwXDocumentSettings();
+    virtual ~SwXDocumentSettings()
+        throw();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )

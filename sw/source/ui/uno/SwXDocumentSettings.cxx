@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-07 10:09:23 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()
+    throw()
 {
 }
 Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-07 11:25:09 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,13 +305,14 @@ SwClipboardChangeListener::~SwClipboardChangeListener()
 {
 }
 
-void SAL_CALL SwClipboardChangeListener::disposing(
-                                            const EventObject& rEventObject )
+void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& rEventObject )
+    throw ( RuntimeException )
 {
 }
 
-void SAL_CALL SwClipboardChangeListener::changedContents(
-                            const CLIP_NMSPC::ClipboardEvent& rEventObject )
+void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::ClipboardEvent& rEventObject )
+    throw ( RuntimeException )
+
 {
     if( pView )
     {

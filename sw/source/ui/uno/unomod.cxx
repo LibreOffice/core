@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 21:46:50 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
 
   -----------------------------------------------------------------------*/
 SwXPrintSettings::~SwXPrintSettings()
+    throw()
 {
 }
 
@@ -663,6 +664,7 @@ SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
 
   -----------------------------------------------------------------------*/
 SwXViewSettings::~SwXViewSettings()
+    throw()
 {
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLSectionList.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:15:36 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -40,7 +40,7 @@
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
  *  License at http://www.openoffice.org/license.html.
-*
+ *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
@@ -82,7 +82,8 @@ protected:
 public:
     SvStrings & rSectionList;
     SwXMLSectionList ( SvStrings & rNewSectionList );
-    ~SwXMLSectionList ( );
+    virtual ~SwXMLSectionList ( )
+        throw();
 };
 
 class SvXMLSectionListContext : public SvXMLImportContext
