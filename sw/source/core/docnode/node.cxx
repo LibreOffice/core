@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-16 19:18:34 $
+ *  last change: $Author: jp $ $Date: 2001-05-25 16:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,7 +1355,8 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
         if( IsTxtNode() && 0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
             RES_PARATR_NUMRULE, TRUE )) &&
             pItem->GetValue().Len() &&
-            pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() )
+            pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
+            GetNodes().IsDocNodes() )
         {
             ((SwNumRuleInfo&)rInfo).AddNode( *(SwTxtNode*)this );
         }
