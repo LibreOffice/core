@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:59:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 //            if( STRING_NOTFOUND != ( nPos = aSaveStr.Search( '.' )))
 //                aSaveStr.Erase( nPos+4 );
 
+            aSaveStr.EraseLeadingAndTrailingChars();
             if( aSaveStr.Len() )
             {
                 sal_Unicode c = aSaveStr.GetChar( 0 );
