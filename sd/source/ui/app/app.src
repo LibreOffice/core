@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:43:17 $
+ *  last change: $Author: dl $ $Date: 2000-11-23 14:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,11 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File[ PORTUGUESE ] = "sc_out03.bmp" ;
         File[ portuguese_brazilian ] = "sc_out03.bmp" ;
         File[ turkish ] = "sc_out90.bmp" ;
+        File[ chinese_simplified ] = "sc_out86.bmp" ;
+        File[ chinese_traditional ] = "sc_out88.bmp" ;
+        File[ japanese ] = "sc_out81.bmp" ;
+        File[ korean ] = "sc_out82.bmp" ;
+
     };
     MaskColor = IMAGE_STDBTN_COLOR ;
     IMAGE_ID_LIST
@@ -456,6 +461,10 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File[ PORTUGUESE ] = "lc_out03.bmp" ;
         File[ portuguese_brazilian ] = "lc_out03.bmp" ;
         File[ turkish ] = "lc_out90.bmp" ;
+        File[ chinese_simplified ] = "lc_out86.bmp" ;
+        File[ chinese_traditional ] = "lc_out88.bmp" ;
+        File[ japanese ] = "lc_out81.bmp" ;
+        File[ korean ] = "lc_out82.bmp" ;
     };
     MaskColor = IMAGE_STDBTN_COLOR ;
     IMAGE_ID_LIST
