@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enumhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:46:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-09 17:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
     :m_aNames(_aNames)
     ,m_nPos(0)
     ,m_xAccess(_rxAccess)
+    ,m_bListening(sal_False)
 {
     impl_startDisposeListening();
 }
