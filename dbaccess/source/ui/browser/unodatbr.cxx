@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-10 11:44:49 $
+ *  last change: $Author: oj $ $Date: 2001-12-19 15:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,9 @@
 #ifndef _DBACCESS_UI_DIRECTSQL_HXX_
 #include "directsql.hxx"
 #endif
-
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -3598,18 +3600,34 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 sal_Bool bPasteAble = isTableFormat();
                 aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bIsConnectionWriteAble && bPasteAble);
 
-                Reference<XRename> xRename;
+                sal_Bool bRenameAllowed = sal_False,
+                         bDropAllowed   = sal_False,
+                         bSelectAllowed = sal_False;
                 if(bIsConnectionWriteAble)
                 {
                     ensureObjectExists(pEntry);
                     DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
                     if(pData && pData->xObject.is())
-                        xRename = Reference<XRename>(pData->xObject,UNO_QUERY);
+                    {
+                        bRenameAllowed  = Reference<XRename>(pData->xObject,UNO_QUERY).is();
+                        try
+                        {
+                            Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
+                            sal_Int32 nPrivileges = 0;
+                            if(xProp.is())
+                                xProp->getPropertyValue(PROPERTY_PRIVILEGES) >>= nPrivileges;
+                            bDropAllowed    = (Privilege::DROP & nPrivileges) == Privilege::DROP;
+                            bSelectAllowed  = (Privilege::SELECT & nPrivileges) == Privilege::SELECT;
+                        }
+                        catch(SQLException&)
+                        {
+                        }
+                    }
                 }
                 // 1.3 actions on existing tables
-                aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType && bIsConnectionWriteAble);
-                aContextMenu.EnableItem(ID_DROP_TABLE,      etTable == eType && bIsConnectionWriteAble);
-                aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble && xRename.is());
+                aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType && bIsConnectionWriteAble && bSelectAllowed);
+                aContextMenu.EnableItem(ID_DROP_TABLE,      etTable == eType && bIsConnectionWriteAble && bDropAllowed);
+                aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble && bRenameAllowed);
                 aContextMenu.EnableItem(ID_TREE_TABLE_COPY, etTable == eType);
                 // these have to be disabled if the connection is readonly
                 if(!bIsConnectionWriteAble)
