@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:31:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 15:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8820,5 +8820,10 @@ BOOL Window::HasActiveChildFrame()
         pFrameWin = pFrameWin->mpFrameData->mpNextFrame;
     }
     return bRet;
+}
+
+LanguageType Window::GetInputLanguage() const
+{
+    return mpFrame->GetInputLanguage();
 }
 
