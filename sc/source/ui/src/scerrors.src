@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 12:06:42 $
+ *  last change: $Author: sab $ $Date: 2002-11-27 13:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,15 +570,21 @@ Resource RID_ERRHDLSC
     };
     String SCWARN_IMPORT_ROW_OVERFLOW & SH_MAX
     {
-        Text = "Die Maximalanzahl von Zeilen wurde überschritten. Überzählige Zeilen wurden nicht importiert!" ;
+        Text = "Die Daten konnten nicht vollständig geladen werden, da die maximale Anzahl von Tabellenzeilen überschritten wurde." ;
+        Text [ ENGLISH ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded." ;
+        Text [ english_us ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded." ;
     };
     String SCWARN_IMPORT_COLUMN_OVERFLOW & SH_MAX
     {
-        Text = "Die Maximalanzahl von Spalten wurde überschritten. Überzählige Spalten wurden nicht importiert!" ;
+        Text = "Die Daten konnten nicht vollständig geladen werden, da die maximale Anzahl von Tabellenspalten überschritten wurde." ;
+        Text [ ENGLISH ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded." ;
+        Text [ english_us ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded." ;
     };
     String SCWARN_IMPORT_SHEET_OVERFLOW & SH_MAX
     {
-        Text = "Die Maximalanzahl von Tabellen wurde überschritten. Überzählige Tabellen wurden nicht importiert!" ;
+        Text = "Einige Tabellen konnten nicht geladen werden, da die maximale Anzahl von Tabellen überschritten wurde." ;
+        Text [ ENGLISH ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded." ;
+        Text [ english_us ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded." ;
     };
     String SCWARN_IMPORT_OPEN_FM3 & SH_MAX
     {
