@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ String RID_SVXSTR_HMERR_ADDWORD
     Text [ finnish ] = "Sanastoon ei voi lisдtд" ;
     Text [ danish ] = "Det var ikke muligt at tilfшje dette ord til ordbogen." ;
     Text [ french ] = "Impossible d'ajouter ce mot au dictionnaire" ;
-    Text [ swedish ] = "Ordet kunde inte lдggas in i ordboken." ;
+    Text [ swedish ] = "Det gick inte att lдgga in ordet i ordboken." ;
     Text [ dutch ] = "Woord kan niet in woordenboek worden opgenomen" ;
     Text [ spanish ] = "No se pudo aсadir la palabra al diccionario." ;
     Text [ english_us ] = "The word could not be added to dictionary" ;
@@ -473,7 +473,7 @@ String RID_SVXSTR_HMERR_THESAURUS
     TEXT [ spanish ] = "No existe un diccionario de sinуnimos para el idioma seleccionado. \nCompruebe por favor su instalaciуn\n e instale, si es necesario, el idioma deseado" ;
     TEXT [ english_us ] = "No thesaurus is available for the selected language. \nPlease check your installation and install the desired language\n" ;
     TEXT[ chinese_simplified ] = "ДъЙи¶ЁµДУпСФГ»УРёЅјУґКµд№¦ДЬЎЈ\nЗлДъјмІйµД°ІЧ°іМРтЎЈ\nИзУР±ШТЄЈ¬ЗлДъ°ІЧ°ТЄК№УГµДУпСФ°ж±ѕЎЈ";
-    TEXT[ russian ] = "Тезаурус для выбранного языка недоступен. \nПроверьте, пожалуйста, Вашу инсталляцию и в случае необходимости\nисталлируйте желаемый язык";
+    TEXT[ russian ] = "Тезаурус для выбранного языка не доступен. \nПроверьте, пожалуйста, вашу инсталляцию и в случае необходимости\nинсталлируйте желаемый язык";
     TEXT[ polish ] = "Tezaurus jest niedostкpny dla wybranego jкzyka. \nProszк sprawdziж instalacjк i zainstalowaж \newentualnie potrzebny jкzyk.";
     TEXT[ japanese ] = "‘I‘р‚і‚к‚ЅЊѕЊк—p‚М—ЮЊкЋ«“T‚НЋg—p‚Е‚«‚Ь‚№‚сЃB\nМЯЫёЮЧС‚МІЭЅД°Щ‚рБЄЇё‚µ‚ДЃA\nЏкЌ‡‚Й‚ж‚Б‚Д‚Н‚ІЉу–]‚МЊѕЊк‚рІЭЅД°Щ‚µ‚Д‰є‚і‚ўЃB";
     TEXT[ chinese_traditional ] = "±zі]©wЄє»yЁҐЄ©Ґ»ЁS¦іЄюҐ[µьЁеҐ\\ЇаЎC\nЅР±zАЛ¬d¦wёЛЄєµ{¦ЎЎC\n­Y¦іҐІ­nЎMЅР±z¦wёЛ­nЁПҐОЄє»yЁҐЄ©Ґ»ЎC";
