@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 12:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1485,22 +1489,70 @@ void SdXMLExport::ImpWriteDrawPageInfos()
                     // write draw-style attributes
                     SvXMLElementExport aDSE(*this, XML_NAMESPACE_STYLE, sXML_style, sal_True, sal_True);
 
-                    if(IsImpress())
+                    // write draw-style properites
+                    uno::Reference< beans::XPropertySet > xPropSet1(xDrawPage, uno::UNO_QUERY);
+                    if(xPropSet1.is())
                     {
-                        // write draw-style properites
-                        uno::Reference< beans::XPropertySet > xPropSet(xDrawPage, uno::UNO_QUERY);
-                        if(xPropSet.is())
+                        // since the background items are in a different propertyset
+                        // which itself is a property of the pages property set
+                        // we now merge these two propertysets if possible to simulate
+                        // a single propertyset with all draw page properties
+                        const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                        uno::Reference< beans::XPropertySet > xPropSet2;
+                        uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                        if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
                         {
-                            const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPresPagePropsMapper();
-                            std::vector< XMLPropertyState > xPropStates = aMapperRef->Filter( xPropSet );
+                            uno::Any aAny( xPropSet1->getPropertyValue( aBackground ) );
+                            aAny >>= xPropSet2;
+                        }
 
-                            if(xPropStates.size())
-                            {
-                                aMapperRef->exportXML(GetDocHandler(), xPropStates,
-                                    GetMM100UnitConverter(), GetNamespaceMap());
-                            }
+                        uno::Reference< beans::XPropertySet > xPropSet;
+                        if( xPropSet2.is() )
+                            xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
+                        else
+                            xPropSet = xPropSet1;
+
+                        const UniReference< XMLPropertySetMapper > aMapperRef( GetPresPagePropsMapper() );
+                        std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet ) );
+
+                        if(xPropStates.size())
+                        {
+                            ImpPresPageDrawStylePropMapper aExpPropMapper(aMapperRef);
+
+                            aExpPropMapper.exportXML(GetDocHandler(), xPropStates,
+                                GetMM100UnitConverter(), GetNamespaceMap());
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void SdXMLExport::ImpWritePresentationStyles()
+{
+    if(IsImpress())
+    {
+        for(sal_uInt32 nCnt = 0L; nCnt < mnDocMasterPageCount; nCnt++)
+        {
+            uno::Any aAny(mxDocMasterPages->getByIndex(nCnt));
+            uno::Reference<container::XNamed> xNamed;
+
+            if(aAny >>= xNamed)
+            {
+                // write presentation styles (ONLY if presentation)
+                if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
+                {
+                    XMLStyleExport aStEx(*this,
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)), GetAutoStylePool().get());
+                    const UniReference< XMLPropertySetMapper > aMapperRef = GetPropertySetMapper();
+
+                    OUString aPrefix = xNamed->getName();
+                    aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+                    aStEx.exportStyleFamily(xNamed->getName(),
+                        XML_STYLE_FAMILY_SD_PRESENTATION_NAME, aMapperRef, FALSE,
+                        XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
                 }
             }
         }
@@ -3007,6 +3059,9 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
     // write page-master infos
     ImpWritePageMasterInfos();
 
+    // write presentation styles
+    ImpWritePresentationStyles();
+
     // prepare draw:style-name for page export
     ImpPrepDrawPageInfos();
 
@@ -3152,20 +3207,6 @@ void SdXMLExport::_ExportMasterStyles()
 
             // write masterpage
             SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, sXML_master_page, sal_True, sal_True);
-
-            // write presentation styles (ONLY if presentation)
-            if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
-            {
-                XMLStyleExport aStEx(*this,
-                    OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)), GetAutoStylePool().get());
-                const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPropertySetMapper();
-
-                OUString aPrefix = xNamed->getName();
-                aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
-                aStEx.exportStyleFamily(xNamed->getName(),
-                    XML_STYLE_FAMILY_SD_PRESENTATION_NAME, aMapperRef, FALSE,
-                    XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
-            }
 
             // write graphic objects on this master page (if any)
             uno::Reference< container::XIndexAccess > xShapes(xMasterPage, uno::UNO_QUERY);
