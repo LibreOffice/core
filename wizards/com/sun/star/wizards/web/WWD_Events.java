@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Events.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $  $Date: 2004-11-27 09:09:20 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,6 @@ public abstract class WWD_Events extends WWD_Startup {
         disableDocUpDown();
     }
 
-    private static final String[] EXTENSIONS = { "StarOffice XML (Writer)", "StarOffice XML (Calc)", "sxi", "sxd", "*" };
 
     /**
      * The user clicks the "Add" button.
