@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScHeaderFieldsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:29 $
+ *  last change:$Date: 2003-02-03 12:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  * Test for object which is represented by collection of
  * text fields conained in the text of a page header. <p>
@@ -149,8 +152,7 @@ public class ScHeaderFieldsObj extends TestCase {
      * @see com.sun.star.text.XText
      * @see com.sun.star.text.XTextContent
      */
-    public TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;
         XPropertySet PropSet;
@@ -166,12 +168,17 @@ public class ScHeaderFieldsObj extends TestCase {
 
         XNameAccess StyleFamNames = StyleFam.getStyleFamilies();
         try{
-            PageStyles = (XNameAccess)StyleFamNames.getByName("PageStyles");
-            StdStyle = (XStyle)PageStyles.getByName("Default");
+            PageStyles = (XNameAccess) AnyConverter.toObject(
+                new Type(XNameAccess.class),StyleFamNames.getByName("PageStyles"));
+            StdStyle = (XStyle) AnyConverter.toObject(
+                        new Type(XStyle.class),PageStyles.getByName("Default"));
         } catch(com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by name", e);
         } catch(com.sun.star.container.NoSuchElementException e){
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get by name", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by name", e);
         }
@@ -185,12 +192,16 @@ public class ScHeaderFieldsObj extends TestCase {
         // first we write what we are intend to do to log file
         log.println( "creating a test environment" );
         try {
-            RPHC = (XHeaderFooterContent)
-                PropSet.getPropertyValue("RightPageHeaderContent");
+            RPHC = (XHeaderFooterContent) AnyConverter.toObject(
+                new Type(XHeaderFooterContent.class),
+                    PropSet.getPropertyValue("RightPageHeaderContent"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get HeaderContent", e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get HeaderContent", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get HeaderContent", e);
         }
