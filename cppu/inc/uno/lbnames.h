@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:26:36 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,9 @@ provoking error here, because PP ignores #error
 #define UNO_LB_UNO "uno"
 /** Environment type name for ANSI C compilers. */
 #define UNO_LB_C "c"
-/** Environment type name for java 1.1 compatible virtual machine. */
+/** Environment type name for Java 1.3.1 compatible virtual machine. */
 #define UNO_LB_JAVA "java"
+/** Environment type name for CLI (Common Language Infrastructure). */
+#define UNO_LB_CLI "cli"
 
 #endif
