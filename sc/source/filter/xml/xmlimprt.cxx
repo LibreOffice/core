@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:39:57 $
+ *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,6 +759,26 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
 
 //----------------------------------------------------------------------------
 
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.importer.Calc" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLImport_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLImport;
+}
+
+//----------------------------------------------------------------------------
+
 const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
 {
     if( !pDocElemTokenMap )
@@ -1235,13 +1255,10 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
     return pContext;
 }
 
-ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::frame::XModel> xTempModel,
-                            com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
-                            sal_Bool bLDoc, sal_uInt16 nStyleFamMask ) :
-    SvXMLImport( xTempModel, rGrfContainer ),
+ScXMLImport::ScXMLImport() :
     pDoc( NULL ),
-    bLoadDoc( bLDoc ),
-    nStyleFamilyMask( nStyleFamMask ),
+    bLoadDoc( sal_False ),
+    nStyleFamilyMask( 0 ),
 //  rDoc( rD ),
 //  pI18NMap( new SvI18NMap ),
     pDocElemTokenMap( 0 ),
@@ -1330,16 +1347,11 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TABLE, sXML_np__table,
                                   sXML_n_table, XML_NAMESPACE_TABLE );*/
 
-    pDoc = ScXMLConverter::GetScDocument( xTempModel );
-    DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
     xScPropHdlFactory = new XMLScPropHdlFactory;
     xCellStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, xScPropHdlFactory);
     xColumnStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, xScPropHdlFactory);
     xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesProperties, xScPropHdlFactory);
     xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory);
-    uno::Reference<document::XActionLockable> xActionLockable(xTempModel, uno::UNO_QUERY);
-    if (xActionLockable.is())
-        xActionLockable->addActionLock();
 }
 
 ScXMLImport::~ScXMLImport()
@@ -1418,6 +1430,22 @@ ScXMLImport::~ScXMLImport()
     uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->removeActionLock();
+}
+
+void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XComponent>& xComponent )
+                            throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SvXMLImport::setTargetDocument( xComponent );
+
+    uno::Reference<frame::XModel> xModel(xComponent, uno::UNO_QUERY);
+    pDoc = ScXMLConverter::GetScDocument( xModel );
+    DBG_ASSERT( pDoc, "ScXMLImport::setTargetDocument - no ScDocument!" );
+    if (!pDoc)
+        throw lang::IllegalArgumentException();
+
+    uno::Reference<document::XActionLockable> xActionLockable(xComponent, uno::UNO_QUERY);
+    if (xActionLockable.is())
+        xActionLockable->addActionLock();
 }
 
 // ---------------------------------------------------------------------

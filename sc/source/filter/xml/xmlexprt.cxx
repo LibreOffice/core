@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-19 15:03:59 $
+ *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,28 @@
 using namespace rtl;
 using namespace com::sun::star;
 
+//----------------------------------------------------------------------------
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.sax.exporter.Calc" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL ScXMLExport_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLExport" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_createInstance(
+                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new ScXMLExport;
+}
+
+//----------------------------------------------------------------------------
+
 void ScXMLExport::SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol)
 {
     if(nCol > nLastColumns[nTable]) nLastColumns[nTable] = nCol;
@@ -292,14 +314,11 @@ sal_Int16 ScXMLExport::GetFieldUnit()
     return 0;
 }
 
-ScXMLExport::ScXMLExport( const uno::Reference <frame::XModel>& xTempModel, const NAMESPACE_RTL(OUString)& rFileName,
-                        const uno::Reference<xml::sax::XDocumentHandler>& rHandler,
-                        const uno::Reference<document::XGraphicObjectResolver >& rGrfContainer,
-                        sal_Bool bShowProgr ) :
-SvXMLExport( rFileName, rHandler, xTempModel, rGrfContainer,
-             GetFieldUnit() ), xModel(xTempModel),
+
+ScXMLExport::ScXMLExport() :
+    SvXMLExport( (MapUnit)GetFieldUnit(), sXML_spreadsheet ),
     pDoc(NULL),
-    mbShowProgress( bShowProgr ),
+    mbShowProgress( sal_False ),
     nLastColumns(SC_DEFAULT_TABLE_COUNT, 0),
     nLastRows(SC_DEFAULT_TABLE_COUNT, 0),
     pColumnStyles(NULL),
@@ -324,7 +343,6 @@ SvXMLExport( rFileName, rHandler, xTempModel, rGrfContainer,
     pDetectiveObjContainer(NULL),
     pChangeTrackingExportHelper(NULL)
 {
-    pDoc = ScXMLConverter::GetScDocument( xTempModel );
     pGroupColumns = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_column_group);
     pGroupRows = new ScMyOpenCloseColumnRowGroup(*this, sXML_table_row_group);
     pColumnStyles = new ScColumnRowStyles();
@@ -336,23 +354,8 @@ SvXMLExport( rFileName, rHandler, xTempModel, rGrfContainer,
     pValidationsContainer = new ScMyValidationsContainer();
     pDetectiveObjContainer = new ScMyDetectiveObjContainer();
     pCellsItr = new ScMyNotEmptyCellsIterator(*this);
-    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
-    DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
-    if ( xSpreadDoc.is() )
-    {
-        uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-        uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-        if ( xIndex.is() )
-        {
-            sal_Int32 nTableCount = xIndex->getCount();
-            if (nTableCount > SC_DEFAULT_TABLE_COUNT)
-            {
-                nLastColumns.resize(nTableCount, 0);
-                nLastRows.resize(nTableCount, 0);
-            }
-        }
-    }
+
+    // document is not set here - create ScChangeTrackingExportHelper later
 
     xScPropHdlFactory = new XMLScPropHdlFactory;
     xCellStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, xScPropHdlFactory);
@@ -401,6 +404,38 @@ ScXMLExport::~ScXMLExport()
     if (pChangeTrackingExportHelper)
         delete pChangeTrackingExportHelper;
 }
+
+void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
+                            throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SvXMLExport::setSourceDocument( xComponent );
+
+    xModel = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY);
+    pDoc = ScXMLConverter::GetScDocument( xModel );
+    DBG_ASSERT( pDoc, "ScXMLExport::setSourceDocument - no ScDocument!" );
+    if (!pDoc)
+        throw lang::IllegalArgumentException();
+
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
+    if ( xSpreadDoc.is() )
+    {
+        uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+        uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+        if ( xIndex.is() )
+        {
+            sal_Int32 nTableCount = xIndex->getCount();
+            if (nTableCount > SC_DEFAULT_TABLE_COUNT)
+            {
+                nLastColumns.resize(nTableCount, 0);
+                nLastRows.resize(nTableCount, 0);
+            }
+        }
+    }
+
+    // create ScChangeTrackingExportHelper after document is known
+    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
+}
+
 
 void ScXMLExport::_ExportMeta()
 {

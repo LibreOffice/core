@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:39:57 $
+ *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,10 +754,13 @@ public:
     rtl::OUString sSC_string;
     rtl::OUString sSC_boolean;
 
-    ScXMLImport( com::sun::star::uno::Reference <com::sun::star::frame::XModel> xTempModel,
-                 com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
-                 sal_Bool bLoadDoc, sal_uInt16 nStyleFamMask );
+    ScXMLImport();
     ~ScXMLImport();
+
+    // XImporter
+    virtual void SAL_CALL setTargetDocument(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+                throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // namespace office
     SvXMLImportContext *CreateMetaContext(

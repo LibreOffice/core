@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:39:57 $
+ *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,12 +205,26 @@ sal_Bool ScXMLImportWrapper::Import()
             xGrfContainer = pGraphicHelper;
         }
 
-        uno::Reference<xml::sax::XDocumentHandler> xFilter = new ScXMLImport(
-            xModel, xGrfContainer, bLoadDoc, nStyleFamilyMask);
+        uno::Reference<task::XStatusIndicator> xStatusIndicator;
+
+        uno::Sequence<uno::Any> aArgs(2);
+        uno::Any* pArgs = aArgs.getArray();
+        pArgs[0] <<= xGrfContainer;
+        pArgs[1] <<= xStatusIndicator;
+
+        uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
+            xServiceFactory->createInstanceWithArguments(
+                OUString::createFromAscii( "com.sun.star.office.sax.importer.Calc" ), aArgs ),
+            uno::UNO_QUERY );
+        DBG_ASSERT( xDocHandler.is(), "can't get Calc importer" );
+        uno::Reference<document::XImporter> xImporter( xDocHandler, uno::UNO_QUERY );
+        uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
+        if (xImporter.is())
+            xImporter->setTargetDocument( xComponent );
 
         // connect parser and filter
         uno::Reference<xml::sax::XParser> xParser( xXMLParser, uno::UNO_QUERY );
-        xParser->setDocumentHandler( xFilter );
+        xParser->setDocumentHandler( xDocHandler );
 
         // parse
         if( xSource.is() )
@@ -299,15 +313,37 @@ sal_Bool ScXMLImportWrapper::Export()
             xGrfContainer = pGraphicHelper;
         }
 
-        ScXMLExport *pExp = new ScXMLExport( xModel, sFileName, xHandler, xGrfContainer, sal_False );
-        uno::Reference< document::XExporter > xExporter( pExp );
+        uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
-        sal_Bool bRet = (0 == pExp->exportDoc( sXML_spreadsheet ));
+        uno::Sequence<uno::Any> aArgs(3);
+        uno::Any* pArgs = aArgs.getArray();
+        pArgs[0] <<= xGrfContainer;
+        pArgs[1] <<= xStatusIndicator;
+        pArgs[2] <<= xHandler;
+
+        uno::Reference<document::XFilter> xFilter(
+            xServiceFactory->createInstanceWithArguments(
+                OUString::createFromAscii( "com.sun.star.office.sax.exporter.Calc" ), aArgs ),
+            uno::UNO_QUERY );
+        DBG_ASSERT( xFilter.is(), "can't get Calc exporter" );
+        uno::Reference<document::XExporter> xExporter( xFilter, uno::UNO_QUERY );
+        uno::Reference<lang::XComponent> xComponent( xModel, uno::UNO_QUERY );
+        if (xExporter.is())
+            xExporter->setSourceDocument( xComponent );
+
+        sal_Bool bRet = sal_False;
+        if ( xFilter.is() )
+        {
+            uno::Sequence<beans::PropertyValue> aDescriptor(1);
+            beans::PropertyValue* pProps = aDescriptor.getArray();
+            pProps[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ) );
+            pProps[0].Value <<= sFileName;
+
+            bRet = xFilter->filter( aDescriptor );
+        }
 
         if( pStorage )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
-
-//      delete pExp;
 
         return bRet;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-01-19 17:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,20 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
+// Calc XML import
+extern uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw();
+extern rtl::OUString SAL_CALL ScXMLImport_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
+            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+
+// Calc XML export
+extern uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_getSupportedServiceNames() throw();
+extern rtl::OUString SAL_CALL ScXMLExport_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_createInstance(
+            const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+
+//------------------------------------------------------------------------
+
 //  Anzahl der Funktionen, die als zuletzt benutzt gespeichert werden
 //! Define mit funcpage.hxx und dwfunctr.hxx zusammenfassen !!!
 #define LRU_MAX 10
@@ -139,6 +153,21 @@ SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "ScSpreadsheetSettings", SCSPREAD
 
 //------------------------------------------------------------------------
 
+void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
+                        const rtl::OUString& rImplementationName,
+                        const uno::Sequence< rtl::OUString >& rServices )
+                    throw( registry::InvalidRegistryException )
+{
+    rtl::OUString aImpl = rtl::OUString::createFromAscii( "/" );
+    aImpl += rImplementationName;
+    aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+    uno::Reference<registry::XRegistryKey> xNewKey = pRegistryKey->createKey(aImpl);
+
+    const rtl::OUString* pArray = rServices.getConstArray();
+    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
+        xNewKey->createKey( pArray[i]);
+}
+
 extern "C" {
 
 void SAL_CALL component_getImplementationEnvironment(
@@ -154,53 +183,33 @@ sal_Bool SAL_CALL component_writeInfo(
     {
         try
         {
-            INT32 i;
-            uno::Reference<registry::XRegistryKey> xNewKey;
+            lcl_WriteInfo( pRegistryKey,
+                            ScSpreadsheetSettings::getImplementationName_Static(),
+                            ScSpreadsheetSettings::getSupportedServiceNames_Static() );
 
-            rtl::OUString aImpl = rtl::OUString::createFromAscii( "/" );
-            aImpl += ScSpreadsheetSettings::getImplementationName_Static();
-            aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-            xNewKey = reinterpret_cast<registry::XRegistryKey*>(pRegistryKey)->createKey(aImpl);
-            uno::Sequence <rtl::OUString> aSequ = ScSpreadsheetSettings::getSupportedServiceNames_Static();
-            const rtl::OUString * pArray = aSequ.getConstArray();
-            for( i = 0; i < aSequ.getLength(); i++ )
-                xNewKey->createKey( pArray[i] );
+            lcl_WriteInfo( pRegistryKey,
+                            ScRecentFunctionsObj::getImplementationName_Static(),
+                            ScRecentFunctionsObj::getSupportedServiceNames_Static() );
 
-            aImpl = rtl::OUString::createFromAscii( "/" );
-            aImpl += ScRecentFunctionsObj::getImplementationName_Static();
-            aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-            xNewKey = reinterpret_cast<registry::XRegistryKey*>(pRegistryKey)->createKey(aImpl);
-            aSequ = ScRecentFunctionsObj::getSupportedServiceNames_Static();
-            pArray = aSequ.getConstArray();
-            for( i = 0; i < aSequ.getLength(); i++ )
-                xNewKey->createKey( pArray[i] );
+            lcl_WriteInfo( pRegistryKey,
+                            ScFunctionListObj::getImplementationName_Static(),
+                            ScFunctionListObj::getSupportedServiceNames_Static() );
 
-            aImpl = rtl::OUString::createFromAscii( "/" );
-            aImpl += ScFunctionListObj::getImplementationName_Static();
-            aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-            xNewKey = reinterpret_cast<registry::XRegistryKey*>(pRegistryKey)->createKey(aImpl);
-            aSequ = ScFunctionListObj::getSupportedServiceNames_Static();
-            pArray = aSequ.getConstArray();
-            for( i = 0; i < aSequ.getLength(); i++ )
-                xNewKey->createKey( pArray[i] );
+            lcl_WriteInfo( pRegistryKey,
+                            ScAutoFormatsObj::getImplementationName_Static(),
+                            ScAutoFormatsObj::getSupportedServiceNames_Static() );
 
-            aImpl = rtl::OUString::createFromAscii( "/" );
-            aImpl += ScAutoFormatsObj::getImplementationName_Static();
-            aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-            xNewKey = reinterpret_cast<registry::XRegistryKey*>(pRegistryKey)->createKey(aImpl);
-            aSequ = ScAutoFormatsObj::getSupportedServiceNames_Static();
-            pArray = aSequ.getConstArray();
-            for( i = 0; i < aSequ.getLength(); i++ )
-                xNewKey->createKey( pArray[i] );
+            lcl_WriteInfo( pRegistryKey,
+                            ScFunctionAccess::getImplementationName_Static(),
+                            ScFunctionAccess::getSupportedServiceNames_Static() );
 
-            aImpl = rtl::OUString::createFromAscii( "/" );
-            aImpl += ScFunctionAccess::getImplementationName_Static();
-            aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-            xNewKey = reinterpret_cast<registry::XRegistryKey*>(pRegistryKey)->createKey(aImpl);
-            aSequ = ScFunctionAccess::getSupportedServiceNames_Static();
-            pArray = aSequ.getConstArray();
-            for( i = 0; i < aSequ.getLength(); i++ )
-                xNewKey->createKey( pArray[i] );
+            lcl_WriteInfo( pRegistryKey,
+                            ScXMLImport_getImplementationName(),
+                            ScXMLImport_getSupportedServiceNames() );
+
+            lcl_WriteInfo( pRegistryKey,
+                            ScXMLExport_getImplementationName(),
+                            ScXMLExport_getSupportedServiceNames() );
 
             return sal_True;
         }
@@ -255,6 +264,20 @@ void * SAL_CALL component_getFactory(
                 ScFunctionAccess::getImplementationName_Static(),
                 ScFunctionAccess_CreateInstance,
                 ScFunctionAccess::getSupportedServiceNames_Static() );
+
+    if ( aImpl == ScXMLImport_getImplementationName() )
+        xFactory = cppu::createSingleFactory(
+                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
+                ScXMLImport_getImplementationName(),
+                ScXMLImport_createInstance,
+                ScXMLImport_getSupportedServiceNames() );
+
+    if ( aImpl == ScXMLExport_getImplementationName() )
+        xFactory = cppu::createSingleFactory(
+                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
+                ScXMLExport_getImplementationName(),
+                ScXMLExport_createInstance,
+                ScXMLExport_getSupportedServiceNames() );
 
     void* pRet = NULL;
     if (xFactory.is())

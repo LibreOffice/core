@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:39:57 $
+ *  last change: $Author: nn $ $Date: 2001-01-19 17:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,13 +224,13 @@ protected:
     virtual XMLShapeExport* CreateShapeExport();
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 public:
-    ScXMLExport( const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xTempModel, const ::rtl::OUString& rFileName,
-                 const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::xml::sax::XDocumentHandler>& rHandler,
-                 const ::com::sun::star::uno::Reference<
-                 ::com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
-                 sal_Bool bShowProgr );
+    ScXMLExport();
     virtual ~ScXMLExport();
+
+    // XExporter
+    virtual void SAL_CALL setSourceDocument(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+                throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     com::sun::star::uno::Reference <com::sun::star::frame::XModel>& GetXModel() { return xModel; }
     const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& GetXModel() const { return xModel; }
