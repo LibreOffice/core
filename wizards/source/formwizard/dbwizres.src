@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 15:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5588,6 +5588,18 @@ String RID_DB_REPORT_WIZARD_START + 73
 };
 
 
+String RID_DB_REPORT_WIZARD_START + 74
+{
+    Text = "Das Sortierkriterium '<FIELDNAME>' wurde zweimal ausgewählt. Jedes Sortierkriterium kann nur einmal gewählt werden.";
+    Text [ english_us ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+};
+
+
+String RID_DB_REPORT_WIZARD_START + 75
+{
+    Text = "Hinweis: Blindtext wird bei der Fertigstellung des Berichtes durch Datenbankinhalte ersetzt.";
+    Text [ english_us ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+};
 
 
 
