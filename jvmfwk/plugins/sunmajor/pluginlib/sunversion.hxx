@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:41:23 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include "rtl/ustring.hxx"
 
-namespace stoc_javadetect {
+namespace jfw_plugin {
 // Define SUNVERSION_SELFTEST to run a test when this lib is loaded
 //#define SUNVERSION_SELFTEST
 
@@ -144,14 +144,6 @@ protected:
 
     bool m_bValid;
 };
-
-/**
-    @param usJavaHome
-    File URL of the java installation directory.
-*/
-SunVersion initVersion(const rtl::OUString& usJavaHome);
-
-SunVersion extractVersion(const rtl::OString & sVersionLine);
 
 }
 
