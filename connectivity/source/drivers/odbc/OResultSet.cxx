@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:09:59 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_bRowInserted(sal_False)
                         ,m_bRowDeleted(sal_False)
                         ,m_bUseFetchScroll(sal_False)
+                        ,m_nCurrentFetchState(0)
 {
     osl_incrementInterlockedCount( &m_refCount );
     try
@@ -1161,15 +1162,22 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
      ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
+    TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
+        ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::std::select2nd<TBookmarkPosMap::value_type>()));
 
-    sal_uInt32 nValue = SQL_UB_OFF;
-    SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
-    if(nValue == SQL_UB_OFF)
-        throw SQLException();
+    if ( aFind == m_aPosToBookmarks.end() )
+    {
+        sal_uInt32 nValue = SQL_UB_OFF;
+        SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
+        if(nValue == SQL_UB_OFF)
+            throw SQLException();
 
-    m_aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
-    m_aPosToBookmarks[m_aBookmark] = m_nRowPos;
-    OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
+        m_aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
+        m_aPosToBookmarks[m_aBookmark] = m_nRowPos;
+        OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
+    }
+    else
+        m_aBookmark = aFind->first;
     return makeAny(m_aBookmark);
 }
 // -------------------------------------------------------------------------
@@ -1579,8 +1587,20 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
             nFetchOrientation = SQL_FETCH_RELATIVE;
             break;
         case IResultSetHelper::ABSOLUTE:
-        case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
             nFetchOrientation = SQL_FETCH_ABSOLUTE;
+            break;
+        case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
+            {
+                TBookmarkPosMap::iterator aIter = m_aPosToBookmarks.begin();
+                TBookmarkPosMap::iterator aEnd = m_aPosToBookmarks.end();
+                for (; aIter != aEnd; ++aIter)
+                {
+                    if ( aIter->second == _nOffset )
+                        return moveToBookmark(makeAny(aIter->first));
+                }
+                OSL_ENSURE(0,"Bookmark not found!");
+                return sal_False;
+            }
             break;
     }
 
@@ -1593,6 +1613,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
     else
         m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,nFetchOrientation,_nOffset);
 
+    OSL_TRACE( __FILE__": OSkipDeletedSet::OResultSet::move(%d,%d), FetchState = %d",nFetchOrientation,_nOffset,m_nCurrentFetchState);
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
     if ( m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO )
@@ -1619,6 +1640,14 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
                 m_nRowPos = _nOffset;
                 break;
         }
+        sal_uInt32 nValue = SQL_UB_OFF;
+        SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
+        if ( nValue != SQL_UB_OFF )
+        {
+            m_aBookmark = OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,0,SQL_C_VARBOOKMARK,m_bWasNull,**this);
+            m_aPosToBookmarks[m_aBookmark] = m_nRowPos;
+            OSL_ENSURE(m_aBookmark.getLength(),"Invalid bookmark from length 0!");
+        }
     }
     else if ( IResultSetHelper::PRIOR == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA )
         m_nRowPos = 0;
@@ -1631,7 +1660,8 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 sal_Int32 OResultSet::getDriverPos() const
 {
     sal_Int32 nValue = 0;
-    N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0);
+    SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_NUMBER,&nValue,SQL_IS_UINTEGER,0);
+    OSL_TRACE( __FILE__": OResultSet::getDriverPos() = Ret = %d, RowNum = %d, RowPos = %d",nRet,nValue , m_nRowPos);
     return nValue ? nValue : m_nRowPos;
 }
 // -----------------------------------------------------------------------------
