@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-23 13:44:05 $
+ *  last change: $Author: kr $ $Date: 2000-10-31 17:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
 static sal_Bool               bDoHardKill = sal_False;
 static sal_Bool               bSetSEGVHandler = sal_False;
+static sal_Bool               bSetWINCHHandler = sal_False;
 
 static void SignalHandlerFunction(int);
 extern oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
@@ -150,7 +151,6 @@ static sal_Bool InitSignal()
     struct sigaction act;
     struct sigaction oact;
 
-    /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     char ProgFile[512];
 
     if ((osl_psz_getExecutableFile(ProgFile, sizeof(ProgFile)) ==  osl_Process_E_None) &&
@@ -171,10 +171,10 @@ static sal_Bool InitSignal()
         //   the office sets the signal handler during startup
         //   java can than overwrite it, if needed
         bSetSEGVHandler = sal_True;
+
+        // WORKAROUND FOR WINCH HANDLER (SEE ABOVE)
+        bSetWINCHHandler = sal_True;
     }
-
-    /* Portal Demo HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
 
     SignalListMutex = osl_createMutex();
 
@@ -187,7 +187,8 @@ static sal_Bool InitSignal()
     for (i = 0; i < NoSignals; i++)
     {
         /* hack: stomcatd is attaching JavaVM wich dont work with an sigaction(SEGV) */
-        if (bSetSEGVHandler || (Signals[i].Signal != SIGSEGV))
+        if ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
+        && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH))
         {
             if (Signals[i].Action != ACT_SYSTEM)
             {
