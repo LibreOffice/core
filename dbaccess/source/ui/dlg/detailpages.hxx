@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 08:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@ namespace dbaui
         OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs, USHORT nControlFlags);
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
         virtual ~OCommonBehaviourTabPage();
+
+        sal_Bool adjustUTF8(const SfxItemSet& _rSet);
+            // returns sal_True if with the settings in _rSet, a charset UTF-8 is allowed
     };
 
     //========================================================================
@@ -281,6 +284,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/04/20 13:38:06  oj
+ *  #85736# new checkbox for odbc
+ *
  *  Revision 1.2  2001/02/05 15:42:07  fs
  *  enlargen the tab pages -> some redesigns
  *
