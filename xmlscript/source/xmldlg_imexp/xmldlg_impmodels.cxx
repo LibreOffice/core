@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-23 13:18:52 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 12:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1792,7 +1792,7 @@ void WindowElement::endElement()
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
         pStyle->importBackgroundColorStyle( xProps );
-        pStyle->importBorderStyle( xProps );
+//          pStyle->importBorderStyle( xProps );
         pStyle->importFontStyle( xProps );
     }
 

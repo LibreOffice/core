@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
+ *  last change: $Author: dbo $ $Date: 2001-12-14 12:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,8 +860,8 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     Style aStyle( 0x1 | 0x4 | 0x8 );
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
-        aStyle._set |= 0x4;
+//      if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+//          aStyle._set |= 0x4;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
         aStyle._set |= 0x8;
     if (aStyle._set)
