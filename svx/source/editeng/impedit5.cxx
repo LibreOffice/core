@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-02 11:57:24 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ BOOL ImpEditEngine::Repeat( EditView* /* pView */ )
     return FALSE;
 }
 
-SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel )
+SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
 {
     DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
 
@@ -430,48 +430,54 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel )
         {
             if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
             {
-                // Nicht nur, wenn gesetzt, sondern auch Defaults
-                /*
-                if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON )
-                    aCurSet.Put( pNode->GetContentAttribs().GetItems().Get( nWhich ) );
-                else if ( pStyle && ( pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_ON ) )
-                    aCurSet.Put( pStyle->GetItemSet().Get( nWhich ) );
-                */
-                // GetItem() hohlt das richtige...
-                const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
-                aCurSet.Put( rItem );
+                if ( !bOnlyHardAttrib )
+                {
+                    const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
+                    aCurSet.Put( rItem );
+                }
+                else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON )
+                {
+                    const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItems().Get( nWhich );
+                    aCurSet.Put( rItem );
+                }
             }
             else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
             {
-                // Generell vergleichen, weil bei SFX_ITEM_OFF das Default-Item aktiv ist.
-//              if ( ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON ) ||
-//                   ( pStyle && ( pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_ON ) ) )
+                const SfxPoolItem* pItem = NULL;
+                if ( !bOnlyHardAttrib )
                 {
-                    // GetItem() hohlt das richtige...
-                    const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
-                    if ( rItem != aCurSet.Get( nWhich ) )
-                    {
-                        // Problem: Wenn Absatzvorlage mit z.B. Font,
-                        // aber Font hart und anders und komplett in Selektion
-                        // Falsch, wenn invalidiert....
-                        // => Lieber nicht invalidieren, UMSTELLEN!
-                        // Besser waere, Absatzweise ein ItemSet zu fuellen
-                        // und dieses mit dem gesmten vergleichen.
+                    pItem = &pNode->GetContentAttribs().GetItem( nWhich );
+                }
+                else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_ON )
+                {
+                    pItem = &pNode->GetContentAttribs().GetItems().Get( nWhich );
+                }
+                // pItem can only be NULL when bOnlyHardAttrib...
+                if ( !pItem || ( *pItem != aCurSet.Get( nWhich ) ) )
+                {
+                    // Problem: Wenn Absatzvorlage mit z.B. Font,
+                    // aber Font hart und anders und komplett in Selektion
+                    // Falsch, wenn invalidiert....
+                    // => Lieber nicht invalidieren, UMSTELLEN!
+                    // Besser waere, Absatzweise ein ItemSet zu fuellen
+                    // und dieses mit dem gesmten vergleichen.
 //                      aCurSet.InvalidateItem( nWhich );
-                        if ( nWhich <= EE_PARA_END )
-                            aCurSet.InvalidateItem( nWhich );
-                    }
+                    if ( nWhich <= EE_PARA_END )
+                        aCurSet.InvalidateItem( nWhich );
                 }
             }
         }
     }
 
     // Leere Slots mit Defaults fuellen...
-    for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++ )
+    if ( !bOnlyHardAttrib )
     {
-        if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+        for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
-            aCurSet.Put( aEditDoc.GetItemPool().GetDefaultItem( nWhich ) );
+            if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+            {
+                aCurSet.Put( aEditDoc.GetItemPool().GetDefaultItem( nWhich ) );
+            }
         }
     }
 

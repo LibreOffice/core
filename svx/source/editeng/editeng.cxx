@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-30 17:46:45 $
+ *  last change: $Author: cl $ $Date: 2001-08-05 15:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,12 +1330,12 @@ void EditEngine::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) con
     pImpEditEngine->GetCharAttribs( nPara, rLst );
 }
 
-SfxItemSet EditEngine::GetAttribs( const ESelection& rSel )
+SfxItemSet EditEngine::GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     EditSelection aSel( pImpEditEngine->
         ConvertSelection( rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos ) );
-    return pImpEditEngine->GetAttribs( aSel );
+    return pImpEditEngine->GetAttribs( aSel, bOnlyHardAttrib );
 }
 
 Font EditEngine::GetStandardFont( sal_uInt16 nPara )
