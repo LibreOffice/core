@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-28 16:51:38 $
+#   last change: $Author: hr $ $Date: 2004-07-23 11:10:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.74 $$"
+LIBSMKREV!:="$$Revision: 1.75 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -400,7 +400,7 @@ SYSSHELLLIB=sysshell.lib
 SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
 JVMACCESSLIB = $(LIBPRE) ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
-XML2LIB = $(LIBPRE) ixml2.lib
+XML2LIB = $(LIBPRE) libxml2.lib
 JVMFWKLIB = $(LIBPRE) ijvmfwk.lib
 
 # #110743#
