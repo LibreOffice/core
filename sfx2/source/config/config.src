@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,10 @@ String STR_EVENTCONFIG
     Text [ swedish ] = "Händelsetilldelning" ;
     Text [ danish ] = "Tildel begivenheder" ;
     Text [ portuguese ] = "Atribuir eventos" ;
-    Text [ portuguese_brazilian ] = "Ereigniszuordnung" ;
+    Text [ portuguese_brazilian ] = "Atribuir eventos" ;
     Text[ chinese_simplified ] = "æŒ‡å®šäº‹ä»¶";
     Text[ russian ] = "Íàçíà÷èòü ñîáûòèÿ";
-    Text[ polish ] = "Przyporz¹dkowanie wydarzeñ";
+    Text[ polish ] = "Przypisz wydarzenia";
     Text[ japanese ] = "ã‚¤ãƒ™ãƒ³ãƒˆã®æŒ‡å®š";
     Text[ chinese_traditional ] = "è¨­å®šå‹•ä½œ";
     Text[ arabic ] = "ÊÚííä ÇáÃÍÏÇË";
@@ -89,6 +89,9 @@ String STR_EVENTCONFIG
     Text[ catalan ] = "Assigna els esdeveniments";
     Text[ finnish ] = "Liitä tapahtumat";
     Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸«à¸•à¸¸à¸à¸²à¸£à¸“à¹Œ";
+    Text[ czech ] = "PÅ™iÅ™adit udÃ¡losti";
+    Text[ hebrew ] = "â€®×”×©××ª ××™×¨×•×¢×™×â€¬";
+    Text[ hindi ] = "à¤˜à¤Ÿà¤¨à¥‹à¤‚ à¤•à¥‹ à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤°à¥‹";
 };
 String STR_FILTERNAME_CFG
 {
@@ -102,7 +105,7 @@ String STR_FILTERNAME_CFG
     Text [ swedish ] = "Konfiguration" ;
     Text [ danish ] = "Konfiguration" ;
     Text [ portuguese ] = "Configuração" ;
-    Text [ portuguese_brazilian ] = "Konfiguration" ;
+    Text [ portuguese_brazilian ] = "Configuração" ;
     Text[ chinese_simplified ] = "é…ç½®";
     Text[ russian ] = "Íàñòğîéêà";
     Text[ polish ] = "Konfiguracja";
@@ -118,6 +121,9 @@ String STR_FILTERNAME_CFG
     Text[ catalan ] = "Configuració";
     Text[ finnish ] = "Kokoonpano";
     Text[ thai ] = "à¹‚à¸„à¸£à¸‡à¹à¸šà¸š";
+    Text[ czech ] = "Konfigurace";
+    Text[ hebrew ] = "â€®×ª×¦×•×¨×”â€¬";
+    Text[ hindi ] = "à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾";
 };
 
 QueryBox DLG_MACROQUERY
@@ -130,7 +136,7 @@ QueryBox DLG_MACROQUERY
     Title[ italian ] = "Esegui macro";
     Title[ portuguese_brazilian ] = "Makro ausf?ren";
     Title[ portuguese ] = "Executar macro";
-    Title[ danish ] = "Udfør makro";
+    Title[ danish ] = "Run Macro";
     Title[ swedish ] = "Kör makro";
     Title[ dutch ] = "Macro uitvoeren";
     Title[ spanish ] = "Ejecutar macro";
@@ -159,7 +165,7 @@ QueryBox DLG_MACROQUERY
         Text [ ENGLISH ] = "Execute" ;
         Text [ portuguese ] = "Executar" ;
         Text [ english_us ] = "Run" ;
-        Text [ portuguese_brazilian ] = "Ausf?ren" ;
+        Text [ portuguese_brazilian ] = "Executar" ;
         Text [ swedish ] = "Kör" ;
         Text [ danish ] = "Udfør" ;
         Text [ italian ] = "Esegui" ;
@@ -168,7 +174,7 @@ QueryBox DLG_MACROQUERY
         Text [ dutch ] = "Uitvoeren" ;
         Text[ chinese_simplified ] = "æ‰§è¡Œ";
         Text[ russian ] = "Âûïîëíèòü";
-        Text[ polish ] = "Wykonaj";
+        Text[ polish ] = "Uruchom";
         Text[ japanese ] = "å®Ÿè¡Œ";
         Text[ chinese_traditional ] = "åŸ·è¡Œ";
         Text[ arabic ] = "ÊäİíĞ";
@@ -181,13 +187,16 @@ QueryBox DLG_MACROQUERY
         Text[ catalan ] = "Ejecutar";
         Text[ finnish ] = "Suorita";
         Text[ thai ] = "Run";
+        Text[ czech ] = "Spustit";
+        Text[ hebrew ] = "â€®×œ×”×¤×¢×™×œâ€¬";
+        Text[ hindi ] = "Run";
     };
     String BTN_CANCEL
     {
         Text = "Nicht Ausführen" ;
         Text [ ENGLISH ] = "Don't execute" ;
         Text [ english_us ] = "Do Not Run" ;
-        Text [ portuguese_brazilian ] = "Nicht Ausf?ren" ;
+        Text [ portuguese_brazilian ] = "Não executar" ;
         Text [ swedish ] = "Kör inte" ;
         Text [ danish ] = "Udfør ikke" ;
         Text [ italian ] = "Non eseguire" ;
@@ -197,7 +206,7 @@ QueryBox DLG_MACROQUERY
         Text [ portuguese ] = "Não executar" ;
         Text[ chinese_simplified ] = "ä¸æ‰§è¡Œ";
         Text[ russian ] = "Íå âûïîëíÿòü";
-        Text[ polish ] = "Nie wykonuj";
+        Text[ polish ] = "Nie uruchamiaj";
         Text[ japanese ] = "å®Ÿè¡Œã—ãªã„";
         Text[ chinese_traditional ] = "ä¸åŸ·è¡Œ";
         Text[ arabic ] = "ÚÏã ÇáÊäİíĞ";
@@ -210,13 +219,16 @@ QueryBox DLG_MACROQUERY
         Text[ catalan ] = "No ejecutar";
         Text[ finnish ] = "Älä suorita";
         Text[ thai ] = "Do Not Run";
+        Text[ czech ] = "NespouÅ¡tÄ›t";
+        Text[ hebrew ] = "â€®×œ× ×œ×”×¤×¢×™×œâ€¬";
+        Text[ hindi ] = "Do Not Run";
     };
     String FT_CANCEL
     {
         Text = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
         Text [english] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
         Text [english_us] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
-        Text[ portuguese ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
+        Text[ portuguese ] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
         Text[ russian ] = "Ìàêğîñ íå âûïîëíÿåòñÿ â ñîîòâåòñòâèè ñ íàñòğîéêàìè çàùèòû. Âûïîëíèòü ìàêğîñ, íåñìîòğÿ íà ıòî?";
         Text[ greek ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
         Text[ dutch ] = "Volgens de beveiligingsopties mag deze macro niet worden uitgevoerd. Wilt u de macro toch uitvoeren?";
@@ -226,23 +238,26 @@ QueryBox DLG_MACROQUERY
         Text[ italian ] = "In base alle impostazioni di sicurezza questa macro non dev'essere eseguita. Volete eseguirla comunque?";
         Text[ danish ] = "Ifølge sikkerhedsindstillingerne skal denne makro ikke udføres. Vil du alligevel udføre den?";
         Text[ swedish ] = "Enligt säkerhetsinställningarna ska det här makrot inte köras. Vill du köra det i alla fall?";
-        Text[ polish ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
-        Text[ portuguese_brazilian ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
+        Text[ polish ] = "Zgodnie z ustawieniami zabezpieczeñ nie nale¿y uruchamiaæ tego makra. Czy mimo to chcesz je uruchomiæ?";
+        Text[ portuguese_brazilian ] = "De acordo com as configurações de segurança, esta macro não deve ser executada. Você deseja executa-la mesmo assim?";
         Text[ japanese ] = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£è¨­å®šã§ã¯ã“ã®ãƒã‚¯ãƒ­ã¯å®Ÿè¡Œã§ããªã„ã¯ãšã§ã™ã€‚ãã‚Œã§ã‚‚å®Ÿè¡Œã—ã¾ã™ã‹ã€‚";
         Text[ korean ] = "ë³´ì•ˆ ì„¤ì •ì— ë”°ë¼ ì´ ë§¤í¬ë¡œëŠ” ì‹¤í–‰ë˜ì–´ì„œëŠ” ì•ˆ ë©ë‹ˆë‹¤.";
         Text[ chinese_simplified ] = "æŒ‰ç…§å®‰å…¨çš„è®¾å®šä¸åº”è¯¥æ‰§è¡Œè¿™ä¸ªå®ã€‚æ‚¨è¿˜æ˜¯è¦æ‰§è¡Œè¿™ä¸ªå®å—ï¼Ÿ";
         Text[ chinese_traditional ] = "ä¾ç…§å®‰å…¨çš„è¨­å®šä¸æ‡‰è©²åŸ·è¡Œé€™å€‹å·¨é›†ã€‚é‚„æ˜¯è¦åŸ·è¡Œé€™å€‹å·¨é›†å—ï¼Ÿ";
-        Text[ turkish ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
+        Text[ turkish ] = "Güvenlik ayarlarına göre, bu makro çalıştırılmamalı. Bu dosyayı gerçekten çalıştırmak istiyor musunuz?";
         Text[ arabic ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
         Text[ catalan ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
         Text[ thai ] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
+        Text[ czech ] = "Podle bezpeÄnostnÃ­ch nastavenÃ­ toto makro nesmÃ­ bÃ½t spuÅ¡tÄ›no. PÅ™ejete si jej pÅ™esto spustit?";
+        Text[ hebrew ] = "â€®×œ×¤×™ ×”×’×“×¨×•×ª ×”××‘×˜×—×”, ××¡×•×¨ ×œ×”×¤×¢×™×œ ×××§×¨×• ×–×”. ×”×× ×œ×”×¤×¢×™×œ×• ×‘×›×œ ×–××ª?â€¬";
+        Text[ hindi ] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
     };
     String FT_OK
     {
         Text = "Möchten Sie dieses Makro ausführen?";
         Text [english] = "Möchten Sie dieses Makro ausführen?";
         Text [english_us] = "Do you want to run the macro?";
-        Text[ portuguese ] = "Möchten Sie dieses Makro ausführen?";
+        Text[ portuguese ] = "Do you want to run the macro?";
         Text[ russian ] = "Âûïîëíèòü ìàêğîñ?";
         Text[ greek ] = "Möchten Sie dieses Makro ausführen?";
         Text[ dutch ] = "Wilt u deze macro uitvoeren?";
@@ -252,16 +267,19 @@ QueryBox DLG_MACROQUERY
         Text[ italian ] = "Volete eseguire questa macro?";
         Text[ danish ] = "Vil du udføre denne makro?";
         Text[ swedish ] = "Vill du köra det här makrot?";
-        Text[ polish ] = "Möchten Sie dieses Makro ausführen?";
-        Text[ portuguese_brazilian ] = "Möchten Sie dieses Makro ausführen?";
+        Text[ polish ] = "Czy chcesz uruchomiæ makro?";
+        Text[ portuguese_brazilian ] = "Você deseja executar esta macro?";
         Text[ japanese ] = "ã“ã®ãƒã‚¯ãƒ­ã‚’å®Ÿè¡Œã—ã¾ã™ã‹ã€‚";
         Text[ korean ] = "ì´ ë§¤í¬ë¡œë¥¼ ì‹¤í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
         Text[ chinese_simplified ] = "æ‚¨è¦æ‰§è¡Œè¿™ä¸ªå®å—ï¼Ÿ";
         Text[ chinese_traditional ] = "è¦åŸ·è¡Œé€™å€‹å·¨é›†å—ï¼Ÿ";
-        Text[ turkish ] = "Möchten Sie dieses Makro ausführen?";
+        Text[ turkish ] = "Bu makroyu çalıştırmak istiyor musunuz?";
         Text[ arabic ] = "Möchten Sie dieses Makro ausführen?";
         Text[ catalan ] = "Möchten Sie dieses Makro ausführen?";
         Text[ thai ] = "Do you want to run the macro?";
+        Text[ czech ] = "Chcete spustit makro?";
+        Text[ hebrew ] = "â€®?×”×× ×œ×”×¤×¢×™×œ ××ª ×”××§×¨×•â€¬";
+        Text[ hindi ] = "Do you want to run the macro?";
     };
     Message[ portuguese ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ russian ] = "Ñğàáîòàëî ñîáûòèå, ïğèíàäëåæàùåå ìàêğîñó $(MACRO). $(TEXT)";
@@ -273,18 +291,37 @@ QueryBox DLG_MACROQUERY
     Message[ italian ] = "Si è verificato l'evento per cui è stata configurata la macro $(MACRO). $(TEXT)";
     Message[ danish ] = "Der er aktiveret en begivenhed, hvortil makroen $(MACRO) er konfigureret. $(TEXT)";
     Message[ swedish ] = "En händelse utlöstes för vilken makrot $(MACRO) har konfigurerats. $(TEXT)";
-    Message[ polish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message[ polish ] = "Nast¹pi³o wydarzenie, z którym zwi¹zane jest makro $(MACRO). $(TEXT)";
     Message[ portuguese_brazilian ] = "Um evento foi iniciado no qual a macro $(MACRO) pertence. $(TEXT)";
     Message[ japanese ] = "ãƒã‚¯ãƒ­ $(MACRO) ã§è¨­å®šã•ã‚Œã¦ã„ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆãŒä½œå‹•ã—ã¾ã—ãŸã€‚$(TEXT)";
     Message[ korean ] = "ë§¤í¬ë¡œ $(MACRO)ê°€ êµ¬ì„±ë˜ì–´ ìˆëŠ” ì´ë²¤íŠ¸ê°€ ì‘ë™ë˜ì—ˆìŠµë‹ˆë‹¤. $(TEXT)";
     Message[ chinese_simplified ] = "å·²ç»å¼•å‘è¿™ä¸ªå® $(MACRO) è®¾å®šå¥½çš„äº‹ä»¶ã€‚$(TEXT)";
     Message[ chinese_traditional ] = "å·²ç¶“å¼•ç™¼é€™å€‹å·¨é›† $(MACRO) è¨­ç½®å¥½çš„å‹•ä½œã€‚$(TEXT)";
-    Message[ turkish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message[ turkish ] = "$(MACRO) nun bağlı olduğu bir işlem etkinleşti.. $(TEXT)";
     Message[ arabic ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ catalan ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ thai ] = "An event was triggered to which the macro $(MACRO) belongs. $(TEXT)";
     Title[ thai ] = "Run Macro";
+    Message[ czech ] = "Nastala udÃ¡lost, ke kterÃ© je pÅ™iÅ™azeno makro $(MACRO). $(TEXT)";
+    Message[ hebrew ] = "â€®××¨×¢ ××™×¨×•×¢ ×©×©×™×™×š ×œ××§×¨×• $(MACRO). $(TEXT)â€¬";
+    Title[ czech ] = "Spustit makro";
+    Title[ hebrew ] = "Makro ausfÃ¼hren";
+    Message[ hindi ] = "An event was triggered to which the macro $(MACRO) belongs. $(TEXT)";
+    Title[ hindi ] = "Run Macro";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
