@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: th $ $Date: 2001-07-09 12:10:29 $
+ *  last change: $Author: th $ $Date: 2001-07-09 17:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <unohelp.hxx>
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
 
 #pragma hdrstop
@@ -1431,6 +1434,8 @@ ImplAllSettingsData::ImplAllSettingsData()
     meUILanguage                = LANGUAGE_SYSTEM;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
+    mpCollatorWrapper           = NULL;
+    mpUICollatorWrapper         = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1455,6 +1460,8 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     meUILanguage                = rData.meUILanguage;
     mpLocaleDataWrapper         = rData.mpLocaleDataWrapper;
     mpUILocaleDataWrapper       = rData.mpUILocaleDataWrapper;
+    mpCollatorWrapper           = rData.mpCollatorWrapper;
+    mpUICollatorWrapper         = rData.mpUICollatorWrapper;
 }
 
 // -----------------------------------------------------------------------
@@ -1896,3 +1903,28 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
         ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetUILocale() );
     return *mpData->mpUILocaleDataWrapper;
 }
+
+// -----------------------------------------------------------------------
+/*
+const CollatorWrapper& AllSettings::GetCollatorWrapper() const
+{
+    if ( !mpData->mpCollatorWrapper )
+    {
+        ((AllSettings*)this)->mpData->mpCollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
+        ((AllSettings*)this)->mpData->mpCollatorWrapper->loadDefaultCollator( GetLocale(), 0 );
+    }
+    return *mpData->mpCollatorWrapper;
+}
+*/
+// -----------------------------------------------------------------------
+/*
+const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
+{
+    if ( !mpData->mpUICollatorWrapper )
+    {
+        ((AllSettings*)this)->mpData->mpUICollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
+        ((AllSettings*)this)->mpData->mpUICollatorWrapper->loadDefaultCollator( GetUILocale(), 0 );
+    }
+    return *mpData->mpUICollatorWrapper;
+}
+*/
