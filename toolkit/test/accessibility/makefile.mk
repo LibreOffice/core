@@ -63,7 +63,6 @@ JAVA_FILES = 								\
     HelpWindow.java							\
     InformationWriter.java					\
     MessageArea.java						\
-    NameProvider.java						\
     NodeFactory.java						\
     NodeHandler.java						\
     NodeMap.java							\
@@ -80,7 +79,6 @@ JAVA_FILES = 								\
     TopWindowListener.java					\
     VectorNode.java
 
-
 JAVA_CLASSPATHS := 			\
     .						\
     $(foreach,i,$(JAR_FILES) $(JAR_PATH)$i) \
@@ -93,8 +91,18 @@ JFLAGS = -deprecation -classpath $(CLASSPATH)
 %.class : %.java
     +$(JAVAC) $(JFLAGS) $<
 
-AccessibilityWorkBench : $(JAVA_FILES:b:+".class")
+%.class : %.java
+    +$(JAVAC) $(JFLAGS) $<
 
+AccessibilityWorkBench : ObjectView $(JAVA_FILES:b:+".class")
+
+ObjectView .SETDIR=ov :
+    @echo "making package ObjectView"
+    dmake
+
+Tools .SETDIR=tools :
+    @echo "making package Tools"
+    dmake
 
 # Create a jar file of all files neccessary to build and run the work bench.
 dist: AccessibilityWorkBench.jar
