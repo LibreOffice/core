@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:24 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
 #include <xmloff/XMLEventsImportContext.hxx>
 #endif
+#include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -103,6 +104,7 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     rtl::OUString   sErrorMessageType;
     rtl::OUString   sBaseCellAddress;
     rtl::OUString   sCondition;
+    sal_Int16       nShowList;
     sal_Bool        bAllowEmptyCell;
     sal_Bool        bDisplayHelp;
     sal_Bool        bDisplayError;
@@ -142,7 +144,7 @@ class ScXMLHelpMessageContext : public SvXMLImportContext
     rtl::OUString   sTitle;
     rtl::OUStringBuffer sMessage;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay : 1;
+    sal_Bool        bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -173,7 +175,7 @@ class ScXMLErrorMessageContext : public SvXMLImportContext
     rtl::OUStringBuffer sMessage;
     rtl::OUString   sMessageType;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay : 1;
+    sal_Bool        bDisplay;
 
     ScXMLContentValidationContext* pValidationContext;
 
@@ -201,7 +203,7 @@ public:
 class ScXMLErrorMacroContext : public SvXMLImportContext
 {
     rtl::OUString   sName;
-    sal_Bool        bExecute : 1;
+    sal_Bool        bExecute;
 
     ScXMLContentValidationContext*  pValidationContext;
     SvXMLImportContextRef           xEventContext;
@@ -283,6 +285,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     sCondition(),
     sBaseCellAddress(),
     bAllowEmptyCell(sal_True),
+    nShowList(sheet::TableValidationVisibility::UNSORTED),
     bDisplayHelp(sal_False),
     bDisplayError(sal_False)
 {
@@ -309,7 +312,27 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
             break;
             case XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL:
                 if (IsXMLToken(sValue, XML_FALSE))
+<<<<<<< xmlcvali.cxx
                     bAllowEmptyCell = sal_False;
+=======
+                    bAllowEmptyCell = sal_False;
+>>>>>>> 1.11.28.2
+            break;
+            case XML_TOK_CONTENT_VALIDATION_SHOW_LIST:
+            {
+                if (IsXMLToken(sValue, XML_NO))
+                {
+                    nShowList = sheet::TableValidationVisibility::INVISIBLE;
+                }
+                else if (IsXMLToken(sValue, XML_UNSORTED))
+                {
+                    nShowList = sheet::TableValidationVisibility::UNSORTED;
+                }
+                else if (IsXMLToken(sValue, XML_SORTED_ASCENDING))
+                {
+                    nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
+                }
+            }
             break;
         }
     }
@@ -391,9 +414,10 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
         rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
         rtl::OUString scell_content_is_date(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-date"));
         rtl::OUString scell_content_is_time(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-time"));
-        rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_between"));
+        rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-between"));
+        rtl::OUString scell_content_is_in_list(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-in-list"));
         rtl::OUString scell_content_text_length(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length"));
-        rtl::OUString scell_content_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_not_between"));
+        rtl::OUString scell_content_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-not-between"));
         rtl::OUString scell_content_is_whole_number(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number"));
         rtl::OUString scell_content_is_decimal_number(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number"));
         rtl::OUString scell_content_text_length_is_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-between"));
@@ -406,7 +430,8 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
         {
             if (i != scell_content_text_length.getLength() &&
                 i != scell_content_text_length_is_between.getLength() &&
-                i != scell_content_text_length_is_not_between.getLength())
+                i != scell_content_text_length_is_not_between.getLength() &&
+                i != scell_content_is_in_list.getLength())
             {
                 if (i == scell_content_is_time.getLength())
                 {
@@ -434,15 +459,25 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
                     i++;
                 if (sCondition[i] == '(')
                 {
+                    rtl::OUString sTemp = sCondition.copy(0, i);
                     sCondition = sCondition.copy(i + 1);
                     if (i == scell_content_is_between.getLength() ||
                         i == scell_content_text_length_is_between.getLength())
                     {
-                        if (i == scell_content_text_length_is_between.getLength())
-                            aValidationType = sheet::ValidationType_TEXT_LEN;
-                        aOperator = sheet::ConditionOperator_BETWEEN;
-                        sCondition = sCondition.copy(0, sCondition.getLength() - 1);
-                        SetFormulas(sCondition, sFormula1, sFormula2);
+                        if (sTemp == scell_content_is_in_list)
+                        {
+                            aValidationType = sheet::ValidationType_LIST;
+                            sFormula1 = sCondition.copy(0, sCondition.getLength() - 1);
+                            aOperator = sheet::ConditionOperator_EQUAL;
+                        }
+                        else
+                        {
+                            if (i == scell_content_text_length_is_between.getLength())
+                                aValidationType = sheet::ValidationType_TEXT_LEN;
+                            aOperator = sheet::ConditionOperator_BETWEEN;
+                            sCondition = sCondition.copy(0, sCondition.getLength() - 1);
+                            SetFormulas(sCondition, sFormula1, sFormula2);
+                        }
                     }
                     else if (i == scell_content_is_not_between.getLength() ||
                         i == scell_content_text_length_is_not_between.getLength())
@@ -529,6 +564,7 @@ void ScXMLContentValidationContext::EndElement()
     aValidation.bShowErrorMessage = bDisplayError;
     aValidation.bShowImputMessage = bDisplayHelp;
     aValidation.bIgnoreBlanks = bAllowEmptyCell;
+    aValidation.nShowList = nShowList;
     GetScImport().AddValidation(aValidation);
 }
 
