@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:13 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,11 @@ public:
 
     void AppendDrawObj( SwDrawContact *pNew );
     void RemoveDrawObj( SwDrawContact *pToRemove );
+    // OD 20.05.2003 #108784# - <AppendDrawObj>/<RemoveDrawObj> for virtual drawing objects
+    void AppendVirtDrawObj( SwDrawContact* _pDrawContact,
+                            SwDrawVirtObj* _pDrawVirtObj );
+    void RemoveVirtDrawObj( SwDrawContact* _pDrawContact,
+                            SwDrawVirtObj* _pDrawVirtObj );
 
     void AppendFly( SwFlyFrm *pNew );
     void RemoveFly( SwFlyFrm *pToRemove );
