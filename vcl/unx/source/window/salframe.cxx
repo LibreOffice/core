@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-06 11:15:14 $
+ *  last change: $Author: pl $ $Date: 2001-07-10 11:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,8 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 
          int w = 500;
          int h = 400;
+        int x = -1;
+        int y = -1;
          if( pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
          {
              w = pDisplay_->GetScreenSize().Width();
@@ -374,14 +376,52 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
             w = pDisplay_->GetScreenSize().Width()*2/3;
             h = pDisplay_->GetScreenSize().Height()*2/3;
         }
+        if( ! mpParent )
+        {
+            // find the last document window (if any)
+            SalFrame* pFrame = pNextFrame_;
+            while( pFrame &&
+                   ( pFrame->maFrameData.mpParent
+                     || pFrame->maFrameData.IsOverrideRedirect()
+                     || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+                     )
+                   )
+                pFrame = pFrame->maFrameData.pNextFrame_;
+            if( pFrame )
+            {
+                // set a document position and size
+                // the first frame gets positioned by the window manager
+                x = pFrame->maFrameData.aPosSize_.Left();
+                y = pFrame->maFrameData.aPosSize_.Top();
+                w = pFrame->maFrameData.aPosSize_.GetWidth();
+                h = pFrame->maFrameData.aPosSize_.GetHeight();
+                if( x+w+40 <= pDisplay_->GetScreenSize().Width() &&
+                    y+h+40 <= pDisplay_->GetScreenSize().Height()
+                    )
+                {
+                    y += 40;
+                    x += 40;
+                }
+                else
+                {
+                    x = 10; // leave some space for dcoration
+                    y = 20;
+                }
+            }
+        }
 
-        Arg aArgs[10];
+        Arg aArgs[16];
         int nArgs=0;
         SalVisual* pVis = GetDisplay()->GetVisual();
         XtSetArg( aArgs[nArgs], XtNvisual, pVis->GetVisual() );     nArgs++;
         XtSetArg( aArgs[nArgs], XtNdepth, pVis->GetDepth() );       nArgs++;
         XtSetArg( aArgs[nArgs], XtNcolormap,
                   GetDisplay()->GetColormap().GetXColormap() );     nArgs++;
+        if( x >= 0 && y >= 0 )
+        {
+            XtSetArg( aArgs[nArgs], XtNx, x );                      nArgs++;
+            XtSetArg( aArgs[nArgs], XtNy, y );                      nArgs++;
+        }
         XtSetArg( aArgs[nArgs], XtNwidth, w );                      nArgs++;
         XtSetArg( aArgs[nArgs], XtNheight, h );                     nArgs++;
         XtSetArg( aArgs[nArgs], XtNallowShellResize, True );        nArgs++;
@@ -465,39 +505,10 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 
         Hints.flags        |= WindowGroupHint;
         Hints.window_group  = mpParent ? mpParent->maFrameData.GetShellWindow() : pDisplay_->GetShellWindow();
-
-        // find the last document window (if any)
-        SalFrame* pFrame = pNextFrame_;
-        while( pFrame &&
-               ( pFrame->maFrameData.mpParent || pFrame->maFrameData.IsOverrideRedirect() )
-               )
-            pFrame = pFrame->maFrameData.pNextFrame_;
-        if( mpParent || ! pFrame || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
-        {
+       if( x < 0 || y < 0 )
             SetSize( Size( w, h ) );
-        }
         else
-        {
-            // set a document position and size
-            // the first frame gets positioned by the window manager
-            int x = pFrame->maFrameData.aPosSize_.Left();
-            int y = pFrame->maFrameData.aPosSize_.Top();
-            w = pFrame->maFrameData.aPosSize_.GetWidth();
-            h = pFrame->maFrameData.aPosSize_.GetHeight();
-            if( x+w+40 <= pDisplay_->GetScreenSize().Width() &&
-                y+h+40 <= pDisplay_->GetScreenSize().Height()
-                )
-            {
-                y += 40;
-                x += 40;
-            }
-            else
-            {
-                x = 0;
-                y = 20; // leave some space for dcoration
-            }
             SetPosSize( Rectangle( Point( x, y ), Size( w, h ) ) );
-        }
     }
 
     if( hShell_ )
@@ -974,6 +985,9 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
             nX = (nRealScreenWidth  - nWidth ) / 2;
             nY = (nRealScreenHeight - nHeight) / 2;
         }
+        nX = nX < 0 ? 0 : nX;
+        nY = nY < 0 ? 0 : nY;
+
         if( maFrameData.nShowState_ == SHOWSTATE_NORMAL)
             maFrameData.bDefaultPosition_ = False;
     }
@@ -985,16 +999,14 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
     {
         if ( nX + nWidth  > nRealScreenWidth  )
             nX = nRealScreenWidth  - nWidth;
-        if ( nX <  0 )
-            nX = 0;
+        nX = nX < 0 ? 0 : nX;
     }
     if( nHeight > maFrameData.aPosSize_.GetHeight() )
     {
         if ( nY + nHeight > nRealScreenHeight )
             nY = nRealScreenHeight - nHeight;
         // guess: size of top window decoration is 20
-        if ( nY < 20 )
-            nY = 20;
+        nY = nY < 20 ? 20 : nY;
     }
 
     Point aPoint ( nX, nY );
