@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:43:46 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ dutch ] = "AutoPiloot Tabelelement";
     Text [ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ±í¸ñÔª¼ş";
     Text [ greek ] = "Óôïé÷åßï ğßíáêá ôïõ ÁõôïĞéëüôïõ";
-    Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ Ç¥ ¿ä¼Ò";
+    Text [ korean ] = "ÀÚµ¿ÆÄÀÏ·µ Å×ÀÌºí ¿ä¼Ò";
     Text [ turkish ] = "OtoPilot Tablo öğesi";
     Text[ catalan ] = "AutoPiloto - Elemento de tabla";
     Text[ finnish ] = "Automaattinen taulukkoelementin ohjaus";
@@ -209,10 +209,10 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.";
     Text[ danish ] = "The connection to the data source could not be established.";
     Text[ swedish ] = "Det gick inte att upprätta en tabellförbindelse till datakällan.";
-    Text[ polish ] = "Po³¹czenie tabeli ze ?ród³em bazy danych nie powiod³o siê.";
+    Text[ polish ] = "Po³¹czenie tabeli ze Ÿród³em bazy danych nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "The connection to the data source could not be established.";
     Text[ japanese ] = "ÃŞ°À¿°½‚Ö‚ÌÃ°ÌŞÙÚ‘±‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "The connection to the data source could not be established.";
+    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º·ÎÀÇ Å×ÀÌºí ¿¬°áÀÌ ÀÌ·ç¾îÁöÁö ¾Ê¾Ò½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÎŞ·¨ºÍÊı¾İÔ´½¨Á¢Á¬½Ó¡£";
     Text[ chinese_traditional ] = "µLªk³s½u¨ì¸ê®Æ·½¡C";
     Text[ turkish ] = "The connection to the data source could not be established.";
@@ -224,6 +224,9 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/17 07:43:46  kz
+ *  Merge SRC632: 17.05.01 - 09:44:11 (NoBranch)
+ *
  *  Revision 1.10  2001/05/10 06:05:23  kz
  *  Merge SRC631: 05/10/01 - 08:05:30 (NoBranch)
  *
@@ -257,4 +260,5 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
 
