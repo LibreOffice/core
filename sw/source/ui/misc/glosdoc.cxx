@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 14:43:07 $
+ *  last change: $Author: os $ $Date: 2000-12-21 12:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ String lcl_CheckFileName(const String& rNewFilePath, const String& rNewGroupName
                                         uno::Reference< XCommandEnvironment >());
         bCreated = aTestContent.isDocument();
     }
-    catch(...)
+    catch(Exception&)
     {
         bCreated = FALSE;
     }
@@ -279,7 +279,7 @@ String lcl_CheckFileName(const String& rNewFilePath, const String& rNewGroupName
                                             uno::Reference< XCommandEnvironment >());
                 bCreated = aTestContent.isDocument();
             }
-            catch(...)
+            catch(Exception&)
             {
                 bCreated = FALSE;
             }
@@ -357,7 +357,7 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
             sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
             bCaseSensitive = nCompare != 0;
         }
-        catch(...)
+        catch(Exception&)
         {
         }
 
@@ -483,7 +483,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                                             uno::Reference< XCommandEnvironment >());
             bExist = aTestContent.isDocument();
         }
-        catch(...)
+        catch(Exception&)
         {
         }
         DBG_ASSERT(bExist, "Gruppe existiert nicht!")
@@ -508,7 +508,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                                                     uno::Reference< XCommandEnvironment >());
                     bExist = aTestContent.isDocument();
                 }
-                catch(...)
+                catch(Exception&)
                 {
                 }
                 DBG_ASSERT(!bExist, "Gruppe existiert bereits!")
@@ -597,7 +597,7 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
         bRemoved = TRUE;
 #endif
     }
-    catch( ... )
+    catch( Exception& )
     {
         DBG_ERRORFILE( "Exception" );
     }
@@ -668,7 +668,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
                                             uno::Reference< XCommandEnvironment >());
                 bExist = aTestContent.isDocument();
             }
-            catch(...)
+            catch(Exception&)
             {
                 bExist = FALSE;
             }
@@ -754,13 +754,13 @@ SvStrings* SwGlossaries::GetNameList()
                                 while ( xResultSet->next() );
                               }
                         }
-                        catch ( ... )
+                        catch ( Exception& )
                         {
                             DBG_ERRORFILE( "Exception caught!" );
                         }
                     }
                 }
-                catch ( ... )
+                catch ( Exception& )
                 {
                     DBG_ERRORFILE( "Exception caught!" );
                 }
@@ -841,7 +841,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
                 ::ucb::Content aTestContent(sPth, uno::Reference< XCommandEnvironment >());
                 bExists = aTestContent.isFolder();
             }
-            catch(...)
+            catch(Exception&)
             {
                 DBG_ERROR("exception <getPropertyValue(IsFolder)>")
             }
@@ -908,6 +908,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/11/15 14:43:07  hr
+    #65293#: SFX_SEARCHPATH_DELIMITER -> SVT_SEARCHPATH_DELIMITER
+
     Revision 1.6  2000/11/13 10:42:26  jp
     must changes: use Search from SvtPathOptions
 
