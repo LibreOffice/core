@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:59:44 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
 // ============================================================================
 
 #ifndef SC_XLROOT_HXX
@@ -107,6 +101,9 @@
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 
 #include "root.hxx"
 
@@ -119,10 +116,11 @@ using ::com::sun::star::frame::XModel;
 
 // Global data ================================================================
 
-XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rBasePath, CharSet eCharSet ) :
+XclRootData::XclRootData( XclBiff eBiff, ScDocument& rDocument, const String& rDocUrl, CharSet eCharSet ) :
     meBiff( eBiff ),
     mrDoc( rDocument ),
-    maBasePath( rBasePath ),
+    maDocUrl( rDocUrl ),
+    maBasePath( rDocUrl, 0, rDocUrl.SearchBackward( '/' ) + 1 ),
     meCharSet( eCharSet ),
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
@@ -295,6 +293,11 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mpDrawEditEng;
+}
+
+XclTracer& XclRoot::GetTracer() const
+{
+    return *mrData.mpTracer;
 }
 
 bool XclRoot::CheckCellAddress( const ScAddress& rPos, const ScAddress rMaxPos ) const
