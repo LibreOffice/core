@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 13:30:01 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 12:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,7 +1271,7 @@ TabPage PAGE_DBASE
         Text [ dutch ] = "~Indices...";
         Text [ spanish ] = "Í~ndices...";
         Text [ english_us ] = "Indexes...";
-        Text [ chinese_simplified ] = "æ ‡å¿—...";
+        Text [ chinese_simplified ] = "æ ‡å¿—(~I)...";
         Text [ russian ] = "Èíäåêñû...";
         Text [ polish ] = "Indeksy...";
         Text [ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹...";
@@ -3621,6 +3621,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.99  2002/05/28 13:30:01  oj
+ *  #99603# set maskcolor to magenta
+ *
  *  Revision 1.98  2002/05/21 09:13:24  kz
  *  Merge SRX642: 21.05.02 - 11:12:54
  *
