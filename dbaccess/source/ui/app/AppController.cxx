@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:05:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
-        if ( getContainer()&& getContainer()->getElementType() == E_TABLE )
+        if ( getContainer() && getContainer()->getElementType() == E_TABLE )
         {
             TDataSourceConnections::iterator aIter = m_aDataSourceConnections.begin();
             TDataSourceConnections::iterator aEnd = m_aDataSourceConnections.end();
@@ -528,6 +528,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
                 if ( aIter->second.is() && aIter->second == xCon )
                 {
                     getContainer()->clearPages();
+                    m_aDataSourceConnections.erase(aIter);
                     break;
                 }
             }
@@ -1049,9 +1050,15 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case ID_BROWSER_SAVEASDOC:
                 {
                     WinBits nBits(WB_STDMODAL|WB_SAVEAS);
+                    Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
+                    ::rtl::OUString sUrl;
+                    if ( xModel.is() )
+                        sUrl = xModel->getURL();
+                    if ( !sUrl.getLength() )
+                        sUrl = SvtPathOptions().GetWorkPath();
 
                     ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
-                    aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
+                    aFileDlg.SetDisplayDirectory( sUrl );
 
                     const SfxFilter* pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
@@ -1073,6 +1080,11 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                                 updateTitle();
                                 m_bCurrentlyModified = sal_False;
                                 InvalidateFeature(ID_BROWSER_SAVEDOC);
+                                if ( getContainer()->getElementType() == E_NONE )
+                                {
+                                    getContainer()->changeContainer(E_NONE);
+                                    getContainer()->changeContainer(E_TABLE);
+                                }
                             }
                         }
                     }
