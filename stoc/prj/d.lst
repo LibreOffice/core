@@ -27,9 +27,4 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 ..\source\typeconv\tcv.xml %_DEST%\xml%_EXT%\typeconverter.uno.xml
 ..\source\uriproc\module.xml %_DEST%\xml%_EXT%\uriproc.uno.xml
 
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
