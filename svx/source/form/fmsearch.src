@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-19 21:19:24 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,13 +635,13 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese ] = "Formas de largura média e normal";
         Text[ russian ] = "Ó÷èòûâàòü øèğèíó çíàêîâ";
         Text[ greek ] = "Öüñìåò ìå êáíïíéêü/ìéóü ğëÜôïò";
-        Text[ dutch ] = "Halve/normale breedte";
+        Text[ dutch ] = "Rekening houden met letterbreedte";
         Text[ french ] = "Respecter la chasse";
         Text[ spanish ] = "Considerar ancho de carácter";
         Text[ finnish ] = "Halb-/normalbreite Formen";
         Text[ italian ] = "Considera la larghezza dei caratteri";
         Text[ danish ] = "Match half/full width forms";
-        Text[ swedish ] = "Anpassa till teckenbredd";
+        Text[ swedish ] = "Ta hänsyn till teckenbredd";
         Text[ polish ] = "Uwzglêdnij szerokoœæ znaków";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "å…¨è§’ã¨åŠè§’";
@@ -1052,6 +1052,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
 
