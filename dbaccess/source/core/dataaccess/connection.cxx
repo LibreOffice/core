@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:09:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 06:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,18 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
                     break;
                 }
             }
+        }
+        // some dbs doesn't support this type so we should ask if a XViewsSupplier is supported
+        if(!m_bSupportsViews)
+        {
+            Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+            Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
+            Reference< XViewsSupplier > xMaster;
+            if(xSupp.is())
+                xMaster = Reference< XViewsSupplier >(xSupp->getDataDefinitionByConnection(m_xMasterConnection),UNO_QUERY);
+
+            if (xMaster.is() && xMaster->getViews().is())
+                m_bSupportsViews = sal_True;
         }
         if(m_bSupportsViews)
             m_pViews = new OViewContainer(*this, m_aMutex, this, this);
