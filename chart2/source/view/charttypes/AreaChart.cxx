@@ -115,6 +115,9 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bC
         , m_eCurveStyle(CurveStyle_LINES)
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)
+        , m_xSeriesTarget(0)
+        , m_xErrorBarTarget(0)
+        , m_xTextTarget(0)
 {
     try
     {
@@ -291,7 +294,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly )
 {
     //return true if a line was created successfully
-    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xLogicTarget);
+    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
 
     drawing::PolyPolygonShape3D aPoly;
     if(CurveStyle_CUBIC_SPLINES==m_eCurveStyle)
@@ -355,7 +358,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
 {
     //return true if an area was created successfully
 
-    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xLogicTarget);
+    uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
     double zValue = pSeries->m_fLogicZPos;
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
@@ -452,7 +455,7 @@ void AreaChart::impl_createSeriesShapes()
         {
             pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
 
-            createRegressionCurvesShapes( **aSeriesIter, m_xLogicTarget );
+            createRegressionCurvesShapes( **aSeriesIter, m_xErrorBarTarget );
 
             if( m_bArea )
             {
@@ -475,14 +478,23 @@ void AreaChart::createShapes()
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
+    //the text labels should be always on top of the other series shapes
+    //for area chart the error bars should be always on top of the other series shapes
+
+    //therefore create an own group for the texts and the error bars to move them to front
+    //(because the text group is created after the series group the texts are displayed on top)
+    m_xSeriesTarget   = createGroupShape( m_xLogicTarget,rtl::OUString() );
+    if( m_bArea )
+        m_xErrorBarTarget = createGroupShape( m_xLogicTarget,rtl::OUString() );
+    else
+        m_xErrorBarTarget = m_xSeriesTarget;
+    m_xTextTarget     = createGroupShape( m_xLogicTarget,rtl::OUString() );
+
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
     double fLogicZ        = -0.5;//as defined
-    // BM: unused:
-//     double fLogicBaseWidth = 1.0;//as defined
-//     double fLogicBaseDepth = fLogicBaseWidth;//Logic Depth and Width are identical by define ... (symmetry is not necessary anymore)
 
     sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount(m_aXSlots);
@@ -518,21 +530,31 @@ void AreaChart::createShapes()
             //iterate through all series
             for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
             {
-                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xLogicTarget);
+                uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeFrontChild(*aSeriesIter, m_xSeriesTarget);
 
                 if(m_nDimension==3)
                     fLogicZ = nZ+0.5;
                 (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                 //collect data point information (logic coordinates, style ):
-                double fLogicX       = m_bCategoryXAxis ? nIndex : (*aSeriesIter)->getX(nIndex);
-                double fLogicY       = (*aSeriesIter)->getY(nIndex);
-                if( ::rtl::math::isNan(fLogicY) )
+                double fLogicX = (*aSeriesIter)->getX(nIndex);
+                double fLogicY = (*aSeriesIter)->getY(nIndex);
+
+                bool bPointForAreaBoundingOnly = false;
+                if(    ::rtl::math::isNan(fLogicX) || ::rtl::math::isInf(fLogicX)
+                    || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
+                    || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
+                {
+                    bPointForAreaBoundingOnly = true;
+                    fLogicX = nIndex;
                     fLogicY=0;//@todo maybe there is another grounding ?? - for sum 0 is right
+                    fLogicZ = nZ+0.5;
+                }
+
                 fLogicY += fLogicYForNextSeries;
                 fLogicYForNextSeries = fLogicY;
 
-                bool bIsVisible = m_pPosHelper->isLogicVisible( fLogicX, fLogicY, fLogicZ );
+                bool bIsVisible = !bPointForAreaBoundingOnly && m_pPosHelper->isLogicVisible( fLogicX, fLogicY, fLogicZ );
 
                 //remind minimal and maximal x values for area 'grounding' points
                 //only for filled area
@@ -545,7 +567,7 @@ void AreaChart::createShapes()
                         rfMaxX=fLogicX;
                 }
 
-                drawing::Position3D aUnScaledPoint( fLogicX, fLogicY, fLogicZ );
+                drawing::Position3D aUnscaledLogicPosition( fLogicX, fLogicY, fLogicZ );
                 //apply scaling
                 //(for more accurat clipping it would be better to first clip and than scale and transform,
                 //but as long as we only have integer Polygon clipping we need to apply scaling and transformation first ) see QQQ
@@ -616,28 +638,9 @@ void AreaChart::createShapes()
                                     }
                                 //@todo other symbol styles
                             }
-
-                            // error bars
-                            uno::Reference< beans::XPropertySet > xPointProp(
-                                (*aSeriesIter)->getPropertiesOfPoint( nIndex ));
-                            uno::Reference< beans::XPropertySet > xErrorBarProp;
-                            if( xPointProp.is() &&
-                                ( xPointProp->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
-                                xErrorBarProp.is())
-                            {
-                                uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-                                    getErrorBarsGroupShape(*aSeriesIter, m_xLogicTarget) );
-
-                                createErrorBar(
-                                    xErrorBarsGroup_Shapes
-                                  , aUnScaledPoint
-                                  , xErrorBarProp
-                                  , (*aSeriesIter)->getAllY()
-                                  , nIndex
-                                  , true /* bVertical */ );
-                            }
                         }
                     }
+                    createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
                 }
 
                 //remove PointGroupShape if empty
