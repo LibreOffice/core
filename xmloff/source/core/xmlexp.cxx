@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-13 14:55:31 $
+ *  last change: $Author: sab $ $Date: 2001-09-13 15:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,9 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -240,6 +243,42 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( CHART ),
     { 0, 0, 0, 0 }
 };
+
+//==============================================================================
+
+class SvXMLExportEventListener : public cppu::WeakImplHelper1<
+                            com::sun::star::lang::XEventListener >
+{
+private:
+    SvXMLExport*    pExport;
+
+public:
+                            SvXMLExportEventListener(SvXMLExport* pExport);
+    virtual                 ~SvXMLExportEventListener();
+
+                            // XEventListener
+    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException);
+};
+
+SvXMLExportEventListener::SvXMLExportEventListener(SvXMLExport* pTempExport)
+    : pExport(pTempExport)
+{
+}
+
+SvXMLExportEventListener::~SvXMLExportEventListener()
+{
+}
+
+// XEventListener
+void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& rEventObject )
+    throw(uno::RuntimeException)
+{
+    if (pExport)
+        pExport->DisposingModel();
+}
+
+//==============================================================================
+
 
 void SvXMLExport::_InitCtor()
 {
@@ -295,6 +334,12 @@ void SvXMLExport::_InitCtor()
     sObjectsPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#./" ) );
     sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
     sEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
+
+    if (xModel.is() && !pEventListener)
+    {
+        pEventListener = new SvXMLExportEventListener(this);
+        xModel->addEventListener(pEventListener);
+    }
 }
 
 SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags ) :
@@ -309,8 +354,11 @@ SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
+    pEventListener( NULL ),
+    pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
-    mnExportFlags( nExportFlags )
+    mnExportFlags( nExportFlags ),
+    mnErrorFlags( ERROR_NO )
 {
     _InitCtor();
 }
@@ -333,8 +381,11 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
+    pEventListener( NULL ),
+    pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
-    mnExportFlags( EXPORT_ALL )
+    mnExportFlags( EXPORT_ALL ),
+    mnErrorFlags( ERROR_NO )
 {
     _InitCtor();
 
@@ -363,8 +414,11 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
+    pEventListener( NULL ),
+    pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
-    mnExportFlags( EXPORT_ALL )
+    mnExportFlags( EXPORT_ALL ),
+    mnErrorFlags( ERROR_NO )
 {
     _InitCtor();
 
@@ -395,8 +449,11 @@ SvXMLExport::SvXMLExport(
     pProgressBarHelper( NULL ),
     pEventExport( NULL ),
     pImageMapExport( NULL ),
+    pEventListener( NULL ),
+    pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
-    mnExportFlags( EXPORT_ALL )
+    mnExportFlags( EXPORT_ALL ),
+    mnErrorFlags( ERROR_NO )
 {
     _InitCtor();
 
@@ -452,6 +509,9 @@ SvXMLExport::~SvXMLExport()
     }
 
     xmloff::token::ResetTokens();
+
+    if (pEventListener && xModel.is())
+        xModel->removeEventListener(pEventListener);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -463,6 +523,11 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     xModel = uno::Reference< frame::XModel >::query( xDoc );
     if( !xModel.is() )
         throw lang::IllegalArgumentException();
+    if (xModel.is() && !pEventListener)
+    {
+        pEventListener = new SvXMLExportEventListener(this);
+        xModel->addEventListener(pEventListener);
+    }
 
     if(!xNumberFormatsSupplier.is() )
     {
@@ -1475,6 +1540,86 @@ OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
 {
     return INetURLObject::AbsToRel( rValue );
 }
+
+void SvXMLExport::StartElement(sal_uInt16 nPrefix,
+                        enum ::xmloff::token::XMLTokenEnum eName,
+                        sal_Bool bIgnWSOutside )
+{
+    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    {
+        OUString sName(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ));
+        try
+        {
+            if( bIgnWSOutside )
+                xHandler->ignorableWhitespace( sWS );
+            xHandler->startElement( sName, GetXAttrList() );
+            ClearAttrList();
+        }
+        catch ( uno::Exception& )
+        {
+            // we have to add a error here,
+            // perhaps we should change the ErrorFlag to ERROR_DO_NOTHING
+            ClearAttrList();
+            DBG_ERROR("Not handled exception");
+        }
+    }
+}
+
+void SvXMLExport::Characters(const ::rtl::OUString& rChars)
+{
+    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    {
+        try
+        {
+            xHandler->characters(rChars);
+        }
+        catch ( uno::Exception& )
+        {
+            // we have to add a error here,
+            // perhaps we should change the ErrorFlag to ERROR_DO_NOTHING
+            DBG_ERROR("Not handled exception");
+        }
+    }
+}
+
+void SvXMLExport::EndElement(sal_uInt16 nPrefix,
+                        enum ::xmloff::token::XMLTokenEnum eName,
+                        sal_Bool bIgnWSInside )
+{
+    if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
+    {
+        OUString sName(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ));
+        try
+        {
+            if( bIgnWSInside )
+                xHandler->ignorableWhitespace( sWS );
+            xHandler->endElement( sName );
+        }
+        catch ( uno::Exception& )
+        {
+            // we have to add a error here,
+            // perhaps we should change the ErrorFlag to ERROR_DO_NOTHING
+            DBG_ERROR("Not handled exception");
+        }
+    }
+}
+
+void SvXMLExport::SetError(sal_uInt16 nId, ::rtl::OUString& rErrorMessage, ::rtl::OUString& rExceptionMessage)
+{
+}
+
+XMLErrors* SvXMLExport::GetErrors()
+{
+    return pXMLErrors;
+}
+
+void SvXMLExport::DisposingModel()
+{
+    xModel = 0;
+    pEventListener = NULL;
+}
+
+//=============================================================================
 
 void SvXMLElementExport::StartElement( SvXMLExport& rExp,
                                        sal_uInt16 nPrefixKey,
