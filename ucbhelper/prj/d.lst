@@ -37,5 +37,6 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\handleinteractionrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\handleinteractionrequest.hxx
 ..\inc\ucbhelper\proxydecider.hxx %_DEST%\inc%_EXT%\ucbhelper\proxydecider.hxx
 ..\version.mk %_DEST%\inc%_EXT%\ucbhelper\version.mk
+..\inc\ucbhelper\ucbhelperdllapi.h %_DEST%\inc%_EXT%\ucbhelper\ucbhelperdllapi.h
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
