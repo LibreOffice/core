@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-19 11:03:09 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 12:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #include <cmdlineargs.hxx>
 
 
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #endif
@@ -243,7 +246,7 @@ void ShutdownIcon::FileOpen()
                         aArgs[1].Name  = OUString::createFromAscii( "FilterName" );
                         aArgs[1].Value = xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM );
                         aArgs[1].Value >>= aFilterName;
-
+/*
                         aArgs[2].Name  = OUString::createFromAscii( "Version" );
 
                         sal_Int32   iVersion = -1;
@@ -252,6 +255,7 @@ void ShutdownIcon::FileOpen()
                         xPickerControls->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION, ControlActions::GET_SELECTED_ITEM_INDEX ) >>= iVersion;
                         uVersion = (sal_uInt16)iVersion;
                         aArgs[2].Value <<= uVersion;
+ */
                     }
 
                     if ( 1 == nFiles )
@@ -310,13 +314,15 @@ void ShutdownIcon::FromTemplate()
                 xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
         if ( xDisp.is() )
         {
-            xDisp->addStatusListener( getInstance(), aTargetURL );
-
             Sequence<PropertyValue> aArgs(1);
             PropertyValue* pArg = aArgs.getArray();
             pArg[0].Name = rtl::OUString::createFromAscii("Referer");
             pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
-            xDisp->dispatch( aTargetURL, aArgs );
+            Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
+            if ( xNotifyer.is() )
+                xNotifyer->dispatchWithNotification( aTargetURL, aArgs, getInstance() );
+            else
+                xDisp->dispatch( aTargetURL, aArgs );
         }
     }
 }
@@ -405,7 +411,7 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 // ---------------------------------------------------------------------------
 // XStatusListener
 
-void SAL_CALL ShutdownIcon::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+void SAL_CALL ShutdownIcon::dispatchFinished( const ::com::sun::star::frame::DispatchResultEvent& Event )
     throw(::com::sun::star::uno::RuntimeException)
 {
 }
