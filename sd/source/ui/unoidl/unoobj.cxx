@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:29:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,16 +615,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_PRESORDER:
                     setOldPresOrder( aValue );
                     break;
-/*
-                    {
-                    sal_Int32 nPos;
-                    if(!(aValue >>= nPos))
-                        throw lang::IllegalArgumentException();
-
-                    SetPresentationOrderPos( nPos );
-                    break;
-                }
-*/
                 case WID_STYLE:
                     SetStyleSheet( aValue );
                     break;
@@ -1097,102 +1087,37 @@ inline sal_Bool IsPathObj( SdrObject* pObj, SdAnimationInfo* pInfo )
  */
 sal_Int32 SdXShape::GetPresentationOrderPos() const throw()
 {
-    SdrObject* pObj = mpShape->GetSdrObject();
-    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
-    if(pDoc == NULL || pObj == NULL)
-        return -1;
-
-    SdrObjListIter aIter( *pObj->GetPage(), IM_FLAT );
-
-
-    SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pObj );
-    if(pInfo == NULL || pInfo->bActive == sal_False || IsPathObj( pObj, pInfo ) )
-       return -1;
-
     sal_Int32 nPos = 0;
 
-    while( aIter.IsMore() )
-    {
-        SdrObject* pIterObj = aIter.Next();
-        if(pIterObj == pObj)
-            continue;
-
-        SdAnimationInfo* pIterInfo = pDoc->GetAnimationInfo( pIterObj );
-        if( pIterInfo )
-        {
-            if( !IsPathObj(pIterObj, pIterInfo ) )
-            {
-                if( pIterInfo->nPresOrder < pInfo->nPresOrder )
-                    nPos++;
-            }
-        }
-    }
-
-    return nPos;
-}
-
-
-/** Sets the position of the given SdrObject in the Presentation order.
- */
-void SdXShape::SetPresentationOrderPos( sal_Int32 nPos ) throw()
-{
-/*
     SdrObject* pObj = mpShape->GetSdrObject();
-    SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
-    if(pDoc == 0 || pObj == NULL)
-        return;
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
-    List aAnmList;
+    EffectSequence& rSequence = pMainSequence->getSequence();
 
-    // Erstmal alle animierten Objekte in eine List packen,
-    // ausgenommen unser eigenes
-    SdrObjListIter aIter( *pObj->GetPage(), IM_FLAT );
-    while( aIter.IsMore())
+    Reference< XShape > xThis( mpShape );
+    Reference< XShape > xCurrent;
+
+    EffectSequence::iterator aIter( rSequence.begin() );
+    EffectSequence::iterator aEnd( rSequence.end() );
+    for( ; aIter != aEnd; aIter++ )
     {
-        SdrObject* pIterObj = aIter.Next();
-        if( pIterObj != pObj && pDoc->GetAnimationInfo( pIterObj ) )
-            aAnmList.Insert(pIterObj, LIST_APPEND);
-    }
+        CustomAnimationEffectPtr pEffect = (*aIter);
 
-    const sal_Int32 nCount = aAnmList.Count();
-
-    if ( nCount )
-    {
-        PSORT   pSort = new SORT[ nCount ];
-        sal_Int32   nOrderIndex = 0;
-        sal_Int32   nAppendIndex = LIST_APPEND - nCount;
-
-        for( SdrObject* pIterObj = (SdrObject*) aAnmList.First(); pIterObj; pIterObj = (SdrObject*) aAnmList.Next() )
+        if( !xCurrent.is() )
         {
-            const SdAnimationInfo*  pInfo = pDoc->GetAnimationInfo( pIterObj );
-            PSORT                   pSortTmp = &pSort[ nOrderIndex++ ];
-
-            pSortTmp->pObj = pIterObj;
-            pSortTmp->nOrder = ( pInfo->nPresOrder != LIST_APPEND ) ? pInfo->nPresOrder : nAppendIndex++;
+            xCurrent = pEffect->getTargetShape();
+        }
+        else if( pEffect->getTargetShape() != xCurrent )
+        {
+            nPos++;
         }
 
-        // Liste loeschen, die Information steckt jetzt im Array
-        aAnmList.Clear();
-
-        // Array nach Ordnungsnummern sortieren
-        qsort( pSort, nCount, sizeof( SORT ), SortFunc );
-
-        // Animationliste neu aufbauen
-        for( sal_Int32 i = 0; i < nCount; i++ )
-            aAnmList.Insert( pSort[ i ].pObj, LIST_APPEND );
-
-        delete[] pSort;
+        // is this the first effect for xThis shape?
+        if( xCurrent == xThis )
+            return nPos;
     }
 
-    aAnmList.Insert(pObj, nPos);
-
-    sal_Int32 nIdx = 0;
-    for( SdrObject* pIterObj = (SdrObject*) aAnmList.First(); pIterObj; pIterObj = (SdrObject*) aAnmList.Next() )
-    {
-        SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pIterObj );
-        pInfo->nPresOrder = nIdx++;
-    }
-*/
+    return 0;
 }
 
 void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumentException )
@@ -2352,7 +2277,7 @@ void SdXShape::setOldDimColor( const com::sun::star::uno::Any& aValue )
         {
             pEffect->setHasAfterEffect( true );
             pEffect->setDimColor( aValue );
-            pEffect->setMasterRel( 0 );
+            pEffect->setMasterRel( 2 );
             bNeedRebuild = true;
         }
     }
@@ -2385,7 +2310,7 @@ void SdXShape::setOldDimHide( const com::sun::star::uno::Any& aValue )
             pEffect->setHasAfterEffect( bDimHide ? true : false );
             if( bDimHide )
                 pEffect->setDimColor( aEmpty );
-            pEffect->setMasterRel( bDimHide ? 2 : 0 );
+            pEffect->setMasterRel( bDimHide ? 0 : 2 );
             bNeedRebuild = true;
         }
     }
@@ -2421,7 +2346,7 @@ void SdXShape::setOldDimPrevious( const com::sun::star::uno::Any& aValue )
             pEffect->setHasAfterEffect( bDimPrevious );
             if( !bDimPrevious || !pEffect->getDimColor().hasValue() )
                 pEffect->setDimColor( aColor );
-            pEffect->setMasterRel( 0 );
+            pEffect->setMasterRel( 2 );
             bNeedRebuild = true;
         }
     }
@@ -2432,4 +2357,84 @@ void SdXShape::setOldDimPrevious( const com::sun::star::uno::Any& aValue )
 
 void SdXShape::setOldPresOrder( const com::sun::star::uno::Any& aValue )
 {
+    sal_Int32 nNewPos;
+    if( !(aValue >>= nNewPos) )
+        lang::IllegalArgumentException();
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+    EffectSequence& rSequence = pMainSequence->getSequence();
+    sal_Int32 nPos;
+    sal_Int32 nCurrentPos = -1;
+    std::vector< std::vector< EffectSequence::iterator > > aEffectVector(1);
+
+    Reference< XShape > xThis( mpShape );
+    Reference< XShape > xCurrent;
+
+    EffectSequence::iterator aIter( rSequence.begin() );
+    EffectSequence::iterator aEnd( rSequence.end() );
+    for( nPos = 0; aIter != aEnd; aIter++ )
+    {
+        CustomAnimationEffectPtr pEffect = (*aIter);
+
+        if( !xCurrent.is() )
+        {
+            xCurrent = pEffect->getTargetShape();
+        }
+        else if( pEffect->getTargetShape() != xCurrent )
+        {
+            nPos++;
+            xCurrent = pEffect->getTargetShape();
+            aEffectVector.resize( nPos+1 );
+        }
+
+        // is this the first effect for xThis shape?
+        if(( nCurrentPos == -1 ) && ( xCurrent == xThis ) )
+        {
+            nCurrentPos = nPos;
+        }
+
+        aEffectVector[nPos].push_back( aIter );
+    }
+
+    // check if there is at least one effect for xThis
+    if( nCurrentPos == -1 )
+        throw lang::IllegalArgumentException();
+
+    // check trivial case
+    if( nCurrentPos != nNewPos )
+    {
+        std::vector< CustomAnimationEffectPtr > aEffects;
+
+        std::vector< EffectSequence::iterator >::iterator aIter( aEffectVector[nCurrentPos].begin() );
+        std::vector< EffectSequence::iterator >::iterator aEnd( aEffectVector[nCurrentPos].end() );
+        while( aIter != aEnd )
+        {
+            aEffects.push_back( (*(*aIter)) );
+            rSequence.erase( (*aIter++) );
+        }
+
+        if( nNewPos > nCurrentPos )
+            nNewPos++;
+
+        std::vector< CustomAnimationEffectPtr >::iterator aTempIter( aEffects.begin() );
+        std::vector< CustomAnimationEffectPtr >::iterator aTempEnd( aEffects.end() );
+
+        if( nNewPos == aEffectVector.size() )
+        {
+            while( aTempIter != aTempEnd )
+            {
+                rSequence.push_back( (*aTempIter++) );
+            }
+        }
+        else
+        {
+            EffectSequence::iterator aPos( aEffectVector[nNewPos][0] );
+            while( aTempIter != aTempEnd )
+            {
+                rSequence.insert( aPos, (*aTempIter++) );
+            }
+        }
+    }
 }
