@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 19:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class ScIndexEnumeration : public cppu::WeakImplHelper2<
 {
 private:
     com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> xIndex;
-    INT32                   nPos;
+    sal_Int32               nPos;
 
 public:
                             ScIndexEnumeration(const com::sun::star::uno::Reference<
@@ -323,20 +323,20 @@ class ScUnoHelpFunctions
 public:
     static com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
                             AnyToInterface( const com::sun::star::uno::Any& rAny );
-    static BOOL             GetBoolProperty( const com::sun::star::uno::Reference<
+    static sal_Bool         GetBoolProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
-                                            const ::rtl::OUString& rName, BOOL bDefault = FALSE );
-    static long             GetLongProperty( const com::sun::star::uno::Reference<
+                                            const ::rtl::OUString& rName, sal_Bool bDefault = sal_False );
+    static sal_Int32        GetLongProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
                                             const ::rtl::OUString& rName, long nDefault = 0 );
-    static long             GetEnumProperty( const com::sun::star::uno::Reference<
+    static sal_Int32        GetEnumProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
                                             const ::rtl::OUString& rName, long nDefault );
 
-    static BOOL             GetBoolFromAny( const com::sun::star::uno::Any& aAny );
-    static INT16            GetInt16FromAny( const com::sun::star::uno::Any& aAny );
-    static INT32            GetEnumFromAny( const com::sun::star::uno::Any& aAny );
-    static void             SetBoolInAny( com::sun::star::uno::Any& rAny, BOOL bValue );
+    static sal_Bool         GetBoolFromAny( const com::sun::star::uno::Any& aAny );
+    static sal_Int16        GetInt16FromAny( const com::sun::star::uno::Any& aAny );
+    static sal_Int32        GetEnumFromAny( const com::sun::star::uno::Any& aAny );
+    static void             SetBoolInAny( com::sun::star::uno::Any& rAny, sal_Bool bValue );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 19:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,10 @@ uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::A
 }
 
 //  static
-BOOL ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
-                                            const rtl::OUString& rName, BOOL bDefault )
+sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
+                                            const rtl::OUString& rName, sal_Bool bDefault )
 {
-    BOOL bRet = bDefault;
+    sal_Bool bRet = bDefault;
     if ( xProp.is() )
     {
         try
@@ -122,7 +122,7 @@ BOOL ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
 }
 
 //  static
-long ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
+sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
     sal_Int32 nRet = nDefault;
@@ -143,7 +143,7 @@ long ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertyS
 }
 
 //  static
-long ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertySet>& xProp,
+sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertySet>& xProp,
                                             const rtl::OUString& rName, long nDefault )
 {
     sal_Int32 nRet = nDefault;
@@ -173,7 +173,7 @@ long ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertyS
 }
 
 //  static
-BOOL ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
+sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
@@ -181,7 +181,7 @@ BOOL ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 }
 
 //  static
-INT16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
+sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
 {
     sal_Int16 nRet;
     if ( aAny >>= nRet )
@@ -190,7 +190,7 @@ INT16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
 }
 
 //  static
-INT32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
+sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
     if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
@@ -201,7 +201,7 @@ INT32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 }
 
 //  static
-void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, BOOL bValue )
+void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
