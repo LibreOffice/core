@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 16:50:23 $
+ *  last change: $Author: dvo $ $Date: 2001-07-26 11:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,10 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 // XFilter
 sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw(uno::RuntimeException)
 {
+    // check for xHandler first... should have been supplied in initialize
+    if( !xHandler.is() )
+        return sal_False;
+
     try
     {
         const sal_Int32 nPropCount = aDescriptor.getLength();
