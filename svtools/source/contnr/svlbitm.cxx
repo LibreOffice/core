@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-24 09:48:23 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 11:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,8 +526,10 @@ Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst, BmpColorMode _eMod
             DBG_ERROR( "SvLBoxContextBmp::implGetImageStore: unexpected mode!");
     }
 
-    static Image aDummy;
-    return aDummy;
+    // #i27063# never access VCL after DeInitVCL - also no destructors
+    // FIXME: static images are currently leaked letting the OS clean up
+    static Image* pDummy = new Image();
+    return *pDummy;
 }
 
 void SvLBoxContextBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
