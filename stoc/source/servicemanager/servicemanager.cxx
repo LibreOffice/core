@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-13 11:00:22 $
+ *  last change: $Author: dbo $ $Date: 2002-11-15 14:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ private:
 //__________________________________________________________________________________________________
 inline void OServiceManager::check_undisposed() const SAL_THROW( (lang::DisposedException) )
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (rBHelper.bDisposed)
     {
         throw lang::DisposedException(
             OUSTR("service manager instance has already been disposed!"),
