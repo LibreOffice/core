@@ -242,7 +242,7 @@ public class SimpleOffice
     public XDrawPage getCurrentDrawPage ()
     {
         return getCurrentDrawPage ((XDrawView) UnoRuntime.queryInterface(
-                XDrawView.class, getDesktop()));
+                XDrawView.class, getCurrentView()));
     }
 
 
@@ -250,17 +250,20 @@ public class SimpleOffice
 
     public XDrawPage getCurrentDrawPage (XDrawView xView)
     {
+        XDrawPage xPage = null;
         try
         {
-            XDrawPage xPage = xView.getCurrentPage();
-            return xPage;
+            if (xView == null)
+                println ("can't get current draw page from null view");
+            else
+                xPage = xView.getCurrentPage();
         }
         catch (Exception e)
         {
             println ("caught exception while getting current draw page : " + e);
         }
 
-        return null;
+        return xPage;
     }
 
 
@@ -270,23 +273,22 @@ public class SimpleOffice
     */
     public XDrawView getCurrentView ()
     {
-        return getCurrentView (null);
+        return getCurrentView (getDesktop());
     }
 
     public XDrawView getCurrentView (XDesktop xDesktop)
     {
-        getDesktop();
-        if (mxDesktop == null)
+        if (xDesktop == null)
             println ("can't get desktop to retrieve current view");
 
         XDrawView xView = null;
         try
         {
-            XComponent xComponent = mxDesktop.getCurrentComponent();
+            XComponent xComponent = xDesktop.getCurrentComponent();
             if (xComponent == null)
                 println ("can't get component to retrieve current view");
 
-            XFrame xFrame = mxDesktop.getCurrentFrame();
+            XFrame xFrame = xDesktop.getCurrentFrame();
             if (xFrame == null)
                 println ("can't get frame to retrieve current view");
 
@@ -296,6 +298,8 @@ public class SimpleOffice
 
             xView = (XDrawView) UnoRuntime.queryInterface(
                 XDrawView.class, xController);
+            if (xView == null)
+                println ("could not cast controller into view");
         }
         catch (Exception e)
         {
