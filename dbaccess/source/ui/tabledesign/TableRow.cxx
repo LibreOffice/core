@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 09:59:57 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 12:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,20 +164,21 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
             }
         }
 
-        // type checking
-        if (_bForce || (m_pActFieldDescr->GetPrecision() > _pType->nPrecision))
-            m_pActFieldDescr->SetPrecision(_pType->nPrecision);
+        if(_pType != m_pActFieldDescr->getTypeInfo())
+        {
+            // type checking
+            if (_bForce || (m_pActFieldDescr->GetPrecision() > _pType->nPrecision))
+                m_pActFieldDescr->SetPrecision(_pType->nPrecision);
 
-        if (_bForce || (m_pActFieldDescr->GetScale() > _pType->nMaximumScale))
-            m_pActFieldDescr->SetScale(_pType->nMinimumScale);
+            if (_bForce || (m_pActFieldDescr->GetScale() > _pType->nMaximumScale))
+                m_pActFieldDescr->SetScale(_pType->nMinimumScale);
 
-        if(!_pType->bNullable && m_pActFieldDescr->IsNullable())
-            m_pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
-        if(!_pType->bAutoIncrement && m_pActFieldDescr->IsAutoIncrement())
-            m_pActFieldDescr->SetAutoIncrement(sal_False);
-
-
-        m_pActFieldDescr->SetType(_pType);
+            if(!_pType->bNullable && m_pActFieldDescr->IsNullable())
+                m_pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
+            if(!_pType->bAutoIncrement && m_pActFieldDescr->IsAutoIncrement())
+                m_pActFieldDescr->SetAutoIncrement(sal_False);
+            m_pActFieldDescr->SetType(_pType);
+        }
     }
     else
     {

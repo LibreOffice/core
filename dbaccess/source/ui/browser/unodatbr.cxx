@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 07:46:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 12:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,8 @@ Reference< XInterface > SAL_CALL SbaTableQueryBrowser::Create(const Reference<XM
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     return *(new SbaTableQueryBrowser(_rxFactory));
 }
+
+DBG_NAME(SbaTableQueryBrowser);
 //------------------------------------------------------------------------------
 SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory >& _rM)
     :SbaXDataBrowserController(_rM)
@@ -394,24 +396,13 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_pCurrentlyDisplayed(NULL)
     ,m_nAsyncDrop(0)
 {
-    // calc the title for the load stopper
-//  sal_uInt32 nTitleResId;
-//  switch (m_xDefinition->GetKind())
-//  {
-//      case dbTable : nTitleResId = STR_TBL_TITLE; break;
-//      case dbQuery : nTitleResId = STR_QRY_TITLE; break;
-//      default : DBG_ERROR("OpenDataObjectThread::run : invalid object !");
-//  }
-//  String sTemp = String(ModuleRes(nTitleResId));
-//  sTemp.SearchAndReplace('#', m_xDefinition->Name());
-//  m_sLoadStopperCaption = String(ModuleRes(RID_STR_OPEN_OBJECT));
-//  m_sLoadStopperCaption += ' ';
-//  m_sLoadStopperCaption += sTemp;
+    DBG_CTOR(SbaTableQueryBrowser,NULL);
 }
 
 //------------------------------------------------------------------------------
 SbaTableQueryBrowser::~SbaTableQueryBrowser()
 {
+    DBG_DTOR(SbaTableQueryBrowser,NULL);
 }
 
 //------------------------------------------------------------------------------

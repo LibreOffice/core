@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-13 17:01:23 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 12:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 //  using namespace ::com::sun::star::container;
 
+DBG_NAME(ODataView);
 // -------------------------------------------------------------------------
 ODataView::ODataView(Window* pParent, const Reference< XMultiServiceFactory >& _rFactory, WinBits nStyle)
     :Window(pParent,nStyle)
     ,m_pToolBox(NULL)
     ,m_xServiceFactory(_rFactory)
 {
+    DBG_CTOR(ODataView,NULL);
 }
 // -------------------------------------------------------------------------
 void ODataView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
@@ -112,6 +114,7 @@ ODataView::~ODataView()
     setToolBox(NULL);
 
     ::comphelper::disposeComponent(m_xMe);
+    DBG_DTOR(ODataView,NULL);
 }
 // -------------------------------------------------------------------------
 void ODataView::setToolBox(ToolBox* pTB)
