@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:50:57 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,7 @@ Resource RES_FRMEX_MENU
     };
     };
 };
+
 
 
 
