@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-17 12:55:03 $
+ *  last change: $Author: pl $ $Date: 2002-01-25 10:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,9 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                                 &nFormat,
                                 &nItems,
                                 &nBytesLeft,
-                                &pProperty ) == 0 )
+                                &pProperty ) == 0
+            && nItems
+            )
         {
             Atom* pAtoms = (Atom*)pProperty;
             char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
@@ -450,6 +452,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                                    &nItems,
                                    &nBytesLeft,
                                    &pProperty ) == 0
+            && pProperty
             )
         {
             m_nDesktops = *(sal_uInt32*)pProperty;
@@ -629,7 +632,9 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                                 &nFormat,
                                 &nItems,
                                 &nBytesLeft,
-                                &pProperty ) == 0 )
+                                &pProperty ) == 0
+            && pProperty
+            )
         {
             Atom* pAtoms = (Atom*)pProperty;
             char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
@@ -680,6 +685,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                                    &nItems,
                                    &nBytesLeft,
                                    &pProperty ) == 0
+            && pProperty
             )
         {
             m_nDesktops = *(sal_uInt32*)pProperty;
@@ -1067,6 +1073,7 @@ void NetWMAdaptor::setNetWMState( SalFrame* pFrame ) const
                                         &nItems,
                                         &nBytesLeft,
                                         &pProperty ) == 0
+                    && pProperty
                     )
                 {
                     nCurrent = *(sal_Int32*)pProperty;
@@ -1175,6 +1182,7 @@ void GnomeWMAdaptor::setGnomeWMState( SalFrame* pFrame ) const
                                         &nItems,
                                         &nBytesLeft,
                                         &pProperty ) == 0
+                    && pProperty
                     )
                 {
                     nCurrent = *(sal_Int32*)pProperty;
