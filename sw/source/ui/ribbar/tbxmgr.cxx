@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:40:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,16 @@
 |*
 |*
 \************************************************************************/
-
+/*
 SwPopupWindowTbxMgr::SwPopupWindowTbxMgr( USHORT nId, WindowAlign eAlign,
                       ResId aRIdWin, ResId aRIdTbx,
                       SfxBindings& rBindings ) :
-                SvxPopupWindowTbxMgr( nId, eAlign, aRIdWin, aRIdTbx, rBindings),
+                SvxPopupWindowTbxMgr( nId, eAlign, aRIdWin, aRIdTbx ),
                 bWeb(FALSE),
                 aRIdWinTemp(aRIdWin),
-                aRIdTbxTemp(aRIdTbx)
+                aRIdTbxTemp(aRIdTbx),
+                eAlignment( eAlign ),
+                mrBindings( rBindings )
 {
     SfxObjectShell* pObjShell = SfxObjectShell::Current();
     if(PTR_CAST(SwWebDocShell, pObjShell))
@@ -119,13 +121,13 @@ SwPopupWindowTbxMgr::SwPopupWindowTbxMgr( USHORT nId, WindowAlign eAlign,
     GetTbxMgr().SetPosSizePixel( Point(), aSize );
     SetOutputSizePixel( aSize );
 }
-
+*/
 /*************************************************************************
 |*
 |*
 |*
 \************************************************************************/
-
+/*
 void SwPopupWindowTbxMgr::StateChanged(USHORT nSID, SfxItemState eState,
                                                     const SfxPoolItem* pState)
 {
@@ -149,6 +151,7 @@ void SwPopupWindowTbxMgr::StateChanged(USHORT nSID, SfxItemState eState,
 
     SfxObjectShell* pObjShell = SfxObjectShell::Current();
     BOOL bNewWeb = 0 != PTR_CAST(SwWebDocShell, pObjShell);
+
     if(bWeb != bNewWeb)
     {
         bWeb = bNewWeb;
@@ -188,19 +191,22 @@ void SwPopupWindowTbxMgr::StateChanged(USHORT nSID, SfxItemState eState,
             SetOutputSizePixel( aSize );
         }
     }
+
     SfxPopupWindow::StateChanged(nSID, eState, pState);
 }
-
-
+*/
+/*
 SfxPopupWindow* SwPopupWindowTbxMgr::Clone() const
 {
     return new SwPopupWindowTbxMgr(
             GetId(),
-            ((SwPopupWindowTbxMgr*)this)->GetTbxMgr().GetToolBox().GetAlign(),
+            eAlignment,
+//          ((SwPopupWindowTbxMgr*)this)->GetTbxMgr().GetToolBox().GetAlign(),
             aRIdWinTemp,
             aRIdTbxTemp,
-            (SfxBindings&)GetBindings()
+            mrBindings
+//          (SfxBindings&)GetBindings()
             );
 }
-
+*/
 
