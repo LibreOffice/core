@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:37:35 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,12 @@
  *
  ************************************************************************/
 
-#define _SV_DIALOG_CXX
-
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -91,9 +89,6 @@
 #endif
 #ifndef _SV_MNEMONIC_HXX
 #include <mnemonic.hxx>
-#endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
 #endif
 #ifndef _SV_DIALOG_HXX
 #include <dialog.hxx>
@@ -333,7 +328,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     {
         pParent = Application::GetDefDialogParent();
         if ( !pParent && !(nStyle & WB_SYSTEMWINDOW) )
-            pParent = Application::GetAppWindow();
+            pParent = ImplGetSVData()->maWinData.mpAppWin;
 
         // If Parent is disabled, then we search for a modal dialog
         // in this frame
@@ -691,12 +686,6 @@ short Dialog::Execute()
     Show();
 
 
-    if ( Application::GetAccessHdlCount() )
-    {
-        Application::AccessNotify( AccessNotification( ACCESS_EVENT_MODALDIALOG_START, this ) );
-        Application::AccessNotify( AccessNotification( ACCESS_EVENT_DLGCONTROLS, this ) );
-    }
-
     // Solange Yielden, bis EndDialog aufgerufen wird, oder der Dialog
     // zerstoert wird (sollte nicht sein und ist nur vorsichtsmassnahme)
     ImplDelData aDelData;
@@ -764,8 +753,6 @@ void Dialog::EndDialog( long nResult )
             NotifyEvent aNEvt( EVENT_ENDEXECUTEDIALOG, this );
             GetParent()->Notify( aNEvt );
         }
-        if ( Application::GetAccessHdlCount() )
-            Application::AccessNotify( AccessNotification( ACCESS_EVENT_MODALDIALOG_END, this ) );
         if ( mpResult )
             *mpResult = nResult;
         mpResult    = NULL;
