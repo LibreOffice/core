@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,7 +759,6 @@ sal_Int32 lcl_GetNextIndex(SwXBookmarkPortionArr& rBkmArr, SwXRedlinePortionArr&
 //-----------------------------------------------------------------------------
 void SwXTextPortionEnumeration::CreatePortions()
 {
-    uno::Any aRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     // set the start if a selection should be exported
     if(nStartPos > 0 && pUnoCrsr->Start()->nContent.GetIndex() != nStartPos)
@@ -794,15 +793,16 @@ void SwXTextPortionEnumeration::CreatePortions()
                     pUnoCrsr->Exchange();
                 pUnoCrsr->DeleteMark();
             }
-            if(!bFirstPortion   && pUnoCrsr->GetCntntNode() &&
-                    pUnoCrsr->GetPoint()->nContent == pUnoCrsr->GetCntntNode()->Len())
+            SwNode* pNode = pUnoCrsr->GetNode();
+            SwCntntNode *pCNd = pNode->GetCntntNode();
+            if(!bFirstPortion   && pCNd &&
+                    pUnoCrsr->GetPoint()->nContent == pCNd->Len())
             {
                 //hier sollte man nie ankommen!
                 bAtEnd = sal_True;
             }
             else
             {
-                SwNode* pNode = pUnoCrsr->GetNode();
                 if(ND_TEXTNODE == pNode->GetNodeType())
                 {
                     SwTxtNode* pTxtNode = (SwTxtNode*)pNode;
@@ -811,7 +811,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                     xub_StrLen nCurrentIndex = pUnoCrsr->GetPoint()->nContent.GetIndex();
                     xub_StrLen nFirstFrameIndex = STRING_MAXLEN;
                     uno::Reference< XTextRange >  xRef;
-                    if(!pUnoCrsr->GetCntntNode()->Len())
+                    if(!pCNd->Len())
                     {
                         lcl_ExportBkmAndRedline(aBkmArr, aRedArr, 0, pUnoCrsr, xParent, aPortionArr);
                         // the paragraph is empty
@@ -923,14 +923,14 @@ void SwXTextPortionEnumeration::CreatePortions()
                     pUnoCrsr->Exchange();
 
             // Absatzende ?
-            sal_Int32 nLocalEnd = nEndPos > 0 ? nEndPos : pUnoCrsr->GetCntntNode()->Len();
-            if(pUnoCrsr->GetCntntNode() &&
-                    pUnoCrsr->GetPoint()->nContent == (xub_StrLen)nLocalEnd)
+            pNode = pUnoCrsr->GetNode();
+            pCNd = pNode->GetCntntNode();
+            sal_Int32 nLocalEnd = nEndPos > 0 ? nEndPos : pCNd->Len();
+            if( pCNd && pUnoCrsr->GetPoint()->nContent == (xub_StrLen)nLocalEnd)
             {
                 bAtEnd = sal_True;
                 lcl_ExportBkmAndRedline(aBkmArr, aRedArr, nLocalEnd,
                                             pUnoCrsr, xParent, aPortionArr);
-                SwNode* pNode = pUnoCrsr->GetNode();
                 if(ND_TEXTNODE == pNode->GetNodeType())
                 {
                     SwTxtNode* pTxtNode = (SwTxtNode*)pNode;

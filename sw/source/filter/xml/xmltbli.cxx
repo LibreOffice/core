@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-30 15:53:20 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2727,16 +2727,11 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         if( !pPrevSttNd )
         {
             pBox1->pSttNd = pStNd;
-            SwCntntNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
-                                                            ->GetCntntNode();
-            SwPosition aPos( *pCNd );
-            aPos.nContent.Assign( pCNd, 0U );
-
-            Reference < XTextRange > xTextRange =
-                SwXTextRange::CreateTextRangeFromPosition( pDoc, aPos, 0 );
-            Reference < XText > xText = xTextRange->getText();
-            Reference < XTextCursor > xTextCursor =
-                xText->createTextCursorByRange( xTextRange );
+            SwTable& rTable = pTableNode->GetTable();
+            SwFrmFmt *pTblFmt = rTable.GetFrmFmt();
+            Reference < XCell > xCell( SwXCell::CreateXCell( pTblFmt, pBox1, 0, &rTable ) );
+            Reference < XText > xText( xCell, UNO_QUERY );
+            Reference < XTextCursor > xTextCursor = xText->createTextCursor();
             GetImport().GetTextImport()->SetCursor( xTextCursor );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-12 17:27:25 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ class SwXMLTableLines_Impl;
 class SwXMLTableLinesCache_Impl;
 class SwXMLTableColumnsSortByWidth_Impl;
 class SwXMLTableFrmFmtsSort_Impl;
+class SwXMLTableInfo_Impl;
 class SwTableNode;
 class XMLPropertySetMapper;
 
@@ -134,6 +135,7 @@ class SwXMLExport : public SvXMLExport
                                  SwXMLTableColumnsSortByWidth_Impl& rExpCols,
                                  SwXMLTableFrmFmtsSort_Impl& rExpRows,
                                  SwXMLTableFrmFmtsSort_Impl& rExpCells,
+                                 SwXMLTableInfo_Impl& rTblInfo,
                                  sal_Bool bTop=sal_False );
 
 
@@ -141,10 +143,13 @@ class SwXMLExport : public SvXMLExport
     void ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth );
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );
-    void ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan );
+    void ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
+                         SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLine( const SwTableLine& rLine,
-                          const SwXMLTableLines_Impl& rLines );
+                          const SwXMLTableLines_Impl& rLines,
+                          SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLines( const SwTableLines& rLines,
+                           SwXMLTableInfo_Impl& rTblInfo,
                            sal_Bool bHeadline=sal_False );
 
     virtual void _ExportMeta();

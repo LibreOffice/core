@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-24 17:47:32 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int16 nColumn, sal_Int16 nRow)
     SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName.ToUpperAscii() );
     if(pBox)
     {
-        pXCell = SwXCell::CreateXCell(pFmt, pBox, &sCellName);
+        pXCell = SwXCell::CreateXCell(pFmt, pBox, &sCellName, pTable );
     }
     return pXCell;
 }
@@ -710,14 +710,15 @@ TYPEINIT1(SwXCell, SwClient);
 /*-- 11.12.98 10:56:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, const String& rCellName) :
+SwXCell::SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBx, const String& rCellName,
+                 sal_uInt16 nPos ) :
     SwXText(pTblFmt->GetDoc(), CURSOR_TBLTEXT),
     sCellName(rCellName),
     pBox(pBx),
     pStartNode(0),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TABLE_CELL)),
     SwClient(pTblFmt),
-    nFndPos(USHRT_MAX)
+    nFndPos(nPos)
 {
 }
 /* -----------------------------09.08.00 15:59--------------------------------
@@ -1185,14 +1186,16 @@ void SwXCell::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 /* -----------------12.06.98 07:54-------------------
  *
  * --------------------------------------------------*/
-SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String* pCellName)
+SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String* pCellName, SwTable *pTable )
 {
     SwXCell* pRet = 0;
     if(pTblFmt && pBox)
     {
-        SwTable* pTable = SwTable::FindTable( pTblFmt );
+        if( !pTable )
+            pTable = SwTable::FindTable( pTblFmt );
+        sal_uInt16 nPos = USHRT_MAX;
         SwTableBox* pFoundBox =
-            pTable->GetTabSortBoxes().Seek_Entry( pBox ) ? pBox : NULL;
+            pTable->GetTabSortBoxes().Seek_Entry( pBox, &nPos ) ? pBox : NULL;
 
         //wenn es die Box gibt, dann wird auch eine Zelle zurueckgegeben
         if(pFoundBox)
@@ -1209,7 +1212,7 @@ SwXCell* SwXCell::CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String*
             }
             //sonst anlegen
             if(!pXCell)
-                pXCell = new SwXCell(pTblFmt, pBox, pCellName? *pCellName : aEmptyStr);
+                pXCell = new SwXCell(pTblFmt, pBox, pCellName? *pCellName : aEmptyStr, nPos );
             pRet = pXCell;
         }
     }

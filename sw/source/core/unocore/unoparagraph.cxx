@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-16 11:58:14 $
+ *  last change: $Author: mib $ $Date: 2001-11-01 13:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,16 +496,16 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
         {
             SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(
                 rUnoCrsr, rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
-            if( !pFmt )
-                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+            eRet = pFmt ? beans::PropertyState_DIRECT_VALUE
+                        : beans::PropertyState_AMBIGUOUS_VALUE;
         }
         break;
     case FN_UNO_PAGE_STYLE:
         {
             String sVal;
             SwUnoCursorHelper::GetCurPageStyle( rUnoCrsr, sVal );
-            if( !sVal.Len() )
-                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+            eRet = sVal.Len() ? beans::PropertyState_DIRECT_VALUE
+                              : beans::PropertyState_AMBIGUOUS_VALUE;
         }
         break;
     lcl_SwXParagraph_getPropertyStateDEFAULT:
@@ -574,7 +574,9 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
                 throw aExcept;
             }
 
-            if (bAttrSetFetched && !pSet )
+            if (bAttrSetFetched && !pSet &&
+                pMap->nWID >= RES_CHRATR_BEGIN &&
+                pMap->nWID <= RES_UNKNOWNATR_END )
                 *pStates = beans::PropertyState_DEFAULT_VALUE;
             else
                 *pStates = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,*pMap, bAttrSetFetched );
