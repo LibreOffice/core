@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:58:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,12 +733,14 @@ SwPageFrm *SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
 }
 
 // OD 2004-05-12 #i28701#
+// --> OD 2004-11-03 #i114798# - unlock position on start and end of page
+// layout process.
 class NotifyLayoutOfPageInProgress
 {
     private:
         SwPageFrm& mrPageFrm;
 
-        void _PositionOfObjs( const bool _bLockPos )
+        void _UnlockPositionOfObjs()
         {
             SwSortedObjs* pObjs = mrPageFrm.GetSortedObjs();
             if ( pObjs )
@@ -747,15 +749,7 @@ class NotifyLayoutOfPageInProgress
                 for ( ; i < pObjs->Count(); ++i )
                 {
                     SwAnchoredObject* pObj = (*pObjs)[i];
-                    if ( _bLockPos )
-                        pObj->LockPosition();
-                    else
-                        pObj->UnlockPosition();
-                    // --> OD 2004-08-25 #i3317# - reset temporarly consideration
-                    // of wrapping style influence at each start/end of the
-                    // layout process of a page frame
-                    pObj->SetTmpConsiderWrapInfluence( false );
-                    // <--
+                    pObj->UnlockPosition();
                 }
             }
         }
@@ -763,15 +757,16 @@ class NotifyLayoutOfPageInProgress
         NotifyLayoutOfPageInProgress( SwPageFrm& _rPageFrm )
             : mrPageFrm( _rPageFrm )
         {
-            _PositionOfObjs( false );
+            _UnlockPositionOfObjs();
             _rPageFrm.SetLayoutInProgress( true );
         }
         ~NotifyLayoutOfPageInProgress()
         {
             mrPageFrm.SetLayoutInProgress( false );
-            _PositionOfObjs( true );
+            _UnlockPositionOfObjs();
         }
 };
+// <--
 
 // --> OD 2004-06-14 #i28701# - local method to determine, if scrolling during
 // the format of the given page is allowed.
@@ -805,6 +800,9 @@ void SwLayAction::InternalAction()
 {
     // OD 2004-05-21 #i28701#
     SwLayouter::ClearMovedFwdFrms( *(pRoot->GetFmt()->GetDoc()) );
+    // --> OD 2004-10-22 #i35911#
+    SwLayouter::ClearObjsTmpConsiderWrapInfluence( *(pRoot->GetFmt()->GetDoc()) );
+    // <--
 
     ASSERT( pRoot->Lower()->IsPageFrm(), ":-( Keine Seite unterhalb der Root.");
 
@@ -1072,6 +1070,9 @@ void SwLayAction::InternalAction()
         long nBottom = rVis.Bottom();
         while ( pPg && pPg->Frm().Top() < nBottom )
         {
+            // --> OD 2004-10-11 #i26945# - follow-up of #i28701#
+            NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPg );
+
             XCHECKPAGE;
             // OD 14.04.2003 #106346# - special case: interrupt content formatting
             // --> OD 2004-07-08 #i28701# - conditions, introduced by #106346#,
@@ -1091,11 +1092,19 @@ void SwLayAction::InternalAction()
                 {
                     pPg->ValidateFlyInCnt();
                     pPg->ValidateCntnt();
+                    // --> OD 2004-05-10 #i26945# - follow-up of fix #117736#
+                    pPg->ValidateFlyLayout();
+                    pPg->ValidateFlyCntnt();
+                    // <--
                     if ( !FormatCntnt( pPg ) )
                     {
                         XCHECKPAGE;
                         pPg->InvalidateCntnt();
                         pPg->InvalidateFlyInCnt();
+                        // --> OD 2004-05-10 #i26945# - follow-up of fix #117736#
+                        pPg->InvalidateFlyLayout();
+                        pPg->InvalidateFlyCntnt();
+                        // <--
                     }
                 }
             }
@@ -1111,6 +1120,9 @@ void SwLayAction::InternalAction()
 
     // OD 2004-05-21 #i28701#
     SwLayouter::ClearMovedFwdFrms( *(pRoot->GetFmt()->GetDoc()) );
+    // --> OD 2004-10-22 #i35911#
+    SwLayouter::ClearObjsTmpConsiderWrapInfluence( *(pRoot->GetFmt()->GetDoc()) );
+    // <--
 }
 /*************************************************************************
 |*
@@ -1840,15 +1852,35 @@ void lcl_ValidateLowerObjs( SwFrm* pFrm,
 {
     if ( pFrm->GetDrawObjs() )
     {
+        // --> OD 2004-10-15 #i26945# - consider layout direction
+        SWRECTFN( pFrm )
+        // <--
         for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
+            // --> OD 2004-10-08 #i26945# - check, if the anchor frame, which
+            // contains the anchor position, is the given frame
+            if ( pAnchoredObj->GetAnchorFrmContainingAnchPos() != pFrm )
+            {
+                continue;
+            }
             if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
                 SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 if ( !bResetOnly )
                 {
-                    pFly->Frm().Pos().Y() += nOfst;
+                    // --> OD 2004-10-15 #i26945#
+                    // - consider layout direction
+                    // - consider condition for direct move
+                    const bool bNoDirectMove =
+                            WEIT_WECH == pFly->Frm().Top() ||
+                            pFly->ConsiderObjWrapInfluenceOnObjPos();
+                    if ( !bNoDirectMove )
+                    {
+                        (pFly->Frm().*fnRect->fnSubTop)( -nOfst );
+                        (pFly->Frm().*fnRect->fnAddBottom)( nOfst );
+                    }
+                    // <--
                     pFly->GetVirtDrawObj()->SetRectsDirty();
                     // --> OD 2004-08-17 - also notify view of <SdrObject>
                     // instance, which represents the Writer fly frame in the
@@ -1857,9 +1889,29 @@ void lcl_ValidateLowerObjs( SwFrm* pFrm,
                     // <--
                     if ( pFly->IsFlyInCntFrm() )
                         ((SwFlyInCntFrm*)pFly)->AddRefOfst( nOfst );
+                    // --> OD 2004-10-15 #i26945# - consider at-character
+                    // anchored Writer fly frames
+                    else if( pFly->IsAutoPos() )
+                    {
+                        pFly->AddLastCharY( nOfst );
+                        // OD 2004-05-18 #i28701# - follow-up of #i22341#
+                        // <mnLastTopOfLine> has also been adjusted.
+                        pFly->AddLastTopOfLineY( nOfst );
+                    }
+                    // <--
                 }
                 ::lcl_ValidateLowers( pFly, nOfst, 0, pPage, bResetOnly);
             }
+            // --> OD 2004-10-15 #i26945# - consider drawing objects
+            else
+            {
+                if ( !bResetOnly )
+                {
+                    pAnchoredObj->AddLastCharY( nOfst );
+                    pAnchoredObj->AddLastTopOfLineY( nOfst );
+                }
+            }
+            // <--
             pAnchoredObj->InvalidateObjPos();
         }
     }
@@ -2146,21 +2198,25 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             const BOOL bOldPaint = IsPaint();
             bPaint = bOldPaint && !(pTab && pTab == pOptTab);
             _FormatCntnt( pCntnt, pPage );
+            // --> OD 2004-11-05 #i26945# - reset <bPaint> before format objects
+            bPaint = bOldPaint;
+            // <--
 
             // OD 2004-05-10 #i28701# - format floating screen object at content frame.
             // No format, if action flag <bAgain> is set or action is interrupted.
             // OD 2004-08-30 #117736# - allow format on interruption of action, if
             // it's the format for this interrupt
+            // --> OD 2004-11-01 #i23129#, #i36347# - pass correct page frame
+            // to the object formatter.
             if ( !IsAgain() &&
                  ( !IsInterrupt() || mbFormatCntntOnInterrupt ) &&
                  pCntnt->IsTxtFrm() &&
                  !SwObjectFormatter::FormatObjsAtFrm( *(const_cast<SwCntntFrm*>(pCntnt)),
-                                                      *pPage, this ) )
+                                                      *(pCntnt->FindPageFrm()), this ) )
+            // <--
             {
                 return FALSE;
             }
-
-            bPaint = bOldPaint;
 
             if ( !pCntnt->GetValidLineNumFlag() && pCntnt->IsTxtFrm() )
             {
@@ -2379,15 +2435,17 @@ BOOL SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
     while ( pCntnt )
     {
         // OD 2004-05-10 #i28701#
-        const SwPageFrm* pPageFrm = pCntnt->FindPageFrm();
-        _FormatCntnt( pCntnt, pPageFrm );
+        _FormatCntnt( pCntnt, pCntnt->FindPageFrm() );
 
         // --> OD 2004-07-23 #i28701# - format floating screen objects
         // at content text frame
+        // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame
+        // to the object formatter.
         if ( pCntnt->IsTxtFrm() &&
              !SwObjectFormatter::FormatObjsAtFrm(
                                             *(const_cast<SwCntntFrm*>(pCntnt)),
-                                            *pPageFrm, this ) )
+                                            *(pCntnt->FindPageFrm()), this ) )
+        // <--
         {
             // restart format with first content
             pCntnt = pFly->ContainsCntnt();
