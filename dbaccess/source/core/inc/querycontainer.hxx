@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_CORE_QUERYCONTAINER_HXX_
 #define _DBA_CORE_QUERYCONTAINER_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE10_HXX_
-#include <cppuhelper/implbase10.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -71,7 +71,6 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -114,18 +113,20 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
-
+#ifndef _DBA_CORE_DEFINITIONCONTAINER_HXX_
+#include "definitioncontainer.hxx"
+#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
-#include "configurationflushable.hxx"
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
+#ifndef DBA_CONTAINERLISTENER_HXX
+#include "ContainerListener.hxx"
 #endif
 
 //........................................................................
@@ -133,44 +134,27 @@ namespace dbaccess
 {
 //........................................................................
 
-    typedef ::cppu::WeakImplHelper10< ::com::sun::star::container::XEnumerationAccess,
-                                     ::com::sun::star::container::XContainerListener,
-                                     ::com::sun::star::container::XNameAccess,
-                                     ::com::sun::star::container::XIndexAccess,
-                                     ::com::sun::star::container::XContainer,
+    typedef ::cppu::ImplHelper4<     ::com::sun::star::container::XContainerListener,
                                      ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                      ::com::sun::star::sdbcx::XAppend,
-                                     ::com::sun::star::sdbcx::XDrop,
-                                     ::com::sun::star::beans::XPropertyChangeListener,
-                                     ::com::sun::star::lang::XServiceInfo > OQueryContainer_Base;
+                                     ::com::sun::star::sdbcx::XDrop> OQueryContainer_Base;
 
     //==========================================================================
     //= OQueryContainer
     //==========================================================================
+    class OQueryContainer;
+    typedef OContainerListener<OQueryContainer> OCommandsListener;
     class OQuery;
-    class OCommandsListener;
     class IWarningsContainer;
-    class OQueryContainer   :public OQueryContainer_Base
-                            ,public OConfigurationFlushable
+    class OQueryContainer   : public ODefinitionContainer
+                            , public OQueryContainer_Base
     {
     protected:
-
-        ::cppu::OWeakObject&        m_rParent;
         IWarningsContainer*         m_pWarnings;
-        ::osl::Mutex&               m_rMutex;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                     m_xCommandDefinitions;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                    m_xORB;
-
-        ::cppu::OInterfaceContainerHelper
-                                    m_aContainerListeners;
-
-        DECLARE_STL_USTRINGACCESS_MAP(OQuery*, Queries);
-        DECLARE_STL_VECTOR(QueriesIterator, QueriesIndexAccess);
-        Queries                     m_aQueries;
-        QueriesIndexAccess          m_aQueriesIndexed;
-
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                                    m_xConnection;
         // possible actions on our "aggregate"
         enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
         AGGREGATE_ACTION        m_eDoingCurrently;
@@ -189,12 +173,16 @@ namespace dbaccess
             ~OAutoActionReset() { m_pActor->m_eDoingCurrently = NONE; }
         };
 
+        // ODefinitionContainer
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject( const ::rtl::OUString& _rName);
+        virtual sal_Bool checkExistence(const ::rtl::OUString& _rName);
+
+        // helper
+        virtual void SAL_CALL disposing();
+        virtual ~OQueryContainer();
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
-            @param          _rConnection        the connection object which acts as parent for the container.
-                                                all refcounting is rerouted to this object
-            @param          _rMutex             the access safety object of the parent
             @param          _rQueryFilter       restricts the visible tables by name
             @param          _rQueryTypeFilter   restricts the visible tables by type
             @param          _rxMasterQueries    the container for the "master objects", i.e. the objects implementing
@@ -208,28 +196,14 @@ namespace dbaccess
                 <p>The caller is responsible for ensuring the lifetime of the object pointed to by this parameter.
                 Usually, it's the same object as referenced by _rConnection</p>
         */
-        OQueryContainer(::cppu::OWeakObject& _rConnection,
-            ::osl::Mutex& _rMutex,
+        OQueryContainer(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
-            const ::utl::OConfigurationTreeRoot& _rRootConfigNode,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             IWarningsContainer* _pWarnings
             );
-        ~OQueryContainer();
 
-        /** tell the container to free all elements and all additional resources.<BR>
-            After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
-        */
-        virtual void SAL_CALL dispose();
-
-    // ::com::sun::star::uno::XInterface
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire() throw();
-        virtual void SAL_CALL release() throw();
-
-    // XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-
+        DECLARE_XINTERFACE( )
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
 
@@ -241,26 +215,6 @@ namespace dbaccess
     // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::container::XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XEnumerationAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::container::XContainer
-        virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::sdbcx::XDataDescriptorFactory
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -270,15 +224,13 @@ namespace dbaccess
     // ::com::sun::star::sdbcx::XDrop
         virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
-        // sets the new confignode at his children
-        void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
-
-    protected:
-        // OConfigurationFlushable
-        virtual void flush_NoBroadcast_NoCommit();
+    // ::com::sun::star::container::XElementAccess
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::container::XIndexAccess
+        virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
+    // ::com::sun::star::container::XNameAccess
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     private:
         // helper
@@ -286,50 +238,11 @@ namespace dbaccess
             container will be asked for the given name.<BR>
             The returned object is acquired once.
         */
-        OQuery* implCreateWrapper(const ::rtl::OUString& _rName);
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const ::rtl::OUString& _rName);
         /// create a query object wrapping a CommandDefinition. The returned object is acquired once.
-        OQuery* implCreateWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDesc);
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxCommandDesc);
 
-        // removes the object with the given number from m_aQueriesIndexed as well as m_aQueries
-        void    implRemove( sal_Int32 nIndex );
-
-        /// search the index of the object with the given name within m_aQueriesIndexed
-        sal_Int32 implGetIndex(const ::rtl::OUString& _rName);
-
-        /// search the object key for the given name
-        ::utl::OConfigurationNode implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool bCreate = sal_False);
     };
-
-    //==========================================================================
-    //= OCommandsListener
-    // is helper class to avoid a cycle in refcount between the OQueyContainer
-    // and the member m_xCommandDefinitions
-    //==========================================================================
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener > OCommandsListener_BASE;
-    class OCommandsListener : public OCommandsListener_BASE
-    {
-        OQueryContainer* m_pDestination;
-    public:
-        OCommandsListener(OQueryContainer* _pDestination) : m_pDestination(_pDestination){}
-
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
-        {
-            m_pDestination->elementInserted(Event);
-        }
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
-        {
-            m_pDestination->elementRemoved(Event);
-        }
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException)
-        {
-            m_pDestination->elementReplaced(Event);
-        }
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
-        {
-            m_pDestination->disposing(Source);
-        }
-    };
-
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
