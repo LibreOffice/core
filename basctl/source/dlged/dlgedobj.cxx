@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 14:02:06 $
+ *  last change: $Author: tbe $ $Date: 2001-03-03 16:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,120 @@ void DlgEdObj::SetPage(SdrPage* _pNewPage)
 
 void DlgEdObj::SetRectFromProps()
 {
+    // DIRTY HACK!!!
+    // I need the window borders from MT
+    //
+    // window borders in pixel
+    sal_Int32 nLeftBorder_px = 3;
+    sal_Int32 nRightBorder_px = 3;
+    sal_Int32 nTopBorder_px = 22;
+    sal_Int32 nBottomBorder_px = 3;
+
+    if ( !ISA(DlgEdForm) )
+    {
+        // get property sets
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSetForm(GetDlgEdForm()->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+
+        if (xPSet.is() && xPSetForm.is())
+        {
+            // get control position and size from properties
+            sal_Int32 nX, nY, nWidth, nHeight;
+            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nX;
+            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nY;
+            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
+            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
+
+            // get form position and size from properties
+            sal_Int32 nFormX, nFormY, nFormWidth, nFormHeight;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nFormX;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nFormY;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nFormWidth;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nFormHeight;
+
+            Size aPos( nX, nY );
+            Size aSize( nWidth, nHeight );
+            Size aFormPos( nFormX, nFormY );
+            Size aFormSize( nFormWidth, nFormHeight );
+
+            // convert logic units to pixel
+            OutputDevice* pDevice = Application::GetDefaultDevice();
+            DBG_ASSERT( pDevice, "Missing Default Device!" );
+            if( pDevice )
+            {
+                aPos = pDevice->LogicToPixel( aPos, MapMode(MAP_APPFONT) );
+                aSize = pDevice->LogicToPixel( aSize, MapMode(MAP_APPFONT) );
+                aFormPos = pDevice->LogicToPixel( aFormPos, MapMode(MAP_APPFONT) );
+                aFormSize = pDevice->LogicToPixel( aFormSize, MapMode(MAP_APPFONT) );
+            }
+
+            // take window borders into account
+            aPos.Width() += aFormPos.Width() + nLeftBorder_px;
+            aPos.Height() += aFormPos.Height() + nTopBorder_px;
+
+            // convert pixel to 100th_mm
+            if( pDevice )
+            {
+                aPos = pDevice->PixelToLogic( aPos, MapMode(MAP_100TH_MM) );
+                aSize = pDevice->PixelToLogic( aSize, MapMode(MAP_100TH_MM) );
+            }
+
+            Point aPoint;
+            aPoint.X() = aPos.Width();
+            aPoint.Y() = aPos.Height();
+
+            // set rectangle position and size
+            SetSnapRect( Rectangle( aPoint, aSize ) );
+        }
+    }
+    else if ( ISA(DlgEdForm) )
+    {
+        // get property set
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSetForm(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+
+        if (xPSetForm.is())
+        {
+            // get form position and size from properties
+            sal_Int32 nFormX, nFormY, nFormWidth, nFormHeight;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ) ) >>= nFormX;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ) ) >>= nFormY;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nFormWidth;
+            xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nFormHeight;
+
+            Size aFormPos( nFormX, nFormY );
+            Size aFormSize( nFormWidth, nFormHeight );
+
+            // convert logic units to pixel
+            OutputDevice* pDevice = Application::GetDefaultDevice();
+            DBG_ASSERT( pDevice, "Missing Default Device!" );
+            if( pDevice )
+            {
+                aFormPos = pDevice->LogicToPixel( aFormPos, MapMode(MAP_APPFONT) );
+                aFormSize = pDevice->LogicToPixel( aFormSize, MapMode(MAP_APPFONT) );
+            }
+
+            // take window borders into account
+            aFormSize.Width() += nLeftBorder_px + nRightBorder_px;
+            aFormSize.Height() += nTopBorder_px + nBottomBorder_px;
+
+            // convert pixel to 100th_mm
+            if( pDevice )
+            {
+                aFormPos = pDevice->PixelToLogic( aFormPos, MapMode(MAP_100TH_MM) );
+                aFormSize = pDevice->PixelToLogic( aFormSize, MapMode(MAP_100TH_MM) );
+            }
+
+            Point aFormPoint;
+            aFormPoint.X() = aFormPos.Width();
+            aFormPoint.Y() = aFormPos.Height();
+
+            // set rectangle position and size
+            SetSnapRect( Rectangle( aFormPoint, aFormSize ) );
+        }
+    }
+
+    /* old method
+    //
     // get property set
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
     if (xPSet.is())
@@ -222,12 +336,135 @@ void DlgEdObj::SetRectFromProps()
         // set rectangle position and size
         SetSnapRect( Rectangle( aPoint, aSize ) );
     }
+    */
 }
 
 //----------------------------------------------------------------------------
 
 void DlgEdObj::SetPropsFromRect()
 {
+    // DIRTY HACK!!!
+    // I need the window borders from MT
+    //
+    // window borders in pixel
+    sal_Int32 nLeftBorder_px = 3;
+    sal_Int32 nRightBorder_px = 3;
+    sal_Int32 nTopBorder_px = 22;
+    sal_Int32 nBottomBorder_px = 3;
+
+    if ( !ISA(DlgEdForm) )
+    {
+        EndPropertyListening(sal_False);
+
+        // get control property set
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        if (xPSet.is())
+        {
+            // get control position and size from rectangle
+            Rectangle aRect = GetSnapRect();
+            Point aPoint = aRect.TopLeft();
+            Size aSize = aRect.GetSize();
+            Size aPos;
+            aPos.Width() = aPoint.X();
+            aPos.Height() = aPoint.Y();
+
+            // get form position and size from rectangle
+            Rectangle aFormRect = GetDlgEdForm()->GetSnapRect();
+            Point aFormPoint = aFormRect.TopLeft();
+            Size aFormSize = aFormRect.GetSize();
+            Size aFormPos;
+            aFormPos.Width() = aFormPoint.X();
+            aFormPos.Height() = aFormPoint.Y();
+
+            // convert 100th_mm to pixel
+            OutputDevice* pDevice = Application::GetDefaultDevice();
+            DBG_ASSERT( pDevice, "Missing Default Device!" );
+            if( pDevice )
+            {
+                aPos = pDevice->LogicToPixel( aPos, MapMode(MAP_100TH_MM) );
+                aSize = pDevice->LogicToPixel( aSize, MapMode(MAP_100TH_MM) );
+                aFormPos = pDevice->LogicToPixel( aFormPos, MapMode(MAP_100TH_MM) );
+                aFormSize = pDevice->LogicToPixel( aFormSize, MapMode(MAP_100TH_MM) );
+            }
+
+            // take window borders into account
+            aPos.Width() -= aFormPos.Width() + nLeftBorder_px;
+            aPos.Height() -= aFormPos.Height() + nTopBorder_px;
+
+            // convert pixel to logic units
+            if( pDevice )
+            {
+                aPos = pDevice->PixelToLogic( aPos, MapMode(MAP_APPFONT) );
+                aSize = pDevice->PixelToLogic( aSize, MapMode(MAP_APPFONT) );
+            }
+
+            // set properties
+            Any aValue;
+            aValue <<= aPos.Width();
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
+            aValue <<= aPos.Height();
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
+            aValue <<= aSize.Width();
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
+            aValue <<= aSize.Height();
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
+        }
+
+        StartPropertyListening();
+    }
+    else if ( ISA(DlgEdForm) )
+    {
+        EndPropertyListening(sal_False);
+
+        // get control property set
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSetForm(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        if (xPSetForm.is())
+        {
+            // get form position and size from rectangle
+            Rectangle aFormRect = GetSnapRect();
+            Point aFormPoint = aFormRect.TopLeft();
+            Size aFormSize = aFormRect.GetSize();
+            Size aFormPos;
+            aFormPos.Width() = aFormPoint.X();
+            aFormPos.Height() = aFormPoint.Y();
+
+            // convert 100th_mm to pixel
+            OutputDevice* pDevice = Application::GetDefaultDevice();
+            DBG_ASSERT( pDevice, "Missing Default Device!" );
+            if( pDevice )
+            {
+                aFormPos = pDevice->LogicToPixel( aFormPos, MapMode(MAP_100TH_MM) );
+                aFormSize = pDevice->LogicToPixel( aFormSize, MapMode(MAP_100TH_MM) );
+            }
+
+            // take window borders into account
+            aFormSize.Width() -= nLeftBorder_px + nRightBorder_px;
+            aFormSize.Height() -= nTopBorder_px + nBottomBorder_px;
+
+            // convert pixel to logic units
+            if( pDevice )
+            {
+                aFormPos = pDevice->PixelToLogic( aFormPos, MapMode(MAP_APPFONT) );
+                aFormSize = pDevice->PixelToLogic( aFormSize, MapMode(MAP_APPFONT) );
+            }
+
+            // set properties
+            Any aValue;
+            aValue <<= aFormPos.Width();
+            xPSetForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
+            aValue <<= aFormPos.Height();
+            xPSetForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
+            aValue <<= aFormSize.Width();
+            xPSetForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
+            aValue <<= aFormSize.Height();
+            xPSetForm->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
+        }
+
+        StartPropertyListening();
+    }
+
+    /* old method
+    //
     EndPropertyListening(sal_False);
 
     // get property set
@@ -273,6 +510,7 @@ void DlgEdObj::SetPropsFromRect()
     }
 
     StartPropertyListening();
+    */
 }
 
 //----------------------------------------------------------------------------
