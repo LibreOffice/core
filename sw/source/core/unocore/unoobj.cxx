@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:04:57 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,11 +770,11 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                         if(!pRuby)
                             pRuby = new SwFmtRuby(aEmptyStr);
                         String sStyle(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
-                         pRuby->SetCharFmtName( sTmp );
+                         pRuby->SetCharFmtName( sStyle );
                         pRuby->SetCharFmtId( 0 );
-                        if(sTmp.getLength())
+                        if(sStyle.Len() > 0)
                         {
-                            sal_uInt16 nId = SwDoc::GetPoolId( sTmp, GET_POOLID_CHRFMT );
+                            sal_uInt16 nId = SwDoc::GetPoolId( sStyle, GET_POOLID_CHRFMT );
                             pRuby->SetCharFmtId(nId);
                         }
                         rSet.Put(*pRuby);
@@ -782,8 +782,10 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     }
                     else
                         throw lang::IllegalArgumentException();
-                    bRet = sal_False;
+                    bRet = sal_True;
                 }
+                else
+                    bRet = sal_False;
             break;
             case RES_PAGEDESC      :
             if(MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId )
