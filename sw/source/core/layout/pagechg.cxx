@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-24 16:18:09 $
+ *  last change: $Author: ama $ $Date: 2002-01-30 13:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#ifndef _SWFNTCCH_HXX
+#include <swfntcch.hxx> // SwFontAccess
+#endif
 
 /*************************************************************************
 |*
@@ -186,12 +189,79 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
         Frm().Width( nWidth );
     }
 
-    Prt().Pos().X() = Prt().Pos().Y() = 0;
-    Prt().Height( Frm().Height() );
-    Prt().Width( Frm().Width() );
+#ifdef VERTICAL_LAYOUT
+    BOOL bNoGrid = TRUE;
+    if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() &&
+        Lower() && !Lower()->IsColumnFrm() )
+    {
+        long nGrid, nRuby, nLines;
+        BOOL bLower, bCell;
+        if( ((SwPageFrm*)GetUpper())->GetGrid( nGrid, nRuby, nLines,
+            bLower, bCell ) && nGrid )
+        {
+            bNoGrid = FALSE;
+            long nSum = nGrid + nRuby;
+            SWRECTFN( this )
+            long nSize = (Frm().*fnRect->fnGetWidth)();
+            long nBorder = 0;
+            if( bCell )
+            {
+                nBorder = nSize % nGrid;
+                nSize -= nBorder;
+                nBorder /= 2;
+            }
+            (Prt().*fnRect->fnSetPosX)( nBorder );
+            (Prt().*fnRect->fnSetWidth)( nSize );
+            nBorder = (Frm().*fnRect->fnGetHeight)();
+            nSize = nBorder / nSum;
+            if( nSize > nLines )
+                nSize = nLines;
+            nSize *= nSum;
+            nBorder -= nSize;
+            nBorder /= 2;
+            (Prt().*fnRect->fnSetPosY)( nBorder );
+            (Prt().*fnRect->fnSetHeight)( nSize );
+        }
+    }
+    if( bNoGrid )
+#endif
+    {
+        Prt().Pos().X() = Prt().Pos().Y() = 0;
+        Prt().Height( Frm().Height() );
+        Prt().Width( Frm().Width() );
+    }
     bValidSize = bValidPrtArea = TRUE;
 }
 
+
+#ifdef VERTICAL_LAYOUT
+BOOL SwPageFrm::GetGrid( long& rGrid, long& rRuby, long& rLines,
+                         BOOL& rbLower, BOOL& rbCell ) const
+{
+    const SwTxtFmtColl *pFmt;
+    if( !bHasGrid || !pDesc || 0 == ( pFmt = pDesc->GetRegisterFmtColl() ) )
+        return FALSE;
+    ViewShell *pSh = GetShell();
+    if( pSh )
+    {
+        SwFontAccess aFontAccess( pFmt, pSh );
+        SwFont aFnt( *aFontAccess.Get()->GetFont() );
+        long nGrid = ( aFnt.GetSize( SW_CJK ).Height() * 5 ) / 4;
+        if( nGrid )
+        {
+            rGrid = nGrid;
+            rRuby = nGrid/4;
+            const SvxFont &rFnt = aFnt.GetFnt( SW_LATIN );
+            rLines = rFnt.GetSize().Height() / 20;
+            rbLower = WEIGHT_NORMAL != rFnt.GetWeight();
+            rbCell = ITALIC_NONE == rFnt.GetItalic();
+            return nGrid && rLines;
+        }
+    }
+    return FALSE;
+}
+
+#endif
 
 /*************************************************************************
 |*
@@ -210,6 +280,13 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
 #ifdef VERTICAL_LAYOUT
     SetDerivedVert( FALSE );
     SetDerivedR2L( FALSE );
+    bHasGrid = bShowGrid = bPrintGrid = FALSE;
+    if( pDesc )
+    {
+        const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
+        if( pFmt )
+            bHasGrid = bShowGrid = bPrintGrid = TRUE;
+    }
 #endif
     SetMaxFtnHeight( pPgDsc->GetFtnInfo().GetHeight() ?
                      pPgDsc->GetFtnInfo().GetHeight() : LONG_MAX ),
@@ -1215,6 +1292,24 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
 
 void SwPageFrm::PrepareRegisterChg()
 {
+#ifdef VERTICAL_LAYOUT
+    if( pDesc )
+    {
+        const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
+        BOOL bOld = bHasGrid;
+        if( pFmt )
+            bHasGrid = bShowGrid = bPrintGrid = TRUE;
+        else
+            bHasGrid = bShowGrid = bPrintGrid = FALSE;
+        if( bOld || bHasGrid )
+        {
+            SwLayoutFrm* pBody = FindBodyCont();
+            if( pBody && pBody->Lower() && !pBody->Lower()->IsColumnFrm() )
+                pBody->InvalidatePrt();
+            SetCompletePaint();
+        }
+    }
+#endif
     SwCntntFrm *pFrm = FindFirstBodyCntnt();
     while( pFrm )
     {

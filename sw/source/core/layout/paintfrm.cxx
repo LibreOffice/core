@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-24 16:19:32 $
+ *  last change: $Author: ama $ $Date: 2002-01-30 13:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3004,139 +3004,232 @@ void SwPageFrm::PaintAllBorders( const SwRect &rRect ) const
 #ifdef VERTICAL_LAYOUT
 void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 {
+    if( !bHasGrid )
+        return;
     const SwPageDesc* pDesc = GetPageDesc();
-    if( pDesc && OUTDEV_PRINTER != pOut->GetOutDevType() )
+    if( OUTDEV_PRINTER != pOut->GetOutDevType() ? bShowGrid : bPrintGrid )
     {
-        long nRegDiff = pDesc->GetRegHeight();
-        if( !nRegDiff )
+        long nGrid, nRuby, nLines;
+        BOOL bLower, bCell;
+        if( !GetGrid( nGrid, nRuby, nLines, bLower, bCell ) )
             return;
-        const SwFrm* pBody = FindBodyCont();
-        if( pBody )
+        const SwLayoutFrm* pBody = FindBodyCont();
+        if( pBody && pBody->Lower() && !pBody->Lower()->IsColumnFrm() )
         {
             SwRect aGrid( pBody->Prt() );
             aGrid += pBody->Frm().Pos();
+         // ::SwAlignRect( aGrid, pGlobalShell );
             SwRect aInter( aGrid );
             aInter.Intersection( rRect );
             if( aInter.HasArea() )
             {
-                long aAdd[3];
-                aAdd[0] = nRegDiff;
-                aAdd[1] = nRegDiff / 4;
-                aAdd[2] = nRegDiff / 2;
-                USHORT nIdx = 3;
-                long nRegSum = nRegDiff + aAdd[1] + aAdd[2];
+                BOOL bGrid = bLower;
+                long nSum = nGrid + nRuby;
                 pOut->Push( PUSH_FILLCOLOR );
-                const Color aStandard( COL_LIGHTGRAY );
+                const Color aStandard( COL_CYAN );
                 pOut->SetFillColor( aStandard );
 
                 SwTwips nRight = aInter.Left() + aInter.Width();
                 SwTwips nBottom = aInter.Top() + aInter.Height();
                 if( IsVertical() )
                 {
-                    SwTwips nOrig = aGrid.Left() + aGrid.Width() + aAdd[2];
-                    SwTwips nY = nOrig + nRegSum *
-                                 ( ( nOrig - aInter.Left() ) / nRegSum );
-                    SwRect aTmp( Point( nY + aAdd[2], aInter.Top() ),
+                    SwTwips nOrig = aGrid.Left() + aGrid.Width();
+                    SwTwips nY = nOrig + nSum *
+                                 ( ( nOrig - aInter.Left() ) / nSum );
+                    SwRect aTmp( Point( nY, aInter.Top() ),
                                 Size( 1, aInter.Height() ) );
-                    SwTwips nX = aGrid.Top() + nRegDiff *
-                                ( ( aInter.Top() - aGrid.Top() )/ nRegDiff );
+                    SwTwips nX = aGrid.Top() + nGrid *
+                                ( ( aInter.Top() - aGrid.Top() )/ nGrid );
                     if( nX < aInter.Top() )
-                        nX += nRegDiff;
+                        nX += nGrid;
+                    SwTwips nGridBottom = aGrid.Top() + aGrid.Height();
+                    BOOL bLeft = aGrid.Top() >= aInter.Top();
+                    BOOL bRight = nGridBottom <= nBottom;
+                    BOOL bBorder = bCell && ( bLeft || bRight );
                     while( nY > nRight )
                     {
                         aTmp.Pos().X() = nY;
-                        nY -= aAdd[ --nIdx ];
-                        if( !nIdx )
+                        if( bGrid )
                         {
-                            nIdx = 3;
+                            nY -= nGrid;
                             SwTwips nPosY = Max( aInter.Left(), nY );
                             SwTwips nHeight = Min(nRight, aTmp.Pos().X())-nPosY;
-                            if( nHeight > 0 )
+                            if( bCell && nHeight > 0 )
                             {
                                 SwRect aVert( Point( nPosY, nX ),
                                             Size( nHeight, 1 ) );
-                                while( aVert.Top() < nBottom )
+                                while( aVert.Top() <= nBottom )
                                 {
                                     pOut->DrawRect( aVert.SVRect() );
-                                    aVert.Pos().Y() += nRegDiff;
+                                    aVert.Pos().Y() += nGrid;
                                 }
                             }
                         }
+                        else
+                        {
+                            nY -= nRuby;
+                            if( bBorder )
+                            {
+                                SwTwips nPos = Max( aInter.Left(), nY );
+                                SwTwips nW = Min(nRight, aTmp.Pos().X()) - nPos;
+                                SwRect aVert( Point( nPos, aGrid.Top() ),
+                                              Size( nW, 1 ) );
+                                if( nW > 0 )
+                                {
+                                    if( bLeft )
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().Y() = nGridBottom;
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    }
+                                }
+                            }
+                        }
+                        bGrid = !bGrid;
                     }
-                    while( nY > aInter.Left() )
+                    while( nY >= aInter.Left() )
                     {
                         aTmp.Pos().X() = nY;
                         pOut->DrawRect( aTmp.SVRect() );
-                        nY -= aAdd[ --nIdx ];
-                        if( !nIdx )
+                        if( bGrid )
                         {
-                            nIdx = 3;
+                            nY -= nGrid;
                             SwTwips nHeight = aTmp.Pos().X()
                                               - Max(aInter.Left(), nY );
-                            if( nHeight > 0 )
+                            if( bCell && nHeight > 0 )
                             {
                                 SwRect aVert( Point( aTmp.Pos().X() - nHeight,
                                                      nX ), Size( nHeight, 1 ) );
-                                while( aVert.Top() < nBottom )
+                                while( aVert.Top() <= nBottom )
                                 {
                                     pOut->DrawRect( aVert.SVRect() );
-                                    aVert.Pos().Y() += nRegDiff;
+                                    //pLines->AddLineRect( aVert, &aStandard, 0 );
+                                    aVert.Pos().Y() += nGrid;
                                 }
                             }
                         }
+                        else
+                        {
+                            nY -= nRuby;
+                            if( bBorder )
+                            {
+                                SwTwips nPos = Max( aInter.Left(), nY );
+                                SwTwips nW = Min(nRight, aTmp.Pos().X()) - nPos;
+                                SwRect aVert( Point( nPos, aGrid.Top() ),
+                                              Size( nW, 1 ) );
+                                if( nW > 0 )
+                                {
+                                    if( bLeft )
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().Y() = nGridBottom;
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    }
+                                }
+                            }
+                        }
+                        bGrid = !bGrid;
                     }
                 }
                 else
                 {
-                    SwTwips nOrig = aGrid.Top() - aAdd[2];
-                    SwTwips nY = nOrig + nRegSum *( (aInter.Top()-nOrig)/nRegSum );
-                    SwRect aTmp( Point( aInter.Left(), nY - aAdd[2] ),
+                    SwTwips nOrig = aGrid.Top();
+                    SwTwips nY = nOrig + nSum *( (aInter.Top()-nOrig)/nSum );
+                    SwRect aTmp( Point( aInter.Left(), nY ),
                                 Size( aInter.Width(), 1 ) );
-                    SwTwips nX = aGrid.Left() + nRegDiff *
-                                ( ( aInter.Left() - aGrid.Left() )/ nRegDiff );
+                    SwTwips nX = aGrid.Left() + nGrid *
+                                ( ( aInter.Left() - aGrid.Left() )/ nGrid );
                     if( nX < aInter.Left() )
-                        nX += nRegDiff;
+                        nX += nGrid;
+                    SwTwips nGridRight = aGrid.Left() + aGrid.Width();
+                    BOOL bLeft = aGrid.Left() >= aInter.Left();
+                    BOOL bRight = nGridRight <= nRight;
+                    BOOL bBorder = bLeft || bRight;
                     while( nY < aInter.Top() )
                     {
                         aTmp.Pos().Y() = nY;
-                        nY += aAdd[ --nIdx ];
-                        if( !nIdx )
+                        if( bGrid )
                         {
-                            nIdx = 3;
+                            nY += nGrid;
                             SwTwips nPosY = Max( aInter.Top(), aTmp.Pos().Y() );
-                            SwTwips nHeight = Min( nBottom, nY ) - nPosY;
-                            if( nHeight )
+                            SwTwips nHeight = Min(nBottom, nY ) - nPosY;
+                            if( bCell && nHeight )
                             {
                                 SwRect aVert( Point( nX, nPosY ),
                                             Size( 1, nHeight ) );
-                                while( aVert.Left() < nRight )
+                                while( aVert.Left() <= nRight )
                                 {
                                     pOut->DrawRect( aVert.SVRect() );
-                                    aVert.Pos().X() += nRegDiff;
+                                    aVert.Pos().X() += nGrid;
                                 }
                             }
                         }
+                        else
+                        {
+                            nY += nRuby;
+                            if( bBorder )
+                            {
+                                SwTwips nPos = Max(aInter.Top(),aTmp.Pos().Y());
+                                SwTwips nH = Min( nBottom, nY ) - nPos;
+                                SwRect aVert( Point( aGrid.Left(), nPos ),
+                                            Size( 1, nH ) );
+                                if( nH > 0 )
+                                {
+                                    if( bLeft )
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().X() = nGridRight;
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    }
+                                }
+                            }
+                        }
+                        bGrid = !bGrid;
                     }
                     while( nY <= nBottom )
                     {
                         aTmp.Pos().Y() = nY;
                         pOut->DrawRect( aTmp.SVRect() );
-                        nY += aAdd[ --nIdx ];
-                        if( !nIdx )
+                        if( bGrid )
                         {
-                            nIdx = 3;
-                            SwTwips nHeight = Min( nBottom, nY ) - aTmp.Pos().Y();
-                            if( nHeight )
+                            nY += nGrid;
+                            SwTwips nHeight = Min(nBottom, nY) - aTmp.Pos().Y();
+                            if( bCell && nHeight )
                             {
                                 SwRect aVert( Point( nX, aTmp.Pos().Y() ),
                                             Size( 1, nHeight ) );
-                                while( aVert.Left() < nRight )
+                                while( aVert.Left() <= nRight )
                                 {
                                     pOut->DrawRect( aVert.SVRect() );
-                                    aVert.Pos().X() += nRegDiff;
+                                    aVert.Pos().X() += nGrid;
                                 }
                             }
                         }
+                        else
+                        {
+                            nY += nRuby;
+                            if( bBorder )
+                            {
+                                SwTwips nPos = Max(aInter.Top(),aTmp.Pos().Y());
+                                SwTwips nH = Min( nBottom, nY ) - nPos;
+                                SwRect aVert( Point( aGrid.Left(), nPos ),
+                                            Size( 1, nH ) );
+                                if( nH > 0 )
+                                {
+                                    if( bLeft )
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    if( bRight )
+                                    {
+                                        aVert.Pos().X() = nGridRight;
+                                        pOut->DrawRect( aVert.SVRect() );
+                                    }
+                                }
+                            }
+                        }
+                        bGrid = !bGrid;
                     }
                 }
                 pOut->Pop();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-23 13:51:02 $
+ *  last change: $Author: ama $ $Date: 2002-01-30 13:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,11 @@ class SwPageFrm: public SwFtnBossFrm
     BOOL bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
     BOOL bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
     BOOL bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
-
+#ifdef VERTICAL_LAYOUT
+    BOOL bHasGrid           :1; // Grid for Asian layout
+    BOOL bShowGrid          :1; // Display the grid
+    BOOL bPrintGrid         :1; // Print the grid
+#endif
     //Anpassung der RootSize und Benachrichtigungen beim Einsetzen,
     //Entfernen und Groessenaenderungen der Seite.
     void AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld );
@@ -192,6 +196,11 @@ public:
 #ifdef VERTICAL_LAYOUT
     virtual void  CheckDirection( BOOL bVert );
     void PaintGrid( OutputDevice* pOut, SwRect &rRect ) const;
+    BOOL HasGrid() const { return bHasGrid; }
+    BOOL ShowGrid() const { return bShowGrid; }
+    BOOL PrintGrid() const { return bPrintGrid; }
+    BOOL GetGrid( long& rGrid, long& rRuby, long& rLines,
+                  BOOL& rbLower, BOOL& rbCell ) const;
 #endif
 
     //Umrandungen aller Frms innerhalb der Seite Painten.
