@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:29:51 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@ namespace sdr
             // access to ViewObjectContactRedirector
             ViewObjectContactRedirector* GetViewObjectContactRedirector() const;
             void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);
+
+            // check if buffering of MasterPages is allowed. Default is sal_False.
+            virtual sal_Bool IsMasterPageBufferingAllowed() const;
         };
     } // end of namespace contact
 } // end of namespace sdr

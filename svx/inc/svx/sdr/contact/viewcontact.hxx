@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:30:26 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,6 @@ namespace sdr
         class DisplayInfo;
         class ViewContact;
         class ViewObjectContactRedirector;
-
-        // typedef for a list of ViewContact
-        typedef ::std::vector< ViewContact* > ViewContactVector;
-
     } // end of namespace contact
     namespace animation
     {
@@ -132,8 +128,9 @@ namespace sdr
             unsigned                                        mbPaintRectangleValid : 1;
 
             // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) = 0;
+            // ObjectContact. Always needs to return something. Default is to create
+            // a standard ViewObjectContact containing the given ObjectContact and *this
+            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
 
             // basic constructor. Since this is a base class only, it shall
             // never be called.
@@ -145,8 +142,9 @@ namespace sdr
             virtual void CalcPaintRectangle() = 0;
 
             // method to create a AnimationInfo. Needs to give a result if
-            // SupportsAnimation() is overloaded and returns sal_True.
-            virtual sdr::animation::AnimationInfo* CreateAnimationInfo() = 0;
+            // SupportsAnimation() is overloaded and returns sal_True. Default is to
+            // pop up an assert since it's always an error if this gets called
+            virtual sdr::animation::AnimationInfo* CreateAnimationInfo();
 
             // Methods to react on start getting viewed or stop getting
             // viewed. This info is derived from the count of members of
@@ -165,9 +163,6 @@ namespace sdr
             // destructor no virtual function calls are allowed. To avoid this problem,
             // it is required to first call PrepareDelete().
             virtual void PrepareDelete();
-
-            // To transport the MasterPage Layer info, ATM use a virtual method at ViewContacts
-            virtual void SetVisibleLayers(const SetOfByte& rSet);
 
             // get a Object-specific ViewObjectContact for a specific
             // ObjectContact (->View). Always needs to return something.
@@ -216,12 +211,12 @@ namespace sdr
             // This is temporarily as long as GluePoints are no handles yet. The default does nothing.
             virtual void PaintGluePoints(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
 
-            // Access to possible sub-hierarchy and parent
-            virtual sal_uInt32 GetObjectCount() const = 0;
-            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const = 0;
-            // Since MasterPages are part of the hierarchy of a DrawPage, the
-            // link to ParentContacts may be 1:n
-            virtual sal_Bool GetParentContacts(ViewContactVector& rVContacts) const = 0;
+            // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
+            // and GetViewContact default pops up an assert since it's an error if
+            // GetObjectCount has a result != 0 and it's not overloaded.
+            virtual sal_uInt32 GetObjectCount() const;
+            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
+            virtual ViewContact* GetParentContact() const;
 
             // React on removal of the object of this ViewContact,
             // DrawHierarchy needs to be changed
@@ -244,8 +239,8 @@ namespace sdr
             // which is associated with this object.
             void CheckAnimationFeatures();
 
-            // Does this ViewContact support animation? Default is sal_False
-            virtual sal_Bool SupportsAnimation() const = 0;
+            // Does this ViewContact support animation? Default is sal_False.
+            virtual sal_Bool SupportsAnimation() const;
 
             // method to get the AnimationInfo. Needs to give a result if
             // SupportsAnimation() is overloaded and returns sal_True. It will
@@ -267,10 +262,6 @@ namespace sdr
             virtual SdrObject* TryToGetSdrObject() const;
             virtual SdrPage* TryToGetSdrPage() const;
         };
-
-        // typedef for a list of ViewContact
-        typedef ::std::vector< ViewContact* > ViewContactVector;
-
     } // end of namespace contact
 } // end of namespace sdr
 
