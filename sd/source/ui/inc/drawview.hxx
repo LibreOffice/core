@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:12:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ namespace sd {
 class DrawDocShell;
 class DrawViewShell;
 class FuSlideShow;
+class Slideshow;
 
 #define SDDRAWVIEW_MAGIC  0x456789BA
 
@@ -118,10 +119,9 @@ public:
     void    PresPaint(const Region& rRegion);
 
     void    SetAnimationMode(BOOL bStart);
-    void    HideAndAnimateObject(SdrObject* pObj);
     void    AnimatePage();
     BOOL    IsInAnimation() { return bInAnimation; }
-    FuSlideShow* GetSlideShow() { return pSlideShow; }
+    Slideshow*  GetSlideShow() { return mpSlideShow; }
 
     virtual SdrObject* GetMaxToBtmObj(SdrObject* pObj) const;
 
@@ -139,7 +139,7 @@ private:
     USHORT              nPresPaintSmph;     // zum Blockieren des Zeichnens
                                             // in der Diashow
     BOOL                bPixelMode;
-    FuSlideShow*        pSlideShow;
+    Slideshow*          mpSlideShow;
     BOOL                bInAnimation;
     ULONG               nMagic;
 
