@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-08 13:43:32 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 05:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,6 +935,12 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlListBoxModel( *this ); }
 
     void                ImplPropertyChanged( sal_uInt16 nPropId );
+    virtual void        ImplNormalizePropertySequence(
+                            const sal_Int32                 _nCount,        /// the number of entries in the arrays
+                            sal_Int32*                      _pHandles,      /// the handles of the properties to set
+                            ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
+                            sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
+                        )   const SAL_THROW(());
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:52:24 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 05:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,19 @@ protected:
     virtual void                                ImplPropertyChanged( sal_uInt16 nPropId );
     virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     sal_Bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
+
+    /** called before setting multiple properties, allows to care for property dependencies
+
+        <p>When multiple property values are set (e.g. XPropertySet::setPropertyValues), it may happen that some
+        of them are dependent. For this, derivees which know such dependencies can affect the order in which
+        the properties are internally really set.</p>
+    */
+    virtual void ImplNormalizePropertySequence(
+                    const sal_Int32                 _nCount,        /// the number of entries in the arrays
+                    sal_Int32*                      _pHandles,      /// the handles of the properties to set
+                    ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
+                    sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
+                )   const SAL_THROW(());
 
 public:
                 UnoControlModel();
