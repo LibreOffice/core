@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 13:57:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,6 +812,12 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
     // Get the information about the input stream
 
     Reference< XInputStream> inputStream =  boundParams[index - 1].getInputStream ();
+    if ( !inputStream.is() )
+    {
+        throw SQLException (::rtl::OUString::createFromAscii("InputStream was not set."),
+        *this,
+            ::rtl::OUString(),0,Any());
+    }
     sal_Int32 inputStreamLen = boundParams[index - 1].getInputStreamLen ();
     sal_Int32 inputStreamType = boundParams[index - 1].getStreamType ();
 
