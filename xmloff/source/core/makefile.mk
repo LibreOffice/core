@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mib $ $Date: 2001-05-09 12:16:22 $
+#   last change: $Author: mtg $ $Date: 2001-05-16 11:51:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,27 +82,6 @@ LIB2OBJFILES  =$(OBJFILES)
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        facreg.cxx		\
-        xmlcnitm.cxx	\
-        attrlist.cxx	\
-        i18nmap.cxx		\
-        nmspmap.cxx		\
-        unoatrcn.cxx	\
-        xmlehelp.cxx	\
-        xmlexp.cxx		\
-        xmlictxt.cxx	\
-        xmlimp.cxx		\
-        xmlkywd.cxx		\
-        xmltkmap.cxx	\
-        xmluconv.cxx	\
-        ProgressBarHelper.cxx	\
-        PropertySetMerger.cxx	\
-        SettingsExportHelper.cxx	\
-        DocumentSettingsContext.cxx \
-        XMLEmbeddedObjectExportFilter.cxx \
-        XMLEmbeddedObjectImportContext.cxx
-
 SLOFILES =	\
         $(SLO)$/facreg.obj		\
         $(SLO)$/xmlcnitm.obj	\
@@ -123,7 +102,14 @@ SLOFILES =	\
         $(SLO)$/DocumentSettingsContext.obj \
         $(SLO)$/XMLEmbeddedObjectExportFilter.obj \
         $(SLO)$/XMLEmbeddedObjectImportContext.obj
+# --- UNO stuff ---------------------------------------------------
 
-# --- Tagets -------------------------------------------------------
+CPPUMAKERFLAGS=
+UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
+UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
+
+UNOTYPES=\
+    com.sun.star.formula.SymbolDescriptor
+# --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
