@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:15:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,24 @@ uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuc
     if(!hasMoreElements())
         throw container::NoSuchElementException();
 
-    SvxUnoTextContent* pContent = new SvxUnoTextContent( rText, nNextParagraph++ );
+    SvxUnoTextContent* pContent = 0;
+
+    const SvxUnoTextRangeBaseList& rRanges( pEditSource->getRanges() );
+    SvxUnoTextRangeBaseList::const_iterator aIter;
+    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pContent == 0); aIter++ )
+    {
+        SvxUnoTextContent* pIterContent = dynamic_cast< SvxUnoTextContent* >( (*aIter ) );
+        if( pIterContent && (pIterContent->nParagraph == nNextParagraph) )
+            pContent = pIterContent;
+    }
+
+    if( pContent == 0 )
+     pContent = new SvxUnoTextContent( rText, nNextParagraph );
+
+    nNextParagraph++;
+
     uno::Reference< text::XTextContent > xRef( pContent );
-    return uno::Any( &xRef, ::getCppuType((const uno::Reference< text::XTextContent>*)0) );
+    return uno::makeAny( xRef );
 }
 
 // ====================================================================
@@ -187,6 +202,7 @@ uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType )
     else QUERYINT( beans::XMultiPropertySet );
     else QUERYINT( beans::XPropertyState );
     else QUERYINT( text::XTextContent );
+    else QUERYINT( text::XTextRangeCompare );
     else QUERYINT( lang::XComponent );
     else QUERYINT( container::XEnumerationAccess );
     else QUERYINT( container::XElementAccess );
@@ -221,13 +237,14 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 9 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 10 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextContent >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
@@ -455,16 +472,29 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 
     uno::Reference< text::XTextRange > xRange;
 
-    // TODO -Wall is this line really nessecary?
-    SvxTextForwarder* pForwarder = rParentText.GetEditSource()->GetTextForwarder();
+    const SvxUnoTextRangeBaseList& rRanges( pEditSource->getRanges() );
 
-    SvxUnoTextRange* pRange = new SvxUnoTextRange( rParentText, sal_True );
+    SvxUnoTextRange* pRange = 0;
+
+    SvxUnoTextRangeBaseList::const_iterator aIter;
+    for( aIter = rRanges.begin(); (aIter != rRanges.end()) && (pRange == 0); aIter++ )
+    {
+        SvxUnoTextRange* pIterRange = dynamic_cast< SvxUnoTextRange* >( (*aIter ) );
+        if( pIterRange && pIterRange->mbPortion && (aSel.IsEqual( pIterRange->aSelection ) ) )
+            pRange = pIterRange;
+    }
+
+    if( pRange == 0 )
+    {
+        pRange = new SvxUnoTextRange( rParentText, sal_True );
+        pRange->SetSelection(aSel);
+    }
+
     xRange = pRange;
 
-    pRange->SetSelection(aSel);
     nNextPortion++;
 
-    return uno::Any( &xRange, ::getCppuType((const uno::Reference< text::XTextRange >*)0) );
+    return uno::makeAny( xRange );
 }
 
 // ====================================================================
@@ -510,6 +540,7 @@ uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
     else QUERYINT( beans::XPropertySet );
     else QUERYINT( beans::XMultiPropertySet );
     else QUERYINT( beans::XPropertyState );
+    else QUERYINT( text::XTextRangeCompare );
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( lang::XTypeProvider );
     else QUERYINT( lang::XUnoTunnel );
@@ -541,7 +572,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 8 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 9 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
@@ -549,6 +580,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
