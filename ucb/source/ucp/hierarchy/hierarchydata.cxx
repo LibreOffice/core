@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 09:08:28 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 11:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,14 +280,11 @@ sal_Bool HierarchyEntry::setData(
             // Create parent's key. It must exist!
 
             OUString aParentPath;
-            OUString aKey;
             sal_Bool bRoot = sal_True;
 
             sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
             if ( nPos != -1 )
             {
-                aKey = m_aPath.copy( nPos + 1 );
-
                 // Skip "/Children" segment of the path, too.
                 nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
@@ -297,8 +294,6 @@ sal_Bool HierarchyEntry::setData(
                 aParentPath += m_aPath.copy( 0, nPos );
                 bRoot = sal_False;
             }
-            else
-                aKey = m_aPath;
 
             Sequence< Any > aArguments( 1 );
             PropertyValue   aProperty;
@@ -345,8 +340,8 @@ sal_Bool HierarchyEntry::setData(
                                 >>= xNameAccess;
                     }
 
-                    if ( xNameAccess->hasByName( aKey ) )
-                        aMyKey = xNameAccess->getByName( aKey );
+                    if ( xNameAccess->hasByName( m_aName ) )
+                        aMyKey = xNameAccess->getByName( m_aName );
                     else
                         bExists = sal_False;
                 }
@@ -429,7 +424,7 @@ sal_Bool HierarchyEntry::setData(
 
                     if ( xContainer.is() )
                         xContainer->insertByName(
-                                            aKey, makeAny( xNameReplace ) );
+                                            m_aName, makeAny( xNameReplace ) );
 
                     // Commit changes.
                     xBatch->commitChanges();
@@ -501,11 +496,19 @@ sal_Bool HierarchyEntry::move(
        - updateaccess commit
 #else
 
-    OUString aOldKey  = m_aPath;
     sal_Bool bOldRoot = sal_True;
     Reference< XChangesBatch > xOldParentBatch;
 
-    OUString aNewKey  = aNewPath;
+    OUString aNewKey;
+    sal_Int32 nPos = rNewURL.lastIndexOf( '/' );
+    if ( nPos > HIERARCHY_URL_SCHEME_LENGTH )
+        aNewKey = rNewURL.copy( nPos + 1 );
+    else
+    {
+        OSL_ENSURE( sal_False, "HierarchyEntry::move - Invalid URL!" );
+        return sal_False;
+    }
+
     sal_Bool bNewRoot = sal_True;
     Reference< XChangesBatch > xNewParentBatch;
 
@@ -525,8 +528,6 @@ sal_Bool HierarchyEntry::move(
         sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
-            aOldKey = m_aPath.copy( nPos + 1 );
-
             // Skip "/Children" segment of the path, too.
             nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
@@ -535,15 +536,11 @@ sal_Bool HierarchyEntry::move(
             aOldParentPath += m_aPath.copy( 0, nPos );
             bOldRoot = sal_False;
         }
-        else
-            aOldKey = m_aPath;
 
         OUString aNewParentPath;
         nPos = aNewPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
-            aNewKey = aNewPath.copy( nPos + 1 );
-
             // Skip "/Children" segment of the path, too.
             nPos = aNewPath.lastIndexOf( '/', nPos - 1 );
 
@@ -552,8 +549,6 @@ sal_Bool HierarchyEntry::move(
             aNewParentPath += aNewPath.copy( 0, nPos );
             bNewRoot = sal_False;
         }
-        else
-            aNewKey = aNewPath;
 
         Sequence< Any > aArguments( 1 );
         PropertyValue   aProperty;
@@ -644,7 +639,7 @@ sal_Bool HierarchyEntry::move(
                  OUString::createFromAscii( "Children" ) ) >>= xOldNameContainer;
         }
 
-        aEntry = xOldNameContainer->getByName( aOldKey );
+        aEntry = xOldNameContainer->getByName( m_aName );
     }
     catch ( NoSuchElementException& )
     {
@@ -669,7 +664,7 @@ sal_Bool HierarchyEntry::move(
 
     try
     {
-        xOldNameContainer->removeByName( aOldKey );
+        xOldNameContainer->removeByName( m_aName );
         xOldParentBatch->commitChanges();
     }
     catch ( NoSuchElementException& )
@@ -816,14 +811,11 @@ sal_Bool HierarchyEntry::remove()
             // Create parent's key. It must exist!
 
             OUString aParentPath;
-            OUString aKey  = m_aPath;
             sal_Bool bRoot = sal_True;
 
             sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
             if ( nPos != -1 )
             {
-                aKey = m_aPath.copy( nPos + 1 );
-
                 // Skip "/Children" segment of the path, too.
                 nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
@@ -833,8 +825,6 @@ sal_Bool HierarchyEntry::remove()
                 aParentPath += m_aPath.copy( 0, nPos );
                 bRoot = sal_False;
             }
-            else
-                aKey = m_aPath;
 
             Sequence< Any > aArguments( 1 );
             PropertyValue   aProperty;
@@ -885,7 +875,7 @@ sal_Bool HierarchyEntry::remove()
 
                 if ( xContainer.is() )
                 {
-                    xContainer->removeByName( aKey );
+                    xContainer->removeByName( m_aName );
                     xBatch->commitChanges();
                     return sal_True;
                 }
@@ -1014,49 +1004,7 @@ sal_Bool HierarchyEntry::next( iterator& it )
 //=========================================================================
 OUString HierarchyEntry::createPathFromHierarchyURL( const HierarchyUri& rURI )
 {
-#if SUPD>637
-    // Transform path....
-    // folder/subfolder/subsubfolder
-    //      --> ['folder']/Children/['subfolder']/Children/['subsubfolder']
-
-    const rtl::OUString aPath = rURI.getPath().copy( 1 ); // skip leading slash.
-    sal_Int32 nLen = aPath.getLength();
-
-    if ( nLen )
-    {
-        rtl::OUStringBuffer aNewPath;
-        aNewPath.appendAscii( "['" );
-
-        sal_Int32 nStart = 0;
-        sal_Int32 nEnd   = aPath.indexOf( '/' );
-
-        do
-        {
-            if ( nEnd == -1 )
-                nEnd = nLen;
-
-            aNewPath.append( aPath.copy( nStart, nEnd - nStart ) );
-
-            if ( nEnd != nLen )
-            {
-                aNewPath.appendAscii( "']/Children/['" );
-                nStart = nEnd + 1;
-                nEnd   = aPath.indexOf( '/', nStart );
-            }
-            else
-                aNewPath.appendAscii( "']" );
-        }
-        while ( nEnd != nLen );
-
-        return aNewPath.makeStringAndClear();
-    }
-
-    OSL_ENSURE( false,
-                "HierarchyEntry::createPathFromHierarchyURL - Invalid URL!" );
-
-    return rtl::OUString();
-
-#else
+#if SUPD<638
     Reference< XStringEscape > xEscaper( getRootReadAccess(), UNO_QUERY );
 
 //    OSL_ENSURE( xEscaper.is(),
@@ -1110,6 +1058,44 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const HierarchyUri& rURI )
     }
 
     return aNewPath;
+#else
+    // Transform path....
+    // folder/subfolder/subsubfolder
+    //      --> ['folder']/Children/['subfolder']/Children/['subsubfolder']
+
+    const rtl::OUString aPath = rURI.getPath().copy( 1 ); // skip leading slash.
+    sal_Int32 nLen = aPath.getLength();
+
+    if ( nLen )
+    {
+        rtl::OUStringBuffer aNewPath;
+        aNewPath.appendAscii( "['" );
+
+        sal_Int32 nStart = 0;
+        sal_Int32 nEnd   = aPath.indexOf( '/' );
+
+        do
+        {
+            if ( nEnd == -1 )
+                nEnd = nLen;
+
+            aNewPath.append( aPath.copy( nStart, nEnd - nStart ) );
+
+            if ( nEnd != nLen )
+            {
+                aNewPath.appendAscii( "']/Children/['" );
+                nStart = nEnd + 1;
+                nEnd   = aPath.indexOf( '/', nStart );
+            }
+            else
+                aNewPath.appendAscii( "']" );
+        }
+        while ( nEnd != nLen );
+
+        return aNewPath.makeStringAndClear();
+    }
+
+    return aPath;
 #endif
 }
 
@@ -1203,26 +1189,7 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
     {
         try
         {
-#if SUPD>637
-            rtl::OUStringBuffer aKey;
-            aKey.appendAscii( "['" );
-            aKey.append( m_pImpl->names.getConstArray()[ m_pImpl->pos ] );
-            aKey.appendAscii( "']" );
-
-            rtl::OUString aTitle     = aKey.makeStringAndClear();
-            rtl::OUString aTargetURL = aTitle;
-
-            aTitle     += OUString::createFromAscii( "/Title" );
-            aTargetURL += OUString::createFromAscii( "/TargetURL" );
-
-            m_pImpl->dir->getByHierarchicalName( aTitle )
-                >>= m_pImpl->entry.aTitle;
-            m_pImpl->dir->getByHierarchicalName( aTargetURL )
-                >>= m_pImpl->entry.aTargetURL;
-
-            m_pImpl->entry.aName
-                = m_pImpl->names.getConstArray()[ m_pImpl->pos ];
-#else
+#if SUPD<638
             OUString aKey = m_pImpl->names.getConstArray()[ m_pImpl->pos ];
             OUString aTitle     = aKey;
             OUString aTargetURL = aKey;
@@ -1250,6 +1217,25 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             }
 
             m_pImpl->entry.aName = aKey;
+#else
+            rtl::OUStringBuffer aKey;
+            aKey.appendAscii( "['" );
+            aKey.append( m_pImpl->names.getConstArray()[ m_pImpl->pos ] );
+            aKey.appendAscii( "']" );
+
+            rtl::OUString aTitle     = aKey.makeStringAndClear();
+            rtl::OUString aTargetURL = aTitle;
+
+            aTitle     += OUString::createFromAscii( "/Title" );
+            aTargetURL += OUString::createFromAscii( "/TargetURL" );
+
+            m_pImpl->dir->getByHierarchicalName( aTitle )
+                >>= m_pImpl->entry.aTitle;
+            m_pImpl->dir->getByHierarchicalName( aTargetURL )
+                >>= m_pImpl->entry.aTargetURL;
+
+            m_pImpl->entry.aName
+                = m_pImpl->names.getConstArray()[ m_pImpl->pos ];
 #endif
         }
         catch ( NoSuchElementException& )
