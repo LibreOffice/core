@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:44:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,6 @@
 #define FT_OPTIONS              6
 #define FT_CHARSET              7
 #define FT_JDBCDRIVERCLASS      8
-#define FT_FIELDSEPARATOR       9
-#define FT_TEXTSEPARATOR        10
-#define FT_DECIMALSEPARATOR     11
-#define FT_THOUSANDSSEPARATOR   12
-#define FT_EXTENSION            13
 #define FT_TABLESUBSCRIPTION    14
 #define FT_SPECIAL_MESSAGE      15
 #define FT_LOGINTIMEOUT         16
@@ -90,6 +85,12 @@
 #define FT_RETRIEVE_AUTO        23
 #define FT_BOOLEANCOMPARISON    24
 #define FT_DATASOURCETYPE_POST  25
+#define FT_DATABASENAME         26
+
+#define FT_GENERALHEADERTEXT    41
+#define FT_GENERALHELPTEXT      42
+#define FT_DATATYPEAPPENDIX     43
+#define FT_DATASOURCEHEADER     44
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
@@ -108,6 +109,11 @@
 #define ET_BASEDN               9
 #define ET_AUTOINCREMENTVALUE  10
 #define ET_RETRIEVE_AUTO       11
+#define ET_DBASELOCATION       12
+#define ET_BROWSEURL           13
+#define ET_PORTNUMBER          15
+#define ET_DATABASENAME        16
+#define ET_GENERALPASSWORD     18
 
 
 #define PB_BROWSECONNECTION     1
@@ -119,6 +125,9 @@
 #define BTN_PASSWORD_CANCEL     7
 #define BTN_PASSWORD_HELP       8
 #define PB_TESTDRIVERCLASS      9
+#define PB_DBASELOCATION        10
+#define PB_BROWSEURL            11
+#define PB_TESTADOCONNECTION    12
 
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
@@ -132,14 +141,15 @@
 #define CB_SQL92CHECK           7
 #define CB_RETRIEVE_AUTO        8
 #define CB_APPENDTABLEALIAS     9
-#define CB_IGNOREDRIVER_PRIV    10
-#define CB_PARAMETERNAMESUBST   11
-#define CB_ENABLEOUTERJOIN      12
+#define CB_IGNOREDRIVER_PRIV        10
+#define CB_PARAMETERNAMESUBST       11
+#define CB_ENABLEOUTERJOIN          12
 #define CB_SCHEMA               13
 #define CB_CATALOG              14
 #define CB_IGNOREINDEXAPPENDIX  15
 #define CB_USESSL               16
-#define CB_DOSLINEENDS          17
+#define CB_DOSLINEENDS          22
+
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
@@ -148,12 +158,7 @@
 #define FL_SEPARATORAUTO        5
 #define FL_DATAHANDLING         6
 #define FL_DATACONVERT          7
-
-#define CM_FIELDSEPARATOR       1
-#define CM_TEXTSEPARATOR        2
-#define CM_DECIMALSEPARATOR     3
-#define CM_THOUSANDSSEPARATOR   4
-#define CM_EXTENSION            5
+#define FL_ADDITIONALSETTINGS   8
 
 #define CTL_TABLESUBSCRIPTION   1
 #define CTL_COLLECTION          2
@@ -165,6 +170,10 @@
 
 #define RB_USEMYODBC            1
 #define RB_USECONNECTORJ3       2
+#define RB_CREATEDBDATABASE     3
+#define RB_GETEXISTINGDATABASE  4
+
+
 
 
 //========================================================================
@@ -173,18 +182,18 @@
 #define STR_PAGETITLE_GENERAL               1
 #define STR_PAGETITLE_CONNECTION            2
 #define STR_PAGETITLE_ADVANCED              3
-#define STR_FIELDSEPARATORLIST              8
-#define STR_TEXTSEPARATORLIST               9
-#define STR_DELIMITER_MISSING               10
-#define STR_DELIMITER_MUST_DIFFER           11
-#define STR_NO_WILDCARDS                    12
-#define STR_PARENTTITLE                     14
+#define STR_NO_WILDCARDS                12
+#define STR_MYSQLENTRY                  13
+
+#define STR_PARENTTITLE                 14
 #define STR_COULDNOTLOAD_ODBCLIB            15
-#define STR_NO_ADABASE_DATASOURCES          16
-#define STR_UNSUPPORTED_DATASOURCE_TYPE     22
-#define STR_TEXT_FIELD_SEP_NONE             24
+#define STR_UNSUPPORTED_DATASOURCE_TYPE         22
 #define STR_MYSQL_CONFIG_NEXT_PAGE          26
 #define STR_JDBC_DEFAULT_URL                27
+
+
+
+
 
 
 //========================================================================
