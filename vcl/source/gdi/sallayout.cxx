@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-21 14:01:05 $
+ *  last change: $Author: hdu $ $Date: 2002-11-22 17:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ sal_Unicode GetVerticalChar( sal_Unicode nChar )
 
 sal_Unicode GetMirroredChar( sal_Unicode nChar )
 {
-    nChar = u_charMirror( nChar );
+    nChar = (sal_Unicode)u_charMirror( nChar );
     return nChar;
 }
 
@@ -584,12 +584,12 @@ void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
 
 // -----------------------------------------------------------------------
 
-void GenericSalLayout::UpdateGlyphPos( int nStart, int nXPos )
+void GenericSalLayout::UpdateGlyphPos( int nStart, int nNewXPos )
 {
     if( nStart >= mnGlyphCount )
         return;
     GlyphItem* pG = mpGlyphItems + nStart;
-    long nXDelta = nXPos - pG->maLinearPos.X();
+    long nXDelta = nNewXPos - pG->maLinearPos.X();
 #if 1
     if( !nXDelta )
         return;
@@ -1286,11 +1286,14 @@ bool MultiSalLayout::ApplyFallback( SalLayout& rFallback )
 
 void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
 {
-    for( int i = 0; i < mnLevel; ++i )
+    for( int i = mnLevel; --i >= 0; )
     {
-        mpLayouts[ i ]->DrawBase() = maDrawBase;
-        mpLayouts[ i ]->DrawOffset() = maDrawOffset;
-        mpLayouts[ i ]->DrawText( rGraphics );
+        SalLayout& rLayout = *mpLayouts[ i ];
+        rLayout.DrawBase() = maDrawBase;
+        rLayout.DrawOffset() += maDrawOffset;
+        rLayout.InitFont();
+        rLayout.DrawText( rGraphics );
+        rLayout.DrawOffset() -= maDrawOffset;
     }
 }
 
@@ -1298,8 +1301,9 @@ void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
 
 int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
-    // TODO
-    int nRetVal = mpLayouts[ 0 ]->GetTextBreak( nMaxWidth, nCharExtra, nFactor );
+    // TODO: merge multiple fallback levels
+    SalLayout& rLayout = *mpLayouts[ 0 ];
+    int nRetVal = rLayout.GetTextBreak( nMaxWidth, nCharExtra, nFactor );
     return nRetVal;
 }
 
@@ -1307,7 +1311,8 @@ int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
 
 long MultiSalLayout::FillDXArray( long* pDXArray ) const
 {
-    int nWidth = mpLayouts[ 0 ]->FillDXArray( pDXArray );
+    SalLayout& rLayout = *mpLayouts[ 0 ];
+    int nWidth = rLayout.FillDXArray( pDXArray );
 
     if( mnLevel > 1 )
     {
@@ -1341,8 +1346,9 @@ long MultiSalLayout::FillDXArray( long* pDXArray ) const
 
 Point MultiSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 {
-    // TODO
-    Point aPoint(0,0);
+    // TODO: merge multiple fallback levels
+    SalLayout& rLayout = *mpLayouts[ 0 ];
+    Point aPoint = rLayout.GetCharPosition( nCharIndex, bRTL );
     return aPoint;
 }
 
@@ -1350,8 +1356,9 @@ Point MultiSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 
 void MultiSalLayout::GetCaretPositions( long* pCaretXArray ) const
 {
-    // TODO
-    mpLayouts[ 0 ]->GetCaretPositions( pCaretXArray );
+    // TODO: merge multiple fallback levels
+    SalLayout& rLayout = *mpLayouts[ 0 ];
+    rLayout.GetCaretPositions( pCaretXArray );
 }
 
 // -----------------------------------------------------------------------
@@ -1359,10 +1366,51 @@ void MultiSalLayout::GetCaretPositions( long* pCaretXArray ) const
 int MultiSalLayout::GetNextGlyphs( int nLen, long* pGlyphIdxAry, Point& rPos,
     int& nStart, long* pGlyphAdvAry, int* pCharPosAry ) const
 {
-    // TODO
-    int nRetVal = mpLayouts[ 0 ]->GetNextGlyphs( nLen, pGlyphIdxAry, rPos,
+    // TODO: merge multiple fallback levels
+    SalLayout& rLayout = *mpLayouts[ 0 ];
+    int nRetVal = rLayout.GetNextGlyphs( nLen, pGlyphIdxAry, rPos,
         nStart, pGlyphAdvAry, pCharPosAry );
     return nRetVal;
+}
+
+// -----------------------------------------------------------------------
+
+bool MultiSalLayout::GetOutline( SalGraphics& rGraphics, PolyPolyVector& rPPV ) const
+{
+    bool bRet = false;
+
+    for( int i = mnLevel; --i >= 0; )
+    {
+        SalLayout& rLayout = *mpLayouts[ i ];
+        rLayout.DrawBase() = maDrawBase;
+        rLayout.DrawOffset() += maDrawOffset;
+        rLayout.InitFont();
+        bRet |= rLayout.GetOutline( rGraphics, rPPV );
+        rLayout.DrawOffset() -= maDrawOffset;
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+bool MultiSalLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rRect ) const
+{
+    bool bRet = false;
+
+    Rectangle aRectangle;
+    for( int i = mnLevel; --i >= 0; )
+    {
+        SalLayout& rLayout = *mpLayouts[ i ];
+        rLayout.DrawBase() = maDrawBase;
+        rLayout.DrawOffset() += maDrawOffset;
+        rLayout.InitFont();
+        bRet |= rLayout.GetBoundRect( rGraphics, aRectangle );
+        rRect.Union( aRectangle );
+        rLayout.DrawOffset() -= maDrawOffset;
+    }
+
+    return bRet;
 }
 
 // =======================================================================
