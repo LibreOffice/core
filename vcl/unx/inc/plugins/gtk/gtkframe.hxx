@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:57:22 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include <prex.h>
 #include <gtk/gtk.h>
+#include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <postx.h>
@@ -94,6 +95,8 @@ class GtkSalFrame : public SalFrame
     };
 
     GtkWindow*              m_pWindow;
+    GdkWindow*              m_pForeignParent;
+    GdkWindow*              m_pForeignTopLevel;
     ULONG                   m_nStyle;
     GtkFixed*               m_pFixedContainer;
     GtkSalFrame*            m_pParent;
@@ -103,12 +106,14 @@ class GtkSalFrame : public SalFrame
     GraphicsHolder          m_aGraphics[ nMaxGraphics ];
     USHORT                  m_nKeyModifiers;
     GdkCursor              *m_pCurrentCursor;
+    GdkVisibilityState      m_nVisibility;
     int                     m_nSavedScreenSaverTimeout;
     bool                    m_bResizeable;
     bool                    m_bSingleAltPress;
     bool                    m_bDefaultPos;
     bool                    m_bDefaultSize;
     bool                    m_bSendModChangeOnRelease;
+    bool                    m_bWasPreedit;
 
     void Init( SalFrame* pParent, ULONG nStyle );
     void Init( SystemParentData* pSysData );
@@ -128,6 +133,7 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalState( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
+    static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
     static void         signalIMCommit( GtkIMContext*, gchar*, gpointer );
     static gboolean     signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer );
     static void         signalIMPreeditChanged( GtkIMContext*, gpointer );
@@ -143,6 +149,19 @@ class GtkSalFrame : public SalFrame
     void            setAutoLock( bool bLock );
     void            setScreenSaverTimeout( int nTimeout );
 
+    GdkNativeWindow findTopLevelSystemWindow( GdkNativeWindow aWindow );
+
+    static int m_nFloats;
+
+    bool isFloatGrabWindow() const
+    {
+        return
+            (m_nStyle & SAL_FRAME_STYLE_FLOAT) &&       // only a float can be floatgrab
+            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP);      // tool tips are not
+    }
+
+    Size calcDefaultSize();
+
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -151,10 +170,14 @@ public:
     // and false else; if true was returned the event should
     // be swallowed
     bool Dispatch( const XEvent* pEvent );
-    void grabPointer( BOOL bGrab );
+    void grabPointer( BOOL bGrab, BOOL bOwnerEvents = FALSE );
 
-    GtkWindow* getWindow() const { return m_pWindow; }
-    GtkFixed* getFixedContainer() const { return m_pFixedContainer; }
+    GtkWindow*  getWindow() const { return m_pWindow; }
+    GtkFixed*   getFixedContainer() const { return m_pFixedContainer; }
+    GdkWindow*  getForeignParent() const { return m_pForeignParent; }
+    GdkWindow*  getForeignTopLevel() const { return m_pForeignTopLevel; }
+    GdkVisibilityState getVisibilityState() const
+    { return m_nVisibility; }
 
     virtual ~GtkSalFrame();
 
