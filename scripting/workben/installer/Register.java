@@ -86,7 +86,7 @@ public class Register{
                     }
                 }
             else {
-                    cmd = "\"" + progpath + "pkgchk.exe -f \" \"" + progpath +
+                    cmd = "\"" + progpath + "pkgchk.exe\" -f \"" + progpath +
                         packages[i] + "\"";
 
             System.err.println(cmd);
