@@ -367,6 +367,10 @@ hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
 hedabu: ..\inc\textwindowaccessibility.hxx %_DEST%\inc%_EXT%\svtools\textwindowaccessibility.hxx
 
 hedabu: ..\inc\docpasswdrequest.hxx %_DEST%\inc%_EXT%\svtools\docpasswdrequest.hxx
+hedabu: ..\inc\fontsubstconfig.hxx %_DEST%\inc%_EXT%\svtools\fontsubstconfig.hxx
+hedabu: ..\inc\apearcfg.hxx %_DEST%\inc%_EXT%\svtools\apearcfg.hxx
+hedabu: ..\inc\fltrcfg.hxx %_DEST%\inc%_EXT%\svtools\fltrcfg.hxx
+hedabu: ..\inc\misccfg.hxx %_DEST%\inc%_EXT%\svtools\misccfg.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
