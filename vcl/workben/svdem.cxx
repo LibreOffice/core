@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2001-08-10 11:20:10 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 19:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,10 @@
 #include <wrkwin.hxx>
 #include <msgbox.hxx>
 
-#ifdef REMOTE_APPSERVER
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#ifdef REMOTE_APPSERVER
 #include "officeacceptthread.hxx"
 #endif
 
@@ -87,12 +87,12 @@ SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMS;
 
-#ifdef REMOTE_APPSERVER
     // for this to work make sure an <appname>.ini file is available, you can just copy soffice.ini
     Reference< XComponentContext > xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
     xMS = Reference< XMultiServiceFactory > (xComponentContext->getServiceManager(), UNO_QUERY);
     ::comphelper::setProcessServiceFactory( xMS );
 
+#ifdef REMOTE_APPSERVER
     // allow remote clients to connect from any host (0) on the given port
     ::desktop::OOfficeAcceptorThread *pOfficeAcceptThread = new ::desktop::OOfficeAcceptorThread( xMS,
         ::rtl::OUString::createFromAscii("socket,host=0,port=8081;urp;"), false, ::rtl::OUString(), ::rtl::OUString() );
