@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:54:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() = 0;
 
-        String              getControlDefault( const OFieldDescription* _pFieldDescr ) const;
+        String              getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck = sal_True) const;
     protected:
         void    implFocusLost(Window* _pWhich);
     };
