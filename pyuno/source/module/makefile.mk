@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 13:12:46 $
+#   last change: $Author: vg $ $Date: 2005-02-16 16:45:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,7 +145,7 @@ $(DLLDEST)$/%.py: %.py
 .IF "$(GUI)" == "UNX"
 $(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
 .IF "$(OS)" == "LINUX"
-    ld -shared -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHLCUI) -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
 .ELIF "$(OS)" == "SOLARIS"
     ld -G -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
 .ELIF "$(OS)" == "FREEBSD"
