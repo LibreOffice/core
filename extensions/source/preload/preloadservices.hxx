@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preloadservices.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-11-14 13:18:18 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,5 +89,5 @@ namespace preload
 }   // namespace preload
 //.........................................................................
 
-#endif _EXTENSIONS_PRELOAD_PRELOADSERVICES_HXX_
+#endif // _EXTENSIONS_PRELOAD_PRELOADSERVICES_HXX_
 
