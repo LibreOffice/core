@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:21:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     final int SOSELGROUPLST = 33;
     final int SOTXTCOLTITLE = 48;
     final int SOTITLESCROLLBAR = 49;
+    public static final String REPORTEXTENSION = ".oxt";
 
 
     public static final int SONULLPAGE = 0;
@@ -195,7 +196,7 @@ public class ReportWizard extends WizardDialog implements XTextListener{
          switch (nOldStep){
             case SOMAINPAGE:
                 CurReportDocument.CurDBMetaData.setFieldNames(CurDBCommandFieldSelection.getSelectedFieldNames());
-                CurReportDocument.CurDBMetaData.setAllIncludedFieldNames();
+                CurReportDocument.CurDBMetaData.setAllIncludedFieldNames(false);
                 CurReportDocument.CurDBMetaData.setFieldColumns(true);
                 if (CurDBCommandFieldSelection.isModified()){
                     CurReportDocument.oTextSectionHandler.removeAllTextSections();
@@ -221,7 +222,7 @@ public class ReportWizard extends WizardDialog implements XTextListener{
              default:
              break;
           }
-        if ((nOldStep < SOTEMPLATEPAGE) && (nNewStep >= SOTEMPLATEPAGE)){
+        if ((nOldStep < SOTEMPLATEPAGE) && (super.getNewStep() >= SOTEMPLATEPAGE)){
             CurReportDocument.CurDBMetaData.setRecordFieldNames();
             CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.CurDBMetaData);
             CurDBMetaData.oSQLQueryComposer.setQueryCommand("Report Wizard", this.xWindow, false);
@@ -232,14 +233,14 @@ public class ReportWizard extends WizardDialog implements XTextListener{
 
 
     public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
     try {
         XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
         ReportWizard CurReportWizard = new ReportWizard(xLocMSF);
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             PropertyValue[] curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DataSourceName", "file:///D:/trash/biblio.sxb");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/New Database16.odb"); //baseLocation ); "DataSourceName", "db1");
             CurReportWizard.startReportWizard(xLocMSF, curproperties);
         }
     }
@@ -308,7 +309,11 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     public void startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
     try{
         this.xMSF = _xMSF;
-        ReportPath = FileAccess.getOfficePath(xMSF, "Template","share") + "/wizard/report";
+        // Check general availability of office paths
+        ReportPath = FileAccess.getOfficePath(xMSF, "Template","share");
+        ReportPath = FileAccess.combinePaths(xMSF, ReportPath, "/wizard/report");
+        if (ReportPath.equals(""))
+            return;
         CurReportDocument =  new ReportDocument(xMSF, true, oResource);
         CurDBMetaData = CurReportDocument.CurDBMetaData;
         DBGPROPERTYVALUE = CurPropertyValue;
@@ -317,6 +322,8 @@ public class ReportWizard extends WizardDialog implements XTextListener{
             CurReportDocument.oTextStyleHandler.loadStyleTemplates(ReportPath + "/stl-default.stw", "LoadPageStyles");
             buildSteps();
             createWindowPeer(CurReportDocument.xWindowPeer);
+            CurDBMetaData.setWindowPeer(this.xControl.getPeer());
+
     //      setAutoMnemonic("lblDialogHeader", false);
             insertQueryRelatedSteps();
             short RetValue = executeDialog(CurReportDocument.xFrame.getComponentWindow().getPosSize());
@@ -329,13 +336,13 @@ public class ReportWizard extends WizardDialog implements XTextListener{
                         CheckIfTodisposeMetaData();
                         return;
                     }
-                    if ((CurReportFinalizer.getReportMode() == Finalizer.SOCREATETEMPLATE) || (CurReportFinalizer.getReportMode() == Finalizer.SOUSETEMPLATE)) {
+                    if ((CurReportFinalizer.getReportOpenMode() == Finalizer.SOCREATETEMPLATE) || (CurReportFinalizer.getReportOpenMode() == Finalizer.SOUSETEMPLATE)) {
                         xComponent.dispose();
                         bdisposeDialog = false;
-                        CurReportDocument.CurDBMetaData.addDatabaseDocument(CurReportDocument.xComponent, false,true);
-                        if (CurReportFinalizer.getReportMode() == Finalizer.SOUSETEMPLATE){
-                            CurDBMetaData.openReportDocument(CurReportFinalizer.getStoreName());
-                        }
+                        int nReportMode = CurReportFinalizer.getReportOpenMode();
+                        CurReportDocument.CurDBMetaData.addReportDocument(CurReportDocument.xComponent, true);
+                        boolean bOpenReadOnly = (nReportMode == Finalizer.SOCREATETEMPLATE);
+                        CurDBMetaData.openReportDocument(CurReportFinalizer.getStoreName(), true, bOpenReadOnly);
                     }
                     else {
                         if (CurReportDocument.checkReportLayoutMode(CurReportDocument.CurDBMetaData.GroupFieldNames)){
@@ -371,34 +378,24 @@ public class ReportWizard extends WizardDialog implements XTextListener{
     }
 
 
-    //final ReportDocument CurReportDocument, final UnoControl CurUnoProgressDialog
     public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport){
-    Thread ProgressThread = new Thread(new Runnable() {
-
-        public void run(){
         boolean bDocisStored = false;
         try{
             if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, false))
                 CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
-                if (CurReportFinalizer.getReportMode() == Finalizer.SOCREATEDOCUMENT){
-                    bDocisStored = OfficeDocument.store(xMSF, CurReportDocument.xComponent, CurReportFinalizer.getStorePath(), "StarOffice XML (Writer)",
-                                                                false, sMsgSavingImpossible);
+                if (CurReportFinalizer.getReportOpenMode() == Finalizer.SOCREATEDOCUMENT){
+                    bDocisStored = CurReportDocument.CurDBMetaData.storeDatabaseDocumentToTempPath(CurReportDocument.xComponent, CurReportFinalizer.getStoreName());
+//                  bDocisStored = OfficeDocument.store(xMSF, CurReportDocument.xComponent, CurReportFinalizer.getStorePath(), "writer8",
+//                                                              false, sMsgSavingImpossible);
                 }
             }
         catch (com.sun.star.wizards.common.InvalidQueryException queryexception){
         }
-        catch (ThreadDeath td){
-            System.out.println("could not stop thread");
-            CurUnoProgressDialog.xComponent.dispose();
-        }
         CurDataimport.xComponent.dispose();
         if (bDocisStored)
-            CurReportDocument.CurDBMetaData.addDatabaseDocument(CurReportDocument.xComponent, false,CurReportFinalizer.getReportMode() == Finalizer.SOCREATETEMPLATE);
+            CurReportDocument.CurDBMetaData.addReportDocument(CurReportDocument.xComponent, false);
         CurReportDocument.CurDBMetaData.disposeDBMetaData();
         }
-    });
-    ProgressThread.start();
-    }
 
 
     public boolean getReportResources(boolean bgetProgressResourcesOnly){
@@ -488,10 +485,10 @@ public class ReportWizard extends WizardDialog implements XTextListener{
          public void setID(String sIncSuffix){
              ID = 1;
              if (sIncSuffix != null){
-                 if (sIncSuffix != ""){
-                     String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
-                     ID = Integer.parseInt(sID);
-                     int a = 0;
+                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_"))) {
+                    String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
+                    ID = Integer.parseInt(sID);
+                    int a = 0;
                  }
              }
          }
