@@ -53,7 +53,8 @@ int main( int argc, char *argv[] )
     OUString value;
     sal_Bool useDefault;
 
-    useDefault = bootstrap.getFrom(OUString(RTL_CONSTASCII_USTRINGPARAM("USEDEFAULT")), OUString());
+    OUString aDummy;
+    useDefault = bootstrap.getFrom(OUString(RTL_CONSTASCII_USTRINGPARAM("USEDEFAULT")), aDummy);
 
     sal_Bool result = sal_False;
     sal_Bool found  = sal_True;
