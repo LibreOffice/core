@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-11 14:07:29 $
+ *  last change: $Author: jbu $ $Date: 2001-05-25 07:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ static OUString makeComponentPath( const OUString & rLibName, const OUString & r
     {
         OUString aComp;
         OSL_ASSERT( osl_File_E_None == FileBase::getSystemPathFromFileURL( rLibName, aComp ) );
-        OSL_ASSERT( osl_File_E_None == FileBase::getSystemPathFromFileURL( rPath, aComp ) );
+        OSL_ASSERT( ! rPath.getLength() || osl_File_E_None == FileBase::getSystemPathFromFileURL( rPath, aComp ) );
     }
 #endif
     OUStringBuffer buf( rPath.getLength() + 32 );
