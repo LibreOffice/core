@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:51:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,8 +272,15 @@
 #define ML_CERTSTATUS                   3
 #define IMG_CERT_SMAL                   4
 
-#define CV_ROW_0A                       (CV_ROW_0+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
-#define CV_ROW_2A                       (CV_ROW_2+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
+#define CVP_ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
+#define CVP_ROW_1                       (CVP_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define REST_HEIGHT                     (TP_HEIGHT-CVP_ROW_1-2*RSC_SP_GRP_SPACE_Y-RSC_CD_FIXEDTEXT_HEIGHT-RSC_CD_PUSHBUTTON_HEIGHT)
+#define CVP_ROW_2                       (CVP_ROW_1+REST_HEIGHT/3*2+RSC_SP_CTRL_DESC_Y)
+#define CVP_ROW_3                       (CVP_ROW_2+RSC_CD_PUSHBUTTON_HEIGHT)
+#define CVP_ROW_4                       (CVP_ROW_3+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+
+//#define CV_ROW_0A                      (CV_ROW_0+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
+//#define CV_ROW_2A                      (CV_ROW_2+RSC_SP_CTRL_DESC_Y+RSC_CD_FIXEDTEXT_HEIGHT)
 
 // --------- tab dialog macro security ---------
 
