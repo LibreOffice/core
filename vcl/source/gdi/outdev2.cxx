@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:59:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1677,7 +1677,9 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             const long      nDstWidth = aDstRect.GetWidth(), nDstHeight = aDstRect.GetHeight();
             const long      nOutWidth = aOutSz.Width(), nOutHeight = aOutSz.Height();
             const long      nOffX = aDstRect.Left() - aOutPt.X(), nOffY = aDstRect.Top() - aOutPt.Y();
-            long            nX, nOutX, nY, nOutY, nMirrOffX, nMirrOffY;
+            long            nX, nOutX, nY, nOutY;
+            long            nMirrOffX = 0;
+            long            nMirrOffY = 0;
             long*           pMapX = new long[ nDstWidth ];
             long*           pMapY = new long[ nDstHeight ];
 
