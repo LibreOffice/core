@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:25:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,8 @@ void SwXDispatch::dispatch(
     if(!aURL.Complete.compareToAscii(cURLInsertContent))
     {
         ::svx::ODataAccessDescriptor aDescriptor(aArgs);
-        pNewDBMgr->MergeNew(DBMGR_MERGE, rSh, aDescriptor);
+        SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
+        pNewDBMgr->MergeNew(aMergeDesc);
     }
     else if(!aURL.Complete.compareToAscii(cURLInsertColumns))
     {
