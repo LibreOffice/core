@@ -153,7 +153,7 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
     +tr -d "\015" < $(SHL1VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL1VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -192,7 +192,7 @@ SHL1DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL1TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL1TARGETN:b)_linkinc.ls
@@ -204,7 +204,7 @@ $(SHL1TARGETN) : $(LINKINCTARGETS)
 SHL1LINKLIST=$(MISC)$/$(SHL1TARGET)_link.lst
 $(MISC)$/$(SHL1TARGET)_link.lst : $(SHL1LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL1USE_EXPORTS)"=="name"
 
@@ -232,31 +232,17 @@ $(SHL1TARGETN) : \
     @-+echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL1ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL1ADD_VERINFO)\" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL1ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ELSE			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL1ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL1ADD_VERINFO)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-.ELSE			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
@@ -272,8 +258,8 @@ $(SHL1TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL1LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL1STDLIBS) $(SHL1STDSHL) $(STDSHL1) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -370,7 +356,7 @@ $(SHL1TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1SONAME) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -564,7 +550,7 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
     +tr -d "\015" < $(SHL2VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL2VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -603,7 +589,7 @@ SHL2DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL2TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL2TARGETN:b)_linkinc.ls
@@ -615,7 +601,7 @@ $(SHL2TARGETN) : $(LINKINCTARGETS)
 SHL2LINKLIST=$(MISC)$/$(SHL2TARGET)_link.lst
 $(MISC)$/$(SHL2TARGET)_link.lst : $(SHL2LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL2USE_EXPORTS)"=="name"
 
@@ -643,31 +629,17 @@ $(SHL2TARGETN) : \
     @-+echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL2ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL2ADD_VERINFO)\" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL2ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ELSE			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL2ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL2ADD_VERINFO)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-.ELSE			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
@@ -683,8 +655,8 @@ $(SHL2TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL2LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL2STDLIBS) $(SHL2STDSHL) $(STDSHL2) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -781,7 +753,7 @@ $(SHL2TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2SONAME) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -975,7 +947,7 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
     +tr -d "\015" < $(SHL3VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL3VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -1014,7 +986,7 @@ SHL3DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL3TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL3TARGETN:b)_linkinc.ls
@@ -1026,7 +998,7 @@ $(SHL3TARGETN) : $(LINKINCTARGETS)
 SHL3LINKLIST=$(MISC)$/$(SHL3TARGET)_link.lst
 $(MISC)$/$(SHL3TARGET)_link.lst : $(SHL3LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL3USE_EXPORTS)"=="name"
 
@@ -1054,31 +1026,17 @@ $(SHL3TARGETN) : \
     @-+echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL3ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL3ADD_VERINFO)\" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL3ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ELSE			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL3ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL3ADD_VERINFO)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-.ELSE			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
@@ -1094,8 +1052,8 @@ $(SHL3TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL3LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL3STDLIBS) $(SHL3STDSHL) $(STDSHL3) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -1192,7 +1150,7 @@ $(SHL3TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3SONAME) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1386,7 +1344,7 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
     +tr -d "\015" < $(SHL4VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL4VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -1425,7 +1383,7 @@ SHL4DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL4TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL4TARGETN:b)_linkinc.ls
@@ -1437,7 +1395,7 @@ $(SHL4TARGETN) : $(LINKINCTARGETS)
 SHL4LINKLIST=$(MISC)$/$(SHL4TARGET)_link.lst
 $(MISC)$/$(SHL4TARGET)_link.lst : $(SHL4LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL4USE_EXPORTS)"=="name"
 
@@ -1465,31 +1423,17 @@ $(SHL4TARGETN) : \
     @-+echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL4ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL4ADD_VERINFO)\" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL4ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ELSE			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL4ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL4ADD_VERINFO)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-.ELSE			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
@@ -1505,8 +1449,8 @@ $(SHL4TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL4LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL4STDLIBS) $(SHL4STDSHL) $(STDSHL4) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -1603,7 +1547,7 @@ $(SHL4TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4SONAME) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1797,7 +1741,7 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
     +tr -d "\015" < $(SHL5VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL5VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -1836,7 +1780,7 @@ SHL5DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL5TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL5TARGETN:b)_linkinc.ls
@@ -1848,7 +1792,7 @@ $(SHL5TARGETN) : $(LINKINCTARGETS)
 SHL5LINKLIST=$(MISC)$/$(SHL5TARGET)_link.lst
 $(MISC)$/$(SHL5TARGET)_link.lst : $(SHL5LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL5USE_EXPORTS)"=="name"
 
@@ -1876,31 +1820,17 @@ $(SHL5TARGETN) : \
     @-+echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL5ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL5ADD_VERINFO)\" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL5ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ELSE			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL5ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL5ADD_VERINFO)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-.ELSE			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
@@ -1916,8 +1846,8 @@ $(SHL5TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL5LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL5STDLIBS) $(SHL5STDSHL) $(STDSHL5) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -2014,7 +1944,7 @@ $(SHL5TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5SONAME) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -2208,7 +2138,7 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
     +tr -d "\015" < $(SHL6VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL6VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -2247,7 +2177,7 @@ SHL6DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL6TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL6TARGETN:b)_linkinc.ls
@@ -2259,7 +2189,7 @@ $(SHL6TARGETN) : $(LINKINCTARGETS)
 SHL6LINKLIST=$(MISC)$/$(SHL6TARGET)_link.lst
 $(MISC)$/$(SHL6TARGET)_link.lst : $(SHL6LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL6USE_EXPORTS)"=="name"
 
@@ -2287,31 +2217,17 @@ $(SHL6TARGETN) : \
     @-+echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL6ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL6ADD_VERINFO)\" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL6ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ELSE			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL6ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL6ADD_VERINFO)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-.ELSE			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
@@ -2327,8 +2243,8 @@ $(SHL6TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL6LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL6STDLIBS) $(SHL6STDSHL) $(STDSHL6) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -2425,7 +2341,7 @@ $(SHL6TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6SONAME) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -2619,7 +2535,7 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
     +tr -d "\015" < $(SHL7VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL7VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -2658,7 +2574,7 @@ SHL7DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL7TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL7TARGETN:b)_linkinc.ls
@@ -2670,7 +2586,7 @@ $(SHL7TARGETN) : $(LINKINCTARGETS)
 SHL7LINKLIST=$(MISC)$/$(SHL7TARGET)_link.lst
 $(MISC)$/$(SHL7TARGET)_link.lst : $(SHL7LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL7USE_EXPORTS)"=="name"
 
@@ -2698,31 +2614,17 @@ $(SHL7TARGETN) : \
     @-+echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL7ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL7ADD_VERINFO)\" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL7ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ELSE			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL7ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL7ADD_VERINFO)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-.ELSE			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
@@ -2738,8 +2640,8 @@ $(SHL7TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL7LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL7STDLIBS) $(SHL7STDSHL) $(STDSHL7) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -2836,7 +2738,7 @@ $(SHL7TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7SONAME) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3030,7 +2932,7 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
     +tr -d "\015" < $(SHL8VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL8VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -3069,7 +2971,7 @@ SHL8DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL8TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL8TARGETN:b)_linkinc.ls
@@ -3081,7 +2983,7 @@ $(SHL8TARGETN) : $(LINKINCTARGETS)
 SHL8LINKLIST=$(MISC)$/$(SHL8TARGET)_link.lst
 $(MISC)$/$(SHL8TARGET)_link.lst : $(SHL8LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL8USE_EXPORTS)"=="name"
 
@@ -3109,31 +3011,17 @@ $(SHL8TARGETN) : \
     @-+echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL8ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL8ADD_VERINFO)\" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL8ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ELSE			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL8ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL8ADD_VERINFO)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-.ELSE			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
@@ -3149,8 +3037,8 @@ $(SHL8TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL8LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL8STDLIBS) $(SHL8STDSHL) $(STDSHL8) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -3247,7 +3135,7 @@ $(SHL8TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8SONAME) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3441,7 +3329,7 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
     +tr -d "\015" < $(SHL9VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL9VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -3480,7 +3368,7 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_d
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL9TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL9TARGETN:b)_linkinc.ls
@@ -3492,7 +3380,7 @@ $(SHL9TARGETN) : $(LINKINCTARGETS)
 SHL9LINKLIST=$(MISC)$/$(SHL9TARGET)_link.lst
 $(MISC)$/$(SHL9TARGET)_link.lst : $(SHL9LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL9USE_EXPORTS)"=="name"
 
@@ -3520,31 +3408,17 @@ $(SHL9TARGETN) : \
     @-+echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL9ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL9ADD_VERINFO)\" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL9ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ELSE			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL9ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL9ADD_VERINFO)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-.ELSE			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
@@ -3560,8 +3434,8 @@ $(SHL9TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL9LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL9STDLIBS) $(SHL9STDSHL) $(STDSHL9) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -3658,7 +3532,7 @@ $(SHL9TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9SONAME) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3852,7 +3726,7 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
     +tr -d "\015" < $(SHL10VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
-    
+
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL10VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
@@ -3891,7 +3765,7 @@ SHL10DESCRIPTIONOBJ*=$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(SHL10TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(SHL10TARGETN:b)_linkinc.ls
@@ -3903,7 +3777,7 @@ $(SHL10TARGETN) : $(LINKINCTARGETS)
 SHL10LINKLIST=$(MISC)$/$(SHL10TARGET)_link.lst
 $(MISC)$/$(SHL10TARGET)_link.lst : $(SHL10LIBS) 
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
+    +$(SED) -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(SHL10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 .ENDIF			# "$(SHL10USE_EXPORTS)"=="name"
 
@@ -3931,31 +3805,17 @@ $(SHL10TARGETN) : \
     @-+echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-.IF "$(USE_SHELL)"!="4nt"
 .IF "$(SHL10ADD_VERINFO)"!=""
-     @-+echo \#include \"$(SHL10ADD_VERINFO)\" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"$(SHL10ADD_VERINFO)$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ELSE			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo \#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo \#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-.ELSE			# "$(USE_SHELL)"!="4nt"
-.IF "$(SHL10ADD_VERINFO)"!=""
-    @-+echo #include "$(SHL10ADD_VERINFO)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-.ELSE			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
-.ENDIF			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-.ENDIF			# "$(USE_SHELL)"!="4nt"
+    @-+echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo $(EMQ)#define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo $(EMQ)#include $(EMQ)"shlinfo.rc$(EMQ)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
@@ -3971,8 +3831,8 @@ $(SHL10TARGETN) : \
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL10LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL10STDLIBS) $(SHL10STDSHL) $(STDSHL10) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -4069,7 +3929,7 @@ $(SHL10TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10SONAME) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
