@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 14:09:23 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_CHRATR_CROSSEDOUT
     M_E( "CharStrikeout",   STYLE,  text_crossing_out,  XML_TYPE_TEXT_CROSSEDOUT,   0),
     // RES_CHRATR_ESCAPEMENT
-    M_E( "CharEscapement",       STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ), // BugID #76842#
-    M_E( "CharEscapementHeight", STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    M_E( "CharEscapement",       STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "CharEscapementHeight", STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_CHRATR_FONT
     M_E( "CharFontName",    FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME, 0 ),
     M_E( "CharFontStyleName",STYLE, font_style_name,    XML_TYPE_STRING, 0 ),
@@ -222,7 +222,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "ParaBottomMargin",        FO, margin_bottom,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
     M_E( "ParaBottomMarginRelative",FO, margin_bottom,      XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL ),
     // RES_PAGEDESC
-    // TODO
+    M_E( "PageDescName",            STYLE,  master_page_name,           XML_TYPE_STRING, 0 ),
+    M_E( "PageNumberOffset",        STYLE,  page_number,            XML_TYPE_NUMBER16, 0 ),
     // RES_BREAK : TODO: does this work?
     M_E( "BreakType",       FO, break_before,       XML_TYPE_TEXT_BREAKBEFORE|MID_FLAG_MULTI_PROPERTY, 0 ),
     M_E( "BreakType",       FO, break_after,        XML_TYPE_TEXT_BREAKAFTER, 0 ),
@@ -306,8 +307,8 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_CHRATR_CROSSEDOUT
     M_E( "CharStrikeout",   STYLE,  text_crossing_out,  XML_TYPE_TEXT_CROSSEDOUT,   0),
     // RES_CHRATR_ESCAPEMENT
-    M_E( "CharEscapement",       STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ), // BugID #76842#
-    M_E( "CharEscapementHeight", STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    M_E( "CharEscapement",       STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "CharEscapementHeight", STYLE, text_position,  XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
     // RES_CHRATR_FONT
     M_E( "CharFontName",    FO,     font_family,        XML_TYPE_TEXT_FONTFAMILYNAME, 0 ),
     M_E( "CharFontStyleName",STYLE, font_style_name,    XML_TYPE_STRING, 0 ),

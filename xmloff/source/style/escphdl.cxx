@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escphdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,11 +113,11 @@ sal_Bool XMLEscapementPropHdl::importXML( const OUString& rStrImpValue, uno::Any
     if( ! aTokens.getNextToken( aToken ) )
         return sal_False;
 
-    if( aToken.compareToAscii( sXML_escapement_sub ) )
+    if( 0 == aToken.compareToAscii( sXML_escapement_sub ) )
     {
         nVal = DFLT_ESC_AUTO_SUB;
     }
-    else if( aToken.compareToAscii( sXML_escapement_super ) )
+    else if( 0 == aToken.compareToAscii( sXML_escapement_super ) )
     {
         nVal = DFLT_ESC_AUTO_SUPER;
     }
