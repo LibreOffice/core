@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 12:16:11 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ void ScMyStylesImportHelper::SetRowStyle(const rtl::OUString& sStyleName)
 }
 
 void ScMyStylesImportHelper::SetAttributes(const rtl::OUString& sStyleName,
-    const rtl::OUString& sCurrency, sal_Int16 nCellType)
+    const rtl::OUString& sCurrency, const sal_Int16 nCellType)
 {
     this->sStyleName = sStyleName;
     this->sCurrency = sCurrency;
