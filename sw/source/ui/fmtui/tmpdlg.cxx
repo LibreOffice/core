@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 08:58:18 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,9 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage(TP_PARA_EXT,     SvxExtParagraphTabPage::Create,
                                         SvxExtParagraphTabPage::GetRanges );
 
+            AddTabPage(TP_PARA_ASIAN,   SvxAsianTabPage::Create,
+                                        SvxAsianTabPage::GetRanges);
+
             AddTabPage(TP_CHAR_STD,     SvxCharNamePage::Create,
                                         SvxCharNamePage::GetRanges );
             AddTabPage(TP_CHAR_EXT,     SvxCharEffectsPage::Create,
@@ -289,6 +292,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                 OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
                 if (!pHtmlOpt->IsPrintLayoutExtension())
                     RemoveTabPage(TP_PARA_EXT);
+                RemoveTabPage(TP_PARA_ASIAN);
                 RemoveTabPage(TP_TABULATOR);
                 RemoveTabPage(TP_NUMPARA);
                 RemoveTabPage(TP_CHAR_TWOLN);
@@ -595,6 +599,9 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/27 08:58:18  jp
+    Task #80425#: new tabpages
+
     Revision 1.1.1.1  2000/09/18 17:14:37  hr
     initial import
 

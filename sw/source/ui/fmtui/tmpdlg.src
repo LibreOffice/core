@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 08:58:18 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,12 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
                 Text[ turkish ] = "Metin akýþý";
                 Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_PARA_ASIAN;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
             };
             PageItem
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-29 13:25:34 $
+ *  last change: $Author: os $ $Date: 2000-11-29 17:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_FORBIDDENRULEITEM_HXX
+#include <svx/forbiddenruleitem.hxx>
 #endif
 
 #ifndef _TXATBASE_HXX //autogen
@@ -751,7 +754,7 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyph )
     const SwAttrSet& rAttrSet = GetTxtFrm()->GetTxtNode()->GetSwAttrSet();
     SetHanging( rAttrSet.GetHangingPunctuation().GetValue() );
     SetScriptSpace( rAttrSet.GetScriptSpace().GetValue() );
-    SetForbiddenChars( TRUE /*rAttrSet.GetForbiddenRule().GetValue()*/ );
+    SetForbiddenChars( rAttrSet.GetForbiddenRule().GetValue() );
     const SvxHyphenZoneItem &rAttr = rAttrSet.GetHyphenZone();
     MaxHyph() = rAttr.GetMaxHyphens();
     sal_Bool bAuto = bAutoHyph || rAttr.IsHyphen();
