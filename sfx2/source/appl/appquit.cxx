@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:32:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,6 @@ void SfxApplication::Deinitialize()
     DBG_ASSERT( pViewFrame == 0, "active foreign ViewFrame" );
 
     delete[] pInterfaces, pInterfaces = 0;
-    DELETEZ(pImageMgr);
 
     // free administration managers
     DELETEZ(pImp->pAutoSaveTimer);
