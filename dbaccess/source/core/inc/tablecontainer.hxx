@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:07:08 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ protected:
     TablesIndexAccess       m_aTablesIndexed;
 
     // holds the original tables which where set in construct but they can be null
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xMasterTables;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
 
     sal_Bool m_bConstructed : 1;        // late ctor called
 
@@ -139,7 +140,8 @@ public:
     */
     OTableContainer(
         ::cppu::OWeakObject& _rParent,
-        ::osl::Mutex& _rMutex
+        ::osl::Mutex& _rMutex,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon
         );
     ~OTableContainer();
 
@@ -147,7 +149,6 @@ public:
         filters given (the connection is the parent object you passed in the ctor).
     */
     void construct(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
         );

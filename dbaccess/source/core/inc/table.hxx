@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:07:08 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ class ODBTable  :public ODataSettings_Base
 {
 protected:
     OWeakConnection                                 m_aConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier > m_xTable;
     //  OColumns                                        m_aColumns;
 
 // <properties>
@@ -149,6 +150,7 @@ protected:
 public:
     /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
         @param          _rxConn         the connection the table belongs to
+        @param          _rxTable        the table from the driver can be null
         @param          _rCatalog       the name of the catalog the table belongs to. May be empty.
         @param          _rSchema        the name of the schema the table belongs to. May be empty.
         @param          _rName          the name of the table
@@ -157,8 +159,9 @@ public:
     */
     ODBTable(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
             const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
-            const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc, sal_Bool _bCaseSensitive)
+            const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)
         throw(::com::sun::star::sdbc::SQLException);
     virtual ~ODBTable();
 

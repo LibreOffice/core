@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:07:08 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 10:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,8 +301,9 @@ protected:
     ODBTable*                   m_pTable;       // in some cases this is the parent
 
     // configuration
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
-                                m_xConfigurationNode;
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > m_xConfigurationNode;
+    // comes from the driver can be null
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDrvColumns;
 
     sal_Bool                    m_bInitialized  : 1;
     sal_Bool                    m_bAddColumn    : 1;
@@ -334,6 +335,10 @@ public:
         @see        setCaseSensitive
     */
     OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
+        sal_Bool _bAddColumn = sal_False,sal_Bool _bDropColumn = sal_False);
+    OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
+        sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
         sal_Bool _bAddColumn = sal_False,sal_Bool _bDropColumn = sal_False);
     ~OColumns();
 
