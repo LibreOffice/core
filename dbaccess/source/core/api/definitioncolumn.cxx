@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-03 13:36:06 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,11 +137,12 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptor::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(19)
+    BEGIN_PROPERTY_HELPER(20)
         DECL_PROP1(ALIGN,               sal_Int32,          MAYBEVOID);
-        DECL_PROP1(CONTROLDEFAULT,          ::rtl::OUString,    MAYBEVOID);
+        DECL_PROP1(AUTOINCREMENTCREATION,::rtl::OUString,   MAYBEVOID);
+        DECL_PROP1(CONTROLDEFAULT,      ::rtl::OUString,    MAYBEVOID);
         DECL_PROP0_IFACE(CONTROLMODEL,  XPropertySet        );
-        DECL_PROP0(DEFAULTVALUE,            ::rtl::OUString     );
+        DECL_PROP0(DEFAULTVALUE,        ::rtl::OUString     );
         DECL_PROP0(DESCRIPTION,         ::rtl::OUString     );
         DECL_PROP1(NUMBERFORMAT,        sal_Int32           ,MAYBEVOID);
         DECL_PROP1(HELPTEXT,            ::rtl::OUString,    MAYBEVOID);
@@ -192,6 +193,9 @@ void OTableColumnDescriptor::getFastPropertyValue( Any& rValue, sal_Int32 nHandl
             break;
         case PROPERTY_ID_DEFAULTVALUE:
             rValue <<= m_aDefaultValue;
+            break;
+        case PROPERTY_ID_AUTOINCREMENTCREATION:
+            rValue <<= m_aAutoIncrementValue;
             break;
         case PROPERTY_ID_ISAUTOINCREMENT:
         {
@@ -247,6 +251,9 @@ sal_Bool OTableColumnDescriptor::convertFastPropertyValue(
             break;
         case PROPERTY_ID_DEFAULTVALUE:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aDefaultValue);
+            break;
+        case PROPERTY_ID_AUTOINCREMENTCREATION:
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAutoIncrementValue);
             break;
         case PROPERTY_ID_ISAUTOINCREMENT:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAutoIncrement);
@@ -310,14 +317,19 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
                 "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
             rValue >>= m_aDefaultValue;
             break;
+        case PROPERTY_ID_AUTOINCREMENTCREATION:
+            OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< rtl::OUString* >(NULL))),
+                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(AUTOINCREMENTVALUE) : invalid value !");
+            rValue >>= m_aAutoIncrementValue;
+            break;
         case PROPERTY_ID_ISAUTOINCREMENT:
             OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
+                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISAUTOINCREMENT) : invalid value !");
             m_bAutoIncrement = ::comphelper::getBOOL(rValue);
             break;
         case PROPERTY_ID_ISCURRENCY:
             OSL_ENSURE(rValue.getValueType().equals(::getCppuType(static_cast< sal_Bool* >(NULL))),
-                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(DEFAULTVALUE) : invalid value !");
+                "OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(ISCURRENCY) : invalid value !");
             m_bCurrency = ::comphelper::getBOOL(rValue);
             break;
         case PROPERTY_ID_ISROWVERSION:
