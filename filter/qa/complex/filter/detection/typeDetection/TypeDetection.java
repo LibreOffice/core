@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-01-28 14:59:10 $
+ *  last change: $Date: 2004-04-21 11:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package complex.filter.detection.typeDetection;
 
 import com.sun.star.beans.PropertyValue;
@@ -69,6 +68,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
+import java.io.File;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -234,7 +234,10 @@ public class TypeDetection extends ComplexTestCase {
         return new String[]{"checkByURLonly",
                             "checkPreselectedType",
                             "checkPreselectedFilter",
-                            "checkPreselectedDocService"};
+                            "checkPreselectedDocService",
+                            "checkStreamLoader",
+                            "checkStreamLoader"};
+
     }
 
     /** Create the environment for following tests.
@@ -260,7 +263,11 @@ public class TypeDetection extends ComplexTestCase {
 
         m_xDetection = (XTypeDetection)
                 UnoRuntime.queryInterface(XTypeDetection.class, oInterface);
-
+        Enumeration k = param.keys();
+        while (k.hasMoreElements()){
+            String kName = ((String)k.nextElement()).toString();
+            log.println(kName + ":" + param.get(kName).toString());
+        }
         // create instrace of helper class
         helper = new Helper(param, log);
 
@@ -525,5 +532,62 @@ public class TypeDetection extends ComplexTestCase {
         }
      }
 
+     public void checkStreamLoader(){
+         try{
 
+            /*
+             *als Dateien die typeDetection.props und eine der csv-Dateien
+             *benutzten. diese können per dmake einfach auf andere Rechte setzten
+             *
+             */
+            log.println("### checkStreamLoader() ###");
+            String[] urls = new String[2];
+
+            urls[0] = helper.getClassURLString("TypeDetection.props");
+            urls[1] = helper.getClassURLString("files.csv");
+
+            for (int j=0; j<urls.length; j++){
+                String fileURL  = urls[j];
+                File file = new File(fileURL);
+                fileURL =  utils.getFullURL(fileURL);
+
+                PropertyValue[] MediaDescriptor = helper.createMediaDescriptor(
+                                                        new String[] {"URL"},
+                                                        new Object[] {fileURL});
+
+                if (file.canWrite()) log.println("check writable file...");
+                else log.println("check readonly file...");
+
+                PropertyValue[][] inOut = helper.createInOutPropertyValue(MediaDescriptor);
+                PropertyValue[] in = inOut[0];
+                log.println("in-Parameter:");
+                for (int i=0; i < in.length; i++){
+                    log.println("["+i+"] '" + in[i].Name + "':'" + in[i].Value.toString()+"'");
+                }
+
+                String type = m_xDetection.queryTypeByDescriptor(inOut, true);
+
+                PropertyValue[] out = inOut[0];
+
+                boolean bStream = false;
+                log.println("out-Parameter");
+                boolean bReadOnly = false;
+                for (int i=0; i < out.length; i++){
+                    if ((out[i].Name.equals("ReadOnly")) && (out[i].Value.toString().equals("true"))) bReadOnly = true;
+                    log.println("["+i+"] '" + out[i].Name + "':'" + out[i].Value.toString()+"'");
+                }
+
+                if (file.canWrite() && bReadOnly)
+                    assure("\nStreamLoader: file '"+ fileURL +"' is writable but out-Parameter does contain 'ReadOnly' property",false ,true);
+                else if ((!file.canWrite()) && (!bReadOnly))
+                    assure("\nStreamLoader: file '"+ fileURL +"'is readonly but out-Parameter does not contain 'ReadOnly' property",false ,true);
+                else assure("all ok",true,true);
+
+            }
+
+         } catch (ClassCastException e){
+            failed(e.toString(), true);
+        }
+
+     }
 }
