@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:06:15 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 07:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,6 +667,7 @@ public:
     sal_Bool                mbOnlyFolder    : 1;
     sal_Bool                mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
     sal_Int16               mnSuspendSelectCallback : 1;
+    sal_Bool                mbIsFirstResort : 1;
 
     IntlWrapper             aIntlWrapper;
 
@@ -1801,6 +1802,7 @@ SvtFileView_Impl::SvtFileView_Impl( Window* pParent, sal_Int16 nFlags, sal_Bool 
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
     ,mpNameTrans                ( NULL )
     ,mnSuspendSelectCallback    ( 0 )
+    ,mbIsFirstResort            ( sal_True )
     ,mpUrlFilter                ( NULL )
 
 {
@@ -2367,7 +2369,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
     SortFolderContent_Impl();
     OpenFolder_Impl();
 
-    if ( aEntryURL.Len() )
+    if ( !mbIsFirstResort )
     {
         ULONG nPos = GetEntryPos( aEntryURL );
         if ( nPos < mpView->GetEntryCount() )
@@ -2379,6 +2381,8 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
             --mnSuspendSelectCallback;
         }
     }
+    else
+        mbIsFirstResort = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2665,7 +2669,7 @@ sal_Bool SvtFileView_Impl::GetDocTitle( const OUString& rTargetURL, OUString& rR
         Any aAny = xPropSet->getPropertyValue( OUString::createFromAscii( "Title" ) );
 
         OUString aTitle;
-        if( aAny >>= aTitle )
+        if ( ( aAny >>= aTitle ) && aTitle.getLength() > 0 )
         {
             rRet = aTitle;
             bRet = sal_True;
