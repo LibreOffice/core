@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:33:00 $
+#   last change: $Author: obo $ $Date: 2004-09-08 13:55:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ LOCALIZEDFILES= \
     SFX.xcu \
     DataAccess.xcu \
     UI.xcu \
+    WebWizard.xcu \
     Writer.xcu 
 
 .INCLUDE :  target.mk
