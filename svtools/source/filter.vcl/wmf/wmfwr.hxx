@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-27 12:04:02 $
+ *  last change: $Author: sj $ $Date: 2001-11-06 17:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,13 @@ struct WMFWriterAttrStackMember
     struct WMFWriterAttrStackMember * pSucc;
     Color aLineColor;
     Color aFillColor;
+    Color aTextColor;
+    TextAlign eTextAlign;
     RasterOp eRasterOp;
     Font aFont;
     MapMode aMapMode;
     Region aClipRegion;
+    sal_uInt16 nFlags;
 };
 
 // -------------
@@ -112,41 +115,33 @@ private:
     ULONG nActRecordPos;
 
     // Aktuelle Attribute im Quell-Metafile:
-    Color    aSrcLineColor;
-    Color    aSrcFillColor;
-    RasterOp eSrcRasterOp;
-    Font     aSrcFont;
-    MapMode  aSrcMapMode;
-    BOOL     bSrcIsClipping;
-    Region   aSrcClipRegion;
+    Color     aSrcLineColor;
+    Color     aSrcFillColor;
+    Color     aSrcTextColor;
+    RasterOp  eSrcRasterOp;
+    FontAlign eSrcTextAlign;
+    Font      aSrcFont;
+    MapMode   aSrcMapMode;
+    BOOL      bSrcIsClipping;
+    Region    aSrcClipRegion;
     WMFWriterAttrStackMember * pAttrStack;
 
     // Aktuelle Attribute im Ziel-Metafile:
-    RasterOp  eDstROP2;
-    Color     aDstTextColor;
-    FontAlign eDstTextAlign;
     Color     aDstLineColor;
     Color     aDstFillColor;
+    Color     aDstTextColor;
+    RasterOp  eDstROP2;
+    FontAlign eDstTextAlign;
     Font      aDstFont;
+
     BOOL      bDstIsClipping; // ???: derzeit unberuecksichtigt
     Region    aDstClipRegion; // ???: derzeit unberuecksichtigt
     BOOL bHandleAllocated[MAXOBJECTHANDLES];             // Welche Handles vergeben sind
     USHORT nDstPenHandle,nDstFontHandle,nDstBrushHandle; // Welche Handles die jeweiligen
                                                          // Selected-Objects besitzen
                                                          // 0xffff = keines:
-    BOOL bDstTextInvalid; // ist TRUE, wenn die Variablen aDstTextColor, eDstTextAlign
-                          // und aDstFont nicht mit den Attributen im Ziel-Metafile
-                          // uebereinstimmen (Das ist am Anfang der Fall)
-    BOOL bDstGraphicsInvalid;  // dito fuer alle anderen Attribute
 
     // Damit nicht bei jeder Operation alle Attribute verglichen werden muessen:
-    BOOL bAttrReadyForLines;    // Ist TRUE, wenn die Attribute im Ziel-Metafile so
-                                // gesetzt sind, dass Linien ausgegeben werden koennen.
-    BOOL bAttrReadyForAreas;    // Ist TRUE, wenn die Attribute im Ziel-Metafile so
-                                // gesetzt sind, dass gefuellte Polygone, Rechtecke etc.
-                                // (einschliesslich Umrahmung) ausgegeben werden koennen.
-    BOOL bAttrReadyForText;     // Ist TRUE, wenn die Attribute im Ziel-Metafile so
-                                // gesetzt sind, dass Text ausgegeben werden kann.
 
     ULONG nNumberOfActions; // Anzahl der Actions im GDIMetafile
     ULONG nNumberOfBitmaps; // Anzahl der Bitmaps
@@ -221,10 +216,8 @@ private:
     void CreateSelectDeleteFont(const Font & rFont);
     void CreateSelectDeleteBrush(const Color& rColor);
 
-    void SetAttrForLines();    // Setzt die Dst-Attribute fuer Linien
-    void SetAttrForAreas();    // Setzt die Dst-Attribute fuer gefuellte Dinge.
-                               // Macht automatisch SetAttrForLines, wenn BrushStyle NULL
-    void SetAttrForText();     // Setzt die Dst-Attribute fuer Text-Ausgabe
+    void SetLineAndFillAttr();
+    void SetAllAttr();
 
     void WriteRecords(const GDIMetaFile & rMTF);
 
