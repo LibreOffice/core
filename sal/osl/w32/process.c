@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     if( ustrCurrentWorkDir )
         rtl_uString_release( ustrCurrentWorkDir );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     dwFlags = GetLastError();
 #endif
 
