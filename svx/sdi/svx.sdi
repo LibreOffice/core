@@ -6154,7 +6154,6 @@ SfxBoolItem LeftPara SID_ATTR_PARA_ADJUST_LEFT
     Synchron;
 
     ImageRotation = TRUE;
-    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
@@ -8238,7 +8237,6 @@ SfxBoolItem RightPara SID_ATTR_PARA_ADJUST_RIGHT
     Synchron;
 
     ImageRotation = TRUE;
-    ImageReflection = TRUE;
     Readonly = FALSE,
 
     /* config: */
