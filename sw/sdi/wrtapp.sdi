@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtapp.sdi,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:11 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,6 @@ interface StarWriter : Module
         ExecMethod = ExecOther ;
         StateMethod = StateOther ;
         DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
-    ]
-
-    SID_SW_DOCMAN_PATH // status()
-    [
-         //     nur fuer Autopilot
-        ExecMethod = ExecOther ;
-        StateMethod = NoState ;
     ]
 
     SID_ATTR_METRIC // status(final|play)
