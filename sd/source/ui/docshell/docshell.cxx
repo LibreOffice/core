@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-01 15:17:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@
 #include "preview.hxx"
 #include "drawview.hxx"
 #include "frmview.hxx"
+#include "unomodel.hxx"
 
 #define POOL_BUFFER_SIZE                (USHORT)32768
 #define BASIC_BUFFER_SIZE               (USHORT)8192
@@ -198,6 +199,13 @@ void SdDrawDocShell::Construct()
     bInDestruction = FALSE;
     SetSlotFilter();     // setzt Filter zurueck
     SetShell(this);
+
+    pDoc = new SdDrawDocument(eDocType, this);
+    SetModel( new SdXImpressDocument( this ) );
+    SetPool( &pDoc->GetItemPool() );
+    pUndoManager = new SfxUndoManager;
+    UpdateTablePointers();
+    SetStyleFamily(5);       //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
 }
 
 /*************************************************************************
