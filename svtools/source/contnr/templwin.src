@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:38:55 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,6 +1197,8 @@ String STR_SVT_SAMPLES_HELP
     Text[ hindi ] = "Contains a selection of sample letters, reports and other documents";
     Text[ slovak ] = "Obsahuje výber vzorových listov, správ a iných dokumetov";
 };
+
+
 
 
 
