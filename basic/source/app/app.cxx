@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:40:30 $
+ *  last change: $Author: gh $ $Date: 2000-11-06 15:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@
 #include <svtools/filedlg.hxx>
 #endif
 
+#include <osl/module.h>
+
 #include "basic.hrc"
 #include "app.hxx"
 #include "printer.hxx"
@@ -137,36 +139,62 @@ using namespace com::sun::star::ucb;
 
 BasicApp aBasicApp;                     // Applikations-Instanz
 
+#ifndef SAL_MODULENAME      // should be defined from src612 on
+#define SAL_MODULENAME( hh ) hh
+#endif
+
 #ifdef _USE_UNO
 Reference< XContentProviderManager > InitializeUCB( std::vector< ucb::ContentProviderRegistrationInfo > &rRegisteredProviders )
 {
+    Reference< XContentProviderManager > xUcb;
+#ifdef DEBUG
+    ::rtl::OUString test(getPathToSystemRegistry());
+#endif
+    try
+    {
+
     //////////////////////////////////////////////////////////////////////
-    // Bootstrap service factory, set global factory
-    Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( getPathToSystemRegistry() ) );
-    setProcessServiceFactory( xSMgr );
+    // Bootstrap readonly service factory
+//  Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( getPathToSystemRegistry() ) );
+    Reference< XMultiServiceFactory > xSMgr( createRegistryServiceFactory( getPathToSystemRegistry(), sal_True ) );
+//  xSMgr.clear();
+//  xSMgr = createRegistryServiceFactory( getPathToSystemRegistry(), sal_True );
 
     //////////////////////////////////////////////////////////////////////
     // Register libraries, check first if already registered
     if( !xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ).is() )
     {
+        //////////////////////////////////////////////////////////////////////
+        // Bootstrap writable service factory
+        xSMgr.clear();
+        xSMgr = createRegistryServiceFactory( getPathToSystemRegistry() );
+
         Reference< XImplementationRegistration >
             xIR( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                                OUString::createFromAscii( "ucb1.dll" ),
+                                                OUString::createFromAscii(SAL_MODULENAME( "ucb1" )),
                                                 Reference< XSimpleRegistry >() );
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii( "ucpfile1.dll" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "ucpfile1" )),
                                         Reference< XSimpleRegistry >() );
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-                                        OUString::createFromAscii( "fileacc.dll" ),
+                                        OUString::createFromAscii(SAL_MODULENAME( "fileacc" )),
                                         Reference< XSimpleRegistry >() );
+
+        //////////////////////////////////////////////////////////////////////
+        // Bootstrap readonly service factory again
+        xSMgr = createRegistryServiceFactory( getPathToSystemRegistry(), sal_True );
     }
+
+    //////////////////////////////////////////////////////////////////////
+    // set global factory
+    setProcessServiceFactory( xSMgr );
 
     // Create unconfigured Ucb:
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sal_False;
     ucb::ContentBroker::initialize( xSMgr, aArgs );
-    Reference< XContentProviderManager > xUcb = ucb::ContentBroker::get()->getContentProviderManagerInterface();
+    xUcb = ucb::ContentBroker::get()->getContentProviderManagerInterface();
     /*
     Reference< XContentProviderManager > xUcb(
         xSMgr->createInstanceWithArguments(
@@ -183,12 +211,26 @@ Reference< XContentProviderManager > InitializeUCB( std::vector< ucb::ContentPro
     aProviders[0].Scheme = OUString::createFromAscii("file");
     aProviders[0].ReplaceExisting = false;
     ucb::registerAtUcb(xUcb, xSMgr, aProviders, &rRegisteredProviders);
+
+    }
+    catch( Exception & rEx)
+    {
+        DBG_ERROR( ByteString( String( rEx.Message ), RTL_TEXTENCODING_ASCII_US).GetBuffer() )
+        throw;
+    }
+    catch( ... )
+    {
+        DBG_ERROR( "unknown exception occured" )
+        throw;
+    }
     return xUcb;
 }
 #endif
 
 void BasicApp::Main( )
 {
+    try
+    {
 #ifdef _USE_UNO
     std::vector< ucb::ContentProviderRegistrationInfo > aRegisteredProviders;
     Reference< XContentProviderManager > xUcb = InitializeUCB( aRegisteredProviders );
@@ -253,6 +295,18 @@ void BasicApp::Main( )
 #ifdef _USE_UNO
     ucb::deregisterFromUcb(xUcb, aRegisteredProviders);
 #endif
+
+    }
+    catch( class Exception & rEx)
+    {
+        DBG_ERROR( ByteString( String( rEx.Message ), RTL_TEXTENCODING_ASCII_US).GetBuffer() )
+        throw;
+    }
+    catch( ... )
+    {
+        DBG_ERROR( "unknown exception occured" )
+        throw;
+    }
 }
 
 void BasicApp::LoadIniFile()
