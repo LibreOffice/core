@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-27 11:41:14 $
+ *  last change: $Author: nn $ $Date: 2002-11-06 10:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,8 @@ BOOL ScViewFunctionSet::SetCursorAtCell( short nPosX, short nPosY, BOOL bScroll 
 {
     ScTabView* pView = pViewData->GetView();
     USHORT nTab = pViewData->GetTabNo();
-    BOOL bRefMode = SC_MOD()->IsFormulaMode();
+    ScModule* pScMod = SC_MOD();
+    BOOL bRefMode = pScMod->IsFormulaMode();
 
     BOOL bHide = !bRefMode && !pViewData->IsAnyFillMode() &&
             ( nPosX != (short) pViewData->GetCurX() || nPosY != (short) pViewData->GetCurY() );
@@ -364,13 +365,17 @@ BOOL ScViewFunctionSet::SetCursorAtCell( short nPosX, short nPosY, BOOL bScroll 
 
     if (bRefMode)
     {
-        if (!bAnchor)
+        // #90910# if no input is possible from this doc, don't move the reference cursor around
+        if ( !pScMod->IsModalMode(pViewData->GetSfxDocShell()) )
         {
-            pView->DoneRefMode( TRUE );
-            pView->InitRefMode( nPosX, nPosY, pViewData->GetTabNo(), SC_REFTYPE_REF );
-        }
+            if (!bAnchor)
+            {
+                pView->DoneRefMode( TRUE );
+                pView->InitRefMode( nPosX, nPosY, pViewData->GetTabNo(), SC_REFTYPE_REF );
+            }
 
-        pView->UpdateRef( nPosX, nPosY, pViewData->GetTabNo() );
+            pView->UpdateRef( nPosX, nPosY, pViewData->GetTabNo() );
+        }
     }
     else if (pViewData->IsFillMode() ||
             (pViewData->GetFillMode() == SC_FILL_MATRIX && (nScFillModeMouseModifier & KEY_MOD1) ))
