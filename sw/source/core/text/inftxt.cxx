@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:08:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
