@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:07:31 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,18 @@
  *
  ************************************************************************/
 
+#include "dp_misc.hrc"
 #include "dp_misc.h"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
 #include "rtl/ustrbuf.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/implbase1.hxx"
 #include "ucbhelper/content.hxx"
 #include "xmlscript/xml_helper.hxx"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
-#include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/ucb/CommandFailedException.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include "com/sun/star/ucb/XContentCreator.hpp"
+#include "com/sun/star/ucb/ContentInfo.hpp"
+#include "com/sun/star/ucb/ContentInfoAttribute.hpp"
 
 
 using namespace ::com::sun::star;
@@ -83,202 +81,43 @@ using ::rtl::OUString;
 namespace dp_misc
 {
 
-template< typename iface >
-class InteractionContinuationImpl : public ::cppu::WeakImplHelper1< iface >
-{
-    bool * m_pselect;
-
-public:
-    inline InteractionContinuationImpl( bool * pselect )
-        : m_pselect( pselect )
-        {}
-
-    // XInteractionContinuation
-    inline virtual void SAL_CALL select() throw (RuntimeException)
-        { *m_pselect = true; }
-};
-
-//==============================================================================
-class InteractionRequestImpl
-    : public ::cppu::WeakImplHelper1< task::XInteractionRequest >
-{
-    Any m_request;
-    Sequence< Reference< task::XInteractionContinuation > > m_conts;
-
-public:
-    inline InteractionRequestImpl(
-        Any const & request,
-        Sequence< Reference< task::XInteractionContinuation > > const & conts )
-        : m_request( request ),
-          m_conts( conts )
-        {}
-
-    // XInteractionRequest
-    virtual Any SAL_CALL getRequest() throw (RuntimeException);
-    virtual Sequence< Reference< task::XInteractionContinuation > > SAL_CALL
-    getContinuations() throw (RuntimeException);
-};
-
-// XInteractionRequest
-//______________________________________________________________________________
-Any InteractionRequestImpl::getRequest() throw (RuntimeException)
-{
-    return m_request;
-}
-
-//______________________________________________________________________________
-Sequence< Reference< task::XInteractionContinuation > >
-InteractionRequestImpl::getContinuations() throw (RuntimeException)
-{
-    return m_conts;
-}
-
-/** @returns true if abort is wanted */
-static bool interact_error_nothrow(
-    Any const & exc,
-    Reference< XCommandEnvironment > const & xCmdEnv )
-{
-    OSL_ASSERT( exc.getValueTypeClass() == TypeClass_EXCEPTION );
-    bool abort = true; // default
-    if (xCmdEnv.is())
-    {
-        Reference< task::XInteractionHandler > xInteractionHandler(
-            xCmdEnv->getInteractionHandler() );
-        if (xInteractionHandler.is())
-        {
-            bool abort_ = false;
-            Sequence< Reference< task::XInteractionContinuation > > conts( 1 );
-            conts[ 0 ] = new InteractionContinuationImpl<
-                task::XInteractionAbort >( &abort_ );
-            xInteractionHandler->handle(
-                new InteractionRequestImpl( exc, conts ) );
-            abort = abort_;
-        }
-    }
-    return abort;
-}
-
-static void log_error( Reference< XCommandEnvironment > const & xCmdEnv,
-                       Any const & exc )
-{
-    if (xCmdEnv.is())
-    {
-        Reference< XProgressHandler > xProgressHandler(
-            xCmdEnv->getProgressHandler() );
-        if (xProgressHandler.is())
-            xProgressHandler->update( exc );
-    }
-}
-
-//==============================================================================
-void interact_error(
-    Any const & exc,
-    Reference< XCommandEnvironment > const & xCmdEnv, bool log )
-{
-    if (log)
-        log_error( xCmdEnv, exc );
-    if (interact_error_nothrow( exc, xCmdEnv ))
-        ::cppu::throwException( exc );
-}
-
-//==============================================================================
-void handle_error(
-    deployment::DeploymentException const & exc,
-    Reference< XCommandEnvironment > const & xCmdEnv, bool log )
-{
-    OSL_ASSERT( exc.Cause.getValueTypeClass() == TypeClass_EXCEPTION );
-
-    // don't handle RuntimeExceptions, rethrow them:
-    RuntimeException rt_exc;
-    if (exc.Cause >>= rt_exc)
-    {
-        OSL_ENSURE( 0, "### missing RuntimeException rethrow?" );
-        ::cppu::throwException( exc.Cause );
-    }
-    // don't handle DeploymentExceptions, rethrow them:
-    deployment::DeploymentException depl_exc;
-    if (exc.Cause >>= depl_exc)
-    {
-        OSL_ENSURE( 0, "### missing DeploymentException rethrow?" );
-        ::cppu::throwException( exc.Cause );
-    }
-
-    // unwrap already negotiated (handled) CommandFailedExceptions:
-    CommandFailedException cf_exc;
-    if (exc.Cause >>= cf_exc)
-    {
-        throw deployment::DeploymentException(
-            exc.Message, exc.Context, cf_exc.Reason );
-    }
-
-    if (log)
-        log_error( xCmdEnv, makeAny(exc) );
-    if (interact_error_nothrow( exc.Cause, xCmdEnv ))
-        throw exc;
-}
-
 //==============================================================================
 bool create_ucb_content(
-    ::ucb::Content * ret_ucb_content, OUString const & url,
-    Reference< XCommandEnvironment > const & xCmdEnv,
+    ::ucb::Content * ret_ucbContent, OUString const & url,
+    Reference<XCommandEnvironment> const & xCmdEnv,
     bool throw_exc )
 {
-    bool success = false;
-    ::ucb::Content ucb_content;
-    if (::ucb::Content::create( url, Reference< XCommandEnvironment >(),
-                                ucb_content ))
+    try
     {
-        try
-        {
-            success = ucb_content.isFolder();
-            if (! success)
-            {
-                Reference< io::XInputStream > xStream(
-                    ucb_content.openStream() );
-                if (xStream.is())
-                {
-                    xStream->closeInput();
-                    success = true;
-                }
-            }
-        }
-        catch (RuntimeException &)
-        {
+        // dilemma: no chance to use the given iahandler here, because it would
+        //          raise no such file dialogs, else no interaction for
+        //          passwords, ...? xxx todo
+        ::ucb::Content ucbContent( url, Reference<XCommandEnvironment>() );
+        if (! ucbContent.isFolder())
+            ucbContent.openStream()->closeInput();
+        if (ret_ucbContent != 0)
+            *ret_ucbContent = ::ucb::Content( url, xCmdEnv );
+        return true;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (Exception &)
+    {
+        if (throw_exc)
             throw;
-        }
-        catch (Exception &)
-        {
-        }
     }
-
-    if (success)
-    {
-        if (ret_ucb_content != 0)
-        {
-            if (xCmdEnv.is())
-                *ret_ucb_content = ::ucb::Content( url, xCmdEnv );
-            else
-                *ret_ucb_content = ucb_content;
-        }
-    }
-    else if (throw_exc)
-    {
-        throw ContentCreationException(
-            OUSTR("cannot open ") + url, Reference< XInterface >(),
-            ContentCreationError_UNKNOWN );
-    }
-
-    return success;
+    return false;
 }
 
 //==============================================================================
 bool create_folder(
-    ::ucb::Content * ret_ucb_content, OUString const & url,
-    Reference< XCommandEnvironment > const & xCmdEnv,
-    bool throw_exc )
+    ::ucb::Content * ret_ucb_content, OUString const & url_,
+    Reference<XCommandEnvironment> const & xCmdEnv, bool throw_exc )
 {
     ::ucb::Content ucb_content;
-    if (create_ucb_content( &ucb_content, url, xCmdEnv, false /* no throw */ ))
+    if (create_ucb_content( &ucb_content, url_, xCmdEnv, false /* no throw */ ))
     {
         if (ucb_content.isFolder())
         {
@@ -286,93 +125,113 @@ bool create_folder(
                 *ret_ucb_content = ucb_content;
             return true;
         }
-        else if (throw_exc)
-            throw ContentCreationException(
-                OUSTR("there is already an item which is no folder: ") +
-                url, Reference< XInterface >(), ContentCreationError_UNKNOWN );
-        return false;
     }
 
+    OUString url( url_ );
     // xxx todo: find parent
     sal_Int32 slash = url.lastIndexOf( '/' );
     if (slash < 0)
     {
-        if (throw_exc)
-            throw ContentCreationException(
-                OUSTR("cannot determine parent folder URL of ") + url,
-                Reference< XInterface >(), ContentCreationError_UNKNOWN );
-        return false;
+        // fallback:
+        url = expand_url( url );
+        slash = url.lastIndexOf( '/' );
     }
-    ::ucb::Content parent_content;
+    ::ucb::Content parentContent;
     if (! create_folder(
-            &parent_content, url.copy( 0, slash ), xCmdEnv, throw_exc ))
+            &parentContent, url.copy( 0, slash ), xCmdEnv, throw_exc ))
         return false;
-
-    OUString str_title( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
-    Any value( makeAny( ::rtl::Uri::decode( url.copy( slash + 1 ),
-                                            rtl_UriDecodeWithCharset,
-                                            RTL_TEXTENCODING_UTF8 ) ) );
-    if (parent_content.insertNewContent(
-            // xxx todo: currently file UCP specific
-            OUSTR("application/vnd.sun.staroffice.fsys-folder"),
-            Sequence< OUString >( &str_title, 1 ),
-            Sequence< Any >( &value, 1 ),
-            ucb_content ))
+    Reference<XContentCreator> xCreator( parentContent.get(), UNO_QUERY );
+    if (xCreator.is())
     {
-        if (ret_ucb_content != 0)
-            *ret_ucb_content = ucb_content;
-        return true;
+        OUString strTitle( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+        Any title( makeAny( ::rtl::Uri::decode( url.copy( slash + 1 ),
+                                                rtl_UriDecodeWithCharset,
+                                                RTL_TEXTENCODING_UTF8 ) ) );
+
+        Sequence<ContentInfo> infos( xCreator->queryCreatableContentsInfo() );
+        for ( sal_Int32 pos = 0; pos < infos.getLength(); ++pos )
+        {
+            // look KIND_FOLDER:
+            ContentInfo const & info = infos[ pos ];
+            if ((info.Attributes & ContentInfoAttribute::KIND_FOLDER) != 0)
+            {
+                // make sure the only required bootstrap property is "Title":
+                Sequence<beans::Property> const & rProps = info.Properties;
+                if (rProps.getLength() != 1 ||
+                    !rProps[ 0 ].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("Title") ))
+                    continue;
+
+                try
+                {
+                    if (parentContent.insertNewContent(
+                            info.Type,
+                            Sequence<OUString>( &strTitle, 1 ),
+                            Sequence<Any>( &title, 1 ),
+                            ucb_content ))
+                    {
+                        if (ret_ucb_content != 0)
+                            *ret_ucb_content = ucb_content;
+                        return true;
+                    }
+                }
+                catch (RuntimeException &)
+                {
+                    throw;
+                }
+                catch (CommandFailedException &)
+                {
+                    // Interaction Handler already handled the error
+                    // that has occured...
+                }
+                catch (Exception &)
+                {
+                    if (throw_exc)
+                        throw;
+                    return false;
+                }
+            }
+        }
     }
-    else if (throw_exc)
+    if (throw_exc)
         throw ContentCreationException(
-            OUSTR("inserting new content failed: ") + url,
-            Reference< XInterface >(), ContentCreationError_UNKNOWN );
+            OUSTR("Cannot create folder: ") + url,
+            Reference<XInterface>(), ContentCreationError_UNKNOWN );
     return false;
 }
 
 //==============================================================================
-void erase_path(
-    OUString const & url, Reference< XCommandEnvironment > const & xCmdEnv )
+bool erase_path( OUString const & url,
+                 Reference<XCommandEnvironment> const & xCmdEnv,
+                 bool throw_exc )
 {
-    Reference< XProgressHandler > xProgressHandler;
-    if (xCmdEnv.is())
-        xProgressHandler = xCmdEnv->getProgressHandler();
-    if (xProgressHandler.is())
-    {
-        xProgressHandler->update(
-            makeAny( OUSTR("erasing path ") + url ) );
-    }
     ::ucb::Content ucb_content;
     if (create_ucb_content( &ucb_content, url, xCmdEnv, false /* no throw */ ))
     {
-        ucb_content.executeCommand(
-            OUSTR("delete"), makeAny( true /* delete physically */ ) );
+        try
+        {
+            ucb_content.executeCommand(
+                OUSTR("delete"), makeAny( true /* delete physically */ ) );
+        }
+        catch (RuntimeException &)
+        {
+            throw;
+        }
+        catch (Exception &)
+        {
+            if (throw_exc)
+                throw;
+            return false;
+        }
     }
-}
-
-//==============================================================================
-OUString make_url( OUString const & base_url, OUString const & url )
-{
-    // xxx todo: wait for SB's api
-    ::rtl::OUStringBuffer buf;
-    buf.append( base_url );
-    if (base_url.getLength() > 0 &&
-        base_url[ base_url.getLength() - 1 ] != '/')
-    {
-        buf.append( static_cast< sal_Unicode >('/') );
-    }
-    if (url.getLength() > 0 && url[ 0 ] == '/')
-        buf.append( url.copy( 1 ) );
-    else
-        buf.append( url );
-    return buf.makeStringAndClear();
+    return true;
 }
 
 //==============================================================================
 ::rtl::ByteSequence readFile( ::ucb::Content & ucb_content )
 {
     ::rtl::ByteSequence bytes;
-    Reference< io::XOutputStream > xStream(
+    Reference<io::XOutputStream> xStream(
         ::xmlscript::createOutputStream( &bytes ) );
     if (! ucb_content.openStream( xStream ))
         throw RuntimeException(
@@ -386,7 +245,7 @@ bool readLine( OUString * res, OUString const & startingWith,
 {
     // read whole file:
     ::rtl::ByteSequence bytes( readFile( ucb_content ) );
-    OUString file( reinterpret_cast< sal_Char const * >(bytes.getConstArray()),
+    OUString file( reinterpret_cast<sal_Char const *>(bytes.getConstArray()),
                    bytes.getLength(), textenc );
     sal_Int32 pos = 0;
     for (;;)
@@ -398,14 +257,14 @@ bool readLine( OUString * res, OUString const & startingWith,
             pos += startingWith.getLength();
             for (;;)
             {
-                pos = file.indexOf( '\n', pos );
+                pos = file.indexOf( LF, pos );
                 if (pos < 0) // EOF
                 {
                     buf.append( file.copy( start ) );
                 }
                 else
                 {
-                    if (file[ pos - 1 ] == '\r') // consume extra CR
+                    if (pos > 0 && file[ pos - 1 ] == CR) // consume extra CR
                     {
                         buf.append( file.copy( start, pos - start - 1 ) );
                         ++pos;
@@ -417,7 +276,7 @@ bool readLine( OUString * res, OUString const & startingWith,
                     if (pos < file.getLength() &&
                         (file[ pos ] == ' ' || file[ pos ] == '\t'))
                     {
-                        buf.append( static_cast< sal_Unicode >(' ') );
+                        buf.append( static_cast<sal_Unicode>(' ') );
                         ++pos;
                         start = pos;
                         continue;
@@ -429,7 +288,7 @@ bool readLine( OUString * res, OUString const & startingWith,
             return true;
         }
         // next line:
-        sal_Int32 next_lf = file.indexOf( '\n', pos );
+        sal_Int32 next_lf = file.indexOf( LF, pos );
         if (next_lf < 0) // EOF
             break;
         pos = next_lf + 1;
