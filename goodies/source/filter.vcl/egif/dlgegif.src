@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:11:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modo";
+        Text[ finnish ] = "Tila";
     };
     CheckBox CBX_INTERLACED
     {
@@ -155,6 +156,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ turkish ] = "~Interlaced";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Entrelazado";
+        Text[ finnish ] = "~Lomitettu";
     };
     GroupBox GRP_DRAW
     {
@@ -188,6 +190,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ turkish ] = "Çizim nesneleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objetos de dibujo";
+        Text[ finnish ] = "Piirrosobjektit";
     };
     CheckBox CBX_TRANSLUCENT
     {
@@ -218,6 +221,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ turkish ] = "Saydam biçimde kaydet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Guardar en modo ~transparente";
+        Text[ finnish ] = "Tallenna ~läpinäkyvyys";
     };
     Text[ chinese_simplified ] = "GIF Ñ¡Ïî";
     Text[ russian ] = "Ïàðàìåòðû GIF";
@@ -232,4 +236,5 @@ ModalDialog DLG_EXPORT_GIF
     Text[ turkish ] = "GIF seçenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones GIF";
+    Text[ finnish ] = "GIF-asetukset";
 };
