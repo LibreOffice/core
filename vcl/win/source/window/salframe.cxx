@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-12 09:56:55 $
+ *  last change: $Author: ssa $ $Date: 2002-04-15 12:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1684,6 +1684,7 @@ static void ImplSalToTop( HWND hWnd, USHORT nFlags )
 
 void SalFrame::ToTop( USHORT nFlags )
 {
+    nFlags &= ~SAL_FRAME_TOTOP_GRABFOCUS;   // this flag is not needed on win32
     // Post this Message to the window, because this only works
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks

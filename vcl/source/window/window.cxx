@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-10 16:23:55 $
+ *  last change: $Author: ssa $ $Date: 2002-04-15 12:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3740,14 +3740,14 @@ void Window::ImplGrabFocus( USHORT nFlags )
         {
             // menue windows never get the system focus
             // the application will keep the focus
-            if( mbFloatWin || ( GetStyle() & WB_SYSTEMFLOATWIN ))
+            if( ( mbFloatWin || ( GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( GetStyle() & WB_MOVEABLE ) )
                 return;
             else
             {
                 // Hier setzen wir schon den Focus um, da ToTop() den Focus
                 // nicht auf ein anderes Fenster setzen darf
                 DBG_WARNING( "Window::GrabFocus() - Frame doesn't have the focus" );
-                mpFrame->ToTop( 0 );
+                mpFrame->ToTop( SAL_FRAME_TOTOP_GRABFOCUS );
                 return;
             }
         }
