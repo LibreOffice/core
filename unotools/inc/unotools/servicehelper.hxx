@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicehelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:53 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,5 +135,5 @@ sal_Int64 SAL_CALL classname::getSomething( const ::com::sun::star::uno::Sequenc
 }
 
 
-#endif _UTL_SERVICEHELPER_HXX_
+#endif // _UTL_SERVICEHELPER_HXX_
 
