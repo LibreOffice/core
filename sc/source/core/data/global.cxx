@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-05-29 18:41:05 $
+ *  last change: $Author: nn $ $Date: 2001-06-12 11:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,7 +880,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxStringItem aReferer( SID_REFERER, aReferName );
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
-    SfxBoolItem aBrowsing( SID_BROWSING, TRUE );
+    SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
 
     //  kein SID_SILENT mehr wegen Bug #42525# (war angeblich sowieso falsch)
 
