@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:01:48 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,6 +683,7 @@ void ODBTableDecorator::refreshColumns()
                                     m_xMetaData.is() && m_xMetaData->supportsAlterTableWithAddColumn(),
                                     m_xMetaData.is() && m_xMetaData->supportsAlterTableWithDropColumn());
 
+        pCol->setParent(*this);
         OContainerMediator* pMediator = new OContainerMediator(pCol,m_xColumnDefinitions,sal_False);
         m_xColumnMediator = pMediator;
         pCol->setMediator(pMediator);
