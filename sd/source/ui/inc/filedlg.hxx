@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-10 12:00:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,16 @@
 #include <tools/errcode.hxx>
 #endif
 
-#include <memory>       // auto_ptr
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
+#endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
 
 class SdFileDialog_Imp;
-
 
 /******************************************************************************/
 
@@ -85,11 +90,15 @@ class SdFileDialog_Imp;
  */
 class SdExportFileDialog
 {
-private:
     const std::auto_ptr< SdFileDialog_Imp > mpImpl;
 
+    // forbidden and not implemented
+    SdExportFileDialog ();
+    SdExportFileDialog (const SdExportFileDialog &);
+    SdExportFileDialog & operator= (const SdExportFileDialog &);
+
 public:
-                            SdExportFileDialog( BOOL haveCheckbox );
+    explicit                SdExportFileDialog( BOOL haveCheckbox );
                             ~SdExportFileDialog();
 
     ErrCode                 Execute();
@@ -112,9 +121,13 @@ public:
    (playing the selected sound file). The interface is a downstripped version
    of the aforementioned class, with similar semantics.
  */
-class SdOpenSoundFileDialog
+class SD_DLLPUBLIC SdOpenSoundFileDialog
 {
     const std::auto_ptr< SdFileDialog_Imp > mpImpl;
+
+    // forbidden and not implemented
+    SdOpenSoundFileDialog (const SdOpenSoundFileDialog &);
+    SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &);
 
 public:
                             SdOpenSoundFileDialog();
