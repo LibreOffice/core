@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,9 +175,11 @@ Parser::Perform()
     }
     if (bIDL)
     {
+
         ::ary::idl::SecondariesPilot &
             rIdl2sPilot = rAry.Gate_Idl().Secondaries();
 
+        rIdl2sPilot.CheckAllInterfaceBases( rAry.Gate_Idl() );
         rIdl2sPilot.Connect_Types2Ces();
         rIdl2sPilot.Gather_CrossReferences();
 
