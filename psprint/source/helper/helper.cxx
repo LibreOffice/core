@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-10 08:58:10 $
+ *  last change: $Author: pl $ $Date: 2002-04-11 16:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #include <psprint/helper.hxx>
 #include <tools/string.hxx>
 #include <osl/file.hxx>
+#include <osl/process.h>
 #include <rtl/bootstrap.hxx>
+#include <sal/config.h>
 
 namespace psp {
 
@@ -79,7 +81,11 @@ static const ::rtl::OUString& getOfficePath( enum whichOfficePath ePath )
     if( ! bOnce )
     {
         bOnce = true;
-        ::rtl::Bootstrap aBootstrap( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bootstraprc" ) ) );
+        ::rtl::OUString aIni;
+        osl_getExecutableFile( &aIni.pData );
+        aIni = aIni.copy( 0, aIni.lastIndexOf( SAL_PATHDELIMITER )+1 );
+        aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
+        ::rtl::Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
         aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
 
