@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:04:03 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ finnish ] = "~Merkistö" ;
         Text [ english_us ] = "~Character set" ;
         Text[ chinese_simplified ] = "å­—ç¬¦é›†(~C)";
-        Text[ russian ] = "Íàáîğ çíàêîâ";
+        Text[ russian ] = "Êîäèğîâêà";
         Text[ polish ] = "Zbiór znaków";
         Text[ japanese ] = "æ–‡å­—åˆ—(~C)";
         Text[ chinese_traditional ] = "å­—å‹(~C)";
