@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:42 $
+ *  last change: $Author: jsc $ $Date: 2000-10-16 11:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,74 +58,6 @@
  *
  *
  ************************************************************************/
-
-/*************************************************************************
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.20  2000/09/17 12:30:32  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.19  2000/08/04 15:31:39  jsc
-    extend biniary type format
-
-    Revision 1.18  2000/07/26 17:44:32  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.17  2000/05/02 06:06:21  jsc
-    insert LIBRARY_VERSION for dynamic loading
-
-    Revision 1.16  2000/04/18 10:09:48  jsc
-    modified for unicode changes
-
-    Revision 1.15  2000/03/24 15:00:36  jsc
-    modified for unicode changes
-
-    Revision 1.14  1999/10/19 16:14:49  kr
-    Version parameter for dynload added
-
-    Revision 1.13  1999/09/06 08:33:00  jsc
-    insert IDL filename in registry
-
-    Revision 1.12  1999/07/02 09:25:40  jsc
-    #67179# Binaerblop der CoreReflection ist erweitert worden
-
-    Revision 1.11  1999/03/12 14:16:38  jsc
-    #61011# Anpassung an osl-Typen
-
-    Revision 1.10  1999/02/05 09:44:33  jsc
-    #61011# Typanpassung
-
-    Revision 1.9  1998/12/11 11:57:42  jsc
-    Anpassung an ODynamicLoader
-
-    Revision 1.8  1998/08/06 09:43:44  jsc
-    #54698# Anpassung an DynamicLoader
-
-    Revision 1.7  1998/07/06 17:02:03  jsc
-    Calltype von InitRegistryTypeWriter_Api gesetzt
-
-    Revision 1.6  1998/07/03 11:20:08  ts
-    prefixen von typen
-
-    Revision 1.5  1998/07/03 08:41:03  ts
-    bugs und set/getUik()
-
-    Revision 1.4  1998/07/02 11:58:39  jsc
-    Typ Anpassung, Schnittstelle frei von solar.h
-
-    Revision 1.3  1998/07/01 16:55:19  ts
-    alignment unter soaris beachten
-
-    Revision 1.2  1998/07/01 13:39:01  ts
-    bugs, bugs, bugs
-
-    Revision 1.1.1.1  1998/06/30 11:17:45  jsc
-    neu
-
-
-*************************************************************************/
 
 #ifndef __REGISTRY_REFLWRIT_HXX__
 #define __REGISTRY_REFLWRIT_HXX__
