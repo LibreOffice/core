@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:58:05 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1507,11 +1507,21 @@ void XMLShapeExport::ImpExportOLE2Shape(
             {
                 OUString sPersistName;
 
-                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
-                if( sPersistName.getLength() )
+                if ( bInternal )
                 {
-                    sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
-                    sURL += sPersistName;
+                    // OOo internal links have no storage persistance, URL is stored in the XML file
+                    // the result LinkURL is empty in case the object is not a link
+                    xPropSet->getPropertyValue( OUString::createFromAscii( "LinkURL" ) ) >>= sURL;
+                }
+
+                if ( !sURL.getLength() )
+                {
+                    xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
+                    if( sPersistName.getLength() )
+                    {
+                        sURL = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
+                        sURL += sPersistName;
+                    }
                 }
 
                 if( !bInternal )
@@ -1527,7 +1537,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
                         // #96717# in theorie, if we don't have a url we shouldn't even
                         // export this ole shape. But practical its to risky right now
                         // to change this so we better dispose this on load
-                        sURL = rExport.AddEmbeddedObject( sURL );
+                        ::rtl::OUString aResolvedURL = rExport.AddEmbeddedObject( sURL );
+                        if ( aResolvedURL.getLength() )
+                                sURL = aResolvedURL;
 
                         rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
                         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
