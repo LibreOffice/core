@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:26:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-30 14:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #ifndef _XMLOFF_XMLNUMFI_HXX
 #include <xmloff/xmlnumfi.hxx>
 #endif
+#ifndef _XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
+#include <xmloff/XMLGraphicsDefaultStyle.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
@@ -702,6 +706,11 @@ SvXMLStyleContext *XMLTableStylesContext::CreateDefaultStyleStyleChildContext(
             case XML_STYLE_FAMILY_TABLE_CELL:
                 pStyle = new XMLTableStyleContext( GetScImport(), nPrefix, rLocalName,
                                             xAttrList, *this, nFamily, sal_True);
+            break;
+            case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+                pStyle = new XMLGraphicsDefaultStyle( GetScImport(), nPrefix, rLocalName,
+                                            xAttrList, *this);
+            break;
         }
     }
 

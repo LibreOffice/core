@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 10:51:36 $
+ *  last change: $Author: sab $ $Date: 2001-03-30 14:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,6 +1438,10 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
         uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
         if (xProperties.is())
             aStylesExp.exportDefaultStyle(xProperties, XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper);
+        xInterface = xMultiServiceFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults")));
+        uno::Reference <beans::XPropertySet> xDrawProperties(xInterface, uno::UNO_QUERY);
+        if (xDrawProperties.is())
+            aStylesExp.exportDefaultStyle(xDrawProperties, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, GetShapeExport()->CreateShapePropMapper(*this));
     }
     uno::Reference <style::XStyleFamiliesSupplier> xStyleFamiliesSupplier (xModel, uno::UNO_QUERY);
     if (xStyleFamiliesSupplier.is())
