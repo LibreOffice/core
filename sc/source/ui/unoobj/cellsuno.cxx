@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-03 10:07:40 $
+ *  last change: $Author: sab $ $Date: 2001-05-09 14:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,6 +1479,9 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, c
             //! also for a fixed value of 0 (in case orientation is ambiguous)?
             if ( nItemWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
                 eState = pPattern->GetItemSet().GetItemState( ATTR_ORIENTATION, FALSE );
+
+            if ( nItemWhich == ATTR_VALUE_FORMAT && eState == SFX_ITEM_DEFAULT )
+                eState = pPattern->GetItemSet().GetItemState( ATTR_LANGUAGE_FORMAT, FALSE );
 
             if ( eState == SFX_ITEM_SET )
                 eRet = beans::PropertyState_DIRECT_VALUE;
