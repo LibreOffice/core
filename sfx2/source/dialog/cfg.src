@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:27:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,25 +73,22 @@
     Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_RESET \
-    Text [ de ] = "Zur~ï¿½cksetzen" ; \
+    Text [ de ] = "Zur~ücksetzen" ; \
     Text [ en-US ] = "R~eset" ; \
     Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_LOAD \
-/* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
     Text [ de ] = "La~den..." ; \
     Text [ en-US ] = "~Load..." ; \
     Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_REMOVE \
-/* ### ACHTUNG: Neuer Text in Resource? ~Lï¿½schen : ~Lï¿½schen */\
-    Text [ de ] = "~Lï¿½schen" ; \
+    Text [ de ] = "~Löschen" ; \
     Text [ en-US ] = "~Delete" ; \
     Text [ x-comment ] = " ";
 
 #define PUSHBUTTON_TEXT_CHANGE \
-/* ### ACHTUNG: Neuer Text in Resource? ~ï¿½ndern : ~ï¿½ndern */\
-    Text [ de ] = "~ï¿½ndern" ; \
+    Text [ de ] = "~Ändern" ; \
     Text [ en-US ] = "~Modify" ; \
     Text [ x-comment ] = " ";
 
@@ -125,7 +122,7 @@ TabPage TP_CONFIG_MENU
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text [ de ] = "Menï¿½eintrï¿½ge" ;
+        Text [ de ] = "Menüeinträge" ;
         Text [ en-US ] = "Menu entries";
     };
     PushButton BTN_MN_NEW
@@ -139,7 +136,7 @@ TabPage TP_CONFIG_MENU
     {
         Pos = MAP_APPFONT ( 226 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Neues ~Menï¿½" ;
+        Text [ de ] = "Neues ~Menü" ;
         Text [ en-US ] = "New Men~u" ;
         Text [ x-comment ] = " ";
     };
@@ -500,9 +497,7 @@ TabDialog DLG_CONFIG
             PageItem
             {
                 Identifier = TP_CONFIG_MENU ;
-                /* ### ACHTUNG: Neuer Text in Resource? Menï¿½ : Menï¿½ */
-                /* ### ACHTUNG: Neuer Text in Resource? Menï¿½ : Menï¿½ */
-                Text [ de ] = "Menï¿½" ;
+                Text [ de ] = "Menü" ;
                 PageResID = 300 ;
                 Text [ en-US ] = "Menu" ;
                 Text [ x-comment ] = " ";
@@ -552,9 +547,7 @@ String STR_NEW
 };
 String STR_OPEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ï¿½ffnen : ï¿½ffnen */
-    /* ### ACHTUNG: Neuer Text in Resource? ï¿½ffnen : ï¿½ffnen */
-    Text [ de ] = "ï¿½ffnen" ;
+    Text [ de ] = "Öffnen" ;
     Text [ en-US ] = "Open" ;
     Text [ x-comment ] = " ";
 };
@@ -596,17 +589,13 @@ String STR_COPY
 };
 String STR_PASTE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Einfï¿½gen : Einfï¿½gen */
-    /* ### ACHTUNG: Neuer Text in Resource? Einfï¿½gen : Einfï¿½gen */
-    Text [ de ] = "Einfï¿½gen" ;
+    Text [ de ] = "Einfügen" ;
     Text [ en-US ] = "Paste" ;
     Text [ x-comment ] = " ";
 };
 String STR_DELETE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Lï¿½schen : Lï¿½schen */
-    /* ### ACHTUNG: Neuer Text in Resource? Lï¿½schen : Lï¿½schen */
-    Text [ de ] = "Lï¿½schen" ;
+    Text [ de ] = "Löschen" ;
     Text [ en-US ] = "Delete" ;
     Text [ x-comment ] = " ";
 };
@@ -618,9 +607,7 @@ String STR_FIND
 };
 String STR_FINDBACKWARD
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Rï¿½ckwï¿½rts suchen : Rï¿½ckwï¿½rts suchen */
-    /* ### ACHTUNG: Neuer Text in Resource? Rï¿½ckwï¿½rts suchen : Rï¿½ckwï¿½rts suchen */
-    Text [ de ] = "Rï¿½ckwï¿½rts suchen" ;
+    Text [ de ] = "Rückwärts suchen" ;
     Text [ en-US ] = "Search backward" ;
     Text [ x-comment ] = " ";
 };
@@ -641,9 +628,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? : Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? */
-    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? : Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? */
-    Message [ de ] = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen?" ;
+    Message [ de ] = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
     Message [ en-US ] = "There are still undefined functions (???).\n\nDo you want to accept the configuration anyway?" ;
     Message [ x-comment ] = " ";
 };
@@ -651,9 +636,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch Eintrï¿½ge mit Funktionen, die nur Popups zugewiesen werden kï¿½nnen.\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? : Es existieren noch Eintrï¿½ge mit Funktionen, die nur Popups zugewiesen werden kï¿½nnen.\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? */
-    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch Eintrï¿½ge mit Funktionen, die nur Popups zugewiesen werden kï¿½nnen.\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? : Es existieren noch Eintrï¿½ge mit Funktionen, die nur Popups zugewiesen werden kï¿½nnen.\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen? */
-    Message [ de ] = "Es existieren noch Eintrï¿½ge mit Funktionen, die nur Popups zugewiesen werden kï¿½nnen.\n\nWollen Sie diese Konfiguration trotzdem ï¿½bernehmen?" ;
+    Message [ de ] = "Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
     Message [ en-US ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
     Message [ x-comment ] = " ";
 };
@@ -665,15 +648,13 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 };
 String STR_LOADMENUCONFIG
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Menï¿½konfiguration laden : Menï¿½konfiguration laden */
-    /* ### ACHTUNG: Neuer Text in Resource? Menï¿½konfiguration laden : Menï¿½konfiguration laden */
-    Text [ de ] = "Menï¿½konfiguration laden" ;
+    Text [ de ] = "Menükonfiguration laden" ;
     Text [ en-US ] = "Load Menu Configuration" ;
     Text [ x-comment ] = " ";
 };
 String STR_SAVEMENUCONFIG
 {
-    Text [ de ] = "Menï¿½konfiguration speichern" ;
+    Text [ de ] = "Menükonfiguration speichern" ;
     Text [ en-US ] = "Save Menu Configuration" ;
 };
 String STR_LOADACCELCONFIG
@@ -700,7 +681,7 @@ String STR_SAVESTATBARCONFIG
 };
 String STR_MENU
 {
-    Text [ de ] = "Menï¿½" ;
+    Text [ de ] = "Menü" ;
     Text [ en-US ] = "Menu" ;
     Text [ x-comment ] = " ";
 };
@@ -718,7 +699,7 @@ String STR_TOOLBAR_SPACE
 
 String STR_FUNCTION_ALREADY_IN_TOOLBOX
 {
-    Text [ de ] = "Die gewï¿½nschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
+    Text [ de ] = "Die gewünschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
     Text [ en-US ] = "The selected function is already on the current toolbar.";
 };
  // ********************************************************************** EOF
