@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-17 11:49:56 $
+ *  last change: $Author: jp $ $Date: 2001-05-29 09:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,8 @@ void SwDoc::AppendUndo(SwUndo* pUndo)
     if( SwDoc::nUndoActions < nUndoCnt )
         // immer 1/10 loeschen
         //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
-        DelUndoObj( (nUndoCnt - SwDoc::nUndoActions) + nUndoCnt / 10 );
+        //JP 29.5.2001: Task #83891#: remove only the overlapping actions
+        DelUndoObj( nUndoCnt - SwDoc::nUndoActions );
     else
     {
         USHORT nUndosCnt = nUndoCnt;
@@ -485,7 +486,8 @@ USHORT SwDoc::EndUndo(USHORT nUndoId)
             if( SwDoc::nUndoActions < nUndoCnt )
                 // immer 1/10 loeschen
                 //JP 23.09.95: oder wenn neu eingestellt wurde um die Differenz
-                DelUndoObj( (nUndoCnt - SwDoc::nUndoActions) + nUndoCnt / 10 );
+                //JP 29.5.2001: Task #83891#: remove only the overlapping actions
+                DelUndoObj( nUndoCnt - SwDoc::nUndoActions );
             else
             {
                 USHORT nEnde = USHRT_MAX - 1000;
