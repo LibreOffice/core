@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:48:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,6 +807,10 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                                     const String* pChkStr ) const
 {
+    USHORT n;
+    const SwSectionNode* pSectNd;
+    const SwSection* pSect;
+
     if(pChkStr && !pChkStr->Len())
         pChkStr = 0;
     String aName( rType.GetTypeName() );
@@ -816,9 +820,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     BYTE* pSetFlags = new BYTE[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    const SwSectionNode* pSectNd;
-    const SwSection* pSect;
-    for( USHORT n = 0; n < pSectionFmtTbl->Count(); ++n )
+    for( n = 0; n < pSectionFmtTbl->Count(); ++n )
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) )&&
              TOX_CONTENT_SECTION == (pSect = &pSectNd->GetSection())->GetType())
         {
@@ -2133,6 +2135,7 @@ void SwTOXBaseSection::UpdatePageNum()
         {
             SwTOXSortTabBase* pSortBase = aSortArr[nRunInEntry];
             USHORT nSize = pSortBase->aTOXSources.Count();
+            USHORT i;
             for( USHORT j = 0; j < nSize; ++j )
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
@@ -2161,7 +2164,7 @@ void SwTOXBaseSection::UpdatePageNum()
                     }
 
                     // sortiert einfuegen
-                    for( USHORT i = 0; i < aNums.Count() && aNums[i] < nPage; ++i )
+                    for( i = 0; i < aNums.Count() && aNums[i] < nPage; ++i )
                         ;
 
                     if( i >= aNums.Count() || aNums[ i ] != nPage )
@@ -2221,10 +2224,12 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     //collect starts end ends of main entry character style
     SvUShorts* pCharStyleIdx = pMainEntryNums ? new SvUShorts : 0;
 
-    String sSrchStr( cNumRepl ); sSrchStr.AppendAscii( sPageDeli ) += cNumRepl;
+    String sSrchStr( cNumRepl );
+    sSrchStr.AppendAscii( sPageDeli ) += cNumRepl;
     xub_StrLen nStartPos = pNd->GetTxt().Search( sSrchStr );
     ( sSrchStr = cNumRepl ) += cEndPageNum;
     xub_StrLen nEndPos = pNd->GetTxt().Search( sSrchStr );
+    USHORT i;
 
     if( STRING_NOTFOUND == nEndPos || !rNums.Count() )
         return;
@@ -2262,7 +2267,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         }
     pNd->Erase(aPos, nEndPos - nStartPos + 2);
 
-    for(USHORT i = 1; i < rNums.Count(); ++i)
+    for( i = 1; i < rNums.Count(); ++i)
     {
         SvxNumberType aType( ((SwPageDesc*)rDescs[i])->GetNumType() );
         if( TOX_INDEX == SwTOXBase::GetType() )
@@ -2426,7 +2431,9 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
 
     // find position and insert
     //
-    for(short i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
+    short i;
+
+    for( i = (short)aRange.Min(); i < (short)aRange.Max(); ++i)
     {   // nur auf gleicher Ebene pruefen
         //
         SwTOXSortTabBase* pOld = aSortArr[i];
@@ -2495,8 +2502,9 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     USHORT nOptions = GetOptions();
     BOOL bIgnoreCase = ( nOptions & TOI_SAME_ENTRY ) &&
                         0 == ( nOptions & TOI_CASE_SENSITIVE );
+    USHORT i;
 
-    for(USHORT i = nMin; i < nMax; ++i)
+    for( i = nMin; i < nMax; ++i)
     {
         SwTOXSortTabBase* pBase = aSortArr[i];
 
