@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:06:01 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ class WinMtfClipPath
 
         sal_Bool    bNeedsUpdate;
 
-                    WinMtfClipPath() : bNeedsUpdate( sal_False ), eType( EMPTY ) {};
+                    WinMtfClipPath(): eType(EMPTY), bNeedsUpdate( sal_False ){};
 
         void        SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
         void        IntersectClipRect( const Rectangle& rRect );
