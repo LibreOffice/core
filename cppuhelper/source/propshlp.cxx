@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 17:23:30 $
+ *  last change: $Author: hr $ $Date: 2002-08-15 13:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@ int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 
 /**
  * The class which implements the PropertySetInfo interface.
  */
+
+#if defined(MACOSX)
+// Initialize static template data here to break circular reference to libstatic
+ClassData1 WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >::s_aCD(1);
+#endif
+
 class OPropertySetHelperInfo_Impl
     : public WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {
