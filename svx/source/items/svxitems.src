@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:54:46 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4936,7 +4936,7 @@ String RID_ATTR_PARA_SPLIT
     Text [ dutch ] = "Alinea splitsen" ;
     Text [ spanish ] = "No dividir p�rrafo" ;
     Text [ english_us ] = "Do not split paragraph" ;
-    Text[ chinese_simplified ] = "段中不分页";
+    Text[ chinese_simplified ] = "不要拆分段落";
     Text[ russian ] = "������� �����";
     Text[ polish ] = "Podziel akapit";
     Text[ japanese ] = "段落を分割しない";
@@ -5599,7 +5599,7 @@ String RID_ATTR_CHAR_CTL_FONT
     Text[ portuguese_brazilian ] = "Idiomas de Layout Complexo";
     Text[ japanese ] = "複合文字言語";
     Text[ korean ] = "복합 문자 언어(CTL)";
-    Text[ chinese_simplified ] = "复杂的文字版式";
+    Text[ chinese_simplified ] = "CTL";
     Text[ chinese_traditional ] = "複雜的文字版式";
     Text[ turkish ] = "Karma��k betikler";
     Text[ arabic ] = "Complex scripts";
@@ -11031,7 +11031,7 @@ String RID_SVXITEMS_PARASNAPTOGRID_ON
     Text[ portuguese_brazilian ] = "O par�grafo se encaixa na grade do texto (se ativada)";
     Text[ japanese ] = "段落を文字罫線で位置合わせ(オンのとき)";
     Text[ korean ] = "단락을 텍스트 그리드로 맞춤(활성시)";
-    Text[ chinese_simplified ] = "段落和稿纸格线对齐(如使用稿纸)";
+    Text[ chinese_simplified ] = "段落和文字格对齐(如使用)";
     Text[ chinese_traditional ] = "段落和稿紙格線對齊 (如使用稿紙)";
     Text[ turkish ] = "Paragraph snaps to text grid (if active)";
     Text[ arabic ] = "paragraph snap to grid";
@@ -11064,7 +11064,7 @@ String RID_SVXITEMS_PARASNAPTOGRID_OFF
     Text[ portuguese_brazilian ] = "O par�grafo n�o se encaixa na grade do texto";
     Text[ japanese ] = "段落を文字罫線で位置合わせしない";
     Text[ korean ] = "단락을 텍스트 그리드로 맞추지 않음";
-    Text[ chinese_simplified ] = "段落不和稿纸格线对齐";
+    Text[ chinese_simplified ] = "段落不和文字格对齐";
     Text[ chinese_traditional ] = "段落不和稿紙格線對齊";
     Text[ turkish ] = "Paragraph does not snap to text grid";
     Text[ arabic ] = "paragraph does not snap to grid";
@@ -11081,11 +11081,13 @@ String RID_SVXITEMS_CHARHIDDEN_FALSE
 {
     Text = "Nicht ausgeblendet";
     Text[ english_us ] = "Not hidden";
+    Text[ chinese_simplified ] = "不隐藏";
 };
 String RID_SVXITEMS_CHARHIDDEN_TRUE
 {
     Text = "Ausgeblendet";
     Text[ english_us ] = "Hidden";
+    Text[ chinese_simplified ] = "隐入";
 };
  // ********************************************************************** EOF
 
