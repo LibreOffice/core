@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:41:07 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,15 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XESTRING_HXX
 #define SC_XESTRING_HXX
 
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
 #endif
-
+#ifndef SC_XLCONST_HXX
+#include "xlconst.hxx"
+#endif
 
 // ============================================================================
 
@@ -95,245 +95,245 @@ public:
     /** Constructs an empty BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    explicit                    XclExpString(
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    explicit            XclExpString(
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Constructs an unformatted BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    explicit                    XclExpString(
-                                    const String& rString,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    explicit            XclExpString(
+                            const String& rString,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Constructs a formatted BIFF8 Unicode string.
         @param rFormats  The formatting runs.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    explicit                    XclExpString(
-                                    const String& rString,
-                                    const XclFormatRunVec& rFormats,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    explicit            XclExpString(
+                            const String& rString,
+                            const XclFormatRunVec& rFormats,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Constructs an unformatted BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    explicit                    XclExpString(
-                                    const ::rtl::OUString& rString,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    explicit            XclExpString(
+                            const ::rtl::OUString& rString,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Constructs a formatted BIFF8 Unicode string.
         @param rFormats  The formatting runs.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    explicit                    XclExpString(
-                                    const ::rtl::OUString& rString,
-                                    const XclFormatRunVec& rFormats,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    explicit            XclExpString(
+                            const ::rtl::OUString& rString,
+                            const XclFormatRunVec& rFormats,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     // assign -----------------------------------------------------------------
 
     /** Assigns an unformatted string, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    void                        Assign(
-                                    const String& rString,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    void                Assign(
+                            const String& rString,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns a formatted string, converts this object to a BIFF8 Unicode string.
         @param rFormats  The formatting runs.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    void                        Assign(
-                                    const String& rString,
-                                    const XclFormatRunVec& rFormats,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    void                Assign(
+                            const String& rString,
+                            const XclFormatRunVec& rFormats,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns an unformatted string, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    void                        Assign(
-                                    const ::rtl::OUString& rString,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    void                Assign(
+                            const ::rtl::OUString& rString,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns a formatted string, converts this object to a BIFF8 Unicode string.
         @param rFormats  The formatting runs.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    void                        Assign(
-                                    const ::rtl::OUString& rString,
-                                    const XclFormatRunVec& rFormats,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    void                Assign(
+                            const ::rtl::OUString& rString,
+                            const XclFormatRunVec& rFormats,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns a Unicode character, converts this object to a BIFF8 Unicode string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string (for appending). */
-    void                        Assign(
-                                    sal_Unicode cChar,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    void                Assign(
+                            sal_Unicode cChar,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     /** Assigns an unformatted string, converts this object to a BIFF2-BIFF7 byte string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
-    void                        AssignByte(
-                                    const String& rString,
-                                    CharSet eCharSet,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    void                AssignByte(
+                            const String& rString,
+                            CharSet eCharSet,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
     /** Assigns a character, converts this object to a BIFF2-BIFF7 byte string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string (for appending). */
-    void                        AssignByte(
-                                    sal_Unicode cChar,
-                                    CharSet eCharSet,
-                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
-                                    sal_uInt16 nMaxLen = 0xFFFF );
+    void                AssignByte(
+                            sal_Unicode cChar,
+                            CharSet eCharSet,
+                            XclStrFlags nFlags = EXC_STR_DEFAULT,
+                            sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
     // append -----------------------------------------------------------------
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF8 Unicode string. */
-    void                        Append( const String& rString );
+    void                Append( const String& rString );
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF8 Unicode string. */
-    void                        Append( const ::rtl::OUString& rString );
+    void                Append( const ::rtl::OUString& rString );
     /** Appends a character. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF8 Unicode string. */
-    void                        Append( sal_Unicode cChar );
+    void                Append( sal_Unicode cChar );
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
-    void                        AppendByte( const String& rString, CharSet eCharSet );
+    void                AppendByte( const String& rString, CharSet eCharSet );
     /** Appends a character. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
-    void                        AppendByte( sal_Unicode cChar, CharSet eCharSet );
+    void                AppendByte( sal_Unicode cChar, CharSet eCharSet );
 
     // formatting runs --------------------------------------------------------
 
     /** Sets new formatting runs for the current text. */
-    void                        SetFormats( const XclFormatRunVec& rFormats );
+    void                SetFormats( const XclFormatRunVec& rFormats );
     /** Appends a formatting run. nChar must be greater than last contained character index. */
-    void                        AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIx );
+    void                AppendFormat( sal_uInt16 nChar, sal_uInt16 nXclFont );
     /** Removes formatting runs at the end, if the string contains too much. */
-    void                        LimitFormatCount( sal_uInt16 nMaxCount );
-    /** returns and removes the Font Index for a char index otherwise EXC_FONT_NOTFOUND from the formatting runs. */
-    sal_uInt16                  RemoveFontOfChar(sal_uInt16 nCharIdx);
+    void                LimitFormatCount( sal_uInt16 nMaxCount );
+    /** Removes and returns the font index for the first char from the formatting runs, otherwise EXC_FONT_NOTFOUND. */
+    sal_uInt16          RemoveLeadingFont();
 
     // get data ---------------------------------------------------------------
 
     /** Returns the character count of the string. */
-    inline sal_uInt16           Len() const { return mnLen; }
+    inline sal_uInt16   Len() const { return mnLen; }
     /** Returns true, if the string is empty. */
-    inline bool                 IsEmpty() const { return mnLen == 0; }
+    inline bool         IsEmpty() const { return mnLen == 0; }
     /** Returns true, if the string contains line breaks. */
-    inline bool                 IsWrapped() const { return mbWrapped; }
+    inline bool         IsWrapped() const { return mbWrapped; }
     /** Returns true, if this string is equal to the passed string. */
-    bool                        IsEqual( const XclExpString& rCmp ) const;
+    bool                IsEqual( const XclExpString& rCmp ) const;
     /** Returns true, if this string is less than the passed string. */
-    bool                        IsLessThan( const XclExpString& rCmp ) const;
+    bool                IsLessThan( const XclExpString& rCmp ) const;
 
     /** Returns true, if the string contains formatting information. */
-    inline bool                 IsRich() const { return mbIsBiff8 && !maFormats.empty(); }
+    inline bool         IsRich() const { return !maFormats.empty(); }
     /** Returns the current count of formatting runs for rich strings. */
-    sal_uInt16                  GetFormatsCount() const;
+    sal_uInt16          GetFormatsCount() const;
     /** Returns the vector with all formatting runs. */
     inline const XclFormatRunVec& GetFormats() const { return maFormats; }
 
     /** Returns the current string flags field to export. */
-    sal_uInt8                   GetFlagField() const;
+    sal_uInt8           GetFlagField() const;
     /** Returns the byte count the character buffer will take on export. */
-    sal_uInt32                  GetBufferSize() const;
+    sal_uInt32          GetBufferSize() const;
     /** Returns the byte count the whole string will take on export. */
-    sal_uInt32                  GetSize() const;
+    sal_uInt32          GetSize() const;
 
     /** Returns a hash value for the string. */
-    sal_uInt16                  GetHash() const;
+    sal_uInt16          GetHash() const;
 
     // streaming --------------------------------------------------------------
 
     /** Writes the string flags field (1 byte). */
-    void                        WriteFlagField( XclExpStream& rStrm ) const;
+    void                WriteFlagField( XclExpStream& rStrm ) const;
     /** Writes 8-bit or 16-bit length field and string flags field. */
-    void                        WriteHeader( XclExpStream& rStrm ) const;
+    void                WriteHeader( XclExpStream& rStrm ) const;
     /** Writes the raw character buffer. */
-    void                        WriteBuffer( XclExpStream& rStrm ) const;
+    void                WriteBuffer( XclExpStream& rStrm ) const;
     /** Writes the raw formatting run buffer. */
-    void                        WriteFormats( XclExpStream& rStrm ) const;
+    void                WriteFormats( XclExpStream& rStrm ) const;
     /** Writes the complete Unicode string. */
-    void                        Write( XclExpStream& rStrm ) const;
+    void                Write( XclExpStream& rStrm ) const;
 
     /** Writes the raw character buffer to memory (8-bit or 16-bit little-endian) */
-    void                        WriteBuffer( void* pDest ) const;
+    void                WriteBuffer( void* pDest ) const;
 
     // ------------------------------------------------------------------------
 private:
     /** Returns true, if the flag field should be written. */
-    bool                        IsWriteFlags() const;
+    bool                IsWriteFlags() const;
     /** Returns true, if the formatting run vector should be written. */
-    bool                        IsWriteFormats() const;
+    bool                IsWriteFormats() const;
 
     /** Sets the string length but regards the limit given in mnMaxLen. */
-    void                        SetStrLen( sal_Int32 nNewLen );
+    void                SetStrLen( sal_Int32 nNewLen );
     /** Inserts the passed character array into the internal character buffer.
         @param nBegin  First index in internal buffer to fill.
         @param nLen  Number of characters to insert. */
-    void                        CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin, sal_Int32 nLen );
+    void                CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin, sal_Int32 nLen );
     /** Inserts the passed character array into the internal character buffer.
         @param nBegin  First index in internal buffer to fill.
         @param nLen  Number of characters to insert. */
-    void                        CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen );
+    void                CharsToBuffer( const sal_Char* pcSource, sal_Int32 nBegin, sal_Int32 nLen );
 
     /** Initializes flags, string length, and resizes character buffer.
         @param nFlags  Modifiers for string export.
         @param nCurrLen  The requested number of characters for the string.
         @param nMaxLen  The maximum length allowed of the resulting string.
         @param bBiff8  true = BIFF8 Unicode string; false = BIFF2-BIFF7 byte string. */
-    void                        Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bBiff8 );
+    void                Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bBiff8 );
     /** Creates the character buffer from the given Unicode array.
         @param pcSource  The source character buffer. Trailing NUL character is not necessary.
         @param nFlags  Modifiers for string export.
         @param nCurrLen  The real count of characters contained in the passed buffer.
         @param nMaxLen  The maximum length allowed of the resulting string. */
-    void                        Build(
-                                    const sal_Unicode* pcSource, sal_Int32 nCurrLen,
-                                    XclStrFlags nFlags, sal_uInt16 nMaxLen );
+    void                Build(
+                            const sal_Unicode* pcSource, sal_Int32 nCurrLen,
+                            XclStrFlags nFlags, sal_uInt16 nMaxLen );
     /** Creates the character buffer from the given character array.
         @param pcSource  The source character buffer. Trailing NUL character is not necessary.
         @param nFlags  Modifiers for string export.
         @param nCurrLen  The real count of characters contained in the passed buffer.
         @param nMaxLen  The maximum length allowed of the resulting string. */
-    void                        Build(
-                                    const sal_Char* pcSource, sal_Int32 nCurrLen,
-                                    XclStrFlags nFlags, sal_uInt16 nMaxLen );
+    void                Build(
+                            const sal_Char* pcSource, sal_Int32 nCurrLen,
+                            XclStrFlags nFlags, sal_uInt16 nMaxLen );
 
     /** Initializes string length and resizes character buffers for appending operation.
         @param nAddLen  The number of characters to be appended. */
-    void                        InitAppend( sal_Int32 nAddLen );
+    void                InitAppend( sal_Int32 nAddLen );
     /** Appends the given Unicode array to the character buffer.
         @param pcSource  The source character buffer. Trailing NUL character is not necessary.
         @param nAddLen  The real count of characters contained in the passed buffer. */
-    void                        BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen );
+    void                BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen );
     /** Appends the given character array to the character buffer.
         @param pcSource  The source character buffer. Trailing NUL character is not necessary.
         @param nAddLen  The real count of characters contained in the passed buffer. */
-    void                        BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen );
+    void                BuildAppend( const sal_Char* pcSource, sal_Int32 nAddLen );
 
     /** Initializes write process on stream. */
-    void                        PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const;
+    void                PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const;
 
 private:
-    ScfUInt16Vec                maUniBuffer;    /// The Unicode character buffer.
-    ScfUInt8Vec                 maCharBuffer;   /// The byte character buffer.
-    XclFormatRunVec             maFormats;      /// All formatting runs.
-    sal_uInt16                  mnLen;          /// Character count to export.
-    sal_uInt16                  mnMaxLen;       /// Maximum allowed number of characters.
-    bool                        mbIsBiff8;      /// true = BIFF8 Unicode string, false = BIFF2-7 bytestring.
-    bool                        mbIsUnicode;    /// true, if at least one character is >0xFF.
-    bool                        mb8BitLen;      /// true = write 8-bit string length; false = 16-bit.
-    bool                        mbSmartFlags;   /// true = omit flags on empty string; false = always write flags.
-    bool                        mbWrapped;      /// true = text contains several paragraphs.
+    ScfUInt16Vec        maUniBuffer;    /// The Unicode character buffer.
+    ScfUInt8Vec         maCharBuffer;   /// The byte character buffer.
+    XclFormatRunVec     maFormats;      /// All formatting runs.
+    sal_uInt16          mnLen;          /// Character count to export.
+    sal_uInt16          mnMaxLen;       /// Maximum allowed number of characters.
+    bool                mbIsBiff8;      /// true = BIFF8 Unicode string, false = BIFF2-7 bytestring.
+    bool                mbIsUnicode;    /// true, if at least one character is >0xFF.
+    bool                mb8BitLen;      /// true = write 8-bit string length; false = 16-bit.
+    bool                mbSmartFlags;   /// true = omit flags on empty string; false = always write flags.
+    bool                mbWrapped;      /// true = text contains several paragraphs.
 };
 
 inline bool operator==( const XclExpString& rLeft, const XclExpString& rRight )
@@ -357,14 +357,9 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpString& rStrin
     return rStrm;
 }
 
-
 // ----------------------------------------------------------------------------
 
-typedef ::boost::shared_ptr< XclExpString > XclExpStringPtr;
-
-//! for compatibility with old code
-typedef XclExpString XclExpUniString;
-
+typedef ScfRef< XclExpString > XclExpStringRef;
 
 // ============================================================================
 
