@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatusDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:13:08 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.wizards.ui.event.TaskListener;
  */
 public class StatusDialog extends UnoDialog2 implements TaskListener {
 
-    public static final int STANDARD_WIDTH = 202;
+    public static final int STANDARD_WIDTH = 240;
 
     private XProgressBar progressBar;
     private XFixedText lblTaskName;
