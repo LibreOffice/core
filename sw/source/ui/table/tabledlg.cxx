@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:06:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-04 15:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2033,9 +2033,6 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     aPageNoNF.SaveValue();
     aTextDirectionLB.SaveValue();
     aVertOrientLB.SaveValue();
-    aTopRB.SaveValue();
-    aCenterRB.SaveValue();
-    aBottomRB.SaveValue();
 
     HeadLineCBClickHdl();
 }
