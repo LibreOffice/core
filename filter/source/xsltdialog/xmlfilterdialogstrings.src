@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:53:43 $
+ *  last change: $Author: rt $ $Date: 2003-05-13 12:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,8 @@ String STR_WARN_DELETE
 
 String STR_ERROR_FILTER_NAME_EXISTS
 {
-    Text                = "Es existiert bereits ein Filter mit dem Namen '%s'. Bitte wählen Sie einen anderen Namen.";
-    Text [english_us]   = "An XML filter with the name '%s' does already exist. Please enter a different name.";
+    Text                = "Es existiert bereits ein XML-Filter mit dem Namen '%s'. Bitte wählen Sie einen anderen Namen.";
+    Text [english_us]   = "An XML filter with the name '%s' already exists. Please enter a different name.";
     Text[ french ] = "Il existe déjà un filtre XML nommé '%s'. Choisissez un autre nom.";
     Text[ spanish ] = "Un filtro XML de nombre '%s' ya existe. Introduzca otro nombre.";
     Text[ italian ] = "Un filtro XML dal nome '%s' esiste già. Indicate un nome diverso.";
@@ -210,7 +210,7 @@ String STR_ERROR_TYPE_NAME_EXISTS
 
 String STR_ERROR_DTD_NOT_FOUND
 {
-    Text                = "Die Import-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text                = "Die DTD konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
     Text [english_us]   = "The DTD could not be found. Please enter a valid path.";
     Text[ french ] = "Impossible de détecter la DTD : spécifiez un chemin valide.";
     Text[ spanish ] = "No se puede encontrar la DTD (definición del tipo de documento). Introduzca una ruta válida.";
@@ -238,7 +238,7 @@ String STR_ERROR_EXPORT_XSLT_NOT_FOUND
 
 String STR_ERROR_IMPORT_XSLT_NOT_FOUND
 {
-    Text                = "Die Import-Dokumentvorlage konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text                = "Die Import-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
     Text [english_us]   = "The XSLT for import cannot be found. Please enter a valid path.";
     Text[ french ] = "Impossible de détecter le XSLT pour l'import : spécifiez un chemin valide.";
     Text[ spanish ] = "Imposible encontrar un XSLT para la importación. Introduzca una ruta válida.";
@@ -252,7 +252,7 @@ String STR_ERROR_IMPORT_XSLT_NOT_FOUND
 
 String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
 {
-    Text                = "Die DTD konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text                = "Die angegebene Import-Dokumentvorlage konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
     Text [english_us]   = "The given import template cannot be found. Please enter a valid path.";
     Text[ french ] = "Impossible de détecter le modèle d'import déterminé : spécifiez un chemin valide.";
     Text[ spanish ] = "La plantilla de importación especificada no se encuentra. Introduzca una ruta válida.";
