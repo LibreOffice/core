@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-31 17:04:45 $
+ *  last change: $Author: ka $ $Date: 2001-11-07 08:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,7 +565,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
                 {
                     aGraphic.Clear();
 
-                    if ( SGAImport( aURL, aGraphic, aFormat ) )
+                    if ( GalleryGraphicImport( aURL, aGraphic, aFormat ) )
                     {
                         SgaObject* pNewObj;
 
@@ -594,55 +594,19 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
             }
             else
             {
-                INetURLObject aURL( pEntry->aURL );
-
                 if ( aSvDrawStorageRef.Is() )
                 {
-                    const String        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
+                    const String        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
                     SvStorageStreamRef  pIStm = aSvDrawStorageRef->OpenStream( aStmName, STREAM_READ );
 
-                    if ( pIStm && !pIStm->GetError() )
+                    if( pIStm && !pIStm->GetError() )
                     {
-                        SvMemoryStream  aMemStm;
-
                         pIStm->SetBufferSize( 16384 );
 
-                        if ( !RLECodec::IsRLECoded( *pIStm ) )
-                        {
-                            const ULONG nSize = pIStm->Seek( STREAM_SEEK_TO_END );
-                            void*       pBuffer = SvMemAlloc( nSize );
+                        SgaObjectSvDraw aNewObj( *pIStm, pEntry->aURL );
 
-                            pIStm->Seek( STREAM_SEEK_TO_BEGIN );
-
-                            if ( pBuffer && nSize )
-                            {
-                                pIStm->Read( pBuffer, nSize );
-
-                                pIStm->SetBufferSize( 0 );
-                                pIStm.Clear();
-                                pIStm = aSvDrawStorageRef->OpenStream( aStmName, STREAM_WRITE | STREAM_TRUNC );
-                                pIStm->SetBufferSize( 16384 );
-                                pIStm->Seek( STREAM_SEEK_TO_BEGIN );
-
-                                RLECodec aCodec( *pIStm );
-
-                                aMemStm.SetBuffer( (char*) pBuffer, nSize, FALSE, nSize );
-                                aCodec.Write( aMemStm );
-
-                                SgaObjectSvDraw aNewObj( aMemStm, aURL );
-                                if( !InsertObject( aNewObj ) )
-                                    pEntry->bDummy = TRUE;
-                            }
-
-                            if( pBuffer )
-                                SvMemFree( pBuffer );
-                        }
-                        else
-                        {
-                            SgaObjectSvDraw aNewObj( *pIStm, aURL );
-                            if( !InsertObject( aNewObj ) )
-                                pEntry->bDummy = TRUE;
-                        }
+                        if( !InsertObject( aNewObj ) )
+                            pEntry->bDummy = TRUE;
 
                         pIStm->SetBufferSize( 0L );
                     }
@@ -855,7 +819,7 @@ BOOL GalleryTheme::GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress )
             case( SGA_OBJ_INET ):
             {
                 String aFilterDummy;
-                bRet = ( SGAImport( aURL, rGraphic, aFilterDummy, bProgress ) != SGA_IMPORT_NONE );
+                bRet = ( GalleryGraphicImport( aURL, rGraphic, aFilterDummy, bProgress ) != SGA_IMPORT_NONE );
             }
             break;
 
@@ -1006,7 +970,7 @@ BOOL GalleryTheme::GetModel( ULONG nPos, FmFormModel& rModel, BOOL bProgress )
             if( xIStm.Is() && !xIStm->GetError() )
             {
                 xIStm->SetBufferSize( STREAMBUF_SIZE );
-                bRet = SGASvDrawImport( *xIStm, rModel );
+                bRet = GallerySvDrawImport( *xIStm, rModel );
                 xIStm->SetBufferSize( 0L );
             }
         }
@@ -1031,30 +995,34 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
         if( xOStm.Is() && !xOStm->GetError() )
         {
             SvMemoryStream  aMemStm( 65535, 65535 );
-            RLECodec        aCodec( *xOStm );
             FmFormModel*    pFormModel = (FmFormModel*) &rModel;
 
-            aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
+            pFormModel->BurnInStyleSheetAttributes();
             pFormModel->SetStreamingSdrModel( TRUE );
-            pFormModel->PreSave();
-            pFormModel->GetItemPool().SetFileFormatVersion( (USHORT) aMemStm.GetVersion() );
-            pFormModel->GetItemPool().Store( aMemStm );
-            aMemStm << *pFormModel;
-            pFormModel->PostSave();
-            pFormModel->SetStreamingSdrModel( FALSE );
-            aMemStm.Seek( 0L );
+            pFormModel->RemoveNotPersistentObjects( TRUE );
 
-            xOStm->SetBufferSize( STREAMBUF_SIZE );
+            {
+                com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( aMemStm ) );
+
+                if( xDocOut.is() )
+                    SvxDrawingLayerExport( pFormModel, xDocOut );
+            }
+
+            pFormModel->SetStreamingSdrModel( FALSE );
+            aMemStm.Seek( 0 );
+
+            xOStm->SetBufferSize( 16348 );
+            GalleryCodec aCodec( *xOStm );
             aCodec.Write( aMemStm );
 
             if( !xOStm->GetError() )
             {
                 SgaObjectSvDraw aObjSvDraw( rModel, aURL );
-                InsertObject( aObjSvDraw, nInsertPos );
-                bRet = TRUE;
+                bRet = InsertObject( aObjSvDraw, nInsertPos );
             }
 
             xOStm->SetBufferSize( 0L );
+            xOStm->Commit();
         }
     }
 
@@ -1084,7 +1052,7 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
     Graphic         aGraphic;
     String          aFormat;
     SgaObject*      pNewObj = NULL;
-    const USHORT    nImportRet = SGAImport( rURL, aGraphic, aFormat );
+    const USHORT    nImportRet = GalleryGraphicImport( rURL, aGraphic, aFormat );
     BOOL            bRet = FALSE;
 
     if( nImportRet != SGA_IMPORT_NONE )
@@ -1096,7 +1064,7 @@ BOOL GalleryTheme::InsertURL( const INetURLObject& rURL, ULONG nInsertPos )
         else
             pNewObj = (SgaObject*) new SgaObjectBmp( aGraphic, rURL, aFormat );
     }
-    else if( SGAIsSoundFile( rURL ) )
+    else if( GalleryIsSoundFile( rURL ) )
         pNewObj = (SgaObject*) new SgaObjectSound( rURL );
 
     if( pNewObj && InsertObject( *pNewObj, nInsertPos ) )
@@ -1124,18 +1092,11 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
 
             if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xModelStm ) )
             {
-                FmFormModel                 aModel;
-                Reference< XInputStream >   xInputStream( new utl::OInputStreamWrapper( *xModelStm ) );
+                FmFormModel aModel;
 
-                aModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
                 aModel.GetItemPool().FreezeIdRanges();
-                aModel.SetStreamingSdrModel( TRUE );
 
-                xModelStm->Seek( 0 );
-                bRet = SvxDrawingLayerImport( &aModel, xInputStream );
-                aModel.SetStreamingSdrModel( FALSE );
-
-                if( bRet )
+                if( GallerySvDrawImport( *xModelStm, aModel ) )
                     bRet = InsertModel( aModel, nInsertPos );
             }
         }

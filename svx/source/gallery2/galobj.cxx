@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-04 12:31:45 $
+ *  last change: $Author: ka $ $Date: 2001-11-07 08:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
     Graphic aGraphic;
     String  aFilter;
 
-    if ( SGA_IMPORT_NONE != SGAImport( rURL, aGraphic, aFilter ) )
+    if ( SGA_IMPORT_NONE != GalleryGraphicImport( rURL, aGraphic, aFilter ) )
         Init( aGraphic, rURL );
 }
 
@@ -418,7 +418,7 @@ SgaObjectSvDraw::SgaObjectSvDraw( SvStream& rIStm, const INetURLObject& rURL )
 
     aModel.GetItemPool().FreezeIdRanges();
 
-    if( SGASvDrawImport( rIStm, aModel ) )
+    if( GallerySvDrawImport( rIStm, aModel ) )
     {
         aURL = rURL;
         bIsValid = CreateThumb( aModel );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-06 12:47:33 $
+ *  last change: $Author: ka $ $Date: 2001-11-07 08:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,12 +142,12 @@ IMPL_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
     return 0L;
 }
 
-// -------------
-// - SGAImport -
-// -------------
+// ------------------------
+// - GalleryGraphicImport -
+// ------------------------
 
-USHORT SGAImport( const INetURLObject& rURL, Graphic& rGraphic,
-                  String& rFilterName, BOOL bShowProgress )
+USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
+                             String& rFilterName, BOOL bShowProgress )
 {
     USHORT      nRet = SGA_IMPORT_NONE;
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
@@ -176,44 +176,61 @@ USHORT SGAImport( const INetURLObject& rURL, Graphic& rGraphic,
     return nRet;
 }
 
-// -------------------
-// - SGASvDrawImport -
-// -------------------
+// -----------------------
+// - GallerySvDrawImport -
+// -----------------------
 
-BOOL SGASvDrawImport( SvStream& rIStm, FmFormModel& rModel )
+BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
 {
-    BOOL bRet;
+    UINT32  nVersion;
+    BOOL    bRet;
 
-    if ( RLECodec::IsRLECoded( rIStm ) )
+    if( GalleryCodec::IsCoded( rIStm, nVersion ) )
     {
-        SvMemoryStream  aMemStm;
-        RLECodec        aCodec( rIStm );
+        SvMemoryStream  aMemStm( 65535, 65535 );
+        GalleryCodec    aCodec( rIStm );
 
         aCodec.Read( aMemStm );
         aMemStm.Seek( 0UL );
-        bRet = SGASvDrawImport( aMemStm, rModel );
-    }
+
+        if( 1 == nVersion )
+        {
+            // read as binary
+               SgaUserDataFactory   aFactory;
+
+            aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
+            rModel.SetStreamingSdrModel( TRUE );
+            rModel.GetItemPool().Load( aMemStm );
+            aMemStm >> rModel;
+            rModel.SetStreamingSdrModel( FALSE );
+            rModel.GetItemPool().LoadCompleted();
+            bRet = ( rIStm.GetError() == 0 );
+        }
+        else if( 2 == nVersion )
+        {
+            // recall to read as XML
+            bRet = GallerySvDrawImport( aMemStm, rModel );
+        }
+     }
     else
     {
-        SgaUserDataFactory  aFactory;
+        // read as XML
+        uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rIStm ) );
 
-        rIStm.SetVersion( SOFFICE_FILEFORMAT_50 );
+        rModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
         rModel.SetStreamingSdrModel( TRUE );
-        rModel.GetItemPool().Load( rIStm );
-        rIStm >> rModel;
+        bRet = SvxDrawingLayerImport( &rModel, xInputStream );
         rModel.SetStreamingSdrModel( FALSE );
-        rModel.GetItemPool().LoadCompleted();
-        bRet = ( rIStm.GetError() == 0 );
     }
 
     return bRet;
 }
 
-// ------------------
-// - SGAIsSoundFile -
-// ------------------
+// ----------------------
+// - GalleryIsSoundFile -
+// ----------------------
 
-BOOL SGAIsSoundFile( const INetURLObject& rURL )
+BOOL GalleryIsSoundFile( const INetURLObject& rURL )
 {
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
@@ -573,6 +590,7 @@ void GalleryTransferable::InitData()
                     mpGraphicObject = new GraphicObject( aGraphic );
 
                 mpModel = new FmFormModel;
+                mpModel->GetItemPool().FreezeIdRanges();
 
                 if( !mpTheme->GetModel( mnObjectPos, *mpModel ) )
                     delete mpModel, mpModel = NULL;
@@ -601,8 +619,6 @@ void GalleryTransferable::AddSupportedFormats()
     {
         Graphic     aGraphic;
         ImageMap    aImageMap;
-
-        mpModel->GetItemPool().FreezeIdRanges();
 
         if( CreateIMapGraphic( *mpModel, aGraphic, aImageMap ) )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codec.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: ka $ $Date: 2001-11-07 08:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,61 +59,44 @@
  *
  ************************************************************************/
 
-
-#include <string.h>
 #include <tools/stream.hxx>
-#include <tools/new.hxx>
-#include <svtools/fltdefs.hxx>
+#include <tools/zcodec.hxx>
 #include "codec.hxx"
 
-#define SUBBUFFER_SIZE  8192
+// ----------------
+// - GalleryCodec -
+// ----------------
 
-#ifdef WIN
-typedef BYTE huge*  HPBYTE;
-#else
-typedef BYTE*       HPBYTE;
-#endif
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-RLECodec::RLECodec( SvStream& rIOStm ) : rStm( rIOStm )
+GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
+    rStm( rIOStm )
 {
 }
 
+// -----------------------------------------------------------------------------
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-RLECodec::~RLECodec()
+GalleryCodec::~GalleryCodec()
 {
 }
 
+// -----------------------------------------------------------------------------
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-BOOL RLECodec::IsRLECoded( SvStream& rStm )
+BOOL GalleryCodec::IsCoded( SvStream& rStm, UINT32& rVersion )
 {
     const ULONG nPos = rStm.Tell();
-    BOOL        bRet = FALSE;
+    BOOL        bRet;
     BYTE        cByte1, cByte2, cByte3, cByte4, cByte5, cByte6;
 
     rStm >> cByte1 >> cByte2 >> cByte3 >> cByte4 >> cByte5 >> cByte6;
 
-    if ( cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' &&
-         cByte4 == 'L' && cByte5 == 'E' && cByte6 == '1' )
+    if ( cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' && cByte4 == 'L' && cByte5 == 'E' && ( cByte6 == '1' || cByte6 == '2' ) )
     {
+        rVersion = ( ( cByte6 == '1' ) ? 1 : 2 );
         bRet = TRUE;
+    }
+    else
+    {
+        rVersion = 0;
+        bRet = FALSE;
     }
 
     rStm.Seek( nPos );
@@ -121,29 +104,26 @@ BOOL RLECodec::IsRLECoded( SvStream& rStm )
     return bRet;
 }
 
+// -----------------------------------------------------------------------------
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-ULONG RLECodec::Write( SvMemoryStream& rStmToWrite )
+ULONG GalleryCodec::Write( SvMemoryStream& rStmToWrite )
 {
-    UINT32  nPos;
-    UINT32  nCompSize;
+    UINT32 nPos, nCompSize;
 
     rStmToWrite.Seek( STREAM_SEEK_TO_END );
     const UINT32 nSize = rStmToWrite.Tell();
     rStmToWrite.Seek( 0UL );
 
-    rStm << 'S' << 'V' << 'R' << 'L' << 'E' << '1';
+    rStm << 'S' << 'V' << 'R' << 'L' << 'E' << '2';
     rStm << nSize;
 
     nPos = rStm.Tell();
     rStm.SeekRel( 4UL );
 
-    ImpWriteBuffer( (BYTE*) rStmToWrite.GetData(), nSize );
+    ZCodec aCodec;
+    aCodec.BeginCompression();
+    aCodec.Write( rStm, static_cast< const BYTE* >( rStmToWrite.GetData() ), nSize );
+    aCodec.EndCompression();
 
     nCompSize = rStm.Tell() - nPos - 4UL;
     rStm.Seek( nPos );
@@ -153,181 +133,43 @@ ULONG RLECodec::Write( SvMemoryStream& rStmToWrite )
     return 0UL;
 }
 
+// -----------------------------------------------------------------------------
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-ULONG RLECodec::Read( SvMemoryStream& rStmToRead )
+ULONG GalleryCodec::Read( SvMemoryStream& rStmToRead )
 {
-    UINT32 nReadBytes = 0UL;
+    UINT32  nVersion = 0;
+    UINT32  nReadBytes = 0;
 
-    if ( IsRLECoded( rStm ) )
+    if( IsCoded( rStm, nVersion ) )
     {
-        UINT32  nCompressedSize;
+        BYTE*   pUnCompressedBuffer = NULL;
+        UINT32  nCompressedSize, nUnCompressedSize;
 
         rStm.SeekRel( 6 );
-        rStm >> nReadBytes;
-        rStm >> nCompressedSize;
+        rStm >> nUnCompressedSize >> nCompressedSize;
 
-        HPBYTE pReadBuffer = (HPBYTE) SvMemAlloc( nCompressedSize );
+        // decompress
+        if( 1 == nVersion )
+            pUnCompressedBuffer = ImpReadRLEBuffer( rStm, nCompressedSize, nUnCompressedSize );
+        else if( 2 == nVersion )
+            pUnCompressedBuffer = ImpReadZBuffer( rStm, nCompressedSize, nUnCompressedSize );
 
-        // komprimierte Bytefolge lesen
-        rStm.Read( pReadBuffer, nCompressedSize );
-
-        // Dekomprimieren
-        rStmToRead.SetBuffer( (char*) ImpReadBuffer( pReadBuffer, nReadBytes ),
-                              nReadBytes, TRUE, nReadBytes );
-
-        SvMemFree( pReadBuffer );
+        if( pUnCompressedBuffer )
+            rStmToRead.SetBuffer( reinterpret_cast< char* >( pUnCompressedBuffer ), nUnCompressedSize, TRUE, nUnCompressedSize );
     }
 
     return nReadBytes;
 }
 
+// -----------------------------------------------------------------------------
 
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-void RLECodec::ImpWriteBuffer( BYTE* pInBuf, const ULONG nSize )
+BYTE* GalleryCodec::ImpReadRLEBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize )
 {
-    HPBYTE      pTmpIn = (HPBYTE) pInBuf;
-    const ULONG nCount = nSize / SUBBUFFER_SIZE;
-    const ULONG nRest = nCount ? nSize % ( nCount * SUBBUFFER_SIZE ) : nSize;
-
-    for( ULONG i = 0; i < nCount; i++ )
-        ImpWriteSubBuffer( &pTmpIn[ i * SUBBUFFER_SIZE ], SUBBUFFER_SIZE );
-
-    if ( nRest )
-        ImpWriteSubBuffer( &pTmpIn[ nCount * SUBBUFFER_SIZE ], nRest );
-
-    // BlockEnde schreiben
-    rStm << (BYTE) 0;
-    rStm << (BYTE) 1;
-}
-
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-void RLECodec::ImpWriteSubBuffer( BYTE* pInBuf, const ULONG nSize )
-{
-    HPBYTE      pTmpIn = (HPBYTE) pInBuf;
-    HPBYTE      pOutBuf = (HPBYTE) SvMemAlloc( nSize << 1 );
-    HPBYTE      pTmpOut = pOutBuf;
-    ULONG       nIndex = 0UL;
-    ULONG       nBufCount = 0UL;
-    ULONG       nSaveIndex;
-    ULONG       nCount;
-    BYTE        cPix;
-    BYTE        cLast;
-    BOOL        bFound;
-
-    while( nIndex < nSize )
-    {
-        nCount = 1L;
-        cPix = pTmpIn[ nIndex++ ];
-
-        // Anzahl der aufeinanderf. gleichen Eintraege bestimmen
-        while( ( nIndex < nSize ) && ( nCount < 255L ) && ( pTmpIn[ nIndex ] == cPix ) )
-        {
-            nIndex++;
-            nCount++;
-        }
-
-        // gleiche Eintraege hintereinander werden kodiert geschrieben
-        if ( nCount > 1 )
-        {
-            *pTmpOut++ = (BYTE) nCount;
-            *pTmpOut++ = cPix;
-            nBufCount += 2;
-        }
-        else
-        {
-            cLast = cPix;
-            nSaveIndex = nIndex - 1;
-            bFound = FALSE;
-
-            // Anzahl der unterschiedlichen Eintraege bestimmen
-            while( ( nIndex < nSize ) && ( nCount < 256L ) && ( ( cPix = pTmpIn[ nIndex ] ) != cLast ) )
-            {
-                nIndex++;
-                nCount++;
-                cLast = cPix;
-                bFound = TRUE;
-            }
-
-            // Falls untersch. Eintrag gefunden, dec. wir den Index
-            // da der letzte Index der erste der neuen Sequenz
-            // sein soll
-            if ( bFound )
-                nIndex--;
-
-            // mehrere untersch. Eintraege ueber abs. Coding schreiben
-            if ( nCount > 3 )
-            {
-                // wir wollen nur so wenig wie moeglich
-                // unterschiedliche Eintraege schreiben
-                *pTmpOut++ = 0;
-                *pTmpOut++ = (BYTE) --nCount;
-
-                MEMCPY( pTmpOut, &pTmpIn[ nSaveIndex ], nCount );
-                pTmpOut += nCount;
-
-                // WORD-Alignment beachten
-                if ( nCount & 1 )
-                {
-                    *pTmpOut++ = 0;
-                    nBufCount += ( nCount + 3 );
-                }
-                else
-                    nBufCount += ( nCount + 2 );
-            }
-            else
-            {
-                *pTmpOut++ = 1;
-                *pTmpOut++ = pTmpIn[ nSaveIndex ];
-
-                if ( nCount == 3 )
-                {
-                    *pTmpOut++ = 1;
-                    *pTmpOut++ = pTmpIn[ ++nSaveIndex ];
-                    nBufCount += 4;
-                }
-                else
-                    nBufCount += 2;
-            }
-        }
-    }
-
-    // Puffer schreiben
-    rStm.Write( pOutBuf, nBufCount );
-
-    // temp. Puffer wieder zerstoeren
-    SvMemFree( pOutBuf );
-}
-
-
-/******************************************************************************
-|*
-|*
-|*
-\******************************************************************************/
-
-BYTE* RLECodec::ImpReadBuffer( BYTE* pStmBuf, const ULONG nSize )
-{
-    HPBYTE  pInBuf = (HPBYTE) pStmBuf;
-    HPBYTE  pOutBuf = (HPBYTE) SvMemAlloc( nSize );
-    HPBYTE  pTmpBuf = pOutBuf;
-    HPBYTE  pLast = pOutBuf + nSize - 1;
+    BYTE*   pCompressedBuffer = new BYTE[ nCompressedSize ]; rIStm.Read( pCompressedBuffer, nCompressedSize );
+    BYTE*   pInBuf = pCompressedBuffer;
+    BYTE*   pOutBuf = new BYTE[ nUnCompressedSize ];
+    BYTE*   pTmpBuf = pOutBuf;
+    BYTE*   pLast = pOutBuf + nUnCompressedSize - 1;
     ULONG   nIndex = 0UL;
     ULONG   nCountByte;
     ULONG   nRunByte;
@@ -344,7 +186,7 @@ BYTE* RLECodec::ImpReadBuffer( BYTE* pStmBuf, const ULONG nSize )
             if ( nRunByte > 2 )
             {
                 // absolutes Fuellen
-                MEMCPY( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
+                memcpy( &pTmpBuf[ nIndex ], pInBuf, nRunByte );
                 pInBuf += nRunByte;
                 nIndex += nRunByte;
 
@@ -359,11 +201,27 @@ BYTE* RLECodec::ImpReadBuffer( BYTE* pStmBuf, const ULONG nSize )
         {
             const BYTE cVal = *pInBuf++;
 
-            MEMSET( &pTmpBuf[ nIndex ], cVal, nCountByte );
+            memset( &pTmpBuf[ nIndex ], cVal, nCountByte );
             nIndex += nCountByte;
         }
     }
     while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
+
+    delete[] pCompressedBuffer;
+
+    return pOutBuf;
+}
+
+// -----------------------------------------------------------------------------
+
+BYTE* GalleryCodec::ImpReadZBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize )
+{
+    ZCodec  aCodec;
+    BYTE*   pOutBuf = new BYTE[ nUnCompressedSize ];
+
+    aCodec.BeginCompression();
+    aCodec.Read( rIStm, pOutBuf, nUnCompressedSize );
+    aCodec.EndCompression();
 
     return pOutBuf;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: codec.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: ka $ $Date: 2001-11-07 08:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,28 @@
 
 #include <tools/gen.hxx>
 
+// ----------------
+// - GalleryCodec -
+// ----------------
+
 class SvStream;
 class SvMemoryStreamStream;
 
-// ------------------------------------------------------------------------
-
-class RLECodec
+class GalleryCodec
 {
+private:
+
     SvStream&   rStm;
 
-    void        ImpWriteBuffer( BYTE* pOutBuf, const ULONG nSize );
-    void        ImpWriteSubBuffer( BYTE* pOutBuf, const ULONG nSize );
-    BYTE*       ImpReadBuffer( BYTE* pInBuf, const ULONG nSize );
+    BYTE*       ImpReadRLEBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize );
+    BYTE*       ImpReadZBuffer( SvStream& rIStm, ULONG nCompressedSize, ULONG nUnCompressedSize );
 
 public:
-                RLECodec( SvStream& rIOStm );
-                ~RLECodec();
+                GalleryCodec( SvStream& rIOStm );
+                ~GalleryCodec();
 
     ULONG       Write( SvMemoryStream& rStmToWrite );
     ULONG       Read( SvMemoryStream& rStmToRead );
 
-    static BOOL IsRLECoded( SvStream& rStm );
+    static BOOL IsCoded( SvStream& rStm, UINT32& rVersion );
 };
