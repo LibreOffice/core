@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:37:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include "sc.hrc" // -> #include <sfx.hrc>
 
 
@@ -101,6 +102,8 @@ String RID_APPTITLE
     Text[ hebrew ] = "%PRODUCTNAME Calc";
     Text[ hindi ] = "%PRODUCTNAME गणना";
     Text[ slovak ] = "%PRODUCTNAME Calc";
+    Text[ hungarian ] = "%PRODUCTNAME Calc";
+    Text[ slovenian ] = "%PRODUCTNAME Calc";
 };
 
  // About-Dialog --------------------------------------------------------------
@@ -148,5 +151,3 @@ Image RID_BMP_REFBTN2_H
 String 30001 { Text = "Dummy1" ; };
 String 30002 { Text = "Dummy2" ; };
 String 30006 { Text = "Dummy3" ; };
-
-
