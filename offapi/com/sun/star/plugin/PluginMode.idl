@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PluginMode.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 //=============================================================================
 
-constants PluginMode
+published constants PluginMode
 {
     /** embedded into document */
     const short EMBED = 1;
