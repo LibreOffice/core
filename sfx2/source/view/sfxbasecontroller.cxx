@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-07 11:47:43 $
+ *  last change: $Author: mba $ $Date: 2001-05-15 07:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
-#if SUPD>626
+#if SUPD>630
                                                     ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER  >*)NULL ) ,
 #endif
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
@@ -766,6 +766,7 @@ SfxViewShell* SfxBaseController::GetViewShell_Impl() const
     return m_pData->m_xIndicator;
 }
 
+#if SUPD>630
 ::rtl::OUString SAL_CALL SfxBaseController::queryDescription( const ::rtl::OUString& rURL ) throw( RUNTIMEEXCEPTION )
 {
     if ( m_pData->m_pViewShell )
@@ -807,5 +808,5 @@ SEQUENCE < DISPATCHINFORMATION > SAL_CALL SfxBaseController::getConfigurableDisp
 {
     return SEQUENCE < DISPATCHINFORMATION >();
 }
-
+#endif
 
