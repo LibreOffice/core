@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 12:38:08 $
+ *  last change: $Author: os $ $Date: 2000-11-10 12:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,13 +129,13 @@ namespace utl
 
             //returns all members of a node
             com::sun::star::uno::Sequence< rtl::OUString >
-                                    GetNodeNames(rtl::OUString& rNode);
+                                    GetNodeNames(const rtl::OUString& rNode);
             // remove all members of a set
-            sal_Bool                ClearNodeSet(rtl::OUString& rNode);
+            sal_Bool                ClearNodeSet(const rtl::OUString& rNode);
             // change or add members to a set
-            sal_Bool                SetSetProperties(rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            sal_Bool                SetSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // remove, change or add members of a set
-            sal_Bool                ReplaceSetProperties(rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            sal_Bool                ReplaceSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
 
         public:
             virtual ~ConfigItem();

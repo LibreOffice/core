@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 15:36:18 $
+ *  last change: $Author: os $ $Date: 2000-11-10 12:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ void ConfigItem::RemoveListener()
 /* -----------------------------15.09.00 12:06--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< OUString > ConfigItem::GetNodeNames(OUString& rNode)
+Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 {
     Sequence< OUString > aRet;
     if(xHierarchyAccess.is())
@@ -495,7 +495,7 @@ Sequence< OUString > ConfigItem::GetNodeNames(OUString& rNode)
 /* -----------------------------15.09.00 15:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool ConfigItem::ClearNodeSet(OUString& rNode)
+sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
 {
     sal_Bool bRet;
     if(xHierarchyAccess.is())
@@ -552,7 +552,7 @@ sal_Bool ConfigItem::ClearNodeSet(OUString& rNode)
     add or change properties
  ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::SetSetProperties(
-    OUString& rNode, Sequence< PropertyValue > rValues)
+    const OUString& rNode, Sequence< PropertyValue > rValues)
 {
     sal_Bool bRet;
     if(xHierarchyAccess.is())
@@ -663,7 +663,7 @@ sal_Bool ConfigItem::SetSetProperties(
 
  ---------------------------------------------------------------------------*/
 sal_Bool ConfigItem::ReplaceSetProperties(
-    OUString& rNode, Sequence< PropertyValue > rValues)
+    const OUString& rNode, Sequence< PropertyValue > rValues)
 {
     sal_Bool bRet;
     if(xHierarchyAccess.is())
