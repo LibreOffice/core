@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:45:56 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
+/*
         case SID_SYNCHRONIZE :
         {
             Reference < ::com::sun::star::frame::XDispatch > xDisp ( comphelper::getProcessServiceFactory()->
@@ -441,7 +442,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 xDisp->dispatch( ::com::sun::star::util::URL(), 0 );
             break;
         }
-
+*/
         case SID_LOAD_LIBRARY:
         case SID_UNLOAD_LIBRARY:
         case SID_REMOVE_LIBRARY:
@@ -814,6 +815,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
         {
             switch(nWhich)
             {
+/*
                 case SID_SYNCHRONIZE :
                 {
                     Reference < XContentEnumerationAccess > xMgr( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
@@ -823,7 +825,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                         rSet.DisableItem(nWhich);
                     break;
                 }
-
+*/
                 case SID_EXITANDRETURN:
                 case SID_QUITAPP:
                 {
