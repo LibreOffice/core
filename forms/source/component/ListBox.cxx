@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-28 18:15:33 $
+ *  last change: $Author: fs $ $Date: 2001-11-07 15:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,8 +756,12 @@ void OListBoxModel::loadData()
         {
             Reference< XPropertySet > xFormProps(xForm, UNO_QUERY);
 
-            xContentSetProperties->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(CommandType::COMMAND));
-            xContentSetProperties->setPropertyValue(PROPERTY_DATASOURCE, xFormProps->getPropertyValue(PROPERTY_DATASOURCE));
+            xContentSetProperties->setPropertyValue( PROPERTY_COMMANDTYPE, makeAny( CommandType::COMMAND ) );
+            xContentSetProperties->setPropertyValue( PROPERTY_DATASOURCE, xFormProps->getPropertyValue( PROPERTY_DATASOURCE ) );
+
+            // try to give the row set the connection of our form - this saves the rowset from creating an own one
+            xContentSetProperties->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) );
+
             xContentRowSet->execute();
         }
     }
