@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellAreaLink.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:20:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::CellAreaLinks
  */
-service CellAreaLink
+published service CellAreaLink
 {
     //-------------------------------------------------------------------------
 
@@ -104,7 +104,7 @@ service CellAreaLink
 
     //-------------------------------------------------------------------------
 
-//! service PropertySet
+//!published service PropertySet
     /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
