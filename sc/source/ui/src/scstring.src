@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:24:11 $
+ *  last change: $Author: kz $ $Date: 2002-02-19 21:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,7 +1292,7 @@ String SCSTR_NEW
     Text[ chinese_traditional ] = "ι–‹ε•ζ–°ζª”(~N)";
     Text[ arabic ] = "ΜΟνΟ";
     Text[ greek ] = "Δημιουργία";
-    Text[ korean ] = "μƒλ΅(~N)";
+    Text[ korean ] = "μƒλ΅ λ§λ“¤κΈ°(~N)";
     Text[ turkish ] = "~Yeni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nou";
