@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SwZoomControl( USHORT nId, StatusBar& rStb, SfxBindings& rBind );
+    SwZoomControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
     ~SwZoomControl();
 
 };
