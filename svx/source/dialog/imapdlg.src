@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:33:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Uygula";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Asignar";
+                Text[ finnish ] = "Käytä";
             };
             ToolBoxItem
             {
@@ -149,6 +150,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Aç...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Abrir...";
+                Text[ finnish ] = "Avaa";
             };
             ToolBoxItem
             {
@@ -183,6 +185,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Kaydet...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Guardar...";
+                Text[ finnish ] = "Tallenna";
             };
             ToolBoxItem
             {
@@ -222,6 +225,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Seçim";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Selección";
+                Text[ finnish ] = "Valitse";
             };
             ToolBoxItem
             {
@@ -256,6 +260,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Dikdörtgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Rectángulo";
+                Text[ finnish ] = "Suorakulmio";
             };
             ToolBoxItem
             {
@@ -290,6 +295,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Elips";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Elipse";
+                Text[ finnish ] = "Ellipsi";
             };
             ToolBoxItem
             {
@@ -324,6 +330,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Çokgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Polígono";
+                Text[ finnish ] = "Polygoni";
             };
             ToolBoxItem
             {
@@ -358,6 +365,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Serbest çokgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Polígono a mano alzada";
+                Text[ finnish ] = "Vapaamuotoinen polygoni";
             };
             ToolBoxItem
             {
@@ -407,7 +415,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ italian ] = "Sposta punti" ;
                 Text [ portuguese_brazilian ] = "Editar Pontos" ;
                 Text [ portuguese ] = "Mover pontos" ;
-                Text [ finnish ] = "Muokkaa pisteitä" ;
+                Text [ finnish ] = "Siirrä pisteitä" ;
                 Text [ danish ] = "Flyt punkter" ;
                 Text [ french ] = "Déplacer des points" ;
                 Text [ swedish ] = "Flytta punkter" ;
@@ -445,7 +453,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ italian ] = "Inserisci punti" ;
                 Text [ portuguese_brazilian ] = "Inserir Pontos" ;
                 Text [ portuguese ] = "Inserir pontos" ;
-                Text [ finnish ] = "Lisää pisteitä" ;
+                Text [ finnish ] = "Lisää pisteet" ;
                 Text [ danish ] = "Indsæt punkter" ;
                 Text [ french ] = "Insérer des points" ;
                 Text [ swedish ] = "Infoga punkter" ;
@@ -484,7 +492,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ italian ] = "Elimina punti" ;
                 Text [ portuguese_brazilian ] = "Apagar Pontos" ;
                 Text [ portuguese ] = "Eliminar pontos" ;
-                Text [ finnish ] = "Poista pisteitä" ;
+                Text [ finnish ] = "Poista pisteet" ;
                 Text [ danish ] = "Slet punkter" ;
                 Text [ french ] = "Supprimer des points" ;
                 Text [ swedish ] = "Radera punkter" ;
@@ -530,7 +538,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ italian ] = "Annulla  " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
                 Text [ portuguese ] = "Anular  " ;
-                Text [ finnish ] = "Kumoa " ;
+                Text [ finnish ] = "Peruuta" ;
                 Text [ danish ] = "Fortryd " ;
                 Text [ french ] = "Annuler " ;
                 Text [ swedish ] = "Ångra  " ;
@@ -582,6 +590,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Restaurar  ";
+                Text[ finnish ] = "Toista ";
             };
             ToolBoxItem
             {
@@ -618,6 +627,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Etkin";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Activo";
+                Text[ finnish ] = "Aktiivinen";
             };
             ToolBoxItem
             {
@@ -650,6 +660,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Makro...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Macro...";
+                Text[ finnish ] = "Makro";
             };
             ToolBoxItem
             {
@@ -682,6 +693,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ turkish ] = "Özellikler...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Propiedades...";
+                Text[ finnish ] = "Ominaisuudet";
             };
         };
         Text[ english_us ] = "Image Map Editor";
@@ -724,6 +736,7 @@ FloatingWindow RID_SVXDLG_IMAP
         Text[ turkish ] = "Adres:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dirección:";
+        Text[ finnish ] = "Osoite:";
     };
     ComboBox CBB_URL
     {
@@ -757,6 +770,7 @@ FloatingWindow RID_SVXDLG_IMAP
         Text[ turkish ] = "Metin:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Texto:";
+        Text[ finnish ] = "Teksti:";
     };
     Edit EDT_TEXT
     {
@@ -787,6 +801,7 @@ FloatingWindow RID_SVXDLG_IMAP
     Text[ turkish ] = "Resim eþlem editörü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editor ImageMap";
+    Text[ finnish ] = "Kuvakartan editori";
 };
 Control RID_SVXCTL_IMAP
 {
@@ -843,6 +858,7 @@ Menu RID_SVXMN_IMAP
             Text[ turkish ] = "Açýklama...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Descripción...";
+            Text[ finnish ] = "Kuvaus";
         };
         MenuItem
         {
@@ -869,6 +885,7 @@ Menu RID_SVXMN_IMAP
             Text[ turkish ] = "Makro...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ma~cro...";
+            Text[ finnish ] = "~Makro";
         };
         MenuItem
         {
@@ -895,6 +912,7 @@ Menu RID_SVXMN_IMAP
             Text[ turkish ] = "Etkin";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Activo";
+            Text[ finnish ] = "Aktiivinen";
         };
         MenuItem
         {
@@ -909,7 +927,7 @@ Menu RID_SVXMN_IMAP
             Text [ italian ] = "~Disponi" ;
             Text [ portuguese_brazilian ] = "~Organizar" ;
             Text [ portuguese ] = "~Disposição" ;
-            Text [ finnish ] = "J~ärjestä" ;
+            Text [ finnish ] = "Järjestä" ;
             Text [ danish ] = "Placering" ;
             Text [ french ] = "~Disposition" ;
             Text [ swedish ] = "~Placering" ;
@@ -929,7 +947,7 @@ Menu RID_SVXMN_IMAP
                         Text [ italian ] = "Porta in primo piano" ;
                         Text [ portuguese_brazilian ] = "Trazer para a Frente" ;
                         Text [ portuguese ] = "P~rimeiro plano" ;
-                        Text [ finnish ] = "E~dustalle" ;
+                        Text [ finnish ] = "Tuo eteen" ;
                         Text [ danish ] = "~Placer forrest" ;
                         Text [ french ] = "Tout à l'~avant" ;
                         Text [ swedish ] = "Längst ~fram" ;
@@ -957,7 +975,7 @@ Menu RID_SVXMN_IMAP
                         Text [ italian ] = "Porta più avanti" ;
                         Text [ portuguese_brazilian ] = "Tazer ~Para Frente" ;
                         Text [ portuguese ] = "~Mais para a frente" ;
-                        Text [ finnish ] = "Yksi ~eteen" ;
+                        Text [ finnish ] = "~Tuo eteenpäin" ;
                         Text [ danish ] = "F~lyt fremad" ;
                         Text [ french ] = "V~ers l'avant" ;
                         Text [ swedish ] = "Längre fra~m" ;
@@ -985,7 +1003,7 @@ Menu RID_SVXMN_IMAP
                         Text [ italian ] = "Porta più i~ndietro" ;
                         Text [ portuguese_brazilian ] = "Enviar ~Para o Fundo" ;
                         Text [ portuguese ] = "Mais para o f~undo" ;
-                        Text [ finnish ] = "Yksi ~taakse" ;
+                        Text [ finnish ] = "~Vie taaksepäin" ;
                         Text [ danish ] = "Flyt bag~ud" ;
                         Text [ french ] = "~Vers l'arrière" ;
                         Text [ swedish ] = "Längre ba~k" ;
@@ -1013,7 +1031,7 @@ Menu RID_SVXMN_IMAP
                         Text [ italian ] = "Porta in fondo" ;
                         Text [ portuguese_brazilian ] = "Enviar para o Último ~Plano" ;
                         Text [ portuguese ] = "Enviar para ~trás" ;
-                        Text [ finnish ] = "T~austalle" ;
+                        Text [ finnish ] = "~Vie taakse" ;
                         Text [ danish ] = "Placer ~bagest" ;
                         Text [ french ] = "Tout à l'a~rrière" ;
                         Text [ swedish ] = "Längst ~bak" ;
@@ -1158,6 +1176,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ korean ] = "´ëÃ¼ ÅØ½ºÆ®:";
         Text[ turkish ] = "Alternatif metin:";
         Text[ catalan ] = "Texto alternativo:";
+        Text[ finnish ] = "Vaihtoehtoinen teksti:";
     };
     Edit EDT_URLDESCRIPTION
     {
@@ -1195,6 +1214,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ turkish ] = "URL:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL:";
+        Text[ finnish ] = "URL-teksti:";
     };
     Edit EDT_URL
     {
@@ -1245,6 +1265,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ turkish ] = "Hyperlink";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Hiperenlace";
+        Text[ finnish ] = "Hyperlinkki";
     };
     FixedText FT_TARGET
     {
@@ -1272,6 +1293,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ turkish ] = "Frame:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Frame:";
+        Text[ finnish ] = "Kehys:";
     };
     ComboBox CBB_TARGETS
     {
@@ -1309,6 +1331,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ turkish ] = "Ad:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre:";
+        Text[ finnish ] = "Nimi:";
     };
     Edit EDT_NAME
     {
@@ -1331,6 +1354,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     Text[ turkish ] = "Açýklama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Descripción";
+    Text[ finnish ] = "Kuvaus";
 };
 /******************************************************************************/
 String STR_IMAPDLG_SAVE
@@ -1360,6 +1384,7 @@ String STR_IMAPDLG_SAVE
     Text[ turkish ] = "Resim eþlem deðiþtirildi.\nDeðiþiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se ha modificado el ImageMap.\n¿Desea guardar los cambios?";
+    Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
 };
 String STR_IMAPDLG_MODIFY
 {
@@ -1387,5 +1412,6 @@ String STR_IMAPDLG_MODIFY
     Text[ turkish ] = "Resim eþlem deðiþtirildi.\nDeðiþiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Se ha modificado el ImageMap.\n¿Desea guardar las modificaciones?";
+    Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
 };
 /******************************************************************************/
