@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ Menu RID_CONTEXTMENU
             Text = "Öff~nen" ;
             Text[ English ] = "~Open" ;
             Text[ italian ] = "~Apri";
-            Text[ portuguese_brazilian ] = "?ff~nen";
+            Text[ portuguese_brazilian ] = "~Abrir";
             Text[ portuguese ] = "~Abrir";
             Text[ danish ] = "Å~bn";
             Text[ french ] = "Ouvrir";
@@ -87,7 +87,7 @@ Menu RID_CONTEXTMENU
             Text[ english_us ] = "~Open";
             Text[ chinese_simplified ] = "æ‰“å¼€(~O)";
             Text[ russian ] = "Îòêğûòü";
-            Text[ polish ] = "Otwórz";
+            Text[ polish ] = "~Otwórz";
             Text[ japanese ] = "é–‹ã(~O)";
             Text[ chinese_traditional ] = "é–‹å•ŸèˆŠæª”(~O)";
             Text[ arabic ] = "İÊÍ";
@@ -100,6 +100,9 @@ Menu RID_CONTEXTMENU
             Text[ catalan ] = "~Obre";
             Text[ finnish ] = "~Avaa";
             Text[ thai ] = "à¹€~à¸›à¸´à¸”";
+            Text[ czech ] = "OtevÅ™Ã­t";
+            Text[ hebrew ] = "â€®×¤×ª×™×—×”â€¬";
+            Text[ hindi ] = "~à¤–à¥‹à¤²à¥‹";
         };
         MenuItem
         {
@@ -108,7 +111,7 @@ Menu RID_CONTEXTMENU
             Text = "Öffnen in neuem ~Fenster" ;
             Text[ English ] = "Open in ~new window" ;
             Text[ italian ] = "Apri nella ~finestra nuova";
-            Text[ portuguese_brazilian ] = "?ff~nen in neuem ~Fenster";
+            Text[ portuguese_brazilian ] = "Abrir numa ~Nova Janela";
             Text[ portuguese ] = "Abrir em ~nova janela";
             Text[ danish ] = "Åbn i nyt vindue";
             Text[ french ] = "Ouvrir dans une nouvelle ~fenêtre";
@@ -118,7 +121,7 @@ Menu RID_CONTEXTMENU
             Text[ english_us ] = "Open in New ~Window";
             Text[ chinese_simplified ] = "ä½¿ç”¨ä¸€ä¸ªæ–°è§†çª—æ‰“å¼€(~W)";
             Text[ russian ] = "Îòêğûòü â íîâîì îêíå";
-            Text[ polish ] = "Otwórz w nowym oknie";
+            Text[ polish ] = "Otwórz ~w nowym oknie";
             Text[ japanese ] = "æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‹ã(~W)";
             Text[ chinese_traditional ] = "ç”¨ä¸€å€‹æ–°è¦–çª—é–‹å•Ÿ(~W)";
             Text[ arabic ] = "İÊÍ İí äÇİĞÉ ÌÏíÏÉ";
@@ -131,6 +134,9 @@ Menu RID_CONTEXTMENU
             Text[ catalan ] = "Obre en una ~finestra nova";
             Text[ finnish ] = "Avaa uudessa ~ikkunassa";
             Text[ thai ] = "à¹€à¸›à¸´à¸”à¹ƒà¸™~à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¹ƒà¸«à¸¡à¹ˆ";
+            Text[ czech ] = "OtevÅ™Ã­t v novÃ©m oknÄ›";
+            Text[ hebrew ] = "â€®×¤×ª×™×—×” ×‘×—×œ×•×Ÿ ×—×“×©â€¬";
+            Text[ hindi ] = "Open in New ~Window";
         };
         MenuItem
         {
@@ -149,7 +155,7 @@ Menu RID_CONTEXTMENU
             Text[ english_us ] = "~Download...";
             Text[ chinese_simplified ] = "ä¸‹è½½(~D)...";
             Text[ russian ] = "Çàãğóçèòü...";
-            Text[ polish ] = "Pobieranie...";
+            Text[ polish ] = "~Pobieranie...";
             Text[ japanese ] = "ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰(~D)...";
             Text[ chinese_traditional ] = "ä¸‹è¼‰(~D)...";
             Text[ arabic ] = "ÊäÒíá...";
@@ -162,6 +168,9 @@ Menu RID_CONTEXTMENU
             Text[ catalan ] = "~Descarregar...";
             Text[ finnish ] = "~Lataa...";
             Text[ thai ] = "~à¸”à¸²à¸§à¸™à¹Œà¹‚à¸«à¸¥à¸”...";
+            Text[ czech ] = "StÃ¡hnout...";
+            Text[ hebrew ] = "â€®×”×•×¨×“×ª × ×ª×•× ×™× ××”×¨×©×ªâ€¬";
+            Text[ hindi ] = "~à¤¡à¥Œà¤¨à¤²à¥‹à¤¡...";
         };
         MenuItem
         {
@@ -174,7 +183,7 @@ Menu RID_CONTEXTMENU
             Text = "Verknüpfung ~hinzufügen" ;
             Text[ English ] = "~Add bookmark" ;
             Text[ italian ] = "~Aggiungi collegamento";
-            Text[ portuguese_brazilian ] = "Verkn?fung ~hinzuf?en";
+            Text[ portuguese_brazilian ] = "Adicionar ~Vínculo";
             Text[ portuguese ] = "Adicionar ~ligação";
             Text[ danish ] = "Tilføj kæde";
             Text[ french ] = "~Ajouter un lien";
@@ -184,7 +193,7 @@ Menu RID_CONTEXTMENU
             Text[ english_us ] = "Add ~Link";
             Text[ chinese_simplified ] = "æ–°å¢é“¾æ¥(~L)";
             Text[ russian ] = "Äîáàâèòü ññûëêó";
-            Text[ polish ] = "Dodaj ³¹cze";
+            Text[ polish ] = "~Dodaj ³¹cze";
             Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®è¿½åŠ (~L)";
             Text[ chinese_traditional ] = "åŠ å…¥æ·å¾‘(~L)";
             Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ";
@@ -197,6 +206,9 @@ Menu RID_CONTEXTMENU
             Text[ catalan ] = "~Afegeix un enllaç";
             Text[ finnish ] = "Lisää ~linkki";
             Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸à¸²à¸£à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+            Text[ czech ] = "PÅ™idat odkaz";
+            Text[ hebrew ] = "â€®×”×•×¡×¤×ª ×§×™×©×•×¨â€¬";
+            Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤œà¥‹à¤¡à¤¼à¥‹";
         };
         MenuItem
         {
@@ -210,7 +222,7 @@ Menu RID_CONTEXTMENU
             Text[ English ] = "~Copy Link" ;
             Text[ english_us ] = "Cop~y Link" ;
             Text[ portuguese ] = "~Copiar ligação" ;
-            Text[ portuguese_brazilian ] = "~Link kopieren" ;
+            Text[ portuguese_brazilian ] = "~Copiar Vínculo" ;
             Text[ swedish ] = "~Kopiera länk" ;
             Text[ danish ] = "Kopier kæde" ;
             Text[ italian ] = "Copia ~link" ;
@@ -219,7 +231,7 @@ Menu RID_CONTEXTMENU
             Text[ dutch ] = "Kopel~ling kopiëren" ;
             Text[ chinese_simplified ] = "å¤åˆ¶é“¾æ¥(~Y)";
             Text[ russian ] = "Êîïèğîâàòü ññûëêó";
-            Text[ polish ] = "Kopiuj ³¹cze";
+            Text[ polish ] = "~Kopiuj ³¹cze";
             Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®ã‚³ãƒ”ãƒ¼(~Y)";
             Text[ chinese_traditional ] = "è¤‡è£½æ·å¾‘(~Y)";
             Text[ arabic ] = "äÓÎ ÇáÇÑÊÈÇØ";
@@ -232,9 +244,21 @@ Menu RID_CONTEXTMENU
             Text[ catalan ] = "Copia l'~enllaç";
             Text[ finnish ] = "~Kopioi linkki";
             Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­~à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+            Text[ czech ] = "KopÃ­rovat odkaz";
+            Text[ hebrew ] = "â€®×”×¢×ª×§×ª ×§×™×©×•×¨â€¬";
+            Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
         };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
