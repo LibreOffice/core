@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-14 15:41:53 $
+ *  last change: $Author: cl $ $Date: 2002-05-08 09:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1804,6 +1804,7 @@ SfxItemSet* SdrGrafObj::CreateNewItemSet(SfxItemPool& rPool)
         // ranges from SdrAttrObj
         SDRATTR_START, SDRATTRSET_SHADOW,
         SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
+        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
         // graf attributes
         SDRATTR_GRAF_FIRST, SDRATTRSET_GRAF,
