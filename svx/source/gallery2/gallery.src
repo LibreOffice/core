@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:41:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     Text[ czech ] = "Galerie";
     Text[ hebrew ] = "‮גלריה‬";
     Text[ hindi ] = "गेलरी";
+    Text[ slovak ] = "Galéria";
 };
 
 
@@ -200,6 +201,7 @@ TabDialog RID_SVXTABDLG_GALLERY
                 Text[ czech ] = "Obecné";
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
+                Text[ slovak ] = "Všeobecný";
             };
         };
     };
@@ -207,6 +209,7 @@ TabDialog RID_SVXTABDLG_GALLERY
     Text[ czech ] = "Vlastnosti ";
     Text[ hebrew ] = "‮מאפיינים של ‬";
     Text[ hindi ] = "का विशेषतायें ";
+    Text[ slovak ] = "Vlastnosti ";
 };
 
 /******************************************************************************/
@@ -278,6 +281,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ czech ] = "Obecné";
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
+                Text[ slovak ] = "Všeobecný";
             };
             PageItem
             {
@@ -311,6 +315,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ czech ] = "Soubory";
                 Text[ hebrew ] = "‮קבצים‬";
                 Text[ hindi ] = "फाइलें";
+                Text[ slovak ] = "Súbory";
             };
         };
     };
@@ -318,6 +323,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     Text[ czech ] = "Vlastnosti ";
     Text[ hebrew ] = "‮מאפיינים של ‬";
     Text[ hindi ] = "का विशेषतायें ";
+    Text[ slovak ] = "Vlastnosti ";
 };
 
 /******************************************************************************/
@@ -377,6 +383,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ czech ] = "Typ:";
         Text[ hebrew ] = "‮סוג:‬";
         Text[ hindi ] = "वर्ग:";
+        Text[ slovak ] = "Typ:";
     };
     FixedText FT_MS_SHOW_TYPE
     {
@@ -417,6 +424,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ czech ] = "Umístění:";
         Text[ hebrew ] = "‮מיקום:‬";
         Text[ hindi ] = "स्थान:";
+        Text[ slovak ] = "Umiestnenie:";
     };
     FixedText FT_MS_SHOW_PATH
     {
@@ -457,6 +465,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ czech ] = "Obsah:";
         Text[ hebrew ] = "‮תוכן:‬";
         Text[ hindi ] = "विषयें:";
+        Text[ slovak ] = "Obsah:";
     };
     FixedText FT_MS_SHOW_CONTENT
     {
@@ -502,6 +511,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ czech ] = "Změněno:";
         Text[ hebrew ] = "‮עודכן:‬";
         Text[ hindi ] = "सुधार किया:";
+        Text[ slovak ] = "Zmenené:";
     };
     FixedText FT_MS_SHOW_CHANGEDATE
     {
@@ -551,6 +561,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ czech ] = "Typ souboru";
         Text[ hebrew ] = "‮סוג קובץ‬";
         Text[ hindi ] = "फाइल वर्ग";
+        Text[ slovak ] = "Typ ~súboru";
     };
     ComboBox CBB_FILETYPE
     {
@@ -603,6 +614,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ czech ] = "Najít soubory...";
         Text[ hebrew ] = "‮חיפוש קבצים...‬";
         Text[ hindi ] = "~फाइलों को अन्वेषण करो...";
+        Text[ slovak ] = "~Nájsť súbory...";
     };
     PushButton BTN_TAKE
     {
@@ -638,6 +650,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     PushButton BTN_TAKEALL
     {
@@ -673,6 +686,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ czech ] = "Přidat vše";
         Text[ hebrew ] = "‮הוספת הכל‬";
         Text[ hindi ] = "~सब जोड़ो";
+        Text[ slovak ] = "Pri~dať všetko";
     };
     CheckBox CBX_PREVIEW
     {
@@ -708,6 +722,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ czech ] = "Náhled";
         Text[ hebrew ] = "‮תצוגה מקדימה‬";
         Text[ hindi ] = "~पूर्वदृश्य";
+        Text[ slovak ] = "~Náhľad";
     };
     Window WND_BRSPRV
     {
@@ -750,6 +765,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ czech ] = "Maddin1";
         Text[ hebrew ] = "‮Maddin1‬";
         Text[ hindi ] = "Maddin1";
+        Text[ slovak ] = "Maddin1";
     };
     PushButton BTN_MADDIN2
     {
@@ -785,6 +801,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ czech ] = "Maddin2";
         Text[ hebrew ] = "‮Maddin2‬";
         Text[ hindi ] = "Maddin2";
+        Text[ slovak ] = "Maddin2";
     };
 };
 
@@ -871,6 +888,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
         Text[ czech ] = "Název";
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "शीर्षक";
+        Text[ slovak ] = "Titul";
     };
     Edit EDT_TITLE
     {
@@ -882,6 +900,7 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     Text[ czech ] = "Zadejte název";
     Text[ hebrew ] = "‮הכנסת כותרת‬";
     Text[ hindi ] = "शीर्षक प्रविष्ट करो";
+    Text[ slovak ] = "Zadajte názov";
 };
 
 /******************************************************************************/
@@ -908,7 +927,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Text[ russian ] = "�����";
     Text[ polish ] = "Znajd�";
     Text[ japanese ] = "検索";
-    Text[ chinese_traditional ] = "搜尋";
+    Text[ chinese_traditional ] = "尋找";
     Text[ arabic ] = "���";
     Text[ dutch ] = "Zoeken";
     Text[ chinese_simplified ] = "搜寻";
@@ -952,6 +971,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ czech ] = "Adresář";
         Text[ hebrew ] = "‮ספריה‬";
         Text[ hindi ] = "डैरक्टरी";
+        Text[ slovak ] = "Adresár";
     };
     FixedText FT_SEARCH_DIR
     {
@@ -997,6 +1017,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ czech ] = "Typ souboru";
         Text[ hebrew ] = "‮סוג קובץ‬";
         Text[ hindi ] = "फाइल वर्ग";
+        Text[ slovak ] = "Typ súboru";
     };
     FixedText FT_SEARCH_TYPE
     {
@@ -1007,6 +1028,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Text[ czech ] = "Najít";
     Text[ hebrew ] = "‮חיפוש‬";
     Text[ hindi ] = "अन्वेषण";
+    Text[ slovak ] = "Nájsť";
 };
 
 /******************************************************************************/
@@ -1077,6 +1099,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
         Text[ czech ] = "Soubor";
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "फाइल";
+        Text[ slovak ] = "Súbor";
     };
     FixedText FT_TAKE_FILE
     {
@@ -1093,6 +1116,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Text[ czech ] = "Použít";
     Text[ hebrew ] = "‮יישום‬";
     Text[ hindi ] = "लागू करो";
+    Text[ slovak ] = "Použiť";
 };
 
 /******************************************************************************/
@@ -1163,6 +1187,7 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
         Text[ czech ] = "Soubor";
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "फाइल";
+        Text[ slovak ] = "Súbor";
     };
     FixedText FT_ACTUALIZE_FILE
     {
@@ -1179,6 +1204,7 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
     Text[ czech ] = "Aktualizace";
     Text[ hebrew ] = "‮עידכון‬";
     Text[ hindi ] = "अपडेट् करो";
+    Text[ slovak ] = "Aktualizácia";
 };
 
 ModalDialog RID_SVXDLG_GALLERY_THEMEID
@@ -1259,6 +1285,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Text[ czech ] = "ID";
         Text[ hebrew ] = "‮מזהה‬";
         Text[ hindi ] = "ID";
+        Text[ slovak ] = "ID";
     };
     ListBox LB_RESNAME
     {
@@ -1274,6 +1301,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Text[ czech ] = "Identifikace tématu";
     Text[ hebrew ] = "‮מזהה נושא‬";
     Text[ hindi ] = "प्रकरण ID";
+    Text[ slovak ] = "Identifikácia témy";
 };
 
 /******************************************************************************/
@@ -1312,6 +1340,7 @@ CheckBox RID_SVXDLG_GALLERY_CBX
     Text[ czech ] = "Podadresáře";
     Text[ hebrew ] = "‮תתי ספריות‬";
     Text[ hindi ] = "~अधीनडैरक्टरियाँ";
+    Text[ slovak ] = "~Podadresáre";
 };
 String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 {
@@ -1344,6 +1373,7 @@ String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
     Text[ czech ] = "Aktualizace";
     Text[ hebrew ] = "‮עידכון‬";
     Text[ hindi ] = "अपडेट् करो";
+    Text[ slovak ] = "Aktualizácia";
 };
 String RID_SVXSTR_GALLERY_FOPENERROR
 {
@@ -1376,6 +1406,7 @@ String RID_SVXSTR_GALLERY_FOPENERROR
     Text[ czech ] = "Tento soubor nelze otevřít";
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ זה‬";
     Text[ hindi ] = "इस फाइल को नहीं खोल सकते है";
+    Text[ slovak ] = "Tento súbor nemožno otvoriť";
 };
 String RID_SVXSTR_GALLERY_NOFILES
 {
@@ -1408,6 +1439,7 @@ String RID_SVXSTR_GALLERY_NOFILES
     Text[ czech ] = "<žádné soubory>";
     Text[ hebrew ] = "‮<אין קבצים>‬";
     Text[ hindi ] = "<कोई फाइल नहीं>";
+    Text[ slovak ] = "<Žiadne súbory>";
 };
 String RID_SVXSTR_GALLERY_NOTHEME
 {
@@ -1440,6 +1472,7 @@ String RID_SVXSTR_GALLERY_NOTHEME
     Text[ czech ] = "Neplatný název motivu!";
     Text[ hebrew ] = "‮שם נושא לא חוקי!‬";
     Text[ hindi ] = "अमान्य प्रकरण नाम!";
+    Text[ slovak ] = "Neplatný názov motívu!";
 };
 String RID_SVXSTR_GALLERY_DELETEOBJ
 {
@@ -1472,6 +1505,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ czech ] = "Opravdu chcete smazat\ntento objekt?";
     Text[ hebrew ] = "‮האם אכן למחוק עצם זה?‬";
     Text[ hindi ] = "आप सचमुच इस वस्तु को\nमिटाना चाहते है?";
+    Text[ slovak ] = "Naozaj chcete zmazať\ntento objekt?";
 };
 String RID_SVXSTR_GALLERY_DELETETHEME
 {
@@ -1501,6 +1535,7 @@ String RID_SVXSTR_GALLERY_DELETETHEME
     Text[ czech ] = "Opravdu chcete smazat\ntento motiv?";
     Text[ hebrew ] = "‮האם אכן למחוק נושא זה?‬";
     Text[ hindi ] = "आप सचमुच इस प्रकरण को\nमिटाना चाहते है?";
+    Text[ slovak ] = "Naozaj chcete zmazať\ntento motív?";
 };
 String RID_SVXSTR_EXTFORMAT1_SYS
 {
@@ -1537,6 +1572,7 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text[ czech ] = "Wave - zvukový soubor";
     Text[ hebrew ] = "‮קובץ שמע Wave‬";
     Text[ hindi ] = "Wave - ध्वनि फाइल";
+    Text[ slovak ] = "Wave - zvukový súbor";
 };
 String RID_SVXSTR_EXTFORMAT2_SYS
 {
@@ -1573,6 +1609,7 @@ String RID_SVXSTR_EXTFORMAT2_UI
     Text[ czech ] = "Formát Audio Interchange File";
     Text[ hebrew ] = "‮Audio Interchange File Format‬";
     Text[ hindi ] = "Audio अदला-बदला फाइल रचना";
+    Text[ slovak ] = "Formát Audio Interchange File";
 };
 String RID_SVXSTR_EXTFORMAT3_SYS
 {
@@ -1606,6 +1643,7 @@ String RID_SVXSTR_EXTFORMAT3_UI
     Text[ czech ] = "AU - zvukový soubor";
     Text[ hebrew ] = "‮קובץ שמע AU‬";
     Text[ hindi ] = "AU - ध्वनि फाइल";
+    Text[ slovak ] = "AU - zvukový súbor";
 };
 String RID_SVXSTR_GALLERY_FILTER
 {
@@ -1638,6 +1676,7 @@ String RID_SVXSTR_GALLERY_FILTER
     Text[ czech ] = "Grafický filtr";
     Text[ hebrew ] = "‮מסנן גרפיקה‬";
     Text[ hindi ] = "सुचित्र फ़िल्टर";
+    Text[ slovak ] = "Grafický filter";
 };
 String RID_SVXSTR_GALLERY_LENGTH
 {
@@ -1670,6 +1709,7 @@ String RID_SVXSTR_GALLERY_LENGTH
     Text[ czech ] = "Délka:";
     Text[ hebrew ] = "‮אורך:‬";
     Text[ hindi ] = "लम्बाई:";
+    Text[ slovak ] = "Dĺžka:";
 };
 String RID_SVXSTR_GALLERY_SIZE
 {
@@ -1702,6 +1742,7 @@ String RID_SVXSTR_GALLERY_SIZE
     Text[ czech ] = "Velikost:";
     Text[ hebrew ] = "‮גודל:‬";
     Text[ hindi ] = "परिमाण:";
+    Text[ slovak ] = "Veľkosť:";
 };
 String RID_SVXSTR_GALLERY_DELETEDD
 {
@@ -1734,6 +1775,7 @@ String RID_SVXSTR_GALLERY_DELETEDD
     Text[ czech ] = "Přejete si smazat propojený soubor?";
     Text[ hebrew ] = "‮האם למחוק את הקובץ המקושר?‬";
     Text[ hindi ] = "आप लिंक किया हुआ फाइल को मिटाना चाहते है?";
+    Text[ slovak ] = "Prajete si zmazať prepojený súbor?";
 };
 String RID_SVXSTR_GALLERY_SEARCH
 {
@@ -1766,6 +1808,7 @@ String RID_SVXSTR_GALLERY_SEARCH
     Text[ czech ] = "Přejete si aktualizovat seznam souborů?";
     Text[ hebrew ] = "‮האם לעדכן את רשימת הקבצים?‬";
     Text[ hindi ] = "आप फाइल सूची को अपडेट् करना चाहते है?";
+    Text[ slovak ] = "Prajete si aktualizovať zoznam súborov?";
 };
 String RID_SVXSTR_GALLERY_SGIERROR
 {
@@ -1798,6 +1841,7 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text[ czech ] = "Tento soubor nelze otevřít.\nPřejete si zadat jinou cestu k prohledání?";
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ זה.\nהאם להשתמש במסלול חיפוש אחר? ‬";
     Text[ hindi ] = "इस फाइल को नहीं खोल सकते है ।\nआप अन्य अन्वेषण मार्ग को प्रवेश करना चाहते है? ";
+    Text[ slovak ] = "Tento súbor sa nedá otvoriť.\nPrajete si zadať inú cestu k prehľadaniu?";
 };
 String RID_SVXSTR_GALLERY_NEWTHEME
 {
@@ -1830,6 +1874,7 @@ String RID_SVXSTR_GALLERY_NEWTHEME
     Text[ czech ] = "Nové téma";
     Text[ hebrew ] = "‮נושא חדש‬";
     Text[ hindi ] = "नया प्रकरण";
+    Text[ slovak ] = "Nová téma";
 };
 String RID_SVXSTR_GALLERY_BROWSER
 {
@@ -1862,6 +1907,7 @@ String RID_SVXSTR_GALLERY_BROWSER
     Text[ czech ] = "Organizátor...";
     Text[ hebrew ] = "‮אירגון‬";
     Text[ hindi ] = "~व्यवस्थापक...";
+    Text[ slovak ] = "~Organizátor...";
 };
 String RID_SVXSTR_GALLERY_THEMEERR
 {
@@ -1894,6 +1940,7 @@ String RID_SVXSTR_GALLERY_THEMEERR
     Text[ czech ] = "Takový název tématu již existuje.\nProsím zvolte jiný.";
     Text[ hebrew ] = "‮נושא זה כבר קיים.\nנא לבחור אחר.‬";
     Text[ hindi ] = "इस प्रकरण नाम पहिले से ही अस्तित्व में है ।\nकृपया किसी दूसरा चुनिए ।";
+    Text[ slovak ] = "Zadaný názov témy už existuje.\nProsím zvoľte iný.";
 };
 String RID_SVXSTR_GALLERYPROPS_THEME
 {
@@ -1926,6 +1973,7 @@ String RID_SVXSTR_GALLERYPROPS_THEME
     Text[ czech ] = "Téma;Témata";
     Text[ hebrew ] = "‮נושא;נושאים‬";
     Text[ hindi ] = "प्रकरण;प्रकरण";
+    Text[ slovak ] = "Téma;Témy";
 };
 String RID_SVXSTR_GALLERYPROPS_OBJECT
 {
@@ -1958,6 +2006,7 @@ String RID_SVXSTR_GALLERYPROPS_OBJECT
     Text[ czech ] = "Objekt;Objekty";
     Text[ hebrew ] = "‮עצם;עצמים‬";
     Text[ hindi ] = "वस्तु;वस्तु";
+    Text[ slovak ] = "Objekt;Objekty";
 };
 String RID_SVXSTR_GALLERYPROPS_GALTHEME
 {
@@ -1990,6 +2039,7 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text[ czech ] = "Téma v galerii";
     Text[ hebrew ] = "‮נושא גלריה‬";
     Text[ hindi ] = "गेलरी प्रकरण";
+    Text[ slovak ] = "Téma v galérii";
 };
 String RID_SVXSTR_GALLERY_IMPORTTHEME
 {
@@ -2022,6 +2072,7 @@ String RID_SVXSTR_GALLERY_IMPORTTHEME
     Text[ czech ] = "Importovat...";
     Text[ hebrew ] = "‮יבוא‬";
     Text[ hindi ] = "आ~यात...";
+    Text[ slovak ] = "I~mportovať...";
 };
 String RID_SVXSTR_GALLERY_CREATETHEME
 {
@@ -2054,6 +2105,7 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text[ czech ] = "Nové téma...";
     Text[ hebrew ] = "‮נושא חדש‬";
     Text[ hindi ] = "नया प्रकरण...";
+    Text[ slovak ] = "Nová téma...";
 };
 String RID_SVXSTR_GALLERY_READONLY
 {
@@ -2087,6 +2139,7 @@ String RID_SVXSTR_GALLERY_READONLY
     Text[ czech ] = " (pouze ke čtení)";
     Text[ hebrew ] = "‮ (קריאה בלבד)‬";
     Text[ hindi ] = " (केवल पढ़ने केलिए)";
+    Text[ slovak ] = " (Iba na čítanie)";
 };
 String RID_SVXSTR_GALLERY_ALLFILES
 {
@@ -2119,6 +2172,7 @@ String RID_SVXSTR_GALLERY_ALLFILES
     Text[ czech ] = "<Všechny soubory>";
     Text[ hebrew ] = "‮<כל הקבצים>‬";
     Text[ hindi ] = "<सब फाइलें>";
+    Text[ slovak ] = "<Všetky súbory>";
 };
 String RID_SVXSTR_GALLERY_DIALOGID
 {
@@ -2151,6 +2205,7 @@ String RID_SVXSTR_GALLERY_DIALOGID
     Text[ czech ] = "Přiřadit ID";
     Text[ hebrew ] = "‮השמת זיהוי (ID)‬";
     Text[ hindi ] = "ID निर्दिष्ट करो";
+    Text[ slovak ] = "Priradiť ID";
 };
 String RID_SVXSTR_GALLERY_ID_EXISTS
 {
@@ -2183,6 +2238,7 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
     Text[ czech ] = "Takové ID již existuje...";
     Text[ hebrew ] = "‮מזהה זה (ID) כבר קיים...‬";
     Text[ hindi ] = "इस ID पहिले से ही अस्तित्व में है...";
+    Text[ slovak ] = "Také ID už existuje...";
 };
 String RID_SVXSTR_GALLERY_TITLE
 {
@@ -2212,6 +2268,7 @@ String RID_SVXSTR_GALLERY_TITLE
     Text[ czech ] = "Název";
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Titul";
 };
 String RID_SVXSTR_GALLERY_PATH
 {
@@ -2243,6 +2300,7 @@ String RID_SVXSTR_GALLERY_PATH
     Text[ czech ] = "Cesta";
     Text[ hebrew ] = "‮מסלול‬";
     Text[ hindi ] = "मार्ग";
+    Text[ slovak ] = "Cesta";
 };
 String RID_SVXSTR_GALLERY_ICONVIEW
 {
@@ -2272,6 +2330,7 @@ String RID_SVXSTR_GALLERY_ICONVIEW
     Text[ czech ] = "Pohled s ikonami";
     Text[ hebrew ] = "‮מבט צלמית‬";
     Text[ hindi ] = "अइकॉन दृश्य";
+    Text[ slovak ] = "Pohľad s ikonami";
 };
 String RID_SVXSTR_GALLERY_LISTVIEW
 {
@@ -2301,6 +2360,7 @@ String RID_SVXSTR_GALLERY_LISTVIEW
     Text[ czech ] = "Detailní pohled";
     Text[ hebrew ] = "‮מבט מפורט‬";
     Text[ hindi ] = "विस्तारपूर्वक वर्णन दृश्य ";
+    Text[ slovak ] = "Detailný pohľad";
 };
 
 /******************************************************************************/
@@ -2459,6 +2519,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ czech ] = "Aktualizace";
             Text[ hebrew ] = "‮עידכון‬";
             Text[ hindi ] = "अपडेट् करो";
+            Text[ slovak ] = "Aktualizácia";
         };
         MenuItem
         {
@@ -2495,6 +2556,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ czech ] = "Smazat";
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
+            Text[ slovak ] = "~Zmazať";
         };
         MenuItem
         {
@@ -2529,6 +2591,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ czech ] = "Přejmenovat";
             Text[ hebrew ] = "‮שינוי שם‬";
             Text[ hindi ] = "~पुनः नाम दो";
+            Text[ slovak ] = "P~remenovať";
         };
         MenuItem
         {
@@ -2566,6 +2629,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ czech ] = "Přiřadit ID";
             Text[ hebrew ] = "‮השמת מזהה (ID)‬";
             Text[ hindi ] = "~ID निर्दिष्ट करो";
+            Text[ slovak ] = "Priradiť ~ID";
         };
         MenuItem
         {
@@ -2604,6 +2668,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ czech ] = "Vlastnosti...";
             Text[ hebrew ] = "‮מאפיינים...‬";
             Text[ hindi ] = "विशे~षतायें ...";
+            Text[ slovak ] = "Vlastnost~i...";
         };
     };
 };
@@ -2680,6 +2745,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ czech ] = "Kopírovat";
                         Text[ hebrew ] = "‮העתקה‬";
                         Text[ hindi ] = "~प्रतिलिपि";
+                        Text[ slovak ] = "~Kopírovať";
                     };
                     MenuItem
                     {
@@ -2714,6 +2780,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ czech ] = "Odkaz";
                         Text[ hebrew ] = "‮קישור‬";
                         Text[ hindi ] = "लिंक";
+                        Text[ slovak ] = "Odkaz";
                     };
                     MenuItem
                     {
@@ -2752,6 +2819,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ czech ] = "Pozadí";
                         Text[ hebrew ] = "‮רקע‬";
                         Text[ hindi ] = "पृष्टभा~ग";
+                        Text[ slovak ] = "Po~zadie";
                     };
                 };
             };
@@ -2759,6 +2827,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ czech ] = "Vložit";
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~जोड़ो";
+            Text[ slovak ] = "~Vložiť";
         };
         MenuItem
         {
@@ -2795,6 +2864,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ czech ] = "Náhled";
             Text[ hebrew ] = "‮תצוגה מקדימה‬";
             Text[ hindi ] = "~पूर्वदृश्य";
+            Text[ slovak ] = "~Náhľad";
         };
         MenuItem
         {
@@ -2830,6 +2900,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ czech ] = "Titulek";
             Text[ hebrew ] = "‮כותרת‬";
             Text[ hindi ] = "~शीर्षक";
+            Text[ slovak ] = "~Titul";
         };
         MenuItem
         {
@@ -2866,6 +2937,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ czech ] = "Smazat";
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
+            Text[ slovak ] = "~Zmazať";
         };
         MenuItem
         {
@@ -2904,6 +2976,7 @@ Menu RID_SVXMN_GALLERY2
             Text[ czech ] = "Kopírovat";
             Text[ hebrew ] = "‮העתקה‬";
             Text[ hindi ] = "~प्रतिलिपि";
+            Text[ slovak ] = "~Kopírovať";
         };
         MenuItem
         {
@@ -2936,9 +3009,12 @@ Menu RID_SVXMN_GALLERY2
             Text[ czech ] = "Vložit";
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~जोड़ो";
+            Text[ slovak ] = "~Vložiť";
         };
     };
 };
+
+
 
 
 
