@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:50:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
     pDlg->EnableRange( PRINTDIALOG_ALL );
     pDlg->EnableCollate();
 
-    if (pShell->ISA(DrawViewShell) && pShell->GetView()->HasMarkedObj())
+    if (pShell->ISA(DrawViewShell) && pShell->GetView()->AreObjectsMarked())
     {
         pDlg->EnableRange( PRINTDIALOG_SELECTION );
         // According #79749 always check PRINTDIALOG_ALL
@@ -528,10 +528,10 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
                     {
                         if( !( bContainsTransparency = pPage->HasTransparentObjects() ) )
                         {
-                            SdPage* pMaster = (SdPage*) pPage->GetMasterPage( 0 );
-
-                            if( pMaster )
-                                bContainsTransparency = pMaster->HasTransparentObjects();
+                            if(pPage->TRG_HasMasterPage())
+                            {
+                                bContainsTransparency = pPage->TRG_GetMasterPage().HasTransparentObjects();
+                            }
                         }
                     }
                 }
@@ -620,7 +620,7 @@ ErrCode PrintManager::DoPrint (
     ViewShell* pShell = mrViewShell.GetSubShellManager().GetMainSubShell();
     if (pShell != NULL)
     {
-        const SdrMarkList& rMarkList = pShell->GetView()->GetMarkList();
+        const SdrMarkList& rMarkList = pShell->GetView()->GetMarkedObjectList();
 
         // Retrieve the range of marked pages.
         String sNewPageRange (msPageRange);
@@ -700,8 +700,7 @@ void PrintManager::PreparePrint (PrintDialog* pPrintDialog)
                 pPrinter->SetPaperBin(pPage->GetPaperBin());
             }
 
-            SdPage* pMaster = (SdPage*) pPage->GetMasterPage(0);
-            pPrinter->SetOrientation(pMaster->GetOrientation());
+            pPrinter->SetOrientation(pPage->TRG_GetMasterPage().GetOrientation());
         }
         else if ( pPrintOpts->IsDraw() || pPrintOpts->IsNotes() )
         {
