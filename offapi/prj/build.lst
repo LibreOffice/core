@@ -24,7 +24,7 @@ oa	offapi\com\sun\star\form\binding        nmake	-	all	oa_form_binding oa_fcomp 
 oa	offapi\com\sun\star\form\validation     nmake   -   all oa_form_validation oa_form_binding NULL
 oa	offapi\com\sun\star\form\control		nmake	-	all	oa_fcontr NULL
 oa	offapi\com\sun\star\formula				nmake	-	all	oa_formula NULL
-oa	offapi\com\sun\star\frame				nmake	-	all	oa_frame NULL
+oa	offapi\com\sun\star\frame				nmake	-	all	oa_frame oa_drafts_frame NULL
 oa	offapi\com\sun\star\i18n				nmake	-	all	oa_i18n NULL
 oa	offapi\com\sun\star\installation		nmake	-	all	oa_inst NULL
 oa	offapi\com\sun\star\ldap			    nmake	-	all	oa_ldap NULL
