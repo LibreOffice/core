@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 10:32:31 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,28 +182,49 @@ namespace dbtools
     using namespace ::com::sun::star::task;
 //==============================================================================
 //==============================================================================
-//------------------------------------------------------------------
 sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
                                  const Reference< XNumberFormatTypes >& _xTypes,
                                  const Locale& _rLocale)
 {
-    OSL_ENSHURE(_xTypes.is() && _xColumn.is(), "dbtools::getDefaultNumberFormat: invalid arg !");
+    OSL_ENSURE(_xTypes.is() && _xColumn.is(), "dbtools::getDefaultNumberFormat: invalid arg !");
     if (!_xTypes.is() || !_xColumn.is())
         return NumberFormat::UNDEFINED;
 
     sal_Int32 nDataType;
+    sal_Int32 nScale = 0;
     try
     {
         // determine the datatype of the column
         _xColumn->getPropertyValue(::rtl::OUString::createFromAscii("Type")) >>= nDataType;
+
+        if (DataType::NUMERIC == nDataType || DataType::DECIMAL == nDataType)
+            _xColumn->getPropertyValue(::rtl::OUString::createFromAscii("Scale")) >>= nScale;
     }
-    catch (...)
+    catch (Exception&)
     {
         return NumberFormat::UNDEFINED;
     }
+    return getDefaultNumberFormat(nDataType,
+                    nScale,
+                    ::cppu::any2bool(_xColumn->getPropertyValue(::rtl::OUString::createFromAscii("IsCurrency"))),
+                    _xTypes,
+                    _rLocale);
+}
 
-    sal_Int32 nFormat;
-    switch (nDataType)
+//------------------------------------------------------------------
+sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
+                                 sal_Int32 _nScale,
+                                 sal_Bool _bIsCurrency,
+                                 const Reference< XNumberFormatTypes >& _xTypes,
+                                 const Locale& _rLocale)
+{
+    OSL_ENSURE(_xTypes.is() , "dbtools::getDefaultNumberFormat: invalid arg !");
+    if (!_xTypes.is())
+        return NumberFormat::UNDEFINED;
+
+    sal_Int32 nFormat = 0;
+    sal_Int32 nNumberType   = _bIsCurrency ? NumberFormat::CURRENCY : NumberFormat::NUMBER;
+    switch (_nDataType)
     {
         case DataType::BIT:
             nFormat = _xTypes->getStandardFormat(NumberFormat::LOGICAL, _rLocale);
@@ -212,8 +233,6 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
         case DataType::SMALLINT:
         case DataType::INTEGER:
         case DataType::BIGINT:
-            nFormat = _xTypes->getStandardFormat(NumberFormat::NUMBER, _rLocale);
-            break;
         case DataType::FLOAT:
         case DataType::REAL:
         case DataType::DOUBLE:
@@ -222,17 +241,12 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
         {
             try
             {
-                if (getBOOL(_xColumn->getPropertyValue(::rtl::OUString::createFromAscii("IsCurrency"))))
-                    nFormat = _xTypes->getStandardFormat(NumberFormat::CURRENCY, _rLocale);
-                else
+                nFormat = _xTypes->getStandardFormat(nNumberType, _rLocale);
+                if(_nScale)
                 {
-                    sal_Int32 nScale = 2;
-                    if (DataType::NUMERIC == nDataType || DataType::DECIMAL == nDataType)
-                        _xColumn->getPropertyValue(::rtl::OUString::createFromAscii("Scale")) >>= nScale;
-
                     // generate a new format if necessary
                     Reference< XNumberFormats > xFormats(_xTypes, UNO_QUERY);
-                    ::rtl::OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, sal_False, sal_False, nScale, sal_True);
+                    ::rtl::OUString sNewFormat = xFormats->generateFormat( 0L, _rLocale, sal_False, sal_False, _nScale, sal_True);
 
                     // and add it to the formatter if necessary
                     nFormat = xFormats->queryKey(sNewFormat, _rLocale, sal_False);
@@ -240,9 +254,9 @@ sal_Int32 getDefaultNumberFormat(const Reference< XPropertySet >& _xColumn,
                         nFormat = xFormats->addNew(sNewFormat, _rLocale);
                 }
             }
-            catch (...)
+            catch (Exception&)
             {
-                nFormat = _xTypes->getStandardFormat(NumberFormat::NUMBER, _rLocale);
+                nFormat = _xTypes->getStandardFormat(nNumberType, _rLocale);
             }
         }   break;
         case DataType::CHAR:
@@ -296,7 +310,7 @@ Reference< XDataSource> getDataSource(
             const ::rtl::OUString& _rsTitleOrPath,
             const Reference< XMultiServiceFactory>& _rxFactory)
 {
-    OSL_ENSHURE(_rsTitleOrPath.getLength(), "::getDataSource : invalid arg !");
+    OSL_ENSURE(_rsTitleOrPath.getLength(), "::getDataSource : invalid arg !");
 
     Reference< XDataSource>  xReturn;
 
@@ -307,7 +321,7 @@ Reference< XDataSource> getDataSource(
 
     if (xNamingContext.is() && xNamingContext->hasByName(_rsTitleOrPath))
     {
-        OSL_ENSHURE(Reference< XNamingService>(xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
+        OSL_ENSURE(Reference< XNamingService>(xNamingContext, UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
         xReturn = Reference< XDataSource>(
             Reference< XNamingService>(xNamingContext, UNO_QUERY)->getRegisteredObject(_rsTitleOrPath),
             UNO_QUERY);
@@ -342,7 +356,7 @@ Reference< XConnection> getConnection(
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSHURE(0,"dbtools::calcConnection: error while retrieving data source properties!");
+                    OSL_ENSURE(0,"dbtools::calcConnection: error while retrieving data source properties!");
                 }
                 if(bPwdReq && !sPwd.getLength())
                 {   // password required, but empty -> connect using an interaction handler
@@ -352,7 +366,7 @@ Reference< XConnection> getConnection(
                         Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
                         if (!xHandler.is())
                         {
-                            OSL_ENSHURE(0,"dbtools::getConnection service com.sun.star.sdb.InteractionHandler not available!");
+                            OSL_ENSURE(0,"dbtools::getConnection service com.sun.star.sdb.InteractionHandler not available!");
                                 // TODO: a real parent!
                         }
                         else
@@ -470,7 +484,7 @@ Reference< XConnection> calcConnection(
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSHURE(0,"EXception when we set the new active connection!");
+                    OSL_ENSURE(0,"EXception when we set the new active connection!");
                 }
             }
         }
@@ -483,18 +497,18 @@ Reference< XConnection> calcConnection(
 Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,const ::rtl::OUString& _rName)
 {
     Reference< XTablesSupplier> xSupplyTables(_rxConn, UNO_QUERY);
-    OSL_ENSHURE(xSupplyTables.is(), "::getTableFields : invalid connection !");
+    OSL_ENSURE(xSupplyTables.is(), "::getTableFields : invalid connection !");
         // the conn already said it would support the service sdb::Connection
     Reference< XNameAccess> xTables( xSupplyTables->getTables());
     if (xTables.is() && xTables->hasByName(_rName))
     {
         Reference< XColumnsSupplier> xTableCols;
         xTables->getByName(_rName) >>= xTableCols;
-        OSL_ENSHURE(xTableCols.is(), "::getTableFields : invalid table !");
+        OSL_ENSURE(xTableCols.is(), "::getTableFields : invalid table !");
             // the table is expected to support the service sddb::Table, which requires an XColumnsSupplier interface
 
         Reference< XNameAccess> xFieldNames(xTableCols->getColumns(), UNO_QUERY);
-        OSL_ENSHURE(xFieldNames.is(), "::getTableFields : TableCols->getColumns doesn't export a NameAccess !");
+        OSL_ENSURE(xFieldNames.is(), "::getTableFields : TableCols->getColumns doesn't export a NameAccess !");
         return xFieldNames;
     }
 
@@ -569,7 +583,7 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
 //------------------------------------------------------------------------------
 void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaData, const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName)
 {
-    OSL_ENSHURE(_rxConnMetaData.is(), "QualifiedNameComponents : invalid meta data!");
+    OSL_ENSURE(_rxConnMetaData.is(), "QualifiedNameComponents : invalid meta data!");
     ::rtl::OUString sSeparator = _rxConnMetaData->getCatalogSeparator();
 
     ::rtl::OUString sName(_rQualifiedName);
@@ -601,7 +615,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
     if (_rxConnMetaData->supportsSchemasInDataManipulation())
     {
         sal_Int32 nIndex = sName.indexOf((sal_Unicode)'.');
-        OSL_ENSHURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
+        OSL_ENSURE(-1 != nIndex, "QualifiedNameComponents : no schema separator!");
         _rSchema = sName.copy(0, nIndex);
         sName = sName.copy(nIndex + 1);
     }
@@ -692,7 +706,7 @@ void TransferFormComponentProperties(
                     ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("TransferFormComponentProperties : could not transfer the value for property \"");
                     sMessage += pResult->Name;
                     sMessage += ::rtl::OUString::createFromAscii("\"");;
-                    OSL_ENSHURE(sal_False, ::rtl::OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US));
+                    OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US));
 #endif
                 }
             }
@@ -743,7 +757,7 @@ void TransferFormComponentProperties(
         {   // im Gegensatz zu ValueMin kann EffectiveMin void sein
             if (hasProperty(sPropValueMin, xNewProps))
             {
-                OSL_ENSHURE(aEffectiveMin.getValueType().getTypeClass() == TypeClass_DOUBLE,
+                OSL_ENSURE(aEffectiveMin.getValueType().getTypeClass() == TypeClass_DOUBLE,
                     "TransferFormComponentProperties : invalid property type !");
                 xNewProps->setPropertyValue(sPropValueMin, aEffectiveMin);
             }
@@ -753,7 +767,7 @@ void TransferFormComponentProperties(
         {   // analog
             if (hasProperty(sPropValueMax, xNewProps))
             {
-                OSL_ENSHURE(aEffectiveMax.getValueType().getTypeClass() == TypeClass_DOUBLE,
+                OSL_ENSURE(aEffectiveMax.getValueType().getTypeClass() == TypeClass_DOUBLE,
                     "TransferFormComponentProperties : invalid property type !");
                 xNewProps->setPropertyValue(sPropValueMax, aEffectiveMax);
             }
@@ -764,7 +778,7 @@ void TransferFormComponentProperties(
         if (aEffectiveDefault.hasValue())
         {
             sal_Bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == TypeClass_STRING;
-            OSL_ENSHURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == TypeClass_DOUBLE,
+            OSL_ENSURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == TypeClass_DOUBLE,
                 "TransferFormComponentProperties : invalid property type !");
                 // die Effective-Properties sollten immer void oder string oder double sein ....
 
@@ -1020,7 +1034,7 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
                     }
                     break;
                     default:
-                        OSL_ENSHURE(sal_False, "::getCurrentSettingsComposer : no table, no query, no statement - what else ?!");
+                        OSL_ENSURE(sal_False, "::getCurrentSettingsComposer : no table, no query, no statement - what else ?!");
                         break;
                 }
             }
@@ -1049,7 +1063,7 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
     }
     catch(Exception&)
     {
-        OSL_ENSHURE(sal_False, "::getCurrentSettingsComposer : catched an exception !");
+        OSL_ENSURE(sal_False, "::getCurrentSettingsComposer : catched an exception !");
         xReturn = NULL;
     }
 
@@ -1070,8 +1084,8 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
                         ::rtl::OUString& _rComposedName,
                         sal_Bool _bQuote)
 {
-    OSL_ENSHURE(_rxMetaData.is(), "composeTableName : invalid meta data !");
-    OSL_ENSHURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
+    OSL_ENSURE(_rxMetaData.is(), "composeTableName : invalid meta data !");
+    OSL_ENSURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
 
     ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
 #define QUOTE(s,s2) if (_bQuote) s += quoteName(sQuoteString,s2); else s += s2
@@ -1132,6 +1146,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/02/05 10:32:31  oj
+ *  check statement length
+ *
  *  Revision 1.13  2001/01/30 15:35:56  oj
  *  check if qoute char is space
  *

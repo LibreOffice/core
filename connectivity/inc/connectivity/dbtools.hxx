@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 16:03:25 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,15 @@ namespace dbtools
 
     // calculates the default numberformat for a given datatype and a give language
     sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
+                                     const ::com::sun::star::lang::Locale& _rLocale);
+
+    // calculates the default numberformat for a given datatype and a give language
+    // @param  _nDataType @see com.sun.star.sdbc.DataType
+    // @param _nScale       can be zero
+    sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
+                                     sal_Int32 _nScale,
+                                     sal_Bool _bIsCurrency,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes >& _xTypes,
                                      const ::com::sun::star::lang::Locale& _rLocale);
 
