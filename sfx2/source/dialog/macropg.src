@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 09:59:58 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ swedish ] = "Tilldelat makro";
         Text[ polish ] = "Assigned macro";
         Text[ portuguese_brazilian ] = "Assigned macro";
-        Text[ japanese ] = "Assigned macro";
-        Text[ korean ] = "Assigned macro";
+        Text[ japanese ] = "割り当てられたマクロ";
+        Text[ korean ] = "지정된 매크로";
         Text[ chinese_simplified ] = "指定的宏";
         Text[ chinese_traditional ] = "指定的巨集";
         Text[ turkish ] = "Assigned macro";
@@ -179,8 +179,8 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ swedish ] = "~Existerande makron i:\n";
         Text[ polish ] = "~Existing macros in:\n";
         Text[ portuguese_brazilian ] = "~Existing macros in:\n";
-        Text[ japanese ] = "~Existing macros in:\n";
-        Text[ korean ] = "~Existing macros in:\n";
+        Text[ japanese ] = "マクロのある場所\n";
+        Text[ korean ] = "매크로가 있는 위치\n";
         Text[ chinese_simplified ] = "现有的宏的位置(~E)：\n";
         Text[ chinese_traditional ] = "現有的巨集位置：\n";
         Text[ turkish ] = "~Existing macros in:\n";
