@@ -13,7 +13,6 @@
 <Platform>
 <PlatformID>generic</PlatformID>
 </Platform>
-<Varient></Varient>
 </LC_INFO>
 <LC_CTYPE ref="es_ES"/>
 <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$$-2C0A]">
