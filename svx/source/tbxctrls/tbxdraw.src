@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:18:08 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 20:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,14 @@ FloatingWindow RID_SVXTBX_DRAW
             };
             ToolBoxItem
             {
+                Identifier = SID_DRAW_TEXT_VERTICAL ;
+                HelpID = SID_DRAW_TEXT_VERTICAL ;
+                RadioCheck = TRUE ;
+                Text = "Vertikaler Text" ;
+                Text [ ENGLISH ] = "Vertical Text" ;
+            };
+            ToolBoxItem
+            {
                 Identifier = SID_DRAW_TEXT_MARQUEE ;
                 HelpID = SID_DRAW_TEXT_MARQUEE ;
                 RadioCheck = TRUE ;
@@ -449,6 +457,14 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = " ⁄·Ìﬁ  ›”Ì—Ì";
                 Text[ turkish ] = "Belirtme Áizgisi";
                 Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_CAPTION_VERTICAL ;
+                HelpID = SID_DRAW_CAPTION_VERTICAL ;
+                RadioCheck = TRUE ;
+                Text = "Vertikale Legende" ;
+                Text [ ENGLISH ] = "Vertical Caption" ;
             };
         };
     };
