@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:56:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ void GalleryPreview::Command(const CommandEvent& rCEvt )
     Window::Command( rCEvt );
 
     if( mpTheme && ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) )
-        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this );
+        ( (GalleryBrowser2*) GetParent() )->ShowContextMenu( this,
+            ( rCEvt.IsMouseEvent() ? &rCEvt.GetMousePosPixel() : NULL ) );
 }
 
 // ------------------------------------------------------------------------
