@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:07:33 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,10 +574,10 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
 
 GraphicCache::GraphicCache( GraphicManager& rMgr, ULONG nDisplayCacheSize, ULONG nMaxObjDisplayCacheSize ) :
     mrMgr                   ( rMgr ),
+    mnReleaseTimeoutSeconds ( 0UL ),
     mnMaxDisplaySize        ( nDisplayCacheSize ),
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
-    mnUsedDisplaySize       ( 0UL ),
-    mnReleaseTimeoutSeconds ( 0UL )
+    mnUsedDisplaySize       ( 0UL )
 {
     maReleaseTimer.SetTimeoutHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
     maReleaseTimer.SetTimeout( RELEASE_TIMEOUT );
@@ -814,7 +814,7 @@ BOOL GraphicCache::IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const
     const Point                 aPtPixel( pOut->LogicToPixel( rPt ) );
     const Size                  aSzPixel( pOut->LogicToPixel( rSz ) );
     const GraphicCacheEntry*    pCacheEntry = ( (GraphicCache*) this )->ImplGetCacheEntry( rObj );
-    GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) ( (GraphicCache*) this )->maDisplayCache.First();
+    //GraphicDisplayCacheEntry* pDisplayEntry = (GraphicDisplayCacheEntry*) ( (GraphicCache*) this )->maDisplayCache.First(); // -Wall removed ....
     BOOL                        bFound = FALSE;
 
     for( long i = 0, nCount = maDisplayCache.Count(); !bFound && ( i < nCount ); i++ )
