@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FatDataBaseOutProducer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-11-18 16:16:37 $
+ *  last change:$Date: 2004-11-02 11:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
                               " VALUES ($test_run.id, $entry.id, \"$EntryState\");");
         }
         else {
-            if (!status.equals("PASSED.OK")) {
+            if (!status.endsWith("OK")) {
                 executeSQLCommand("UPDATE test_state SET status = \"$EntryState\""+
                                   " WHERE test_run_id = $test_run.id AND entry_id = $entry.id;");
             }
