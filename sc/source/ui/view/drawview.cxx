@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 18:27:00 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 15:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,13 +564,6 @@ void __EXPORT ScDrawView::MarkListHasChanged()
             DBG_ERROR("SdrOle2Obj ohne ObjRef");
             pViewSh->SetVerbs( 0 );
         }
-    }
-    else if ( pGrafObj && !bOle && SFX_APP()->HasFeature(SFX_FEATURE_SIMAGE) )
-    {
-        SvVerb aVerb( 0, ScGlobal::GetRscString( STR_UNDO_GRAFEDIT ) );
-        SvVerbList aVerbList;
-        aVerbList.Append( aVerb );
-        pViewSh->SetVerbs( &aVerbList );
     }
     else
         pViewSh->SetVerbs( 0 );
