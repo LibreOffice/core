@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-01 13:39:22 $
+ *  last change: $Author: pb $ $Date: 2001-06-06 12:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "dynamicmenuoptions.hxx"
 #include "xtextedt.hxx"
 #include "txtattr.hxx"
+#include "inettype.hxx"
 
 #include "svtools.hrc"
 #include "templwin.hrc"
@@ -555,6 +556,10 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
     Window( pParent )
 
 {
+    // detect application language
+    eLangType = SvtPathOptions().GetLanguageType();
+
+    // create windows and frame
     pEditWin = new SvtExtendedMultiLineEdit_Impl( this );
     pTextWin = new Window( this );
     xFrame = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > (
@@ -562,6 +567,8 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
             String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame") ) ), ::com::sun::star::uno::UNO_QUERY );
     xWindow = VCLUnoHelper::GetInterface( pTextWin );
     xFrame->initialize( xWindow );
+
+    // create docinfo instance
     xDocInfo = ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist > (
                ::comphelper::getProcessServiceFactory()->createInstance(
                String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties") ) ), ::com::sun::star::uno::UNO_QUERY );
@@ -617,7 +624,19 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
                     case STRING_TYPE :
                     {
                         if ( ( aValue >>= aStringValue ) && aStringValue.getLength() > 0 )
-                            pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), String( aStringValue ) );
+                        {
+                            String aValueStr;
+                            if ( DI_MIMETYPE == DocInfoMap_Impl[ nIndex ]._nStringId )
+                            {
+                                INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL( rURL );
+                                aValueStr = INetContentTypes::GetPresentation( eTypeID, eLangType );
+                                if ( aValueStr.Len() == 0 )
+                                    aValueStr = String( aStringValue );
+                            }
+                            else
+                                aValueStr = String( aStringValue );
+                            pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aValueStr );
+                        }
                         break;
                     }
 

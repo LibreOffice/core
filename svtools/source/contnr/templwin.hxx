@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-23 13:11:11 $
+ *  last change: $Author: pb $ $Date: 2001-06-06 12:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ private:
 
     SvtExtendedMultiLineEdit_Impl*  pEditWin;
     Window*                         pTextWin;
+    LanguageType                    eLangType;
     SvtDocInfoTable_Impl            aInfoTable;
     String                          aCurrentURL;
 
