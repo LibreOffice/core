@@ -4,6 +4,8 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:AddDirect" menu:helpid="5537" menu:label="" />
             <menu:menuitem menu:id=".uno:Open" menu:helpid="5501" menu:label="" />
+            <menu:menuitem menu:id=".uno:RecentFileList"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:helpid="6381" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:CloseDoc" menu:helpid="5503" menu:label="" />
