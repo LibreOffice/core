@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:05 $
+#   last change: $Author: sab $ $Date: 2001-03-09 19:02:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
             $(SLO)$/enumhelper.obj	\
-            $(SLO)$/container.obj
+            $(SLO)$/container.obj \
+            $(SLO)$/IndexedPropertyValuesContainer.obj	\
+            $(SLO)$/NamedPropertyValuesContainer.obj
 
 # --- Targets ----------------------------------
 
