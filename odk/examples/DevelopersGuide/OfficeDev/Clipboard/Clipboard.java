@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Clipboard.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:32:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -64,7 +64,7 @@ public class Clipboard
             if ( args.length >= 2 )
                 sConnection = "uno:" + args[0] + ";urp;StarOffice.ServiceManager" ;
             else
-                sConnection = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
             /* Bootstraps a component context with the jurt base components
                registered. Component context to be granted to a component for running.
