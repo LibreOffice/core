@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storagehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:07:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
       || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.presentation" ) )
       || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.spreadsheet" ) )
       || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.chart" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.math" ) ) )
+      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.formula" ) ) )
     {
         nResult = SOFFICE_FILEFORMAT_8;
     }
