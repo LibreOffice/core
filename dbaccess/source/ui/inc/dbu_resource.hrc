@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:49:58 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 11:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,7 @@
 #define STR_UNEXPECTED_ERROR                RID_STRING_START + 157
 #define STR_COULDNOTOPEN_LINKEDDOC          RID_STRING_START + 158
 #define RID_STR_BOOKMARKS_CONTAINER         RID_STRING_START + 159
+#define STR_INDEX_NAME_ALREADY_USED         RID_STRING_START + 160
 
 //========================================================================
 // untyped resources
@@ -421,6 +422,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2001/04/26 11:49:58  fs
+ *  file is alive, again - added support for data source associated bookmarks
+ *
  *  Revision 1.39  2001/04/24 14:34:10  oj
  *  impl views and a menu
  *

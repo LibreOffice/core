@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:45:34 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 11:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,6 +629,13 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ arabic ] = "≈€·«ﬁ  ’„Ì„ «·›Â—”!";
 };
 
+String STR_INDEX_NAME_ALREADY_USED
+{
+    Text = "Es gibt schon einen anderen Index namens \"$name$\".";
+    Text [ english ] = "There's already another index named \"$name$\".";
+    Text [ english_us ] = "There's already another index named \"$name$\".";
+};
+
 String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 {
     Text = "In einer Index-Definition darf jede Tabellen-Spalte hˆchstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\""
@@ -657,6 +664,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/04/26 19:45:34  kz
+ *  Merge SRC630: 26.04.01 - 21:44:50 (NoBranch)
+ *
  *  Revision 1.6  2001/04/02 12:05:06  fs
  *  #85275# added a help button
  *
