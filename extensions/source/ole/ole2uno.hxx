@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #endif
 
 #define _WIN32_DCOM
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 //#define _ATL_DEBUG_INTERFACES
 #endif
 
