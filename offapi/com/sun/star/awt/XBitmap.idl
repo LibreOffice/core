@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBitmap.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,32 +76,25 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XBitmap
 /** provides a bitmap in the Microsoft DIB format.
  */
 interface XBitmap: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XBitmap::getSize
-    /** @returns
-                the size of the bitmap in pixel.
+    /** returns the size of the bitmap in pixel.
      */
     com::sun::star::awt::Size getSize();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XBitmap::getDIB
-    /** @returns
-                    the device independend bitmap.
+    /** returns the device independent bitmap.
      */
     sequence<byte> getDIB();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XBitmap::getMaskDIB
-    /** @returns
-                    the transparence mask of the device independend bitmap.
+    /** returns the transparence mask of the device independent bitmap.
      */
     sequence<byte> getMaskDIB();
 

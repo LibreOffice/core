@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XActivateListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,35 +76,30 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XActivateListener
-/** makes it possible to receive activate events.@see XFocusListener
-        @see XTopWindowListener
+/** makes it possible to receive activate events.
+
+    @see XFocusListener
+    @see XTopWindowListener
  */
 interface XActivateListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XActivateListener::windowActivated
-    /** gets invoked when a window is activated.
+    /** is invoked when a window is activated.
 
+        <p>A window is avtivated if a child or itself got the focus.</p>
 
-
-        <p>A window is avtivated if a child or itself got the focus.
-
-        </p>@see XFocusListener::focusGained
+        @see XFocusListener::focusGained
      */
     [oneway] void windowActivated( [in] com::sun::star::lang::EventObject e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XActivateListener::windowDeactivated
-    /** gets invoked when a window is de-activated.
+    /** is invoked when a window is de-activated.
 
+        <p>A window is deavtivated if a child or itself lost the focus.</p>
 
-
-        <p>A window is deavtivated if a child or itself lost the focus.
-
-        </p>@see XFocusListener::focusLost
+        @see XFocusListener::focusLost
      */
     [oneway] void windowDeactivated( [in] com::sun::star::lang::EventObject e );
 
