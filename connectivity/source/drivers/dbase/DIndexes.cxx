@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,15 +147,11 @@ void ODbaseIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 // XDrop
 void ODbaseIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    ObjectIter aIter = m_aElements[_nPos];
-    if(!aIter->second.is())
-        aIter->second = createObject(_sElementName);
-
-    Reference< XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
-    if(xTunnel.is())
+    Reference< XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
+    if ( xTunnel.is() )
     {
         ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
-        if(pIndex)
+        if ( pIndex )
             pIndex->DropImpl();
     }
 
