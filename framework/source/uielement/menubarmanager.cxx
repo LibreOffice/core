@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:20:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ const ::rtl::OUString aCmdNewDocDirect( RTL_CONSTASCII_USTRINGPARAM( ".uno:AddDi
 const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" ));
 const ::rtl::OUString aCmdAutoPilot( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoPilotMenu" ));
 const ::rtl::OUString aCmdHelpIndex( RTL_CONSTASCII_USTRINGPARAM( ".uno:HelpIndex" ));
+const ::rtl::OUString aCmdToolsMenu( RTL_CONSTASCII_USTRINGPARAM( ".uno:ToolsMenu" ));
 
 const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
 const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
@@ -1674,7 +1675,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
                 if (( nItemId == SID_ADDONLIST ||
-                    aItemCommand == aSlotSpecialToolsMenu ) &&
+                    aItemCommand == aSlotSpecialToolsMenu ||
+                                        aItemCommand == aCmdToolsMenu ) &&
                     AddonMenuManager::HasAddonMenuElements() )
                 {
                     USHORT      nCount   = 0;
