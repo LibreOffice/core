@@ -9343,3 +9343,10 @@ _real@8@4003a000000000000000
 ??_C@_0DM@KDMO@O?3?2CFG636?2src?2xmloff?2source?2text@
 ??_C@_0DF@FAPE@O?3?2CFG636?2src?2xmloff?2source?2form@
 ??_C@_0DJ@EKHE@O?3?2CFG636?2src?2xmloff?2source?2form@
+?GetRelativeReference@SvXMLExport@@QAE?AVOUString@rtl@@ABV23@@Z
+?GetAbsoluteReference@SvXMLImport@@QAE?AVOUString@rtl@@ABV23@@Z
+?CreateChildContext@SchXMLParagraphContext@@UAEPAVSvXMLImportContext@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
+?EndElement@SchXMLParagraphContext@@UAEXXZ
+?exportTargetLocationAttribute@OPropertyExport@xmloff@@IAEXXZ
+?handleAttribute@OButtonImport@xmloff@@MAEXGABVOUString@rtl@@0@Z
+?handleAttribute@ORadioImport@xmloff@@MAEXGABVOUString@rtl@@0@Z
