@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proptypehlp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,13 @@ namespace cppu {
  */
 
 template < class target >
-inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::star::uno::Any & a);
+inline void SAL_CALL convertPropertyValue( target &value , const  ::com::sun::star::uno::Any & a)
 //      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
         ;
 
 // This template is needed at least for msci4 compiler
 template < class target >
-inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::uno::Any & a);
+inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::uno::Any & a)
 //      SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
         ;
 
