@@ -2,8 +2,8 @@
  *
  *  $RCSfile: frmdirlbox.src,v $
  *
- *  $Revision: 1.8 $
- *  last change: $Author: vg $ $Date: 2003-12-17 14:02:29 $
+ *  $Revision: 1.9 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,235 +64,46 @@
 
 String RID_SVXSTR_FRAMEDIR_LTR
 {
-    Text = "Links-nach-rechts";
-    Text [ english ] = "Left-to-right";
-    Text [ english_us ] = "Left-to-right";
-    Text[ portuguese ] = "Left-to-right";
-    Text[ russian ] = "Left-to-right";
-    Text[ greek ] = "ÁñéóôåñÜ-ğñïò-äåîéÜ";
-    Text[ dutch ] = "Left-to-right";
-    Text[ french ] = "De gauche à droite";
-    Text[ spanish ] = "De izquierda a derecha";
-    Text[ finnish ] = "Left-to-right";
-    Text[ italian ] = "Da sinistra a destra";
-    Text[ danish ] = "Venstre mod højre";
-    Text[ swedish ] = "Vänster-till-höger";
-    Text[ polish ] = "Left-to-right";
-    Text[ portuguese_brazilian ] = "Da esquerda para a direita";
-    Text[ japanese ] = "å·¦ã‹ã‚‰å³ã¸";
-    Text[ korean ] = "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ";
-    Text[ chinese_simplified ] = "ä»å·¦å‘å³";
-    Text[ chinese_traditional ] = "å¾å·¦å‘å³";
-    Text[ turkish ] = "Soldan-sağa";
-    Text[ arabic ] = "Left-to-right";
-    Text[ catalan ] = "Left-to-right";
-    Text[ thai ] = "Left-to-right";
-    Text[ czech ] = "Zleva doprava";
-    Text[ hebrew ] = "â€®××©×××œ-×œ×™××™×Ÿâ€¬";
-    Text[ hindi ] = "à¤¬à¤¾à¤¯à¤¾à¤ à¤“à¤° à¤¸à¥‡ à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤°";
-    Text[ slovak ] = "ZÄ¾ava-do-prava";
-    Text[ hungarian ] = "BalrÃ³l jobbra";
-    Text[ slovenian ] = "Od leve proti desni";
+    Text [ de ] = "Links-nach-rechts";
+    Text [ en-US ] = "Left-to-right";
 };
 
 String RID_SVXSTR_FRAMEDIR_RTL
 {
-    Text = "Rechts-nach-links";
-    Text [ english ] = "Right-to-left";
-    Text [ english_us ] = "Right-to-left";
-    Text[ portuguese ] = "Right-to-left";
-    Text[ russian ] = "Right-to-left";
-    Text[ greek ] = "ÄåîéÜ-ğñïò-áñéóôåñÜ";
-    Text[ dutch ] = "Right-to-left";
-    Text[ french ] = "De droite à gauche";
-    Text[ spanish ] = "De derecha a izquierda";
-    Text[ finnish ] = "Right-to-left";
-    Text[ italian ] = "Da destra a sinistra";
-    Text[ danish ] = "Højre mod venstre";
-    Text[ swedish ] = "Höger-till-vänster";
-    Text[ polish ] = "Right-to-left";
-    Text[ portuguese_brazilian ] = "Da direita para a esquerda";
-    Text[ japanese ] = "å³ã‹ã‚‰å·¦ã¸";
-    Text[ korean ] = "ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ";
-    Text[ chinese_simplified ] = "ä»å³å‘å·¦";
-    Text[ chinese_traditional ] = "å¾å³å‘å·¦";
-    Text[ turkish ] = "Sağdan sola";
-    Text[ arabic ] = "Right-to-left";
-    Text[ catalan ] = "Right-to-left";
-    Text[ thai ] = "Right-to-left";
-    Text[ czech ] = "Zprava doleva";
-    Text[ hebrew ] = "â€®××™××™×Ÿ-×œ×©×××œâ€¬";
-    Text[ hindi ] = "Right-to-left";
-    Text[ slovak ] = "Sprava-do-Ä¾ava";
-    Text[ hungarian ] = "JobbrÃ³l balra";
-    Text[ slovenian ] = "Od desne proti levi";
+    Text [ de ] = "Rechts-nach-links";
+    Text [ en-US ] = "Right-to-left";
 };
 
 String RID_SVXSTR_FRAMEDIR_SUPER
 {
-    Text = "Einstellungen des übergeordneten Objektes verwenden";
-    Text [ english ] = "Use superordinate object settings";
-    Text [ english_us ] = "Use superordinate object settings";
-    Text[ portuguese ] = "Use superordinate object settings";
-    Text[ russian ] = "Use superordinate object settings";
-    Text[ greek ] = "×ñŞóç ñõèìßóåùí õğåñêåßìåíïõ áíôéêåéìİíïõ";
-    Text[ dutch ] = "Use superordinate object settings";
-    Text[ french ] = "Utiliser les paramètres de l'objet supérieur";
-    Text[ spanish ] = "Utilizar la configuración del objeto superior";
-    Text[ finnish ] = "Use superordinate object settings";
-    Text[ italian ] = "Usa le impostazioni dell'oggetto superiore";
-    Text[ danish ] = "Brug indstillinger fra det overordnede objekt";
-    Text[ swedish ] = "Använd det överordnade objektets inställningar";
-    Text[ polish ] = "Use superordinate object settings";
-    Text[ portuguese_brazilian ] = "Usar configurações do objeto superior";
-    Text[ japanese ] = "å‘¨ã‚Šã®ãƒ†ã‚­ã‚¹ãƒˆã®æ–‡å­—æ–¹å‘ã«åˆã‚ã›ã‚‹";
-    Text[ korean ] = "ë¬¸ì ë°©í–¥ì˜ ìƒìœ„ ì„¤ì •ì„ ì‚¬ìš©";
-    Text[ chinese_simplified ] = "æ²¿ç”¨ç°æœ‰çš„æ–‡å­—æ–¹å‘çš„è®¾å®š";
-    Text[ chinese_traditional ] = "æ²¿ç”¨ç¾æœ‰çš„æ–‡å­—æ–¹å‘çš„è¨­å®š";
-    Text[ turkish ] = "Üs nesne kullanım ayarları";
-    Text[ arabic ] = "Use superordinate object settings";
-    Text[ catalan ] = "Use superordinate object settings";
-    Text[ thai ] = "Use superordinate object settings";
-    Text[ czech ] = "PouÅ¾Ã­t nastavenÃ­ nadÅ™azenÃ©ho objektu";
-    Text[ hebrew ] = "Einstellungen des Ã¼bergeordneten Objektes verwenden";
-    Text[ hindi ] = "Use superordinate object settings";
-    Text[ slovak ] = "PouÅ¾iÅ¥ nastavenia nadriadenÃ©ho objektu";
-    Text[ hungarian ] = "SzÃ¼lÅ‘objektum beÃ¡llÃ­tÃ¡sainak hasznÃ¡lata";
-    Text[ slovenian ] = "Uporabi predmetne nastavitve smeri besedila";
+    Text [ de ] = "Einstellungen des übergeordneten Objektes verwenden";
+    Text [ en-US ] = "Use superordinate object settings";
 };
 
 // page direction -------------------------------------------------------------
 
 String RID_SVXSTR_PAGEDIR_LTR_HORI
 {
-    Text = "Links-nach-rechts (horizontal)";
-    Text [ english ] = "Left-to-right (horizontal)";
-    Text [ english_us ] = "Left-to-right (horizontal)";
-    Text[ portuguese ] = "Left-to-right (horizontal)";
-    Text[ russian ] = "Ñëåâà-íàïğàâî (ãîğèçîíòàëüíî)";
-    Text[ greek ] = "ÁñéóôåñÜ-ğñïò-äåîéÜ (ïñéæüíôéá)";
-    Text[ dutch ] = "Links-naar-rechts (horizontaal)";
-    Text[ french ] = "De gauche à droite (horizontal)";
-    Text[ spanish ] = "De izquierda a derecha (horizontal)";
-    Text[ finnish ] = "Vasemmalta oikealle (vaaka)";
-    Text[ italian ] = "Da sinistra a destra (orizzontale)";
-    Text[ danish ] = "Fra venstre mod højre (vandret)";
-    Text[ swedish ] = "Vänster-till-höger (horisontellt)";
-    Text[ polish ] = "Od lewej do prawej (poziomo)";
-    Text[ portuguese_brazilian ] = "Da esquerda para a direita (horizontal)";
-    Text[ japanese ] = "å·¦ã‹ã‚‰å³ã¸(æ¨ªæ›¸ã)";
-    Text[ korean ] = "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ (ê°€ë¡œ)";
-    Text[ chinese_simplified ] = "ä»å·¦å‘å³(æ¨ªå†™)";
-    Text[ chinese_traditional ] = "å¾å·¦å‘å³(æ©«æ›¸)";
-    Text[ turkish ] = "Soldan sağa (yatay)";
-    Text[ arabic ] = "Left-to-right (horizontal)";
-    Text[ catalan ] = "Left-to-right (horizontal)";
-    Text[ thai ] = "Left-to-right (horizontal)";
-    Text[ czech ] = "Zleva doprava (vodorovnÄ›)";
-    Text[ hebrew ] = "Links-nach-rechts (horizontal)";
-    Text[ hindi ] = "Left-to-right (horizontal)";
-    Text[ slovak ] = "ZÄ¾ava-do-prava (horizontÃ¡lne)";
-    Text[ hungarian ] = "BalrÃ³l jobbra (vÃ­zszintes)";
-    Text[ slovenian ] = "Levo-desno (vodoravno)";
+    Text [ de ] = "Links-nach-rechts (horizontal)";
+    Text [ en-US ] = "Left-to-right (horizontal)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_HORI
 {
-    Text = "Rechts-nach-links (horizontal)";
-    Text [ english ] = "Right-to-left (horizontal)";
-    Text [ english_us ] = "Right-to-left (horizontal)";
-    Text[ portuguese ] = "Right-to-left (horizontal)";
-    Text[ russian ] = "Ñïğàâà-íàëåâî (ãîğèçîíòàëüíî)";
-    Text[ greek ] = "ÄåîéÜ-ğñïò-áñéóôåñÜ (ïñéæüíôéá)";
-    Text[ dutch ] = "Rechts-naar-links (horizontaal)";
-    Text[ french ] = "De droite à gauche (horizontal)";
-    Text[ spanish ] = "De derecha a izquierda (horizontal)";
-    Text[ finnish ] = "Oikealta vasemmalle (vaaka)";
-    Text[ italian ] = "Da destra a sinistra (orizzontale)";
-    Text[ danish ] = "Fra højre mod venstre (vandret)";
-    Text[ swedish ] = "Höger-till-vänster (horisontellt)";
-    Text[ polish ] = "Od prawej do lewej (poziomo)";
-    Text[ portuguese_brazilian ] = "Da direita para a esquerda (horizontal)";
-    Text[ japanese ] = "å³ã‹ã‚‰å·¦ã¸(æ¨ªæ›¸ã)";
-    Text[ korean ] = "ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ (ê°€ë¡œ)";
-    Text[ chinese_simplified ] = "ä»å³å‘å·¦(æ¨ªå†™)";
-    Text[ chinese_traditional ] = "å¾å³å‘å·¦(æ©«æ›¸)";
-    Text[ turkish ] = "Sağdan sola (yatay)";
-    Text[ arabic ] = "Right-to-left (horizontal)";
-    Text[ catalan ] = "Right-to-left (horizontal)";
-    Text[ thai ] = "Right-to-left (horizontal)";
-    Text[ czech ] = "Zprava doleva (vodorovnÄ›)";
-    Text[ hebrew ] = "Rechts-nach-links (horizontal)";
-    Text[ hindi ] = "Right-to-left (horizontal)";
-    Text[ slovak ] = "Sprava-do-Ä¾ava (horizontÃ¡lne)";
-    Text[ hungarian ] = "JobbrÃ³l balra (vÃ­zszintes)";
-    Text[ slovenian ] = "Desno-levo (vodoravno)";
+    Text [ de ] = "Rechts-nach-links (horizontal)";
+    Text [ en-US ] = "Right-to-left (horizontal)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_VERT
 {
-    Text = "Rechts-nach-links (vertikal)";
-    Text [ english ] = "Right-to-left (vertical)";
-    Text [ english_us ] = "Right-to-left (vertical)";
-    Text[ portuguese ] = "Right-to-left (vertical)";
-    Text[ russian ] = "Ñïğàâà-íàëåâî (âåğòèêàëüíî)";
-    Text[ greek ] = "ÄåîéÜ-ğñïò-áñéóôåñÜ (êáôáêüñõöá)";
-    Text[ dutch ] = "Rechts-naar-links (verticaal)";
-    Text[ french ] = "De droite à gauche (vertical)";
-    Text[ spanish ] = "De derecha a izquierda (vertical)";
-    Text[ finnish ] = "Oikealta vasemmalle (pysty)";
-    Text[ italian ] = "Da destra a sinistra (verticale)";
-    Text[ danish ] = "Fra højre mod venstre (lodret)";
-    Text[ swedish ] = "Höger-till-vänster (vertikalt)";
-    Text[ polish ] = "Od prawej do lewej (pionowo)";
-    Text[ portuguese_brazilian ] = "Da direita para a esquerda (vertical)";
-    Text[ japanese ] = "å³ã‹ã‚‰å·¦ã¸(ç¸¦æ›¸ã)";
-    Text[ korean ] = "ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ (ì„¸ë¡œ)";
-    Text[ chinese_simplified ] = "ä»å³å‘å·¦(ç«–å†™)";
-    Text[ chinese_traditional ] = "å¾å³å‘å·¦(ç›´æ›¸)";
-    Text[ turkish ] = "Sağdan-sola (dikey)";
-    Text[ arabic ] = "Right-to-left (vertical)";
-    Text[ catalan ] = "Right-to-left (vertical)";
-    Text[ thai ] = "Right-to-left (vertical)";
-    Text[ czech ] = "Zprava doleva (svisle)";
-    Text[ hebrew ] = "Rechts-nach-links (vertikal)";
-    Text[ hindi ] = "Right-to-left (vertical)";
-    Text[ slovak ] = "Sprava-do-Ä¾ava (vertikÃ¡lne)";
-    Text[ hungarian ] = "JobbrÃ³l balra (fÃ¼ggÅ‘leges)";
-    Text[ slovenian ] = "Desno-levo (navpiÄno)";
+    Text [ de ] = "Rechts-nach-links (vertikal)";
+    Text [ en-US ] = "Right-to-left (vertical)";
 };
 
 String RID_SVXSTR_PAGEDIR_LTR_VERT
 {
-    Text = "Links-nach-rechts (vertikal)";
-    Text [ english ] = "Left-to-right (vertical)";
-    Text [ english_us ] = "Left-to-right (vertical)";
-    Text[ portuguese ] = "Left-to-right (vertical)";
-    Text[ russian ] = "Ñëåâà-íàïğàâî (âåğòèêàëüíî)";
-    Text[ greek ] = "ÁñéóôåñÜ-ğñïò-äåîéÜ (êáôáêüñõöá)";
-    Text[ dutch ] = "Links-naar-rechts (verticaal)";
-    Text[ french ] = "De gauche à droite (vertical)";
-    Text[ spanish ] = "De izquierda a derecha (vertical)";
-    Text[ finnish ] = "Vasemmalta oikealle (pysty)";
-    Text[ italian ] = "Da sinistra a destra (verticale)";
-    Text[ danish ] = "Fra venstre mod højre (lodret)";
-    Text[ swedish ] = "Vänster-till-höger (vertikalt)";
-    Text[ polish ] = "Od lewej do prawej (pionowo)";
-    Text[ portuguese_brazilian ] = "Da esquerda para a direita (vertical)";
-    Text[ japanese ] = "å·¦ã‹ã‚‰å³ã¸(ç¸¦æ›¸ã)";
-    Text[ korean ] = "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ (ì„¸ë¡œ)";
-    Text[ chinese_simplified ] = "ä»å·¦å‘å³(ç«–å†™)";
-    Text[ chinese_traditional ] = "å¾å·¦å‘å³(ç›´æ›¸)";
-    Text[ turkish ] = "Soldan sağa (dikey)";
-    Text[ arabic ] = "Left-to-right (vertical)";
-    Text[ catalan ] = "Left-to-right (vertical)";
-    Text[ thai ] = "Left-to-right (vertical)";
-    Text[ czech ] = "Zleva doprava (svisle)";
-    Text[ hebrew ] = "Links-nach-rechts (vertikal)";
-    Text[ hindi ] = "Left-to-right (vertical)";
-    Text[ slovak ] = "ZÄ¾ava-do-prava (vertikÃ¡lne)";
-    Text[ hungarian ] = "BalrÃ³l jobbra (fÃ¼ggÅ‘leges)";
-    Text[ slovenian ] = "Levo-desno (navpiÄno)";
+    Text [ de ] = "Links-nach-rechts (vertikal)";
+    Text [ en-US ] = "Left-to-right (vertical)";
 };
 
 // ----------------------------------------------------------------------------
