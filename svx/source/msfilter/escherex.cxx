@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-27 14:45:24 $
+ *  last change: $Author: sj $ $Date: 2001-09-07 09:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,15 +956,21 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                     if ( bMirrored || nAngle )
                     {
                         pGraphicAttr = new GraphicAttr;
-                        pGraphicAttr->SetRotation( nAngle );
                         if ( bMirrored )
                             pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
-                        if ( nAngle )   // ppoint does not rotate graphics !
+                        GraphicObject aTmpGraphicObject( aUniqueId );
+                        if ( aTmpGraphicObject.GetType() == GRAPHIC_GDIMETAFILE )
+                            AddOpt( ESCHER_Prop_Rotation, ( ( ((sal_Int32)nAngle << 16 ) / 10 ) + 0x8000 ) &~ 0xffff );
+                        else
                         {
-                            Polygon aPoly( *pShapeBoundRect );
-                            aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
-                            *pShapeBoundRect = aPoly.GetBoundRect();
-                            bSuppressRotation = sal_True;
+                            pGraphicAttr->SetRotation( nAngle );
+                            if ( nAngle )   // up to xp ppoint does not rotate bitmaps !
+                            {
+                                Polygon aPoly( *pShapeBoundRect );
+                                aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
+                                *pShapeBoundRect = aPoly.GetBoundRect();
+                                bSuppressRotation = sal_True;
+                            }
                         }
                     }
                 }
@@ -1623,7 +1629,6 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     if ( nLen && pData && ( eType != GRAPHIC_NONE ) )
     {
         mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
-
         mnIdentifier[ 1 ] = 0;
 
         if ( pGraphicAttr )
@@ -1849,21 +1854,9 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                                                 const Rectangle& rBoundRect, const GraphicAttr* pGraphicAttr )
 {
     sal_uInt32          nBlibId = 0;
-    GraphicAttr*        pAttr = NULL;
-    const GraphicAttr*  pAttrUsed = pGraphicAttr;
     GraphicObject       aGraphicObject( rId );
 
-    if ( pAttrUsed
-            && pAttrUsed->GetRotation()
-                && ( aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE )
-                    && ( mnFlags & _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES ) )
-    {
-        pAttr = new GraphicAttr;
-        *pAttr = *pAttrUsed;
-        pAttr->SetRotation( 0 );
-        pAttrUsed = pAttr;
-    }
-    EscherBlibEntry* p_EscherBlibEntry = new EscherBlibEntry( rPicOutStrm.Tell(), aGraphicObject, rId, pAttrUsed );
+    EscherBlibEntry* p_EscherBlibEntry = new EscherBlibEntry( rPicOutStrm.Tell(), aGraphicObject, rId, pGraphicAttr );
     if ( !p_EscherBlibEntry->IsEmpty() )
     {
         for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
@@ -1878,7 +1871,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
 
         sal_Bool            bUseNativeGraphic( FALSE );
 
-        Graphic             aGraphic( aGraphicObject.GetTransformedGraphic( pAttrUsed ) );
+        Graphic             aGraphic( aGraphicObject.GetTransformedGraphic( pGraphicAttr ) );
         GfxLink             aGraphicLink;
         SvMemoryStream      aStream;
 
@@ -2056,8 +2049,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
     }
     if ( p_EscherBlibEntry )
         delete p_EscherBlibEntry;
-    if ( pAttr )
-        delete pAttr;
     return nBlibId;
 }
 
@@ -2363,7 +2354,7 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 // ---------------------------------------------------------------------------------------------
 
 EscherEx::EscherEx( SvStream& rOutStrm, UINT32 nDrawings ) :
-    EscherGraphicProvider   ( _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES ),
+    EscherGraphicProvider   ( 0 ),
     mpOutStrm               ( &rOutStrm ),
     mpOffsets               ( new sal_uInt32[ 32 ] ),
     mpRecTypes              ( new sal_uInt16[ 32 ] ),
