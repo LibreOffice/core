@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:27:27 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,15 @@
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include "sdattr.hxx"
 
@@ -83,15 +92,11 @@
 #include <osl/file.hxx>
 #endif
 #include <sfx2/app.hxx>
-#include <tools/urlobj.hxx>
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
@@ -163,6 +168,8 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 
 static USHORT pActionRanges[] =
 {
@@ -788,52 +795,30 @@ void SdTPAction::OpenFileDialog()
             Application::SetDefDialogParent( this );
 
             // choose macro dialog
-            String aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
+            ::rtl::OUString aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
 
-            // aScriptURL has the following format:
-            // vnd.sun.star.script:language=[language],macro=[macro],location=[location]
-            // [language] = StarBasic
-            // [macro] = libname.modulename.macroname
-            // [location] = application|document
-            // e.g. 'vnd.sun.star.script:language=StarBasic,macro=Standard.Module1.Main,location=document'
+            // a scriptURL has the following format:
+            // vnd.sun.star.script:[name]?language=[language]&location=[location]
+            // [name] = [libname].[modulename].[macroname]
+            // [language] = Basic
+            // [location] = application | document
+            // e.g. "vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
             //
             // but for the UI we need this format:
             // 'libname.modulename.macroname'
 
-            if ( aScriptURL.Len() != 0 )
+            if ( aScriptURL.getLength() != 0 )
             {
-                // parse script URL
-                BOOL bFound;
-                String aValue;
-                INetURLObject aINetScriptURL( aScriptURL );
-
-                // get language
-                String aLanguage;
-                bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("language") ), &aValue );
-                if ( bFound )
-                    aLanguage = aValue;
-
-                // get macro
-                String aMacro;
-                String aLibName;
-                String aModuleName;
-                String aMacroName;
-                bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("macro") ), &aValue );
-                if ( bFound )
+                // parse scriptURL
+                Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+                Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+                if ( xFactory.is() )
                 {
-                    aMacro = aValue;
-                    aLibName    = aMacro.GetToken(0, sal_Unicode('.'));
-                    aModuleName = aMacro.GetToken(1, sal_Unicode('.'));
-                    aMacroName  = aMacro.GetToken(2, sal_Unicode('.'));
+                    Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
+                    if ( xUrl.is() )
+                        SetEditText( xUrl->getName() );
                 }
-
-                // get location
-                String aLocation;
-                bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("location") ), &aValue );
-                if ( bFound )
-                    aLocation = aValue;
-
-                SetEditText( aMacro );
             }
 
             Application::SetDefDialogParent( pOldWin );
@@ -1290,7 +1275,7 @@ void SdTPAction::SetActualAnimationEffect( presentation::AnimationEffect eAE )
 
 //------------------------------------------------------------------------
 
-void SdTPAction::SetEditText( String& rStr )
+void SdTPAction::SetEditText( String const & rStr )
 {
     presentation::ClickAction   eCA = GetActualClickAction();
     String                      aText(rStr);
