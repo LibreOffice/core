@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:51:54 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ russian ] = "Çàãîëîâêè ñòğîê è ñòîëáöîâ";
         Text[ polish ] = "~Nag³ówki wierszy & kolumn";
         Text[ japanese ] = "s‚Æ—ñ‚Ì”Ô†(~H)";
-        Text[ chinese_traditional ] = "Äæ©M¦C¼ĞÃD(~H)";
+        Text[ chinese_traditional ] = "Äæ©M¦C¼ĞÃD(~C)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÓØÑ æÇáÃÚãÏÉ";
         Text[ greek ] = "Êåöáëßäåò ãñáììşí/óôçëşí";
         Text[ korean ] = "¿­°ú Çà ¸Ó¸®±Û";
@@ -814,7 +814,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ russian ] = "Äèàãğàììà";
         Text[ polish ] = "Wy~kresy";
         Text[ japanese ] = "¸Ş×Ì(~C)";
-        Text[ chinese_traditional ] = "¹Ïªí(~C)";
+        Text[ chinese_traditional ] = "¹Ïªí(~A)";
         Text[ arabic ] = "ÑÓæã ÈíÇäíÉ";
         Text[ greek ] = "ÄéáãñÜììáôá";
         Text[ korean ] = "Â÷Æ®";
