@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2001-06-11 12:12:36 $
+ *  last change: $Author: kso $ $Date: 2001-06-22 14:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_UCB_HANDLECOOKIESREQUEST_HPP_
 #include <com/sun/star/ucb/HandleCookiesRequest.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
@@ -88,9 +91,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEFILEIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveFileIOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveIOException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKCONNECTEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
@@ -654,45 +654,6 @@ UUIInteractionHandler::handle(
         if (!bAbort)
             return;
 
-        static sal_uInt32 const aID[ucb::IOErrorCode_WRONG_VERSION + 1]
-            = { ERRCODE_IO_ABORT, // ABORT
-                ERRCODE_IO_ACCESSDENIED, // ACCESS_DENIED
-                ERRCODE_IO_ALREADYEXISTS, // ALREADY_EXISTING
-                ERRCODE_IO_BADCRC, // BAD_CRC
-                ERRCODE_IO_CANTCREATE, // CANT_CREATE
-                ERRCODE_IO_CANTREAD, // CANT_READ
-                ERRCODE_IO_CANTSEEK, // CANT_SEEK
-                ERRCODE_IO_CANTTELL, // CANT_TELL
-                ERRCODE_IO_CANTWRITE, // CANT_WRITE
-                ERRCODE_IO_CURRENTDIR, // CURRENT_DIRECTORY
-                ERRCODE_IO_DEVICENOTREADY, // DEVICE_NOT_READY
-                ERRCODE_IO_NOTSAMEDEVICE, // DIFFERENT_DEVICES
-                ERRCODE_IO_GENERAL, // GENERAL
-                ERRCODE_IO_INVALIDACCESS, // INVALID_ACCESS
-                ERRCODE_IO_INVALIDCHAR, // INVALID_CHARACTER
-                ERRCODE_IO_INVALIDDEVICE, // INVALID_DEVICE
-                ERRCODE_IO_INVALIDLENGTH, // INVALID_LENGTH
-                ERRCODE_IO_INVALIDPARAMETER, // INVALID_PARAMETER
-                ERRCODE_IO_ISWILDCARD, // IS_WILDCARD
-                ERRCODE_IO_LOCKVIOLATION, // LOCKING_VIOLATION
-                ERRCODE_IO_MISPLACEDCHAR, // MISPLACED_CHARACTER
-                ERRCODE_IO_NAMETOOLONG, // NAME_TOO_LONG
-                ERRCODE_IO_NOTEXISTS, // NOT_EXISTING
-                ERRCODE_IO_NOTEXISTSPATH, // NOT_EXISTING_PATH
-                ERRCODE_IO_NOTSUPPORTED, // NOT_SUPPORTED
-                ERRCODE_IO_NOTADIRECTORY, // NO_DIRECTORY
-                ERRCODE_IO_NOTAFILE, // NO_FILE
-                ERRCODE_IO_OUTOFSPACE, // OUT_OF_DISK_SPACE
-                ERRCODE_IO_TOOMANYOPENFILES, // OUT_OF_FILE_HANDLES
-                ERRCODE_IO_OUTOFMEMORY, // OUT_OF_MEMORY
-                ERRCODE_IO_PENDING, // PENDING
-                ERRCODE_IO_RECURSIVE, // RECURSIVE
-                ERRCODE_IO_UNKNOWN, // UNKNOWN
-                ERRCODE_IO_WRITEPROTECTED, // WRITE_PROTECTED
-                ERRCODE_IO_WRONGFORMAT, // WRONG_FORMAT
-                ERRCODE_IO_WRONGVERSION }; // WRONG_VERSION
-        nErrorID = aID[aIOException.Code];
-
         nErrorFlags = ERRCODE_BUTTON_OK;
         switch (eClassification)
         {
@@ -713,22 +674,169 @@ UUIInteractionHandler::handle(
                 break;
         }
 
-        ucb::InteractiveFileIOException aFileIOException;
-        if (aTheRequest >>= aFileIOException)
-        {
-            vos::OGuard aGuard(Application::GetSolarMutex());
-
-            ResMgr * pManager
-                = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui));
-            UniString aTheContext(ResId(STR_ERROR_FILEIO, pManager));
-            delete pManager;
-
-            aTheContext.SearchAndReplaceAscii("($URL1)",
-                                              aFileIOException.FileName);
-            pContext = new SimpleErrorContext(aTheContext);
-        }
-
         eExecute = EXECUTE_IGNORE_RESULT;
+
+        ucb::InteractiveAugmentedIOException aAugmentedIOException;
+        if (aTheRequest >>= aAugmentedIOException)
+        {
+            static sal_uInt32 const aID[ucb::IOErrorCode_WRONG_VERSION + 1]
+                = { ERRCODE_UUI_IO_ABORT, // ABORT
+                    ERRCODE_UUI_IO_ACCESSDENIED, // ACCESS_DENIED
+                    ERRCODE_UUI_IO_ALREADYEXISTS, // ALREADY_EXISTING
+                    ERRCODE_UUI_IO_BADCRC, // BAD_CRC
+                    ERRCODE_UUI_IO_CANTCREATE, // CANT_CREATE
+                    ERRCODE_UUI_IO_CANTREAD, // CANT_READ
+                    ERRCODE_UUI_IO_CANTSEEK, // CANT_SEEK
+                    ERRCODE_UUI_IO_CANTTELL, // CANT_TELL
+                    ERRCODE_UUI_IO_CANTWRITE, // CANT_WRITE
+                    ERRCODE_UUI_IO_CURRENTDIR, // CURRENT_DIRECTORY
+                    ERRCODE_UUI_IO_DEVICENOTREADY, // DEVICE_NOT_READY
+                    ERRCODE_UUI_IO_NOTSAMEDEVICE, // DIFFERENT_DEVICES
+                    ERRCODE_UUI_IO_GENERAL, // GENERAL
+                    ERRCODE_UUI_IO_INVALIDACCESS, // INVALID_ACCESS
+                    ERRCODE_UUI_IO_INVALIDCHAR, // INVALID_CHARACTER
+                    ERRCODE_UUI_IO_INVALIDDEVICE, // INVALID_DEVICE
+                    ERRCODE_UUI_IO_INVALIDLENGTH, // INVALID_LENGTH
+                    ERRCODE_UUI_IO_INVALIDPARAMETER, // INVALID_PARAMETER
+                    ERRCODE_UUI_IO_ISWILDCARD, // IS_WILDCARD
+                    ERRCODE_UUI_IO_LOCKVIOLATION, // LOCKING_VIOLATION
+                    ERRCODE_UUI_IO_MISPLACEDCHAR, // MISPLACED_CHARACTER
+                    ERRCODE_UUI_IO_NAMETOOLONG, // NAME_TOO_LONG
+                    ERRCODE_UUI_IO_NOTEXISTS, // NOT_EXISTING
+                    ERRCODE_UUI_IO_NOTEXISTSPATH, // NOT_EXISTING_PATH
+                    ERRCODE_UUI_IO_NOTSUPPORTED, // NOT_SUPPORTED
+                    ERRCODE_UUI_IO_NOTADIRECTORY, // NO_DIRECTORY
+                    ERRCODE_UUI_IO_NOTAFILE, // NO_FILE
+                    ERRCODE_UUI_IO_OUTOFSPACE, // OUT_OF_DISK_SPACE
+                    ERRCODE_UUI_IO_TOOMANYOPENFILES, // OUT_OF_FILE_HANDLES
+                    ERRCODE_UUI_IO_OUTOFMEMORY, // OUT_OF_MEMORY
+                    ERRCODE_UUI_IO_PENDING, // PENDING
+                    ERRCODE_UUI_IO_RECURSIVE, // RECURSIVE
+                    ERRCODE_UUI_IO_UNKNOWN, // UNKNOWN
+                    ERRCODE_UUI_IO_WRITEPROTECTED, // WRITE_PROTECTED
+                    ERRCODE_UUI_IO_WRONGFORMAT, // WRONG_FORMAT
+                    ERRCODE_UUI_IO_WRONGVERSION }; // WRONG_VERSION
+
+            switch ( aAugmentedIOException.Code )
+            {
+                case ucb::IOErrorCode_CANT_CREATE:
+                case ucb::IOErrorCode_DIFFERENT_DEVICES:
+                {
+                    if ( aAugmentedIOException.Arguments.getLength() < 2 )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "UUIInteractionHandler::handle - "
+                                    "Too few arguments!" );
+                        return;
+                    }
+
+                    rtl::OUString aArg1;
+                    if ( !( aAugmentedIOException.Arguments[ 0 ] >>= aArg1 ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "UUIInteractionHandler::handle - "
+                                    "First argument must be a string!" );
+                        return;
+                    }
+
+                    rtl::OUString aArg2;
+                    if ( !( aAugmentedIOException.Arguments[ 0 ] >>= aArg2 ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "UUIInteractionHandler::handle - "
+                                    "Second argument must be a string!" );
+                        return;
+                    }
+
+                    nErrorID = *new TwoStringErrorInfo(
+                                        aID[ aAugmentedIOException.Code ],
+                                        aArg1,
+                                        aArg2 );
+                    break;
+                }
+
+                default:
+                {
+                    if ( aAugmentedIOException.Arguments.getLength() < 1 )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "UUIInteractionHandler::handle - "
+                                    "Too few arguments!" );
+                        return;
+                    }
+
+                    rtl::OUString aArg;
+                    if ( !( aAugmentedIOException.Arguments[ 0 ] >>= aArg ) )
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "UUIInteractionHandler::handle - "
+                                    "First argument must be a string!" );
+                        return;
+                    }
+
+                    nErrorID = *new StringErrorInfo(
+                                        aID[ aAugmentedIOException.Code ],
+                                        aArg );
+                    break;
+                }
+            }
+        }
+        else
+        {
+            static sal_uInt32 const aID[ucb::IOErrorCode_WRONG_VERSION + 1]
+                = { ERRCODE_IO_ABORT, // ABORT
+                    ERRCODE_IO_ACCESSDENIED, // ACCESS_DENIED
+                    ERRCODE_IO_ALREADYEXISTS, // ALREADY_EXISTING
+                    ERRCODE_IO_BADCRC, // BAD_CRC
+                    ERRCODE_IO_CANTCREATE, // CANT_CREATE
+                    ERRCODE_IO_CANTREAD, // CANT_READ
+                    ERRCODE_IO_CANTSEEK, // CANT_SEEK
+                    ERRCODE_IO_CANTTELL, // CANT_TELL
+                    ERRCODE_IO_CANTWRITE, // CANT_WRITE
+                    ERRCODE_IO_CURRENTDIR, // CURRENT_DIRECTORY
+                    ERRCODE_IO_DEVICENOTREADY, // DEVICE_NOT_READY
+                    ERRCODE_IO_NOTSAMEDEVICE, // DIFFERENT_DEVICES
+                    ERRCODE_IO_GENERAL, // GENERAL
+                    ERRCODE_IO_INVALIDACCESS, // INVALID_ACCESS
+                    ERRCODE_IO_INVALIDCHAR, // INVALID_CHARACTER
+                    ERRCODE_IO_INVALIDDEVICE, // INVALID_DEVICE
+                    ERRCODE_IO_INVALIDLENGTH, // INVALID_LENGTH
+                    ERRCODE_IO_INVALIDPARAMETER, // INVALID_PARAMETER
+                    ERRCODE_IO_ISWILDCARD, // IS_WILDCARD
+                    ERRCODE_IO_LOCKVIOLATION, // LOCKING_VIOLATION
+                    ERRCODE_IO_MISPLACEDCHAR, // MISPLACED_CHARACTER
+                    ERRCODE_IO_NAMETOOLONG, // NAME_TOO_LONG
+                    ERRCODE_IO_NOTEXISTS, // NOT_EXISTING
+                    ERRCODE_IO_NOTEXISTSPATH, // NOT_EXISTING_PATH
+                    ERRCODE_IO_NOTSUPPORTED, // NOT_SUPPORTED
+                    ERRCODE_IO_NOTADIRECTORY, // NO_DIRECTORY
+                    ERRCODE_IO_NOTAFILE, // NO_FILE
+                    ERRCODE_IO_OUTOFSPACE, // OUT_OF_DISK_SPACE
+                    ERRCODE_IO_TOOMANYOPENFILES, // OUT_OF_FILE_HANDLES
+                    ERRCODE_IO_OUTOFMEMORY, // OUT_OF_MEMORY
+                    ERRCODE_IO_PENDING, // PENDING
+                    ERRCODE_IO_RECURSIVE, // RECURSIVE
+                    ERRCODE_IO_UNKNOWN, // UNKNOWN
+                    ERRCODE_IO_WRITEPROTECTED, // WRITE_PROTECTED
+                    ERRCODE_IO_WRONGFORMAT, // WRONG_FORMAT
+                    ERRCODE_IO_WRONGVERSION }; // WRONG_VERSION
+            nErrorID = aID[aIOException.Code];
+
+            ucb::InteractiveFileIOException aFileIOException;
+            if (aTheRequest >>= aFileIOException)
+            {
+                vos::OGuard aGuard(Application::GetSolarMutex());
+
+                ResMgr * pManager
+                    = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui));
+                UniString aTheContext(ResId(STR_ERROR_FILEIO, pManager));
+                delete pManager;
+
+                aTheContext.SearchAndReplaceAscii("($URL1)",
+                                                aFileIOException.FileName);
+                pContext = new SimpleErrorContext(aTheContext);
+            }
+        }
     }
     else if (aTheRequest >>= aNetworkException)
     {
@@ -917,6 +1025,10 @@ USHORT executeErrorDialog(ULONG nID, USHORT nMask)
                               ERRCODE_AREA_CHAOS_END, pManager2);
         // cf. chaos/source/inc/cntrids.hrc, where
         // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
+    ResMgr * pManager3 = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui));
+    SfxErrorHandler * pHandler3
+        = new SfxErrorHandler(RID_UUI_ERRHDL, ERRCODE_AREA_UUI,
+                              ERRCODE_AREA_UUI_END, pManager3);
 
     // Needed because within ErrorHandler::HandleError() ResIds are created
     // without a ResMgr---they require a default ResMgr:
@@ -927,6 +1039,8 @@ USHORT executeErrorDialog(ULONG nID, USHORT nMask)
 
     Resource::SetResManager(pDefaultManager);
 
+    delete pHandler3;
+    delete pManager3;
     delete pHandler2;
     delete pManager2;
     delete pHandler1;

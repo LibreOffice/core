@@ -43,6 +43,7 @@
         <type> com.sun.star.task.XInteractionRetry                     </type>
         <type> com.sun.star.ucb.AuthenticationRequest                  </type>
         <type> com.sun.star.ucb.HandleCookiesRequest                   </type>
+        <type> com.sun.star.ucb.InteractiveAugmentedIOException        </type>
         <type> com.sun.star.ucb.InteractiveBadTransferURLException     </type>
         <type> com.sun.star.ucb.InteractiveCHAOSException              </type>
         <type> com.sun.star.ucb.InteractiveFileIOException             </type>
@@ -64,9 +65,9 @@
     <project-build-dependency> svtools            </project-build-dependency>
     <project-build-dependency> vcl                </project-build-dependency>
 
-    <runtime-module-dependency> sal2          </runtime-module-dependency>
-    <runtime-module-dependency> cppu2         </runtime-module-dependency>
-    <runtime-module-dependency> cppuhelper2$(COM) </runtime-module-dependency>
+    <runtime-module-dependency> sal3              </runtime-module-dependency>
+    <runtime-module-dependency> cppu3             </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper3$(COM) </runtime-module-dependency>
     <runtime-module-dependency> tl                </runtime-module-dependency>
     <runtime-module-dependency> svt               </runtime-module-dependency>
     <runtime-module-dependency> vcl               </runtime-module-dependency>

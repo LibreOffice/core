@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-10 10:57:09 $
+ *  last change: $Author: kso $ $Date: 2001-06-22 14:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,15 @@
 //
 //  The UUI Resources
 //
-// $Author: sb $ $Date: 2000-11-10 10:57:09 $ $Revision: 1.2 $
+// $Author: kso $ $Date: 2001-06-22 14:06:59 $ $Revision: 1.3 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
 #define UUI_IDS_HRC
+
+#ifndef _ERRCODE_HXX
+#include <tools/errcode.hxx>
+#endif
 
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
@@ -87,6 +91,50 @@
 #define STR_ERROR_WRONGMEDIUM (RID_UUI_START + 11)
 
 //============================================================================
+// errors
+#define RID_UUI_ERRHDL                    (RID_UUI_START + 20)
+
+//============================================================================
+// IO errors ( for use with css::ucb::InteractiveAugmentedIOException )
+
+#define ERRCODE_UUI_IO_ABORT              (ERRCODE_AREA_UUI +  0)
+#define ERRCODE_UUI_IO_ACCESSDENIED       (ERRCODE_AREA_UUI +  1)
+#define ERRCODE_UUI_IO_ALREADYEXISTS      (ERRCODE_AREA_UUI +  2)
+#define ERRCODE_UUI_IO_BADCRC             (ERRCODE_AREA_UUI +  3)
+#define ERRCODE_UUI_IO_CANTCREATE         (ERRCODE_AREA_UUI +  4)
+#define ERRCODE_UUI_IO_CANTREAD           (ERRCODE_AREA_UUI +  5)
+#define ERRCODE_UUI_IO_CANTSEEK           (ERRCODE_AREA_UUI +  6)
+#define ERRCODE_UUI_IO_CANTTELL           (ERRCODE_AREA_UUI +  7)
+#define ERRCODE_UUI_IO_CANTWRITE          (ERRCODE_AREA_UUI +  8)
+#define ERRCODE_UUI_IO_CURRENTDIR         (ERRCODE_AREA_UUI +  9)
+#define ERRCODE_UUI_IO_DEVICENOTREADY     (ERRCODE_AREA_UUI + 10)
+#define ERRCODE_UUI_IO_NOTSAMEDEVICE      (ERRCODE_AREA_UUI + 11)
+#define ERRCODE_UUI_IO_GENERAL            (ERRCODE_AREA_UUI + 12)
+#define ERRCODE_UUI_IO_INVALIDACCESS      (ERRCODE_AREA_UUI + 13)
+#define ERRCODE_UUI_IO_INVALIDCHAR        (ERRCODE_AREA_UUI + 14)
+#define ERRCODE_UUI_IO_INVALIDDEVICE      (ERRCODE_AREA_UUI + 15)
+#define ERRCODE_UUI_IO_INVALIDLENGTH      (ERRCODE_AREA_UUI + 16)
+#define ERRCODE_UUI_IO_INVALIDPARAMETER   (ERRCODE_AREA_UUI + 17)
+#define ERRCODE_UUI_IO_ISWILDCARD         (ERRCODE_AREA_UUI + 18)
+#define ERRCODE_UUI_IO_LOCKVIOLATION      (ERRCODE_AREA_UUI + 19)
+#define ERRCODE_UUI_IO_MISPLACEDCHAR      (ERRCODE_AREA_UUI + 20)
+#define ERRCODE_UUI_IO_NAMETOOLONG        (ERRCODE_AREA_UUI + 21)
+#define ERRCODE_UUI_IO_NOTEXISTS          (ERRCODE_AREA_UUI + 22)
+#define ERRCODE_UUI_IO_NOTEXISTSPATH      (ERRCODE_AREA_UUI + 23)
+#define ERRCODE_UUI_IO_NOTSUPPORTED       (ERRCODE_AREA_UUI + 24)
+#define ERRCODE_UUI_IO_NOTADIRECTORY      (ERRCODE_AREA_UUI + 25)
+#define ERRCODE_UUI_IO_NOTAFILE           (ERRCODE_AREA_UUI + 26)
+#define ERRCODE_UUI_IO_OUTOFSPACE         (ERRCODE_AREA_UUI + 27)
+#define ERRCODE_UUI_IO_TOOMANYOPENFILES   (ERRCODE_AREA_UUI + 28)
+#define ERRCODE_UUI_IO_OUTOFMEMORY        (ERRCODE_AREA_UUI + 29)
+#define ERRCODE_UUI_IO_PENDING            (ERRCODE_AREA_UUI + 30)
+#define ERRCODE_UUI_IO_RECURSIVE          (ERRCODE_AREA_UUI + 31)
+#define ERRCODE_UUI_IO_UNKNOWN            (ERRCODE_AREA_UUI + 32)
+#define ERRCODE_UUI_IO_WRITEPROTECTED     (ERRCODE_AREA_UUI + 33)
+#define ERRCODE_UUI_IO_WRONGFORMAT        (ERRCODE_AREA_UUI + 34)
+#define ERRCODE_UUI_IO_WRONGVERSION       (ERRCODE_AREA_UUI + 35)
+
+//============================================================================
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)
 
@@ -94,4 +142,3 @@
 // sfx2/util/hidother.src!
 
 #endif // UUI_IDS_HRC
-
