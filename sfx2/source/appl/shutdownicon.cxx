@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-27 12:45:42 $
+ *  last change: $Author: hro $ $Date: 2001-11-01 08:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,9 @@ void ShutdownIcon::FileOpen()
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
+#ifdef WNT
+        EnterModalMode();
+#endif
         // use ctor for filling up filters automatically! #89169#
         FileDialogHelper dlg( WB_OPEN | SFXWB_MULTISELECTION, *(SfxObjectFactory*) NULL );
         if ( ERRCODE_NONE == dlg.Execute() )
@@ -238,6 +240,9 @@ void ShutdownIcon::FileOpen()
             {
             }
         }
+#ifdef WNT
+        LeaveModalMode();
+#endif
     }
 }
 
@@ -266,6 +271,8 @@ void ShutdownIcon::FromTemplate()
                 xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
         if ( xDisp.is() )
         {
+            xDisp->addStatusListener( getInstance(), aTargetURL );
+
             Sequence<PropertyValue> aArgs(1);
             PropertyValue* pArg = aArgs.getArray();
             pArg[0].Name = rtl::OUString::createFromAscii("Referer");
@@ -305,6 +312,8 @@ void ShutdownIcon::addTerminateListener()
         getInstance()->m_xDesktop->addTerminateListener( getInstance() );
 }
 
+// ---------------------------------------------------------------------------
+
 void ShutdownIcon::terminateDesktop()
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
@@ -330,11 +339,15 @@ void ShutdownIcon::terminateDesktop()
     }
 }
 
+// ---------------------------------------------------------------------------
+
 ShutdownIcon* ShutdownIcon::getInstance()
 {
     OSL_ASSERT( pShutdownIcon );
     return pShutdownIcon;
 }
+
+// ---------------------------------------------------------------------------
 
 void SAL_CALL ShutdownIcon::disposing()
 {
@@ -350,6 +363,16 @@ void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject
 {
 }
 
+// ---------------------------------------------------------------------------
+// XStatusListener
+
+void SAL_CALL ShutdownIcon::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
+{
+}
+
+
+// ---------------------------------------------------------------------------
+
 // XTerminateListener
 void SAL_CALL ShutdownIcon::queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
 throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
@@ -361,11 +384,15 @@ throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::
 }
 
 
+// ---------------------------------------------------------------------------
+
 void SAL_CALL ShutdownIcon::notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
 throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
+
+// ---------------------------------------------------------------------------
 
 void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
     throw( ::com::sun::star::uno::Exception )

@@ -26,6 +26,9 @@
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
+#include <com/sun/star/frame/XStatusListener.hpp>
+#endif
 #ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
 #endif
@@ -38,15 +41,16 @@
 #ifndef _SFX_SFXUNO_HXX
 #include <sfxuno.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 
 class ResMgr;
 
-typedef ::cppu::WeakComponentImplHelper3<
+typedef ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::frame::XTerminateListener,
+    ::com::sun::star::frame::XStatusListener,
     ::com::sun::star::lang::XServiceInfo > ShutdownIconServiceBase;
 
 class ShutdownIcon :    public ShutdownIconServiceBase
@@ -63,6 +67,8 @@ class ShutdownIcon :    public ShutdownIconServiceBase
         void deInitSystray();
         static void SetAutostartW32( const ::rtl::OUString& aShortcutName, bool bActivate );
         static bool GetAutostartW32( const ::rtl::OUString& aShortcutName );
+        static void EnterModalMode();
+        static void LeaveModalMode();
 #endif
 
     public:
@@ -100,6 +106,9 @@ class ShutdownIcon :    public ShutdownIconServiceBase
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
             throw(::com::sun::star::uno::RuntimeException);
+
+        // XStatusListener
+        virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event );
 
         // XTerminateListener
         virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )

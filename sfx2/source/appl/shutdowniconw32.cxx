@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-18 14:19:52 $
+ *  last change: $Author: hro $ $Date: 2001-11-01 08:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #include <shutdownicon.hxx>
 #include <app.hrc>
-//#include <windows.h>
 #include <shlobj.h>
 #include <objidl.h>
 #include <stdio.h>
@@ -193,6 +192,7 @@ using namespace ::osl;
 
 static HWND aListenerWindow = NULL;
 static HWND aExecuterWindow = NULL;
+static BOOL bModalMode = FALSE;
 
 static void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis);
 static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
@@ -404,7 +404,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             switch( lParam )
             {
                 case WM_LBUTTONDBLCLK:
-                    ShutdownIcon::FromTemplate();
+                    PostMessage( aExecuterWindow, WM_COMMAND, IDM_TEMPLATE, (LPARAM)hWnd );
                     break;
 
                 case WM_RBUTTONDOWN:
@@ -415,6 +415,10 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                     // update status before showing menu, could have been changed from option page
                     CheckMenuItem( popupMenu, IDM_INSTALL, MF_BYCOMMAND| (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
+
+                    EnableMenuItem( popupMenu, IDM_EXIT, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
+                    EnableMenuItem( popupMenu, IDM_OPEN, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
+                    EnableMenuItem( popupMenu, IDM_TEMPLATE, MF_BYCOMMAND | (bModalMode ? MF_GRAYED : MF_ENABLED) );
 
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
@@ -493,7 +497,8 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             switch( LOWORD(wParam) )
             {
                 case IDM_OPEN:
-                    ShutdownIcon::FileOpen();
+                    if ( !bModalMode )
+                        ShutdownIcon::FileOpen();
                 break;
                 case IDM_WRITER:
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( WRITER_URL ) ) );
@@ -508,7 +513,8 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ) );
                 break;
                 case IDM_TEMPLATE:
-                    ShutdownIcon::FromTemplate();
+                    if ( !bModalMode )
+                        ShutdownIcon::FromTemplate();
                 break;
                 case IDM_INSTALL:
                     ShutdownIcon::SetAutostart( !ShutdownIcon::GetAutostart() );
@@ -516,7 +522,8 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 case IDM_EXIT:
                     // remove listener and
                     //  terminate office if running in background
-                    ShutdownIcon::terminateDesktop();
+                    if ( !bModalMode )
+                        ShutdownIcon::terminateDesktop();
                     break;
             }
             break;
@@ -633,6 +640,20 @@ void ShutdownIcon::deInitSystray()
 
 // -------------------------------
 
+void ShutdownIcon::EnterModalMode()
+{
+    bModalMode = TRUE;
+}
+
+// -------------------------------
+
+void ShutdownIcon::LeaveModalMode()
+{
+    bModalMode = FALSE;
+}
+
+// -------------------------------
+
 void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
 {
     MYITEM *pMyItem = (MYITEM *) lpmis->itemData;
@@ -668,29 +689,26 @@ void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
     HFONT hfntOld;
     HBRUSH hbrOld;
     int x, y;
+    BOOL    fSelected = lpdis->itemState & ODS_SELECTED;
+    BOOL    fDisabled = lpdis->itemState & (ODS_DISABLED | ODS_GRAYED);
 
     // Set the appropriate foreground and background colors.
 
     RECT aRect = lpdis->rcItem;
 
-    if (lpdis->itemState & ODS_SELECTED)
-    {
-        clrPrevText = SetTextColor(lpdis->hDC,
-                GetSysColor(COLOR_HIGHLIGHTTEXT));
-        clrPrevBkgnd = SetBkColor(lpdis->hDC,
-                GetSysColor(COLOR_HIGHLIGHT));
-        hbrOld = (HBRUSH) SelectObject(lpdis->hDC,
-            CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT)));
-    }
+    clrPrevBkgnd = SetBkColor( lpdis->hDC, GetSysColor(COLOR_MENU) );
+
+    if ( fDisabled )
+        clrPrevText = SetTextColor( lpdis->hDC, GetSysColor( COLOR_GRAYTEXT ) );
     else
-    {
-        clrPrevText = SetTextColor(lpdis->hDC,
-                GetSysColor(COLOR_MENUTEXT));
-        clrPrevBkgnd = SetBkColor(lpdis->hDC,
-                GetSysColor(COLOR_MENU));
-        hbrOld = (HBRUSH) SelectObject(lpdis->hDC,
-            CreateSolidBrush(GetSysColor(COLOR_MENU)));
-    }
+        clrPrevText = SetTextColor( lpdis->hDC, GetSysColor( fSelected ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT ) );
+
+    if ( fSelected )
+        clrPrevBkgnd = SetBkColor( lpdis->hDC, GetSysColor(COLOR_HIGHLIGHT) );
+    else
+        clrPrevBkgnd = SetBkColor( lpdis->hDC, GetSysColor(COLOR_MENU) );
+
+    hbrOld = (HBRUSH)SelectObject( lpdis->hDC, CreateSolidBrush( GetBkColor( lpdis->hDC ) ) );
 
     // Fill background
     PatBlt(lpdis->hDC, aRect.left, aRect.top, aRect.right-aRect.left, aRect.bottom-aRect.top, PATCOPY);
@@ -706,7 +724,13 @@ void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
                                       IMAGE_ICON, cx, cy,
                                       LR_DEFAULTCOLOR | LR_SHARED );
 
-    DrawIconEx( lpdis->hDC, x, y+(height-cy)/2, hIcon, cx, cy, 0, NULL, DI_NORMAL );
+    // DrawIconEx( lpdis->hDC, x, y+(height-cy)/2, hIcon, cx, cy, 0, NULL, DI_NORMAL );
+
+    HBRUSH hbrIcon = CreateSolidBrush( GetSysColor( COLOR_GRAYTEXT ) );
+
+    DrawStateW( lpdis->hDC, (HBRUSH)hbrIcon, (DRAWSTATEPROC)NULL, (LPARAM)hIcon, (WPARAM)0, x, y+(height-cy)/2, 0, 0, DST_ICON | (fDisabled ? (fSelected ? DSS_MONO : DSS_DISABLED) : DSS_NORMAL) );
+
+    DeleteObject( hbrIcon );
 
     x += cx + 4;    // space for icon
     aRect.left = x;
@@ -724,14 +748,10 @@ void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
     hfntOld = (HFONT) SelectObject(lpdis->hDC, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
 
-    SIZE size;
-    GetTextExtentPoint32W(lpdis->hDC, pMyItem->text.getStr(),
-            pMyItem->text.getLength(), &size);
+    SIZE    size;
+    GetTextExtentPointW( lpdis->hDC, pMyItem->text.getStr(), pMyItem->text.getLength(), &size );
 
-    ExtTextOutW(lpdis->hDC, aRect.left, aRect.top + (height - size.cy)/2, ETO_OPAQUE,
-            &aRect, pMyItem->text.getStr(),
-            pMyItem->text.getLength(), NULL);
-
+    DrawStateW( lpdis->hDC, (HBRUSH)NULL, (DRAWSTATEPROC)NULL, (LPARAM)pMyItem->text.getStr(), (WPARAM)0, aRect.left, aRect.top + (height - size.cy)/2, 0, 0, DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) );
 
     // Restore the original font and colors.
     DeleteObject( SelectObject( lpdis->hDC, hbrOld ) );
