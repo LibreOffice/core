@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-05 09:51:34 $
+ *  last change: $Author: sab $ $Date: 2002-05-03 11:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2104,8 +2104,11 @@ namespace xmloff { namespace token {
 
         TOKEN( "snap-to-layout-grid" ),        // XML_SNAP_TO_LAYOUT_GRID
 
-        TOKEN( "glyph-orientation-vertical" ), // XML_GLYPH_ORIENTATION_VERTICAL
         TOKEN( "dont-balance-text-columns" ),  // XML_DONT_BALANCE_TEXT_COLUMNS
+
+        TOKEN( "glyph-orientation-vertical" ), // XML_GLYPH_ORIENTATION_VERTICAL
+
+        TOKEN( "marked-invalid" ),             //XML_MARKED_INVALID
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
