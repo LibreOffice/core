@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptedtext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:22:39 $
+ *  last change: $Author: dr $ $Date: 2001-11-20 13:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,11 @@ private:
                                 /** Assignment operator not implemented to prevent usage. */
     SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& );
 
+                                /** Gets the font of the given script type. */
+    const Font&                 GetFont( sal_uInt16 _nScript ) const;
                                 /** Sets a font on the output device depending on the script type. */
-    void                        SetOutDevFont( sal_uInt16 _nScript );
+    inline void                 SetOutDevFont( sal_uInt16 _nScript )
+                                    { mrOutDevice.SetFont( GetFont( _nScript ) ); }
                                 /** Fills maPosVec with positions of all changes of script type.
                                     This method expects correctly initialized maPosVec and maScriptVec. */
     void                        CalculateSizes();
@@ -178,20 +181,21 @@ SvtScriptedTextHelper_Impl::~SvtScriptedTextHelper_Impl()
 {
 }
 
-void SvtScriptedTextHelper_Impl::SetOutDevFont( sal_uInt16 _nScript )
+const Font& SvtScriptedTextHelper_Impl::GetFont( sal_uInt16 _nScript ) const
 {
-    Font* pNewFont = NULL;
     switch( _nScript )
     {
-        case i18n::ScriptType::LATIN:       mrOutDevice.SetFont( maLatinFont ); break;
-        case i18n::ScriptType::ASIAN:       mrOutDevice.SetFont( maAsianFont ); break;
-        case i18n::ScriptType::COMPLEX:     mrOutDevice.SetFont( maCmplxFont ); break;
+        case i18n::ScriptType::LATIN:       return maLatinFont;
+        case i18n::ScriptType::ASIAN:       return maAsianFont;
+        case i18n::ScriptType::COMPLEX:     return maCmplxFont;
     }
+    return maDefltFont;
 }
 
 void SvtScriptedTextHelper_Impl::CalculateSizes()
 {
     maTextSize.Width() = maTextSize.Height() = 0;
+    maDefltFont = mrOutDevice.GetFont();
 
     // calculate text portion widths and total width
     maWidthVec.clear();
@@ -269,7 +273,26 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
 - weak portion follows another portion: Script type of preceding portion is used */
                         if( maPosVec.empty() )
                         {
-                            //.....
+                            sal_Int32 nCharIx = 0;
+                            sal_Int32 nNextCharIx = 0;
+                            sal_Int16 nScript;
+                            do
+                            {
+                                nScript = i18n::ScriptType::LATIN;
+                                while( (nScript != i18n::ScriptType::WEAK) && (nCharIx == nNextCharIx) )
+                                {
+                                    nNextCharIx = mrOutDevice.HasGlyphs( GetFont( nScript ), maText, nCharIx, nNextPos - nCharIx );
+                                    if( nCharIx == nNextCharIx )
+                                        ++nScript;
+                                }
+                                if( nNextCharIx == nCharIx )
+                                    ++nNextCharIx;
+
+                                maPosVec.push_back( nCharIx );
+                                maScriptVec.push_back( nScript );
+                                nCharIx = nNextCharIx;
+                            }
+                            while( nCharIx < nNextPos );
                         }
                         // nothing to do for following portions
                     }
@@ -323,6 +346,7 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
     DBG_ASSERT( maPosVec.size() - 1 == maScriptVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
     DBG_ASSERT( maScriptVec.size() == maWidthVec.size(), "SvtScriptedTextHelper_Impl::DrawText - invalid vectors" );
 
+    maDefltFont = mrOutDevice.GetFont();
     Point aCurrPos( _rPos );
     xub_StrLen nThisPos = static_cast< xub_StrLen >( maPosVec[ 0 ] );
     xub_StrLen nNextPos;
