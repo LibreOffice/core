@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 //Grid-Page
 #define MTR_FLD_GRID 1
 #define GRP_DRAWGRID 1
-#define GRP_OPTIONS 3
 #define GRP_SNAPGRID 2
 #define CBX_USE_GRIDSNAP 1
 #define CBX_SYNCHRONIZE 2

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,6 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aCbxUseGridsnap ( this, ResId( CBX_USE_GRIDSNAP ) ),
     aCbxSynchronize ( this, ResId( CBX_SYNCHRONIZE ) ),
     aCbxGridVisible ( this, ResId( CBX_GRID_VISIBLE ) ),
-    aGrpOptions     ( this, ResId( GRP_OPTIONS ) ),
     bAttrModified( FALSE )
 {
     // diese Page braucht ExchangeSupport

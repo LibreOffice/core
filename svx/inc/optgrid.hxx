@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-16 12:37:33 $
+ *  last change: $Author: os $ $Date: 2001-03-22 09:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@ public:
 private:
     CheckBox            aCbxUseGridsnap;
     CheckBox            aCbxGridVisible;
-    FixedLine            aGrpOptions; // Neu
 
     FixedText           aFtResolution;
     FixedText           aFtDrawX;
@@ -173,7 +172,7 @@ private:
     MetricField         aMtrFldDivisionX;
     MetricField         aMtrFldDivisionY;
     CheckBox            aCbxSynchronize;
-    FixedLine            aGrpDrawGrid; // Neu
+    FixedLine           aGrpDrawGrid; // Neu
 
     BOOL                bAttrModified;
     BOOL                bEqualGrid; // Neu
