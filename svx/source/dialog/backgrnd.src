@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:33:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
     text[ chinese_simplified ] = "Î´Á´½ÓµÄÍ¼ĞÎ";    \
     text[ russian ] = "Íåñâÿçàííàÿ ãğàôèêà";    \
     text[ polish ] = "Nie po³¹czona grafika";   \
-    text[ japanese ] = "Øİ¸‚³‚ê‚Ä‚¢‚È‚¢¸Ş×Ì¨¯¸";    \
+    text[ japanese ] = "Øİ¸‚³‚ê‚Ä‚¢‚È‚¢}"; \
     text[ chinese_traditional ] = "¥¼³sµ²ªº¹Ï§Î";   \
     text[ arabic ] = "ÕæÑÉ ÛíÑ ãÑÊÈØÉ"; \
     text[ greek ] = "Ãñáöéêü ÷ùñßò óıíäåóç";    \
@@ -461,7 +461,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         stringlist [ french ] =
         {
             < "Paragraphe" ; > ;
-            < "Caractère" ; > ;
+            < "Caractères" ; > ;
         };
         stringlist [ dutch ] =
         {
@@ -883,7 +883,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ chinese_simplified ] = "ËÑÑ°Í¼ĞÎ";
         Text[ russian ] = "Íàéòè ãğàôèêó";
         Text[ polish ] = "Szukaj grafiki";
-        Text[ japanese ] = "¸Ş×Ì¨¯¸‚ğŒŸõ";
+        Text[ japanese ] = "}‚ğŒŸõ";
         Text[ chinese_traditional ] = "·j´M¹Ï§Î";
         Text[ arabic ] = "ÇáÈÍË Úä ÑÓã";
         Text[ greek ] = "ÁíáæŞôçóç ãñáöéêïı";
