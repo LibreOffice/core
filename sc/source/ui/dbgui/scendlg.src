@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 11:31:02 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ chinese_traditional ] = "¦C¦LÃä®Ø";
         Text[ arabic ] = "ØÈÇÚÉ ßÇÏÑ";
         Text[ greek ] = "Åêôýðùóç ðëáéóßïõ";
-        Text[ korean ] = "°æ°è¼± ÀÎ¼â";
+        Text[ korean ] = "Å×µÎ¸®  ÀÎ¼â";
         Text[ turkish ] = "Çerçeveyi yazdýr";
     };
     CheckBox CB_TWOWAY
