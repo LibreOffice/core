@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:14:49 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 08:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,14 +100,19 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
+#include <com/sun/star/util/XRefreshable.hpp>
+#endif
 
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
-
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
 class SvxEditSource;
 class SvxFieldItem;
@@ -119,10 +124,11 @@ class ScHeaderFooterContentObj;
 //------------------------------------------------------------------
 
 
-class ScCellFieldsObj : public cppu::WeakImplHelper4<
+class ScCellFieldsObj : public cppu::WeakImplHelper5<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
                             com::sun::star::container::XContainer,
+                            com::sun::star::util::XRefreshable,
                             com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -130,6 +136,10 @@ private:
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
     SvxEditSource*          pEditSource;
+    /// List of refresh listeners.
+    cppu::OInterfaceContainerHelper* mpRefreshListeners;
+    /// mutex to lock the InterfaceContainerHelper
+    osl::Mutex              aMutex;
 
     ScCellFieldObj*         GetObjectByIndex_Impl(INT32 Index) const;
 
@@ -162,6 +172,16 @@ public:
     virtual void SAL_CALL   removeContainerListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::container::XContainerListener >& xListener )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+                            // XRefreshable
+    virtual void SAL_CALL refresh(  )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRefreshListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::util::XRefreshListener >& l )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRefreshListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::util::XRefreshListener >& l )
+                                    throw (::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
@@ -304,10 +324,11 @@ public:
 
 //------------------------------------------------------------------
 
-class ScHeaderFieldsObj : public cppu::WeakImplHelper4<
+class ScHeaderFieldsObj : public cppu::WeakImplHelper5<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
                             com::sun::star::container::XContainer,
+                            com::sun::star::util::XRefreshable,
                             com::sun::star::lang::XServiceInfo >
 {
 private:
@@ -315,6 +336,11 @@ private:
     USHORT                      nPart;
     UINT16                      nType;
     SvxEditSource*              pEditSource;
+
+    /// List of refresh listeners.
+    cppu::OInterfaceContainerHelper* mpRefreshListeners;
+    /// mutex to lock the InterfaceContainerHelper
+    osl::Mutex                  aMutex;
 
     ScHeaderFieldObj*       GetObjectByIndex_Impl(INT32 Index) const;
 
@@ -346,6 +372,16 @@ public:
     virtual void SAL_CALL   removeContainerListener( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::container::XContainerListener >& xListener )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+                            // XRefreshable
+    virtual void SAL_CALL refresh(  )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addRefreshListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::util::XRefreshListener >& l )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeRefreshListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::util::XRefreshListener >& l )
+                                    throw (::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()

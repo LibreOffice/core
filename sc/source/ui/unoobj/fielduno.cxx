@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,8 @@ SvxFieldData* ScUnoEditEngine::FindByPos(USHORT nPar, xub_StrLen nPos, TypeId aT
 
 ScCellFieldsObj::ScCellFieldsObj(ScDocShell* pDocSh, const ScAddress& rPos) :
     pDocShell( pDocSh ),
-    aCellPos( rPos )
+    aCellPos( rPos ),
+    mpRefreshListeners( NULL )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 
@@ -291,6 +292,20 @@ ScCellFieldsObj::~ScCellFieldsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 
     delete pEditSource;
+
+    // increment refcount to prevent double call off dtor
+    osl_incrementInterlockedCount( &m_refCount );
+
+    if (mpRefreshListeners)
+    {
+        lang::EventObject aEvent;
+        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        if (mpRefreshListeners)
+        {
+            mpRefreshListeners->disposeAndClear(aEvent);
+            DELETEZ( mpRefreshListeners );
+        }
+    }
 }
 
 void ScCellFieldsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -384,6 +399,69 @@ void SAL_CALL ScCellFieldsObj::removeContainerListener(
                                     throw(uno::RuntimeException)
 {
     DBG_ERROR("not implemented");
+}
+
+// XRefreshable
+void SAL_CALL ScCellFieldsObj::refresh(  )
+                                    throw (uno::RuntimeException)
+{
+    if (mpRefreshListeners)
+    {
+        //  Call all listeners.
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpRefreshListeners->getElements();
+        sal_uInt32 nLength(aListeners.getLength());
+        if (nLength)
+        {
+            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+            if (pInterfaces)
+            {
+                lang::EventObject aEvent;
+                aEvent.Source = uno::Reference< util::XRefreshable >(const_cast<ScCellFieldsObj*>(this));
+                sal_uInt32 i(0);
+                while (i < nLength)
+                {
+                    try
+                    {
+                        while(i < nLength)
+                        {
+                            static_cast< util::XRefreshListener* >(pInterfaces->get())->refreshed(aEvent);
+                            ++pInterfaces;
+                            ++i;
+                        }
+                    }
+                    catch(uno::RuntimeException&)
+                    {
+//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
+                        ++pInterfaces;
+                        ++i;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void SAL_CALL ScCellFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
+                                    throw (uno::RuntimeException)
+{
+    if (xListener.is())
+    {
+        ScUnoGuard aGuard;
+        if (!mpRefreshListeners)
+            mpRefreshListeners = new cppu::OInterfaceContainerHelper(aMutex);
+        mpRefreshListeners->addInterface(xListener);
+    }
+}
+
+void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
+                                    throw (uno::RuntimeException)
+{
+    if (xListener.is())
+    {
+        ScUnoGuard aGuard;
+        if (mpRefreshListeners)
+            mpRefreshListeners->removeInterface(xListener);
+    }
 }
 
 //------------------------------------------------------------------------
@@ -832,7 +910,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellFieldObj::getSupportedServiceNames()
 ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, USHORT nP, USHORT nT) :
     pContentObj( pContent ),
     nPart( nP ),
-    nType( nT )
+    nType( nT ),
+    mpRefreshListeners( NULL )
 {
     DBG_ASSERT( pContentObj, "ScHeaderFieldsObj ohne Objekt?" );
 
@@ -851,6 +930,20 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
 
     if (pContentObj)
         pContentObj->release();
+
+    // increment refcount to prevent double call off dtor
+    osl_incrementInterlockedCount( &m_refCount );
+
+    if (mpRefreshListeners)
+    {
+        lang::EventObject aEvent;
+        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+        if (mpRefreshListeners)
+        {
+            mpRefreshListeners->disposeAndClear(aEvent);
+            DELETEZ( mpRefreshListeners );
+        }
+    }
 }
 
 // XIndexAccess (via XTextFields)
@@ -964,6 +1057,69 @@ void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
                                     throw(uno::RuntimeException)
 {
     DBG_ERROR("not implemented");
+}
+
+// XRefreshable
+void SAL_CALL ScHeaderFieldsObj::refresh(  )
+                                    throw (uno::RuntimeException)
+{
+    if (mpRefreshListeners)
+    {
+        //  Call all listeners.
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpRefreshListeners->getElements();
+        sal_uInt32 nLength(aListeners.getLength());
+        if (nLength)
+        {
+            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+            if (pInterfaces)
+            {
+                lang::EventObject aEvent;
+                aEvent.Source = uno::Reference< util::XRefreshable >(const_cast<ScHeaderFieldsObj*>(this));
+                sal_uInt32 i(0);
+                while (i < nLength)
+                {
+                    try
+                    {
+                        while(i < nLength)
+                        {
+                            static_cast< util::XRefreshListener* >(pInterfaces->get())->refreshed(aEvent);
+                            ++pInterfaces;
+                            ++i;
+                        }
+                    }
+                    catch(uno::RuntimeException&)
+                    {
+//                      DBG_ERROR("a object is gone without to remove from Broadcaster");
+                        ++pInterfaces;
+                        ++i;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void SAL_CALL ScHeaderFieldsObj::addRefreshListener( const uno::Reference< util::XRefreshListener >& xListener )
+                                    throw (uno::RuntimeException)
+{
+    if (xListener.is())
+    {
+        ScUnoGuard aGuard;
+        if (!mpRefreshListeners)
+            mpRefreshListeners = new cppu::OInterfaceContainerHelper(aMutex);
+        mpRefreshListeners->addInterface(xListener);
+    }
+}
+
+void SAL_CALL ScHeaderFieldsObj::removeRefreshListener( const uno::Reference<util::XRefreshListener >& xListener )
+                                    throw (uno::RuntimeException)
+{
+    if (xListener.is())
+    {
+        ScUnoGuard aGuard;
+        if (mpRefreshListeners)
+            mpRefreshListeners->removeInterface(xListener);
+    }
 }
 
 //------------------------------------------------------------------------
