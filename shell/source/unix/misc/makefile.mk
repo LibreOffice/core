@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.2 $
+#	$Revision: 1.3 $
 #
-#	last change: $Author: hr $ $Date: 2004-05-10 13:08:20 $
+#	last change: $Author: rt $ $Date: 2004-06-17 15:42:14 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -76,6 +76,7 @@ LIBSALCPPRT=$(0)
 # --- Files --------------------------------------------------------
 
 SCRIPTFILES = \
+    $(BIN)$/senddoc \
     $(BIN)$/open-url \
     $(BIN)$/cde-open-url \
     $(BIN)$/gnome-open-url \
