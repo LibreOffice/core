@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scpzipfiles.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:29:33 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:16:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,20 +147,20 @@ sub resolving_scpzip_replace_flag
                 my $destinationpath = $replacedir . $onefilename;
                 my $movepath = $destinationpath . ".orig";
 
-                if (!(-f $movepath))    # do nothing if the file already exists
+            #   if (!(-f $movepath))    # do nothing if the file already exists
+            #   {
+                my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
+
+                if ( $copysuccess )
                 {
-                    my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
+                    # Now the file can be edited
+                    # ToDo: How about binary patching?
 
-                    if ( $copysuccess )
-                    {
-                        # Now the file can be edited
-                        # ToDo: How about binary patching?
-
-                        my $onefileref = installer::files::read_file($movepath);
-                        replace_all_ziplistvariables_in_file($onefileref, $variablesref);
-                        installer::files::save_file($destinationpath ,$onefileref);
-                    }
+                    my $onefileref = installer::files::read_file($movepath);
+                    replace_all_ziplistvariables_in_file($onefileref, $variablesref);
+                    installer::files::save_file($destinationpath ,$onefileref);
                 }
+            #   }
 
                 # Writing the new sourcepath into the hashref, even if it was no copied
 
