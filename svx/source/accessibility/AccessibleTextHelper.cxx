@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-23 12:09:43 $
+ *  last change: $Author: thb $ $Date: 2002-11-29 17:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,12 +309,6 @@ namespace accessibility
         // whether we (this object) has the focus set (guarded by solar mutex)
         sal_Bool mbThisHasFocus;
 
-        // whether the children are active and editable (guarded by solar mutex)
-        sal_Bool mbChildrenActive;
-
-        // the internal paragraph number of the child with the focus (guarded by solar mutex)
-        sal_Int32 mnFocusedChild;
-
         // must be before maStateListeners, has to live longer
         mutable ::osl::Mutex maMutex;
 
@@ -341,8 +335,6 @@ namespace accessibility
         mbInNotify( sal_False ),
         mbGroupHasFocus( sal_False ),
         mbThisHasFocus( sal_False ),
-        mbChildrenActive( sal_False ),
-        mnFocusedChild( -1 ),
         maOffset(0,0),
         maStateListeners( maMutex )
     {
@@ -1242,15 +1234,9 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::FireEvent( const AccessibleEventObject& rEvent ) const
     {
-        // -- object locked --
-        ::osl::ClearableMutexGuard aGuard( maMutex );
-
-        ::cppu::OInterfaceIteratorHelper aIter( const_cast< AccessibleTextHelper_Impl* >(this)->maStateListeners );
-
         // no locking necessary, OInterfaceIteratorHelper copies listeners if someone removes/adds in between
         // Further locking, actually, might lead to deadlocks, since we're calling out of this object
-        aGuard.clear();
-        // -- until here --
+        ::cppu::OInterfaceIteratorHelper aIter( const_cast< AccessibleTextHelper_Impl* >(this)->maStateListeners );
 
         // #102261# Call global queue for focus events
         if( rEvent.EventId == AccessibleStateType::FOCUSED )
