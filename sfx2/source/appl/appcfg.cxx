@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:37:09 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <svtools/misccfg.hxx>
 
 #include "docfile.hxx"
 #include "viewfrm.hxx"
@@ -170,18 +171,15 @@
 #include "viewsh.hxx"
 #include "request.hxx"
 #include "evntconf.hxx"
-#include "cfgmgr.hxx"
 #include "docinf.hxx"
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include <svtools/misccfg.hxx>
-#include <macrconf.hxx>
+#include "macrconf.hxx"
 #include "appimp.hxx"
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "shutdownicon.hxx"
-#include "imgmgr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -1156,7 +1154,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
     // geaenderte Daten speichern
     aInetOptions.flush();
-    SaveConfiguration();
 }
 
 //--------------------------------------------------------------------
@@ -1374,19 +1371,6 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 }
 
 //--------------------------------------------------------------------
-
-void SfxApplication::SaveConfiguration() const
-{
-    // Workingset schreiben?
-//    if ( SvtOptions().IsSaveWorkingSet() )
-//        SfxTaskManager::SaveWorkingSet();
-//(mba/task): Implementierung fehlt
-
-    if ( !pCfgMgr->StoreConfiguration() )
-        HandleConfigError_Impl( (sal_uInt16)pCfgMgr->GetErrorCode() );
-
-    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
-}
 
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
