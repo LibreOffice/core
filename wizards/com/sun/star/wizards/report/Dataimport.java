@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bc $ $Date: 2002-11-08 17:25:55 $
+ *  last change: $Author: bc $ $Date: 2002-11-26 11:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  */
 
-
 package com.sun.star.wizards.report;
+import com.sun.star.wizards.common.TextDocument;
+import com.sun.star.wizards.common.TextDocument.UnknownHiddenControlException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XElementAccess;
 import com.sun.star.container.XNameAccess;
@@ -68,11 +69,9 @@ import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XIndexContainer;
-
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XMultiPropertySet;
-
 import com.sun.star.comp.servicemanager.ServiceManager;
 import com.sun.star.connection.XConnector;
 import com.sun.star.connection.XConnection;
@@ -138,7 +137,6 @@ import com.sun.star.frame.XModel;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;
 import com.sun.star.text.TableColumnSeparator;
-import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.script.XInvocation;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.style.XStyleLoader;
@@ -158,9 +156,9 @@ import com.sun.star.awt.XActionListener;
 
 public class Dataimport extends ReportWizard{
 
+    ReportDocument CurReportDocument;
     UNODialogs CurUNOProgressDialog;
     static boolean bStopProcess;
-
 
     public Dataimport() {
     }
@@ -194,10 +192,9 @@ public class Dataimport extends ReportWizard{
     }
 
 
-    public UNODialogs showProgressDisplay(XMultiServiceFactory xMSF, ReportDocument CurReportDocument, boolean bgetConnection){
+    public void showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection){
     try{
         int iHeight;
-        ReportWizard.getReportResources(xMSF, true);
         CurUNOProgressDialog = new UNODialogs(xMSF, new String[] {"Height", "Step", "Title", "Width"},
                             new Object[] {new Integer(84), new Integer(0), sProgressTitle, new Integer(180)});
         com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();
@@ -226,24 +223,24 @@ public class Dataimport extends ReportWizard{
                             new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
                             new Object[] {new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop});
 
-        CurUNOProgressDialog.calculateDialogPosition(xMSF, CurReportDocument.Frame.getComponentWindow().getPosSize(), CurReportDocument.xWindowPeer);
+        CurUNOProgressDialog.calculateDialogPosition(xMSF, CurReportDocument.xFrame.getComponentWindow().getPosSize(), CurReportDocument.xWindowPeer);
 
         CurUNOProgressDialog.xWindow.setVisible(true);
 
-    return CurUNOProgressDialog;
+    return;
     }
     catch(com.sun.star.uno.Exception exception)
     {
         exception.printStackTrace(System.out);
-    return null;
+    return;
     }
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
-    return null;
+    return;
     }}
 
 
-    public void importReportData(final XMultiServiceFactory xMSF, final ReportDocument CurReportDocument, final UNODialogs CurUNOProgressDialog){
+    public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport){
 /*    Thread ProgressThread = new Thread(new Runnable(CurUNOProgressDialog) {
         private UNODialogs dialog;
     public Runnable( UNODialogs x )
@@ -253,13 +250,14 @@ public class Dataimport extends ReportWizard{
     Thread ProgressThread = new Thread(new Runnable() {
     public void run(){
     try{
-        if (reconnectToDatabase(xMSF, CurReportDocument)){
-        CurReportDocument.getGroupFieldFortmats(xMSF, CurReportDocument.CurDBMetaData, sMsgTableNotExisting);
+        if (reconnectToDatabase(xMSF)){
+        CurReportDocument.getallDBColumns(CurReportDocument.CurDBMetaData);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
         CurUNOProgressDialog.modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
-        insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
+        insertDatabaseDatatoReportDocument(xMSF);
         }
-        CurUNOProgressDialog.xComponent.dispose();
+        CurDataimport.CurUNOProgressDialog.xComponent.dispose();
+        CurReportDocument.CurDBMetaData.disposeDBMetaData();
     }
     catch (ThreadDeath td){
         System.out.println("could not stop thread");
@@ -280,60 +278,39 @@ public class Dataimport extends ReportWizard{
 
     public void createReport(final XMultiServiceFactory xMSF){
     try{
-    ReportDocument CurReportDocument;
-    CurReportDocument = new ReportDocument(xMSF, false, true);
-    int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
-    CurUNOProgressDialog = showProgressDisplay(xMSF, CurReportDocument, true);
-    importReportData(xMSF, CurReportDocument, CurUNOProgressDialog);
-    CurReportDocument.CurDBMetaData.disposeDBMetaData();
+    if (ReportWizard.getReportResources(xMSF, true)){
+        CurReportDocument = new ReportDocument(xMSF, false, true, ReportMessages);
+        int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
+        showProgressDisplay(xMSF, true);
+        importReportData(xMSF, this);
+    }
     }
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
     }}
 
 
-    public String getValueofHiddenControl(XMultiServiceFactory xMSF, XNameAccess xNamedForm, String ControlName, boolean[] bgoOn){
-    try{
-    if (bgoOn[0] == true){
-        String ControlValue = (String) tools.getUNOPropertyValue(xNamedForm.getByName(ControlName), "HiddenValue");
-        return ControlValue;
-    }
-    else
-        return null;
-    }
-    catch(com.sun.star.uno.Exception exception){
-    sMsgHiddenControlMissing = tools.replaceSubString(sMsgHiddenControlMissing, SOREPORTFORMNAME, "<REPORTFORM>");
-    sMsgHiddenControlMissing = tools.replaceSubString(sMsgHiddenControlMissing, ControlName, "<CONTROLNAME>");
-    UNODialogs.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot);
-    bgoOn[0] = false;
-    return null;
-    }}
-
-
-    public boolean reconnectToDatabase(XMultiServiceFactory xMSF, ReportDocument CurReportDocument){
+    public boolean reconnectToDatabase(XMultiServiceFactory xMSF){
     try{
     XNameContainer xNamedForms = CurReportDocument.getDocumentForms();
     Object oDBForm = tools.getUNOObjectbyName(xNamedForms, SOREPORTFORMNAME);
     boolean bgetConnection;
     if (oDBForm != null){
-        boolean[] bgoOn = new boolean[1];
-        bgoOn[0] = true;
+        String sMsg = sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot;
         XNameAccess xNamedForm = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBForm);
         // Todo make up an exception class to catch that error
-        CurReportDocument.CurDBMetaData.DataSourceName = (String) getValueofHiddenControl(xMSF, xNamedForm, "DataSourceName", bgoOn);
-        CurReportDocument.CurDBMetaData.Command = getValueofHiddenControl(xMSF, xNamedForm, "Command", bgoOn);
-        String sCommandType = getValueofHiddenControl(xMSF, xNamedForm, "CommandType", bgoOn);
-        String sGroupFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "GroupFieldNames", bgoOn);
-        String sFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "FieldNames", bgoOn);
-        String sRecordFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "RecordFieldNames", bgoOn);
+        CurReportDocument.CurDBMetaData.DataSourceName = (String) CurReportDocument.getValueofHiddenControl(xNamedForm, "DataSourceName", sMsg);
+        CurReportDocument.CurDBMetaData.Command = CurReportDocument.getValueofHiddenControl(xNamedForm, "Command", sMsg);
+        String sCommandType = CurReportDocument.getValueofHiddenControl(xNamedForm, "CommandType", sMsg);
+        String sGroupFieldNames = CurReportDocument.getValueofHiddenControl(xNamedForm, "GroupFieldNames", sMsg);
+        String sFieldNames = CurReportDocument.getValueofHiddenControl(xNamedForm, "FieldNames", sMsg);
+        String sRecordFieldNames = CurReportDocument.getValueofHiddenControl(xNamedForm, "RecordFieldNames", sMsg);
         CurReportDocument.CurDBMetaData.FieldNames = tools.ArrayoutofString(sFieldNames,";");
         CurReportDocument.CurDBMetaData.RecordFieldNames = tools.ArrayoutofString(sRecordFieldNames,";");
         CurReportDocument.CurDBMetaData.GroupFieldNames = tools.ArrayoutofString(sGroupFieldNames,";");
         CurReportDocument.CurDBMetaData.CommandType = Integer.valueOf(sCommandType).intValue();
         sMsgQueryCreationImpossible = tools.replaceSubString(sMsgQueryCreationImpossible, CurReportDocument.CurDBMetaData.Command, "<STATEMENT>");
-        bgetConnection = CurReportDocument.CurDBMetaData.getConnection(CurReportDocument, CurReportDocument.CurDBMetaData.DataSourceName, sMsgNoConnection, sMsgConnectionImpossible);
-        if (bgoOn[0] == false)
-        return false;
+        bgetConnection = CurReportDocument.CurDBMetaData.getConnection(sMsgNoConnection, sMsgConnectionImpossible);
         if (bgetConnection){
         boolean bexecute = CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
         return bexecute;
@@ -347,24 +324,26 @@ public class Dataimport extends ReportWizard{
         return false;
     }
     }
-     catch(java.lang.Exception javaexception ){
-        javaexception.printStackTrace(System.out);
+    catch(java.lang.Exception javaexception ){
+    javaexception.printStackTrace(System.out);
     return false;
-    }}
+    }
+    catch(UnknownHiddenControlException exception){
+    return false;
+     }}
 
 
 
-    public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF, ReportDocument CurReportDocument, UNODialogs CurUNOProgressDialog){
+    public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF){
     try{
         int ColIndex;
         int i;
     boolean breset;
-    Object oTextTable;
     XCellRange xCellRange;
     XTextCursor xTextCursor;
     XTextDocument xTextDocument;
     java.util.Vector DataVector = new java.util.Vector();
-    ReportDocument.GroupFieldFormat CurGroupFieldFormat;
+    ReportDocument.DBColumn CurDBColumn;
     Object CurGroupValue;
     String CurGroupTableName;
     DBMetaData CurDBMetaData = CurReportDocument.CurDBMetaData;
@@ -382,16 +361,16 @@ public class Dataimport extends ReportWizard{
         SelColIndices = CurDBMetaData.getSelectedQueryFields(CurDBMetaData.RecordFieldNames);
         GroupColIndices = CurDBMetaData.getSelectedQueryFields(CurDBMetaData.GroupFieldNames);
     }
-    XNameAccess xTextTables = CurReportDocument.TextTablesSupplier.getTextTables();
-    xTextDocument = CurReportDocument.ReportTextDocument;
-        xTextCursor = CurReportDocument.createTextCursor(CurReportDocument.ReportTextDocument.getText());
+    XNameAccess xTextTables = CurReportDocument.xTextTablesSupplier.getTextTables();
+    xTextDocument = CurReportDocument.xTextDocument;
+        xTextCursor = CurReportDocument.createTextCursor(CurReportDocument.xTextDocument.getText());
     xTextDocument.lockControllers();
         if (CurDBMetaData.ResultSet.next() == true){
-
+        replaceUserFields();
         tools.setUNOPropertyValue(xTextCursor, "PageDescName", "First Page");
         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++){
             CurGroupTableName = "Tbl_GroupField" + Integer.toString(ColIndex+1);
-            xGroupBaseTables[ColIndex] = (XTextTable) CurReportDocument.TextTablesSupplier.getTextTables().getByName(CurGroupTableName);
+            xGroupBaseTables[ColIndex] = (XTextTable) CurReportDocument.xTextTablesSupplier.getTextTables().getByName(CurGroupTableName);
         if (ColIndex == 0){
             BreakType BreakValue = (BreakType) tools.getUNOPropertyValue(xGroupBaseTables[ColIndex], "BreakType");
             if (BreakValue.equals(BreakType.NONE) == false) {
@@ -406,8 +385,8 @@ public class Dataimport extends ReportWizard{
         }
             CurGroupValue = CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
         OldGroupFieldValues[ColIndex] = CurGroupValue;
-        CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
-        addLinkedTextSection(CurReportDocument, xTextCursor, "GroupField" + Integer.toString(ColIndex+1), CurGroupFieldFormat, CurGroupValue);
+        CurDBColumn = (ReportDocument.DBColumn) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
+        addLinkedTextSection(xTextCursor, "GroupField" + Integer.toString(ColIndex+1), CurDBColumn, CurGroupValue);
         }
         if (CurDBMetaData.getcurrentRecordData(ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible) == true){
         int RowIndex = 1;
@@ -419,24 +398,24 @@ public class Dataimport extends ReportWizard{
             CurGroupValue = CurDBMetaData.getGroupColumnValue(iCommandType, GroupColIndices, ColIndex);
             if ((CurGroupValue.equals((Object) OldGroupFieldValues[ColIndex]) == false) || (breset)){
                 breset = true;
-                insertDataToRecordTable(CurReportDocument, xTextCursor, DataVector, RecordFieldCount);
-                CurGroupFieldFormat = (ReportDocument.GroupFieldFormat) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
-                addLinkedTextSection(CurReportDocument, xTextCursor, "GroupField" + Integer.toString(ColIndex+1), CurGroupFieldFormat, CurGroupValue);
+                insertDataToRecordTable(xTextCursor, DataVector, RecordFieldCount);
+                CurDBColumn = (ReportDocument.DBColumn) CurReportDocument.GroupFormatVector.elementAt(ColIndex);
+                addLinkedTextSection(xTextCursor, "GroupField" + Integer.toString(ColIndex+1), CurDBColumn, CurGroupValue);
                 OldGroupFieldValues[ColIndex] = CurGroupValue;
                 breset = !(ColIndex == GroupFieldCount-1);
             }
             }
             CurDBMetaData.getcurrentRecordData(ColIndex, FieldCount, RecordFieldCount, SelColIndices, iCommandType, DataVector, sMsgQueryCreationImpossible);
-            updateProgressDisplay(RowIndex, CurUNOProgressDialog);
+            updateProgressDisplay(RowIndex);
         }
-        insertDataToRecordTable(CurReportDocument, xTextCursor, DataVector, RecordFieldCount);
+        insertDataToRecordTable(xTextCursor, DataVector, RecordFieldCount);
         }
         else{
         xTextDocument.unlockControllers();
         return;
         }
         }
-    setLayoutSectionsInvisible(CurReportDocument.TextSectionsSupplier, GroupFieldCount);
+    setLayoutSectionsInvisible(GroupFieldCount);
     CurReportDocument.breakLinkofTextSections();
     if (CorrBreakValue != null)
         tools.setUNOPropertyValue(xGroupBaseTables[0], "BreakType", CorrBreakValue);
@@ -450,14 +429,14 @@ public class Dataimport extends ReportWizard{
     catch(java.lang.Exception javaexception ){
         javaexception.printStackTrace(System.out);
     }
-    if (CurReportDocument.ReportTextDocument.hasControllersLocked())
-        CurReportDocument.ReportTextDocument.unlockControllers();
+    if (CurReportDocument.xTextDocument.hasControllersLocked())
+        CurReportDocument.xTextDocument.unlockControllers();
     }
 
 
-    public void setLayoutSectionsInvisible(XTextSectionsSupplier xTextSectionsSupplier, int GroupFieldCount){
+    public void setLayoutSectionsInvisible(int GroupFieldCount){
     try{
-    XNameAccess xTextSections = xTextSectionsSupplier.getTextSections();
+    XNameAccess xTextSections = CurReportDocument.xTextSectionsSupplier.getTextSections();
     Object oTextSection;
     for (int i = 0; i< GroupFieldCount; i++){
         oTextSection = xTextSections.getByName("GroupField" + String.valueOf(i+1));
@@ -473,14 +452,14 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-    public void insertDataToRecordTable(ReportDocument CurReportDocument, XTextCursor xTextCursor, java.util.Vector DataVector, int FieldCount){
+    public void insertDataToRecordTable(XTextCursor xTextCursor, java.util.Vector DataVector, int FieldCount){
     try{
     int DataLength = DataVector.size();
     if ((FieldCount > 0)&& (DataLength > 0)){
-        addLinkedTextSection(CurReportDocument, xTextCursor, "RecordSection", null, null);
+        addLinkedTextSection(xTextCursor, "RecordSection", null, null);
         Object[][] RecordArray = new Object[DataLength][FieldCount];
         DataVector.copyInto(RecordArray);
-        XTextTable xTextTable = getlastTextTable(CurReportDocument.ReportTextDocument);
+        XTextTable xTextTable = CurReportDocument.getlastTextTable();
         if (DataLength > 1){
         xTextTable.getRows().insertByIndex(xTextTable.getRows().getCount(), DataLength - 1);
         }
@@ -499,7 +478,7 @@ public class Dataimport extends ReportWizard{
      }}
 
 
-    public void updateProgressDisplay(int iCounter, UNODialogs CurUNOProgressDialog){
+    public void updateProgressDisplay(int iCounter){
     try{
     if (iCounter % 10 == 0){
         sProgressCurRecord = tools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
@@ -511,43 +490,39 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-
-
-    public static void addLinkedTextSection(ReportDocument CurReportDocument, XTextCursor xTextCursor, String sLinkRegion,
-                        ReportDocument.GroupFieldFormat CurGroupFieldFormat, Object CurGroupValue){
+    public void addLinkedTextSection(XTextCursor xTextCursor, String sLinkRegion, ReportDocument.DBColumn CurDBColumn, Object CurGroupValue){
     try{
-    Object oTextSection =  CurReportDocument.MSFDoc.createInstance("com.sun.star.text.TextSection");
+    Object oTextSection =  CurReportDocument.xMSFDoc.createInstance("com.sun.star.text.TextSection");
     XTextContent xTextSectionContent = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextSection);
     xTextCursor.gotoEnd(false);
     xTextCursor.getText().insertTextContent(xTextCursor, xTextSectionContent, true);
     tools.setUNOPropertyValue(oTextSection, "LinkRegion", sLinkRegion);
-    if (CurGroupFieldFormat != null){
+    if (CurDBColumn != null){
         boolean bIsGroupTable = (sLinkRegion.equals("RecordSection") != true);
         if (bIsGroupTable == true){
-        Object oTextTable = getlastTextTable(CurReportDocument.ReportTextDocument);
-        XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, oTextTable);
-        CurGroupFieldFormat.modifyCellContent(xCellRange, CurGroupValue);
+        XTextTable xTextTable = CurReportDocument.getlastTextTable();
+        XCellRange xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
+        CurDBColumn.modifyCellContent(xCellRange, CurGroupValue);
         }
     }
     }
     catch( com.sun.star.uno.Exception exception ){
         exception.printStackTrace(System.out);
-     }}
-
-
-    // Todo: This Routine should be  modified, because I cannot rely on the last Table in the document to be the last in the TextTables sequence
-    // to make it really safe you must acquire the Tablenames before the insertion and after the insertion of the new Table. By comparing the
-    // two sequences of tablenames you can find out the tablename of the last inserted Table
-    public static XTextTable getlastTextTable(XTextDocument xTextDocument){
-    try{
-    XTextTablesSupplier xTextTablesSuppl = (XTextTablesSupplier) UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
-    XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSuppl.getTextTables());
-    int MaxIndex = xAllTextTables.getCount()-1;
-    XTextTable xTextTable = (XTextTable) xAllTextTables.getByIndex(MaxIndex);
-    return xTextTable;
-    }
-    catch( com.sun.star.uno.Exception exception ){
-        exception.printStackTrace(System.out);
-     return null;
     }}
+
+
+    public void replaceUserFields(){
+    ReportDocument.DBColumn CurDBColumn;
+    XTextCursor xNameCellCursor;
+    String FieldContent;
+    int iCount = CurReportDocument.GroupFormatVector.size();
+    for (int i = 0; i < iCount; i++){
+        CurDBColumn = (ReportDocument.DBColumn) CurReportDocument.GroupFormatVector.elementAt(i);
+        xNameCellCursor = CurReportDocument.createTextCursor(CurDBColumn.xNameCell);
+        xNameCellCursor.gotoStart(false);
+        FieldContent = CurReportDocument.getUserFieldContent(xNameCellCursor);
+        xNameCellCursor.goRight((short)1, true);
+        xNameCellCursor.setString(FieldContent);
+    }
+    }
 }
