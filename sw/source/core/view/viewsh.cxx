@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-05 13:43:40 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 10:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,14 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
         Imp()->ResetScroll();
         SwLayAction aAction( GetLayout(), Imp() );
         aAction.SetComplete( FALSE );
+        // We increment the action counter to avoid a recursive call of actions
+        // e.g. from a SwFEShell::RequestObjectResize(..) in bug 95829.
+        // A recursive call of actions is no good idea because the inner action
+        // can't format frames which are locked by the outer action. This may
+        // cause and endless loop.
+        ++nStartAction;
         aAction.Action();
+        --nStartAction;
 
         SwRegionRects *pRegion = Imp()->GetRegion();
         if ( pRegion && aAction.IsBrowseActionStop() )
