@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:26:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ void SwFEShell::ParkCursorInTab()
     while (pTmpCrsr != pSwCrsr);
 
     KillPams();
+
+    /* @@@ semantic: SwCursor::operator=() is not implemented @@@ */
 
     /* Set cursor to end of selection to ensure IsLastCellInRow works
        properly. */
