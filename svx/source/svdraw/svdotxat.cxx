@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-06 08:39:12 $
+ *  last change: $Author: dl $ $Date: 2001-03-16 09:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,37 +310,40 @@ void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrTextObj::BurnInStyleSheetAttributes()
+void SdrTextObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
     if ( pModel && pOutlinerParaObject && !pEdtOutl && !IsLinkedText() )
     {
         Outliner* pOutliner = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pModel );
         pOutliner->SetText( *pOutlinerParaObject );
 
-        SdrAttrObj::BurnInStyleSheetAttributes();
-
         USHORT nParaCount = (USHORT) pOutliner->GetParagraphCount();
         if ( nParaCount > 0 )
         {
+            BOOL bBurnIn = FALSE;
+
             for ( USHORT nPara = 0; nPara < nParaCount; nPara++ )
             {
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( nPara );
 
-                if( pSheet )
+                if( pSheet && !bPseudoSheetsOnly || pSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
                 {
                     SfxItemSet aSet( pSheet->GetItemSet() );
                     aSet.Put( pOutliner->GetParaAttribs( nPara ), FALSE );
                     pOutliner->SetParaAttribs( nPara, aSet );
+                    bBurnIn = TRUE;
                 }
             }
 
-            OutlinerParaObject* pTemp = pOutliner->CreateParaObject( 0, nParaCount );
-            NbcSetOutlinerParaObject( pTemp );
-            delete pOutliner;
+            if( bBurnIn )
+            {
+                OutlinerParaObject* pTemp = pOutliner->CreateParaObject( 0, nParaCount );
+                NbcSetOutlinerParaObject( pTemp );
+            }
         }
+
+        delete pOutliner;
     }
-    else
-        SdrAttrObj::BurnInStyleSheetAttributes();
 }
 
 FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt, FASTBOOL bWdt) const

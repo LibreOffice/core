@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-07 16:20:06 $
+ *  last change: $Author: dl $ $Date: 2001-03-16 09:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,16 +863,16 @@ SvStream* SdrModel::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 }
 
 // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
-void SdrModel::BurnInStyleSheetAttributes()
+void SdrModel::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
     USHORT nAnz=GetMasterPageCount();
     USHORT nNum;
     for (nNum=0; nNum<nAnz; nNum++) {
-        GetMasterPage(nNum)->BurnInStyleSheetAttributes();
+        GetMasterPage(nNum)->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
     }
     nAnz=GetPageCount();
     for (nNum=0; nNum<nAnz; nNum++) {
-        GetPage(nNum)->BurnInStyleSheetAttributes();
+        GetPage(nNum)->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
+ *  last change: $Author: dl $ $Date: 2001-03-16 09:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,9 +1534,9 @@ void SdrObjGroup::ReformatText()
 }
 
 
-void SdrObjGroup::BurnInStyleSheetAttributes()
+void SdrObjGroup::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
 {
-    pSub->BurnInStyleSheetAttributes();
+    pSub->BurnInStyleSheetAttributes( bPseudoSheetsOnly );
 }
 
 

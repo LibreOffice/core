@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-07 14:35:36 $
+ *  last change: $Author: dl $ $Date: 2001-03-16 09:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,10 +1230,6 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes(ExtOutputDevice& rXOut, FASTBOOL bNo
     }
 
     return FALSE;
-}
-
-void SdrAttrObj::BurnInStyleSheetAttributes()
-{
 }
 
 // ItemPool fuer dieses Objekt wechseln
