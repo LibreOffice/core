@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-27 14:54:48 $
+ *  last change: $Author: mib $ $Date: 2001-07-05 09:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,15 +128,7 @@
 #include <tools/bigint.hxx>
 #endif
 
-// xml stuff
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmloff/xmluconv.hxx>
-#endif
 #include <rtl/ustring>
-#include <rtl/ustrbuf.hxx>
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -241,7 +233,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
-using namespace ::xmloff::token;
 
 // Konvertierung fuer UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -424,233 +415,6 @@ sal_Bool SvxFontItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
         break;
     }
     return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-#ifndef SVX_LIGHT
-
-void xml_in_font_family_impl( SvxFontItem& rItem, const OUString& rValue )
-{
-    String sValue;
-
-    sal_Int32 nPos = 0;
-    do
-    {
-        sal_Int32 nFirst = nPos;
-        nPos = SvXMLUnitConverter::indexOfComma( rValue, nPos );
-        sal_Int32 nLast = (-1 == nPos ? rValue.getLength() : nPos);
-        if( nLast > 0 )
-            nLast--;
-
-        // skip trailing blanks
-        while( sal_Unicode(' ') == rValue[nLast] && nLast > nFirst )
-            nLast--;
-
-        // skip leading blanks
-        while( sal_Unicode(' ') == rValue[nFirst] && nFirst <= nLast )
-            nFirst++;
-
-        // remove quotes
-        sal_Unicode c = rValue[nFirst];
-        if( nFirst < nLast && (sal_Unicode('\'') == c || sal_Unicode('\"') == c) && rValue[nLast] == c )
-        {
-            nFirst++;
-            nLast--;
-        }
-
-        if( nFirst <= nLast )
-        {
-            if( sValue.Len() != 0 )
-                sValue += sal_Unicode(';');
-
-            OUString sTemp = rValue.copy( nFirst, nLast-nFirst+1 );
-            sValue += sTemp.getStr();
-        }
-
-        if( -1 != nPos )
-            nPos++;
-    }
-    while( -1 != nPos );
-
-    if( sValue.Len() )
-        rItem.GetFamilyName() = sValue;
-}
-
-static SvXMLEnumMapEntry __READONLY_DATA aFontFamilyGenericMap[] =
-{
-    { XML_DECORATIVE,   FAMILY_DECORATIVE },
-
-    { XML_MODERN,       FAMILY_MODERN   },
-    { XML_ROMAN,        FAMILY_ROMAN    },
-    { XML_SCRIPT,       FAMILY_SCRIPT   },
-    { XML_SWISS,        FAMILY_SWISS    },
-    { XML_SYSTEM,       FAMILY_SYSTEM   },
-    { XML_TOKEN_INVALID, 0 }
-};
-
-static SvXMLEnumMapEntry __READONLY_DATA aFontPitchMap[] =
-{
-    { XML_FIXED,        PITCH_FIXED     },
-
-    { XML_VARIABLE,     PITCH_VARIABLE  },
-    { XML_TOKEN_INVALID, 0 }
-};
-#endif
-
-sal_Bool SvxFontItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    switch( nMemberId )
-    {
-    case MID_FONT_FAMILY_NAME:
-        xml_in_font_family_impl( *this, rValue );
-        break;
-    case MID_FONT_STYLE_NAME:
-        aStyleName = rValue.getStr();
-        break;
-    case MID_FONT_FAMILY:
-        {
-            sal_uInt16 eNewFamily;
-            if( !rUnitConverter.convertEnum( eNewFamily, rValue, aFontFamilyGenericMap ) )
-                return sal_False;
-            eFamily =  (FontFamily)eNewFamily;
-        }
-        break;
-    case MID_FONT_CHAR_SET:
-        if( rValue.compareToAscii(sXML_x_symbol ) )
-            eTextEncoding = RTL_TEXTENCODING_SYMBOL;
-        break;
-    case MID_FONT_PITCH:
-        {
-            USHORT eNewPitch;
-            if( !rUnitConverter.convertEnum( eNewPitch, rValue, aFontPitchMap ) )
-                return sal_False;
-            ePitch = (FontPitch)eNewPitch;
-        }
-        break;
-    }
-
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-#ifndef SVX_LIGHT
-void xml_out_font_family_impl( const SvxFontItem& rFont, OUString& rValue )
-{
-    OUString sFamilies( rFont.GetFamilyName().GetBuffer() );
-
-    OUStringBuffer sValue( sFamilies.getLength() + 2L );
-    sal_Int32 nPos = 0L;
-    do
-    {
-        sal_Int32 nFirst = nPos;
-        nPos = sFamilies.indexOf( sal_Unicode(';'), nPos );
-        sal_Int32 nLast = (-1L == nPos ? sFamilies.getLength() : nPos);
-        if( nLast > 0L )
-            nLast--;
-
-        // skip trailing blanks
-        while( sal_Unicode(' ') == sFamilies[nLast] && nLast > nFirst )
-            nLast--;
-
-        // skip leading blanks
-        while( sal_Unicode(' ') == sFamilies[nFirst] && nFirst <= nLast )
-            nFirst++;
-
-        if( nFirst <= nLast )
-        {
-            if( sValue.getLength() != 0L )
-            {
-                sValue.append( sal_Unicode( ',' ) );
-                sValue.append( sal_Unicode( ' ' ));
-            }
-            sal_Int32 nLen = nLast-nFirst+1L;
-            OUString sFamily( sFamilies.copy( nFirst, nLen ) );
-            sal_Bool bQuote = sal_False;
-            for( sal_Int32 i=0; i < nLen; i++ )
-            {
-                sal_Unicode c = sFamily[i];
-                if( sal_Unicode(' ') == c || sal_Unicode(',') == c )
-                {
-                    bQuote = sal_True;
-                    break;
-                }
-            }
-            if( bQuote )
-                sValue.append( sal_Unicode('\'') );
-            sValue.append( sFamily );
-            if( bQuote )
-                sValue.append( sal_Unicode('\'') );
-        }
-
-        if( -1L != nPos )
-            nPos++;
-    }
-    while( -1L != nPos );
-
-    rValue = sValue.makeStringAndClear();
-}
-#endif
-
-sal_Bool SvxFontItem::exportXML( OUString& rValue, USHORT nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bOk = sal_False;
-#ifndef SVX_LIGHT
-
-    OUStringBuffer aOut;
-
-    switch( nMemberId )
-    {
-    case MID_FONT_FAMILY_NAME:
-        xml_out_font_family_impl( *this, rValue );
-        return sal_True;
-
-    case MID_FONT_STYLE_NAME:
-        if( aStyleName.Len() != 0 )
-        {
-            OUString sTmp( aStyleName.GetBuffer() );
-            aOut.append( sTmp );
-            bOk = sal_True;
-        }
-        break;
-
-    case MID_FONT_FAMILY:
-        if( eFamily != FAMILY_DONTKNOW )
-            bOk = rUnitConverter.convertEnum( aOut, eFamily, aFontFamilyGenericMap );
-        break;
-
-    case MID_FONT_CHAR_SET:
-        // MIB 30.9.99: As long as we don't support unicode at the core, we
-        // must know if a font is a symbol font. This is not required to
-        // convert characters, but to set the right encoding within the
-        // font attributes.
-
-        // see:
-        // ftp://ftp.isi.edu/in-notes/iana/assignments/character-sets
-        // http://msdn.microsoft.com/workshop/author/dhtml/reference/charsets/charset4.asp
-        // Mozilla (libi18n/csnametb.c)
-        if( eTextEncoding == RTL_TEXTENCODING_SYMBOL )
-        {
-            aOut.appendAscii( sXML_x_symbol );
-            bOk = sal_True;
-        }
-        break;
-
-    case MID_FONT_PITCH:
-        if( PITCH_DONTKNOW != ePitch )
-            bOk = rUnitConverter.convertEnum( aOut, ePitch, aFontPitchMap, XML_FIXED );
-        break;
-    }
-
-    rValue = aOut.makeStringAndClear();
-
-#endif
-    return bOk;
 }
 
 // -----------------------------------------------------------------------
@@ -874,50 +638,6 @@ sal_Bool SvxPostureItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     }
     return sal_True;
 }
-
-#ifndef SVX_LIGHT
-static SvXMLEnumMapEntry __READONLY_DATA aPostureGenericMap[] =
-{
-    { XML_POSTURE_NORMAL,       ITALIC_NONE     },
-    { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },
-    { XML_POSTURE_OBLIQUE,      ITALIC_OBLIQUE  },
-    { XML_TOKEN_INVALID, 0 }
-};
-#endif
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxPostureItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_uInt16 ePosture;
-    if( rUnitConverter.convertEnum( ePosture, rValue, aPostureGenericMap ) )
-    {
-        SetValue( ePosture );
-        return sal_True;
-    }
-
-#endif
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-
-sal_Bool SvxPostureItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    if( rUnitConverter.convertEnum( aOut, GetValue(), aPostureGenericMap ) )
-    {
-        rValue = aOut.makeStringAndClear();
-        return sal_True;
-    }
-
-#endif
-    return sal_False;
-}
-
 // -----------------------------------------------------------------------
 
 int SvxPostureItem::HasBoolValue() const
@@ -1074,107 +794,6 @@ sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
     }
     return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-// TODO:.is this apropriate?
-#ifndef SVX_LIGHT
-
-static struct
-{
-    FontWeight eWeight;
-    USHORT nValue;
-}
-aFontWeightMap[] =
-{
-    { WEIGHT_DONTKNOW,      0 },
-    { WEIGHT_THIN,          100 },
-    { WEIGHT_ULTRALIGHT,    150 },
-    { WEIGHT_LIGHT,         250 },
-    { WEIGHT_SEMILIGHT,     350 },
-    { WEIGHT_NORMAL,        400 },
-    { WEIGHT_MEDIUM,        450 },
-    { WEIGHT_SEMIBOLD,      600 },
-    { WEIGHT_BOLD,          700 },
-    { WEIGHT_ULTRABOLD,     800 },
-    { WEIGHT_BLACK,         900 },
-    { (FontWeight)USHRT_MAX,       1000 }
-};
-#endif
-
-sal_Bool SvxWeightItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_uInt16 nWeight = 0;
-
-    if( rValue.compareToAscii( sXML_weight_normal ) )
-    {
-        nWeight = 400;
-    }
-    else if( rValue.compareToAscii( sXML_weight_bold ) )
-    {
-        nWeight = 700;
-    }
-    else
-    {
-        sal_Int32 nTemp;
-        if( !rUnitConverter.convertNumber( nTemp, rValue, 100, 900 ) )
-            return sal_False;
-        nWeight = (USHORT)nTemp;
-    }
-
-    for( int i = 0; aFontWeightMap[i].eWeight != USHRT_MAX; i++ )
-    {
-        if( (nWeight >= aFontWeightMap[i].nValue) && (nWeight <= aFontWeightMap[i+1].nValue) )
-        {
-            sal_uInt16 nDiff1 = aFontWeightMap[i].nValue - nWeight;
-            sal_uInt16 nDiff2 = nWeight - aFontWeightMap[i+1].nValue;
-
-            if( nDiff1 < nDiff2 )
-                SetValue( aFontWeightMap[i].eWeight );
-            else
-                SetValue( aFontWeightMap[i+1].eWeight );
-
-            return sal_True;
-        }
-    }
-
-    SetValue( WEIGHT_DONTKNOW );
-#endif
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxWeightItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    sal_uInt16 nWeight = 0;
-
-    for( int i = 0; aFontWeightMap[i].eWeight != -1; i++ )
-    {
-        if( aFontWeightMap[i].eWeight == GetValue() )
-        {
-             nWeight = aFontWeightMap[i].nValue;
-             break;
-        }
-    }
-
-    OUStringBuffer aOut;
-
-    if( 400 == nWeight )
-        aOut.appendAscii( sXML_weight_normal );
-    else if( 700 == nWeight )
-        aOut.appendAscii( sXML_weight_bold );
-    else
-        rUnitConverter.convertNumber( aOut, (sal_Int32) nWeight );
-
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
 }
 
 // class SvxFontHeightItem -----------------------------------------------
@@ -1404,50 +1023,6 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
     }
     return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxFontHeightItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-    sal_Bool bOk = sal_False;
-#ifndef SVX_LIGHT
-
-    sal_Int32 nPrc = 100;
-    sal_Int32 nAbs = 0;
-
-    if( rValue.indexOf( sal_Unicode('%') ) != -1 )
-        bOk = rUnitConverter.convertPercent( nPrc, rValue );
-    else
-        bOk = rUnitConverter.convertMeasure( nAbs, rValue );
-
-    if( bOk )
-        SetHeight( (sal_uInt32)nAbs, (sal_uInt16)nPrc );
-
-#endif
-    return bOk;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxFontHeightItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-
-    if( GetProp() != 100 )
-        rUnitConverter.convertPercent( aOut, GetProp() );
-    else
-        SvXMLUnitConverter::convertMeasure( aOut, GetHeight(),
-                                            rUnitConverter.getCoreMeasureUnit(),
-                                            MAP_POINT );
-
-    rValue = aOut.makeStringAndClear();
-
-    return sal_True;
-#else
-    return sal_False;
-#endif
 }
 
 //------------------------------------------------------------------------
@@ -1858,104 +1433,6 @@ int SvxUnderlineItem::operator==( const SfxPoolItem& rItem ) const
     return SfxEnumItem::operator==( rItem ) &&
            GetColor() == ((SvxUnderlineItem&)rItem).GetColor();
 }
-// -----------------------------------------------------------------------
-
-#ifndef SVX_LIGHT
-
-SvXMLEnumMapEntry pXML_underline_enums[] =
-{
-    { XML_UNDERLINE_NONE,               UNDERLINE_NONE },
-    { XML_UNDERLINE_SINGLE,             UNDERLINE_SINGLE },
-    { XML_UNDERLINE_DOUBLE,             UNDERLINE_DOUBLE },
-    { XML_UNDERLINE_DOTTED,             UNDERLINE_DOTTED },
-    { XML_UNDERLINE_DASH,               UNDERLINE_DASH },
-    { XML_UNDERLINE_LONG_DASH,          UNDERLINE_LONGDASH },
-    { XML_UNDERLINE_DOT_DASH,           UNDERLINE_DASHDOT },
-    { XML_UNDERLINE_DOT_DOT_DASH,       UNDERLINE_DASHDOTDOT },
-    { XML_UNDERLINE_WAVE,               UNDERLINE_WAVE },
-    { XML_UNDERLINE_BOLD,               UNDERLINE_BOLD },
-    { XML_UNDERLINE_BOLD_DOTTED,        UNDERLINE_BOLDDOTTED },
-    { XML_UNDERLINE_BOLD_DASH,          UNDERLINE_BOLDDASH },
-    { XML_UNDERLINE_BOLD_LONG_DASH,     UNDERLINE_BOLDLONGDASH },
-    { XML_UNDERLINE_BOLD_DOT_DASH,      UNDERLINE_BOLDDASHDOT },
-    { XML_UNDERLINE_BOLD_DOT_DOT_DASH,  UNDERLINE_BOLDDASHDOTDOT },
-    { XML_UNDERLINE_BOLD_WAVE,          UNDERLINE_BOLDWAVE },
-    { XML_UNDERLINE_DOUBLE_WAVE,        UNDERLINE_DOUBLEWAVE },
-    { XML_UNDERLINE_SMALL_WAVE,         UNDERLINE_SMALLWAVE },
-    { XML_TOKEN_INVALID, 0 }
-};
-#endif
-
-sal_Bool SvxUnderlineItem::importXML( const OUString& rValue,
-                                    sal_uInt16 nMemberId,
-                                    const SvXMLUnitConverter& rUnitConverter )
-{
-    sal_Bool bRet =
-#ifdef SVX_LIGHT
-            sal_False;
-#else
-            sal_True;
-
-    Color aTempColor;
-    sal_uInt16 eUnderline;
-    switch( nMemberId )
-    {
-    case MID_UNDERLINED:
-    case MID_UNDERLINE:
-        if( rUnitConverter.convertEnum( eUnderline, rValue,
-                                        pXML_underline_enums ) )
-            SetValue( eUnderline );
-        else
-            bRet = sal_False;
-        break;
-
-    case MID_UL_COLOR:
-        if( 0 == rValue.compareToAscii( sXML_transparent ) )
-            mColor.SetTransparency( 0xff );
-        else if( rUnitConverter.convertColor( aTempColor, rValue ) )
-        {
-            mColor = aTempColor;
-            mColor.SetTransparency( 0 );
-        }
-        else
-            bRet = sal_False;
-        break;
-    }
-#endif
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-
-sal_Bool SvxUnderlineItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bRet =
-#ifdef SVX_LIGHT
-            sal_False;
-#else
-            sal_True;
-
-    OUStringBuffer aOut;
-    switch( nMemberId )
-    {
-    case MID_UNDERLINED:
-    case MID_UNDERLINE:
-        bRet = rUnitConverter.convertEnum( aOut, GetValue(),
-                                            pXML_underline_enums );
-        break;
-
-    case MID_UL_COLOR:
-        if( mColor.GetTransparency() )
-            aOut.appendAscii( sXML_transparent );
-        else
-            rUnitConverter.convertColor( aOut, mColor );
-        break;
-    }
-    rValue = aOut.makeStringAndClear();
-#endif
-    return bRet;
-}
 
 // class SvxCrossedOutItem -----------------------------------------------
 
@@ -2084,51 +1561,6 @@ sal_Bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     }
     return sal_True;
 }
-
-#ifndef SVX_LIGHT
-SvXMLEnumMapEntry pXML_crossedout_enums[] =
-{
-    { XML_CROSSEDOUT_NONE,      STRIKEOUT_NONE },
-    { XML_CROSSEDOUT_SINGLE,    STRIKEOUT_SINGLE },
-    { XML_CROSSEDOUT_DOUBLE,    STRIKEOUT_DOUBLE },
-    { XML_CROSSEDOUT_THICK,     STRIKEOUT_BOLD },
-    { XML_CROSSEDOUT_SLASH,     STRIKEOUT_SLASH },
-    { XML_CROSSEDOUT_CROSS,     STRIKEOUT_X },
-    { XML_TOKEN_INVALID, 0 }
-};
-#endif
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxCrossedOutItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_uInt16 eCross;
-    if( rUnitConverter.convertEnum( eCross, rValue, pXML_crossedout_enums ) )
-    {
-        SetValue( eCross );
-        return sal_True;
-    }
-#endif
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxCrossedOutItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-
-    OUStringBuffer aOut;
-    if( rUnitConverter.convertEnum( aOut, GetValue(), pXML_crossedout_enums ) )
-    {
-        rValue = aOut.makeStringAndClear();
-        return sal_True;
-    }
-#endif
-    return sal_False;
-}
-
 // class SvxShadowedItem -------------------------------------------------
 
 SvxShadowedItem::SvxShadowedItem( const sal_Bool bShadowed, const USHORT nId ) :
@@ -2189,35 +1621,6 @@ SfxItemPresentation SvxShadowedItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxShadowedItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-
-    SetValue( !rValue.compareToAscii( sXML_none ) );
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-sal_Bool SvxShadowedItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    if(GetValue())
-    {
-        rValue = OUString("1pt 1pt", 7 , gsl_getSystemTextEncoding());
-    }
-    else
-    {
-        rValue = OUString(sXML_none, sizeof(sXML_none), gsl_getSystemTextEncoding());
-    }
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-
 // class SvxAutoKernItem -------------------------------------------------
 
 SvxAutoKernItem::SvxAutoKernItem( const sal_Bool bAutoKern, const USHORT nId ) :
@@ -2276,33 +1679,6 @@ SfxItemPresentation SvxAutoKernItem::GetPresentation
         }
     }
     return SFX_ITEM_PRESENTATION_NONE;
-}
-
-sal_Bool SvxAutoKernItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Bool bValue;
-    if( rUnitConverter.convertBool( bValue, rValue ) )
-    {
-        SetValue( bValue );
-        return sal_True;
-    }
-#endif
-    return sal_False;
-}
-
-sal_Bool SvxAutoKernItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-
-    OUStringBuffer aOut;
-
-    rUnitConverter.convertBool( aOut, GetValue() );
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
 }
 
 // class SvxWordLineModeItem ---------------------------------------------
@@ -2366,31 +1742,6 @@ SfxItemPresentation SvxWordLineModeItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxWordLineModeItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Bool bValue;
-    if( rUnitConverter.convertBool( bValue, rValue ) )
-    {
-        SetValue( !bValue );
-        return sal_True;
-    }
-#endif
-    return sal_False;
-}
-
-sal_Bool SvxWordLineModeItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    rUnitConverter.convertBool( aOut, !GetValue() );
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 // class SvxContourItem --------------------------------------------------
 
 SvxContourItem::SvxContourItem( const sal_Bool bContoured, const USHORT nId ) :
@@ -2450,32 +1801,6 @@ SfxItemPresentation SvxContourItem::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-sal_Bool SvxContourItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Bool bValue;
-    if( rUnitConverter.convertBool( bValue, rValue ) )
-    {
-        SetValue( bValue );
-        return sal_True;
-    }
-#endif
-    return sal_False;
-}
-
-sal_Bool SvxContourItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    rUnitConverter.convertBool( aOut, GetValue() );
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 
 // class SvxPropSizeItem -------------------------------------------------
 
@@ -2600,33 +1925,6 @@ sal_Bool SvxColorItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     mColor.SetColor( nColor );
     return sal_True;
 }
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxColorItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    return rUnitConverter.convertColor( mColor, rValue );
-#else
-    return sal_False;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxColorItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-
-    OUStringBuffer aOut;
-    rUnitConverter.convertColor( aOut, mColor );
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 
 // -----------------------------------------------------------------------
 
@@ -2833,46 +2131,6 @@ SfxItemPresentation SvxKerningItem::GetPresentation
 #endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-sal_Bool SvxKerningItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-
-    if( rValue.compareToAscii( sXML_kerning_normal )  )
-    {
-        SetValue( 0 );
-        return sal_True;
-    }
-    else
-    {
-        sal_Int32 eKerning;
-        if( rUnitConverter.convertMeasure( eKerning, rValue ) )
-        {
-            SetValue((short)eKerning);
-            return sal_True;
-        }
-    }
-#endif
-    return sal_False;
-}
-
-sal_Bool SvxKerningItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-
-    OUStringBuffer aOut;
-
-    if( GetValue() == 0 )
-        aOut.appendAscii( sXML_kerning_normal );
-    else
-        rUnitConverter.convertMeasure( aOut, GetValue() );
-
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
 /* -----------------------------19.02.01 12:21--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -3002,80 +2260,6 @@ sal_Bool SvxCaseMapItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     SetValue(nVal);
     return sal_True;
 }
-
-// -----------------------------------------------------------------------
-
-#ifndef SVX_LIGHT
-static SvXMLEnumMapEntry pXML_casemap_enums[] =
-{
-    { XML_NONE,                 SVX_CASEMAP_NOT_MAPPED },
-    { XML_CASEMAP_LOWERCASE,    SVX_CASEMAP_GEMEINE },
-    { XML_CASEMAP_UPPERCASE,    SVX_CASEMAP_VERSALIEN },
-    { XML_CASEMAP_CAPITALIZE,   SVX_CASEMAP_TITEL },
-    { XML_TOKEN_INVALID, 0 }
-};
-#endif
-
-sal_Bool SvxCaseMapItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_uInt16 nVal = SVX_CASEMAP_NOT_MAPPED;
-    switch( nMemberId )
-    {
-    case MID_CASEMAP_VARIANT:
-        if( rValue.compareToAscii( sXML_casemap_small_caps ) )
-            nVal = SVX_CASEMAP_KAPITAELCHEN;
-        else
-            if( !rValue.compareToAscii(sXML_casemap_normal ) )
-                return sal_False;
-        break;
-    case MID_CASEMAP_TRANS:
-        if(!rUnitConverter.convertEnum( nVal, rValue, pXML_casemap_enums ))
-            return sal_False;
-        break;
-    }
-
-    SetValue( (sal_uInt16)nVal );
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxCaseMapItem::exportXML( OUString& rValue, sal_uInt16 nMemberId,
-                                const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-
-    sal_uInt16 nVal = GetValue();
-
-    OUStringBuffer aOut;
-
-    switch( nMemberId )
-    {
-    case MID_CASEMAP_VARIANT:
-        if( nVal == SVX_CASEMAP_KAPITAELCHEN || nVal == SVX_CASEMAP_NOT_MAPPED )
-            aOut.appendAscii( nVal == SVX_CASEMAP_KAPITAELCHEN ?
-                              sXML_casemap_small_caps :
-                              sXML_casemap_normal );
-        else
-            return sal_False;
-        break;
-    case MID_CASEMAP_TRANS:
-        if(!rUnitConverter.convertEnum( aOut, nVal, pXML_casemap_enums ))
-            return sal_False;
-        break;
-    }
-
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 
 // class SvxEscapementItem -----------------------------------------------
 
@@ -3285,82 +2469,6 @@ sal_Bool SvxEscapementItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool SvxEscapementItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-
-    SvXMLTokenEnumerator aTokens( rValue );
-
-    OUString aToken;
-    if( ! aTokens.getNextToken( aToken ) )
-        return sal_False;
-
-    if( aToken.compareToAscii( sXML_escapement_sub ) )
-    {
-        nEsc = DFLT_ESC_AUTO_SUB;
-    }
-    else if( aToken.compareToAscii( sXML_escapement_super ) )
-    {
-        nEsc = DFLT_ESC_AUTO_SUPER;
-    }
-    else
-    {
-        sal_Int32 nNewEsc;
-        if( !rUnitConverter.convertPercent( nNewEsc, aToken ) )
-            return sal_False;
-
-        nEsc = (sal_uInt16) nNewEsc;
-    }
-
-    if( aTokens.getNextToken( aToken ) )
-    {
-        sal_Int32 nNewProp;
-        if( !rUnitConverter.convertPercent( nNewProp, aToken ) )
-            return sal_False;
-        nProp = (BYTE)nNewProp;
-    }
-    else
-    {
-        nProp = (sal_uInt16) DFLT_ESC_PROP;
-    }
-
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxEscapementItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    if( nEsc == DFLT_ESC_AUTO_SUPER )
-    {
-        aOut.appendAscii( sXML_escapement_super );
-    }
-    else if( nEsc == DFLT_ESC_AUTO_SUB )
-    {
-        aOut.appendAscii( sXML_escapement_sub );
-    }
-    else
-    {
-        rUnitConverter.convertPercent( aOut, nEsc );
-    }
-
-    aOut.append( sal_Unicode(' '));
-    rUnitConverter.convertPercent( aOut, nProp );
-
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 // class SvxLanguageItem -------------------------------------------------
 
 SvxLanguageItem::SvxLanguageItem( const LanguageType eLang, const USHORT nId )
@@ -3478,136 +2586,6 @@ sal_Bool SvxLanguageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
     }
     return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxLanguageItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Bool bRet = sal_False;
-    switch( nMemberId )
-    {
-    case MID_LANGUAGE:
-    case MID_COUNTRY:
-        {
-            String sLanguage, sCountry;
-            if( LANGUAGE_DONTKNOW != GetLanguage() &&
-                LANGUAGE_NONE != GetLanguage() &&
-                LANGUAGE_SYSTEM != GetLanguage() )
-            {
-                ConvertLanguageToIsoNames( GetLanguage(), sLanguage, sCountry );
-                DBG_ASSERT( !sCountry.Len(),
-        "SvxLanguageItem::importXML: setting contry first is unimplemented" );
-            }
-
-            String sValue;
-            if( !rValue.compareToAscii( sXML_none ) )
-                sValue = rValue.getStr();
-
-            if( MID_LANGUAGE == nMemberId )
-                sLanguage = sValue;
-            else
-                sCountry = sValue;
-
-            if( 0 == sLanguage.Len() && 0 == sCountry.Len() )
-            {
-                SetLanguage( LANGUAGE_NONE );
-                bRet = sal_True;
-            }
-            else
-            {
-                LanguageType eLang = ConvertIsoNamesToLanguage( sLanguage,
-                                                                sCountry );
-                if( LANGUAGE_NONE != eLang )
-                {
-                    SetLanguage( eLang );
-                    bRet = sal_True;
-                }
-            }
-        }
-        break;
-    case MID_LANG_COUNTRY:
-        if( rValue.getLength() )
-        {
-            LanguageType eLang = ConvertIsoStringToLanguage( rValue.getStr() );
-            if( LANGUAGE_NONE != eLang )
-            {
-                SetLanguage( eLang );
-                bRet = sal_True;
-            }
-        }
-        else
-        {
-            SetLanguage( LANGUAGE_NONE );
-            bRet = sal_True;
-        }
-        break;
-    }
-
-    return bRet;
-#else
-    return sal_False;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-
-sal_Bool SvxLanguageItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    sal_Bool bRet = sal_False;
-    switch( nMemberId )
-    {
-    case MID_LANGUAGE:
-    case MID_COUNTRY:
-        if( LANGUAGE_NONE == GetLanguage() ||
-            LANGUAGE_DONTKNOW == GetLanguage() ||
-            LANGUAGE_SYSTEM == GetLanguage() )
-        {
-            rValue = OUString( sXML_none, sizeof(sXML_none), gsl_getSystemTextEncoding() );
-            bRet = sal_True;
-        }
-        else
-        {
-            String sLang, sCountry;
-            ConvertLanguageToIsoNames( GetLanguage(), sLang, sCountry );
-            if( MID_LANGUAGE == nMemberId )
-                rValue = sLang.GetBuffer();
-            else
-                rValue = sCountry.GetBuffer();
-            bRet = 0 != rValue.getLength();
-        }
-        break;
-
-    case MID_LANG_COUNTRY:
-        if( LANGUAGE_NONE == GetLanguage() ||
-            LANGUAGE_DONTKNOW == GetLanguage() ||
-            LANGUAGE_SYSTEM == GetLanguage() )
-        {
-            rValue = OUString();
-            bRet = sal_True;
-        }
-        else
-        {
-            rValue = ConvertLanguageToIsoString( GetLanguage() ).GetBuffer();
-            bRet = 0 != rValue.getLength();
-        }
-        break;
-    }
-
-    return bRet;
-#else
-    return sal_False;
-#endif
-}
-
-// class SvxNoLinebreakItem ----------------------------------------------
-
-SvxNoLinebreakItem::SvxNoLinebreakItem( const sal_Bool bBreak, const USHORT nId ) :
-    SfxBoolItem( nId, bBreak )
-{
 }
 
 // -----------------------------------------------------------------------
@@ -3808,32 +2786,6 @@ SfxItemPresentation SvxBlinkItem::GetPresentation
         }
     }
     return SFX_ITEM_PRESENTATION_NONE;
-}
-
-sal_Bool SvxBlinkItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Bool bValue;
-    if( rUnitConverter.convertBool( bValue, rValue ) )
-    {
-        SetValue( bValue );
-        return sal_True;
-    }
-#endif
-    return sal_False;
-}
-
-sal_Bool SvxBlinkItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-
-    rUnitConverter.convertBool( aOut, GetValue() );
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
 }
 
 // class SvxEmphaisMarkItem ---------------------------------------------------

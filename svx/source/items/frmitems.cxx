@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-29 11:18:10 $
+ *  last change: $Author: mib $ $Date: 2001-07-05 09:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,12 +125,6 @@
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_XMLITMAP_HXX
-#include <xmloff/xmlitmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLITEM_HXX
-#include <xmloff/xmlitem.hxx>
 #endif
 #include <rtl/ustring>
 #include <rtl/ustrbuf.hxx>
@@ -1375,30 +1369,6 @@ SfxItemPresentation SvxPrintItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxPrintItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Bool bValue;
-    sal_Bool bOk = rUnitConverter.convertBool( bValue, rValue );
-    SetValue( bValue );
-    return bOk;
-#else
-    return sal_False;
-#endif
-}
-
-sal_Bool SvxPrintItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    rUnitConverter.convertBool( aOut, GetValue() );
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 // class SvxOpaqueItem ---------------------------------------------------
 
 SfxPoolItem* SvxOpaqueItem::Clone( SfxItemPool* ) const
@@ -1455,33 +1425,6 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxOpaqueItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    SetValue( rValue.compareToAscii(sXML_opaque_foreground ) );
-    return GetValue() || rValue.compareToAscii( sXML_opaque_background );
-#else
-    return sal_False;
-#endif
-}
-
-sal_Bool SvxOpaqueItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    if(GetValue())
-    {
-        rValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_opaque_foreground) );
-    }
-    else
-    {
-        rValue = OUString( RTL_CONSTASCII_USTRINGPARAM(sXML_opaque_background) );
-    }
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 // class SvxProtectItem --------------------------------------------------
 
 int SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
@@ -1527,65 +1470,6 @@ sal_Bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             return sal_False;
     }
     return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxProtectItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    OUString sContent(sXML_protect_content, sizeof(sXML_protect_content), gsl_getSystemTextEncoding());
-    OUString sSize(sXML_protect_size, sizeof(sXML_protect_size), gsl_getSystemTextEncoding());
-    OUString sPosition(sXML_protect_position, sizeof(sXML_protect_position), gsl_getSystemTextEncoding());
-
-    bCntnt = rValue.indexOf(sContent) != -1;
-    bSize  = rValue.indexOf(sSize) != -1;
-    bPos   = rValue.indexOf(sPosition) != -1;
-
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxProtectItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    sal_Bool bEmpty = sal_True;
-
-    if( bCntnt )
-    {
-        aOut.appendAscii( sXML_protect_content );
-        bEmpty = sal_False;
-    }
-
-    if( bSize )
-    {
-        if( bEmpty )
-            bEmpty = sal_True;
-        else
-            aOut.appendAscii( " " );
-
-        aOut.appendAscii( sXML_protect_size );
-    }
-
-    if( bPos )
-    {
-        if( !bEmpty )
-            aOut.appendAscii( " " );
-
-        aOut.appendAscii( sXML_protect_position );
-    }
-
-    rValue = aOut.makeStringAndClear();
-
-    return rValue.getLength() != 0;
-#else
-    return sal_False;
-#endif
 }
 
 // -----------------------------------------------------------------------

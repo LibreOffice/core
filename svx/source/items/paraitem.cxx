@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:43:56 $
+ *  last change: $Author: mib $ $Date: 2001-07-05 09:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,18 +121,7 @@ using namespace ::com::sun::star;
 #include "paravertalignitem.hxx"
 
 
-// xml stuff
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmloff/xmluconv.hxx>
-#endif
 #include <rtl/ustring>
-#include <rtl/ustrbuf.hxx>
 
 #include <unomid.hxx>
 
@@ -148,7 +137,6 @@ using namespace ::com::sun::star;
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::xmloff::token;
 
 // Konvertierung fuer UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -293,111 +281,6 @@ sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
         break;
     }
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxLineSpacingItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-
-    style::LineSpacing aLSp;
-    sal_Int32 nTemp = 0;
-
-    switch( nMemberId )
-    {
-    case MID_LS_FIXED:
-        if( -1 != rValue.indexOf( sal_Unicode( '%' ) ) )
-        {
-            aLSp.Mode = style::LineSpacingMode::PROP;
-            if(!rUnitConverter.convertPercent( nTemp, rValue ))
-                return sal_False;
-
-            aLSp.Height = nTemp;
-        }
-        else if( rValue.compareToAscii( sXML_casemap_normal ) )
-        {
-            aLSp.Mode = style::LineSpacingMode::PROP;
-            aLSp.Height = 100;
-        }
-        else
-        {
-            aLSp.Mode = style::LineSpacingMode::FIX;
-        }
-        break;
-
-    case MID_LS_MINIMUM:
-        aLSp.Mode = style::LineSpacingMode::MINIMUM;
-        break;
-
-    case MID_LS_DISTANCE:
-        aLSp.Mode = style::LineSpacingMode::LEADING;
-        break;
-    }
-
-    if( aLSp.Mode != style::LineSpacingMode::PROP )
-    {
-        // get the height
-        if(!rUnitConverter.convertMeasure( nTemp, rValue, 0x0000, 0xffff ))
-            return sal_False;
-        aLSp.Height = nTemp;
-    }
-
-    // use PutValue to set set the LineSpace
-    uno::Any aAny(&aLSp, ::getCppuType((const style::LineSpacing*)0));
-    return PutValue( aAny, 0 );
-#else
-    return sal_False;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-
-sal_Bool SvxLineSpacingItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-
-    uno::Any aAny;
-    QueryValue( aAny, 0 );
-    style::LineSpacing* pLSp =  (style::LineSpacing*)aAny.getValue();
-
-    const sal_Int16 Mode = pLSp->Mode;
-    const sal_Int16 Height = pLSp->Height;
-
-    // check if this memberid is valid for export
-    switch( nMemberId )
-    {
-    case MID_LS_FIXED:
-        if( style::LineSpacingMode::PROP != Mode &&
-            style::LineSpacingMode::FIX  != Mode )
-            return sal_False;
-        break;
-
-    case MID_LS_MINIMUM:
-        if( style::LineSpacingMode::MINIMUM != Mode )
-            return sal_False;
-        break;
-
-    case MID_LS_DISTANCE:
-        if( style::LineSpacingMode::LEADING != Mode )
-            return sal_False;
-        break;
-    }
-
-    if( style::LineSpacingMode::PROP == Mode )
-    {
-        rUnitConverter.convertPercent( aOut, Height );
-    }
-    else
-    {
-        rUnitConverter.convertMeasure( aOut, Height );
-    }
-
-    rValue = aOut.makeStringAndClear();
-#endif
     return sal_True;
 }
 
@@ -591,115 +474,6 @@ sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 
 // -----------------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-SvXMLEnumMapEntry pXML_para_adjust_enums[] =
-{
-    { XML_START,        SVX_ADJUST_LEFT },
-    { XML_END,          SVX_ADJUST_RIGHT },
-    { XML_CENTER,       SVX_ADJUST_CENTER },
-    { XML_JUSTIFY,      SVX_ADJUST_BLOCK },
-    { XML_JUSTIFIED,    SVX_ADJUST_BLOCK },
-    { XML_TOKEN_INVALID, 0 }
-};
-
-SvXMLEnumMapEntry pXML_para_align_last_enums[] =
-{
-    { XML_START,        SVX_ADJUST_LEFT },
-    { XML_CENTER,       SVX_ADJUST_CENTER },
-    { XML_JUSTIFY,      SVX_ADJUST_BLOCK },
-    { XML_JUSTIFIED,    SVX_ADJUST_BLOCK },
-    { XML_TOKEN_INVALID, 0 }
-};
-#endif
-
-sal_Bool SvxAdjustItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-    sal_Bool bOk = sal_False;
-#ifndef SVX_LIGHT
-    switch( nMemberId )
-    {
-    case MID_PARA_ADJUST:
-        sal_uInt16 eAdjust;
-        if( rUnitConverter.convertEnum( eAdjust, rValue, pXML_para_adjust_enums ) )
-        {
-            SetAdjust( (SvxAdjust)eAdjust );
-            bOk = sal_True;
-        }
-        break;
-
-    case MID_LAST_LINE_ADJUST:
-        {
-            sal_uInt16 eAdjust;
-            if( rUnitConverter.convertEnum( eAdjust, rValue,
-                                              pXML_para_align_last_enums ) )
-            {
-                SetLastBlock( (SvxAdjust)eAdjust );
-                bOk = sal_True;
-            }
-        }
-        break;
-    case MID_EXPAND_SINGLE:
-        {
-            sal_Bool bBlock;
-            if( rUnitConverter.convertBool( bBlock, rValue ) )
-            {
-                SetOneWord( bBlock ? SVX_ADJUST_BLOCK : SVX_ADJUST_LEFT );
-                bOk = sal_True;
-            }
-        }
-        break;
-    }
-
-#endif
-    return bOk;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxAdjustItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-    sal_Bool bOk = sal_False;
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-
-    switch( nMemberId )
-    {
-    case MID_PARA_ADJUST:
-        bOk = rUnitConverter.convertEnum( aOut,
-                                          GetAdjust(),
-                                          pXML_para_adjust_enums, XML_START );
-        break;
-    case MID_LAST_LINE_ADJUST:
-        {
-            if( GetAdjust() == SVX_ADJUST_BLOCK )
-            {
-                SvxAdjust eAdjust = GetLastBlock();
-                if( eAdjust != SVX_ADJUST_LEFT )
-                    bOk = rUnitConverter.convertEnum( aOut, eAdjust,
-                                                  pXML_para_align_last_enums );
-            }
-        }
-        break;
-    case MID_EXPAND_SINGLE:
-        {
-            if( GetAdjust() == SVX_ADJUST_BLOCK &&
-                GetLastBlock() == SVX_ADJUST_BLOCK &&
-                 GetOneWord() == SVX_ADJUST_BLOCK )
-            {
-                rUnitConverter.convertBool( aOut, sal_True );
-                bOk = sal_True;
-            }
-        }
-        break;
-    }
-
-    rValue = aOut.makeStringAndClear();
-#endif
-    return bOk;
-}
-
-// -----------------------------------------------------------------------
-
 SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
 {
     return new SvxAdjustItem( *this );
@@ -863,29 +637,6 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxWidowsItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Int32 nValue;
-    sal_Bool bOk = rUnitConverter.convertNumber( nValue, rValue, 0, 0xff );
-    if( bOk )
-        SetValue( nValue );
-    return bOk;
-#else
-    return sal_False;
-#endif
-}
-
-sal_Bool SvxWidowsItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    rUnitConverter.convertNumber( aOut, (sal_Int32) GetValue() );
-    rValue = aOut.makeStringAndClear();
-#endif
-    return sal_True;
-}
-
 // class SvxOrphansItem --------------------------------------------------
 
 SvxOrphansItem::SvxOrphansItem(const BYTE nL, const USHORT nId ) :
@@ -947,31 +698,6 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-sal_Bool SvxOrphansItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    sal_Int32 nValue;
-    sal_Bool bOk = rUnitConverter.convertNumber( nValue, rValue, 0x00, 0xff );
-    if( bOk )
-        SetValue( nValue  );
-    return bOk;
-#else
-    return sal_False;
-#endif
-}
-
-sal_Bool SvxOrphansItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-    rUnitConverter.convertNumber( aOut, (sal_Int32) GetValue() );
-    rValue = aOut.makeStringAndClear();
-    return sal_True;
-#else
-    return sal_False;
-#endif
-}
-
 // class SvxHyphenZoneItem -----------------------------------------------
 
 SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId ) :
@@ -1028,93 +754,6 @@ sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
     }
     return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxHyphenZoneItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-    sal_Bool bOk = sal_False;
-#ifndef SVX_LIGHT
-
-    sal_Int32 nTemp;
-    switch( nMemberId )
-    {
-    case MID_IS_HYPHEN:
-        sal_Bool bNewHyphen;
-        bOk = rUnitConverter.convertBool( bNewHyphen, rValue );
-        bHyphen = bNewHyphen;
-        break;
-
-    case MID_HYPHEN_MIN_LEAD:
-        bOk = rUnitConverter.convertNumber( nTemp, rValue );
-        nMinLead = nTemp;
-        break;
-
-    case MID_HYPHEN_MIN_TRAIL:
-        bOk = rUnitConverter.convertNumber( nTemp, rValue );
-        nMinTrail = nTemp;
-        break;
-
-    case MID_HYPHEN_MAX_HYPHENS:
-        if( rValue.compareToAscii( sXML_no_limit ) )
-        {
-            nMaxHyphens = 0;
-            bOk = sal_True;
-        }
-        else
-        {
-            bOk = rUnitConverter.convertNumber( nTemp, rValue );
-            nMaxHyphens = nTemp;
-        }
-        break;
-    }
-#endif
-    return bOk;
-}
-
-// -----------------------------------------------------------------------
-
-
-sal_Bool SvxHyphenZoneItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    OUStringBuffer aOut;
-
-    switch( nMemberId )
-    {
-    case MID_IS_HYPHEN:
-        rUnitConverter.convertBool( aOut, bHyphen );
-        break;
-
-    case MID_HYPHEN_MIN_LEAD:
-        if( !bHyphen )
-            return sal_False;
-        rUnitConverter.convertNumber( aOut, (sal_Int32) nMinLead );
-        break;
-
-    case MID_HYPHEN_MIN_TRAIL:
-        if( !bHyphen )
-            return sal_False;
-        rUnitConverter.convertNumber( aOut, (sal_Int32) nMinTrail );
-        break;
-
-    case MID_HYPHEN_MAX_HYPHENS:
-        if( !bHyphen )
-            return sal_False;
-        if( nMaxHyphens == 0 )
-            aOut.appendAscii( sXML_no_limit );
-        else
-            rUnitConverter.convertNumber( aOut, (sal_Int32) nMaxHyphens );
-        break;
-    }
-
-    rValue = aOut.makeStringAndClear();
-
-    return sal_True;
-#else
-    return sal_False;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1694,37 +1333,6 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
         }
     }
     return SFX_ITEM_PRESENTATION_NONE;
-}
-
-// --------------------------------------------------------------------
-
-sal_Bool SvxFmtSplitItem::importXML( const OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter )
-{
-#ifndef SVX_LIGHT
-    SetValue( rValue.compareToAscii(sXML_columnsplit_auto ) );
-    return GetValue() || rValue.compareToAscii(sXML_columnsplit_avoid );
-#else
-    return sal_False;
-#endif
-}
-
-sal_Bool SvxFmtSplitItem::exportXML( OUString& rValue, sal_uInt16 nMemberId, const SvXMLUnitConverter& rUnitConverter ) const
-{
-#ifndef SVX_LIGHT
-    if(GetValue())
-    {
-        rValue = OUString(sXML_columnsplit_auto, sizeof(sXML_columnsplit_auto),
-            gsl_getSystemTextEncoding());
-    }
-    else
-    {
-        rValue = OUString(sXML_columnsplit_avoid, sizeof(sXML_columnsplit_avoid),
-            gsl_getSystemTextEncoding());
-    }
-    return sal_True;
-#else
-    return sal_False;
-#endif
 }
 
 // --------------------------------------------------------------------
