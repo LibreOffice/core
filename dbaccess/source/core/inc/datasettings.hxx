@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-30 08:27:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,19 +74,12 @@
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
-
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
-#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
-#include <comphelper/propertycontainer.hxx>
+#ifndef COMPHELPER_PROPERTYSTATECONTAINER_HXX
+#include <comphelper/propertystatecontainer.hxx>
 #endif
-
-namespace utl
-{
-    class OConfigurationNode;
-}
 
 //........................................................................
 namespace dbaccess
@@ -101,7 +94,7 @@ namespace dbaccess
 //==========================================================================
 class ODataSettings_Base
 {
-protected:
+public:
 // <properties>
     ::rtl::OUString                             m_sFilter;
     ::rtl::OUString                             m_sOrder;
@@ -117,18 +110,6 @@ protected:
 protected:
     ODataSettings_Base();
     ODataSettings_Base(const ODataSettings_Base& _rSource);
-
-    /** store all configuration relevant informations under the given configuration node (matching the configuration
-        scheme for "DefinitionSettings" - which has yet to be defined :)
-        @param      _rxConfigLocation       the configuration node. must not be readonly
-    */
-    void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation) const;
-
-    /** load all configuration relevant informations from the given configuration node.
-        @param      _rxConfigLocation       the configuration node. must not be readonly
-    */
-    void    loadFrom(const ::utl::OConfigurationNode& _rConfigLocation);
-
 };
 //==========================================================================
 //= ODataSettings - a base class which implements the property handling
@@ -136,14 +117,19 @@ protected:
 //=                 service
 //==========================================================================
 
-class ODataSettings : public ::comphelper::OPropertyContainer
+class ODataSettings : public ::comphelper::OPropertyStateContainer
                     , public ODataSettings_Base
 {
 protected:
     ODataSettings(::cppu::OBroadcastHelper& _rBHelper);
     ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper);
-private:
-    void registerProperties();
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
+
+    /** register the properties from the param given. The parameter instance must be alive as long as tis object live.
+        @param  _pItem
+            The database settings, can be <br>this</br>
+    */
+    void registerProperties(ODataSettings_Base* _pItem);
 };
 
 //........................................................................
