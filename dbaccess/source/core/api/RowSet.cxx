@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:26:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1854,7 +1854,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             {
                 ::rtl::OUString sErrorMsg(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The command '")));
                 sErrorMsg += aSql;
-                sErrorMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' does not succeed."));
+                sErrorMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' did not succeed."));
                 throwGenericSQLException(sErrorMsg,*this);
             }
         }
