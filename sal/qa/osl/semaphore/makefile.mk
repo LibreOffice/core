@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:51:45 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:02:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS=  \
     $(SLO)$/osl_Semaphore.obj
 
-SHL1TARGET= Semaphore
+SHL1TARGET= osl_Semaphore
 SHL1STDLIBS=\
    $(SALLIB) 
 .IF "$(GUI)" == "WNT"
