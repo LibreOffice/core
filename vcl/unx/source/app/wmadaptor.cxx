@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:33:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 #include <X11/Xresource.h>
 #include <postx.h>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -227,7 +227,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     pAdaptor = new NetWMAdaptor( pSalDisplay );
     if( ! pAdaptor->isValid() )
         delete pAdaptor, pAdaptor = NULL;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
         fprintf( stderr, "WM supports extended WM hints\n" );
 #endif
@@ -238,7 +238,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
         pAdaptor = new GnomeWMAdaptor( pSalDisplay );
         if( ! pAdaptor->isValid() )
             delete pAdaptor, pAdaptor = NULL;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
             fprintf( stderr, "WM supports GNOME WM hints\n" );
 #endif
@@ -247,7 +247,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
     if( ! pAdaptor )
         pAdaptor = new WMAdaptor( pSalDisplay );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Window Manager's name is \"%s\"\n",
              ByteString( pAdaptor->getWindowManagerName(), RTL_TEXTENCODING_ISO_8859_1 ).GetBuffer() );
 #endif
@@ -458,7 +458,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "supported protocols:\n" );
 #endif
                 for( int i = 0; i < nItems; i++ )
@@ -479,7 +479,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                         if( pMatch->nProtocol == NET_WM_STATE_STAYS_ON_TOP )
                             m_bEnableAlwaysOnTopWorks = true;
                     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
 #endif
 
@@ -538,7 +538,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                     m_aWMWorkAreas[i] = aWorkArea;
                     if( aWorkArea != m_aWMWorkAreas[0] )
                         m_bEqualWorkAreas = false;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "workarea %d: %dx%d+%d+%d\n",
                              i,
                              m_aWMWorkAreas[i].GetWidth(),
@@ -550,7 +550,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             }
             else
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "%d workareas for %d desktops !\n", nItems/4, m_nDesktops );
 #endif
                 if( pProperty )
@@ -691,7 +691,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "supported protocols:\n" );
 #endif
                 for( int i = 0; i < nItems; i++ )
@@ -718,7 +718,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                         m_nWinGravity = NorthWestGravity;
                         m_nInitWinGravity = NorthWestGravity;
                     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "  %s%s\n", pAtomNames[i], nProtocol != -1 ? "" : " (unsupported)" );
 #endif
 
