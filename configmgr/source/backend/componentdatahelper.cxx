@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:14:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,9 @@ namespace configmgr
         using backenduno::MalformedDataException;
 // -----------------------------------------------------------------------------
 
-DataBuilderContext::DataBuilderContext(  )
-: m_aParentStack()
+DataBuilderContext::DataBuilderContext( UnoContext const & xContext )
+: m_aLogger(xContext)
+, m_aParentStack()
 , m_aActiveComponent()
 , m_pContext()
 , m_aExpectedComponentName(OUString())
@@ -127,23 +128,37 @@ DataBuilderContext::DataBuilderContext(  )
 }
 // -----------------------------------------------------------------------------
 
-DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext, ITemplateDataProvider* aTemplateProvider )
-: m_aParentStack()
+DataBuilderContext::DataBuilderContext( UnoContext const & xContext, uno::XInterface * _pContext, ITemplateDataProvider* aTemplateProvider )
+: m_aLogger(xContext)
+, m_aParentStack()
 , m_aActiveComponent()
 , m_pContext(_pContext)
-, m_aExpectedComponentName(OUString())
+, m_aExpectedComponentName()
 , m_aTemplateProvider( aTemplateProvider )
 {
 
 }
 // -----------------------------------------------------------------------------
 
-DataBuilderContext::DataBuilderContext( uno::XInterface * _pContext, const OUString& aExpectedComponentName, ITemplateDataProvider* aTemplateProvider )
-: m_aParentStack()
+DataBuilderContext::DataBuilderContext( UnoContext const & xContext, uno::XInterface * _pContext, const OUString& aExpectedComponentName, ITemplateDataProvider* aTemplateProvider )
+: m_aLogger(xContext)
+, m_aParentStack()
 , m_aActiveComponent()
 , m_pContext(_pContext)
 , m_aExpectedComponentName( aExpectedComponentName )
 , m_aTemplateProvider( aTemplateProvider )
+{
+
+}
+// -----------------------------------------------------------------------------
+
+DataBuilderContext::DataBuilderContext(DataBuilderContext const & aBaseContext, uno::XInterface * _pContext)
+: m_aLogger(aBaseContext.m_aLogger)
+, m_aParentStack()
+, m_aActiveComponent()
+, m_pContext(_pContext)
+, m_aExpectedComponentName()
+, m_aTemplateProvider( aBaseContext.m_aTemplateProvider )
 {
 
 }
@@ -159,7 +174,8 @@ DataBuilderContext::~DataBuilderContext(  )
 void DataBuilderContext::raiseMalformedDataException(sal_Char const * _pText) const
         CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString const sMessage = OUString::createFromAscii(_pText);
+    OUString const sMessage = makeMessageWithPath(_pText);
+    m_aLogger.error(sMessage,"parse","configmgr::backend::DataBuilder");
     throw MalformedDataException(sMessage, m_pContext, uno::Any());
 }
 // -----------------------------------------------------------------------------
@@ -167,40 +183,48 @@ void DataBuilderContext::raiseMalformedDataException(sal_Char const * _pText) co
 void DataBuilderContext::raiseIllegalAccessException(sal_Char const * _pText) const
         CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString const sMessage = OUString::createFromAscii(_pText);
+    OUString const sMessage = makeMessageWithPath(_pText);
     lang::IllegalAccessException e(sMessage, m_pContext);
 
-    throw MalformedDataException(OUSTR("Illegal Access: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("Illegal Access: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage , m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseIllegalTypeException(sal_Char const * _pText) const
         CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString const sMessage = OUString::createFromAscii(_pText);
+    OUString const sMessage = makeMessageWithPath(_pText);
     beans::IllegalTypeException e(sMessage, m_pContext);
 
-    throw MalformedDataException(OUSTR("Illegal Type: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("Illegal Type: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseNoSupportException(sal_Char const * _pText) const
         CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString const sMessage = OUString::createFromAscii(_pText);
+    OUString const sMessage = makeMessageWithPath(_pText);
     lang::NoSupportException e(sMessage, m_pContext);
 
-    throw MalformedDataException(OUSTR("Not Supported: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("Not Supported: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
 void DataBuilderContext::raiseIllegalArgumentException(sal_Char const * _pText, sal_Int16 _nPos) const
         CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
-    OUString const sMessage = OUString::createFromAscii(_pText);
+    OUString const sMessage = makeMessageWithPath(_pText);
     lang::IllegalArgumentException e(sMessage, m_pContext, _nPos);
 
-    throw MalformedDataException(OUSTR("Illegal Argument: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("Illegal Argument: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
@@ -210,7 +234,9 @@ void DataBuilderContext::raiseNoSuchElementException(sal_Char const * _pText, OU
     OUString const sMessage = makeMessageWithName(_pText,_sElement);
     container::NoSuchElementException e(sMessage, m_pContext);
 
-    throw MalformedDataException(OUSTR("No Such Node: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("No Such Node: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
@@ -220,7 +246,9 @@ void DataBuilderContext::raiseElementExistException(sal_Char const * _pText, OUS
     OUString const sMessage = makeMessageWithName(_pText,_sElement);
     container::ElementExistException e(sMessage, m_pContext);
 
-    throw MalformedDataException(OUSTR("Node Already Exists: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("Node Already Exists: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
@@ -230,7 +258,9 @@ void DataBuilderContext::raiseUnknownPropertyException(sal_Char const * _pText, 
     OUString const sMessage = makeMessageWithName(_pText,_sElement);
     beans::UnknownPropertyException e(sMessage, m_pContext);
 
-    throw MalformedDataException(OUSTR("No Such Property: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("No Such Property: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
 }
 // -----------------------------------------------------------------------------
 
@@ -240,7 +270,21 @@ void DataBuilderContext::raisePropertyExistException(sal_Char const * _pText, OU
     OUString const sMessage = makeMessageWithName(_pText,_sElement);
     beans::PropertyExistException e(sMessage, m_pContext);
 
-    throw MalformedDataException(OUSTR("No Such Property: ").concat(sMessage), m_pContext, uno::makeAny(e));
+    OUString const sFullMessage = OUSTR("No Such Property: ").concat(sMessage);
+    m_aLogger.error(sFullMessage,"parse","configmgr::backend::DataBuilder");
+    throw MalformedDataException(sFullMessage, m_pContext, uno::makeAny(e));
+}
+// -----------------------------------------------------------------------------
+
+OUString DataBuilderContext::makeMessageWithPath(sal_Char const * _pText) const
+        CFG_UNO_THROW_RTE(  )
+{
+    rtl::OUStringBuffer sMessage;
+    sMessage.appendAscii(_pText);
+
+    sMessage.appendAscii(" [@").append(getNodeParentagePath()).appendAscii("] ");
+
+    return sMessage.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
 
@@ -251,9 +295,37 @@ OUString DataBuilderContext::makeMessageWithName(sal_Char const * _pText, OUStri
     sMessage.appendAscii(_pText);
 
     if (_aName.getLength() != 0)
-        sMessage.appendAscii(" [").append(_aName).appendAscii("] ");
+        sMessage.appendAscii(" [").append(getNodePath(_aName)).appendAscii("] ");
+    else
+        sMessage.appendAscii(" [@").append(getNodeParentagePath()).appendAscii("] ");
 
     return sMessage.makeStringAndClear();
+}
+// -----------------------------------------------------------------------------
+const sal_Unicode k_pathsep = '/';
+
+OUString DataBuilderContext::getNodeParentagePath() const
+{
+    rtl::OUStringBuffer path;
+
+    for (Stack< ISubtree * >::bottomup_iterator it = m_aParentStack.begin_up();
+            it != m_aParentStack.end_up(); ++it)
+    {
+        OSL_ASSERT(*it);
+        path.append(k_pathsep).append((**it).getName());
+    }
+
+    return path.makeStringAndClear();
+}
+// -----------------------------------------------------------------------------
+
+OUString DataBuilderContext::getNodePath(OUString const & aNodeName) const
+{
+    rtl::OUStringBuffer path( getNodeParentagePath() );
+
+    path.append(k_pathsep).append(aNodeName);
+
+    return path.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
