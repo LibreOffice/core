@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 21:36:38 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ korean ] = "ÀÎ¼â ¿É¼Ç";
         Text[ turkish ] = "Yazdýrma seçenekleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones de impresión";
     };
     RadioButton RBT_SCALE
     {
@@ -139,6 +140,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ korean ] = "ÂÊÀ» ÀÎ¼â¹üÀ§¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "Sayfaya sýðdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar ~página a área de impresión";
     };
     RadioButton RBT_POSTER
     {
@@ -166,6 +168,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ korean ] = "¿©·¯ ÂÊ¿¡ ÀÎ¼â(~P)";
         Text[ turkish ] = "Birden çok sayfaya yazdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imprimir en ~varias páginas";
     };
     RadioButton RBT_CUT
     {
@@ -193,6 +196,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ korean ] = "Àß¶ó ³»±â(~T)";
         Text[ turkish ] = "Kes";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Cortar";
     };
     FixedText FI_INFO
     {
@@ -221,6 +225,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Text[ korean ] = "ÂÊ ¼³Á¤ÀÌ ÀÎ¼â¹üÀ§¿Í ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.\n»ç¿ëÀÚ´Â ´ÙÀ½°ú °°Àº ¿É¼ÇÀ» ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Sayfa ayarlarý ile yazdýrma aralýðý örtüþmüyor.\nAþaðýdaki seçeneklerden birini seçin:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La configuración de página no coincide con el área de impresión.\nSeleccione una de las siguientes opciones.";
     };
     Text [ english_us ] = "Warning Print Options" ;
     Text [ portuguese ] = "Advertência sobre opções de impressão" ;
@@ -241,4 +246,5 @@ ModalDialog DLG_PRINT_WARNINGS
     Text[ korean ] = "°æ°í ÀÎ¼â¿É¼Ç";
     Text[ turkish ] = "Uyarý: Yazdýrma seçenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Advertencia opciones de impresión";
 };
