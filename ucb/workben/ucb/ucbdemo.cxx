@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-04 17:39:20 $
+ *  last change: $Author: kso $ $Date: 2000-12-06 16:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@
 #endif
 #ifndef _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
 #include <ucbhelper/fileidentifierconverter.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENTBROKER_HXX
+#include <ucbhelper/contentbroker.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -580,6 +583,7 @@ sal_Bool Ucb::init()
                 aArgs[1] <<= m_aConfigurationKey2;
                 aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
                 aArgs[3] <<= aPipe;
+#if 0
                 m_xProv
                     = Reference< XContentProvider >(
                           m_xFac->
@@ -589,6 +593,10 @@ sal_Bool Ucb::init()
                                           "UniversalContentBroker"),
                                   aArgs),
                           UNO_QUERY);
+#else
+                ::ucb::ContentBroker::initialize( m_xFac, aArgs );
+                m_xProv = ::ucb::ContentBroker::get()->getContentProviderInterface();
+#endif
             }
             catch (Exception const &) {}
 
@@ -1231,8 +1239,7 @@ void UcbContent::open( const OUString & rName, const UniString& rInput,
             {
                 print( "Folder object opened - iterating:" );
                 print( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                    "Content-ID : ContentType : Title : Size : IsFolder "
-                    ": IsDocument\n"
+                    "Content-ID : Title : Size : IsFolder : IsDocument\n"
                     "-------------------------------------------------" ) ) );
             }
 
@@ -1486,6 +1493,8 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
     Any aArg;
     aArg <<= TransferInfo( bMove, rSourceURL, OUString(), NameClash::ERROR );
     executeCommand( OUString::createFromAscii( "transfer" ), aArg );
+
+//  executeCommand( OUString::createFromAscii( "flush" ), Any() );
 }
 
 //----------------------------------------------------------------------------
@@ -1496,6 +1505,8 @@ void UcbContent::destroy()
     Any aArg;
     aArg <<= sal_Bool( sal_True ); // delete physically, not only to trash.
     executeCommand( OUString::createFromAscii( "delete" ), aArg );
+
+//  executeCommand( OUString::createFromAscii( "flush" ), Any() );
 }
 
 //-------------------------------------------------------------------------
@@ -1620,6 +1631,8 @@ void UcbContent::setPropertyValue( const OUString& rName, const Any& rValue )
     aArg <<= aProps;
 
     executeCommand( OUString::createFromAscii( "setPropertyValues" ), aArg );
+
+//  executeCommand( OUString::createFromAscii( "flush" ), Any() );
 }
 
 //----------------------------------------------------------------------------
@@ -2168,7 +2181,7 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_pCmdEdit = new Edit( this );
     m_pCmdEdit->SetReadOnly( FALSE );
     m_pCmdEdit->SetText( UniString::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM("file:///c|/" ) ) );
+                            RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.pkg://file%3A%2F%2F%2fe%3a%2fx.zip/" ) ) );
     m_pCmdEdit->Show();
 
     // MyOutWindow.
@@ -2641,6 +2654,8 @@ void MyApp::Main()
     //////////////////////////////////////////////////////////////////////
     // Cleanup.
     //////////////////////////////////////////////////////////////////////
+
+    ::ucb::ContentBroker::deinitialize();
 
     // Dispose local service manager.
     if ( xComponent.is() )
