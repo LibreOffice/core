@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:48:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
 {
     // collect styles
     Style aStyle( 0x2 | 0x8 | 0x20 | 0x40 );
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._backgroundColor)
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
         aStyle._set |= 0x20;
