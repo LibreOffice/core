@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:30:57 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 10:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,25 @@
 
 #define USE_SM_EXTENSION
 
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdarg>
+static bool bFirstAssert = true;
+#endif
+
+inline void SMprintf( char* pFormat, ... )
+{
+#if OSL_DEBUG_LEVEL > 1
+    FILE* fp = fopen( "/tmp/sessionlog.txt", bFirstAssert ? "w" : "a" );
+    bFirstAssert = false;
+    va_list ap;
+    va_start( ap, pFormat );
+    vfprintf( fp, pFormat, ap );
+    fclose( fp );
+    va_end( ap );
+#endif
+};
+
+
 extern "C" void SAL_CALL ICEConnectionWorker( void* );
 
 class ICEConnectionObserver
@@ -128,12 +147,14 @@ int ICEConnectionObserver::nConnections = 0;
 oslMutex ICEConnectionObserver::ICEMutex = NULL;
 oslThread ICEConnectionObserver::ICEThread = NULL;
 oslCondition SessionManagerClient::aSaveCond = NULL;
-oslCondition SessionManagerClient::aDieCond = NULL;
+// HACK
+bool SessionManagerClient::bDocSaveDone = false;
 
 
 static SmProp*  pSmProps = NULL;
 static SmProp** ppSmProps = NULL;
 static int      nSmProps = 0;
+
 
 static void BuildSmPropertyList()
 {
@@ -192,12 +213,15 @@ static void BuildSmPropertyList()
     }
 }
 
+bool SessionManagerClient::checkDocumentsSaved()
+{
+    return bDocSaveDone;
+}
 
 IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "posting save documents event\n" );
-#endif
+    SMprintf( "posting save documents event\n" );
+
     Application::EnableDialogCancel( TRUE );
     ApplicationEvent aEvent( String( RTL_CONSTASCII_USTRINGPARAM( "SessionManager" ) ),
                              ApplicationAddress(),
@@ -206,9 +230,27 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
 
     if( GetpApp() )
         GetpApp()->AppEvent( aEvent );
+    bDocSaveDone = true;
     if( aSaveCond )
         osl_setCondition( aSaveCond );
     return 0;
+}
+
+void SessionManagerClient::checkSaveYourselfCond()
+{
+    if( aSaveCond )
+    {
+        if( osl_checkCondition( aSaveCond ) )
+        {
+            osl_waitCondition( aSaveCond, NULL );
+            SMprintf( "wakeup on save yourself condition\n" );
+            osl_destroyCondition( aSaveCond );
+            aSaveCond = NULL;
+            SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
+            SmcSaveYourselfDone( aSmcConnection, True );
+            SMprintf( "sent SaveYourselfDone\n" );
+        }
+    }
 }
 
 void SessionManagerClient::SaveYourselfProc(
@@ -220,60 +262,47 @@ void SessionManagerClient::SaveYourselfProc(
     Bool fast
     )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Session: save yourself, save_type = %s, shutdown = %s, interact_style = %s, fast = %s\n",
-             save_type == SmSaveLocal ? "SmcSaveLocal" :
-             ( save_type == SmSaveGlobal ? "SmcSaveGlobal" :
-               ( save_type == SmSaveBoth ? "SmcSaveBoth" : "<unknown>" ) ),
-             shutdown ? "true" : "false",
-             interact_style == SmInteractStyleNone ? "SmInteractStyleNone" :
-             ( interact_style == SmInteractStyleErrors ? "SmInteractStyleErrors" :
-               ( interact_style == SmInteractStyleAny ? "SmInteractStyleAny" : "<unknown>" ) ),
-             false ? "true" : "false"
-             );
-#endif
+    SMprintf( "Session: save yourself, save_type = %s, shutdown = %s, interact_style = %s, fast = %s\n",
+              save_type == SmSaveLocal ? "SmcSaveLocal" :
+              ( save_type == SmSaveGlobal ? "SmcSaveGlobal" :
+                ( save_type == SmSaveBoth ? "SmcSaveBoth" : "<unknown>" ) ),
+              shutdown ? "true" : "false",
+              interact_style == SmInteractStyleNone ? "SmInteractStyleNone" :
+              ( interact_style == SmInteractStyleErrors ? "SmInteractStyleErrors" :
+                ( interact_style == SmInteractStyleAny ? "SmInteractStyleAny" : "<unknown>" ) ),
+              false ? "true" : "false"
+              );
     BuildSmPropertyList();
 #ifdef USE_SM_EXTENSION
     if( shutdown )
     {
-        aSaveCond = osl_createCondition();
-        if( aSaveCond )
-            osl_resetCondition( aSaveCond );
-        Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, SaveYourselfHdl ) );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "waiting for save yourself event to be processed\n" );
-#endif
-        osl_waitCondition( aSaveCond, NULL );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "wakeup on save yourself condition\n" );
-#endif
-        osl_destroyCondition( aSaveCond );
-        aSaveCond = NULL;
+        if( ! aSaveCond )
+        {
+            bDocSaveDone = false;
+            aSaveCond = osl_createCondition();
+            if( aSaveCond )
+            {
+                osl_resetCondition( aSaveCond );
+                Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, SaveYourselfHdl ) );
+                SMprintf( "waiting for save yourself event to be processed\n" );
+            }
+        }
     }
-    SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
-    SmcSaveYourselfDone( aSmcConnection, True );
+    else
+    {
+        SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
+        SmcSaveYourselfDone( aSmcConnection, True );
+        SMprintf( "sent SaveYourselfDone (no shutdown)\n" );
+    }
 #endif
 }
 
 IMPL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void*, pDummy )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, GetSalData()->pFirstFrame_ ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
-#endif
+    SMprintf( GetSalData()->pFirstFrame_ ? "shutdown on first frame\n" : "shutdown event but no frame\n" );
     if( GetSalData()->pFirstFrame_ )
         GetSalData()->pFirstFrame_->maFrameData.ShutDown();
     return 0;
-}
-
-void SessionManagerClient::shutdownDone()
-{
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "SessionManagerClient::shutdownDone\n" );
-    if( ! aDieCond )
-        fprintf( stderr, "no DieCond\n" );
-#endif
-    if( aDieCond )
-        osl_setCondition( aDieCond );
 }
 
 void SessionManagerClient::DieProc(
@@ -281,32 +310,12 @@ void SessionManagerClient::DieProc(
     SmPointer client_data
     )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Session: die\n" );
-#endif
+    SMprintf( "Session: die\n" );
     if( connection == aSmcConnection )
     {
-        aSmcConnection = NULL;
-        aDieCond = osl_createCondition();
-        if( aDieCond )
-            osl_resetCondition( aDieCond );
         Application::PostUserEvent( STATIC_LINK( NULL, SessionManagerClient, ShutDownHdl ) );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "waiting for shutdown event to be processed\n" );
-#endif
-        osl_waitCondition( aDieCond, NULL );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "wakeup on die condition\n" );
-#endif
-        osl_destroyCondition( aDieCond );
-        aDieCond = NULL;
+        SMprintf( "waiting for shutdown event to be processed\n" );
     }
-#ifdef USE_SM_EXTENSION
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "closing connection\n" );
-#endif
-    SmcCloseConnection( connection, 0, NULL );
-#endif
 }
 
 void SessionManagerClient::SaveCompleteProc(
@@ -314,18 +323,14 @@ void SessionManagerClient::SaveCompleteProc(
     SmPointer client_data
     )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Session: save complete\n" );
-#endif
+    SMprintf( "Session: save complete\n" );
 }
 
 void SessionManagerClient::ShutdownCanceledProc(
     SmcConn connection,
     SmPointer client_data )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "Session: shutdown canceled\n" );
-#endif
+    SMprintf( "Session: shutdown canceled\n" );
 }
 
 void SessionManagerClient::open()
@@ -364,14 +369,10 @@ void SessionManagerClient::open()
                                             &pClientID,
                                             sizeof( aErrBuf ),
                                             aErrBuf );
-#if (OSL_DEBUG_LEVEL > 1)  || defined DBG_UTIL
         if( ! aSmcConnection )
-            fprintf( stderr, "SmcOpenConnection failed: %s\n", aErrBuf );
-#if OSL_DEBUG_LEVEL > 1
+            SMprintf( "SmcOpenConnection failed: %s\n", aErrBuf );
         else
-            fprintf( stderr, "SmcOpenConnection succeeded, client ID is \"%s\"\n", pClientID );
-#endif
-#endif
+            SMprintf( "SmcOpenConnection succeeded, client ID is \"%s\"\n", pClientID );
         aClientID = ByteString( pClientID );
         free( pClientID );
         pClientID = NULL;
@@ -391,10 +392,8 @@ void SessionManagerClient::open()
                              );
         }
     }
-#if OSL_DEBUG_LEVEL > 1
-    else if( aSmcConnection )
-        fprintf( stderr, "no SESSION_MANAGER\n" );
-#endif
+    else if( ! aSmcConnection )
+        SMprintf( "no SESSION_MANAGER\n" );
 #endif
 }
 
@@ -402,14 +401,12 @@ void SessionManagerClient::close()
 {
     if( aSmcConnection )
     {
+        ICEConnectionObserver::deactivate();
 #ifdef USE_SM_EXTENSION
         SmcCloseConnection( aSmcConnection, 0, NULL );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "SmcConnection closed\n" );
-#endif
+        SMprintf( "SmcConnection closed\n" );
 #endif
         aSmcConnection = NULL;
-        ICEConnectionObserver::deactivate();
     }
 }
 
@@ -442,9 +439,7 @@ const ByteString& SessionManagerClient::getPreviousSessionID()
             break;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "previous ID = \"%s\"\n", aPrevId.GetBuffer() );
-#endif
+    SMprintf( "previous ID = \"%s\"\n", aPrevId.GetBuffer() );
     return aPrevId;
 }
 
@@ -481,6 +476,7 @@ void ICEConnectionObserver::deactivate()
         if( ICEThread )
         {
             osl_terminateThread( ICEThread );
+            osl_joinWithThread( ICEThread );
             osl_destroyThread( ICEThread );
             ICEThread = NULL;
         }
@@ -491,7 +487,7 @@ void ICEConnectionObserver::deactivate()
 void ICEConnectionWorker( void* pData )
 {
 #ifdef USE_SM_EXTENSION
-    while( ICEConnectionObserver::nConnections )
+    while( ICEConnectionObserver::nConnections && osl_scheduleThread( ICEConnectionObserver::ICEThread) )
     {
         osl_acquireMutex( ICEConnectionObserver::ICEMutex );
         int nRet = poll( ICEConnectionObserver::pFilehandles,
@@ -499,16 +495,14 @@ void ICEConnectionWorker( void* pData )
                          400 );
         if( nRet > 0 )
         {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "IceProcessMessages\n" );
-#endif
+            SMprintf( "IceProcessMessages\n" );
             Bool bReply;
             for( int i = 0; i < ICEConnectionObserver::nConnections; i++ )
                 if( ICEConnectionObserver::pFilehandles[i].revents & POLLIN )
                     IceProcessMessages( ICEConnectionObserver::pConnections[i], NULL, &bReply );
         }
+        SessionManagerClient::checkSaveYourselfCond();
         osl_releaseMutex( ICEConnectionObserver::ICEMutex );
-        osl_yieldThread();
     }
 #endif
 }
@@ -533,7 +527,10 @@ void ICEConnectionObserver::ICEWatchProc(
         pFilehandles[ nConnections-1 ].events   = POLLIN;
         osl_releaseMutex( ICEMutex );
         if( nConnections == 1 )
-            ICEThread = osl_createThread( ICEConnectionWorker, NULL );
+        {
+            ICEThread = osl_createSuspendedThread( ICEConnectionWorker, NULL );
+            osl_resumeThread( ICEThread );
+        }
     }
     else
     {
@@ -561,11 +558,9 @@ void ICEConnectionObserver::ICEWatchProc(
             ICEThread = NULL;
         }
     }
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "ICE connection on %d %s\n",
-             IceConnectionNumber( connection ),
-             opening ? "inserted" : "removed" );
-    fprintf( stderr, "Display connection is %d\n", ConnectionNumber( GetSalData()->GetDefDisp()->GetDisplay() ) );
-#endif
+    SMprintf( "ICE connection on %d %s\n",
+              IceConnectionNumber( connection ),
+              opening ? "inserted" : "removed" );
+    SMprintf( "Display connection is %d\n", ConnectionNumber( GetSalData()->GetDefDisp()->GetDisplay() ) );
 #endif
 }
