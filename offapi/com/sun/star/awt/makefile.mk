@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: mi $ $Date: 2001-10-22 16:03:10 $
+#   last change: $Author: mt $ $Date: 2002-09-11 14:44:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,6 +171,7 @@ IDLFILES=\
     UnoControlRadioButtonModel.idl\
     UnoControlScrollBar.idl\
     UnoControlScrollBarModel.idl\
+    UnoControlSpinField.idl\
     UnoControlTimeField.idl\
     UnoControlTimeFieldModel.idl\
     VclContainerEvent.idl\
