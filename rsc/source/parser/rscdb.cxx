@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:55:02 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ RscTop * RscTypCont::SearchType( HASHID nId )
         return NULL;
 
 #define ELSE_IF( a )                \
-    else if( a##.GetId() == nId )   \
+    else if( a.GetId() == nId ) \
         return &a;                  \
 
     if( aBool.GetId() == nId )
