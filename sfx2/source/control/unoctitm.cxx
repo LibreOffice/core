@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-31 16:05:42 $
+ *  last change: $Author: mba $ $Date: 2001-11-02 16:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,8 +516,16 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
                     SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
             {
-                SfxRequest aReq( GetId(), nCall, aSet );
-                pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+                if ( aSet.Count() )
+                {
+                    SfxRequest aReq( GetId(), nCall, aSet );
+                    pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+                }
+                else
+                {
+                    SfxRequest aReq( GetId(), nCall, SFX_APP()->GetPool() );
+                    pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+                }
             }
         }
         else
