@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:46:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ namespace
             m_aNameMap.clear();
         }
         // -----------------------------------------------------------------------------
-        virtual void insert(const ::rtl::OUString& _sName,const Object_BASE& _xObject)
+        virtual void insert(const ::rtl::OUString& _sName,const ObjectType& _xObject)
         {
             m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(_sName,_xObject)));
         }
@@ -160,7 +160,7 @@ namespace
             m_aElements.reserve(_rVector.size());
 
             for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
-                m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,WeakReference< XNamed >())));
+                m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(*i,ObjectType())));
         }
         // -----------------------------------------------------------------------------
         virtual bool rename(const ::rtl::OUString _sOldName,const ::rtl::OUString _sNewName)
@@ -243,18 +243,18 @@ namespace
             return m_aElements[_nIndex]->first;
         }
         // -----------------------------------------------------------------------------
-        virtual Reference< XNamed > getObject(sal_Int32 _nIndex)
+        virtual ObjectType getObject(sal_Int32 _nIndex)
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             return m_aElements[_nIndex]->second;
         }
         // -----------------------------------------------------------------------------
-        virtual Reference< XNamed > getObject(const ::rtl::OUString& columnName)
+        virtual ObjectType getObject(const ::rtl::OUString& columnName)
         {
             return m_aNameMap.find(columnName)->second;
         }
         // -----------------------------------------------------------------------------
-        virtual void setObject(sal_Int32 _nIndex,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >& _xObject)
+        virtual void setObject(sal_Int32 _nIndex,const ObjectType& _xObject)
         {
             OSL_ENSURE(_nIndex >= 0 && _nIndex < static_cast<sal_Int32>(m_aElements.size()),"Illegal argument!");
             m_aElements[_nIndex]->second = _xObject;
@@ -285,11 +285,11 @@ OCollection::OCollection(::cppu::OWeakObject& _rParent
 {
     if ( _bUseHardRef )
     {
-        m_pElements.reset(new OHardRefMap< Reference< XNamed> >(_bCase));
+        m_pElements.reset(new OHardRefMap< ObjectType >(_bCase));
     }
     else
     {
-        m_pElements.reset(new OHardRefMap< WeakReference< XNamed> >(_bCase));
+        m_pElements.reset(new OHardRefMap< WeakReference< XPropertySet> >(_bCase));
     }
     m_pElements->reFill(_rVector);
 }
@@ -399,21 +399,31 @@ Reference< XPropertySet > SAL_CALL OCollection::createDataDescriptor(  ) throw(R
 
     return createEmptyObject();
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString OCollection::getNameForObject(const ObjectType& _xObject)
+{
+    OSL_ENSURE(_xObject.is(),"OCollection::getNameForObject: Object is NULL!");
+    ::rtl::OUString sName;
+    _xObject->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
+    return sName;
+}
 // -------------------------------------------------------------------------
 // XAppend
 void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
 
-    Reference< XNamed > xName(descriptor,UNO_QUERY);
+    ObjectType xName(descriptor,UNO_QUERY);
     if(xName.is())
     {
-        ::rtl::OUString sName = xName->getName();
+
+        ::rtl::OUString sName = getNameForObject(xName);
+
         if ( m_pElements->exists(sName) )
             throw ElementExistException(sName,static_cast<XTypeProvider*>(this));
 
         appendObject(descriptor);
-        Reference< XNamed > xNewName = cloneObject(descriptor);
+        ObjectType xNewName = cloneObject(descriptor);
         Reference<XUnoTunnel> xTunnel(xNewName,UNO_QUERY);
         if(xTunnel.is())
         {
@@ -424,7 +434,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
 
         if(xNewName.is())
         {
-            sName = xNewName->getName();
+            sName = getNameForObject(xNewName);
             if ( !m_pElements->exists(sName) ) // this may happen when the drived class included it itself
                 m_pElements->insert(sName,xNewName);
             // notify our container listeners
@@ -548,7 +558,7 @@ void SAL_CALL OCollection::removeRefreshListener( const Reference< XRefreshListe
     m_aRefreshListeners.removeInterface(l);
 }
 // -----------------------------------------------------------------------------
-void OCollection::insertElement(const ::rtl::OUString& _sElementName,const Object_BASE& _xElement)
+void OCollection::insertElement(const ::rtl::OUString& _sElementName,const ObjectType& _xElement)
 {
     OSL_ENSURE(!m_pElements->exists(_sElementName),"Element already exists");
     if ( !m_pElements->exists(_sElementName) )
@@ -572,9 +582,9 @@ void OCollection::renameObject(const ::rtl::OUString _sOldName,const ::rtl::OUSt
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OCollection::getObject(sal_Int32 _nIndex)
+ObjectType OCollection::getObject(sal_Int32 _nIndex)
 {
-    Reference< XNamed > xName = m_pElements->getObject(_nIndex);
+    ObjectType xName = m_pElements->getObject(_nIndex);
     if ( !xName.is() )
     {
         try
@@ -612,10 +622,9 @@ void OCollection::appendObject( const Reference< XPropertySet >& descriptor )
 {
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OCollection::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+ObjectType OCollection::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    OSL_ASSERT(!"Need to be overloaded when used!");
-    throw SQLException();
+    return _xDescriptor.is() ? createObject(getNameForObject(_xDescriptor)) : sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 void OCollection::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
