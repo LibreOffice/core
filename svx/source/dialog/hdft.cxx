@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ma $ $Date: 2001-04-12 15:16:42 $
+ *  last change: $Author: os $ $Date: 2002-08-26 11:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ static USHORT pRanges[] =
     SID_ATTR_PAGE_ON,        SID_ATTR_PAGE_ON,
     SID_ATTR_PAGE_DYNAMIC,   SID_ATTR_PAGE_DYNAMIC,
     SID_ATTR_PAGE_SHARED,    SID_ATTR_PAGE_SHARED,
+    SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING,
     0
 };
 
@@ -195,6 +196,7 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     aTurnOnBox      ( this, ResId( CB_TURNON ) ),
     aDistFT         ( this, ResId( FT_DIST ) ),
     aDistEdit       ( this, ResId( ED_DIST ) ),
+    aDynSpacingCB   ( this, ResId( CB_DYNSPACING ) ),
     aHeightFT       ( this, ResId( FT_HEIGHT ) ),
     aHeightEdit     ( this, ResId( ED_HEIGHT ) ),
     aHeightDynBtn   ( this, ResId( CB_HEIGHT_DYN ) ),
@@ -244,6 +246,7 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
     const USHORT        nWULSpace   = GetWhich( SID_ATTR_ULSPACE );
     const USHORT        nWOn        = GetWhich( SID_ATTR_PAGE_ON );
     const USHORT        nWDynamic   = GetWhich( SID_ATTR_PAGE_DYNAMIC );
+    const USHORT        nWDynSpacing = GetWhich( SID_ATTR_HDFT_DYNAMIC_SPACING );
     const USHORT        nWShared    = GetWhich( SID_ATTR_PAGE_SHARED );
     const USHORT        nWBrush     = GetWhich( SID_ATTR_BRUSH );
     const USHORT        nWBox       = GetWhich( SID_ATTR_BORDER_OUTER );
@@ -261,7 +264,9 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
     aWhichTab[14]   =   aWhichTab[15]   = nWBoxInfo;
     aWhichTab[16]   =   aWhichTab[17]   = nWBox;
     aWhichTab[18]   =   aWhichTab[19]   = nWShadow;
-    aWhichTab[20]   =   0;
+    aWhichTab[20]   =   aWhichTab[21]  = nWDynSpacing;
+    aWhichTab[22] = 0;
+
 #else
     const USHORT        aWhichTab[] = { nWSize,     nWSize,
                                         nWLRSpace,  nWLRSpace,
@@ -273,6 +278,7 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
                                         nWBoxInfo,  nWBoxInfo,
                                         nWBox,      nWBox,
                                         nWShadow,   nWShadow,
+                                        nWDynSpacing, nWDynSpacing,
                                         0 };
 #endif
     const SfxItemSet&   rOldSet     = GetItemSet();
@@ -286,6 +292,13 @@ BOOL SvxHFPage::FillItemSet( SfxItemSet& rSet )
     aSet.Put( SfxBoolItem( nWOn,      aTurnOnBox.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWDynamic, aHeightDynBtn.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWShared,  aCntSharedBox.IsChecked() ) );
+    if(aDynSpacingCB.IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
+    {
+        SfxBoolItem* pBoolItem = (SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone();
+        pBoolItem->SetValue(aDynSpacingCB.IsChecked());
+        aSet.Put(*pBoolItem);
+        delete pBoolItem;
+    }
 
     // Groesse
     SvxSizeItem aSizeItem( (const SvxSizeItem&)rOldSet.Get( nWSize ) );
@@ -379,6 +392,13 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
                 (const SvxULSpaceItem&)rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) );
             const SvxLRSpaceItem& rLR =
                 (const SvxLRSpaceItem&)rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
+            if(aDynSpacingCB.IsVisible())
+            {
+                const SfxBoolItem& rDynSpacing =
+                    (const SfxBoolItem&)rHeaderSet.Get(GetWhich(SID_ATTR_HDFT_DYNAMIC_SPACING));
+                aDynSpacingCB.Check(rDynSpacing.GetValue());
+            }
+
 
             if ( nId == SID_ATTR_PAGE_HEADERSET )
             {   // Kopfzeile
@@ -994,5 +1014,30 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     aRMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
     return 0;
 }
+/* -----------------------------26.08.2002 12:49------------------------------
 
+ ---------------------------------------------------------------------------*/
+void lcl_Move(Window& rWin, sal_Int32 nDiff)
+{
+    Point aPos(rWin.GetPosPixel());
+    aPos.Y() -= nDiff;
+    rWin.SetPosPixel(aPos);
+}
+void SvxHFPage::EnableDynamicSpacing()
+{
+    aDynSpacingCB.Show();
+    //move all following controls
+    Window* aMoveWindows[] =
+    {
+        &aHeightFT,
+        &aHeightEdit,
+        &aHeightDynBtn,
+        &aBackgroundBtn,
+        0
+    };
+    sal_Int32 nOffset = aTurnOnBox.GetPosPixel().Y() - aCntSharedBox.GetPosPixel().Y();
+    sal_Int32 nIdx = 0;
+    while(aMoveWindows[nIdx])
+        lcl_Move(*aMoveWindows[nIdx++], nOffset);
+}
 
