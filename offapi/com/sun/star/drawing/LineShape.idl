@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineShape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 
 /** This service is for a simple <type>Shape</type> with lines.
  */
-service LineShape
+published service LineShape
 {
     service com::sun::star::drawing::Shape;
 
