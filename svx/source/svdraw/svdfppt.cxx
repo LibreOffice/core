@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:28:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1732,13 +1732,11 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                         else
                         {
                             DBG_ERROR("SdrPowerPointImport::Ctor(): Persist-Eintrag fehlerhaft! (SJ)");
-                            bOk = FALSE;
                         }
                     }
                     else
                     {
                         DBG_ERROR("SdrPowerPointImport::Ctor(): SlidePersist fehlerhaft! (SJ)");
-                        bOk = FALSE;
                     }
                 }
             }
