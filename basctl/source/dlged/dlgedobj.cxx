@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 08:48:49 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 11:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,21 +884,21 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     }
     else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
     {
-        return OBJ_DLG_PREVIEW;
+        return OBJ_DLG_IMAGECONTROL;
     }
     else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ))
     {
-        return OBJ_DLG_SPINBUTTON;  // ???change this!
+        return OBJ_DLG_PROGRESSBAR;
     }
     else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
     {
-        return OBJ_DLG_HSCROLLBAR;  // ???change this??? OBJ_DLG_VSCROLLBAR
+        return OBJ_DLG_HSCROLLBAR;
     }
     else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
     {
-        return OBJ_DLG_URLBUTTON;  // ???change this!
+        return OBJ_DLG_HFIXEDLINE;
     }
-    else        // missing: imagecontrol, progressbar, fixedline (2x)
+    else
     {
         return 0;
     }

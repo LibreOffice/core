@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 08:48:41 $
+ *  last change: $Author: tbe $ $Date: 2001-05-14 11:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,12 +173,6 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
             case OBJ_DLG_FIXEDTEXT:
                  pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedTextModel"), xDialogSFact);
                  break;
-            case OBJ_DLG_PREVIEW:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel"), xDialogSFact);
-                 break;
-            case OBJ_DLG_SPINBUTTON:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlProgressBarModel"), xDialogSFact);
-                 break;
             case OBJ_DLG_HSCROLLBAR:
                  pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel"), xDialogSFact);
                  break;
@@ -201,9 +195,6 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  {
                  }
             }    break;
-            case OBJ_DLG_URLBUTTON:
-                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedLineModel"), xDialogSFact);
-                 break;
             case OBJ_DLG_IMAGECONTROL:
                  pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel"), xDialogSFact);
                  break;
