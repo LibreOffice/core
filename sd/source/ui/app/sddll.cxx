@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:54:36 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ ULONG SdDLL::DetectFilter(SfxMedium& rMedium, const SfxFilter** ppFilter,
                             *ppFilter = NULL;
                             nReturn = ERRCODE_ABORT;
                             INetURLObject aURL( aFileName );
-                            if( aURL.getExtension().EqualsIgnoreCaseAscii( "cgm" ) )
+                            if( aURL.getExtension().equalsIgnoreAsciiCaseAscii( "cgm" ) )
                             {
                                 sal_uInt8 n8;
                                 pStm->Seek( STREAM_SEEK_TO_BEGIN );
