@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavresultset.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,21 +80,21 @@ namespace webdav_ucp {
 
 class DynamicResultSet : public ::ucb::ResultSetImplHelper
 {
-  vos::ORef< Content > m_xContent;
-  std::vector< DAVResource >* m_pResources;
+    vos::ORef< Content > m_xContent;
+    com::sun::star::uno::Reference<
+        com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
 private:
-  virtual void initStatic();
-  virtual void initDynamic();
+      virtual void initStatic();
+      virtual void initDynamic();
 
 public:
-  DynamicResultSet( const com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            const vos::ORef< Content >& rxContent,
-            const com::sun::star::ucb::OpenCommandArgument2& rCommand,
-            std::vector< DAVResource >* pResources );
-
-  ~DynamicResultSet();
+      DynamicResultSet( const com::sun::star::uno::Reference<
+                        com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                      const vos::ORef< Content >& rxContent,
+                      const com::sun::star::ucb::OpenCommandArgument2& rCommand,
+                      const com::sun::star::uno::Reference<
+                        com::sun::star::ucb::XCommandEnvironment >& rxEnv );
 };
 
 }

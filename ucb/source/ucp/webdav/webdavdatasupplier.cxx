@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,14 @@ namespace webdav_ucp
 
 struct ResultListEntry
 {
-    OUString            aId;
+    OUString                        aId;
     Reference< XContentIdentifier > xId;
-    Reference< XContent >       xContent;
-    Reference< XRow >       xRow;
-    const ContentProperties*    pData;
+    Reference< XContent >           xContent;
+    Reference< XRow >               xRow;
+    const ContentProperties*        pData;
 
     ResultListEntry( const ContentProperties* pEntry ) : pData( pEntry ) {};
-     ~ResultListEntry() {delete pData;}
+     ~ResultListEntry() { delete pData; }
 };
 
 //=========================================================================
@@ -138,12 +138,14 @@ struct DataSupplier_Impl
     ResultList                        m_aResults;
     vos::ORef< Content >              m_xContent;
     Reference< XMultiServiceFactory > m_xSMgr;
+      sal_Int32                       m_nOpenMode;
       sal_Bool                        m_bCountFinal;
 
     DataSupplier_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
-                       const vos::ORef< Content >& rContent )
+                       const vos::ORef< Content >& rContent,
+                       sal_Int32 nOpenMode )
     : m_xContent( rContent ), m_xSMgr( rxSMgr ),
-      m_bCountFinal( sal_False ) {}
+      m_nOpenMode( nOpenMode ), m_bCountFinal( sal_False ) {}
     ~DataSupplier_Impl();
 };
 
@@ -171,53 +173,10 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //=========================================================================
 
 DataSupplier::DataSupplier( const Reference< XMultiServiceFactory >& rxSMgr,
-                const vos::ORef< Content >& rContent,
-                sal_Int32 nOpenMode,
-                std::vector< DAVResource >& resources)
-: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent ) )
+                            const vos::ORef< Content >& rContent,
+                            sal_Int32 nOpenMode )
+: m_pImpl( new DataSupplier_Impl( rxSMgr, rContent, nOpenMode ) )
 {
-    for (sal_Int32 i=0; i<resources.size()-1; i++)
-    {
-      ContentProperties* pContentProperty = new ContentProperties;
-      pContentProperty->setValues(resources[i]);
-
-      // Check resource against open mode.
-      sal_Bool bMatchesOpenMode = sal_True;
-
-      switch ( nOpenMode )
-      {
-        case OpenMode::FOLDERS:
-            if ( !pContentProperty->bIsFolder )
-            {
-                // Entry is a document.
-                bMatchesOpenMode = sal_False;
-            }
-            break;
-
-        case OpenMode::DOCUMENTS:
-            if ( !pContentProperty->bIsDocument )
-            {
-                // Entry is a folder.
-                bMatchesOpenMode = sal_False;
-            }
-            break;
-
-        case OpenMode::ALL:
-        default:
-            break;
-      }
-
-      if ( bMatchesOpenMode )
-          m_pImpl->m_aResults.push_back(new ResultListEntry( pContentProperty ) );
-    }
-
-
-    m_pImpl->m_bCountFinal = sal_True;
-    vos::ORef< ResultSet > xResultSet = getResultSet();
-    if ( xResultSet.isValid() )
-    {
-      xResultSet->rowCountFinal();
-    }
 }
 
 //=========================================================================
@@ -248,15 +207,8 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         OUString aId
             = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
 
-        const ContentProperties& props = *(m_pImpl->m_aResults[ nIndex ]->pData);
-
-//      fprintf(stderr,OUStringToOString( props.aTitle, RTL_TEXTENCODING_ASCII_US ));
-//      fprintf(stderr, "\n");
-
-//      fprintf(stderr,OUStringToOString(aId, RTL_TEXTENCODING_ASCII_US ));
-//      fprintf(stderr, "\n");
-
-//      fprintf(stderr, "size : %d\n", m_pImpl->m_aResults.size());
+        const ContentProperties& props
+                            = *( m_pImpl->m_aResults[ nIndex ]->pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += OUString::createFromAscii( "/" );
@@ -271,7 +223,8 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
 //=========================================================================
 // virtual
-Reference< XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+Reference< XContentIdentifier > DataSupplier::queryContentIdentifier(
+                                                        sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
@@ -304,7 +257,8 @@ Reference< XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        Reference< XContent > xContent = m_pImpl->m_aResults[ nIndex ]->xContent;
+        Reference< XContent > xContent
+                                = m_pImpl->m_aResults[ nIndex ]->xContent;
         if ( xContent.is() )
         {
             // Already cached.
@@ -342,17 +296,26 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
         return sal_True;
     }
 
-    // Result not (yet) present.
+    // Obtain values...
+    if ( getData() )
+    {
+        if ( m_pImpl->m_aResults.size() > nIndex )
+        {
+            // Result already present.
+            return sal_True;
+        }
+    }
 
-    if ( m_pImpl->m_bCountFinal )
-        return sal_False;
-
+    return sal_False;
 }
 
 //=========================================================================
 // virtual
 sal_uInt32 DataSupplier::totalCount()
 {
+  // Obtain values...
+  getData();
+
   return m_pImpl->m_aResults.size();
 }
 
@@ -422,5 +385,88 @@ void DataSupplier::close()
 void DataSupplier::validate()
     throw( ResultSetException )
 {
+}
+
+//=========================================================================
+sal_Bool DataSupplier::getData()
+{
+    osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+
+    if ( !m_pImpl->m_bCountFinal )
+    {
+//      const Sequence< Property > & rProps = getResultSet()->getProperties();
+        std::vector< DAVResource > resources;
+        try
+        {
+            // @@@ limit to resources really necessaray according to rProps
+
+               std::vector< OUString > propertyNames;
+               propertyNames.push_back( DAVProperties::CREATIONDATE );
+               propertyNames.push_back( DAVProperties::DISPLAYNAME );
+               propertyNames.push_back( DAVProperties::GETCONTENTLANGUAGE );
+               propertyNames.push_back( DAVProperties::GETCONTENTLENGTH );
+               propertyNames.push_back( DAVProperties::GETCONTENTTYPE );
+               propertyNames.push_back( DAVProperties::GETETAG );
+               propertyNames.push_back( DAVProperties::GETLASTMODIFIED );
+               propertyNames.push_back( DAVProperties::LOCKDISCOVERY );
+               propertyNames.push_back( DAVProperties::RESOURCETYPE );
+               propertyNames.push_back( DAVProperties::SOURCE );
+               //   propertyNames.push_back( DAVProperties::SUPPORTEDLOCK );
+
+            // propfind depth 1, get property values for each child
+            vos::ORef< DAVSession > xSession = m_pImpl->m_xContent->getSession();
+            xSession->PROPFIND( m_pImpl->m_xContent->getPath(),
+                                ONE,
+                                propertyNames,
+                                resources,
+                                getResultSet()->getEnvironment() );
+          }
+          catch ( DAVException & )
+        {
+            VOS_ENSURE( sal_False, "PROPFIND : DAVException" );
+            return sal_False;
+          }
+
+        // Note: Last elem of resources contains data for the folder itself.
+        for ( sal_Int32 n = 0; n < resources.size() - 1 ; ++n )
+        {
+            ContentProperties* pContentProperty = new ContentProperties;
+            pContentProperty->setValues( resources[ n ] );
+
+            // Check resource against open mode.
+            switch ( m_pImpl->m_nOpenMode )
+            {
+                case OpenMode::FOLDERS:
+                    if ( !pContentProperty->bIsFolder )
+                    {
+                        // Entry is a document.
+                        continue;
+                    }
+                    break;
+
+                case OpenMode::DOCUMENTS:
+                    if ( !pContentProperty->bIsDocument )
+                    {
+                        // Entry is a folder.
+                        continue;
+                    }
+                    break;
+
+                case OpenMode::ALL:
+                default:
+                    break;
+            }
+
+              m_pImpl->m_aResults.push_back(
+                                new ResultListEntry( pContentProperty ) );
+        }
+
+          m_pImpl->m_bCountFinal = sal_True;
+
+        // Callback possible, bacause listeners may be informed!
+        aGuard.clear();
+        getResultSet()->rowCountFinal();
+    }
+      return sal_True;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-02 15:49:54 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,19 +134,20 @@
 #include "DAVSession.hxx"
 #endif
 
-#ifndef _WEBDAV_UCP_AUTHINTERACTION_HXX
-#include "authinteraction.hxx"
-#endif
-
 #include "DateTimeHelper.hxx"
 
 #include "NeonUri.hxx"
+
+#ifndef _WEBDAV_UCP_AUTHINTERACTION_HXX
+#include "authinteraction.hxx"
+#endif
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -154,6 +155,8 @@ using namespace cppu;
 using namespace rtl;
 
 using namespace webdav_ucp;
+
+//=========================================================================
 
 class AuthListener : public DAVAuthListener
 {
@@ -175,6 +178,7 @@ class AuthListener : public DAVAuthListener
     }
 } webdavAuthListener;
 
+//=========================================================================
 
 void ContentProperties::setValues(DAVResource& resource)
 {
@@ -268,60 +272,57 @@ void ContentProperties::setValues(DAVResource& resource)
 //=========================================================================
 // ctr for content on an existing webdav resource
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-          ::ucb::ContentProviderImplHelper* pProvider,
-          const Reference< XContentIdentifier >& Identifier )
+                    ::ucb::ContentProviderImplHelper* pProvider,
+                    const Reference< XContentIdentifier >& Identifier )
   throw ( ContentCreationException )
-  : ContentImplHelper( rxSMgr, pProvider, Identifier )
+: ContentImplHelper( rxSMgr, pProvider, Identifier ),
+  _transient( sal_False ),
+  _upToDate( sal_False )
 {
-  _transient = sal_False;
-  _upToDate = sal_False;
-  initpath();
+      initpath();
 
-  try {
-      // set the webdav session
-      _pWebdavSession = DAVSessionFactory::createDAVSession(m_xIdentifier->getContentIdentifier());
-      _pWebdavSession->setServerAuthListener(&webdavAuthListener);
+    try
+      {
+        // set the webdav session
+          _pWebdavSession = DAVSessionFactory::createDAVSession(
+                                    m_xIdentifier->getContentIdentifier() );
+          _pWebdavSession->setServerAuthListener( &webdavAuthListener );
     }
-    catch (DAVException e) {
-      VOS_ENSURE( sal_False, "createDAVSession : DAVException" );
-      throw ContentCreationException();
-  }
-
-  if ( ! update( Reference< XCommandEnvironment >() ) ) {
-    // may have failed because of authentification
-    // throw CommandAbortedException();
-  }
-
+    catch ( DAVException & )
+    {
+        VOS_ENSURE( sal_False, "createDAVSession : DAVException" );
+          throw ContentCreationException();
+      }
 }
 
 
 //=========================================================================
 // ctr for content on an non-existing webdav resource
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-          ::ucb::ContentProviderImplHelper* pProvider,
-          const Reference< XContentIdentifier >& Identifier,
-          ::vos::ORef< DAVSession > pSession,
-          sal_Bool isCollection)
+                    ::ucb::ContentProviderImplHelper* pProvider,
+                    const Reference< XContentIdentifier >& Identifier,
+                    ::vos::ORef< DAVSession > pSession,
+                    sal_Bool isCollection )
   throw ( ContentCreationException )
-  : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False )
+: ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
+  _transient( sal_True ),
+  _upToDate( sal_False ),
+  _pWebdavSession( pSession )
 {
-  _transient = sal_True;
-  _upToDate = sal_False;
-  _pWebdavSession = pSession;
+    initpath();
 
-  initpath();
+    // this is not an existing Content, let's set some props anyway ...
 
-  // this is not an existing Content, let's set some props anyway ...
-
-  if (isCollection) {
-    m_aProps.bIsDocument  =  sal_False;
-    m_aProps.bIsFolder  =  sal_True;
-  }
-  else {
-    m_aProps.bIsDocument  =  sal_True;
-    m_aProps.bIsFolder  =  sal_False;
-  }
-
+    if ( isCollection )
+    {
+        m_aProps.bIsDocument = sal_False;
+        m_aProps.bIsFolder   = sal_True;
+      }
+      else
+    {
+        m_aProps.bIsDocument = sal_True;
+        m_aProps.bIsFolder   = sal_False;
+      }
 }
 
 //=========================================================================
@@ -329,54 +330,113 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 void Content::initpath()
   throw ( ContentCreationException )
 {
-  OUString aURL = m_xIdentifier->getContentIdentifier();
+      OUString aURL = m_xIdentifier->getContentIdentifier();
 
-  // webdavscheme://user@host:port/path
-  sal_Int32 indexOfSecondSlash = aURL.indexOf('/',WEBDAV_URL_SCHEME_LENGTH+2);
-  sal_Int32 indexOfThirdSlash = aURL.indexOf('/',indexOfSecondSlash+1);
-  if (indexOfThirdSlash==-1) {
-    VOS_ENSURE( sal_False, "No third '/' in URL " );
-    throw ContentCreationException();
+      // webdavscheme://user@host:port/path
+      sal_Int32 indexOfSecondSlash
+                      = aURL.indexOf( '/', WEBDAV_URL_SCHEME_LENGTH + 2 );
+      sal_Int32 indexOfThirdSlash
+                      = aURL.indexOf( '/', indexOfSecondSlash + 1 );
+      if ( indexOfThirdSlash == -1 )
+      {
+        VOS_ENSURE( sal_False, "No third '/' in URL " );
+        throw ContentCreationException();
+      }
+
+      _path = aURL.copy( indexOfThirdSlash );
+
+    sal_Int32 nPos = aURL.lastIndexOf( '/' );
+      sal_Int32 nEnd = aURL.getLength();
+
+      if ( nPos == ( aURL.getLength() - 1 ) )
+    {
+        // Trailing slash found. Skip.
+        nPos = aURL.lastIndexOf( '/', nPos );
+        nEnd--;
+      }
+
+      if ( nPos != -1 ) {
+        m_aProps.aTitle = aURL.copy( nPos + 1, nEnd - nPos - 1 );
   }
-
-  _path = aURL.copy(indexOfThirdSlash);
-
 }
 
 //=========================================================================
 // init dav server and path
-sal_Bool Content::update(const Reference< XCommandEnvironment >& Environment)
+sal_Bool Content::update( const Sequence< Property >& rProperties,
+                           const Reference< XCommandEnvironment >& Environment )
 {
-  std::vector< DAVResource > resources;
-  try {
-    // properties initialization
-    std::vector< OUString > propertyNames;
-    propertyNames.push_back(DAVProperties::CREATIONDATE);
-    propertyNames.push_back(DAVProperties::DISPLAYNAME);
-    propertyNames.push_back(DAVProperties::GETCONTENTLANGUAGE);
-    propertyNames.push_back(DAVProperties::GETCONTENTLENGTH);
-    propertyNames.push_back(DAVProperties::GETCONTENTTYPE);
-    propertyNames.push_back(DAVProperties::GETETAG);
-    propertyNames.push_back(DAVProperties::GETLASTMODIFIED);
-    propertyNames.push_back(DAVProperties::LOCKDISCOVERY);
-    propertyNames.push_back(DAVProperties::RESOURCETYPE);
-    propertyNames.push_back(DAVProperties::SOURCE);
-    //   propertyNames.push_back(DAVProperties::SUPPORTEDLOCK);
+    if ( _transient )
+        return sal_True;
 
-    _pWebdavSession->PROPFIND (_path,ZERO,propertyNames,resources, Environment);
-  }
-  catch (DAVException e) {
-    VOS_ENSURE( sal_False, "PROPFIND : DAVException" );
-    return sal_False;
-  }
+    if ( !_upToDate )
+    {
+        // Require requested resources network access???
 
-  if (resources.size()!=1) {
-    return sal_False;
-  }
+        sal_Bool bDoIt = sal_False;
+        sal_Int32 nCount = rProperties.getLength();
+        for ( sal_Int32 n = 0; n < nCount; ++n )
+        {
+            const OUString& rPropName = rProperties[ n ].Name;
 
-  m_aProps.setValues(resources[0]);
-  _upToDate = sal_True;
-  return sal_True;
+            if ( ( rPropName == DAVProperties::CREATIONDATE ) ||
+                 ( rPropName == DAVProperties::DISPLAYNAME ) ||
+                 ( rPropName == DAVProperties::GETCONTENTLANGUAGE ) ||
+                 ( rPropName == DAVProperties::GETCONTENTLENGTH ) ||
+                 ( rPropName == DAVProperties::GETCONTENTTYPE ) ||
+                 ( rPropName == DAVProperties::GETETAG ) ||
+                 ( rPropName == DAVProperties::GETLASTMODIFIED ) ||
+                 ( rPropName == DAVProperties::LOCKDISCOVERY ) ||
+                 ( rPropName == DAVProperties::RESOURCETYPE ) ||
+                 ( rPropName == DAVProperties::SOURCE ) ||
+//               ( rPropName == DAVProperties::SUPPORTEDLOCK ) ||
+                   ( rPropName.compareToAscii( "IsDocument" ) == 0 ) ||
+                   ( rPropName.compareToAscii( "IsFolder" ) == 0 ) ||
+                   ( rPropName.compareToAscii( "Size" ) == 0 ) ||
+                   ( rPropName.compareToAscii( "DateCreated" ) == 0 ) ||
+                   ( rPropName.compareToAscii( "DateModified" ) == 0 ) ||
+                   ( rPropName.compareToAscii( "MediaType" ) == 0 ) )
+            {
+                bDoIt = sal_True;
+                break;
+            }
+        }
+
+        if ( bDoIt )
+        {
+            std::vector< DAVResource > resources;
+              try
+            {
+                // properties initialization
+                std::vector< OUString > propertyNames;
+                propertyNames.push_back( DAVProperties::CREATIONDATE );
+                propertyNames.push_back( DAVProperties::DISPLAYNAME );
+                propertyNames.push_back( DAVProperties::GETCONTENTLANGUAGE );
+                propertyNames.push_back( DAVProperties::GETCONTENTLENGTH );
+                propertyNames.push_back( DAVProperties::GETCONTENTTYPE );
+                propertyNames.push_back( DAVProperties::GETETAG );
+                propertyNames.push_back( DAVProperties::GETLASTMODIFIED );
+                propertyNames.push_back( DAVProperties::LOCKDISCOVERY );
+                propertyNames.push_back( DAVProperties::RESOURCETYPE );
+                propertyNames.push_back( DAVProperties::SOURCE );
+                //   propertyNames.push_back( DAVProperties::SUPPORTEDLOCK );
+
+                _pWebdavSession->PROPFIND(
+                        _path, ZERO, propertyNames, resources, Environment );
+              }
+              catch ( DAVException & )
+            {
+                VOS_ENSURE( sal_False, "PROPFIND : DAVException" );
+                return sal_False;
+              }
+
+              if ( resources.size() != 1 )
+                return sal_False;
+
+              m_aProps.setValues( resources[ 0 ] );
+              _upToDate = sal_True;
+        }
+    }
+      return sal_True;
 }
 
 //=========================================================================
@@ -531,73 +591,62 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                    XCommandEnvironment >& Environment )
     throw( Exception, CommandAbortedException, RuntimeException )
 {
-  Any aRet;
+      Any aRet;
 
-  if ( !_transient && !_upToDate ) {
-    // initialisation for content created by the provider
-    if ( ! update(Environment) ) {
-      throw CommandAbortedException();
-    }
-  }
-
-  //   fprintf (stderr, "\nCOMMAND : ");
-  //   fprintf (stderr, OUStringToOString( aCommand.Name, RTL_TEXTENCODING_ASCII_US ) );
-  //   fprintf (stderr, "\n");
-
-  if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
+    if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
     {
-      //////////////////////////////////////////////////////////////////
-      // getPropertyValues
-      //////////////////////////////////////////////////////////////////
+          //////////////////////////////////////////////////////////////////
+          // getPropertyValues
+          //////////////////////////////////////////////////////////////////
 
-      Sequence< Property > Properties;
-      if ( !( aCommand.Argument >>= Properties ) )
+          Sequence< Property > Properties;
+          if ( !( aCommand.Argument >>= Properties ) )
+        {
+              VOS_ENSURE( sal_False, "Wrong argument type!" );
+              return Any();
+        }
+
+          aRet <<= getPropertyValues( Properties, Environment );
+    }
+      else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
     {
-      VOS_ENSURE( sal_False, "Wrong argument type!" );
-      return Any();
-    }
+          //////////////////////////////////////////////////////////////////
+          // setPropertyValues
+          //////////////////////////////////////////////////////////////////
 
-      aRet <<= getPropertyValues( Properties );
-    }
-  else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
-    {
-      //////////////////////////////////////////////////////////////////
-      // setPropertyValues
-      //////////////////////////////////////////////////////////////////
+          Sequence< PropertyValue > aProperties;
+          if ( !( aCommand.Argument >>= aProperties ) )
+        {
+              VOS_ENSURE( sal_False, "Wrong argument type!" );
+              return Any();
+        }
 
-      Sequence< PropertyValue > aProperties;
-      if ( !( aCommand.Argument >>= aProperties ) )
-    {
-      VOS_ENSURE( sal_False, "Wrong argument type!" );
-      return Any();
-    }
+          if ( !aProperties.getLength() )
+        {
+              VOS_ENSURE( sal_False, "No properties!" );
+              return Any();
+        }
 
-      if ( !aProperties.getLength() )
-    {
-      VOS_ENSURE( sal_False, "No properties!" );
-      return Any();
+          setPropertyValues( aProperties, Environment );
     }
+      else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
+       {
+          //////////////////////////////////////////////////////////////////
+          // getPropertySetInfo
+          //////////////////////////////////////////////////////////////////
 
-      setPropertyValues( aProperties, Environment );
-    }
-  else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
-    {
-      //////////////////////////////////////////////////////////////////
-      // getPropertySetInfo
-      //////////////////////////////////////////////////////////////////
+          // Note: Implemented by base class.
+          aRet <<= getPropertySetInfo();
+       }
+      else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
+       {
+          //////////////////////////////////////////////////////////////////
+          // getCommandInfo
+          //////////////////////////////////////////////////////////////////
 
-      // Note: Implemented by base class.
-      aRet <<= getPropertySetInfo();
-    }
-  else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
-    {
-      //////////////////////////////////////////////////////////////////
-      // getCommandInfo
-      //////////////////////////////////////////////////////////////////
-
-      // Note: Implemented by base class.
-      aRet <<= getCommandInfo();
-    }
+          // Note: Implemented by base class.
+          aRet <<= getCommandInfo();
+       }
     else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {
         //////////////////////////////////////////////////////////////////
@@ -611,11 +660,11 @@ Any SAL_CALL Content::execute( const Command& aCommand,
             {
                 // Open collection.
 
-                std::vector< DAVResource >* pResources
-                    = new  std::vector< DAVResource >;
-                getChildrenResources( *pResources, Environment );
-                Reference< XDynamicResultSet > xSet = new DynamicResultSet(
-                                    m_xSMgr, this, aOpenCommand, pResources );
+                Reference< XDynamicResultSet > xSet
+                                = new DynamicResultSet( m_xSMgr,
+                                                        this,
+                                                        aOpenCommand,
+                                                        Environment );
                 aRet <<= xSet;
               }
               else
@@ -1046,9 +1095,6 @@ Reference< XContent > SAL_CALL Content::createNewContent( const ContentInfo& Inf
     isCollection = sal_False;
       }
 
-//       fprintf ( stderr, "new Content URL : " );
-//       fprintf ( stderr, OUStringToOString( aURL, RTL_TEXTENCODING_ASCII_US ) );
-//       fprintf ( stderr, "\n" );
       Reference< XContentIdentifier > xId( new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
 
       // create the local content
@@ -1099,9 +1145,6 @@ OUString Content::getParentURL()
 //
 //=========================================================================
 
-
-
-//=========================================================================
 // static
 Reference< XRow > Content::getPropertyValues(
                 const Reference< XMultiServiceFactory >& rSMgr,
@@ -1128,7 +1171,8 @@ Reference< XRow > Content::getPropertyValues(
 
       // Process Core properties.
 
-      if ( rProp.Name.compareToAscii( "ContentType" ) == 0 ) {
+      if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
+       {
             if ( rData.bIsFolder )
                   xRow->appendString( rProp, OUString::createFromAscii(
                                                       WEBDAV_COLLECTION_TYPE ) );
@@ -1160,7 +1204,7 @@ Reference< XRow > Content::getPropertyValues(
           {
           xRow->appendTimestamp( rProp, rData.dateModified );
         }
-      if ( rProp.Name.compareToAscii( "MediaType" ) == 0 ) {
+      else if ( rProp.Name.compareToAscii( "MediaType" ) == 0 ) {
           xRow->appendString( rProp, rData.getcontenttype );
         }
       else if ( rProp.Name.equals(DAVProperties::CREATIONDATE) ) {
@@ -1380,14 +1424,19 @@ Reference< XRow > Content::getPropertyValues(
 }
 
 //=========================================================================
-Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rProperties )
+Reference< XRow > Content::getPropertyValues(
+                        const Sequence< Property >& rProperties,
+                        const Reference< XCommandEnvironment >& xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    return getPropertyValues( m_xSMgr,
-                  rProperties,
-                  m_aProps,
-                  m_xProvider,
-                  m_xIdentifier->getContentIdentifier() );
+
+    if ( update( rProperties, xEnv ) )
+        return getPropertyValues( m_xSMgr,
+                                      rProperties,
+                                      m_aProps,
+                                      m_xProvider,
+                                      m_xIdentifier->getContentIdentifier() );
+    return Reference< XRow >();
 }
 
 //=========================================================================
@@ -1651,9 +1700,10 @@ void Content::insert(Reference<XInputStream> xInputStream,
       VOS_ENSURE( sal_False, "PUT : DAVException\n" );
     throw CommandAbortedException();
   }
-  if ( ! update(Environment) ) {
-    throw CommandAbortedException();
-  }
+
+//  if ( ! update(Environment) ) {
+//    throw CommandAbortedException();
+//  }
 
   aGuard.clear();
   inserted();
@@ -1665,11 +1715,8 @@ void Content::destroy( sal_Bool bDeletePhysical )
     throw( CommandAbortedException )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
-  OUString aURL = m_xIdentifier->getContentIdentifier();
+    OUString aURL = m_xIdentifier->getContentIdentifier();
 
-//   fprintf(stderr, " destroy : ");
-//   fprintf ( stderr, OUStringToOString( aURL, RTL_TEXTENCODING_ASCII_US ) );
-//   fprintf(stderr, " \n");
     Reference< XContent > xThis = this;
 
     deleted();
@@ -1678,14 +1725,12 @@ void Content::destroy( sal_Bool bDeletePhysical )
 
     // Process instanciated children...
 
-//  fprintf(stderr, " destroy 2\n");
     ::webdav_ucp::Content::ContentRefList aChildren;
     queryChildren( aChildren );
 
     ContentRefList::const_iterator it  = aChildren.begin();
     ContentRefList::const_iterator end = aChildren.end();
 
-//  fprintf(stderr, " destroy children\n");
     while ( it != end )
     {
         (*it)->destroy( bDeletePhysical );
@@ -1762,36 +1807,3 @@ sal_Bool Content::exchangeIdentity(
                 "Panic! Cannot exchange identity!" );
     return sal_False;
 }
-
-//=========================================================================
-void Content::getChildrenResources(std::vector< DAVResource >& resources,
-                   const Reference< XCommandEnvironment >& Environment )
-{
-  // propfind depth 1, build ContentProperty for each children
-
-  // @@@ limit it to the resultset properties
-  std::vector< OUString > propertyNames;
-  propertyNames.push_back(DAVProperties::CREATIONDATE);
-  propertyNames.push_back(DAVProperties::DISPLAYNAME);
-  propertyNames.push_back(DAVProperties::GETCONTENTLANGUAGE);
-  propertyNames.push_back(DAVProperties::GETCONTENTLENGTH);
-  propertyNames.push_back(DAVProperties::GETCONTENTTYPE);
-  propertyNames.push_back(DAVProperties::GETETAG);
-  propertyNames.push_back(DAVProperties::GETLASTMODIFIED);
-  propertyNames.push_back(DAVProperties::LOCKDISCOVERY);
-  propertyNames.push_back(DAVProperties::RESOURCETYPE);
-  propertyNames.push_back(DAVProperties::SOURCE);
-//   propertyNames.push_back(DAVProperties::SUPPORTEDLOCK);
-
-
-    OUString aURL = m_xIdentifier->getContentIdentifier();
-
-    try {
-      _pWebdavSession->PROPFIND (_path, ONE, propertyNames, resources, Environment);
-    }
-    catch (DAVException e){
-      VOS_ENSURE( sal_False, "PROPFIND : DAVException" );
-      throw CommandAbortedException();
-    }
-}
-

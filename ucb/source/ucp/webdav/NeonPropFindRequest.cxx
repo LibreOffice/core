@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,12 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession *             inSession,
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     if ( theRetVal != HTTP_OK )
-        throw DAVException( DAVException::DAV_HTTP_ERROR );
+    {
+        if ( theRetVal == HTTP_AUTH )
+            throw DAVException( DAVException::DAV_HTTP_AUTH );
+        else
+            throw DAVException( DAVException::DAV_HTTP_ERROR );
+    }
 }
 
 // -------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVException.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ class DAVException
     public:
         enum ExceptionCode { DAV_HTTP_LOOKUP = 0,
                              DAV_HTTP_ERROR,
+                             DAV_HTTP_AUTH,
                              DAV_SESSION_CREATE,
                              DAV_REQUEST_CREATE,
                              DAV_INVALID_ARG,

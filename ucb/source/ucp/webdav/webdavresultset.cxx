@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavresultset.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,20 +88,17 @@ using namespace webdav_ucp;
 //=========================================================================
 //=========================================================================
 
-DynamicResultSet::DynamicResultSet( const Reference< XMultiServiceFactory >& rxSMgr,
-                    const vos::ORef< Content >& rxContent,
-                    const OpenCommandArgument2& rCommand,
-                    std::vector< DAVResource >* pResources )
+DynamicResultSet::DynamicResultSet(
+                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const vos::ORef< Content >& rxContent,
+                        const OpenCommandArgument2& rCommand,
+                        const Reference< XCommandEnvironment >& rxEnv )
 : ResultSetImplHelper( rxSMgr, rCommand ),
   m_xContent( rxContent ),
-  m_pResources( pResources )
+  m_xEnv( rxEnv )
 {
 }
 
-DynamicResultSet::~DynamicResultSet()
-{
-  delete m_pResources;
-}
 //=========================================================================
 //
 // Non-interface methods.
@@ -112,9 +109,11 @@ void DynamicResultSet::initStatic()
 {
     m_xResultSet1
         = new ::ucb::ResultSet( m_xSMgr,
-                    m_aCommand.Properties,
-                    new DataSupplier(
-                        m_xSMgr, m_xContent, m_aCommand.Mode, *m_pResources) );
+                                m_aCommand.Properties,
+                                new DataSupplier( m_xSMgr,
+                                                  m_xContent,
+                                                  m_aCommand.Mode ),
+                                m_xEnv );
 }
 
 //=========================================================================
@@ -122,9 +121,11 @@ void DynamicResultSet::initDynamic()
 {
     m_xResultSet1
         = new ::ucb::ResultSet( m_xSMgr,
-                    m_aCommand.Properties,
-                    new DataSupplier(
-                        m_xSMgr, m_xContent, m_aCommand.Mode, *m_pResources) );
+                                m_aCommand.Properties,
+                                new DataSupplier( m_xSMgr,
+                                                  m_xContent,
+                                                  m_aCommand.Mode ),
+                                m_xEnv );
     m_xResultSet2 = m_xResultSet1;
 }
 

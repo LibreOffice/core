@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,17 +73,20 @@ namespace webdav_ucp {
 struct DataSupplier_Impl;
 class Content;
 class DAVResource;
+struct ContentProperties;
 
 class DataSupplier : public ucb::ResultSetDataSupplier
 {
     DataSupplier_Impl* m_pImpl;
 
+private:
+    sal_Bool DataSupplier::getData();
+
 public:
     DataSupplier( const com::sun::star::uno::Reference<
               com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
               const vos::ORef< Content >& rContent,
-              sal_Int32 nOpenMode,
-              std::vector< DAVResource >& resources);
+              sal_Int32 nOpenMode);
 
     virtual ~DataSupplier();
 

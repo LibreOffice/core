@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-27 08:05:40 $
+ *  last change: $Author: kso $ $Date: 2000-11-07 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,10 @@ class Content : public ::ucb::ContentImplHelper,
 
 private:
 
-  sal_Bool update(const ::com::sun::star::uno::Reference<
-          com::sun::star::ucb::XCommandEnvironment >& Environment);
+  sal_Bool update( const ::com::sun::star::uno::Sequence<
+                           ::com::sun::star::beans::Property >& rProperties,
+                     const ::com::sun::star::uno::Reference<
+                          com::sun::star::ucb::XCommandEnvironment >& Environment);
   void initpath()
     throw ( ContentCreationException );
 
@@ -177,7 +179,9 @@ private:
 
   ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
   getPropertyValues( const ::com::sun::star::uno::Sequence<
-             ::com::sun::star::beans::Property >& rProperties );
+                         ::com::sun::star::beans::Property >& rProperties,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
   void setPropertyValues(
              const ::com::sun::star::uno::Sequence<
              ::com::sun::star::beans::PropertyValue >& rValues,
@@ -268,28 +272,23 @@ public:
     throw( com::sun::star::uno::RuntimeException );
 
 
-//////////////////////////////////////////////////////////////////////
-// Non-interface methods.
-//////////////////////////////////////////////////////////////////////
-  ::vos::ORef< DAVSession > getSession() {
-    return _pWebdavSession;
-  }
+  //////////////////////////////////////////////////////////////////////
+  // Non-interface methods.
+  //////////////////////////////////////////////////////////////////////
 
-// Called from resultset data supplier.
-static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-getPropertyValues( const ::com::sun::star::uno::Reference<
-           ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
-           const ::com::sun::star::uno::Sequence<
-           ::com::sun::star::beans::Property >& rProperties,
-           const ContentProperties& rData,
-           const ::vos::ORef< ::ucb::ContentProviderImplHelper >&
-           rProvider,
-           const ::rtl::OUString& rContentId );
+  ::vos::ORef< DAVSession > getSession() { return _pWebdavSession; }
+  const ::rtl::OUString& getPath() const { return _path; }
 
-  void getChildrenResources(std::vector< DAVResource >& resources,
-                const com::sun::star::uno::Reference<
-                com::sun::star::ucb::XCommandEnvironment >& Environment  );
-
+  // Called from resultset data supplier.
+  static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
+  getPropertyValues( const ::com::sun::star::uno::Reference<
+                           ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                     const ::com::sun::star::uno::Sequence<
+                           ::com::sun::star::beans::Property >& rProperties,
+                        const ContentProperties& rData,
+                        const ::vos::ORef<
+                         ::ucb::ContentProviderImplHelper >&    rProvider,
+                        const ::rtl::OUString& rContentId );
 };
 
 };
