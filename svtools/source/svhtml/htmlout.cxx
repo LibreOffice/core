@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:14:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,8 @@ HTMLOutContext::~HTMLOutContext()
     rtl_destroyUnicodeToTextConverter( m_hConv );
 }
 
-const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c )
+const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
+                                             rtl_TextEncoding eDestEnc )
 {
     const sal_Char* pStr = 0;
     switch( c )
@@ -238,58 +239,11 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c )
     case 402:       pStr = sHTML_S_fnof;    break;
     case 710:       pStr = sHTML_S_circ;    break;
     case 732:       pStr = sHTML_S_tilde;   break;
-    case 913:       pStr = sHTML_S_Alpha;   break;
-    case 914:       pStr = sHTML_S_Beta;    break;
-    case 915:       pStr = sHTML_S_Gamma;   break;
-    case 916:       pStr = sHTML_S_Delta;   break;
-    case 917:       pStr = sHTML_S_Epsilon; break;
-    case 918:       pStr = sHTML_S_Zeta;    break;
-    case 919:       pStr = sHTML_S_Eta;     break;
-    case 920:       pStr = sHTML_S_Theta;   break;
-    case 921:       pStr = sHTML_S_Iota;    break;
-    case 922:       pStr = sHTML_S_Kappa;   break;
-    case 923:       pStr = sHTML_S_Lambda;  break;
-    case 924:       pStr = sHTML_S_Mu;      break;
-    case 925:       pStr = sHTML_S_Nu;      break;
-    case 926:       pStr = sHTML_S_Xi;      break;
-    case 927:       pStr = sHTML_S_Omicron; break;
-    case 928:       pStr = sHTML_S_Pi;      break;
-    case 929:       pStr = sHTML_S_Rho;     break;
-    case 931:       pStr = sHTML_S_Sigma;   break;
-    case 932:       pStr = sHTML_S_Tau;     break;
-    case 933:       pStr = sHTML_S_Upsilon; break;
-    case 934:       pStr = sHTML_S_Phi;     break;
-    case 935:       pStr = sHTML_S_Chi;     break;
-    case 936:       pStr = sHTML_S_Psi;     break;
-    case 937:       pStr = sHTML_S_Omega;   break;
-    case 945:       pStr = sHTML_S_alpha;   break;
-    case 946:       pStr = sHTML_S_beta;    break;
-    case 947:       pStr = sHTML_S_gamma;   break;
-    case 948:       pStr = sHTML_S_delta;   break;
-    case 949:       pStr = sHTML_S_epsilon; break;
-    case 950:       pStr = sHTML_S_zeta;    break;
-    case 951:       pStr = sHTML_S_eta;     break;
-    case 952:       pStr = sHTML_S_theta;   break;
-    case 953:       pStr = sHTML_S_iota;    break;
-    case 954:       pStr = sHTML_S_kappa;   break;
-    case 955:       pStr = sHTML_S_lambda;  break;
-    case 956:       pStr = sHTML_S_mu;      break;
-    case 957:       pStr = sHTML_S_nu;      break;
-    case 958:       pStr = sHTML_S_xi;      break;
-    case 959:       pStr = sHTML_S_omicron; break;
-    case 960:       pStr = sHTML_S_pi;      break;
-    case 961:       pStr = sHTML_S_rho;     break;
-    case 962:       pStr = sHTML_S_sigmaf;  break;
-    case 963:       pStr = sHTML_S_sigma;   break;
-    case 964:       pStr = sHTML_S_tau;     break;
-    case 965:       pStr = sHTML_S_upsilon; break;
-    case 966:       pStr = sHTML_S_phi;     break;
-    case 967:       pStr = sHTML_S_chi;     break;
-    case 968:       pStr = sHTML_S_psi;     break;
-    case 969:       pStr = sHTML_S_omega;   break;
-    case 977:       pStr = sHTML_S_thetasym;break;
-    case 978:       pStr = sHTML_S_upsih;   break;
-    case 982:       pStr = sHTML_S_piv;     break;
+
+    // Greek chars are handled later,
+    // since they should *not* be transformed to entities
+    // when generating Greek text (== using Greek encoding)
+
     case 8194:      pStr = sHTML_S_ensp;    break;
     case 8195:      pStr = sHTML_S_emsp;    break;
     case 8201:      pStr = sHTML_S_thinsp;  break;
@@ -384,6 +338,69 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c )
     case 9830:      pStr = sHTML_S_diams;   break;
     }
 
+    // Greek chars: if we do not produce a Greek encoding,
+    // transform them into entities
+    if( !pStr &&
+        ( eDestEnc != RTL_TEXTENCODING_ISO_8859_7 ) &&
+        ( eDestEnc != RTL_TEXTENCODING_MS_1253 ) )
+    {
+        switch( c )
+        {
+        case 913:       pStr = sHTML_S_Alpha;   break;
+        case 914:       pStr = sHTML_S_Beta;    break;
+        case 915:       pStr = sHTML_S_Gamma;   break;
+        case 916:       pStr = sHTML_S_Delta;   break;
+        case 917:       pStr = sHTML_S_Epsilon; break;
+        case 918:       pStr = sHTML_S_Zeta;    break;
+        case 919:       pStr = sHTML_S_Eta;     break;
+        case 920:       pStr = sHTML_S_Theta;   break;
+        case 921:       pStr = sHTML_S_Iota;    break;
+        case 922:       pStr = sHTML_S_Kappa;   break;
+        case 923:       pStr = sHTML_S_Lambda;  break;
+        case 924:       pStr = sHTML_S_Mu;      break;
+        case 925:       pStr = sHTML_S_Nu;      break;
+        case 926:       pStr = sHTML_S_Xi;      break;
+        case 927:       pStr = sHTML_S_Omicron; break;
+        case 928:       pStr = sHTML_S_Pi;      break;
+        case 929:       pStr = sHTML_S_Rho;     break;
+        case 931:       pStr = sHTML_S_Sigma;   break;
+        case 932:       pStr = sHTML_S_Tau;     break;
+        case 933:       pStr = sHTML_S_Upsilon; break;
+        case 934:       pStr = sHTML_S_Phi;     break;
+        case 935:       pStr = sHTML_S_Chi;     break;
+        case 936:       pStr = sHTML_S_Psi;     break;
+        case 937:       pStr = sHTML_S_Omega;   break;
+        case 945:       pStr = sHTML_S_alpha;   break;
+        case 946:       pStr = sHTML_S_beta;    break;
+        case 947:       pStr = sHTML_S_gamma;   break;
+        case 948:       pStr = sHTML_S_delta;   break;
+        case 949:       pStr = sHTML_S_epsilon; break;
+        case 950:       pStr = sHTML_S_zeta;    break;
+        case 951:       pStr = sHTML_S_eta;     break;
+        case 952:       pStr = sHTML_S_theta;   break;
+        case 953:       pStr = sHTML_S_iota;    break;
+        case 954:       pStr = sHTML_S_kappa;   break;
+        case 955:       pStr = sHTML_S_lambda;  break;
+        case 956:       pStr = sHTML_S_mu;      break;
+        case 957:       pStr = sHTML_S_nu;      break;
+        case 958:       pStr = sHTML_S_xi;      break;
+        case 959:       pStr = sHTML_S_omicron; break;
+        case 960:       pStr = sHTML_S_pi;      break;
+        case 961:       pStr = sHTML_S_rho;     break;
+        case 962:       pStr = sHTML_S_sigmaf;  break;
+        case 963:       pStr = sHTML_S_sigma;   break;
+        case 964:       pStr = sHTML_S_tau;     break;
+        case 965:       pStr = sHTML_S_upsilon; break;
+        case 966:       pStr = sHTML_S_phi;     break;
+        case 967:       pStr = sHTML_S_chi;     break;
+        case 968:       pStr = sHTML_S_psi;     break;
+        case 969:       pStr = sHTML_S_omega;   break;
+        case 977:       pStr = sHTML_S_thetasym;break;
+        case 978:       pStr = sHTML_S_upsih;   break;
+        case 982:       pStr = sHTML_S_piv;     break;
+        }
+    }
+
     return pStr;
 }
 
@@ -411,7 +428,7 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
         // because Netscape 4 does support UTF-8 but does not support
         // these entities.
         if( c < 256 || RTL_TEXTENCODING_UTF8 != rContext.m_eDestEnc )
-            pStr = lcl_svhtml_GetEntityForChar( c );
+            pStr = lcl_svhtml_GetEntityForChar( c, rContext.m_eDestEnc );
         break;
     }
 
