@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 15:44:09 $
+ *  last change: $Author: fs $ $Date: 2000-10-23 10:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,13 +127,16 @@ struct TabDlg_Impl
                         bHideResetBtn   : 1;
     SfxTabDlgData_Impl* pData;
 
+    PushButton*         pApplyButton;
+
     TabDlg_Impl( BYTE nCnt ) :
 
         bModified       ( FALSE ),
         bModal          ( TRUE ),
         bInOK           ( FALSE ),
         bHideResetBtn   ( FALSE ),
-        pData           ( new SfxTabDlgData_Impl( nCnt ) )
+        pData           ( new SfxTabDlgData_Impl( nCnt ) ),
+        pApplyButton    ( NULL )
     {}
 };
 
@@ -449,6 +452,7 @@ SfxTabDialog::~SfxTabDialog()
         }
         delete pDataObject;
     }
+    delete pImpl->pApplyButton;
     delete pImpl->pData;
     delete pImpl;
     delete pUserBtn;
@@ -545,6 +549,76 @@ void SfxTabDialog::Start( BOOL bShow )
 
     if ( bShow )
         Show();
+}
+
+// -----------------------------------------------------------------------
+
+void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
+{
+    DBG_ASSERT( pImpl->pApplyButton, "SfxTabDialog::GetApplyHandler: no apply button enabled!" );
+    if ( pImpl->pApplyButton )
+        pImpl->pApplyButton->SetClickHdl( _rHdl );
+}
+
+// -----------------------------------------------------------------------
+
+Link SfxTabDialog::GetApplyHandler() const
+{
+    DBG_ASSERT( pImpl->pApplyButton, "SfxTabDialog::GetApplyHandler: no button enabled!" );
+    if ( !pImpl->pApplyButton )
+        return Link();
+
+    return pImpl->pApplyButton->GetClickHdl();
+}
+
+// -----------------------------------------------------------------------
+
+void SfxTabDialog::EnableApplyButton(BOOL bEnable)
+{
+    if ( IsApplyButtonEnabled() == bEnable )
+        // nothing to do
+        return;
+
+    // create or remove the apply button
+    if ( bEnable )
+    {
+        pImpl->pApplyButton = new PushButton( this );
+        // in the z-order, the apply button should be behind the ok button, thus appearing at the right side of it
+        pImpl->pApplyButton->SetZOrder(&aOKBtn, WINDOW_ZORDER_BEHIND);
+
+        pImpl->pApplyButton->SetText( String::CreateFromAscii("Apply") );
+        pImpl->pApplyButton->Show();
+    }
+    else
+    {
+        delete pImpl->pApplyButton;
+        pImpl->pApplyButton = NULL;
+    }
+
+    // adjust the layout
+    if (IsReallyShown())
+        AdjustLayout();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SfxTabDialog::IsApplyButtonEnabled() const
+{
+    return ( NULL != pImpl->pApplyButton );
+}
+
+// -----------------------------------------------------------------------
+
+const PushButton* SfxTabDialog::GetApplyButton() const
+{
+    return pImpl->pApplyButton;
+}
+
+// -----------------------------------------------------------------------
+
+PushButton* SfxTabDialog::GetApplyButton()
+{
+    return pImpl->pApplyButton;
 }
 
 // -----------------------------------------------------------------------
