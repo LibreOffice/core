@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:36:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,10 @@ const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 // #110680#
 XMLAutoTextEventExport::XMLAutoTextEventExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_uInt16 nFlags
     )
-:       SvXMLExport( xServiceFactory, MAP_INCH, XML_AUTO_TEXT ),
+:       SvXMLExport( xServiceFactory, MAP_INCH, XML_AUTO_TEXT, nFlags ),
         sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
         sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
 {
@@ -172,7 +173,8 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     const OUString& rFileName,
     const Reference<XDocumentHandler> & rHandler,
     const Reference<XModel> & rModel,
-    const Reference<XNameAccess> & rEvents)
+    const Reference<XNameAccess> & rEvents,
+    sal_uInt16 nFlags )
 :   SvXMLExport( xServiceFactory, rFileName, rHandler, rModel, MAP_INCH ),
     xEvents(rEvents),
     sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
@@ -222,6 +224,34 @@ void XMLAutoTextEventExport::initialize(
 sal_uInt32 XMLAutoTextEventExport::exportDoc(
     enum XMLTokenEnum eClass)
 {
+    if( (getExportFlags() & EXPORT_OASIS) == 0 )
+    {
+        Reference< lang::XMultiServiceFactory > xFactory = getServiceFactory();
+        if( xFactory.is() )
+        {
+            try
+            {
+
+                Sequence<Any> aArgs( 1 );
+                aArgs[0] <<= GetDocHandler();
+
+                // get filter component
+                Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
+                    xFactory->createInstanceWithArguments(
+                    OUString::createFromAscii("com.sun.star.comp.Oasis2OOoTransformer"),
+                                aArgs), UNO_QUERY);
+                OSL_ENSURE( xTmpDocHandler.is(),
+                    "can't instantiate OASIS transformer component" );
+                if( xTmpDocHandler.is() )
+                {
+                    SetDocHandler( xTmpDocHandler );
+                }
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+            }
+        }
+    }
     if (hasEvents())
     {
         GetDocHandler()->startDocument();
@@ -231,7 +261,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc(
         {
             // container element
             SvXMLElementExport aContainerElement(
-                *this, XML_NAMESPACE_OFFICE, XML_AUTO_TEXT_EVENTS,
+                *this, XML_NAMESPACE_OOO, XML_AUTO_TEXT_EVENTS,
                 sal_True, sal_True);
 
             exportEvents();
@@ -254,14 +284,20 @@ void XMLAutoTextEventExport::addNamespaces()
 {
     // namespaces for office:, text: and script:
     GetAttrList().AddAttribute(
+        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
+        GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
+    GetAttrList().AddAttribute(
         GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_TEXT ),
         GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_TEXT ) );
     GetAttrList().AddAttribute(
         GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_SCRIPT ),
         GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_SCRIPT ) );
     GetAttrList().AddAttribute(
-        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OFFICE ),
-        GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OFFICE ) );
+        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_DOM ),
+        GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_DOM ) );
+    GetAttrList().AddAttribute(
+        GetNamespaceMap().GetAttrNameByIndex( XML_NAMESPACE_OOO ),
+        GetNamespaceMap().GetNameByIndex( XML_NAMESPACE_OOO ) );
 }
 
 void XMLAutoTextEventExport::exportEvents()
@@ -299,7 +335,7 @@ Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames()
 OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.comp.Writer.XMLAutotextEventsExporter" ) );
+        "com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter" ) );
 }
 
 Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
@@ -308,6 +344,31 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
 {
     // #110680#
     // return (cppu::OWeakObject*)new XMLAutoTextEventExport;
-    return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr);
+    return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr, EXPORT_ALL|EXPORT_OASIS);
+}
+
+// methods to support the component registration
+
+Sequence< OUString > SAL_CALL XMLAutoTextEventExportOOO_getSupportedServiceNames()
+    throw()
+{
+    Sequence< OUString > aSeq( 1 );
+    aSeq[0] = XMLAutoTextEventExportOOO_getImplementationName();
+    return aSeq;
+}
+
+OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.Writer.XMLAutotextEventsExporter" ) );
+}
+
+Reference< XInterface > SAL_CALL XMLAutoTextEventExportOOO_createInstance(
+        const Reference< XMultiServiceFactory > & rSMgr)
+    throw( Exception )
+{
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLAutoTextEventExport;
+    return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr,EXPORT_ALL);
 }
 
