@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:26:10 $
+ *  last change: $Author: aw $ $Date: 2001-05-04 15:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,8 +725,9 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 
             if(pDefSS)
             {
-                // Dabei jedoch nicht die harte Attributierung loeschen!
-                AddStyleSheet(pDefSS, TRUE);
+                // #85778# NbcSetStyleSheet is the safer method.
+                // old version: AddStyleSheet(pDefSS, TRUE);
+                NbcSetStyleSheet(pDefSS, TRUE);
             }
         }
     }
