@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChangeListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     @see XChangeBroadcaster
  */
-interface XChangeListener: com::sun::star::lang::XEventListener
+published interface XChangeListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
