@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
+ *  last change: $Author: bm $ $Date: 2001-05-25 08:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,6 +774,8 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     sal_Bool bIs3DChart = sal_False;
     drawing::HomogenMatrix aTransMatrix;
 
+    msStringBuffer.setLength( 0 );
+
     // plot-area element
     // -----------------
 
@@ -898,7 +900,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         if( msString.getLength())
         {
             mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msString );
-            SvXMLElementExport aDomain( mrExport, XML_NAMESPACE_CHART, sXML_categories, sal_True, sal_True );
+            SvXMLElementExport aCategories( mrExport, XML_NAMESPACE_CHART, sXML_categories, sal_True, sal_True );
         }
     }
 
@@ -1032,8 +1034,8 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 if( msString.getLength())
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, msString );
-                    SvXMLElementExport aDomain( mrExport, XML_NAMESPACE_CHART, sXML_domain, sal_True, sal_True );
                 }
+                SvXMLElementExport aDomain( mrExport, XML_NAMESPACE_CHART, sXML_domain, sal_True, sal_True );
             }
         }
 
