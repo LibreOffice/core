@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:25:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,14 @@
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
+#ifndef  _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
 
 #include <comphelper/processfactory.hxx>
+#ifndef _UNOTOOLS_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 #include <rtl/ustring.hxx>
 
 #include "eventdlg.hxx"
@@ -83,11 +89,9 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include "cfg.hxx"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/eventcfg.hxx>
-
 
 #ifndef _HEADERTABLISTBOX_HXX
 #include "headertablistbox.hxx"
@@ -99,11 +103,12 @@
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
 #include "eventdlg.hrc"
+#include "selector.hxx"
+#include "cfg.hxx"
 
 
+using ::rtl::OUString;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
 // -----------------------------------------------------------------------
 
 SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet ) :
@@ -128,15 +133,16 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
     aSaveInListBox.SetSelectHdl( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
 
-    Reference< document::XEventsSupplier > xSupplier;
+    uno::Reference< document::XEventsSupplier > xSupplier;
 
-//    xSupplier = Reference< document::XEventsSupplier >( new GlobalEventConfig());
-      xSupplier = Reference< document::XEventsSupplier >
-                ( ::comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), UNO_QUERY );
+//    xSupplier = uno::Reference< document::XEventsSupplier >( new GlobalEventConfig());
+    xSupplier = uno::Reference< document::XEventsSupplier > (
+        ::comphelper::getProcessServiceFactory()->createInstance(
+            OUString::createFromAscii(
+                "com.sun.star.frame.GlobalEventBroadcaster" ) ),
+        uno::UNO_QUERY );
 
-    Reference< container::XNameReplace > xEvents_app, xEvents_doc;
-    Reference< util::XModifiable > xModifiable_doc;
+    uno::Reference< container::XNameReplace > xEvents_app, xEvents_doc;
     USHORT nPos;
     if ( xSupplier.is() )
     {
@@ -145,7 +151,10 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
         {
             OSL_TRACE("==============globalevents impl xNameReplace broken :-(");
         }
-        nPos = aSaveInListBox.InsertEntry( SFX_APP()->GetName() );
+        OUString label;
+        utl::ConfigManager::GetDirectConfigProperty(
+            utl::ConfigManager::PRODUCTNAME ) >>= label;
+        nPos = aSaveInListBox.InsertEntry( label );
         aSaveInListBox.SetEntryData( nPos, new bool(true) );
         aSaveInListBox.SelectEntryPos( nPos, TRUE );
     }
@@ -154,21 +163,63 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
         OSL_TRACE("==============globalevents impl broken :-(");
     }
 
-    SfxObjectShell* pDoc = SfxObjectShell::Current();
-    if ( pDoc )
+    uno::Reference< frame::XFramesSupplier > xFramesSupplier(
+        ::comphelper::getProcessServiceFactory()->createInstance(
+            OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+        uno::UNO_QUERY );
+
+    uno::Reference< frame::XModel > xModel;
+    uno::Reference< frame::XFrame > xFrame =
+        xFramesSupplier->getActiveFrame();
+
+    if ( xFrame.is() )
     {
-        xSupplier = Reference< document::XEventsSupplier >( pDoc->GetModel(), UNO_QUERY );
+        // first establish if this type of application module
+        // supports document configuration
+        uno::Reference< drafts::com::sun::star::frame::XModuleManager >
+            xModuleManager(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.frame.ModuleManager" ) ) ),
+            uno::UNO_QUERY );
+
+        OUString aModuleId = xModuleManager->identify( xFrame );
+
+        if ( SvxConfigPage::CanConfig( aModuleId ) )
+        {
+            uno::Reference< frame::XController > xController =
+                xFrame->getController();
+
+            if ( xController.is() )
+            {
+                xModel = xController->getModel();
+            }
+        }
+    }
+
+    uno::Reference< util::XModifiable > xModifiable_doc;
+    if ( xModel.is() )
+    {
+        xSupplier = uno::Reference< document::XEventsSupplier >(
+            xModel, uno::UNO_QUERY );
+
         if ( xSupplier.is() )
         {
             xEvents_doc = xSupplier->getEvents();
-            nPos = aSaveInListBox.InsertEntry(
-                    pDoc->GetTitle() );
+            xModifiable_doc =
+                uno::Reference< util::XModifiable >( xModel, uno::UNO_QUERY );
+
+            OUString aTitle;
+            SvxScriptSelectorDialog::GetDocTitle( xModel, aTitle );
+            nPos = aSaveInListBox.InsertEntry( aTitle );
+
             aSaveInListBox.SetEntryData( nPos, new bool(false) );
             aSaveInListBox.SelectEntryPos( nPos, TRUE );
-            xModifiable_doc = Reference< util::XModifiable >( pDoc->GetModel(), UNO_QUERY );
+
             bAppConfig = false;
         }
     }
+
     InitAndSetHandler( xEvents_app, xEvents_doc, xModifiable_doc );
 
        SelectHdl_Impl( NULL );
@@ -198,7 +249,30 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     }
     else
     {
-        SetReadOnly( SfxObjectShell::Current()->IsReadOnly() );
+        bool isReadonly = FALSE;
+
+        uno::Reference< frame::XFramesSupplier > xFramesSupplier(
+            ::comphelper::getProcessServiceFactory()->createInstance(
+                OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+            uno::UNO_QUERY );
+
+        uno::Reference< frame::XFrame > xFrame =
+            xFramesSupplier->getActiveFrame();
+
+        if ( xFrame.is() )
+        {
+            uno::Reference< frame::XController > xController =
+                xFrame->getController();
+
+            if ( xController.is() )
+            {
+                uno::Reference< frame::XStorable > xStorable(
+                    xController->getModel(), uno::UNO_QUERY );
+                isReadonly = xStorable->isReadonly();
+            }
+        }
+
+        SetReadOnly( isReadonly );
         _SvxMacroTabPage::DisplayAppEvents( false );
     }
 
