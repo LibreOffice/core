@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:28:13 $
+#   last change: $Author: hr $ $Date: 2003-04-04 19:22:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ SLOFILES =	\
         $(SLO)$/objxtor.obj \
         $(SLO)$/objmisc.obj \
         $(SLO)$/objstor.obj \
+        $(SLO)$/objsys.obj \
         $(SLO)$/objcont.obj \
         $(SLO)$/objserv.obj \
         $(SLO)$/objitem.obj \
