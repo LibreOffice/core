@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:10:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,8 @@ struct SectPageInformation
     bool mbFacpgsxn;
     bool mbRTLsection;
     bool mbPgnrestart;
+    bool mbTitlePageHdFtUsed;
+    bool mbPageHdFtUsed;
     SectPageInformation(const DocPageInformation &rDoc);
     SectPageInformation(const SectPageInformation &rSect);
 };
@@ -271,6 +273,7 @@ private:
         USHORT nNettoWidth);
     void SetHdFt(rtfSection &rSection);
     void CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest);
+    void MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest);
 public:
     bool empty() const { return maSegments.empty(); }
     int size() const { return maSegments.size(); }
@@ -281,7 +284,7 @@ public:
     void InsertSegments(bool bIsNewDoc);
     rtfSections(SwRTFParser &rReader) : mrReader(rReader) {}
     std::vector<sal_uInt16> maDummyPageNos;
-    typedef std::vector<sal_uInt16>::iterator myDummyIter;
+    typedef std::vector<sal_uInt16>::reverse_iterator myrDummyIter;
     void PrependedInlineNode(const SwPosition &rPos,
         const SwNode &rNode);
 };
