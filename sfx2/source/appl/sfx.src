@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:12:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ String STR_FILTERNAME_ALL
     Text [ english_us ] = "All files (*.*)" ;
     Text[ portuguese ] = "<Todos>";
     Text[ russian ] = "Βρε τΰιλϋ (*.*)";
-    Text[ greek ] = "<Όλα>";
+    Text[ greek ] = "Όλα τα αρχεία (*.*)";
     Text[ dutch ] = "Alle bestanden (*.*)";
     Text[ french ] = "Tous les fichiers (*.*)";
     Text[ spanish ] = "Todos los archivos (*.*)";
@@ -516,7 +516,7 @@ String STR_UNDO
     Text [ English ] = "Undo " ;
     Text [ norwegian ] = "Angre " ;
     Text [ italian ] = "Annulla " ;
-    Text [ portuguese_brazilian ] = "Desfazer: " ;
+    Text [ portuguese_brazilian ] = "~Desfazer: " ;
     Text [ portuguese ] = "Anular: " ;
     Text [ finnish ] = "Kumoa: " ;
     Text [ danish ] = "Fortryd: " ;
@@ -531,7 +531,7 @@ String STR_UNDO
     Text[ japanese ] = "ε…ƒγ«ζ»γ™: ";
     Text[ chinese_traditional ] = "εΎ©εοΌ";
     Text[ arabic ] = "ΚΡΗΜΪ: ";
-    Text[ greek ] = "Αναίρεση: ";
+    Text[ greek ] = "Αναί~ρεση: ";
     Text[ korean ] = "μ‹¤ν–‰ μ·¨μ†: ";
     Text[ turkish ] = "Geri al: ";
     Text[ catalan ] = "Desfιs: ";
@@ -548,7 +548,7 @@ String STR_REDO
     Text [ English ] = "Redo: " ;
     Text [ english_us ] = "Re~do: " ;
     Text [ portuguese ] = "Restaurar: " ;
-    Text [ portuguese_brazilian ] = "Refazer: " ;
+    Text [ portuguese_brazilian ] = "Re~fazer: " ;
     Text [ swedish ] = "Εterstδll:  " ;
     Text [ danish ] = "Gendan: " ;
     Text [ italian ] = "Ripristina: " ;
@@ -561,7 +561,7 @@ String STR_REDO
     Text[ japanese ] = "γ‚„γ‚η›΄γ—(~D):";
     Text[ chinese_traditional ] = "ζΆεΎ©ζ’¤ζ¶ζ‡δ»¤(~D):";
     Text[ arabic ] = "ΕΪΗΟΙ: ";
-    Text[ greek ] = "Επαναφορά: ";
+    Text[ greek ] = "Επανεκτέλεση: ";
     Text[ korean ] = "λ‹¤μ‹ μ‹¤ν–‰(~D):";
     Text[ turkish ] = "~Yinele: ";
     Text[ catalan ] = "Restaurar: ";
@@ -668,6 +668,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Message[ hindi ] = "ΰ¤Έΰ¤¬ ΰ¤ªΰ¤°ΰ¤Ώΰ¤µΰ¤°ΰ¥ΰ¤¤ΰ¤¨ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤°ΰ¤¦ΰ¥ΰ¤¦ ΰ¤•ΰ¤°ΰ¤¨ΰ¤Ύ ΰ¤Ήΰ¥?";
     Message[ slovak ] = "ZruΕ΅iΕ¥ vΕ΅etky zmeny?";
 };
+
 
 
 
