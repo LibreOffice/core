@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 11:27:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 09:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,8 @@ static osl::Mutex& getGlobalImageListMutex()
     if ( pImageListWrapperMutex == 0 )
     {
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-        pImageListWrapperMutex = new osl::Mutex;
+        if ( pImageListWrapperMutex == 0 )
+            pImageListWrapperMutex = new osl::Mutex;
     }
 
     return *pImageListWrapperMutex;
