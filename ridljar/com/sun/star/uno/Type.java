@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:40:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ public class Type {
      * @since UDK3.0
      */
     public Type() {
-        this(void.class);
+        init(null, void.class, false, false);
     }
 
     /**
@@ -239,7 +239,7 @@ public class Type {
      * @since UDK3.0
      */
     public Type(Class zClass) {
-        this(zClass, false);
+        init(null, zClass, false, false);
     }
 
     /**
@@ -283,6 +283,9 @@ public class Type {
      * <p>In all other cases, the value of <code>alternative</code> is
      * ignored.</p>
      *
+     * <p>This constructor cannot be used to create <code>Type</code> instances
+     * that represent (sequences of) instantiated polymorphic struct types.</p>
+     *
      * @param zClass the Java class of this type; must not be <code>null</code>
      * @param alternative controls which UNO type to choose in case of
      *     ambiguities
@@ -290,58 +293,7 @@ public class Type {
      * @since UDK 3.2
      */
     public Type(Class zClass, boolean alternative) {
-        TypeClass[] tc = (TypeClass[]) __javaClassToTypeClass.get(zClass);
-        if (tc != null) {
-            // tc only contains primitive type classes, except for
-            // TypeClass.INTERFACE, which stands for XInterface (the alternative
-            // interpretation of java.lang.Object):
-            _typeClass = tc[alternative ? 1 : 0];
-            _typeName = _typeClass == TypeClass.INTERFACE
-                ? XInterface.class.getName()
-                : __typeClassToTypeName[_typeClass.getValue()];
-            // do not assign _class from zClass, as _class should always be
-            // normalized (e.g., boolean.class instead of
-            // java.lang.Boolean.class); getZClass will later calculate the
-            // correct class when needed
-        } else if (zClass.isArray()) {
-            Type t = new Type(zClass.getComponentType(), alternative);
-            _typeClass = t.getTypeClass() != TypeClass.UNKNOWN
-                ? TypeClass.SEQUENCE : TypeClass.UNKNOWN;
-            _typeName = "[]" + t.getTypeName();
-            // do not assign _class from zClass, as _class should always be
-            // normalized (e.g., boolean[].class instead of
-            // java.lang.Boolean[].class); getZClass will later calculate the
-            // correct class when needed
-        } else if (Enum.class.isAssignableFrom(zClass)) {
-            _typeClass = zClass != Enum.class
-                ? TypeClass.ENUM : TypeClass.UNKNOWN;
-            _typeName = zClass.getName();
-            _class = zClass;
-        } else if (Throwable.class.isAssignableFrom(zClass)) {
-            _typeClass
-                = com.sun.star.uno.Exception.class.isAssignableFrom(zClass)
-                || com.sun.star.uno.RuntimeException.class.isAssignableFrom(
-                    zClass)
-                ? TypeClass.EXCEPTION : TypeClass.UNKNOWN;
-            _typeName = zClass.getName();
-            _class = zClass;
-        } else if (zClass.isInterface()) {
-            _typeClass = XInterface.class.isAssignableFrom(zClass)
-                ? TypeClass.INTERFACE : TypeClass.UNKNOWN;
-            _typeName = zClass.getName();
-            _class = zClass;
-        } else if (XInterface.class.isAssignableFrom(zClass)) {
-            // This case is needed by code that uses this constructor to
-            // calculate the UNO type corresponding to a Java object:
-            _typeClass = TypeClass.INTERFACE;
-            _typeName = XInterface.class.getName();
-            _class = XInterface.class;
-        } else {
-            // assert zClass != Object.class && !zClass.isPrimitive();
-            _typeClass = TypeClass.STRUCT;
-            _typeName = zClass.getName();
-            _class = zClass;
-        }
+        init(null, zClass, alternative, false);
     }
 
     /**
@@ -362,32 +314,31 @@ public class Type {
      * Constructs a new <code>Type</code> with the given type name.
      *
      * @param typeName the name of this type; must not be <code>null</code>.
-     *     For simple types (<code>VOID</code>, <code>BOOLEAN</code>,
-     *     <code>CHAR</code>, <code>BYTE</code>, <code>SHORT</code>,
-     *     <code>UNSIGNED SHORT</code>, <code>LONG</code>, <code>UNSIGNED
-     *     LONG</code>, <code>HYPER</code>, <code>UNSIGNED HYPER</code>,
-     *     <code>FLOAT</code>, <code>DOUBLE</code>, <code>STRING</code>,
-     *     <code>TYPE</code>, <code>ANY</code>), the type class is calculated;
-     *     for other types, the type class is set to <code>UNKNOWN</code>.
      *
      * @since UDK3.0
-     *
-     * @deprecated This constructor is deprecated as of UDK3.2.  Using it is
-     * dangerous, as it can create a <code>Type</code> with an
-     * <code>UNKNOWN</code> type class.  One of the other constructors like
-     * <code>Type(Class)</code> or <code>Type(String, TypeClass)</code> should
-     * be used instead.
      */
     public Type(String typeName) {
-        TypeClass tc = TypeClass.UNKNOWN;
+        if (typeName.startsWith("[]")) {
+            _typeName = typeName;
+            _typeClass = TypeClass.SEQUENCE;
+            return;
+        }
         for (int i = 0; i < __typeClassToTypeName.length; ++i) {
             if (__typeClassToTypeName[i].equals(typeName)) {
-                tc = TypeClass.fromInt(i);
-                break;
+                _typeName = typeName;
+                _typeClass = TypeClass.fromInt(i);
+                return;
             }
         }
-        _typeClass = tc;
-        _typeName = typeName;
+        int i = typeName.indexOf('<');
+        try {
+            init(
+                typeName,
+                Class.forName(i < 0 ? typeName : typeName.substring(0, i)),
+                false, i >= 0);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e.toString());
+        }
     }
 
     /**
@@ -498,20 +449,29 @@ public class Type {
      * @since OOo 2.0
      */
     public boolean isSupertypeOf(Type type) {
+        if (_typeClass != type._typeClass) {
+            return false;
+        }
         switch (_typeClass.getValue()) {
+        case TypeClass.SEQUENCE_value:
+        case TypeClass.ENUM_value:
+            return _typeName.equals(type._typeName);
+
         case TypeClass.STRUCT_value:
+            // This check exploits the fact that an instantiated polymorphic
+            // struct type may not be the direct base of a struct type:
+            if (_typeName.indexOf('<') >= 0 || type._typeName.indexOf('<') >= 0)
+            {
+                return _typeName.equals(type._typeName);
+            }
         case TypeClass.EXCEPTION_value:
         case TypeClass.INTERFACE_value:
-            if (type._typeClass.equals(_typeClass)) {
-                Class c1 = getZClass();
-                Class c2 = type.getZClass();
-                return c1 != null && c2 != null && c1.isAssignableFrom(c2);
-            } else {
-                return false;
-            }
+            Class c1 = getZClass();
+            Class c2 = type.getZClass();
+            return c1 != null && c2 != null && c1.isAssignableFrom(c2);
 
         default:
-            return this.equals(type);
+            return true;
         }
     }
 
@@ -530,6 +490,67 @@ public class Type {
     // @see java.lang.Object#toString
     public String toString() {
         return "Type[" + _typeName + "]";
+    }
+
+    private void init(
+        String name, Class zClass, boolean alternative, boolean arguments)
+    {
+        TypeClass[] tc = (TypeClass[]) __javaClassToTypeClass.get(zClass);
+        if (tc != null) {
+            // tc only contains primitive type classes, except for
+            // TypeClass.INTERFACE, which stands for XInterface (the alternative
+            // interpretation of java.lang.Object):
+            _typeClass = tc[alternative ? 1 : 0];
+            _typeName = _typeClass == TypeClass.INTERFACE
+                ? XInterface.class.getName()
+                : __typeClassToTypeName[_typeClass.getValue()];
+            // do not assign _class from zClass, as _class should always be
+            // normalized (e.g., boolean.class instead of
+            // java.lang.Boolean.class); getZClass will later calculate the
+            // correct class when needed
+        } else if (zClass.isArray()) {
+            Type t = new Type(zClass.getComponentType(), alternative);
+            _typeClass = t.getTypeClass() != TypeClass.UNKNOWN
+                ? TypeClass.SEQUENCE : TypeClass.UNKNOWN;
+            _typeName = "[]" + t.getTypeName();
+            // do not assign _class from zClass, as _class should always be
+            // normalized (e.g., boolean[].class instead of
+            // java.lang.Boolean[].class); getZClass will later calculate the
+            // correct class when needed
+        } else if (Enum.class.isAssignableFrom(zClass)) {
+            _typeClass = zClass != Enum.class
+                ? TypeClass.ENUM : TypeClass.UNKNOWN;
+            _typeName = zClass.getName();
+            _class = zClass;
+        } else if (Throwable.class.isAssignableFrom(zClass)) {
+            _typeClass
+                = com.sun.star.uno.Exception.class.isAssignableFrom(zClass)
+                || com.sun.star.uno.RuntimeException.class.isAssignableFrom(
+                    zClass)
+                ? TypeClass.EXCEPTION : TypeClass.UNKNOWN;
+            _typeName = zClass.getName();
+            _class = zClass;
+        } else if (zClass.isInterface()) {
+            _typeClass = XInterface.class.isAssignableFrom(zClass)
+                ? TypeClass.INTERFACE : TypeClass.UNKNOWN;
+            _typeName = zClass.getName();
+            _class = zClass;
+        } else if (XInterface.class.isAssignableFrom(zClass)) {
+            // This case is needed by code that uses this constructor to
+            // calculate the UNO type corresponding to a Java object:
+            _typeClass = TypeClass.INTERFACE;
+            _typeName = XInterface.class.getName();
+            _class = XInterface.class;
+        } else {
+            // assert zClass != Object.class && !zClass.isPrimitive();
+            _typeClass = TypeClass.STRUCT;
+            _typeName = name == null ? zClass.getName() : name;
+            _class = zClass;
+        }
+        if (arguments && _typeClass != TypeClass.STRUCT) {
+            throw new IllegalArgumentException(
+                zClass + " cannot have type arguments");
+        }
     }
 
     private Class determineClass() {
@@ -588,6 +609,9 @@ public class Type {
             {
                 buf.append('[');
             }
+            if (buf.length() == 0) {
+                return null;
+            }
             String base = _typeName.substring(offset);
             if (base.equals(TYPE_NAME_VOID)) {
                 buf.append('V');
@@ -617,12 +641,17 @@ public class Type {
             } else if (base.equals(TYPE_NAME_ANY)) {
                 buf.append("Ljava.lang.Object;");
             } else {
-                Class c = null;
+                int args = base.indexOf('<');
+                if (args >= 0) {
+                    base = base.substring(0, args);
+                }
+                Class c;
                 try {
                     c = Class.forName(base);
-                } catch (ClassNotFoundException e) {}
-                if (c == null
-                    || new Type(c).getTypeClass() == TypeClass.UNKNOWN)
+                } catch (ClassNotFoundException e) {
+                    return null;
+                }
+                if (args < 0 && new Type(c).getTypeClass() == TypeClass.UNKNOWN)
                 {
                     return null;
                 }
@@ -637,16 +666,30 @@ public class Type {
             }
 
         case TypeClass.ENUM_value:
-        case TypeClass.STRUCT_value:
         case TypeClass.EXCEPTION_value:
         case TypeClass.INTERFACE_value:
-            Class c;
-            try {
+            {
+                Class c;
+                try {
                     c = Class.forName(_typeName);
-            } catch (ClassNotFoundException e) {
-                return null;
+                } catch (ClassNotFoundException e) {
+                    return null;
+                }
+                return new Type(c).equals(this) ? c : null;
             }
-            return new Type(c).equals(this) ? c : null;
+
+        case TypeClass.STRUCT_value:
+            {
+                int args = _typeName.indexOf('<');
+                Class c;
+                try {
+                    c = Class.forName(
+                        args < 0 ? _typeName : _typeName.substring(0, args));
+                } catch (ClassNotFoundException e) {
+                    return null;
+                }
+                return args >= 0 || new Type(c).equals(this) ? c : null;
+            }
 
         default:
             return null;
