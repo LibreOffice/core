@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:03:36 $
+ *  last change: $Author: obo $ $Date: 2001-06-05 21:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese_brazilian ] = "Formatierung ~beibehalten" ;
         Text [ swedish ] = "Behåll ~formatering" ;
         Text [ danish ] = "Bevar formatering" ;
-        Text [ italian ] = "Mantieni formattazione" ;
+        Text [ italian ] = "~Mantieni formattazione" ;
         Text [ spanish ] = "Co~nservar formato" ;
         Text [ french ] = "Conserver le ~formatage" ;
         Text [ dutch ] = "Opmaak ~behouden" ;
