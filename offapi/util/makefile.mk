@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 14:31:46 $
+#   last change: $Author: vg $ $Date: 2003-04-24 11:03:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,6 +140,8 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssawt.db\
     $(UCR)$/dcssabridge.db\
     $(UCR)$/dcssi18n.db\
+    $(UCR)$/dcsscbackend.db\
+    $(UCR)$/dcssauth.db\
     $(UCR)$/dcssdrawing.db\
     $(UCR)$/dcssformula.db \
     $(UCR)$/dcsssheet.db\
