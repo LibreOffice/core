@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlDialogModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:46 $
+ *  last change:$Date: 2003-09-08 10:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 package ifc.awt;
 
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 import util.utils;
 
 /**
@@ -101,6 +100,18 @@ public class _UnoControlDialogModel extends MultiPropertyTest {
     */
     public void _TextColor() {
         testProperty("TextColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object old) {
+                return utils.isVoid(old) ? new Integer(4321) : null ;
+            }
+        }) ;
+    }
+
+    /**
+    * This property can be VOID, and in case if it is so new
+    * value must defined.
+    */
+    public void _TextLineColor() {
+        testProperty("TextLineColor", new PropertyTester() {
             protected Object getNewValue(String p, Object old) {
                 return utils.isVoid(old) ? new Integer(4321) : null ;
             }
