@@ -125,8 +125,8 @@ dnl check whether we're using solaris 7
 if test "$_os" = "SunOS"; then 
    AC_MSG_CHECKING([the solaris operating system release])
    _os_release=`uname -r | $AWK -F. '{ print $2 }'`
-   if test "$_os_release" != "7" -a "$_os_release" != "6"; then
-      AC_MSG_ERROR([use solaris 6 or 7 to build OpenOffice])
+   if test "$_os_release" != "8" -a "$_os_release" != "7" -a "$_os_release" != "6"; then
+      AC_MSG_ERROR([use solaris 6, 7 or 8 to build OpenOffice])
    else
       AC_MSG_RESULT([ok ($_os_release)])
    fi
