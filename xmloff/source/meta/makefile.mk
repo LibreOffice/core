@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:28:18 $
+#   last change: $Author: vg $ $Date: 2005-02-21 16:36:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,8 @@ SLOFILES =	\
         $(SLO)$/xmlmetae.obj \
         $(SLO)$/xmlmetai.obj \
         $(SLO)$/MetaExportComponent.obj \
-        $(SLO)$/MetaImportComponent.obj
+                $(SLO)$/MetaImportComponent.obj \
+                $(SLO)$/xmlversion.obj
 
 SVXLIGHTOBJFILES =	\
         $(OBJ)$/xmlmetai.obj \
