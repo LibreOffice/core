@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 17:20:24 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 23:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ greek ] = "à‡†á‹ ƒš¢‡•";
         QuickHelpText[ polish ] = "Punkt podstawy";
         QuickHelpText[ japanese ] = "Öèø«×áıí";
-        QuickHelpText[ korean ] = "Base point";
+        QuickHelpText[ korean ] = "ñƒµµ­!";
         QuickHelpText[ chinese_simplified ] = "Base point";
         QuickHelpText[ chinese_traditional ] = "ø•¶I";
         QuickHelpText[ arabic ] = "„è € Çà€à";
@@ -237,7 +237,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ swedish ] = "F”rankring" ;
         Text [ danish ] = "Forankring" ;
         Text [ portuguese_brazilian ] = "Verankerung" ;
-        Text [ portuguese ] = "Ancorar" ;
+        Text [ portuguese ] = "¶ncora" ;
         Text[ russian ] = "ØĞŠƒ˜‡ˆ…";
         Text[ greek ] = "µÆˆì¤—¢‡";
         Text[ polish ] = "Zakotwiczenie";
@@ -392,7 +392,7 @@ TabPage RID_SVXPAGE_POSITION
     {
             < "ïšô“¨­" ; > ;
         < "û©·éú×" ; > ;
-        < "’„·Şµ”¨­" ; > ;
+        < "¶Ò¨­" ; > ;
         < "€µúû·à¨­" ; > ;
     };
     StringList [ chinese_simplified ] =
@@ -891,7 +891,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ greek ] = "à‡†á‹ ƒš¢‡•";
         QuickHelpText[ polish ] = "Punkt podstawy";
         QuickHelpText[ japanese ] = "Öèø«×áıí";
-        QuickHelpText[ korean ] = "Base point";
+        QuickHelpText[ korean ] = "ñƒµµ­!";
         QuickHelpText[ chinese_simplified ] = "Base point";
         QuickHelpText[ chinese_traditional ] = "ø•¶I";
         QuickHelpText[ arabic ] = "„è € Çà€à";
@@ -1245,7 +1245,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ greek ] = "à‡†á‹ Ğ†¤‚¢“¤‹”è•";
         QuickHelpText[ polish ] = "Punkt rotacyjny";
         QuickHelpText[ japanese ] = "?¤\"],ü,û,‚\"_";
-        QuickHelpText[ korean ] = "Rotation point";
+        QuickHelpText[ korean ] = "Ô÷·µ­!";
         QuickHelpText[ chinese_simplified ] = "Rotation point";
         QuickHelpText[ chinese_traditional ] = "ñê¶…¶I";
         QuickHelpText[ arabic ] = "„è € €àÒØ€¥";
