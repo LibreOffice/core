@@ -61,7 +61,6 @@ On Local Error Goto GlobalErrorHandler
 	oBaseDocument.LockControllers
 	oViewSettings.ShowTableBoundaries = False
 	If Not GetWebWizardPaths() Then
-		DisposeDocument(oBaseDocument)
 		Exit Sub
 	End If
 	LoadLanguage
