@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:27:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡: ±µ¨ü©Î©Úµ´ÅÜ§ó";
     Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
     Text[ greek ] = "ÁõôïÌïñöŞ:Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
-    Text[ korean ] = "ÀÚµ¿¼­½Ä£º  º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
+    Text[ korean ] = "ÀÚµ¿¼­½Ä£º º¯°æ»çÇ× Àû¿ë ¶Ç´Â Ãë¼Ò";
     Text[ turkish ] = "Otomatik formatlama: Değişiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato: Aceptar o rechazar cambios";
@@ -347,7 +347,7 @@ Menu MN_REDLINE_POPUP
             Text[ chinese_traditional ] = "±Æ§Ç";
             Text[ arabic ] = "İÑÒ";
             Text[ greek ] = "Ôáîéíüìçóç";
-            Text[ korean ] = "Á¤·Ä";
+            Text[ korean ] = "ºĞ·ù";
             Text[ turkish ] = "Sırala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ordenar";
@@ -363,6 +363,7 @@ Bitmap BMP_ROOT_OPENED
 {
     File = "minus.bmp" ;
 };
+
 
 
 
