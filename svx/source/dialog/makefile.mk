@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 16:39:53 $
+#   last change: $Author: hr $ $Date: 2004-08-02 17:47:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -186,7 +186,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/optgdlg.obj	\
     $(SLO)$/charmap.obj		\
     $(SLO)$/_bmpmask.obj	\
-    $(SLO)$/frmsel.obj   \
     $(SLO)$/opengrf.obj		\
     $(SLO)$/hltpbase.obj	\
     $(SLO)$/hldocntp.obj	\
@@ -256,9 +255,10 @@ SLOFILES=\
                 $(SLO)$/backgrnd.obj \
                 $(SLO)$/bbdlg.obj    \
                 $(SLO)$/border.obj   \
+                $(SLO)$/borderconn.obj   \
                 $(SLO)$/chardlg.obj  \
                 $(SLO)$/checklbx.obj \
-                $(SLO)$/ctrdial.obj    \
+                $(SLO)$/dialcontrol.obj    \
                 $(SLO)$/ctredlin.obj \
                 $(SLO)$/dlgctrl.obj \
                 $(SLO)$/dlgctl3d.obj \
@@ -272,8 +272,7 @@ SLOFILES=\
                 $(SLO)$/labdlg.obj \
                 $(SLO)$/langtab.obj \
                 $(SLO)$/langbox.obj \
-                $(SLO)$/linelink.obj \
-                $(SLO)$/nforient.obj    \
+                $(SLO)$/wrapfield.obj \
                 $(SLO)$/numfmt.obj   \
                 $(SLO)$/page.obj     \
                 $(SLO)$/pagectrl.obj \
@@ -308,7 +307,7 @@ SLOFILES=\
                 $(SLO)$/tplnedef.obj \
                 $(SLO)$/tpshadow.obj   \
                 $(SLO)$/transfrm.obj \
-                $(SLO)$/worient.obj    \
+                $(SLO)$/orienthelper.obj    \
                 $(SLO)$/txenctab.obj \
                 $(SLO)$/txencbox.obj \
                 $(SLO)$/zoom.obj	 \
@@ -330,11 +329,13 @@ SLOFILES=\
     $(SLO)$/optinet2.obj	\
     $(SLO)$/optctl.obj	\
     $(SLO)$/svxgrahicitem.obj \
-    $(SLO)$/framelink.obj \
     $(SLO)$/swframeposstrings.obj\
     $(SLO)$/swframeexample.obj \
     $(SLO)$/svxbmpnumvalueset.obj	\
-    $(SLO)$/svxgrahicitem.obj
+    $(SLO)$/svxgrahicitem.obj \
+    $(SLO)$/frmsel.obj	\
+    $(SLO)$/framelink.obj	\
+    $(SLO)$/framelinkarray.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -363,8 +364,9 @@ LIB1OBJFILES= \
     $(SLO)$/measctrl.obj \
     $(SLO)$/passwd.obj \
     $(SLO)$/strarray.obj \
+    $(SLO)$/borderconn.obj    \
     $(SLO)$/checklbx.obj \
-    $(SLO)$/ctrdial.obj    \
+    $(SLO)$/dialcontrol.obj    \
     $(SLO)$/ctredlin.obj \
     $(SLO)$/dlgctrl.obj \
     $(SLO)$/dlgctl3d.obj \
@@ -375,8 +377,7 @@ LIB1OBJFILES= \
     $(SLO)$/impgrf.obj   \
     $(SLO)$/langtab.obj \
     $(SLO)$/langbox.obj \
-    $(SLO)$/linelink.obj \
-    $(SLO)$/nforient.obj    \
+    $(SLO)$/wrapfield.obj    \
     $(SLO)$/pagectrl.obj \
     $(SLO)$/paraprev.obj \
     $(SLO)$/pfiledlg.obj \
@@ -393,7 +394,7 @@ LIB1OBJFILES= \
     $(SLO)$/svxbox.obj   \
     $(SLO)$/svxruler.obj \
     $(SLO)$/tparea.obj   \
-    $(SLO)$/worient.obj    \
+    $(SLO)$/orienthelper.obj    \
     $(SLO)$/txenctab.obj \
     $(SLO)$/txencbox.obj \
     $(SLO)$/grfflt.obj \
@@ -402,12 +403,13 @@ LIB1OBJFILES= \
     $(SLO)$/dialmgr.obj	\
     $(SLO)$/svxbmpnumvalueset.obj   \
     $(SLO)$/svxgrahicitem.obj \
-    $(SLO)$/framelink.obj\
     $(SLO)$/swframeexample.obj \
     $(SLO)$/swframeposstrings.obj \
     $(SLO)$/eventdlg.obj \
     $(SLO)$/macropg.obj \
-    $(SLO)$/cfg.obj
+    $(SLO)$/cfg.obj	\
+    $(SLO)$/framelink.obj	\
+    $(SLO)$/framelinkarray.obj
 
 LIB2TARGET= $(SLB)$/cui.lib
 
