@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mib $ $Date: 2000-10-11 07:49:38 $
+#   last change: $Author: dr $ $Date: 2000-10-18 11:38:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,12 @@ CXXFILES = \
         XMLClipPropertyHandler.cxx		\
         XMLConstantsPropertyHandler.cxx	\
         XMLElementPropertyContext.cxx	\
-        XMLPageExport.cxx
+        XMLPageExport.cxx				\
+        PageMasterPropHdl.cxx			\
+        PageMasterPropHdlFactory.cxx	\
+        PageMasterStyleMap.cxx			\
+        PageMasterPropMapper.cxx		\
+        PageMasterExportPropMapper.cxx
 
 
 SLOFILES =	\
@@ -201,7 +206,13 @@ SLOFILES =	\
         $(SLO)$/XMLClipPropertyHandler.obj		\
         $(SLO)$/XMLConstantsPropertyHandler.obj	\
         $(SLO)$/XMLElementPropertyContext.obj	\
-        $(SLO)$/XMLPageExport.obj
+        $(SLO)$/XMLPageExport.obj				\
+        $(SLO)$/PageMasterPropHdl.obj			\
+        $(SLO)$/PageMasterPropHdlFactory.obj	\
+        $(SLO)$/PageMasterStyleMap.obj			\
+        $(SLO)$/PageMasterPropMapper.obj		\
+        $(SLO)$/PageMasterExportPropMapper.obj
+
 
 # --- Tagets -------------------------------------------------------
 
