@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:25:53 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,6 +1438,13 @@ void TabControl::DataChanged( const DataChangedEvent& rDCEvt )
         ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
     }
+}
+
+// -----------------------------------------------------------------------
+
+long TabControl::PreNotify( NotifyEvent& rNEvt )
+{
+    return Control::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
