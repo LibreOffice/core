@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 11:40:53 $
+#   last change: $Author: rt $ $Date: 2004-12-10 17:02:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.11 $ ';
+my $id_str = ' $Revision: 1.12 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -334,6 +334,37 @@ sub get_globalini
     return $globalini;
 }
 
+sub leave_cwsname_hint
+{
+    my $stand_dir = shift;
+    my $cws = shift;
+    my $src_root = defined($ENV{SRC_ROOT}) ? $ENV{SRC_ROOT} : "";
+    my $hint_location = "$src_root";
+    my $hint_file = "$hint_location/cwsname.mk";
+    my $result = 0;
+    my $hint_ok = 0;
+
+    $hint_location  =~ s/\\/\//;
+    if ( ! -d "$hint_location" ) {
+        my @tokenlist = split '/', $hint_location;
+        my $checkpath = shift @tokenlist;
+        while ( $checkpath ne $hint_location && defined $tokenlist[0]) {
+            $checkpath += "/". shift @tokenlist;
+            mkdir($checkpath) if ( ! -d $checkpath );
+        }
+    }
+    $result = open (HINTFILE, ">$hint_file");
+    if ( !$result ) {
+        print_warning("Could not create CWS name: \"$hint_file\"!\nPlease create manually.");
+    } else {
+        print HINTFILE "CWS_WORK_STAMP*=".$cws->child()."\n";
+        print HINTFILE ".EXPORT : CWS_WORK_STAMP\n";
+        close HINTFILE;
+        $hint_ok = 1;
+    }
+    return $hint_ok;
+}
+
 #
 # procedure checks if all modules are in the
 # workspace and issues warning(s) about missing ones
@@ -391,6 +422,7 @@ sub update_workspace {
     };
     print $_ foreach (@warnings);
     check_cvs_update(\%cvs_aliases, \%updated_modules, $master_tag);
+    leave_cwsname_hint($stand_dir, $cws);
     return '1';
 };
 
