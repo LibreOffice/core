@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:54:33 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     if ( rTxtNode.HasSwAttrSet() )
     {
         const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
-        pFnt = new SwFont( pAttrSet );
+        pFnt = new SwFont( pAttrSet, GetTxtNode()->GetDoc() );
     }
     else
     {
@@ -377,8 +377,10 @@ SwTwips SwTxtFrm::EmptyHeight() const
         if( MSHRT_MAX != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
-            aAttrHandler.Init( GetTxtNode()->GetSwAttrSet() );
-            SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, sal_True );
+            aAttrHandler.Init( GetTxtNode()->GetSwAttrSet(),
+                               *GetTxtNode()->GetDoc() );
+            SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler,
+                                 nRedlPos, sal_True );
         }
     }
 

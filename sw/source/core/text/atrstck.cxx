@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-19 15:57:05 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 #endif
 #ifndef _TXTINET_HXX
 #include <txtinet.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 #define NUM_OBJECTS (RES_TXTATR_END - RES_CHRATR_BEGIN + 1)
@@ -362,16 +365,21 @@ SwAttrHandler::SwAttrHandler()
  *                      SwAttrHandler::Init()
  *************************************************************************/
 
-void SwAttrHandler::Init( const SwAttrSet& rAttrSet )
+void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc )
 {
     pAttrSet = &rAttrSet;
+    pDoc = &rDoc;
+
     for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
 }
 
-void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS )
+void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
+                          const SwDoc& rDoc )
 {
     pAttrSet = &rAS;
+    pDoc = &rDoc;
+
     memcpy( pDefaultArray, pPoolItem,
             NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
@@ -681,7 +689,11 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             rFnt.SetWordLineMode( ((SvxWordLineModeItem&)rItem).GetValue() );
             break;
         case RES_CHRATR_AUTOKERN :
-            rFnt.SetAutoKern( ((SvxAutoKernItem&)rItem).GetValue() );
+            if( ((SvxAutoKernItem&)rItem).GetValue() )
+                rFnt.SetAutoKern( ( !pDoc || !pDoc->IsKernAsianPunctuation() ) ?
+                         KERNING_FONTSPECIFIC : KERNING_ASIAN );
+            else
+                rFnt.SetAutoKern( 0 );
             break;
         case RES_CHRATR_BLINK :
             rFnt.SetBlink( ((SvxBlinkItem&)rItem).GetValue() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,7 +964,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         aSet.Put( *GetTxtNode()->GetpSwAttrSet() );
         aSet.SetParent( pSet );
         pSet = &aSet;
-        pFnt = new SwFont( pSet );
+        pFnt = new SwFont( pSet, GetNode()->GetDoc() );
     }
     else
     {

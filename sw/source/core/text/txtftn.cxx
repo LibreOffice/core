@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:49:31 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -971,8 +971,8 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     const SwAttrSet& rSet = pInfo->GetCharFmt(*pDoc)->GetAttrSet();
 
     const SwAttrSet* pParSet = &rInf.GetCharAttr();
-    SwFont *pFnt = new SwFont( pParSet );
-    pFnt->SetDiffFnt(&rSet);
+    SwFont *pFnt = new SwFont( pParSet, rInf.GetDoc() );
+    pFnt->SetDiffFnt(&rSet, rInf.GetDoc() );
     SwTxtFtn* pTxtFtn = rFtn.GetTxtFtn();
     if( pTxtFtn )
     {
@@ -1270,7 +1270,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf, const SwTxtFtn* pTxtFtn )
         else
             pInfo = &pDoc->GetFtnInfo();
         const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
-        pFnt->SetDiffFnt( &rSet );
+        pFnt->SetDiffFnt( &rSet, rInf.GetDoc() );
         pFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,

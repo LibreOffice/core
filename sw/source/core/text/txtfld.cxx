@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,10 +287,10 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 aTmpSet.Set( pChFmt->GetAttrSet() );
                 aTmpSet.Differentiate( aSet );
                 if( aTmpSet.Count() )
-                    pTmpFnt->SetDiffFnt( &aTmpSet );
+                    pTmpFnt->SetDiffFnt( &aTmpSet, rInf.GetDoc() );
             }
             else
-                pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet() );
+                pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), rInf.GetDoc() );
         }
         pRet = new SwFldPortion( pFld->GetCntnt( bName ), pTmpFnt );
     }
@@ -421,9 +421,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             if( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
             {
                 const Font *pFmtFnt = rNumFmt.GetBulletFont();
-                pNumFnt = new SwFont( &rInf.GetCharAttr() );
+                pNumFnt = new SwFont( &rInf.GetCharAttr(), rInf.GetDoc() );
                 if( pFmt )
-                    pNumFnt->SetDiffFnt( pFmt );
+                    pNumFnt->SetDiffFnt( pFmt, rInf.GetDoc() );
                 if ( pFmtFnt )
                 {
                     const BYTE nAct = pNumFnt->GetActual();
@@ -447,9 +447,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // vorliegt!
                 if( aTxt.Len() )
                 {
-                    pNumFnt = new SwFont( &rInf.GetCharAttr() );
+                    pNumFnt = new SwFont( &rInf.GetCharAttr(), rInf.GetDoc() );
                     if( pFmt )
-                        pNumFnt->SetDiffFnt( pFmt );
+                        pNumFnt->SetDiffFnt( pFmt, rInf.GetDoc() );
                     // Die SSize muss erhalten bleiben
                     // pNumFnt->ChangeSize( rInf.GetFont()->GetSize() );
                     pRet = new SwNumberPortion( aTxt, pNumFnt, bLeft, bCenter,

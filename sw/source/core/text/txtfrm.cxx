@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-05 12:50:28 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1655,7 +1655,7 @@ KSHORT SwTxtFrm::GetLineSpace() const
                 if ( pPrt && ((Printer*)pPrt)->IsValid() )
                     pOut = pPrt;
             }
-            SwFont aFont( pSet );
+            SwFont aFont( pSet, GetTxtNode()->GetDoc() );
             // Wir muessen dafuer sorgen, dass am OutputDevice der Font
             // korrekt restauriert wird, sonst droht ein Last!=Owner.
             if ( pLastFont )

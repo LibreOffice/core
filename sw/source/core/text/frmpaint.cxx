@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         nX = pFrm->Frm().Left();
         SwCharFmt* pFmt = rLineInf.GetCharFmt( *((SwDoc*)pFrm->GetNode()->GetDoc()) );
         ASSERT( pFmt, "PaintExtraData without CharFmt" );
-        pFnt = new SwFont( &pFmt->GetAttrSet() );
+        pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->GetDoc() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
         nLineNr += pFrm->GetAllLines() - pFrm->GetThisLines();
@@ -504,7 +504,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
             if ( rTxtNode.HasSwAttrSet() )
             {
                 const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
-                pFnt = new SwFont( pAttrSet );
+                pFnt = new SwFont( pAttrSet, GetTxtNode()->GetDoc() );
             }
             else
             {
@@ -522,7 +522,8 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 if( MSHRT_MAX != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;
-                    aAttrHandler.Init( GetTxtNode()->GetSwAttrSet() );
+                    aAttrHandler.Init( GetTxtNode()->GetSwAttrSet(),
+                                       *GetTxtNode()->GetDoc() );
                     SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, sal_True );
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-29 12:01:19 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,7 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
  * --------------------------------------------------*/
 
 SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
-    xub_StrLen nEnd, xub_StrLen nOffs ) : SwMultiPortion( nEnd )
+    const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs ) : SwMultiPortion( nEnd )
 {
     SetRuby();
     ASSERT( SW_MC_RUBY == rCreate.nId, "Ruby exspected" );
@@ -615,7 +615,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     {
         const SwAttrSet& rSet = pFmt->GetAttrSet();
          pRubyFont = new SwFont( rFnt );
-        pRubyFont->SetDiffFnt( &rSet );
+        pRubyFont->SetDiffFnt( &rSet, &rDoc );
     }
     else
         pRubyFont = NULL;
@@ -1872,8 +1872,9 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         if( pMulti->IsDouble() )
             pTmp = new SwDoubleLinePortion( *pCreate, nMultiPos );
         else if( pMulti->IsRuby() )
-            pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(), nMultiPos,
-                                ((SwRubyPortion*)pMulti)->GetRubyOffset() );
+            pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
+                    *GetInfo().GetDoc(), nMultiPos,
+                    ((SwRubyPortion*)pMulti)->GetRubyOffset() );
         else if( pMulti->GetDirection() )
             pTmp = new SwRotatedPortion( nMultiPos, pMulti->GetDirection() );
         else

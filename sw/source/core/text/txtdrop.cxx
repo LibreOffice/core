@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf ) const
     }
     SwFont *pTmpFnt = new SwFont( pDropFmt->GetCharFmt()
                                  ? &pDropFmt->GetCharFmt()->GetAttrSet()
-                                 : &rInf.GetCharAttr() );
+                                 : &rInf.GetCharAttr(), rInf.GetDoc() );
     if( GetDropHeight() )
         pDropPor = new SwDropPortion( pTmpFnt, GetDropLines(),
                                  GetDropHeight(), GetDropDescent(),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-10 14:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,8 @@ public:
     inline sal_Bool HasHint( xub_StrLen nPos ) const
         { return _HasHint( pFrm->GetTxtNode(), nPos ); }
     static sal_Bool _HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos );
+
+    inline SwDoc* GetDoc() const { return pFrm->GetNode()->GetDoc(); };
 
     //
     // If Kana Compression is enabled, a minimum and maximum portion width
