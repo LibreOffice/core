@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-08 12:45:28 $
+ *  last change: $Author: mtg $ $Date: 2002-01-29 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,9 +289,6 @@ ULONG SmXMLWrapper::ReadThroughComponent(
     SvStorageStreamRef xEventsStream;
     xEventsStream = pStorage->OpenStream( sStreamName,
                                           STREAM_READ | STREAM_NOCREATE );
-    xEventsStream->SetBufferSize( 16*1024 );
-    Reference<io::XInputStream> xInputStream =
-        new utl::OInputStreamWrapper( *xEventsStream );
 
     // determine if stream is encrypted or not
     Any aAny;
@@ -301,9 +298,10 @@ ULONG SmXMLWrapper::ReadThroughComponent(
         aAny.getValueType() == ::getBooleanCppuType() &&
         *(sal_Bool *)aAny.getValue();
 
+    Reference < io::XInputStream > xStream = xEventsStream->GetXInputStream();
     // read from the stream
     return ReadThroughComponent(
-        xInputStream, xModelComponent, rFactory, pFilterName, bEncrypted );
+        xStream, xModelComponent, rFactory, pFilterName, bEncrypted );
 }
 
 ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
