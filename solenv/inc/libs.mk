@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2001-05-07 13:45:18 $
+#   last change: $Author: jsc $ $Date: 2001-05-08 09:49:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ LIBPRE=libr
 .IF "$(OS)"=="S390"
 
 GPC3RDLIB=$(L)$/libgpc.x
-SALHELPERLIB=$(L)$/libsalhelper$(SALHELPER_MAJOR)$(DLLPOSTFIX).x
+SALHELPERLIB=$(L)$/libsalhelper$(UDK_MAJOR)$(DLLPOSTFIX).x
 XMLSCRIPTLIB =$(L)$/libxcr$(UPD)$(DLLPOSTFIX).x
 CONNECTIVITYLIB=$(L)$/libconnectivity.x
 LDAPBERLIB=$(L)$/libldapber.x
@@ -177,7 +177,7 @@ OSLLIB=
 RTLLIB=
 TECLIB=
 CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper2$(COM)
+CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COM)
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COM)
 REGLIB=-lreg
