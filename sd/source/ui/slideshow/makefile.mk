@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 20:19:52 $
+#   last change: $Author: vg $ $Date: 2005-03-23 09:06:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ SLOFILES =	\
         $(SLO)$/slideshow.obj \
         $(SLO)$/showwin.obj\
         $(SLO)$/slideshowimpl.obj\
-        $(SLO)$/slideshowviewimpl.obj
+        $(SLO)$/slideshowviewimpl.obj\
+        $(SLO)$/PaneHider.obj
 
 
 # --- Tagets -------------------------------------------------------
