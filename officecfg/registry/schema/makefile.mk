@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 13:48:29 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 15:30:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,7 @@ XCSFILES= \
     org$/openoffice$/TypeDetection$/Misc.xcs
 
 # transform xcs format to properties format
-RESOURCES1=$(foreach,j,$(foreach,i,$(XCSFILES) $(MISC)$/registry$/res$/$i) $(foreach,k,$(alllangext) $(subst,$/res,$/res$/{$(iso_$(k))} $j)))
+RESOURCES1=$(foreach,j,$(foreach,i,$(XCSFILES) $(MISC)$/registry$/res$/$i) $(foreach,k,$(alllangiso) $(subst,$/res,$/res$/{$(k)} $j)))
 RESOURCES=$(foreach,i,$(RESOURCES1) $(subst,.xcs,.properties $i))
 
 # remove unnecessary info from the component schemas
