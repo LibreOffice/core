@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-27 18:36:55 $
+ *  last change: $Author: hdu $ $Date: 2001-03-07 13:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,7 @@ GlyphCache::GlyphCache( ULONG _nMaxSize )
     pFtManager(NULL),
     pCurrentGCFont(NULL)
 {
-#ifndef NO_FREETYPE_FONTS
     pFtManager = new FreetypeManager;
-#endif // NO_FREETYPE_FONTS
 }
 
 // -----------------------------------------------------------------------
@@ -102,10 +100,8 @@ GlyphCache::~GlyphCache()
 // TODO:
 //  for( FontList::iterator it = aFontList.begin(); it != aFontList.end(); ++it )
 //      delete const_cast<ServerFont*>( it->second );
-#ifndef NO_FREETYPE_FONTS
     if( pFtManager )
         delete pFtManager;
-#endif // NO_FREETYPE_FONTS
 }
 
 // -----------------------------------------------------------------------
@@ -113,8 +109,7 @@ GlyphCache::~GlyphCache()
 inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectData& rFontSelData ) const
 {
     // TODO: does it pay much to improve this hash function?
-    size_t nHash = ::rtl::OUString( rFontSelData.maName ).hashCode();
-    nHash   += ::rtl::OUString( rFontSelData.maStyleName ).hashCode();
+    size_t nHash = size_t( rFontSelData.mpFontData->mpSysData );
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
     nHash   += rFontSelData.mbVertical;
@@ -125,18 +120,11 @@ inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectDat
 
 bool operator==( const ImplFontSelectData& rA, const ImplFontSelectData& rB )
 {
-    if( (rA.maName          == rB.maName)
-    &&  (rA.maStyleName     == rB.maStyleName)
+    if( (rA.mpFontData->mpSysData   == rB.mpFontData->mpSysData )
     &&  (rA.mnHeight        == rB.mnHeight)
     &&  ((rA.mnWidth==rB.mnWidth) || (!rA.mnWidth && (rA.mnHeight==rB.mnWidth)))
     &&  (rA.mnOrientation   == rB.mnOrientation)
-    &&  (rA.mbVertical      == rB.mbVertical)
-    &&  (rA.meWeight        == rB.meWeight)
-    &&  (rA.meItalic        == rB.meItalic)
-    &&  (rA.mePitch         == rB.mePitch)
-    &&  (rA.meCharSet       == rB.meCharSet)
-    &&  (rA.meFamily        == rB.meFamily)
-    &&  (rA.meWidthType     == rB.meWidthType) )
+    &&  (rA.mbVertical      == rB.mbVertical) )
         return true;
     return false;
 }
@@ -167,17 +155,14 @@ void GlyphCache::EnsureInstance( GlyphCachePeer& rPeer, bool bInitFonts )
 
 void GlyphCache::ClearFontPath()
 {
-#ifndef NO_FREETYPE_FONTS
     if( pFtManager )
         pFtManager->ClearFontList();
-#endif // NO_FREETYPE_FONTS
 }
 
 // -----------------------------------------------------------------------
 
 void GlyphCache::AddFontPath( const String& rFontPath )
 {
-#ifndef NO_FREETYPE_FONTS
     if( !pFtManager )
         return;
 
@@ -191,7 +176,6 @@ void GlyphCache::AddFontPath( const String& rFontPath )
         osl::FileBase::normalizePath( rFontPath.Copy( nBreaker1, nBreaker2 ), aNormalizedName );
         pFtManager->AddFontDir( aNormalizedName );
     }
-#endif // NO_FREETYPE_FONTS
 }
 
 // -----------------------------------------------------------------------
@@ -199,10 +183,8 @@ void GlyphCache::AddFontPath( const String& rFontPath )
 void GlyphCache::AddFontFile( const String& rNormalizedName, int nFaceNum,
     int nFontId, const ImplFontData* pFontData )
 {
-#ifndef NO_FREETYPE_FONTS
     if( pFtManager )
         pFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, pFontData );
-#endif // NO_FREETYPE_FONTS
 }
 
 // -----------------------------------------------------------------------
@@ -210,10 +192,8 @@ void GlyphCache::AddFontFile( const String& rNormalizedName, int nFaceNum,
 long GlyphCache::FetchFontList( ImplDevFontList* pList ) const
 {
     long nCount = 0;
-#ifndef NO_FREETYPE_FONTS
     if( pFtManager )
         nCount += pFtManager->FetchFontList( pList );
-#endif // NO_FREETYPE_FONTS
     //  nCount += VirtDevServerFont::FetchFontList( pList );
     return nCount;
 }
@@ -233,10 +213,8 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
     // font not cached yet => create new font item
     ServerFont* pNew = NULL;
     // TODO: pNew = VirtDevServerFont::CreateFont( rFontSelData );
-#ifndef NO_FREETYPE_FONTS
     if( !pNew && pFtManager)
         pNew = pFtManager->CreateFont( rFontSelData );
-#endif // NO_FREETYPE_FONTS
 
     if( pNew )
     {

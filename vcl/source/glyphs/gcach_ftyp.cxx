@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.12 $
- *  last change: $Author: pl $ $Date: 2001-03-05 10:58:40 $
+ *  $Revision: 1.13 $
+ *  last change: $Author: hdu $ $Date: 2001-03-07 13:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,9 @@
 #include <bitmap.hxx>
 #include <bmpacc.hxx>
 
-#include <rtl/ustring>      // used only for string=>hashvalue
+//#include <rtl/ustring>        // used only for string=>hashvalue
 #include <osl/file.hxx>
 #include <poly.hxx>
-
-#ifndef NO_FREETYPE_FONTS
 
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
@@ -96,8 +94,7 @@ static FT_Library aLibFT = 0;
 
 size_t std::hash<FtFontInfo*>::operator()( const FtFontInfo* pFI ) const
 {
-    size_t nHash = ::rtl::OUString( pFI->aFontData.maName ).hashCode();
-//###   nHash += ::rtl::OUString( pFI->aFontData.maStyleName ).hashCode();
+    size_t nHash = (size_t)pFI;
     return nHash;
 }
 
@@ -105,19 +102,7 @@ size_t std::hash<FtFontInfo*>::operator()( const FtFontInfo* pFI ) const
 
 bool std::equal_to<FtFontInfo*>::operator()( const FtFontInfo* pA, const FtFontInfo* pB ) const
 {
-    if( (pA->aFontData.maName == pB->aFontData.maName)  )
-        return true;
-    return false;
-}
-
-// -----------------------------------------------------------------------
-
-inline int CalcSimilarity( const FtFontInfo* pA, const FtFontInfo* pB )
-{
-    int nSimilarity = 0;
-    nSimilarity +=  3*(pA->aFontData.meItalic   == pB->aFontData.meItalic);
-    nSimilarity +=  2*(pA->aFontData.meWeight   == pB->aFontData.meWeight);
-    return nSimilarity;
+    return (pA == pB);
 }
 
 // -----------------------------------------------------------------------
@@ -151,8 +136,13 @@ void FreetypeManager::AddFontFile( const String& rNormalizedName,
 
     ImplFontData& rData = pFontInfo->aFontData;
     rData               = *pData;
-    rData.mpSysData     = SERVERFONT_MAGIC;
+    rData.mpSysData     = pFontInfo;
     rData.mpNext        = NULL;
+
+    // using unicode emulation for non-symbol fonts
+    if( rData.meCharSet != RTL_TEXTENCODING_SYMBOL )
+        rData.meCharSet = RTL_TEXTENCODING_UNICODE;
+    rData.meScript      = SCRIPT_DONTKNOW;
 
     maFontList.insert( pFontInfo );
 }
@@ -197,7 +187,7 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
             ImplFontData& rData = pFontInfo->aFontData;
 
             rData.mpNext        = NULL;
-            rData.mpSysData     = SERVERFONT_MAGIC;
+            rData.mpSysData     = pFontInfo;
 
             // TODO: prefer unicode names if available
             // TODO: prefer locale specific names if available?
@@ -256,8 +246,8 @@ long FreetypeManager::FetchFontList( ImplDevFontList* pToAdd ) const
 
 void FreetypeManager::ClearFontList( )
 {
-    for( FontList::iterator it(maFontList.begin()); it != maFontList.end(); ++it )
-        delete *it;
+    for( FontList::iterator it(maFontList.begin()); it != maFontList.end(); )
+        delete *(it++);
     maFontList.clear();
 }
 
@@ -265,40 +255,11 @@ void FreetypeManager::ClearFontList( )
 
 FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD )
 {
-    FtFontInfo aFontInfo;
-    aFontInfo.aFontData.maStyleName = rFSD.maStyleName;
-    aFontInfo.aFontData.meWeight    = rFSD.meWeight;
-    aFontInfo.aFontData.meItalic    = rFSD.meItalic;
-
-    for( xub_StrLen nBreaker1 = 0, nBreaker2 = 0; nBreaker2 != STRING_LEN; nBreaker1 = nBreaker2 + 1 )
+    const FtFontInfo* pFI = (const FtFontInfo*)rFSD.mpFontData->mpSysData;
+    if( maFontList.find( pFI ) != maFontList.end() )
     {
-        nBreaker2 = rFSD.maName.Search( ';', nBreaker1 );
-        if( nBreaker2 == STRING_NOTFOUND )
-            nBreaker2 = STRING_LEN;
-        aFontInfo.aFontData.maName = rFSD.maName.Copy( nBreaker1, nBreaker2-nBreaker1 );
-
-        // find best match (e.g. only regular available but bold requested)
-        typedef std::pair<FontList::const_iterator,FontList::const_iterator> CPair;
-
-        const CPair aRange = maFontList.equal_range( &aFontInfo );
-        int nBestMatch = 0;
-        FontList::const_iterator it_best = aRange.first;
-        for( FontList::const_iterator it = aRange.first; it != aRange.second; ++it )
-        {
-            const int nMatchVal = CalcSimilarity( (*it), &aFontInfo );
-            if( nBestMatch < nMatchVal )
-            {
-                nBestMatch = nMatchVal;
-                it_best = it;
-            }
-        }
-        if( it_best != aRange.second )
-        {
-            FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, **it_best );
-            if( pFont->TestFont() )
-                return pFont;
-            delete pFont;
-        }
+        FreetypeServerFont* pFont = new FreetypeServerFont( rFSD, *pFI );
+        return pFont;
     }
 
     return NULL;
@@ -321,8 +282,11 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
 
     FT_Encoding eEncoding = ft_encoding_unicode;
     if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
-        // TODO: for FT>=2.0 use "eEncoding = ft_encoding_symbol";
+    {
+        // TODO for FT>=200b8: ft_encoding_symbol
+        //### TODO: some PS symbol fonts don't map their symbols correctly
         eEncoding = ft_encoding_none;
+    }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
 
     mnWidth = rFSD.mnWidth;
@@ -339,7 +303,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
 
     if( rFSD.mnOrientation != 0 )
     {
-        mnLoadFlags |= FT_LOAD_NO_HINTING;
+        mnLoadFlags |= FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
 
         FT_Matrix aMatrix;
         aMatrix.xx = +nCos;
@@ -373,7 +337,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
     // TODO: change +desc to -desc for FT_Version>2.0beta8
     rTo.mnDescent           = (+rMetrics.descender + 32) >> 6;
-    rTo.mnLeading           = (rMetrics.height - rMetrics.ascender - rMetrics.descender + 32) >> 6;
+    rTo.mnLeading           = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
     rTo.mnSlant             = 0;
 
     rTo.maName              = mrFontInfo.aFontData.maName;
@@ -414,6 +378,50 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
 // -----------------------------------------------------------------------
 
+/*### TODO
+static int SetVerticalFlags( sal_Unicode nChar )
+{
+    if ( (nChar >= 0x1100 && nChar <= 0x11f9) ||    // Hangul Jamo
+        (nChar >= 0x3000 && nChar <= 0xfaff) )      // other CJK
+    {
+        if( nChar == 0x2010 || nChar == 0x2015 ||
+            nChar == 0x2016 || nChar == 0x2026 ||
+            (nChar >= 0x3008 && nChar <= 0x3017) )
+        {
+            return VCLASS_ROTATE;
+        }
+        else if( nChar == 0x3001 || nChar == 0x3002 )
+        {
+            return VCLASS_TRANSFORM1;
+        }
+        else if( nChar == 0x3041 || nChar == 0x3043 ||
+            nChar == 0x3045 || nChar == 0x3047 ||
+            nChar == 0x3049 || nChar == 0x3063 ||
+            nChar == 0x3083 || nChar == 0x3085 ||
+            nChar == 0x3087 || nChar == 0x308e ||
+            nChar == 0x30a1 || nChar == 0x30a3 ||
+            nChar == 0x30a5 || nChar == 0x30a7 ||
+            nChar == 0x30a9 || nChar == 0x30c3 ||
+            nChar == 0x30e3 || nChar == 0x30e5 ||
+            nChar == 0x30e7 || nChar == 0x30ee ||
+            nChar == 0x30f5 || nChar == 0x30f6 )
+        {
+            return VCLASS_TRANSFORM2;
+        }
+        else if ( nChar == 0x30fc )
+        {
+            return VCLASS_ROTATE_REVERSE;
+        }
+
+        return VCLASS_CJK;
+    }
+
+    return VCLASS_ROTATE;
+}
+*/
+
+// -----------------------------------------------------------------------
+
 int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 {
     if( mrFontInfo.aFontData.meCharSet == RTL_TEXTENCODING_SYMBOL )
@@ -434,6 +442,15 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, mnLoadFlags );
+    if( rc != FT_Err_Ok )
+    {
+        // we get here when e.g. a PS font doesn't have a default glyph
+        rGD.SetCharWidth( 0 );
+        rGD.SetDelta( 0, 0 );
+        rGD.SetOffset( 0, 0 );
+        rGD.SetSize( Size( 0, 0 ) );
+        return;
+    }
 
 #if 0
     if( GetFontSelData().mbVertical && FT_HAS_VERTICAL(maFaceFT) )
@@ -577,7 +594,6 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 
     // first figure out which glyph pairs are involved in kerning
     SFNT_Interface* pSFNT = (SFNT_Interface*) FT_Get_Module_Interface( aLibFT, "sfnt" );
-    DBG_ASSERT( (pSFNT!=NULL), "pSFNT==NULL!" );
     if( !pSFNT )
         return 0;
 
@@ -894,4 +910,3 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
 
 // =======================================================================
 
-#endif  // NO_FREETYPE_FONTS

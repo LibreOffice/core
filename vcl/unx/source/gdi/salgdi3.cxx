@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-05 10:58:42 $
+ *  last change: $Author: hdu $ $Date: 2001-03-07 12:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,32 +543,10 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
     if( pEntry->mpFontData && pEntry->mpFontData->mpSysData )
     {
 #ifdef USE_BUILTIN_RASTERIZER
-        if( pEntry->mpFontData->mpSysData == SERVERFONT_MAGIC )
-        {
-            // requesting a font provided by builtin rasterizer
-            mpServerSideFont = GlyphCache::GetInstance().CacheFont( *pEntry );
-#ifdef USE_PSPRINT
-            if( (m_pPrinterGfx != NULL) && (mpServerSideFont != NULL) )
-            {
-                // we need to notify printergfx of the font change
-                int nFontId = mpServerSideFont->GetFontId();
-                if( nFontId <= 0 )
-                {
-                    if( const ::rtl::OString* pOString = mpServerSideFont->GetFontFileName() )
-                    {
-                        // we have a font file the printfontmanager should know about
-                        ::rtl::OUString aFontFileName = OStringToOUString( *pOString, RTL_TEXTENCODING_UNICODE );
-                        int nFaceNum = mpServerSideFont->GetFontFaceNumber();
-                        psp::PrintFontManager& rPSPFontManager = psp::PrintFontManager::get();
-                        nFontId = rPSPFontManager.addFontFile( aFontFileName, nFaceNum );
-                        mpServerSideFont->SetFontId( nFontId );
-                    }
-                }
-                m_pPrinterGfx->SetFont( nFontId, pEntry->mnHeight, pEntry->mnWidth, pEntry->mnOrientation );
-            }
-#endif // USE_PSPRINT
+        // requesting a font provided by builtin rasterizer
+        mpServerSideFont = GlyphCache::GetInstance().CacheFont( *pEntry );
+        if( mpServerSideFont )
             return;
-        }
 #endif //USE_BUILTIN_RASTERIZER
 
         ExtendedXlfd *pSysFont = (ExtendedXlfd*)pEntry->mpFontData->mpSysData;
@@ -1227,34 +1205,21 @@ SalGraphicsData::DrawText(
 USHORT
 SalGraphics::SetFont( ImplFontSelectData *pEntry )
 {
-#if defined(USE_PSPRINT)
-    if( (maGraphicsData.m_pPrinterGfx != NULL)
-#ifdef USE_BUILTIN_RASTERIZER
-    && ( !pEntry->mpFontData || (pEntry->mpFontData->mpSysData != SERVERFONT_MAGIC) )
-#endif // USE_BUILTIN_RASTERIZER
-    )
+#ifdef USE_PSPRINT
+    if( (maGraphicsData.m_pPrinterGfx != NULL) )
     {
         sal_Bool bVertical = pEntry->mbVertical;
         sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
 
-        return maGraphicsData.m_pPrinterGfx->SetFont(
-                                                     nID,
-                                                     pEntry->mnHeight,
-                                                     pEntry->mnWidth,
-                                                     pEntry->mnOrientation
-                                                     );
+        return maGraphicsData.m_pPrinterGfx->SetFont( nID,
+            pEntry->mnHeight, pEntry->mnWidth, pEntry->mnOrientation);
     }
     else
+#endif
     {
-#endif
-
-
-    maGraphicsData.SetFont( pEntry );
-    return _IsPrinter() ? SAL_SETFONT_USEDRAWTEXTARRAY : 0;
-
-#if defined(USE_PSPRINT)
+        maGraphicsData.SetFont( pEntry );
+        return _IsPrinter() ? SAL_SETFONT_USEDRAWTEXTARRAY : 0;
     }
-#endif
 }
 
 // ----------------------------------------------------------------------------
