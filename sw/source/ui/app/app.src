@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 20:44:59 $
+ *  last change: $Author: rt $ $Date: 2001-09-27 20:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,10 +668,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ chinese_traditional ] =
         {
-         < "自動" ; SFXSTYLEBIT_ALL ; > ;
-            < "全部樣式" ; SFXSTYLEBIT_USED ; > ;
-            < "使用的樣式" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "自訂樣式" ; SFXSTYLEBIT_AUTO ; > ;
+         < "全部的樣式" ; SFXSTYLEBIT_ALL ; > ;
+            < "使用的樣式" ; SFXSTYLEBIT_USED ; > ;
+            < "自訂的樣式" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "自動" ; SFXSTYLEBIT_AUTO ; > ;
             < "文字樣式" ; SWSTYLEBIT_TEXT ; > ;
             < "章樣式" ; SWSTYLEBIT_CHAPTER ; > ;
             < "清單樣式" ; SWSTYLEBIT_LIST ; > ;
@@ -3197,6 +3197,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
