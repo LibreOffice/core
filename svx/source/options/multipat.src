@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-10-31 13:34:41 $
+ *  last change: $Author: kz $ $Date: 2003-02-27 12:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     Text = "Pfade auswählen" ;
     Text [ English ] = "Select paths" ;
     Text [ english_us ] = "Select Paths" ;
-    Text [ portuguese_brazilian ] = "Pfade ausw?hlen" ;
+    Text [ portuguese_brazilian ] = "Selecionar caminhos" ;
     Text [ swedish ] = "Välj sökvägar" ;
     Text [ danish ] = "Vælg stier" ;
     Text [ italian ] = "Seleziona percorsi" ;
@@ -112,7 +112,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ English ] = "Add..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text [ english_us ] = "~Add..." ;
-        Text [ portuguese_brazilian ] = "Hi~nzuf?en" ;
+        Text [ portuguese_brazilian ] = "~Adicionar..." ;
         Text [ swedish ] = "Lägg t~ill..." ;
         Text [ danish ] = "T~ilføj..." ;
         Text [ italian ] = "~Aggiungi..." ;
@@ -121,7 +121,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ dutch ] = "Toe~voegen..." ;
         Text[ chinese_simplified ] = "æ–°å¢(~A)...";
         Text[ russian ] = "Äîáàâèòü...";
-        Text[ polish ] = "Dodaj...";
+        Text[ polish ] = "~Dodaj...";
         Text[ japanese ] = "è¿½åŠ (~A)...";
         Text[ chinese_traditional ] = "æ–°å¢(~A)...";
         Text[ arabic ] = "...ÅÖÇİÉ";
@@ -142,7 +142,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ English ] = "~Delete" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~L?chen" ;
+        Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
@@ -151,7 +151,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ dutch ] = "~Wissen" ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "~Usuñ";
         Text[ japanese ] = "å‰Šé™¤(~D)";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
@@ -171,7 +171,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text = "Pfade" ;
         Text [ English ] = "Paths" ;
         Text [ english_us ] = "Paths" ;
-        Text [ portuguese_brazilian ] = "Pfade" ;
+        Text [ portuguese_brazilian ] = "Caminhos" ;
         Text [ swedish ] = "Sökvägar" ;
         Text [ danish ] = "Stier" ;
         Text [ italian ] = "Percorsi" ;
@@ -216,7 +216,7 @@ String RID_MULTIPATH_DBL_ERR
     Text = "Der Pfad %1 ist bereits vorhanden." ;
     Text [ ENGLISH ] = "The path %1 is already defined." ;
     Text [ english_us ] = "The path %1 already exists." ;
-    Text [ portuguese_brazilian ] = "Der Pfad %1 ist bereits vorhanden." ;
+    Text [ portuguese_brazilian ] = "O caminho %1 já existe." ;
     Text [ swedish ] = "Sökvägen %1 finns redan." ;
     Text [ danish ] = "Stien %1 findes allerede." ;
     Text [ italian ] = "Il percorso %1 esiste già." ;
@@ -225,7 +225,7 @@ String RID_MULTIPATH_DBL_ERR
     Text [ dutch ] = "Pad %1 bestaat reeds." ;
     Text [ portuguese ] = "O atalho %1 já existe." ;
     Text[ chinese_simplified ] = "è¿™ä¸ªè·¯å¾„ %1 å·²ç»å­˜åœ¨ã€‚";
-    Text[ russian ] = "Ïóòü %1 óæå èìååòñÿ.";
+    Text[ russian ] = "Ïóòü %1 óæå ñóùåñòâóåò.";
     Text[ polish ] = "Œcie¿ka %1 ju¿ istnieje.";
     Text[ japanese ] = "%1ã®ãƒ‘ã‚¹ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
     Text[ chinese_traditional ] = "é€™å€‹è·¯å¾‘ %1 å·²ç¶“å­˜åœ¨ã€‚";
@@ -245,7 +245,7 @@ String RID_SVXSTR_FILE_TITLE
     Text [ English ] = "Select files" ;
     Text [ english_us ] = "Select files" ;
     Text [ portuguese ] = "Seleccionar ficheiros" ;
-    Text [ portuguese_brazilian ] = "Dateien ausw?hlen" ;
+    Text [ portuguese_brazilian ] = "Selecionar arquivos" ;
     Text [ swedish ] = "Välj ut filer" ;
     Text [ danish ] = "Vælg filer" ;
     Text [ italian ] = "Seleziona file" ;
@@ -273,7 +273,7 @@ String RID_SVXSTR_FILE_HEADLINE
     Text [ English ] = "Files" ;
     Text [ english_us ] = "Files" ;
     Text [ portuguese ] = "Ficheiros" ;
-    Text [ portuguese_brazilian ] = "Dateien" ;
+    Text [ portuguese_brazilian ] = "Arquivos" ;
     Text [ swedish ] = "Filer" ;
     Text [ danish ] = "Filer" ;
     Text [ italian ] = "File" ;
@@ -301,17 +301,17 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text [ English ] = "Select archives" ;
     Text [ english_us ] = "Select Archives" ;
     Text[ portuguese ] = "Select archives";
-    Text[ russian ] = "Select archives";
+    Text[ russian ] = "Âûáîğ àğõèâîâ";
     Text[ greek ] = "Select archives";
     Text[ dutch ] = "Archieven selecteren";
     Text[ french ] = "Sélection des archives";
     Text[ spanish ] = "Seleccionar archivos";
-    Text[ finnish ] = "Select archives";
+    Text[ finnish ] = "Valitse arkistot";
     Text[ italian ] = "Seleziona archivio";
     Text[ danish ] = "Vælg arkiver";
     Text[ swedish ] = "Välj arkiv";
-    Text[ polish ] = "Select archives";
-    Text[ portuguese_brazilian ] = "Select archives";
+    Text[ polish ] = "Wybierz archiwa";
+    Text[ portuguese_brazilian ] = "Selecionar arquivos";
     Text[ japanese ] = "ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–ã®é¸æŠ";
     Text[ korean ] = "ì €ì¥ ìœ„ì¹˜ ì„ íƒ";
     Text[ chinese_simplified ] = "é€‰æ‹©å¤‡ä»¶";
@@ -326,17 +326,17 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text [ English ] = "Archives" ;
     Text [ english_us ] = "Archives" ;
     Text[ portuguese ] = "Archives";
-    Text[ russian ] = "Archives";
+    Text[ russian ] = "Àğõèâû";
     Text[ greek ] = "Archives";
     Text[ dutch ] = "Archieven";
     Text[ french ] = "Archives";
     Text[ spanish ] = "Archivos";
-    Text[ finnish ] = "Archives";
+    Text[ finnish ] = "Arkistot";
     Text[ italian ] = "Archivi";
     Text[ danish ] = "Arkiv";
     Text[ swedish ] = "Arkiv";
-    Text[ polish ] = "Archives";
-    Text[ portuguese_brazilian ] = "Archives";
+    Text[ polish ] = "Archiwa";
+    Text[ portuguese_brazilian ] = "Arquivos";
     Text[ japanese ] = "ã‚¢ãƒ¼ã‚«ã‚¤ãƒ–";
     Text[ korean ] = "ìë£Œ ì €ì¥";
     Text[ chinese_simplified ] = "å¤‡ä»¶";
@@ -351,7 +351,7 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text [ ENGLISH ] = "The file %1 is already defined." ;
     Text [ english_us ] = "The file %1 already exists." ;
     Text [ portuguese ] = "O ficheiro %1 já existe." ;
-    Text [ portuguese_brazilian ] = "Die Datei %1 ist bereits vorhanden." ;
+    Text [ portuguese_brazilian ] = "O arquivo %1 já existe." ;
     Text [ swedish ] = "Filen %1 existerar redan." ;
     Text [ danish ] = "Filen %1 findes allerede." ;
     Text [ italian ] = "Il file %1 esiste già." ;
@@ -359,7 +359,7 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text [ french ] = "Le fichier %1existe déjà." ;
     Text [ dutch ] = "Bestand %1 bestaat reeds" ;
     Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
-    Text[ russian ] = "Ôàéë %1 óæå èìååòñÿ.";
+    Text[ russian ] = "Ôàéë %1 óæå ñóùåñòâóåò.";
     Text[ polish ] = "Plik %1 ju¿ istnieje.";
     Text[ japanese ] = "%1ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
     Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆ %1 å·²ç¶“å­˜åœ¨ã€‚";
