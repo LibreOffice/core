@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-22 14:20:30 $
+#   last change: $Author: hr $ $Date: 2005-02-11 16:50:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,8 @@ IDLFILES=\
         ScriptExceptionRaisedException.idl\
         ScriptFrameworkErrorException.idl\
         ScriptFrameworkErrorType.idl\
+        ScriptURIHelper.idl\
+        XScriptURIHelper.idl\
         ScriptProviderForBasic.idl
 
 # ------------------------------------------------------------------
