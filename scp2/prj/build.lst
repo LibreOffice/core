@@ -1,4 +1,4 @@
-cp    scp2    :    scptools setup_native python NULL
+cp    scp2    :    setup_native python NULL
 cp    scp2                        usr1     -    all    cp_mkout NULL
 cp    scp2\source\activex         nmake    -    all    cp_activex NULL
 cp    scp2\source\calc            nmake    -    all    cp_calc NULL
