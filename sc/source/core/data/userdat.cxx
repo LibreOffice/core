@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userdat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,26 +737,3 @@ SdrObjUserData* __EXPORT ScIMapInfo::Clone( SdrObject* pObj ) const
 {
     return new ScIMapInfo( *this );
 }
-
-//BFS01void __EXPORT ScIMapInfo::WriteData( SvStream& rOStm )
-//BFS01{
-//BFS01 SdrObjUserData::WriteData( rOStm );
-//BFS01
-//BFS01 ScWriteHeader aHdr( rOStm );
-//BFS01
-//BFS01 rOStm << aImageMap;
-//BFS01}
-
-//BFS01void __EXPORT ScIMapInfo::ReadData( SvStream& rIStm )
-//BFS01{
-//BFS01 SdrObjUserData::ReadData( rIStm );
-//BFS01
-//BFS01 ScReadHeader aHdr( rIStm );
-//BFS01
-//BFS01 rIStm >> aImageMap;
-//BFS01}
-
-
-
-
-
