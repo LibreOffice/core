@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: hr $ $Date: 2003-06-30 16:02:04 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:48:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,8 +145,7 @@ LIBLIST = \
 SETTINGSLIST= \
     $(DESTDIRSETTINGS)$/settings.mk \
     $(DESTDIRSETTINGS)$/std.mk \
-    $(DESTDIRSETTINGS)$/stdtarget.mk \
-    $(DESTDIRSETTINGS)$/dk.mk
+    $(DESTDIRSETTINGS)$/stdtarget.mk
 
 DOCUSTUDIO4INTEGRATIONHTMLFILES= \
     $(DESTDIRDOCU)$/DevStudioWizards$/CalcAddinWizard.html \
@@ -239,10 +238,7 @@ INSTALLSCRIPT= \
     $(DESTDIR)$/setsdkenv_windows.bat
 .ENDIF
 
-#--------------------------------------------------
-# TARGETS
-#--------------------------------------------------
-all : \
+DIR_FILE_LIST=\
     $(EXELIST) \
     $(XMLLIST) \
     $(SDKDLLLIST) \
@@ -255,9 +251,19 @@ all : \
     $(DESTDIRDOCU)$/common$/spec$/xml_format$/xml_specification.pdf
 #	$(DESTDIRCLASSES)$/oosupport.nbm \
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/copying_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/copying_files.txt
+
+#--------------------------------------------------
+# TARGETS
+#--------------------------------------------------
+all : \
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
+
 #--------------------------------------------------
 # use global rules
 #--------------------------------------------------   
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
-    
-    
+
