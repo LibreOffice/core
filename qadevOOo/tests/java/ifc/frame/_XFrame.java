@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFrame.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:39:23 $
+ *  last change:$Date: 2003-10-06 13:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,8 @@
 
 package ifc.frame;
 
-import java.io.PrintWriter;
-
-import lib.MultiMethodTest;
-import lib.TestEnvironment;
-
 import com.sun.star.awt.XWindow;
+//import com.sun.star.awt.XWindow;
 import com.sun.star.frame.FrameAction;
 import com.sun.star.frame.FrameActionEvent;
 import com.sun.star.frame.XController;
@@ -74,6 +70,14 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFrameActionListener;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import java.io.PrintWriter;
+import lib.MultiMethodTest;
+import lib.TestEnvironment;
+import util.SOfficeFactory;
 
 /**
 * Testing <code>com.sun.star.frame.XFrame</code>
@@ -181,6 +185,7 @@ public class _XFrame extends MultiMethodTest {
     */
     public void _deactivate() {
         oObj.deactivate() ;
+        oObj.activate() ;
         tRes.tested("deactivate()", true) ;
     }
 
@@ -199,14 +204,14 @@ public class _XFrame extends MultiMethodTest {
             return;
         }
 
-        oObj.activate();
-        result &= oObj.isActive();
-        if (!oObj.isActive())
-            log.println("after activate() method call, isActive() returned false") ;
         oObj.deactivate();
         result &= !oObj.isActive();
         if (oObj.isActive())
             log.println("after deactivate() method call, isActive() returned true");
+        oObj.activate();
+        result &= oObj.isActive();
+        if (!oObj.isActive())
+            log.println("after activate() method call, isActive() returned false") ;
         boolean res = isDesktop(log,tEnv,"isActive()");
         if (res) result=res;
 
@@ -278,6 +283,7 @@ public class _XFrame extends MultiMethodTest {
         oObj.removeFrameActionListener(listener);
         oObj.activate();
         oObj.deactivate();
+        oObj.activate();
         if (tEnv.getTestCase().getObjectName().equals("Desktop")) {
             log.println("No actions supported by Desktop");
             tRes.tested("removeFrameActionListener()", true) ;
@@ -497,12 +503,44 @@ public class _XFrame extends MultiMethodTest {
     }
 
     /**
-    * Test calls the method, then result is checked. Values, stored at the
-    * beginning are restored at the end of method.<p>
+    * Test calls the method, then result is checked.<p>
     * Has <b> OK </b> status if method returns true, and values, set by the
     * method are nulls, or if method returns false, and values are not changed.
+    * This method destroy the object. Therfore all other methods have to be
+    * executed before :
+    * <ul>
+    *  <li> <code> getName() </code>
+    *  <li> <code> setName() </code>
+    *  <li> <code> activate() </code>
+    *  <li> <code> deactivate() </code>
+    *  <li> <code> isActive() </code>
+    *  <li> <code> addFrameActionListener() </code>
+    *  <li> <code> getComponentWindow() </code>
+    *  <li> <code> getContainerWindow() </code>
+    *  <li> <code> getController() </code>
+    *  <li> <code> isTop() </code>
+    *  <li> <code> findFrame() </code>
+    *  <li> <code> contextChanged() </code>
+    *  <li> <code> setCreator() </code>
+    *  object</li>
+    * </ul>
     */
     public void _setComponent() {
+        // setComponent() destr
+        requiredMethod("getName()") ;
+        requiredMethod("setName()") ;
+        requiredMethod("activate()") ;
+        requiredMethod("deactivate()") ;
+        requiredMethod("isActive()") ;
+        requiredMethod("addFrameActionListener()") ;
+        requiredMethod("getComponentWindow()") ;
+        requiredMethod("getContainerWindow()") ;
+        requiredMethod("getController()") ;
+        requiredMethod("isTop()") ;
+        requiredMethod("findFrame()") ;
+        requiredMethod("contextChanged()") ;
+        requiredMethod("setCreator()") ;
+
         boolean result = true;
 
         XWindow oldWindow = oObj.getComponentWindow();
@@ -523,7 +561,6 @@ public class _XFrame extends MultiMethodTest {
         }
         tRes.tested("setComponent()", result);
 
-        oObj.setComponent(oldWindow, oldController);
     }
 
     /**
@@ -558,6 +595,4 @@ public class _XFrame extends MultiMethodTest {
             return false;
         }
     }
-
 }
-
