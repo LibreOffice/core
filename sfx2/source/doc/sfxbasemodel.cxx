@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:30:49 $
+ *  last change: $Author: mba $ $Date: 2003-05-05 16:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ struct IMPL_SfxBaseModel_DataContainer
     sal_Bool                                        m_bLoadDone             ;
     sal_Bool                                        m_bLoadState            ;
     sal_Bool                                        m_bClosed               ;
+    sal_Bool                                        m_bClosing              ;
     REFERENCE< com::sun::star::view::XPrintJob>     m_xPrintJob             ;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
 
@@ -327,6 +328,7 @@ struct IMPL_SfxBaseModel_DataContainer
             ,   m_bLoadDone             ( sal_False     )
             ,   m_bLoadState            ( sal_False     )
             ,   m_bClosed               ( sal_False     )
+            ,   m_bClosing              ( sal_False     )
     {
     }
 } ;
@@ -720,6 +722,21 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     // object already disposed?
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
+
+    if  ( !m_pData->m_bClosed )
+    {
+        // gracefully accept wrong dispose calls instead of close call
+        // and try to make it work (may be really disposed later!)
+        try
+        {
+            close( sal_True );
+        }
+        catch ( com::sun::star::util::CloseVetoException& )
+        {
+        }
+
+        return;
+    }
 
     EVENTOBJECT aEvent( (XMODEL *)this );
     m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
@@ -1218,7 +1235,7 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENE
 void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETOEXCEPTION, RUNTIMEEXCEPTION)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( !m_pData || m_pData->m_bClosed )
+    if ( !m_pData || m_pData->m_bClosed || m_pData->m_bClosing )
         return;
 
     uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
@@ -1241,7 +1258,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
     }
 
     // no own objections against closing!
-
+    m_pData->m_bClosing = sal_True;
     m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
     pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
     if (pContainer!=NULL)
@@ -1261,6 +1278,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
     }
 
     m_pData->m_bClosed = sal_True;
+    m_pData->m_bClosing = sal_False;
 
     dispose();
 }
@@ -1962,11 +1980,11 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
         sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ?
                                 m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTREAD;
         m_pData->m_pObjectShell->ResetError();
-
+/*
         // remove lock without closing (it is set in the LoadEnvironment, because the document
         // is loaded in a hidden mode)
         m_pData->m_pObjectShell->RemoveOwnerLock();
-
+*/
         if ( !m_pData->m_bLoadState )
         {
             throw SfxIOException_Impl( nErrCode );
