@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:21:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Text [ spanish ] = "Importar archivo" ;
     Text [ danish ] = "Importer fil" ;
     Text [ swedish ] = "Importera fil" ;
-    Text [ finnish ] = "Import File" ;
+    Text [ finnish ] = "Tuo tiedosto" ;
     Text [ english_us ] = "Import File" ;
     FixedText FT_FIELDSEP
     {
@@ -98,7 +98,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ spanish ] = "Separador de campos" ;
         Text [ danish ] = "Feltseparator" ;
         Text [ swedish ] = "~Fältavgränsare" ;
-        Text [ finnish ] = "~Field delimiter" ;
+        Text [ finnish ] = "~Kentän erotin" ;
         Text [ english_us ] = "~Field delimiter" ;
         Text[ chinese_simplified ] = "×Ö¶Î·Ö¸ô·û(~F)";
         Text[ russian ] = "Ðàçäåëèòåëü ïîëÿ";
@@ -133,7 +133,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ spanish ] = "S~eparador de texto" ;
         Text [ danish ] = "Tekstseparator" ;
         Text [ swedish ] = "~Textavgränsare" ;
-        Text [ finnish ] = "~Text delimiter" ;
+        Text [ finnish ] = "~Tekstin erottimet" ;
         Text [ english_us ] = "~Text delimiter" ;
         Text[ chinese_simplified ] = "ÎÄ×Ö·Ö¸ô·û(~T)";
         Text[ russian ] = "Ðàçäåëèòåëü òåêñòà";
@@ -168,7 +168,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ spanish ] = "J~uego de caracteres" ;
         Text [ danish ] = "Tegnsæt" ;
         Text [ swedish ] = "~Teckenuppsättning" ;
-        Text [ finnish ] = "F~ont" ;
+        Text [ finnish ] = "~Merkistö" ;
         Text [ english_us ] = "~Character set" ;
         Text[ chinese_simplified ] = "×ÖÌå(~C)";
         Text[ russian ] = "Íàáîð çíàêîâ";
@@ -213,7 +213,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ spanish ] = "Opciones de campo" ;
         Text [ danish ] = "Feltindstillinger" ;
         Text [ swedish ] = "Fältalternativ" ;
-        Text [ finnish ] = "Field Options" ;
+        Text [ finnish ] = "Kentän asetukset" ;
         Text [ english_us ] = "Field options" ;
         Text[ chinese_simplified ] = "×Ö¶ÎÑ¡Ïî";
         Text[ russian ] = "Ïàðàìåòðû ïîëÿ";
