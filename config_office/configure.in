@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-04-04 07:49:14 $
+dnl * Date: $Date: 2005-04-06 10:53:18 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.113 $ )
+AC_REVISION( $Revision: 1.114 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1854,6 +1854,26 @@ AC_SUBST(JDK)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
+
+dnl ===================================================================
+dnl Check for optional gcj-dbtool
+dnl ===================================================================
+if test "$JDK" == "gcj"; then 
+    javacache=`echo $WITH_JAVA | $SED -e "s/gij/gcj-dbtool/g"`
+    if test -z "$with_jdk_home"; then
+        AC_PATH_PROG(JAVACACHE, $javacache)
+    else
+        _javac_path="$with_jdk_home/bin/$javacache"
+        dnl Check if there is a gcj-dbtool at all.
+        if test -x "$_javac_path"; then
+            JAVACACHE=$_javac_path
+        fi
+    fi
+    if test -z "$JAVACACHE"; then
+      AC_MSG_WARN([$javacache not found set with_jdk_home])
+    fi
+fi
+AC_SUBST(JAVACACHE)
 
 if test "$NEEDXSLTPROC" = "no"; then
    XSLTPROC=NO_XSLTPROC
