@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-25 15:37:49 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 10:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,119 +58,114 @@
  *
  *
  ************************************************************************/
+
 #include "interact.hxx"
 
-#ifndef _COM_SUN_STAR_JAVA_JAVADISABLEDEXCEPTION_HPP_
-#include <com/sun/star/java/JavaDisabledException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_JAVAVMCREATIONFAILUREEXCEPTION_HPP_
-#include <com/sun/star/java/JavaVMCreationFailureException.hpp>
-#endif
+#include "com/sun/star/java/JavaDisabledException.hpp"
+#include "com/sun/star/java/JavaVMCreationFailureException.hpp"
+#include "com/sun/star/task/XInteractionAbort.hpp"
+#include "com/sun/star/task/XInteractionRetry.hpp"
+#include "com/sun/star/task/XInteractionContinuation.hpp"
+#include "cppuhelper/implbase1.hxx"
+#include "osl/mutex.hxx"
 
+namespace css = com::sun::star;
 
-namespace stoc_javavm
+using stoc_javavm::InteractionRequest;
+
+namespace {
+
+class AbortContinuation:
+    public cppu::WeakImplHelper1< css::task::XInteractionAbort >
 {
+public:
+    inline AbortContinuation() {}
 
-InteractionAbort::InteractionAbort( const WeakReference<XInterface>& xJVM,
-                                    JavaVirtualMachine_Impl * _pJVM):
-    m_xJVM(xJVM),
-    m_pJVM(_pJVM)
-{
-    OSL_ASSERT( _pJVM);
+    virtual inline void SAL_CALL select() throw (css::uno::RuntimeException) {}
+
+private:
+    AbortContinuation(AbortContinuation &); // not implemented
+    void operator =(AbortContinuation); // not implemented
+
+    virtual inline ~AbortContinuation() {}
+};
+
 }
 
-void SAL_CALL InteractionAbort::select(  ) throw (RuntimeException)
+class InteractionRequest::RetryContinuation:
+    public cppu::WeakImplHelper1< css::task::XInteractionRetry >
 {
-    //If we get a hard reference to JavaVirtualMachine_Impl
-    //then we may call the callback
-    Reference<XInterface> xIntJVM= m_xJVM;
-    if( xIntJVM.is())
-        m_pJVM->selectAbort();
-}
-//================================================================================
-InteractionRetry::InteractionRetry( const WeakReference<XInterface>& xJVM,
-                                    JavaVirtualMachine_Impl * _pJVM):
-    m_xJVM(xJVM),
-    m_pJVM(_pJVM)
+public:
+    inline RetryContinuation(): m_bSelected(false) {}
+
+    virtual void SAL_CALL select() throw (css::uno::RuntimeException);
+
+    bool isSelected() const;
+
+private:
+    RetryContinuation(RetryContinuation &); // not implemented
+    void operator =(RetryContinuation); // not implemented
+
+    virtual inline ~RetryContinuation() {}
+
+    mutable osl::Mutex m_aMutex;
+    bool m_bSelected;
+};
+
+void SAL_CALL InteractionRequest::RetryContinuation::select()
+    throw (css::uno::RuntimeException)
 {
-    OSL_ASSERT( _pJVM);
+    osl::MutexGuard aGuard(m_aMutex);
+    m_bSelected = true;
 }
 
-void SAL_CALL InteractionRetry::select(  ) throw (RuntimeException)
+bool InteractionRequest::RetryContinuation::isSelected() const
 {
-    //If we get a hard reference to JavaVirtualMachine_Impl
-    //then we may call the callback
-    Reference<XInterface> xIntJVM= m_xJVM;
-    if( xIntJVM.is())
-        m_pJVM->selectRetry();
-}
-//================================================================================
-InteractionRequest::InteractionRequest( const Reference<XInterface>& xJVM,
-                                        JavaVirtualMachine_Impl* _pJVM,
-                                        Any& _request):
-    m_xJVM(xJVM),
-    m_pJVM(_pJVM),
-    m_anyRequest(_request),
-    m_pseqContinuations(NULL)
-{
+    osl::MutexGuard aGuard(m_aMutex);
+    return m_bSelected;
 }
 
-Any SAL_CALL InteractionRequest::getRequest(  ) throw (RuntimeException)
+InteractionRequest::InteractionRequest(css::uno::Any const & rRequest):
+    m_aRequest(rRequest)
 {
-    return m_anyRequest;
-}
-
-Sequence< Reference< XInteractionContinuation > >
-SAL_CALL InteractionRequest::getContinuations(  ) throw (RuntimeException)
-{
-    if ( ! m_pseqContinuations)
+    bool bRetry;
+#if defined LINUX
+    // Only if Java is disabled we allow retry:
+    bRetry = m_aRequest.isExtractableTo(
+        getCppuType(static_cast< css::java::JavaDisabledException * >(0)));
+#else // LINUX
+    // If the creation of the JVM failed then do not offer retry, because Java
+    // might crash next time:
+    bRetry = !m_aRequest.isExtractableTo(
+        getCppuType(
+            static_cast< css::java::JavaVMCreationFailureException * >(0)));
+#endif // LINUX
+    m_aContinuations.realloc(bRetry ? 2 : 1);
+    m_aContinuations[0] = new AbortContinuation;
+    if (bRetry)
     {
-        MutexGuard guard(javavm_getMutex());
-        if( ! m_pseqContinuations)
-        {
-#ifdef LINUX
-            // Only if java is disabled we allow retry
-            if( m_anyRequest.getValueType() == getCppuType( (JavaDisabledException*)0))
-            {
-                Reference<XInteractionContinuation> arObjs[2];
-                arObjs[0]= Reference< XInteractionContinuation >(
-                    static_cast<XWeak*> (new InteractionRetry(m_xJVM, m_pJVM)), UNO_QUERY);
-                arObjs[1]= Reference< XInteractionContinuation> (
-                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
-                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 2);
-            }
-            else
-            {
-                Reference<XInteractionContinuation> arObjs[1];
-                arObjs[0]= Reference< XInteractionContinuation> (
-                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
-                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 1);
-            }
-#else
-            // If the creation of JVM failed then don't offer retry, because java might crash
-            // next time
-            if( m_anyRequest.getValueType() == getCppuType( (JavaVMCreationFailureException*)0))
-            {
-                Reference<XInteractionContinuation> arObjs[1];
-                arObjs[0]= Reference< XInteractionContinuation> (
-                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
-                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 1);
-            }
-            else
-            {
-                Reference<XInteractionContinuation> arObjs[2];
-                arObjs[0]= Reference< XInteractionContinuation >(
-                    static_cast<XWeak*> (new InteractionRetry(m_xJVM, m_pJVM)), UNO_QUERY);
-                arObjs[1]= Reference< XInteractionContinuation> (
-                    static_cast<XWeak*> (new InteractionAbort(m_xJVM, m_pJVM)), UNO_QUERY);
-                m_seqContinuations= Sequence< Reference< XInteractionContinuation> >( arObjs, 2);
-            }
-#endif
-        }
+        m_xRetryContinuation = new RetryContinuation;
+        m_aContinuations[1] = m_xRetryContinuation.get();
     }
-    return m_seqContinuations;
 }
 
+css::uno::Any SAL_CALL InteractionRequest::getRequest()
+    throw (css::uno::RuntimeException)
+{
+    return m_aRequest;
+}
 
+css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
+SAL_CALL InteractionRequest::getContinuations()
+    throw (css::uno::RuntimeException)
+{
+    return m_aContinuations;
+}
 
-} // end namespace
+bool InteractionRequest::retry() const
+{
+    return m_xRetryContinuation.is() && m_xRetryContinuation->isSelected();
+}
+
+InteractionRequest::~InteractionRequest()
+{}

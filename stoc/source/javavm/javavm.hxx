@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-25 15:37:50 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 10:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,126 +58,146 @@
  *
  *
  ************************************************************************/
-#ifndef _JVM_JAVAVM_HXX_
-#define _JVM_JAVAVM_HXX_
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_XJAVAVM_HPP_
-#include <com/sun/star/java/XJavaVM.hpp>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_XJAVATHREADREGISTER_11_HPP_
-#include <com/sun/star/java/XJavaThreadRegister_11.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_
-#include <com/sun/star/container/XContainerListener.hpp>
-#endif
+
+#if !defined INCLUDED_STOC_JAVAVM_JAVAVM_HXX
+#define INCLUDED_STOC_JAVAVM_JAVAVM_HXX
+
+#include "jvmargs.hxx"
+
+#include "com/sun/star/container/XContainerListener.hpp"
+#include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/java/XJavaThreadRegister_11.hpp"
+#include "com/sun/star/java/XJavaVM.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "cppuhelper/compbase5.hxx"
+#include "osl/module.hxx"
+#include "osl/thread.hxx"
+#include "rtl/ref.hxx"
+
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _OSL_MODULE_HXX_
-#include <osl/module.hxx>
-#endif
-#ifndef _UNO_ENVIRONMENT_HXX_
-#include <uno/environment.h>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef __VMHOLDER
-#include <bridges/java/jvmcontext.hxx>
-#endif
-//#include <jni.h>
-#include "jvmargs.hxx"
 
-using namespace ::cppu;
-using namespace ::osl;
-using namespace ::rtl;
-using namespace ::com::sun::star::java;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
+namespace com { namespace sun { namespace star {
+    namespace container { class XContainer; }
+    namespace uno { class XComponentContext; }
+} } }
+namespace jvmaccess { class VirtualMachine; }
 
-namespace stoc_javavm
+namespace stoc_javavm {
+
+// The MS compiler needs a typedef here, so the JavaVirtualMachine ctor can call
+// its base class ctor:
+typedef
+cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization,
+                                com::sun::star::lang::XServiceInfo,
+                                com::sun::star::java::XJavaVM,
+                                com::sun::star::java::XJavaThreadRegister_11,
+                                com::sun::star::container::XContainerListener >
+JavaVirtualMachine_Impl;
+
+class JavaVirtualMachine: private osl::Mutex, public JavaVirtualMachine_Impl
 {
+public:
+    explicit JavaVirtualMachine(
+        com::sun::star::uno::Reference<
+            com::sun::star::uno::XComponentContext > const & rContext);
 
-Mutex* javavm_getMutex();
-class OCreatorThread;
+    // XInitialization
+    virtual void SAL_CALL
+    initialize(com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
+                   rArguments)
+        throw (com::sun::star::uno::Exception);
 
-class JavaVirtualMachine_Impl : public WeakImplHelper4< XJavaVM, XJavaThreadRegister_11,
-              XServiceInfo, XContainerListener >
-{
-    OCreatorThread                *  pCreatorThread;
-    uno_Environment               * _pJava_environment;
-    JavaVMContext                 * _pVMContext;
+    // XServiceInfo
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw (com::sun::star::uno::RuntimeException);
 
-    Reference<XComponentContext>        _xCtx;
-    Reference<XMultiComponentFactory > _xSMgr;
+    virtual sal_Bool SAL_CALL
+    supportsService(rtl::OUString const & rServiceName)
+        throw (com::sun::star::uno::RuntimeException);
 
-    // For Inet settings
-    Reference<XInterface> _xConfigurationAccess;
-    // for Java settings
-    Reference<XInterface> _xConfigurationAccess2;
-    Module    _javaLib;
+    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+
+    // XJavaVM
+    virtual com::sun::star::uno::Any SAL_CALL
+    getJavaVM(com::sun::star::uno::Sequence< sal_Int8 > const & rProcessId)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isVMStarted()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isVMEnabled()
+        throw (com::sun::star::uno::RuntimeException);
+
+    // XJavaThreadRegister_11
+    virtual sal_Bool SAL_CALL isThreadAttached()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL registerThread()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL revokeThread()
+        throw (com::sun::star::uno::RuntimeException);
+
+    // XContainerListener
+    virtual void SAL_CALL
+    disposing(com::sun::star::lang::EventObject const & rSource)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+    elementInserted(com::sun::star::container::ContainerEvent const & rEvent)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+    elementRemoved(com::sun::star::container::ContainerEvent const & rEvent)
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL
+    elementReplaced(com::sun::star::container::ContainerEvent const & rEvent)
+        throw (com::sun::star::uno::RuntimeException);
+
+private:
+    JavaVirtualMachine(JavaVirtualMachine &); // not implemented
+    void operator =(JavaVirtualMachine); // not implemented
+
+    virtual ~JavaVirtualMachine();
+
+    virtual void SAL_CALL disposing();
+
+    JavaVM * createJavaVM(JVM const & jvm, JNIEnv ** pMainThreadEnv);
+        // throws com::sun::star::uno::RuntimeException
 
     void registerConfigChangesListener();
 
-    sal_Bool m_bInteractionAbort;
-    sal_Bool m_bInteractionRetry;
+    void setINetSettingsInVM(bool set_reset);
 
-    // If the first creation of java failed an this flag is set then the next call
-    // to getJavaVM throws an RuntimException. This is useful when the second attempt
-    // to create Java might cause a crash.
-    sal_Bool m_bDontCreateJVM;
-public:
-    JavaVirtualMachine_Impl(const Reference<XComponentContext> & xCtx) throw();
-    ~JavaVirtualMachine_Impl() throw();
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        m_xContext;
 
+    // the following are controlled by the 'this' mutex:
+    bool m_bDisposed;
+    rtl::Reference< jvmaccess::VirtualMachine > m_xVirtualMachine;
+    JavaVM * m_pJavaVm;
+        // stored as an instance member for backwards compatibility in getJavaVM
+    bool m_bDontCreateJvm;
+        // If the first creation of Java failed and this flag is set then the
+        // next call to getJavaVM throws a RuntimException.  This is useful when
+        // the second attempt to create Java might cause a crash.
+    com::sun::star::uno::Reference< com::sun::star::container::XContainer >
+        m_xInetConfiguration;
+    com::sun::star::uno::Reference< com::sun::star::container::XContainer >
+        m_xJavaConfiguration; // for Java settings
+    osl::Module m_aJavaLib;
 
-    // XJavaVM
-    virtual Any      SAL_CALL getJavaVM(const Sequence<sal_Int8> & processID)   throw(RuntimeException);
-    virtual sal_Bool SAL_CALL isVMStarted(void)                                 throw( RuntimeException);
-    virtual sal_Bool SAL_CALL isVMEnabled(void)                                 throw( RuntimeException);
-
-    // XJavaThreadRegister_11
-    virtual sal_Bool SAL_CALL isThreadAttached(void) throw(RuntimeException);
-    virtual void     SAL_CALL registerThread(void)   throw(RuntimeException);
-    virtual void     SAL_CALL revokeThread(void)     throw(RuntimeException);
-
-    // XServiceInfo
-    virtual OUString           SAL_CALL getImplementationName()                      throw(RuntimeException);
-    virtual sal_Bool           SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException);
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames(void)               throw(RuntimeException);
-
-    // XContainerListener
-    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException);
-    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) throw (RuntimeException);
-    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException);
-
-    // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
-
-    JavaVM *                createJavaVM(const JVM & jvm) throw(RuntimeException);
-    void                    disposeJavaVM() throw();
-
-
-    //callback for the InteractionAbort object
-    void selectAbort();
-    //callback for the InteractionRetry object
-    void selectRetry();
-    enum SelectedAction {action_abort,action_retry};
-protected:
-    void setINetSettingsInVM( sal_Bool set_reset);
-
-    SelectedAction doClientInteraction(Any& exception);
-
+    osl::ThreadData m_aAttachGuards;
 };
 
-} // end namespace
-#endif
+}
+
+#endif // INCLUDED_STOC_JAVAVM_JAVAVM_HXX

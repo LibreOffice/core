@@ -28,6 +28,9 @@ the existing vm given back.
         <type>  com.sun.star.lang.XMultiServiceFactory          </type>
     <type>  com.sun.star.lang.XComponent  </type>
     <type>  com.sun.star.lang.WrappedTargetRuntimeException  </type>
+    <type>  com.sun.star.lang.DisposedException  </type>
+    <type>  com.sun.star.lang.IllegalArgumentException  </type>
+    <type>  com.sun.star.lang.XInitialization  </type>
         <type>  com.sun.star.registry.XSimpleRegistry           </type>
         <type>  com.sun.star.lang.XSingleComponentFactory                   </type>
         <type>  com.sun.star.uno.XComponentContext                  </type>
@@ -52,8 +55,12 @@ the existing vm given back.
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  tools       </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>
+    <project-build-dependency>  jvmaccess   </project-build-dependency>
+    <project-build-dependency>  salhelper   </project-build-dependency>
     <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
     <runtime-module-dependency> cppu2       </runtime-module-dependency>
     <runtime-module-dependency> tl(COM)     </runtime-module-dependency>
     <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> jvmaccess3$(COM) </runtime-module-dependency>
+    <runtime-module-dependency> salhelper3$(COM) </runtime-module-dependency>
 </module-description>

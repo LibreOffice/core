@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2002-12-03 11:39:07 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 10:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 
 #endif
 
-#ifndef _OSL_FILE_H_
-#include <osl/file.h>
-#endif
 
 #include <string.h>
 
@@ -77,6 +74,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include "osl/file.h"
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -310,73 +308,6 @@ OUString JVM::getUserClasspath()
         _abort = abort;
     }
 
-    void JVM::setArgs(JDK1_1InitArgs * pargs) const throw() {
-        OUString classpath = _systemClasspath;
-        classpath += OUString(RTL_CONSTASCII_USTRINGPARAM(CLASSPATH_DELIMETER));
-        classpath += _userClasspath;
-
-#ifdef DEBUG
-        fprintf( stderr, "JavaVM: using classpath %s\n" , OUStringToOString(classpath, osl_getThreadTextEncoding()).getStr());
-#endif
-        pargs->classpath = strdup(OUStringToOString(classpath, osl_getThreadTextEncoding()));
-
-        if(_is_debugPort) {
-            pargs->debugging = JNI_TRUE;
-            pargs->debugPort = _debugPort;
-        }
-
-        if(_is_disableAsyncGC)
-            pargs->disableAsyncGC = _disableAsyncGC;
-
-        if(_is_enableClassGC)
-            pargs->enableClassGC = _enableClassGC;
-
-        if(_is_enableVerboseGC)
-            pargs->enableVerboseGC = _enableVerboseGC;
-
-        if(_is_checkSource)
-            pargs->checkSource = _checkSource;
-
-        if(_is_nativeStackSize)
-            pargs->nativeStackSize = _nativeStackSize;
-
-        if(_is_javaStackSize)
-            pargs->javaStackSize = _javaStackSize;
-
-        if(_is_minHeapSize) {
-            // Workaround ! Der neue Wert wird nur uebernommen, wenn dieser ueber der
-            // DefaultSize ( 1 MB ) liegt. Ein zu kleiner initialer HeapSize fuehrt unter Solaris Sparc zum Deadlock.
-            if(_minHeapSize > (sal_uInt32) pargs->minHeapSize)
-                pargs->minHeapSize = _minHeapSize;
-        }
-
-        if(_is_maxHeapSize)
-            pargs->maxHeapSize = _maxHeapSize;
-
-        if(_is_verifyMode)
-            pargs->verifyMode = _verifyMode;
-
-        if(_is_print)
-            pargs->vfprintf = _print;
-
-        if(_is_exit)
-            pargs->exit = _exit;
-
-        if(_is_abort)
-            pargs->abort = _abort;
-
-        size_t size = _props.size();
-        pargs->properties = (char **)calloc(sizeof(const char *), size + 1);
-
-        for(size_t i = 0; i < size; ++ i) {
-            const OUString & str = _props[i];
-
-            pargs->properties[i] = strdup(OUStringToOString(str, RTL_TEXTENCODING_ASCII_US));
-        }
-
-        pargs->properties[size] = NULL;
-    }
-
     void JVM::setRuntimeLib(const OUString & libName) throw() {
         _runtimeLib = libName;
     }
@@ -389,7 +320,20 @@ OUString JVM::getUserClasspath()
         return _enabled;
     }
 
-        const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
+    rtl::OUString JVM::getClassPath() const
+    {
+        rtl::OUStringBuffer aBuffer(_systemClasspath);
+        if (_userClasspath.getLength() > 0)
+        {
+            if (aBuffer.getLength() > 0)
+                aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM(
+                                        CLASSPATH_DELIMETER));
+            aBuffer.append(_userClasspath);
+        }
+        return aBuffer.makeStringAndClear();
+    }
+
+    const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
     {
         return _props;
     }

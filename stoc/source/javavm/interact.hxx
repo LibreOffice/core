@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interact.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-23 14:07:17 $
+ *  last change: $Author: sb $ $Date: 2002-12-06 10:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,74 +58,52 @@
  *
  *
  ************************************************************************/
-#ifndef _JVM_INTERACT_HXX_
-#define _JVM_INTERACT_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX_
-#include <cppuhelper/weakref.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONRETRY_HPP_
-#include <com/sun/star/task/XInteractionRetry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTION_ABORT_HPP_
-#include <com/sun/star/task/XInteractionAbort.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
-#include <com/sun/star/task/XInteractionRequest.hpp>
-#endif
+#if !defined INCLUDED_STOC_JAVAVM_INTERACT_HXX
+#define INCLUDED_STOC_JAVAVM_INTERACT_HXX
 
-#include "javavm.hxx"
+#include "com/sun/star/task/XInteractionRequest.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "cppuhelper/implbase1.hxx"
+#include "rtl/ref.hxx"
 
-using namespace ::cppu;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::uno;
-namespace stoc_javavm
+namespace com { namespace sun { namespace star { namespace task {
+    class XInteractionContinuation;
+} } } }
+
+namespace stoc_javavm {
+
+class InteractionRequest:
+    public cppu::WeakImplHelper1< com::sun::star::task::XInteractionRequest >
 {
-class InteractionAbort: public WeakImplHelper1<XInteractionAbort>
-{
-    // Holds the JavaVirtualMachine_Impl. Calls on XInteractionAbort::select
-    // in this class are delegated to JavaVirtualMachine_Impl.
-    WeakReference<XInterface> m_xJVM;
-    JavaVirtualMachine_Impl *m_pJVM;
 public:
-    InteractionAbort( const WeakReference<XInterface>& xJVM, JavaVirtualMachine_Impl* _pJVM);
-    //com.sun.star.task.XInteractionAbort
-    virtual void SAL_CALL select(  ) throw (RuntimeException);
+    explicit InteractionRequest(com::sun::star::uno::Any const & rRequest);
+
+    virtual com::sun::star::uno::Any SAL_CALL getRequest()
+        throw (com::sun::star::uno::RuntimeException);
+
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
+        com::sun::star::task::XInteractionContinuation > > SAL_CALL
+    getContinuations() throw (com::sun::star::uno::RuntimeException);
+
+    bool retry() const;
+
+private:
+    class RetryContinuation;
+
+    InteractionRequest(InteractionRequest &); // not implemented
+    void operator =(InteractionRequest); // not implemented
+
+    virtual ~InteractionRequest();
+
+    com::sun::star::uno::Any m_aRequest;
+    com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
+        com::sun::star::task::XInteractionContinuation > > m_aContinuations;
+    rtl::Reference< RetryContinuation > m_xRetryContinuation;
 };
 
-class InteractionRetry: public WeakImplHelper1<XInteractionRetry>
-{
-    // Holds the JavaVirtualMachine_Impl. Calls on XInteractionAbort::select
-    // in this class are delegated to JavaVirtualMachine_Impl.
-    WeakReference<XInterface> m_xJVM;
-    JavaVirtualMachine_Impl *m_pJVM;
-public:
-    InteractionRetry( const WeakReference<XInterface>& xJVM, JavaVirtualMachine_Impl* _pJVM);
-    //com.sun.star.task.XInteractionAbort
-    virtual void SAL_CALL select(  ) throw (RuntimeException);
-};
+}
 
-class InteractionRequest: public WeakImplHelper1<XInteractionRequest>
-{
-    // Holds the JavaVirtualMachine_Impl. Calls on XInteractionAbort::select
-    // in this class are delegated to JavaVirtualMachine_Impl.
-    WeakReference<XInterface> m_xJVM;
-    JavaVirtualMachine_Impl *m_pJVM;
-    Any m_anyRequest;
-    Sequence< Reference<XInteractionContinuation> > m_seqContinuations;
-    Sequence< Reference<XInteractionContinuation> > * m_pseqContinuations;
-
-public:
-    InteractionRequest( const Reference<XInterface>& xJVM,
-                        JavaVirtualMachine_Impl* _pJVM, Any& _request);
-    virtual Any SAL_CALL getRequest(  ) throw (RuntimeException);
-    virtual Sequence< Reference< XInteractionContinuation > >
-    SAL_CALL getContinuations(  ) throw (RuntimeException);
-};
-
-} // end namespace
-#endif
-
+#endif // INCLUDED_STOC_JAVAVM_INTERACT_HXX

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: jbu $ $Date: 2002-08-13 16:12:55 $
+#   last change: $Author: sb $ $Date: 2002-12-06 10:48:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,9 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(CPPULIB)	    	\
         $(UNOLIB)	    	\
-        $(SALLIB)
+        $(SALLIB) \
+        $(JVMACCESSLIB) \
+        $(SALHELPERLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS += advapi32.lib
