@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-10 15:04:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,16 @@
 #ifndef _SVX_PAGECTRL_HXX //autogen
 #include <svx/pagectrl.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
 #endif
-
+#ifndef _FRMATR_HXX
 #include "frmatr.hxx"
+#endif
 
 class SwColMgr;
 class SfxItemSet;
@@ -76,7 +81,7 @@ class SfxItemSet;
 /* -----------------------------08.02.2002 11:32------------------------------
 
  ---------------------------------------------------------------------------*/
-class SwPageExample : public SvxPageWindow
+class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 {
 public:
     SwPageExample(Window* pPar, const ResId& rResId ) :
@@ -89,7 +94,7 @@ public:
 
  ---------------------------------------------------------------------------*/
 class SwTextGridItem;
-class SwPageGridExample : public SwPageExample
+class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
 {
     SwTextGridItem*     pGridItem;
     sal_Bool            m_bVertical;
@@ -109,7 +114,7 @@ public:
     Beschreibung:
  --------------------------------------------------------------------*/
 
-class SwColExample : public SwPageExample
+class SW_DLLPUBLIC SwColExample : public SwPageExample
 {
     SwColMgr*   pColMgr;
 protected:
@@ -131,7 +136,7 @@ public:
 /*-----------------25.10.96 08.23-------------------
 
 --------------------------------------------------*/
-class SwColumnOnlyExample : public Window
+class SW_DLLPUBLIC SwColumnOnlyExample : public Window
 {
 private:
     Size        aWinSize;
