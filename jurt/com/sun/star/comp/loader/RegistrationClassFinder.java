@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistrationClassFinder.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-22 13:26:37 $
+ *  last change: $Author: jbu $ $Date: 2002-07-19 09:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ public class RegistrationClassFinder {
                 throw new ClassNotFoundException( "jar access failed!" );
               Resource resource = ResourceProxy.load(url, null);
               resource.loadJar(url);
+            m_context.addCargo( resource );
 
               java.io.InputStream inManifest = ResourceProxy.load(new java.net.URL(m_manifest), null).getInputStream();
             java.io.BufferedReader manifestReader = new java.io.BufferedReader(new java.io.InputStreamReader(inManifest));
