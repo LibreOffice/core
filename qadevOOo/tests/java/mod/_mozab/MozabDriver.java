@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MozabDriver.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:58 $
+ *  last change:$Date: 2003-05-27 12:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import lib.TestEnvironment;
 import lib.StatusException;
 import lib.Status;
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyValue;
 
 /**
@@ -103,7 +104,7 @@ public class MozabDriver extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)Param.getMSF().
+            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).
                 createInstance("com.sun.star.comp.sdbc.MozabDriver");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException(Status.failed("Couldn't create object"));
