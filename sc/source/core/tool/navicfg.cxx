@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navicfg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: nn $ $Date: 2000-11-16 13:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,16 @@
 
 //------------------------------------------------------------------
 
-#include <tools/stream.hxx>
-
 #include "navicfg.hxx"
-#include "cfgids.hxx"
-#include "scresid.hxx"
-#include "sc.hrc"
 
-#define SC_NAVICFG_VERSION  0
+//------------------------------------------------------------------
+
+//! #define CFGPATH_NAVIPI          "Office.Calc/Navigator"
 
 //------------------------------------------------------------------
 
 ScNavipiCfg::ScNavipiCfg() :
-    SfxConfigItem( SCCFG_NAVIPI ),
+//! ConfigItem( OUString::createFromAscii( CFGPATH_NAVIPI ) ),
     nListMode(0),
     nDragMode(0),
     nRootType(0)
@@ -88,54 +85,12 @@ ScNavipiCfg::ScNavipiCfg() :
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScNavipiCfg::Load( SvStream& rStream )
-{
-    SetDefault(FALSE);
-
-    USHORT nVer;
-    rStream >> nVer;
-    if ( nVer != SC_NAVICFG_VERSION )
-        return SfxConfigItem::WARNING_VERSION;
-
-    rStream >> nListMode;
-    rStream >> nDragMode;
-    rStream >> nRootType;
-
-    return SfxConfigItem::ERR_OK;
-}
-
-//------------------------------------------------------------------------
-
-BOOL __EXPORT ScNavipiCfg::Store( SvStream& rStream)
-{
-    rStream << (USHORT) SC_NAVICFG_VERSION;
-
-    rStream << nListMode;
-    rStream << nDragMode;
-    rStream << nRootType;
-
-//? SetDefault( FALSE );
-    return SfxConfigItem::ERR_OK;
-}
-
-//------------------------------------------------------------------------
-
-void __EXPORT ScNavipiCfg::UseDefault()
-{
-    nListMode = nDragMode = nRootType = 0;
-
-    SetDefault( TRUE );
-}
-
-
-//------------------------------------------------------------------------
-
 void ScNavipiCfg::SetListMode(USHORT nNew)
 {
     if ( nListMode != nNew )
     {
         nListMode = nNew;
-        SetDefault(FALSE);
+//!     SetModified();
     }
 }
 
@@ -144,7 +99,7 @@ void ScNavipiCfg::SetDragMode(USHORT nNew)
     if ( nDragMode != nNew )
     {
         nDragMode = nNew;
-        SetDefault(FALSE);
+//!     SetModified();
     }
 }
 
@@ -153,17 +108,8 @@ void ScNavipiCfg::SetRootType(USHORT nNew)
     if ( nRootType != nNew )
     {
         nRootType = nNew;
-        SetDefault(FALSE);
+//!     SetModified();
     }
 }
-
-//------------------------------------------------------------------------
-
-String __EXPORT ScNavipiCfg::GetName() const
-{
-    return String( ScResId( SCSTR_CFG_NAVIPI ) );
-}
-
-
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navicfg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2000-11-16 13:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,16 @@
 #ifndef SC_NAVICFG_HXX
 #define SC_NAVICFG_HXX
 
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
+#ifndef _SOLAR_H
+#include <tools/solar.h>
 #endif
+
 
 //==================================================================
 // CfgItem fuer Navigator-Zustand
 //==================================================================
 
-class ScNavipiCfg : public SfxConfigItem
+class ScNavipiCfg
 {
 private:
     USHORT  nListMode;
@@ -80,19 +81,12 @@ private:
 public:
             ScNavipiCfg();
 
-    virtual String GetName() const;
-
     void    SetListMode(USHORT nNew);
     USHORT  GetListMode() const         { return nListMode; }
     void    SetDragMode(USHORT nNew);
     USHORT  GetDragMode() const         { return nDragMode; }
     void    SetRootType(USHORT nNew);
     USHORT  GetRootType() const         { return nRootType; }
-
-protected:
-    virtual int     Load(SvStream& rStream);
-    virtual BOOL    Store(SvStream& rStream);
-    virtual void    UseDefault();
 };
 
 
