@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:24:27 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ TabDialog DLG_FLD_INSERT
     Text [ swedish ] = "Fältkommandon" ;
     Text [ danish ] = "Felter" ;
     Text [ italian ] = "Comandi di campo" ;
-    Text [ spanish ] = "Comandos de campo" ;
+    Text [ spanish ] = "Campos" ;
     Text [ french ] = "Champs" ;
     Text [ dutch ] = "Veldopdracht" ;
     Text [ portuguese ] = "Campos" ;
