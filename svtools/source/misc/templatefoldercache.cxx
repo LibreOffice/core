@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:19 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
@@ -76,6 +79,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XOFFICEINSTALLATIONDIRECTORIES_HPP_
+#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
@@ -95,6 +104,8 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include "pathoptions.hxx"
 #endif
+
+#include "comphelper/processfactory.hxx"
 
 #include <vector>
 #include <list>
@@ -386,12 +397,22 @@ namespace svt
             :public ::std::unary_function< ::vos::ORef< TemplateContent >, void >
             ,public StoreString
     {
-        StoreContentURL( SvStream& _rStorage ) : StoreString( _rStorage ) { }
+        uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
+
+        StoreContentURL( SvStream& _rStorage,
+                         const uno::Reference<
+                            util::XOfficeInstallationDirectories > &
+                                xOfficeInstDirs )
+        : StoreString( _rStorage ), m_xOfficeInstDirs( xOfficeInstDirs ) { }
 
         void operator() ( const ::vos::ORef< TemplateContent >& _rxContent ) const
         {
             // use the base class operator with the local name of the content
-            StoreString::operator() ( _rxContent->getURL() );
+            String sURL = _rxContent->getURL();
+            // #116281# Keep office installtion relocatable. Never store
+            // any direct references to office installation directory.
+            sURL = m_xOfficeInstDirs->makeRelocatableURL( sURL );
+            StoreString::operator() ( sURL );
         }
     };
 
@@ -497,6 +518,10 @@ namespace svt
         TemplateFolderContent           m_aPreviousState;   // the current state of the template dirs (as found on the HD)
         TemplateFolderContent           m_aCurrentState;    // the previous state of the template dirs (as found in the cache file)
 
+        osl::Mutex                      m_aMutex;
+        // will be lazy inited; never access directly; use getOfficeInstDirs().
+        uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
+
         SvStream*                       m_pCacheStream;
         sal_Bool                        m_bNeedsUpdate : 1;
         sal_Bool                        m_bKnowState : 1;
@@ -530,6 +555,9 @@ namespace svt
 
         // @return <TRUE/> if the states equal
         static  sal_Bool    equalStates( const TemplateFolderContent& _rLHS, const TemplateFolderContent& _rRHS );
+
+        // late initialize m_xOfficeInstDirs
+        uno::Reference< util::XOfficeInstallationDirectories > getOfficeInstDirs();
     };
 
     //---------------------------------------------------------------------
@@ -612,7 +640,7 @@ namespace svt
             ::std::for_each(
                 m_aCurrentState.begin(),
                 m_aCurrentState.end(),
-                StoreContentURL( *m_pCacheStream )
+                StoreContentURL( *m_pCacheStream, getOfficeInstDirs() )
             );
 
             // the contents
@@ -773,6 +801,9 @@ namespace svt
         {
             String sURL;
             m_pCacheStream->ReadByteString( sURL );
+            // #116281# Keep office installtion relocatable. Never store
+            // any direct references to office installation directory.
+            sURL = getOfficeInstDirs()->makeAbsoluteURL( sURL );
             m_aPreviousState.push_back( new TemplateContent( sURL ) );
         }
 
@@ -854,6 +885,50 @@ namespace svt
     //---------------------------------------------------------------------
     void TemplateFolderCacheImpl::initTemplDirs( ::std::vector< String >& _rRootDirs )
     {
+    }
+
+    //---------------------------------------------------------------------
+    uno::Reference< util::XOfficeInstallationDirectories >
+    TemplateFolderCacheImpl::getOfficeInstDirs()
+    {
+        if ( !m_xOfficeInstDirs.is() )
+        {
+            osl::MutexGuard aGuard( m_aMutex );
+            if ( !m_xOfficeInstDirs.is() )
+            {
+                // @@@ This is bad!
+                uno::Reference< lang::XMultiServiceFactory > xSMgr
+                    = comphelper::getProcessServiceFactory();
+                OSL_ENSURE( xSMgr.is(), "No service manager!" );
+
+                uno::Reference< beans::XPropertySet > xPropSet(
+                    xSMgr, uno::UNO_QUERY );
+                if ( xPropSet.is() )
+                {
+                    uno::Reference< uno::XComponentContext > xCtx;
+                    xPropSet->getPropertyValue(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                    >>= xCtx;
+
+                    OSL_ENSURE( xCtx.is(),
+                                "Unable to obtain component context from service manager!" );
+
+                    if ( xCtx.is() )
+                    {
+                        xCtx->getValueByName(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "/singletons/com.sun.star.util.theOfficeInstallationDirectories" ) ) )
+                        >>= m_xOfficeInstDirs;
+                    }
+
+                    OSL_ENSURE( m_xOfficeInstDirs.is(),
+                                "Unable to obtain office directories singleton!" );
+
+                }
+            }
+        }
+        return m_xOfficeInstDirs;
     }
 
     //=====================================================================
