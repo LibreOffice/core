@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 19:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         bRefInputMode   ( FALSE ),
-        bAutoReOpen     ( TRUE )
+        bAutoReOpen     ( TRUE ),
+        bCloseOnButtonUp( FALSE )
 {
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
@@ -175,6 +176,8 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         String aRefStr;
         theCurArea.Format( aRefStr, ABS_DREF3D, pDoc );
         aEdAssign.SetRefString( aRefStr );
+
+        aChangeHdl.Call( &aRefStr );
     }
 }
 
@@ -218,6 +221,19 @@ void ScSimpleRefDlg::SetCloseHdl( const Link& rLink )
     aCloseHdl=rLink;
 }
 
+void ScSimpleRefDlg::SetUnoLinks( const Link& rDone, const Link& rAbort,
+                                    const Link& rChange )
+{
+    aDoneHdl    = rDone;
+    aAbortedHdl = rAbort;
+    aChangeHdl  = rChange;
+}
+
+void ScSimpleRefDlg::SetFlags( BOOL bSetCloseOnButtonUp )
+{
+    bCloseOnButtonUp = bSetCloseOnButtonUp;
+}
+
 void ScSimpleRefDlg::StartRefInput()
 {
     aRbAssign.DoRef();
@@ -227,7 +243,8 @@ void ScSimpleRefDlg::StartRefInput()
 void ScSimpleRefDlg::RefInputDone( BOOL bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
-    if(bForced && bCloseFlag) OkBtnHdl(&aBtnOk);
+    if ( (bForced || bCloseOnButtonUp) && bCloseFlag )
+        OkBtnHdl(&aBtnOk);
 }
 //------------------------------------------------------------------------
 // Handler:
@@ -237,7 +254,9 @@ IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
     bAutoReOpen=FALSE;
     String aResult=aEdAssign.GetText();
     aCloseHdl.Call(&aResult);
+    Link aUnoLink = aDoneHdl;       // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
+    aUnoLink.Call( &aResult );
     return 0;
 }
 
@@ -245,8 +264,11 @@ IMPL_LINK( ScSimpleRefDlg, OkBtnHdl, void *, EMPTYARG )
 IMPL_LINK( ScSimpleRefDlg, CancelBtnHdl, void *, EMPTYARG )
 {
     bAutoReOpen=FALSE;
+    String aResult=aEdAssign.GetText();
     aCloseHdl.Call(NULL);
+    Link aUnoLink = aAbortedHdl;    // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
+    aUnoLink.Call( &aResult );
     return 0;
 }
 
