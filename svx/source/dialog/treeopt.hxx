@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:00:55 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ private:
     SfxItemSet*     CreateItemSet( USHORT nId );
     void            ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
     void            Initialize();
+    void            ResizeTreeLB( void );   // resizes dialog so that treelistbox has no horizontal scroll bar
 
 protected:
         DECL_LINK(ExpandedHdl_Impl, SvTreeListBox* );
