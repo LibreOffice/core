@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 15:12:35 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 18:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,9 @@ SdXMLGenericPageContext::~SdXMLGenericPageContext()
 void SdXMLGenericPageContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     GetImport().GetShapeImport()->pushGroupForSorting( mxShapes );
-    GetImport().GetFormImport()->startPage( uno::Reference< drawing::XDrawPage >::query( mxShapes ) );
+
+    if( GetImport().IsFormsSupported() )
+        GetImport().GetFormImport()->startPage( uno::Reference< drawing::XDrawPage >::query( mxShapes ) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -128,7 +130,8 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
     }
     else if( nPrefix == XML_NAMESPACE_OFFICE && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_forms ) ) )
     {
-        pContext = GetImport().GetFormImport()->createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
+        if( GetImport().IsFormsSupported() )
+            pContext = GetImport().GetFormImport()->createOfficeFormsContext( GetImport(), nPrefix, rLocalName );
     }
     else
     {
@@ -149,5 +152,7 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
 void SdXMLGenericPageContext::EndElement()
 {
     GetImport().GetShapeImport()->popGroupAndSort();
-    GetImport().GetFormImport()->endPage();
+
+    if( GetImport().IsFormsSupported() )
+        GetImport().GetFormImport()->endPage();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-24 11:36:10 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 18:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,13 +1271,16 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         DBG_ASSERT( maFormId.getLength(), "draw:control without a form:id attribute!" );
         if( maFormId.getLength() )
         {
-            uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
-            if( xControlModel.is() )
+            if( GetImport().IsFormsSupported() )
             {
-                uno::Reference< drawing::XControlShape > xControl( mxShape, uno::UNO_QUERY );
-                if( xControl.is() )
-                    xControl->setControl(  xControlModel );
+                uno::Reference< awt::XControlModel > xControlModel( GetImport().GetFormImport()->lookupControl( maFormId ), uno::UNO_QUERY );
+                if( xControlModel.is() )
+                {
+                    uno::Reference< drawing::XControlShape > xControl( mxShape, uno::UNO_QUERY );
+                    if( xControl.is() )
+                        xControl->setControl(  xControlModel );
 
+                }
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-26 10:52:45 $
+ *  last change: $Author: thb $ $Date: 2001-04-26 18:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 
 #ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 #include "DocumentSettingsContext.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/form/XFormsSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
@@ -594,6 +598,10 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     mxDocDrawPages = mxDocDrawPages.query( xDrawPagesSupplier->getDrawPages() );
     if(!mxDocDrawPages.is())
         throw lang::IllegalArgumentException();
+
+    uno::Reference< form::XFormsSupplier > xFormsSupp;
+    mxDocDrawPages->getByIndex(0) >>= xFormsSupp;
+    mbIsFormsSupported = xFormsSupp.is();
 }
 
 // XInitialization
