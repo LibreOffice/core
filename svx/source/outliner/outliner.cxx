@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-01 11:40:44 $
+ *  last change: $Author: mt $ $Date: 2001-08-08 15:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <outlundo.hxx>
 #include <eeitem.hxx>
 #include <editstat.hxx>
+#include <scripttypeitem.hxx>
 
 #ifndef _EDITOBJ_HXX //autogen
 #include <editobj.hxx>
@@ -1096,7 +1097,9 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         Size aFontSz( 0, rFH.GetHeight() );
                         aFontSz.Height() /= 5;
 
-                        Font aNewFont( System::_GetStandardFont( _STDFONT_SWISS ) );
+                        LanguageType eLang = pEditEngine->GetDefaultLanguage();
+                        // USHORT nScriptType = GetScriptTypeOfLanguage( eLang );
+                        Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
                         aNewFont.SetSize( aFontSz );
                         aNewFont.SetAlign( ALIGN_BOTTOM );
                         aNewFont.SetVertical( bVertical );
