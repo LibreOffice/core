@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:26:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,40 @@
 					<author>AW</author>
 					<desc>Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
 					<label>Show Undo-Stack Delete Warning</label>
+				</info>
+				<value>true</value>
+			</prop>
+
+			<prop oor:name="PreviewNewEffects" oor:type="xs:boolean">
+				<!-- OldPath: -->
+				<!-- OldLocation: -->
+				<!-- UIHints: automatic preview checkbox in create new effect dialog -->
+				<info>
+					<author>CL</author>
+					<desc>Indicates whether a selected effect in the custom animation create dialog should be previewed.</desc>
+					<label>Automatic preview for new custom animation</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="PreviewChangedEffects" oor:type="xs:boolean">
+				<!-- OldPath: -->
+				<!-- OldLocation: -->
+				<!-- UIHints: automatic preview in custom animation panel -->
+				<info>
+					<author>CL</author>
+					<desc>Indicates whether changes in the custom animation panel should be previewed.</desc>
+					<label>Automatic preview for custom animation panel</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="PreviewTransitions" oor:type="xs:boolean">
+				<!-- OldPath: -->
+				<!-- OldLocation: -->
+				<!-- UIHints: automatic preview in slide transtion panel -->
+				<info>
+					<author>CL</author>
+					<desc>Indicates whether changes in the slide transition panel should be previewed.</desc>
+					<label>Automatic preview for slide transition panel</label>
 				</info>
 				<value>true</value>
 			</prop>
