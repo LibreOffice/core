@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjre.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:52:03 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ public:
     virtual char const* const* getRuntimePaths(int * size);
     virtual char const* const* getLibraryPaths(int* size);
 
+    virtual int compareVersions(const rtl::OUString& sSecond) const;
 };
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjre.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:51:49 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,13 @@
 
 #include "osl/thread.h"
 #include "sunjre.hxx"
+#include "sunversion.hxx"
+#include "diagnostics.h"
 
 using namespace rtl;
 using namespace std;
 
-
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin
 {
 
@@ -123,6 +125,26 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 #endif
     size = 0;
     return NULL;
+}
+
+int SunInfo::compareVersions(const rtl::OUString& sSecond) const
+{
+    OUString sFirst = getVersion();
+
+    SunVersion version1(sFirst);
+    JFW_ENSURE(version1, OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION
+                               " does not know the version: ")
+               + sFirst + OUSTR(" as valid for a SUN JRE."));
+    SunVersion version2(sSecond);
+    if ( ! version2)
+        throw MalformedVersionException();
+
+    if(version1 == version2)
+        return 0;
+    if(version1 > version2)
+        return 1;
+    else
+        return -1;
 }
 
 
