@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAcceptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:34 $
+ *  last change: $Author: jbu $ $Date: 2001-10-12 16:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,25 +69,30 @@
 
 module com {  module sun {  module star {  module connection {
 
-/** @missing
+/** allows to passivly accept connection attempts from other processes.
+
+    <p>
+    This is the counterpart to the XConnector interface.
  */
 interface XAcceptor: com::sun::star::uno::XInterface
 {
     // DocMerge from xml: method com::sun::star::connection::XAcceptor::accept
     /** accepts an interprocess connection. Waits until someone connects to the resource.
         <p>
-           After a successful return, the method may be called again to accept
-           further connections, but the parameter string MUST be left unchanged.
+        After a successful return, the method may be called again to accept
+        further connections, but the parameter string MUST be left unchanged.
+
 
        @param sConnectionDescription contains the kind of the connection plus a
               comma seperated list of attributes.
               e.g. <em>socket,host=locahost,port=2345</em> for a tcpip connection.
 
-       @return empty XConnection-reference, when stopAccepting was called
+       @return null reference, stopAccepting was called. Otherwise a valid XConnection
+               reference.
 
        @throws AlreadyAcceptingException Only one acceptor-thread per instance allowed.
        @throws ConnectionSetupException  Problems during setting up the acceptor.
-                                         (e.g. Security-reasons, socket already busy .. )
+                                         (e.g. Security-reasons, socket already busy, etc. )
        @throws com::sun::star::lang::IllegalArgumentException
                   sConnectionDescription could not be interpreted
 
@@ -98,7 +103,6 @@ interface XAcceptor: com::sun::star::uno::XInterface
                 com::sun::star::lang::IllegalArgumentException);
 
 
-    // DocMerge from xml: method com::sun::star::connection::XAcceptor::stopAccepting
     /** pushes acceptor out of the accept-call.
      */
     void stopAccepting();

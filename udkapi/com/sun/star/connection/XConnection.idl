@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:34 $
+ *  last change: $Author: jbu $ $Date: 2001-10-12 16:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,43 +66,57 @@
 
 module com {  module sun {  module star {  module connection {
 
-/** @missing
+/** A bidirectional bytestream.
+
+    <p> You should additionally implement XConnection2.
+
+    @see XConnection2
  */
 interface XConnection: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::connection::XConnection::read
-    /** blocking.
+    /** reads a requested number of bytes from the connection.
+        <p> This method is blocking, meaning that it  always returns a bytesequence
+        with the requested number of bytes unless it has reached end of file (which
+        often means, that close() has been called).
 
-        @incomplete
+        <p> please see also the readSomeBytes() method of XConnection2.
+
+        @return The read number of bytes. The return value and the length of the
+                returned sequence must be identical.
+        @param nBytesToRead
+                The number of bytes to be read from the stream.
+
+        @throws com::sun::star::io::IOException
+               in case an error occured during reading from the stream.
      */
     long read( [out] sequence < byte > aReadBytes , [in] long nBytesToRead )
             raises( com::sun::star::io::IOException );
 
 
     // DocMerge from xml: method com::sun::star::connection::XConnection::write
-    /** blocking.
+    /** writes the given bytesequence to the stream.
+        <p>The method blocks until the whole sequence is written.
 
-        @incomplete
+        @throws com::sun::star::io::IOException
+               in case an error occured during writing to the stream.
      */
     void write( [in] sequence < byte > aData )
         raises( com::sun::star::io::IOException );
 
 
-    /** @missing
+    /** Empties all internal buffers.
      */
     void flush( )
             raises( com::sun::star::io::IOException );
 
-
-    // DocMerge from xml: method com::sun::star::connection::XConnection::close
     /** Immeadiatly terminates any ongoing read or write calls.
+        All subsequent read or write calls()
      */
     void close( )
             raises( com::sun::star::io::IOException );
 
 
-    // DocMerge from xml: method com::sun::star::connection::XConnection::getDescription
     /** A unique string describing the connection.
 
         <p>This string is different from the arguments to <member>XConnection::accept</member>
