@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentsignaturehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-18 08:03:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,33 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
             {
                 ; // Doesn't have to exist...
             }
+            // 3) OLE....
+            aSubStorageName = rtl::OUString::createFromAscii( "ObjectReplacements" );
+            try
+            {
+                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
+                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+                xSubStore.clear();
+
+                // Object folders...
+                rtl::OUString aMatchStr( rtl::OUString::createFromAscii( "Object " ) );
+                uno::Reference < container::XNameAccess > xElements( rxStore, uno::UNO_QUERY );
+                uno::Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
+                sal_Int32 nElements = aElementNames.getLength();
+                const ::rtl::OUString* pNames = aElementNames.getConstArray();
+                for ( sal_Int32 n = 0; n < nElements; n++ )
+                {
+                    if ( ( pNames[n].match( aMatchStr ) ) && rxStore->isStorageElement( pNames[n] ) )
+                    {
+                        uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
+                        ImplFillElementList( aElements, xSubStore, pNames[n]+aSep, true );
+                    }
+                }
+            }
+            catch( com::sun::star::io::IOException& )
+            {
+                ; // Doesn't have to exist...
+            }
         }
         break;
         case SignatureModeMacros:
@@ -147,6 +174,17 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
 
             // 2) Dialogs
             aSubStorageName = rtl::OUString::createFromAscii( "Dialogs") ;
+            try
+            {
+                uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
+                ImplFillElementList( aElements, xSubStore, aSubStorageName+aSep, true );
+            }
+            catch( com::sun::star::io::IOException& )
+            {
+                ; // Doesn't have to exist...
+            }
+            // 3) Scripts
+            aSubStorageName = rtl::OUString::createFromAscii( "Scripts") ;
             try
             {
                 uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, embed::ElementModes::READ );
