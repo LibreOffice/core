@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 13:29:17 $
+ *  last change: $Author: aw $ $Date: 2002-04-08 10:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@
 #include <svx/svditer.hxx>
 #endif
 
-// #98198#
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+// #98533#
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
 #endif
 
 TYPEINIT0( FuPoor );
@@ -824,30 +824,23 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
             {
-                // is the character a printable one?
-                SvtSysLocale aSysLocale;
-                const CharClass& rCharClass = aSysLocale.GetCharClass();
-                String aCharString(rKEvt.GetCharCode());
+                // #98533# use common IsSimpleCharInput from
+                // the EditEngine.
+                sal_Bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
 
-                if(aCharString.Len())
+                if(bPrintable)
                 {
-                    sal_Int32 nCharType = rCharClass.getCharacterType(aCharString, 0);
-                    sal_Bool bPrintable(0 != (nCharType & ::com::sun::star::i18n::KCharacterType::PRINTABLE));
+                    // try to activate textedit mode for the selected object
+                    SfxStringItem aInputString(SID_ATTR_CHAR, String(rKEvt.GetCharCode()));
 
-                    if(bPrintable)
-                    {
-                        // try to activate textedit mode for the selected object
-                        SfxStringItem aInputString(SID_ATTR_CHAR, aCharString);
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                        SID_ATTR_CHAR,
+                        SFX_CALLMODE_ASYNCHRON,
+                        &aInputString,
+                        0L);
 
-                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_ATTR_CHAR,
-                            SFX_CALLMODE_ASYNCHRON,
-                            &aInputString,
-                            0L);
-
-                        // consumed
-                        bReturn = TRUE;
-                    }
+                    // consumed
+                    bReturn = TRUE;
                 }
             }
         }
