@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:18:42 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@
 #endif
 
 
-#pragma hdrstop
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
