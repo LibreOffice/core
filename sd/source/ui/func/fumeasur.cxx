@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumeasur.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:09:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,16 +104,17 @@ FuMeasureDlg::FuMeasureDlg (
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
+    ::std::auto_ptr<AbstractSfxSingleTabDialog> pDlg (NULL);
     if( !pArgs )
     {
         //CHINA001 SvxMeasureDialog* pDlg = new SvxMeasureDialog( NULL, aNewAttr, pView );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
-        AbstractSfxSingleTabDialog * pDlg = pFact->CreateSfxSingleTabDialog( NULL,
-                    aNewAttr,
-                    pView,
-                    ResId(RID_SVXPAGE_MEASURE));
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        pDlg.reset (pFact->CreateSfxSingleTabDialog( NULL,
+                aNewAttr,
+                pView,
+                ResId(RID_SVXPAGE_MEASURE)));
+        DBG_ASSERT(pDlg.get()!=NULL, "Dialogdiet fail!");//CHINA001
 
         USHORT nResult = pDlg->Execute();
 
@@ -127,12 +128,8 @@ FuMeasureDlg::FuMeasureDlg (
             break;
 
             default:
-            {
-                delete( pDlg );
-            }
-            return; // Abbruch
+                return; // Abbruch
         }
-        delete( pDlg );
     }
     pView->SetAttributes( *pArgs );
 }
