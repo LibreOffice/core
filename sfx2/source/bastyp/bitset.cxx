@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-23 13:47:36 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "bitset.hxx"
 
