@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-04 15:52:50 $
+ *  last change: $Author: tbe $ $Date: 2002-09-12 09:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,9 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, p
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
         {
+            // #103087# to prevent an early release of the component
+            uno::Reference< accessibility::XAccessibleContext > xTmp = this;
+
             ULONG nCount = Application::ReleaseSolarMutex();
             ProcessWindowChildEvent( *(VclWindowEvent*)pEvent );
             Application::AcquireSolarMutex( nCount );
