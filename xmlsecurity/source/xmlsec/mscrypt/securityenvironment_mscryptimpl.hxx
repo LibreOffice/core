@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-19 11:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,14 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATECHARACTERS_HDL_
+#include <com/sun/star/security/CertificateCharacters.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HDL_
+#include <com/sun/star/security/CertificateValidity.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -159,6 +167,9 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromRaw( const ::com::sun::star::uno::Sequence< sal_Int8 >& rawCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii( const ::rtl::OUString& asciiCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+
+    virtual ::sal_Int32 SAL_CALL verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+    virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 
         //Methods from XInitialization
         virtual void SAL_CALL initialize(

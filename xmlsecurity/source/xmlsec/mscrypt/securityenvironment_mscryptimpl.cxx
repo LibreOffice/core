@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: mmi $ $Date: 2004-07-19 11:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,6 +884,333 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFr
     xmlFree( chCert ) ;
 
     return createCertificateFromRaw( rawCert ) ;
+}
+
+sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+    sal_Int32 validity ;
+    PCCERT_CHAIN_CONTEXT pChainContext ;
+    PCCERT_CONTEXT pCertContext ;
+    const X509Certificate_MSCryptImpl* xcert ;
+    FILETIME fTime ;
+    DWORD chainStatus ;
+
+    CERT_ENHKEY_USAGE   enhKeyUsage ;
+    CERT_USAGE_MATCH    certUsage ;
+    CERT_CHAIN_PARA     chainPara ;
+
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
+    if( !xCertTunnel.is() ) {
+        throw RuntimeException() ;
+    }
+
+    xcert = ( X509Certificate_MSCryptImpl* )xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ) ;
+    if( xcert == NULL ) {
+        throw RuntimeException() ;
+    }
+
+    pCertContext = xcert->getMswcryCert() ;
+
+    //Get the current system time.
+    GetSystemTimeAsFileTime( &fTime ) ;
+
+    /*-
+     * Build and validate the certificate
+     */
+    enhKeyUsage.cUsageIdentifier = 0 ;
+    enhKeyUsage.rgpszUsageIdentifier = NULL ;
+    certUsage.dwType = USAGE_MATCH_TYPE_AND ;
+    certUsage.Usage = enhKeyUsage ;
+    chainPara.cbSize = sizeof( CERT_CHAIN_PARA ) ;
+    chainPara.RequestedUsage = certUsage ;
+
+    pChainContext = NULL ;
+
+    //Above all, we try to find the certificate in the given key store.
+    if( pCertContext != NULL ) {
+        if( !CertGetCertificateChain(
+                NULL ,
+                pCertContext ,
+                &fTime ,
+                m_hKeyStore ,
+                &chainPara ,
+                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+                NULL ,
+                &pChainContext
+            )
+        ) {
+            pChainContext = NULL ;
+        }
+    }
+
+    //firstly, we try to find the certificate in the given cert store.
+    if( pCertContext != NULL && pChainContext != NULL ) {
+        if( !CertGetCertificateChain(
+                NULL ,
+                pCertContext ,
+                &fTime ,
+                m_hCertStore ,
+                &chainPara ,
+                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+                NULL ,
+                &pChainContext
+            )
+        ) {
+            pChainContext = NULL ;
+        }
+    }
+
+    //Secondly, we try to find certificate from system default system store.
+    if( pCertContext != NULL && pChainContext != NULL ) {
+        HCERTSTORE hCollectionStore ;
+
+        hCollectionStore = CertOpenStore(
+                CERT_STORE_PROV_COLLECTION ,
+                0 ,
+                NULL ,
+                0 ,
+                NULL
+            ) ;
+
+        if( hCollectionStore != NULL ) {
+            HCERTSTORE hSystemStore ;
+
+            //Add system key store to the collection.
+            hSystemStore = CertOpenSystemStore( 0, "MY" ) ;
+            if( hSystemStore != NULL ) {
+                CertAddStoreToCollection (
+                    hCollectionStore ,
+                    hSystemStore ,
+                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                    1
+                ) ;
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+            }
+
+            //Add system root store to the collection.
+            hSystemStore = CertOpenSystemStore( 0, "Root" ) ;
+            if( hSystemStore != NULL ) {
+                CertAddStoreToCollection (
+                    hCollectionStore ,
+                    hSystemStore ,
+                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                    2
+                ) ;
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+            }
+
+            //Add system trust store to the collection.
+            hSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
+            if( hSystemStore != NULL ) {
+                CertAddStoreToCollection (
+                    hCollectionStore ,
+                    hSystemStore ,
+                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                    3
+                ) ;
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+            }
+
+            //Add system CA store to the collection.
+            hSystemStore = CertOpenSystemStore( 0, "CA" ) ;
+            if( hSystemStore != NULL ) {
+                CertAddStoreToCollection (
+                    hCollectionStore ,
+                    hSystemStore ,
+                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                    4
+                ) ;
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+            }
+
+            //Get the chain from the collection store.
+            if( !CertGetCertificateChain(
+                    NULL ,
+                    pCertContext ,
+                    &fTime ,
+                    hCollectionStore ,
+                    &chainPara ,
+                    CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+                    NULL ,
+                    &pChainContext
+                )
+            ) {
+                pChainContext = NULL ;
+            }
+
+            CertCloseStore( hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+        }
+    }
+
+    if( pChainContext != NULL ) {
+        chainStatus = pChainContext->TrustStatus.dwErrorStatus ;
+        CertFreeCertificateChain( pChainContext ) ;
+
+        if( chainStatus == CERT_TRUST_NO_ERROR ) {
+            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_VALID ;
+        } else {
+            validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_VALID ) == CERT_TRUST_IS_NOT_TIME_VALID ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_TIMEOUT ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_NESTED ) == CERT_TRUST_IS_NOT_TIME_NESTED ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_TIMEOUT ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_IS_REVOKED ) == CERT_TRUST_IS_REVOKED ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_REVOKED ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_IS_OFFLINE_REVOCATION ) == CERT_TRUST_IS_OFFLINE_REVOCATION ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_REVOKED ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_IS_NOT_SIGNATURE_VALID ) == CERT_TRUST_IS_NOT_SIGNATURE_VALID ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_SIGNATURE_INVALID ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_IS_UNTRUSTED_ROOT ) == CERT_TRUST_IS_UNTRUSTED_ROOT ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_ROOT_UNTRUSTED ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) == CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_UNKNOWN_REVOKATION ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_INVALID_EXTENSION ) == CERT_TRUST_INVALID_EXTENSION ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_EXTENSION_INVALID ;
+        }
+
+        if( ( chainStatus & CERT_TRUST_IS_PARTIAL_CHAIN ) == CERT_TRUST_IS_PARTIAL_CHAIN ) {
+            validity |= ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_CHAIN_INCOMPLETE ;
+        }
+    } else {
+        validity = ::com::sun::star::security::CertificateValidity::CERT_VALIDITY_INVALID ;
+    }
+
+    return validity ;
+}
+
+sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
+    sal_Int32 characters ;
+    PCCERT_CONTEXT pCertContext ;
+    const X509Certificate_MSCryptImpl* xcert ;
+
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
+    if( !xCertTunnel.is() ) {
+        throw RuntimeException() ;
+    }
+
+    xcert = ( X509Certificate_MSCryptImpl* )xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ) ;
+    if( xcert == NULL ) {
+        throw RuntimeException() ;
+    }
+
+    pCertContext = xcert->getMswcryCert() ;
+
+    characters = 0x00000000 ;
+
+    //Firstly, make sentence whether or not the cert is self-signed.
+    if( CertCompareCertificateName( X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, &(pCertContext->pCertInfo->Subject), &(pCertContext->pCertInfo->Issuer) ) ) {
+        characters |= ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+    } else {
+        characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_SELF_SIGNED ;
+    }
+
+    //Secondly, make sentence whether or not the cert has a private key.
+    {
+        BOOL    fCallerFreeProv ;
+        DWORD   dwKeySpec ;
+        HCRYPTPROV  hProv ;
+        if( CryptAcquireCertificatePrivateKey( pCertContext ,
+                   0 ,
+                   NULL ,
+                   &( hProv ) ,
+                   &( dwKeySpec ) ,
+                   &( fCallerFreeProv ) )
+        ) {
+            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+
+            if( hProv != NULL && fCallerFreeProv )
+                CryptReleaseContext( hProv, 0 ) ;
+        } else {
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ;
+        }
+    }
+
+    //Thirdly, make sentence whether or not the cert is trusted.
+    {
+        HCERTSTORE hCollectionStore ;
+        PCCERT_CONTEXT pTempCert ;
+
+        hCollectionStore = CertOpenStore(
+                CERT_STORE_PROV_COLLECTION ,
+                0 ,
+                NULL ,
+                0 ,
+                NULL
+            ) ;
+
+        if( hCollectionStore != NULL ) {
+            HCERTSTORE hSystemStore ;
+
+            //Add system key store to the collection.
+            hSystemStore = CertOpenSystemStore( 0, "MY" ) ;
+            if( hSystemStore != NULL ) {
+                CertAddStoreToCollection (
+                    hCollectionStore ,
+                    hSystemStore ,
+                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                    1
+                ) ;
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+            }
+
+            //Add system root store to the collection.
+            hSystemStore = CertOpenSystemStore( 0, "Root" ) ;
+            if( hSystemStore != NULL ) {
+                CertAddStoreToCollection (
+                    hCollectionStore ,
+                    hSystemStore ,
+                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                    2
+                ) ;
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+            }
+
+            //Add system trust store to the collection.
+            hSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
+            if( hSystemStore != NULL ) {
+                CertAddStoreToCollection (
+                    hCollectionStore ,
+                    hSystemStore ,
+                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                    3
+                ) ;
+                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+            }
+
+            //Find the cert in the collection store.
+            pTempCert = CertFindCertificateInStore(
+                hCollectionStore ,
+                X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
+                0 ,
+                CERT_FIND_SUBJECT_NAME,
+                &( pCertContext->pCertInfo->Subject ) ,
+                NULL
+            ) ;
+
+            if( pTempCert != NULL && CertCompareCertificate( X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pCertContext->pCertInfo, pTempCert->pCertInfo ) ) {
+                characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            } else {
+                characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            }
+        }
+    }
+
+    return characters ;
 }
 
 void SecurityEnvironment_MSCryptImpl :: enableDefaultCrypt( sal_Bool enable ) throw( Exception, RuntimeException ) {
