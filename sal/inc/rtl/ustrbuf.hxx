@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 15:24:23 $
+ *  last change: $Author: sb $ $Date: 2001-10-15 07:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,12 +171,17 @@ public:
         rtl_uStringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
 
-    /**
-        Release the string own string data and notice and acquire the string data of value.
+    /** Assign to this a copy of value.
      */
     OUStringBuffer& operator = ( const OUStringBuffer& value )
     {
-        rtl_uString_assign( &pData, value.pData );
+        if (this != &value)
+        {
+            rtl_uStringbuffer_newFromStringBuffer(&pData,
+                                                  value.nCapacity,
+                                                  value.pData);
+            nCapacity = value.nCapacity;
+        }
         return *this;
     }
 

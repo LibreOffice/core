@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strbuf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 15:24:15 $
+ *  last change: $Author: sb $ $Date: 2001-10-15 07:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,12 +168,17 @@ public:
         rtl_stringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
 
-    /**
-        Release the string own string data and notice and acquire the string data of value.
+    /** Assign to this a copy of value.
      */
     OStringBuffer& operator = ( const OStringBuffer& value )
     {
-        rtl_string_assign( &pData, value.pData );
+        if (this != &value)
+        {
+            rtl_stringbuffer_newFromStringBuffer(&pData,
+                                                  value.nCapacity,
+                                                  value.pData);
+            nCapacity = value.nCapacity;
+        }
         return *this;
     }
 
