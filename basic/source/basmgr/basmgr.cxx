@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-27 12:31:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ BasicManagerImpl::~BasicManagerImpl()
     {
         for( sal_Int32 i = 0 ; i < mnLibStreamCount ; i++ )
             delete mppLibStreams[i];
-        delete mppLibStreams;
+        delete[] mppLibStreams;
     }
 }
 
@@ -2608,8 +2608,8 @@ Type ModuleContainer_Impl::getElementType()
 sal_Bool ModuleContainer_Impl::hasElements()
     throw(RuntimeException)
 {
-    SbxArray* pMods = mpLib->GetModules();
-    sal_Bool bRet = (pMods->Count() > 0);
+    SbxArray* pMods = mpLib ? mpLib->GetModules() : NULL;
+    sal_Bool bRet = pMods ? (pMods->Count() > 0) : sal_False;
     return bRet;
 }
 
@@ -2617,7 +2617,7 @@ sal_Bool ModuleContainer_Impl::hasElements()
 Any ModuleContainer_Impl::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    SbModule* pMod = mpLib->FindModule( aName );
+    SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
     if( !pMod )
         throw NoSuchElementException();
     Reference< XStarBasicModuleInfo > xMod = (XStarBasicModuleInfo*)new ModuleInfo_Impl
@@ -2630,8 +2630,8 @@ Any ModuleContainer_Impl::getByName( const OUString& aName )
 Sequence< OUString > ModuleContainer_Impl::getElementNames()
     throw(RuntimeException)
 {
-    SbxArray* pMods = mpLib->GetModules();
-    USHORT nMods = pMods->Count();
+    SbxArray* pMods = mpLib ? mpLib->GetModules() : NULL;
+    USHORT nMods = pMods ? pMods->Count() : 0;
     Sequence< OUString > aRetSeq( nMods );
     OUString* pRetSeq = aRetSeq.getArray();
     for( USHORT i = 0 ; i < nMods ; i++ )
@@ -2645,7 +2645,7 @@ Sequence< OUString > ModuleContainer_Impl::getElementNames()
 sal_Bool ModuleContainer_Impl::hasByName( const OUString& aName )
     throw(RuntimeException)
 {
-    SbModule* pMod = mpLib->FindModule( aName );
+    SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
     sal_Bool bRet = (pMod != NULL);
     return bRet;
 }
@@ -2676,7 +2676,7 @@ void ModuleContainer_Impl::insertByName( const OUString& aName, const Any& aElem
 void ModuleContainer_Impl::removeByName( const OUString& Name )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    SbModule* pMod = mpLib->FindModule( Name );
+    SbModule* pMod = mpLib ? mpLib->FindModule( Name ) : NULL;
     if( !pMod )
         throw NoSuchElementException();
     mpLib->Remove( pMod );

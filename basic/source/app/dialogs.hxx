@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ public:
     ReplaceDialog (Window*, const ResId&, String&, String&);
 };
 
+////////////////////////////////////////////////////////////////////
+
 class ConfEdit : public PushButton
 {
     FixedText aText;
@@ -155,6 +157,7 @@ class ConfEdit : public PushButton
 public:
     ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN );
     void Save( Config &aConf );
+    void Reload( Config &aConf );
     void Click();
 };
 
@@ -177,20 +180,55 @@ public:
     DECL_LINK( ActivatePageHdl, TabControl * );
 };
 
-class SpecialOptions : public TabPage
+class ProfileOptions : public TabPage
 {
+    FixedLine aFlProfile;
+    ComboBox aCbProfile;
+    PushButton aPbNewProfile;
+    PushButton aPbDelProfile;
+
     FixedLine aDirs;
     ConfEdit aLog;
     ConfEdit aBasis;
     ConfEdit aHID;
+
+    CheckBox aAutoReload;
+    CheckBox aAutoSave;
+    CheckBox aStopOnSyntaxError;
+
+    Config aConf;
+
+    void LoadData();
+
+    DECL_LINK( Select, ComboBox* );
+    DECL_LINK( DelProfile, Button* );
+    DECL_LINK( NewProfile, Button* );
+    DECL_LINK( CheckButtonsHdl, ComboBox* );
+
+    void ReloadProfile();
+
+public:
+    ProfileOptions( Window* );
+    void Save();
+};
+
+class MiscOptions : public TabPage
+{
+    FixedLine aFLCommunication;
+    FixedText aFTHost;
+    Edit aEDHost;
+    FixedText aFTTTPort;
+    NumericField aNFTTPort;
+    FixedText aFTUNOPort;
+    NumericField aNFUNOPort;
     FixedLine aOther;
     FixedText aTimeoutText;
     TimeField aServerTimeout;
-    CheckBox aAutoReload;
-    CheckBox aAutoSave;
+    FixedText aFTLRU;
+    NumericField aTFMaxLRU;
 
 public:
-    SpecialOptions( Window* );
+    MiscOptions( Window* );
     void Save();
 };
 
@@ -222,8 +260,8 @@ public:
 
 
 DECLARE_LIST( StringList, String * );
-#define C_KEY_ALLE          CByteString("Alle")
-#define C_KEY_AKTUELL       CByteString("Aktuell")
+#define C_KEY_ALLE          CByteString("All")
+#define C_KEY_AKTUELL       CByteString("Current")
 #define C_KEY_DELETE        CByteString("Deleted Groups")
 
 class GenericOptions : public TabPage
@@ -246,8 +284,6 @@ class GenericOptions : public TabPage
     String ReadKey( const ByteString &aGroup, const ByteString &aKey );
     BOOL HasKey( Config &aConfig, const ByteString &aKey );
 
-    void LoadValues();
-
     StringList* GetAllGroups();
     void LoadData();
 
@@ -257,8 +293,6 @@ class GenericOptions : public TabPage
     DECL_LINK( DelValue, Button* );
     DECL_LINK( NewValue, Button* );
     DECL_LINK( CheckButtonsHdl, ComboBox* );
-
-    void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB );
 
 public:
     GenericOptions( Window* );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-09 10:29:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,7 @@
 
 #include <stdlib.h>
 #include <svtools/sbx.hxx>
-#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
-#endif
+#include <rtl/math.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
 #include "sbintern.hxx"
@@ -80,7 +78,6 @@ void SbiRuntime::StepLOADNC( USHORT nOp1 )
     SbxVariable* p = new SbxVariable( SbxDOUBLE );
 
     // #57844 Lokalisierte Funktion benutzen
-    int nErrno;
     String aStr = pImg->GetString( nOp1 );
     // Auch , zulassen !!!
     USHORT iComma = aStr.Search( ',' );
@@ -92,7 +89,7 @@ void SbiRuntime::StepLOADNC( USHORT nOp1 )
         aStr += '.';
         aStr += aStr2;
     }
-    double n = SolarMath::StringToDouble( aStr.GetBuffer(), ',', '.', nErrno );
+    double n = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
 
     p->PutDouble( n );
     PushVar( p );

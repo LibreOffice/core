@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: gh $ $Date: 2002-12-02 15:35:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,14 @@ using namespace com::sun::star::beans;
 // filter Messages generated due to missing configuration  Bug:#83887#
 void TestToolDebugMessageFilter( const sal_Char *pString )
 {
+    static BOOL static_bInsideFilter = FALSE;
+
+    // Ignore messages during filtering to avoid endless recursions
+    if ( static_bInsideFilter )
+        return;
+
+    static_bInsideFilter = TRUE;
+
     ByteString aMessage( pString );
 
     // OSL
@@ -165,10 +173,18 @@ void TestToolDebugMessageFilter( const sal_Char *pString )
       && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND ) return;
 
 
-    aBasicApp.DbgPrintMsgBox( pString );
+    try
+    {
+        aBasicApp.DbgPrintMsgBox( pString );
+    }
+    catch ( ... )
+    {
+        printf("DbgPrintMsgBox failed: %s\n", pString );
+    }
 /*    DBG_INSTOUTERROR( DBG_OUT_MSGBOX )
     DBG_ERROR( pString );
     DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )*/
+    static_bInsideFilter = FALSE;
 }
 void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
 {
@@ -323,7 +339,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
     {
         xSMgr = createRegistryServiceFactory( types, services, sal_True );
     }
-    catch( com::sun::star::uno::Exception & e )
+    catch( com::sun::star::uno::Exception & )
     {
         try
         {
@@ -338,8 +354,10 @@ Reference< XContentProviderManager > InitializeUCB( void )
                 OUString loader( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" ));
                 for( sal_Int32 i = 0; components[i] ; i ++ )
                 {
+                    printf("Registering %s ... ", components[i]);
                     xIR->registerImplementation(
                         loader, OUString::createFromAscii(components[i]),Reference< XSimpleRegistry >());
+                    printf("done\n");
                 }
                 Reference< XComponent > xComp( interimSmgr, UNO_QUERY );
                 if( xComp.is() )
@@ -391,11 +409,6 @@ Reference< XContentProviderManager > InitializeUCB( void )
         ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.PackageContentProvider" ) ), UNO_QUERY );
     xUcb->registerContentProvider( xPackageProvider, OUString::createFromAscii( "vnd.sun.star.pkg" ), sal_True );
     */
-
-#ifdef DEBUG
-    ucb::Content aTester( OUString::createFromAscii("file:///x:/gh"),com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >());
-    BOOL bFolder = aTester.isFolder();
-#endif
 
     return xUcb;
 }
@@ -498,6 +511,7 @@ void BasicApp::Main( )
     }
     catch( class Exception & rEx)
     {
+        printf( "%s\n", ByteString( String(rEx.Message), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
         InfoBox( NULL, String( rEx.Message ) ).Execute();
         throw;
     }
@@ -716,7 +730,6 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     pList   = new EditList;
     pStatus = new StatusLine( this );
 
-    LoadLRU();
     LoadIniFile();
 
     UpdateTitle();
@@ -726,10 +739,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
         aConf.SetGroup("WinGeom");
-        // workaround for #100819#
-        ByteString a( aConf.ReadKey("WinParams", "").GetToken(1) );
-        if ( !a.Equals( "5" ) )
-            SetWindowState( aConf.ReadKey("WinParams", "") );
+        SetWindowState( aConf.ReadKey("WinParams", "") );
     }
 
 //  pWork = new AppEdit( this, NULL );
@@ -752,19 +762,35 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
 
 void BasicFrame::LoadIniFile()
 {
+    USHORT i;
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup("Misc");
 
+    for ( i = 0 ; i < aConf.GetGroupCount() ; i++ )
+    {
+        aConf.SetGroup( ByteString( aConf.GetGroupName( i ) ) );
+        if ( ( aConf.ReadKey( "Aktuell" ).Len() || aConf.ReadKey( "Alle" ).Len() )
+           &&( !aConf.ReadKey( "Current" ).Len() && !aConf.ReadKey( "All" ).Len() ) )
+        {
+            aConf.WriteKey( "Current", aConf.ReadKey( "Aktuell" ) );
+            aConf.WriteKey( "All", aConf.ReadKey( "Alle" ) );
+        }
+    }
+
+    aConf.SetGroup("Misc");
     ByteString aTemp;
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
+    aConf.SetGroup( aCurrentProfile );
     aTemp = aConf.ReadKey( "AutoReload", "0" );
     bAutoReload = ( aTemp.CompareTo("1") == COMPARE_EQUAL );
     aTemp = aConf.ReadKey( "AutoSave", "0" );
     bAutoSave = ( aTemp.CompareTo("1") == COMPARE_EQUAL );
 
+    LoadLRU();
+
     if ( pBasic )
         pBasic->LoadIniFile();
 
-    for ( int i = 0 ; i < pList->Count() ; i++ )
+    for ( i = 0 ; i < pList->Count() ; i++ )
         pList->GetObject( i )->LoadIniFile();
 }
 
@@ -884,10 +910,7 @@ void BasicFrame::Resize()
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("WinGeom");
-    // workaround for #100819#
-    ByteString a( GetWindowState( WINDOWSTATE_MASK_STATE ).GetToken(1) );
-    if ( !a.Equals( "5" ) )
-        aConf.WriteKey("WinParams",GetWindowState());
+    aConf.WriteKey("WinParams",GetWindowState());
 
     // Statusbar
     Size aOutSize = GetOutputSizePixel();
@@ -912,10 +935,7 @@ void BasicFrame::Move()
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("WinGeom");
-    // workaround for #100819#
-    ByteString a( GetWindowState( WINDOWSTATE_MASK_STATE ).GetToken(1) );
-    if ( !a.Equals( "5" ) )
-        aConf.WriteKey("WinParams",GetWindowState());
+    aConf.WriteKey("WinParams",GetWindowState());
 }
 
 IMPL_LINK( BasicFrame, CloseButtonClick, void*, EMPTYARG )
@@ -1116,7 +1136,7 @@ BOOL BasicFrame::CompileAll()
 
 // Menu aufsetzen
 
-#define MENU2FILENAME Copy(3)
+#define MENU2FILENAME( Name ) Name.Copy( Name.SearchAscii(" ") +1)
 #define FILENAME2MENU( Nr, Name ) CUniString("~").Append( UniString::CreateFromInt32(i) ).AppendAscii(" ").Append( Name )
 #define LRUNr( nNr ) CByteString("LRU").Append( ByteString::CreateFromInt32(nNr) )
 void BasicFrame::AddToLRU(String const& aFile)
@@ -1143,9 +1163,9 @@ void BasicFrame::AddToLRU(String const& aFile)
         {
             aConfig.WriteKey(LRUNr(i), aConfig.ReadKey(LRUNr(i-1),""));
             if ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) == MENU_ITEM_NOTFOUND )
-                 pPopup->InsertItem(IDM_FILE_LRU1 + i-1, FILENAME2MENU( i, pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1).MENU2FILENAME ));
+                 pPopup->InsertItem(IDM_FILE_LRU1 + i-1, FILENAME2MENU( i, MENU2FILENAME( pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1) ) ));
             else
-                pPopup->SetItemText(IDM_FILE_LRU1 + i-1,FILENAME2MENU( i, pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1).MENU2FILENAME ));
+                pPopup->SetItemText(IDM_FILE_LRU1 + i-1,FILENAME2MENU( i, MENU2FILENAME( pPopup->GetItemText(IDM_FILE_LRU1 + i-1-1) ) ));
         }
     }
     aConfig.WriteKey(LRUNr(1), ByteString( aFile, RTL_TEXTENCODING_UTF8 ) );
@@ -1164,6 +1184,9 @@ void BasicFrame::LoadLRU()
     aConfig.SetGroup("LRU");
     USHORT nMaxLRU = aConfig.ReadKey("MaxLRU","4").ToInt32();
 
+    if ( pPopup )
+        bAddSep = pPopup->GetItemPos( IDM_FILE_LRU1 ) == MENU_ITEM_NOTFOUND;
+
     int i;
     for ( i = 1; i <= nMaxLRU && pPopup != NULL; i++)
     {
@@ -1177,8 +1200,17 @@ void BasicFrame::LoadLRU()
                 bAddSep = FALSE;
             }
 
-            pPopup->InsertItem(IDM_FILE_LRU1 + i-1, FILENAME2MENU( i, aFile ));
+            if ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) == MENU_ITEM_NOTFOUND )
+                pPopup->InsertItem(IDM_FILE_LRU1 + i-1, FILENAME2MENU( i, aFile ));
+            else
+                pPopup->SetItemText(IDM_FILE_LRU1 + i-1, FILENAME2MENU( i, aFile ));
         }
+    }
+    i = nMaxLRU+1;
+    while ( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) != MENU_ITEM_NOTFOUND )
+    {
+        pPopup->RemoveItem( pPopup->GetItemPos( IDM_FILE_LRU1 + i-1 ) );
+        i++;
     }
 }
 
@@ -1396,18 +1428,6 @@ long BasicFrame::Command( short nID, BOOL bChecked )
         case RID_QUIT:
             if( Close() ) aBasicApp.Quit();
             break;
-        case IDM_FILE_LRU1:
-        case IDM_FILE_LRU2:
-        case IDM_FILE_LRU3:
-        case IDM_FILE_LRU4:
-            {
-                String s = GetMenuBar()->GetPopupMenu(RID_APPFILE)->GetItemText(nID).MENU2FILENAME;
-
-                AddToLRU( s );
-                LoadFile( s );
-//              InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
-            }
-            break;
 
 
         case RID_RUNSTART:
@@ -1594,7 +1614,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             break;
         case RID_WINCASCADE:
             {
-                for ( ULONG i = 0 ; i < pList->Count() ; i++ )
+                for ( USHORT i = 0 ; i < pList->Count() ; i++ )
                 {
                     pList->GetObject( i )->Cascade( i );
                 }
@@ -1639,6 +1659,14 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 AppWin* pWin = FindWin( aName );
                 if ( pWin )
                     pWin->ToTop();
+            }
+            else if ( nID >= IDM_FILE_LRU1 && nID  <= IDM_FILE_LRUn )
+            {
+                String s = MENU2FILENAME( GetMenuBar()->GetPopupMenu(RID_APPFILE)->GetItemText(nID) );
+
+                AddToLRU( s );
+                LoadFile( s );
+//              InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
             }
             else
             {
@@ -1742,7 +1770,7 @@ class NewFileDialog : public FileDialog
 private:
     String aLastPath;
 public:
-    ByteString aPathName;
+    ByteString aFilterType;
     NewFileDialog( Window* pParent, WinBits nWinStyle ):FileDialog( pParent, nWinStyle ){};
     virtual short   Execute();
     virtual void    FilterSelect();
@@ -1762,11 +1790,13 @@ void NewFileDialog::FilterSelect()
     {
         nFilterNr++;
     }
-    aPathName = ByteString( GetFilterType( nFilterNr ), RTL_TEXTENCODING_UTF8 );
+    aFilterType = ByteString( GetFilterType( nFilterNr ), RTL_TEXTENCODING_UTF8 );
 
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup( "Path" );
-    aLastPath = UniString( aConf.ReadKey( aPathName, aConf.ReadKey( "Basisverzeichnis" ) ), RTL_TEXTENCODING_UTF8 );
+    aConf.SetGroup( "Misc" );
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aConf.SetGroup( aCurrentProfile );
+    aLastPath = UniString( aConf.ReadKey( aFilterType, aConf.ReadKey( "BaseDir" ) ), RTL_TEXTENCODING_UTF8 );
     SetPath( aLastPath );
 //  if ( IsInExecute() )
 //      SetPath( "" );
@@ -1778,8 +1808,11 @@ short NewFileDialog::Execute()
     if ( bRet )
     {
         Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-        aConf.SetGroup( "Path" );
-        aConf.WriteKey( aPathName, ByteString( DirEntry( GetPath() ).GetPath().GetFull(), RTL_TEXTENCODING_UTF8 ) );
+        aConf.SetGroup( "Misc" );
+        ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+        aConf.SetGroup( aCurrentProfile );
+        aConf.WriteKey( aFilterType, ByteString( DirEntry( GetPath() ).GetPath().GetFull(), RTL_TEXTENCODING_UTF8 ) );
+        aConf.WriteKey( "LastFilterName", ByteString( GetCurFilter(), RTL_TEXTENCODING_UTF8 ) );
     }
     return bRet;
 }
@@ -1814,6 +1847,15 @@ BOOL BasicFrame::QueryFileName
         aDlg.SetCurFilter( ResId( IDS_LIBFILTER ) );
     }
 
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    aConf.SetGroup( "Misc" );
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aConf.SetGroup( aCurrentProfile );
+    ByteString aFilter( aConf.ReadKey( "LastFilterName") );
+    if ( aFilter.Len() )
+        aDlg.SetCurFilter( String( aFilter, RTL_TEXTENCODING_UTF8 ) );
+    else
+        aDlg.SetCurFilter( String( ResId( IDS_BASFILTER ) ) );
 
     aDlg.FilterSelect();    // Setzt den Pfad vom letzten mal.
 //  if ( bSave )
@@ -1841,11 +1883,7 @@ USHORT BasicFrame::BreakHandler()
 //  aBar.EnableItem( RID_APPEDIT, FALSE );
     SetAppMode( String( ResId ( IDS_APPMODE_BREAK ) ) );
     while( bInBreak )
-#if SUPD >= 357
         GetpApp()->Yield();
-#else
-        GetpApp()->Reschedule();
-#endif
     SetAppMode( String( ResId ( IDS_APPMODE_RUN ) ) );
 //  aBar.EnableItem( RID_APPEDIT, TRUE );
 //  InitMenu(GetMenuBar()->GetPopupMenu( RID_APPRUN ));
@@ -1909,7 +1947,7 @@ String BasicFrame::GenRealString( const String &aResString )
         if ( aType.CompareTo(ResKenn) == COMPARE_EQUAL )
         {
 //          if ( Resource::GetResManager()->IsAvailable( ResId( aValue ) ) )
-                aString = String( ResId( aValue.ToInt32() ) );
+                aString = String( ResId( (USHORT)(aValue.ToInt32()) ) );
 //          else
             {
 //              DBG_ERROR( "Ressource konnte nicht geladen werden" );

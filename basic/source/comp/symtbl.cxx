@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-12 11:57:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,10 @@ short SbiStringPool::Add( double n, SbxDataType t )
     char buf[ 40 ];
     switch( t )
     {
-        case SbxINTEGER: sprintf( buf, "%d", (short) n ); break;
-        case SbxLONG:    sprintf( buf, "%ld", (long) n ); break;
-        case SbxSINGLE:  sprintf( buf, "%.6g", (float) n ); break;
-        case SbxDOUBLE:  sprintf( buf, "%.16g", n ); break;
+        case SbxINTEGER: snprintf( buf, sizeof(buf), "%d", (short) n ); break;
+        case SbxLONG:    snprintf( buf, sizeof(buf), "%ld", (long) n ); break;
+        case SbxSINGLE:  snprintf( buf, sizeof(buf), "%.6g", (float) n ); break;
+        case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break;
     }
     return Add( String::CreateFromAscii( buf ) );
 }

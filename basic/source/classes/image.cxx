@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-13 13:45:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@ SbiImage::~SbiImage()
 
 void SbiImage::Clear()
 {
-    delete pStringOff;
-    delete pStrings;
-    delete pCode;
+    delete[] pStringOff;
+    delete[] pStrings;
+    delete[] pCode;
     pStringOff = NULL;
     pStrings   = NULL;
     pCode      = NULL;
@@ -231,7 +231,7 @@ BOOL SbiImage::Load( SvStream& r )
                         String aStr( pByteStrings + nOff, eCharSet );
                         memcpy( pStrings + nOff, aStr.GetBuffer(), (aStr.Len() + 1) * sizeof( sal_Unicode ) );
                     }
-                    delete pByteStrings;
+                    delete[] pByteStrings;
                 } break;
             case B_MODEND:
                 goto done;
@@ -317,7 +317,8 @@ BOOL SbiImage::Save( SvStream& r )
         }
         r << (UINT32) nStringSize;
         r.Write( pByteStrings, nStringSize );
-        delete pByteStrings;
+
+        delete[] pByteStrings;
         SbiCloseRecord( r, nPos );
     }
     // Und die Gesamtlaenge setzen
@@ -372,7 +373,7 @@ void SbiImage::AddString( const String& r )
             if( p )
             {
                 memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
-                delete pStrings;
+                delete[] pStrings;
                 pStrings = p;
                 nStringSize = nNewLen;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-07 13:57:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,14 @@ IMPL_LINK( ReplaceDialog, ButtonClick, Button *, pB )
 
 ////////////////////////////////////////////////////////////////////
 
+
+void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
+{
+    aNewB.Enable( aCB.GetEntryPos( aCB.GetText() ) == COMBOBOX_ENTRY_NOTFOUND && aCB.GetText().Len() );
+    aDelB.Enable( aCB.GetEntryPos( aCB.GetText() ) != COMBOBOX_ENTRY_NOTFOUND );
+}
+
+
 ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN )
 : PushButton( pParent, ResId(nResButton) )
 , aText( pParent, ResId(nResText) )
@@ -214,7 +222,9 @@ ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nR
 , aKeyName(aKN)
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup("Path");
+    aConf.SetGroup("Misc");
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aConf.SetGroup( aCurrentProfile );
 
     String aTemp = UniString( aConf.ReadKey( aKeyName ), RTL_TEXTENCODING_UTF8 );
     aEdit.SetText( aTemp );
@@ -222,16 +232,27 @@ ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nR
 
 void ConfEdit::Save( Config &aConf )
 {
-    aConf.SetGroup("Path");
+    aConf.SetGroup("Misc");
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aConf.SetGroup( aCurrentProfile );
     aConf.WriteKey( aKeyName, ByteString( aEdit.GetText(), RTL_TEXTENCODING_UTF8 ) );
+}
+
+void ConfEdit::Reload( Config &aConf )
+{
+    aConf.SetGroup("Misc");
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aConf.SetGroup( aCurrentProfile );
+    String aValue = String( aConf.ReadKey( aKeyName ), RTL_TEXTENCODING_UTF8 );
+    aEdit.SetText( aValue );
 }
 
 void ConfEdit::Click()
 {
     PathDialog aPD( this );
     aPD.SetPath( aEdit.GetText() );
-    aPD.Execute();
-    aEdit.SetText( aPD.GetPath() );
+    if ( aPD.Execute() )
+        aEdit.SetText( aPD.GetPath() );
 }
 
 
@@ -277,11 +298,14 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         TabPage *pNewTabPage = NULL;
         switch ( nId )
         {
-            case RID_TP_SPE:
-                pNewTabPage = new SpecialOptions( pTabCtrl );
-                break;
             case RID_TP_GEN:
                 pNewTabPage = new GenericOptions( pTabCtrl );
+                break;
+            case RID_TP_PRO:
+                pNewTabPage = new ProfileOptions( pTabCtrl );
+                break;
+            case RID_TP_MIS:
+                pNewTabPage = new MiscOptions( pTabCtrl );
                 break;
             case RID_TP_FON:
                 pNewTabPage = new FontOptions( pTabCtrl );
@@ -299,15 +323,20 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 {
-    SpecialOptions *pSpecial;
-    pSpecial = (SpecialOptions*)aTabCtrl.GetTabPage( RID_TP_SPE );
-    if ( pSpecial )
-        pSpecial->Save();
-
     GenericOptions *pGeneric;
     pGeneric = (GenericOptions*)aTabCtrl.GetTabPage( RID_TP_GEN );
     if ( pGeneric )
         pGeneric->Save();
+
+    ProfileOptions *pProfile;
+    pProfile = (ProfileOptions*)aTabCtrl.GetTabPage( RID_TP_PRO );
+    if ( pProfile )
+        pProfile->Save();
+
+    MiscOptions *pMisc;
+    pMisc = (MiscOptions*)aTabCtrl.GetTabPage( RID_TP_MIS );
+    if ( pMisc )
+        pMisc->Save();
 
     FontOptions *pFonts;
     pFonts = (FontOptions*)aTabCtrl.GetTabPage( RID_TP_FON );
@@ -320,43 +349,201 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 }
 
 
-SpecialOptions::SpecialOptions( Window* pParent )
-: TabPage( pParent, ResId( RID_TP_SPECIAL ) )
+ProfileOptions::ProfileOptions( Window* pParent )
+: TabPage( pParent, ResId( RID_TP_PROFILE ) )
+, aConf( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
+
+, aFlProfile( this, ResId( RID_FL_PROFILE ) )
+, aCbProfile( this, ResId( RID_CB_PROFILE ) )
+, aPbNewProfile( this, ResId( RID_PB_NEW_PROFILE ) )
+, aPbDelProfile( this, ResId( RID_PD_DEL_PROFILE ) )
+
 , aDirs( this, ResId(FL_DIRECTORIES) )
-, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBasisverzeichnis" )
-, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"Basisverzeichnis" )
-, aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDVerzeichnis" )
-, aOther( this, ResId(FL_OTHER) )
-, aTimeoutText( this, ResId(TIMEOUT_TEXT) )
-, aServerTimeout( this, ResId(SERVER_TIMEOUT) )
+, aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBaseDir" )
+, aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"BaseDir" )
+, aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDDir" )
+
 , aAutoReload( this, ResId(CB_AUTORELOAD) )
 , aAutoSave( this, ResId(CB_AUTOSAVE) )
+, aStopOnSyntaxError( this, ResId(CB_STOPONSYNTAXERRORS) )
 {
     FreeResource();
 
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup("Misc");
-    ByteString aTemp = aConf.ReadKey( "ServerTimeout", "10000" );   // Vorgabe 1 Minute
-    aServerTimeout.SetTime( Time(aTemp.ToInt32()) );
+    aCbProfile.EnableAutocomplete( TRUE );
 
+    aCbProfile.SetSelectHdl( LINK( this, ProfileOptions, Select ) );
+
+    aPbNewProfile.SetClickHdl( LINK( this, ProfileOptions, NewProfile ) );
+    aPbDelProfile.SetClickHdl( LINK( this, ProfileOptions, DelProfile ) );
+    aCbProfile.SetModifyHdl( LINK( this, ProfileOptions, CheckButtonsHdl ) );
+
+    LoadData();
+    ReloadProfile();
+}
+
+void ProfileOptions::LoadData()
+{
+    for ( USHORT i = 0 ; i < aConf.GetGroupCount() ; i++ )
+    {
+        ByteString aProfile = aConf.GetGroupName( i );
+        if ( aProfile.Match( "_profile_" ) )
+            aCbProfile.InsertEntry( String( aProfile.Copy( 9 ), RTL_TEXTENCODING_UTF8 ) );
+    }
+    aConf.SetGroup( "Misc" );
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aCbProfile.SetText( String( aCurrentProfile.Copy( 9 ), RTL_TEXTENCODING_UTF8 ) );
+    CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
+}
+
+IMPL_LINK( ProfileOptions, Select, ComboBox*, EMPTYARG )
+{
+    if ( aCbProfile.GetEntryPos( aCbProfile.GetText() ) == LISTBOX_ENTRY_NOTFOUND )
+        return 1;
+    Save();
+    ByteString aProfileKey( CByteString( "_profile_" ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
+    aConf.SetGroup( "Misc" );
+    aConf.WriteKey( "CurrentProfile", aProfileKey );
+    ReloadProfile();
+
+    return 0;
+}
+
+void ProfileOptions::ReloadProfile()
+{
+    aLog.Reload( aConf );
+    aBasis.Reload( aConf );
+    aHID.Reload( aConf );
+    CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
+
+    ByteString aTemp;
+    aConf.SetGroup( "Misc" );
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
+    aConf.SetGroup( aCurrentProfile );
     aTemp = aConf.ReadKey( "AutoReload", "0" );
     aAutoReload.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
     aTemp = aConf.ReadKey( "AutoSave", "0" );
     aAutoSave.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
+    aTemp = aConf.ReadKey( "StopOnSyntaxError", "0" );
+    aStopOnSyntaxError.Check( aTemp.CompareTo("1") == COMPARE_EQUAL );
 }
 
-
-void SpecialOptions::Save()
+IMPL_LINK( ProfileOptions, DelProfile, Button*, EMPTYARG )
 {
-    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    String aProfile = aCbProfile.GetText();
+    ByteString aProfileKey( CByteString( "_profile_" ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) ) );
+    if ( aCbProfile.GetEntryPos( aProfile ) != COMBOBOX_ENTRY_NOTFOUND )
+    {
+        aCbProfile.RemoveEntry( aProfile );
+        aConf.DeleteGroup( aProfileKey );
+    }
+
+    aCbProfile.SetText( aCbProfile.GetEntry( 0 ) );
+    aProfile = aCbProfile.GetText();
+    aProfileKey = CByteString( "_profile_" ).Append( ByteString( aProfile, RTL_TEXTENCODING_UTF8 ) );
+    aConf.SetGroup( "Misc" );
+    aConf.WriteKey( "CurrentProfile", aProfileKey );
+    ReloadProfile();
+    CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
+
+    return 0;
+}
+
+IMPL_LINK( ProfileOptions, NewProfile, Button*, EMPTYARG )
+{
+    aCbProfile.InsertEntry( aCbProfile.GetText() );
+    ByteString aProfileKey( CByteString( "_profile_" ).Append( ByteString( aCbProfile.GetText(), RTL_TEXTENCODING_UTF8 ) ) );
+    aConf.SetGroup( "Misc" );
+    aConf.WriteKey( "CurrentProfile", aProfileKey );
+    Save();
+    CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
+
+    return 0;
+}
+
+IMPL_LINK( ProfileOptions, CheckButtonsHdl, ComboBox*, pCB )
+{
+    CheckButtons( aCbProfile, aPbNewProfile, aPbDelProfile );
+    return 0;
+}
+
+void ProfileOptions::Save()
+{
     aLog.Save( aConf );
     aBasis.Save( aConf );
     aHID.Save( aConf );
 
-    aConf.SetGroup("Misc");
-    aConf.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
+    aConf.SetGroup( "Misc" );
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
+    aConf.SetGroup( aCurrentProfile );
     aConf.WriteKey( "AutoReload", aAutoReload.IsChecked()?"1":"0" );
     aConf.WriteKey( "AutoSave", aAutoSave.IsChecked()?"1":"0" );
+    aConf.WriteKey( "StopOnSyntaxError", aStopOnSyntaxError.IsChecked()?"1":"0" );
+
+    aConf.Flush();
+}
+
+MiscOptions::MiscOptions( Window* pParent )
+: TabPage( pParent, ResId( RID_TP_MISC ) )
+, aFLCommunication( this, ResId(FL_COMMUNICATION) )
+, aFTHost( this, ResId(FT_HOST) )
+, aEDHost( this, ResId(ED_HOST) )
+, aFTTTPort( this, ResId(FT_TTPORT) )
+, aNFTTPort( this, ResId(NF_TTPORT) )
+, aFTUNOPort( this, ResId(FT_UNOPORT) )
+, aNFUNOPort( this, ResId(NF_UNOPORT) )
+, aOther( this, ResId(FL_OTHER) )
+, aTimeoutText( this, ResId(TIMEOUT_TEXT) )
+, aServerTimeout( this, ResId(SERVER_TIMEOUT) )
+, aFTLRU( this, ResId(FT_LRU) )
+, aTFMaxLRU( this, ResId(TF_MAX_LRU) )
+{
+    FreeResource();
+
+    International aInt;
+    aNFTTPort.SetUseThousandSep( FALSE );
+    aNFUNOPort.SetUseThousandSep( FALSE );
+    aTFMaxLRU.SetUseThousandSep( FALSE );
+
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+    ByteString aTemp;
+
+    aConf.SetGroup("Communication");
+    aTemp = aConf.ReadKey( "Host", DEFAULT_HOST );
+    aEDHost.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aTemp = aConf.ReadKey( "TTPort", ByteString::CreateFromInt32( TESTTOOL_DEFAULT_PORT ) );
+    aNFTTPort.SetValue( aTemp.ToInt32() );
+    aTemp = aConf.ReadKey( "UnoPort", ByteString::CreateFromInt32( UNO_DEFAULT_PORT ) );
+    aNFUNOPort.SetValue( aTemp.ToInt32() );
+
+    aConf.SetGroup("Misc");
+    aTemp = aConf.ReadKey( "ServerTimeout", "10000" );  // Vorgabe 1 Minute
+    aServerTimeout.SetTime( Time(aTemp.ToInt32()) );
+
+    aConf.SetGroup("LRU");
+    aTemp = aConf.ReadKey( "MaxLRU", "4" );
+    aTFMaxLRU.SetValue( aTemp.ToInt32() );
+}
+
+
+void MiscOptions::Save()
+{
+    Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
+
+    aConf.SetGroup("Communication");
+    aConf.WriteKey( "Host", ByteString( aEDHost.GetText(), RTL_TEXTENCODING_UTF8 ) );
+    aConf.WriteKey( "TTPort", ByteString::CreateFromInt32( aNFTTPort.GetValue() ) );
+    aConf.WriteKey( "UnoPort", ByteString::CreateFromInt32( aNFUNOPort.GetValue() ) );
+
+    aConf.SetGroup("Misc");
+    aConf.WriteKey( "ServerTimeout", ByteString::CreateFromInt32( aServerTimeout.GetTime().GetTime() ) );
+
+    aConf.SetGroup("LRU");
+    ByteString aTemp = aConf.ReadKey( "MaxLRU", "4" );
+    USHORT nOldMaxLRU = aTemp.ToInt32();
+    USHORT n;
+    for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
+        aConf.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
+    aConf.WriteKey( "MaxLRU", ByteString::CreateFromInt32( aTFMaxLRU.GetValue() ) );
 }
 
 
@@ -635,11 +822,6 @@ IMPL_LINK( GenericOptions, CheckButtonsHdl, ComboBox*, pCB )
     if ( pCB == &aCbValue )
         CheckButtons( aCbValue, aPbNewValue, aPbDelValue );
     return 0;
-}
-
-void GenericOptions::CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
-{
-    aNewB.Enable( aCB.GetEntryPos( aCB.GetText() ) == COMBOBOX_ENTRY_NOTFOUND && aCB.GetText().Len() );
 }
 
 void GenericOptions::Save()

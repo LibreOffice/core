@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-28 14:43:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ typedef USHORT TTFeatures;          // Bitfeld für Features der Entrys
 #define HasError    TTFeatures(0x01)
 #define HasWarning  TTFeatures(0x02)
 #define HasAssertion TTFeatures(0x04)
+#define HasQAError  TTFeatures(0x08)
 
 
 class TTTreeListBox : public SvTreeListBox
@@ -129,6 +130,7 @@ public:
     void AddMessage( String aMsg, TTDebugData aDebugData );
     void AddWarning( String aMsg, TTDebugData aDebugData );
     void AddAssertion( String aMsg, TTDebugData aDebugData );
+    void AddQAError( String aMsg, TTDebugData aDebugData );
 DATA_FUNC_DEF( aEditTree, TTTreeListBox )
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resids.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,76 +83,93 @@
 // OptionsDialog
 #define RES_TC_OPTIONS     20
 
-// SpecialOptions
-#define RID_TP_SPE         30
-#define FL_DIRECTORIES     31
-#define LOG_TEXT           32
-#define BASIS_TEXT         33
-#define HID_TEXT           34
-#define FL_OTHER           35
-#define TIMEOUT_TEXT       36
-#define LOG_NAME           37
-#define BASIS_NAME         38
-#define HID_NAME           39
-#define LOG_SET            40
-#define BASIS_SET          41
-#define HID_SET            42
-#define SERVER_TIMEOUT     43
-#define CB_AUTORELOAD      44
-#define CB_AUTOSAVE        45
-
 // GenericOptions
-#define RID_TP_GEN         50
-#define RID_FL_AREA        51
-#define RID_CB_AREA        52
-#define RID_PB_NEW_AREA    53
-#define RID_PD_DEL_AREA    54
-#define RID_FL_VALUE       55
-#define RID_CB_VALUE       56
-#define RID_PB_NEW_VALUE   57
-#define RID_PB_DEL_VALUE   58
+#define RID_TP_GEN         30
+#define RID_FL_AREA        31
+#define RID_CB_AREA        32
+#define RID_PB_NEW_AREA    33
+#define RID_PD_DEL_AREA    34
+#define RID_FL_VALUE       35
+#define RID_CB_VALUE       36
+#define RID_PB_NEW_VALUE   37
+#define RID_PB_DEL_VALUE   38
+
+// ProfileOptions
+#define RID_TP_PRO         40
+#define RID_FL_PROFILE     41
+#define RID_CB_PROFILE     42
+#define RID_PB_NEW_PROFILE 43
+#define RID_PD_DEL_PROFILE 44
+#define FL_DIRECTORIES     45
+#define LOG_TEXT           46
+#define BASIS_TEXT         47
+#define HID_TEXT           48
+#define LOG_NAME           49
+#define BASIS_NAME         50
+#define HID_NAME           51
+#define LOG_SET            52
+#define BASIS_SET          53
+#define HID_SET            54
+#define CB_AUTORELOAD      55
+#define CB_AUTOSAVE        56
+#define CB_STOPONSYNTAXERRORS 57
+
+// MiscOptions
+#define RID_TP_MIS         60
+#define FL_COMMUNICATION   61
+#define FT_HOST            62
+#define ED_HOST            63
+#define FT_TTPORT          64
+#define NF_TTPORT          65
+#define FT_UNOPORT         66
+#define NF_UNOPORT         67
+#define FL_OTHER           68
+#define TIMEOUT_TEXT       69
+#define SERVER_TIMEOUT     70
+#define FT_LRU             71
+#define TF_MAX_LRU         72
 
 // Font Settings
-#define RID_TP_FON         60
-#define FT_FONTNAME        61
-#define CB_FONTNAME        62
-#define FT_FONTSTYLE       63
-#define CB_FONTSTYLE       64
-#define FT_FONTSIZE        65
-#define MB_FONTSIZE        66
-#define FT_PREVIEW         67
+#define RID_TP_FON         70
+#define FT_FONTNAME        71
+#define CB_FONTNAME        72
+#define FT_FONTSTYLE       73
+#define CB_FONTSTYLE       74
+#define FT_FONTSIZE        75
+#define MB_FONTSIZE        76
+#define FT_PREVIEW         77
 
 // DisplayHId
-#define RID_TB_CONF        70
-#define RID_FT_CONTROLS    71
-#define RID_MLB_CONTROLS   72
-#define RID_FT_SLOTS       73
-#define RID_MLB_SLOTS      74
-#define RID_PB_KOPIEREN    75
-#define RID_PB_BENENNEN    76
-#define RID_PB_SELECTALL   77
-#define RID_OK_CLOSE       78
+#define RID_TB_CONF        80
+#define RID_FT_CONTROLS    81
+#define RID_MLB_CONTROLS   82
+#define RID_FT_SLOTS       83
+#define RID_MLB_SLOTS      84
+#define RID_PB_KOPIEREN    85
+#define RID_PB_BENENNEN    86
+#define RID_PB_SELECTALL   87
+#define RID_OK_CLOSE       88
 
 
 // BreakpointWindow
-#define IMGID_BRKENABLED        80
-#define IMGID_BRKDISABLED       81
-#define IMGID_STEPMARKER        82
-#define IMGID_ERRORMARKER       83
+#define IMGID_BRKENABLED        90
+#define IMGID_BRKDISABLED       91
+#define IMGID_STEPMARKER        92
+#define IMGID_ERRORMARKER       93
 
 
 // Edit Variables
-#define RID_FT_NAME             90
-#define RID_FT_CONTENT          91
-#define RID_FT_NEW_CONTENT      92
-#define RID_FT_NAME_VALUE       93
-#define RID_FT_CONTENT_VALUE    94
+#define RID_FT_NAME             100
+#define RID_FT_CONTENT          101
+#define RID_FT_NEW_CONTENT      102
+#define RID_FT_NAME_VALUE       103
+#define RID_FT_CONTENT_VALUE    104
 
-#define RID_RB_NEW_BOOL_T       95
-#define RID_RB_NEW_BOOL_F       96
-#define RID_NF_NEW_INTEGER      97
-#define RID_NF_NEW_LONG         98
-#define RID_ED_NEW_STRING       99
+#define RID_RB_NEW_BOOL_T       105
+#define RID_RB_NEW_BOOL_F       106
+#define RID_NF_NEW_INTEGER      107
+#define RID_NF_NEW_LONG         108
+#define RID_ED_NEW_STRING       109
 
 #endif
 

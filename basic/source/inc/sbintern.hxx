@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-26 16:29:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ struct SbiGlobals
     SbLanguageMode  eLanguageMode;  // Flag fuer Visual-Basic-Script-Modus
     SbErrorStack*   pErrStack;      // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
+    BOOL            bBlockCompilerError;
 
     SbiGlobals();
     ~SbiGlobals();

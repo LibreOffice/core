@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2002-12-06 15:50:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include <stdio.h>      // sprintf()
+#include <stdio.h>
 
 #pragma hdrstop
 #include "sb.hxx"
@@ -1029,7 +1029,7 @@ BOOL StarBASIC::LoadData( SvStream& r, USHORT nVer )
         if( pVar )
             pObjs->Remove( pVar );
     }
-    delete ppDeleteTab;
+    delete[] ppDeleteTab;
 
     UINT16 nMod;
     pModules->Clear();
@@ -1082,5 +1082,3 @@ BOOL StarBASIC::LoadOldModules( SvStream& r )
 {
     return FALSE;
 }
-
-

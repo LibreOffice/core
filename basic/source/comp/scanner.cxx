@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include "sbcomp.hxx"
 #pragma hdrstop
-#include <stdio.h>  // sprintf()
+#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #if defined (ICC) || defined (WTC) || defined(__powerc) || defined ( MAC ) || defined UNX
@@ -69,9 +69,7 @@
 #else
 #include <math.h>   // atof()
 #endif
-#ifndef _SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
-#endif
+#include <rtl/math.hxx>
 #ifndef _TOOLS_INTN_HXX
 #include <tools/intn.hxx>
 #endif
@@ -119,6 +117,11 @@ void SbiScanner::UnlockColumn()
 
 void SbiScanner::GenError( SbError code )
 {
+    if( GetSbData()->bBlockCompilerError )
+    {
+        bAbort = TRUE;
+        return;
+    }
     if( !bError && bErrors )
     {
         BOOL bRes = TRUE;
@@ -316,8 +319,7 @@ BOOL SbiScanner::NextSym()
             GenError( SbERR_BAD_CHAR_IN_NUMBER );   }
 
         // #57844 Lokalisierte Funktion benutzen
-        int nErrno;
-        nVal = SolarMath::StringToDouble( buf, ',', '.', nErrno );
+        nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', NULL, NULL );
         // ALT: nVal = atof( buf );
 
         ndig -= comma;

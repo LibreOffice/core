@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2001-08-14 13:25:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ private:
     Timer HideTipTimer;
     Timer ShowTipTimer;
 
+    BOOL bViewMoved;
 
 public:
     TextEditImp( AppEdit *pParent, const WinBits& aBits );
@@ -141,6 +142,7 @@ public:
     //BOOL              Drop( const DropEvent& rEvt );
     //BOOL              QueryDrop( DropEvent& rEvt );
 
+    BOOL                ViewMoved();
 
     void DoDelayedSyntaxHighlight( xub_StrLen nPara );
     void InvalidateSyntaxHighlight();

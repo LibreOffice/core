@@ -2,9 +2,9 @@
  *
  *  $RCSfile: buffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ SbiBuffer::SbiBuffer( SbiParser* p, short n )
 
 SbiBuffer::~SbiBuffer()
 {
-    delete pBuf;
+    delete[] pBuf;
 }
 
 // Rausreichen des Puffers
@@ -113,13 +113,13 @@ BOOL SbiBuffer::Check( USHORT n )
         {
             pParser->Error( SbERR_PROG_TOO_LARGE );
             nInc = 0;
-            delete pBuf; pBuf = NULL;
+            delete[] pBuf; pBuf = NULL;
             return FALSE;
         }
         else
         {
             if( nSize ) memcpy( p, pBuf, nSize );
-            delete pBuf;
+            delete[] pBuf;
             pBuf = p;
             pCur = pBuf + nOff;
             nSize += nn;

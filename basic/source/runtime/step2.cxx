@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-28 16:38:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,10 +756,42 @@ void SbiRuntime::StepCREATE( USHORT nOp1, USHORT nOp2 )
     }
 }
 
-// #56204 Objekt-Array kreieren (+StringID+StringID), DCREATE == Dim-Create
 void SbiRuntime::StepDCREATE( USHORT nOp1, USHORT nOp2 )
 {
+    StepDCREATE_IMPL( nOp1, nOp2, FALSE );
+}
+
+void SbiRuntime::StepDCREATE_REDIMP( USHORT nOp1, USHORT nOp2 )
+{
+    StepDCREATE_IMPL( nOp1, nOp2, TRUE );
+}
+
+
+// Helper function for StepDCREATE_IMPL / bRedimp = true
+void implCopyDimArray_DCREATE( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMaxDimIndex,
+    short nActualDim, sal_Int32* pActualIndices, sal_Int32* pLowerBounds, sal_Int32* pUpperBounds )
+{
+    sal_Int32& ri = pActualIndices[nActualDim];
+    for( ri = pLowerBounds[nActualDim] ; ri <= pUpperBounds[nActualDim] ; ri++ )
+    {
+        if( nActualDim < nMaxDimIndex )
+        {
+            implCopyDimArray_DCREATE( pNewArray, pOldArray, nMaxDimIndex, nActualDim + 1,
+                pActualIndices, pLowerBounds, pUpperBounds );
+        }
+        else
+        {
+            SbxVariable* pSource = pOldArray->Get32( pActualIndices );
+            pNewArray->Put32( pSource, pActualIndices );
+        }
+    }
+}
+
+// #56204 Objekt-Array kreieren (+StringID+StringID), DCREATE == Dim-Create
+void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
+{
     SbxVariableRef refVar = PopVar();
+
     DimImpl( refVar );
 
     // Das Array mit Instanzen der geforderten Klasse fuellen
@@ -770,10 +802,11 @@ void SbiRuntime::StepDCREATE( USHORT nOp1, USHORT nOp2 )
         return;
     }
 
+    SbxDimArray* pArray;
     if( xObj->ISA(SbxDimArray) )
     {
         SbxBase* pObj = (SbxBase*)xObj;
-        SbxDimArray* pArray = (SbxDimArray*)pObj;
+        pArray = (SbxDimArray*)pObj;
 
         // Dimensionen auswerten
         short nDims = pArray->GetDims();
@@ -811,6 +844,58 @@ void SbiRuntime::StepDCREATE( USHORT nOp1, USHORT nOp2 )
                 pArray->SbxArray::Put32( pObj, i );
             }
         }
+    }
+
+    SbxDimArray* pOldArray = (SbxDimArray*)(SbxArray*)refRedimpArray;
+    if( pArray && pOldArray )
+    {
+        short nDimsNew = pArray->GetDims();
+        short nDimsOld = pOldArray->GetDims();
+        short nDims = nDimsNew;
+        BOOL bRangeError = FALSE;
+
+        // Store dims to use them for copying later
+        sal_Int32* pLowerBounds = new sal_Int32[nDims];
+        sal_Int32* pUpperBounds = new sal_Int32[nDims];
+        sal_Int32* pActualIndices = new sal_Int32[nDims];
+        if( nDimsOld != nDimsNew )
+        {
+            bRangeError = TRUE;
+        }
+        else
+        {
+            // Compare bounds
+            for( short i = 1 ; i <= nDims ; i++ )
+            {
+                sal_Int32 lBoundNew, uBoundNew;
+                sal_Int32 lBoundOld, uBoundOld;
+                pArray->GetDim32( i, lBoundNew, uBoundNew );
+                pOldArray->GetDim32( i, lBoundOld, uBoundOld );
+
+                lBoundNew = std::max( lBoundNew, lBoundOld );
+                uBoundNew = std::min( uBoundNew, uBoundOld );
+                short j = i - 1;
+                pActualIndices[j] = pLowerBounds[j] = lBoundNew;
+                pUpperBounds[j] = uBoundNew;
+            }
+        }
+
+        if( bRangeError )
+        {
+            StarBASIC::Error( SbERR_OUT_OF_RANGE );
+        }
+        else
+        {
+            // Copy data from old array by going recursively through all dimensions
+            // (It would be faster to work on the flat internal data array of an
+            // SbyArray but this solution is clearer and easier)
+            implCopyDimArray_DCREATE( pArray, pOldArray, nDims - 1,
+                0, pActualIndices, pLowerBounds, pUpperBounds );
+        }
+        delete pUpperBounds;
+        delete pLowerBounds;
+        delete pActualIndices;
+        refRedimpArray = NULL;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,10 @@ void MyBasic::ReportRuntimeError( AppBasEd *pEditWin )
     BasicError( pEditWin,
         GetVBErrorCode( GetErrorCode() ), nErrorText, GetLine(),
         GetCol1(), GetCol2() ).Show();
+}
+
+void MyBasic::DebugFindNoErrors( BOOL bDebugFindNoErrors )
+{
 }
 
 const String MyBasic::GetSpechialErrorText()

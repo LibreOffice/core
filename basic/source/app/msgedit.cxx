@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gh $ $Date: 2002-07-04 10:29:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,8 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             case LOG_MESSAGE:   AddMessage( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_WARNING:   AddWarning( aUILogMsg, LogMsg->aDebugData ); break;
             case LOG_ASSERTION: AddAssertion( aUILogMsg, LogMsg->aDebugData ); break;
+            case LOG_QA_ERROR:  AddQAError( aUILogMsg, LogMsg->aDebugData ); break;
+            default:DBG_ERROR("Unbekannter Typ in ResultFile. Speichern des ResultFile resultiert in Informationsverlust");
         }
 
         if ( !bFileLoading )
@@ -358,6 +360,29 @@ void MsgEdit::AddAssertion( String aMsg, TTDebugData aDebugData )
         aEditTree.InvalidateEntry( pThisEntry );
 }
 
+void MsgEdit::AddQAError( String aMsg, TTDebugData aDebugData )
+{
+    SvLBoxEntry *pThisEntry = NULL;
+    if ( pCurrentTestCase )
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentTestCase );
+    else if ( pCurrentRun )
+    {
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        aEditTree.ShowEntry( pThisEntry );
+    }
+    else
+    {
+        AddRun( aMsg, aDebugData );
+        pThisEntry = aEditTree.InsertEntry( aMsg, pCurrentRun );
+        aEditTree.ShowEntry( pThisEntry );
+    }
+    aDebugData.aLogType = LOG_QA_ERROR;     // Da auch von anderswo aufgerufen
+    ADD_TTDEBUGDATA( pThisEntry );
+
+    while ( !aEditTree.IsEntryVisible( pThisEntry ) && ( pThisEntry = aEditTree.GetParent( pThisEntry ) ) )
+        aEditTree.InvalidateEntry( pThisEntry );
+}
+
 /*
     SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return SvLBox::GetEntry(pParent,nPos); }
     SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
@@ -419,6 +444,7 @@ String MsgEdit::Impl_MakeText( SvLBoxEntry *pEntry ) const
         case LOG_MESSAGE:   break;
         case LOG_WARNING:   break;
         case LOG_ASSERTION: break;
+        case LOG_QA_ERROR:  break;
         default:DBG_ERROR("Unbekannter Typ im ResultFenster");
     }
     aRet += aEditTree.GetEntryText( pEntry );
@@ -821,10 +847,12 @@ TTFeatures TTTreeListBox::GetFeatures( SvLBoxEntry* pEntry )
             }
         case LOG_ASSERTION:
                 return HasAssertion;
+        case LOG_QA_ERROR:
+                return HasQAError;
         default:
             DBG_ERROR("Unbekannter Typ im ResultFenster");
     }
-    return HasNothing;  // da der Comp nich sieht, daß kein dafault nötig ist.
+    return HasNothing;
 }
 
 
@@ -850,11 +878,13 @@ void TTLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
         Font aOldFont( rDev.GetFont());
         Font aFont( aOldFont );
 
-        if ( ( aFeatures & HasError ) != 0  || ( aFeatures & HasWarning ) != 0 )
+        if ( ( aFeatures & HasError ) != 0  || ( aFeatures & HasWarning ) != 0 || ( aFeatures & HasQAError ) != 0 )
         {
             Color aCol;
             if ( ( aFeatures & HasError ) == HasError )
                 aCol = Color( 255, 120, 120 );  // Rot
+            else if ( ( aFeatures & HasQAError ) == HasQAError )
+                aCol = Color( 255, 102, 51 );   // Orange oder so
             else
                 aCol = Color( 255, 200, 120 );  // Ocker oder so
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,7 @@
 #define RID_FILESETUP 1110
 #define RID_QUIT 1111
 #define IDM_FILE_LRU1 1112
-#define IDM_FILE_LRU2 (IDM_FILE_LRU1 + 1)
-#define IDM_FILE_LRU3 (IDM_FILE_LRU2 + 1)
-#define IDM_FILE_LRU4 (IDM_FILE_LRU3 + 1)
+#define IDM_FILE_LRUn 1199
 #define RID_EDIT 1200
 #define RID_EDITUNDO 1201
 #define RID_EDITREDO 1202
@@ -197,11 +195,12 @@
 #define IDD_REPLACE_DIALOG 4005
 #define IDD_PRINT_DIALOG 4006
 #define IDD_OPTIONS_DLG 4007
-#define RID_TP_SPECIAL 4008
-#define RID_TP_FONT 4009
-#define RID_TP_GENERIC 4010
-#define IDD_DISPLAY_HID 4011
-#define IDD_EDIT_VAR 4012
+#define RID_TP_PROFILE 4008
+#define RID_TP_MISC 4009
+#define RID_TP_FONT 4010
+#define RID_TP_GENERIC 4011
+#define IDD_DISPLAY_HID 4012
+#define IDD_EDIT_VAR 4013
 
 
 //#define RID_APPFONT 5000

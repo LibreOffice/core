@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-25 10:03:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,13 +559,14 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
     // #67781 Rueckgabewerte der Uno-Methoden loeschen
     clearUnoMethods();
 
+    ClearUnoObjectsInRTL_Impl_Rek( pBasic );
+
     // Oberstes Basic suchen
     SbxObject* p = pBasic;
     while( p->GetParent() )
         p = p->GetParent();
-
-    // Rekursiven Loeschvorgang ausloesen
-    ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
+    if( ((StarBASIC*)p) != pBasic )
+        ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
 }
 
 // Ausfuehren eines BASIC-Unterprogramms

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-28 16:38:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
     MEMBER(SbiRuntime::StepGLOBAL_P),   // Globale Variable definieren, die beim Neustart
                                         // von Basic nicht ueberschrieben wird (+StringID+Typ)
     MEMBER(SbiRuntime::StepFIND_G),     // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
+    MEMBER(SbiRuntime::StepDCREATE_REDIMP), // Objekt-Array redimensionieren (+StringID+StringID)
 };
 
 

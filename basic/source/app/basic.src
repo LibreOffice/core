@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: gh $ $Date: 2002-10-17 10:30:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,8 +799,13 @@ ModelessDialog IDD_OPTIONS_DLG
             };
             PageItem
             {
-                Identifier = RID_TP_SPE ;
-                Text = "Specialized" ;
+                Identifier = RID_TP_PRO ;
+                Text = "Profile" ;
+            };
+            PageItem
+            {
+                Identifier = RID_TP_MIS ;
+                Text = "Misc" ;
             };
             PageItem
             {
@@ -828,7 +833,7 @@ TabPage RID_TP_GENERIC {
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
     FixedLine RID_FL_AREA {
-            Pos = MAP_APPFONT( 4, 4 );
+            Pos = MAP_APPFONT( 4, 2 );
             Size = MAP_APPFONT( 228, 8 );
             Text = "Area";
     };
@@ -837,25 +842,25 @@ TabPage RID_TP_GENERIC {
             VScroll              = TRUE;
             AutoHScroll          = TRUE;
             Border = TRUE;
-            Pos = MAP_APPFONT( 8, 16 );
+            Pos = MAP_APPFONT( 8, 12 );
             Size = MAP_APPFONT( 132, 88 );
             TabStop = TRUE;
             DropDown = TRUE;
         };
     PushButton RID_PB_NEW_AREA {
-            Pos = MAP_APPFONT( 144, 16 );
+            Pos = MAP_APPFONT( 144, 12 );
             Size = MAP_APPFONT( 40, 12 );
             Text = "New";
             TabStop = TRUE;
     };
     PushButton RID_PD_DEL_AREA {
-            Pos = MAP_APPFONT( 188, 16 );
+            Pos = MAP_APPFONT( 188, 12 );
             Size = MAP_APPFONT( 40, 12 );
             Text = "Delete";
             TabStop = TRUE;
     };
     FixedLine RID_FL_VALUE {
-            Pos = MAP_APPFONT( 4, 36 );
+            Pos = MAP_APPFONT( 4, 32 );
             Size = MAP_APPFONT( 228, 8 );
             Text = "Setting";
     };
@@ -883,79 +888,181 @@ TabPage RID_TP_GENERIC {
 };
 
 
-TabPage RID_TP_SPECIAL {
+TabPage RID_TP_PROFILE {
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
+    FixedLine RID_FL_PROFILE {
+            Pos = MAP_APPFONT( 4, 4 );
+            Size = MAP_APPFONT( 22, 8 );
+            Text = "Profile";
+    };
+    ComboBox RID_CB_PROFILE {
+            HScroll              = TRUE;
+            VScroll              = TRUE;
+            AutoHScroll          = TRUE;
+            Border = TRUE;
+            Pos = MAP_APPFONT( 30, 2 );
+            Size = MAP_APPFONT( 110, 88 );
+            TabStop = TRUE;
+            DropDown = TRUE;
+        };
+    PushButton RID_PB_NEW_PROFILE {
+            Pos = MAP_APPFONT( 144, 2 );
+            Size = MAP_APPFONT( 40, 12 );
+            Text = "New";
+            TabStop = TRUE;
+    };
+    PushButton RID_PD_DEL_PROFILE {
+            Pos = MAP_APPFONT( 188, 2 );
+            Size = MAP_APPFONT( 40, 12 );
+            Text = "Delete";
+            TabStop = TRUE;
+    };
     FixedLine FL_DIRECTORIES {
-            Pos = MAP_APPFONT( 4, 2 );
+            Pos = MAP_APPFONT( 4, 16 );
             Size = MAP_APPFONT( 230, 8 );
-            Text = "Directories";
+            Text = "Profile settings";
     };
     FixedText LOG_TEXT {
-            Pos = MAP_APPFONT( 7, 12 );
+            Pos = MAP_APPFONT( 7, 26 );
             Size = MAP_APPFONT( 76, 12 );
             Text = "Log base directory";
     };
     FixedText BASIS_TEXT {
-            Pos = MAP_APPFONT( 7, 28 );
+            Pos = MAP_APPFONT( 7, 42 );
             Size = MAP_APPFONT( 76, 12 );
             Text = "Base directory";
     };
     FixedText HID_TEXT {
-            Pos = MAP_APPFONT( 7, 44 );
+            Pos = MAP_APPFONT( 7, 58 );
             Size = MAP_APPFONT( 76, 12 );
             Text = "HID directory";
     };
     Edit LOG_NAME {
             Border = TRUE;
-            Pos = MAP_APPFONT( 87, 12 );
+            Pos = MAP_APPFONT( 87, 26 );
             Size = MAP_APPFONT( 126, 12 );
             TabStop = TRUE;
         };
     Edit BASIS_NAME {
             Border = TRUE;
-            Pos = MAP_APPFONT( 87, 28 );
+            Pos = MAP_APPFONT( 87, 42 );
             Size = MAP_APPFONT( 126, 12 );
             TabStop = TRUE;
         };
     Edit HID_NAME {
             Border = TRUE;
-            Pos = MAP_APPFONT( 87, 44 );
+            Pos = MAP_APPFONT( 87, 58 );
             Size = MAP_APPFONT( 126, 12 );
             TabStop = TRUE;
         };
     PushButton LOG_SET {
-            Pos = MAP_APPFONT( 217, 12 );
+            Pos = MAP_APPFONT( 217, 26 );
             Size = MAP_APPFONT( 12, 12 );
             Text = "...";
             TabStop = TRUE;
     };
     PushButton BASIS_SET {
-            Pos = MAP_APPFONT( 217, 28 );
+            Pos = MAP_APPFONT( 217, 42 );
             Size = MAP_APPFONT( 12, 12 );
             Text = "...";
             TabStop = TRUE;
     };
     PushButton HID_SET {
-            Pos = MAP_APPFONT( 217, 44 );
+            Pos = MAP_APPFONT( 217, 58 );
             Size = MAP_APPFONT( 12, 12 );
             Text = "...";
             TabStop = TRUE;
     };
+    CheckBox CB_AUTORELOAD {
+            Pos = MAP_APPFONT( 7, 74 );
+            Size = MAP_APPFONT( 115, 12 );
+            Text = "AutoReload";
+    };
+    CheckBox CB_AUTOSAVE {
+            Pos = MAP_APPFONT( 7, 87 );
+            Size = MAP_APPFONT( 115, 12 );
+            Text = "Save before execute";
+    };
+    CheckBox CB_STOPONSYNTAXERRORS {
+            Pos = MAP_APPFONT( 132, 74 );
+            Size = MAP_APPFONT( 115, 12 );
+            Text = "Stop on Syntax Errors";
+    };
+};
+
+
+TabPage RID_TP_MISC {
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 244, 100 );
+    FixedLine FL_COMMUNICATION {
+            Pos = MAP_APPFONT( 4, 2 );
+            Size = MAP_APPFONT( 230, 8 );
+            Text = "Communication";
+    };
+    FixedText FT_HOST {
+            Pos = MAP_APPFONT( 8, 12 );
+            Size = MAP_APPFONT( 30, 12 );
+            Text = "Host";
+    };
+    Edit ED_HOST {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 43, 12);
+            Size = MAP_APPFONT( 80, 12 );
+            TabStop = TRUE;
+        };
+    FixedText FT_TTPORT {
+            Pos = MAP_APPFONT( 132, 12 );
+            Size = MAP_APPFONT( 70, 12 );
+            Text = "Testtool Port";
+    };
+    NumericField NF_TTPORT {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 191, 12);
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+            Right = TRUE;
+            Repeat = TRUE;
+            Spin = TRUE;
+            Minimum = 1024;
+            Maximum = 0xffff;
+            First = 1024;
+            Last = 0xffff;
+        };
+    FixedText FT_UNOPORT {
+            Pos = MAP_APPFONT( 132, 12+15 );
+            Size = MAP_APPFONT( 70, 12 );
+            Text = "Remote UNO Port";
+    };
+    NumericField NF_UNOPORT {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 191, 12+15);
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+            Right = TRUE;
+            Repeat = TRUE;
+            Spin = TRUE;
+            Minimum = 1024;
+            Maximum = 0xffff;
+            First = 1024;
+            Last = 0xffff;
+        };
+
     FixedLine FL_OTHER {
-            Pos = MAP_APPFONT( 4, 60 );
+            Pos = MAP_APPFONT( 4, 27 +13 );
             Size = MAP_APPFONT( 230, 8 );
             Text = "Other settings";
     };
     FixedText TIMEOUT_TEXT {
-            Pos = MAP_APPFONT( 8, 70 );
+            Pos = MAP_APPFONT( 8, 48 );
             Size = MAP_APPFONT( 70, 12 );
             Text = "Server Timeout";
     };
     TimeField SERVER_TIMEOUT {
             Border = TRUE;
-            Pos = MAP_APPFONT( 83, 70 );
+            Pos = MAP_APPFONT( 83, 48 );
             Size = MAP_APPFONT( 40, 12 );
             TabStop = TRUE;
             Repeat = TRUE;
@@ -963,24 +1070,22 @@ TabPage RID_TP_SPECIAL {
             Format = TIMEF_SEC;
             Duration = TRUE;
         };
-    CheckBox CB_AUTORELOAD {
-            Pos = MAP_APPFONT( 8, 83 );
-            Size = MAP_APPFONT( 115, 12 );
-            Text = "AutoReload";
+    FixedText FT_LRU {
+            Pos = MAP_APPFONT( 132, 48 );
+            Size = MAP_APPFONT( 70, 12 );
+            Text = "Max LRU Files";
     };
-/*  ComboBox LB_FONT {
-            Pos = MAP_APPFONT( 127, 70 );
-            Size = MAP_APPFONT( 103, 12 );
-            Sort = TRUE;
-            DropDown = TRUE;
-            AutoSize = TRUE;
-            AutoHScroll = TRUE;
-        };*/
-    CheckBox CB_AUTOSAVE {
-            Pos = MAP_APPFONT( 127, 83 );
-            Size = MAP_APPFONT( 103, 12 );
-            Text = "Save before execute";
-    };
+    NumericField TF_MAX_LRU {
+            Border = TRUE;
+            Pos = MAP_APPFONT( 191, 48);
+            Size = MAP_APPFONT( 40, 12 );
+            TabStop = TRUE;
+            Right = TRUE;
+            Repeat = TRUE;
+            Spin = TRUE;
+            Minimum = 0;
+            Maximum = IDM_FILE_LRUn - IDM_FILE_LRU1 +1;
+        };
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-18 08:38:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,7 @@ void SbiRuntime::StepREDIMP()
             sal_Int32* pLowerBounds = new sal_Int32[nDims];
             sal_Int32* pUpperBounds = new sal_Int32[nDims];
             sal_Int32* pActualIndices = new sal_Int32[nDims];
+
             if( nDimsOld != nDimsNew )
             {
                 bRangeError = TRUE;
@@ -521,9 +522,10 @@ void SbiRuntime::StepREDIMP()
                 implCopyDimArray( pNewArray, pOldArray, nDims - 1,
                     0, pActualIndices, pLowerBounds, pUpperBounds );
             }
-            delete pUpperBounds;
-            delete pLowerBounds;
-            delete pActualIndices;
+
+            delete[] pUpperBounds;
+            delete[] pLowerBounds;
+            delete[] pActualIndices;
             refRedimpArray = NULL;
         }
     }
@@ -613,7 +615,7 @@ void SbiRuntime::StepARGV()
 
         // Before fix of #94916:
         // if( pVal->ISA(SbxMethod) || pVal->ISA(SbxProperty) )
-        if( pVal->ISA(SbxMethod) )
+        if( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) )
         {
             // Methoden und Properties evaluieren!
             SbxVariable* pRes = new SbxVariable( *pVal );

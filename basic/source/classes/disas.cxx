@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:47:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ static const char* pOp3[] = {
     "GLOBAL_P",         // Globale Variable definieren, die beim Neustart von Basic
                         // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
     "FIND_G",           // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
+    "DCREATE_REDIMP",   // User defined Objekt-Array redimensionieren (+StringId+StringId)
 };
 
 #ifdef MACOSX
@@ -258,6 +259,7 @@ static const Func pOperand3[] = {
     MEMBER(SbiDisas::VarDefOp), // Globale Variable definieren, die beim Neustart von Basic
                                 // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
     MEMBER(SbiDisas::VarOp),    // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
+    MEMBER(SbiDisas::Str2Op),   // User defined Objekt-Array redimensionieren (+StringId+StringId)
 };
 
 
@@ -434,7 +436,7 @@ BOOL SbiDisas::DisasLine( String& rText )
                 n = s.Search( '\n' );
                 if( n != STRING_NOTFOUND ) bDone = FALSE, s.Erase( n, 1 );
             } while( !bDone );
-//          sprintf( cBuf, pMask[ 0 ], nPC );
+//          snprintf( cBuf, sizeof(cBuf), pMask[ 0 ], nPC );
 //          rText += cBuf;
             rText.AppendAscii( "; " );
             rText += s;
@@ -462,7 +464,7 @@ BOOL SbiDisas::DisasLine( String& rText )
                     break;
             }
         }
-        sprintf( cBuf, pMask[ 0 ], nPC );
+        snprintf( cBuf, sizeof(cBuf), pMask[ 0 ], nPC );
         rText.AppendAscii( cBuf );
         if( p && *p )
         {
@@ -470,13 +472,13 @@ BOOL SbiDisas::DisasLine( String& rText )
         }
         else
         {
-            sprintf( cBuf, "Lbl%04X", nPC );
+            snprintf( cBuf, sizeof(cBuf), "Lbl%04X", nPC );
             rText.AppendAscii( cBuf );
         }
         rText += ':';
         rText.AppendAscii( _crlf() );
     }
-    sprintf( cBuf, pMask[ nParts ], nPC, (USHORT) eOp, nOp1, nOp2 );
+    snprintf( cBuf, sizeof(cBuf), pMask[ nParts ], nPC, (USHORT) eOp, nOp1, nOp2 );
     rText.AppendAscii( cBuf );
     short n = eOp;
     if( eOp >= SbOP2_START )
@@ -503,7 +505,8 @@ BOOL SbiDisas::DisasLine( String& rText )
 void SbiDisas::StrOp( String& rText )
 {
     String aStr = rImg.GetString( nOp1 );
-    const char* p = ByteString( aStr, gsl_getSystemTextEncoding() ).GetBuffer();
+    ByteString aByteString( aStr, RTL_TEXTENCODING_ASCII_US );
+    const char* p = aByteString.GetBuffer();
     if( p )
     {
         rText += '"';
@@ -548,7 +551,7 @@ void SbiDisas::OnOp( String& rText )
 void SbiDisas::LblOp( String& rText )
 {
     char cBuf[ 10 ];
-    sprintf( cBuf, "Lbl%04X", nOp1 );
+    snprintf( cBuf, sizeof(cBuf), "Lbl%04X", nOp1 );
     rText.AppendAscii( cBuf );
 }
 
@@ -699,13 +702,13 @@ void SbiDisas::CaseOp( String& rText )
 
 void SbiDisas::StmntOp( String& rText )
 {
-    rText += nOp1;
+    rText += String::CreateFromInt32( nOp1 );
     rText += ',';
     USHORT nCol = nOp2 & 0xFF;
     USHORT nFor = nOp2 / 0x100;
-    rText += nCol;
+    rText += String::CreateFromInt32( nCol );
     rText.AppendAscii( " (For-Level: " );
-    rText += nFor;
+    rText += String::CreateFromInt32( nFor );
     rText += ')';
 }
 
@@ -714,7 +717,7 @@ void SbiDisas::StmntOp( String& rText )
 void SbiDisas::StrmOp( String& rText )
 {
     char cBuf[ 10 ];
-    sprintf( cBuf, "%04X", nOp1 );
+    snprintf( cBuf, sizeof(cBuf), "%04X", nOp1 );
     rText.AppendAscii( cBuf );
     if( nOp2 & SBSTRM_INPUT )
         rText.AppendAscii( ", Input" );

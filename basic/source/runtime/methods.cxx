@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-27 12:26:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,7 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
-#endif
+#include <rtl/math.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/time.h>
 #include <unotools/charclass.hxx>
@@ -143,6 +141,11 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+
+#ifndef PRODUCT
+#include <com/sun/star/io/XTextOutputStream.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#endif
 
 using namespace comphelper;
 using namespace rtl;
@@ -211,6 +214,7 @@ using namespace com::sun::star::io;
 #if defined (OS2) && defined (__BORLANDC__)
 #pragma option -w-par
 #endif
+
 
 static void FilterWhiteSpace( String& rStr )
 {
@@ -987,9 +991,9 @@ RTLFUNC(Hex)
         char aBuffer[16];
         SbxVariableRef pArg = rPar.Get( 1 );
         if ( pArg->IsInteger() )
-            sprintf( aBuffer,"%X", pArg->GetInteger() );
+            snprintf( aBuffer, sizeof(aBuffer), "%X", pArg->GetInteger() );
         else
-            sprintf( aBuffer,"%lX", pArg->GetLong() );
+            snprintf( aBuffer, sizeof(aBuffer), "%lX", pArg->GetLong() );
         rPar.Get(0)->PutString( String::CreateFromAscii( aBuffer ) );
     }
 }
@@ -1218,9 +1222,9 @@ RTLFUNC(Oct)
         char aBuffer[16];
         SbxVariableRef pArg = rPar.Get( 1 );
         if ( pArg->IsInteger() )
-            sprintf( aBuffer,"%o", pArg->GetInteger() );
+            snprintf( aBuffer, sizeof(aBuffer), "%o", pArg->GetInteger() );
         else
-            sprintf( aBuffer,"%lo", pArg->GetLong() );
+            snprintf( aBuffer, sizeof(aBuffer), "%lo", pArg->GetLong() );
         rPar.Get(0)->PutString( String::CreateFromAscii( aBuffer ) );
     }
 }
@@ -1453,8 +1457,7 @@ RTLFUNC(Val)
         else
         {
             // #57844 Lokalisierte Funktion benutzen
-            int nErrno;
-            nResult = SolarMath::StringToDouble( aStr.GetBuffer(), ',', '.', nErrno );
+            nResult = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
             // ATL: nResult = strtod( aStr.GetStr(), &pEndPtr );
         }
 
@@ -1529,7 +1532,7 @@ RTLFUNC(CDateToIso)
         double aDate = rPar.Get(1)->GetDate();
 
         char Buffer[9];
-        sprintf( Buffer, "%04ld%02ld%02ld",
+        snprintf( Buffer, sizeof( Buffer ), "%04ld%02ld%02ld",
             implGetDateYear( aDate ),
             implGetDateMonth( aDate ),
             implGetDateDay( aDate ) );
@@ -1827,7 +1830,7 @@ RTLFUNC(Time)
         {
             // Time$: hh:mm:ss
             char buf[ 20 ];
-            sprintf( buf, "%02d:%02d:%02d",
+            snprintf( buf, sizeof(buf), "%02d:%02d:%02d",
                 aTime.GetHour(), aTime.GetMin(), aTime.GetSec() );
             aRes = String::CreateFromAscii( buf );
         }
@@ -3891,3 +3894,37 @@ RTLFUNC(FileExists)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
+#ifndef PRODUCT
+// For debugging only
+void dbg_SaveDisassembly( SbModule* pModule )
+{
+    Reference< XSimpleFileAccess > xSFI;
+    Reference< XTextOutputStream > xTextOut;
+    Reference< XOutputStream > xOut;
+    Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+    if( xSMgr.is() )
+    {
+        Reference< XSimpleFileAccess > xSFI = Reference< XSimpleFileAccess >( xSMgr->createInstance
+            ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+        if( xSFI.is() )
+        {
+            String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/BasicAsm.txt") );
+            if( xSFI->exists( aFile ) )
+                xSFI->kill( aFile );
+            xOut = xSFI->openFileWrite( aFile );
+            Reference< XInterface > x = xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.io.TextOutputStream" ) );
+            Reference< XActiveDataSource > xADS( x, UNO_QUERY );
+            xADS->setOutputStream( xOut );
+            xTextOut = Reference< XTextOutputStream >( x, UNO_QUERY );
+        }
+    }
+
+    if( xTextOut.is() )
+    {
+        String aDisassemblyStr;
+        pModule->Disassemble( aDisassemblyStr );
+        xTextOut->writeString( aDisassemblyStr );
+    }
+    xOut->closeOutput();
+}
+#endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-06 13:30:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,8 +368,8 @@ void SbiDllMgr::FreeDllHandle( SbiDllHandle hLib )
 
 SbiDllProc SbiDllMgr::GetProcAddr(SbiDllHandle hLib, const ByteString& rProcName)
 {
-    char buf1 [128];
-    char buf2 [128];
+    char buf1 [128] = "";
+    char buf2 [128] = "";
 
     SbiDllProc pProc = 0;
     short nOrd = 0;
@@ -379,12 +379,17 @@ SbiDllProc SbiDllMgr::GetProcAddr(SbiDllHandle hLib, const ByteString& rProcName
         nOrd = atoi( rProcName.GetBuffer()+1 );
 
     // Moegliche Parameter weg:
-    strcpy( buf1, rProcName.GetBuffer() );
+    DBG_ASSERT( sizeof(buf1) > rProcName.Len(),
+                "SbiDllMgr::GetProcAddr: buffer to small!" );
+    strncpy( buf1, rProcName.GetBuffer(), sizeof(buf1)-1 );
     char *p = strchr( buf1, '#' );
     if( p )
         *p = 0;
-    strcpy( buf2, "_" );
-    strcat( buf2, buf1 );
+
+    DBG_ASSERT( sizeof(buf2) > strlen(buf1) + 1,
+                "SbiDllMgr::GetProcAddr: buffer to small!" );
+    strncpy( buf2, "_",  sizeof(buf2)-1 );
+    strncat( buf2, buf1, sizeof(buf2)-1-strlen(buf2) );
 
 #if defined(WIN) || defined(WNT)
     if( nOrd > 0 )
@@ -604,7 +609,7 @@ void* SbiDllMgr::CreateStack( SbxArray* pArgs, USHORT& rSize )
                         nLen = rStr.Len() + 1;
 
                     char* pStr = new char[ nLen ];
-                    strcpy( pStr, rStr.GetBuffer() );
+                    strcpy( pStr, rStr.GetBuffer() ); // #100211# - checked
                     // ist nicht so sauber, aber wir sparen ein Pointerarray
                     DBG_ASSERT(sizeof(UINT32)>=sizeof(char*),"Gleich krachts im Basic");
                     pVar->SetUserData( (UINT32)pStr );
@@ -658,7 +663,7 @@ void* SbiDllMgr::CreateStack( SbxArray* pArgs, USHORT& rSize )
                     {
                     char* pStr = new char[ pVar->GetString().Len() + 1 ];
                     ByteString aByteStr( pVar->GetString(), gsl_getSystemTextEncoding() );
-                    strcpy( pStr, aByteStr.GetBuffer() );
+                    strcpy( pStr, aByteStr.GetBuffer() ); // #100211# - checked
                     // ist nicht so sauber, aber wir sparen ein Pointerarray
                     DBG_ASSERT(sizeof(UINT32)>=sizeof(char*),"Gleich krachts im Basic");
                     pVar->SetUserData( (UINT32)pStr );

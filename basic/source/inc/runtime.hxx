@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-28 16:34:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,7 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
-#endif
+#include <rtl/math.hxx>
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
@@ -444,6 +442,7 @@ class SbiRuntime
     void StepOPEN( USHORT, USHORT ),    StepSTATIC( USHORT, USHORT );
     void StepTCREATE(USHORT,USHORT),    StepDCREATE(USHORT,USHORT);
     void StepGLOBAL_P( USHORT, USHORT ),StepFIND_G( USHORT, USHORT );
+    void StepDCREATE_REDIMP(USHORT,USHORT), StepDCREATE_IMPL(USHORT,USHORT,BOOL);
 public:
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
     SbiRuntime* pNext;               // Stack-Chain
@@ -468,7 +467,7 @@ public:
 
 inline void checkArithmeticOverflow( double d )
 {
-    if( SolarMath::IsINF( d ) || SolarMath::IsNAN( d ) )
+    if( !::rtl::math::isFinite( d ) )
         StarBASIC::Error( SbERR_MATH_OVERFLOW );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TextEditImp::TextEditImp( AppEdit* pParent, const WinBits& aBits )
 , bDoSyntaxHighlight( FALSE )
 , bDelayHighlight( TRUE )
 , nTipId( 0 )
+, bViewMoved( FALSE )
 {
     pTextEngine = new TextEngine();
     pTextEngine->SetMaxTextLen( STRING_MAXLEN );
@@ -126,6 +127,13 @@ TextEditImp::~TextEditImp()
     delete pTextEngine;
 }
 
+BOOL TextEditImp::ViewMoved()
+{
+    BOOL bOld = bViewMoved;
+    bViewMoved = FALSE;
+    return bOld;
+}
+
 void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
@@ -137,6 +145,7 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             pAppEdit->pVScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
             if ( ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow() )
                 ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->Scroll( 0, ((TextEdit*)(pAppEdit->pDataEdit))->GetBreakpointWindow()->GetCurYOffset() - pTextView->GetStartDocPos().Y() );
+            bViewMoved = TRUE;
         }
         else if( rTextHint.GetId() == TEXT_HINT_TEXTHEIGHTCHANGED )
         {
@@ -182,7 +191,8 @@ void TextEditImp::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
         {
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
-            ModifyHdl.Call( NULL );
+            if ( pTextView->GetTextEngine()->IsModified() )
+                ModifyHdl.Call( NULL );
         }
     }
 }
@@ -469,7 +479,7 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
 
 void TextEditImp::InvalidateSyntaxHighlight()
 {
-    for ( ULONG i = 0; i < pTextEngine->GetParagraphCount(); i++ )
+    for ( xub_StrLen i = 0; i < pTextEngine->GetParagraphCount(); i++ )
         DoDelayedSyntaxHighlight( i );
 }
 
@@ -594,7 +604,10 @@ SbxBase* TextEditImp::GetSbxAtMousePos( String &aWord )
             aWord.Erase( nLastChar, 1 );
 
         BOOL bWasError = SbxBase::IsError();    // Da eventuell im Testtool ein Fehler geschmissen wird.
+        pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( TRUE );
         SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aWord );
+        pAppEdit->GetBasicFrame()->Basic().DebugFindNoErrors( FALSE );
+        DBG_ASSERT( !( !bWasError && SbxBase::IsError()), "Error generated while retrieving Variable data for viewing" )
         if ( !bWasError && SbxBase::IsError() )
             SbxBase::ResetError();
 
@@ -615,7 +628,7 @@ IMPL_LINK( TextEditImp, ShowVarContents, void*, EMPTYARG )
     {
         SbxVariable* pVar = (SbxVariable*)pSBX;
         SbxDataType eType = pVar->GetType();
-        if ( (BYTE)eType == (BYTE)SbxOBJECT )
+        if ( eType == SbxOBJECT )
         {
             // Kann zu Absturz, z.B. bei Selections-Objekt fuehren
             // Type == Object heisst nicht, dass pVar == Object!
@@ -626,7 +639,7 @@ IMPL_LINK( TextEditImp, ShowVarContents, void*, EMPTYARG )
         }
         else if ( eType & SbxARRAY )
             aHelpText = CUniString("{...}");
-        else if ( (BYTE)eType != (BYTE)SbxEMPTY )
+        else if ( eType != SbxEMPTY )
         {
             aHelpText = pVar->GetName();
             if ( !aHelpText.Len() )     // Bei Uebergabeparametern wird der Name nicht kopiert
@@ -764,8 +777,14 @@ void TextEdit::Highlight( ULONG nLine, xub_StrLen nCol1, xub_StrLen nCol2 )
         }
     }
 
-    aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1)) );
+    aEdit.ViewMoved();
     aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
+    if ( aEdit.ViewMoved() )
+    {
+        aEdit.pTextView->SetSelection( TextSelection(TextPaM(TEXT_PARA_ALL,1)) );   // fix #105169#
+        aEdit.pTextView->SetSelection( TextSelection(TextPaM((nLine>=2?nLine-2:0),nCol2+1)) );
+        aEdit.pTextView->SetSelection( TextSelection(TextPaM(nLine,nCol2+1), TextPaM(nLine,nCol1)) );
+    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcodes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-04 07:24:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ enum SbiOpcode {
     _GLOBAL_P,          // Globale Variable definieren, die beim Neustart von Basic
                         // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
     _FIND_G,            // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
+    _DCREATE_REDIMP,    // Objekt-Array redimensionieren (+StringId+StringID)
     SbOP2_END
 
 };

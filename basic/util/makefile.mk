@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2002-04-30 14:32:19 $
+#   last change: $Author: hr $ $Date: 2003-03-18 16:28:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,8 +96,7 @@ SHL1STDLIBS= \
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB) \
             $(SOTLIB) \
-            $(VOSLIB) \
-            $(XMLSCRIPTLIB)
+            $(VOSLIB)
 
 .IF "$(SOLAR_JAVA)" != "TRUE"
 SHL1STDLIBS+=$(SJLIB)
@@ -122,50 +121,6 @@ DEF1DEPN	=	\
 DEFLIB1NAME	=sb
 DEF1DES		=StarBasic
 
-
-# Light basic
-LIB2TARGET=$(SLB)$/sbl.lib
-LIB2FILES=		\
-    $(SLB)$/basicmgr.lib   \
-    $(SLB)$/classesl.lib	 \
-    $(SLB)$/comp.lib 	 \
-    $(SLB)$/runtime.lib
-
-SHL2TARGET= sbl$(UPD)$(DLLPOSTFIX)
-SHL2IMPLIB= basicl
-
-SHL2STDLIBS= \
-            $(CPPULIB) \
-            $(CPPUHELPERLIB) \
-            $(TOOLSLIB) \
-            $(SVTOOLLIB) \
-            $(SVLLIB)	\
-            $(SVLIB) \
-            $(VOSLIB) \
-            $(SALLIB) \
-            $(SVMEMLIB)	\
-            $(SOTLIB) \
-            $(VOSLIB) \
-            $(COMPHELPERLIB) \
-            $(UNOTOOLSLIB)
-
-.IF "$(SOLAR_JAVA)" != "TRUE"
-SHL2STDLIBS+=$(SJLIB)
-.ENDIF
-.IF "$(GUI)" != "UNX"
-SHL2OBJS=	\
-    $(SLO)$/sb.obj
-.ENDIF
-
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-SHL2LIBS=	$(SLB)$/sbl.lib
-
-DEF2NAME	=$(SHL2TARGET)
-DEF2DEPN	=	\
-    $(MISC)$/$(SHL2TARGET).flt $(SLB)$/sbl.lib
-
-DEFLIB2NAME	=sbl
-DEF2DES		=StarBasic Light
 
 RES1TARGET=$(PRJNAME)
 SRS1FILES= \
@@ -193,19 +148,6 @@ RESLIB1SRSFILES= \
 # --- Basic-Filter-Datei ---
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP > $@
-    @echo LIBMAIN >> $@
-    @echo LibMain >> $@
-    @echo Sbi >> $@
-    @echo SvRTL >> $@
-    @echo SbRtl_ >> $@
-    @echo exception >> $@
-    @echo bad_alloc >> $@
-    @echo __CT >> $@
-
-$(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo WEP > $@

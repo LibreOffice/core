@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbcomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #include "sbcomp.hxx"
 #include "image.hxx"
 
+
+#ifndef PRODUCT
+// For debugging only
+void dbg_SaveDisassembly( SbModule* pModule );
+#endif
+
 // Diese Routine ist hier definiert, damit der Compiler als eigenes Segment
 // geladen werden kann.
 
@@ -118,6 +124,14 @@ BOOL SbModule::Compile()
         if( pBasic )
             pBasic->ClearAllModuleVars();
     }
+
+#ifndef PRODUCT
+    // Disassembly functionality for debugging
+    bool bDisassemble = false;
+    if( bDisassemble )
+        dbg_SaveDisassembly( this );
+#endif
+
     return bRet;
 }
 

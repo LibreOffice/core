@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@ AppEdit::~AppEdit()
 
 void AppEdit::LoadIniFile()
 {
+    TextView *pTextView = ((TextEdit*)pDataEdit)->aEdit.pTextView;
+    BOOL bWasModified = pTextView->GetTextEngine()->IsModified();
+    pTextView->GetTextEngine()->SetModified( FALSE );
+
     FontList aFontList( pFrame );   // Just some Window is needed
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
     aConf.SetGroup("Misc");
@@ -151,6 +155,8 @@ void AppEdit::LoadIniFile()
         ((TextEdit*)pDataEdit)->GetBreakpointWindow()->SetFont( aFont );
         ((TextEdit*)pDataEdit)->GetBreakpointWindow()->Invalidate();
     }
+
+    pTextView->GetTextEngine()->SetModified( bWasModified );    // Eventuell wieder setzen
 }
 
 void AppEdit::Command( const CommandEvent& rCEvt )

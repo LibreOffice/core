@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apperror.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,10 @@ FileType AppError::GetFileType()
 void AppError::LoadIniFile()
 {
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
-    aConf.SetGroup("Path");
-
-    aBaseDir = DirEntry( aConf.ReadKey("Basisverzeichnis") );
+    aConf.SetGroup("Misc");
+    ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
+    aConf.SetGroup( aCurrentProfile );
+    aBaseDir = DirEntry( aConf.ReadKey("BaseDir") );
 
 
     FontList aFontList( pFrame );   // Just some Window is needed
