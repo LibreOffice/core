@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:53:41 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ Resource RID_WRNHDLSC
         Text[ chinese_traditional ] = "¥uÀx¦s¤F·í«eªºªí®æ¡C";
         Text[ arabic ] = "Êã ÍİÙ ÇáÌÏæá ÇáÍÇáí İŞØ.";
         Text[ greek ] = "Áğïèçêåıôçêå ìüíï ï ôñİ÷ùí ğßíáêáò.";
-        Text[ korean ] = "È°¼ºµÈ ½ÃÆ®¸¸ÀÌ ÀúÀåµÇ¾ú½À´Ï´Ù.";
+        Text[ korean ] = "È°¼ºÈ­µÈ ½ÃÆ®¸¸ÀÌ ÀúÀåµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Yalnızca yürürlükteki tablo kaydedildi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Solo se ha guardado la hoja actual.";
