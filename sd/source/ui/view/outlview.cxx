@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-07-02 12:31:33 $
+ *  last change: $Author: dl $ $Date: 2001-09-12 12:16:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _OUTLOBJ_HXX //autogen
 #include <svx/outlobj.hxx>
 #endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -198,6 +201,19 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
         // Outliner initialisieren: Referenz-Device setzen
         bInitOutliner = TRUE;
         pOutliner->Init( OUTLINERMODE_OUTLINEVIEW );
+
+        SfxStyleSheet* pTitleSheet = pDoc->GetSdPage( 0, PK_STANDARD )->GetStyleSheetForPresObj( PRESOBJ_TITLE );
+
+        if ( pTitleSheet )
+        {
+            // set title symbol (level 0)
+            SvxNumBulletItem aNumBulletItem( (const SvxNumBulletItem&) pTitleSheet->GetItemSet().Get(EE_PARA_NUMBULLET) );
+            SvxNumRule aNumRule(* aNumBulletItem.GetNumRule());
+            SvxNumberFormat aFormat( aNumRule.GetLevel(0));
+            aFormat.SetBulletChar( 0xE011 );  // StarBats: 0xF000 + 114
+            pOutliner->OverwriteLevel0Bullet( aFormat );
+        }
+
         SfxPrinter* pPrinter = pDocSh->GetPrinter(TRUE);
         pOutliner->SetRefDevice(pPrinter);
         ULONG nWidth = OUTLINE_PAPERWIDTH;
