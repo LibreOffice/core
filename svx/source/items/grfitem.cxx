@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:18:08 $
+ *  last change: $Author: cl $ $Date: 2000-11-02 16:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,10 +182,10 @@ BOOL SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 BOOL SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    if(!rVal.hasValue() || rVal.getValueType() != ::getCppuType((text::GraphicCrop*)0))
-        return sal_False;
     text::GraphicCrop aVal;
-    rVal >>= aVal;
+
+    if(!(rVal >>= aVal))
+        return sal_False;
     if(nMemberId&CONVERT_TWIPS)
     {
        aVal.Right   = MM100_TO_TWIP(aVal.Right );
