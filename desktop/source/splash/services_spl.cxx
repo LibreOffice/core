@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: services.cxx,v $
+ *  $RCSfile: services_spl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:23:44 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#include "evaluation.hxx"
-
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
@@ -81,8 +79,8 @@
 #include <unotools/configmgr.hxx>
 #endif
 
-#include "oemjob.hxx"
-#include "evaluation.hxx"
+#include "splash.hxx"
+#include "firststart.hxx"
 
 
 using namespace rtl;
@@ -94,15 +92,15 @@ using namespace ::desktop;
 
 static const char* pServices[] =
 {
-    SOEvaluation::serviceName,
-    OEMPreloadJob::serviceName,
+    SplashScreen::serviceName,
+    FirstStart::serviceName,
     NULL
 };
 
 static const char* pImplementations[] =
 {
-    SOEvaluation::implementationName,
-    OEMPreloadJob::implementationName,
+    SplashScreen::implementationName,
+    FirstStart::implementationName,
     NULL
 };
 
@@ -110,16 +108,16 @@ typedef Reference<XInterface>(* fProvider)(const Reference<XMultiServiceFactory>
 
 static const fProvider pInstanceProviders[] =
 {
-    SOEvaluation::CreateInstance,
-    OEMPreloadJob::CreateInstance,
+    SplashScreen::getInstance,
+    FirstStart::CreateInstance,
     NULL
 };
 
 
 static const char** pSupportedServices[] =
 {
-    SOEvaluation::interfaces,
-    OEMPreloadJob::interfaces,
+    SplashScreen::interfaces,
+    FirstStart::interfaces,
     NULL
 };
 

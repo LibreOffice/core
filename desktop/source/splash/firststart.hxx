@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: splash.hxx,v $
+ *  $RCSfile: firststart.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 12:21:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SOCOMP_FIRSTSTART_HXX_
+#define _SOCOMP_FIRSTSTART_HXX_
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -71,100 +74,65 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
-#include <com/sun/star/task/XStatusIndicator.hpp>
+#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
+#include <com/sun/star/task/XJob.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
-#ifndef _SFX_HELP_HXX
-#include <sfx2/sfxhelp.hxx>
-#endif
-#ifndef _SV_INTROWIN_HXX
-#include <vcl/introwin.hxx>
-#endif
-#ifndef _SV_BITMAP_HXX
-#include <vcl/bitmap.hxx>
-#endif
+#include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
-#include <sfx2/sfxuno.hxx>
-#include <vcl/virdev.hxx>
 
-
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 
-namespace desktop {
+namespace desktop{
 
-class  SplashScreen
-    : public ::cppu::WeakImplHelper2< XStatusIndicator, XInitialization >
-    , public IntroWindow
+class FirstStart : public ::cppu::WeakImplHelper4< XJob, XJobExecutor, XComponent, XServiceInfo >
 {
+
 private:
-    // don't allow anybody but ourselves to create instances of this class
-    SplashScreen(const SplashScreen&);
-    SplashScreen(void);
-    SplashScreen operator =(const SplashScreen&);
-
-    SplashScreen(const Reference< XMultiServiceFactory >& xFactory);
-
-    DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
-    virtual ~SplashScreen();
-    void initBitmap();
-    void updateStatus();
-
-    static  SplashScreen *_pINSTANCE;
-
-    static osl::Mutex _aMutex;
-    Reference< XMultiServiceFactory > _rFactory;
-
-    VirtualDevice _vdev;
-    Bitmap          _aIntroBmp;
-    sal_Int32 _iMax;
-    sal_Int32 _iProgress;
-    sal_Bool _bPaintBitmap;
-    sal_Bool _bPaintProgress;
-    sal_Bool _bVisible;
-    long _height, _width, _tlx, _tly, _barwidth;
-    const long _xoffset, _yoffset, _barspace;
-    long _barheight;
-
+    ::osl::Mutex                        m_aMutex;
+    ::cppu::OInterfaceContainerHelper   m_aListeners;
+    Reference< XMultiServiceFactory >   m_xServiceManager;
 
 public:
+    FirstStart( const Reference < XMultiServiceFactory >& xFactory );
+    virtual ~FirstStart();
+
+    static ::rtl::OUString                      GetImplementationName();
+    static Sequence< rtl::OUString >            GetSupportedServiceNames();
+
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw ( RuntimeException );
+    virtual void SAL_CALL addEventListener( const Reference< XEventListener > & aListener) throw ( RuntimeException );
+    virtual void SAL_CALL removeEventListener(const Reference< XEventListener > & aListener) throw ( RuntimeException );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw ( RuntimeException );
+    virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& rServiceName ) throw ( RuntimeException );
+    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( RuntimeException );
+
+    //XJob
+    virtual Any SAL_CALL execute(const Sequence<NamedValue>& args)throw ( RuntimeException );
+    //XJobExecutor
+    virtual void SAL_CALL trigger(const rtl::OUString& arg)throw ( RuntimeException );
+
     static const char* interfaces[];
-    static const sal_Char *serviceName;
-    static const sal_Char *implementationName;
-    static const sal_Char *supportedServiceNames[];
+    static const char* implementationName;
+    static const char* serviceName;
+    static Reference<XInterface> SAL_CALL CreateInstance(
+        const Reference< XMultiServiceFactory >&);
 
-    static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
-
-    // static service info
-    static OUString  impl_getImplementationName();
-    static Sequence<OUString> impl_getSupportedServiceNames();
-
-    // XStatusIndicator
-    virtual void SAL_CALL end() throw ( RuntimeException );
-    virtual void SAL_CALL reset() throw ( RuntimeException );
-    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException );
-    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException );
-    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException );
-
-    // XInitialize
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
-        throw ( RuntimeException );
-
-    // workwindow
-    virtual void Paint( const Rectangle& );
 
 };
-
 }
+
+#endif // _SOCOMP_FIRSTSTART_HXX_

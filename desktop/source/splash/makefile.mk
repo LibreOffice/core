@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:40:08 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:21:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,10 +74,17 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	$(SLO)$/splash.obj
+SLOFILES =	$(SLO)$/splash.obj \
+            $(SLO)$/firststart.obj \
+            $(SLO)$/services_spl.obj
 
 SHL1DEPN=   makefile.mk
-SHL1OBJS=   $(SLOFILES)
+SHL1OBJS=   $(SLOFILES) \
+            $(SLO)$/pages.obj \
+            $(SLO)$/wizard.obj \
+            $(SLO)$/migration.obj \
+            $(SLO)$/cfgfilter.obj
+
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=i$(TARGET)
@@ -88,6 +95,9 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
     $(VCLLIB)			\
+    $(SVLLIB)           \
+    $(SVTOOLLIB)        \
+    $(COMPHELPERLIB)    \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(VOSLIB)			\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:38:11 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#include <rtl/logfile.hxx>
 
 
 using namespace ::rtl;
@@ -176,9 +175,6 @@ void SAL_CALL SplashScreen::setText(const OUString& aText)
 void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "::SplashScreen::setValue (lo119109)" );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "value=%d", nValue );
-
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if (_bVisible) {
         Show();
@@ -336,6 +332,12 @@ Reference< XInterface > SplashScreen::getInstance(const Reference< XMultiService
 }
 
 // static service info...
+const char* SplashScreen::interfaces[] =
+{
+    "com.sun.star.task.XStartusIndicator",
+    "com.sun.star.lang.XInitialization",
+    NULL,
+};
 const sal_Char *SplashScreen::serviceName = "com.sun.star.office.SplashScreen";
 const sal_Char *SplashScreen::implementationName = "com.sun.star.office.comp.SplashScreen";
 const sal_Char *SplashScreen::supportedServiceNames[] = {"com.sun.star.office.SplashScreen", NULL};
@@ -355,6 +357,7 @@ Sequence<OUString> SplashScreen::impl_getSupportedServiceNames()
 
 }
 
+#if 0
 // component management stuff...
 // ----------------------------------------------------------------------------
 extern "C"
@@ -416,3 +419,4 @@ component_getFactory(const sal_Char *pImplementationName, void *pServiceManager,
 }
 
 } // extern "C"
+#endif
