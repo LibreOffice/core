@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-09-22 14:07:31 $
+ *  last change: $Author: pw $ $Date: 2000-10-13 14:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     if (xNumberFormatsSupplier.is())
         pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
 
+    /*
     if( xModel.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFact( xModel, ::com::sun::star::uno::UNO_QUERY);
@@ -228,6 +229,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
             {}
         }
     }
+    */
 }
 
 SvXMLImport::~SvXMLImport() throw ()
