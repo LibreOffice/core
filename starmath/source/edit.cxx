@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2000-10-12 08:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,9 +149,7 @@ void SmGetLeftSelectionPart(const ESelection aSel,
 SmEditWindow::SmEditWindow(Window* pParent) :
     Window(pParent),
     pEditView( 0 ),
-#if SUPD >= 602
     pEditEngineItemPool( 0 ),
-#endif
     pEditEngine( 0 ),
     pHScrollBar( 0 ),
     pVScrollBar( 0 ),
@@ -180,9 +178,8 @@ SmEditWindow::~SmEditWindow()
         pEditEngine->RemoveView(pEditView);
         delete pEditView;
         delete pEditEngine;
-#if SUPD >= 602
         delete pEditEngineItemPool;
-#endif
+
         delete pHScrollBar;
         delete pVScrollBar;
         delete pScrollBox;
@@ -198,7 +195,6 @@ void SmEditWindow::ImplSetFont()
         Font aFont = GetFont();
         pEditEngine->SetDefTab( USHORT( GetTextWidth( C2S("XXXX") ) ) );
 
-#if SUPD >= 602
         DBG_ASSERT( pEditEngineItemPool, "NULL pointer");
         pEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem( aFont.GetFamily(), aFont.GetName(),
@@ -209,16 +205,9 @@ void SmEditWindow::ImplSetFont()
                     EE_CHAR_FONTHEIGHT ) );
 //      pEditEngineItemPool->SetPoolDefaultItem(
 //              SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
-#else
-        SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-        aSet.Put( SvxFontItem( aFont.GetFamily(), aFont.GetName(),
-                    aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
-                    EE_CHAR_FONTINFO ) );
-        aSet.Put( SvxFontHeightItem( aFont.GetSize().Height(), 100, EE_CHAR_FONTHEIGHT ) );
-//      aSet.Put( SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
 
-        pEditEngine->SetDefaults(aSet);
-#endif
+        // forces new settings to be used
+        pEditEngine->Clear();   //#77957 incorrect font size
     }
 }
 
@@ -413,12 +402,8 @@ void SmEditWindow::CreateEditEngine()
 {
     if (! pEditEngine)
     {
-#if SUPD >= 602
         pEditEngineItemPool = EditEngine::CreatePool();
         pEditEngine = new EditEngine( pEditEngineItemPool );
-#else
-        pEditEngine = new EditEngine;
-#endif
         pEditView = new EditView(pEditEngine, this);
         pEditEngine->SetUpdateMode(FALSE);
         pEditEngine->InsertView(pEditView);
@@ -430,7 +415,6 @@ void SmEditWindow::CreateEditEngine()
         pEditEngine->SetRefMapMode(MAP_PIXEL);
 
         ImplSetFont();
-        pEditEngine->Clear();   //#77957 incorrect font size
 
         pEditEngine->SetPaperSize( Size( 800, 0 ) );
 
