@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAuthenticator.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:31:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star { module mail {
    An implementation of this interface may for instance show a
    dialog to query the user for the necessary data.
 
-   @since #116332#
+   @since OOo 2.0.0
  */
 interface XAuthenticator: ::com::sun::star::uno::XInterface {
 
