@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-10-02 12:25:33 $
+ *  last change: $Author: os $ $Date: 2001-11-20 09:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,7 @@ static sal_uInt16 nBCTitleNo = 0;
             SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
 
             SET_CURR_SHELL(pSh);
+            pSh->SetLabelDoc(rItem.bSynchron);
             pSh->DoUndo( sal_False );
             pSh->StartAllAction();
 
@@ -547,7 +548,6 @@ static sal_uInt16 nBCTitleNo = 0;
 
             pSh->EndAllAction();
             pSh->DoUndo( sal_True );
-            pSh->SetLabelDoc(rItem.bSynchron);
         }
 
         if( rItem.aWriting.indexOf( '<' ) >= 0 )
