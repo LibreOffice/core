@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 09:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,9 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent, const String& r
     ,m_bDragSource( sal_False )
 {
     DBG_CTOR(OTableWindowListBox,NULL);
+#ifndef TF_SVDATA
     EnableDrop();
+#endif // TF_SVDATA
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
     SetDoubleClickHdl( LINK(this, OTableWindowListBox, DoubleClickHdl) );
 

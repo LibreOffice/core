@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 09:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,11 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX
 #include <vcl/drag.hxx>
 #endif
+#endif // TF_SVDATA
 #ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
 #endif
@@ -280,80 +282,6 @@ void OJoinTableView::Resize()
         pCurrent->SetPosPixel(aPos);
     }
 }
-
-//------------------------------------------------------------------------------
-BOOL OJoinTableView::Drop( const DropEvent& rEvt )
-{
-    DBG_CHKTHIS(OJoinTableView,NULL);
-    BOOL bDrop = FALSE;
-/*
-    //////////////////////////////////////////////////////////////////////
-    // Nach dem richtigen Format suchen
-    for(USHORT i = 0; i < DragServer::GetItemCount(); ++i)
-    {
-        if (INetBookmark::DragServerHasFormat(i) )
-        {
-            INetBookmark aBmk;
-            if (aBmk.PasteDragServer(i))
-            {
-                //////////////////////////////////////////////////////////////////////
-                // Tabellenname aus URL-Obj holen
-                INetURLObject aObj(aBmk.GetURL());
-                aObj.SetSmartProtocol(INET_PROT_FILE);
-                String aMark(aObj.GetMark());
-                aMark.Erase(0, strlen(char(11)));
-
-                //////////////////////////////////////////////////////////////////////
-                // Stammt die Tabelle aus derselben Datenbank?
-                String aDatabaseName = aObj.PathToFileName();
-                DirEntry aDBEntry(aDatabaseName);
-                SbaDatabase* pDatabase = GetDatabase();
-                if (aDBEntry == DirEntry(pDatabase->Name()))
-                {
-                    //////////////////////////////////////////////////////////////////////
-                    // Neue Tabelle hinzufuegen
-                    SbaDBDefRef xDef = pDatabase->OpenDBDef( dbTable, aMark );
-                    if (xDef.Is())
-                    {
-                        SdbTable* pTable = ((SbaTableDef*)&xDef)->GetTable();
-                        if (pTable && pTable->IsOpen())
-                        {
-                            AddTabWin( pTable->QualifierName(), pTable->Name() );
-                            bDrop = TRUE;
-                        }
-                    }
-                }
-
-                if (!bDrop)
-                    Sound::Beep();
-                break;
-            }
-        }
-    }
-*/
-    return bDrop;
-}
-
-//------------------------------------------------------------------------------
-BOOL OJoinTableView::QueryDrop( DropEvent& rEvt )
-{
-    DBG_CHKTHIS(OJoinTableView,NULL);
-    //////////////////////////////////////////////////////////////////////
-    // Wenn Bookmark-Format, Drop erlaubt
-    BOOL bDrop = FALSE;
-    DropAction eAction = rEvt.GetAction();
-
-    for (USHORT i = 0; i < DragServer::GetItemCount(); ++i)
-    {
-        if (INetBookmark::DragServerHasFormat(i) && eAction != DROP_MOVE)
-        {
-            bDrop = TRUE;
-            break;
-        }
-    }
-    return bDrop;
-}
-
 //------------------------------------------------------------------------------
 ULONG OJoinTableView::GetTabWinCount()
 {
@@ -1568,6 +1496,20 @@ void OJoinTableView::HideTabWins()
 
 }
 // -----------------------------------------------------------------------------
+sal_Int8 OJoinTableView::AcceptDrop( const AcceptDropEvent& _rEvt )
+{
+    return DND_ACTION_NONE;
+}
+// -----------------------------------------------------------------------------
+sal_Int8 OJoinTableView::ExecuteDrop( const ExecuteDropEvent& _rEvt )
+{
+    return DND_ACTION_NONE;
+}
+// -----------------------------------------------------------------------------
+void OJoinTableView::dragFinished( )
+{
+}
+//------------------------------------------------------------------------------
 void OJoinTableView::clearLayoutInformation()
 {
     //////////////////////////////////////////////////////////////////////
@@ -1585,7 +1527,6 @@ void OJoinTableView::clearLayoutInformation()
     GetTabConnList()->clear();
 }
 // -----------------------------------------------------------------------------
-
 
 
 

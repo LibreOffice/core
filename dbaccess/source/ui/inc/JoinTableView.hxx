@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 09:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,12 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _DBACCESS_UI_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
 
-
+struct AcceptDropEvent;
+struct ExecuteDropEvent;
 namespace dbaui
 {
     class OTableConnection;
@@ -123,7 +127,8 @@ namespace dbaui
     };
 
 
-    class OJoinTableView : public Window
+    class OJoinTableView :  public Window
+                            ,public IDragTransferableListener
     {
     public:
         DECLARE_STL_USTRINGACCESS_MAP(OTableWindow*,OTableWindowMap);
@@ -218,6 +223,11 @@ namespace dbaui
         virtual BOOL IsAddAllowed();
         virtual long PreNotify(NotifyEvent& rNEvt);
 
+        // DnD stuff
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+
     protected:
         virtual void MouseButtonUp( const MouseEvent& rEvt );
         virtual void MouseButtonDown( const MouseEvent& rEvt );
@@ -229,8 +239,10 @@ namespace dbaui
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
         virtual void Resize();
-        virtual BOOL Drop( const DropEvent& rEvt );
-        virtual BOOL QueryDrop( DropEvent& rEvt );
+
+        virtual void dragFinished( );
+//      virtual BOOL Drop( const DropEvent& rEvt );
+//      virtual BOOL QueryDrop( DropEvent& rEvt );
 
         // wird nach Verschieben/Groessenaenderung der TabWins aufgerufen (die Standardimplementation reicht die neuen Daten einfach
         // an die Daten des Wins weiter)

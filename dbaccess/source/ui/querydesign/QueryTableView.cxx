@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 09:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,9 @@ OQueryTableView::OQueryTableView( Window* pParent,OQueryDesignView* pView)
 {
     DBG_CTOR(OQueryTableView,NULL);
     SetHelpId(HID_CTL_QRYDGNTAB);
+#ifndef TF_SVDATA
     EnableDrop();
+#endif // TF_SVDATA
 }
 
 //------------------------------------------------------------------------
@@ -1064,132 +1066,6 @@ void OQueryTableView::InsertField(const OTableFieldDesc& rInfo)
     DBG_CHKTHIS(OQueryTableView,NULL);
     DBG_ASSERT(getDesignView() != NULL, "OQueryTableView::InsertField : habe kein Parent !");
     static_cast<OQueryDesignView*>(getDesignView())->InsertField(rInfo);
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OQueryTableView::Drop(const DropEvent& rEvt)
-{
-    DBG_CHKTHIS(OQueryTableView,NULL);
-    sal_Bool bDrop = sal_False;
-/*
-    SbaDatabaseRef xDatabase(GetDatabase());
-    ::com::sun::star::uno::Reference< ::com::sun::star::data::XDatabaseDescriptor >  rMetaData = xDatabase->GetMetaData();
-    ::com::sun::star::uno::Any aJoin = rMetaData->getInfo(::com::sun::star::data::DatabaseInfo::OUTER_JOIN_SUPPORT);
-
-    if (!xDatabase.Is() || !((::utl::getINT16(aJoin) & ::com::sun::star::data::DatabaseOuterJoinSupport::PARTIAL) || (::utl::getINT16(aJoin) & ::com::sun::star::data::DatabaseOuterJoinSupport::YES)) && GetTabWinMap()->size())
-    {
-        Sound::Beep();
-        return sal_False;
-    }
-
-    sal_Bool bDrop = sal_False;
-
-    for (sal_uInt16 i = 0; i < DragServer::GetItemCount(); ++i)
-    {
-        if (INetBookmark::DragServerHasFormat(i) )
-        {
-            INetBookmark aBmk;
-            if (aBmk.PasteDragServer(i))
-            {
-                INetURLObject aObj(aBmk.GetURL());
-                aObj.SetSmartProtocol(INET_PROT_FILE);
-                String aMark(aObj.GetMark());
-
-                if (aMark.GetTokenCount(';') > 1)
-                {
-                    String sType = aMark.GetToken(0, ';');
-                    sType += ';';
-                    if (sType == String::CreateFromAscii(SDB_TABLEMARK_HEADER))
-                    {
-                        aMark.Erase(0, strlen(SDB_TABLEMARK_HEADER));
-
-                        String aDatabaseName = aObj.PathToFileName();
-                        DirEntry aDBEntry(aDatabaseName);
-
-                        if (aDBEntry == DirEntry(xDatabase->Name()))
-                        {
-                            SbaDBDefRef aDef = xDatabase->OpenDBDef(dbTable, aMark);
-                            if (aDef.Is())
-                            {
-                                if (aDef->Status().IsError())
-                                    SBA_MOD()->ShowDbStatus(aDef->Status(), dbReadError,NULL);
-
-                                SdbTable* pTable = (static_cast< SbaTableDef*>(&aDef)->GetTable();
-                                if (pTable && pTable->IsOpen())
-                                {
-                                    AddTabWin(pTable->QualifierName(),pTable->GetFullName());
-                                    bDrop = sal_True;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (!bDrop)
-                    Sound::Beep();
-                break;
-            }
-        }
-    }
-*/
-    return bDrop;
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OQueryTableView::QueryDrop(DropEvent& rEvt)
-{
-    DBG_CHKTHIS(OQueryTableView,NULL);
-    sal_Bool bDrop = sal_False;
-/*
-    SbaDatabaseRef xDatabase(GetDatabase());
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::data::XDatabaseDescriptor >  rMetaData = xDatabase->GetMetaData();
-    ::com::sun::star::uno::Any aJoin = rMetaData->getInfo(::com::sun::star::data::DatabaseInfo::OUTER_JOIN_SUPPORT);
-    if (!xDatabase.Is() || !((::utl::getINT16(aJoin) & ::com::sun::star::data::DatabaseOuterJoinSupport::PARTIAL) || (::utl::getINT16(aJoin) & ::com::sun::star::data::DatabaseOuterJoinSupport::YES)) && GetTabWinMap()->size())
-        return sal_False;
-
-    sal_Bool bDrop = sal_False;
-    DropAction eAction = rEvt.GetAction();
-
-    for (sal_uInt16 i = 0; i < DragServer::GetItemCount(); ++i)
-    {
-        if (INetBookmark::DragServerHasFormat(i))
-        {
-            INetBookmark aBmk;
-            if (aBmk.PasteDragServer(i))
-            {   // it's a INetBookmark
-                INetURLObject aObj(aBmk.GetURL());
-                aObj.SetSmartProtocol(INET_PROT_FILE);
-                String aMark(aObj.GetMark());
-
-                // maybe it's a reference to a db object
-                if (aMark.GetTokenCount(';') > 1)
-                {
-                    String sType = aMark.GetToken(0, ';');
-                    sType += ';';
-                    if (sType == String::CreateFromAscii(SDB_TABLEMARK_HEADER))
-                    {   // it's a reference to a table
-                        aMark.Erase(0, strlen(SDB_TABLEMARK_HEADER));
-
-                        String aDatabaseName = aObj.PathToFileName();
-                        DirEntry aDBEntry(aDatabaseName);
-
-                        if (aDBEntry == DirEntry(xDatabase->Name()))
-                        {   // it's a reference to a table of our own database
-                            if (xDatabase->HasObjectByURL(aObj.GetMainURL()))
-                            {
-                                rEvt.SetAction(DROP_COPY);
-                                bDrop = sal_True;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-*/
-    return bDrop;
 }
 //------------------------------------------------------------------------------
 sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:03:02 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 09:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,10 +157,6 @@ namespace dbaui
 
         // eine neu Connection bekanntgeben und einfuegen lassen, wenn nicht schon existent
         void NotifyTabConnection(const OQueryTableConnection& rNewConn, BOOL _bCreateUndoAction = TRUE);
-
-        // fuer Droppen von Tabellen
-        BOOL Drop(const DropEvent& rEvt);
-        BOOL QueryDrop(DropEvent& rEvt);
 
         Link    SetTabWinsChangeHandler(const Link& lnk) { Link lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
             // der Handler bekommt einen Zeiger auf eine TabWinsChangeNotification-Struktur
