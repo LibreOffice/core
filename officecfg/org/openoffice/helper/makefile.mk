@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: armin $ $Date: 2000-10-27 15:56:05 $
+#   last change: $Author: svesik $ $Date: 2000-10-27 16:08:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,8 @@ PACKAGE=org$/openoffice$/helper
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 
+EXTRAJARFILES = jaxp.jar parser.jar
+
 JAVACLASSFILES=	\
     $(CLASSDIR)$/$(PACKAGE)$/Validator.class \
     $(CLASSDIR)$/$(PACKAGE)$/PrettyPrinter.class
@@ -90,8 +92,3 @@ JARCOMPRESS		= TRUE
 
 .INCLUDE :  target.mk
 
-.IF "$(GUI)"=="WIN"
-CLASSPATH:=$(COMMON_BUILD_TOOLS)$/jaxp.jar;$(COMMON_BUILD_TOOLS)$/parser.jar
-.ELSE
-CLASSPATH:=$(COMMON_BUILD_TOOLS)$/jaxp.jar:$(COMMON_BUILD_TOOLS)$/parser.jar
-.ENDIF
