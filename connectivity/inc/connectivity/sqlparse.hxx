@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:32:36 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,15 @@
 #include "connectivity/sqlbison.hxx"
 #endif
 #endif
+#ifndef _COM_SUN_STAR_LANG_XCHARACTERCLASSIFICATION_HPP_
+#include <com/sun/star/lang/XCharacterClassification.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XLOCALEDATA_HPP_
+#include <com/sun/star/lang/XLocaleData.hpp>
+#endif
 
 // forward declarations
 namespace com
@@ -91,10 +100,13 @@ namespace com
             {
                 class XNumberFormatter;
             }
+            namespace lang
+            {
+                struct Locale;
+            }
         }
     }
 }
-class International;
 namespace connectivity
 {
     class OSQLScanner;
@@ -143,16 +155,16 @@ namespace connectivity
 
         virtual ~OParseContext();
         // retrieves language specific error messages
-        virtual String getErrorMessage(ErrorCode _eCodes) const;
+        virtual ::rtl::OUString getErrorMessage(ErrorCode _eCodes) const;
 
         // retrieves language specific keyword strings (only ASCII allowed)
-        virtual ByteString getIntlKeywordAscii(InternationalKeyCode _eKey) const;
+        virtual ::rtl::OString getIntlKeywordAscii(InternationalKeyCode _eKey) const;
 
         // finds out, if we have an international keyword (only ASCII allowed)
-        virtual InternationalKeyCode getIntlKeyCode(const ByteString& rToken) const;
+        virtual InternationalKeyCode getIntlKeyCode(const ::rtl::OString& rToken) const;
 
         // determines the default international setting
-        static const International& getDefaultInternational();
+        static const ::com::sun::star::lang::Locale& getDefaultLocale();
     };
 
     //==========================================================================
@@ -180,28 +192,34 @@ namespace connectivity
     // informations on the current parse action
         OParseContext*              m_pContext;
         OSQLParseNode*              m_pParseTree;   // result from parsing
-        International*              m_pIntl;        // current internation settings for parsing
-        String                      m_sFieldName;   // current field name for a predicate
-        String                      m_sErrorMessage;// current error msg
+        ::com::sun::star::lang::Locale* m_pLocale;      // current locale settings for parsing
+        ::rtl::OUString                     m_sFieldName;   // current field name for a predicate
+        ::rtl::OUString                     m_sErrorMessage;// current error msg
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xField;       // current field
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
                                     m_xFormatter;   // current number formatter
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XCharacterClassification> m_xCharClass;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XLocaleData>              m_xLocaleData;
+
+        // convert a string into double trim it to scale of _nscale and than transform it back to string
+        ::rtl::OUString stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale);
 
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(OParseContext* _pContext = NULL);
+        OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,OParseContext* _pContext = NULL);
         ~OSQLParser();
 
         // Parsing an SQLStatement
-        OSQLParseNode* parseTree(String& rErrorMessage,
-                       const String& rStatement,
+        OSQLParseNode* parseTree(::rtl::OUString& rErrorMessage,
+                       const ::rtl::OUString& rStatement,
                        sal_Bool bInternational = sal_False);
 
         // Check a Predicate
-        OSQLParseNode* predicateTree(String& rErrorMessage, const String& rStatement,
+        OSQLParseNode* predicateTree(::rtl::OUString& rErrorMessage, const ::rtl::OUString& rStatement,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xField);
 
@@ -209,26 +227,26 @@ namespace connectivity
         const OParseContext& getContext() const {return *m_pContext;}
 
         // TokenIDToStr: Token-Name zu einer Token-Nr.
-        static ByteString TokenIDToStr(sal_uInt32 nTokenID, OParseContext* pContext = NULL);
+        static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, OParseContext* pContext = NULL);
 
         // StrToTokenID: Token-Nr. zu einem Token-Namen.
-        // static sal_uInt32 StrToTokenID(const ByteString & rName);
+        // static sal_uInt32 StrToTokenID(const ::rtl::OString & rName);
 
-        // RuleIDToStr gibt den zu einer RuleID gehoerenden String zurueck
+        // RuleIDToStr gibt den zu einer RuleID gehoerenden ::rtl::OUString zurueck
         // (Leerstring, falls nicht gefunden)
-        static String RuleIDToStr(sal_uInt32 nRuleID);
+        static ::rtl::OUString RuleIDToStr(sal_uInt32 nRuleID);
 
-        // StrToRuleID berechnet zu einem String die RuleID (d.h. ::com::sun::star::sdbcx::Index in yytname)
+        // StrToRuleID berechnet zu einem ::rtl::OUString die RuleID (d.h. ::com::sun::star::sdbcx::Index in yytname)
         // (0, falls nicht gefunden). Die Suche nach der ID aufgrund eines Strings ist
-        // extrem ineffizient (sequentielle Suche nach String)!
-        static sal_uInt32 StrToRuleID(const ByteString & rValue);
+        // extrem ineffizient (sequentielle Suche nach ::rtl::OUString)!
+        static sal_uInt32 StrToRuleID(const ::rtl::OString & rValue);
 
         // RuleId mit enum, wesentlich effizienter
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
 
 
 
-        void error(char *fmt);
+        void error(sal_Char *fmt);
         int SQLlex();
 #ifdef YYBISON
         void setParseTree(OSQLParseNode * pNewParseTree);
@@ -236,7 +254,7 @@ namespace connectivity
         // Is the parse in a special mode?
         // Predicate chack is used to check a condition for a field
         sal_Bool inPredicateCheck() const {return m_xField.is();}
-        const String& getFieldName() const {return m_sFieldName;}
+        const ::rtl::OUString& getFieldName() const {return m_sFieldName;}
 
         void reduceLiteral(OSQLParseNode*& pLiteral, sal_Bool bAppendBlank);
          // does not change the pLiteral argument

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDescriptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ namespace connectivity
                 : ::comphelper::OPropertyContainer(_rBHelper)
                 , m_bNew(_bNew),m_aCase(_bCase){}
 
+            virtual ~ODescriptor();
             sal_Bool isNew()  const { return m_bNew; }
             sal_Bool getNew() const { return m_bNew; }
 

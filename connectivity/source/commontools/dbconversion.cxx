@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:50:32 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,15 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
-#ifndef _UNOTOOLS_DATETIME_HXX_
+#ifndef _COMPHELPER_DATETIME_HXX_
 #include <comphelper/datetime.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
 #endif
@@ -85,6 +83,16 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
+#include <com/sun/star/sdb/XColumnUpdate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
+#include <com/sun/star/sdb/XColumn.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 
 #define MAX_DAYS    3636532
 
@@ -95,14 +103,19 @@ namespace dbtools
 
 
 using namespace ::comphelper;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
 
 //------------------------------------------------------------------------------
-starutil::Date DBTypeConversion::STANDARD_DB_DATE(1, 1, 1900);
+Date DBTypeConversion::STANDARD_DB_DATE(1, 1, 1900);
 
 //------------------------------------------------------------------------------
-void DBTypeConversion::setValue(const staruno::Reference<starsdb::XColumnUpdate>& xVariant,
-                                const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
-                                const starutil::Date& rNullDate,
+void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
+                                const Reference<XNumberFormatter>& xFormatter,
+                                const Date& rNullDate,
                                 const ::rtl::OUString& rString,
                                 sal_Int32 nKey,
                                 sal_Int16 nFieldType,
@@ -112,8 +125,8 @@ void DBTypeConversion::setValue(const staruno::Reference<starsdb::XColumnUpdate>
     if (rString.len())
     {
             // Muss der String formatiert werden?
-        sal_Int16 nTypeClass = nKeyType & ~starutil::NumberFormat::DEFINED;
-        sal_Bool bTextFormat = nTypeClass == starutil::NumberFormat::TEXT;
+        sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;
+        sal_Bool bTextFormat = nTypeClass == NumberFormat::TEXT;
         sal_Int32 nKeyToUse  = bTextFormat ? 0 : nKey;
         sal_Int16 nRealUsedTypeClass = nTypeClass;
             // bei einem Text-Format muessen wir dem Formatter etwas mehr Freiheiten einraeumen, sonst
@@ -123,10 +136,10 @@ void DBTypeConversion::setValue(const staruno::Reference<starsdb::XColumnUpdate>
             fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
             sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(0, rString);
             if (nRealUsedKey != nKeyToUse)
-                nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~starutil::NumberFormat::DEFINED;
+                nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;
 
             // und noch eine Sonderbehandlung, diesmal fuer Prozent-Formate
-            if ((starutil::NumberFormat::NUMBER == nRealUsedTypeClass) && (starutil::NumberFormat::PERCENT == nTypeClass))
+            if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
             {   // die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
                 // einfache Nummer dar -> anpassen
                 ::rtl::OUString sExpanded(rString);
@@ -138,16 +151,16 @@ void DBTypeConversion::setValue(const staruno::Reference<starsdb::XColumnUpdate>
 
             switch (nRealUsedTypeClass)
             {
-                case starutil::NumberFormat::DATE:
-                case starutil::NumberFormat::DATETIME:
+                case NumberFormat::DATE:
+                case NumberFormat::DATETIME:
                     xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
                     break;
-                case starutil::NumberFormat::TIME:
-                case starutil::NumberFormat::CURRENCY:
-                case starutil::NumberFormat::NUMBER:
-                case starutil::NumberFormat::SCIENTIFIC:
-                case starutil::NumberFormat::FRACTION:
-                case starutil::NumberFormat::PERCENT:
+                case NumberFormat::TIME:
+                case NumberFormat::CURRENCY:
+                case NumberFormat::NUMBER:
+                case NumberFormat::SCIENTIFIC:
+                case NumberFormat::FRACTION:
+                case NumberFormat::PERCENT:
                     xVariant->updateDouble(fValue);
                     break;
                 default:
@@ -175,16 +188,16 @@ void DBTypeConversion::setValue(const staruno::Reference<starsdb::XColumnUpdate>
 }
 
 //------------------------------------------------------------------------------
-void DBTypeConversion::setValue(const staruno::Reference<starsdb::XColumnUpdate>& xVariant,
-                                const starutil::Date& rNullDate,
+void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
+                                const Date& rNullDate,
                                 const double& rValue,
                                 sal_Int16 nKeyType) throw(starlang::IllegalArgumentException)
 {
-    switch (nKeyType & ~starutil::NumberFormat::DEFINED)
+    switch (nKeyType & ~NumberFormat::DEFINED)
     {
-        case starutil::NumberFormat::DATE:
-        case starutil::NumberFormat::DATETIME:
-        //  case starutil::NumberFormat::TIME:
+        case NumberFormat::DATE:
+        case NumberFormat::DATETIME:
+        //  case NumberFormat::TIME:
             xVariant->updateDouble(toStandardDbDate(rNullDate, rValue));
             break;
         default:
@@ -193,17 +206,17 @@ void DBTypeConversion::setValue(const staruno::Reference<starsdb::XColumnUpdate>
 }
 
 //------------------------------------------------------------------------------
-double DBTypeConversion::getValue(const staruno::Reference<starsdb::XColumn>& xVariant,
-                                  const starutil::Date& rNullDate,
+double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
+                                  const Date& rNullDate,
                                   sal_Int16 nKeyType)
 {
     try
     {
-        switch (nKeyType & ~starutil::NumberFormat::DEFINED)
+        switch (nKeyType & ~NumberFormat::DEFINED)
         {
-            case starutil::NumberFormat::DATE:
-            case starutil::NumberFormat::DATETIME:
-            //  case starutil::NumberFormat::TIME:
+            case NumberFormat::DATE:
+            case NumberFormat::DATETIME:
+            //  case NumberFormat::TIME:
                 return toNullDate(rNullDate, xVariant->getDouble());
             default:
                 return xVariant->getDouble();
@@ -215,10 +228,10 @@ double DBTypeConversion::getValue(const staruno::Reference<starsdb::XColumn>& xV
     }
 }
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getValue(const staruno::Reference<starbeans::XPropertySet>& _xColumn,
-                                           const staruno::Reference<starutil::XNumberFormatter>& _xFormatter,
+::rtl::OUString DBTypeConversion::getValue(const Reference<starbeans::XPropertySet>& _xColumn,
+                                           const Reference<XNumberFormatter>& _xFormatter,
                                            const starlang::Locale& _rLocale,
-                                           const starutil::Date& _rNullDate)
+                                           const Date& _rNullDate)
 {
     sal_Int32 nKey;
     sal_Int16 nKeyType;
@@ -237,23 +250,23 @@ double DBTypeConversion::getValue(const staruno::Reference<starsdb::XColumn>& xV
 
     if (!nKey)
     {
-        staruno::Reference<starutil::XNumberFormats> xFormats( _xFormatter->getNumberFormatsSupplier()->getNumberFormats() );
-        staruno::Reference<starutil::XNumberFormatTypes> xTypeList(_xFormatter->getNumberFormatsSupplier()->getNumberFormats(), staruno::UNO_QUERY);
+        Reference<XNumberFormats> xFormats( _xFormatter->getNumberFormatsSupplier()->getNumberFormats() );
+        Reference<XNumberFormatTypes> xTypeList(_xFormatter->getNumberFormatsSupplier()->getNumberFormats(), UNO_QUERY);
 
         nKey = dbtools::getDefaultNumberFormat(_xColumn,
-                                           staruno::Reference< starutil::XNumberFormatTypes > (xFormats, staruno::UNO_QUERY),
+                                           Reference< XNumberFormatTypes > (xFormats, UNO_QUERY),
                                            _rLocale);
 
-        nKeyType = getNumberFormatType(_xFormatter, nKey) & ~starutil::NumberFormat::DEFINED;
+        nKeyType = getNumberFormatType(_xFormatter, nKey) & ~NumberFormat::DEFINED;
     }
 
-    return DBTypeConversion::getValue(staruno::Reference< starsdb::XColumn > (_xColumn, staruno::UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
+    return DBTypeConversion::getValue(Reference< XColumn > (_xColumn, UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getValue(const staruno::Reference<starsdb::XColumn>& xVariant,
-                                   const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
-                                   const starutil::Date& rNullDate,
+::rtl::OUString DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
+                                   const Reference<XNumberFormatter>& xFormatter,
+                                   const Date& rNullDate,
                                    sal_Int32 nKey,
                                    sal_Int16 nKeyType)
 {
@@ -262,32 +275,32 @@ double DBTypeConversion::getValue(const staruno::Reference<starsdb::XColumn>& xV
     {
         try
         {
-            switch (nKeyType & ~starutil::NumberFormat::DEFINED)
+            switch (nKeyType & ~NumberFormat::DEFINED)
             {
-                case starutil::NumberFormat::DATE:
-                case starutil::NumberFormat::DATETIME:
+                case NumberFormat::DATE:
+                case NumberFormat::DATETIME:
                 {
                     double fValue = xVariant->getDouble();
                     if (!xVariant->wasNull())
                         xFormatter->convertNumberToString(nKey, toNullDate(rNullDate, fValue));
                 }   break;
-                case starutil::NumberFormat::TIME:
-                case starutil::NumberFormat::NUMBER:
-                case starutil::NumberFormat::SCIENTIFIC:
-                case starutil::NumberFormat::FRACTION:
-                case starutil::NumberFormat::PERCENT:
+                case NumberFormat::TIME:
+                case NumberFormat::NUMBER:
+                case NumberFormat::SCIENTIFIC:
+                case NumberFormat::FRACTION:
+                case NumberFormat::PERCENT:
                 {
                     double fValue = xVariant->getDouble();
                     if (!xVariant->wasNull())
                         aString = xFormatter->convertNumberToString(nKey, fValue);
                 }   break;
-                case starutil::NumberFormat::CURRENCY:
+                case NumberFormat::CURRENCY:
                 {
                     double fValue = xVariant->getDouble();
                     if (!xVariant->wasNull())
                         aString = xFormatter->getInputString(nKey, fValue);
                 }   break;
-                case starutil::NumberFormat::TEXT:
+                case NumberFormat::TEXT:
                     aString = xFormatter->formatString(nKey, xVariant->getString());
                     break;
                 default:
@@ -305,7 +318,7 @@ double DBTypeConversion::getValue(const staruno::Reference<starsdb::XColumn>& xV
 
 const double fMilliSecondsPerDay = 86400000.0;
 //------------------------------------------------------------------------------
-sal_Int32 DBTypeConversion::toINT32(const starutil::Date& rVal)
+sal_Int32 DBTypeConversion::toINT32(const Date& rVal)
 {
     return ((sal_Int32)(rVal.Day%100)) +
           (((sal_Int32)(rVal.Month%100))*100) +
@@ -313,7 +326,7 @@ sal_Int32 DBTypeConversion::toINT32(const starutil::Date& rVal)
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 DBTypeConversion::toINT32(const starutil::Time& rVal)
+sal_Int32 DBTypeConversion::toINT32(const Time& rVal)
 {
     // Zeit normalisieren
     sal_Int32 nSeconds          = rVal.Seconds + rVal.HundredthSeconds / 100;
@@ -328,7 +341,7 @@ sal_Int32 DBTypeConversion::toINT32(const starutil::Time& rVal)
 }
 
 //------------------------------------------------------------------------------
-sal_Int64 DBTypeConversion::toINT64(const starutil::DateTime& rVal)
+sal_Int64 DBTypeConversion::toINT64(const DateTime& rVal)
 {
     // Zeit normalisieren
     sal_Int32 nSeconds          = rVal.Seconds + rVal.HundredthSeconds / 100;
@@ -347,7 +360,7 @@ sal_Int64 DBTypeConversion::toINT64(const starutil::DateTime& rVal)
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 DBTypeConversion::getMsFromTime(const starutil::Time& rVal)
+sal_Int32 DBTypeConversion::getMsFromTime(const Time& rVal)
 {
     sal_Int16   nSign     = (toINT32(rVal) >= 0) ? +1 : -1;
     sal_Int32   nHour     = rVal.Hours;
@@ -388,7 +401,7 @@ static sal_Int32 implDaysInMonth(sal_Int32 _nMonth, sal_Int32 _nYear)
 }
 
 //------------------------------------------------------------------------------
-static sal_Int32 implRelativeToAbsoluteNull(const starutil::Date& _rDate)
+static sal_Int32 implRelativeToAbsoluteNull(const Date& _rDate)
 {
     sal_Int32 nDays = 0;
 
@@ -446,27 +459,27 @@ static void implBuildFromRelative( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16
     rDay = nTempDays;
 }
 //------------------------------------------------------------------------------
-sal_Int32 DBTypeConversion::toDays(const starutil::Date& _rVal, const starutil::Date& _rNullDate)
+sal_Int32 DBTypeConversion::toDays(const Date& _rVal, const Date& _rNullDate)
 {
     return implRelativeToAbsoluteNull(_rVal) - implRelativeToAbsoluteNull(_rNullDate);
 }
 
 //------------------------------------------------------------------------------
-double DBTypeConversion::toDouble(const starutil::Date& rVal, const starutil::Date& _rNullDate)
+double DBTypeConversion::toDouble(const Date& rVal, const Date& _rNullDate)
 {
     return (double)toDays(rVal, _rNullDate);
 }
 
 //------------------------------------------------------------------------------
-double DBTypeConversion::toDouble(const starutil::Time& rVal)
+double DBTypeConversion::toDouble(const Time& rVal)
 {
     return (double)getMsFromTime(rVal) / fMilliSecondsPerDay;
 }
 
 //------------------------------------------------------------------------------
-double DBTypeConversion::toDouble(const starutil::DateTime& _rVal, const starutil::Date& _rNullDate)
+double DBTypeConversion::toDouble(const DateTime& _rVal, const Date& _rNullDate)
 {
-    sal_Int64   nTime     = toDays(starutil::Date(_rVal.Day, _rVal.Month, _rVal.Year), _rNullDate);
+    sal_Int64   nTime     = toDays(Date(_rVal.Day, _rVal.Month, _rVal.Year), _rNullDate);
     sal_Int16   nSign     = (nTime >= 0) ? +1 : -1;
     sal_Int32   nHour     = _rVal.Hours;
     sal_Int32   nMin      = _rVal.Minutes;
@@ -478,7 +491,7 @@ double DBTypeConversion::toDouble(const starutil::DateTime& _rVal, const staruti
     return ((double)nTime) + (nVal * (1/fMilliSecondsPerDay));
 }
 // -------------------------------------------------------------------------
-static void addDays(sal_Int32 nDays, starutil::Date& _rDate)
+static void addDays(sal_Int32 nDays, Date& _rDate)
 {
     sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
@@ -499,7 +512,7 @@ static void addDays(sal_Int32 nDays, starutil::Date& _rDate)
         implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
 }
 // -----------------------------------------------------------------------
-static void subDays( sal_Int32 nDays, starutil::Date& _rDate )
+static void subDays( sal_Int32 nDays, Date& _rDate )
 {
     sal_Int32   nTempDays = implRelativeToAbsoluteNull( _rDate );
 
@@ -520,9 +533,9 @@ static void subDays( sal_Int32 nDays, starutil::Date& _rDate )
         implBuildFromRelative( nTempDays, _rDate.Day, _rDate.Month, _rDate.Year );
 }
 // -------------------------------------------------------------------------
-starutil::Date DBTypeConversion::toDate(double dVal, const starutil::Date& _rNullDate)
+Date DBTypeConversion::toDate(double dVal, const Date& _rNullDate)
 {
-    starutil::Date aRet = _rNullDate;
+    Date aRet = _rNullDate;
 
     if (dVal >= 0)
         addDays((sal_Int32)dVal,aRet);
@@ -533,7 +546,7 @@ starutil::Date DBTypeConversion::toDate(double dVal, const starutil::Date& _rNul
     return aRet;
 }
 // -------------------------------------------------------------------------
-starutil::Time DBTypeConversion::toTime(double dVal)
+Time DBTypeConversion::toTime(double dVal)
 {
     sal_Int32 nDays     = (sal_Int32)dVal;
     sal_Int32 nMS = sal_Int32((dVal - (double)nDays) * fMilliSecondsPerDay + 0.5);
@@ -547,7 +560,7 @@ starutil::Time DBTypeConversion::toTime(double dVal)
     else
         nSign = 1;
 
-    starutil::Time xRet;
+    Time xRet;
     // Zeit normalisieren
     xRet.HundredthSeconds   = nMS/10;
     xRet.Seconds            = xRet.HundredthSeconds / 100;
@@ -571,12 +584,12 @@ starutil::Time DBTypeConversion::toTime(double dVal)
 
 }
 //------------------------------------------------------------------------------
-starutil::DateTime DBTypeConversion::toDateTime(double dVal, const starutil::Date& _rNullDate)
+DateTime DBTypeConversion::toDateTime(double dVal, const Date& _rNullDate)
 {
-    starutil::Date aDate = toDate(dVal, _rNullDate);
-    starutil::Time aTime = toTime(dVal);
+    Date aDate = toDate(dVal, _rNullDate);
+    Time aTime = toTime(dVal);
 
-    starutil::DateTime xRet;
+    DateTime xRet;
 
     xRet.Day                = aDate.Day;
     xRet.Month              = aDate.Month;
@@ -590,6 +603,27 @@ starutil::DateTime DBTypeConversion::toDateTime(double dVal, const starutil::Dat
 
     return xRet;
 }
+//------------------------------------------------------------------------------
+Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xSupplier)
+{
+    OSL_ENSHURE(xSupplier.is(), "getNULLDate : the formatter doesn't implement a supplier !");
+    if (xSupplier.is())
+    {
+        try
+        {
+            // get the null date
+            Date aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
+            return aDate;
+        }
+        catch ( ... )
+        {
+        }
+    }
+
+    return STANDARD_DB_DATE;
+}
+
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
@@ -598,6 +632,9 @@ starutil::DateTime DBTypeConversion::toDateTime(double dVal, const starutil::Dat
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 08:50:32  fs
+ *  moved the files from unotools to here
+ *
  *
  *  Revision 1.0 29.09.00 08:17:18  fs
  ************************************************************************/

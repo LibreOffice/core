@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@ OKeyColumn::OKeyColumn( const ::rtl::OUString&  _ReferencedColumn,
                         ,   m_ReferencedColumn(_ReferencedColumn)
 {
     construct();
+}
+// -------------------------------------------------------------------------
+OKeyColumn::~OKeyColumn()
+{
 }
 // -------------------------------------------------------------------------
 void OKeyColumn::construct()

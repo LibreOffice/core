@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:36:20 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
 #endif
-#ifndef _CONNECTIVITY_ENUMHELPER_HXX_
-#include "enumhelper.hxx"
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
 #endif
 #ifndef _COMPHELPER_CONTAINER_HXX_
 #include <comphelper/container.hxx>
@@ -71,6 +71,7 @@
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;
+using namespace comphelper;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -249,6 +250,6 @@ sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) 
 Reference< XEnumeration > SAL_CALL OCollection::createEnumeration(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    return new connectivity::OEnumerationByIndex( static_cast< XIndexAccess*>(this));
+    return new OEnumerationByIndex( static_cast< XIndexAccess*>(this));
 }
 

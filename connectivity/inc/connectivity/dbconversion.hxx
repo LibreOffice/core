@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:56:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,92 +62,135 @@
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #define _DBHELPER_DBCONVERSION_HXX_
 
-#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
-#include <com/sun/star/sdb/XColumnUpdate.hpp>
+//#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
+//#include <com/sun/star/sdb/XColumnUpdate.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
+//#include <com/sun/star/sdb/XColumn.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
+//#include <com/sun/star/util/XNumberFormatter.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+//#include <com/sun/star/beans/XPropertySet.hpp>
+//#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
-#include <com/sun/star/sdb/XColumn.hpp>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
+
+
+// forward declarations
+namespace rtl
+{
+    class OUString;
+}
+namespace com
+{
+    namespace sun
+    {
+        namespace star
+        {
+            namespace uno
+            {
+                class Reference;
+            }
+            namespace lang
+            {
+                class IllegalArgumentException;
+                struct Locale;
+            }
+            namespace sdb
+            {
+                class XColumn;
+                class XColumnUpdate;
+            }
+            namespace beans
+            {
+                class XPropertySet;
+            }
+            namespace util
+            {
+                class XNumberFormatter;
+                class XNumberFormatsSupplier;
+                struct Time;
+                struct DateTime;
+            }
+        }
+    }
+}
 
 //.........................................................................
 namespace dbtools
 {
 //.........................................................................
 
-    namespace staruno   = ::com::sun::star::uno;
-    namespace starsdbc  = ::com::sun::star::sdbc;
-    namespace starsdb   = ::com::sun::star::sdb;
-    namespace starutil  = ::com::sun::star::util;
-    namespace starlang  = ::com::sun::star::lang;
-    namespace starbeans = ::com::sun::star::beans;
-
 class DBTypeConversion
 {
 public:
-    static starutil::Date STANDARD_DB_DATE;
+    static ::com::sun::star::util::Date STANDARD_DB_DATE;
 
 public:
-    static void setValue(const staruno::Reference<starsdb::XColumnUpdate>& xVariant,
-                                const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
-                                const starutil::Date& rNullDate,
+    static void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
+                                const ::com::sun::star::util::Date& rNullDate,
                                 const ::rtl::OUString& rString,
                                 sal_Int32 nKey,
                                 sal_Int16 nFieldType,
-                                sal_Int16 nKeyType) throw(starlang::IllegalArgumentException);
+                                sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
 
-    static void setValue(const staruno::Reference<starsdb::XColumnUpdate>& xVariant,
-                         const starutil::Date& rNullDate,
+    static void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
+                         const ::com::sun::star::util::Date& rNullDate,
                          const double& rValue,
-                         sal_Int16 nKeyType) throw(starlang::IllegalArgumentException);
+                         sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
 
-    static double getValue(const staruno::Reference<starsdb::XColumn>& xVariant, const starutil::Date& rNullDate,
+    static double getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate,
                                 sal_Int16 nKeyType);
 
     // get the columnvalue as string with a default format given by the column or a default format
     // for the type
-    static ::rtl::OUString getValue(const staruno::Reference<starbeans::XPropertySet>& _xColumn,
-                                    const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
-                                    const starlang::Locale& _rLocale,
-                                    const starutil::Date& rNullDate);
+    static ::rtl::OUString getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
+                                    const ::com::sun::star::lang::Locale& _rLocale,
+                                    const ::com::sun::star::util::Date& rNullDate);
 
-    static ::rtl::OUString getValue(const staruno::Reference<starsdb::XColumn>& _xColumn,
-                                    const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
-                                    const starutil::Date& rNullDate,
+    static ::rtl::OUString getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _xColumn,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
+                                    const ::com::sun::star::util::Date& rNullDate,
                                     sal_Int32 nKey,
                                     sal_Int16 nKeyType);
 
-    static starutil::Date       toDate(double dVal, const starutil::Date& _rNullDate = STANDARD_DB_DATE);
-    static starutil::Time       toTime(double dVal);
-    static starutil::DateTime   toDateTime(double dVal, const starutil::Date& _rNullDate = STANDARD_DB_DATE);
+    static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
+    static ::com::sun::star::util::Time     toTime(double dVal);
+    static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
 
     /** return the given DateTime as JDBC compliant 64 bit value
     */
-    static sal_Int64 toINT64(const starutil::DateTime& rVal);
-    static sal_Int32 getMsFromTime(const starutil::Time& rVal);
+    static sal_Int64 toINT64(const ::com::sun::star::util::DateTime& rVal);
+    static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal);
 
-    static sal_Int32 toDays(const starutil::Date& _rVal, const starutil::Date& _rNullDate = STANDARD_DB_DATE);
+    static sal_Int32 toDays(const ::com::sun::star::util::Date& _rVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
 
-    static double   toDouble(const starutil::Date& rVal, const starutil::Date& _rNullDate = STANDARD_DB_DATE);
-    static double   toDouble(const starutil::Time& rVal);
-    static double   toDouble(const starutil::DateTime& rVal, const starutil::Date& _rNullDate = STANDARD_DB_DATE);
+    static double   toDouble(const ::com::sun::star::util::Date& rVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
+    static double   toDouble(const ::com::sun::star::util::Time& rVal);
+    static double   toDouble(const ::com::sun::star::util::DateTime& rVal, const ::com::sun::star::util::Date& _rNullDate = STANDARD_DB_DATE);
 
-    static sal_Int32    toINT32(const starutil::Date& rVal);
-    static sal_Int32    toINT32(const starutil::Time& rVal);
+    static sal_Int32    toINT32(const ::com::sun::star::util::Date& rVal);
+    static sal_Int32    toINT32(const ::com::sun::star::util::Time& rVal);
 
     /** convert a double which is a date value relative to a given fixed date into a date value relative
         to the standard db null date.
     */
-    static double toStandardDbDate(const starutil::Date& _rNullDate, double _rVal) { return _rVal + toDays(_rNullDate); }
+    static double toStandardDbDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal + toDays(_rNullDate); }
     /** convert a double which is a date value relative to the standard db null date into a date value relative
         to a given fixed date.
     */
-    static double toNullDate(const starutil::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
+    static double toNullDate(const ::com::sun::star::util::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
+
+    // return the date from the numberformatsupplier or the STANDARD_DATE (1900,1,1)
+    static ::com::sun::star::util::Date getNULLDate(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier);
 };
 
 //.........................................................................

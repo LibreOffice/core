@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 12:05:10 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,5 +165,9 @@ void ODescriptor::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : ::com::sun::star::beans::PropertyAttribute::READONLY;
     registerProperty(connectivity::PROPERTY_NAME, PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+}
+// -------------------------------------------------------------------------
+ODescriptor::~ODescriptor()
+{
 }
 

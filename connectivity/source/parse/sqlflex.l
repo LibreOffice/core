@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.1.1.1 2000-09-18 16:14:28 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.2 2000-10-19 11:47:14 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2000-09-18 16:14:28 $ $Revision: 1.1.1.1 $
+//	$Author: oj $ $Date: 2000-10-19 11:47:14 $ $Revision: 1.2 $
 //
 // Description:
 //
@@ -25,9 +25,6 @@
 
 #ifndef _INC_STRING
 #include <string.h>
-#endif
-#ifndef _SOLAR_H
-#include <tools/solar.h>
 #endif
 
 #ifndef _CONNECTIVITY_SQLINTERNALNODE_HXX
@@ -59,11 +56,11 @@ using namespace connectivity;
 // Erzeugung der Blaetter fuer die Token
 // Blaetter werden generell vom Lexer erzeugt
 
-static String aEmptyString;
+static ::rtl::OUString aEmptyString;
 
-static int	gatherString(int delim, int nTyp);
-static int  gatherName(const char*);
-static int	gatherNamePre(const char* );
+static sal_Int32	gatherString(sal_Int32 delim, sal_Int32 nTyp);
+static sal_Int32	gatherName(const sal_Char*);
+static sal_Int32	gatherNamePre(const sal_Char* );
 // has to be set before the parser starts
 OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
@@ -73,13 +70,13 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 #define SQL_NEW_KEYWORD(token)						\
 		SQLyylval.pParseNode = new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, (token));		
 
-#define SQL_NEW_NAME 		SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_NAME)
-#define SQL_NEW_INTNUM 		SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_INTNUM)
-#define SQL_NEW_APPROXNUM 	SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_APPROXNUM)
-#define SQL_NEW_STRING 		SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_STRING)
-#define SQL_NEW_COMPARISON 	SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_COMPARISON)
-#define SQL_NEW_AMMSC 		SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_AMMSC)
-#define SQL_NEW_DATE 		SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_ACCESS_DATE)
+#define SQL_NEW_NAME 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_NAME)
+#define SQL_NEW_INTNUM 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_INTNUM)
+#define SQL_NEW_APPROXNUM 	SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_APPROXNUM)
+#define SQL_NEW_STRING 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_STRING)
+#define SQL_NEW_COMPARISON 	SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_COMPARISON)
+#define SQL_NEW_AMMSC 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_AMMSC)
+#define SQL_NEW_DATE 		SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_ACCESS_DATE)
 
 #define YY_INPUT(buf,result,max_size) 				\
 {													\
@@ -271,13 +268,13 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [Zz][Oo][Nn][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_ZONE); return SQL_TOKEN_ZONE; }
 
-"<"					{ SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_LESS);return LESS;}
-">"					{ SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_GREAT);return GREAT;}
-"="					{ SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_EQUAL);return EQUAL;}
-"<="				{ SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_LESSEQ);return LESSEQ;}
-">="				{ SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_GREATEQ);return GREATEQ;}
-"<>"				{ SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
-"!="				{ SQL_NEW_NODE(String::CreateFromAscii(SQLyytext), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
+"<"					{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_LESS);return LESS;}
+">"					{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_GREAT);return GREAT;}
+"="					{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_EQUAL);return EQUAL;}
+"<="				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_LESSEQ);return LESSEQ;}
+">="				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_GREATEQ);return GREATEQ;}
+"<>"				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
+"!="				{ SQL_NEW_NODE(::rtl::OUString::createFromAscii(SQLyytext), SQL_NODE_NOTEQUAL);return NOTEQUAL;}
 
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
@@ -349,14 +346,14 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
  * nTyp == 1 -> SQL_NODE_STRING
  * nTyp == 2 -> SQL_NODE_ACCESS_DATE
  */
-int gatherString( int delim, int nTyp)
+sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 {
-	int ch;
+	sal_Int32 ch;
 	static sal_Int32 BUFFERSIZE = 256;
-	static char* Buffer = new char[BUFFERSIZE];
+	static sal_Char* Buffer = new sal_Char[BUFFERSIZE];
 	
-	char *s = Buffer;
-	int nPos = 0;
+	sal_Char *s = Buffer;
+	sal_Int32 nPos = 0;
 
 	while ((ch = yyinput()) != EOF) 
 	{
@@ -372,13 +369,13 @@ int gatherString( int delim, int nTyp)
 				switch(nTyp)
 				{
 					case 0:
-						SQL_NEW_NODE(String(Buffer,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+						SQL_NEW_NODE(::rtl::OUString(Buffer,BUFFERSIZE,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
 						return SQL_TOKEN_NAME;											
 					case 1:
-						SQL_NEW_NODE(String(Buffer,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+						SQL_NEW_NODE(::rtl::OUString(Buffer,BUFFERSIZE,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
 						return SQL_TOKEN_STRING;
 					case 2:
-						SQL_NEW_NODE(String(Buffer,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
+						SQL_NEW_NODE(::rtl::OUString(Buffer,BUFFERSIZE,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
 						return SQL_TOKEN_ACCESS_DATE;
 				}				
 			} 
@@ -387,12 +384,12 @@ int gatherString( int delim, int nTyp)
 				*s++ = ch;
 				if (++nPos == BUFFERSIZE)
 				{
-					ByteString aBuf(Buffer);
+					::rtl::OString aBuf(Buffer);
 					delete Buffer;
 					BUFFERSIZE *=2;
-					Buffer = new char[BUFFERSIZE];
-					for(xub_StrLen i=0;i<aBuf.Len();++i,++Buffer)
-						*Buffer = aBuf.GetChar(i);
+					Buffer = new sal_Char[BUFFERSIZE];
+					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
+						*Buffer = aBuf.getStr()[i];
 					s = &Buffer[nPos];
 				}
 			}
@@ -405,12 +402,12 @@ int gatherString( int delim, int nTyp)
 			*s++ = ch;
 			if (++nPos == BUFFERSIZE)
 			{
-				ByteString aBuf(Buffer);
+				::rtl::OString aBuf(Buffer);
 				delete Buffer;
 				BUFFERSIZE *=2;
-				Buffer = new char[BUFFERSIZE];
-				for(xub_StrLen i=0;i<aBuf.Len();++i,++Buffer)
-					*Buffer = aBuf.GetChar(i);
+				Buffer = new sal_Char[BUFFERSIZE];
+				for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
+					*Buffer = aBuf.getStr()[i];
 				s = &Buffer[nPos];
 			}
 		}
@@ -425,10 +422,10 @@ int gatherString( int delim, int nTyp)
  * Valid Names or internatioanl keywords:
  *	As we have international keywords, we test first on them  
  */
-int gatherName(const char* text)
+sal_Int32 gatherName(const sal_Char* text)
 {
 	OSL_ENSHURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
-	int nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
+	sal_Int32 nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
 	switch (nToken)
 	{
 		case SQL_TOKEN_LIKE:
@@ -448,7 +445,7 @@ int gatherName(const char* text)
 			SQL_NEW_KEYWORD(nToken); 
 			return nToken;
 		default:
-			SQL_NEW_NODE(String::CreateFromAscii(text), SQL_NODE_NAME); 
+			SQL_NEW_NODE(::rtl::OUString::createFromAscii(text), SQL_NODE_NAME); 
 			return SQL_TOKEN_NAME; 
 	}
 }
@@ -457,10 +454,10 @@ int gatherName(const char* text)
  Valid Names or internatioanl keywords:
  As we have international keywords, we test first on them  
 */
-int gatherNamePre(const char* text)
+sal_Int32 gatherNamePre(const sal_Char* text)
 { 
 	OSL_ENSHURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
-	int nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
+	sal_Int32 nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
 	switch (nToken)
 	{
 		case SQL_TOKEN_LIKE:
@@ -483,12 +480,12 @@ int gatherNamePre(const char* text)
 			// we need a special handling for parameter
 			if (yy_hold_char == ':')
 			{
-				SQL_NEW_NODE(String::CreateFromAscii(text), SQL_NODE_NAME); 
+				SQL_NEW_NODE(::rtl::OUString::createFromAscii(text), SQL_NODE_NAME); 
 				return SQL_TOKEN_NAME; 				
 			}
 			else
 			{
-				SQL_NEW_NODE(String::CreateFromAscii(text), SQL_NODE_STRING);
+				SQL_NEW_NODE(::rtl::OUString::createFromAscii(text), SQL_NODE_STRING);
 				return SQL_TOKEN_STRING;			
 			}
 	}															   	
@@ -504,8 +501,6 @@ static sal_uInt32 Intl_TokenID[] =
 	SQL_TOKEN_MIN, SQL_TOKEN_SUM
 };
 
-DBG_NAME(OSQLScanner);
-
 //------------------------------------------------------------------------------
 OSQLScanner::OSQLScanner()
 			: m_nCurrentPos(0)
@@ -513,68 +508,65 @@ OSQLScanner::OSQLScanner()
 			, m_pContext(NULL)
 			, m_nRule(0) // 0 is INITIAL
 {
-	DBG_CTOR(OSQLScanner,NULL);		
 }
 
 //------------------------------------------------------------------------------
 OSQLScanner::~OSQLScanner()
 {
-	DBG_DTOR(OSQLScanner,NULL);
 }
 
 //------------------------------------------------------------------------------
-void OSQLScanner::SQLyyerror(char *fmt)
+void OSQLScanner::SQLyyerror(sal_Char *fmt)
 {
-	DBG_ASSERT(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
+	OSL_ENSHURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
 	m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
-	if (m_nCurrentPos < m_sStatement.Len())
+	if (m_nCurrentPos < m_sStatement.getLength())
 	{
-		m_sErrorMessage.AppendAscii(": ");
+		m_sErrorMessage += ::rtl::OUString::createFromAscii(": ");
 		m_sErrorMessage += m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL_HINT);
-		m_sErrorMessage.SearchAndReplaceAscii("#",String::CreateFromAscii(SQLyytext));	
+		
+		m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf('#',0),1,::rtl::OUString::createFromAscii(SQLyytext));	
 	}
 }
 
 //------------------------------------------------------------------------------
-void OSQLScanner::prepareScan(const String & rNewStatement, OParseContext* pContext, sal_Bool bInternational)
+void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, OParseContext* pContext, sal_Bool bInternational)
 {
-	DBG_CHKTHIS(OSQLScanner,NULL);
-
 	BEGIN(m_nRule);
 
-	m_sErrorMessage.Erase();	
-	m_sStatement = ByteString(rNewStatement, RTL_TEXTENCODING_UTF8);
+	m_sErrorMessage = ::rtl::OUString();	
+	m_sStatement = ::rtl::OString(rNewStatement,rNewStatement.getLength(), RTL_TEXTENCODING_UTF8);
 	m_nCurrentPos = 0;
 	m_bInternational = bInternational;
 	m_pContext = pContext;
 }
 
 //------------------------------------------------------------------------------
-int OSQLScanner::SQLyygetc(void)
+sal_Int32 OSQLScanner::SQLyygetc(void)
 {
-	return (m_nCurrentPos >= m_sStatement.Len()) ? -1 : m_sStatement.GetChar(m_nCurrentPos++);
+	return (m_nCurrentPos >= m_sStatement.getLength()) ? -1 : m_sStatement.getStr()[m_nCurrentPos++];
 }
 
 //------------------------------------------------------------------------------
-int OSQLScanner::getInternationalTokenID(const char* sToken) const
+sal_Int32 OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
 {		
-	DBG_ASSERT(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");			
-	return (m_bInternational) ? m_pContext->getIntlKeyCode(ByteString(sToken, RTL_TEXTENCODING_ASCII_US)) : 0;	
+	OSL_ENSHURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");			
+	return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken, RTL_TEXTENCODING_ASCII_US)) : 0;	
 }
 // -------------------------------------------------------------------------
-int	OSQLScanner::GetCurrentRule() const { return m_nRule; }
-int	OSQLScanner::GetGERRule() const		{ return PREDICATE_GER; }
-int	OSQLScanner::GetENGRule() const		{ return PREDICATE_ENG; }
-int	OSQLScanner::GetSQLRule() const		{ return SQL; }
-int	OSQLScanner::GetDATERule() const	{ return DATE; }
-int	OSQLScanner::GetSTRINGRule() const	{ return STRING; }
+sal_Int32	OSQLScanner::GetCurrentRule() const { return m_nRule; }
+sal_Int32	OSQLScanner::GetGERRule() const		{ return PREDICATE_GER; }
+sal_Int32	OSQLScanner::GetENGRule() const		{ return PREDICATE_ENG; }
+sal_Int32	OSQLScanner::GetSQLRule() const		{ return SQL; }
+sal_Int32	OSQLScanner::GetDATERule() const	{ return DATE; }
+sal_Int32	OSQLScanner::GetSTRINGRule() const	{ return STRING; }
 // -------------------------------------------------------------------------
 void OSQLScanner::setScanner(sal_Bool _bNull)
 {
 	xxx_pGLOBAL_SQLSCAN = _bNull ? NULL : this;
 }
 // -------------------------------------------------------------------------
-int OSQLScanner::SQLlex()
+sal_Int32 OSQLScanner::SQLlex()
 {
 	return SQLyylex();
 }

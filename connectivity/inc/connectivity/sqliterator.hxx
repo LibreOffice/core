@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:50 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #define _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 
-#ifndef _SVTOOLS_HASHCONT_HXX //autogen
-#include <svtools/hashcont.hxx>
-#endif
+//#ifndef _SVTOOLS_HASHCONT_HXX //autogen
+//#include <svtools/hashcont.hxx>
+//#endif
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include "connectivity/sqlnode.hxx"
 #endif
@@ -129,8 +129,8 @@ namespace connectivity
     //==================================================================
     struct OSQLParseIteratorErrorInfo
     {
-        USHORT      nErrorCode;     // 1 == Tabelle nicht gefunden, 2 == Spalte nicht gefunden
-        String      aExpression;    // der Teil-Ausdruck, der das Problem verursacht hat (kann leer sein)
+        sal_uInt16      nErrorCode;     // 1 == Tabelle nicht gefunden, 2 == Spalte nicht gefunden
+        ::rtl::OUString     aExpression;    // der Teil-Ausdruck, der das Problem verursacht hat (kann leer sein)
     };
 
     #define RET_CONTINUE    1   // Parsevorgang fortsetzen
@@ -146,28 +146,26 @@ namespace connectivity
         ::vos::ORef<OSQLColumns>    m_aSelectColumns; // alle Spalten aus dem Select-Clause
         ::comphelper::UStringMixEqual       m_aCaseEqual;
 
-        Link                    m_aErrorHdl;        // wird im Fehlerfall gerufen
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDatabaseMetaData;
 
         // F"ugt eine Tabelle in die Map ein
-        void                traverseOneTableName(const OSQLParseNode * pTableName, const String & rTableRange);
+        void                traverseOneTableName(const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange);
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
         void                traverseANDCriteria(OSQLParseNode * pSearchCondition);
         void                traverseOnePredicate(
                                                 OSQLParseNode * pColumnRef,
                                                 OSQLPredicateType ePredicateType,
-                                                String& aValue,
-                                                BOOL bCompareNull,
+                                                ::rtl::OUString& aValue,
+                                                sal_Bool bCompareNull,
                                                 OSQLParseNode * pParameter);
-        OSQLParseNode *     getTableRef(OSQLParseNode *pTableRef,String& aTableRange);
-        OSQLParseNode *     getQualified_join(OSQLParseNode *pTableRef,String& aTableRange);
+        OSQLParseNode *     getTableRef(OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
+        OSQLParseNode *     getQualified_join(OSQLParseNode *pTableRef,::rtl::OUString& aTableRange);
         void                getSelect_statement(OSQLParseNode *pSelect);
-        BOOL                CallError(USHORT nError, const String& rExpression = String());
-        String              getUniqueColumnName(const String & rColumnName) const;
+        ::rtl::OUString     getUniqueColumnName(const ::rtl::OUString & rColumnName)    const;
 
       protected:
-        void setSelectColumnName(const String & rColumnName,const String & rColumnAlias, const String & rTableRange,BOOL bFkt=FALSE);
+        void setSelectColumnName(const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False);
         void appendColumns(const OSQLTable& _rTable);
         // Weitere Member-Variable, die in den "set"-Funktionen zur
         // Verfuegung stehen sollen, koennen in der abgeleiteten Klasse
@@ -249,8 +247,8 @@ namespace connectivity
         // des Parse Tree abgebrochen. Ansonsten liefert "Status().IsSuccessful() == TRUE".
 
         void traverseTableNames();
-        virtual void setTableName(const String & rTableName, const String & rDBName, const String& rOwner,
-                                  const String & rTableRange);
+        virtual void setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rDBName, const ::rtl::OUString& rOwner,
+                                  const ::rtl::OUString & rTableRange);
         // [TableName enthaelt immer einen Namen, TableRange ist, falls angegeben, die "Range"-
         // Variable (eine Art Alias-Name fuer den TableName), falls nicht angegeben, identisch
         // zum TableName. SchemaName ist leer, wenn nicht angegeben.]
@@ -259,7 +257,7 @@ namespace connectivity
         // [TableRange kann leer sein, wenn nicht angegeben]
 
         void traverseOrderByColumnNames(const OSQLParseNode* pSelectNode);
-        virtual void setOrderByColumnName(const String & rColumnName, const String & rTableRange, BOOL bAscending);
+        virtual void setOrderByColumnName(const ::rtl::OUString & rColumnName, const ::rtl::OUString & rTableRange, sal_Bool bAscending);
         // [TableRange kann leer sein, wenn nicht angegeben]
 
         // Bei Selektionskriterien werden (selbst bei einem einfachen Praedikat)
@@ -286,18 +284,18 @@ namespace connectivity
         virtual void setORCriteriaPost();
         virtual void setANDCriteriaPre();
         virtual void setANDCriteriaPost();
-        virtual void setPredicate(const String & rColumnName,
-                                  const String & rTableRange,
+        virtual void setPredicate(const ::rtl::OUString & rColumnName,
+                                  const ::rtl::OUString & rTableRange,
                                   OSQLPredicateType ePredicateType,
-                                  const String & rValue,
-                                  const String & rParameterName);
+                                  const ::rtl::OUString & rValue,
+                                  const ::rtl::OUString & rParameterName);
 
 
         // Erweiterung auf UPDATE- und INSERT-Statement ... (nyi):
         void traverseAssignments();
-        virtual void setAssign(const String & rColumnName,
-                               const String & rValue, BOOL bsetNull,
-                               const String & rParameterName);
+        virtual void setAssign(const ::rtl::OUString & rColumnName,
+                               const ::rtl::OUString & rValue, sal_Bool bsetNull,
+                               const ::rtl::OUString & rParameterName);
 
         // Alle "traverse"-Routinen hintereinander aufrufen. Je nach Statement-Typ:
         // Bei UPDATE und INSERT-Statement nur traverseTableNames und traverseAssignments,
@@ -319,17 +317,13 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             getSelectAsNameAccess(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) const;
         // gibt den Aliasnamen der Column zur"uck, Leer falls nicht vorhanden
-        String getColumnAlias(const OSQLParseNode* pDerivedColumn) const;
+        ::rtl::OUString getColumnAlias(const OSQLParseNode* pDerivedColumn) const;
         // gibt den Columnnamen und die Tablerange (falls vorhanden) zur"uck
-        void getColumnRange(const OSQLParseNode* pColumnRef,String &rColumnName,String &rTableRange) const;
+        void getColumnRange(const OSQLParseNode* pColumnRef,::rtl::OUString &rColumnName,::rtl::OUString &rTableRange) const;
 
         // Ermittelt fuer eine Funktion, Spalten den zugehoeren TableRange,
         // wenn nicht eindeutig, dann leer
-        BOOL getColumnTableRange(const OSQLParseNode* pNode, String &rTableRange) const;
-
-        // FehlerHdl setzen
-        void    setErrorHdl(const Link& rHdl){  m_aErrorHdl = rHdl;};
-        const Link& getErrorHdl(){  return m_aErrorHdl;};
+        sal_Bool getColumnTableRange(const OSQLParseNode* pNode, ::rtl::OUString &rTableRange) const;
     };
 }
 

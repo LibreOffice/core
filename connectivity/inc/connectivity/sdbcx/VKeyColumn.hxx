@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:48:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,8 @@ namespace connectivity
                             sal_Bool        _IsRowVersion,
                             sal_Bool        _IsCurrency,
                             sal_Bool        _bCase);
+            // just to make it not inline
+            virtual ~OKeyColumn();
 
             virtual void construct();
         };

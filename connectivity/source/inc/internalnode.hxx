@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internalnode.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,13 @@ namespace connectivity
         OSQLInternalNode(const sal_Char* pNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
-        OSQLInternalNode(const ByteString& _rNewValue,
+        OSQLInternalNode(const ::rtl::OString& _rNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
         OSQLInternalNode(const sal_Unicode* pNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
-        OSQLInternalNode(const String& _rNewValue,
+        OSQLInternalNode(const ::rtl::OUString& _rNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
 

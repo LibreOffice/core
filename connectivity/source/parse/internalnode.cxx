@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internalnode.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif
-#ifndef _DEBUG_HXX //autogen
-#include <tools/debug.hxx>
-#endif
 
 using namespace connectivity;
 
@@ -76,19 +73,19 @@ using namespace connectivity;
 OSQLInternalNode::OSQLInternalNode(const sal_Char* pNewValue,
                                    SQLNodeType eNodeType,
                                    sal_uInt32 nNodeID)
-                 :OSQLParseNode(pNewValue,eNodeType,nNodeID)
+                 : OSQLParseNode(pNewValue,eNodeType,nNodeID)
 {
-    DBG_ASSERT(OSQLParser::s_pGarbageCollector, "Collector not initialized")
+    OSL_ENSHURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
     OSQLParser::s_pGarbageCollector->push_back(this);
 }
 
 //-----------------------------------------------------------------------------
-OSQLInternalNode::OSQLInternalNode(const ByteString &_NewValue,
+OSQLInternalNode::OSQLInternalNode(const ::rtl::OString &_NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
                 :OSQLParseNode(_NewValue,eNodeType,nNodeID)
 {
-    DBG_ASSERT(OSQLParser::s_pGarbageCollector, "Collector not initialized")
+    OSL_ENSHURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
     OSQLParser::s_pGarbageCollector->push_back(this);
 }
 
@@ -98,17 +95,17 @@ OSQLInternalNode::OSQLInternalNode(const sal_Unicode* pNewValue,
                                    sal_uInt32 nNodeID)
                  :OSQLParseNode(pNewValue,eNodeType,nNodeID)
 {
-    DBG_ASSERT(OSQLParser::s_pGarbageCollector, "Collector not initialized")
+    OSL_ENSHURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
     OSQLParser::s_pGarbageCollector->push_back(this);
 }
 
 //-----------------------------------------------------------------------------
-OSQLInternalNode::OSQLInternalNode(const String &_NewValue,
+OSQLInternalNode::OSQLInternalNode(const ::rtl::OUString &_NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
                 :OSQLParseNode(_NewValue,eNodeType,nNodeID)
 {
-    DBG_ASSERT(OSQLParser::s_pGarbageCollector, "Collector not initialized")
+    OSL_ENSHURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
     OSQLParser::s_pGarbageCollector->push_back(this);
 }
 
@@ -117,7 +114,7 @@ OSQLInternalNode::OSQLInternalNode(const String &_NewValue,
 OSQLInternalNode::~OSQLInternalNode()
 {
     // remove the node from the garbage list
-    DBG_ASSERT(OSQLParser::s_pGarbageCollector, "Collector not initialized")
+    OSL_ENSHURE(OSQLParser::s_pGarbageCollector, "Collector not initialized");
     if (!OSQLParser::s_pGarbageCollector->empty())
     {
         OSQLParser::s_pGarbageCollector->erase(
