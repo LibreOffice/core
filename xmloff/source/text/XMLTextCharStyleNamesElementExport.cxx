@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextCharStyleNamesElementExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(
                 while( --i )
                 {
                     rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          *pName );
+                                          rExport.EncodeStyleName( *pName ) );
                     rExport.StartElement( aName, sal_False );
                     ++pName;
                 }
