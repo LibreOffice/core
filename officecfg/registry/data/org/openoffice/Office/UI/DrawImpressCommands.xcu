@@ -362,8 +362,17 @@
             </node>
             <node oor:name=".uno:EffectWindow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">E~ffekt</value>
-                    <value xml:lang="en-US">~Effects</value>
+                    <value xml:lang="de">Benutzerdefinierte Animation...</value>
+                    <value xml:lang="en-US">Custom Animation...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CustomAnimationSchemes" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Animationsschemas...</value>
+                    <value xml:lang="en-US">Animation Schemes...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -371,8 +380,8 @@
             </node>
             <node oor:name=".uno:SlideChangeWindow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Dia~wechsel</value>
-                    <value xml:lang="en-US">Slide ~Transition</value>
+                    <value xml:lang="de">Folienübergang...</value>
+                    <value xml:lang="en-US">Slide Transition...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConnectorAttributes" oor:op="replace">
@@ -982,8 +991,8 @@
             </node>
             <node oor:name=".uno:AnimationObjects" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Animation</value>
-                    <value xml:lang="en-US">~Animation</value>
+                    <value xml:lang="de">Animiertes Bild...</value>
+                    <value xml:lang="en-US">Animated Image...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
