@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MenuProxy.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 /** Allows to execute dispatch for a menu item
     and handles listeners for changes in menu items.
  */
-service MenuProxy
+published service MenuProxy
 {
     //-------------------------------------------------------------------------
 
