@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:15:18 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifdef DBG_UTIL
 
 #include "svdata.hxx"
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <limits.h>
 #include <svsys.h>
 
@@ -1200,10 +1200,10 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         DbgData* pData = DbgGetData();
         pData->nTestFlags &= ~(DBG_TEST_XTOR_TRACE | DBG_TEST_MEM_INIT | DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT);
         pData->nTestFlags |= aData.nTestFlags & (DBG_TEST_XTOR_TRACE | DBG_TEST_MEM_INIT | DBG_TEST_RESOURCE | DBG_TEST_DIALOG | DBG_TEST_BOLDAPPFONT);
-        strcpy( pData->aInclClassFilter, aData.aInclClassFilter );
-        strcpy( pData->aExclClassFilter, aData.aExclClassFilter );
-        strcpy( pData->aInclFilter, aData.aInclFilter );
-        strcpy( pData->aExclFilter, aData.aExclFilter );
+        strncpy( pData->aInclClassFilter, aData.aInclClassFilter, sizeof( pData->aInclClassFilter ) );
+        strncpy( pData->aExclClassFilter, aData.aExclClassFilter, sizeof( pData->aExclClassFilter ) );
+        strncpy( pData->aInclFilter, aData.aInclFilter, sizeof( pData->aInclFilter ) );
+        strncpy( pData->aExclFilter, aData.aExclFilter, sizeof( pData->aExclFilter ) );
         if ( maBoldAppFont.GetSavedValue() != maBoldAppFont.IsChecked() )
         {
             AllSettings aSettings = Application::GetSettings();
