@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-22 08:07:53 $
+ *  last change: $Author: cd $ $Date: 2002-05-16 12:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@
     Text[ turkish ] = "~Kaydet..."; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "~Guardar...";    \
-    Text[ finnish ] = "~Tallenna";
+    Text[ finnish ] = "~Tallenna";  \
+    Text[ thai ] = "~บันทึก...";
 
 #define PUSHBUTTON_TEXT_RESET \
     Text = "Zur~�cksetzen" ; \
@@ -112,7 +113,8 @@
     Text[ turkish ] = "Ba�a al";    \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "~Restablecer";   \
-    Text[ finnish ] = "P~alauta";
+    Text[ finnish ] = "P~alauta";   \
+    Text[ thai ] = "ตั้~งค่าใหม่";
 
 #define PUSHBUTTON_TEXT_LOAD \
 /* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
@@ -138,7 +140,8 @@
     Text[ turkish ] = "Y�kle...";   \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "~Cargar..."; \
-    Text[ finnish ] = "~Lataa";
+    Text[ finnish ] = "~Lataa"; \
+    Text[ thai ] = "โ~หลด...";
 
 #define PUSHBUTTON_TEXT_REMOVE \
 /* ### ACHTUNG: Neuer Text in Resource? ~L�schen : ~L�schen */\
@@ -165,7 +168,8 @@
     Text[ korean ] = "삭제(~D)";  \
     Text[ turkish ] = "Sil";    \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Eliminar";
+    Text[ catalan ] = "~Eliminar";  \
+    Text[ thai ] = "~ลบ";
 
 #define PUSHBUTTON_TEXT_CHANGE \
 /* ### ACHTUNG: Neuer Text in Resource? ~�ndern : ~�ndern */\
@@ -192,7 +196,8 @@
     Text[ korean ] = "변경(~M)";  \
     Text[ turkish ] = "De�i�tir";   \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Modificar";
+    Text[ catalan ] = "~Modificar"; \
+    Text[ thai ] = "~ดัดแปลงแก้ไข";
 
 #define PUSHBUTTON_TEXT_NEW \
     Text = "~Neu" ; \
@@ -218,7 +223,8 @@
     Text[ korean ] = "새로 만들기(~N)";    \
     Text[ turkish ] = "~Yeni";  \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Nuevo";
+    Text[ catalan ] = "~Nuevo"; \
+    Text[ thai ] = "ใ~หม่";
 
 #define FIXEDTEXT_TEXT_GROUP \
     Text = "~Bereich" ; \
@@ -244,7 +250,8 @@
     Text[ korean ] = "영역(~C)";  \
     Text[ turkish ] = "Ka~tegori";  \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~�rea";
+    Text[ catalan ] = "~�rea";  \
+    Text[ thai ] = "~ประเภท";
 
 #define FIXEDTEXT_TEXT_FUNCTION \
     Text = "~Funktion" ; \
@@ -270,7 +277,8 @@
     Text[ korean ] = "기능";  \
     Text[ turkish ] = "��lev";  \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "~Funci�n";
+    Text[ catalan ] = "~Funci�n";   \
+    Text[ thai ] = "ฟังก์ชั่น";
 
 #define GROUPBOX_TEXT_FUNCTIONS \
     Text = "Funktionen" ; \
@@ -296,7 +304,8 @@
     Text[ korean ] = "기능들";   \
     Text[ turkish ] = "Fonksiyon";  \
     Text[ language_user1 ] = " ";   \
-    Text[ catalan ] = "Funciones";
+    Text[ catalan ] = "Funciones";  \
+    Text[ thai ] = "ฟังก์ชั่น";
 
  // TP_CONFIG_MENU --------------------------------------------------------
 TabPage TP_CONFIG_MENU
@@ -330,6 +339,7 @@ TabPage TP_CONFIG_MENU
         Text[ turkish ] = "Menu entries";
         Text[ arabic ] = "Menu entries";
         Text[ catalan ] = "Menu entries";
+        Text[ thai ] = "รายการเมนู";
     };
     PushButton BTN_MN_NEW
     {
@@ -365,6 +375,7 @@ TabPage TP_CONFIG_MENU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nue~vo men�";
         Text[ finnish ] = "Uusi va~likko";
+        Text[ thai ] = "เม~นูใหม่";
     };
     PushButton BTN_MN_CHANGE
     {
@@ -455,6 +466,7 @@ TabPage TP_CONFIG_MENU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Funciones";
         Text[ finnish ] = "Toiminnot";
+        Text[ thai ] = "ฟังก์ชั่น";
     };
     FixedText TXT_MN_GROUP
     {
@@ -485,6 +497,7 @@ TabPage TP_CONFIG_MENU
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~�rea";
         Text[ finnish ] = "L~uokka";
+        Text[ thai ] = "ป~ระเภท";
     };
     Control BOX_MN_GROUP
     {
@@ -570,6 +583,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "Keyboard shortcuts";
         Text[ arabic ] = "Keyboard shortcuts";
         Text[ catalan ] = "Keyboard shortcuts";
+        Text[ thai ] = "ปุ่มทางลัด";
     };
     Control BOX_ACC_ENTRIES
     {
@@ -647,6 +661,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ turkish ] = "T~u�lar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Teclas";
+        Text[ thai ] = "~ปุ่ม";
     };
     ListBox BOX_ACC_KEY
     {
@@ -715,6 +730,7 @@ TabPage TP_CONFIG_STATBAR
         Text[ turkish ] = "Durum �ubu�u ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Barra de estado  ";
+        Text[ thai ] = "แถบแสดงสถานะ ";
     };
     Control BOX_STATBAR_ENTRIES
     {
@@ -809,6 +825,7 @@ TabDialog DLG_CONFIG
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Men�";
                 Text[ finnish ] = "Valikko";
+                Text[ thai ] = "เมนู";
             };
             PageItem
             {
@@ -838,6 +855,7 @@ TabDialog DLG_CONFIG
                 Text[ turkish ] = "Klavye";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Teclado";
+                Text[ thai ] = "แป้นพิมพ์";
             };
             PageItem
             {
@@ -867,6 +885,7 @@ TabDialog DLG_CONFIG
                 Text[ turkish ] = "Durum �ubu�u";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Barra de estado";
+                Text[ thai ] = "แถบแสดงสถานะ";
             };
             PageItem
             {
@@ -896,7 +915,8 @@ TabDialog DLG_CONFIG
                 Text[ turkish ] = "Ara� �ubuklar�";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Barras de s�mbolos";
-            };
+                Text[ thai ] = "แถบเครื่องมือ";
+        };
             PageItem
             {
                 Identifier = TP_CONFIG_EVENT ;
@@ -925,6 +945,7 @@ TabDialog DLG_CONFIG
                 Text[ turkish ] = "��lemler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Acontecimientos";
+                Text[ thai ] = "เหตุการณ์";
             };
         };
     };
@@ -939,6 +960,7 @@ TabDialog DLG_CONFIG
     Text[ turkish ] = "�zelle�tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Configurar";
+    Text[ thai ] = "โครงแบบ";
 };
  // Strings ---------------------------------------------------------------
 String STR_NEW
@@ -967,6 +989,7 @@ String STR_NEW
     Text[ turkish ] = "Yeni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nuevo";
+    Text[ thai ] = "ใหม่";
 };
 String STR_OPEN
 {
@@ -996,6 +1019,7 @@ String STR_OPEN
     Text[ turkish ] = "A�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Abrir";
+    Text[ thai ] = "เปิด";
 };
 String STR_SAVE
 {
@@ -1023,6 +1047,7 @@ String STR_SAVE
     Text[ turkish ] = "Kaydet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar";
+    Text[ thai ] = "บันทึก";
 };
 String STR_SAVEAS
 {
@@ -1050,6 +1075,7 @@ String STR_SAVEAS
     Text[ turkish ] = "Farkl� kaydet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar como";
+    Text[ thai ] = "บันทึกเป็น";
 };
 String STR_PRINT
 {
@@ -1077,6 +1103,7 @@ String STR_PRINT
     Text[ turkish ] = "Yazd�r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imprimir";
+    Text[ thai ] = "พิมพ์";
 };
 String STR_QUIT
 {
@@ -1104,6 +1131,7 @@ String STR_QUIT
     Text[ turkish ] = "Kapat";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Terminar";
+    Text[ thai ] = "ออก";
 };
 String STR_CUT
 {
@@ -1131,6 +1159,7 @@ String STR_CUT
     Text[ turkish ] = "Kes";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cortar";
+    Text[ thai ] = "ตัด";
 };
 String STR_COPY
 {
@@ -1158,6 +1187,7 @@ String STR_COPY
     Text[ turkish ] = "Kopyala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Copiar";
+    Text[ thai ] = "คัดลอก";
 };
 String STR_PASTE
 {
@@ -1187,6 +1217,7 @@ String STR_PASTE
     Text[ turkish ] = "Yap��t�r";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pegar";
+    Text[ thai ] = "วาง";
 };
 String STR_DELETE
 {
@@ -1216,6 +1247,7 @@ String STR_DELETE
     Text[ turkish ] = "Sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar";
+    Text[ thai ] = "ลบ";
 };
 String STR_FIND
 {
@@ -1243,6 +1275,7 @@ String STR_FIND
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Buscar";
+    Text[ thai ] = "ค้นหา";
 };
 String STR_FINDBACKWARD
 {
@@ -1272,6 +1305,7 @@ String STR_FINDBACKWARD
     Text[ turkish ] = "Geriye do�ru ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Buscar hacia atr�s";
+    Text[ thai ] = "ค้นหาย้อนกลับ";
 };
 String STR_PROPERTIES
 {
@@ -1299,6 +1333,7 @@ String STR_PROPERTIES
     Text[ turkish ] = "�zellikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedades";
+    Text[ thai ] = "คุณสมบัติ";
 };
 String STR_FRONT
 {
@@ -1326,6 +1361,7 @@ String STR_FRONT
     Text[ turkish ] = "�leri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Primer plano";
+    Text[ thai ] = "ไปยังด้านหน้า";
 };
  // MessageBoxes ----------------------------------------------------------
 QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
@@ -1358,6 +1394,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
     Message[ turkish ] = "Hala tan�mlanmam�� i�levler mevcut (???).\n\nBu konfig�rasyonu yine de kabul etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Todav�a hay funciones no definidas (???).\n\n�Desea de todas formas aceptar esta configuraci�n?";
+    Message[ thai ] = "มีฟังก์ชั่นที่ยังไม่ได้กำหนด (???).\n\nคุณต้องการยอมรับโครงแบบหรือไม่?";
 };
 QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
@@ -1389,6 +1426,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ turkish ] = "Yaln�zca a��lan m�n�lere atanabilen i�levleri olan giri�ler mevcut.\n\nBu konfig�rasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Todav�a hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n�Desea continuar de todos modos?";
+    Message[ thai ] = "มีรายการฟังก์ชั่นที่ยังคงสามารถกำหนดไปยังตัวผุดขึ้น\n\nทำต่อหรือไม่?";
 };
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
@@ -1416,6 +1454,7 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message[ turkish ] = "��lev zaten bu a��lan m�n�de mevcut.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La funci�n ya est� incluida en este emergente.";
+    Message[ thai ] = "รวมฟังก์ชั่นในการผุดขึ้นนี้แล้ว";
 };
 String STR_LOADMENUCONFIG
 {
@@ -1444,6 +1483,7 @@ String STR_LOADMENUCONFIG
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuraci�n del men�";
     Text[ finnish ] = "Lataa valikkom��ritys";
+    Text[ thai ] = "โหลดโครงแบบเมนู";
 };
 String STR_SAVEMENUCONFIG
 {
@@ -1469,6 +1509,7 @@ String STR_SAVEMENUCONFIG
     Text[ turkish ] = "M�n� konfig�rasyonunu kaydet";
     Text[ catalan ] = "Guardar configuraci�n del men�";
     Text[ finnish ] = "Tallenna valikkom��ritys";
+    Text[ thai ] = "บันทึกโครงแบบเมนู";
 };
 String STR_LOADACCELCONFIG
 {
@@ -1495,6 +1536,7 @@ String STR_LOADACCELCONFIG
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuraci�n del teclado";
     Text[ finnish ] = "Lataa n�pp�imist�m��ritys";
+    Text[ thai ] = "โหลดโครงแบบแป้นพิมพ์";
 };
 String STR_SAVEACCELCONFIG
 {
@@ -1520,6 +1562,7 @@ String STR_SAVEACCELCONFIG
     Text[ turkish ] = "Klavye konfig�rasyonunu kaydet";
     Text[ catalan ] = "Guardar configuraci�n del teclado";
     Text[ finnish ] = "Tallenna n�pp�imist�m��ritys";
+    Text[ thai ] = "บันทึกโครงแบบแป้นพิมพ์";
 };
 String STR_LOADSTATBARCONFIG
 {
@@ -1546,6 +1589,7 @@ String STR_LOADSTATBARCONFIG
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar configuraci�n de la barra de estado";
     Text[ finnish ] = "Lataa tilarivim��ritys";
+    Text[ thai ] = "โหลดโครงแบบแถบแสดงสถานะ";
 };
 String STR_SAVESTATBARCONFIG
 {
@@ -1571,6 +1615,7 @@ String STR_SAVESTATBARCONFIG
     Text[ turkish ] = "Durum �ubu�u konfig�rasyonunu kaydet";
     Text[ catalan ] = "Guardar configuraci�n de la barra de estado";
     Text[ finnish ] = "Tallenna tilarivin kokoonpanom��ritykset";
+    Text[ thai ] = "บันทึกโครงแบบแสดงสถานะ";
 };
 String STR_MENU
 {
@@ -1597,24 +1642,88 @@ String STR_MENU
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Men�";
     Text[ finnish ] = "Valikko";
+    Text[ thai ] = "เมนู";
 };
 
 String STR_TOOLBAR_SEPARATOR
 {
     Text = "Trenner" ;
     Text [ ENGLISH ] = "Separator" ;
+    Text[ english_us ] = "Separator";
+    Text[ portuguese ] = "Separator";
+    Text[ russian ] = "Separator";
+    Text[ greek ] = "Separator";
+    Text[ dutch ] = "Separator";
+    Text[ french ] = "Separator";
+    Text[ spanish ] = "Separator";
+    Text[ finnish ] = "Separator";
+    Text[ italian ] = "Separator";
+    Text[ danish ] = "Separator";
+    Text[ swedish ] = "Separator";
+    Text[ polish ] = "Separator";
+    Text[ portuguese_brazilian ] = "Separator";
+    Text[ japanese ] = "Separator";
+    Text[ korean ] = "Separator";
+    Text[ chinese_simplified ] = "Separator";
+    Text[ chinese_traditional ] = "Separator";
+    Text[ turkish ] = "Separator";
+    Text[ arabic ] = "Separator";
+    Text[ catalan ] = "Separator";
+    Text[ thai ] = "Separator";
 };
 
 String STR_TOOLBAR_SPACE
 {
     Text = "Unsichtbarer Trenner" ;
     Text [ ENGLISH ] = "Invisible separator" ;
+    Text[ english_us ] = "Invisible separator";
+    Text[ portuguese ] = "Invisible separator";
+    Text[ russian ] = "Invisible separator";
+    Text[ greek ] = "Invisible separator";
+    Text[ dutch ] = "Invisible separator";
+    Text[ french ] = "Invisible separator";
+    Text[ spanish ] = "Invisible separator";
+    Text[ finnish ] = "Invisible separator";
+    Text[ italian ] = "Invisible separator";
+    Text[ danish ] = "Invisible separator";
+    Text[ swedish ] = "Invisible separator";
+    Text[ polish ] = "Invisible separator";
+    Text[ portuguese_brazilian ] = "Invisible separator";
+    Text[ japanese ] = "Invisible separator";
+    Text[ korean ] = "Invisible separator";
+    Text[ chinese_simplified ] = "Invisible separator";
+    Text[ chinese_traditional ] = "Invisible separator";
+    Text[ turkish ] = "Invisible separator";
+    Text[ arabic ] = "Invisible separator";
+    Text[ catalan ] = "Invisible separator";
+    Text[ thai ] = "Invisible separator";
 };
 
 String STR_FUNCTION_ALREADY_IN_TOOLBOX
 {
-    Text = "Die gew�nschte Funktion ist bereits in der aktuellen Toolbar vorhanden." ;
+    Text = "Die gew�nschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
     Text [ ENGLISH ] = "The selected function is already in the current toolbox." ;
+    Text[ english_us ] = "The selected function is already in the current toolbox.";
+    Text[ portuguese ] = "The selected function is already in the current toolbox.";
+    Text[ russian ] = "The selected function is already in the current toolbox.";
+    Text[ greek ] = "The selected function is already in the current toolbox.";
+    Text[ dutch ] = "The selected function is already in the current toolbox.";
+    Text[ french ] = "The selected function is already in the current toolbox.";
+    Text[ spanish ] = "The selected function is already in the current toolbox.";
+    Text[ finnish ] = "The selected function is already in the current toolbox.";
+    Text[ italian ] = "The selected function is already in the current toolbox.";
+    Text[ danish ] = "The selected function is already in the current toolbox.";
+    Text[ swedish ] = "The selected function is already in the current toolbox.";
+    Text[ polish ] = "The selected function is already in the current toolbox.";
+    Text[ portuguese_brazilian ] = "The selected function is already in the current toolbox.";
+    Text[ japanese ] = "The selected function is already in the current toolbox.";
+    Text[ korean ] = "The selected function is already in the current toolbox.";
+    Text[ chinese_simplified ] = "The selected function is already in the current toolbox.";
+    Text[ chinese_traditional ] = "The selected function is already in the current toolbox.";
+    Text[ turkish ] = "The selected function is already in the current toolbox.";
+    Text[ arabic ] = "The selected function is already in the current toolbox.";
+    Text[ catalan ] = "The selected function is already in the current toolbox.";
+    Text[ thai ] = "The selected function is already in the current toolbox.";
 };
 
  // ********************************************************************** EOF
