@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
     virtual void EndElement();
 };
 
