@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.39 2002-01-09 12:57:20 dvo Exp $
+	$Id: text.mod,v 1.40 2002-01-09 16:50:04 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -872,7 +872,7 @@
 <!ATTLIST text:user-index-source text:use-objects %boolean; "false">
 <!ATTLIST text:user-index-source text:use-index-source-styles 
 													%boolean; "false">
-<!ATTLIST text:user-index-source text:copy-outline-level %boolean; "false">
+<!ATTLIST text:user-index-source text:copy-outline-levels %boolean; "false">
 <!ATTLIST text:user-index-source fo:language %string; #IMPLIED>
 <!ATTLIST text:user-index-source fo:country %string; #IMPLIED>
 <!ATTLIST text:user-index-source text:sort-algorithm %string; #IMPLIED>
