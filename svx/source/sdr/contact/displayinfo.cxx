@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:06:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ namespace sdr
         }
 
         // access to ExtendedOutputDevice
-        void DisplayInfo::SetExtendedOutputDevice(ExtOutputDevice* pExtOut)
+        void DisplayInfo::SetExtendedOutputDevice(XOutputDevice* pExtOut)
         {
             if(mpExtOutputDevice != pExtOut)
             {
@@ -191,7 +191,7 @@ namespace sdr
             }
         }
 
-        ExtOutputDevice* DisplayInfo::GetExtendedOutputDevice() const
+        XOutputDevice* DisplayInfo::GetExtendedOutputDevice() const
         {
             return mpExtOutputDevice;
         }
