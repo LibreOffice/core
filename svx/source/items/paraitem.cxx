@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 11:08:33 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 10:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@ using namespace ::com::sun::star;
 #include <vcl/svapp.hxx>
 #endif
 
+#include <algorithm>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -257,7 +259,7 @@ sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case style::LineSpacingMode::PROP:
         {
             eLineSpace = SVX_LINE_SPACE_AUTO;
-            nPropLineSpace = (sal_Int8)min(aLSp.Height, 0xFF);
+            nPropLineSpace = (sal_Int8)std::min(aLSp.Height, (short)0xFF);
             if(100 == aLSp.Height)
                 eInterLineSpace = SVX_INTER_LINE_SPACE_OFF;
             else
