@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,8 @@ namespace dbaccess
 
     protected:
         sal_Bool    isReadOnly() const {return m_nResultSetConcurrency == ::com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY;}
+        void checkReadOnly();
+        void checkBookmarkable();
     };
 }
 #endif // _DBA_COREAPI_RESULTSET_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 09:32:05 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,8 +434,8 @@ sal_Bool SAL_CALL ORowSetCache::wasNull(  ) throw(SQLException, RuntimeException
 
     return (*(*m_aMatrixIter))[m_nLastColumnIndex].isNull();
 }
-// -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORowSetCache::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+// -----------------------------------------------------------------------------
+ORowSetValue ORowSetCache::getValue(sal_Int32 columnIndex)
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -443,129 +443,67 @@ sal_Bool SAL_CALL ORowSetCache::wasNull(  ) throw(SQLException, RuntimeException
     OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
 
     m_nLastColumnIndex = columnIndex;
-    ::rtl::OUString aRet;
     return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ORowSetCache::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int8 SAL_CALL ORowSetCache::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int16 SAL_CALL ORowSetCache::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetCache::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 sal_Int64 SAL_CALL ORowSetCache::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 float SAL_CALL ORowSetCache::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 double SAL_CALL ORowSetCache::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL ORowSetCache::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::Date SAL_CALL ORowSetCache::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::Time SAL_CALL ORowSetCache::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::com::sun::star::util::DateTime SAL_CALL ORowSetCache::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast)
-        throwFunctionSequenceException(m_xSet.get());
-
-    OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"Iterator is equal end()");
-
-    m_nLastColumnIndex = columnIndex;
-    return (*(*m_aMatrixIter))[m_nLastColumnIndex];
+    return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -665,23 +603,13 @@ sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLE
     {
         m_bDeleted  = m_bBeforeFirst    = sal_False;
         m_nPosition = m_pCacheSet->getRow();
-        if(m_bRowCountFinal)
-        {
-            m_bAfterLast    = m_nPosition > m_nRowCount;
-            m_bLast         = m_nPosition == m_nRowCount;
-            if(m_bAfterLast)
-                m_nPosition = 0;//m_nRowCount;
-        }
+
+        checkPositionFlags();
+
         if(!m_bAfterLast)
         {
             moveWindow();
-            if(m_bRowCountFinal) // check again
-            {
-                m_bAfterLast    = m_nPosition > m_nRowCount;
-                m_bLast         = m_nPosition == m_nRowCount;
-                if(m_bAfterLast)
-                    m_nPosition = 0;//m_nRowCount;
-            }
+            checkPositionFlags();
             if(!m_bAfterLast)
                 m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // must be -1
             else
@@ -713,10 +641,7 @@ sal_Bool SAL_CALL ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetCache::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
 {
-    if(!first.hasValue() || !second.hasValue())
-        return CompareBookmark::NOT_COMPARABLE;
-
-    return m_pCacheSet->compareBookmarks(first,second);
+    return (!first.hasValue() || !second.hasValue()) ? CompareBookmark::NOT_COMPARABLE : m_pCacheSet->compareBookmarks(first,second);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
@@ -729,250 +654,60 @@ sal_Int32 SAL_CALL ORowSetCache::hashBookmark( const Any& bookmark ) throw(SQLEx
     return m_pCacheSet->hashBookmark(bookmark);
 }
 // -------------------------------------------------------------------------
-#ifdef DBG_UTIL
-void ORowSetCache::columnModified(sal_Int32 columnIndex)
-{
-}
-#endif
-
 // XRowUpdate
 void SAL_CALL ORowSetCache::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex].setNull();
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
+    updateValue(columnIndex,ORowSetValue());
 }
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(SQLException, RuntimeException)
+// -----------------------------------------------------------------------------
+void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
 {
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
+    checkUpdateConditions(columnIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = (sal_Int32)x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = (sal_Int32)x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateDouble( sal_Int32 columnIndex, double x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex].setFromDouble(x,m_xMetaData->getColumnType(columnIndex));
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
-}
-// -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException)
-{
-    if(m_bAfterLast || columnIndex < 1 || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
-
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = x;
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast || columnIndex < 1 || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
+    checkUpdateConditions(columnIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     Sequence<sal_Int8> aSeq;
     if(x.is())
         x->readSomeBytes(aSeq,length);
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = aSeq;
-    //  (*(*m_aInsertRow))[columnIndex].setTypeKind(DataType::BLOB);
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
+    updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast || columnIndex < 1 || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
+    checkUpdateConditions(columnIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     Sequence<sal_Int8> aSeq;
     if(x.is())
         x->readSomeBytes(aSeq,length);
 
-    (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
-    (*(*m_aInsertRow))[columnIndex] = aSeq;
-    //  (*(*m_aInsertRow))[columnIndex].setTypeKind(DataType::CLOB);
-    (*(*m_aInsertRow))[columnIndex].setModified();
-    m_bModified = sal_True;
-
-    columnModified(columnIndex);
+    updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast || columnIndex < 1 || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
+    checkUpdateConditions(columnIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
     (*(*m_aInsertRow))[columnIndex] = x;
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
-
-    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
-    if(m_bAfterLast || columnIndex < 1 || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
-        throwFunctionSequenceException(m_xSet.get());
+    checkUpdateConditions(columnIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     (*(*m_aInsertRow))[columnIndex].setBound(sal_True);
@@ -980,7 +715,6 @@ void SAL_CALL ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const An
     (*(*m_aInsertRow))[columnIndex].setModified();
     m_bModified = sal_True;
 
-    columnModified(columnIndex);
 }
 // -------------------------------------------------------------------------
 // XResultSet
@@ -988,33 +722,19 @@ sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
-    if(isAfterLast())
-        return sal_False;
-
-    m_bBeforeFirst = sal_False;
-    ++m_nPosition;
-    // after we increment the position we have to check if we are already after the last row
-    if(m_bRowCountFinal)
+    if(!isAfterLast())
     {
-        m_bAfterLast    = m_nPosition > m_nRowCount;
-        m_bLast         = m_nPosition == m_nRowCount;
-        if(m_bAfterLast)
-            m_nPosition = 0;//m_nRowCount;
-    }
-    if(!m_bAfterLast)
-    {
-
-        moveWindow();
-        //  readForward();
-
-        OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-        m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // -1 because rows start at zero
-        if(m_bRowCountFinal)
+        m_bBeforeFirst = sal_False;
+        ++m_nPosition;
+        // after we increment the position we have to check if we are already after the last row
+        checkPositionFlags();
+        if(!m_bAfterLast)
         {
-            m_bAfterLast    = m_nPosition > m_nRowCount;
-            m_bLast         = m_nPosition == m_nRowCount;
-            if(m_bAfterLast)
-                m_nPosition = 0;//m_nRowCount;
+            moveWindow();
+
+            OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+            m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // -1 because rows start at zero
+            checkPositionFlags();
         }
     }
 
@@ -1024,6 +744,7 @@ sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
 sal_Bool SAL_CALL ORowSetCache::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     //  return !m_nPosition;
+    ::osl::MutexGuard aGuard( m_aRowCountMutex );
     return m_bBeforeFirst;
 }
 // -------------------------------------------------------------------------
@@ -1031,59 +752,63 @@ sal_Bool SAL_CALL ORowSetCache::isAfterLast(  ) throw(SQLException, RuntimeExcep
 {
     //  return m_pCacheSet->isAfterLast();
     //  return m_bRowCountFinal ? m_bAfterLast : m_pCacheSet->isAfterLast();
+    ::osl::MutexGuard aGuard( m_aRowCountMutex );
     return m_bAfterLast;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::isFirst(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aRowCountMutex );
     return m_nPosition == 1; // ask resultset for
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::isLast(  ) throw(SQLException, RuntimeException)
 {
     //  return m_bRowCountFinal ? (m_nPosition==m_nRowCount) : m_pCacheSet->isLast();
-    return m_nPosition==m_nRowCount;
+    ::osl::MutexGuard aGuard( m_aRowCountMutex );
+    return m_nPosition == m_nRowCount;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
-//  if(m_bInserted)
-//      m_bInserted = sal_False;
-
-    m_bAfterLast    = m_bLast = sal_False;
-    m_nPosition     = 0;
-    m_bBeforeFirst  = sal_True;
-    m_pCacheSet->beforeFirst();
-    moveWindow();
-    m_aMatrixIter = m_pMatrix->end();
+    if(!m_bBeforeFirst)
+    {
+        m_bAfterLast    = m_bLast = sal_False;
+        m_nPosition     = 0;
+        m_bBeforeFirst  = sal_True;
+        m_pCacheSet->beforeFirst();
+        moveWindow();
+        m_aMatrixIter = m_pMatrix->end();
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::afterLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
-//  if(m_bInserted)
-//      m_bInserted = sal_False;
-
-    m_bBeforeFirst = m_bLast = sal_False;
-    m_bAfterLast = sal_True;
-
-    m_pCacheSet->last();
-    if(!m_bRowCountFinal)
+    if(!m_bAfterLast)
     {
-        m_bRowCountFinal = sal_True;
-        m_nRowCount = m_pCacheSet->getRow();// + 1 removed
-    }
-    m_pCacheSet->afterLast();
+        m_bBeforeFirst = m_bLast = sal_False;
+        m_bAfterLast = sal_True;
 
-    m_nPosition = 0;
-    m_aMatrixIter = m_pMatrix->end();
+        if(!m_bRowCountFinal)
+        {
+            m_pCacheSet->last();
+            m_bRowCountFinal = sal_True;
+            m_nRowCount = m_pCacheSet->getRow();// + 1 removed
+        }
+        m_pCacheSet->afterLast();
+
+        m_nPosition = 0;
+        m_aMatrixIter = m_pMatrix->end();
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos)
 {
+    OSL_ENSURE(_nNewStartPos != _nNewEndPos,"ORowSetCache::fillMatrix: StartPos and EndPos can not be equal!");
     // fill the whole window with new data
     ORowSetMatrix::iterator aIter = m_pMatrix->begin();
     sal_Bool bCheck = m_pCacheSet->absolute(_nNewStartPos); // -1 no need to
@@ -1203,14 +928,12 @@ sal_Bool ORowSetCache::moveWindow()
                 }
                 ::std::rotate(m_pMatrix->begin(),aEnd,m_pMatrix->end());
                 // now correct the iterator in our iterator vector
-                //  rotateCacheIterator(aEnd-m_pMatrix->begin());
+                //  rotateCacheIterator(aEnd-m_pMatrix->begin()); //can't be used because they decrement and here we need to increment
                 sal_Int16 _nDist = aEnd-m_pMatrix->begin();
                 ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
                 for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
                 {
-                    if(!aCacheIter->second.aIterator)
-                        continue;
-                    if(aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
+                    if(aCacheIter->second.aIterator && aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
                     {
                         sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                         if(nDist > _nDist)
@@ -1283,10 +1006,8 @@ sal_Bool ORowSetCache::moveWindow()
                 {
                     if(!m_bRowCountFinal)
                     {
-                        if(m_pCacheSet->previous()) // because we stand after the last row
-                            m_nRowCount = m_pCacheSet->getRow();//  + 1 removed
-                        else
-                            m_nRowCount = 0;
+                        // because we stand after the last row
+                        m_nRowCount = m_pCacheSet->previous() ? m_pCacheSet->getRow() : 0;//  + 1 removed
                         m_bRowCountFinal = sal_True;
                     }
                 }
@@ -1371,7 +1092,7 @@ sal_Bool ORowSetCache::moveWindow()
             sal_Int32 nNewSt = nNewStartPos;
             bRet = fillMatrix(nNewSt,nNewEndPos);
             m_nStartPos = nNewSt - 1;
-            rotateCacheIterator(m_nFetchSize+1);
+            rotateCacheIterator(m_nFetchSize+1); // forces that every iterator will be set to null
         }
     }
 
@@ -1386,9 +1107,6 @@ sal_Bool SAL_CALL ORowSetCache::first(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
-//  if(m_bInserted)
-//      m_bInserted = sal_False;
-
     // first move to the first row
     // then check if the cache window is at the begining
     // when not postionize the window and fill it with data
@@ -1402,16 +1120,16 @@ sal_Bool SAL_CALL ORowSetCache::first(  ) throw(SQLException, RuntimeException)
         m_aMatrixIter   = m_pMatrix->begin();
     }
     else
+    {
+        OSL_ENSURE(m_bBeforeFirst,"ORowSetCache::first return false and BeforeFirst isn't true");
         m_aMatrixIter = m_pMatrix->end();
+    }
     return bRet;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
-
-//  if(m_bInserted)
-//      m_bInserted = sal_False;
 
     sal_Bool bRet = m_pCacheSet->last();
     if(bRet)
@@ -1433,7 +1151,10 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
             m_aMatrixIter = m_pMatrix->begin() + m_nPosition - 1;
     }
     else
+    {
+        OSL_ENSURE(m_bBeforeFirst,"ORowSetCache::last return false and BeforeFirst isn't true");
         m_aMatrixIter = m_pMatrix->end();
+    }
 #ifdef DEBUG
     if(bRet)
     {
@@ -1446,9 +1167,9 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSetCache::getRow(  ) throw(SQLException, RuntimeException)
 {
-    if(isBeforeFirst() || isAfterLast())
-        return 0;
-    return m_nPosition;
+    ::osl::MutexGuard aGuard( m_aRowCountMutex );
+
+    return (isBeforeFirst() || isAfterLast()) ? 0 : m_nPosition;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
@@ -1460,6 +1181,8 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
 
     if(row < 0)
     {
+        // here we have to scroll from the last row to backward so we have to go to last row and
+        // and two the previous
         if(m_bRowCountFinal || last())
         {
             m_nPosition = m_nRowCount + row + 1; // + row because row is negative and +1 because row==-1 means last row
@@ -1487,24 +1210,12 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
         m_nPosition = row;
         // the position flags
         m_bBeforeFirst  = sal_False;
-        if(m_bRowCountFinal)
-        {
-            m_bAfterLast    = m_nPosition > m_nRowCount;
-            m_bLast         = m_nPosition == m_nRowCount;
-            if(m_bAfterLast)
-                m_nPosition = 0;//m_nRowCount;
-        }
+        checkPositionFlags();
 
         if(!m_bAfterLast)
         {
             moveWindow();
-            if(m_bRowCountFinal) // check again
-            {
-                m_bAfterLast    = m_nPosition > m_nRowCount;
-                m_bLast         = m_nPosition == m_nRowCount;
-                if(m_bAfterLast)
-                    m_nPosition = 0;//m_nRowCount;
-            }
+            checkPositionFlags();
             if(!m_bAfterLast)
                 m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // must be -1
             else
@@ -1521,51 +1232,53 @@ sal_Bool SAL_CALL ORowSetCache::relative( sal_Int32 rows ) throw(SQLException, R
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
-    if(!rows)
-        return sal_True;
-    if(m_bBeforeFirst || (m_bRowCountFinal && m_bAfterLast))
-        throw SQLException();
+    sal_Bool bErg = sal_True;
+    if(rows)
+    {
+        if(m_bBeforeFirst || (m_bRowCountFinal && m_bAfterLast))
+            throw SQLException();
 
-    if(!(m_nPosition + rows))
-        return !(m_bBeforeFirst = sal_True);
-    sal_Bool bErg = absolute(m_nPosition + rows);
+        if(m_nPosition + rows)
+        {
+            bErg = absolute(m_nPosition + rows);
 
-    return bErg && !isAfterLast() && !isBeforeFirst();
+            bErg = bErg && !isAfterLast() && !isBeforeFirst();
+        }
+        else
+            bErg = !(m_bBeforeFirst = sal_True);
+    }
+    return bErg;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
-    if(isBeforeFirst())
-        return sal_False;
-
-//  if(m_bInserted)
-//      m_bInserted = sal_False;
-
-    if(m_bAfterLast)
-        return last();
-
-    m_bAfterLast = sal_False;
-    --m_nPosition;
-    moveWindow();
-    OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
-    m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // must be -1
-
-    if(m_bRowCountFinal)
+    sal_Bool bRet = sal_False;
+    if(!isBeforeFirst())
     {
-        m_bLast         = m_nRowCount == m_nPosition;
-        m_bAfterLast    = m_nPosition > m_nRowCount;
-    }
+        if(m_bAfterLast)   // we stand after the last row so one before is the last row
+            bRet = last();
+        else
+        {
+            m_bAfterLast = sal_False;
+            --m_nPosition;
+            moveWindow();
+            OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
+            m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // must be -1
 
-    if(!m_nPosition)
-    {
-        m_bBeforeFirst = sal_True;
-        m_aMatrixIter = m_pMatrix->end();
-        return sal_False;
-    }
+            checkPositionFlags();
 
-    return (*m_aMatrixIter).isValid();
+            if(!m_nPosition)
+            {
+                m_bBeforeFirst = sal_True;
+                m_aMatrixIter = m_pMatrix->end();
+            }
+            else
+                bRet = (*m_aMatrixIter).isValid();
+        }
+    }
+    return bRet;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::refreshRow(  ) throw(SQLException, RuntimeException)
@@ -1635,7 +1348,18 @@ void ORowSetCache::cancelInsert()
     m_bNew          = sal_False;
     m_bModified     = sal_False;
     m_bInserted     = sal_False;
-    m_aInsertRow    = m_aMatrixIter;
+
+    // clear the insertrow references   -> implies that the current row of the rowset changes as well
+    ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
+    for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
+    {
+        if(aCacheIter->second.aIterator)
+        {
+            ORowSetMatrix::iterator aOldIter = aCacheIter->second.aIterator;
+            if(aOldIter == m_aInsertRow)
+                aCacheIter->second.aIterator = NULL;
+        }
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateRow(  ) throw(SQLException, RuntimeException)
@@ -1815,21 +1539,22 @@ ORowSetCacheIterator ORowSetCache::createIterator()
 // -----------------------------------------------------------------------------
 void ORowSetCache::rotateCacheIterator(sal_Int16 _nDist)
 {
-    // now correct the iterator in our iterator vector
-    ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
-    for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
+    if(_nDist)
     {
-        if(!aCacheIter->second.aIterator)
-            continue;
-        if(aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
+        // now correct the iterator in our iterator vector
+        ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
+        for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
         {
-            sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
-            if(nDist < _nDist)
+            if(aCacheIter->second.aIterator && aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
             {
-                aCacheIter->second.aIterator = NULL;
+                sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
+                if(nDist < _nDist)
+                {
+                    aCacheIter->second.aIterator = NULL;
+                }
+                else
+                    aCacheIter->second.aIterator -= _nDist;
             }
-            else
-                aCacheIter->second.aIterator -= _nDist;
         }
     }
 }
@@ -1857,9 +1582,28 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
         aIter->setModified(sal_False);
 }
 // -----------------------------------------------------------------------------
+void ORowSetCache::checkPositionFlags()
+{
+    if(m_bRowCountFinal)
+    {
+        m_bAfterLast    = m_nPosition > m_nRowCount;
+        m_bLast         = m_nPosition == m_nRowCount;
+        if(m_bAfterLast)
+            m_nPosition = 0;//m_nRowCount;
+    }
+}
+// -----------------------------------------------------------------------------
+void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
+{
+    if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->size())
+        throwFunctionSequenceException(m_xSet.get());
+}
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.37  2001/06/26 09:32:05  fs
+    #88392# added columnModified for diagnostics
+
     Revision 1.36  2001/06/22 13:08:06  oj
     #88012# a new method for repositioning the cache
 

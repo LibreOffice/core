@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 09:32:05 $
+ *  last change: $Author: oj $ $Date: 2001-06-26 10:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,8 +200,8 @@ namespace dbaccess
         sal_Int32                   m_nPosition;                // 0 means beforefirst
         sal_Int32                   m_nAsyncUpdateRowCount;
 
-        sal_Int32                   m_nStartPos;                // start pos of the window
-        sal_Int32                   m_nEndPos;                  // end   pos of the window
+        sal_Int32                   m_nStartPos;                // start pos of the window zero based
+        sal_Int32                   m_nEndPos;                  // end   pos of the window zero based
 
         sal_Bool                    m_bUseEscapeProcessing ;
         sal_Bool                    m_bApplyFilter ;
@@ -229,14 +229,11 @@ namespace dbaccess
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::com::sun::star::uno::Any& _rOldValue);
 
         void rotateCacheIterator(sal_Int16 _nDist);
-
-#ifdef DBG_UTIL
-        void columnModified(sal_Int32 columnIndex);
-        // for the non-pro version only. This method is called whenever one of the updateXXX methods is invoked.
-        // This eases tracking column value changes.
-#else
-    #define columnModified(columnIndex)
-#endif
+        void updateValue(sal_Int32 columnIndex,const ORowSetValue& x);
+        ORowSetValue getValue(sal_Int32 columnIndex);
+        // checks and set the flags isAfterLast isLast and position when afterlast is true
+        void checkPositionFlags();
+        void checkUpdateConditions(sal_Int32 columnIndex);
 
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
@@ -305,18 +302,6 @@ namespace dbaccess
 
     // ::com::sun::star::sdbc::XRowUpdate
         virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -373,6 +358,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/06/26 09:32:05  fs
+    #88392# added columnModified for diagnostics
+
     Revision 1.7  2001/02/01 14:23:57  oj
     change for insert , delete and update rows
 
