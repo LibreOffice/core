@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:53:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
@@ -941,8 +941,8 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
     case TYP_DDEFLD:
         switch ( aSwFlds[ GetPos( nTypeId ) ].nFmtBegin + nFormatId )
         {
-        case FMT_DDE_NORMAL:    nId = so3::LINKUPDATE_ONCALL; break;
-        case FMT_DDE_HOT:       nId = so3::LINKUPDATE_ALWAYS; break;
+        case FMT_DDE_NORMAL:    nId = sfx2::LINKUPDATE_ONCALL; break;
+        case FMT_DDE_HOT:       nId = sfx2::LINKUPDATE_ALWAYS; break;
         }
         break;
     }
@@ -1185,8 +1185,8 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
             //              Namen haben! Wird hier noch nicht beachtet.
             String sCmd( rData.sPar2 );
-            USHORT nTmpPos = sCmd.SearchAndReplace( ' ', so3::cTokenSeperator );
-            sCmd.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
+            USHORT nTmpPos = sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+            sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
 
             SwDDEFieldType* pTyp = (SwDDEFieldType*)pCurShell->InsertFldType(
                     SwDDEFieldType( rData.sPar1, sCmd, (USHORT)nFormatId ));
@@ -1615,8 +1615,8 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
         {
             //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
             //              Namen haben! Wird hier noch nicht beachtet.
-            USHORT nTmpPos = sPar2.SearchAndReplace( ' ', so3::cTokenSeperator );
-            sPar2.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
+            USHORT nTmpPos = sPar2.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+            sPar2.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
             break;
         }
 
