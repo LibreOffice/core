@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:36:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2927,7 +2927,32 @@
             <node oor:name=".uno:GridVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Raster sichtbar</value>
-                    <value xml:lang="en-US">~Visible Grid</value>
+                    <value xml:lang="en-US">~Display Grid</value>
+                    <value xml:lang="ar">شبكة مرئية</value>
+                    <value xml:lang="no">~Visible Grid</value>
+                    <value xml:lang="ca">Graella ~visible</value>
+                    <value xml:lang="zh-TW">顯示網格(~V)</value>
+                    <value xml:lang="cs">Viditelná mřížka</value>
+                    <value xml:lang="da">~Gitter synligt</value>
+                    <value xml:lang="el">Ο~ρατό πλέγμα</value>
+                    <value xml:lang="es">Cuadrícula ~visible</value>
+                    <value xml:lang="fi">~Näkyvä ruudukko</value>
+                    <value xml:lang="fr">~Grille visible</value>
+                    <value xml:lang="he">~Raster sichtbar</value>
+                    <value xml:lang="it">Griglia ~visibile</value>
+                    <value xml:lang="ja">グリッド線の表示(~V)</value>
+                    <value xml:lang="ko">그리드 표시(~V)</value>
+                    <value xml:lang="nl">Raster ~zichtbaar</value>
+                    <value xml:lang="pl">Siatka wido~czna</value>
+                    <value xml:lang="pt-BR">~Grade Visível</value>
+                    <value xml:lang="ru">Видимая сетка</value>
+                    <value xml:lang="sk">~Viditeľná mriežka</value>
+                    <value xml:lang="sv">~Raster synligt</value>
+                    <value xml:lang="th">~มองเห็นเส้นตาราง</value>
+                    <value xml:lang="tr">~Kılavuz çizgileri göster</value>
+                    <value xml:lang="hi">~प्रकट जाल</value>
+                    <value xml:lang="zh-CN">显示网格(~V)</value>
+                    <value xml:lang="pt">~Grelha vísivel</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -3436,7 +3461,32 @@
             <node oor:name=".uno:ShowImeStatusWindow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Eingabemethode-Status</value>
-                    <value xml:lang="en-US">~Input Method Status</value>
+                    <value xml:lang="en-US">Input M~ethod Status</value>
+                    <value xml:lang="ar">~Input Method Status</value>
+                    <value xml:lang="no">~Input Method Status</value>
+                    <value xml:lang="ca">~Input Method Status</value>
+                    <value xml:lang="zh-TW">輸入法狀態(~I)</value>
+                    <value xml:lang="cs">Stav vstupní metody</value>
+                    <value xml:lang="da">~Inputmetodestatus</value>
+                    <value xml:lang="el">~Input Method Status</value>
+                    <value xml:lang="es">~Estado del método de entrada</value>
+                    <value xml:lang="fi">~Input Method Status</value>
+                    <value xml:lang="fr">Statut de la méthode de ~saisie</value>
+                    <value xml:lang="he">~Eingabemethode-Status</value>
+                    <value xml:lang="it">Stato del ~metodo immissione</value>
+                    <value xml:lang="ja">入力方式のステータス(~I)</value>
+                    <value xml:lang="ko">입력기 표시(~I)</value>
+                    <value xml:lang="nl">Status ~invoermethode</value>
+                    <value xml:lang="pl">~Input Method Status</value>
+                    <value xml:lang="pt-BR">~Status do método de entrada</value>
+                    <value xml:lang="ru">~Input Method Status</value>
+                    <value xml:lang="sk">Vlož~iť status metódy</value>
+                    <value xml:lang="sv">Status ~inmatningsmetod</value>
+                    <value xml:lang="th">~Input Method Status</value>
+                    <value xml:lang="tr">Girdi Metot Durumu</value>
+                    <value xml:lang="hi">~Input Method Status</value>
+                    <value xml:lang="zh-CN">输入法状态(~I)</value>
+                    <value xml:lang="pt">~Input Method Status</value>
                 </prop>
             </node>
             <node oor:name=".uno:OptionBarVisible" oor:op="replace">
@@ -3459,7 +3509,32 @@
             <node oor:name=".uno:StatusBarVisible" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Statusleiste</value>
-                    <value xml:lang="en-US">~Status Bar</value>
+                    <value xml:lang="en-US">Status ~Bar</value>
+                    <value xml:lang="ar">شريط المعلومات</value>
+                    <value xml:lang="no">~Status Bar</value>
+                    <value xml:lang="ca">Barra d&apos;estat</value>
+                    <value xml:lang="zh-TW">狀態列(~S)</value>
+                    <value xml:lang="cs">Stavový panel</value>
+                    <value xml:lang="da">~Statuslinje</value>
+                    <value xml:lang="el">Γραμμή κατάσ~τασης</value>
+                    <value xml:lang="es">Barra de estado</value>
+                    <value xml:lang="fi">T~ilarivi</value>
+                    <value xml:lang="fr">Barre d&apos;~état</value>
+                    <value xml:lang="he">‮סרגל מצב‬</value>
+                    <value xml:lang="it">Barra di ~stato</value>
+                    <value xml:lang="ja">ステータスバー(~S)</value>
+                    <value xml:lang="ko">상태 표시줄(~S)</value>
+                    <value xml:lang="nl">~Statusbalk</value>
+                    <value xml:lang="pl">Pas~ek stanu</value>
+                    <value xml:lang="pt-BR">~Barra de status</value>
+                    <value xml:lang="ru">Строка состояния</value>
+                    <value xml:lang="sk">~Stavový panel</value>
+                    <value xml:lang="sv">~Statuslist</value>
+                    <value xml:lang="th">แถบ~สถานะ</value>
+                    <value xml:lang="tr">Durum çubuğu</value>
+                    <value xml:lang="hi">~वस्तुस्थिति पट्टी</value>
+                    <value xml:lang="zh-CN">状态栏(~S)</value>
+                    <value xml:lang="pt">Ba~rra de estado</value>
                 </prop>
             </node>
             <node oor:name=".uno:MacroBarVisible" oor:op="replace">
