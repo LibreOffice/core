@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 12:38:30 $
+ *  last change: $Author: ka $ $Date: 2001-03-14 12:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,6 +876,8 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
                     }
                 }
             }
+            else
+                nRet = nDropAction;
         }
     }
 
