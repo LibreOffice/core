@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleStatus.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:41 $
+ *  last change:$Date: 2003-11-18 16:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ class SimpleStatus extends Status {
      * @return <tt>true</tt> if obj is a SimpleStatus instance and it has
      * the same state and runstate, <tt>false</tt> otherwise.
      */
-    public boolean equals(Object obj) {
+/*    public boolean equals(Object obj) {
         if (obj == null || !(obj instanceof SimpleStatus)) {
             return false;
         }
@@ -131,5 +131,5 @@ class SimpleStatus extends Status {
 
         return this.getState() == other.getState()
                 && this.getRunState() == other.getRunState();
-    }
+    } */
 }
