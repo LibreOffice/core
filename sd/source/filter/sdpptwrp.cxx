@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:11:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <sfx2/interno.hxx>
 #include <svx/msoleexp.hxx>
 #include <svx/svxmsbas.hxx>
+#include <svx/svxerr.hxx>
 #include <svtools/fltrcfg.hxx>
 
 #include "sdpptwrp.hxx"
@@ -145,7 +146,12 @@ sal_Bool SdPPTFilter::Import()
             aTracer.StartTracing();
             SdPPTImport* pImport = new SdPPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium, &aTracer );
             if ( !( bRet = pImport->Import() ) )
-                mrMedium.SetError( SVSTREAM_WRONGVERSION );
+            {
+                if ( pStorage->IsStream( String( RTL_CONSTASCII_USTRINGPARAM("EncryptedSummary") ) ) )
+                    mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT );
+                else
+                    mrMedium.SetError( SVSTREAM_WRONGVERSION );
+            }
             aTracer.EndTracing();
             delete pImport;
             delete pDocStream;
