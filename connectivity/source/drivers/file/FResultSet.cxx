@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 14:26:18 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2412,7 +2412,7 @@ void OResultSet::GetAssignValues()
 {
     if (m_pParseTree == NULL)
     {
-        //  aStatus.SetInvalidStatement();
+        throw ::dbtools::FunctionSequenceException(*this);
         return;
     }
 
@@ -2783,7 +2783,7 @@ void OResultSet::describeParameter()
 //------------------------------------------------------------------
 void OResultSet::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
-    DBG_ASSERT(pParseNode != NULL,"SdbCursor: interner Fehler: ungueltiger ParseNode");
+    DBG_ASSERT(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
     // Parameter Name-Regel gefunden?
     if (SQL_ISRULE(pParseNode,parameter))
