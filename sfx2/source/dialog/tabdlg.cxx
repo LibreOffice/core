@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-12 13:06:36 $
+ *  last change: $Author: fs $ $Date: 2001-10-19 12:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ SfxTabDialog::~SfxTabDialog()
 {
     // save settings (screen position and current page)
     SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
-    aDlgOpt.SetWindowState( OUString::createFromAscii( GetWindowState().GetBuffer() ) );
+    aDlgOpt.SetWindowState( OUString::createFromAscii( GetWindowState( WINDOWSTATE_MASK_POS ).GetBuffer() ) );
     aDlgOpt.SetPageID( aTabCtrl.GetCurPageId() );
 
     const USHORT nCount = pImpl->pData->Count();
