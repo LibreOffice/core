@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCompletedConnection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:35 $
+ *  last change:$Date: 2003-09-08 10:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.sdb;
 
+import lib.MultiMethodTest;
+import lib.StatusException;
+
 import com.sun.star.sdb.XCompletedConnection;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.task.XInteractionHandler;
-import lib.MultiMethodTest;
-import lib.StatusException;
 
 /**
  * Testing <code>com.sun.star.sdb.XCompletedConnection</code>

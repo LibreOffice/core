@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XQueryDefinitionsSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:33 $
+ *  last change:$Date: 2003-09-08 10:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sdb;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.container.XNameAccess;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
-import lib.MultiMethodTest;
 
 /**
  * Testing <code>com.sun.star.sdb.XQueryDefinitionsSupplier</code>
