@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:13:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,12 +189,6 @@
 #endif
 #include "zoomlist.hxx"
 #include "stlsheet.hxx"
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
 #endif
@@ -249,7 +243,6 @@ SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
                                 SdResId(RID_DRAW_VIEWER_TOOLBOX) );
     SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
-    SFX_CHILDWINDOW_REGISTRATION( PreviewChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( ::sd::SpellDialogChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
@@ -520,15 +513,6 @@ void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
         }
         break;
 
-        case SID_PREVIEW_QUALITY_COLOR:
-        case SID_PREVIEW_QUALITY_GRAYSCALE:
-        case SID_PREVIEW_QUALITY_BLACKWHITE:
-        case SID_PREVIEW_QUALITY_CONTRAST:
-        {
-            ExecReq( rReq );
-            break;
-        }
-
         case SID_OPT_LOCALE_CHANGED:
         {
             pOlView->GetOutliner()->UpdateFields();
@@ -577,10 +561,6 @@ void OutlineViewShell::Activate( BOOL bIsMDIActivate )
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
         ::Outliner* pOutl = pOutlinerView->GetOutliner();
         pOutl->UpdateFields();
-
-        SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInOutlineMode() != 0 );
-        GetViewFrame()->GetDispatcher()->Execute(
-            SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
     }
 }
 
@@ -647,30 +627,6 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         rSet.Put(aHLinkItem);
     }
     rSet.Put( SfxBoolItem( SID_READONLY_MODE, GetDocSh()->IsReadOnly() ) );
-
-    // #49150#: Qualitaet des Previewfensters aendern, falls vorhanden
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_COLOR ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_GRAYSCALE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_CONTRAST ) )
-    {
-        USHORT nId = PreviewChildWindow::GetChildWindowId();
-        if( GetViewFrame()->GetChildWindow( nId ) )
-        {
-            ULONG nMode = pFrameView->GetPreviewDrawMode();
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_COLOR, (BOOL)(nMode == PREVIEW_DRAWMODE_COLOR) ) );
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_GRAYSCALE, (BOOL)(nMode == PREVIEW_DRAWMODE_GRAYSCALE) ) );
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_BLACKWHITE, (BOOL)(nMode == PREVIEW_DRAWMODE_BLACKWHITE) ) );
-            rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_CONTRAST, (BOOL)(nMode == PREVIEW_DRAWMODE_CONTRAST) ) );
-        }
-        else
-        {
-            rSet.DisableItem( SID_PREVIEW_QUALITY_COLOR );
-            rSet.DisableItem( SID_PREVIEW_QUALITY_GRAYSCALE );
-            rSet.DisableItem( SID_PREVIEW_QUALITY_BLACKWHITE );
-            rSet.DisableItem( SID_PREVIEW_QUALITY_CONTRAST );
-        }
-    }
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
         rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, TRUE ) );
@@ -983,22 +939,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 {
     ViewShell::GetMenuState(rSet);
 
-/*
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
-    {
-        SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(
-            PreviewChildWindow::GetChildWindowId());
-        PreviewWindow*  pPreviewWin = static_cast<PreviewWindow*>(
-            pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
-        FuSlideShow* pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
-
-        if ( (pShow && pShow->IsInputLocked()) ||
-             GetDocSh()->IsPreview() )
-        {
-            rSet.DisableItem( SID_PRESENTATION );
-        }
-    }
-*/
     // Vorlagenkatalog darf nicht aufgerufen werden
     rSet.DisableItem( SID_STYLE_CATALOG );
 
@@ -1195,23 +1135,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.Put(SfxBoolItem(SID_AUTOSPELL_CHECK, FALSE));
         }
     }
-
-    // PreviewWindow
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_WIN ) )
-    {
-        USHORT nId = PreviewChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
-    /*af This should not be called here but probably when the current
-    pages changes.  This leads eventually to an Invalidate() call
-    while in Update().
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_STATE ) )
-    {
-        BOOL bModified = GetDoc()->IsChanged();
-        UpdatePreview( GetActualPage() );
-        GetDoc()->SetChanged( bModified );
-    }
-    */
 
     // Feldbefehle
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MODIFY_FIELD ) )
@@ -1936,27 +1859,6 @@ void OutlineViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin
     // ggfs. Preview den neuen Kontext mitteilen
     if( GetActualPage() != pLastPage )
         Invalidate( SID_PREVIEW_STATE );
-
-    /*
-    SfxChildWindow* pPreviewChildWindow =
-        SFX_APP()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
-    if (pPreviewChildWindow)
-    {
-        SdPreviewWin* pPreviewWin =
-            (SdPreviewWin*)pPreviewChildWindow->GetWindow();
-        if (pPreviewWin)
-        {
-            SdPage* pPage = GetActualPage();
-            if( pPage != pLastPage )
-            {
-                pLastPage = pPage;
-                USHORT  nPage = (pPage->GetPageNum() - 1) / 2; // Sdr --> Sd
-
-                pPreviewWin->SetContext( GetDoc(), nPage, pFrameView );
-            }
-        }
-    }
-    */
 }
 
 /*************************************************************************
@@ -2117,66 +2019,55 @@ String OutlineViewShell::GetPageRangeString()
 
 void OutlineViewShell::UpdatePreview( SdPage* pPage, BOOL bInit )
 {
-    // vom ShowWindow der DiaShow?
-    // ggfs. Preview den neuen Kontext mitteilen
-    /*  SfxChildWindow* pPreviewChildWindow =
-        GetViewFrame()->GetChildWindow(PreviewChildWindow::GetChildWindowId());
-    if (pPreviewChildWindow)
+    BOOL bNewObject = FALSE;
+
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
+    ::Outliner* pOutliner = pOutlinerView->GetOutliner();
+    List* pList = pOutlinerView->CreateSelectionList();
+    Paragraph* pPara = (Paragraph*)pList->First();
+    delete pList;
+
+    BOOL bNewPage = pPage != pLastPage;
+    BOOL bTitleObject = pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0;
+    if( !bTitleObject )
+        pPara = pOlView->GetPrevTitle( pPara );
+
+    // #96551# handle both updates when its an OutlineView
+    BOOL bOutlineView(FALSE);
+    if(OUTLINERMODE_OUTLINEVIEW == pOutliner->GetMode())
+        bOutlineView = TRUE;
+
+    if( bTitleObject || bNewPage || bOutlineView )
     {
-        PreviewWindow* pPreviewWin =
-            static_cast<PreviewWindow*>(pPreviewChildWindow->GetWindow());
-        if (pPreviewWin && ( bInit || pPreviewWin->GetDoc() == GetDoc() ) )
-    */      {
-            BOOL bNewObject = FALSE;
+        /*********************************************************************
+            |* Titeltextobjekt
+            \********************************************************************/
+        bNewObject = UpdateTitleObject( pPage, pPara );
+    }
+    if( !bTitleObject || bNewPage || bOutlineView )
+    {
+        /*********************************************************************
+            |* Gliederungstextobjekt
+            \********************************************************************/
+        bNewObject |= UpdateLayoutObject( pPage, pPara );
+    }
 
-            OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-            ::Outliner* pOutliner = pOutlinerView->GetOutliner();
-            List* pList = pOutlinerView->CreateSelectionList();
-            Paragraph* pPara = (Paragraph*)pList->First();
-            delete pList;
-
-            BOOL bNewPage = pPage != pLastPage;
-            BOOL bTitleObject = pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0;
-            if( !bTitleObject )
-                pPara = pOlView->GetPrevTitle( pPara );
-
-            // #96551# handle both updates when its an OutlineView
-            BOOL bOutlineView(FALSE);
-            if(OUTLINERMODE_OUTLINEVIEW == pOutliner->GetMode())
-                bOutlineView = TRUE;
-
-            if( bTitleObject || bNewPage || bOutlineView )
-            {
-                /*********************************************************************
-                |* Titeltextobjekt
-                \********************************************************************/
-                bNewObject = UpdateTitleObject( pPage, pPara );
-            }
-            if( !bTitleObject || bNewPage || bOutlineView )
-            {
-                /*********************************************************************
-                |* Gliederungstextobjekt
-                \********************************************************************/
-                bNewObject |= UpdateLayoutObject( pPage, pPara );
-            }
-
-            if( bNewObject )
-            {
-                // das AutoLayout nochmal anwenden, damit neu eingefuegte Textobjekte
-                // die richtige Position/Groesse bekommen
-                pPage->SetAutoLayout(pPage->GetAutoLayout());
-            }
-            // In Preview neu darstellen (nur bei neuer Seite):
-            if( bNewPage || bNewObject || bInit )
-            {
-                pLastPage = pPage;
-                ViewShell::UpdatePreview( pPage, TRUE );
-            }
-            if (bNewPage)
-                SetCurrentPage (pPage);
-        }
-    //  }
+    if( bNewObject )
+    {
+        // das AutoLayout nochmal anwenden, damit neu eingefuegte Textobjekte
+        // die richtige Position/Groesse bekommen
+        pPage->SetAutoLayout(pPage->GetAutoLayout());
+    }
+    // In Preview neu darstellen (nur bei neuer Seite):
+    if( bNewPage || bNewObject || bInit )
+    {
+        pLastPage = pPage;
+        ViewShell::UpdatePreview( pPage, TRUE );
+    }
+    if (bNewPage)
+        SetCurrentPage (pPage);
 }
+
 
 /*************************************************************************
 |*
