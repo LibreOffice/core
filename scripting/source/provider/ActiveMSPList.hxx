@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:09:20 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,25 +74,24 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 
 namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsss ::drafts::com::sun::star::script
 
 //Typedefs
 //=============================================================================
 
 
 typedef ::std::map < css::uno::Reference< css::frame::XModel >,
-                     css::uno::Reference< dcsss::provider::XScriptProvider > > Model_map;
+                     css::uno::Reference< css::script::provider::XScriptProvider > > Model_map;
 
 typedef ::std::hash_map< ::rtl::OUString,
-    css::uno::Reference< dcsss::provider::XScriptProvider >,
+    css::uno::Reference< css::script::provider::XScriptProvider >,
     ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > Msp_hash;
 
@@ -106,13 +105,13 @@ public:
     ActiveMSPList(  const css::uno::Reference<
         css::uno::XComponentContext > & xContext  );
     ~ActiveMSPList();
-    css::uno::Reference< dcsss::provider::XScriptProvider >
+    css::uno::Reference< css::script::provider::XScriptProvider >
         createMSP( const ::rtl::OUString& context )
             throw ( css::uno::RuntimeException );
-    css::uno::Reference< dcsss::provider::XScriptProvider >
+    css::uno::Reference< css::script::provider::XScriptProvider >
         createMSP( const css::uno::Any& context )
             throw ( css::uno::RuntimeException );
-    css::uno::Sequence< css::uno::Reference< dcsss::provider::XScriptProvider > >
+    css::uno::Sequence< css::uno::Reference< css::script::provider::XScriptProvider > >
         getActiveProviders();
     //XEventListener
     //======================================================================
@@ -122,8 +121,8 @@ public:
 
 private:
     void addActiveMSP( const css::uno::Reference< css::frame::XModel >& xModel,
-                       const css::uno::Reference< dcsss::provider::XScriptProvider >& msp );
-    css::uno::Reference< dcsss::provider::XScriptProvider >
+                       const css::uno::Reference< css::script::provider::XScriptProvider >& msp );
+    css::uno::Reference< css::script::provider::XScriptProvider >
         createNewMSP( const ::rtl::OUString& )
             throw ( css::uno::RuntimeException );
     void createNonDocMSPs();
