@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-08 16:23:21 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
+#ifndef CONNECTIVITY_IPARSECONTEXT_HXX
+#include "connectivity/IParseContext.hxx"
+#endif
 
 // forward declarations
 namespace com
@@ -114,44 +117,8 @@ namespace connectivity
     //==========================================================================
     //= OParseContext
     //==========================================================================
-    class OParseContext
+    class OParseContext : public IParseContext
     {
-    public:
-        enum    ErrorCode
-        {
-            ERROR_NONE      = 0,
-            ERROR_GENERAL,                  // "Syntax error in SQL expression"
-            ERROR_GENERAL_HINT,             // "before \"#\" expression.", uses 1 parameter
-            ERROR_VALUE_NO_LIKE,            // "The value # can not be used with LIKE!", uses 1 parameter
-            ERROR_FIELD_NO_LIKE,            // "LIKE can not be used with this field!"
-            ERROR_INVALID_COMPARE,          // "The entered criterion can not be compared with this field!";
-            ERROR_INVALID_INT_COMPARE,      // "The field can not be compared with a number!"
-            ERROR_INVALID_STRING_COMPARE,   // "The field can not be compared with a string!"
-            ERROR_INVALID_DATE_COMPARE,     // "The field can not be compared with a date!"
-            ERROR_INVALID_REAL_COMPARE,     // "The field can not be compared with a floating point number!"
-            ERROR_INVALID_TABLE,            // "The table \"#\" is unknown in the database!"
-            ERROR_INVALID_COLUMN            // "The column \"#\" is unknown in the table \"#\"!"
-        };
-
-        enum    InternationalKeyCode
-        {
-            KEY_NONE = 0,
-            KEY_LIKE = SQL_TOKEN_LIKE,
-            KEY_NOT = SQL_TOKEN_NOT,
-            KEY_NULL = SQL_TOKEN_NULL,
-            KEY_TRUE = SQL_TOKEN_TRUE,
-            KEY_FALSE = SQL_TOKEN_FALSE,
-            KEY_IS = SQL_TOKEN_IS,
-            KEY_BETWEEN = SQL_TOKEN_BETWEEN,
-            KEY_OR = SQL_TOKEN_OR,
-            KEY_AND = SQL_TOKEN_AND,
-            KEY_AVG = SQL_TOKEN_AVG,
-            KEY_COUNT = SQL_TOKEN_COUNT,
-            KEY_MAX = SQL_TOKEN_MAX,
-            KEY_MIN = SQL_TOKEN_MIN,
-            KEY_SUM = SQL_TOKEN_SUM
-        };
-
     public:
         OParseContext();
 
@@ -205,7 +172,7 @@ namespace connectivity
         static sal_Int32            s_nRefCount;
 
     // informations on the current parse action
-        const OParseContext*        m_pContext;
+        const IParseContext*        m_pContext;
         OSQLParseNode*              m_pParseTree;   // result from parsing
         ::com::sun::star::lang::Locale* m_pLocale;      // current locale settings for parsing
         ::rtl::OUString                     m_sFieldName;   // current field name for a predicate
@@ -229,7 +196,7 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const OParseContext* _pContext = NULL);
+        OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const IParseContext* _pContext = NULL);
         ~OSQLParser();
 
         // Parsing an SQLStatement
@@ -243,10 +210,10 @@ namespace connectivity
                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xField);
 
         // Access to the context
-        const OParseContext& getContext() const {return *m_pContext;}
+        const IParseContext& getContext() const {return *m_pContext;}
 
         // TokenIDToStr: Token-Name zu einer Token-Nr.
-        static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, const OParseContext* pContext = NULL);
+        static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = NULL);
 
         // StrToTokenID: Token-Nr. zu einem Token-Namen.
         // static sal_uInt32 StrToTokenID(const ::rtl::OString & rName);
@@ -263,7 +230,7 @@ namespace connectivity
         // RuleId mit enum, wesentlich effizienter
         static sal_uInt32 RuleID(OSQLParseNode::Rule eRule);
         // compares the _sFunctionName with all known function names and return the DataType of the return value
-        static sal_Int32 getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const OParseContext* pContext = NULL);
+        static sal_Int32 getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const IParseContext* pContext = NULL);
 
 
 

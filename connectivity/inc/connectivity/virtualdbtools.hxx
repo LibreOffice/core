@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-13 14:53:21 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 10:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ namespace connectivity
 {
 //........................................................................
 
-    class OParseContext;
+    class IParseContext;
     //....................................................................
     namespace simple
     {
@@ -261,7 +261,8 @@ namespace connectivity
         {
         public:
             virtual void parseNodeToStr(::rtl::OUString& _rString,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
+                const IParseContext* _pContext
             ) const = 0;
 
             virtual void parseNodeToPredicateStr(::rtl::OUString& _rString,
@@ -269,7 +270,8 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
                 const ::com::sun::star::lang::Locale& _rIntl,
-                const sal_Char _cDecSeparator
+                const sal_Char _cDecSeparator,
+                const IParseContext* _pContext
             ) const = 0;
         };
 
@@ -288,7 +290,7 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
             ) const = 0;
 
-            virtual const OParseContext& getContext() const = 0;
+            virtual const IParseContext& getContext() const = 0;
         };
 
         //================================================================
@@ -301,7 +303,8 @@ namespace connectivity
         public:
             /// creates a simple version of the class OSQLParser
             virtual ::rtl::Reference< ISQLParser > createSQLParser(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,
+                const IParseContext* _pContext
                 ) const = 0;
 
             /// creates a helper for charset related functionality (<type>OCharsetMap</type>)
@@ -327,6 +330,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/08/13 14:53:21  fs
+ *  #90761# +IDataAccessCharset / +createCharsetHelper
+ *
  *  Revision 1.2  2001/08/06 14:47:53  fs
  *  #87690# +connectRowset / some other methods needed later on (to make writer link-time independent og dbtools)
  *

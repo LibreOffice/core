@@ -2,9 +2,9 @@
  *
  *  $RCSfile: predicateinput.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:29:53 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 10:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ namespace dbtools
         OPredicateInputController(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::connectivity::OParseContext* _pParseContext = NULL
+            const ::connectivity::IParseContext* _pParseContext = NULL
         );
 
         /** transforms a "raw" predicate value (usually obtained from a user input) into a valid predicate for the given column
@@ -173,6 +173,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/09 14:29:53  fs
+ *  initial checkin - helper class for inputting predicate values
+ *
  *
  *  Revision 1.0 04.04.02 15:13:13  fs
  ************************************************************************/

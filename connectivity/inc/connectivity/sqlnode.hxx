@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-15 09:52:42 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 10:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,7 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 // forward declarations
 namespace com
@@ -104,7 +102,7 @@ namespace connectivity
 {
 
     class OSQLParseNode;
-    class OParseContext;
+    class IParseContext;
 
     typedef ::std::vector< OSQLParseNode* > OSQLParseNodes;
 
@@ -137,7 +135,7 @@ namespace connectivity
             const ::rtl::OUString                   aCatalogSeparator;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > xFormatter;
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField;
-            const OParseContext& rContext;
+            const IParseContext* m_pContext;
             sal_Char            cDecSep ;
             sal_Bool            bQuote : 1;
             sal_Bool            bInternational : 1;
@@ -148,7 +146,7 @@ namespace connectivity
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & _xFormatter,
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                                   const ::com::sun::star::lang::Locale& _rIntl,
-                                  const OParseContext* _pContext,
+                                  const IParseContext* _pContext,
                                   sal_Bool _bIntl = sal_False,
                                   sal_Bool _bQuote= sal_True,
                                   sal_Char _cDecSep = '.',
@@ -288,7 +286,7 @@ namespace connectivity
 
         void parseNodeToStr(::rtl::OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
-                            const OParseContext* pContext = NULL,
+                            const IParseContext* pContext = NULL,
                             sal_Bool _bIntl = sal_False,
                             sal_Bool _bQuote= sal_True) const;
 
@@ -298,7 +296,7 @@ namespace connectivity
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                      const ::com::sun::star::lang::Locale& rIntl,
                                      sal_Char _cDec,
-                                     const OParseContext* pContext = NULL ) const;
+                                     const IParseContext* pContext = NULL ) const;
 
         void parseNodeToPredicateStr(::rtl::OUString& rString,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > & xMeta,
@@ -306,7 +304,7 @@ namespace connectivity
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                                      const ::com::sun::star::lang::Locale& rIntl,
                                      sal_Char _cDec,
-                                     const OParseContext* pContext = NULL ) const;
+                                     const IParseContext* pContext = NULL ) const;
 
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 
@@ -377,7 +375,7 @@ namespace connectivity
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
                             const ::com::sun::star::lang::Locale& rIntl,
-                            const OParseContext* pContext,
+                            const IParseContext* pContext,
                             sal_Bool _bIntl,
                             sal_Bool _bQuote,
                             sal_Char _cDecSep,

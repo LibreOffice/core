@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-15 12:34:56 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                 m_xTables->getByName(aComposedName) >>= m_aTables[aTableRange];
             else if(m_pParser)
             {
-                ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(OParseContext::ERROR_INVALID_TABLE);
+                ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(IParseContext::ERROR_INVALID_TABLE);
                 sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,aTableName);
                 appendWarning(sErrMsg);
             }
@@ -579,7 +579,7 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     if (!pSelectNode || m_eStatementType != SQL_STATEMENT_SELECT || m_aTables.empty())
     {
         if(m_pParser)
-            appendWarning(m_pParser->getContext().getErrorMessage(OParseContext::ERROR_GENERAL));
+            appendWarning(m_pParser->getContext().getErrorMessage(IParseContext::ERROR_GENERAL));
         return;
     }
 
@@ -1262,7 +1262,7 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
         }
         else if(m_pParser)
         {
-            ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(OParseContext::ERROR_INVALID_COLUMN);
+            ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(IParseContext::ERROR_INVALID_COLUMN);
             sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,*pBegin);
             sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,_rTableAlias);
             appendWarning(sErrMsg);
