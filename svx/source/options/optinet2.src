@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:14:22 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 12:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,18 +136,21 @@ TabPage RID_SVXPAGE_INET_PROXY
         StringList [ de ] =
         {
             < "Keine" ; > ;
+            < "System" ; > ;
             < "Manuell" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-             < "; Keine" ; > ;
-        < "; Manuell" ; > ;
-    };
-    StringList [ en-US ] =
-    {
-             < "None" ; > ;
-        < "Manual" ; > ;
-    };
+        StringList [ x-comment ] =
+        {
+            < "; Keine" ; > ;
+            < "; System" ; > ;
+            < "; Manuell" ; > ;
+            };
+        StringList [ en-US ] =
+        {
+            < "None" ; > ;
+            < "System" ; > ;
+            < "Manual" ; > ;
+        };
     };
     String ST_PROXY_FROM_BROWSER
     {
