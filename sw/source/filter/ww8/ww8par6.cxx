@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-08 15:15:18 $
+ *  last change: $Author: cmc $ $Date: 2001-11-12 17:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2419,7 +2419,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
                 nYPos = 0;                  // koennen wir nicht
             break;
     }
-
+#if 0 //Not sure what this is trying to achieve, but breaks 94418
     if( (rIo.bIsHeader || rIo.bIsFooter) && (FLY_AT_CNTNT != eAnchor) )
     {
         eAnchor = FLY_AT_CNTNT;
@@ -2434,7 +2434,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
         }
         rIo.pNode_FLY_AT_CNTNT = &rPaM.GetPoint()->nNode.GetNode();
     }
-
+#endif
     BYTE nXBind = ( rWW.nSp29 & 0xc0 ) >> 6;
     switch ( nXBind )           // X - Bindung -> Koordinatentransformation
     {
@@ -2743,7 +2743,7 @@ void WW8AnchoringProperties::Insert(SwFltControlStack *pCtrlStck)
 BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
     WW8_TablePos *pTabPos)
 {
-    ASSERT(pSprm29 || pTabPos, "If no frame found, *MUST* be in a table");
+    ASSERT(pSprm29 || pTabPos || bNowStyleApo, "If no frame found, *MUST* be in a table");
 
     pWFlyPara = new WW8FlyPara ( bVer67, bNowStyleApo  ?
         pCollA[nAktColl].pWWFly : 0 );

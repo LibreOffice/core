@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
+ *  last change: $Author: cmc $ $Date: 2001-11-12 17:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,9 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
 {
     const BYTE* pSprm37;
     const BYTE* pSprm29;
-    rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly); // Apo in StyleDef
+    // Frame in Style Definition (word appears to ignore them if
+    // inside an text autoshape, e.g. #94418#)
+    rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly && !bTxbxFlySection);
     rbStartApo = rbStopApo  = FALSE;
 
     /*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: cmc $ $Date: 2001-11-12 17:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2407,10 +2407,15 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         {
             if( bIsHeader || bIsFooter)
             {
+#if 0
+                //Not sure what this wants to achieve, its certainly wrong for
+                //94418
+
                 if( bIsHeader && (nPgTop < pF->nYaTop))
                     pF->nYaTop -= nPgTop;
                 else
                     pF->nYaTop = 0;
+#endif
                 pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
             }
             else
