@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:46:20 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:15:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,8 +98,7 @@ CFLAGSEXCEPTIONS=-fexceptions
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-# -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -fno-for-scope -fpermissive 
+CFLAGSCXX= -pipe
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST= -fPIC
