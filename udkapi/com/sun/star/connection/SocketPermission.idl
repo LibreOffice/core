@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SocketPermission.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-10 13:35:49 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 08:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,45 +68,47 @@ module com {  module sun {  module star {  module connection {
 //=============================================================================
 
 /** This permission represents access to a network via sockets.
-    A SocketPermission consists of a host specification and a set of "actions"
-    specifying ways to connect to that host. The host is specified as
+    A SocketPermission consists of a host specification and a set of actions
+    specifying ways to connect to that host.  The host is specified as
     <pre>
     host = (hostname | IPaddress)[:portrange]
     portrange = portnumber | -portnumber | portnumber-[portnumber]
     </pre>
     The host is expressed as a DNS name, as a numerical IP address, or as
-    "localhost" (for the local machine).  The wildcard "*" may be included once
+    <code>"localhost"</code> (for the local machine).  The wildcard <code>"*"</code>
+     may be included once
     in a DNS name host specification.  If it is included, it must be in the
-    leftmost position, as in "*.sun.com".
+    leftmost position, as in <code>"*.sun.com"</code>.
     <br>
-    The port or portrange is optional.  A port specification of the form "N-",
-    where N is a port number, signifies all ports numbered N and above,
-    while a specification of the form "-N" indicates all ports numbered N and below.
+    The port or portrange is optional.  A port specification of the form <code>"N-"</code>,
+    where <code>N</code> is a port number, signifies all ports numbered <code>N</code> and above,
+    while a specification of the form <code>"-N"</code> indicates all ports numbered
+    <code>N</code> and below.
 
     <p>
     The possible ways to connect to the host are
     <ul>
-    <li>accept</li>
-    <li>connect</li>
-    <li>listen</li>
-    <li>resolve</li>
-    </ul>
-    The "listen" action is only meaningful when used with "localhost".
-    The "resolve" (resolve host/ip name service lookups) action is implied when
+    <li><code>accept</code></li>
+    <li><code>connect</code></li>
+    <li><code>listen</code></li>
+    <li><code>resolve</code></li>
+    </ul><br>
+    The <code>"listen"</code> action is only meaningful when used with <code>"localhost"</code>.
+    The <code>"resolve"</code> (resolve host/ip name service lookups) action is implied when
     any of the other actions are present.
     <br>
     As an example of the creation and meaning of SocketPermissions, note that if
     the following permission
-    <pre>
-    SocketPermission("puffin.eng.sun.com:7777", "connect,accept");
-    </pre>
-    is granted, it allows to connect to port 7777 on puffin.eng.sun.com, and to
+<pre>
+SocketPermission("foo.bar.com:7777", "connect,accept");
+</pre>
+    is granted, it allows to connect to port 7777 on foo.bar.com, and to
     accept connections on that port.
     <br>
     Similarly, if the following permission
-    <pre>
-    SocketPermission("localhost:1024-", "accept,connect,listen");
-    </pre>
+<pre>
+SocketPermission("localhost:1024-", "accept,connect,listen");
+</pre>
     is granted, it allows that code to accept connections on, connect to, or listen
     on any port between 1024 and 65535 on the local host.
     </p>
@@ -115,6 +117,7 @@ module com {  module sun {  module star {  module connection {
     Granting code permission to accept or make connections to remote hosts may be
     dangerous because malevolent code can then more easily transfer and share
     confidential data among parties who may not otherwise have access to the data.
+    </p>
 */
 struct SocketPermission
 {

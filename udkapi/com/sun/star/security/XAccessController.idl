@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessController.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-11 10:01:12 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 08:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,9 @@ interface XAccessController : com::sun::star::uno::XInterface
 
     /** Perform the specified action restricting permissions to the given
         XAccessControlContext.
-        The action is performed with the intersection of the permissions of all given
-        XAccessControlContexts (including the ones given by earlier doRestricted() calls of the
-        call chain) and the security policy currently in effect.
-        The latter includes static security, e.g. based on user credentials.
+        The action is performed with the intersection of the permissions of the currently installed
+        XAccessControlContext, the given XAccessControlContext and the security policy currently
+        in effect.  The latter includes static security, e.g. based on user credentials.
         <p>
         If the specified XAccessControlContext is null, then the action is performed
         with unmodified permissions, i.e. the call makes no sense.
@@ -142,12 +141,14 @@ interface XAccessController : com::sun::star::uno::XInterface
         [in] XAccessControlContext restriction )
         raises (com::sun::star::uno::Exception);
 
-    /** Perform the specified action reducing restrictions to only the given XAccessControlContext
-        and the security policy currently in effect.
-        The latter includes static security, e.g. based on user credentials.
+    /** Perform the specified action adding a set of permissions defined by the given
+        XAccessControlContext.
+        The action is performed with the union of the permissions of the currently installed
+        XAccessControlContext, the given XAccessControlContext and the security policy currently
+        in effect.  The latter includes static security, e.g. based on user credentials.
         <p>
-        If the specified XAccessControlContext is null, then the action is performed
-        only with the permissions of the security policy currently in effect.
+        If the given XAccessControlContext is null, then the action is performed
+        <b>only</b> with the permissions of the security policy currently in effect.
         </p>
 
         @attention

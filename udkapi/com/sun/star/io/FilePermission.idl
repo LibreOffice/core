@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePermission.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-20 14:20:50 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 08:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,37 +67,38 @@ module com {  module sun {  module star {  module io {
 
 //=============================================================================
 
-/** This permission represents access to a file or directory.  A FilePermission
-    consists of a file url and a set of actions valid for that url.
+/** This permission represents access to a file or directory.
+    A FilePermission consists of a file url and a set of actions valid for that url.
     <p>
-    The path of the file url that ends in "/*" indicates all the files and
-    directories contained in that directory.  A path that ends with "/-"
+    The path of the file url that ends in <code>"/*"</code> indicates all the files and
+    directories contained in that directory.  A path that ends with <code>"/-"</code>
     indicates (recursively) all files and subdirectories contained in that
-    directory.  A file url string consisting of the special token "<<ALL FILES>>"
-    matches any file.
+    directory.  A file url string consisting of the special token
+    <code>"&lt;&lt;ALL FILES&gt;&gt;"</code> matches any file.
     <br>
-    Note: A file url string consisting of a single "*" indicates all the files
-    in the current directory, while a string consisting of a single "-" indicates
+    Note: A file url string consisting of a single <code>"*"</code> indicates all the files
+    in the current directory, while a string consisting of a single <code>"-"</code> indicates
     all the files in the current directory and (recursively) all files and
     subdirectories contained in the current directory.
     <br>
     The actions to be granted is a list of one or more comma-separated keywords.
-    The possible keywords are "read", "write", "execute", and "delete".
+    The possible keywords are <code>"read"</code>, <code>"write"</code>,
+    <code>"execute"</code>, and <code>"delete"</code>.
     Their meaning is defined as follows:
     <ul>
-    <li>read -- read permission</li>
-    <li>write -- write permission</li>
-    <li>execute -- execute permission</li>
-    <li>delete -- delete permission</li>
-    </ul>
-    The actions string is converted to lowercase before processing.
+    <li><code>read</code> -- read permission</li>
+    <li><code>write</code> -- write permission</li>
+    <li><code>execute</code> -- execute permission</li>
+    <li><code>delete</code> -- delete permission</li>
+    </ul><br>
+    The actions string is processed case-insensitive.
     </p>
 
     @attention
     Be careful when granting FilePermissions.  Think about the implications of
     granting read and especially write access to various files and directories.
-    The "<<ALL FILES>>" permission with write action is especially dangerous.
-    This grants permission to write to the entire file system.
+    The <code>"&lt;&lt;ALL FILES&gt;&gt;"</code> permission with write action is
+    especially dangerous.  This grants permission to write to the entire file system.
 */
 struct FilePermission
 {
