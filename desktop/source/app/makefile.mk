@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cd $ $Date: 2001-11-05 07:17:36 $
+#   last change: $Author: dic $ $Date: 2002-03-14 15:39:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,24 @@ OBJFILES = \
         $(OBJ)$/appsys.obj				\
         $(OBJ)$/desktopresid.obj		\
         $(OBJ)$/dispatchwatcher.obj
+
+.IF "$(OS)" == "SOLARIS"
+
+SLOFILES = \
+        $(SLO)$/app.obj					\
+        $(SLO)$/intro.obj				\
+        $(SLO)$/officeipcthread.obj		\
+        $(SLO)$/appinit.obj				\
+        $(SLO)$/cmdlineargs.obj			\
+        $(SLO)$/pluginacceptthread.obj	\
+        $(SLO)$/officeacceptthread.obj	\
+        $(SLO)$/oinstanceprovider.obj	\
+        $(SLO)$/opluginframefactory.obj	\
+        $(SLO)$/appsys.obj				\
+        $(SLO)$/desktopresid.obj		\
+        $(SLO)$/dispatchwatcher.obj
+
+.ENDIF
 
 SRC1FILES=	desktop.src
 SRS1NAME=	desktop

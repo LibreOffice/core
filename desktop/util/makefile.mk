@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: cd $ $Date: 2001-11-05 07:18:26 $
+#   last change: $Author: dic $ $Date: 2002-03-14 15:40:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -211,6 +211,45 @@ APP4ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
 APP4VERINFO=verinfo.rc
 APP4LINKRES=$(MISC)$/$(APP4TARGET).res
 
+.ENDIF
+
+.IF "$(OS)" == "SOLARIS"
+
+SLOFILES =	\
+    $(SLO)$/app.obj			\
+    $(SLO)$/intro.obj		\
+    $(SLO)$/officeipcthread.obj	\
+    $(SLO)$/appinit.obj		\
+    $(SLO)$/cmdlineargs.obj		\
+    $(SLO)$/pluginacceptthread.obj	\
+    $(SLO)$/officeacceptthread.obj	\
+    $(SLO)$/oinstanceprovider.obj	\
+    $(SLO)$/opluginframefactory.obj	\
+    $(SLO)$/appsys.obj		\
+    $(SLO)$/desktopresid.obj	\
+    $(SLO)$/dispatchwatcher.obj
+
+SHL1OBJS=	$(SLOFILES)
+SHL1TARGET=	dsk$(UPD)$(DLLPOSTFIX)
+
+SHL1IMPLIB= idsk
+SHL1STDLIBS=    \
+    $(SALLIB)		\
+    $(VOSLIB)		\
+    $(TOOLSLIB)		\
+    $(CPPULIB)		\
+    $(CPPUHELPERLIB) 	\
+    $(SVLLIB) 		\
+    $(VCLLIB)		\
+    $(UNOTOOLSLIB)		\
+    $(UCBHELPERLIB)		\
+    $(COMPHELPERLIB)	\
+    $(SALHELPERLIB)
+
+SHL1DEPN=       makefile.mk
+SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=       $(SHL1TARGET)
 .ENDIF
 
 # --- Targets -------------------------------------------------------------
