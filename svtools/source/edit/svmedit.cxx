@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 15:09:15 $
+ *  last change: $Author: mt $ $Date: 2001-07-17 16:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,8 @@ void ImpSvMEdit::Resize()
 
     if ( mpScrollBox )
         mpScrollBox->SetPosSizePixel( aSz.Width(), aSz.Height(), nSBWidth, nSBWidth );
+
+    ImpInitScrollBars();
 }
 
 void ImpSvMEdit::GetFocus()
