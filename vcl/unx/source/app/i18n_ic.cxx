@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-15 12:35:44 $
+ *  last change: $Author: svesik $ $Date: 2002-01-02 13:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         if ( mnPreeditStyle != XIMPreeditNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX
             if ( mpPreeditAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -364,7 +364,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined IRIX
             if ( mpStatusAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
