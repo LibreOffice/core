@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:38:34 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:27:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,16 +72,13 @@ ENABLE_EXCEPTIONS	=	TRUE
 
 # --- Settings ------------------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Allgemein -----------------------------------------------------------
-CXXFILES=	setup_main.cxx setup_a.cxx setup_w.cxx
 
 RCFILES=	$(RES)$/$(TARGET).rc
 
-LNGFILES=	setup.lng
+ULFFILES=	setup.ulf
 
 OBJFILES= 	$(OBJ)$/setup_main.obj \
             $(OBJ)$/setup_a.obj \
@@ -107,10 +104,8 @@ APP1NOSVRES=	$(RES)$/$(TARGET).res
 
 # --- setup --------------------------------------------------------------
 
-#ALL: ALLTAR $(RCFILES)
-
 .INCLUDE :  target.mk
 
-$(RCFILES) : $(LNGFILES) makefile.mk rcfooter.txt rcheader.txt rctmpl.txt lnglist.txt
-    lngconvex.exe -lng setup.lng -rc $(RCFILES) -c lnglist.txt -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+$(RCFILES) : $(ULFFILES) makefile.mk rcfooter.txt rcheader.txt rctmpl.txt lnglist.txt
+    $(WRAPCMD) lngconvex.exe -ulf $(COMMONMISC)$/$(TARGET)$/setup.ulf -rc $(RCFILES) -c lnglist.txt -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
 
