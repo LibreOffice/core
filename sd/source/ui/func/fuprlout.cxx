@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:52:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,15 +75,15 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVDUNDO_HXX //autogen
 #include <svx/svdundo.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
