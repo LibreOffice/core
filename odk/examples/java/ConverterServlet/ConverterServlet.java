@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConverterServlet.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:12:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -87,7 +87,7 @@ public class ConverterServlet extends HttpServlet {
 
     /** Specifies the port for the office server.
      */
-    private String stringPort = "8100";
+    private String stringPort = "2083";
 
     /** Called by the server (via the service method) to allow a servlet to handle
      * a POST request. The file from the client will be uploaded to the web server
