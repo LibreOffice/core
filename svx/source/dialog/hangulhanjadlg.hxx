@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:46:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #endif
+#include <svtools/valueset.hxx>
 
-
+#include <vector>
 #include <memory>   // for auto_ptr
 
 class SvxCommonLinguisticControl;
@@ -108,6 +109,53 @@ namespace svx
     //= HangulHanjaConversionDialog
     //=========================================================================
 
+    class SuggestionSet : public ValueSet
+    {
+    public:
+        SuggestionSet( Window* pParent );
+        virtual ~SuggestionSet();
+
+        virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+        void            ClearSet();
+    };
+
+    class SuggestionDisplay : public Control
+    {
+    public:
+        SuggestionDisplay( Window* pParent, const ResId& rResId );
+        virtual ~SuggestionDisplay();
+
+        void DisplayListBox( bool bDisplayListBox );
+
+        void SetSelectHdl( const Link& rLink );
+
+        void Clear();
+        void InsertEntry( const XubString& rStr );
+        void SelectEntryPos( USHORT nPos );
+
+        USHORT GetEntryCount() const;
+
+        XubString GetEntry( USHORT nPos ) const;
+        XubString GetSelectEntry() const;
+
+        virtual void StateChanged( StateChangedType nStateChange );
+
+        DECL_LINK( SelectSuggestionHdl, Control* );
+
+        void SetHelpIds();
+
+    private:
+        void implUpdateDisplay();
+
+    private:
+        bool          m_bDisplayListBox;//otherwise ValueSet
+        SuggestionSet m_aValueSet;
+        ListBox       m_aListBox;
+
+        Link          m_aSelectLink;
+        bool          m_bInSelectionUpdate;
+    };
+
     class HangulHanjaConversionDialog : public  ModalDialog
     {
     private:
@@ -115,7 +163,7 @@ namespace svx
                     m_pPlayground;                  // order matters: before all other controls!
 
         PushButton      m_aFind;
-        ListBox         m_aSuggestions;
+        SuggestionDisplay   m_aSuggestions;
         FixedText       m_aFormat;
         RadioButton     m_aSimpleConversion;
         RadioButton     m_aHangulBracketed;
@@ -135,6 +183,10 @@ namespace svx
                             // the user uses the "find" functionality, we switch to working
                             // with what the user entered, which then does not have any relation to
                             // the document anymore. Some functionality must be disabled then
+
+        Link            m_aOptionsChangedLink;
+        Link            m_aClickByCharacterLink;
+
     public:
         HangulHanjaConversionDialog(
                 Window* _pParent,
@@ -142,6 +194,7 @@ namespace svx
         ~HangulHanjaConversionDialog( );
 
     public:
+        void    SetOptionsChangedHdl( const Link& _rHdl );
         void    SetIgnoreHdl( const Link& _rHdl );
         void    SetIgnoreAllHdl( const Link& _rHdl );
         void    SetChangeHdl( const Link& _rHdl );
@@ -170,9 +223,14 @@ namespace svx
         void            SetByCharacter( sal_Bool _bByCharacter );
         sal_Bool        GetByCharacter( ) const;
 
-        // should text which does not fit the primary conversion direction be ignored
-        void            SetUseBothDirections( sal_Bool _bBoth ) const;
+        void            SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
+
+        // should text which does not match the primary conversion direction be ignored?
         sal_Bool        GetUseBothDirections( ) const;
+
+        // get current conversion direction to use
+        // (return argument if GetUseBothDirections is true)
+        HangulHanjaConversion::ConversionDirection  GetDirection( HangulHanjaConversion::ConversionDirection eDefaultDirection ) const;
 
         // enables or disbales the checkboxes for ruby formatted replacements
         void            EnableRubySupport( sal_Bool bVal );
@@ -182,32 +240,15 @@ namespace svx
         DECL_LINK( OnOption, void* );
         DECL_LINK( OnSuggestionModified, void* );
         DECL_LINK( OnSuggestionSelected, void* );
+        DECL_LINK( OnConversionDirectionClicked, CheckBox* );
+        DECL_LINK( ClickByCharacterHdl, CheckBox* );
 
         // fill the suggestion list box with suggestions for the actual input
         void FillSuggestions( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions );
     };
 
 
-    class HHDictList
-    {
-    private:
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary > >
-                            m_aList;
-        sal_uInt32          m_nNew;     // position where the next dictionary will be inserted
-    protected:
-    public:
-                            HHDictList( void );
-        virtual             ~HHDictList();
-
-        void                Clear( void );
-        void                Add( ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary > _xDict );
-        sal_uInt32          Count( void ) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary >
-                            Get( sal_uInt32 _nInd );
-        String              GetName( sal_uInt32 _nInd );
-        bool                GetIsActive( sal_uInt32 _nInd );
-    };
-
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary > > HHDictList;
 
     class HangulHanjaOptionsDialog : public ModalDialog
     {
@@ -216,7 +257,6 @@ namespace svx
         SvxCheckListBox     m_aDictsLB;
         FixedLine           m_aOptionsFL;
         CheckBox            m_aIgnorepostCB;
-        CheckBox            m_aAutocloseCB;
         CheckBox            m_aShowrecentlyfirstCB;
         CheckBox            m_aAutoreplaceuniqueCB;
         PushButton          m_aNewPB;
@@ -229,6 +269,7 @@ namespace svx
         SvLBoxButtonData*   m_pCheckButtonData;
 
         HHDictList          m_aDictList;
+        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 
         DECL_LINK( OkHdl, void* );
         DECL_LINK( OnNew, void* );
@@ -294,16 +335,6 @@ namespace svx
     class HangulHanjaEditDictDialog : public ModalDialog
     {
     private:
-        enum EditState
-        {
-            ES_NIL,                 // neither original nor suggestion(s) entered
-            ES_NEW_ORG_EMPTY,       // a new original was entered, no suggestion(s)
-            ES_NEW_SUGG,            // no original was entered but at least one suggestion
-            ES_NEW_ORG_SUGG,        // a new original and at least one suggestion was entered
-            ES_EXIST_ORG,           // while typing, an existing entry matched
-            ES_EXIST_ORG_MOD        // an existing entry has been modified
-        };
-        EditState       m_eState;
         const String    m_aEditHintText;
         HHDictList&     m_rDictList;
         sal_uInt32      m_nCurrentDict;
@@ -315,7 +346,6 @@ namespace svx
         ListBox         m_aBookLB;
         FixedText       m_aOriginalFT;
         ComboBox        m_aOriginalLB;
-        CheckBox        m_aReplacebycharCB;
         FixedText       m_aSuggestionsFT;
         SuggestionEdit  m_aEdit1;
         SuggestionEdit  m_aEdit2;
@@ -327,36 +357,26 @@ namespace svx
         HelpButton      m_aHelpPB;
         CancelButton    m_aClosePB;
 
-        bool            m_bModified;
-        bool            m_bNew;
         sal_uInt16      m_nTopPos;
+        bool            m_bModifiedSuggestions;
+        bool            m_bModifiedOriginal;
 
         DECL_LINK( OriginalModifyHdl, void* );
-        DECL_LINK( OriginalFocusLostHdl, void* );
         DECL_LINK( ScrollHdl, void* );
         DECL_LINK( EditModifyHdl1, Edit* );
         DECL_LINK( EditModifyHdl2, Edit* );
         DECL_LINK( EditModifyHdl3, Edit* );
         DECL_LINK( EditModifyHdl4, Edit* );
-        DECL_LINK( EditFocusLostHdl1, Edit* );
-        DECL_LINK( EditFocusLostHdl2, Edit* );
-        DECL_LINK( EditFocusLostHdl3, Edit* );
-        DECL_LINK( EditFocusLostHdl4, Edit* );
 
         DECL_LINK( BookLBSelectHdl, void* );
-        DECL_LINK( OriginalLBSelectHdl, void* );
         DECL_LINK( NewPBPushHdl, void* );
         DECL_LINK( DeletePBPushHdl, void* );
 
-        void            Init( sal_uInt32 _nSelDict );
+        void            InitEditDictDialog( sal_uInt32 _nSelDict );
         void            UpdateOriginalLB( void );
         void            UpdateSuggestions( void );
-        void            UpdateSuggestions( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions );
-        void            Leave( void );
-        void            CheckNewState( void );
-                        // checks if enough data is entered to enable "New" Button and set Button state accordingly
-        void            SetSuggestion( const String& _rText, sal_uInt16 _nEntryNum );
-        void            ResetSuggestion( sal_uInt16 _nEntryNum );
+        void            UpdateButtonStates();
+
         void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
         void            EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset );
         void            EditFocusLost( Edit* _pEdit, sal_uInt8 _nEntryOffset );
