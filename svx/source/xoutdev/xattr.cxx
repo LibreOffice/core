@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:09:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,8 +1001,10 @@ sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
             aLineDash.DashLen = rXD.GetDashLen();
             aLineDash.Distance = rXD.GetDistance();
 
+            rtl::OUString aApiName;
+            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
             aPropSeq[0].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
-            aPropSeq[0].Value   = uno::makeAny( OUString( GetName() ));
+            aPropSeq[0].Value   = uno::makeAny( aApiName );
             aPropSeq[1].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ));
             aPropSeq[1].Value   = uno::makeAny( aLineDash );
             rVal = uno::makeAny( aPropSeq );
@@ -3534,6 +3536,34 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
+        case 0:
+        {
+            uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
+
+            ::com::sun::star::awt::Gradient aGradient;
+
+            const XGradient& aXGradient = GetValue();
+            aGradient.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
+            aGradient.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
+            aGradient.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
+            aGradient.Angle = (short)aXGradient.GetAngle();
+            aGradient.Border = aXGradient.GetBorder();
+            aGradient.XOffset = aXGradient.GetXOffset();
+            aGradient.YOffset = aXGradient.GetYOffset();
+            aGradient.StartIntensity = aXGradient.GetStartIntens();
+            aGradient.EndIntensity = aXGradient.GetEndIntens();
+            aGradient.StepCount = aXGradient.GetSteps();
+
+            rtl::OUString aApiName;
+            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            aPropSeq[0].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
+            aPropSeq[0].Value   = uno::makeAny( aApiName );
+            aPropSeq[1].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ));
+            aPropSeq[1].Value   = uno::makeAny( aGradient );
+            rVal = uno::makeAny( aPropSeq );
+            break;
+        }
+
         case MID_FILLGRADIENT:
         {
             const XGradient& aXGradient = GetValue();
@@ -3587,6 +3617,51 @@ sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BY
 
     switch ( nMemberId )
     {
+        case 0:
+        {
+            uno::Sequence< beans::PropertyValue >   aPropSeq;
+            ::com::sun::star::awt::Gradient         aGradient;
+            rtl::OUString                           aName;
+            bool                                    bGradient( false );
+
+            if ( rVal >>= aPropSeq )
+            {
+                for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+                {
+                    if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" )))
+                        aPropSeq[n].Value >>= aName;
+                    else if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillGradient" )))
+                    {
+                        if ( aPropSeq[n].Value >>= aGradient )
+                            bGradient = true;
+                    }
+                }
+
+                SetName( aName );
+                if ( bGradient )
+                {
+                    XGradient aXGradient;
+
+                    aXGradient.SetGradientStyle( (XGradientStyle) aGradient.Style );
+                    aXGradient.SetStartColor( aGradient.StartColor );
+                    aXGradient.SetEndColor( aGradient.EndColor );
+                    aXGradient.SetAngle( aGradient.Angle );
+                    aXGradient.SetBorder( aGradient.Border );
+                    aXGradient.SetXOffset( aGradient.XOffset );
+                    aXGradient.SetYOffset( aGradient.YOffset );
+                    aXGradient.SetStartIntens( aGradient.StartIntensity );
+                    aXGradient.SetEndIntens( aGradient.EndIntensity );
+                    aXGradient.SetSteps( aGradient.StepCount );
+
+                    SetValue( aXGradient );
+                }
+
+                return sal_True;
+            }
+
+            return sal_False;
+        }
+
         case MID_NAME:
         {
             rtl::OUString aName;
@@ -4166,6 +4241,27 @@ sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 
     switch ( nMemberId )
     {
+        case 0:
+        {
+            uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
+
+            ::com::sun::star::drawing::Hatch aUnoHatch;
+
+            aUnoHatch.Style = (::com::sun::star::drawing::HatchStyle)aHatch.GetHatchStyle();
+            aUnoHatch.Color = aHatch.GetColor().GetColor();
+            aUnoHatch.Distance = aHatch.GetDistance();
+            aUnoHatch.Angle = aHatch.GetAngle();
+
+            rtl::OUString aApiName;
+            SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
+            aPropSeq[0].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
+            aPropSeq[0].Value   = uno::makeAny( aApiName );
+            aPropSeq[1].Name    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ));
+            aPropSeq[1].Value   = uno::makeAny( aUnoHatch );
+            rVal = uno::makeAny( aPropSeq );
+            break;
+        }
+
         case MID_FILLHATCH:
         {
             ::com::sun::star::drawing::Hatch aUnoHatch;
@@ -4209,6 +4305,41 @@ sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 
     switch ( nMemberId )
     {
+        case 0:
+        {
+            uno::Sequence< beans::PropertyValue >   aPropSeq;
+            ::com::sun::star::drawing::Hatch        aUnoHatch;
+            rtl::OUString                           aName;
+            bool                                    bHatch( false );
+
+            if ( rVal >>= aPropSeq )
+            {
+                for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
+                {
+                    if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" )))
+                        aPropSeq[n].Value >>= aName;
+                    else if ( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillHatch" )))
+                    {
+                        if ( aPropSeq[n].Value >>= aUnoHatch )
+                            bHatch = true;
+                    }
+                }
+
+                SetName( aName );
+                if ( bHatch )
+                {
+                    aHatch.SetHatchStyle( (XHatchStyle)aUnoHatch.Style );
+                    aHatch.SetColor( aUnoHatch.Color );
+                    aHatch.SetDistance( aUnoHatch.Distance );
+                    aHatch.SetAngle( aUnoHatch.Angle );
+                }
+
+                return sal_True;
+            }
+
+            return sal_False;
+        }
+
         case MID_FILLHATCH:
         {
             ::com::sun::star::drawing::Hatch aUnoHatch;
