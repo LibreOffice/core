@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:59:49 $
+ *  last change: $Author: hr $ $Date: 2004-10-11 12:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ public:
                     ScAsciiOptions();
                     ScAsciiOptions(const ScAsciiOptions& rOpt);
                     ~ScAsciiOptions();
+
+    static const sal_Unicode cDefaultTextSep = '"';
 
     ScAsciiOptions& operator=( const ScAsciiOptions& rCpy );
 
