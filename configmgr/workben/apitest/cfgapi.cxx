@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 19:16:33 $
+ *  last change: $Author: jb $ $Date: 2002-10-17 11:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,7 @@ using namespace std;
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
-#include <cppuhelper/servicefactory.hxx>
-#endif
+#include <cppuhelper/bootstrap.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
@@ -176,7 +174,7 @@ inline void operator <<= (Any& _rUnoValue, const ::rtl::OString& _rAsciiString)
 }
 
 //=============================================================================
-bool test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF);
+bool test_cfg_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF);
 //=============================================================================
 struct prompt_and_wait
 {
@@ -205,102 +203,9 @@ void commit()
 }
 
 // -----------------------------------------------------------------------------
-static sal_Bool             s_bInitialized  =   sal_False;
-
-static const sal_Char*      s_pProviderService  =   "com.sun.star.configuration.ConfigurationProvider";
-static const sal_Char*      s_pSourcePath   =   "../share/config/registry";
-static const sal_Char*      s_pUpdatePath   =   "../user/config/registry";
-static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.Common";
-static const sal_Char*      s_pServerType   =   "uno";
-static const sal_Char*      s_pLocale       =   "en-US";
-static const sal_Char*      s_pServer       =   "lautrec:48205";
-static const sal_Char*      s_pUser         =   "nobody";
-static const sal_Char*      s_pPassword     =   "";
-
-
-// -----------------------------------------------------------------------------
-static void loadDefaults()
-{
-    if (s_bInitialized)
-        return;
-
-    s_bInitialized = sal_True;
-
-    try
-    {
-        // the executable file name
-        ::rtl::OUString sExecutable;
-        osl_getExecutableFile(&sExecutable.pData);
-        // cut the name, add a cfgapi.ini to the path
-        sal_Int32 nLastSep = sExecutable.lastIndexOf('/');
-        if (-1 != nLastSep)
-            sExecutable = sExecutable.copy(0, nLastSep + 1);
-#ifdef UNX
-        sExecutable += ::rtl::OUString::createFromAscii("cfgapirc");
-#else
-        sExecutable += ::rtl::OUString::createFromAscii("cfgapi.ini");
-#endif
-        ::rtl::OUString sNormalized;
-        sNormalized = sExecutable;
-        if (1)
-        {
-            ::osl::Profile aProfile(sNormalized);
-
-            static ::rtl::OString   sSection("defaults");
-            static ::rtl::OString   sSourcePath("sourcepath");
-            static ::rtl::OString   sUpdatePath("updatepath");
-            static ::rtl::OString   sRootNode("rootnode");
-            static ::rtl::OString   sServerType("servertype");
-            static ::rtl::OString   sLocale("Locale");
-            static ::rtl::OString   sServer("Server");
-            static ::rtl::OString   sUser("User");
-            static ::rtl::OString   sPassword("Password");
-
-            // read some strings.
-            // Do this static because we want to redirect the global static character pointers to the buffers.
-            static ::rtl::OString s_sSourcePath = aProfile.readString(sSection, sSourcePath, s_pSourcePath);
-            static ::rtl::OString s_sUpdatePath = aProfile.readString(sSection, sUpdatePath, s_pUpdatePath);
-            static ::rtl::OString s_sRootNode   = aProfile.readString(sSection, sRootNode, s_pRootNode);
-            static ::rtl::OString s_sServerType = aProfile.readString(sSection, sServerType, s_pServerType);
-            static ::rtl::OString s_sLocale     = aProfile.readString(sSection, sLocale, s_pLocale);
-            static ::rtl::OString s_sServer     = aProfile.readString(sSection, sServer, s_pServer);
-            static ::rtl::OString s_sUser       = aProfile.readString(sSection, sUser, s_pUser);
-            static ::rtl::OString s_sPassword   = aProfile.readString(sSection, sPassword, s_pPassword);
-
-            // do this redirection
-            s_pSourcePath   =   s_sSourcePath.getStr();
-            s_pUpdatePath   =   s_sUpdatePath.getStr();
-            s_pRootNode     =   s_sRootNode.getStr();
-            s_pServerType   =   s_sServerType.getStr();
-            s_pLocale       =   s_sLocale.getStr();
-            s_pServer       =   s_sServer.getStr();
-            s_pUser         =   s_sUser.getStr();
-            s_pPassword     =   s_sPassword.getStr();
-        }
-    }
-    catch(std::exception& e)
-    {
-        e.what();   // silence warnings
-    }
-}
-
-// -----------------------------------------------------------------------------
-Sequence<Any> createSequence(const OUString &sUser, const OUString &sPasswd)
-{
-    Sequence< Any > aCPArgs;
-
-    if (sUser.getLength() > 0)
-    {
-        aCPArgs.realloc(1);
-        aCPArgs[0] <<= configmgr::createPropertyValue(ASCII("user"), sUser);
-    }
-    if (sPasswd.getLength() > 0)
-    {
-        aCPArgs.realloc(2);
-        aCPArgs[1] <<= configmgr::createPropertyValue(ASCII("password"), sPasswd);
-    }
-    return aCPArgs;
-}
+static const sal_Char*  const   s_pProviderService  =   "com.sun.star.configuration.ConfigurationProvider";
+static const sal_Char*  const   s_pRootNode         =   "org.openoffice.Office.Common";
+static const sal_Char*  const   s_pLocale           =   "en-US";
 
 //=============================================================================
 #include <string.h>
@@ -399,101 +304,30 @@ int _cdecl main( int argc, char * argv[] )
     aTimeout.Seconds = 5;
     aTimeout.Nanosec = 0;
 
-    // cout << "    Please insert Text: ";
-    // cout.flush();
-    // OString aTxt = input("Der Text", 0);
-    // cout << endl << "You inserted: " << aTxt.getStr() << endl;
-    //
-    // cout << "Please insert Password: ";
-    // cout.flush();
-    // OString aPasswd = input("", '*');
-    // cout << endl << "You inserted: " << aPasswd.getStr() << endl;
-
-    loadDefaults();
-
     try
     {
-        OUString const sServiceRegistry = OUString::createFromAscii( argc > 1 ? argv[1] : "applicat.rdb" );
-        Reference< XMultiServiceFactory > xORB = createRegistryServiceFactory(
-            sServiceRegistry,
-            ::rtl::OUString()
-            );
+        Reference< XComponentContext > xUnoContext = defaultBootstrap_InitialComponentContext();
+        if (!xUnoContext.is())
+        {
+            cout.flush();
+            cerr << "Could not create the UNO context !\n\n";
+            return 1;
+        }
+
+        Reference< XMultiServiceFactory > xORB( xUnoContext->getServiceManager(), UNO_QUERY );
         if (!xORB.is())
         {
             cout.flush();
             cerr << "Could not create the service factory !\n\n";
-            return 1;
+            return 2;
         }
         cout << "Service factory created !\n---------------------------------------------------------------" << endl;
 
-        Sequence< Any > aCPArgs;
 
-        OUString sServerType = enterValue("servertype: ", s_pServerType, false);
+        OUString sProviderService = enterValue("Use provider service: ", s_pProviderService, false);
         cout << endl;
 
-        OUString sProviderService = enterValue("provider-service: ", s_pProviderService, false);
-        cout << endl;
-
-        rtl::OUString sUser;
-
-        bool bUno   = sServerType.trim().getLength() == 0 || sServerType.equalsIgnoreAsciiCase(ASCII("uno"));
-        bool bLocal = sServerType.equalsIgnoreAsciiCase(ASCII("local")) || sServerType.equalsIgnoreAsciiCase(ASCII("setup"));
-        if (!bUno)
-        {
-            if (!bLocal)
-            {
-                rtl::OUString sServer;
-                sServer =           enterValue("server  : ", s_pServer,false);
-                cout << endl;
-
-                sUser =             enterValue("user    : ", s_pUser, false);
-                cout << endl;
-
-                OUString sPasswd =  enterValue("password: ", s_pPassword, true);
-                cout << endl;
-
-                aCPArgs = createSequence(sUser, sPasswd);
-
-                if (sServer.getLength())
-                {
-                    sal_Int32 nPortPos = sServer.lastIndexOf(':');
-                    sal_Int16 nPort = (nPortPos > 0) ? sServer.copy(nPortPos+1).toInt32() : 0;
-                    if (nPort != 0)
-                    {
-                        aCPArgs.realloc(aCPArgs.getLength() + 1);
-                        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("port"), nPort);
-                        sServer = sServer.copy(0,nPortPos);
-                    }
-                    aCPArgs.realloc(aCPArgs.getLength() + 1);
-                    aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("server"), sServer);
-                }
-
-                OUString sTimeout = ASCII("10000");
-                aCPArgs.realloc(aCPArgs.getLength() + 1);
-                aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("timeout"), sTimeout);
-
-            }
-            else
-            {
-                rtl::OUString sSharePath, sUserPath;
-                sSharePath =        enterValue("share path: ", s_pSourcePath, false);
-                cout << endl;
-                sUserPath =         enterValue("user path : ", s_pUpdatePath, false);
-                cout << endl;
-
-                aCPArgs.realloc(aCPArgs.getLength() + 1);
-                sal_Int32 nCount = aCPArgs.getLength() - 1;
-                Any *pAny = &aCPArgs[nCount];
-                *pAny <<= configmgr::createPropertyValue(ASCII("sourcepath"), sSharePath);
-                aCPArgs.realloc(aCPArgs.getLength() + 1);
-                aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("updatepath"), sUserPath);
-            }
-
-        }
-        aCPArgs.realloc(aCPArgs.getLength() + 1);
-        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("servertype"), sServerType);
-
-        Reference< XMultiServiceFactory > xCfgProvider( xORB->createInstanceWithArguments(sProviderService,aCPArgs), UNO_QUERY);
+        Reference< XMultiServiceFactory > xCfgProvider( xORB->createInstance(sProviderService), UNO_QUERY);
         if (!xCfgProvider.is())
         {
             cout.flush();
@@ -536,7 +370,7 @@ int _cdecl main( int argc, char * argv[] )
             Sequence<OUString> aSeq = xCfgProvider->getAvailableServiceNames();
             showSequence(aSeq);
 
-            bQuit = test_read_access(xIFace, xCfgProvider);
+            bQuit = test_cfg_access(xIFace, xCfgProvider);
         }
         while (!bQuit);
     }
@@ -601,7 +435,7 @@ void write(Reference< XChild >& xChild)
 
 bool ask(Reference< XInterface >& xIface, Reference<XMultiServiceFactory> &, bool&);
 
-bool test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
+bool test_cfg_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
 {
     bool bQuit = true;
 
@@ -628,6 +462,7 @@ bool test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceF
 bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF, bool& rbQuit)
 {
     cout << "\n[ S ] -> <SetValue> ";
+    cout << "\n[ Z ] -> <SetToNull> ";
     cout << "\n[ D ] -> <SetToDefault> ";
     cout << "\n[ I ] -> <InsertElement> ";
     cout << "\n[ R ] -> <RemoveElement> ";
@@ -636,14 +471,14 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
     cout << endl;
 
     cout << "\n:> " << flush;
-    char buf[200] = {0};
+    char buf[200] = "";
     try
     {
 
-        enum { nop, move, insert, replace, remove, reset };
+        enum { nop, show, insert, replace, remove, reset, nullify };
 
         int eToDo = nop;
-        bool bValue = false;
+        bool bNeedValue = false;
 
         if (cin.getline(buf,sizeof buf))
         {
@@ -673,7 +508,19 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                     if (cin.getline(buf,sizeof buf))
                         eToDo = replace;
 
-                    bValue = true;
+                    bNeedValue = true;
+                }
+            }
+            else if( (buf[0] == 'z' || buf[0] == 'Z') && (0 == buf[1]))
+            {
+                // Replace a Value
+                Reference< XNameReplace > xAccess(xIface, UNO_QUERY);
+
+                if (xAccess.is())
+                {
+                    cout << "Select a Value" << endl;
+                    if (cin.getline(buf,sizeof buf))
+                        eToDo = nullify;
                 }
             }
             else if( (buf[0] == 'd' || buf[0] == 'D') && (0 == buf[1]))
@@ -711,7 +558,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                     if (cin.getline(buf,sizeof buf))
                         eToDo = insert;
 
-                    bValue = ! Reference< XSingleServiceFactory >::query(xAccess).is();
+                    bNeedValue = ! Reference< XSingleServiceFactory >::query(xAccess).is();
                 }
             }
             else if ((buf[0] == 'p' || buf[0] == 'P') && (0 == buf[1]))
@@ -722,7 +569,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                 eToDo = nop;
             }
             else
-                eToDo = move;
+                eToDo = show;
 
             if (nop != eToDo)
             {
@@ -777,7 +624,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                         switch (aElement.getValueTypeClass() )
                         {
                         case TypeClass_INTERFACE:
-                            bValue = false;
+                            bNeedValue = false;
                             cout << "ELEMENT '" << aName << "' is an INNER NODE " << endl;
                             break;
 
@@ -877,7 +724,7 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                         bValueOk = true;
 
                     Any aValue;
-                    if (bValue)
+                    if (bNeedValue)
                     {
                         if (aElement.getValueTypeClass() == TypeClass_BOOLEAN )
                         {
@@ -890,12 +737,15 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                             if (aInput.equalsIgnoreAsciiCase(ASCII("true")))
                                 bBoolValue = true;
 
+                            else if (!aInput.equalsIgnoreAsciiCase(ASCII("false")))
+                                cout << "Warning: Not a valid bool value - setting to false" << endl;
+
                             aValue <<= bBoolValue;
                         }
                         else
                         {
                             if ( aElement.getValueTypeClass() == TypeClass_VOID )
-                                cout << "Warning: Cannot determine value type" << endl;
+                                cout << "Warning: Cannot determine value type (value is NULL)" << endl;
 
                             else if ( aElement.getValueTypeClass() != TypeClass_STRING)
                                 cout << "Warning: No explict support for value type found" << endl;
@@ -921,6 +771,10 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
 
                     switch (eToDo)
                     {
+                    case nullify:
+                        OSL_ASSERT(!aValue.hasValue()); // nullify is replace with NULL value
+                        // fall thru
+
                     case replace:
                         {
                             Reference< XNameReplace > xNameReplace(xIface, UNO_QUERY);
@@ -960,21 +814,19 @@ bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMS
                             }
                         } break;
 
-                    case move:
+                    case show:
                         {
-                            if (!bValue)
-                            {
-                                if (aElement >>= xNext)
-                                    cout << "Got an Interface for '" << aName << "'" << endl;
-                                else
-                                    cout << "Error: Cannot get an Interface for '" << aName << "'" << endl;
-                            }
+                            if (aElement >>= xNext)
+                                cout << "Got an Interface for '" << aName << "'" << endl;
+
+                            else if (!aElement.hasValue())
+                                cout << "Error: Cannot get a Value or Interface for '" << aName << "'" << endl;
                         } break;
                     }
-                    if (move != eToDo)
+                    if (show != eToDo)
                         commit();
 
-                    if (bValue)
+                    if (bNeedValue)
                     {
                         prompt_and_wait();
                         return bValueOk;
