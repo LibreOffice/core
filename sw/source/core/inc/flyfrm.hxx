@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:18:30 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ class SwFlyFrm : public SwLayoutFrm
     //darf Locken. Definiert in frmtool.cxx
     friend void AppendObjs   ( const SwSpzFrmFmts *, ULONG, SwFrm *, SwPageFrm * );
     friend void AppendAllObjs( const SwSpzFrmFmts * );
-    friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld );
+    friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
+                        const SwRect* pOldPrt );
     //darf die Pos berechnen (lassen)
     friend void lcl_MakeFlyPosition( SwFlyFrm *pFly );
 
