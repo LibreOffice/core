@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-11 08:44:28 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 09:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #include "procimpl.h"
 #include "sockimpl.h"
 #include "secimpl.h"
-#include "dirW9X.h"
+// #include "dirW9X.h"
+#include <rtl/ustrbuf.h>
+#include <rtl/alloc.h>
 
 LPWSTR *lpArgvW = NULL;
 int nArgnW = 0;
@@ -104,161 +106,223 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
 
 /***************************************************************************/
 
-oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
-                                            rtl_uString *strArguments[],
+oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
+                                            rtl_uString *ustrArguments[],
                                             sal_uInt32   nArguments,
                                             oslProcessOption Options,
                                             oslSecurity Security,
-                                            rtl_uString *strWorkDir,
-                                            rtl_uString *strEnvironment[],
+                                            rtl_uString *ustrWorkDir,
+                                            rtl_uString *ustrEnvironmentVars[],
                                             sal_uInt32   nEnvironmentVars,
                                             oslIOResource* pResources,
                                             oslProcess *pProcess)
 {
-    sal_uInt32          i, first=0;
-    sal_Int32           n;
-    sal_Unicode*        args;
-    DWORD               flags;
-    BOOL                started;
-    STARTUPINFOW        startinfo;
-    PROCESS_INFORMATION procinfo;
-    sal_Unicode         desktopName[] = L"";
-    rtl_uString         *strPath=NULL;
-    LPCWSTR             pCurrentWorkDir = NULL;
+    sal_Int32 nIndex;
+    sal_Int32 nCapacity = 0;
+    sal_uInt32 n, first = 0;
+    rtl_uString* ustrPath = NULL;
+    rtl_uString* ustrCommandLine = NULL;
+    rtl_uString* ustrEnvironment = NULL;
+    rtl_uString* ustrCurrentWorkDir = NULL;
 
-    if ((strImageName == NULL) && nArguments)
-        strImageName = strArguments[first++];
+      DWORD               dwFlags = NORMAL_PRIORITY_CLASS;
+    LPCWSTR             lpCurrentWorkDir = NULL;
+    LPWSTR              lpDesktopName = L"";
+    LPVOID              lpEnvironment = NULL;
+    STARTUPINFOW        startupInfo;
+    PROCESS_INFORMATION processInfo;
+    BOOL                bRet;
 
-    OSL_ASSERT(strImageName != NULL);
+    /* if no image name given, use first argument */
+    if( ( NULL == ustrImageName ) && nArguments )
+        ustrImageName = ustrArguments[first++];
 
-    if ( !(Options & osl_Process_SEARCHPATH) )
+    OSL_ASSERT( NULL != ustrImageName );
+
+    /* search image to get to absolute path */
+    if( Options & osl_Process_SEARCHPATH )
     {
-        rtl_uString_newFromString( &strPath, strImageName);
-        osl_getSystemPathFromFileURL( strPath, &strPath );
-    }
-    else if ( osl_Process_E_None == osl_searchFileURL( strImageName, NULL, &strPath ) )
-    {
-        osl_getSystemPathFromFileURL( strPath, &strPath );
+        if( osl_File_E_None != osl_searchFileURL( ustrImageName, NULL, &ustrPath ) )
+        {
+            rtl_uString_release( ustrPath );
+            return osl_Process_E_NotFound;
+        }
     }
     else
     {
-        /* This is only for convenience if full qualified system paths are specified */
-
-        rtl_uString_newFromString( &strPath, strImageName);
-        osl_getSystemPathFromFileURL( strPath, &strPath );
+        rtl_uString_assign( &ustrPath, ustrImageName );
     }
 
-    n = rtl_uString_getLength(strPath) + 1;
-
-    /* added space for quoting if not already quoted */
-    if (*rtl_uString_getStr(strPath) != L'"')
-        n += 2;
-
-    for (i = first; i<nArguments; i++)
+    /* convert file url to system path */
+    if( osl_File_E_None != osl_getSystemPathFromFileURL( ustrPath, &ustrPath ) )
     {
-        /* added space for quoting */
-        if ( wcschr( rtl_uString_getStr(strArguments[i]), L' ' ) )
-            n += 2;
-
-        n += rtl_uString_getLength(strArguments[i]) + 1;
+        rtl_uString_release( ustrPath );
+        return osl_Process_E_NotFound;
     }
 
-    args = malloc(n * sizeof(sal_Unicode));
-
-    if (wcschr(rtl_uString_getStr(strPath) , L'"'))
-        wcscpy(args, rtl_uString_getStr(strPath));
-    else
+    /* working directory must be file url as well */
+       if ( ustrWorkDir && ustrWorkDir->length )
     {
-        wcscpy(args, L"\"");
-        wcscat(args, rtl_uString_getStr(strPath));
-        wcscat(args, L"\"");
+        if( osl_File_E_None == osl_getSystemPathFromFileURL( ustrWorkDir, &ustrCurrentWorkDir ) )
+            lpCurrentWorkDir = ustrCurrentWorkDir->buffer;
     }
 
-    rtl_uString_release(strPath);
+    /* ensure capacity does not create strings */
+    rtl_uString_new( &ustrCommandLine );
 
-    if (nArguments > first)
-        wcscat(args,L" ");
-
-    for (i = first; i < nArguments; i++)
+    /* check if image file is a batch and start the command processor */
+    nIndex = rtl_ustr_lastIndexOfChar_WithLength( ustrPath->buffer, ustrPath->length, '.' );
+    if( -1 != nIndex )
     {
-        sal_Unicode *pSpace = wcschr( rtl_uString_getStr(strArguments[i]), L' ' );
+        if( ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrPath->buffer + nIndex + 1, ustrPath->length - nIndex - 1, "bat", 3 ) ) ||
+            ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrPath->buffer + nIndex + 1, ustrPath->length - nIndex - 1, "cmd", 3 ) ) ||
+            ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength( ustrPath->buffer + nIndex + 1, ustrPath->length - nIndex - 1, "btm", 3 ) ) )
+        {
+            rtl_uString* ustrTmp = NULL;
+            rtl_uString* ustrComSpec = NULL;
 
-        if ( pSpace )
-            wcscat( args, L"\"" );
+            /* use command processor from comspec variable */
+            rtl_uString_newFromStr( &ustrTmp, L"COMSPEC" );
+            osl_getEnvironment( ustrTmp, &ustrComSpec );
+            rtl_uString_release( ustrTmp );
 
-        wcscat(args, rtl_uString_getStr(strArguments[i]));
+            /* add to chars for quotes */
+            rtl_uStringbuffer_ensureCapacity( &ustrCommandLine, &nCapacity, ustrComSpec->length + 3 );
 
-        if ( pSpace )
-            wcscat( args, L"\"" );
+            /* check if compec path contains blanks and quote it if any */
+            nIndex = rtl_ustr_indexOfChar_WithLength( ustrComSpec->buffer, ustrComSpec->length, ' ' );
+            if( nIndex != -1 )
+                rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
 
-        if ((i + 1 ) < nArguments)
-            wcscat(args, L" ");
+            rtl_uStringbuffer_insert( &ustrCommandLine, &nCapacity, ustrCommandLine->length, ustrComSpec->buffer, ustrComSpec->length );
+
+            if( nIndex != -1 )
+                rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
+
+            rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, " ", 1 );
+            rtl_uString_release( ustrComSpec );
+        }
     }
 
-    if (strEnvironment)
+    /* add image path to command line */
+    rtl_uStringbuffer_ensureCapacity( &ustrCommandLine, &nCapacity, nCapacity + ustrImageName->length + 2 );
+
+    /* check if path contains blanks and quote it if any */
+    nIndex = rtl_ustr_indexOfChar_WithLength( ustrPath->buffer, ustrPath->length, ' ' );
+    if( nIndex != -1 )
+        rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
+
+    rtl_uStringbuffer_insert( &ustrCommandLine, &nCapacity, ustrCommandLine->length, ustrPath->buffer, ustrPath->length );
+    rtl_uString_release( ustrPath );
+
+    if( nIndex != -1 )
+        rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
+
+    /* add remaining arguments to command line */
+    for( n = first; n < nArguments; n++ )
     {
-        sal_uInt32  nVar;
-         for (nVar=0; nVar < nEnvironmentVars; nVar++)
-             _wputenv(rtl_uString_getStr(strEnvironment[nVar]));
+        rtl_uStringbuffer_ensureCapacity( &ustrCommandLine, &nCapacity, nCapacity + ustrArguments[n]->length + 3 );
+        rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, " ", 1 );
+
+        /* check if argument contains blanks and quote it if any */
+        nIndex = rtl_ustr_indexOfChar_WithLength( ustrArguments[n]->buffer, ustrArguments[n]->length, ' ' );
+        if( nIndex != -1 )
+            rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
+
+        rtl_uStringbuffer_insert( &ustrCommandLine, &nCapacity, ustrCommandLine->length, ustrArguments[n]->buffer, ustrArguments[n]->length );
+
+        if( nIndex != -1 )
+            rtl_uStringbuffer_insert_ascii( &ustrCommandLine, &nCapacity, ustrCommandLine->length, "\"", 1 );
     }
 
-    flags = NORMAL_PRIORITY_CLASS;
+    if( Options & osl_Process_DETACHED )
+        dwFlags |= DETACHED_PROCESS;
 
-    if (Options & osl_Process_DETACHED)
-        flags |= DETACHED_PROCESS;
+    /* initialize startupInfo structure */
+    memset( &startupInfo, 0, sizeof(STARTUPINFOW) );
 
-    memset(&startinfo, 0, sizeof(startinfo));
+    startupInfo.cb        = sizeof( STARTUPINFOW );
+    startupInfo.dwFlags   = STARTF_USESHOWWINDOW;
+    startupInfo.lpDesktop = lpDesktopName;
 
-    startinfo.cb      = sizeof(startinfo);
-    startinfo.dwFlags = STARTF_USESHOWWINDOW;
-    startinfo.lpDesktop = desktopName;
-
-    switch (Options & (osl_Process_NORMAL | osl_Process_HIDDEN |
-                   osl_Process_MINIMIZED | osl_Process_MAXIMIZED |
-                   osl_Process_FULLSCREEN))
+    switch( Options & (osl_Process_NORMAL | osl_Process_HIDDEN | osl_Process_MINIMIZED | osl_Process_MAXIMIZED | osl_Process_FULLSCREEN) )
     {
         case osl_Process_HIDDEN:
-            startinfo.wShowWindow = SW_HIDE;
+            startupInfo.wShowWindow = SW_HIDE;
             break;
 
         case osl_Process_MINIMIZED:
-            startinfo.wShowWindow = SW_MINIMIZE;
+            startupInfo.wShowWindow = SW_MINIMIZE;
             break;
 
         case osl_Process_MAXIMIZED:
         case osl_Process_FULLSCREEN:
-            startinfo.wShowWindow = SW_MAXIMIZE;
+            startupInfo.wShowWindow = SW_MAXIMIZE;
             break;
 
         default:
-            startinfo.wShowWindow = SW_NORMAL;
+            startupInfo.wShowWindow = SW_NORMAL;
     }
 
-    if ( strWorkDir->length )
-        pCurrentWorkDir = rtl_uString_getStr(strWorkDir);
+    /* if we have environment variables, we have to set the */
+    if( nEnvironmentVars )
+    {
+        sal_uInt32  nVar;
+        sal_Int32   nEnvCapacity = 0;
 
+        dwFlags |= CREATE_UNICODE_ENVIRONMENT;
+
+        rtl_uString_new( &ustrEnvironment );
+
+        for( nVar=0; nVar < nEnvironmentVars; nVar++ )
+        {
+            rtl_uStringbuffer_insert( &ustrEnvironment,
+                &nEnvCapacity, ustrEnvironment->length,
+                ustrEnvironmentVars[nVar]->buffer, ustrEnvironmentVars[nVar]->length );
+
+            /* to keep the trailing '\0' increase length of 1 */
+            rtl_uStringbuffer_ensureCapacity( &ustrEnvironment, &nEnvCapacity, nEnvCapacity + 1 );
+            ustrEnvironment->length++;
+        }
+
+        /* to add second trailing '\0' increase length of 1 */
+        rtl_uStringbuffer_ensureCapacity( &ustrEnvironment, &nEnvCapacity, nEnvCapacity + 1 );
+        ustrEnvironment->buffer[ustrEnvironment->length] = 0;
+        ustrEnvironment->length++;
+
+        lpEnvironment = ustrEnvironment->buffer;
+    }
 
     if ((Security != NULL) && (((oslSecurityImpl*)Security)->m_hToken != NULL))
     {
-        started = lpfnCreateProcessAsUser(((oslSecurityImpl*)Security)->m_hToken,
-                                    NULL, args, NULL,  NULL,
-                                    FALSE, flags, NULL, pCurrentWorkDir,
-                                    &startinfo, &procinfo);
+        bRet = CreateProcessAsUserW(
+            ((oslSecurityImpl*)Security)->m_hToken,
+            NULL, ustrCommandLine->buffer, NULL,  NULL,
+            FALSE, dwFlags, lpEnvironment, lpCurrentWorkDir,
+            &startupInfo, &processInfo);
     }
     else
     {
-        started = lpfnCreateProcess(NULL, args, NULL,  NULL,
-                                    FALSE, flags, NULL, pCurrentWorkDir,
-                                    &startinfo, &procinfo);
+        bRet = CreateProcessW(
+            NULL, ustrCommandLine->buffer, NULL,  NULL,
+            FALSE, dwFlags, lpEnvironment, lpCurrentWorkDir,
+            &startupInfo, &processInfo);
     }
 
-    free(args);
+    /* release string members */
+    rtl_uString_release( ustrCommandLine );
+    if( ustrEnvironment )
+        rtl_uString_release( ustrEnvironment );
+    if( ustrCurrentWorkDir )
+        rtl_uString_release( ustrCurrentWorkDir );
 
-    if (started)
+    dwFlags = GetLastError();
+
+    if (bRet)
     {
         oslProcessImpl* pProcImpl;
 
-        CloseHandle(procinfo.hThread);
+        CloseHandle( processInfo.hThread );
 
         if (pResources)
         {
@@ -269,9 +333,9 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
 //              sendIOResources(pipe, pResources, procinfo.hProcess);
         }
 
-        pProcImpl = malloc(sizeof(oslProcessImpl));
-        pProcImpl->m_hProcess  = procinfo.hProcess;
-        pProcImpl->m_IdProcess = procinfo.dwProcessId;
+        pProcImpl = rtl_allocateMemory( sizeof(oslProcessImpl) );
+        pProcImpl->m_hProcess  = processInfo.hProcess;
+        pProcImpl->m_IdProcess = processInfo.dwProcessId;
 
         *pProcess = (oslProcess)pProcImpl;
 
@@ -284,6 +348,8 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
     return osl_Process_E_Unknown;
 }
 
+/***************************************************************************/
+
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {
     if (Process == NULL)
@@ -295,6 +361,8 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 
     return osl_Process_E_Unknown;
 }
+
+/***************************************************************************/
 
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 {
@@ -314,6 +382,8 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     return (pProcImpl);
 }
 
+/***************************************************************************/
+
 void SAL_CALL osl_freeProcessHandle(oslProcess Process)
 {
     if (Process != NULL)
@@ -323,6 +393,8 @@ void SAL_CALL osl_freeProcessHandle(oslProcess Process)
         free((oslProcessImpl*)Process);
     }
 }
+
+/***************************************************************************/
 
 oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields,
                                    oslProcessInfo* pInfo)
@@ -404,6 +476,8 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
 
+/***************************************************************************/
+
 oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
     if (Process == NULL)
@@ -414,43 +488,59 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
     return osl_Process_E_None;
 }
 
-oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **strFile)
-{
-    sal_Unicode buffer[MAX_PATH];
-    sal_Int32   nLen;
+/***************************************************************************/
 
-    nLen=GetModuleFileNameW(NULL, buffer, MAX_PATH);
-    if (nLen>0)
+oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **pustrFile )
+{
+    oslProcessError eRet = osl_Process_E_Unknown;
+    rtl_uString* ustrTmp = NULL;
+
+    /* let GetModuleFileName directly write into ustring buffer */
+    rtl_uString_new_WithLength( &ustrTmp, MAX_PATH );
+    ustrTmp->length = GetModuleFileNameW( NULL, ustrTmp->buffer, MAX_PATH );
+
+    if( ustrTmp->length > 0 );
     {
-        rtl_uString *strTmp = NULL;
-        rtl_uString_newFromStr_WithLength( &strTmp, buffer, nLen );
-        osl_getFileURLFromSystemPath(strTmp, strFile);
-        rtl_uString_release(strTmp);
-        return osl_Process_E_None;
+        if( osl_File_E_None == osl_getFileURLFromSystemPath( ustrTmp, pustrFile ) )
+            eRet = osl_Process_E_None;
     }
-    else
-    {
-        return  osl_Process_E_Unknown;
-    }
+
+    rtl_uString_release( ustrTmp );
+    return eRet;
 }
 
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **strValue)
-{
-    sal_Unicode buffer[MAX_PATH];
-    sal_Int32   nLen;
+/***************************************************************************/
 
-    nLen=lpfnGetEnvironmentVariable(rtl_uString_getStr(strVar), buffer, MAX_PATH);
-    if (nLen>0 && nLen<=MAX_PATH)
+oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
+{
+    WCHAR buffer[1];
+    DWORD dwRet;
+
+    /* get the size of the buffer needed */
+    dwRet = GetEnvironmentVariableW( ustrVar->buffer, buffer, 1 );
+
+    /* allocate buffer that is big enough */
+    if( dwRet > 0 )
     {
-        rtl_uString_newFromStr_WithLength( strValue, buffer, nLen );
-        return osl_Process_E_None;
+        rtl_uString* ustrTmp = NULL;
+
+        /* wasting one byte here */
+        rtl_uString_new_WithLength( &ustrTmp, dwRet );
+        ustrTmp->length = GetEnvironmentVariableW( ustrVar->buffer, ustrTmp->buffer, dwRet );
+
+        if( dwRet == (DWORD) ustrTmp->length + 1 )
+        {
+            *ustrValue = ustrTmp;
+            return osl_Process_E_None;
+        }
+
+        rtl_uString_release( ustrTmp );
     }
-    else
-    {
-        return  osl_Process_E_Unknown;
-    }
+
+    return  osl_Process_E_Unknown;
 }
 
+/***************************************************************************/
 
 sal_uInt32 SAL_CALL osl_getCommandArgCount()
 {
@@ -461,6 +551,8 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount()
 
     return nArgnW ? nArgnW - 1 : 0;
 }
+
+/***************************************************************************/
 
 oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCommandArg)
 {
@@ -475,13 +567,6 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
     }
 
     return osl_Process_E_None;
-}
-
-
-/* get environment variable - use same emulation as nspr on MAC OS < X */
-const char * getPREnv(const char * envVar)
-{
-    return getenv( envVar );
 }
 
 
