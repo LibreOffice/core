@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-15 12:48:13 $
+ *  last change: $Author: pb $ $Date: 2002-11-21 08:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1763,7 +1763,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                                     "non-file URLs cannot be deleted" );
                             if ( aObj.GetProtocol() == INET_PROT_FILE )
                             {
-                                KillFile_Impl( aObj.GetMainURL() );
+                                KillFile_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                             }
                         }
                         UpdateDicBox_Impl();
