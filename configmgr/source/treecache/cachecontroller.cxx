@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:51:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ void CacheController::dispose() CFG_UNO_THROW_RTE()
     m_bDisposing = true;                         // we are in dispose, handling of errors must be something different.
 
     // writing of pending updates
-    this->flushPendingUpdates();
+    this->flushCacheWriter();
 
     // cleaning the cache
     this->disposeAll(true);
@@ -717,7 +717,17 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
 }
 // -----------------------------------------------------------------------------
 
-void CacheController::flushPendingUpdates()CFG_NOTHROW()
+void CacheController::flushPendingUpdates()CFG_UNO_THROW_ALL()
+{
+    osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
+    CacheList::Map aFlushList = m_aCacheList.copy();
+    aGuard.clear();
+
+    for (CacheList::Map::iterator it = aFlushList.begin(); it != aFlushList.end(); ++it)
+        saveAllPendingChanges(it->second,it->first);
+}
+
+void CacheController::flushCacheWriter()CFG_NOTHROW()
 {
     //OSL_ASSERT(m_bDisposing);
 
@@ -923,16 +933,11 @@ void CacheController::dataChanged(const ComponentRequest& _aRequest) CFG_NOTHROW
 void CacheController::refreshAllComponents() CFG_UNO_THROW_ALL()
 {
     osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
-    CacheList::Map aCacheRefreshableList;
-    CacheList::Map aCacheRefreshableListCopy;
-    m_aCacheList.swap(aCacheRefreshableList);
-    aCacheRefreshableListCopy = aCacheRefreshableList;
-    // replace the data into the map as we have a copy
-    m_aCacheList.swap(aCacheRefreshableList);
+    CacheList::Map aRefreshList = m_aCacheList.copy();
     aGuard.clear();
 
-    for (CacheList::Map::iterator i = aCacheRefreshableListCopy.begin();
-        i != aCacheRefreshableListCopy.end(); ++i)
+    for (CacheList::Map::iterator i = aRefreshList.begin();
+        i != aRefreshList.end(); ++i)
     {
         if (!i->second->isEmpty())
         {
@@ -948,6 +953,7 @@ void CacheController::refreshAllComponents() CFG_UNO_THROW_ALL()
                     ComponentRequest aRequest(itr->first,i->first);
                     refreshComponent(aRequest);
                 }
+                // FIXME: otherwise dispose now
             }
         }
     }
