@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+#   last change: $Author: jl $ $Date: 2000-10-13 15:29:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
 
 
-UNOTYPES=	com.sun.star.lang.XMultiServiceFactory \
+UNOTYPES=	com.sun.star.bridge.XBridgeSupplier2 \
+            com.sun.star.lang.XMultiServiceFactory \
             com.sun.star.script.XInvocation			\
             oletest.XCallback 
 
@@ -99,7 +100,9 @@ UNOTYPES=	com.sun.star.lang.XMultiServiceFactory \
 .ENDIF # depend
 
 APP1TARGET=	$(TARGET)
-APP1OBJS=	$(OBJ)$/clientTest.obj
+APP1OBJS=	$(OBJ)$/clientTest.obj \
+            $(OBJ)$/axhost.obj
+
 LIBCMT=msvcrtd.lib
             
 
@@ -112,7 +115,8 @@ APP1STDLIBS= \
     ole32.lib	\
     oleaut32.lib	\
     uuid.lib		\
-    comdlg32.lib	
+    comdlg32.lib	\
+    gdi32.lib
 
 
 
