@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:33:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,9 @@ enum SdXMLDrawPageAttrTokenMap
 
 enum SdXMLDrawPageElemTokenMap
 {
-    XML_TOK_DRAWPAGE_NOTES
+    XML_TOK_DRAWPAGE_NOTES,
+    XML_TOK_DRAWPAGE_PAR,
+    XML_TOK_DRAWPAGE_SEQ
 };
 
 enum SdXMLPresentationPlaceholderAttrTokenMap
