@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-25 10:03:59 $
+ *  last change: $Author: mba $ $Date: 2001-08-21 09:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,7 @@ protected:
                                 ~UCBStorage();
 public:
     static BOOL                 IsStorageFile( SvStream* );
+    static BOOL                 IsPackedFile( SvStream* );
     static String               GetLinkedFile( SvStream& );
     static String               CreateLinkFile( const String& rName );
 
