@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:26:42 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 16:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,6 +867,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "every";
         Text[ catalan ] = "Tot";
         Text[ thai ] = "ทั้งหมด";
+        Text[ portuguese_brazilian ] = "Todos";
     };
     NumericField ED_RELOAD
     {
@@ -907,6 +908,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "seconds";
         Text[ catalan ] = "segons";
         Text[ thai ] = "ชช:นน:วว";
+        Text[ portuguese_brazilian ] = "segundos";
     };
 
     RadioButton RB_FORWARDUPDATE
@@ -999,6 +1001,7 @@ TabPage TP_DOCINFORELOAD
         Text[ arabic ] = "seconds";
         Text[ catalan ] = "segons";
         Text[ thai ] = "ชช:นน:วว";
+        Text[ portuguese_brazilian ] = "segundos";
     };
     FixedText FT_URL
     {
