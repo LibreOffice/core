@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-29 08:14:39 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 12:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
 : m_xFactory( xFactory ),
   m_pEmbedObj( pEmbObj ),
   m_pInterceptor( NULL ),
-  m_bReadOnly( sal_False )
+  m_bReadOnly( sal_False ),
+  m_bWaitForClose( sal_False )
 {
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
     uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -145,16 +146,19 @@ DocumentHolder::~DocumentHolder()
         CloseFrame();
 
     if ( m_xDocument.is() )
-        CloseDocument();
-
-    if ( m_xFactory.is() )
-        FreeOffice();
+    {
+        try {
+            CloseDocument( sal_True, sal_False );
+        } catch( uno::Exception& ) {}
+    }
 
     if ( m_pInterceptor )
     {
         m_pInterceptor->DisconnectDocHolder();
         m_pInterceptor->release();
     }
+
+    FreeOffice();
 }
 
 void DocumentHolder::CloseFrame()
@@ -202,18 +206,14 @@ void DocumentHolder::FreeOffice()
                 {}
             }
         }
-
-        m_xFactory = uno::Reference< lang::XMultiServiceFactory >();
     }
 }
 
-void DocumentHolder::CloseDocument()
+void DocumentHolder::CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitForClose )
 {
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xDocument, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
     {
-        xBroadcaster->removeCloseListener( ( util::XCloseListener* )this );
-
         uno::Reference< document::XEventBroadcaster > xEventBroadcaster( m_xDocument, uno::UNO_QUERY );
         if ( xEventBroadcaster.is() )
             xEventBroadcaster->removeEventListener( ( document::XEventListener* )this );
@@ -221,12 +221,8 @@ void DocumentHolder::CloseDocument()
         uno::Reference< util::XCloseable > xCloseable( xBroadcaster, uno::UNO_QUERY );
         if ( xCloseable.is() )
         {
-            try
-            {
-                xCloseable->close( sal_True );
-            }
-            catch( uno::Exception& )
-            {}
+            m_bWaitForClose = bWaitForClose;
+            xCloseable->close( bDeliverOwnership );
         }
     }
 
@@ -276,7 +272,13 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
 void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, sal_Bool bReadOnly )
 {
     if ( m_xDocument.is() )
-        CloseDocument();
+    {
+        // May be should be improved
+        try {
+            CloseDocument( sal_True, sal_False );
+        } catch( uno::Exception& )
+        {}
+    }
 
     m_xDocument = xDoc;
     m_bReadOnly = bReadOnly;
@@ -522,7 +524,14 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
         throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
+    {
         m_xDocument = uno::Reference< frame::XModel >();
+        if ( m_bWaitForClose )
+        {
+            m_bWaitForClose = sal_False;
+            FreeOffice();
+        }
+    }
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
         m_xFrame = uno::Reference< frame::XFrame >();
@@ -532,20 +541,22 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
 void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool bGetsOwnership )
         throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException)
 {
-    if ( m_xDocument.is() && m_xDocument == aSource.Source )
+    if ( m_xDocument.is() && m_xDocument == aSource.Source && m_bWaitForClose )
         throw util::CloseVetoException();
 }
 
 void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    uno::Reference< util::XCloseBroadcaster > xEventBroadcaster(
-        aSource.Source, uno::UNO_QUERY );
-    if ( xEventBroadcaster.is() )
-        xEventBroadcaster->removeCloseListener( ( util::XCloseListener* )this );
-
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
+    {
         m_xDocument = uno::Reference< frame::XModel >();
+        if ( m_bWaitForClose )
+        {
+            m_bWaitForClose = sal_False;
+            FreeOffice();
+        }
+    }
 
     if( m_xFrame.is() && m_xFrame == aSource.Source )
         m_xFrame = uno::Reference< frame::XFrame >();
@@ -554,7 +565,7 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
 void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& aSource )
         throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException)
 {
-    if ( m_xDocument.is() )
+    if ( m_bWaitForClose )
         throw frame::TerminationVetoException();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 09:03:53 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 12:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_pInterfaceContainer( NULL )
 , m_bReadOnly( sal_False )
 , m_bDisposed( sal_False )
+, m_bClosed( sal_False )
 , m_nObjectState( -1 )
 , m_nUpdateMode ( embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
 , m_xFactory( xFactory )
@@ -121,6 +122,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_pInterfaceContainer( NULL )
 , m_bReadOnly( sal_False )
 , m_bDisposed( sal_False )
+, m_bClosed( sal_False )
 , m_nObjectState( embed::EmbedStates::EMBED_LOADED )
 , m_nUpdateMode ( embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
 , m_xFactory( xFactory )
@@ -185,36 +187,32 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
     {
         m_refCount++;
         try {
-            Dispose();
+            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+
+            if ( m_pInterfaceContainer )
+            {
+                m_pInterfaceContainer->disposeAndClear( aSource );
+
+                delete m_pInterfaceContainer;
+                m_pInterfaceContainer = NULL;
+            }
+        } catch( uno::Exception& ) {}
+
+        try {
+            if ( m_pDocHolder )
+            {
+                m_pDocHolder->CloseFrame();
+                try {
+                    m_pDocHolder->CloseDocument( sal_True, sal_True );
+                } catch ( uno::Exception& ) {}
+                m_pDocHolder->FreeOffice();
+
+                m_pDocHolder->release();
+                m_pDocHolder = NULL;
+            }
         } catch( uno::Exception& ) {}
     }
 }
-
-//------------------------------------------------------
-void OCommonEmbeddedObject::Dispose()
-{
-    if ( m_pInterfaceContainer )
-    {
-        lang::EventObject aEvent( (embed::XEmbeddedObject*)this );
-        m_pInterfaceContainer->disposeAndClear( aEvent );
-
-        delete m_pInterfaceContainer;
-        m_pInterfaceContainer = NULL;
-    }
-
-    if ( m_pDocHolder )
-    {
-        m_pDocHolder->CloseFrame();
-        m_pDocHolder->CloseDocument();
-        m_pDocHolder->FreeOffice();
-
-        m_pDocHolder->release();
-        m_pDocHolder = NULL;
-    }
-
-    m_bDisposed = true;
-}
-
 
 //------------------------------------------------------
 void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName )
@@ -388,7 +386,7 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
             uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bDisposed )
+    if ( m_bClosed )
         throw lang::DisposedException(); // TODO
 
     uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >( this ) );
@@ -431,9 +429,45 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
                 }
             }
         }
+
+        m_pInterfaceContainer->disposeAndClear( aSource );
+
+        delete m_pInterfaceContainer;
+        m_pInterfaceContainer = NULL;
     }
 
-    Dispose();
+    m_bDisposed = sal_True; // the object is disposed now for outside
+
+    // it is possible that the document can not be closed, in this case if the argument is false
+    // the exception will be thrown otherwise in addition to exception the object must register itself
+    // as termination listener and listen for document events
+
+    if ( m_pDocHolder )
+    {
+        m_pDocHolder->CloseFrame();
+
+        try {
+            m_pDocHolder->CloseDocument( bDeliverOwnership, bDeliverOwnership );
+        }
+        catch( uno::Exception& )
+        {
+            if ( bDeliverOwnership )
+            {
+                m_pDocHolder->release();
+                m_pDocHolder = NULL;
+                m_bClosed = sal_True;
+            }
+
+            throw;
+        }
+
+        m_pDocHolder->FreeOffice();
+
+        m_pDocHolder->release();
+        m_pDocHolder = NULL;
+    }
+
+    m_bClosed = sal_True; // the closing succeeded
 }
 
 //----------------------------------------------
@@ -455,9 +489,6 @@ void SAL_CALL OCommonEmbeddedObject::removeCloseListener( const uno::Reference< 
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
-
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< util::XCloseListener >*)0 ),
                                                 xListener );
@@ -482,9 +513,6 @@ void SAL_CALL OCommonEmbeddedObject::removeEventListener( const uno::Reference< 
         throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
-
     if ( m_pInterfaceContainer )
         m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ),
                                                 xListener );

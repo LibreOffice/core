@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-14 15:33:20 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         if ( nNextState == embed::EmbedStates::EMBED_LOADED )
         {
             // actually frame should not exist at this point
-            m_pDocHolder->CloseDocument();
+            m_pDocHolder->CloseDocument( sal_False, sal_False );
 
             m_nObjectState = nNextState;
         }

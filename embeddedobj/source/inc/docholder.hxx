@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-28 16:32:49 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 12:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ private:
 
     sal_Bool m_bReadOnly;
 
+    sal_Bool m_bWaitForClose;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetDocFrame();
     void LoadDocToFrame();
 
@@ -127,8 +129,10 @@ public:
 
     void SetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xDoc, sal_Bool bReadOnly );
 
+    void LockOffice();
     void FreeOffice();
-    void CloseDocument();
+
+    void CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitForClose );
     void CloseFrame();
 
     void SetTitle(const rtl::OUString& aDocumentName);

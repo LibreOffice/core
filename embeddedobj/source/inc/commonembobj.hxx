@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 09:03:53 $
+ *  last change: $Author: mav $ $Date: 2003-11-18 12:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,9 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
 
     sal_Bool m_bReadOnly;
 
-    sal_Int32 m_bDisposed;
+    sal_Bool m_bDisposed;
+    sal_Bool m_bClosed;
+
     sal_Int32 m_nObjectState;
     sal_Int32 m_nUpdateMode;
 
@@ -188,8 +190,6 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
 
 private:
     void CommonInit_Impl();
-
-    void Dispose();
 
     ::rtl::OUString GetDocumentServiceName() { return m_aDocServiceName; }
 
