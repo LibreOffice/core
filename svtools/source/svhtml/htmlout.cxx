@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 06:19:52 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,10 @@ const sal_Char HTMLOutFuncs::sNewLine = '\012';
 const sal_Char __FAR_DATA HTMLOutFuncs::sNewLine[] = "\015\012";
 #endif
 
-const sal_Char *lcl_svhtml_GetEntityForANSIChar( sal_Char c )
+const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c )
 {
     const sal_Char* pStr = 0;
-    switch( (unsigned char)c )
+    switch( c )
     {
 //      case '\x0a':   return HTMLOutFuncs::Out_Tag( rStream, sHTML_linebreak );
 
@@ -111,7 +111,7 @@ const sal_Char *lcl_svhtml_GetEntityForANSIChar( sal_Char c )
     case '"':       pStr = sHTML_C_quot;    break;
 
     case 161:       pStr = sHTML_S_iexcl;   break;
-    case 162:       pStr = sHTML_S_cent;        break;
+    case 162:       pStr = sHTML_S_cent;    break;
     case 163:       pStr = sHTML_S_pound;   break;
     case 164:       pStr = sHTML_S_curren;  break;
     case 165:       pStr = sHTML_S_yen;     break;
@@ -214,12 +214,12 @@ const sal_Char *lcl_svhtml_GetEntityForANSIChar( sal_Char c )
 }
 
 void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
-                            rtl_TextEncoding eDestEnc )
+                            rtl_TextEncoding eDestEnc,
+                            String *pNonConvertableChars )
 {
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != eDestEnc,
                     "wrong destination encoding" );
     const sal_Char *pStr = 0;
-    sal_Char cANSI = 0;
     switch( c )
     {
     case 0xA0:      // is a hard blank
@@ -231,14 +231,10 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
     case 0xAD:      // is a soft hyphen
         pStr = sHTML_S_shy;
         break;
-
     default:
-        // Convert character to ISO8859-1 temporarily
-        cANSI = ByteString::ConvertFromUnicode(
-                                    c, RTL_TEXTENCODING_ISO_8859_1, FALSE );
-        // If it could be converted, there may be an entity for the character.
-        if( cANSI )
-            pStr = lcl_svhtml_GetEntityForANSIChar( cANSI );
+        // There may be an entity for the character.
+        pStr = lcl_svhtml_GetEntityForChar( c );
+        break;
     }
 
     if( pStr )
@@ -247,57 +243,72 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
     }
     else
     {
-        switch( eDestEnc )
+        if( RTL_TEXTENCODING_UTF8 == eDestEnc )
         {
-        case RTL_TEXTENCODING_ISO_8859_1:
-            rDest += (cANSI ? cANSI : (sal_Char)c);
-            break;
-        case RTL_TEXTENCODING_UTF8:
+            sal_Char cBuffer[3];
+            size_t nLen = ByteString::ConvertFromUnicode( c, cBuffer, 3,
+                                                    RTL_TEXTENCODING_UTF8 );
+            if( nLen )
             {
-                sal_Char cBuffer[3];
-                size_t nLen = ByteString::ConvertFromUnicode( c, cBuffer, 3,
-                                                        RTL_TEXTENCODING_UTF8 );
-                if( nLen )
-                {
-                    sal_Char *pBuffer = cBuffer;
-                    while( nLen-- )
-                        rDest += *pBuffer++;
-                }
-                else
-                {
-                    rDest += (sal_Char)c;
-                }
+                sal_Char *pBuffer = cBuffer;
+                while( nLen-- )
+                    rDest += *pBuffer++;
             }
-            break;
-        default:
+            else
             {
-                // We allow 8 bit encoding here only
-                sal_Char cOut = ByteString::ConvertFromUnicode( c,
-                                                        eDestEnc, FALSE );
-                // If the character could not be converted to the destination
-                // character set, the original character code is truncated to
-                // an 8-bit-character code.
-                if( !cOut )
-                    cOut = (sal_Char)c;
-                if( (cOut>=' ' && cOut<='~') || cOut=='\t' )
-                    rDest += cOut;
-                else
-                    (((rDest += '&') += '#') +=
-                        ByteString::CreateFromInt32( (sal_Int32)cOut )) += ';';
+                rDest += (sal_Char)c;
+            }
+        }
+        else
+        {
+            // We allow 8 bit encoding here only
+            sal_Char cOut = ByteString::ConvertFromUnicode( c,
+                                                    eDestEnc, FALSE );
+            // If the character could not be converted to the destination
+            // character set, the UNICODE character is exported as character
+            // entity.
+            if( !cOut )
+            {
+                (((rDest += '&') += '#') +=
+                        ByteString::CreateFromInt64( (sal_uInt32)c )) += ';';
+                if( pNonConvertableChars &&
+                    STRING_NOTFOUND == pNonConvertableChars->Search( c ) )
+                    pNonConvertableChars->Append( c );
+            }
+            else if( (cOut>=' ' && cOut<='~') || cOut=='\t' )
+            {
+                rDest += cOut;
+            }
+            else
+            {
+                (((rDest += '&') += '#') +=
+                        ByteString::CreateFromInt32( (sal_uChar)cOut )) += ';';
             }
         }
     }
 }
 
+#if SUPD < 638
 void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
                                         ByteString& rDest,
                                         rtl_TextEncoding eDestEnc )
+{
+
+    ConvertStringToHTML( rSrc, rDest, eDestEnc );
+}
+#endif
+
+void HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
+                                        ByteString& rDest,
+                                        rtl_TextEncoding eDestEnc,
+                                         String *pNonConvertableChars )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = gsl_getSystemTextEncoding();
 
     for( sal_uInt32 i=0UL, nLen = rSrc.Len(); i < nLen; i++ )
-        lcl_ConvertCharToHTML( rSrc.GetChar( (xub_StrLen)i ), rDest,  eDestEnc );
+        lcl_ConvertCharToHTML( rSrc.GetChar( (xub_StrLen)i ), rDest,  eDestEnc,
+                               pNonConvertableChars );
 }
 
 SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
@@ -310,22 +321,25 @@ SvStream& HTMLOutFuncs::Out_AsciiTag( SvStream& rStream, const sal_Char *pStr,
 }
 
 SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
-                                  rtl_TextEncoding eDestEnc )
+                                  rtl_TextEncoding eDestEnc,
+                                  String *pNonConvertableChars )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = gsl_getSystemTextEncoding();
 
     ByteString sOut;
-    lcl_ConvertCharToHTML( c, sOut,  eDestEnc );
+    lcl_ConvertCharToHTML( c, sOut,  eDestEnc, pNonConvertableChars );
     rStream << sOut.GetBuffer();
     return rStream;
 }
 
 SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const String& rStr,
-                                    rtl_TextEncoding eDestEnc )
+                                    rtl_TextEncoding eDestEnc,
+                                    String *pNonConvertableChars )
 {
     for( sal_uInt32 n = 0UL; n < rStr.Len(); n++ )
-        HTMLOutFuncs::Out_Char( rStream, rStr.GetChar( (xub_StrLen)n ), eDestEnc );
+        HTMLOutFuncs::Out_Char( rStream, rStr.GetChar( (xub_StrLen)n ),
+                                eDestEnc, pNonConvertableChars );
     return rStream;
 }
 
@@ -371,7 +385,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                                       const sal_Char *pDelim,
                                       const sal_Char *pIndentArea,
                                       const sal_Char *pIndentMap,
-                                      rtl_TextEncoding eDestEnc )
+                                      rtl_TextEncoding eDestEnc,
+                                        String *pNonConvertableChars    )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = gsl_getSystemTextEncoding();
@@ -388,7 +403,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     sOut.Append( RTL_CONSTASCII_STRINGPARAM("=\"") );
     rStream << sOut.GetBuffer();
     sOut.Erase();
-    Out_String( rStream, rOutName, eDestEnc );
+    Out_String( rStream, rOutName, eDestEnc, pNonConvertableChars );
     rStream << "\">";
 
     for( USHORT i=0U; i<rIMap.GetIMapObjectCount(); i++ )
@@ -474,7 +489,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     aURL = INetURLObject::AbsToRel( aURL );
                     (sOut = sHTML_O_href) += "=\"";
                     rStream << sOut.GetBuffer();
-                    Out_String( rStream, aURL, eDestEnc ) << '\"';
+                    Out_String( rStream, aURL, eDestEnc, pNonConvertableChars ) << '\"';
                 }
                 else
                     rStream << sHTML_O_nohref;
@@ -484,7 +499,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     ((sOut = ' ') += sHTML_O_name) += "=\"";
                     rStream << sOut.GetBuffer();
-                    Out_String( rStream, rName, eDestEnc ) << '\"';
+                    Out_String( rStream, rName, eDestEnc, pNonConvertableChars ) << '\"';
                 }
 
                 const String& rTarget = pObj->GetTarget();
@@ -492,7 +507,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     ((sOut = ' ') += sHTML_O_target) += "=\"";
                     rStream << sOut.GetBuffer();
-                    Out_String( rStream, rTarget, eDestEnc ) << '\"';
+                    Out_String( rStream, rTarget, eDestEnc, pNonConvertableChars ) << '\"';
                 }
 
                 const String& rDesc = pObj->GetDescription();
@@ -500,13 +515,13 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     ((sOut = ' ') += sHTML_O_alt) += "=\"";
                     rStream << sOut.GetBuffer();
-                    Out_String( rStream, rDesc, eDestEnc ) << '\"';
+                    Out_String( rStream, rDesc, eDestEnc, pNonConvertableChars ) << '\"';
                 }
 
                 const SvxMacroTableDtor& rMacroTab = pObj->GetMacroTable();
                 if( pEventTable && rMacroTab.Count() )
                     Out_Events( rStream, rMacroTab, pEventTable,
-                                bOutStarBasic, eDestEnc );
+                                bOutStarBasic, eDestEnc, pNonConvertableChars );
 
                 rStream << '>';
             }
@@ -529,7 +544,8 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
                                    const String& rSrc,
                                    const String *pSBLibrary,
                                    const String *pSBModule,
-                                   rtl_TextEncoding eDestEnc )
+                                   rtl_TextEncoding eDestEnc,
+                                   String *pNonConvertableChars )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
         eDestEnc = gsl_getSystemTextEncoding();
@@ -544,7 +560,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
         sOut.Append( RTL_CONSTASCII_STRINGPARAM(sHTML_O_language) );
         sOut.Append( RTL_CONSTASCII_STRINGPARAM("=\"") );
         rStrm << sOut.GetBuffer();
-        Out_String( rStrm, rLanguage, eDestEnc );
+        Out_String( rStrm, rLanguage, eDestEnc, pNonConvertableChars );
         sOut = '\"';
     }
 
@@ -552,7 +568,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
     {
         ((sOut += ' ') += sHTML_O_src) += "=\"";
         rStrm << sOut.GetBuffer();
-        Out_String( rStrm, INetURLObject::AbsToRel(rSrc), eDestEnc );
+        Out_String( rStrm, INetURLObject::AbsToRel(rSrc), eDestEnc, pNonConvertableChars );
         sOut = '\"';
     }
 
@@ -560,7 +576,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
     {
         ((sOut += ' ') += sHTML_O_sdlibrary) += "=\"";
         rStrm << sOut.GetBuffer();
-        Out_String( rStrm, *pSBLibrary, eDestEnc );
+        Out_String( rStrm, *pSBLibrary, eDestEnc, pNonConvertableChars );
         sOut = '\"';
     }
 
@@ -568,7 +584,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
     {
         ((sOut += ' ') += sHTML_O_sdmodule) += "=\"";
         rStrm << sOut.GetBuffer();
-        Out_String( rStrm, *pSBModule, eDestEnc );
+        Out_String( rStrm, *pSBModule, eDestEnc, pNonConvertableChars );
         sOut = '\"';
     }
 
@@ -639,7 +655,8 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
                                     const SvxMacroTableDtor& rMacroTable,
                                     const HTMLOutEvent *pEventTable,
                                     BOOL bOutStarBasic,
-                                    rtl_TextEncoding eDestEnc )
+                                    rtl_TextEncoding eDestEnc,
+                                    String *pNonConvertableChars )
 {
     USHORT i=0;
     while( pEventTable[i].pBasicName || pEventTable[i].pJavaName )
@@ -660,7 +677,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
                 (sOut += pStr) += "=\"";
                 rStrm << sOut.GetBuffer();
 
-                Out_String( rStrm, pMacro->GetMacName(), eDestEnc ) << '\"';
+                Out_String( rStrm, pMacro->GetMacName(), eDestEnc, pNonConvertableChars ) << '\"';
             }
         }
         i++;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 07:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 
                         if( RTL_TEXTENCODING_DONTKNOW != eSrcEnc &&
                             RTL_TEXTENCODING_UCS2 != eSrcEnc &&
-                            RTL_TEXTENCODING_UTF8 != eSrcEnc )
+                            RTL_TEXTENCODING_UTF8 != eSrcEnc &&
+                             cChar < 256 )
                         {
                              sal_Unicode cOrig = cChar;
                             cChar = ByteString::ConvertToUnicode(
