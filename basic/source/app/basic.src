@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:36:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 15:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ dutch ] = "Versie 1.0";
         TEXT[ french ] = "Version 1.0";
         TEXT[ spanish ] = "Versión 1.0";
-        TEXT[ italian ] = "Version 1.0";
+        TEXT[ italian ] = "Versione 1.0";
         TEXT[ danish ] = "Version 1.0";
         TEXT[ swedish ] = "Version 1.0";
         TEXT[ polish ] = "Version 1.0";
@@ -279,7 +279,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ dutch ] = "~Tekst";
         TEXT[ french ] = "~Texte";
         TEXT[ spanish ] = "Te~xto";
-        TEXT[ italian ] = "~Text";
+        TEXT[ italian ] = "~Testo";
         TEXT[ danish ] = "~Text";
         TEXT[ swedish ] = "~Text";
         TEXT[ polish ] = "~Text";
@@ -334,7 +334,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ dutch ] = "~Annuleren";
         TEXT[ french ] = "~Annuler";
         TEXT[ spanish ] = "~Cancelar";
-        TEXT[ italian ] = "~Cancel";
+        TEXT[ italian ] = "~Annulla";
         TEXT[ danish ] = "~Cancel";
         TEXT[ swedish ] = "~Cancel";
         TEXT[ polish ] = "~Cancel";
@@ -384,7 +384,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ dutch ] = "~Oude tekst";
         TEXT[ french ] = "~Ancien texte";
         TEXT[ spanish ] = "~Antiguo texto";
-        TEXT[ italian ] = "~Previous text";
+        TEXT[ italian ] = "~Testo precedente";
         TEXT[ danish ] = "~Previous text";
         TEXT[ swedish ] = "~Previous text";
         TEXT[ polish ] = "~Previous text ";
@@ -407,7 +407,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ dutch ] = "~Nieuwe tekst";
         TEXT[ french ] = "~Nouveau texte";
         TEXT[ spanish ] = "~Nuevo texto";
-        TEXT[ italian ] = "~New text";
+        TEXT[ italian ] = "~Nuovo testo";
         TEXT[ danish ] = "~New text";
         TEXT[ swedish ] = "~New text";
         TEXT[ polish ] = "~New text ";
@@ -468,7 +468,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ dutch ] = "~Annuleren";
         TEXT[ french ] = "~Annuler";
         TEXT[ spanish ] = "~Cancelar";
-        TEXT[ italian ] = "~Cancel";
+        TEXT[ italian ] = "~Annulla";
         TEXT[ danish ] = "~Cancel";
         TEXT[ swedish ] = "~Cancel";
         TEXT[ polish ] = "~Cancel ";
@@ -531,7 +531,7 @@ ErrorBox IDS_CANTLOAD {
     MESSAGE[ dutch ] = "Library kan niet worden geladen!";
     MESSAGE[ french ] = "Impossible de charger la bibliothèque !";
     MESSAGE[ spanish ] = "¡No se puede cargar la biblioteca!";
-    MESSAGE[ italian ] = "Library cannot be loaded!";
+    MESSAGE[ italian ] = "Impossibile caricare la library.";
     MESSAGE[ danish ] = "Library cannot be loaded!";
     MESSAGE[ swedish ] = "Library cannot be loaded!";
     MESSAGE[ polish ] = "Library cannot be loaded! ";
@@ -571,7 +571,7 @@ ErrorBox IDS_CANTSAVE {
     MESSAGE[ dutch ] = "Library kan niet worden opgeslagen!";
     MESSAGE[ french ] = "Impossible d'enregistrer la bibliothèque !";
     MESSAGE[ spanish ] = "¡No se puede guardar la biblioteca!";
-    MESSAGE[ italian ] = "Library cannot be saved!";
+    MESSAGE[ italian ] = "Impossibile salvare la library";
     MESSAGE[ danish ] = "Library cannot be saved!";
     MESSAGE[ swedish ] = "Library cannot be saved!";
     MESSAGE[ polish ] = "Library cannot be saved! ";
@@ -611,7 +611,7 @@ ErrorBox IDS_NOMAINPGM {
     MESSAGE[ dutch ] = "Dit venster bevat geen hoofdprogramma!";
     MESSAGE[ french ] = "Cette fenêtre ne contient aucun programme principal !";
     MESSAGE[ spanish ] = "¡Esta ventana no contiene ningún programa principal!";
-    MESSAGE[ italian ] = "The window does not contain a main program!";
+    MESSAGE[ italian ] = "La finestra non contiene un programma principale.";
     MESSAGE[ danish ] = "This window does not contain a main program!";
     MESSAGE[ swedish ] = "This window does not contain a main program!";
     MESSAGE[ polish ] = "This window does not contain a main program! ";
@@ -651,7 +651,7 @@ ErrorBox IDS_READERROR {
     MESSAGE[ dutch ] = "Bestand kan niet worden gelezen!";
     MESSAGE[ french ] = "Impossible de lire le fichier !";
     MESSAGE[ spanish ] = "¡No se puede leer el archivo!";
-    MESSAGE[ italian ] = "File cannot be read!";
+    MESSAGE[ italian ] = "Impossibile leggere il file";
     MESSAGE[ danish ] = "File cannot be read!";
     MESSAGE[ swedish ] = "File cannot be read!";
     MESSAGE[ polish ] = "File cannot be read! ";
@@ -691,7 +691,7 @@ ErrorBox IDS_WRITEERROR {
     MESSAGE[ dutch ] = "Bestand kan niet worden opgeslagen!";
     MESSAGE[ french ] = "Impossible d'enregister le fichier !";
     MESSAGE[ spanish ] = "¡No se puede guardar el archivo!";
-    MESSAGE[ italian ] = "File cannt be saved!";
+    MESSAGE[ italian ] = "Impossibile salvare il file";
     MESSAGE[ danish ] = "File cannot be saved!";
     MESSAGE[ swedish ] = "File cannot be saved!";
     MESSAGE[ polish ] = "File cannot be saved! ";
@@ -731,7 +731,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     MESSAGE[ dutch ] = "Zoekbegrip niet gevonden!";
     MESSAGE[ french ] = "Élément recherché introuvable !";
     MESSAGE[ spanish ] = "¡No se encontró el término buscado!";
-    MESSAGE[ italian ] = "Search key not found!";
+    MESSAGE[ italian ] = "Impossibile trovare chiave di ricerca.";
     MESSAGE[ danish ] = "Search key not found!";
     MESSAGE[ swedish ] = "Search term not found!";
     MESSAGE[ polish ] = "Search key not found!";
@@ -771,7 +771,7 @@ ErrorBox IDS_INVALID_VALUE {
     MESSAGE[ dutch ] = "De waarde is ongeldig en kan daarom niet worden gebruikt.";
     MESSAGE[ french ] = "Valeur incorrecte, impossible de la placer.";
     MESSAGE[ spanish ] = "Valor incorrecto; no se puede aplicar.";
-    MESSAGE[ italian ] = "The value is invalid and cannot be set.";
+    MESSAGE[ italian ] = "Il valore non è valido e non può essere applicato";
     MESSAGE[ danish ] = "The value is invalid and cannot be set.";
     MESSAGE[ swedish ] = "The value is invalid and cannot be set.";
     MESSAGE[ polish ] = "The value is invalid and cannot be set.";
@@ -2876,7 +2876,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ dutch ] = "Afdruk van ";
         TEXT[ french ] = "Impression de ";
         TEXT[ spanish ] = "Imprimir ";
-        TEXT[ italian ] = "Print from ";
+        TEXT[ italian ] = "Stampa da ";
         TEXT[ danish ] = "Print from ";
         TEXT[ swedish ] = "Print from  ";
         TEXT[ polish ] = "Print from ";
@@ -2899,7 +2899,7 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ dutch ] = "Annuleren";
         TEXT[ french ] = "Annuler";
         TEXT[ spanish ] = "Cancelar";
-        TEXT[ italian ] = "Cancel";
+        TEXT[ italian ] = "Annulla";
         TEXT[ danish ] = "Cancel";
         TEXT[ swedish ] = "Cancel";
         TEXT[ polish ] = "Cancel";
@@ -3415,7 +3415,7 @@ TabPage RID_TP_SPECIAL {
         Text[ dutch ] = "Server timeout";
         Text[ french ] = "Timeout du serveur";
         Text[ spanish ] = "Desconexión temporal del servidor";
-        Text[ italian ] = "Server Timeout";
+        Text[ italian ] = "Timeout server";
         Text[ danish ] = "Server Timeout";
         Text[ swedish ] = "Server Timeout";
         Text[ polish ] = "Server Timeout";
@@ -3448,7 +3448,7 @@ TabPage RID_TP_SPECIAL {
         Text[ dutch ] = "Automatische reload";
         Text[ french ] = "Recharge automatique";
         Text[ spanish ] = "Recarga automática";
-        Text[ italian ] = "AutoReload";
+        Text[ italian ] = "Ricarica automatica";
         Text[ danish ] = "AutoReload";
         Text[ swedish ] = "AutoReload";
         Text[ polish ] = "AutoReload";
@@ -3505,7 +3505,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ dutch ] = "Controls";
         Text[ french ] = "Contrôles";
         Text[ spanish ] = "Controles";
-        Text[ italian ] = "Controls";
+        Text[ italian ] = "Controlli";
         Text[ danish ] = "Controls";
         Text[ swedish ] = "Controls";
         Text[ polish ] = "Controls";
@@ -3535,7 +3535,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ dutch ] = "Slots";
         Text[ french ] = "Slots";
         Text[ spanish ] = "Puertos (slots)";
-        Text[ italian ] = "Slots";
+        Text[ italian ] = "Slot";
         Text[ danish ] = "Slots";
         Text[ swedish ] = "Slots";
         Text[ polish ] = "Slots";
@@ -3790,7 +3790,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ dutch ] = "Naam";
         Text[ french ] = "Nom";
         Text[ spanish ] = "Nombre";
-        Text[ italian ] = "Name";
+        Text[ italian ] = "Nome";
         Text[ danish ] = "Name";
         Text[ swedish ] = "Name";
         Text[ polish ] = "Name";
@@ -3813,7 +3813,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ dutch ] = "Inhoud";
         Text[ french ] = "Contenu";
         Text[ spanish ] = "Contenido";
-        Text[ italian ] = "Content";
+        Text[ italian ] = "Contenuto";
         Text[ danish ] = "Content";
         Text[ swedish ] = "Content";
         Text[ polish ] = "Content";
@@ -3836,7 +3836,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ dutch ] = "Nieuwe inhoud";
         Text[ french ] = "Nouveau contenu";
         Text[ spanish ] = "Nuevo contenido";
-        Text[ italian ] = "New content";
+        Text[ italian ] = "Nuovo contenuto";
         Text[ danish ] = "New content";
         Text[ swedish ] = "New content";
         Text[ polish ] = "New content";
@@ -3859,7 +3859,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ dutch ] = "Naam van de variabelen";
         Text[ french ] = "Noms des variables";
         Text[ spanish ] = "nombre de variables";
-        Text[ italian ] = "Name of variables";
+        Text[ italian ] = "Nome delle variabili";
         Text[ danish ] = "Name of variable";
         Text[ swedish ] = "Name of variable";
         Text[ polish ] = "Name of variable";
@@ -4053,7 +4053,7 @@ FloatingWindow LOAD_CONF {
         Text[ polish ] = "Slot IDs";
         Text[ portuguese_brazilian ] = "Slot IDs";
         Text[ japanese ] = "Slot IDs";
-        Text[ korean ] = "Slot IDs";
+        Text[ korean ] = "½½·Ô ID";
         Text[ chinese_simplified ] = "Slot IDs";
         Text[ chinese_traditional ] = "Slot IDs";
         Text[ arabic ] = "Slot IDs";
@@ -4096,7 +4096,7 @@ FloatingWindow LOAD_CONF {
     Text[ polish ] = "Reading Configuration Files";
     Text[ portuguese_brazilian ] = "Lese Konfigurationsdateien";
     Text[ japanese ] = "Reading Configuration Files";
-    Text[ korean ] = "±¸¼º ÆÄÀÏ ·Îµå";
+    Text[ korean ] = "ÄÁÇÇ±Ô·¹ÀÌ¼Ç ÆÄÀÏ ÀÐ±â";
     Text[ chinese_simplified ] = "Reading Configuration Files";
     Text[ chinese_traditional ] = "Åª¨ú°t¸m¤å¥ó";
     Text[ arabic ] = "Reading Configuration Files";
