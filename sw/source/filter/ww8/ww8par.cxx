@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:12:30 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2088,73 +2088,6 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
 {
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
 
-#if 0 //I'm giving up on this approach, see issue #i11873# & #i20871#
-
-    //If a paragraph ends in tabs and that paragraph has a tab at or beyond
-    //the right of the page then word has a bug where further use of tab will
-    //not wrap the paragraph around to the next page. We will, so we will
-    //remove these tabs ourselves.
-
-    //To be fair this is only a partial solution for the most common case of
-    //ending in redundant tabs. It is possible to have text after these flawed
-    //tabs which in word will not line wrap to the next page, and this
-    //solution will not fix that.
-    const String &rStr = pTxt->GetTxt();
-    xub_StrLen nLen=rStr.Len();
-
-
-    //If we happen to end on a tab, something a well formed sentence shouldn't
-    //do :-), then go into strip mode.
-    if (nLen && rStr.GetChar(nLen-1) == '\x9')
-    {
-        std::vector<const xub_StrLen*> aLocs;
-        GetNoninlineNodeAttribs(pTxt,aLocs);
-        while (nLen)
-        {
-            if (rStr.GetChar(nLen-1) != '\x9')
-                break;
-            else
-            {
-                std::vector<const xub_StrLen*>::iterator aIter =
-                    std::find_if(aLocs.begin(),aLocs.end(),AttribHere(nLen-1));
-                if (aIter != aLocs.end())
-                    break;
-                else
-                    --nLen;
-            }
-        }
-        //We have some candidate tabs whose removal would not affect the
-        //document logically. Let us see if this is one of the buggy
-        //paragraphs that word would place all in one line, if so remove them
-        //to match word's layout.
-        if (xub_StrLen nDiff = rStr.Len() - nLen)
-        {
-            const SvxTabStopItem* pTabStop =
-                (const SvxTabStopItem*)GetFmtAttr(RES_PARATR_TABSTOP);
-
-            const SvxLRSpaceItem* pLR =
-                (const SvxLRSpaceItem*)GetFmtAttr(RES_LR_SPACE);
-
-            for (USHORT nI = pTabStop ? pTabStop->Count() : 0; nI--;)
-            {
-                //Give ourselves a leeway of 1 twip.
-                if ((*pTabStop)[nI].GetTabPos() + pLR->GetTxtLeft() + 1
-                    >= maSectionManager.GetPageWidth()
-                    - maSectionManager.GetPageRight()
-                    - maSectionManager.GetPageLeft())
-                {
-                    pPaM->SetMark();
-                    pPaM->GetMark()->nContent-=nDiff;
-                    pCtrlStck->Delete(*pPaM);
-                    rDoc.Delete(*pPaM);     //this frobs the mark
-                    pPaM->DeleteMark();
-                    break;
-                }
-            }
-        }
-    }
-#endif
-
     const SwNumRule* pRule = sw::util::GetNumRuleFromTxtNode(*pTxt);
 
     if (
@@ -3068,7 +3001,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     SwTxtNode* pPreviousNode = 0;
     BYTE nDropLines = 0;
     SwCharFmt* pNewSwCharFmt = 0;
-    const SwCharFmt* pFmt;
+    const SwCharFmt* pFmt = 0;
     pStrm->Seek( pSBase->WW8Cp2Fc( nStartCp + nCpOfs, &bIsUnicode ) );
 
     WW8_CP l = nStartCp;
@@ -3111,7 +3044,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
             // Word has no concept of a "whole word dropcap"
             aDrop.GetWholeWord() = false;
 
-            if(pFmt)
+            if (pFmt)
                 aDrop.SetCharFmt(const_cast<SwCharFmt*>(pFmt));
             else if(pNewSwCharFmt)
                 aDrop.SetCharFmt(const_cast<SwCharFmt*>(pNewSwCharFmt));
