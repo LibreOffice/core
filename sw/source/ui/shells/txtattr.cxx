@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-30 13:18:53 $
+ *  last change: $Author: os $ $Date: 2002-11-27 09:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ SET_LINESPACE:
         case SID_ATTR_PARA_RIGHT_TO_LEFT :
         {
             BOOL bSet = TRUE;
-            int eState = pArgs->GetItemState(nSlot);
+            int eState = pArgs ? pArgs->GetItemState(nSlot) : SFX_ITEM_DISABLED;
             if (pArgs && SFX_ITEM_SET == eState)
                 bSet = ((const SfxBoolItem&)pArgs->Get(nSlot)).GetValue();
 /*
@@ -878,6 +878,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2002/09/30 13:18:53  tl
+    #103604# LTR-RTL buttons are no longer toggle switches
+
     Revision 1.8  2002/08/05 09:31:15  tl
     #100584# made SID_ATTR_PARA_RIGHT/LEFT_TO_... toggle slots
 
