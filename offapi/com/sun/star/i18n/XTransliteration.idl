@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransliteration.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ module com { module sun { module star { module i18n {
  */
 
 
-interface XTransliteration: com::sun::star::uno::XInterface
+published interface XTransliteration: com::sun::star::uno::XInterface
 {
 
     //------------------------------------------------------------------------
