@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:27:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,8 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
 
         linkNames_ = new rtl::OUString[linkNamesL_];
         for( i = 0; i < linkNamesL_; ++i ) {
-            int first;
+            // TODO what happens to first if we never hit Place?
+            int first = 0;
             int Place = UNREACHABLEPLACE; // This is the defintely last place
             for( int j = 0; j < NAMECOUNT; ++j )
             {
