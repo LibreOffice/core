@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:42:02 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 #include <svtools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
 
+#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #pragma hdrstop
 
 #include "appimp.hxx"
@@ -206,11 +209,14 @@
 #include "imestatuswindow.hxx"
 #include "sfxdlg.hxx"
 #include "dialogs.hrc"
+#include "sorgitm.hxx"
 
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
+using namespace ::drafts::com::sun::star::script;
 
 #define SFX_KEY_MULTIQUICKSEARCH    "ExplorerMultiQuickSearch"
 
@@ -929,6 +935,51 @@ static const ::rtl::OUString& getProductRegistrationServiceName( )
     return s_sServiceName;
 }
 
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
+typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
+
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
+
+::rtl::OUString ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
+{
+    // get basctl dllname
+    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
+    ::rtl::OUString aLibName( sLibName );
+
+    // load module
+    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+
+    // get symbol
+    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
+    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getSymbol( handleMod, aSymbol.pData );
+
+    // call basicide_choose_macro in basctl
+    rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
+    ::rtl::OUString aScriptURL( pScriptURL );
+    rtl_uString_release( pScriptURL );
+    return aScriptURL;
+}
+
+void MacroOrganizer( INT16 nTabId )
+{
+    // get basctl dllname
+    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
+    ::rtl::OUString aLibName( sLibName );
+
+    // load module
+    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+
+    // get symbol
+    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_macro_organizer" ) );
+    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getSymbol( handleMod, aSymbol.pData );
+
+    // call basicide_macro_organizer in basctl
+    pSymbol( nTabId );
+}
+
 #define RID_ERRBOX_MODULENOTINSTALLED     (RID_OFA_START + 72)
 
 ResMgr* SfxApplication::GetOffResManager_Impl()
@@ -1036,6 +1087,109 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
 
             rReq.SetReturnValue( SfxStringItem( rReq.GetSlot(), ChooseMacro( bExecute, bChooseOnly ) ) );
+            rReq.Done();
+        }
+        break;
+
+        case SID_MACROORGANIZER:
+        {
+            OSL_TRACE("handling SID_MACROORGANIZER");
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem;
+            INT16 nTabId = 0;
+            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_MACROORGANIZER, sal_False, &pItem) )
+            {
+                nTabId = ((SfxUInt16Item*)pItem)->GetValue();
+            }
+
+            SfxApplication::MacroOrganizer( nTabId );
+            rReq.Done();
+        }
+        break;
+
+        case SID_RUNMACRO:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            OSL_TRACE("SfxApplication::OfaExec_Impl: case ScriptOrg");
+            AbstractScriptSelectorDialog* pDlg = pFact->CreateScriptSelectorDialog( GetTopWindow() );
+            if( pDlg )
+            {
+                pDlg->SetRunLabel();
+                short ret = pDlg->Execute();
+                if ( ret )
+                {
+                    const String scriptURL = pDlg->GetScriptURL();
+                    SfxViewFrame* pView = SfxViewFrame::Current();
+                    SfxObjectShell* pObjShell = NULL;
+                    Sequence< Any > args(0);
+                    Any aRet;
+                    Sequence< sal_Int16 > outIndex;
+                    Sequence< Any > outArgs( 0 );
+                    if ( pView && ( pObjShell = pView->GetObjectShell() ) )
+                    {
+                        pObjShell->CallXScript(scriptURL, args, aRet, outIndex, outArgs);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+                            Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+
+                            Reference< provider::XScriptProviderFactory > xFac(
+                                xCtx->getValueByName(
+                                    ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY_THROW );
+
+                            Any aContext;
+
+                            Reference< provider::XScriptProvider > xScriptProvider( xFac->createScriptProvider( aContext ),
+                                UNO_QUERY_THROW );
+                            Reference< provider::XScript > xScript(
+                                xScriptProvider->getScript( scriptURL ), UNO_QUERY_THROW );
+
+                            Any aRet = xScript->invoke( args, outIndex, outArgs );
+                        }
+                        catch( ::com::sun::star::uno::Exception& e )
+                        {
+                            OSL_TRACE("Failed to execute script for url %s, error: %s",
+                                ::rtl::OUStringToOString( scriptURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                                ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        }
+                    }
+                }
+            }
+            else
+            {
+                OSL_TRACE("no dialog!!!");
+            }
+            rReq.Done();
+        }
+        break;
+
+        case SID_SCRIPTORGANIZER:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            OSL_TRACE("SfxApplication::OfaExec_Impl: case ScriptOrg");
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem;
+            String aLanguage;
+            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_SCRIPTORGANIZER, sal_False, &pItem) )
+            {
+                aLanguage = ((SfxScriptOrganizerItem*)pItem)->getLanguage();
+            }
+
+            ::rtl::OUString aLang( aLanguage );
+            OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", ::rtl::OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+            // not sure about the Window*
+            VclAbstractDialog* pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage, ResId( RID_DLG_SCRIPTORGANIZER ) );
+            if( pDlg )
+            {
+                pDlg->Execute();
+            }
+            else
+            {
+                OSL_TRACE("no dialog!!!");
+            }
             rReq.Done();
         }
         break;
