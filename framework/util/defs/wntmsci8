@@ -4257,3 +4257,5 @@ __CTA2?AVbad_alloc@std@@
 ?getArray@?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@QAAPAVAny@2345@XZ
 ?getArray@?$Sequence@VOUString@rtl@@@uno@star@sun@com@@QAAPAVOUString@rtl@@XZ
 ?getArray@?$Sequence@UNamedValue@beans@star@sun@com@@@uno@star@sun@com@@QAAPAUNamedValue@beans@345@XZ
+?getArray@?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Sequence@UPropertyValue@beans@star@sun@com@@@2345@XZ
+?getArray@?$Sequence@V?$Reference@VXInteractionContinuation@task@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAPAV?$Reference@VXInteractionContinuation@task@star@sun@com@@@2345@XZ
