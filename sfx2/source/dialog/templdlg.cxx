@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-14 13:20:43 $
+ *  last change: $Author: fs $ $Date: 2002-05-27 09:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,16 @@ SfxTemplateDialog::~SfxTemplateDialog()
 ISfxTemplateCommon* SfxTemplateDialog::GetISfxTemplateCommon()
 {
     return pImpl->GetISfxTemplateCommon();
+}
+
+// ------------------------------------------------------------------------
+
+void SfxTemplateDialog::DataChanged( const DataChangedEvent& _rDCEvt )
+{
+    if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) && ( 0 != ( SETTINGS_STYLE & _rDCEvt.GetFlags() ) ) )
+        pImpl->updateFamilyImages();
+
+    SfxDockingWindow::DataChanged( _rDCEvt );
 }
 
 //-------------------------------------------------------------------------
@@ -768,8 +778,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     bUpdateByExampleDisabled( FALSE ),
     bTreeDrag               ( TRUE ),
     bHierarchical           ( FALSE ),
-    bBindingUpdate          ( TRUE )
-
+    bBindingUpdate          ( TRUE ),
+    m_pStyleFamiliesId      ( NULL )
 {
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
@@ -866,6 +876,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     ResMgr* pMgr = pCurObjShell ? pCurObjShell->GetResMgr() : NULL;
     ResId aFamId( DLG_STYLE_DESIGNER, pMgr );
     aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
+    m_pStyleFamiliesId = new ResId( aFamId );
     if( !pMgr || !pMgr->IsAvailable( aFamId ) )
         pStyleFamilies = new SfxStyleFamilies;
     else
@@ -933,7 +944,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
         InsertFamilyItem( nId, pItem );
     }
 
-    Resize();
+    LoadedFamilies();
 
     USHORT nStart = SID_STYLE_FAMILY1;
     USHORT nEnd = SID_STYLE_FAMILY4;
@@ -956,6 +967,8 @@ void SfxCommonTemplateDialog_Impl::ClearResource()
     for ( i = 0; i < COUNT_BOUND_FUNC; ++i )
         delete pBoundItems[i];
     pCurObjShell = NULL;
+
+    DELETEZ( m_pStyleFamiliesId );
 }
 
 //-------------------------------------------------------------------------
@@ -985,6 +998,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         Execute_Impl(SID_STYLE_WATERCAN, aEmpty, aEmpty, 0);
     GetWindow()->Hide();
     DELETEX(pStyleFamilies);
+    DELETEZ( m_pStyleFamiliesId );
     USHORT i;
     for ( i = 0; i < MAX_FAMILIES; ++i )
         DELETEX(pFamilyState[i]);
@@ -2260,6 +2274,27 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyIte
 }
 
 // ------------------------------------------------------------------------
+void SfxTemplateDialog_Impl::updateFamilyImages()
+{
+    if ( !m_pStyleFamiliesId )
+        // we do not have a resource id to load the new images from
+        return;
+
+    // let the families collection update the images
+    sal_Bool bIsHighContrast = pFloat->GetDisplayBackground().GetColor().IsDark();
+    pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
+
+    // and set the new images on our toolbox
+    USHORT nLoop = pStyleFamilies->Count();
+    for( ; --nLoop; )
+    {
+        const SfxStyleFamilyItem *pItem = pStyleFamilies->GetObject( nLoop );
+        USHORT nId = SfxFamilyIdToNId( (USHORT) pItem->GetFamily() );
+        aActionTbL.SetItemImage( nId, pItem->GetImage() );
+    }
+}
+
+// ------------------------------------------------------------------------
 
 void SfxTemplateDialog_Impl::ClearFamilyList()
 {
@@ -2292,6 +2327,14 @@ SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
         pImgMgr->ReleaseToolBox( &aActionTbL );
         pImgMgr->ReleaseToolBox( &aActionTbR );
     }
+}
+
+//-------------------------------------------------------------------------
+
+void SfxTemplateDialog_Impl::LoadedFamilies()
+{
+    updateFamilyImages();
+    Resize();
 }
 
 //-------------------------------------------------------------------------
