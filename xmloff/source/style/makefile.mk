@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
+#   last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,8 @@ CXXFILES = \
         HatchStyle.cxx					\
         ImageStyle.cxx					\
         MarkerStyle.cxx					\
+        DashStyle.cxx					\
+        AttributeContainerHandler.cxx	\
         NamedBoolPropertyHdl.cxx		\
         TransGradientStyle.cxx			\
         XMLBackgroundImageContext.cxx	\
@@ -145,7 +147,6 @@ CXXFILES = \
         PageMasterStyleMap.cxx			\
         PageMasterPropMapper.cxx		\
         PageMasterExportPropMapper.cxx
-
 
 SLOFILES =	\
         $(SLO)$/adjushdl.obj	\
@@ -209,6 +210,7 @@ SLOFILES =	\
         $(SLO)$/XMLBackgroundImageExport.obj	\
         $(SLO)$/XMLClipPropertyHandler.obj		\
         $(SLO)$/XMLConstantsPropertyHandler.obj	\
+        $(SLO)$/AttributeContainerHandler.obj	\
         $(SLO)$/XMLElementPropertyContext.obj	\
         $(SLO)$/XMLPageExport.obj				\
         $(SLO)$/PageMasterPropHdl.obj			\
@@ -216,7 +218,6 @@ SLOFILES =	\
         $(SLO)$/PageMasterStyleMap.obj			\
         $(SLO)$/PageMasterPropMapper.obj		\
         $(SLO)$/PageMasterExportPropMapper.obj
-
 
 # --- Tagets -------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
+ *  last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLER_TABSTOPTYPES_HXX
 #include <tabsthdl.hxx>
+#endif
+#ifndef _XMLOFF_ATTRIBUTECONTAINERHANDLER_HXX
+#include "AttributeContainerHandler.hxx"
 #endif
 
 ///////////////////////////////////////////////////////////////////////////
@@ -339,6 +342,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_TEXT_TABSTOP:
                 pPropHdl = new XMLTabStopPropHdl;
+                break;
+            case XML_TYPE_ATTRIBUTE_CONTAINER:
+                pPropHdl = new XMLAttributeContainerHandler;
                 break;
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-25 14:45:01 $
+ *  last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,13 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_XML_ATTRIBUTEDATA_HPP_
+#include <com/sun/star/xml/AttributeData.hpp>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include "xmlprmap.hxx"
@@ -74,7 +81,13 @@
 #include "xmlimppr.hxx"
 #endif
 
+#include "xmlkywd.hxx"
+#include "unoatrcn.hxx"
+#include "xmlnmspe.hxx"
+
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::rtl;
 using namespace ::std;
@@ -98,7 +111,7 @@ void SvXMLImportPropertyMapper::importXML(
 {
     INT16 nAttr = xAttrList->getLength();
 
-//  SvXMLAttrContainerItem *pUnknownItem = 0;
+    Reference< XNameContainer > xAttrContainer;
 
     for( INT16 i=0; i < nAttr; i++ )
     {
@@ -178,52 +191,52 @@ void SvXMLImportPropertyMapper::importXML(
             }
             else
             {
-                /*
-                if( USHRT_MAX != mnUnknownWhich &&
-                    // TODO: PI
-                    (XML_NAMESPACE_NONE == nPrefix ||
-                     XML_NAMESPACE_UNKNOWN == nPrefix) )
+                if( XML_NAMESPACE_NONE == nPrefix || XML_NAMESPACE_UNKNOWN == nPrefix )
                 {
-                    if( !pUnknownItem )
+                    if( !xAttrContainer.is() )
                     {
-                        const SfxPoolItem* pItem = 0;
-                        if( SFX_ITEM_SET == rSet.GetItemState( mnUnknownWhich, TRUE,
-                                                               &pItem ) )
-                        {
-                            SfxPoolItem *pNew = pItem->Clone();
-                            pUnknownItem = PTR_CAST( SvXMLAttrContainerItem, pNew );
-                            DBG_ASSERT( pUnknownItem,
-                                        "SvXMLAttrContainerItem expected" );
-                            if( !pUnknownItem )
-                                delete pNew;
-                        }
-                        else
-                        {
-                            pUnknownItem = new SvXMLAttrContainerItem( mnUnknownWhich );
-                        }
+                        // add an unknown attribute container to the properties
+                        Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
+                        xAttrContainer = xNew;
+
+                        // find map entry and create new property state
+                        nIndex = maPropMapper->FindEntryIndex( "CharUserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
+                        if( nIndex == -1 )
+                            nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
+
+                        Any aAny;
+                        aAny <<= xAttrContainer;
+                        XMLPropertyState aNewProperty( nIndex, aAny );
+
+                        // push it on our stack so we export it later
+                        rProperties.push_back( aNewProperty );
                     }
-                    if( pUnknownItem )
+
+                    if( xAttrContainer.is() )
                     {
-                        if( XML_NAMESPACE_NONE == nPrefix )
-                            pUnknownItem->AddAttr( aLocalName, rValue );
-                        else
-                            pUnknownItem->AddAttr( aPrefix, aNamespace, aLocalName,
-                                                   rValue );
+                        AttributeData aData;
+                        aData.Type = OUString::createFromAscii( sXML_CDATA );
+                        aData.Value = rValue;
+
+                        OUStringBuffer sName;
+                        if( XML_NAMESPACE_NONE != nPrefix )
+                        {
+                            sName.append( aPrefix );
+                            sName.append( sal_Unicode(':') );
+                            aData.Namespace = aNamespace;
+                        }
+
+                        sName.append( aLocalName );
+
+                        Any aAny;
+                        aAny <<= aData;
+                        xAttrContainer->insertByName( sName.makeStringAndClear(), aAny );
                     }
                 }
-                */
             }
         }
         while( ( nIndex >= 0 ) && (( nFlags & MID_FLAG_MULTI_PROPERTY ) != 0 ) );
     }
-
-/*
-    if( pUnknownItem )
-    {
-        rSet.Put( *pUnknownItem );
-        delete pUnknownItem;
-    }
-*/
 
     finished( rProperties );
 }

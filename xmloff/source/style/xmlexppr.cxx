@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
+ *  last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,18 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_XML_ATTRIBUTEDATA_HPP_
+#include <com/sun/star/xml/AttributeData.hpp>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #include "xmlexppr.hxx"
 
@@ -273,34 +285,41 @@ void SvXMLExportPropertyMapper::_exportXML(
     if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
                 MID_FLAG_SPECIAL_ITEM_EXPORT ) != 0 )
     {
-        /* Currently, we have nothing like a SvXMLAttrContainerItem, since we use properties instead of poolitems
-
-        if( rItem.ISA( SvXMLAttrContainerItem ) )
+        uno::Reference< container::XNameContainer > xAttrContainer;
+        if( rProperty.maValue >>= xAttrContainer )
         {
             SvXMLNamespaceMap *pNewNamespaceMap = 0;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
-            const SvXMLAttrContainerItem *pUnknown = PTR_CAST( SvXMLAttrContainerItem, &rItem );
+            uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );
+            const OUString* pAttribName = aAttribNames.getConstArray();
 
-            sal_uInt16 nCount = pUnknown->GetAttrCount();
+            const sal_Int32 nCount = aAttribNames.getLength();
+
             OUStringBuffer sName;
-            for( sal_uInt16 i=0; i < nCount; i++ )
+            xml::AttributeData aData;
+            for( sal_Int32 i=0; i < nCount; i++, pAttribName++ )
             {
-                OUString sPrefix( pUnknown->GetAttrPrefix( i ) );
+                xAttrContainer->getByName( *pAttribName ) >>= aData;
+
+                // extract namespace prefix from attribute name if it exists
+                OUString sPrefix;
+                const sal_Int32 nPos = pAttribName->indexOf( sal_Unicode(':') );
+                if( nPos != -1 )
+                    sPrefix = pAttribName->copy( 0, nPos );
+
                 if( sPrefix.getLength() )
                 {
-                    OUString sNamespace( pUnknown->GetAttrNamespace( i ) );
+                    OUString sNamespace( aData.Namespace );
 
                     // if the prefix isn't defined yet or has another meaning,
                     // we have to redefine it now.
-                    sal_uInt16 nIdx =   pNamespaceMap->GetIndexByPrefix( sPrefix );
-                    if( USHRT_MAX == nIdx ||
-                        pNamespaceMap->GetNameByIndex( nIdx ) != sNamespace )
+                    sal_uInt16 nIdx = pNamespaceMap->GetIndexByPrefix( sPrefix );
+                    if( USHRT_MAX == nIdx || pNamespaceMap->GetNameByIndex( nIdx ) != sNamespace )
                     {
                         if( !pNewNamespaceMap )
                         {
-                            pNewNamespaceMap =
-                                        new SvXMLNamespaceMap( rNamespaceMap );
+                            pNewNamespaceMap = new SvXMLNamespaceMap( rNamespaceMap );
                             pNamespaceMap = pNewNamespaceMap;
                         }
                         pNewNamespaceMap->Add( sPrefix, sNamespace );
@@ -311,20 +330,14 @@ void SvXMLExportPropertyMapper::_exportXML(
                         rAttrList.AddAttribute( sName.makeStringAndClear(), sCDATA,
                                                 sNamespace );
                     }
-
-                    sName.append( sPrefix );
-                    sName.append( sal_Unicode(':') );
                 }
 
-                sName.append( pUnknown->GetAttrLName( i ) );
-                rAttrList.AddAttribute( sName.makeStringAndClear(), sCDATA,
-                                        pUnknown->GetAttrValue(i) );
+                rAttrList.AddAttribute( *pAttribName, aData.Type, aData.Value );
             }
 
             delete pNewNamespaceMap;
         }
         else
-        */
         {
             handleSpecialItem( rAttrList, rProperty, rUnitConverter,
                                rNamespaceMap, pProperties, nIdx );
