@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 19:50:50 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 13:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,18 @@
 
 #pragma hdrstop
 
+#include <tools/debug.hxx>
 #include <comphelper/uno3.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/unoshape.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include "shapeuno.hxx"
 #include "miscuno.hxx"
+#include "cellsuno.hxx"
+#include "docsh.hxx"
+#include "drwlayer.hxx"
 #include "unoguard.hxx"
 
 using namespace ::com::sun::star;
@@ -107,6 +113,9 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
 {
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( beans::XPropertyState )
+    SC_QUERYINTERFACE( text::XTextContent )
+    SC_QUERYINTERFACE( lang::XComponent )
+    SC_QUERYINTERFACE( lang::XTypeProvider )
 
     uno::Any aRet = OWeakObject::queryInterface( rType );
     if ( !aRet.hasValue() && mxShapeAgg.is() )
@@ -138,6 +147,14 @@ uno::Reference<beans::XPropertyState> lcl_GetPropertyState( const uno::Reference
     uno::Reference<beans::XPropertyState> xRet;
     if ( xAgg.is() )
         xAgg->queryAggregation( getCppuType((uno::Reference<beans::XPropertyState>*) 0) ) >>= xRet;
+    return xRet;
+}
+
+uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAggregation>& xAgg )
+{
+    uno::Reference<lang::XComponent> xRet;
+    if ( xAgg.is() )
+        xAgg->queryAggregation( getCppuType((uno::Reference<lang::XComponent>*) 0) ) >>= xRet;
     return xRet;
 }
 
@@ -298,4 +315,141 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aProperty
     return aAny;
 }
 
+// XTextContent
+
+void SAL_CALL ScShapeObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
+                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    throw lang::IllegalArgumentException();     // anchor cannot be changed
+}
+
+BOOL lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, USHORT& rNum )
+{
+    USHORT nCount = rModel.GetPageCount();
+    for (USHORT i=0; i<nCount; i++)
+        if ( rModel.GetPage(i) == pPage )
+        {
+            rNum = i;
+            return TRUE;
+        }
+
+    return FALSE;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XTextRange> xRet;
+
+    SdrObject* pObj = GetSdrObject();
+    if( pObj )
+    {
+        ScDrawLayer* pModel = (ScDrawLayer*)pObj->GetModel();
+        SdrPage* pPage = pObj->GetPage();
+        if ( pModel )
+        {
+            ScDocument* pDoc = pModel->GetDocument();
+            if ( pDoc )
+            {
+                SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+                if ( pObjSh && pObjSh->ISA(ScDocShell) )
+                {
+                    ScDocShell* pDocSh = (ScDocShell*)pObjSh;
+
+                    USHORT nTab = 0;
+                    if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
+                    {
+                        Point aPos = pObj->GetBoundRect().TopLeft();
+                        ScRange aRange = pDoc->GetRange( nTab, Rectangle( aPos, aPos ) );
+
+                        //  anchor is always the cell
+
+                        xRet = new ScCellObj( pDocSh, aRange.aStart );
+                    }
+                }
+            }
+        }
+    }
+
+    return xRet;
+}
+
+// XComponent
+
+void SAL_CALL ScShapeObj::dispose() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<lang::XComponent> xAggComp = lcl_GetComponent(mxShapeAgg);
+    if ( xAggComp.is() )
+        xAggComp->dispose();
+}
+
+void SAL_CALL ScShapeObj::addEventListener(
+                        const uno::Reference<lang::XEventListener>& xListener )
+                                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<lang::XComponent> xAggComp = lcl_GetComponent(mxShapeAgg);
+    if ( xAggComp.is() )
+        xAggComp->addEventListener(xListener);
+}
+
+void SAL_CALL ScShapeObj::removeEventListener(
+                        const uno::Reference<lang::XEventListener>& xListener )
+                                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<lang::XComponent> xAggComp = lcl_GetComponent(mxShapeAgg);
+    if ( xAggComp.is() )
+        xAggComp->removeEventListener(xListener);
+}
+
+// XTypeProvider
+
+uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes() throw(uno::RuntimeException)
+{
+    uno::Sequence< uno::Type > aTypeSequence;
+
+    uno::Reference<lang::XTypeProvider> xBaseProvider;
+    if ( mxShapeAgg.is() )
+        mxShapeAgg->queryAggregation( getCppuType((uno::Reference<lang::XTypeProvider>*) 0) ) >>= xBaseProvider;
+
+    DBG_ASSERT( xBaseProvider.is(), "ScShapeObj: No XTypeProvider from aggregated shape!" );
+    if( xBaseProvider.is() )
+    {
+        aTypeSequence = xBaseProvider->getTypes();
+        long nBaseLen = aTypeSequence.getLength();
+
+        aTypeSequence.realloc( nBaseLen + 1 );
+        uno::Type* pPtr = aTypeSequence.getArray();
+        pPtr[nBaseLen + 0] = getCppuType((const uno::Reference<text::XTextContent>*)0);
+    }
+    return aTypeSequence;
+}
+
+uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
+                                                    throw(uno::RuntimeException)
+{
+    //! an id must be generated for each unique implementation id of the aggregated object
+
+    return uno::Sequence<sal_Int8>(0);      // no id available
+}
+
+SdrObject* ScShapeObj::GetSdrObject() const throw()
+{
+    if(mxShapeAgg.is())
+    {
+        SvxShape* pShape = SvxShape::getImplementation( mxShapeAgg );
+        if(pShape)
+            return pShape->GetSdrObject();
+    }
+
+    return NULL;
+}
 

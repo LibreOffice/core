@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 19:50:25 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 13:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
+#include <com/sun/star/text/XTextContent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -91,7 +97,9 @@ class SdrObject;
 
 class ScShapeObj : public ::cppu::OWeakObject,
                     public ::com::sun::star::beans::XPropertySet,
-                    public ::com::sun::star::beans::XPropertyState
+                    public ::com::sun::star::beans::XPropertyState,
+                    public ::com::sun::star::text::XTextContent,
+                    public ::com::sun::star::lang::XTypeProvider
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
@@ -170,6 +178,29 @@ public:
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
+
+                            // XTextContent
+    virtual void SAL_CALL   attach(const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::text::XTextRange > & xTextRange)
+                                throw( ::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getAnchor(void) throw( ::com::sun::star::uno::RuntimeException );
+
+                            // XComponent
+    virtual void SAL_CALL   dispose(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL   addEventListener(const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::lang::XEventListener > & aListener)
+                                throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL   removeEventListener(const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::lang::XEventListener > & aListener)
+                                throw( ::com::sun::star::uno::RuntimeException );
+
+                            // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+                                throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif
