@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:19 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,11 @@
 #ifndef _SV_COLOR_HXX //autogen
 #include <vcl/color.hxx>
 #endif
+// OD 25.06.2003 #108784#
+#ifndef _SVDTYPES_HXX
+#include <svx/svdtypes.hxx>
+#endif
+
 #include "swtypes.hxx"
 #include "swrect.hxx"
 
@@ -262,7 +267,9 @@ public:
     // direction of the page in order to set the default horizontal text
     // direction at the outliner of the draw view for painting layers <hell>
     // and <heaven>.
-    void   PaintLayer  ( const BYTE _nLayerID, const SwRect& _rRect,
+    // OD 25.06.2003 #108784# - correct type of 1st parameter
+    void   PaintLayer  ( const SdrLayerID _nLayerID,
+                         const SwRect& _rRect,
                          const Color* _pPageBackgrdColor = 0,
                          const bool _bIsPageRightToLeft = false ) const;
 
