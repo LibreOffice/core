@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-06 09:12:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include <memory>
+
+#ifndef _SFX_IPFRM_HXX
+#include <sfx2/ipfrm.hxx>
+#endif
 
 #include <ide_pch.hxx>
 
@@ -776,11 +780,16 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
     if ( pButton == &aEditButton )
     {
         SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pViewFrame != NULL, "No current view frame!" );
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
+        SfxDispatcher* pDispatcher = ( pViewFrame && !pViewFrame->ISA( SfxInPlaceFrame ) ) ? pViewFrame->GetDispatcher() : NULL;
+        if ( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
+        }
+        else
+        {
+            SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+            SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+            SFX_APP()->ExecuteSlot( aRequest );
         }
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
