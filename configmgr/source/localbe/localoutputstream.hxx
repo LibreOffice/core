@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localoutputstream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-05-27 17:08:47 $
+ *  last change: $Author: jb $ $Date: 2002-06-11 15:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
 
     private :
         /** Temporary file used during access */
-        uno::Reference<XOutputStream> mTemporaryFile ;
+        uno::Reference<io::XOutputStream> mTemporaryFile ;
         /** URL of the target file */
         rtl::OUString mFileUrl ;
         /** URL of the temporary file */
