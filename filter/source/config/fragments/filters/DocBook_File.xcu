@@ -7,36 +7,7 @@
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
         <prop oor:name="TemplateName"><value>../share/xslt/docbook/DocBookTemplate.stw</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="pl">DocBook</value>
-            <value xml:lang="hu">DocBook (egyszerűsített)</value>
-            <value xml:lang="ja">DocBook</value>
-            <value xml:lang="es">DocBook</value>
-            <value xml:lang="tr">DocBook</value>
-            <value xml:lang="ru">DocBook</value>
-            <value xml:lang="th">DocBook</value>
-            <value xml:lang="x-comment">EM Oct 2002: Do not translate </value>
-            <value xml:lang="ca">DocBook</value>
-            <value xml:lang="el">DocBook (απλοποιημένο)</value>
-            <value xml:lang="zh-CN">DocBook</value>
-            <value xml:lang="pt">DocBook</value>
-            <value xml:lang="cs">DocBook (zjednodušený)</value>
-            <value xml:lang="fr">DocBook</value>
-            <value xml:lang="ar">DocBook</value>
-            <value xml:lang="zh-TW">DocBook</value>
-            <value xml:lang="sl">DocBook (enostavno)</value>
-            <value xml:lang="fi">DocBook</value>
-            <value xml:lang="hi-IN">DocBook</value>
-            <value xml:lang="en-US">DocBook (simplified)</value>
-            <value xml:lang="sk">DocBook</value>
-            <value xml:lang="he">DocBook</value>
-            <value xml:lang="sv">DocBook</value>
-            <value xml:lang="da">DocBook (simpel)</value>
-            <value xml:lang="de">DocBook (vereinfacht)</value>
-            <value xml:lang="ko">DocBook</value>
-            <value xml:lang="nl">DocBook</value>
-            <value xml:lang="pt-BR">DocBook</value>
-            <value xml:lang="it">DocBook</value>
-            <value xml:lang="x-translate">DocBook</value>
+            <value>DocBook</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
     </node>
