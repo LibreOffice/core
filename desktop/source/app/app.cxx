@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:32:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 
 ResMgr*                 desktop::Desktop::pResMgr = 0;
+sal_Bool                desktop::Desktop::bSuppressOpenDefault = sal_False;
 
 namespace desktop
 {
@@ -557,9 +558,9 @@ void Desktop::Init()
 
     if ( !Application::IsRemoteServer() )
     {
+        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 #ifdef UNX
         //  check whether we need to print cmdline help
-        CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
         if ( pCmdLineArgs->IsHelp() ) {
             displayCmdlineHelp();
             exit(0);
@@ -578,6 +579,11 @@ void Desktop::Init()
             // 2nd office startup should terminate after sending cmdlineargs through pipe
             _exit( 0 );
         }
+        else if ( pCmdLineArgs->IsHelp() )
+        {
+            // disable IPC thread in an instance that is just showing a help message
+            OfficeIPCThread::DisableOfficeIPCThread();
+        }
 
         pSignalHandler = new SalMainPipeExchangeSignalHandler;
     }
@@ -585,6 +591,9 @@ void Desktop::Init()
 
 void Desktop::DeInit()
 {
+    // close splashscreen if it's still open
+    CloseSplashScreen();
+
     Reference<XMultiServiceFactory> xXMultiServiceFactory(::comphelper::getProcessServiceFactory());
     DestroyApplicationServiceManager( xXMultiServiceFactory );
     // nobody should get a destroyd service factory...
@@ -1303,6 +1312,48 @@ void Desktop::Main()
         SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
+        if (pCmdLineArgs->IsEmpty())
+        {
+            ::desktop::Desktop::bSuppressOpenDefault = sal_True;
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
+            Reference< XFrame > xDesktopFrame( xSMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+            if (xDesktopFrame.is())
+            {
+                Reference< XFrame > xBackingFrame;
+                Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+
+                xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+                if (xBackingFrame.is())
+                    xContainerWindow = xBackingFrame->getContainerWindow();
+                if (xContainerWindow.is())
+                {
+                    Sequence< Any > lArgs(1);
+                    lArgs[0] <<= xContainerWindow;
+
+                    Reference< XController > xBackingComp(
+                        xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.view.BackingComp") ), lArgs),
+                        UNO_QUERY);
+
+                    if (xBackingComp.is())
+                    {
+                        Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
+                        // Attention: You MUST(!) call setComponent() before you call attachFrame().
+                        // Because the backing component set the property "IsBackingMode" of the frame
+                        // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+                        xBackingFrame->setComponent(xBackingWin, xBackingComp);
+                        xBackingComp->attachFrame(xBackingFrame);
+                        xContainerWindow->setVisible(sal_True);
+
+                        Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
+                        if (pCompWindow)
+                            pCompWindow->Update();
+                    }
+                }
+            }
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create BackingComponent" );
+        }
+
         Sequence< Any > aSeq(2);
         aSeq[1] <<= m_rSplashScreen;
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.office.OfficeWrapper" );
@@ -1650,7 +1701,7 @@ void Desktop::OpenClients()
                     }
 
                     // load the document
-                    Reference < XComponent > xDoc = xDesktop->loadComponentFromURL( sTempFileName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aArgs );
+                    Reference < XComponent > xDoc = xDesktop->loadComponentFromURL( sTempFileName, ::rtl::OUString::createFromAscii( "_default" ), 0, aArgs );
                     if ( !xFirst.is() )
                         // remember the first successfully recovered file
                         xFirst = xDoc;
@@ -1743,8 +1794,8 @@ void Desktop::OpenClients()
     if ( bLoaded || xFirst.is() || pArgs->IsServer() )
         return;
 
-    if ( pArgs->IsQuickstart() || pArgs->IsInvisible() || pArgs->IsBean())
-        // soffice was started as tray icon
+    if ( pArgs->IsQuickstart() || pArgs->IsInvisible() || pArgs->IsBean() )
+        // soffice was started as tray icon ...
         return;
     {
         OpenDefault();
@@ -1753,6 +1804,9 @@ void Desktop::OpenClients()
 
 void Desktop::OpenDefault()
 {
+    if (::desktop::Desktop::bSuppressOpenDefault)
+        return;
+
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
 
     ::rtl::OUString     aName;
@@ -1798,7 +1852,7 @@ void Desktop::OpenDefault()
     Reference< XComponentLoader > xDesktop(
             ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY );
-    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aNoArgs );
+    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_default" ), 0, aNoArgs );
 }
 
 
