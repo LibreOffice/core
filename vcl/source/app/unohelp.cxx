@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 12:30:46 $
+ *  last change: $Author: mt $ $Date: 2001-03-08 13:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ struct VCLRegServiceInfo
 
 static VCLRegServiceInfo aVCLComponentsArray[] =
 {
-    {"int",             sal_True},
+    {"i18n",            sal_True},
 #ifdef UNIX
     {"dtransX11",       sal_True},
 #endif
