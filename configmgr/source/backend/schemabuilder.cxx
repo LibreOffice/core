@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+ *  last change: $Author: jb $ $Date: 2002-05-17 11:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace configmgr
 
         namespace SchemaAttribute = backenduno::SchemaAttribute;
 // -----------------------------------------------------------------------------
-        static check_if_complete()
+        static void check_if_complete()
         {
             uno::Reference< backenduno::XSchemaHandler >
                 test(new SchemaBuilder());
@@ -242,7 +242,7 @@ void SAL_CALL SchemaBuilder::startSetTemplate( const TemplateIdentifier& aTempla
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endTemplate( )
-        throw (MalformedDataException, lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
+        throw (MalformedDataException, lang::NoSupportException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
@@ -278,7 +278,7 @@ void SAL_CALL SchemaBuilder::startSet( const OUString& aName, sal_Int16 aAttribu
 // -----------------------------------------------------------------------------
 
 void SAL_CALL SchemaBuilder::endNode( )
-        throw (MalformedDataException, lang::IllegalArgumentException, uno::RuntimeException)
+        throw (MalformedDataException, uno::RuntimeException)
 {
     m_aContext.popNode();
 
