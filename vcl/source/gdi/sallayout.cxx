@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:34:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,21 +776,14 @@ void GenericSalLayout::AppendGlyph( const GlyphItem& rGlyphItem )
 bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
 {
     // initialize character extents buffer
-    int nCharCapacity = mnEndCharPos - mnMinCharPos;
-    long* pMinPos  = (long*)alloca( 2*nCharCapacity * sizeof(long) );
-    long* pMaxPos  = pMinPos + nCharCapacity;
-
-    int i;
-    for( i = 0; i < nCharCapacity; ++i )
-    {
-        pMinPos[i] = LONG_MAX;
-        pMaxPos[i] = -1;
-    }
+    int nCharCount = mnEndCharPos - mnMinCharPos;
+    for( int n = 0; n < nCharCount; ++n )
+        pCharWidths[n] = 0;
 
     // determine cluster extents
     const GlyphItem* pG = mpGlyphItems;
     int nClusterIndex = 0;
-    for( i = mnGlyphCount; --i >= 0; ++pG )
+    for( int i = mnGlyphCount; --i >= 0; ++pG )
     {
         // use cluster start to get char index
         if( !pG->IsClusterStart() )
@@ -803,46 +796,41 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
         if( n < 0 )
             continue;
 
-        // minimum is left extent of cluster
-        long nXPos = pG->maLinearPos.X();
-        if( pMinPos[n] > nXPos )
-            pMinPos[n] = nXPos;
+        // left glyph in cluster defines default extent
+        long nXPosMin = pG->maLinearPos.X();
+        long nXPosMax = nXPosMin + pG->mnNewWidth;
 
-        // calculate maximum for this cluster
-        for( const GlyphItem* pGCluster = pG;; pG = ++pGCluster, --i )
+        // calculate right x-position for this glyph cluster
+        // break if no more glyphs in layout
+        // break at next glyph cluster start
+        for(; (i > 0) && !pG[1].IsClusterStart(); --i )
         {
-            // update max X position
-            nXPos += pGCluster->mnNewWidth;
-            if( pMaxPos[n] < nXPos )
-                pMaxPos[n] = nXPos;
-            // break at right end of cluster
-            if( i <= 1 )
-                break;
-            if( pGCluster[1].IsClusterStart() )
-                break;
-            nXPos = pGCluster[1].maLinearPos.X();
+            // advance to next glyph in cluster
+            ++pG;
+
+            // get leftmost x-extent of this glyph
+            long nXPos = pG->maLinearPos.X();
+            if( nXPosMin > nXPos )
+                nXPosMin = nXPos;
+
+            // get rightmost x-extent of this glyph
+            nXPos += pG->mnNewWidth;
+            if( nXPosMax < nXPos )
+                nXPosMax = nXPos;
         }
+
+        // rightmost cluster edge is leftmost edge of next cluster
+        if( (i > 0) && (nXPosMax > pG[1].maLinearPos.X()) )
+            nXPosMax = pG->maLinearPos.X();
+
+        // character width is sum of glyph cluster widths
+        pCharWidths[n] += nXPosMax - nXPosMin;
     }
 
-    // set char width array
+    // TODO: distribute the cluster width proportionally to the characters
     // clusters (e.g. ligatures) correspond to more than one char index,
     // so some character widths are still uninitialized. This is solved
     // by setting the first charwidth of the cluster to the cluster width
-    // TODO: distribute the cluster width proportionally to the characters
-    long nCharWidth = 0;
-    for( i = 0; i < nCharCapacity; ++i )
-    {
-        if( pMaxPos[i] < 0 )
-        {
-            // TODO: untouched chars of cluster get their share
-            pCharWidths[i] = nCharWidth;
-        }
-        else
-        {
-            long nClusterWidth = pMaxPos[i] - pMinPos[i];
-            pCharWidths[i] = nClusterWidth;
-        }
-    }
 
     return true;
 }
@@ -1320,6 +1308,32 @@ void GenericSalLayout::Simplify( bool bIsBase )
         ++pGDst;
     }
     mnGlyphCount = pGDst - mpGlyphItems;
+}
+
+// -----------------------------------------------------------------------
+
+// make sure GlyphItems are sorted left to right
+void GenericSalLayout::SortGlyphItems()
+{
+    // using insertion sort because the glyph items are "almost sorted"
+    GlyphItem* pGL = mpGlyphItems;
+    const GlyphItem* pGEnd = mpGlyphItems + mnGlyphCount;
+    for( GlyphItem* pGR = pGL; ++pGR < pGEnd; pGL = pGR )
+    {
+        // nothing to do when already in correct order
+        int nXPos = pGR->maLinearPos.X();
+        if( pGL->maLinearPos.X() <= nXPos )
+            continue;
+
+        // keep data of misplaced item
+        GlyphItem aGI = *pGR;
+        // make room for misplaced item
+        do  pGL[1] = pGL[0];
+        while( (--pGL >= mpGlyphItems) && (nXPos < pGL->maLinearPos.X()) );
+        // move misplaced item to proper slot
+        pGL[1] = aGI;
+        // TODO: fix glyph cluster start flags
+    }
 }
 
 // =======================================================================
