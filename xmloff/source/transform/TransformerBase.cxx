@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2004-07-22 11:55:04 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,16 +515,28 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         if( sName.getLength() )
         {
             m_aExtPathPrefix = OUString( RTL_CONSTASCII_USTRINGPARAM("../" ) );
+
+            // If there is a rel path within a package, then append
+            // additional '../'. If the rel path contains an ':', then it is
+            // an absolute URI (or invalid URI, because zip files don't
+            // permit ':'), and it will be ignored.
             if( sRelPath.getLength() )
             {
-                OUString sTmp = m_aExtPathPrefix;
-                sal_Int32 nPos = 0;
-                do
+                sal_Int32 nColPos = sRelPath.indexOf( ':' );
+                OSL_ENSURE( -1 == nColPos,
+                            "StreamRelPath contains ':', absolute URI?" );
+
+                if( -1 == nColPos )
                 {
-                    m_aExtPathPrefix += sTmp;
-                    nPos = sRelPath.indexOf( '/', nPos + 1 );
+                    OUString sTmp = m_aExtPathPrefix;
+                    sal_Int32 nPos = 0;
+                    do
+                    {
+                        m_aExtPathPrefix += sTmp;
+                        nPos = sRelPath.indexOf( '/', nPos + 1 );
+                    }
+                    while( -1 != nPos );
                 }
-                while( -1 != nPos );
             }
 
         }
