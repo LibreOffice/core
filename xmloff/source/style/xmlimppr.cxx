@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-26 10:35:27 $
+ *  last change: $Author: cl $ $Date: 2000-10-27 14:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,9 @@ void SvXMLImportPropertyMapper::importXML(
                         xAttrContainer = xNew;
 
                         // find map entry and create new property state
-                        nIndex = maPropMapper->FindEntryIndex( "CharUserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
+                        nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
                         if( nIndex == -1 )
-                            nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
+                            nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, sXML_xmlns );
 
                         Any aAny;
                         aAny <<= xAttrContainer;
