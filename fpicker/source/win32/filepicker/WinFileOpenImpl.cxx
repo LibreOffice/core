@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-11 09:21:28 $
+ *  last change: $Author: tra $ $Date: 2001-07-30 07:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,8 @@ CWinFileOpenImpl::CWinFileOpenImpl(
     m_filterContainer( new CFilterContainer( ) ),
     m_FilePicker( aFilePicker ),
     m_bPreviewExists( sal_False ),
-    m_bInExecuteMode( sal_False )
+    m_bInExecuteMode( sal_False ),
+    m_bInitialSelChanged( sal_True )
 {
 }
 
@@ -951,6 +952,20 @@ sal_uInt32 SAL_CALL CWinFileOpenImpl::onFileOk()
 
 void SAL_CALL CWinFileOpenImpl::onSelChanged( HWND hwndListBox )
 {
+    // the windows file open dialog sends an initial
+    // SelChanged message after the InitDone message
+    // when the dialog is about to be opened
+    // if the lpstrFile buffer of the OPENFILENAME is
+    // empty (zero length string) the windows file open
+    // dialog sends a WM_SETTEXT message with an empty
+    // string to the file name edit line
+    // this would overwritte our text when we would set
+    // the default name in onInitDone, so we have to
+    // remeber that this is the first SelChanged message
+    // and set the default name here to overwrite the
+    // windows setting
+    InitialSetDefaultName( );
+
     FilePickerEvent evt;
     evt.Source = static_cast< XFilePicker* >( m_FilePicker );
     m_FilePicker->fileSelectionChanged( evt );
@@ -974,24 +989,6 @@ void SAL_CALL CWinFileOpenImpl::onHelp( )
 
 void SAL_CALL CWinFileOpenImpl::onInitDone()
 {
-    // manually setting the file name that appears
-    // initially in the file-name-box of the file
-    // open dialog (reason: see above setDefaultName)
-    if ( m_defaultName.getLength( ) )
-    {
-        sal_Int32 edt1Id = edt1;
-
-        // under W2k the there is a combobox instead
-        // of an edit field for the file name edit field
-        // the control id of this box is cmb13 and not
-        // edt1 as before so we must use this id
-        if ( IsWin2000( ) )
-            edt1Id = cmb13;
-
-        HWND hwndEdt1 = GetDlgItem( m_hwndFileOpenDlg, edt1Id );
-        SetWindowTextW( hwndEdt1, m_defaultName );
-    }
-
     // we check if the checkbox is present and if so
     // create a preview window
     EnumParam enumParam( CHECK_PREVIEW, this );
@@ -1269,4 +1266,31 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension( )
     }
 
     // !!! HACK !!!
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName( )
+{
+    // manually setting the file name that appears
+    // initially in the file-name-box of the file
+    // open dialog (reason: see above setDefaultName)
+    if ( m_bInitialSelChanged && m_defaultName.getLength( ) )
+    {
+        sal_Int32 edt1Id = edt1;
+
+        // under W2k the there is a combobox instead
+        // of an edit field for the file name edit field
+        // the control id of this box is cmb13 and not
+        // edt1 as before so we must use this id
+        if ( IsWin2000( ) )
+            edt1Id = cmb13;
+
+        HWND hwndEdt1 = GetDlgItem( m_hwndFileOpenDlg, edt1Id );
+        SetWindowTextW( hwndEdt1, m_defaultName.getStr( ) );
+    }
+
+    m_bInitialSelChanged = sal_False;
 }

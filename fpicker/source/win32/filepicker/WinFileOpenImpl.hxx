@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-09 12:58:25 $
+ *  last change: $Author: tra $ $Date: 2001-07-30 07:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ private:
     HWND SAL_CALL GetHwndDlgItem( sal_Int16 ctrlId, sal_Bool bIncludeStdCtrls = sal_True );
 
     void SAL_CALL SetDefaultExtension( );
+    void SAL_CALL InitialSetDefaultName( );
 
     static unsigned int CALLBACK SubClassFunc( HWND hWnd, WORD wMessage, WPARAM wParam, LPARAM lParam );
 
@@ -262,6 +263,7 @@ private:
     rtl::OUString                       m_defaultName;
     sal_Bool                            m_bInExecuteMode;
     ControlCache_T                      m_ControlCache;
+    sal_Bool                            m_bInitialSelChanged;
 };
 
 
