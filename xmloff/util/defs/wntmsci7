@@ -10959,3 +10959,8 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 _real@8@4000c000000000000000
 ?ProcessCommandType@XMLTextFieldExport@@IAEXF@Z
 _real@8@3ffdaaaaaaaaaaaaa800
+?CreatePropertyHandler@XMLPropertyHandlerFactory@@SAPBVXMLPropertyHandler@@J@Z
+?prepare@XMLAnimationsExporter@@QAEXV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@@Z
+?ImpressXMLClipboardExport_createInstance@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@2345@@Z
+?ImpressXMLClipboardExport_getImplementationName@@YA?AVOUString@rtl@@XZ
+?ImpressXMLClipboardExport_getSupportedServiceNames@@YA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
