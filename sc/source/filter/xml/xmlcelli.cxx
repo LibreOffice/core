@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,34 @@ ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
 }
 
+void ScXMLTableRowCellContext::SetCursorOnTextImport()
+{
+    com::sun::star::table::CellAddress aCellPos = GetScImport().GetTables().GetRealCellPos();
+    uno::Reference<sheet::XSpreadsheet> xTable = GetScImport().GetTables().GetCurrentXSheet();
+    if (xTable.is())
+    {
+        uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
+        if (xCellRange.is())
+        {
+            if (aCellPos.Column > MAXCOL)
+                aCellPos.Column = MAXCOL;
+            if (aCellPos.Row > MAXROW)
+                aCellPos.Row = MAXROW;
+            uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+            if (xCell.is())
+            {
+                uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
+                if (xText.is())
+                {
+                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+                    if (xTextCursor.is())
+                        GetScImport().GetTextImport()->SetCursor(xTextCursor);
+                }
+            }
+        }
+    }
+}
+
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
@@ -357,42 +385,23 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                 ScXMLImport& rXMLImport = GetScImport();
                 if (!bHasTextImport)
                 {
-                    com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
-                    uno::Reference<sheet::XSpreadsheet> xTable = rXMLImport.GetTables().GetCurrentXSheet();
-                    if (xTable.is())
-                    {
-                        uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
-                        if (xCellRange.is())
-                        {
-                            if (aCellPos.Column > MAXCOL)
-                                aCellPos.Column = MAXCOL;
-                            if (aCellPos.Row > MAXROW)
-                                aCellPos.Row = MAXROW;
-                            uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-                            if (xCell.is())
-                            {
-                                uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-                                if (xText.is())
-                                {
-                                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
-                                    rXMLImport.GetTextImport()->SetCursor(xTextCursor);
-                                    bIsFirstTextImport = sal_True;
-                                    bHasTextImport = sal_True;
-                                    pContext = new ScXMLTextPContext(GetScImport(), nPrefix, rLName, xAttrList);
-//                                  pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
-//                                      GetScImport(), nPrefix, rLName, xAttrList);
-                                }
-                            }
-                        }
-                    }
+                    bIsFirstTextImport = sal_True;
+                    bHasTextImport = sal_True;
+                    pContext = new ScXMLTextPContext(GetScImport(), nPrefix, rLName, xAttrList, this);
+//                  pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
+//                          GetScImport(), nPrefix, rLName, xAttrList);
                 }
                 else
                 {
                     if (bIsFirstTextImport && !GetScImport().GetRemoveLastChar())
                     {
+                        SetCursorOnTextImport();
                         GetScImport().SetRemoveLastChar(sal_True);
-                        uno::Reference < text::XText > xText (GetScImport().GetTextImport()->GetCursor()->getText());
-                        uno::Reference < text::XTextRange > xTextRange (GetScImport().GetTextImport()->GetCursor(), uno::UNO_QUERY);
+                        uno::Reference<text::XTextCursor> xTextCursor = GetScImport().GetTextImport()->GetCursor();
+                        xTextCursor->setString(sOUTextContent);
+                        sOUTextContent = sEmpty;
+                        uno::Reference < text::XText > xText (xTextCursor->getText());
+                        uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
                         if (xText.is() && xTextRange.is())
                             xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
                     }
@@ -463,249 +472,6 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
 
     return pContext;
 }
-
-/*sal_Int16 ScXMLTableRowCellContext::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
-{
-    uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetScImport().GetNumberFormatsSupplier();
-    if (xNumberFormatsSupplier.is())
-    {
-        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-        if (xNumberFormats.is())
-        {
-            try
-            {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)));
-                aIsStandardFormat >>= bIsStandard;
-                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)));
-                sal_Int16 nNumberFormat;
-                if ( aNumberFormat >>= nNumberFormat )
-                {
-                    return nNumberFormat;
-                }
-            }
-            catch ( uno::Exception& )
-            {
-                DBG_ERROR("Numberformat not found");
-            }
-        }
-    }
-    return 0;
-}*/
-
-/*void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& xCellRange,
-                                                const table::CellAddress& aCellAddress)
-{
-    if (nCellType != util::NumberFormat::TEXT)
-    {
-        uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetScImport().GetNumberFormatsSupplier();
-        if (xNumberFormatsSupplier.is())
-        {
-            uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-            if (xNumberFormats.is())
-            {
-                sal_Int32 nBottom = aCellAddress.Row + nRepeatedRows - 1;
-                sal_Int32 nRight = aCellAddress.Column + nCellsRepeated - 1;
-                if (nBottom > MAXROW)
-                    nBottom = MAXROW;
-                if (nRight > MAXCOL)
-                    nRight = MAXCOL;
-                uno::Reference <util::XNumberFormatTypes> xNumberFormatTypes (xNumberFormats, uno::UNO_QUERY);
-                uno::Reference <table::XCellRange> xPropCellRange = xCellRange->getCellRangeByPosition(aCellAddress.Column, aCellAddress.Row,
-                    nRight, nBottom);
-                if (xPropCellRange.is())
-                {
-                    uno::Reference <beans::XPropertySet> xCellPropertySet (xPropCellRange, uno::UNO_QUERY);
-                    if (xCellPropertySet.is() && xNumberFormatTypes.is())
-                    {
-                        uno::Any aKey = xCellPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT) ));
-                        sal_Int32 nKey;
-                        if ( aKey >>= nKey )
-                        {
-                            sal_Bool bIsStandard;
-                            sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
-                            if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
-                                ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
-                                (nCurrentCellType == util::NumberFormat::FRACTION) ||
-                                (nCurrentCellType == 0))))
-                            {
-                                try
-                                {
-                                    uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
-                                    if (xNumberFormatProperties.is())
-                                    {
-                                        if (nCellType != util::NumberFormat::CURRENCY)
-                                        {
-                                            uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
-                                            lang::Locale aLocale;
-                                            if ( aNumberLocale >>= aLocale )
-                                            {
-                                                sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
-                                                uno::Any aNumberFormatPropertyKey;
-                                                aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
-                                                xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aNumberFormatPropertyKey );
-                                            }
-                                        }
-                                        else
-                                        {
-                                            nKey = SetCurrencySymbol(nKey);
-                                            uno::Any aAny;
-                                            aAny <<= nKey;
-                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
-                                        }
-                                    }
-                                }
-                                catch ( uno::Exception& )
-                                {
-                                    DBG_ERROR("Numberformat not found");
-                                }
-                            }
-                            else
-                            {
-                                if (nCellType == util::NumberFormat::CURRENCY)
-                                {
-                                    rtl::OUString sNewCurrencySymbol;
-                                    if (XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(nKey, sNewCurrencySymbol, xNumberFormatsSupplier))
-                                    {
-                                        if (!sNewCurrencySymbol.equals(sCurrencySymbol))
-                                        {
-                                            nKey = SetCurrencySymbol(nKey);
-                                            uno::Any aAny;
-                                            aAny <<= nKey;
-                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell)
-{
-    if (nCellType != util::NumberFormat::TEXT)
-    {
-        uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetScImport().GetNumberFormatsSupplier();
-        if (xNumberFormatsSupplier.is())
-        {
-            uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-            if (xNumberFormats.is())
-            {
-                uno::Reference <util::XNumberFormatTypes> xNumberFormatTypes (xNumberFormats, uno::UNO_QUERY);
-                uno::Reference <beans::XPropertySet> xCellPropertySet (xCell, uno::UNO_QUERY);
-                if (xCellPropertySet.is() && xNumberFormatTypes.is())
-                {
-                    uno::Any aKey = xCellPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT) ));
-                    sal_Int32 nKey;
-                    if ( aKey >>= nKey )
-                    {
-                        sal_Bool bIsStandard;
-                        sal_Int32 nCurrentCellType(GetCellType(nKey, bIsStandard) & ~util::NumberFormat::DEFINED);
-                        if ((nCellType != nCurrentCellType) && !(nCellType == util::NumberFormat::NUMBER &&
-                            ((nCurrentCellType == util::NumberFormat::SCIENTIFIC) ||
-                            (nCurrentCellType == util::NumberFormat::FRACTION) ||
-                            (nCurrentCellType == 0))))
-                        {
-                            try
-                            {
-                                uno::Reference < beans::XPropertySet> xNumberFormatProperties = xNumberFormats->getByKey(nKey);
-                                if (xNumberFormatProperties.is())
-                                {
-                                    if (nCellType != util::NumberFormat::CURRENCY)
-                                    {
-                                        uno::Any aNumberLocale = xNumberFormatProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
-                                        lang::Locale aLocale;
-                                        if ( aNumberLocale >>= aLocale )
-                                        {
-                                            sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
-                                            uno::Any aNumberFormatPropertyKey;
-                                            aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
-                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aNumberFormatPropertyKey );
-                                        }
-                                    }
-                                    else
-                                    {
-                                        nKey = SetCurrencySymbol(nKey);
-                                        uno::Any aAny;
-                                        aAny <<= nKey;
-                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
-                                    }
-                                }
-                            }
-                            catch ( uno::Exception& )
-                            {
-                                DBG_ERROR("Numberformat not found");
-                            }
-                        }
-                        else
-                        {
-                            if (nCellType == util::NumberFormat::CURRENCY)
-                            {
-                                rtl::OUString sNewCurrencySymbol;
-                                if (XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(nKey, sNewCurrencySymbol, xNumberFormatsSupplier))
-                                {
-                                    if (!sNewCurrencySymbol.equals(sCurrencySymbol))
-                                    {
-                                        nKey = SetCurrencySymbol(nKey);
-                                        uno::Any aAny;
-                                        aAny <<= nKey;
-                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-sal_Int32 ScXMLTableRowCellContext::SetCurrencySymbol(const sal_Int32 nKey)
-{
-    if (sCurrencySymbol.getLength() > 0)
-    {
-        uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetScImport().GetNumberFormatsSupplier();
-        if (xNumberFormatsSupplier.is())
-        {
-            uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-            if (xNumberFormats.is())
-            {
-                try
-                {
-                    uno::Reference <beans::XPropertySet> xProperties = xNumberFormats->getByKey(nKey);
-                    if (xProperties.is())
-                    {
-                        uno::Any aAny = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_LOCALE)));
-                        lang::Locale aLocale;
-                        if (aAny >>= aLocale)
-                        {
-                            LocaleDataWrapper aLocaleData( GetScImport().GetDocument()->GetServiceManager(), aLocale );
-                            rtl::OUStringBuffer aBuffer(15);
-                            aBuffer.appendAscii("#");
-                            aBuffer.append( aLocaleData.getNumThousandSep() );
-                            aBuffer.appendAscii("##0");
-                            aBuffer.append( aLocaleData.getNumDecimalSep() );
-                            aBuffer.appendAscii("00 [$");
-                            aBuffer.append(sCurrencySymbol);
-                            aBuffer.appendAscii("]");
-                            return xNumberFormats->addNew(aBuffer.makeStringAndClear(), aLocale);
-                        }
-                    }
-                }
-                catch ( uno::Exception& )
-                {
-                    DBG_ERROR("Numberformat not found");
-                }
-            }
-        }
-    }
-       return nKey;
-}*/
 
 sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
                             table::CellRangeAddress& aCellAddress) const
@@ -836,20 +602,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
     {
         uno::Reference <beans::XPropertySet> xProperties (xPropCellRange, uno::UNO_QUERY);
         if (xProperties.is())
-        {
-            /*XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
-            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
-            if (pStyle)
-                pStyle->FillPropertySet(xProperties);
-            else
-            {
-                uno::Any aStyleName;
-                aStyleName <<= sStyleName;
-                xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
-            }*/
             SetContentValidation(xProperties);
-        }
     }
 }
 
@@ -858,20 +611,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
     ScXMLImport& rXMLImport = GetScImport();
     uno::Reference <beans::XPropertySet> xProperties (xCell, uno::UNO_QUERY);
     if (xProperties.is())
-    {
-        /*XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
-        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-            XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
-        if (pStyle)
-            pStyle->FillPropertySet(xProperties);
-        else
-        {
-            uno::Any aStyleName;
-            aStyleName <<= sStyleName;
-            xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
-        }*/
         SetContentValidation(xProperties);
-    }
 }
 
 void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>& xCell)
@@ -1030,6 +770,8 @@ void ScXMLTableRowCellContext::EndElement()
                                         {
                                             if(sOUTextValue.getLength())
                                                 xText->setString(sOUTextValue);
+                                            else if (sOUTextContent.getLength())
+                                                xText->setString(sOUTextContent);
                                             else
                                                 if (i > 0)
                                                     xText->setString(sOUText);

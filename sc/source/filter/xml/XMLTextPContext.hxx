@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,13 @@
 #endif
 
 class ScXMLImport;
+class ScXMLTableRowCellContext;
 
 class ScXMLTextPContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> xAttrList;
     SvXMLImportContext *pTextPContext;
+    ScXMLTableRowCellContext* pCellContext;
     rtl::OUString   sLName;
     rtl::OUStringBuffer sOUText;
     USHORT          nPrefix;
@@ -86,7 +88,8 @@ public:
     ScXMLTextPContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLTableRowCellContext* pCellContext);
 
     virtual ~ScXMLTextPContext();
 

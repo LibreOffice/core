@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef SC_XMLIMPRT_HXX
 #include "xmlimprt.hxx"
 #endif
+#ifndef SC_XMLCELLI_HXX
+#include "xmlcelli.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
@@ -86,9 +89,11 @@ ScXMLTextPContext::ScXMLTextPContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList,
+                                      ScXMLTableRowCellContext* pTempCellContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pTextPContext(NULL),
+    pCellContext(pTempCellContext),
     sOUText(),
     sLName(rLName),
     xAttrList(xTempAttrList),
@@ -113,6 +118,7 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
     if (!pTextPContext)
     {
         bWasContext = sal_False;
+        pCellContext->SetCursorOnTextImport();
         pTextPContext = GetScImport().GetTextImport()->CreateTextChildContext(
                                 GetScImport(), nPrefix, sLName, xAttrList);
     }
@@ -141,7 +147,8 @@ void ScXMLTextPContext::Characters( const ::rtl::OUString& rChars )
 void ScXMLTextPContext::EndElement()
 {
     if (!pTextPContext)
-        GetScImport().GetTextImport()->GetCursor()->setString(sOUText.makeStringAndClear());
+        pCellContext->SetString(sOUText.makeStringAndClear());
+//      GetScImport().GetTextImport()->GetCursor()->setString(sOUText.makeStringAndClear());
     else
     {
         pTextPContext->EndElement();

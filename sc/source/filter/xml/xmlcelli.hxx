@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,13 @@ struct ScMyAnnotation
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
 {
+    rtl::OUString sEmpty;
     rtl::OUString sOUText;
     rtl::OUString sOUDateValue;
     rtl::OUString sOUTimeValue;
     rtl::OUString sOUBooleanValue;
     rtl::OUString sOUTextValue;
+    rtl::OUString sOUTextContent;
     rtl::OUString sOUFormula;
     rtl::OUString sCurrencySymbol;
     rtl::OUString sStyleName;
@@ -174,7 +176,8 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void SetString(const rtl::OUString& sOUTempText) { sOUText = sOUTempText; }
+    void SetString(const rtl::OUString& sOUTempText) { sOUTextContent = sOUTempText; }
+    void SetCursorOnTextImport();
 
     void SetAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
     void SetDetectiveObj( const ::com::sun::star::table::CellAddress& rPosition );
