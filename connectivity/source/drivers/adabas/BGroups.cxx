@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BGroups.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #endif
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -92,7 +92,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 // -------------------------------------------------------------------------
-Reference< XNamed > OGroups::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OGroups::createObject(const ::rtl::OUString& _rName)
 {
     return new OAdabasGroup(m_pConnection,_rName);
 }
@@ -106,13 +106,6 @@ Reference< XPropertySet > OGroups::createEmptyObject()
 {
     //  OAdabasGroup* pNew =
     return new OAdabasGroup(m_pConnection);
-}
-// -----------------------------------------------------------------------------
-Reference< XNamed > OGroups::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 // XAppend
