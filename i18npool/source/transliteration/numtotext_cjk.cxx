@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-04-10 12:37:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define TRANSLITERATION_ALL
 #include <numtotext_cjk.hxx>
 #include <bullet.h>
-#include <drafts/com/sun/star/i18n/NativeNumberMode.hpp>
+#include <com/sun/star/i18n/NativeNumberMode.hpp>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -74,7 +74,7 @@ NumToText##name::NumToText##name() \
         transliterationName = "NumToText"#name; \
         implementationName = "com.sun.star.i18n.Transliteration.NumToText"#name; \
 }
-using namespace drafts::com::sun::star::i18n::NativeNumberMode;
+using namespace com::sun::star::i18n::NativeNumberMode;
 
 TRANSLITERATION_NUMTOTEXT( Lower_zh_CN, NATNUM4)
 TRANSLITERATION_NUMTOTEXT( Upper_zh_CN, NATNUM5)
