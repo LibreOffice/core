@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:11:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
+#include "sfx2/docfile.hxx"
 
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
@@ -1133,7 +1134,12 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
 
     case ClickAction_PROGRAM:
     {
-        INetURLObject aURL( ::URIHelper::SmartRelToAbs( pEvent->maStrBookmark, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
+        INetURLObject aURL(
+            ::URIHelper::SmartRel2Abs(
+                INetURLObject(mpDocSh->GetMedium()->GetBaseURL()),
+                pEvent->maStrBookmark, ::URIHelper::GetMaybeFileHdl(), true,
+                false, INetURLObject::WAS_ENCODED,
+                INetURLObject::DECODE_UNAMBIGUOUS ) );
 
         if( INET_PROT_FILE == aURL.GetProtocol() )
         {
