@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-09 15:37:50 $
+#   last change: $Author: obo $ $Date: 2004-11-17 15:06:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ SLOFILES =	\
         $(SLO)$/guisaveas.obj\
         $(SLO)$/objembed.obj\
         $(SLO)$/graphhelp.obj \
+        $(SLO)$/QuerySaveDocument.obj \
         $(SLO)$/secmacrowarnings.obj 
 
 # exception should already be switched on
