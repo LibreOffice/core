@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:46:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,15 +230,15 @@ namespace frm
 
     FORMS_CONSTASCII_STRING( FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.Forms" );
 
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_CHECK_BOX,      "com.sun.star.form.component.binding.BindableDatabaseCheckBox" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_COMBO_BOX,      "com.sun.star.form.component.binding.BindableDatabaseComboBox" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_FORMATTED_FIELD,"com.sun.star.form.component.binding.BindableDatabaseFormattedField" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_LIST_BOX,       "com.sun.star.form.component.binding.BindableDatabaseListBox" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_NUMERIC_FIELD,  "com.sun.star.form.component.binding.BindableDatabaseNumericField" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_RADIO_BUTTON,   "com.sun.star.form.component.binding.BindableDatabaseRadioButton" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_TEXT_FIELD,     "com.sun.star.form.component.binding.BindableDatabaseTextField" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_DATE_FIELD,     "com.sun.star.form.component.binding.BindableDatabaseDateField" );
-    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_TIME_FIELD,     "com.sun.star.form.component.binding.BindableDatabaseTimeField" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_CHECK_BOX,      "com.sun.star.form.binding.BindableDatabaseCheckBox" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_COMBO_BOX,      "com.sun.star.form.binding.BindableDatabaseComboBox" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_FORMATTED_FIELD,"com.sun.star.form.binding.BindableDatabaseFormattedField" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_LIST_BOX,       "com.sun.star.form.binding.BindableDatabaseListBox" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_NUMERIC_FIELD,  "com.sun.star.form.binding.BindableDatabaseNumericField" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_RADIO_BUTTON,   "com.sun.star.form.binding.BindableDatabaseRadioButton" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_TEXT_FIELD,     "com.sun.star.form.binding.BindableDatabaseTextField" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_DATE_FIELD,     "com.sun.star.form.binding.BindableDatabaseDateField" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_TIME_FIELD,     "com.sun.star.form.binding.BindableDatabaseTimeField" );
 
     FORMS_CONSTASCII_STRING( BINDABLE_CONTROL_MODEL,            "com.sun.star.form.binding.BindableControlModel" );
     FORMS_CONSTASCII_STRING( BINDABLE_INTEGER_VALUE_RANGE,      "com.sun.star.form.binding.BindableIntegerValueRange" );
