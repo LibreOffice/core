@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 15:33:42 $
+#   last change: $Author: rt $ $Date: 2004-11-09 15:02:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,61 +81,60 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/xlstream.obj				\
-        $(SLO)$/xltools.obj					\
-        $(SLO)$/xlroot.obj					\
-        $(SLO)$/xlstyle.obj					\
-        $(SLO)$/xlpage.obj					\
-        $(SLO)$/xlformula.obj				\
-        $(SLO)$/xlescher.obj				\
-        $(SLO)$/xlocx.obj					\
-        $(SLO)$/xlpivot.obj					\
-        $(SLO)$/xltracer.obj				\
-        $(SLO)$/xistream.obj				\
-        $(SLO)$/xiroot.obj					\
-        $(SLO)$/xihelper.obj				\
-        $(SLO)$/xilink.obj					\
-        $(SLO)$/xicontent.obj				\
-        $(SLO)$/xistyle.obj					\
-        $(SLO)$/xipage.obj					\
-        $(SLO)$/xiescher.obj				\
-        $(SLO)$/xipivot.obj					\
-        $(SLO)$/xestream.obj				\
-        $(SLO)$/xerecord.obj				\
-        $(SLO)$/xeroot.obj					\
-        $(SLO)$/xestring.obj				\
-        $(SLO)$/xehelper.obj				\
-        $(SLO)$/xetable.obj					\
-        $(SLO)$/xelink.obj					\
-        $(SLO)$/xecontent.obj				\
-        $(SLO)$/xestyle.obj					\
-        $(SLO)$/xepage.obj					\
-        $(SLO)$/xeescher.obj				\
-        $(SLO)$/xepivot.obj					\
         $(SLO)$/XclChartsApiHelper.obj		\
         $(SLO)$/XclImpCharts.obj			\
         $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpCharts.obj			\
-        $(SLO)$/read.obj					\
-        $(SLO)$/impop.obj					\
-        $(SLO)$/excimp8.obj					\
+        $(SLO)$/biffdump.obj				\
+        $(SLO)$/colrowst.obj				\
+        $(SLO)$/excchart.obj				\
+        $(SLO)$/excdoc.obj					\
         $(SLO)$/excel.obj					\
         $(SLO)$/excform.obj					\
         $(SLO)$/excform8.obj				\
-        $(SLO)$/fontbuff.obj				\
-        $(SLO)$/tokstack.obj				\
-        $(SLO)$/namebuff.obj				\
-        $(SLO)$/colrowst.obj				\
-        $(SLO)$/expop2.obj					\
-        $(SLO)$/excrecds.obj				\
-        $(SLO)$/excdoc.obj					\
-        $(SLO)$/exctools.obj				\
+        $(SLO)$/excimp8.obj					\
         $(SLO)$/excobj.obj					\
-        $(SLO)$/excchart.obj				\
-        $(SLO)$/functab.obj					\
+        $(SLO)$/excrecds.obj				\
+        $(SLO)$/exctools.obj				\
+        $(SLO)$/expop2.obj					\
+        $(SLO)$/fontbuff.obj				\
         $(SLO)$/frmbase.obj					\
-        $(SLO)$/exccomp.obj					\
-        $(SLO)$/biffdump.obj
+        $(SLO)$/impop.obj					\
+        $(SLO)$/namebuff.obj				\
+        $(SLO)$/read.obj					\
+        $(SLO)$/tokstack.obj				\
+        $(SLO)$/xecontent.obj				\
+        $(SLO)$/xeescher.obj				\
+        $(SLO)$/xeformula.obj				\
+        $(SLO)$/xehelper.obj				\
+        $(SLO)$/xelink.obj					\
+        $(SLO)$/xepage.obj					\
+        $(SLO)$/xepivot.obj					\
+        $(SLO)$/xerecord.obj				\
+        $(SLO)$/xeroot.obj					\
+        $(SLO)$/xestream.obj				\
+        $(SLO)$/xestring.obj				\
+        $(SLO)$/xestyle.obj					\
+        $(SLO)$/xetable.obj					\
+        $(SLO)$/xicontent.obj				\
+        $(SLO)$/xiescher.obj				\
+        $(SLO)$/xihelper.obj				\
+        $(SLO)$/xilink.obj					\
+        $(SLO)$/xipage.obj					\
+        $(SLO)$/xipivot.obj					\
+        $(SLO)$/xiroot.obj					\
+        $(SLO)$/xistream.obj				\
+        $(SLO)$/xistyle.obj					\
+        $(SLO)$/xlescher.obj				\
+        $(SLO)$/xlformula.obj				\
+        $(SLO)$/xlocx.obj					\
+        $(SLO)$/xlpage.obj					\
+        $(SLO)$/xlpivot.obj					\
+        $(SLO)$/xlroot.obj					\
+        $(SLO)$/xlstream.obj				\
+        $(SLO)$/xlstyle.obj					\
+        $(SLO)$/xltools.obj					\
+        $(SLO)$/xltracer.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
