@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-26 12:56:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,11 @@ private:
     LngLineList *pLines;
     ByteString sSource;
     BOOL bDBIsUTF8;
+    BOOL bULF;
 
     void FillInFallbacks( ByteString *Text );
 public:
-    LngParser( const ByteString &rLngFile, BOOL bUTF8 );
+    LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat );
     ~LngParser();
 
     BOOL CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
