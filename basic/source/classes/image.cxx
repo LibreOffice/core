@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-13 12:00:49 $
+ *  last change: $Author: gh $ $Date: 2001-11-13 13:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ void SbiImage::AddString( const String& r )
                 memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
                 delete pStrings;
                 pStrings = p;
-                nStringSize += nNewLen;
+                nStringSize = nNewLen;
             }
             else
                 bError = TRUE;
