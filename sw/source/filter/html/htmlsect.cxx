@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:26:38 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,24 +286,6 @@ void SwHTMLParser::NewDivision( int nToken )
                     break;
                 }
             }
-        }
-
-        // Kopf- bzw. Fusszeile im Browse-Mode aktivieren
-        ViewShell* pVSh = 0;
-        pDoc->GetEditShell( &pVSh );
-        if( pVSh )
-        {
-            if( bHeader )
-                pVSh->SetHeadInBrowse();
-            else
-                pVSh->SetFootInBrowse();
-        }
-        else
-        {
-            if( bHeader )
-                pDoc->SetHeadInBrowse();
-            else
-                pDoc->SetFootInBrowse();
         }
 
         SwPosition aNewPos( SwNodeIndex( rCntntStIdx, 1 ), SwIndex( pCNd, 0 ) );
