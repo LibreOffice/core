@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 09:45:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-21 13:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,9 @@ namespace xmloff
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                         m_aValueList;
 
+        sal_Int32       m_nEmptyListItems;
+        sal_Int32       m_nEmptyValueItems;
+
         ::com::sun::star::uno::Sequence< sal_Int16 >
                         m_aSelectedSeq;
         ::com::sun::star::uno::Sequence< sal_Int16 >
@@ -430,6 +433,9 @@ namespace xmloff
     protected:
         void implPushBackLabel(const ::rtl::OUString& _rLabel);
         void implPushBackValue(const ::rtl::OUString& _rValue);
+
+        void implEmptyLabelFound();
+        void implEmptyValueFound();
 
         void implSelectCurrentItem();
         void implDefaultSelectCurrentItem();
@@ -625,6 +631,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/29 09:45:16  fs
+ *  #85386# +OTextLikeImport / handle attributes which's defaults differ from the property defaults
+ *
  *  Revision 1.10  2001/03/28 14:00:56  fs
  *  #85371# +OButtonImport / for buttons and forms, correctly handle the target frame attribute
  *
