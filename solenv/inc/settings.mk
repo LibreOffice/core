@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.140 $
+#   $Revision: 1.141 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:38:04 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:06:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -973,6 +973,10 @@ CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 
 .IF "$(CDEFS_PRESET)" != ""
 CDEFS+=$(CDEFS_PRESET)
+.ENDIF
+
+.IF "$(COM)"=="GCC"
+CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
 .ENDIF
 
 .IF "$(TIMELOG)" != ""
