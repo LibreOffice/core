@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:29:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,10 +294,10 @@ void ScDocShell::RemoveUnknownObjects()
             BOOL bFound = FALSE;
             if ( pDrawLayer )
             {
-                USHORT nTabCount = pDrawLayer->GetPageCount();
-                for (USHORT nTab=0; nTab<nTabCount && !bFound; nTab++)
+                SCTAB nTabCount = static_cast<sal_Int16>(pDrawLayer->GetPageCount());
+                for (SCTAB nTab=0; nTab<nTabCount && !bFound; nTab++)
                 {
-                    SdrPage* pPage = pDrawLayer->GetPage(nTab);
+                    SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
                     DBG_ASSERT(pPage,"Page ?");
                     if (pPage)
                     {
