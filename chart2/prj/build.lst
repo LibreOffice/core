@@ -1,4 +1,4 @@
-ch	chart2	:	apphelper comphelper cppu cppuhelper sal sv svl svtool svx tk tools vcl NULL
+ch	chart2	:	comphelper cppu cppuhelper sal sv svl svtool svx tk tools vcl NULL
 ch	chart2										usr1	-	all	ch_mkout NULL
 ch	chart2\com\sun\star\chart2					nmake	-	all	ch_uno_chart2 NULL
 ch	chart2\com\sun\star\layout					nmake	-	all	ch_uno_layout NULL
