@@ -665,12 +665,14 @@ sub callBasic(id)
 		Next
 	Next
 
-	
+
+	set outValue= factory.Bridge_GetValueObject()
+	outValue.InitOutParam
+	set value= factory.Bridge_GetValueObject()	
 	select case id
-		case 0 
-			document.writeln "param: "
-			printArray arrInt
-			ret= oletest.methodByte(arrInt)
+		case 0
+			value.Set "[]byte", arrInt
+			ret= oletest.methodByte(value)
 			document.writeln "<br> return value: "
 			printArray ret
 		case 1
@@ -865,6 +867,12 @@ sub callBasic(id)
 				next
 			next
 
+// out params			
+		case 300
+			oletest.testout_methodByte( outValue )
+			alert("byte: " &  outValue.Get() )
+		
+
 	end select
 end sub
 sub printArray( arr)
@@ -918,7 +926,7 @@ All methods receive a Sequence as Parameter. The element type of the Sequence is
 <button onclick='callOleTest( 13)'>XInterface</Button>
 <p>
 
-<p>
+
 Out Parameter <br>
 <button onclick='callOleTest( 2000)'>byte </Button>
 <button onclick='callOleTest( 2001)'>double</Button>
@@ -987,14 +995,16 @@ Test of Any parameter in a property. Any contains:<br>
 <button onclick='callOleTest( 1014)'>object</Button>
 <p>
 <p>
-
+-->
 
 <h2> Visual Basic Tests </h2>
 Test array /Sequence conversion and return value<br>
-Template: <b> Sequence &lt type &gt method( Sequence&lt type &gt ) </b> <br>
-<!--<font color= red>Multi dimensional arrays are not processed by VBSript</font> <br>  -->
-<!--
+Template: <b> Sequence &lt type &gt method( Sequence&lt type &gt ) </b>
+<p> 
+
+
 <button onclick='callBasic(0)'>byte</button>
+<!--
 <button onclick='callBasic(1)'>double</button>
 <button onclick='callBasic(2)'>boolean</button>
 <button onclick='callBasic(3)'>short</button>
@@ -1004,12 +1014,15 @@ Template: <b> Sequence &lt type &gt method( Sequence&lt type &gt ) </b> <br>
 <button onclick='callBasic(7)'>string</button>	 
 <button onclick='callBasic(8)'>char</button>	
 <button onclick='callBasic(9)'>any</button> <br>
-<button onclick='callBasic(10)'>Seq &lt int &gt</button> <br>
+<button onclick='callBasic(10)'>Seq &lt int &gt</button>
+-->
+<p>
 
 
 Out parameter <br>
 Template: <b> void method( Sequence &lt type &gt ) </b> <br>
-<button onclick='callBasic(100)'>byte</button>
+<button onclick='callBasic(300)'>byte</button>
+<!--
 <button onclick='callBasic(101)'>double</button>
 <button onclick='callBasic(102)'>boolean</button>
 <button onclick='callBasic(103)'>short</button>
@@ -1019,7 +1032,9 @@ Template: <b> void method( Sequence &lt type &gt ) </b> <br>
 <button onclick='callBasic(107)'>string</button>	 
 <button onclick='callBasic(108)'>char</button>	
 <button onclick='callBasic(109)'>any</button> <br>
-
+-->
+<p>
+<!--
 Tests Array/Sequence conversion with <b>Attributes</b>. All params are of type Sequence and 
  the element type of the Sequence is written on the buttons. <br>
 <button onclick='callBasic( 200)'>byte </Button>
@@ -1033,7 +1048,7 @@ Tests Array/Sequence conversion with <b>Attributes</b>. All params are of type S
 <button onclick='callBasic( 208)'>char</Button>
 <button onclick='callBasic( 209)'>any</Button>
 <button onclick='callBasic( 210)'>sequence&ltlong&gt </Button>
-
 -->
+
 
 

@@ -767,8 +767,34 @@ sub callBasic(id)
 			call oletest.testinout_methodByte( aByte)
 			MsgBox aByte 
 
+
+		case 400
+		
+		set  struct= oletest.Bridge_GetStruct("com.sun.star.beans.Property")
+		 struct.Attributes= 1
+		 struct.Handle= 2
+		 struct.Name= "some Property"
+		 oletest.methodStruct struct
+
+	case 401
+		set struct= oletest.retMethodStruct()
+		alert( "Property::Attributes : " & struct.Attributes & vblf & " Property::Handle : " _
+		& struct.Handle & vblf & " Property::Name : " & struct.Name)
+
+	case 402
+		set struct= oletest.Bridge_GetStruct("com.sun.star.beans.Property")
+		 struct.Attributes= 1
+		 struct.Handle= 2
+		 struct.Name= "some Property"
+		 oletest.AttrStruct=  struct
+
+		 set struct2= oletest.AttrStruct
+		alert( "property get: " & vblf & "Property::Attributes : " & struct2.Attributes & _
+		vblf & " Property::Handle : " &  struct2.Handle & vblf & " Property::Name : " _
+		& struct2.Name)
 	end select
 end sub
+
 sub printArray( arr)
 	document.write "array: "
 	For Each val In arr
@@ -964,6 +990,11 @@ Tests Array/Sequence conversion with <b>Attributes</b>. All params are of type S
 
 In Out parameter <br>
 <button onclick='callBasic( 300)'>byte</Button>
+<p>
+Structs <br>
+<button onclick='callBasic(400)'>methodStruct</button>
+<button onclick='callBasic(401)'>return Struct</button>
+<button onclick='callBasic(402)'>struct attribute</button>
 
 
 
