@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:24:44 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,11 +1091,11 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     }
                     break;
                 case MID_FRMSIZE_MIN_HEIGHT:
-                    if( ATT_MIN_SIZE == pFrmSize->GetSizeType() )
+                    if( ATT_MIN_SIZE == pFrmSize->GetHeightSizeType() )
                         bOutHeight = sal_True;
                     break;
                 case MID_FRMSIZE_FIX_HEIGHT:
-                    if( ATT_FIX_SIZE == pFrmSize->GetSizeType() )
+                    if( ATT_FIX_SIZE == pFrmSize->GetHeightSizeType() )
                         bOutHeight = sal_True;
                     break;
             }
