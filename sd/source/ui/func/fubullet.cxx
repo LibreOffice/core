@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: dl $ $Date: 2001-10-25 08:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,8 @@ FuBullet::FuBullet( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                                    aFont.GetStyleName(), aFont.GetPitch(),
                                    aFont.GetCharSet());
             aSet.Put(aFontItem);
+            aSet.Put(aFontItem, EE_CHAR_FONTINFO_CJK);
+            aSet.Put(aFontItem, EE_CHAR_FONTINFO_CTL);
             pOV->SetAttribs(aSet);
 
             ESelection aSel = pOV->GetSelection();
