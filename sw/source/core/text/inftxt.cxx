@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 14:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,6 +749,11 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
     }
 
     SwRect aRect( aPoint, aSize );
+
+#ifdef VERTICAL_LAYOUT
+    if ( pInf->GetTxtFrm()->IsVertical() )
+        pInf->GetTxtFrm()->SwitchHorizontalToVertical( aRect );
+#endif
 
     if ( pRect )
         *pRect = aRect;
