@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-31 13:09:23 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 11:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,8 +355,7 @@ const ULONG ExcDummy8_Country::nMyLen = sizeof(ExcDummy8_Country::pMyData);
 const BYTE ExcDummy8_02::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // SAVERECALC
     0x82, 0x00, 0x02, 0x00, 0x01, 0x00,                     // GRIDSET
-    0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00,         // DEFAULTROWHEIGHT
-    0x81, 0x00, 0x02, 0x00, 0xc1, 0x04                      // WSBOOL
+    0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00          // DEFAULTROWHEIGHT
     };
 const ULONG ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
 

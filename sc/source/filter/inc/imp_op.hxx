@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-30 16:05:20 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 11:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,10 @@ protected:
     BOOL                    bTabTruncated;      // wenn Bereichsueberschreitung zum
                                                 //  Abschneiden von Zellen fuehrt
 
+    sal_Bool                bFitToPage;         /// Stores fit to page setting from WSBOOL record.
+    sal_Bool                bHasHeader;         /// Stores whether header for current sheet exists.
+    sal_Bool                bHasFooter;         /// Stores whether footer for current sheet exists.
+
     // Record-Funktionen
     void                    Dimensions( void );             // 0x00
     void                    Blank25( void );                // 0x01
@@ -242,6 +246,7 @@ protected:
     void                    Standardwidth( void );          // 0x99
     void                    Scl( void );                    // 0xA0
     void                    Setup( void );                  // 0xA1
+    void                    Setup5( void );                 // 0xA1
     void                    Shrfmla( void );                // 0xBC
     void                    Mulrk( void );                  // 0xBD
     void                    Mulblank( void );               // 0xBE
@@ -339,7 +344,7 @@ protected:
                                 EditTextObject*& rpMid, EditTextObject*& rpRight );
     void                    GetHF( BOOL bHeader );
     virtual void            GetHFString( String& rStr );
-    void                    GetAndSetMargin( XclMarginType eSide );
+
                                 // nSide -> IMPEXC_MARGINSIDE_*
     String                  GetPageStyleName( UINT16 nTab );
     EditTextObject*         CreateFormText( BYTE, const String&, const UINT16 );
@@ -352,6 +357,13 @@ protected:
                                         String& rUnconvertedText, const UINT16 nXF );
                                             // Achtung: rUnconvertedText wird moeglicherweise veraendert
     UINT16                  CalcColWidth( const UINT16 nExcColWidth );
+
+    /** Sets a margin item into an item set.
+        @param rItemSet  The destination item set.
+        @param fMargin  The Excel margin value in inches.
+        @param eType  The margin type. */
+    void                        SetMarginItem( SfxItemSet& rItemSet, double fMarginInch, XclMarginType eType );
+
 public:
                             ImportExcel( SvStream&, ScDocument* );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-10 12:59:15 $
+ *  last change: $Author: dr $ $Date: 2002-04-16 11:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,37 @@ public:
 
 inline XclExpEmptyRecord::XclExpEmptyRecord( sal_uInt16 nRecId ) :
     XclExpRecord( nRecId, 0 )
+{
+}
+
+
+// XclExpUInt16Record =========================================================
+
+/** A record with an unsigned 16-bit value. */
+class XclExpUInt16Record : public XclExpRecord
+{
+protected:
+    sal_uInt16                  mnValue16;      /// The 16-bit record body.
+
+private:
+    /** Writes the 16-bit body of the record. */
+    virtual void                WriteBody( XclExpStream& rStrm );
+
+public:
+    /** @param nRecId  The record ID of this record.
+        @param nValue  The value for the record body. */
+    inline                      XclExpUInt16Record( sal_uInt16 nRecId, sal_uInt16 nValue = 0 );
+
+    /** @return  The value of the record. */
+    inline sal_uInt16           GetValue() const                { return mnValue16; }
+    /** Sets a new record value. */
+    inline void                 SetValue( sal_uInt16 nValue )   { mnValue16 = nValue; }
+};
+
+
+inline XclExpUInt16Record::XclExpUInt16Record( sal_uInt16 nRecId, sal_uInt16 nValue ) :
+    XclExpRecord( nRecId, 2 ),
+    mnValue16( nValue )
 {
 }
 
@@ -1653,6 +1684,15 @@ public:
 };
 
 
+// XclExpWsbool ===============================================================
+
+class XclExpWsbool : public XclExpUInt16Record
+{
+public:
+                            XclExpWsbool( RootData& rRootData );
+};
+
+
 //------------------------------------------------------------ class ExcSetup -
 
 class ExcSetup : public ExcRecord
@@ -1661,7 +1701,10 @@ private:
     UINT16                  nPaperSize;
     UINT16                  nScale;
     UINT16                  nPageStart;
+    sal_uInt16              nFitToPages;
     UINT16                  nGrbit;
+    sal_uInt16              nHeaderMargin;
+    sal_uInt16              nFooterMargin;
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
