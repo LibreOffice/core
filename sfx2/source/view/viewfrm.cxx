@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:34:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2234,6 +2234,8 @@ void SfxViewFrame::Show()
     // hat oder wenn er keine Component enth"alt
     if ( &GetWindow() == &GetFrame()->GetWindow() || !GetFrame()->HasComponent() )
         GetWindow().Show();
+
+    GetFrame()->GetWindow().Show();
 
     SfxViewFrame* pCurrent = SfxViewFrame::Current();
     if ( GetFrame()->GetFrameInterface()->isActive() &&
