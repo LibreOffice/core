@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:34:54 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,10 @@
  *
  ************************************************************************/
 
-#ifdef SOLARIS
-#include <alloca.h>
-#elif defined MACOSX
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
+#ifndef INCLUDED_SAL_ALLOCA_H
+#include <sal/alloca.h>
 #endif
+
 #include <string.h>
 
 #ifndef _OSL_DIAGNOSE_H_
