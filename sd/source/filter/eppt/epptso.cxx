@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-15 15:57:15 $
+ *  last change: $Author: sj $ $Date: 2001-03-19 10:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@
 #include <tools/urlobj.hxx>
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _CPPUHELPER_PROPTYPEHLP_HXX_
 #include <cppuhelper/proptypehlp.hxx>
