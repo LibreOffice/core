@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:58:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,12 @@
 #endif
 #ifndef _WVIEW_HXX
 #include <wview.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
 #endif
 
 #ifndef _GLOBALS_HRC
@@ -543,25 +549,60 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                     return;
                 }
             }
-            if(!bSilent && pSh->GetViewOptions()->IsFldName() && pSh->IsAnyFieldInDoc())
+            //set the appropriate view options to print
+            //on silent mode the field commands have to be switched off always
+            //on default print the user is asked what to do
+            const SwViewOption* pCurrentViewOptions = pSh->GetViewOptions();
+            bool bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && pSh->IsAnyFieldInDoc();
+
+            if(!bSilent && bSwitchOff_IsFldName)
             {
                 QueryBox aBox( &GetEditWin(), SW_RES( DLG_PRT_FIELDNAME ) );
                 USHORT nRet = aBox.Execute();
                 if( RET_CANCEL == nRet)
                     return;
                 // disable field commands
-                if( RET_NO == nRet )
+                if( RET_NO != nRet )
                 {
-                    pOrgViewOption = new SwViewOption(*pSh->GetViewOptions());
-                    pOrgViewOption->SetFldName(FALSE);
-                    SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
+                    bSwitchOff_IsFldName = false;
                 }
+            }
+            bool bApplyViewOptions = bSwitchOff_IsFldName;
+            //switch off display of hidden characters if on and hidden characters are in use
+            bool bSwitchOff_HiddenChar = pCurrentViewOptions->IsShowHiddenChar() && pSh->GetDoc()->ContainsHiddenChars();
+            //switch off display of hidden paragraphs if on and hidden paragraphs are in use
+            bool bSwitchOff_HiddenParagraphs = pCurrentViewOptions->IsShowHiddenPara();
+            if(bSwitchOff_HiddenParagraphs)
+            {
+                const SwFieldType* pFldType = pSh->GetDoc()->GetSysFldType(RES_HIDDENPARAFLD);
+                if(!pFldType || !pFldType->GetDepends())
+                    bSwitchOff_HiddenParagraphs = false;
+            }
+
+            bApplyViewOptions |= bSwitchOff_HiddenChar;
+            bApplyViewOptions |= bSwitchOff_HiddenParagraphs;
+            if(bApplyViewOptions)
+            {
+                pOrgViewOption = new SwViewOption(*pSh->GetViewOptions());
+                if(bSwitchOff_IsFldName)
+                    pOrgViewOption->SetFldName(FALSE);
+                if(bSwitchOff_HiddenChar)
+                    pOrgViewOption->SetShowHiddenChar(FALSE);
+                if(bSwitchOff_HiddenParagraphs)
+                    pOrgViewOption->SetShowHiddenPara(FALSE);
+
+                SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
             }
             bIsApi = rReq.IsAPI();
             SfxViewShell::ExecuteSlot( rReq, SfxViewShell::GetInterface() );
             if(pOrgViewOption)
             {
-                pOrgViewOption->SetFldName(TRUE);
+                if(bSwitchOff_IsFldName)
+                    pOrgViewOption->SetFldName(TRUE);
+                if(bSwitchOff_HiddenChar)
+                    pOrgViewOption->SetShowHiddenChar(TRUE);
+                if(bSwitchOff_HiddenParagraphs)
+                    pOrgViewOption->SetShowHiddenPara(TRUE);
                 SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
                 delete pOrgViewOption;
             }
