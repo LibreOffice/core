@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.143 $
+#   $Revision: 1.144 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 13:46:58 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:12:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,10 +156,9 @@ DEPFILESx+=$(subst,$(PAR),$(MISC) $(ALLPARFILES:s/.par/.dpsc/))
 .IF "$(L10N_framework)"==""
 .IF "$(RCFILES)"!=""
 .IF "$(RESNAME)"!=""
-#RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
 DEPFILESx+=$(MISC)$/$(RESNAME).dpcc
 .ELSE			# "$(RESNAME)"!=""
-DEPFILESx+=$(foreach,i,$(alllangext) $(MISC)$/$i$/$(TARGET).dprc)
+DEPFILESx+=$(MISC)$/$(TARGET).dprc
 .ENDIF			# "$(RESNAME)"!=""
 .ENDIF			# "$(RCFILES)"!=""
 .ENDIF          # "$(L10N_framework)"==""
@@ -185,6 +184,13 @@ something_wrong_with_objects :
 .ENDIF			# "$(TESTOBJECTS)"!=""
 
 .INCLUDE : postset.mk
+
+# --- add L10N_framework codes -------------------------------------
+
+alllangiso+=$(L10N_framework:s/,/ /)
+completelangiso+=$(L10N_framework:s/,/ /)
+RSC_LANG_ISO+:=$(completelangiso)
+.EXPORT : RSC_LANG_ISO
 
 .IF "$(depend)" == ""
 
@@ -486,23 +492,15 @@ javauno:=
 .IF "$(L10N_framework)"==""
 .IF "$(RCFILES)"!=""
 RESNAME*=$(TARGET)
-.IF "$(solarlang)" == "deut"
-RCTARGET=$(RES)$/$(RESNAME).res
-.IF "$(NO_REC_RES)"!=""
-RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
-.ENDIF          # "$(NO_REC_RES)"!=""
-.ELSE           # "$(solarlang)" == "deut"
 .IF "$(RCFILES)" != "verinfo.rc"
 RCTARGET=$(RES)$/$(RESNAME).res
-.IF "$(NO_REC_RES)"!=""
-RCTARGET!:=$(foreach,i,$(alllangext) $(RES)$/$i$/$(RESNAME).res)
-.ENDIF          # "$(NO_REC_RES)"!=""
 .ELSE           # "$(RCFILES)" != "verinfo.rc"
 RCFILES=
 .ENDIF          # "$(RCFILES)" != "verinfo.rc"
-.ENDIF          # "$(solarlang)" == "deut"
 .ENDIF          # "$(RCFILES)"!=""
 .ENDIF          # "$(L10N_framework)"==""
+
+LOCALIZE_ME_DEST:=$(foreach,i,$(LOCALIZE_ME) $(INCCOM)$/$(i:f:s/_tmpl//))
 
 .IF "$(SCP1TARGET)"!=""
 SCP1TARGETN:=$(foreach,i,$(SCP1LINK_PRODUCT_TYPE) $(BIN)$/$i$/$(SCP1TARGET)$(SCPPOST))
@@ -560,13 +558,13 @@ ZIPALL=ZIPALLTARGET
 .IF "$(ZIP1LIST:s/LANGDIR//)" == "$(ZIP1LIST)"
 ZIP1TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET).zip
 .ELSE
-ZIP1TARGETN=$(foreach,i,$(zip1alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET)$i.zip )
+ZIP1TARGETN=$(foreach,i,$(zip1alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP1TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP1LIST:s/LANGDIR//)" == "$(ZIP1LIST)"
 ZIP1TARGETN=$(BIN)$/$(ZIP1TARGET).zip
 .ELSE
-ZIP1TARGETN=$(foreach,i,$(zip1alllangext) $(BIN)$/$(ZIP1TARGET)$i.zip )
+ZIP1TARGETN=$(foreach,i,$(zip1alllangiso) $(BIN)$/$(ZIP1TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP1DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP1TARGETN:s/.zip/.dpzz)))
@@ -578,13 +576,13 @@ ZIPDEPFILES+=$(ZIP1DEPFILE)
 .IF "$(ZIP2LIST:s/LANGDIR//)" == "$(ZIP2LIST)"
 ZIP2TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET).zip
 .ELSE
-ZIP2TARGETN=$(foreach,i,$(zip2alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET)$i.zip )
+ZIP2TARGETN=$(foreach,i,$(zip2alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP2TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP2LIST:s/LANGDIR//)" == "$(ZIP2LIST)"
 ZIP2TARGETN=$(BIN)$/$(ZIP2TARGET).zip
 .ELSE
-ZIP2TARGETN=$(foreach,i,$(zip2alllangext) $(BIN)$/$(ZIP2TARGET)$i.zip )
+ZIP2TARGETN=$(foreach,i,$(zip2alllangiso) $(BIN)$/$(ZIP2TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP2DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP2TARGETN:s/.zip/.dpzz)))
@@ -596,13 +594,13 @@ ZIPDEPFILES+=$(ZIP2DEPFILE)
 .IF "$(ZIP3LIST:s/LANGDIR//)" == "$(ZIP3LIST)"
 ZIP3TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET).zip
 .ELSE
-ZIP3TARGETN=$(foreach,i,$(zip3alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET)$i.zip )
+ZIP3TARGETN=$(foreach,i,$(zip3alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP3TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP3LIST:s/LANGDIR//)" == "$(ZIP3LIST)"
 ZIP3TARGETN=$(BIN)$/$(ZIP3TARGET).zip
 .ELSE
-ZIP3TARGETN=$(foreach,i,$(zip3alllangext) $(BIN)$/$(ZIP3TARGET)$i.zip )
+ZIP3TARGETN=$(foreach,i,$(zip3alllangiso) $(BIN)$/$(ZIP3TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP3DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP3TARGETN:s/.zip/.dpzz)))
@@ -614,13 +612,13 @@ ZIPDEPFILES+=$(ZIP3DEPFILE)
 .IF "$(ZIP4LIST:s/LANGDIR//)" == "$(ZIP4LIST)"
 ZIP4TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET).zip
 .ELSE
-ZIP4TARGETN=$(foreach,i,$(zip4alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET)$i.zip )
+ZIP4TARGETN=$(foreach,i,$(zip4alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP4TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP4LIST:s/LANGDIR//)" == "$(ZIP4LIST)"
 ZIP4TARGETN=$(BIN)$/$(ZIP4TARGET).zip
 .ELSE
-ZIP4TARGETN=$(foreach,i,$(zip4alllangext) $(BIN)$/$(ZIP4TARGET)$i.zip )
+ZIP4TARGETN=$(foreach,i,$(zip4alllangiso) $(BIN)$/$(ZIP4TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP4DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP4TARGETN:s/.zip/.dpzz)))
@@ -632,13 +630,13 @@ ZIPDEPFILES+=$(ZIP4DEPFILE)
 .IF "$(ZIP5LIST:s/LANGDIR//)" == "$(ZIP5LIST)"
 ZIP5TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET).zip
 .ELSE
-ZIP5TARGETN=$(foreach,i,$(zip5alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET)$i.zip )
+ZIP5TARGETN=$(foreach,i,$(zip5alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP5TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP5LIST:s/LANGDIR//)" == "$(ZIP5LIST)"
 ZIP5TARGETN=$(BIN)$/$(ZIP5TARGET).zip
 .ELSE
-ZIP5TARGETN=$(foreach,i,$(zip5alllangext) $(BIN)$/$(ZIP5TARGET)$i.zip )
+ZIP5TARGETN=$(foreach,i,$(zip5alllangiso) $(BIN)$/$(ZIP5TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP5DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP5TARGETN:s/.zip/.dpzz)))
@@ -650,13 +648,13 @@ ZIPDEPFILES+=$(ZIP5DEPFILE)
 .IF "$(ZIP6LIST:s/LANGDIR//)" == "$(ZIP6LIST)"
 ZIP6TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET).zip
 .ELSE
-ZIP6TARGETN=$(foreach,i,$(zip6alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET)$i.zip )
+ZIP6TARGETN=$(foreach,i,$(zip6alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP6TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP6LIST:s/LANGDIR//)" == "$(ZIP6LIST)"
 ZIP6TARGETN=$(BIN)$/$(ZIP6TARGET).zip
 .ELSE
-ZIP6TARGETN=$(foreach,i,$(zip6alllangext) $(BIN)$/$(ZIP6TARGET)$i.zip )
+ZIP6TARGETN=$(foreach,i,$(zip6alllangiso) $(BIN)$/$(ZIP6TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP6DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP6TARGETN:s/.zip/.dpzz)))
@@ -668,13 +666,13 @@ ZIPDEPFILES+=$(ZIP6DEPFILE)
 .IF "$(ZIP7LIST:s/LANGDIR//)" == "$(ZIP7LIST)"
 ZIP7TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET).zip
 .ELSE
-ZIP7TARGETN=$(foreach,i,$(zip7alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET)$i.zip )
+ZIP7TARGETN=$(foreach,i,$(zip7alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP7TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP7LIST:s/LANGDIR//)" == "$(ZIP7LIST)"
 ZIP7TARGETN=$(BIN)$/$(ZIP7TARGET).zip
 .ELSE
-ZIP7TARGETN=$(foreach,i,$(zip7alllangext) $(BIN)$/$(ZIP7TARGET)$i.zip )
+ZIP7TARGETN=$(foreach,i,$(zip7alllangiso) $(BIN)$/$(ZIP7TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP7DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP7TARGETN:s/.zip/.dpzz)))
@@ -686,13 +684,13 @@ ZIPDEPFILES+=$(ZIP7DEPFILE)
 .IF "$(ZIP8LIST:s/LANGDIR//)" == "$(ZIP8LIST)"
 ZIP8TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET).zip
 .ELSE
-ZIP8TARGETN=$(foreach,i,$(zip8alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET)$i.zip )
+ZIP8TARGETN=$(foreach,i,$(zip8alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP8TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP8LIST:s/LANGDIR//)" == "$(ZIP8LIST)"
 ZIP8TARGETN=$(BIN)$/$(ZIP8TARGET).zip
 .ELSE
-ZIP8TARGETN=$(foreach,i,$(zip8alllangext) $(BIN)$/$(ZIP8TARGET)$i.zip )
+ZIP8TARGETN=$(foreach,i,$(zip8alllangiso) $(BIN)$/$(ZIP8TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP8DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP8TARGETN:s/.zip/.dpzz)))
@@ -704,13 +702,13 @@ ZIPDEPFILES+=$(ZIP8DEPFILE)
 .IF "$(ZIP9LIST:s/LANGDIR//)" == "$(ZIP9LIST)"
 ZIP9TARGETN=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET).zip
 .ELSE
-ZIP9TARGETN=$(foreach,i,$(zip9alllangext) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET)$i.zip )
+ZIP9TARGETN=$(foreach,i,$(zip9alllangiso) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(ZIP9TARGET)_$i.zip )
 .ENDIF
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP9LIST:s/LANGDIR//)" == "$(ZIP9LIST)"
 ZIP9TARGETN=$(BIN)$/$(ZIP9TARGET).zip
 .ELSE
-ZIP9TARGETN=$(foreach,i,$(zip9alllangext) $(BIN)$/$(ZIP9TARGET)$i.zip )
+ZIP9TARGETN=$(foreach,i,$(zip9alllangiso) $(BIN)$/$(ZIP9TARGET)_$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
 ZIP9DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP9TARGETN:s/.zip/.dpzz)))
@@ -719,11 +717,6 @@ ZIPDEPFILES+=$(ZIP9DEPFILE)
 
 .IF "$(APP1TARGET)"!=""
 APP1TARGETN=$(BIN)$/$(APP1TARGET)$(EXECPOST)
-.IF "$(NO_REC_RES)"!=""
-.IF "$(APP1NOSVRES)"!=""
-APP1TARGETN!:=$(foreach,i,$(alllangext) $(BIN)$/$i$/$(APP1TARGET)$(EXECPOST))
-.ENDIF
-.ENDIF
 APP1 ?= TNR!:=1
 .IF "$(BASE)" != ""
 .IF "$(GUI)"=="WNT"
@@ -737,11 +730,6 @@ APP1BASEX=/BASE:$(APP1BASE)
 
 .IF "$(APP2TARGET)"!=""
 APP2TARGETN=$(BIN)$/$(APP2TARGET)$(EXECPOST)
-.IF "$(NO_REC_RES)"!=""
-.IF "$(APP2NOSVRES)"!=""
-APP2TARGETN!:=$(foreach,i,$(alllangext) $(BIN)$/$i$/$(APP2TARGET)$(EXECPOST))
-.ENDIF
-.ENDIF
 APP2 ?= TNR!:=2
 .IF "$(BASE)" != ""
 .IF "$(GUI)"=="WNT"
@@ -755,11 +743,6 @@ APP2BASEX=/BASE:$(APP2BASE)
 
 .IF "$(APP3TARGET)"!=""
 APP3TARGETN=$(BIN)$/$(APP3TARGET)$(EXECPOST)
-.IF "$(NO_REC_RES)"!=""
-.IF "$(APP3NOSVRES)"!=""
-APP3TARGETN!:=$(foreach,i,$(alllangext) $(BIN)$/$i$/$(APP3TARGET)$(EXECPOST))
-.ENDIF
-.ENDIF
 APP3 ?= TNR!:=3
 .IF "$(BASE)" != ""
 .IF "$(GUI)"=="WNT"
@@ -1424,7 +1407,8 @@ RSC_MULTI1=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB1NAME)
 RESLIB1TARGETN=$(BIN)$/$(RESLIB1NAME)$(RESLIB1VERSION)LANGEXT.res
 RSC_MULTI1=$(MISC)$/rsc_$(RESLIB1NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB1TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB1TARGETN:s/LANGEXT/$i/))
+# change to iso if resmgr is changed
+RESLIB1TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB1TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB2NAME)" != ""
@@ -1439,7 +1423,7 @@ RSC_MULTI2=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB2NAME)
 RESLIB2TARGETN=$(BIN)$/$(RESLIB2NAME)$(RESLIB2VERSION)LANGEXT.res
 RSC_MULTI2=$(MISC)$/rsc_$(RESLIB2NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB2TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB2TARGETN:s/LANGEXT/$i/))
+RESLIB2TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB2TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB3NAME)" != ""
@@ -1454,7 +1438,7 @@ RSC_MULTI3=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB3NAME)
 RESLIB3TARGETN=$(BIN)$/$(RESLIB3NAME)$(RESLIB3VERSION)LANGEXT.res
 RSC_MULTI3=$(MISC)$/rsc_$(RESLIB3NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB3TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB3TARGETN:s/LANGEXT/$i/))
+RESLIB3TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB3TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB4NAME)" != ""
@@ -1469,7 +1453,7 @@ RSC_MULTI4=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB4NAME)
 RESLIB4TARGETN=$(BIN)$/$(RESLIB4NAME)$(RESLIB4VERSION)LANGEXT.res
 RSC_MULTI4=$(MISC)$/rsc_$(RESLIB4NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB4TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB4TARGETN:s/LANGEXT/$i/))
+RESLIB4TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB4TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB5NAME)" != ""
@@ -1484,7 +1468,7 @@ RSC_MULTI5=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB5NAME)
 RESLIB5TARGETN=$(BIN)$/$(RESLIB5NAME)$(RESLIB5VERSION)LANGEXT.res
 RSC_MULTI5=$(MISC)$/rsc_$(RESLIB5NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB5TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB5TARGETN:s/LANGEXT/$i/))
+RESLIB5TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB5TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB6NAME)" != ""
@@ -1499,7 +1483,7 @@ RSC_MULTI6=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB6NAME)
 RESLIB6TARGETN=$(BIN)$/$(RESLIB6NAME)$(RESLIB6VERSION)LANGEXT.res
 RSC_MULTI6=$(MISC)$/rsc_$(RESLIB6NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB6TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB6TARGETN:s/LANGEXT/$i/))
+RESLIB6TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB6TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB7NAME)" != ""
@@ -1514,7 +1498,7 @@ RSC_MULTI7=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB7NAME)
 RESLIB7TARGETN=$(BIN)$/$(RESLIB7NAME)$(RESLIB7VERSION)LANGEXT.res
 RSC_MULTI7=$(MISC)$/rsc_$(RESLIB7NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB7TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB7TARGETN:s/LANGEXT/$i/))
+RESLIB7TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB7TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB8NAME)" != ""
@@ -1529,7 +1513,7 @@ RSC_MULTI8=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB8NAME)
 RESLIB8TARGETN=$(BIN)$/$(RESLIB8NAME)$(RESLIB8VERSION)LANGEXT.res
 RSC_MULTI8=$(MISC)$/rsc_$(RESLIB8NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB8TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB8TARGETN:s/LANGEXT/$i/))
+RESLIB8TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB8TARGETN)))
 .ENDIF
 
 .IF "$(RESLIB9NAME)" != ""
@@ -1544,7 +1528,7 @@ RSC_MULTI9=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/rsc_$(RESLIB9NAME)
 RESLIB9TARGETN=$(BIN)$/$(RESLIB9NAME)$(RESLIB9VERSION)LANGEXT.res
 RSC_MULTI9=$(MISC)$/rsc_$(RESLIB9NAME)
 .ENDIF			# "$(common_build_reslib)"!=""
-RESLIB9TARGETN!:=$(foreach,i,$(alllangext) $(RESLIB9TARGETN:s/LANGEXT/$i/))
+RESLIB9TARGETN!:=$(foreach,i,$(alllangiso) $(subst,LANGEXT,$i $(RESLIB9TARGETN)))
 .ENDIF
 
 .IF "$(INDPRESLIB1NAME)"!=""
@@ -1600,52 +1584,50 @@ DEF9TARGETN=$(MISC)$/$(DEF9NAME).def
 DEF9 ?= TNR!:=9
 .ENDIF
 
-# MISCX for NO_REC_RES uncritical here
-
 .IF "$(SDINAME)"!=""
 .DIRCACHE=no
-SDITARGET=$(MISCX)$/$(SDINAME).don
-HIDSIDPARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDINAME)_sid.hid
+SDITARGET=$(MISC)$/$(SDINAME).don
+HIDSIDPARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(SDINAME)_sid.hid
 SDI0 ?= TNR!:=
 .ENDIF
 
 .IF "$(SDI1NAME)"!=""
 .DIRCACHE=no
-SDI1TARGET=$(MISCX)$/$(SDI1NAME).don
-HIDSID1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI1NAME)_sid.hid
+SDI1TARGET=$(MISC)$/$(SDI1NAME).don
+HIDSID1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(SDI1NAME)_sid.hid
 SDI1 ?= TNR!:=1
 .ENDIF
 
 .IF "$(SDI2NAME)"!=""
 .DIRCACHE=no
-SDI2TARGET=$(MISCX)$/$(SDI2NAME).don
-HIDSID2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI2NAME)_sid.hid
+SDI2TARGET=$(MISC)$/$(SDI2NAME).don
+HIDSID2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(SDI2NAME)_sid.hid
 SDI2 ?= TNR!:=2
 .ENDIF
 
 .IF "$(SDI3NAME)"!=""
 .DIRCACHE=no
-SDI3TARGET=$(MISCX)$/$(SDI3NAME).don
-HIDSID3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI3NAME)_sid.hid
+SDI3TARGET=$(MISC)$/$(SDI3NAME).don
+HIDSID3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(SDI3NAME)_sid.hid
 SDI3 ?= TNR!:=3
 .ENDIF
 
 .IF "$(SDI4NAME)"!=""
 .DIRCACHE=no
-SDI4TARGET=$(MISCX)$/$(SDI4NAME).don
-HIDSID4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI4NAME)_sid.hid
+SDI4TARGET=$(MISC)$/$(SDI4NAME).don
+HIDSID4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(SDI4NAME)_sid.hid
 SDI4 ?= TNR!:=4
 .ENDIF
 
 .IF "$(SDI5NAME)"!=""
 .DIRCACHE=no
-SDI5TARGET=$(MISCX)$/$(SDI5NAME).don
-HIDSID5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI5NAME)_sid.hid
+SDI5TARGET=$(MISC)$/$(SDI5NAME).don
+HIDSID5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(SDI5NAME)_sid.hid
 SDI5 ?= TNR!:=5
 .ENDIF
 
 .IF "$(XMLPROPERTIES)"!=""
-XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(MISC)$/$(TARGET)_$(i:s/.xrb/.done/))
+XMLPROPERTIESN:=$(foreach,i,$(XMLPROPERTIES) $(COMMONMISC)$/$(TARGET)_$(i:s/.xrb/.done/))
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(XMLXULRES)"!=""
@@ -1769,12 +1751,13 @@ ALLTAR:	\
         $(PRJHIDTARGET) \
         $(PRJHID2TARGET) \
         $(REMOTE_BUILD)\
+        $(LOCALIZE_ME_DEST)\
         last_target
 
 .ELSE			# "$(L10N_framework)"!=""
 #		$(NOOPTTARGET) $(EXCEPTIONSTARGET)
 
-ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
+ALLTAR: $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(COMPVERMK) \
         $(JAVAVERMK) \
         $(target_empty) \
@@ -1903,6 +1886,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
                 $(SIGNFORJARSIGNER) \
         $(CONVERTUNIXTEXT) \
         $(REMOTE_BUILD)\
+        $(LOCALIZE_ME_DEST)\
         last_target
 
 .IF "$(EXCEPTIONSNOOPT_FLAG)"==""
@@ -2084,15 +2068,29 @@ COMPVTMP:=$(mktmp iii)
     
 .ENDIF			# "$(JAVAVERMK)"!=""
 
+# on recursive call there seems to be one blank in TARGETDEP
+# which makes it not empty :-(
+.IF "$(TARGETDEPS:s/ //)"!=""
+$(TARGETDEPS) : $(LOCALIZE_ME_DEST)
+.ENDIF          # "$(TARGETDEPS)"!=""
+
+.IF "$(LOCALIZE_ME_DEST)"!=""
+$(LOCALIZE_ME_DEST) : $(LOCALIZE_ME) localize.sdf 
+    +-$(MKDIR) $(@:d)
+    +-$(RM) $@
+    $(WRAPCMD) $(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m localize.sdf -l all
+    +$(RENAME) $(@:d)$/$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
+
+.ENDIF          # "$(LOCALIZE_ME_DEST)"!=""
 
 .IF "$(XMLPROPERTIES)"!=""
 .IF "$(L10N_framework)"!=""
 XML_ISO_CODE*=-ISO99 $(L10N_framework)
 .ENDIF
-$(MISC)$/$(TARGET)_%.done : %.xrb
-    @+-$(RM) $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
-    +native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET) && xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
-    @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+$(COMMONMISC)$/$(TARGET)_%.done : $(COMMONMISC)$/$(TARGET)$/%.xrb
+    @+-$(RM) $(COMMONMISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
+    +native2ascii -encoding UTF8 $< $(COMMONMISC)$/$(<:b).interm$(TARGET) && xmlex -i $(COMMONMISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
+    @+$(RM)  $(COMMONMISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(XMLXULRES)"!=""
@@ -2100,7 +2098,7 @@ $(MISC)$/$(TARGET)_%.done : %.xrb
 XML_ISO_CODE*=-ISO99 $(L10N_framework)
 .ENDIF
 $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
-    @xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale $(XML_ISO_CODE) -g:dtd -d $@
+    xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale $(XML_ISO_CODE) -g:dtd -d $@
 .ENDIF			# "$(XMLXULRES)"!=""
 
 .INCLUDE : tg_sdi.mk
@@ -2267,7 +2265,7 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(ZIP1TARGET)" != "" || "$(ZIP2TARGET)" != "" || "$(ZIP3TARGET)" != ""
 .IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpz
-missing_zipdep_langs=$(alllangext)
+missing_zipdep_langs=$(alllangiso)
 some_dummy_var:=$(foreach,i,$(zipdep_langs) $(assign missing_zipdep_langs:=$(strip $(subst,$i, $(missing_zipdep_langs)))))
 .IF "$(missing_zipdep_langs)"!=""
 ZIPDEPPHONY=.PHONY
@@ -2747,11 +2745,7 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
 .INCLUDE : tg_java.mk
 .ENDIF          # "$(SOLAR_JAVA)"!=""
 
-# dependencies from *.lng to par-files, this dependency is too much
-# but better than nothing
-.IF "$(PARFILES)"!=""
-$(ALLPARFILES): $(LNGFILES)
-.ENDIF
+.INCLUDE : tg_merge.mk
 
 wordcount:
     +wc *.* >> $(TMP)$/wc.lst
