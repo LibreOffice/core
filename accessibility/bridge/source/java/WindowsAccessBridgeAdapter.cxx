@@ -275,29 +275,39 @@ void handleWindowEvent(Window * pWindow, bool bShow)
 
         if ( pParentWindow )
         {
-            // The parent window of a combo box floating window should have the role COMBO_BOX
-            Reference< XAccessible > xParentAccessible(pParentWindow->GetAccessible());
-            if ( xParentAccessible.is() )
+            try
             {
-                Reference< XAccessibleContext > xParentAC(xParentAccessible->getAccessibleContext());
-                if ( xParentAC.is() && (AccessibleRole::COMBO_BOX == xParentAC->getAccessibleRole()) )
+                // The parent window of a combo box floating window should have the role COMBO_BOX
+                Reference< XAccessible > xParentAccessible(pParentWindow->GetAccessible());
+                if ( xParentAccessible.is() )
                 {
-                    // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
-                    // Let's not rely on a specific child order, just search for the child with the role LIST
-                    sal_Int32 nCount = xParentAC->getAccessibleChildCount();
-                    for ( sal_Int32 n = 0; (n < nCount) && !xAccessible.is(); n++)
+                    Reference< XAccessibleContext > xParentAC(xParentAccessible->getAccessibleContext());
+                    if ( xParentAC.is() && (AccessibleRole::COMBO_BOX == xParentAC->getAccessibleRole()) )
                     {
-                        Reference< XAccessible > xChild = xParentAC->getAccessibleChild(n);
-                        if ( xChild.is() )
+                        // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
+                        // Let's not rely on a specific child order, just search for the child with the role LIST
+                        sal_Int32 nCount = xParentAC->getAccessibleChildCount();
+                        for ( sal_Int32 n = 0; (n < nCount) && !xAccessible.is(); n++)
                         {
-                            Reference< XAccessibleContext > xChildAC = xChild->getAccessibleContext();
-                            if ( xChildAC.is() && (AccessibleRole::LIST == xChildAC->getAccessibleRole()) )
+                            Reference< XAccessible > xChild = xParentAC->getAccessibleChild(n);
+                            if ( xChild.is() )
                             {
-                                xAccessible = xChild;
+                                Reference< XAccessibleContext > xChildAC = xChild->getAccessibleContext();
+                                if ( xChildAC.is() && (AccessibleRole::LIST == xChildAC->getAccessibleRole()) )
+                                {
+                                    xAccessible = xChild;
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (::com::sun::star::uno::RuntimeException e)
+            {
+                // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
+                // but keep revoking these windows in hide(s).
+                if (bShow)
+                    return;
             }
         }
 
