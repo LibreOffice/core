@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: oj $ $Date: 2002-04-17 11:56:23 $
+#   last change: $Author: vg $ $Date: 2003-04-24 13:02:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,14 +62,12 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=browse
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
