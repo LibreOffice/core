@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-15 18:01:32 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,8 +967,9 @@ inline RegError RegistryKey::openSubKeys(const ::rtl::OUString& keyName,
             RegError        ret = REG_NO_ERROR;
             RegKeyHandle*   pSubKeys;
             sal_uInt32      nSubKeys;
-             if (ret = m_registry.m_pApi->openSubKeys(m_hImpl, keyName.pData,
-                                                      &pSubKeys, &nSubKeys))
+             ret = m_registry.m_pApi->openSubKeys(m_hImpl, keyName.pData,
+                                                      &pSubKeys, &nSubKeys);
+             if ( ret )
             {
                 return ret;
             } else
@@ -988,8 +989,9 @@ inline RegError RegistryKey::getKeyNames(const ::rtl::OUString& keyName,
             RegError        ret = REG_NO_ERROR;
             rtl_uString**   pSubKeyNames;
             sal_uInt32      nSubKeys;
-             if (ret = m_registry.m_pApi->getKeyNames(m_hImpl, keyName.pData,
-                                                      &pSubKeyNames, &nSubKeys))
+             ret = m_registry.m_pApi->getKeyNames(m_hImpl, keyName.pData,
+                                                  &pSubKeyNames, &nSubKeys);
+             if ( ret )
             {
                 return ret;
             } else
@@ -1104,8 +1106,9 @@ inline RegError RegistryKey::getLongListValue(const ::rtl::OUString& keyName,
             RegError    ret = REG_NO_ERROR;
             sal_Int32*  pValueList;
             sal_uInt32  length;
-             if (ret = m_registry.m_pApi->getLongListValue(m_hImpl, keyName.pData,
-                                                      &pValueList, &length))
+             ret = m_registry.m_pApi->getLongListValue(m_hImpl, keyName.pData,
+                                                      &pValueList, &length);
+             if ( ret )
             {
                 return ret;
             } else
@@ -1126,8 +1129,9 @@ inline RegError RegistryKey::getStringListValue(const ::rtl::OUString& keyName,
             RegError    ret = REG_NO_ERROR;
             sal_Char**  pValueList;
             sal_uInt32  length;
-             if (ret = m_registry.m_pApi->getStringListValue(m_hImpl, keyName.pData,
-                                                      &pValueList, &length))
+             ret = m_registry.m_pApi->getStringListValue(m_hImpl, keyName.pData,
+                                                      &pValueList, &length);
+             if ( ret )
             {
                 return ret;
             } else
@@ -1148,8 +1152,9 @@ inline RegError RegistryKey::getUnicodeListValue(const ::rtl::OUString& keyName,
             RegError        ret = REG_NO_ERROR;
             sal_Unicode**   pValueList;
             sal_uInt32      length;
-             if (ret = m_registry.m_pApi->getUnicodeListValue(m_hImpl, keyName.pData,
-                                                      &pValueList, &length))
+             ret = m_registry.m_pApi->getUnicodeListValue(m_hImpl, keyName.pData,
+                                                      &pValueList, &length);
+             if ( ret )
             {
                 return ret;
             } else
