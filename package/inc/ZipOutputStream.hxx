@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:51 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,6 @@
 #include "CRC32.hxx"
 #endif
 
-#ifndef _TOOLS_TIME_HXX
-#include <tools/time.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_PACKAGE_XZIPOUTPUTSTREAM_HPP_
 #include <com/sun/star/package/XZipOutputStream.hpp>
 #endif
@@ -97,6 +93,12 @@
 #include <stl/vector>
 #endif
 
+#ifndef _VOS_DIAGNOSE_H_
+#include <vos/diagnose.hxx>
+#endif
+
+#include <time.h>
+#include <utime.h>
 
 class ZipOutputStream : public cppu::WeakImplHelper1< com::sun::star::package::XZipOutputStream >
 {
@@ -132,19 +134,8 @@ public:
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL close(  )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-#if 0
-    ZipOutputStream (SvStream& aOStream);
-    void                close();
-    void                closeEntry();
-    void                finish();
-    void                putNextEntry(ZipEntry &rEntry);
-    void                setComment(::rtl::ByteSequence &nComment);
-    void                setLevel(sal_Int16 nNewLevel);
-    void                setMethod(sal_Int16 nNewMethod);
-    void                write (::rtl::ByteSequence &rBuffer, sal_uInt16 nOff, sal_uInt16 nLen);
-    static const sal_Int16 STORED   = ZipEntry::STORED;
-    static const sal_Int16 DEFLATED = ZipEntry::DEFLATED;
-#endif
+    static sal_uInt32 tmDateToDosDate ( tm &rTime);
+    static void dosDateToTMDate ( tm &rTime, sal_uInt32 nDosDate);
 private:
     void doDeflate();
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 10:45:20 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,6 @@
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_HXX
 #define _ZIP_PACKAGE_HXX
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx> // helper for implementations

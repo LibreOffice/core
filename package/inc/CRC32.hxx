@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:37:57 $
+ *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
 
 #ifndef _COM_SUN_STAR_PACKAGE_XCHECKSUM_HPP_
 #include <com/sun/star/package/XChecksum.hpp>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
 #endif
 
 class CRC32 : public cppu::WeakImplHelper1<com::sun::star::package::XChecksum>
