@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FatDataBaseOutProducer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:40:47 $
+ *  last change:$Date: 2003-11-18 16:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package stats;
 
+import java.text.DecimalFormat;
 import share.LogWriter;
 import share.DescEntry;
 import java.util.Hashtable;
@@ -84,67 +85,77 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
         String descriptionString = testLanguage+":"+(String)mSqlInput.get("OperatingSystem")+":"+testBase+":"+apiVersion;
         apiVersion = apiVersion.substring(0, 6);
         // build date
-        String pre = "";
-        Calendar cal = new GregorianCalendar();
-        String year = (new Integer(cal.get(GregorianCalendar.YEAR))).toString();
-        int c = cal.get(GregorianCalendar.MONTH) + 1;
-        pre = (c < 10)?"0":"";
-        String month = pre + (new Integer(c)).toString();
-        c = cal.get(GregorianCalendar.DATE);
-        pre = (c < 10)?"0":"";
-        String day = pre + (new Integer(c)).toString();
-        String dateString = year + "-" + month + "-" + day;
+        if (mSqlInput.get("Date") != null) {
+            mSqlInput.put("date", mSqlInput.get("Date"));
+        }
+        if (mSqlInput.get("date") == null) {
+            // build date if it's not there
+            Calendar cal = new GregorianCalendar();
+            DecimalFormat dfmt = new DecimalFormat("00");
+            String year = Integer.toString(cal.get(GregorianCalendar.YEAR));
+            // month is starting with "0"
+            String month = dfmt.format(cal.get(GregorianCalendar.MONTH) + 1);
+            String day = dfmt.format(cal.get(GregorianCalendar.DATE));
+            String dateString = year + "-" + month + "-" + day;
 
-        mSqlInput.put("date", dateString);
+            mSqlInput.put("date", dateString);
+        }
+
+        setWriteableEntryTypes(new String[]{"property", "method", "component", "interface", "service"});
+
         mSqlInput.put("test_run.description", descriptionString);
         mSqlInput.put("api_version_name", apiVersion);
     }
 
     protected boolean prepareDataBase(LogWriter log) {
+        executeSQLCommand("SHOW TABLES");
+
         executeSQLCommand("SELECT id AS \"test_run.id\", api_version_id, description, date FROM test_run" +
                           " WHERE date = \"$date\" AND description = \"$test_run.description\";", true);
         String id = (String)mSqlInput.get("test_run.id");
         // create an entry for this test run
         if (id == null) {
-            executeSQLCommand("SELECT id as api_version_id FROM api_version" +
+            executeSQLCommand("SELECT id AS api_version_id FROM api_version" +
                               " WHERE version = \"$api_version_name\";", true);
             String api_version_id = (String)mSqlInput.get("api_version_id");
             // create an entry for this API
             if (api_version_id == null) {
                 executeSQLCommand("INSERT api_version (api_name, version)" +
                                   " VALUES (\"soapi\", \"$api_version_name\")");
-                executeSQLCommand("SELECT id as api_version_id FROM api_version" +
+                executeSQLCommand("SELECT id AS api_version_id FROM api_version" +
                                   " WHERE version = \"$api_version_name\";", true);
             }
+            // complete entry for the test run
             executeSQLCommand("INSERT test_run (api_version_id, description, date)" +
                               " VALUES ($api_version_id, \"$test_run.description\", \"$date\");");
-            executeSQLCommand("SELECT test_run.id, api_version_id, description, date FROM test_run" +
+            executeSQLCommand("SELECT test_run.id AS \"test_run.id\", api_version_id, description, date FROM test_run" +
                               " WHERE date = \"$date\" AND description = \"$test_run.description\";", true);
         }
         return true;
     }
 
+    // check the database afterwards
     protected boolean checkDataBase(LogWriter log) {
         return true;
     }
 
     protected boolean insertEntry(LogWriter log) {
 
-        executeSQLCommand("SELECT id as \"entry.id\", name as \"entry.name\" FROM entry WHERE name = \"$EntryLongName\";", true);
+        executeSQLCommand("SELECT id AS \"entry.id\", name AS \"entry.name\" FROM entry WHERE name = \"$EntryLongName\";", true);
         if (mSqlInput.get("entry.id") == null) {
             executeSQLCommand("INSERT entry (name, type)" +
                               " VALUES (\"$EntryLongName\", \"$EntryType\");");
-            executeSQLCommand("SELECT id as \"entry.id\", name as \"entry.name\" FROM entry WHERE name = \"$EntryLongName\";", true);
+            executeSQLCommand("SELECT id AS \"entry.id\", name AS \"entry.name\" FROM entry WHERE name = \"$EntryLongName\";", true);
         }
-        executeSQLCommand("SELECT id as \"api_entry.id\", api_version_id as \"api_entry.api_version_id\", entry_id as \"api_entry.entry_id\" FROM api_entry" +
+        executeSQLCommand("SELECT id AS \"api_entry.id\", api_version_id AS \"api_entry.api_version_id\", entry_id AS \"api_entry.entry_id\" FROM api_entry" +
                           " WHERE entry_id = $entry.id;", true);
         if (mSqlInput.get("api_entry.id") == null) {
             executeSQLCommand("INSERT api_entry (entry_id, api_version_id)"+
                               " VALUES ($entry.id, $api_version_id);");
-            executeSQLCommand("SELECT id as \"api_entry.id\", api_version_id as \"api_entry.api_version_id\", entry_id as \"api_entry.entry_id\" FROM api_entry" +
+            executeSQLCommand("SELECT id AS \"api_entry.id\", api_version_id AS \"api_entry.api_version_id\", entry_id AS \"api_entry.entry_id\" FROM api_entry" +
                               " WHERE entry_id = $entry.id;", true);
         }
-        executeSQLCommand("SELECT status as \"test_state.status\" FROM test_state"+
+        executeSQLCommand("SELECT status AS \"test_state.status\" FROM test_state"+
                           " WHERE test_run_id = $test_run.id AND entry_id = $entry.id;", true);
 
         String status = (String)mSqlInput.get("test_state.status");
@@ -153,9 +164,9 @@ public class FatDataBaseOutProducer extends DataBaseOutProducer {
                               " VALUES ($test_run.id, $entry.id, \"$EntryState\");");
         }
         else {
-            if (status != "PASSED.OK") {
-//                executeSQLCommand("INSERT test_state (test_run_id, entry_id, status)"+
-//                                  " VALUES ($test_run.id, $entry.id, \"$EntryState\");");
+            if (!status.equals("PASSED.OK")) {
+                executeSQLCommand("UPDATE test_state SET status = \"$EntryState\""+
+                                  " WHERE test_run_id = $test_run.id AND entry_id = $entry.id;");
             }
         }
         return true;
