@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,6 +1164,7 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, String& rStr );
     eF_ResT Read_F_Author( WW8FieldDesc*, String& );
     eF_ResT Read_F_TemplName( WW8FieldDesc*, String& );
+    short GetTimeDatePara(String& rStr, ULONG& rFormat);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_FileName( WW8FieldDesc*, String& );
     eF_ResT Read_F_Anz( WW8FieldDesc* pF, String& );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
+ *  last change: $Author: cmc $ $Date: 2002-03-01 09:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
+#endif
+#ifndef _ZFORMAT_HXX
+#include <svtools/zformat.hxx>
 #endif
 
 #ifndef _LINKMGR_HXX //autogen
@@ -614,7 +617,6 @@ static SvxExtNumType GetNumTypeFromName( const String& rStr, BOOL bAllowPageDesc
     return eTyp;
 }
 
-
 static SvxExtNumType GetNumberPara( String& rStr, BOOL bAllowPageDesc = FALSE )
 {
     String s( FindPara( rStr, '*', '*' ) );     // Ziffernart
@@ -622,54 +624,67 @@ static SvxExtNumType GetNumberPara( String& rStr, BOOL bAllowPageDesc = FALSE )
     return aType;
 }
 
-
-ULONG MSDateTimeFormatToSwFormat( String& rParams, SwDoc& rDoc, USHORT nLang )
+static ULONG MSDateTimeFormatToSwFormat(String& rParams,
+    SvNumberFormatter *pFormatter, USHORT nLang)
 {
-    // get Doc Numberformatter
-    SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
-
     // tell the Formatter about the new entry
     UINT16 nCheckPos = 0;
     INT16  nType = NUMBERFORMAT_DEFINED;
     ULONG  nKey = 0;
 
-//  if( !
-    pFormatter->PutandConvertEntry(  rParams, nCheckPos, nType, nKey,
-            nLang, LANGUAGE_SYSTEM )
-;//)
-//      nKey = 0;
+    pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, nLang);
 
     return nKey;
 }
 
-static short GetTimeDatePara( SwDoc& rDoc, String& rStr, ULONG& rFormat )
+short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat)
 {
-    String aParams( FindPara( rStr, '@', '@' ) );// Date/Time
-    if( 0 == aParams.Len() )
-    {                               // No Date / Time
-        rFormat =  NF_DATE_SYS_NNNNDMMMMYYYY;
+    SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
+    String sParams( FindPara( rStr, '@', '@' ) );// Date/Time
+    if (!sParams.Len())
+    {
+        //Get the system date in the correct final language layout, convert to
+        //a known language and modify the 2 digit year part to be 4 digit, and
+        //convert back to the correct language layout.
+        LanguageType nLang = LANGUAGE_ENGLISH_US;
+        if (const SvxLanguageItem *pLang =
+            (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE))
+        {
+            nLang = pLang->GetValue();
+        }
+
+        ULONG nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
+
+        SvNumberformat aFormat = const_cast<SvNumberformat &>
+            (*(pFormatter->GetEntry(nIndex)));
+        aFormat.ConvertLanguage(*pFormatter, nLang, LANGUAGE_ENGLISH_US);
+
+        sParams = aFormat.GetFormatstring();
+        sParams.SearchAndReplace(CREATE_CONST_ASC("YY"),
+            CREATE_CONST_ASC("YYYY"));
+
+        UINT16 nCheckPos = 0;
+        INT16 nType = NUMBERFORMAT_DEFINED;
+        rFormat = 0;
+
+        pFormatter->PutandConvertEntry(sParams, nCheckPos, nType, rFormat,
+            LANGUAGE_ENGLISH_US, nLang);
+
         return NUMBERFORMAT_DATE;
     }
 
-    const SvxLanguageItem& rLang = (SvxLanguageItem&)(rDoc.GetAttrPool().
-                    GetDefaultItem( RES_CHRATR_LANGUAGE ));
+    const SvxLanguageItem& rLang = (const SvxLanguageItem&)(rDoc.GetAttrPool().
+        GetDefaultItem( RES_CHRATR_LANGUAGE ));
 
-    ULONG nNumFmtIdx = MSDateTimeFormatToSwFormat( aParams, rDoc,
-                                                    rLang.GetValue() );
-
+    ULONG nFmtIdx = MSDateTimeFormatToSwFormat(sParams, pFormatter,
+        rLang.GetValue());
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
-    if( nNumFmtIdx )
-    {
-        SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
-        nNumFmtType = pFormatter->GetType( nNumFmtIdx );
-    }
-    rFormat = nNumFmtIdx;
+    if (nFmtIdx)
+        nNumFmtType = pFormatter->GetType(nFmtIdx);
+    rFormat = nFmtIdx;
 
     return nNumFmtType;
-
 }
-
-
 
 //-----------------------------------------
 //              Felder
@@ -1484,7 +1499,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
     if( bDateTime )
     {
-        short nDT = GetTimeDatePara( rDoc, rStr, nFormat );
+        short nDT = GetTimeDatePara(rStr, nFormat);
         switch( nDT )
         {
             case NUMBERFORMAT_DATE:
@@ -1534,7 +1549,7 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
 {                                               // Datum/Uhrzeit - Feld
     ULONG nFormat = 0;
 
-    short nDT = GetTimeDatePara( rDoc, rStr, nFormat );
+    short nDT = GetTimeDatePara(rStr, nFormat);
 
     if( NUMBERFORMAT_UNDEFINED == nDT )             // no D/T-Formatstring
     {
@@ -1612,10 +1627,12 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         else
             rDoc.Insert( *pPaM, SwFmtHardBlank( c ));
     }
-                                               // Seitennummer
+
+    // Seitennummer
     SwPageNumberField aFld( (SwPageNumberFieldType*)
-                    rDoc.GetSysFldType( RES_PAGENUMBERFLD ), PG_RANDOM,
-                    GetNumberPara( rStr, TRUE ) );
+        rDoc.GetSysFldType( RES_PAGENUMBERFLD ), PG_RANDOM,
+        GetNumberPara( rStr, TRUE ) );
+
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     return FLD_OK;
 }
