@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-14 14:00:56 $
+#   last change: $Author: obo $ $Date: 2004-04-14 15:48:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.106 $ ';
+    $id_str = ' $Revision: 1.107 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -242,6 +242,7 @@
         print STDERR "\nERROR: please check these directories and build the correspondent module(s) anew!!\n\n";
         do_exit(1);
     };
+    &finish_logging;
     do_exit(0);
 
 
