@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:21:51 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -88,13 +85,27 @@
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
 #endif
-#include "swtypes.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "tblafmt.hxx"
-#include "tautofmt.hxx"
-#include "shellres.hxx"
-#include "tautofmt.hrc"
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _TBLAFMT_HXX
+#include <tblafmt.hxx>
+#endif
+#ifndef _TAUTOFMT_HXX
+#include <tautofmt.hxx>
+#endif
+#ifndef _SHELLRES_HXX
+#include <shellres.hxx>
+#endif
+#ifndef _TAUTOFMT_HRC
+#include <tautofmt.hrc>
+#endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -1179,13 +1190,14 @@ MAKENUMSTR:
                 aCurData.GetBoxFmt( (BYTE)nNum ).GetValueFormat( sFmt, eLng, eSys );
 
                 ULONG nKey = 0;
-                if ( eLng == LANGUAGE_SYSTEM && eSys != ::GetSystemLanguage() )
+                if ( eLng == LANGUAGE_SYSTEM && eSys != ::GetAppLanguage() )
                 {
                     //  #53381# wenn System beim Speichern etwas anderes war,
                     //  muss konvertiert werden (geht nur mit eingebauten Formaten)
                     ULONG nOrig = pNumFmt->GetEntryKey( sFmt, eSys );
                     if ( nOrig != NUMBERFORMAT_ENTRY_NOT_FOUND )
-                        nKey = pNumFmt->GetFormatForLanguageIfBuiltIn( nOrig, ::GetSystemLanguage() );
+                        nKey = pNumFmt->GetFormatForLanguageIfBuiltIn( nOrig,
+                                                        ::GetAppLanguage() );
                 }
                 else    // sonst einfach suchen oder anlegen
                 {
@@ -1723,6 +1735,9 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/06/14 17:21:51  fme
+    Fix: #86988#: Redesign of dialogs
+
     Revision 1.5  2001/06/01 11:14:10  fme
     Fix #86988#: Redesign of dialogs
 

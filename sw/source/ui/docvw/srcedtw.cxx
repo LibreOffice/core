@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 12:48:29 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,14 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-#include "cmdid.h"
-
-
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+
+
 #ifndef _TEXTVIEW_HXX
 #include <svtools/textview.hxx>
 #endif
@@ -97,13 +98,25 @@
 #include <svtools/txtattr.hxx>
 #endif
 
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _SRCVIEW_HXX
+#include <srcview.hxx>
+#endif
+#ifndef _SRCEDTW_HXX
+#include <srcedtw.hxx>
+#endif
+#ifndef _SRCVCFG_HXX
+#include <srcvcfg.hxx>
+#endif
 
-#include "swmodule.hxx"
-#include "docsh.hxx"
-#include "srcview.hxx"
-#include "srcedtw.hxx"
-#include "srcvcfg.hxx"
-#include "helpid.h"
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
 
 
 enum SwHtmlTextType {

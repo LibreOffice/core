@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 14:16:23 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@
 #endif
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell

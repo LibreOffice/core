@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-09-10 14:38:02 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
 #endif
 
 //Statt uiparam.hxx selbst definieren, das spart keys
@@ -872,9 +868,7 @@ void SwDocShell::SubInitNew()
     }
     else
     {   // guess DefaultLanguage to be used from other sources
-        nVal = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
-        if( nVal == LANGUAGE_SYSTEM )
-            nVal = ::GetSystemLanguage();
+        nVal = GetAppLanguage();
         eCJK = eCTL = nVal;
     }
 

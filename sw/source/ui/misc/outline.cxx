@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:04:55 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #endif
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
@@ -1088,7 +1085,8 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
         USHORT nYStart = 4;
         USHORT nYStep = (aSize.Height() - 6)/ MAXLEVEL;
         aStdFont = OutputDevice::GetDefaultFont(
-                DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
+                                    DEFAULTFONT_UI_SANS, GetAppLanguage(),
+                                    DEFAULTFONT_FLAGS_ONLYONE, this );
 
         //
         USHORT nFontHeight = nYStep * 6 / 10;

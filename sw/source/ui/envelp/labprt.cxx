@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 #pragma hdrstop
 
-#include <vcl/system.hxx>
 #ifndef _SV_PRNSETUP_HXX_ //autogen
 #include <svtools/prnsetup.hxx>
 #endif
@@ -73,14 +72,28 @@
 #include <vcl/print.hxx>
 #endif
 
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "label.hxx"
-#include "labprt.hxx"
-#include "labimg.hxx"
-#include "labimp.hxx"
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _LABEL_HXX
+#include <label.hxx>
+#endif
+#ifndef _LABPRT_HXX
+#include <labprt.hxx>
+#endif
+#ifndef _LABIMG_HXX
+#include <labimg.hxx>
+#endif
+#ifndef _LABIMP_HXX
+#include <labimp.hxx>
+#endif
 
-#include "labprt.hrc"
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _LABPRT_HRC
+#include <labprt.hrc>
+#endif
 
 
 // --------------------------------------------------------------------------
@@ -261,6 +274,9 @@ void SwLabPrtPage::Reset(const SfxItemSet& rSet)
 // --------------------------------------------------------------------------
 /*
 $Log: not supported by cvs2svn $
+Revision 1.2  2001/06/01 10:53:31  fme
+Fix #86988#: Redesign of dialogs
+
 Revision 1.1.1.1  2000/09/18 17:14:36  hr
 initial import
 

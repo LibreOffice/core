@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-28 16:33:11 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -307,6 +310,14 @@ SwHash* Find( const String& rStr, SwHash** ppTable, USHORT nTblSize,
     return 0;
 }
 
+inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
+{
+    return ((SvxLanguageItem&)rDoc.GetDefault(
+                            GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                                GetScriptTypeOfLanguage( GetAppLanguage() ))
+            )).GetLanguage();
+}
+
 //-----------------------------------------------------------------------------
 
 /******************************************************************************
@@ -328,8 +339,7 @@ SwCalc::SwCalc( SwDoc& rD )
 {
     aErrExpr.aStr.AssignAscii( "~C_ERR~" );
     memset( VarTable, 0, sizeof(VarTable) );
-    LanguageType eLang = ((SvxLanguageItem&)rDoc.GetDefault(
-                                        RES_CHRATR_LANGUAGE )).GetLanguage();
+    LanguageType eLang = GetDocAppScriptLang( rDoc );
     if( eLang != SvxLocaleToLanguage( pLclData->getLocale() ) )
     {
         STAR_NMSPC::lang::Locale aLocale( SvxCreateLocale( eLang ));
@@ -679,12 +689,9 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             String sResult;
             double nNumber = DBL_MAX;
 
-            const SfxPoolItem& rItem = rDoc.GetDefault(RES_CHRATR_LANGUAGE);
-            LanguageType eLang = ((SvxLanguageItem&)rDoc.GetDefault(
-                                        RES_CHRATR_LANGUAGE )).GetLanguage();
-            if(LANGUAGE_SYSTEM == eLang)
-                eLang = ::GetSystemLanguage();
-            if(pMgr->GetColumnCnt(sSourceName, sTableName, sColumnName, nTmpRec, (long)eLang, sResult, &nNumber))
+            long nLang = SvxLocaleToLanguage( pLclData->getLocale() );
+            if(pMgr->GetColumnCnt( sSourceName, sTableName, sColumnName,
+                                    nTmpRec, nLang, sResult, &nNumber ))
             {
                 if (nNumber != DBL_MAX)
                     aErrExpr.nValue.PutDouble( nNumber );
@@ -1636,8 +1643,8 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     const LocaleDataWrapper* pLclD = &GetAppLocaleData();
     if( pDoc )
     {
-        LanguageType eLang = ((SvxLanguageItem&)pDoc->GetDefault(
-                                        RES_CHRATR_LANGUAGE )).GetLanguage();
+
+        LanguageType eLang = GetDocAppScriptLang( *pDoc );
         if( eLang != SvxLocaleToLanguage( pLclD->getLocale() ) )
             pLclD = new LocaleDataWrapper(
                             ::comphelper::getProcessServiceFactory(),

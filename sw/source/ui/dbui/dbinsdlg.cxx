@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 13:36:14 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,7 +1939,7 @@ void SwInsertDBColAutoPilot::Commit()
         else
         {
             pSubValues[4].Value <<= rtl::OUString(sTmp);
-            eLang = ::GetSystemLanguage();
+            eLang = GetAppLanguage();
         }
 
         if( eLang != ePrevLang )

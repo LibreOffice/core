@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:21:21 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _SVX_SVXFONT_HXX //autogen
 #include <svx/svxfont.hxx>
 #endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 
 class LinguBase;        // SetLingu()
 class SfxItemSet;
@@ -90,8 +93,6 @@ const xub_Unicode CH_BREAK = 0x0A;  //
 const xub_Unicode CH_TAB   = '\t';  // \t
 const xub_Unicode CH_PAR    = 0xB6;     // Paragraph
 const xub_Unicode CH_BULLET = 0xB7;     // mittiger Punkt
-
-LanguageType GetSystemLang();
 
 class SwSubFont : public SvxFont
 {
@@ -303,8 +304,6 @@ public:
 
     inline const SvxFont &GetFnt( const BYTE nWhich ) const
         { return aSub[nWhich]; };
-
-    void SetSystemLang();
 
     BOOL IsSymbol( ViewShell *pSh )
         { return aSub[nActual].IsSymbol( pSh ); }
@@ -782,7 +781,7 @@ inline void SwFont::SetEscapement( const short nNewEsc )
 inline void SwSubFont::SetLanguage( LanguageType eNewLang )
 {
     if( eNewLang == LANGUAGE_SYSTEM )
-        eNewLang = ::GetSystemLang();
+        eNewLang = (LanguageType)GetAppLanguage();
     SvxFont::SetLanguage( eNewLang );
 }
 

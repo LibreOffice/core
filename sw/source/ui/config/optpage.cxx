@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 09:50:39 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@
 #endif
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 #ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
@@ -664,7 +661,7 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     bIdxDefault(FALSE),
     bDeletePrinter(FALSE),
     bCJKMode(FALSE),
-    eLanguage(::GetSystemLanguage())
+    eLanguage( GetAppLanguage() )
 {
     FreeResource();
     aStandardPB.SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));

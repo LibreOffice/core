@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-05 09:38:34 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,6 @@
 #endif
 #ifndef _WRONG_HXX
 #include <wrong.hxx>
-#endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>   // GetSystemLang
 #endif
 #ifndef _TXTTYPES_HXX
 #include <txttypes.hxx>
@@ -664,7 +661,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
                 eActLang=eFmtLang;
 
             if( eActLang == LANGUAGE_SYSTEM )
-                eActLang = ::GetSystemLang();
+                eActLang = GetAppLanguage();
 
             if( rWord.Len() > 1 )
             {

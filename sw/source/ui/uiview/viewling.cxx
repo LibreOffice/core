@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 17:34:16 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,31 +84,8 @@
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
-#endif
-#ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-
-
-#ifndef _SVX_THESDLG_HXX //autogen
-#include <svx/thesdlg.hxx>
-#endif
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef NOOLDSV //autogen
-#include <vcl/system.hxx>
-#endif
-#ifndef _SFXREQUEST_HXX //autogen
-#include <sfx2/request.hxx>
+#ifndef _SV_MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _EHDL_HXX //autogen
 #include <svtools/ehdl.hxx>
@@ -116,8 +93,8 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SV_MSGBOX_HXX //autogen
-#include <vcl/msgbox.hxx>
+#ifndef _SFXREQUEST_HXX //autogen
+#include <sfx2/request.hxx>
 #endif
 #ifndef _SVX_DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
@@ -130,6 +107,12 @@
 #endif
 #ifndef _SVXERR_HXX
 #include <svx/svxerr.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_THESDLG_HXX //autogen
+#include <svx/thesdlg.hxx>
 #endif
 
 #ifndef _SWMODULE_HXX
@@ -159,15 +142,6 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>               // fuer Undo-Ids
 #endif
-#ifndef _CMDID_H
-#include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
-#include <globals.hrc>
-#endif
-#ifndef _COMCORE_HRC
-#include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
-#endif
 #ifndef _SPLWRP_HXX
 #include <splwrp.hxx>               //    "
 #endif
@@ -184,6 +158,15 @@
 #include <edtwin.hxx>
 #endif
 
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
+#endif
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
@@ -581,12 +564,10 @@ void SwView::StartThesaurus()
     // Sprache rausholen
     //
     LanguageType eLang = pWrtShell->GetCurLang();
-    if ( ( eLang == LANGUAGE_SYSTEM ) &&
-         ( ((eLang=SvxLocaleToLanguage( GetAppLocaleData().getLocale() ))==LANGUAGE_SYSTEM )
-         && ( ( eLang=::GetSystemLanguage() ) == LANGUAGE_SYSTEM ) ) )
-        eLang = LANGUAGE_DONTKNOW;
+    if( LANGUAGE_SYSTEM == eLang )
+        eLang = GetAppLanguage();
 
-    if ( eLang == LANGUAGE_DONTKNOW || eLang == LANGUAGE_NONE )
+    if( eLang == LANGUAGE_DONTKNOW || eLang == LANGUAGE_NONE )
     {
         SpellError( (void *) LANGUAGE_NONE );
         return;

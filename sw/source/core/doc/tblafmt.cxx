@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:23:21 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ SwBoxAutoFmt::SwBoxAutoFmt()
     : aFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) ),
     aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 )
 {
-    eSysLanguage = eNumFmtLanguage = ::GetSystemLanguage();
+    eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
     aBox.SetDistance( 55 );
 }
 
@@ -393,7 +393,7 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
         if ( eSysLanguage == LANGUAGE_SYSTEM )      // von alten Versionen (Calc)
-            eSysLanguage = ::GetSystemLanguage();
+            eSysLanguage = ::GetAppLanguage();
     }
 
     return 0 == rStream.GetError();
@@ -621,12 +621,12 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
             0 != (pNumFormat = pNFmtr->GetEntry( pNumFmtItem->GetValue() )) )
             pFmt->SetValueFormat( ((SvNumberformat*)pNumFormat)->GetFormatstring(),
                                     pNumFormat->GetLanguage(),
-                                    ::GetSystemLanguage() );
+                                    ::GetAppLanguage() );
         else
         {
             // defaulten
             pFmt->SetValueFormat( aEmptyStr, LANGUAGE_SYSTEM,
-                                    ::GetSystemLanguage() );
+                                    ::GetAppLanguage() );
         }
     }
     // den Rest koennen wir nicht, StarCalc spezifisch
@@ -672,14 +672,14 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
             if( sFmt.Len() )
             {
                 ULONG nKey = 0;
-                if ( eLng == LANGUAGE_SYSTEM && eSys != ::GetSystemLanguage() )
+                if ( eLng == LANGUAGE_SYSTEM && eSys != ::GetAppLanguage() )
                 {
                     //  #53381# wenn System beim Speichern etwas anderes war,
                     //  muss konvertiert werden (geht nur mit eingebauten Formaten)
                     ULONG nOrig = pNFmtr->GetEntryKey( sFmt, eSys );
                     if ( nOrig != NUMBERFORMAT_ENTRY_NOT_FOUND )
                         nKey = pNFmtr->GetFormatForLanguageIfBuiltIn( nOrig,
-                                        ::GetSystemLanguage() );
+                                        ::GetAppLanguage() );
                 }
                 else    // sonst einfach suchen oder anlegen
                 {

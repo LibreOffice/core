@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 10:53:11 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
+#endif
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
 #endif
 
 #ifndef _TOX_HXX

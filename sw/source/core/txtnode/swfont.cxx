@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:22:48 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,10 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
 #endif
+
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
@@ -158,11 +157,18 @@
 #ifndef _SWATRSET_HXX //autogen
 #include <swatrset.hxx>
 #endif
-
-#include "viewsh.hxx"       // Bildschirmabgleich
-#include "swfont.hxx"
-#include "fntcache.hxx"     // FontCache
-#include "drawfont.hxx"     // SwDrawTextInfo
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>       // Bildschirmabgleich
+#endif
+#ifndef _SWFONT_HXX
+#include <swfont.hxx>
+#endif
+#ifndef _FNTCACHE_HXX
+#include <fntcache.hxx>     // FontCache
+#endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>     // SwDrawTextInfo
+#endif
 
 #if defined(WIN) || defined(WNT) || defined(PM2)
 #define FNT_LEADING_HACK
@@ -648,22 +654,6 @@ BOOL SwSubFont::IsSymbol( ViewShell *pSh )
 {
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh, FALSE );
     return aFntAccess.Get()->IsSymbol();
-}
-
-/*************************************************************************
- *                      SwFont::SetSystemLang()
- *************************************************************************/
-
-LanguageType GetSystemLang( )
-{
-    // Hier wird bei LANGUAGE_SYSTEM die Sprache ermittelt.
-    // 1.Versuch: Was sagt die Applikation?
-    LanguageType eTmp = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
-    if ( ( eTmp == LANGUAGE_SYSTEM ) &&
-        // Was sagt die Systemumgebung?
-         ( (eTmp = ::GetSystemLanguage()) == LANGUAGE_SYSTEM ) )
-        eTmp = LANGUAGE_DONTKNOW; // also unbekannt
-    return eTmp;
 }
 
 /*************************************************************************

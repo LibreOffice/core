@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:22:03 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _APP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
 #define _SVSTDARR_STRINGSSORT
 #include <svtools/svstdarr.hxx>
 #ifndef _SVX_LANGITEM_HXX

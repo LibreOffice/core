@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 09:50:39 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+
 #define C2S(cChar) String::CreateFromAscii(cChar)
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -121,7 +126,7 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer"))
 {
-    LanguageType eLang = ::GetSystemLanguage();
+    LanguageType eLang = GetAppLanguage();
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
         sDefaultFonts[i] = GetDefaultFor(i, eLang);
 
@@ -151,7 +156,7 @@ void    SwStdFontConfig::Commit()
     OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
-    LanguageType eLang = ::GetSystemLanguage();
+    LanguageType eLang = GetAppLanguage();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         if(GetDefaultFor(nProp, eLang) != sDefaultFonts[nProp])
@@ -170,7 +175,7 @@ SwStdFontConfig::~SwStdFontConfig()
 BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
-    LanguageType eLang = ::GetSystemLanguage();
+    LanguageType eLang = GetAppLanguage();
     String sDefFont(GetDefaultFor(FONT_STANDARD, eLang));
     String sDefFontCJK(GetDefaultFor(FONT_STANDARD_CJK, eLang));
     switch( nFontType )

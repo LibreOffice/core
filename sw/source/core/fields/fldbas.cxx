@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-04-26 07:03:27 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ USHORT lcl_GetLanguageOfFormat( USHORT nLng, ULONG nFmt,
 {
     if( nLng == LANGUAGE_NONE ) // wegen Bug #60010
         nLng = LANGUAGE_SYSTEM;
-    else if( nLng == ::GetSystemLanguage() )
+    else if( nLng == ::GetAppLanguage() )
         switch( rFormatter.GetIndexTableOffset( nFmt ))
         {
         case NF_NUMBER_SYSTEM:

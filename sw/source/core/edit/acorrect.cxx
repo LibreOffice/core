@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:39:39 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 #endif
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
-#endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>
 #endif
 
 class _PaMIntoCrsrShellRing
@@ -374,7 +371,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
 
     LanguageType eLang = GetLanguage(nEndPos, FALSE);
     if(LANGUAGE_SYSTEM == eLang)
-        eLang = ::GetSystemLang();
+        eLang = GetAppLanguage();
 
     //JP 22.04.99: Bug 63883 - Sonderbehandlung fuer Punkte.
     BOOL bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().Len() &&
@@ -506,7 +503,7 @@ LanguageType SwAutoCorrDoc::GetLanguage( xub_StrLen nPos, BOOL bPrevPara ) const
     if( pNd )
         eRet = pNd->GetLang( nPos, 0 );
     if(LANGUAGE_SYSTEM == eRet)
-        eRet = ::GetSystemLang();
+        eRet = GetAppLanguage();
     return eRet;
 }
 

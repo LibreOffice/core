@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 15:42:07 $
+ *  last change: $Author: jp $ $Date: 2001-09-27 17:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
@@ -2193,11 +2190,14 @@ void SwFltShell::NextStyle(USHORT nWhich, USHORT nNext)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/fltshell.cxx,v 1.2 2001-01-26 15:42:07 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww1/fltshell.cxx,v 1.3 2001-09-27 17:18:03 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/01/26 15:42:07  jp
+      Bug #77951#: MakePageDesc - create I18N names
+
       Revision 1.1.1.1  2000/09/18 17:14:57  hr
       initial import
 
