@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-12 15:26:25 $
+ *  last change: $Author: jp $ $Date: 2001-07-24 20:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,8 +813,12 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
         xStm->Seek( STREAM_SEEK_TO_BEGIN );
         xStm->Read( aSeq.getArray(),  nLen );
 
+//JP 24.7.2001: as I know was this only for the writer application and this
+//              writes now UTF16 format into the stream
         if( nLen && ( SotExchange::GetFormat( rFlavor ) == SOT_FORMAT_STRING ) )
-            maAny <<= ::rtl::OUString( (const sal_Char*) aSeq.getConstArray(), nLen - 1, gsl_getSystemTextEncoding() );
+//          maAny <<= ::rtl::OUString( (const sal_Char*) aSeq.getConstArray(), nLen - 1, gsl_getSystemTextEncoding() );
+            maAny <<= ::rtl::OUString( (const sal_Unicode*) aSeq.getConstArray(),
+                                        (nLen - 1) / sizeof( sal_Unicode ) );
         else
             maAny <<= aSeq;
     }
