@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAnnotationsObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:43 $
+ *  last change:$Date: 2003-01-31 14:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which represents a collection of annotations
@@ -138,9 +140,7 @@ public class ScAnnotationsObj extends TestCase {
     * of annotations is retrieved using spreadsheet's
     * <code>com.sun.star.sheet.XSheetAnnotationsSupplier</code> interface.
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log )
-           throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oInterface = null;
         XInterface oObj = null;
@@ -162,8 +162,9 @@ public class ScAnnotationsObj extends TestCase {
         XCell oCell = null;
         XSpreadsheet oSheet  = null;
         try {
-            oSheet = (XSpreadsheet)
-                oNames.getByName(oNames.getElementNames()[0]);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),
+                        oNames.getByName(oNames.getElementNames()[0]));
             // adding an annotation...
             XCellRange oCRange = (XCellRange)
                 UnoRuntime.queryInterface(XCellRange.class, oSheet);
@@ -177,6 +178,10 @@ public class ScAnnotationsObj extends TestCase {
             throw new StatusException(
                 "Error getting test object from spreadsheet document",e) ;
         } catch (com.sun.star.container.NoSuchElementException e) {
+            e.printStackTrace(log) ;
+            throw new StatusException(
+                "Error getting test object from spreadsheet document",e) ;
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log) ;
             throw new StatusException(
                 "Error getting test object from spreadsheet document",e) ;

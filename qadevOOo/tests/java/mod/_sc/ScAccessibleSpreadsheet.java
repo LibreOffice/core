@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleSpreadsheet.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:44 $
+ *  last change:$Date: 2003-01-31 13:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.table.XCell;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for accessible object of spreadsheet document.<p>
@@ -167,13 +169,17 @@ public class ScAccessibleSpreadsheet extends TestCase {
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
             xCell = oSheet.getCellByPosition(5, 5) ;
             xCell.setFormula(text);
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception ceating relation :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Exception ceating relation :");
+            e.printStackTrace(log);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println("Exception ceating relation :");
             e.printStackTrace(log);
         }

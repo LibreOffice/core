@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAnnotationObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:43 $
+ *  last change:$Date: 2003-01-31 13:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which represents some text annotation
@@ -170,8 +172,8 @@ public class ScAnnotationObj extends TestCase {
             UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCell oCell = null;
         try {
-            XSpreadsheet oSheet = (XSpreadsheet)
-                    XAccess.getByIndex(cellPos.Sheet);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),XAccess.getByIndex(cellPos.Sheet));
             XCellRange oCRange = (XCellRange)
                 UnoRuntime.queryInterface(XCellRange.class, oSheet);
             oCell = oCRange.getCellByPosition(cellPos.Column, cellPos.Row);
@@ -180,6 +182,10 @@ public class ScAnnotationObj extends TestCase {
             throw new StatusException(
                 "Error getting test object from spreadsheet document",e);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException(
+                "Error getting test object from spreadsheet document",e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
                 "Error getting test object from spreadsheet document",e);
