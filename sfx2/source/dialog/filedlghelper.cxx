@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: thb $ $Date: 2001-09-04 16:44:33 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 08:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,8 +571,12 @@ void FileDialogHelper_Impl::updateVersions()
             }
             else if ( aMed.GetStorage() )
             {
-                aEntries.realloc( 1 );
-                aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
+                SfxFilterFlags nMust = SFX_FILTER_IMPORT | SFX_FILTER_OWN, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
+                if ( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aMed.GetStorage()->GetFormat(), nMust, nDont ) )
+                {
+                    aEntries.realloc( 1 );
+                    aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
+                }
             }
         }
     }
@@ -967,7 +971,6 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
     PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
     pThread->create();
-
     while ( pThread->GetReturnValue() == nMagic )
         Application::Yield();
 
