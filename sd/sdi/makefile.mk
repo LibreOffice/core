@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:29 $
+#   last change: $Author: mba $ $Date: 2002-03-28 16:29:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,8 @@ PRJ=..
 PRJNAME=sd
 TARGET=sdslots
 TARGET2=sdgslots
-SDI1EXPORT=sdnew
-SDI2EXPORT=sdnew
+SDI1EXPORT=sdraw
+SDI2EXPORT=sdraw
 SVSDIINC=$(PRJ)$/source$/ui$/inc
 
 # --- Settings -----------------------------------------------------
@@ -85,7 +85,6 @@ SIDHRCNAME=SDSLOTS.HRC
 SVSDI1DEPEND= \
     $(SOLARINCXDIR)$/ofa.ilb \
     sdraw.sdi \
-    sdnew.sdi \
     app.sdi \
     _docsh.sdi \
     docshell.sdi \
@@ -102,7 +101,6 @@ SVSDI1DEPEND= \
 SVSDI2DEPEND= \
     $(SOLARINCXDIR)$/ofa.ilb \
     sdraw.sdi \
-    sdnew.sdi \
     app.sdi \
     _docsh.sdi \
     grdocsh.sdi \
