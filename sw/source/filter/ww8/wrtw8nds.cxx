@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:19:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1760,12 +1760,13 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     rWW8Wrt.Out_SfxBreakItems(pFmt->GetAttrSet(), rNode);
 
     /*
-    ALWAYS relative (nPageSize + ( nPageSize / 10 )) < nTblSz,
+    ALWAYS relative when HORI_NONE (nPageSize + ( nPageSize / 10 )) < nTblSz,
     in that case the cell width's and table width's are not real. The table
     width is maxed and cells relative, so we need the frame (generally page)
     width that the table is in to work out the true widths.
     */
-    bool bRelBoxSize = true;
+    SwFmtHoriOrient aHori(pFmt->GetHoriOrient());
+    bool bRelBoxSize = (pFmt->GetHoriOrient().GetHoriOrient() == HORI_NONE);
     unsigned long nTblSz = static_cast<unsigned long>(pFmt->GetFrmSize().GetWidth());
 
     unsigned long nPageSize = nTblSz;
