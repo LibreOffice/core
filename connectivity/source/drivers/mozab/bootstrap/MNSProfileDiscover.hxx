@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ *  $RCSfile: MNSProfileDiscover.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:28:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __MNSProfileDiscover_h___
+#define __MNSProfileDiscover_h___
+
+#include "nsCOMPtr.h"
+#include "nsISupports.h"
+#include "nsString.h"
+#include "nsIRegistry.h"
+#include "nsXPIDLString.h"
+#include "nsVoidArray.h"
+#include "nsIFile.h"
+#include "nsILocalFile.h"
+
+#include <sal/types.h>
+#include <osl/diagnose.h>
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
+#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
+#include <com/sun/star/mozilla/MozillaProductType.hpp>
+#endif
+#include <com/sun/star/uno/RuntimeException.hpp>
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+#include <vector>
+#include <map>
+
+#ifdef XP_WIN
+#include <windows.h>
+#endif
+
+#ifdef XP_OS2
+#define INCL_DOSERRORS
+#define INCL_DOSFILEMGR
+#include <os2.h>
+#endif
+
+using namespace com::sun::star::mozilla;
+namespace connectivity
+{
+    namespace mozab
+    {
+        class ProfileStruct;
+    }
+}
+typedef ::std::map < ::rtl::OUString, ::connectivity::mozab::ProfileStruct* > ProfileList;
+namespace connectivity
+{
+    namespace mozab
+    {
+        class ProfileStruct
+        {
+        public:
+            ProfileStruct(MozillaProductType aProduct,::rtl::OUString aProfileName,nsILocalFile * aProfilePath);
+            MozillaProductType getProductType() { return product;}
+            ::rtl::OUString getProfileName(){ return profileName;}
+            ::rtl::OUString getProfilePath() ;
+            nsILocalFile    *getProfileLocal(){ return profilePath;}
+        protected:
+            MozillaProductType product;
+            ::rtl::OUString profileName;
+            nsCOMPtr<nsILocalFile> profilePath;
+        };
+
+        class ProductStruct
+        {
+        public:
+            void setCurrentProfile(::rtl::OUString aProfileName){mCurrentProfileName = aProfileName;}
+
+            ::rtl::OUString mCurrentProfileName;
+
+            ProfileList mProfileList;
+        };
+
+        //Used to query profiles information
+        class ProfileAccess
+        {
+        public:
+
+            virtual ~ProfileAccess();
+            ProfileAccess();
+            ::rtl::OUString getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
+            ::sal_Int32 getProfileCount( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException);
+            ::sal_Int32 getProfileList( ::com::sun::star::mozilla::MozillaProductType product, ::com::sun::star::uno::Sequence< ::rtl::OUString >& list ) throw (::com::sun::star::uno::RuntimeException);
+            ::rtl::OUString getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException);
+            ::sal_Bool SAL_CALL isProfileLocked( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
+            ::sal_Bool SAL_CALL getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
+
+        protected:
+            ProductStruct m_ProductProfileList[4];
+            sal_Int32 LoadProductsInfo();
+            nsresult  LoadMozillaProfiles();
+            sal_Int32 LoadXPToolkitProfiles(MozillaProductType product);
+
+            //used by isProfileLocked
+            nsresult isExistFileOrSymlink(nsILocalFile* aFile,PRBool *bExist);
+            nsresult isLockExist(nsILocalFile* aFile);
+        };
+
+    }
+}
+
+#endif // __MNSProfileDiscover_h___
+
