@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 17:23:42 $
+#   last change: $Author: vg $ $Date: 2003-03-20 12:26:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,12 +165,28 @@ TYPES:=test.A;test.BA;test.CA;test.DBA;test.E;test.FE;test.G;test.H;test.I
 HELPERTYPES:=com.sun.star.uno.XReference;com.sun.star.uno.XAdapter;com.sun.star.uno.XAggregation;com.sun.star.uno.XWeak;com.sun.star.lang.XComponent;com.sun.star.lang.XTypeProvider;com.sun.star.lang.XEventListener;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.registry.XRegistryKey;com.sun.star.lang.XInitialization;com.sun.star.lang.XServiceInfo;com.sun.star.loader.XImplementationLoader;com.sun.star.lang.IllegalAccessException;com.sun.star.beans.XVetoableChangeListener;com.sun.star.beans.XPropertySet;com.sun.star.uno.XComponentContext
 FACTORYTYPES:=com.sun.star.lang.XComponent;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;com.sun.star.lang.XMultiServiceFactory;com.sun.star.loader.XImplementationLoader;com.sun.star.registry.XImplementationRegistration;com.sun.star.container.XSet;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XMultiComponentFactory
 
+.IF "$(OS)" == "WNT"
+UNO_PATH = $(SOLARBINDIR)
+UNO_OUT = $(OUT)$/bin
+.ELSE
+UNO_PATH = $(SOLARLIBDIR)
+UNO_OUT = $(OUT)$/lib
+.ENDIF
+
 $(BIN)$/cpputest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
     +regcomp -register -r $@ -c $(DLLPRE)corefl$(DLLPOST)
     touch $@
+    +$(COPY) $(UNO_PATH)$/*smgr* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/*cpld* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/*simreg* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/*defreg* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/*tdmgr* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/*rdbtdp* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/*impreg* $(UNO_OUT)
+    +$(COPY) $(UNO_PATH)$/*sec* $(UNO_OUT)
 
 unoheader: $(BIN)$/cpputest.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES)" $(BIN)$/cpputest.rdb
