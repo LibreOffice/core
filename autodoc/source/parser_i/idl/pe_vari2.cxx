@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vari2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace uidl
 
 PE_Variable::PE_Variable( ary::idl::Type_id &   i_rResult_Type,
                           String &              i_rResult_Name )
-    :   eState(),
+    :   eState(e_none),
         pResult_Type(&i_rResult_Type),
         pResult_Name(&i_rResult_Name),
         pPE_Type(0)
