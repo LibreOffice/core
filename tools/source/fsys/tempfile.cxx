@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-15 11:38:13 $
+ *  last change: $Author: hro $ $Date: 2001-07-27 08:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,7 @@ String GetSystemTempDir_Impl()
     const char *pDir = TempDirImpl(sBuf);
     ::rtl::OUString aTmp = ::rtl::OUString::createFromAscii( pDir );
     rtl::OUString aRet;
-#ifdef TF_FILEURL
     FileBase::getFileURLFromSystemPath( aTmp, aRet );
-#else
-    FileBase::normalizePath( aTmp, aRet );
-#endif
     String aName = aRet;
     sal_Int32 i = aName.Len();
     if( aName.GetChar(i-1) != '/' )
@@ -115,10 +111,6 @@ String ConstructTempDir_Impl( const String* pParent )
         rtl::OUString aRet;
 
         // test for valid filename
-#ifdef TF_FILEURL
-#else
-        if ( FileBase::getNormalizedPathFromFileURL( aTmp, aRet ) == FileBase::E_None )
-#endif
         {
             ::osl::DirectoryItem aItem;
             sal_Int32 i = aRet.getLength();
@@ -212,11 +204,7 @@ String TempFile::CreateTempName( const String* pParent )
     // convert to file URL
     rtl::OUString aTmp;
     if ( aName.Len() )
-#ifdef TF_FILEURL
         aTmp = aName;
-#else
-        FileBase::getFileURLFromNormalizedPath( aName, aTmp );
-#endif
     return aTmp;
 }
 
@@ -307,11 +295,7 @@ sal_Bool TempFile::IsValid() const
 String TempFile::GetName() const
 {
     rtl::OUString aTmp;
-#ifdef TF_FILEURL
     aTmp = pImp->aName;
-#else
-    FileBase::getFileURLFromNormalizedPath( pImp->aName, aTmp );
-#endif
     return aTmp;
 }
 
@@ -336,11 +320,7 @@ String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
     }
 
     rtl::OUString aTmp;
-#ifdef TF_FILEURL
     aTmp = aTempNameBase_Impl;
-#else
-    FileBase::getFileURLFromNormalizedPath( aTempNameBase_Impl, aTmp );
-#endif
     return aTmp;
 }
 
@@ -350,11 +330,7 @@ String TempFile::GetTempNameBaseDirectory()
         aTempNameBase_Impl = GetSystemTempDir_Impl();
 
     rtl::OUString aTmp;
-#ifdef TF_FILEURL
     aTmp = aTempNameBase_Impl;
-#else
-    FileBase::getFileURLFromNormalizedPath( aTempNameBase_Impl, aTmp );
-#endif
     return aTmp;
 }
 
