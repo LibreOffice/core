@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:19:21 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 #include <algorithm>
 
@@ -813,6 +816,8 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_SCROLLBAR;
     if ( sPersistentServiceName.equals( FM_SUN_COMPONENT_SPINBUTTON) )
         return OBJ_FM_SPINBUTTON;
+    if (sPersistentServiceName.equals(FM_SUN_COMPONENT_NAVIGATIONBAR))
+        return OBJ_FM_NAVIGATIONBAR;
 
     DBG_ERROR("::getControlTypeByObject : unknown object type !");
     return OBJ_FM_CONTROL;
@@ -844,6 +849,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         case OBJ_FM_FORMATTEDFIELD  : return FM_COMPONENT_FORMATTEDFIELD;
         case OBJ_FM_SCROLLBAR       : return FM_SUN_COMPONENT_SCROLLBAR;
         case OBJ_FM_SPINBUTTON      : return FM_SUN_COMPONENT_SPINBUTTON;
+        case OBJ_FM_NAVIGATIONBAR   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
     }
     return ::rtl::OUString();
 }
@@ -872,7 +878,6 @@ Sequence< ::rtl::OUString> getEventMethods(const Type& type)
             *pNames = pRealMemberDescription->pMemberName;
         }
     }
-
     typelib_typedescription_release( (typelib_TypeDescription *)pType );
     return aNames;
 }
@@ -1008,139 +1013,6 @@ sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XInd
     return (sal_Int16)-1;
 }
 
-//==============================================================================
-// FmSlotDispatch - some kind of translator between the Sfx-Slots and the UNO-dispatchers
-//==============================================================================
-
-//  SMART_UNO_IMPLEMENTATION(FmSlotDispatch, UsrObject);
-
-
-DBG_NAME(FmSlotDispatch);
-//------------------------------------------------------------------------------
-FmSlotDispatch::FmSlotDispatch(const  URL& rUrl, sal_Int16 nSlotId, SfxBindings& rBindings)
-    :SfxControllerItem(nSlotId, rBindings)
-    ,m_aDisposeListeners(m_aAccessSafety)
-    ,m_aStatusListeners(m_aAccessSafety)
-    ,m_aUrl(rUrl)
-    ,m_nSlot(nSlotId)
-{
-    DBG_CTOR(FmSlotDispatch,NULL);
-
-}
-
-//------------------------------------------------------------------------------
-FmSlotDispatch::~FmSlotDispatch()
-{
-
-    DBG_DTOR(FmSlotDispatch,NULL);
-}
-
-//------------------------------------------------------------------------------
-void FmSlotDispatch::BroadcastCurrentState( )
-{
-    SfxPoolItem* pCurrentState = NULL;
-    SfxItemState eCurrentState = GetBindings().QueryState( m_nSlot, pCurrentState );
-    NotifyState( eCurrentState, pCurrentState );
-    delete pCurrentState;
-}
-
-//------------------------------------------------------------------------------
-void FmSlotDispatch::dispatch(const  URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) throw( RuntimeException )
-{
-    DBG_ASSERT(aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL, "FmSlotDispatch::dispatch : invalid argument !");
-    DBG_ASSERT(m_aExecutor.IsSet(), "FmSlotDispatch::dispatch : no executor !");
-    // if we have no executor we would have disabled this feature in statusChanged-calls
-
-    m_aExecutor.Call(this);
-}
-
-//------------------------------------------------------------------------------
-void FmSlotDispatch::NotifyState(SfxItemState eState, const SfxPoolItem* pState, const Reference< ::com::sun::star::frame::XStatusListener>& rListener)
-{
-    ::com::sun::star::frame::FeatureStateEvent aEvent = BuildEvent(eState, pState);
-
-    if (rListener.is())
-        rListener->statusChanged(aEvent);
-    else
-        NOTIFY_LISTENERS(m_aStatusListeners, ::com::sun::star::frame::XStatusListener, statusChanged, aEvent);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::addStatusListener( const Reference< ::com::sun::star::frame::XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
-{
-    DBG_ASSERT((aURL.Main.getLength() == 0) || (aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL),
-        "FmSlotDispatch::addStatusListener: invalid argument !");
-    m_aStatusListeners.addInterface( xControl );
-
-    // acknowledge the initial status
-    SfxPoolItem* pState = NULL;
-    SfxItemState eInitialState = GetBindings().QueryState(m_nSlot, pState);
-
-    NotifyState(eInitialState, pState, xControl);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::removeStatusListener( const Reference< ::com::sun::star::frame::XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
-{
-    DBG_ASSERT((aURL.Main.getLength() == 0) || (aURL.Main.compareTo(m_aUrl.Main) == COMPARE_EQUAL),
-        "FmSlotDispatch::removeStatusListener: invalid argument !");
-    m_aStatusListeners.removeInterface( xControl );
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::dispose(  ) throw(RuntimeException)
-{
-    Reference< XInterface > xXInterface((*this));
-    ::com::sun::star::lang::EventObject aEvt(xXInterface);
-    m_aDisposeListeners.disposeAndClear(aEvt);
-    m_aStatusListeners.disposeAndClear(aEvt);
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::addEventListener( const Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(RuntimeException)
-{
-    m_aDisposeListeners.addInterface( xListener );
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL FmSlotDispatch::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(RuntimeException)
-{
-    m_aDisposeListeners.removeInterface( aListener );
-}
-
-//------------------------------------------------------------------------------
-void FmSlotDispatch::StateChanged(USHORT _nSID, SfxItemState _eState, const SfxPoolItem* _pState)
-{
-    DBG_ASSERT(_nSID == m_nSlot, "FmSlotDispatch::StateChanged : where did this come from ?");
-
-    ::com::sun::star::frame::FeatureStateEvent eEvent = BuildEvent(_eState, _pState);
-    NOTIFY_LISTENERS(m_aStatusListeners, ::com::sun::star::frame::XStatusListener, statusChanged, eEvent);
-}
-
-//------------------------------------------------------------------------------
-::com::sun::star::frame::FeatureStateEvent FmSlotDispatch::BuildEvent(SfxItemState eState, const SfxPoolItem* pState)
-{
-    ::com::sun::star::frame::FeatureStateEvent aReturn;
-    aReturn.Source = static_cast< ::cppu::OWeakObject* >( this );
-    aReturn.FeatureURL = m_aUrl;
-    aReturn.IsEnabled = (SFX_ITEM_DISABLED != eState) && m_aExecutor.IsSet();
-    aReturn.Requery = sal_False;
-
-    if (pState)
-    {
-        if (pState->ISA(SfxBoolItem))
-            aReturn.State <<= ((SfxBoolItem*)pState)->GetValue();
-        else if (pState->ISA(SfxStringItem))
-            aReturn.State <<= ::rtl::OUString(((SfxStringItem*)pState)->GetValue());
-#if DBG_UTIL
-        else if (!pState->ISA(SfxVoidItem))
-            DBG_ERROR("FmSlotDispatch::BuildEvent : don't know what to do with the ItemState !");
-#endif
-    }
-
-    return aReturn;
-}
-
 //========================================================================
 //= FmXDispatchInterceptorImpl
 //========================================================================
@@ -1188,8 +1060,19 @@ FmXDispatchInterceptorImpl::~FmXDispatchInterceptorImpl()
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL FmXDispatchInterceptorImpl::getImplementationId() throw(RuntimeException)
 {
-    return ::form::OImplementationIds::getImplementationId(getTypes());
+    static ::cppu::OImplementationId* pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
+
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch > SAL_CALL FmXDispatchInterceptorImpl::queryDispatch( const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(RuntimeException)
 {
