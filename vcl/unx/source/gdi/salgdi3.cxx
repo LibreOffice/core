@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-12 08:00:24 $
+ *  last change: $Author: hdu $ $Date: 2002-09-13 08:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,20 +1287,6 @@ void SalGraphicsData::DrawServerSimpleFontString( const ServerFontLayout& rSalLa
 
 //--------------------------------------------------------------------------
 
-void SalGraphicsData::DispatchServerFontString( const ServerFontLayout& rLayout )
-{
-    ServerFont& rFont = rLayout.GetServerFont();
-
-    if( aX11GlyphPeer.GetGlyphSet( rFont ) )
-        DrawServerAAFontString( rLayout );
-    else if( aX11GlyphPeer.ForcedAntialiasing( rFont ) )
-        DrawServerAAForcedString( rLayout );
-    else
-        DrawServerSimpleFontString( rLayout );
-}
-
-//--------------------------------------------------------------------------
-
 #ifndef _USE_PRINT_EXTENSION_
 
 // TODO: move into psp project
@@ -1360,13 +1346,13 @@ PspFontLayout::PspFontLayout( const ImplLayoutArgs& rArgs, ::psp::PrinterGfx& rG
     SetWantFallback( false );
     if( rArgs.mpDXArray )
         ApplyDXArray( rArgs.mpDXArray );
-    if( rArgs.mnLayoutWidth )
+    else if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
 }
 
 //--------------------------------------------------------------------------
 
-void PspFontLayout::DrawText( SalGraphics& rSalGraphics ) const
+void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
 {
     const int nMaxGlyphs = 160;
     long        aGlyphAry[ nMaxGlyphs ];
@@ -1374,9 +1360,10 @@ void PspFontLayout::DrawText( SalGraphics& rSalGraphics ) const
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
     Point aPos;
+    long nUnitsPerPixel = rLayout.GetUnitsPerPixel();
     for( int nStart = 0;; )
     {
-        int nGlyphCount = GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry );
+        int nGlyphCount = rLayout.GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart, aWidthAry );
         if( !nGlyphCount )
             break;
 
@@ -1384,16 +1371,47 @@ void PspFontLayout::DrawText( SalGraphics& rSalGraphics ) const
         for( int i = 0; i < nGlyphCount; ++i )
         {
             nXOffset += aWidthAry[ i ];
-            aIdxAry[ i ] = nXOffset / mnUnitsPerPixel;
+            aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
             long nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
             aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? nGlyphIdx : 0;
             aGlyphAry[i] = nGlyphIdx;
         }
 
-        mrPrinterGfx.DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
+        rGfx.DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
     }
 }
+
+//--------------------------------------------------------------------------
+
+void PspFontLayout::DrawText( SalGraphics& ) const
+{
+    DrawPrinterLayout( *this, mrPrinterGfx );
+}
+
 #endif // _USE_PRINT_EXTENSION_
+
+//--------------------------------------------------------------------------
+
+void SalGraphicsData::DispatchServerFontString( const ServerFontLayout& rLayout )
+{
+    if( m_pPrinterGfx != NULL )
+    {
+        // print complex text
+        DrawPrinterLayout( rLayout, *m_pPrinterGfx );
+    }
+    else
+    {
+        // draw complex text
+        ServerFont& rFont = rLayout.GetServerFont();
+
+        if( aX11GlyphPeer.GetGlyphSet( rFont ) )
+            DrawServerAAFontString( rLayout );
+        else if( aX11GlyphPeer.ForcedAntialiasing( rFont ) )
+            DrawServerAAForcedString( rLayout );
+        else
+            DrawServerSimpleFontString( rLayout );
+    }
+}
 
 //--------------------------------------------------------------------------
 
@@ -1418,24 +1436,7 @@ RotatedPoint( Point &rOrigin, int nDx, int nAngle )
 
 void SalGraphicsData::DrawServerFontString( const ServerFontLayout& rLayout )
 {
-#if 1 // TODO: enable fallback
     DispatchServerFontString( rLayout );
-#else
-    // try to use selected font
-    ServerFontLayout* pLayout = rLayout.ExtractLayout( 0, GlyphItem::FALLBACK_MASK );
-    if( pLayout )
-    {
-        DispatchServerFontString( *pLayout );
-        pLayout->Release();
-    }
-    // if needed use fallback font
-    pLayout = rLayout.ExtractLayout( 1, GlyphItem::FALLBACK_MASK );
-    if( pLayout )
-    {
-        DispatchServerFontString( *pLayout );
-        pLayout->Release();
-    }
-#endif
 }
 
 #endif // USE_BUILTIN_RASTERIZER
@@ -1496,6 +1497,8 @@ void SalGraphicsData::DrawStringUCS2MB( const Point& rPoint, const sal_Unicode* 
         XDrawText16( pDisplay, hDrawable_, nGC, rPoint.X(), rPoint.Y(), pTextItem, nItem );
     }
 }
+
+//--------------------------------------------------------------------------
 
 ULONG SalGraphicsData::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
@@ -2147,23 +2150,23 @@ SalLayout* SalGraphicsData::LayoutText( ImplLayoutArgs& rArgs )
     }
 #endif // !defined(_USE_PRINT_EXTENSION_)
 
-    GenericSalLayout* pSalLayout = NULL;
+    GenericSalLayout* pLayout = NULL;
 
     if( mpServerSideFont && !(rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) )
     {
         // layout in selected font
-        pSalLayout = new ServerFontLayout( rArgs, *mpServerSideFont );
+        pLayout = new ServerFontLayout( rArgs, *mpServerSideFont );
     }
 #if !defined(_USE_PRINT_EXTENSION_)
     else if( m_pPrinterGfx != NULL )
     {
-        pSalLayout = new PspFontLayout( rArgs, *m_pPrinterGfx );
+        pLayout = new PspFontLayout( rArgs, *m_pPrinterGfx );
     }
 #endif // !defined(_USE_PRINT_EXTENSION_)
     else if( xFont_ )
-        pSalLayout = new X11FontLayout( rArgs, *xFont_ );
+        pLayout = new X11FontLayout( rArgs, *xFont_ );
 
-    return pSalLayout;
+    return pLayout;
 }
 
 //--------------------------------------------------------------------------
