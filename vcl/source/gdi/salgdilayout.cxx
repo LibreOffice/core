@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:49:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,4 +570,9 @@ BOOL SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
     else
         return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue, rControlHandle, aCaption,
                                                 rNativeBoundingRegion, rNativeContentRegion );
+}
+
+bool SalGraphics::filterText( const String& rOrigText, String& rNewText, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop )
+{
+    return false;
 }
