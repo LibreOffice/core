@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-08 07:28:30 $
+ *  last change: $Author: pb $ $Date: 2002-05-13 09:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 
 #define _SVX_CHARDLG_CXX
 
-#ifndef _SVTOOLS_ASIANLANGUAGESOPTIONS_HXX
-#include <svtools/asianlanguagesoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 
 #include "dialogs.hrc"
@@ -615,8 +615,8 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pImpl->m_aNoStyleText = String( ResId( STR_CHARNAME_NOSTYLE ) );
     m_pImpl->m_aTransparentText = String( ResId( STR_CHARNAME_TRANSPARENT ) );
 
-    SvtAsianLanguagesOptions aAsianLangOptions;
-    sal_Bool bCJK = ( aAsianLangOptions.IsCJKFontEnabled() || aAsianLangOptions.IsCTLFontEnabled() );
+    SvtLanguageOptions aLanguageOptions;
+    sal_Bool bCJK = ( aLanguageOptions.IsCJKFontEnabled() || aLanguageOptions.IsCTLFontEnabled() );
 
     m_pWestLine         = new FixedLine( this, ResId( FL_WEST ) );
     m_pWestFontNameFT   = new FixedText( this, ResId( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
@@ -666,7 +666,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pWestLine             ->Show( bCJK );
     m_pColorFL              ->Show( bCJK );
 
-    bCJK = aAsianLangOptions.IsCJKFontEnabled();
+    bCJK = aLanguageOptions.IsCJKFontEnabled();
     m_pEastLine             ->Show( bCJK );
     m_pEastFontNameFT       ->Show( bCJK );
     m_pEastFontNameLB       ->Show( bCJK );
@@ -677,7 +677,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pEastFontLanguageFT   ->Show( bCJK );
     m_pEastFontLanguageLB   ->Show( bCJK );
 
-    sal_Bool bShowCTL = aAsianLangOptions.IsCTLFontEnabled();
+    sal_Bool bShowCTL = aLanguageOptions.IsCTLFontEnabled();
     if ( bShowCTL && !bCJK )
     {
         // move CTL controls to the places of the CJK controls, if these controls aren't visible
@@ -1916,7 +1916,7 @@ void SvxCharEffectsPage::Initialize()
     m_aOutlineBtn.SetClickHdl( aLink );
     m_aShadowBtn.SetClickHdl( aLink );
 
-    if ( !SvtAsianLanguagesOptions().IsAsianTypographyEnabled() )
+    if ( !SvtLanguageOptions().IsAsianTypographyEnabled() )
     {
         m_aEmphasisFT.Hide();
         m_aEmphasisLB.Hide();
