@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeElementImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: mib $ $Date: 2001-03-13 15:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
     {
         rChangedRegion.UseRedlineText();
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
-            GetImport(), nPrefix, rLocalName, xAttrList, XML_TEXT_TYPE_BODY);
+            GetImport(), nPrefix, rLocalName, xAttrList,
+            XML_TEXT_TYPE_CHANGED_REGION);
     }
 
     if (NULL == pContext)

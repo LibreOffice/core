@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-09 16:04:22 $
+ *  last change: $Author: mib $ $Date: 2001-03-13 15:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,6 +527,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     bStylesOnlyMode( bStylesOnlyM ),
     bProgress( bPrg ),
     bOrganizerMode( sal_False ),
+    bBodyContentStarted( sal_True ),
     pFootnoteBackpatcher( NULL ),
     pSequenceIdBackpatcher( NULL ),
     pSequenceNameBackpatcher( NULL ),
@@ -659,6 +660,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     bStylesOnlyMode( bStylesOnlyM ),
     bProgress( bPrg ),
     bOrganizerMode( bOrganizerM ),
+    bBodyContentStarted( sal_True ),
     pFootnoteBackpatcher( NULL ),
     pSequenceIdBackpatcher( NULL ),
     pSequenceNameBackpatcher( NULL ),
@@ -1325,6 +1327,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     const SvXMLTokenMap& rTokenMap = GetTextElemTokenMap();
     sal_Bool bOrdered = sal_False;
     sal_Bool bHeading = sal_False;
+    sal_Bool bContent = sal_True;
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
     switch( nToken )
     {
@@ -1349,42 +1352,58 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                                 xAttrList, bOrdered );
         break;
     case XML_TOK_TABLE_TABLE:
-        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType ||
+        if( XML_TEXT_TYPE_BODY == eType ||
+            XML_TEXT_TYPE_TEXTBOX == eType ||
              XML_TEXT_TYPE_SECTION == eType ||
-            XML_TEXT_TYPE_HEADER_FOOTER == eType )
+            XML_TEXT_TYPE_HEADER_FOOTER == eType ||
+            XML_TEXT_TYPE_CHANGED_REGION == eType)
             pContext = CreateTableChildContext( rImport, nPrefix, rLocalName,
                                                 xAttrList );
         break;
     case XML_TOK_TEXT_SEQUENCE_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType ||
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
             XML_TEXT_TYPE_HEADER_FOOTER == eType )
+        {
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeSequence);
+            bContent = sal_False;
+        }
         break;
 
     case XML_TOK_TEXT_VARFIELD_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType ||
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
             XML_TEXT_TYPE_HEADER_FOOTER == eType )
+        {
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeSimple);
+            bContent = sal_False;
+        }
         break;
 
     case XML_TOK_TEXT_USERFIELD_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType ||
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted)||
             XML_TEXT_TYPE_HEADER_FOOTER == eType )
+        {
             pContext = new XMLVariableDeclsImportContext(
                 rImport, *this, nPrefix, rLocalName, VarTypeUserField);
+            bContent = sal_False;
+        }
         break;
 
     case XML_TOK_TEXT_DDE_DECLS:
-        if( XML_TEXT_TYPE_BODY == eType ||
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
             XML_TEXT_TYPE_HEADER_FOOTER == eType )
+        {
             pContext = new XMLDdeFieldDeclsImportContext(
                 rImport, nPrefix, rLocalName);
+            bContent = sal_False;
+        }
         break;
 
     case XML_TOK_TEXT_TEXTBOX_PAGE:
-        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
+            XML_TEXT_TYPE_TEXTBOX == eType ||
+            XML_TEXT_TYPE_CHANGED_REGION == eType )
         {
             if( HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) )
             {
@@ -1402,11 +1421,14 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                 pContext = rImport.GetShapeImport()->CreateGroupChildContext(
                         rImport, nPrefix, rLocalName, xAttrList, xShapes );
             }
+            bContent = sal_False;
         }
         break;
 
     case XML_TOK_TEXT_IMAGE_PAGE:
-        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
+            XML_TEXT_TYPE_TEXTBOX == eType ||
+            XML_TEXT_TYPE_CHANGED_REGION == eType )
         {
             if( HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) )
             {
@@ -1424,12 +1446,15 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                 pContext = rImport.GetShapeImport()->CreateGroupChildContext(
                         rImport, nPrefix, rLocalName, xAttrList, xShapes );
             }
+            bContent = sal_False;
         }
         break;
 
     case XML_TOK_TEXT_OBJECT_PAGE:
     case XML_TOK_TEXT_OBJECT_OLE_PAGE:
-        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
+            XML_TEXT_TYPE_TEXTBOX == eType ||
+             XML_TEXT_TYPE_CHANGED_REGION == eType )
         {
             TextContentAnchorType eAnchorType =
                 XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
@@ -1438,11 +1463,14 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                                 rLocalName, xAttrList,
                                                 eAnchorType,
                                                 XML_TEXT_FRAME_OLE );
+            bContent = sal_False;
         }
         break;
 
     case XML_TOK_DRAW_A_PAGE:
-        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
+            XML_TEXT_TYPE_TEXTBOX == eType ||
+             XML_TEXT_TYPE_CHANGED_REGION == eType)
         {
             TextContentAnchorType eAnchorType =
                 XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
@@ -1450,6 +1478,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             pContext = new XMLTextFrameHyperlinkContext( rImport, nPrefix,
                                                 rLocalName, xAttrList,
                                                 eAnchorType );
+            bContent = sal_False;
         }
         break;
 
@@ -1472,6 +1501,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_TRACKED_CHANGES:
         pContext = new XMLTrackedChangesImportContext( rImport, nPrefix,
                                                        rLocalName);
+        bContent = sal_False;
         break;
 
     case XML_TOK_TEXT_CHANGE:
@@ -1486,10 +1516,13 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 
     case XML_TOK_TEXT_FORMS:
         pContext = new XMLFormsContext(rImport, nPrefix, rLocalName);
+        bContent = sal_False;
         break;
 
     default:
-        if( XML_TEXT_TYPE_BODY == eType || XML_TEXT_TYPE_TEXTBOX == eType )
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
+            XML_TEXT_TYPE_TEXTBOX == eType ||
+             XML_TEXT_TYPE_CHANGED_REGION  )
         {
             Reference < XShapes > xShapes;
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
@@ -1507,6 +1540,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     {
         ResetOpenRedlineId();
     }
+
+    if( XML_TEXT_TYPE_BODY == eType && bContent )
+        bBodyContentStarted = sal_False;
 
     return pContext;
 }

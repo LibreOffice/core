@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-13 08:17:08 $
+ *  last change: $Author: mib $ $Date: 2001-03-13 15:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,12 +433,14 @@ XMLTextFrameContext::XMLTextFrameContext(
                 TextContentAnchorType_AT_CHARACTER == eAnchorType ||
                 TextContentAnchorType_AS_CHARACTER == eAnchorType )
             {
+
                 TextContentAnchorType eNew;
                 if( XMLAnchorTypePropHdl::convert( rValue,
                             GetImport().GetMM100UnitConverter(), eNew ) &&
                     ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
                       TextContentAnchorType_AT_CHARACTER == eNew ||
-                      TextContentAnchorType_AS_CHARACTER == eNew ) )
+                      TextContentAnchorType_AS_CHARACTER == eNew ||
+                      TextContentAnchorType_AT_PAGE == eNew) )
                     eAnchorType = eNew;
             }
             break;
