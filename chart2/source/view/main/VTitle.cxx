@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:50:29 $
+ *  last change: $Author: iha $ $Date: 2003-10-30 15:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <goodies/matrix3d.hxx>
 #endif
 
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -127,12 +131,31 @@ void SAL_CALL VTitle::init(
 }
 
 
-awt::Size VTitle::getSize() const
+awt::Size VTitle::getFinalSize() const //size after rotation
 {
     awt::Size aRet;
     if(m_xShape.is())
     {
-        aRet = m_xShape->getSize();
+        double fAngleDegree = m_fRotationAngleDegree;
+        {
+            while(fAngleDegree>=360.0)
+                fAngleDegree-=360.0;
+            while(fAngleDegree<0.0)
+                fAngleDegree+=360.0;
+            if(fAngleDegree>270.0)
+                fAngleDegree=360.0-fAngleDegree;
+            else if(fAngleDegree>180.0)
+                fAngleDegree=fAngleDegree-180.0;
+            else if(fAngleDegree>90.0)
+                fAngleDegree=180.0-fAngleDegree;
+        }
+
+        const double fAnglePi = fAngleDegree*F_PI/180.0;
+        const awt::Size aSize = m_xShape->getSize();
+        aRet.Height = aSize.Width*rtl::math::sin( fAnglePi )
+            + aSize.Height*rtl::math::cos( fAnglePi );
+        aRet.Width = aSize.Width*rtl::math::cos( fAnglePi )
+            + aSize.Height*rtl::math::sin( fAnglePi );
     }
     return aRet;
 }
@@ -153,7 +176,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         Matrix3D aM3;
         aM3.Scale( 1, 1 );
-        aM3.Rotate( m_fRotationAngleDegree );
+        aM3.Rotate( m_fRotationAngleDegree*F_PI/180.0 );
         aM3.Translate( m_nXPos, m_nYPos);
         xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( Matrix3DToHomogenMatrix3(aM3) ) );
     }
@@ -280,18 +303,14 @@ void VTitle::createShapes( const awt::Point& rPos )
             }
         }
 
-        double fRotationAngleDegree( 0.0 );
         try
         {
-            xTitleProperties->getPropertyValue( C2U( "TextRotation" ) ) >>= fRotationAngleDegree;
-            // convert DEG to RAD
-            fRotationAngleDegree *= ( F_PI / 180.0 );
+            xTitleProperties->getPropertyValue( C2U( "TextRotation" ) ) >>= m_fRotationAngleDegree;
         }
         catch( uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
-        m_fRotationAngleDegree = fRotationAngleDegree;
         m_nXPos = rPos.X;
         m_nYPos = rPos.Y;
 
@@ -299,7 +318,7 @@ void VTitle::createShapes( const awt::Point& rPos )
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         Matrix3D aM3;
         aM3.Scale( 1, 1 );
-        aM3.Rotate( m_fRotationAngleDegree );
+        aM3.Rotate( m_fRotationAngleDegree*F_PI/180.0 );
         aM3.Translate( m_nXPos, m_nYPos );
         xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( Matrix3DToHomogenMatrix3(aM3) ) );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 18:17:32 $
+ *  last change: $Author: iha $ $Date: 2003-10-30 15:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ void createTitle( const uno::Reference< XTitle >& xTitle
         VTitle aVTitle(xTitle);
         aVTitle.init(xPageShapes,xShapeFactory);
         aVTitle.createShapes( awt::Point(0,0) );
-        awt::Size aTitleSize = aVTitle.getSize();
+        awt::Size aTitleSize = aVTitle.getFinalSize();
         aVTitle.changePosition( awt::Point( nXPosition, nrYOffset + aTitleSize.Height/2 + nYDistance ) );
         nrYOffset += aTitleSize.Height + 2*nYDistance;
     }

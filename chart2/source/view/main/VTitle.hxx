@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: iha $ $Date: 2003-10-30 15:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ public:
 
     void    createShapes( const ::com::sun::star::awt::Point& rPos );
 
-    ::com::sun::star::awt::Size getSize() const;
+    ::com::sun::star::awt::Size getFinalSize() const;
     void    changePosition( const ::com::sun::star::awt::Point& rPos );
 
 private:
