@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mtg $ $Date: 2001-06-26 11:44:08 $
+#   last change: $Author: mtg $ $Date: 2001-07-27 13:21:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ SLOFILES =  \
         $(SLO)$/dlelstnr.obj \
         $(SLO)$/unofreg.obj \
         $(SLO)$/SwXDocumentSettings.obj \
+        $(SLO)$/SwXPrintPreviewSettings.obj \
         $(SLO)$/RefreshListenerContainer.obj
 
 EXCEPTIONSFILES= \
