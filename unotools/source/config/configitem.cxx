@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: as $ $Date: 2001-05-04 12:34:18 $
+ *  last change: $Author: fs $ $Date: 2001-05-07 10:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,12 +112,14 @@ using namespace com::sun::star::container;
 #endif
 
 #ifdef DBG_UTIL
-inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, Exception& rEx)
+inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
 {
     OString sMsg(cText);
     sMsg += OString(rEx.Message.getStr(), rEx.Message.getLength(), RTL_TEXTENCODING_ASCII_US);
     OSL_ENSURE(sal_False, sMsg.getStr());
 }
+#else
+    #define lcl_CFG_DBG_EXCEPTION( a, b)
 #endif
 
 namespace utl{
@@ -1124,6 +1126,47 @@ sal_Bool ConfigItem::ReplaceSetProperties(
     }
     return bRet;
 }
+/* -----------------------------07.05.01 12:15--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, ::rtl::OUString& _rName)
+{
+    ::rtl::OUString sNewElementName;
+    try
+    {
+        Reference< XNameAccess > xSetNode;
+        xHierarchyAccess->getByHierarchicalName(_rSetNode) >>= xSetNode;
+        if (xSetNode.is())
+        {
+            const sal_uInt32 nPrime = 65521;                            // a prime number
+            const sal_uInt32 nPrimeLess1 = nPrime - 1;
+            sal_uInt32 nEngendering     = (rand() % nPrimeLess1) + 1;   // the engendering of the field
+            sal_uInt32 nFirstElement    = (rand() % nPrimeLess1) + 1;   // the start element
+
+            // the element which will loop through the field
+            sal_uInt32 nFieldElement = (nFirstElement * nEngendering) % nPrime;
+
+            ::rtl::OUString sThisRoundTrial;
+            for (; nFieldElement != nFirstElement; nFieldElement = (nFieldElement * nEngendering) % nPrime)
+            {
+                ::rtl::OUString sThisRoundTrial = sNewElementName;
+                sThisRoundTrial += ::rtl::OUString::valueOf((sal_Int32)nFieldElement);
+
+                if (!xSetNode->hasByName(sThisRoundTrial))
+                {
+                    _rName = sThisRoundTrial;
+                    return sal_True;
+                }
+            }
+        }
+    }
+    catch(const Exception& rEx)
+    {
+        lcl_CFG_DBG_EXCEPTION("Exception from getUniqueSetElementName(): ", rEx);
+    }
+    return sal_False;
+}
+
 /* -----------------------------23.01.01 12:49--------------------------------
 
  ---------------------------------------------------------------------------*/

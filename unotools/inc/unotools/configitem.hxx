@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2001-05-04 12:33:55 $
+ *  last change: $Author: fs $ $Date: 2001-05-07 10:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,17 @@ namespace utl
             sal_Bool                ReplaceSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // add a new node without setting any properties
             sal_Bool                AddNode(const rtl::OUString& rNode, const rtl::OUString& rNewNode);
+
+            /** get a name for a new element of a set node
+                @param _rSetNode
+                    relative path to the set node
+                @param _rBaseName
+                    <ul><li><b>in</b>: the base to use when calculating a new name</li>
+                        <li><b>out</b>: an unused element name</li>
+                    </ul>
+                @return <TRUE/> if a free name could be generated
+            */
+            sal_Bool                getUniqueSetElementName( const rtl::OUString& _rSetNode, rtl::OUString& _rBaseName);
 
         public:
             virtual ~ConfigItem();
