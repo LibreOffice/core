@@ -78,7 +78,7 @@ $(OBJ)$/sxl_%.obj : %.cxx
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& $(NULLDEV)
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV)
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
 .ENDIF
 
@@ -99,7 +99,7 @@ $(SLO)$/sxl_%.obj : %.cxx
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& $(NULLDEV)
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV)
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
 .ENDIF
 
@@ -126,7 +126,7 @@ $(OBJ)$/$(SECOND_BUILD)_%.obj : %.cxx
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& $(NULLDEV)
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@ >& $(NULLDEV)
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
 .ENDIF
 
