@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datanavi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:28:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SV_MENUBTN_HXX
 #include <vcl/menubtn.hxx>
 #endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 #ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
 #endif
@@ -113,6 +116,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XFORMS_XFORMSUIHELPER1_HPP_
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
@@ -178,6 +184,8 @@ namespace svxform
     typedef ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XNameContainer >       XNameContainer_ref;
     typedef ::com::sun::star::uno::Reference<
+                ::com::sun::star::frame::XFrame >                   XFrame_ref;
+    typedef ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >                   XFrameModel_ref;
     typedef ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::dom::events::XEventTarget >  XEventTarget_ref;
@@ -226,8 +234,12 @@ namespace svxform
         ImageList                   m_TbxImageList;
         ImageList                   m_TbxHCImageList;
         // these strings are not valid on the Submission and Binding Page
+        // mb: furthermore these are properties of an instance, thus
+        // it would be much better to get/set them through the UIHelper
+        // interface.
         String                      m_sInstanceName;
         String                      m_sInstanceURL;
+        bool                        m_bLinkOnce;
 
         DECL_LINK(                  TbxSelectHdl, ToolBox * );
         DECL_LINK(                  ItemSelectHdl, DataTreeListBox * );
@@ -235,7 +247,7 @@ namespace svxform
         void                        AddChildren( SvLBoxEntry* _pParent,
                                                  const ImageList& _rImgLst,
                                                  const XNode_ref& _xNode );
-        void                        DoToolBoxAction( USHORT _nToolBoxID );
+        bool                        DoToolBoxAction( USHORT _nToolBoxID );
         SvLBoxEntry*                AddEntry( ItemNode* _pNewNode, bool _bIsElement );
         SvLBoxEntry*                AddEntry( const XPropertySet_ref& _rPropSet );
         void                        EditEntry( const XPropertySet_ref& _rPropSet );
@@ -256,12 +268,23 @@ namespace svxform
         String                      LoadInstance( const PropertyValue_seq& _xPropSeq,
                                                   const ImageList& _rImgLst );
 
-        void                        DoMenuAction( USHORT _nMenuID );
+        bool                        DoMenuAction( USHORT _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
 
         inline SvLBoxEntry*         GetSelectedItem() const { return m_aItemList.FirstSelected(); }
         inline const String&        GetInstanceName() const { return m_sInstanceName; }
         inline const String&        GetInstanceURL() const { return m_sInstanceURL; }
+        inline bool                 GetLinkOnce() const { return m_bLinkOnce; }
+        inline void                 SetInstanceName( const String &name ) { m_sInstanceName=name; }
+        inline void                 SetInstanceURL( const String &url ) { m_sInstanceURL=url; }
+        inline void                 SetLinkOnce( bool bLinkOnce ) { m_bLinkOnce=bLinkOnce; }
+
+        typedef com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> XPropertySet_t;
+        typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> XNode_t;
+
+        inline XPropertySet_t GetBindingForNode( const XNode_t &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
+        inline String GetServiceNameForNode( const XNode_t &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
+        inline XFormsUIHelper1_ref GetXFormsHelper( void ) const { return m_xUIHelper; }
     };
 
     //========================================================================
@@ -299,6 +322,7 @@ namespace svxform
 
         DataListener_ref            m_xDataListener;
         XNameContainer_ref          m_xDataContainer;
+        XFrame_ref                  m_xFrame;
         XFrameModel_ref             m_xFrameModel;
 
         DECL_LINK(                  ModelSelectHdl, ListBox * );
@@ -324,9 +348,10 @@ namespace svxform
         ~DataNavigatorWindow();
 
         void                        SetDocModified();
-        void                        NotifyChanges();
+        void                        NotifyChanges( bool _bLoadAll = false );
         void                        AddContainerBroadcaster( const XContainer_ref& xContainer );
         void                        AddEventBroadcaster( const XEventTarget_ref& xTarget );
+        void                        RemoveBroadcaster();
 
         inline const ImageList&     GetItemImageList() const { return m_aItemImageList; }
         inline const ImageList&     GetItemHCImageList() const { return m_aItemHCImageList; }
@@ -633,6 +658,13 @@ namespace svxform
         m_aFilePickerBtn.Disable();
         m_aLinkInstanceCB.Disable();
     }
+
+    //========================================================================
+    class LinkedInstanceWarningBox : public MessBox
+    {
+    public:
+        LinkedInstanceWarningBox( Window* pParent );
+    };
 
 //............................................................................
 }   // namespace svxform
