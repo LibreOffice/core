@@ -1,8 +1,10 @@
 dr	dtrans	:	offapi rdbmaker NULL
 dr	dtrans									usr1	-	all	dr_mkout NULL
 dr	dtrans\source\cnttype					nmake	-	all	dr_cnttype NULL
-dr	dtrans\source\misc						nmake	-	w	dr_misc NULL
 dr	dtrans\source\generic					nmake	-	all	dr_generic dr_misc.2w NULL
-dr	dtrans\source\win32						nmake	-	w	dr_win32 dr_generic NULL
+dr	dtrans\source\win32\misc				nmake	-	w	dr_win32_misc NULL
+dr	dtrans\source\win32\dtobj				nmake	-	w	dr_win32_dtobj dr_win32_misc NULL
+dr	dtrans\source\win32\ftransl				nmake	-	w	dr_win32_ftransl dr_win32_misc NULL 
+dr	dtrans\source\win32						nmake	-	w	dr_win32 dr_win32_dtobj NULL
 dr	dtrans\source\win32\dnd					nmake	-	w	dr_win32_dnd dr_win32 NULL
 dr	dtrans\source\X11						nmake	-	u	dr_X11 NULL
