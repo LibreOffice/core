@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-08 13:39:07 $
+ *  last change: $Author: jp $ $Date: 2001-07-03 15:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,10 @@ SwExtTextInput::~SwExtTextInput()
                 {
                     pTNd->Replace( rIdx, nLen, sOverwriteText.Copy( 0, nLen ));
                     if( bInsText )
+                    {
+                        rIdx = nSttCnt;
                         pDoc->Overwrite( *this, sTxt );
+                    }
                 }
             }
             else
