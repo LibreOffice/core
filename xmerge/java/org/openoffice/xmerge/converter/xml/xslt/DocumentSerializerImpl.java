@@ -187,26 +187,29 @@ public final class DocumentSerializerImpl
         NodeList nodeList;
         Node tmpNode;
         Node rootNode = (Node)rootElement;
-
+        if (metaDoc !=null){
         nodeList= metaDoc.getElementsByTagName(TAG_OFFICE_META);
         if (nodeList.getLength()>0){
-        tmpNode = newDoc.importNode(nodeList.item(0),true);
-        rootNode.appendChild(tmpNode);
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
         }
+        } if (styleDoc !=null){
         nodeList= styleDoc.getElementsByTagName(TAG_OFFICE_STYLES);
         if (nodeList.getLength()>0){
-        tmpNode = newDoc.importNode(nodeList.item(0),true);
-        rootNode.appendChild(tmpNode);
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
         }
+        }if (domDoc !=null){
         nodeList= domDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
         if (nodeList.getLength()>0){
-        tmpNode = newDoc.importNode(nodeList.item(0),true);
-        rootNode.appendChild(tmpNode);
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
         }
         nodeList= domDoc.getElementsByTagName(TAG_OFFICE_BODY);
         if (nodeList.getLength()>0){
-        tmpNode = newDoc.importNode(nodeList.item(0),true);
-        rootNode.appendChild(tmpNode);
+            tmpNode = newDoc.importNode(nodeList.item(0),true);
+            rootNode.appendChild(tmpNode);
+        }
         }
         domDoc=newDoc;
         }catch(Exception e){
