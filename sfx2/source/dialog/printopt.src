@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:18:47 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:48:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮צימצום נתוני הדפסה‬";
         Text[ hindi ] = "छपाई ड़ॉटा को घटाओ";
         Text[ slovak ] = "Redukovať dáta k tlači";
+        Text[ hungarian ] = "Nyomtatási adatok mennyiségének csökkentése";
+        Text[ slovenian ] = "Zmanjšaj podatke za tiskanje";
     };
     FixedText FT_OUTPUTTYPE
     {
@@ -143,6 +145,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮קביעות עבור‬";
         Text[ hindi ] = "केलिए निर्धारण";
         Text[ slovak ] = "Nastavenie pre";
+        Text[ hungarian ] = "Beállítások:";
+        Text[ slovenian ] = "Nastavitve za";
     };
     RadioButton RB_PRINTEROUTPUT
     {
@@ -176,6 +180,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "~मुद्रक";
         Text[ slovak ] = "~Tlačiareň";
+        Text[ hungarian ] = "~Nyomtató";
+        Text[ slovenian ] = "~Tiskalnik";
     };
     RadioButton RB_PRINTFILEOUTPUT
     {
@@ -192,7 +198,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ french ] = "Imprimer dans un fichier";
         Text[ spanish ] = "Imprimir en ~archivo";
         Text[ italian ] = "Stampa nel ~file";
-        Text[ danish ] = "Udskriv i ~fil";
+        Text[ danish ] = "Udskriv til ~fil";
         Text[ swedish ] = "Skriv ut t~ill fil";
         Text[ polish ] = "Dr~ukowanie do pliku";
         Text[ portuguese_brazilian ] = "Imprimir para ~arquivo";
@@ -209,6 +215,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮הדפסה לקובץ‬";
         Text[ hindi ] = "~फाइल में छपाई";
         Text[ slovak ] = "Tlač do sú~boru";
+        Text[ hungarian ] = "~Fájlba nyomtatás";
+        Text[ slovenian ] = "Natisni v ~datoteko";
     };
 
     // -----------
@@ -251,6 +259,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮צמצום שקיפות‬";
         Text[ hindi ] = "पारदर्शकता ~घटाओ";
         Text[ slovak ] = "~Redukovať priehľadnosť";
+        Text[ hungarian ] = "Átlátszóság ~csökkentése";
+        Text[ slovenian ] = "Z~manjšaj prosojnost";
     };
     RadioButton RB_REDUCETRANSPARENCY_AUTO
     {
@@ -284,6 +294,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्व~चालित प्रकार से";
         Text[ slovak ] = "Auto~maticky";
+        Text[ hungarian ] = "A~utomatikusan";
+        Text[ slovenian ] = "Samo~dejno";
     };
     RadioButton RB_REDUCETRANSPARENCY_NONE
     {
@@ -317,6 +329,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮ללא שקיפות‬";
         Text[ hindi ] = "~कोई पारदर्शकता नहीं";
         Text[ slovak ] = "Žiad~na priehľadnosť";
+        Text[ hungarian ] = "Nincsenek át~látszó elemek";
+        Text[ slovenian ] = "~Brez prosojnosti";
     };
 
     // -----------
@@ -353,6 +367,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮צמצום שיפוע צבע‬";
         Text[ hindi ] = "~ग्रेडिऐन्ट्स घटाओ";
         Text[ slovak ] = "Redukovať pr~echody";
+        Text[ hungarian ] = "Színátmenetek csö~kkentése";
+        Text[ slovenian ] = "Zmanjšaj ~prelive";
     };
     RadioButton RB_REDUCEGRADIENTS_STRIPES
     {
@@ -386,6 +402,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮פסי שופוע צבע‬";
         Text[ hindi ] = "ग्रेडिऐन्ट्स ~स्ट्रइप्स";
         Text[ slovak ] = "P~ruhy prechodov";
+        Text[ hungarian ] = "Á~rnyalatok száma";
+        Text[ slovenian ] = "Pro~ge v prelivu";
     };
     NumericField NF_REDUCEGRADIENTS_STEPCOUNT
     {
@@ -430,6 +448,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮צבע ביניים‬";
         Text[ hindi ] = "बीच का ~रंग";
         Text[ slovak ] = "Pre~chodná farba";
+        Text[ hungarian ] = "Kö~ztes szín";
+        Text[ slovenian ] = "Vmesna ~barva";
     };
 
     // -----------
@@ -466,6 +486,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮צמצום מפות סיביות‬";
         Text[ hindi ] = "~बिटमॉप्स घटाओ";
         Text[ slovak ] = "Redukovať ~bitové mapy";
+        Text[ hungarian ] = "B~itképek minőségének csökkentése";
+        Text[ slovenian ] = "Zmanjšaj ~bitne slike";
     };
     RadioButton RB_REDUCEBITMAPS_OPTIMAL
     {
@@ -482,7 +504,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ french ] = "Qualit� d'impression optimale";
         Text[ spanish ] = "~Calidad de impresi�n �ptima";
         Text[ italian ] = "Qualit� ottima";
-        Text[ danish ] = "H�j ~udskriftskvalitet";
+        Text[ danish ] = "~H�j udskriftskvalitet";
         Text[ swedish ] = "H�g utskrifts~kvalitet";
         Text[ polish ] = "Wy~soka jako�� wydruku";
         Text[ portuguese_brazilian ] = "~Qualidade de impress�o otimizada";
@@ -499,6 +521,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮איכות הדפסה גבוהה‬";
         Text[ hindi ] = "~उच्च छपाई गुण";
         Text[ slovak ] = "Vysoká ~kvalita tlače";
+        Text[ hungarian ] = "Jó ~minőségű nyomtatás";
+        Text[ slovenian ] = "~Visoka kakovost tiskanja";
     };
     RadioButton RB_REDUCEBITMAPS_NORMAL
     {
@@ -515,7 +539,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ french ] = "Qualit� d'impression ~standard";
         Text[ spanish ] = "Calidad ~normal de impresi�n";
         Text[ italian ] = "Qualit� ~normale";
-        Text[ danish ] = "N~ormal udskriftskvalitet";
+        Text[ danish ] = "~Normal udskriftskvalitet";
         Text[ swedish ] = "N~ormal utskriftskvalitet";
         Text[ polish ] = "Zwyk�a jak~o�� wydruku";
         Text[ portuguese_brazilian ] = "Qualidade de impress�o ~normal";
@@ -532,6 +556,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮איכות הדפסה רגילה‬";
         Text[ hindi ] = "सा~मान्य छपाई गुण";
         Text[ slovak ] = "N~ormálna kvalita tlače";
+        Text[ hungarian ] = "N~ormál nyomtatási minőség";
+        Text[ slovenian ] = "N~avadna kakovost tiskanja";
     };
     RadioButton RB_REDUCEBITMAPS_RESOLUTION
     {
@@ -548,7 +574,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ french ] = "~R�solution";
         Text[ spanish ] = "R~esoluci�n";
         Text[ italian ] = "Risoluzione";
-        Text[ danish ] = "Opl~�sning";
+        Text[ danish ] = "~Opl�sning";
         Text[ swedish ] = "Uppl~�sning";
         Text[ polish ] = "Rozdzie~lczo��";
         Text[ portuguese_brazilian ] = "~Resolu��o";
@@ -565,6 +591,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮רזולוציה‬";
         Text[ hindi ] = "विश्ले~षण";
         Text[ slovak ] = "Roz~líšenie";
+        Text[ hungarian ] = "Fel~bontás";
+        Text[ slovenian ] = "Ločl~jivost";
     };
     ListBox LB_REDUCEBITMAPS_RESOLUTION
     {
@@ -678,7 +706,7 @@ TabPage TP_COMMONPRINTOPTIONS
             < "72 DPI"; 0; > ;
         < "96 DPI"; 0;  > ;
         < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (forudindstilling)"; 0; > ;
+        < "200 DPI (standard)"; 0; > ;
         < "300 dpi"; 0; > ;
         < "600 dpi"; 0; > ;
     };
@@ -826,6 +854,24 @@ TabPage TP_COMMONPRINTOPTIONS
         < "300 DPI"; 0; > ;
         < "600 DPI"; 0; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "72 DPI"; 0; > ;
+        < "96 DPI"; 0;  > ;
+        < "150 DPI (Fax)"; 0; > ;
+        < "200 DPI (alapértelmezett)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "72 DPI"; 0; > ;
+        < "96 DPI"; 0;  > ;
+        < "150 DPI (Faks)"; 0; > ;
+        < "200 DPI (Privzeto)"; 0; > ;
+        < "300 DPI"; 0; > ;
+        < "600 DPI"; 0; > ;
+    };
     };
     CheckBox CB_REDUCEBITMAPS_TRANSPARENCY
     {
@@ -859,6 +905,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮הכללת עצמים שקופים‬";
         Text[ hindi ] = "पारदर्शक वस्तु~ओं को सम्मिलित करो";
         Text[ slovak ] = "Zahrnúť priehľadné ob~jekty";
+        Text[ hungarian ] = "Átlátszó ~elemekre is vonatkozzon";
+        Text[ slovenian ] = "Vključi prosojne p~redmete";
     };
 
     // -----------
@@ -895,6 +943,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮המרת צבעים לסולם האפור‬";
         Text[ hindi ] = "रंगों को ग्रेस्केल में बद~लो";
         Text[ slovak ] = "Pre~viesť farby na odtiene šedi";
+        Text[ hungarian ] = "Színek konvertálása szürkeárn~yalatra";
+        Text[ slovenian ] = "Pret~vori barve v sivine";
     };
 
     // -----------
@@ -910,7 +960,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text [ portuguese_brazilian ] = "Avisos da Impressora" ;
         Text [ portuguese ] = "Advert�ncias" ;
         Text [ finnish ] = "Tulostinvaroitukset" ;
-        Text [ danish ] = "Printer-advarsler" ;
+        Text [ danish ] = "Printeradvarsler" ;
         Text [ french ] = "Avertissements" ;
         Text [ swedish ] = "Skrivarvarningar" ;
         Text [ dutch ] = "Printerwaarschuwingen" ;
@@ -931,6 +981,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮אזהרות מדפסת‬";
         Text[ hindi ] = "मुद्रक चेतावनी";
         Text[ slovak ] = "Hlásenia tlačiarne";
+        Text[ hungarian ] = "Figyelmeztetések nyomtatáskor";
+        Text[ slovenian ] = "Opozorila tiskalnika";
     };
     CheckBox CB_PAPERSIZE
     {
@@ -945,7 +997,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text [ french ] = "Taille du papier" ;
         Text [ dutch ] = "Papiergr~ootte" ;
         Text [ swedish ] = "P~appersstorlek" ;
-        Text [ danish ] = "Papirst�rre~lse" ;
+        Text [ danish ] = "~Papirst�rrelse" ;
         Text [ portuguese_brazilian ] = "~Tamanho do papel" ;
         Text [ portuguese ] = "~Tamanho do papel" ;
         Text[ chinese_simplified ] = "纸张大小(~A)";
@@ -964,6 +1016,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮גודל דף‬";
         Text[ hindi ] = "का~गज परिमाण";
         Text[ slovak ] = "Veľkosť p~apiera";
+        Text[ hungarian ] = "P~apírméret";
+        Text[ slovenian ] = "Velikost p~apirja";
     };
     CheckBox CB_PAPERORIENTATION
     {
@@ -997,6 +1051,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮כיוונון נייר‬";
         Text[ hindi ] = "काग~ज अनुस्थापन";
         Text[ slovak ] = "Orientácia papi~era";
+        Text[ hungarian ] = "~Papír tájolása";
+        Text[ slovenian ] = "Us~merjenost papirja";
     };
     CheckBox CB_TRANSPARENCY
     {
@@ -1013,7 +1069,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ french ] = "Transparence";
         Text[ spanish ] = "Transparencia";
         Text[ italian ] = "~Trasparenza";
-        Text[ danish ] = "Tra~nsparens";
+        Text[ danish ] = "~Transparens";
         Text[ swedish ] = "Trans~parens";
         Text[ polish ] = "Przezrocz~ysto��";
         Text[ portuguese_brazilian ] = "~Transpar�ncia";
@@ -1030,6 +1086,8 @@ TabPage TP_COMMONPRINTOPTIONS
         Text[ hebrew ] = "‮שקף‬";
         Text[ hindi ] = "~पारदर्शकता";
         Text[ slovak ] = "Priehľadno~sť";
+        Text[ hungarian ] = "Á~tlátszó elemek nyomtatásakor";
+        Text[ slovenian ] = "~Prosojnost";
     };
 };
 
@@ -1046,7 +1104,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ english_us ] = "Warning" ;
     Text[ portuguese_brazilian ] = "Aviso" ;
     Text[ swedish ] = "Varning" ;
-    Text[ danish ] = "Advarsel!" ;
+    Text[ danish ] = "Advarsel" ;
     Text[ italian ] = "Avvertimento" ;
     Text[ spanish ] = "Advertencia" ;
     Text[ french ] = "Avertissement" ;
@@ -1100,6 +1158,8 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ hebrew ] = "‮המסמך מכיל עצמים שקופים.\nעובדה זו יכולה להאט את ההדפסה במדפסות מסוימות.\nהאם לצמצם את מידת השקיפות כדי לזרז את ההדפסה?‬";
         Text[ hindi ] = "आपका लेखपत्र में पारदर्शक वस्तुओं सम्मिलित है ।\nइसके कारण कुछ मुद्रकें में छपाई करने केलिए अधिक समय ले सकता है ।\nपारदर्शकता अवस्था को घटाना चाहते है ?";
         Text[ slovak ] = "Váš dokument obsahuje priesvitné objekty.\nTo môže na určitých tlačiarňach spôsobiť predĺženie doby tlače.\nMá byť obmedzené použitie priehľadnosti?";
+        Text[ hungarian ] = "A dokumentum átlátszó objektumokat \ntartalmaz. Ez bizonyos nyomtatókon \nhosszabb nyomtatási időhöz vezethet. \nCsökkenthető az átlátszóság foka?";
+        Text[ slovenian ] = "Vaš dokument vsebuje prosojne predmete.\nTo lahko povzroči pri določenih tiskalnikih daljši čas\ntiskanja. Ali naj zmanjšam vidik\nprosojnosti?";
     };
     OKButton BTN_PRINTTRANS_YES
     {
@@ -1134,6 +1194,8 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ hebrew ] = "‮כן‬";
         Text[ hindi ] = "~हाँ";
         Text[ slovak ] = "Án~o";
+        Text[ hungarian ] = "~Igen";
+        Text[ slovenian ] = "~Da";
     };
     PushButton BTN_PRINTTRANS_NO
     {
@@ -1167,6 +1229,8 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ hebrew ] = "‮לא‬";
         Text[ hindi ] = "~नहीं";
         Text[ slovak ] = "~Nie";
+        Text[ hungarian ] = "~Nem";
+        Text[ slovenian ] = "~Ne";
     };
     CancelButton BTN_PRINTTRANS_CANCEL
     {
@@ -1199,6 +1263,8 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ hebrew ] = "‮ביטול‬";
         Text[ hindi ] = "~रद्द करो";
         Text[ slovak ] = "~Zrušiť";
+        Text[ hungarian ] = "~Mégsem";
+        Text[ slovenian ] = "Pre~kliči";
     };
     CheckBox CBX_NOPRINTTRANSWARN
     {
@@ -1210,7 +1276,7 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text [ english_us ] = "~Do not show warning again" ;
         Text [ portuguese_brazilian ] = "~N�o mostrar mais este aviso" ;
         Text [ swedish ] = "Visa inte ~den h�r varningen igen" ;
-        Text [ danish ] = "Vis ikke denne ad~varsel igen" ;
+        Text [ danish ] = "~Vis ikke denne advarsel igen" ;
         Text [ italian ] = "~Non mostrare pi� questa avvertenza" ;
         Text [ spanish ] = "~No mostrar m�s esta advertencia" ;
         Text [ french ] = "~Ne plus afficher cet avertissement" ;
@@ -1232,6 +1298,8 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Text[ hebrew ] = "‮לא להציג אזהרה זו שנית‬";
         Text[ hindi ] = "चेतावनी को फ़िर से ~मत दिखाओ";
         Text[ slovak ] = "Upozornenie znovu nezo~brazovať";
+        Text[ hungarian ] = "~Ne jelenjen meg újra a figyelmeztetés.";
+        Text[ slovenian ] = "~Ne kaži več opozorila";
     };
     Text[ catalan ] = "Av�s";
     Text[ finnish ] = "Varoitus";
@@ -1240,7 +1308,12 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
     Text[ hebrew ] = "‮אזהרה‬";
     Text[ hindi ] = "चेतावनी";
     Text[ slovak ] = "Upozornenie";
+    Text[ hungarian ] = "Figyelmeztetés";
+    Text[ slovenian ] = "Opozorilo";
 };
+
+
+
 
 
 
