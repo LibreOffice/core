@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheupdatelistener.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:58:02 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,8 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
-#include <com/sun/star/document/XEventListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESLISTENER_HPP_
+#include <com/sun/star/util/XChangesListener.hpp>
 #endif
 
 #ifndef _SALHELPER_SINGLETONREF_HXX_
@@ -102,17 +98,11 @@ namespace filter{
 //_______________________________________________
 
 /** @short      implements a listener, which will update the
-                global filter cache of an office, after zje office
-                startup was finished.
-
-    @descr      To perform startup of an office, the filter cache starts
-                with a minimum set of properties only. After the first document
-                was loaded successfully a thread will be started to fill the
-                cache with all other proeprties, so it can work with the whole
-                filter configuration.
+                global filter cache, if the underlying configuration
+                wa changed by other processes.
  */
 class CacheUpdateListener : public BaseLock // must be the first one to guarantee right initialized mutex member!
-                          , public ::cppu::WeakImplHelper1< css::document::XEventListener >
+                          , public ::cppu::WeakImplHelper1< css::util::XChangesListener >
 {
     //-------------------------------------------
     // member
@@ -123,13 +113,9 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
                     to create own needed services. */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
-        /** @short  reference(!) to the singleton filter cache implementation,
+        /** @short  reference to the singleton(!) filter cache implementation,
                     which should be updated by this thread. */
         ::salhelper::SingletonRef< FilterCache > m_rCache;
-
-        /** @short  reference to the global event broadcaster, which is usde to find
-                    out, when the first office document was opened successfully. */
-        css::uno::Reference< css::document::XEventBroadcaster > m_xBroadcaster;
 
     //-------------------------------------------
     // native interface
@@ -141,10 +127,10 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
         /** @short  initialize new instance of this class.
 
-            @descr  It set a reference to the global filter cache singleton,
-                    which should be updated here. Further it starts listening
-                    on the global event broadcaster to get the information, when
-                    loading of the first document was finished.
+            @descr  Listening wont be started here. It can be done
+                    by calling startListening() on this instance.
+
+            @see    startListening()
 
             @param  xSMGR
                     reference to a service manager, which can be used to create
@@ -158,15 +144,49 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
          */
         virtual ~CacheUpdateListener();
 
+        //---------------------------------------
+
+        /** @short  starts listening on the given configuration access.
+
+            @descr  There wont be a check, if this instance is already a listener
+                    on the given configuration access! Such things must be checked
+                    by the outside code.
+
+                    => startListening() and stopListening() must be called in pairs.
+                    But calling of stopListening() isnt required in real.
+                    If the configuration access dies, the listener dies automaticly too.
+
+            @param  xConfigAccess
+                    the configuration access, where this instance should listen for changes.
+         */
+        virtual void startListening(const css::uno::Reference< css::uno::XInterface >& xConfigAccess);
+
+        //---------------------------------------
+
+        /** @short  stop listening on the given configuration access.
+
+            @descr  There wont be a check, if this instance is a listener
+                    on the given configuration access or not! Such things must be checked
+                    by the outside code.
+
+                    => startListening() and stopListening() must be called in pairs.
+                    But calling of stopListening() isnt required in real.
+                    If the configuration access dies, the listener dies automaticly too.
+
+            @param  xConfigAccess
+                    the configuration access, where this instance should stop listening.
+         */
+        virtual void stopListening(const css::uno::Reference< css::uno::XInterface >& xConfigAccess);
+
     //-------------------------------------------
     // uno interface
 
     public:
 
         //---------------------------------------
-        // document.XEventListener
+        // XChangesListener
 
-        virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)
+        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent)
             throw(css::uno::RuntimeException);
 
         //---------------------------------------
