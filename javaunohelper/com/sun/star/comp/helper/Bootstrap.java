@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-21 15:30:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 07:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,24 @@
 
 package com.sun.star.comp.helper;
 
-
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.JavaLoader;
-
 import com.sun.star.container.XSet;
-
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XSingleComponentFactory;
-
+import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.loader.XImplementationLoader;
-
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
-import java.util.Hashtable;
+import java.io.File;
 import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Random;
 
 /** Bootstrap offers functionality to obtain a context or simply
     a service manager.
@@ -243,4 +243,102 @@ public class Bootstrap {
     static private native final Object cppuhelper_bootstrap(
         String ini_file, String bootstrap_parameters [] )
         throws Exception;
+
+    /**
+     * Bootstraps the component context from a UNO installation.
+     *
+     * @return a bootstrapped component context.
+     */
+    public static final XComponentContext bootstrap()
+        throws BootstrapException {
+
+        final String SOFFICE =
+            System.getProperty( "os.name" ).startsWith( "Windows" ) ?
+            "soffice.exe" : "soffice";
+        final String NOLOGO = "-nologo";
+        final String NODEFAULT = "-nodefault";
+        final String PIPENAME =
+            "uno" + Integer.toString( (new Random()).nextInt() & 0xffff );
+        final String URL =
+            "uno:pipe,name=" + PIPENAME + ";urp;StarOffice.ServiceManager";
+        final String CONNECTION =
+            "-accept=pipe,name=" + PIPENAME + ";urp;StarOffice.ServiceManager";
+
+        final long SLEEPMILLIS = 500;
+
+        XComponentContext xContext = null;
+
+        try {
+            // create default local component context
+            XComponentContext xLocalContext =
+                createInitialComponentContext( null );
+
+            // initial service manager
+            XMultiComponentFactory xLocalServiceManager =
+                xLocalContext.getServiceManager();
+
+            // create a URL resolver
+            Object urlResolver = xLocalServiceManager.createInstanceWithContext(
+                "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
+
+            // query for the XUnoUrlResolver interface
+            XUnoUrlResolver xUrlResolver =
+                (XUnoUrlResolver)UnoRuntime.queryInterface(
+                XUnoUrlResolver.class, urlResolver );
+
+            // try to connect to office
+            Object remoteServiceManager = null;
+            try {
+                remoteServiceManager = xUrlResolver.resolve( URL );
+            }
+            catch ( com.sun.star.connection.NoConnectException e ) {
+                // find office executable relative to this class's class loader
+                File fOffice = NativeLibraryLoader.getResource(
+                    Bootstrap.class.getClassLoader(), SOFFICE );
+
+                if ( fOffice != null ) {
+                    // create call with arguments
+                    String[] cmdArray = new String[4];
+                    cmdArray[0] = fOffice.getPath();
+                    cmdArray[1] = NOLOGO;
+                    cmdArray[2] = NODEFAULT;
+                    cmdArray[3] = CONNECTION;
+
+                    // start office process
+                    Runtime.getRuntime().exec( cmdArray );
+
+                    // wait until office is started
+                    while ( remoteServiceManager == null ) {
+                        try {
+                            // try to connect to office
+                            Thread.currentThread().sleep( SLEEPMILLIS );
+                            remoteServiceManager = xUrlResolver.resolve( URL );
+                        } catch ( com.sun.star.connection.NoConnectException ex ) {
+                            // try to connect again
+                        }
+                    }
+                } else {
+                    throw new BootstrapException(
+                        "no office executable found!" );
+                }
+            }
+
+            // XComponentContext
+            if ( remoteServiceManager != null ) {
+                XPropertySet xPropertySet =
+                    (XPropertySet)UnoRuntime.queryInterface(
+                    XPropertySet.class, remoteServiceManager );
+                Object context =
+                    xPropertySet.getPropertyValue( "DefaultContext" );
+                xContext = (XComponentContext) UnoRuntime.queryInterface(
+                    XComponentContext.class, context);
+            }
+        } catch ( java.lang.RuntimeException e ) {
+            throw e;
+        } catch ( java.lang.Exception e ) {
+            throw new BootstrapException( e );
+        }
+
+        return xContext;
+    }
 }
