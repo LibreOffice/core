@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-15 14:57:40 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 18:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,7 @@ private:
     UINT16                      nType;
     SvxEditSource*              pEditSource;
     ESelection                  aSelection;
+    sal_Int16                   nFileFormat;        // enum SvxFileFormat, valid if not inserted
 
 public:
                             ScHeaderFieldObj();

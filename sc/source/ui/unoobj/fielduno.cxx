@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-27 18:04:05 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 18:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/FilenameDisplayFormat.hpp>
 
 #include "fielduno.hxx"
 #include "textuno.hxx"
@@ -117,13 +118,25 @@ const SfxItemPropertyMap* lcl_GetHeaderFieldPropertyMap()
 {
     static SfxItemPropertyMap aHeaderFieldPropertyMap_Impl[] =
     {
-        //! format mode for file name?
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY },
         {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY },
         {0,0,0,0}
     };
     return aHeaderFieldPropertyMap_Impl;
+}
+
+const SfxItemPropertyMap* lcl_GetFileFieldPropertyMap()
+{
+    static SfxItemPropertyMap aFileFieldPropertyMap_Impl[] =
+    {
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY },
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY },
+        {MAP_CHAR_LEN(SC_UNONAME_FILEFORM), 0,  &getCppuType((sal_Int16*)0),        0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY },
+        {0,0,0,0}
+    };
+    return aFileFieldPropertyMap_Impl;
 }
 
 //------------------------------------------------------------------------
@@ -955,6 +968,33 @@ void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
 
 //------------------------------------------------------------------------
 
+SvxFileFormat lcl_UnoToSvxFileFormat( sal_Int16 nUnoValue )
+{
+    switch( nUnoValue )
+    {
+        case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
+        case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
+        case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
+//      case text::FilenameDisplayFormat::NAME_AND_EXT:
+        default:
+            return SVXFILEFORMAT_NAME_EXT;
+    }
+}
+
+sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
+{
+    switch( nSvxValue )
+    {
+        case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
+        case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
+        case SVXFILEFORMAT_PATH:        return text::FilenameDisplayFormat::PATH;
+//      case SVXFILEFORMAT_NAME:
+        default:
+            return text::FilenameDisplayFormat::NAME;
+    }
+}
+
+
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
 ScHeaderFieldObj::ScHeaderFieldObj() :
@@ -962,7 +1002,8 @@ ScHeaderFieldObj::ScHeaderFieldObj() :
     aPropSet( lcl_GetHeaderFieldPropertyMap() ),
     pContentObj( NULL ),
     nPart( 0 ),
-    nType( 0 )
+    nType( 0 ),
+    nFileFormat( SVXFILEFORMAT_NAME_EXT )
 {
     pEditSource = NULL;
 }
@@ -970,11 +1011,12 @@ ScHeaderFieldObj::ScHeaderFieldObj() :
 ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP,
                                             USHORT nT, const ESelection& rSel) :
     OComponentHelper( getMutex() ),
-    aPropSet( lcl_GetHeaderFieldPropertyMap() ),
+    aPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertyMap() : lcl_GetHeaderFieldPropertyMap() ),
     pContentObj( pContent ),
     nPart( nP ),
     nType( nT ),
-    aSelection( rSel )
+    aSelection( rSel ),
+    nFileFormat( SVXFILEFORMAT_NAME_EXT )
 {
     //  pContent ist Null, wenn per ServiceProvider erzeugt
 
@@ -1109,6 +1151,7 @@ SvxFieldItem ScHeaderFieldObj::CreateFieldItem()
         case SC_SERVICE_FILEFIELD:
             {
                 SvxExtFileField aField;
+                aField.SetFormat( (SvxFileFormat) nFileFormat );
                 return SvxFieldItem( aField );
             }
         case SC_SERVICE_SHEETFIELD:
@@ -1217,9 +1260,19 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScHeaderFieldObj::getPropertySe
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
-    return aRef;
+    if (nType == SC_SERVICE_FILEFIELD)
+    {
+        //  file field has different properties
+        static uno::Reference<beans::XPropertySetInfo> aFileFieldInfo =
+            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+        return aFileFieldInfo;
+    }
+    else
+    {
+        static uno::Reference<beans::XPropertySetInfo> aRef =
+            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+        return aRef;
+    }
 }
 
 void SAL_CALL ScHeaderFieldObj::setPropertyValue(
@@ -1228,13 +1281,41 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    //! Properties?
+    ScUnoGuard aGuard;
+    String aNameString = aPropertyName;
+    if ( nType == SC_SERVICE_FILEFIELD && aNameString.EqualsAscii( SC_UNONAME_FILEFORM ) )
+    {
+        sal_Int16 nIntVal;
+        if ( aValue >>= nIntVal )
+        {
+            SvxFileFormat eFormat = lcl_UnoToSvxFileFormat( nIntVal );
+            if (pEditSource)
+            {
+                ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+                ScUnoEditEngine aTempEngine(pEditEngine);
+                SvxFieldData* pField = aTempEngine.FindByPos(
+                        aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
+                DBG_ASSERT(pField,"setPropertyValue: Field not found");
+                if (pField)
+                {
+                    SvxExtFileField* pExtFile = (SvxExtFileField*)pField;   // local to the ScUnoEditEngine
+                    pExtFile->SetFormat( eFormat );
+                    pEditEngine->QuickInsertField( SvxFieldItem(*pField), aSelection );
+                    pEditSource->UpdateData();
+                }
+            }
+            else
+                nFileFormat = eFormat;          // not inserted yet - store value
+        }
+    }
 }
 
 uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
+    ScUnoGuard aGuard;
+
     //! Properties?
     uno::Any aRet;
     String aNameString = aPropertyName;
@@ -1251,6 +1332,28 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_TEXTWRAP ) )
         aRet <<= text::WrapTextMode_NONE;
+    else if ( nType == SC_SERVICE_FILEFIELD && aNameString.EqualsAscii( SC_UNONAME_FILEFORM ) )
+    {
+        SvxFileFormat eFormat = SVXFILEFORMAT_NAME_EXT;
+        if (pEditSource)
+        {
+            ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
+            ScUnoEditEngine aTempEngine(pEditEngine);
+            SvxFieldData* pField = aTempEngine.FindByPos(
+                    aSelection.nStartPara, aSelection.nStartPos, TYPE(SvxExtFileField) );
+            DBG_ASSERT(pField,"setPropertyValue: Field not found");
+            if (pField)
+            {
+                const SvxExtFileField* pExtFile = (const SvxExtFileField*)pField;
+                eFormat = pExtFile->GetFormat();
+            }
+        }
+        else
+            eFormat = (SvxFileFormat) nFileFormat;      // not inserted yet - use stored value
+
+        sal_Int16 nIntVal = lcl_SvxToUnoFileFormat( eFormat );
+        aRet <<= nIntVal;
+    }
 
     return aRet;
 }

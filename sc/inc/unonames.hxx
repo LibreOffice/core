@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-30 10:10:05 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 18:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@
 #define SC_UNONAME_ANCTYPE          "AnchorType"
 #define SC_UNONAME_ANCTYPES         "AnchorTypes"
 #define SC_UNONAME_TEXTWRAP         "TextWrap"
+#define SC_UNONAME_FILEFORM         "FileFormat"
 
 //  url field
 #define SC_UNONAME_REPR             "Representation"
