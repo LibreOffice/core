@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-29 02:41:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   tabopdlg.src  $
- //   $Author: obo $
- //     $Date: 2001-06-29 02:41:31 $
- // $Revision: 1.14 $
+ //   $Author: kz $
+ //     $Date: 2001-07-14 20:26:12 $
+ // $Revision: 1.15 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -496,7 +496,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text[ catalan ] = "ЎFуrmulas no forman una fila!";
     };
     Text[ chinese_simplified ] = "¶аЦШјЖЛг";
-    Text[ russian ] = "Таблица подстановок";
+    Text[ russian ] = "Таблица подстановки";
     Text[ polish ] = "Operacje wielokrotne";
     Text[ japanese ] = "•Ўђ”‰‰ЋZ";
     Text[ chinese_traditional ] = "јПЇГ¤АЄRЄн";
@@ -507,6 +507,7 @@ ModelessDialog RID_SCDLG_TABOP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Operaciones mъltiples";
 };
+
 
 
 
