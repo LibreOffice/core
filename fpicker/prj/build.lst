@@ -1,4 +1,4 @@
-fp	fpicker	:	xml2cmp drafts rdbmaker svtools NULL
+fp	fpicker	:	xml2cmp drafts rdbmaker svtools vcl NULL
 fp	fpicker\source\win32\filepicker		nmake	-	w	fp_win32_filepicker NULL
 fp	fpicker\source\win32\folderpicker	nmake	-	w	fp_win32_folderpicker NULL
 fp  fpicker\source\win32\misc			nmake	-	w	fp_win32_misc fp_win32_filepicker.w fp_win32_folderpicker.w NULL
