@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:17 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1612,7 +1612,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
                 else
                     adx += md/2;
             adx /= md;
-            nNewX = (long)adx + ly;
+            nNewY = (long)adx + ly;
         }
     }
 
@@ -1703,35 +1703,31 @@ Rectangle Polygon::GetBoundRect() const
     DBG_CHKTHIS( Polygon, NULL );
     DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetBoundRect could fail with beziers!" );
 
-    long    nXMin, nXMax, nYMin, nYMax;
     USHORT  nCount = mpImplPolygon->mnPoints;
+    if( ! nCount )
+        return Rectangle();
+
+    long    nXMin, nXMax, nYMin, nYMax;
+
+    const Point* pPt = &(mpImplPolygon->mpPointAry[0]);
+    nXMin = nXMax = pPt->X();
+    nYMin = nYMax = pPt->Y();
 
     for ( USHORT i = 0; i < nCount; i++ )
     {
-        const Point* pPt = &(mpImplPolygon->mpPointAry[i]);
+        pPt = &(mpImplPolygon->mpPointAry[i]);
 
-        if ( !i )
-        {
-            nXMin = nXMax = pPt->X();
-            nYMin = nYMax = pPt->Y();
-        }
-        else
-        {
-            if ( pPt->X() < nXMin )
-                nXMin = pPt->X();
-            if ( pPt->X() > nXMax )
-                nXMax = pPt->X();
-            if ( pPt->Y() < nYMin )
-                nYMin = pPt->Y();
-            if ( pPt->Y() > nYMax )
-                nYMax = pPt->Y();
-        }
+        if ( pPt->X() < nXMin )
+            nXMin = pPt->X();
+        if ( pPt->X() > nXMax )
+            nXMax = pPt->X();
+        if ( pPt->Y() < nYMin )
+            nYMin = pPt->Y();
+        if ( pPt->Y() > nYMax )
+            nYMax = pPt->Y();
     }
 
-    if ( nCount )
-        return Rectangle( nXMin, nYMin, nXMax, nYMax );
-    else
-        return Rectangle();
+    return Rectangle( nXMin, nYMin, nXMax, nYMax );
 }
 
 // -----------------------------------------------------------------------
