@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:23:57 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,7 @@ long ScrollBar::ImplDoAction( BOOL bCallEndScroll )
             nDelta = ImplScroll( mnThumbPos+mnPageSize, bCallEndScroll );
             break;
         default:
-            DBG_ERROR( "ImplDoAction - Invalid Action" );
+            ;
     }
 
     return nDelta;
@@ -745,8 +745,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
                 mnStateFlags &= ~SCRBAR_STATE_PAGE2_DOWN;
             break;
         default:
-            DBG_ERROR( "ImplDoMouseAction - Invalid Action" );
-
+            ;
     }
 
     if ( nOldStateFlags != mnStateFlags )
@@ -1102,6 +1101,13 @@ void ScrollBar::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         Invalidate();
+}
+
+// -----------------------------------------------------------------------
+
+long ScrollBar::PreNotify( NotifyEvent& rNEvt )
+{
+    return Control::PreNotify( rNEvt );
 }
 
 // -----------------------------------------------------------------------
