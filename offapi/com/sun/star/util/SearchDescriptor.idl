@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SearchDescriptor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module util {
 
 /** describes what and how to search within a container.
  */
-service SearchDescriptor
+published service SearchDescriptor
 {
     interface com::sun::star::util::XSearchDescriptor;
 
