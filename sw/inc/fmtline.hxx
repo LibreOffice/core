@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:32:47 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 17:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ class SwFmtLineNumber: public SfxPoolItem
 public:
     SwFmtLineNumber();
     ~SwFmtLineNumber();
+
+    TYPEINFO();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
