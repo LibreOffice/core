@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.46 2002-01-17 12:49:54 mib Exp $
+	$Id: style.mod,v 1.47 2002-01-17 13:35:08 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -69,7 +69,7 @@
 <!ATTLIST style:style style:name %styleName; #REQUIRED>
 
 <!ENTITY % styleFamily "(paragraph|text|section|
-						 table|table-column|table-row|table-cell|table-page|chart|graphics|default|drawing-page|presentation|control)">
+						 table|table-column|table-row|table-cell|table-page|chart|graphics|default|drawing-page|presentation|control|ruby)">
 <!ATTLIST style:style style:family %styleFamily; #REQUIRED>
 
 <!ATTLIST style:style style:parent-style-name %styleName; #IMPLIED>
@@ -319,6 +319,11 @@
 
 <!ATTLIST style:properties style:decimal-places %nonNegativeInteger; #IMPLIED>
 <!ATTLIST style:properties style:tab-stop-distance %nonNegativeLength; #IMPLIED>
+
+<!-- ruby properties -->
+<!ATTLIST style:properties style:ruby-align (left|center|right|distribute-letter|distribute-space) #IMPLIED>
+<!ATTLIST style:properties style:ruby-position (above|below) #IMPLIED>
+
 
 <!-- table properties -->
 <!ATTLIST style:properties style:width %positiveLength; #IMPLIED>
