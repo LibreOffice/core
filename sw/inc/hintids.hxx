@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:12:32 $
+ *  last change: $Author: os $ $Date: 2001-07-04 11:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,82 +195,82 @@ RES_PARATR_END
 enum RES_FRMATR
 {
 RES_FRMATR_BEGIN = RES_PARATR_END,
-    RES_FILL_ORDER = RES_FRMATR_BEGIN,              // 66
-    RES_FRM_SIZE,                                   // 67
-    RES_PAPER_BIN,                                  // 68
-    RES_LR_SPACE,                                   // 69
-    RES_UL_SPACE,                                   // 70
-    RES_PAGEDESC,                                   // 71
-    RES_BREAK,                                      // 72
-    RES_CNTNT,                                      // 73
-    RES_HEADER,                                     // 74
-    RES_FOOTER,                                     // 75
-    RES_PRINT,                                      // 76
-    RES_OPAQUE,                                     // 77
-    RES_PROTECT,                                    // 78
-    RES_SURROUND,                                   // 79
-    RES_VERT_ORIENT,                                // 80
-    RES_HORI_ORIENT,                                // 81
-    RES_ANCHOR,                                     // 82
-    RES_BACKGROUND,                                 // 83
-    RES_BOX,                                        // 84
-    RES_SHADOW,                                     // 85
-    RES_FRMMACRO,                                   // 86
-    RES_COL,                                        // 87
-    RES_KEEP,                                       // 88
-    RES_URL,                                        // 89
-    RES_EDIT_IN_READONLY,                           // 90
-    RES_LAYOUT_SPLIT,                               // 91
-    RES_CHAIN,                                      // 92
-    RES_FRMATR_DUMMY2,                              // 93
-    RES_LINENUMBER  ,                               // 94
-    RES_FTN_AT_TXTEND,                              // 95
-    RES_END_AT_TXTEND,                              // 96
-    RES_COLUMNBALANCE,                              // 97
-    RES_FRMATR_DUMMY7,                              // 98
-    RES_FRMATR_DUMMY8,                              // 99
-    RES_FRMATR_DUMMY9,                              // 100
+    RES_FILL_ORDER = RES_FRMATR_BEGIN,              // 75
+    RES_FRM_SIZE,                                   // 76
+    RES_PAPER_BIN,                                  // 77
+    RES_LR_SPACE,                                   // 78
+    RES_UL_SPACE,                                   // 79
+    RES_PAGEDESC,                                   // 80
+    RES_BREAK,                                      // 81
+    RES_CNTNT,                                      // 82
+    RES_HEADER,                                     // 83
+    RES_FOOTER,                                     // 84
+    RES_PRINT,                                      // 85
+    RES_OPAQUE,                                     // 86
+    RES_PROTECT,                                    // 87
+    RES_SURROUND,                                   // 88
+    RES_VERT_ORIENT,                                // 89
+    RES_HORI_ORIENT,                                // 90
+    RES_ANCHOR,                                     // 91
+    RES_BACKGROUND,                                 // 92
+    RES_BOX,                                        // 93
+    RES_SHADOW,                                     // 94
+    RES_FRMMACRO,                                   // 95
+    RES_COL,                                        // 96
+    RES_KEEP,                                       // 97
+    RES_URL,                                        // 98
+    RES_EDIT_IN_READONLY,                           // 99
+    RES_LAYOUT_SPLIT,                               // 100
+    RES_CHAIN,                                      // 101
+    RES_FRMATR_DUMMY2,                              // 102
+    RES_LINENUMBER  ,                               // 103
+    RES_FTN_AT_TXTEND,                              // 104
+    RES_END_AT_TXTEND,                              // 105
+    RES_COLUMNBALANCE,                              // 106
+    RES_FRMATR_DUMMY7,                              // 107
+    RES_FRMATR_DUMMY8,                              // 108
+    RES_FRMATR_DUMMY9,                              // 109
 RES_FRMATR_END
 };
 
 enum RES_GRFATR
 {
 RES_GRFATR_BEGIN = RES_FRMATR_END,
-    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 101
-    RES_GRFATR_CROPGRF,                             // 102
+    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 110
+    RES_GRFATR_CROPGRF,                             // 111
 
-    RES_GRFATR_ROTATION,                            // 103
-    RES_GRFATR_LUMINANCE,                           // 104
-    RES_GRFATR_CONTRAST,                            // 105
-    RES_GRFATR_CHANNELR,                            // 106
-    RES_GRFATR_CHANNELG,                            // 107
-    RES_GRFATR_CHANNELB,                            // 108
-    RES_GRFATR_GAMMA,                               // 109
-    RES_GRFATR_INVERT,                              // 110
-    RES_GRFATR_TRANSPARENCY,                        // 111
-    RES_GRFATR_DRAWMODE,                            // 112
+    RES_GRFATR_ROTATION,                            // 112
+    RES_GRFATR_LUMINANCE,                           // 113
+    RES_GRFATR_CONTRAST,                            // 114
+    RES_GRFATR_CHANNELR,                            // 115
+    RES_GRFATR_CHANNELG,                            // 116
+    RES_GRFATR_CHANNELB,                            // 117
+    RES_GRFATR_GAMMA,                               // 118
+    RES_GRFATR_INVERT,                              // 119
+    RES_GRFATR_TRANSPARENCY,                        // 120
+    RES_GRFATR_DRAWMODE,                            // 121
 
-    RES_GRFATR_DUMMY1,                              // 113
-    RES_GRFATR_DUMMY2,                              // 114
-    RES_GRFATR_DUMMY3,                              // 115
-    RES_GRFATR_DUMMY4,                              // 116
-    RES_GRFATR_DUMMY5,                              // 117
+    RES_GRFATR_DUMMY1,                              // 122
+    RES_GRFATR_DUMMY2,                              // 123
+    RES_GRFATR_DUMMY3,                              // 124
+    RES_GRFATR_DUMMY4,                              // 125
+    RES_GRFATR_DUMMY5,                              // 126
 RES_GRFATR_END
 };
 
 enum RES_BOXATR
 {
 RES_BOXATR_BEGIN = RES_GRFATR_END,
-    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 118
-    RES_BOXATR_FORMULA,                             // 119
-    RES_BOXATR_VALUE,                               // 120
+    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 127
+    RES_BOXATR_FORMULA,                             // 128
+    RES_BOXATR_VALUE,                               // 129
 RES_BOXATR_END
 };
 
 enum RES_UNKNOWNATR
 {
 RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
-    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,        // 121
+    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,        // 120
 RES_UNKNOWNATR_END
 };
 
