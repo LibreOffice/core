@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:42:44 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,14 +120,14 @@ ModalDialog DLG_SNAPLINE
         Text [ spanish ] = "~Eliminar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "~Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -149,14 +149,14 @@ ModalDialog DLG_SNAPLINE
         Text [ dutch ] = "Positie" ;
         Text [ spanish ] = "Posición" ;
         Text [ english_us ] = "Position" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ chinese_simplified ] = "ä½ç½®";
         Text[ russian ] = "Ïîçèöèÿ";
         Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ˆÊ’u";
-        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ japanese ] = "ä½ç½®";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición";
@@ -224,14 +224,14 @@ ModalDialog DLG_SNAPLINE
         Text [ dutch ] = "Type" ;
         Text [ spanish ] = "Tipo" ;
         Text [ english_us ] = "Type" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "ÇüÅÂ";
+        Text[ korean ] = "í˜•íƒœ";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
@@ -259,14 +259,14 @@ ModalDialog DLG_SNAPLINE
             MaskColor = IMAGE_MASK_STDCOLOR;
             ImageBitmap = Bitmap { File = "hlppoint.bmp" ; };
         };
-        Text[ chinese_simplified ] = "µã(~P)";
+        Text[ chinese_simplified ] = "ç‚¹(~P)";
         Text[ russian ] = "~Òî÷êà";
         Text[ polish ] = "Pu~nkt";
-        Text[ japanese ] = "“_(~P)";
-        Text[ chinese_traditional ] = "ÂI(~P)";
+        Text[ japanese ] = "ç‚¹(~P)";
+        Text[ chinese_traditional ] = "é»(~P)";
         Text[ arabic ] = "äŞØÉ";
         Text[ greek ] = "Óçìåßï";
-        Text[ korean ] = "Á¡(~P)";
+        Text[ korean ] = "ì (~P)";
         Text[ turkish ] = "Nokta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Punto";
@@ -294,14 +294,14 @@ ModalDialog DLG_SNAPLINE
             MaskColor = IMAGE_MASK_STDCOLOR;
             ImageBitmap = Bitmap { File = "hlplvert.bmp" ; };
         };
-        Text[ chinese_simplified ] = "×İÏò(~V)";
+        Text[ chinese_simplified ] = "çºµå‘(~V)";
         Text[ russian ] = "~Âåğòèêàëüíî";
         Text[ polish ] = "W pionie";
-        Text[ japanese ] = "cˆÊ’u(~V)";
-        Text[ chinese_traditional ] = "Áa¦V(~V)";
+        Text[ japanese ] = "ç¸¦ä½ç½®(~V)";
+        Text[ chinese_traditional ] = "ç¸±å‘(~V)";
         Text[ arabic ] = "ÑÃÓí";
         Text[ greek ] = "Êáôáêüñõöá";
-        Text[ korean ] = "¼öÁ÷(~V)";
+        Text[ korean ] = "ìˆ˜ì§(~V)";
         Text[ turkish ] = "Dikey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vertical";
@@ -329,30 +329,31 @@ ModalDialog DLG_SNAPLINE
             MaskColor = IMAGE_MASK_STDCOLOR;
             ImageBitmap = Bitmap { File = "hlplhorz.bmp" ; };
         };
-        Text[ chinese_simplified ] = "ºáÏò(~Z)";
+        Text[ chinese_simplified ] = "æ¨ªå‘(~Z)";
         Text[ russian ] = "Ãîğèçîíòàëüíî";
         Text[ polish ] = "W poziomie";
-        Text[ japanese ] = "‰¡ˆÊ’u(~Z)";
-        Text[ chinese_traditional ] = "¾î¦V(~Z)";
+        Text[ japanese ] = "æ¨ªä½ç½®(~Z)";
+        Text[ chinese_traditional ] = "æ©«å‘(~Z)";
         Text[ arabic ] = "ÃİŞí";
         Text[ greek ] = "Ïñéæüíôéá";
-        Text[ korean ] = "¼öÆò(~Z)";
+        Text[ korean ] = "ìˆ˜í‰(~Z)";
         Text[ turkish ] = "Yatay";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Horizontal";
     };
-    Text[ chinese_simplified ] = "ĞÂ½¨×ø±ê";
+    Text[ chinese_simplified ] = "æ–°å»ºåæ ‡";
     Text[ russian ] = "Íîâûé îáúåêò ïğèâÿçêè";
     Text[ polish ] = "Nowy obiekt zaczepu";
-    Text[ japanese ] = "V‚µ‚¢½Å¯ÌßµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "·s«Ø®y¼Ğ";
+    Text[ japanese ] = "æ–°ã—ã„ï½½ï¾…ï½¯ï¾Œï¾Ÿï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+    Text[ chinese_traditional ] = "æ–°å»ºåº§æ¨™";
     Text[ arabic ] = "ßÇÆä ÍÈÓ ÌÏíÏ";
     Text[ greek ] = "Íİï áíôéêåßìåíï ğñïóêüëëçóçò";
-    Text[ korean ] = "»õ ¸ÂÃã °³Ã¼";
+    Text[ korean ] = "ìƒˆ ë§ì¶¤ ê°œì²´";
     Text[ turkish ] = "Yeni kavrama nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nuevo objeto de captura";
 };
+
 
 
 
