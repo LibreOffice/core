@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-12 08:26:37 $
+ *  last change: $Author: tl $ $Date: 2000-10-19 09:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,12 +570,8 @@ BOOL SmEditWindow::IsAllSelected() const
 
 void SmEditWindow::SelectAll()
 {
-    // set selection from first paragraph, first char to
-    // last paragraph, last char
-    ULONG nParaCnt = pEditEngine->GetParagraphCount();  //! always >= 1
-    DBG_ASSERT( nParaCnt >= 1, "Sm : paragraph count is 0!" );
-    ULONG nParaLen = pEditEngine->GetTextLen( nParaCnt - 1 );
-    pEditView->SetSelection( ESelection( 0, 0, nParaCnt - 1, nParaLen - 1 ) );
+    // 0xFFFF as last two parameters refers to the end of the text
+    pEditView->SetSelection( ESelection( 0, 0, 0xFFFF, 0xFFFF ) );
 }
 
 void SmEditWindow::InsertCommand(USHORT Command)
