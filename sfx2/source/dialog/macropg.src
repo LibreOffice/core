@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text [ dutch ] = "Macro toewijzen" ;
     Text [ swedish ] = "Tilldela makro" ;
     Text [ danish ] = "Tildel makro" ;
-    Text [ portuguese_brazilian ] = "Makro zuweisen" ;
+    Text [ portuguese_brazilian ] = "Atribuir macro" ;
     Text [ portuguese ] = "Atribuir macro" ;
     String STR_EVENT
     {
@@ -105,6 +105,9 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ catalan ] = "Esdeveniment";
         Text[ finnish ] = "Tapahtuma";
         Text[ thai ] = "à¹€à¸«à¸•à¸¸à¸à¸²à¸£à¸“à¹Œ";
+        Text[ czech ] = "UdÃ¡lost";
+        Text[ hebrew ] = "â€®××™×¨×•×¢â€¬";
+        Text[ hindi ] = "à¤˜à¤Ÿà¤¨à¤¾";
     };
     String STR_ASSMACRO
     {
@@ -127,10 +130,13 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "ì§€ì •ëœ ë§¤í¬ë¡œ";
         Text[ chinese_simplified ] = "æŒ‡å®šçš„å®";
         Text[ chinese_traditional ] = "æŒ‡å®šçš„å·¨é›†";
-        Text[ turkish ] = "Assigned macro";
+        Text[ turkish ] = "Atanan makro";
         Text[ arabic ] = "Assigned macro";
         Text[ catalan ] = "Assigned macro";
         Text[ thai ] = "Assigned macro";
+        Text[ czech ] = "PÅ™iÅ™azenÃ© makro";
+        Text[ hebrew ] = "â€®××§×¨×• ××•×©×â€¬";
+        Text[ hindi ] = "Assigned macro";
     };
     Control LB_EVENT
     {
@@ -183,10 +189,13 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ korean ] = "ë§¤í¬ë¡œê°€ ìˆëŠ” ìœ„ì¹˜\n";
         Text[ chinese_simplified ] = "ç°æœ‰çš„å®çš„ä½ç½®(~E)ï¼š\n";
         Text[ chinese_traditional ] = "ç¾æœ‰çš„å·¨é›†ä½ç½®ï¼š\n";
-        Text[ turkish ] = "~Existing macros in:\n";
+        Text[ turkish ] = "~Mevcut makrolar:\n";
         Text[ arabic ] = "~Existing macros in:\n";
         Text[ catalan ] = "~Existing macros in:\n";
         Text[ thai ] = "~Existing macros in:\n";
+        Text[ czech ] = "ExistujÃ­cÃ­ makra v:\n";
+        Text[ hebrew ] = "â€®××§×¨×•××™× ×§×™×™××™× ×‘:\nâ€¬";
+        Text[ hindi ] = "~Existing macros in:\n";
     };
     Control LB_MACROS
     {
@@ -212,11 +221,11 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ dutch ] = "T~oewijzen" ;
         Text [ swedish ] = "Till~dela" ;
         Text [ danish ] = "Tildel" ;
-        Text [ portuguese_brazilian ] = "Z~uweisen" ;
+        Text [ portuguese_brazilian ] = "~Atribuir" ;
         Text [ portuguese ] = "~Atribuir" ;
         Text[ chinese_simplified ] = "æŒ‡å®š(~A)";
         Text[ russian ] = "Íàçíà÷èòü";
-        Text[ polish ] = "P~rzypisz";
+        Text[ polish ] = "~Przypisz";
         Text[ japanese ] = "å‰²ã‚Šå½“ã¦(~A)";
         Text[ chinese_traditional ] = "æŒ‡å®š(~A)";
         Text[ arabic ] = "ÊÚííä";
@@ -226,6 +235,9 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ catalan ] = "~Assigna";
         Text[ finnish ] = "~Määritä";
         Text[ thai ] = "~à¸à¸³à¸«à¸™à¸”";
+        Text[ czech ] = "PÅ™iÅ™adit";
+        Text[ hebrew ] = "â€®×”×©××”â€¬";
+        Text[ hindi ] = "~à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤°à¥‹";
     };
     PushButton PB_DELETE
     {
@@ -242,11 +254,11 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ dutch ] = "~Opheffen" ;
         Text [ swedish ] = "~Upphäv" ;
         Text [ danish ] = "Oph~æv" ;
-        Text [ portuguese_brazilian ] = "~Aufheben" ;
+        Text [ portuguese_brazilian ] = "~Remover" ;
         Text [ portuguese ] = "~Limpar" ;
         Text[ chinese_simplified ] = "å–æ¶ˆ(~R)";
         Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "~Usuñ";
         Text[ japanese ] = "è§£é™¤(~R)";
         Text[ chinese_traditional ] = "å–æ¶ˆ(~R)";
         Text[ arabic ] = "ÅÒÇáÉ";
@@ -256,6 +268,9 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
         Text[ thai ] = "à¹€~à¸­à¸²à¸­à¸­à¸";
+        Text[ czech ] = "Odstranit";
+        Text[ hebrew ] = "â€®×”×¡×¨×”â€¬";
+        Text[ hindi ] = "~à¤¹à¤Ÿà¤¾à¤“";
     };
     ListBox LB_SCRIPTTYPE
     {
@@ -277,7 +292,7 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text [ french ] = "Macros" ;
         Text [ swedish ] = "Makron" ;
         Text [ danish ] = "Makroer" ;
-        Text [ portuguese_brazilian ] = "Makros" ;
+        Text [ portuguese_brazilian ] = "Macros" ;
         Text [ portuguese ] = "Macros" ;
         Text[ chinese_simplified ] = "å®";
         Text[ russian ] = "Ìàêğîñû";
@@ -287,10 +302,13 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ arabic ] = "æÍÏÇÊ ÇáãÇßÑæ";
         Text[ greek ] = "Ìáêñïåíôïëİò";
         Text[ korean ] = "ë§¤í¬ë¡œ";
-        Text[ turkish ] = "Makro";
+        Text[ turkish ] = "Makrolar";
         Text[ catalan ] = "Macros";
         Text[ finnish ] = "Makrot";
         Text[ thai ] = "à¸¡à¸²à¹‚à¸„à¸£";
+        Text[ czech ] = "Makra";
+        Text[ hebrew ] = "â€®×××§×¨×•â€¬";
+        Text[ hindi ] = "à¤®à¥‰à¤•à¥à¤°à¥‹à¤¸";
     };
     Text[ russian ] = "Íàçíà÷èòü ìàêğîñ";
     Text[ greek ] = "Áíôéóôïß÷éóç ìáêñïåíôïëŞò";
@@ -304,55 +322,19 @@ TabPage RID_SFX_TP_MACROASSIGN
     Text[ catalan ] = "Assigna la macro";
     Text[ finnish ] = "Määritä makro";
     Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸¡à¸²à¹‚à¸„à¸£";
-#if SUPD<582
-    String STR_JAVASCRIPT
-    {
-        Text = "JavaScript" ;
-        Text [ ENGLISH ] = "JavaScript" ;
-        Text [ english_us ] = "JavaScript" ;
-        Text [ swedish ] = "JavaScript" ;
-        Text [ danish ] = "JavaScript" ;
-        Text [ italian ] = "JavaScript" ;
-        Text [ spanish ] = "JavaScript" ;
-        Text [ french ] = "JavaScript" ;
-        Text [ dutch ] = "JavaScript" ;
-        Text [ portuguese_brazilian ] = "JavaScript" ;
-        Text [ portuguese ] = "JavaScript" ;
-        Text[ chinese_simplified ] = "JavaScript";
-        Text[ russian ] = "JavaScript";
-        Text[ polish ] = "JavaScript";
-        Text[ japanese ] = "JavaScript";
-        Text[ chinese_traditional ] = "JavaScript";
-        Text[ arabic ] = "JavaScript";
-        Text[ greek ] = "JavaScript";
-        Text[ korean ] = "JavaScript";
-        Text[ turkish ] = "JavaScript";
-        Text[ catalan ] = "JavaScript";
-        Text[ finnish ] = "JavaScript";
-        Text[ thai ] = "JavaScript";
-    };
-    MultiLineEdit ED_JAVASCRIPT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 85  ) ;
-        Size = MAP_APPFONT ( 236 , 88 ) ;
-        TabStop = TRUE ;
-        Left = TRUE ;
-        VScroll = TRUE ;
-        HScroll = TRUE ;
-        Hide = TRUE ;
-        IgnoreTab = TRUE ;
-    };
-#endif
-    Text[ chinese_simplified ] = "Ö¸¶¨ºê";
-    Text[ russian ] = "Íàçíà÷èòü ìàêğîñ";
-    Text[ polish ] = "Przypisz makro";
-    Text[ japanese ] = "Ï¸Û‚ÌŠ„‚è“–‚Ä";
-    Text[ chinese_traditional ] = "«ü©w¥¨¶°";
-    Text[ arabic ] = "ÊÚííä æÍÏÉ ãÇßÑæ";
-    Text[ greek ] = "Áíôéóôïß÷éóç ìáêñïåíôïëŞò";
-    Text[ korean ] = "Assign Macro";
+    Text[ czech ] = "PÅ™iÅ™adit makro";
+    Text[ hebrew ] = "â€®×”×©××ª ××§×¨×•â€¬";
+    Text[ hindi ] = "à¤®à¥‰à¤•à¥à¤°à¥‹ à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¤°à¥‹";
 };
+
+
+
+
+
+
+
+
+
 
 
 
