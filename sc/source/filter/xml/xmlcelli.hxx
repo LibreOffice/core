@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-09-27 11:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Bool    bIsEmpty : 1;
     sal_Bool    bHasTextImport : 1;
     sal_Bool    bIsFirstTextImport : 1;
+    sal_Bool    bSolarMutexLocked : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -150,6 +151,9 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,
                                                 const com::sun::star::table::CellAddress& aCellAddress);
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
+
+    void LockSolarMutex();
+    void UnlockSolarMutex();
 
 public:
 

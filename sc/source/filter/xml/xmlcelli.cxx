@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-09-27 11:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nMergedRows(1),
     nCellsRepeated(1),
     fValue(0.0),
-    rXMLImport((ScXMLImport&)rImport)
+    rXMLImport((ScXMLImport&)rImport),
+    bSolarMutexLocked(sal_False)
 {
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
@@ -377,6 +378,24 @@ ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
         delete pDetectiveObjVec;
     if (pCellRangeSource)
         delete pCellRangeSource;
+}
+
+void ScXMLTableRowCellContext::LockSolarMutex()
+{
+    if (!bSolarMutexLocked)
+    {
+        GetScImport().LockSolarMutex();
+        bSolarMutexLocked = sal_True;
+    }
+}
+
+void ScXMLTableRowCellContext::UnlockSolarMutex()
+{
+    if (bSolarMutexLocked)
+    {
+        GetScImport().UnlockSolarMutex();
+        bSolarMutexLocked = sal_False;
+    }
 }
 
 void ScXMLTableRowCellContext::SetCursorOnTextImport()
@@ -691,6 +710,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
             ScDocument* pDoc = rXMLImport.GetDocument();
             if (pDoc)
             {
+                LockSolarMutex();
                 SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
                 sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
                 String sDate;
@@ -723,6 +743,7 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosit
 {
     if( pDetectiveObjVec && pDetectiveObjVec->size() )
     {
+        LockSolarMutex();
         ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Sheet );
         uno::Reference < drawing::XShapes > xShapes (rXMLImport.GetTables().GetCurrentXShapes());   // make draw page
         for( ScMyImpDetectiveObjVec::iterator aItr = pDetectiveObjVec->begin(); aItr != pDetectiveObjVec->end(); aItr++ )
@@ -750,6 +771,7 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
         ScDocument* pDoc = rXMLImport.GetDocument();
         if (pDoc)
         {
+            LockSolarMutex();
             ScRange aDestRange( static_cast<USHORT>(rPosition.Column), static_cast<USHORT>(rPosition.Row), rPosition.Sheet,
                 rPosition.Column + pCellRangeSource->nColumns - 1,
                 rPosition.Row + pCellRangeSource->nRows - 1, rPosition.Sheet );
@@ -767,7 +789,6 @@ void ScXMLTableRowCellContext::EndElement()
 {
     if (!bHasSubTable)
     {
-        rXMLImport.LockSolarMutex();
         if (bHasTextImport && rXMLImport.GetRemoveLastChar())
         {
             if (GetImport().GetTextImport()->GetCursor().is())
@@ -823,7 +844,8 @@ void ScXMLTableRowCellContext::EndElement()
                 }
                 uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
-                if (pContentValidationName && pContentValidationName->getLength())
+                if ((pContentValidationName && pContentValidationName->getLength()) ||
+                    pMyAnnotation || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = sal_False;
                 for (sal_Int32 i = 0; i < nCellsRepeated; i++)
                 {
@@ -863,7 +885,7 @@ void ScXMLTableRowCellContext::EndElement()
                                             else
                                                 bDoIncrement = sal_False;
                                         }
-                                        if (bDoIncrement)
+                                        if (bDoIncrement || bHasTextImport)
                                             rXMLImport.GetProgressBarHelper()->Increment();
                                     }
                                     break;
@@ -891,12 +913,16 @@ void ScXMLTableRowCellContext::EndElement()
                         }
                     }
                     else
+                    {
+                        if (bHasTextImport)
+                            rXMLImport.GetProgressBarHelper()->Increment();
                         if ((i == 0) && (aCellPos.Column == 0))
                             for (sal_Int32 j = 1; j < nRepeatedRows; j++)
                             {
                                     rXMLImport.GetTables().AddRow();
                                     rXMLImport.GetTables().AddColumn(sal_False);
                             }
+                    }
                 }
                 if (nCellsRepeated > 1 || nRepeatedRows > 1)
                 {
@@ -927,12 +953,14 @@ void ScXMLTableRowCellContext::EndElement()
                     xCell->setFormula(*pOUFormula);
                     if ((nCellType == util::NumberFormat::TEXT) && pOUTextValue && pOUTextValue->getLength())
                     {
+                        LockSolarMutex();
                         ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
                         if (pCellObj)
                             pCellObj->SetFormulaResultString(*pOUTextValue);
                     }
                     else if (fValue != 0.0)
                     {
+                        LockSolarMutex();
                         ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
                         if (pCellObj)
                             pCellObj->SetFormulaResultDouble(fValue);
@@ -959,7 +987,7 @@ void ScXMLTableRowCellContext::EndElement()
                 rXMLImport.GetProgressBarHelper()->Increment();
             }
         }
-        rXMLImport.UnlockSolarMutex();
+        UnlockSolarMutex();
     }
     bIsMerged = sal_False;
     bHasSubTable = sal_False;
