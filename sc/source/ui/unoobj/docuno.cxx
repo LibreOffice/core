@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:57:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,8 +472,9 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else
-        SfxBaseModel::Notify( rBC, rHint );     // SfxBaseModel is derived from SfxListener
+
+    // always call parent - SfxBaseModel might need to handle the same hints again
+    SfxBaseModel::Notify( rBC, rHint );     // SfxBaseModel is derived from SfxListener
 }
 
 // XSpreadsheetDocument
