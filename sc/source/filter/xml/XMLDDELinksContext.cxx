@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
+#endif
+#ifndef SC_MATRIX_HXX
+#include "scmatrix.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -210,35 +213,37 @@ void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRows)
 
 void ScXMLDDELinkContext::EndElement()
 {
-    if (nPosition > -1 && nColumns && nRows)
+    if (nPosition > -1 && nColumns && nRows && GetScImport().GetDocument())
     {
-        ScMatrix* pMatrix;
-        if (GetScImport().GetDocument() &&
-            GetScImport().GetDocument()->CreateDdeLinkResultDimension(static_cast<USHORT>(nPosition),
-            static_cast<USHORT>(nColumns), static_cast<USHORT>(nRows), pMatrix))
+        ScMatrixRef pMatrix = new ScMatrix( static_cast<USHORT>(nColumns), static_cast<USHORT>(nRows) );
+
+        DBG_ASSERT(static_cast<sal_uInt32>(nColumns * nRows) == aDDELinkTable.size(), "there is a wrong cells count");
+        sal_Int32 nCol(0);
+        sal_Int32 nRow(-1);
+        sal_Int32 nIndex(0);
+        for (ScDDELinkCells::iterator aItr = aDDELinkTable.begin(); aItr != aDDELinkTable.end(); ++aItr)
         {
-            if (pMatrix)
+            if (nIndex % nColumns == 0)
             {
-                DBG_ASSERT(static_cast<sal_uInt32>(nColumns * nRows) == aDDELinkTable.size(), "there is a wrong cells count");
-                sal_Int32 nCol(0);
-                sal_Int32 nRow(-1);
-                sal_Int32 nIndex(0);
-                for (ScDDELinkCells::iterator aItr = aDDELinkTable.begin(); aItr != aDDELinkTable.end(); aItr++)
-                {
-                    if (nIndex % nColumns == 0)
-                    {
-                        nRow++;
-                        nCol = 0;
-                    }
-                    else
-                        nCol++;
-                    String sValue(aItr->sValue);
-                    GetScImport().GetDocument()->SetDdeLinkResult(pMatrix, static_cast<USHORT>(nCol), static_cast<USHORT>(nRow),
-                        sValue, aItr->fValue, aItr->bString, aItr->bEmpty);
-                    nIndex++;
-                }
+                nRow++;
+                nCol = 0;
             }
+            else
+                nCol++;
+
+            USHORT nScCol( static_cast< USHORT >( nCol ) );
+            USHORT nScRow( static_cast< USHORT >( nRow ) );
+            if( aItr->bEmpty )
+                pMatrix->PutEmpty( nScCol, nScRow );
+            else if( aItr->bString )
+                pMatrix->PutString( aItr->sValue, nScCol, nScRow );
+            else
+                pMatrix->PutDouble( aItr->fValue, nScCol, nScRow );
+
+            nIndex++;
         }
+
+        GetScImport().GetDocument()->SetDdeLinkResultMatrix( static_cast< USHORT >( nPosition ), pMatrix );
     }
 }
 
