@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_xrefpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-15 10:35:32 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,14 @@ HF_IdlXrefs::Write_ManualLinks( const client &  i_ce ) const
         Xml::Element &
             rLink = rOutCell >> *new Html::Link( Env().Link2Manual(*it));
         if ( (*(it+1)).empty() )
-            rLink << *it;
+
+            // HACK KORR_FUTURE
+            // Research what happens with manual links which contain normal characters
+            // in non-utf-8 texts. And research, why utfF-8 does not work here.
+            rLink << new Xml::XmlCode(*it);
         else
-            rLink << *(it+1);
+            // HACK KORR_FUTURE, see above.
+            rLink << new Xml::XmlCode( *(it+1) );
         rOutCell
             << new Html::LineBreak
             << C_sCRLF;
