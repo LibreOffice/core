@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ portuguese ] = "Intervalo entre linhas" ;
         Text[ chinese_simplified ] = "Ïß¼ä¸ô";
         Text[ russian ] = "Ïğîìåæóòîê ìåæäó ëèíèÿìè";
-        Text[ polish ] = "Odstêp wierszy";
+        Text[ polish ] = "Odstêpy miêdzy liniami";
         Text[ japanese ] = "üŠÔŠu";
         Text[ chinese_traditional ] = "½u¶¡¹j";
         Text[ arabic ] = "ÊÈÇÚÏ ÇáÎØæØ";
@@ -305,6 +305,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ turkish ] = "Çizgi aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia entre líneas";
+        Text[ finnish ] = "Line spacing";
     };
     FixedText FT_HORZ_1
     {
@@ -491,6 +492,26 @@ TabPage RID_SVXPAGE_CONNECTION
         TabStop = TRUE ;
         QuickHelpText = "Vorschau" ;
         QuickHelpText [ ENGLISH ] = "Preview" ;
+        QuickHelpText[ english_us ] = "Preview!";
+        QuickHelpText[ portuguese ] = "Preview";
+        QuickHelpText[ russian ] = "Preview";
+        QuickHelpText[ greek ] = "Preview";
+        QuickHelpText[ dutch ] = "Preview";
+        QuickHelpText[ french ] = "Preview";
+        QuickHelpText[ spanish ] = "Previsualización!";
+        QuickHelpText[ finnish ] = "Preview";
+        QuickHelpText[ italian ] = "Preview";
+        QuickHelpText[ danish ] = "Preview";
+        QuickHelpText[ swedish ] = "Förhandsvisning!";
+        QuickHelpText[ polish ] = "Podgl¹d!";
+        QuickHelpText[ portuguese_brazilian ] = "Preview";
+        QuickHelpText[ japanese ] = "Preview";
+        QuickHelpText[ korean ] = "Preview";
+        QuickHelpText[ chinese_simplified ] = "Ô¤ÊÓ!";
+        QuickHelpText[ chinese_traditional ] = "¹wÄı!";
+        QuickHelpText[ turkish ] = "Preview";
+        QuickHelpText[ arabic ] = "Preview";
+        QuickHelpText[ catalan ] = "Preview";
     };
     Text[ chinese_simplified ] = "Á¬½Ó·û";
     Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";
