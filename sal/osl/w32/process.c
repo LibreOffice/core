@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-20 16:41:29 $
+ *  last change: $Author: hro $ $Date: 2001-07-23 15:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,12 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     HANDLE              hInputRead = NULL, hInputWrite = NULL, hOutputRead = NULL, hOutputWrite = NULL, hErrorRead = NULL, hErrorWrite = NULL;
     BOOL                fInheritHandles = FALSE;
+    SECURITY_ATTRIBUTES sa;
+
+    /* Set up the security attributes struct. */
+    sa.nLength= sizeof(SECURITY_ATTRIBUTES);
+    sa.lpSecurityDescriptor = NULL;
+    sa.bInheritHandle = TRUE;
 
     /* if no image name given, use first argument */
     if( ( NULL == ustrImageName ) && nArguments )
@@ -293,7 +299,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     {
         HANDLE  hTemp = NULL;
 
-        CreatePipe( &hInputRead, &hTemp, NULL, 0 );
+        CreatePipe( &hInputRead, &hTemp, &sa, 0 );
 
         DuplicateHandle( GetCurrentProcess(), hTemp, GetCurrentProcess(), &hInputWrite, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS );
 
@@ -306,7 +312,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     {
         HANDLE  hTemp = NULL;
 
-        CreatePipe( &hTemp, &hOutputWrite, NULL, 0 );
+        CreatePipe( &hTemp, &hOutputWrite, &sa, 0 );
 
         DuplicateHandle( GetCurrentProcess(), hTemp, GetCurrentProcess(), &hOutputRead, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS );
 
@@ -319,7 +325,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     {
         HANDLE  hTemp = NULL;
 
-        CreatePipe( &hTemp, &hErrorWrite, NULL, 0 );
+        CreatePipe( &hTemp, &hErrorWrite, &sa, 0 );
 
         DuplicateHandle( GetCurrentProcess(), hTemp, GetCurrentProcess(), &hErrorRead, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS );
 
