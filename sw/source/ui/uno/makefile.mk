@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:23:24 $
+#   last change: $Author: obo $ $Date: 2004-11-16 10:27:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,10 @@ LIBTARGET=no
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
+
+.IF "$(DVO_XFORMS)" != ""
+CDEFS+=-DDVO_XFORMS
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
