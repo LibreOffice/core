@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmisc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
+ *  last change: $Author: ka $ $Date: 2002-01-17 15:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,9 @@ static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuff
     BitmapColor*        pColMapBuf = aColMap.ImplGetColorBuffer();
     BitmapColor         aIndex( 0 );
 
-    for( USHORT i = 0, nCount = aColMap.GetEntryCount(); i < nCount; i++ )
+    for( USHORT i = 0, nSrcCount = aColMap.GetEntryCount(), nDstCount = rDstBuffer.maPalette.GetEntryCount(); i < nSrcCount; i++ )
     {
-        if( rSrcBuffer.maPalette[ i ] == rDstBuffer.maPalette[ i ] )
+        if( ( i < nDstCount ) && ( rSrcBuffer.maPalette[ i ] == rDstBuffer.maPalette[ i ] ) )
             aIndex.SetIndex( i );
         else
             aIndex.SetIndex( rDstBuffer.maPalette.GetBestIndex( rSrcBuffer.maPalette[ i ] ) );
