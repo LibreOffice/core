@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:28:06 $
+ *  last change: $Author: mba $ $Date: 2001-10-02 07:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,19 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PropertyValue_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 #ifndef _STDLIB_H
 #include <stdlib.h>
@@ -142,6 +155,7 @@
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "viewfrm.hxx"
 #include "sfxhelp.hxx"
@@ -164,6 +178,11 @@
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "shutdownicon.hxx"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
 
 //-------------------------------------------------------------------------
 
@@ -409,16 +428,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_INET_EXE_PLUGIN  :
                     if ( rSet.Put( SfxBoolItem( SID_INET_EXE_PLUGIN, aSecurityOptions.IsExecutePlugins() ) ) )
                         bRet = TRUE;
-                case SID_INET_DNS_SERVER :
-                    if ( rSet.Put( SfxStringItem( rPool.GetWhich(SID_INET_DNS_SERVER),
-                                     aInetOptions.GetDnsIpAddress() ) ) )
-                        bRet = TRUE;
-                    break;
-                case SID_INET_DNS_AUTO  :
-                    if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_DNS_AUTO ),
-                                !aInetOptions.GetDnsIpAddress().getLength() ) ) )
-                        bRet = TRUE;
-                    break;
                 case SID_SECURE_URL :
                 {
                     ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs = aSecurityOptions.GetSecureURLs();
@@ -446,38 +455,72 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     DBG_ASSERT(sal_False, "SfxApplication::GetOptions()\nSoffice.ini key \"Common\\MetafilePrint\" is obsolete! .. How I can support SID_ENABLE_METAFILEPRINT any longer?\n");
 #endif
                     break;
+
+                case SID_INET_DNS_SERVER :
+                    if ( !IsPlugin() && rSet.Put( SfxStringItem( rPool.GetWhich(SID_INET_DNS_SERVER),
+                                     aInetOptions.GetDnsIpAddress() ) ) )
+                        bRet = TRUE;
+                    break;
+                case SID_INET_DNS_AUTO  :
+                    if ( !IsPlugin() && rSet.Put( SfxBoolItem( rPool.GetWhich( SID_INET_DNS_AUTO ),
+                                !aInetOptions.GetDnsIpAddress().getLength() ) ) )
+                        bRet = TRUE;
+                    break;
                 case SID_INET_PROXY_TYPE :
-                    if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
-                            (UINT16)aInetOptions.GetProxyType() )))
+                {
+                    if ( IsPlugin() )
+                    {
+                        // currently no settings available, use a default
+                        if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
+                                (UINT16) 1 )))
+                            bRet = TRUE;
+                    }
+                    else if( rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_INET_PROXY_TYPE ),
+                                (UINT16)aInetOptions.GetProxyType() )))
+                            bRet = TRUE;
+                    break;
+                }
+                case SID_INET_HTTP_PROXY_NAME :
+                {
+                    if ( IsPlugin() )
+                    {
+                        // currently no settings available, use a default
+                        if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ), String() ) ) )
+                            bRet = TRUE;
+                    }
+                    else if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
+                            aInetOptions.GetProxyHttpName() )))
+                        bRet = TRUE;
+                    break;
+                }
+                case SID_INET_HTTP_PROXY_PORT :
+                    if ( IsPlugin() )
+                    {
+                        // currently no settings available, use a default
+                        if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ), String() ) ) )
+                            bRet = TRUE;
+                    }
+                    else if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
+                            aInetOptions.GetProxyHttpPort() )))
                         bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_NAME :
-                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_FTP_PROXY_NAME ),
+                    if ( !IsPlugin() && rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_FTP_PROXY_NAME ),
                             aInetOptions.GetProxyFtpName() )))
                         bRet = TRUE;
                     break;
                 case SID_INET_FTP_PROXY_PORT :
-                    if ( rSet.Put( SfxInt32Item ( rPool.GetWhich(SID_INET_FTP_PROXY_PORT ),
+                    if ( !IsPlugin() && rSet.Put( SfxInt32Item ( rPool.GetWhich(SID_INET_FTP_PROXY_PORT ),
                             aInetOptions.GetProxyFtpPort() )))
                         bRet = TRUE;
                     break;
-                case SID_INET_HTTP_PROXY_NAME :
-                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_HTTP_PROXY_NAME ),
-                            aInetOptions.GetProxyHttpName() )))
-                        bRet = TRUE;
-                    break;
-                case SID_INET_HTTP_PROXY_PORT :
-                    if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_HTTP_PROXY_PORT ),
-                            aInetOptions.GetProxyHttpPort() )))
-                        bRet = TRUE;
-                    break;
                 case SID_INET_SOCKS_PROXY_NAME :
-                    if ( rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_SOCKS_PROXY_NAME ),
+                    if ( !IsPlugin() && rSet.Put( SfxStringItem ( rPool.GetWhich(SID_INET_SOCKS_PROXY_NAME ),
                             aInetOptions.GetProxySocksName() )))
                         bRet = TRUE;
                     break;
                 case SID_INET_SOCKS_PROXY_PORT :
-                    if ( rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_SOCKS_PROXY_PORT ),
+                    if ( !IsPlugin() && rSet.Put( SfxInt32Item( rPool.GetWhich(SID_INET_SOCKS_PROXY_PORT ),
                             aInetOptions.GetProxySocksPort() )))
                         bRet = TRUE;
                     break;
@@ -488,7 +531,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 #endif
                     break;
                 case SID_INET_NOPROXY :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
+                    if( !IsPlugin() && rSet.Put( SfxStringItem ( rPool.GetWhich( SID_INET_NOPROXY),
                                 aInetOptions.GetProxyNoProxy() )))
                         bRet = TRUE;
                     break;
@@ -769,24 +812,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         ShutdownIcon::SetAutostart( ( (const SfxBoolItem*)pItem )->GetValue() != FALSE );
     }
 
-    // Proxy-Type
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
-    {
-        DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
-        aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
-    }
-
-    // NoProxy
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
-    }
-
     // StarBasic Enable
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_BASIC_ENABLED, TRUE, &pItem))
     {
@@ -802,69 +827,160 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         bResetSession = TRUE;
     }
 
-    // DNS Server
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DNS_AUTO), TRUE, &pItem))
+    if ( IsPlugin() )
     {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL bIsAuto = ((const SfxBoolItem *)pItem)->GetValue();
-        if( bIsAuto )
+        sal_Int16 nMode = 0;
+        String aServerName;
+        String aPortNumber;
+        if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
         {
-            aInetOptions.SetDnsIpAddress( String() );
+            DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
+            nMode = ((const SfxUInt16Item*)pItem )->GetValue();
         }
-        else
-        {
-            String aDNS;
-            if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DNS_SERVER), TRUE, &pItem) )
-            {
-                DBG_ASSERT(pItem->ISA(SfxStringItem), "SfxStringItem expected");
-                aDNS = ((const SfxStringItem *)pItem)->GetValue();
-            }
-            aInetOptions.SetDnsIpAddress( aDNS );
-        }
-        bResetSession = TRUE;
-    }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-        aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
+        if ( nMode == 2 )
+        {
+            if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
+            {
+                DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
+                aServerName = ((const SfxStringItem *)pItem)->GetValue();
+            }
+            if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), TRUE, &pItem ) )
+            {
+                DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
+                aPortNumber = String::CreateFromInt32( ((const SfxInt32Item*)pItem )->GetValue() );
+            }
+
+            if ( !aServerName.Len() || !aPortNumber.Len() )
+                nMode = 0;
+        }
+
+        // assemble URL
+        String aURL = String::CreateFromAscii("vnd.sun.star.cmd.plugin:ProxySettings?mode=");
+
+        // add mode ( 0 = no proxy, 1 = browser settings, 2 = manual settings )
+        aURL.Append( String::CreateFromInt32( nMode ) );
+
+        // for manual settings: add server and port
+        if ( nMode == 2 )
+        {
+            aURL.AppendAscii("&server=");
+            aURL += aServerName;
+            aURL.AppendAscii("&port=");
+            aURL += aPortNumber;
+        }
+
+        // get the desktop object ...
+        Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
+                Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance(
+                DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+
+        // ... and its active task
+        // dispatching must be done through the task, because only the task ( = PluginFrame ) has a connection to the plugin
+        Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
+        if ( xFrame.is() )
+        {
+            // parse URL
+            URL aTargetURL;
+            aTargetURL.Complete = aURL;
+            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+            xTrans->parseStrict( aTargetURL );
+
+            // get provider interface from the frame
+            Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            Reference < ::com::sun::star::frame::XDispatch > xDisp;
+            if ( xProv.is() )
+                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+            if ( xDisp.is() )
+            {
+                Sequence<PropertyValue> aArgs(1);
+                PropertyValue* pArg = aArgs.getArray();
+                pArg[0].Name = rtl::OUString::createFromAscii("Referer");
+                pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
+                xDisp->dispatch( aTargetURL, aArgs );
+            }
+        }
     }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), TRUE, &pItem ) )
+    else
     {
-        DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-        aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), TRUE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-        aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), TRUE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-        aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_SOCKS_PROXY_NAME ), TRUE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
-        aInetOptions.SetProxySocksName( ((const SfxStringItem *)pItem)->GetValue() );
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
-    }
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_SOCKS_PROXY_PORT ), TRUE, &pItem ) )
-    {
-        DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
-        aInetOptions.SetProxySocksPort( ( (const SfxInt32Item*)pItem )->GetValue() );
-        bResetSession = TRUE;
-        bProxiesModified = TRUE;
+        if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_PROXY_TYPE), TRUE, &pItem))
+        {
+            DBG_ASSERT( pItem->ISA(SfxUInt16Item), "UInt16Item expected" );
+            aInetOptions.SetProxyType((SvtInetOptions::ProxyType)( (const SfxUInt16Item*)pItem )->GetValue());
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
+
+        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_NAME ), TRUE, &pItem ) )
+        {
+            DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
+            aInetOptions.SetProxyHttpName( ((const SfxStringItem *)pItem)->GetValue() );
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
+        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_HTTP_PROXY_PORT ), TRUE, &pItem ) )
+        {
+            DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
+            aInetOptions.SetProxyHttpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
+        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_NAME ), TRUE, &pItem ) )
+        {
+            DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
+            aInetOptions.SetProxyFtpName( ((const SfxStringItem *)pItem)->GetValue() );
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
+        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_FTP_PROXY_PORT ), TRUE, &pItem ) )
+        {
+            DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
+            aInetOptions.SetProxyFtpPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
+        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_SOCKS_PROXY_NAME ), TRUE, &pItem ) )
+        {
+            DBG_ASSERT( pItem->ISA(SfxStringItem), "StringItem expected" );
+            aInetOptions.SetProxySocksName( ((const SfxStringItem *)pItem)->GetValue() );
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
+        if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_INET_SOCKS_PROXY_PORT ), TRUE, &pItem ) )
+        {
+            DBG_ASSERT( pItem->ISA(SfxInt32Item), "Int32Item expected" );
+            aInetOptions.SetProxySocksPort( ( (const SfxInt32Item*)pItem )->GetValue() );
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
+        if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DNS_AUTO), TRUE, &pItem))
+        {
+            DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
+            BOOL bIsAuto = ((const SfxBoolItem *)pItem)->GetValue();
+            if( bIsAuto )
+            {
+                aInetOptions.SetDnsIpAddress( String() );
+            }
+            else
+            {
+                String aDNS;
+                if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_INET_DNS_SERVER), TRUE, &pItem) )
+                {
+                    DBG_ASSERT(pItem->ISA(SfxStringItem), "SfxStringItem expected");
+                    aDNS = ((const SfxStringItem *)pItem)->GetValue();
+                }
+                aInetOptions.SetDnsIpAddress( aDNS );
+            }
+            bResetSession = TRUE;
+        }
+        if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_NOPROXY, TRUE, &pItem))
+        {
+            DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
+            aInetOptions.SetProxyNoProxy(((const SfxStringItem *)pItem)->GetValue());
+            bResetSession = TRUE;
+            bProxiesModified = TRUE;
+        }
     }
 
     // Secure-Referers
