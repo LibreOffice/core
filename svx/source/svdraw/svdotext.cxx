@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-18 15:51:56 $
+ *  last change: $Author: aw $ $Date: 2002-09-26 13:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@ SdrTextObj::SdrTextObj():
     bNoRotate=FALSE;
     bNoMirror=FALSE;
     bDisableAutoWidthOnDragging=FALSE;
+
+    // #101684#
+    mbInEditMode = FALSE;
 }
 
 SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
@@ -175,6 +178,9 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
     bNoMirror=FALSE;
     bDisableAutoWidthOnDragging=FALSE;
     ImpJustifyRect(aRect);
+
+    // #101684#
+    mbInEditMode = FALSE;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
@@ -190,6 +196,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
     bNoMirror=TRUE;
     bPortionInfoChecked=FALSE;
     bDisableAutoWidthOnDragging=FALSE;
+
+    // #101684#
+    mbInEditMode = FALSE;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
@@ -207,6 +216,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
     bPortionInfoChecked=FALSE;
     bDisableAutoWidthOnDragging=FALSE;
     ImpJustifyRect(aRect);
+
+    // #101684#
+    mbInEditMode = FALSE;
 }
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, USHORT eFormat):
@@ -226,6 +238,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
     ImpJustifyRect(aRect);
 
     NbcSetText(rInput,eFormat);
+
+    // #101684#
+    mbInEditMode = FALSE;
 }
 
 SdrTextObj::~SdrTextObj()
@@ -375,7 +390,10 @@ FASTBOOL SdrTextObj::IsAutoGrowWidth() const
     const SfxItemSet& rSet = GetItemSet();
     BOOL bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
 
-    if(bRet)
+    // #101684#
+    BOOL bInEditMOde = IsInEditMode();
+
+    if(!bInEditMOde && bRet)
     {
         SdrTextAniKind eAniKind = ((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
 
@@ -400,7 +418,10 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
     const SfxItemSet& rSet = GetItemSet();
     SdrTextHorzAdjust eRet = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
 
-    if(eRet == SDRTEXTHORZADJUST_BLOCK)
+    // #101684#
+    BOOL bInEditMode = IsInEditMode();
+
+    if(!bInEditMode && eRet == SDRTEXTHORZADJUST_BLOCK)
     {
         SdrTextAniKind eAniKind = ((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
 
@@ -780,7 +801,11 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
         {
             long nWdt=nAnkWdt;
             long nHgt=nAnkHgt;
-            if (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE)
+
+            // #101684#
+            BOOL bInEditMode = IsInEditMode();
+
+            if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
             {
                 // Grenzenlose Papiergroesse fuer Laufschrift
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nWdt=1000000;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-13 15:07:04 $
+ *  last change: $Author: aw $ $Date: 2002-09-26 13:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 {
     if (pEdtOutl!=NULL) return FALSE; // Textedit laeuft evtl. schon an einer anderen View!
     pEdtOutl=&rOutl;
+
+    // #101684#
+    mbInEditMode = TRUE;
 
     USHORT nOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
     if ( !IsOutlText() )
@@ -209,7 +212,12 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
             if (!IsAutoGrowHeight()) { nMaxHgt=aAnkSiz.Height(); nMinHgt=nMaxHgt; }
             SdrTextAniKind      eAniKind=GetTextAniKind();
             SdrTextAniDirection eAniDirection=GetTextAniDirection();
-            if (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE) {
+
+            // #101684#
+            BOOL bInEditMode = IsInEditMode();
+
+            if (!bInEditMode && (eAniKind==SDRTEXTANI_SCROLL || eAniKind==SDRTEXTANI_ALTERNATE || eAniKind==SDRTEXTANI_SLIDE))
+            {
                 // Grenzenlose Papiergroesse fuer Laufschrift
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nMaxWdt=1000000;
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
@@ -295,6 +303,9 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     UINT32 nStat = rOutl.GetControlWord();
     nStat &= ~EE_CNTRL_AUTOPAGESIZE;
     rOutl.SetControlWord(nStat);
+
+    // #101684#
+    mbInEditMode = FALSE;
 }
 
 SdrObject* SdrTextObj::CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
