@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-12 16:21:02 $
+ *  last change: $Author: dbo $ $Date: 2001-10-16 11:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,40 +295,59 @@ sal_Bool SAL_CALL uno_assignData(
 #   pragma pack(8)
 #endif
 
-#define BINTEST_VERIFY( c ) \
-    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: " #c " [line %d]!!!\n", __LINE__ ); abort(); }
-#ifdef DEBUG
-#define BINTEST_VERIFYSIZE( s, n ) \
-    fprintf( stderr, "> sizeof( " #s " ) = %d\n", sizeof(s) ); \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof( " #s " ) = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
-#else
-#define BINTEST_VERIFYSIZE( s, n ) \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof( " #s " ) = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+#if defined(__GNUC__) && defined(LINUX) && defined(INTEL)
+#define MAX_ALIGNMENT_4
 #endif
 
 #define OFFSET_OF( s, m ) ((sal_Size)((char *)&((s *)16)->m -16))
 
-struct C
+#define BINTEST_VERIFY( c ) \
+    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: " #c " [line %d]!!!\n", __LINE__ ); abort(); }
+#define BINTEST_VERIFYOFFSET( s, m, n ) \
+    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
+
+#ifdef DEBUG
+#if defined(__GNUC__) && defined(LINUX) && defined(INTEL)
+#define BINTEST_VERIFYSIZE( s, n ) \
+    fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+#else // ! GNUC
+#define BINTEST_VERIFYSIZE( s, n ) \
+    fprintf( stderr, "> sizeof(" #s ") = %d\n", sizeof(s) ); \
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+#endif
+#else // ! DEBUG
+#define BINTEST_VERIFYSIZE( s, n ) \
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+#endif
+
+struct C1
 {
-    sal_Int16 d;
+    sal_Int16 n1;
 };
-struct C2 : public C
+struct C2 : public C1
 {
-    sal_Int32 e CPPU_GNU3_ALIGN(2);
+    sal_Int32 n2 CPPU_GNU3_ALIGN( C1 );
 };
 struct C3 : public C2
 {
-    double d CPPU_GNU3_ALIGN(4);
+    double d3;
+    sal_Int32 n3;
 };
 struct C4 : public C3
 {
-    C3 c3 CPPU_GNU3_ALIGN(8);
-    sal_Bool b;
+    sal_Int32 n4 CPPU_GNU3_ALIGN( C3 );
+    double d4;
 };
-struct C5
+struct C5 : public C4
 {
-    C4 c4;
-    sal_Bool b;
+    sal_Int64 n5;
+    sal_Bool b5;
+};
+struct C6
+{
+    C5 c6;
+    sal_Bool b6;
 };
 
 struct D
@@ -353,7 +372,7 @@ struct M
 
 struct N : public M
 {
-    sal_Int16   p CPPU_GNU3_ALIGN(4);
+    sal_Int16   p CPPU_GNU3_ALIGN( M );
 };
 struct N2
 {
@@ -363,16 +382,16 @@ struct N2
 
 struct O : public M
 {
-    double  p CPPU_GNU3_ALIGN(4);
+    double  p;
 };
 struct O2 : public O
 {
-    double  p CPPU_GNU3_ALIGN(8);
+    double  p;
 };
 
 struct P : public N
 {
-    double  p CPPU_GNU3_ALIGN(4);
+    double  p;
 };
 
 struct empty
@@ -389,6 +408,24 @@ struct AlignSize_Impl
     double      dDouble;
 };
 
+struct Char1
+{
+    char c1;
+};
+struct Char2 : public Char1
+{
+    char c2 CPPU_GNU3_ALIGN( Char1 );
+};
+struct Char3 : public Char2
+{
+    char c3 CPPU_GNU3_ALIGN( Char2 );
+};
+struct Char4
+{
+    Char3 chars;
+    char c;
+};
+
 class BinaryCompatible_Impl
 {
 public:
@@ -396,8 +433,14 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
-#ifdef DEBUG
-    fprintf( stderr, "> nMaxAlignment = %d\n", OFFSET_OF( AlignSize_Impl, dDouble ) );
+#ifdef MAX_ALIGNMENT_4
+    // max alignment is 4
+    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 4 );
+    BINTEST_VERIFYSIZE( AlignSize_Impl, 12 );
+#else
+    // max alignment is 8
+    BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 8 );
+    BINTEST_VERIFYSIZE( AlignSize_Impl, 16 );
 #endif
 
     // sequence
@@ -408,46 +451,70 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFY( sizeof(void *) >= sizeof(sal_Int32) );
     BINTEST_VERIFY( sizeof( Any ) == sizeof( uno_Any ) );
     BINTEST_VERIFY( sizeof( Any ) == sizeof( void * ) * 3 );
-    BINTEST_VERIFY( OFFSET_OF( Any, pType ) == 0 );
-    BINTEST_VERIFY( OFFSET_OF( Any, pData ) == 4 );
-    BINTEST_VERIFY( OFFSET_OF( Any, pReserved ) == 8 );
+    BINTEST_VERIFYOFFSET( Any, pType, 0 );
+    BINTEST_VERIFYOFFSET( Any, pData, 4 );
+    BINTEST_VERIFYOFFSET( Any, pReserved, 8 );
     // interface
     BINTEST_VERIFY( sizeof( Reference< XInterface > ) == sizeof( XInterface * ) );
     // string
     BINTEST_VERIFY( sizeof( OUString ) == sizeof( rtl_uString * ) );
     // struct
     BINTEST_VERIFYSIZE( M, 8 );
-    BINTEST_VERIFY( OFFSET_OF( M, o ) == 4 );
+    BINTEST_VERIFYOFFSET( M, o, 4 );
     BINTEST_VERIFYSIZE( N, 12 );
-    BINTEST_VERIFY( OFFSET_OF( N, p ) == 8 );
+    BINTEST_VERIFYOFFSET( N, p, 8 );
     BINTEST_VERIFYSIZE( N2, 12 );
-    BINTEST_VERIFY( OFFSET_OF( N2, p ) == 8 );
+    BINTEST_VERIFYOFFSET( N2, p, 8 );
     BINTEST_VERIFYSIZE( O, 16 );
     BINTEST_VERIFYSIZE( D, 8 );
-    BINTEST_VERIFY( OFFSET_OF( D, e ) == 4 );
-    BINTEST_VERIFY( OFFSET_OF( E, d ) == 4 );
-    BINTEST_VERIFY( OFFSET_OF( E, e ) == 8 );
-    BINTEST_VERIFYSIZE( C, 2 );
+    BINTEST_VERIFYOFFSET( D, e, 4 );
+    BINTEST_VERIFYOFFSET( E, d, 4 );
+    BINTEST_VERIFYOFFSET( E, e, 8 );
+
+    BINTEST_VERIFYSIZE( C1, 2 );
     BINTEST_VERIFYSIZE( C2, 8 );
-    BINTEST_VERIFY( OFFSET_OF( C2, e ) == 4 );
+    BINTEST_VERIFYOFFSET( C2, n2, 4 );
 
-    BINTEST_VERIFYSIZE( C3, 16 );
-    BINTEST_VERIFY( OFFSET_OF( C3, d ) == 8 );
+#ifdef MAX_ALIGNMENT_4
+    BINTEST_VERIFYSIZE( C3, 20 );
+    BINTEST_VERIFYOFFSET( C3, d3, 8 );
+    BINTEST_VERIFYOFFSET( C3, n3, 16 );
+    BINTEST_VERIFYSIZE( C4, 32 );
+    BINTEST_VERIFYOFFSET( C4, n4, 20 );
+    BINTEST_VERIFYOFFSET( C4, d4, 24 );
+    BINTEST_VERIFYSIZE( C5, 44 );
+    BINTEST_VERIFYOFFSET( C5, n5, 32 );
+    BINTEST_VERIFYOFFSET( C5, b5, 40 );
+    BINTEST_VERIFYSIZE( C6, 48 );
+    BINTEST_VERIFYOFFSET( C6, c6, 0 );
+    BINTEST_VERIFYOFFSET( C6, b6, 44 );
+#else
+    BINTEST_VERIFYSIZE( C3, 24 );
+    BINTEST_VERIFYOFFSET( C3, d3, 8 );
+    BINTEST_VERIFYOFFSET( C3, n3, 16 );
     BINTEST_VERIFYSIZE( C4, 40 );
-    BINTEST_VERIFY( OFFSET_OF( C4, c3 ) == 16 );
-    BINTEST_VERIFY( OFFSET_OF( C4, b ) == 32 );
-
-    BINTEST_VERIFYSIZE( C5, 48 );
-    BINTEST_VERIFY( OFFSET_OF( C5, c4 ) == 0 );
-    BINTEST_VERIFY( OFFSET_OF( C5, b ) == 40 );
+    BINTEST_VERIFYOFFSET( C4, n4, 24 );
+    BINTEST_VERIFYOFFSET( C4, d4, 32 );
+    BINTEST_VERIFYSIZE( C5, 56 );
+    BINTEST_VERIFYOFFSET( C5, n5, 40 );
+    BINTEST_VERIFYOFFSET( C5, b5, 48 );
+    BINTEST_VERIFYSIZE( C6, 64 );
+    BINTEST_VERIFYOFFSET( C6, c6, 0 );
+    BINTEST_VERIFYOFFSET( C6, b6, 56 );
+#endif
 
     BINTEST_VERIFYSIZE( O2, 24 );
-    BINTEST_VERIFY( OFFSET_OF( O2, p ) == 16 );
+    BINTEST_VERIFYOFFSET( O2, p, 16 );
 
-#ifdef SAL_W32
+    BINTEST_VERIFYSIZE( Char3, 3 );
+    BINTEST_VERIFYOFFSET( Char4, c, 3 );
+
+#ifdef MAX_ALIGNMENT_4
+    // max alignment is 4
+    BINTEST_VERIFYSIZE( P, 20 );
+#else
+    // alignment of P is 8, because of P[] ...
     BINTEST_VERIFYSIZE( P, 24 );
-#endif
-#ifndef __GNUC__
     BINTEST_VERIFYSIZE( second, sizeof( int ) );
 #endif
 }
