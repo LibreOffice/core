@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: tra $ $Date: 2002-09-25 13:53:17 $
+ *  last change: $Author: ssa $ $Date: 2002-09-25 14:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4820,7 +4820,16 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             ImplHandleInputLangChange( hWnd, wParam, lParam );
             break;
 
-        case WM_IME_STARTCOMPOSITION:
+        case WM_IME_CHAR:
+            // #103487#, some IMEs (eg, those that do not work onspot)
+            //           may send WM_IME_CHAR instead of WM_IME_COMPOSITION
+            // we just handle it like a WM_CHAR message - seems to work fine
+            ImplSalYieldMutexAcquireWithWait();
+            rDef = !ImplHandleKeyMsg( hWnd, WM_CHAR, wParam, lParam );
+            ImplSalYieldMutexRelease();
+            break;
+
+         case WM_IME_STARTCOMPOSITION:
             rDef = ImplHandleIMEStartComposition( hWnd );
             break;
 
