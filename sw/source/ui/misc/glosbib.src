@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:00:38 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,11 +190,11 @@ ModalDialog DLG_BIB_BASE
         Text [ dutch ] = "Bereik" ;
         Text [ spanish ] = "Área" ;
         Text [ english_us ] = "Category" ;
-        Text[ chinese_simplified ] = "·ÖÀà±êÌâ";
+        Text[ chinese_simplified ] = "ÇøÓò±êÌâ";
         Text[ russian ] = "Çàãîëîâîê êàòåãîğèè";
         Text[ polish ] = "Tytu³ kategorii";
         Text[ japanese ] = "•ª—Ş–¼";
-        Text[ chinese_traditional ] = "°Ï°ì";
+        Text[ chinese_traditional ] = "°Ï°ì¼ĞÃD";
         Text[ arabic ] = "İÆÉ";
         Text[ greek ] = "Ôßôëïò êáôçãïñßáò";
         Text[ korean ] = "±¸¿ª";
@@ -251,7 +251,7 @@ ModalDialog DLG_BIB_BASE
         Text[ japanese ] = "Êß½";
         Text[ korean ] = "Path";
         Text[ chinese_simplified ] = "Â·¾¶";
-        Text[ chinese_traditional ] = "Path";
+        Text[ chinese_traditional ] = "¸ô®|";
         Text[ turkish ] = "Path";
         Text[ arabic ] = "Path";
         Text[ catalan ] = "Path";
@@ -287,7 +287,7 @@ ModalDialog DLG_BIB_BASE
         Text[ japanese ] = "‘I‘ğØ½Ä";
         Text[ korean ] = "Group";
         Text[ chinese_simplified ] = "Ñ¡ÔñÁĞµ¥";
-        Text[ chinese_traditional ] = "Group";
+        Text[ chinese_traditional ] = "¿ï¾Ü²M³æ";
         Text[ turkish ] = "Group";
         Text[ arabic ] = "Group";
         Text[ catalan ] = "Group";
@@ -339,4 +339,5 @@ String STR_GLOSSARY_BIB_DLG
     Text [ portuguese ] = "Editar secções" ;
     Text [ portuguese_brazilian ] = "Bereiche bearbeiten" ;
 };*/
+
 
