@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:41:02 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,15 +82,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "Range";
         Text[ dutch ] = "Range";
         Text[ french ] = "Range";
-        Text[ spanish ] = "Range";
+        Text[ spanish ] = "�rea";
         Text[ finnish ] = "Range";
-        Text[ italian ] = "Range";
+        Text[ italian ] = "Sezione";
         Text[ danish ] = "Range";
         Text[ swedish ] = "Omr�de";
         Text[ polish ] = "Range";
         Text[ portuguese_brazilian ] = "Range";
-        Text[ japanese ] = "Range";
-        Text[ korean ] = "Range";
+        Text[ japanese ] = "範囲";
+        Text[ korean ] = "영역";
         Text[ chinese_simplified ] = "区域";
         Text[ chinese_traditional ] = "區域";
         Text[ turkish ] = "Range";
@@ -110,15 +110,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "~All";
         Text[ dutch ] = "~All";
         Text[ french ] = "~All";
-        Text[ spanish ] = "~All";
+        Text[ spanish ] = "~Todo";
         Text[ finnish ] = "~All";
-        Text[ italian ] = "~All";
+        Text[ italian ] = "~Tutte";
         Text[ danish ] = "~All";
         Text[ swedish ] = "~Alla";
         Text[ polish ] = "~All";
         Text[ portuguese_brazilian ] = "~All";
-        Text[ japanese ] = "~All";
-        Text[ korean ] = "~All";
+        Text[ japanese ] = "すべて(~A)";
+        Text[ korean ] = "모두(~A)";
         Text[ chinese_simplified ] = "全部(~A)";
         Text[ chinese_traditional ] = "全部(~A)";
         Text[ turkish ] = "~All";
@@ -138,15 +138,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "Pa~ges";
         Text[ dutch ] = "Pa~ges";
         Text[ french ] = "Pa~ges";
-        Text[ spanish ] = "Pa~ges";
+        Text[ spanish ] = "P�gin~as";
         Text[ finnish ] = "Pa~ges";
-        Text[ italian ] = "Pa~ges";
+        Text[ italian ] = "Pagine";
         Text[ danish ] = "Pa~ges";
         Text[ swedish ] = "~Sidor";
         Text[ polish ] = "Pa~ges";
         Text[ portuguese_brazilian ] = "Pa~ges";
-        Text[ japanese ] = "Pa~ges";
-        Text[ korean ] = "Pa~ges";
+        Text[ japanese ] = "ページ指定";
+        Text[ korean ] = "페이지(~P)";
         Text[ chinese_simplified ] = "页(~P)";
         Text[ chinese_traditional ] = "頁(~P)";
         Text[ turkish ] = "Pa~ges";
@@ -166,15 +166,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "~Selection";
         Text[ dutch ] = "~Selection";
         Text[ french ] = "~Selection";
-        Text[ spanish ] = "~Selection";
+        Text[ spanish ] = "~Selecci�n";
         Text[ finnish ] = "~Selection";
-        Text[ italian ] = "~Selection";
+        Text[ italian ] = "Scelta";
         Text[ danish ] = "~Selection";
         Text[ swedish ] = "~Markering";
         Text[ polish ] = "~Selection";
         Text[ portuguese_brazilian ] = "~Selection";
-        Text[ japanese ] = "~Selection";
-        Text[ korean ] = "~Selection";
+        Text[ japanese ] = "選択した部分";
+        Text[ korean ] = "선택";
         Text[ chinese_simplified ] = "选择";
         Text[ chinese_traditional ] = "選擇";
         Text[ turkish ] = "~Selection";
@@ -200,15 +200,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "Compression";
         Text[ dutch ] = "Compression";
         Text[ french ] = "Compression";
-        Text[ spanish ] = "Compression";
+        Text[ spanish ] = "Compresi�n";
         Text[ finnish ] = "Compression";
-        Text[ italian ] = "Compression";
+        Text[ italian ] = "Compressione";
         Text[ danish ] = "Compression";
         Text[ swedish ] = "Komprimering";
         Text[ polish ] = "Compression";
         Text[ portuguese_brazilian ] = "Compression";
-        Text[ japanese ] = "Compression";
-        Text[ korean ] = "Compression";
+        Text[ japanese ] = "圧縮";
+        Text[ korean ] = "압축";
         Text[ chinese_simplified ] = "压缩";
         Text[ chinese_traditional ] = "壓縮";
         Text[ turkish ] = "Compression";
@@ -228,15 +228,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "S~creen optimized (smallest file size)";
         Text[ dutch ] = "S~creen optimized (smallest file size)";
         Text[ french ] = "S~creen optimized (smallest file size)";
-        Text[ spanish ] = "S~creen optimized (smallest file size)";
+        Text[ spanish ] = "~Optimado para la pantalla (tama�o m�nimo de archivo)";
         Text[ finnish ] = "S~creen optimized (smallest file size)";
-        Text[ italian ] = "S~creen optimized (smallest file size)";
+        Text[ italian ] = "Ottimizzato per lo schermo (dimensioni minime file)";
         Text[ danish ] = "S~creen optimized (smallest file size)";
         Text[ swedish ] = "Optimerad f�r ~bildsk�rm (minsta filstorlek)";
         Text[ polish ] = "S~creen optimized (smallest file size)";
         Text[ portuguese_brazilian ] = "S~creen optimized (smallest file size)";
-        Text[ japanese ] = "S~creen optimized (smallest file size)";
-        Text[ korean ] = "S~creen optimized (smallest file size)";
+        Text[ japanese ] = "画面用に最適化する (最小ファイルサイズ)";
+        Text[ korean ] = "화면용으로 최적화(최소 파일 크기)";
         Text[ chinese_simplified ] = "优化屏幕显示(最小的文件大小)";
         Text[ chinese_traditional ] = "優化屏幕顯示(最小的檔案大小)";
         Text[ turkish ] = "S~creen optimized (smallest file size)";
@@ -256,15 +256,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "~Print optimized";
         Text[ dutch ] = "~Print optimized";
         Text[ french ] = "~Print optimized";
-        Text[ spanish ] = "~Print optimized";
+        Text[ spanish ] = "~Optimado para la impresi�n";
         Text[ finnish ] = "~Print optimized";
-        Text[ italian ] = "~Print optimized";
+        Text[ italian ] = "Ottimizzato per la stampa";
         Text[ danish ] = "~Print optimized";
         Text[ swedish ] = "~Utskriftsoptimerad";
         Text[ polish ] = "~Print optimized";
         Text[ portuguese_brazilian ] = "~Print optimized";
-        Text[ japanese ] = "~Print optimized";
-        Text[ korean ] = "~Print optimized";
+        Text[ japanese ] = "印刷用に最適化する";
+        Text[ korean ] = "인쇄용으로 최적화";
         Text[ chinese_simplified ] = "优化打印效果";
         Text[ chinese_traditional ] = "優化列印效果";
         Text[ turkish ] = "~Print optimized";
@@ -284,15 +284,15 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "Pr~ess optimized";
         Text[ dutch ] = "Pr~ess optimized";
         Text[ french ] = "Pr~ess optimized";
-        Text[ spanish ] = "Pr~ess optimized";
+        Text[ spanish ] = "~Optima para la impresi�n";
         Text[ finnish ] = "Pr~ess optimized";
-        Text[ italian ] = "Pr~ess optimized";
+        Text[ italian ] = "Ottimizza per la stampa";
         Text[ danish ] = "Pr~ess optimized";
         Text[ swedish ] = "Tr~yckoptimerad";
         Text[ polish ] = "Pr~ess optimized";
         Text[ portuguese_brazilian ] = "Pr~ess optimized";
         Text[ japanese ] = "Pr~ess optimized";
-        Text[ korean ] = "Pr~ess optimized";
+        Text[ korean ] = "인쇄 최적화";
         Text[ chinese_simplified ] = "优化新闻印刷";
         Text[ chinese_traditional ] = "優化新聞印刷";
         Text[ turkish ] = "Pr~ess optimized";
@@ -314,16 +314,16 @@ ModalDialog DLG_PDFEXPORT
         Text[ greek ] = "E~xport";
         Text[ dutch ] = "E~xport";
         Text[ french ] = "E~xport";
-        Text[ spanish ] = "E~xport";
+        Text[ spanish ] = "E~xportar";
         Text[ finnish ] = "E~xport";
-        Text[ italian ] = "E~xport";
+        Text[ italian ] = "Esporta";
         Text[ danish ] = "E~xport";
         Text[ swedish ] = "E~xportera";
         Text[ polish ] = "E~xport";
         Text[ portuguese_brazilian ] = "E~xport";
-        Text[ japanese ] = "E~xport";
-        Text[ korean ] = "E~xport";
-        Text[ chinese_simplified ] = "E~xport";
+        Text[ japanese ] = "エクスポート";
+        Text[ korean ] = "내보내기";
+        Text[ chinese_simplified ] = "输出";
         Text[ chinese_traditional ] = "匯出";
         Text[ turkish ] = "E~xport";
         Text[ arabic ] = "E~xport";
@@ -350,15 +350,15 @@ ModalDialog DLG_PDFEXPORT
     Text[ greek ] = "PDF Options";
     Text[ dutch ] = "PDF Options";
     Text[ french ] = "PDF Options";
-    Text[ spanish ] = "PDF Options";
+    Text[ spanish ] = "Opciones PDF ";
     Text[ finnish ] = "PDF Options";
-    Text[ italian ] = "PDF Options";
+    Text[ italian ] = "Opzioni PDF";
     Text[ danish ] = "PDF Options";
     Text[ swedish ] = "PDF-alternativ";
     Text[ polish ] = "PDF Options";
     Text[ portuguese_brazilian ] = "PDF Options";
-    Text[ japanese ] = "PDF Options";
-    Text[ korean ] = "PDF Options";
+    Text[ japanese ] = "PDF オプション";
+    Text[ korean ] = "PDF 옵션";
     Text[ chinese_simplified ] = "PDF 选项";
     Text[ chinese_traditional ] = "PDF 選項";
     Text[ turkish ] = "PDF Options";
