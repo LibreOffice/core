@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,7 @@ tMakeSlotIdCommandMap m_aSlotIdCommandMap =
         Window* pWindow = m_pChartWindow;
         Rectangle aRect( Point(0,0), pWindow->GetOutputSize() );
         Region aRegion( aRect );
-        m_pDrawViewWrapper->InitRedraw(pWindow, aRegion );
+        m_pDrawViewWrapper->CompleteRedraw(pWindow, aRegion );
 
         /*
         INVALIDATE_CHILDREN
