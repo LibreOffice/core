@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ModalDialog DLG_ROW_HEIGHT
         Text [ english_us ] = "Height" ;
         Text[ chinese_simplified ] = "¸ß";
         Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "Wysokoœæ";
         Text[ japanese ] = "‚‚³";
         Text[ chinese_traditional ] = "°ª";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
@@ -188,3 +188,4 @@ ModalDialog DLG_ROW_HEIGHT
     Text[ turkish ] = "Satır yüksekliği";
     Text[ catalan ] = "Altura de fila";
 };
+
