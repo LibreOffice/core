@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-01 11:31:44 $
+ *  last change: $Author: dbo $ $Date: 2001-02-05 11:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _CPPU_MACROS_HXX_
 #define _CPPU_MACROS_HXX_
 
@@ -73,7 +72,7 @@
 // Microsoft Visual C++ 4.x, 5.0, 6.0
 #if defined(_MSC_VER)
 #   if ( _MSC_VER < 1000 )
-#       define CPPU_COMPILER_ERROR "msc version must be between 4.2 and 6.x"
+#       error "msc version must be between 4.2 and 6.x"
 #   elif (_MSC_VER < 1100)  // MSVC 4.x
 #       pragma warning( disable: 4290 )
 #       define  CPPU_CLBN_TMP   UNO_LB_MSCI
@@ -88,28 +87,28 @@
 #       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "MSC"
 #   else
-#     define CPPU_COMPILER_ERROR "msc version must be between 4.2 and 6.x"
+#     error "msc version must be between 4.2 and 6.x"
 #   endif
 
 // AIX xlC 3.1 , 3.0.1 ==0x301
 // Visual Age C++ 3.x
 #elif ( defined (__xlC__) && __xlC__ < 0x400 ) || \
     ( defined (  __IBMCPP__ ) && (  __IBMCPP__ < 400 ) )
-#   define CPPU_COMPILER_ERROR "visual age on aix not supported"
+#   error "visual age on aix not supported"
 
 // Borland C++ ( 5.x )
 #elif defined (BC50)
-#   define CPPU_COMPILER_ERROR "borland compiler not supported"
+#   error "borland compiler not supported"
 
 #elif defined(__SUNPRO_CC)
 #   if ( __SUNPRO_CC < 0x500 )
-#       define CPPU_COMPILER_ERROR "sunpro cc version must be 5.x"
+#       error "sunpro cc version must be 5.x"
 #   elif( __SUNPRO_CC < 0x600 )
 #       define  CPPU_CLBN_TMP   UNO_LB_SUNPRO5
 #       define  CPPU_CLBN_NS_TMP UNO_LB_SUNPRO5_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "C50"
 #   else
-#       define CPPU_COMPILER_ERROR "sunpro cc version must be 5.x"
+#       error "sunpro cc version must be 5.x"
 #   endif
 
 // g++ 2.7.x
@@ -117,7 +116,7 @@
 // cygnus have a lot of version, let's assume the best.
 // no specific definitions known except this one
 #   if ( __GNUC__ == 2 && __GNUC_MINOR__ == 7 )
-#       define CPPU_COMPILER_ERROR "gcc 2.7 compiler not supported"
+#       error "gcc 2.7 compiler not supported"
 #   elif ( __GNUC__ == 2 && __GNUC_MINOR__ == 91 )
 #       define  CPPU_CLBN_TMP   UNO_LB_GCC2
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
@@ -127,30 +126,25 @@
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "GCC"
 #  else
-#       define CPPU_COMPILER_ERROR "gcc unknown version"
+#       error "unknown gcc version"
 #   endif
 
 #elif defined (__WATCOM_CPLUSPLUS__)
-#   define CPPU_COMPILER_ERROR "watcom compiler not supported"
+#   error "watcom compiler not supported"
 
 // Symantec 7.5
 #elif defined (__SC__)
-#   define CPPU_COMPILER_ERROR "symantec compiler not supported"
+#   error "symantec compiler not supported"
 
 // HP-UX und aCC
 #elif defined(HPUX) && !defined(__GNUC__)
-#   define CPPU_COMPILER_ERROR "HP-UX compiler not supported"
+#   error "HP-UX compiler not supported"
 
 // MAC Metrowerks
 #elif defined (__MWERKS__)
-#   define CPPU_COMPILER_ERROR "Metroworks compiler not supported"
+#   error "Metroworks compiler not supported"
 #else
-#   define CPPU_COMPILER_ERROR "unknown compiler"
-#endif
-
-#ifdef CPPU_COMPILER_ERROR
-// set to unknown
-#   error CPPU_COMPILER_ERROR
+#   error "unknown compiler"
 #endif
 
 /**
