@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widthfolding.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 12:26:04 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 // prevent internal compiler error with MSVC6SP3
-#include <stl/utility>
+#include <utility>
 #include <i18nutil/widthfolding.hxx>
 #include <i18nutil/x_rtl_ustring.h>
 #include "widthfolding_data.h"
