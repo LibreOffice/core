@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:35:10 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 16:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,17 @@ IMPL_LINK( SwInsertBookmarkDlg, DeleteHdl, Button *, EMPTYARG )
 
 void SwInsertBookmarkDlg::Apply()
 {
+    //at first remove deleted bookmarks to prevent multiple bookmarks with the same
+    //name
+    for (USHORT nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
+    {
+        String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).aName;
+        rSh.DelBookmark( sRemoved );
+        SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
+        aReq.AppendItem( SfxStringItem( FN_DELETE_BOOKMARK, sRemoved ) );
+        aReq.Done();
+    }
+
     // Textmarke einfuegen
     USHORT      nLen = aBookmarkBox.GetText().Len();
     SwBoxEntry  aTmpEntry(aBookmarkBox.GetText(), 0 );
@@ -166,14 +177,6 @@ void SwInsertBookmarkDlg::Apply()
     if ( !rReq.IsDone() )
         rReq.Ignore();
 
-    for (USHORT nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
-    {
-        String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).aName;
-        rSh.DelBookmark( sRemoved );
-        SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
-        aReq.AppendItem( SfxStringItem( FN_DELETE_BOOKMARK, sRemoved ) );
-        aReq.Done();
-    }
 }
 
 /*------------------------------------------------------------------------
