@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
+ *  last change: $Author: sab $ $Date: 2002-04-23 13:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
 #include "PageMasterExportPropMapper.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -77,11 +80,18 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
+using namespace ::xmloff::token;
 
 
 //______________________________________________________________________________
@@ -112,7 +122,11 @@ void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
         lcl_RemoveState( pState );
 }
 
-
+void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int32 nIndex, const rtl::OUString& rProperty, uno::Reference< beans::XPropertySet >& xProps)
+{
+    if(::cppu::any2bool(xProps->getPropertyValue(rProperty)))
+        rPropState.push_back(XMLPropertyState (nIndex, cppu::bool2any(sal_True)));
+}
 
 //______________________________________________________________________________
 // helper struct to handle equal XMLPropertyState's for page, header and footer
@@ -353,11 +367,16 @@ void XMLPageMasterExportPropMapper::ContextFilter(
     XMLPropertyState*       pPMScaleTo          = NULL;
     XMLPropertyState*       pPMScaleToPages     = NULL;
 
+    XMLPropertyState*       pPrint              = NULL;
+
+    UniReference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
+
     for( ::std::vector< XMLPropertyState >::iterator pProp = rPropState.begin(); pProp != rPropState.end(); pProp++ )
     {
-        sal_Int16 nContextId    = getPropertySetMapper()->GetEntryContextId( pProp->mnIndex );
+        sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
         sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
         sal_Int16 nSimpleId     = nContextId & (~CTF_PM_FLAGMASK | XML_PM_CTF_START);
+        sal_Int16 nPrintId      = nContextId & CTF_PM_PRINTMASK;
 
         XMLPropertyStateBuffer* pBuffer;
         switch( nFlag )
@@ -397,6 +416,11 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTF_PM_SCALETO:            pPMScaleTo          = pProp;    break;
             case CTF_PM_SCALETOPAGES:       pPMScaleToPages     = pProp;    break;
         }
+        if (nPrintId == CTF_PM_PRINTMASK)
+        {
+            pPrint = pProp;
+            lcl_RemoveState(pPrint);
+        }
     }
 
     aPageBuffer.ContextFilter( rPropState );
@@ -421,6 +445,18 @@ void XMLPageMasterExportPropMapper::ContextFilter(
         lcl_RemoveStateIfZero16( pPMScaleTo );
     if( pPMScaleToPages )
         lcl_RemoveStateIfZero16( pPMScaleToPages );
+
+    if (pPrint)
+    {
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ANNOTATIONS), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintAnnotations")), rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_CHARTS), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintCharts")), rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_DRAWING), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintDrawing")), rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_FORMULAS), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintFormulas")), rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_GRID), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintGrid")), rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_HEADERS), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintHeaders")), rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_OBJECTS), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintObjects")), rPropSet);
+        lcl_AddState(rPropState, aPropMapper->FindEntryIndex(CTF_PM_PRINT_ZEROVALUES), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PrintZeroValues")), rPropSet);
+    }
 
     SvXMLExportPropertyMapper::ContextFilter(rPropState,rPropSet);
 }
