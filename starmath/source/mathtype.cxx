@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-23 09:07:42 $
+ *  last change: $Author: cmc $ $Date: 2001-07-30 11:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,9 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         case ')':
             pC = " \\) ";
+            break;
+        case '.':
+            pC = " \".\" ";
             break;
         case 0x00fb:
             if ((nVersion < 3) && (nTypeFace == 0x81))
@@ -2775,20 +2778,33 @@ int MathType::HandleTemplate(int nLevel,sal_uInt8 &rSelector,
     {
         DBG_ASSERT(nOption < 3,"Option out of range");
     }
-    //suborderlist
-    int nRet = HandleRecords(nLevel+1,rSelector,rVariation);
 
     //For the (broken) case where one subscript template ends, and there is
     //another one after it, mathtype handles it as if the second one was
     //inside the first one and renders it as sub of sub
-    if ((rLastTemplateBracket == STRING_NOTFOUND) && (rSelector == 0xf))
-        rLastTemplateBracket = rRet.SearchBackward('}');
-    else if (rSelector == 0xf)
+    BOOL bRemove=FALSE;
+    if ( (rSelector == 0xf) && (rLastTemplateBracket != STRING_NOTFOUND) )
+    {
+        bRemove=TRUE;
+        for (xub_StrLen nI = rLastTemplateBracket+1; nI < rRet.Len(); nI++ )
+            if (rRet.GetChar(nI) != ' ')
+            {
+                bRemove=FALSE;
+                break;
+            }
+    }
+
+    //suborderlist
+    int nRet = HandleRecords(nLevel+1,rSelector,rVariation);
+
+    if (bRemove)
     {
         rRet.Erase(rLastTemplateBracket,1);
         APPEND(rRet,"} ");
         rLastTemplateBracket = STRING_NOTFOUND;
     }
+    if (rSelector == 0xf)
+        rLastTemplateBracket = rRet.SearchBackward('}');
     else
         rLastTemplateBracket = STRING_NOTFOUND;
 
