@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRowUpdate.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:28:21 $
+ *  last change:$Date: 2003-09-08 10:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 package ifc.sdbc;
 
+import java.util.Vector;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import util.ValueComparer;
+
 import com.sun.star.io.XDataInputStream;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XTextInputStream;
@@ -72,10 +78,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.Date;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
-import java.util.Vector;
-import lib.MultiMethodTest;
-import lib.Status;
-import util.ValueComparer;
 
 /**
 * Testing <code>com.sun.star.sdbc.XRowUpdate</code>
@@ -654,7 +656,7 @@ public class _XRowUpdate extends MultiMethodTest {
             Object newVal = ((XMultiServiceFactory)tParam.getMSF()).
                 createInstance("com.sun.star.io.Pipe") ;
 
-            //oObj.updateObject(idx, newVal) ;
+            oObj.updateObject(idx, newVal) ;
             //Object getVal = row.getObject(idx) ;
             //result = UnoRuntime.areSame(newVal, getVal) ;
         } catch (SQLException e) {
