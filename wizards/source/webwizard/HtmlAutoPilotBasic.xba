@@ -503,8 +503,10 @@ Dim i as Integer
 		If oPageFamily.GetByIndex(i).IsInUse Then
 			oStyle = oPageFamily.GetbyIndex(i)
 			If oStyle.PropertySetInfo.HasPropertybyName(&quot;BackGraphicURL&quot;) Then
-				oStyleBack.GraphicUrl = CopyFile(oStyle.BackGraphicUrl, SavePath)
-				Exit Sub
+				If oStyle.BackGraphicUrl &lt;&gt; &quot;&quot; Then
+					oStyleBack.GraphicUrl = CopyFile(oStyle.BackGraphicUrl, SavePath)
+					Exit Sub
+				End If
 			End If
 		End If
 	Next i
