@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 13:36:29 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:26:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,10 @@ SLOFILES =      							\
     $(SLO)$/MasterPageContainer.obj			\
     $(SLO)$/PreviewValueSet.obj				\
     $(SLO)$/RecentlyUsedMasterPages.obj		\
-    $(SLO)$/RecentMasterPagesSelector.obj
+    $(SLO)$/RecentMasterPagesSelector.obj	\
+    $(SLO)$/CustomAnimationPanel.obj \
+    $(SLO)$/SlideTransitionPanel.obj \
+    $(SLO)$/AnimationSchemesPanel.obj
 
 
 # --- Tagets -------------------------------------------------------
