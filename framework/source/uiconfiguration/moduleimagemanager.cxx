@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:31:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,12 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
-#include <drafts/com/sun/star/ui/ConfigurationEvent.hpp>
+#ifndef _COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
+#include <com/sun/star/ui/ConfigurationEvent.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
@@ -117,8 +117,8 @@
 #include <com/sun/star/io/XStream.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
-#include <drafts/com/sun/star/ui/ImageType.hpp>
+#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
+#include <com/sun/star/ui/ImageType.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -159,13 +159,13 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 
 // Image sizes for our toolbars/menus
 const sal_Int32 IMAGE_SIZE_NORMAL         = 16;
 const sal_Int32 IMAGE_SIZE_LARGE          = 26;
-const sal_Int16 MAX_IMAGETYPE_VALUE       = ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
-                                            ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE;
+const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
+                                            ::com::sun::star::ui::ImageType::SIZE_LARGE;
 
 static const char   IMAGE_FOLDER[]        = "images";
 static const char   BITMAPS_FOLDER[]      = "Bitmaps";
@@ -429,18 +429,18 @@ DEFINE_XINTERFACE_6                    (    ModuleImageManager                  
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XComponent                                         ),
                                             DIRECT_INTERFACE( css::lang::XInitialization                                    ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XImageManager                     ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIConfiguration                  ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIConfigurationPersistence       )
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XImageManager                     ),
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfiguration                  ),
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationPersistence       )
                                         )
 
 DEFINE_XTYPEPROVIDER_6                  (   ModuleImageManager                                          ,
                                             css::lang::XTypeProvider                                    ,
                                             css::lang::XComponent                                       ,
                                             css::lang::XInitialization                                  ,
-                                            drafts::com::sun::star::ui::XImageManager                   ,
-                                            drafts::com::sun::star::ui::XUIConfiguration                ,
-                                            drafts::com::sun::star::ui::XUIConfigurationPersistence
+                                            ::com::sun::star::ui::XImageManager                   ,
+                                            ::com::sun::star::ui::XUIConfiguration                ,
+                                            ::com::sun::star::ui::XUIConfigurationPersistence
                                         )
 
 static OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
@@ -485,23 +485,23 @@ static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGra
 static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
 {
     sal_Int16 nIndex( 0 );
-    if ( nImageType & ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE )
+    if ( nImageType & ::com::sun::star::ui::ImageType::SIZE_LARGE )
         nIndex += 1;
-    if ( nImageType & ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST )
+    if ( nImageType & ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST )
         nIndex += 2;
     return nIndex;
 }
 
 static sal_Int16 implts_convertIndexToImageType( sal_Int16 nIndex )
 {
-    sal_Int16 nImageType = ::drafts::com::sun::star::ui::ImageType::SIZE_DEFAULT;
+    sal_Int16 nImageType = ::com::sun::star::ui::ImageType::SIZE_DEFAULT;
     switch ( nImageType )
     {
         case 0: break;
-        case 1: nImageType |= ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE; break;
-        case 2: nImageType |= ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST; break;
-        case 3: nImageType |= ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
-                              ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE; break;
+        case 1: nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE; break;
+        case 2: nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST; break;
+        case 3: nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
+                              ::com::sun::star::ui::ImageType::SIZE_LARGE; break;
     }
     return nImageType;
 }
@@ -1254,7 +1254,7 @@ throw ( ::com::sun::star::container::ElementExistException,
 }
 
 // XUIConfiguration
-void SAL_CALL ModuleImageManager::addConfigurationListener( const uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationListener >& xListener )
+void SAL_CALL ModuleImageManager::addConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
 throw (::com::sun::star::uno::RuntimeException)
 {
     {
@@ -1268,7 +1268,7 @@ throw (::com::sun::star::uno::RuntimeException)
     m_aListenerContainer.addInterface( ::getCppuType( ( const uno::Reference< XUIConfigurationListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL ModuleImageManager::removeConfigurationListener( const uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationListener >& xListener )
+void SAL_CALL ModuleImageManager::removeConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
 throw (::com::sun::star::uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -1495,7 +1495,7 @@ sal_Bool SAL_CALL ModuleImageManager::isReadOnly() throw (::com::sun::star::uno:
 void ModuleImageManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer(
-                                        ::getCppuType( ( const css::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationListener >*) NULL ) );
+                                        ::getCppuType( ( const css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >*) NULL ) );
     if ( pContainer != NULL )
     {
         ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
@@ -1506,13 +1506,13 @@ void ModuleImageManager::implts_notifyContainerListener( const ConfigurationEven
                 switch ( eOp )
                 {
                     case NotifyOp_Replace:
-                        ((drafts::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementReplaced( aEvent );
+                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementReplaced( aEvent );
                         break;
                     case NotifyOp_Insert:
-                        ((drafts::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementInserted( aEvent );
+                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementInserted( aEvent );
                         break;
                     case NotifyOp_Remove:
-                        ((drafts::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementRemoved( aEvent );
+                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementRemoved( aEvent );
                         break;
                 }
             }
