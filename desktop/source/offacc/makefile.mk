@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 13:52:41 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:29:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,10 @@
 
 PRJ=..$/..
 
-PRJNAME=officeacceptor
+PRJNAME=desktop
 TARGET=offacc
 LIBTARGET=NO
-AUTOSEG=true
+
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -78,44 +78,21 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 SLOFILES =	$(SLO)$/acceptor.obj
 
-SHL1OBJS=   $(SLOFILES)
-SHL1TARGET=     $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1DEPN=	makefile.mk
+SHL1OBJS=	$(SLOFILES)
 
-SHL1IMPLIB= ispl
-SHL1STDLIBS=    \
-                $(SFX2LIB) 			\
-                $(FWELIB)			\
-                $(BASICLIB) 		\
-                $(SO2LIB) 			\
-                $(SJLIB) 			\
-                $(TKLIB) 			\
-                $(SVTOOLLIB) 		\
-                $(SVLLIB) 			\
-                $(SVMEMLIB) 		\
-                $(OFALIB)			\
-                $(ONELIB) 			\
-                $(VCLLIB) 			\
-                $(SOTLIB) 			\
-                $(SALLIB)			\
-                $(VOSLIB)			\
-                $(TOOLSLIB)			\
-                $(UNOLIB)			\
-                $(CPPULIB)			\
-                $(CPPUHELPERLIB)	\
-                $(SCHLIB)               \
-                $(SMLIB)                \
-                $(SWLIB)                \
-                $(SDLIB)                \
-                $(SCLIB)                \
-                $(SVXLIB)               \
-                $(UNOTOOLSLIB)						\
-                $(COMPHELPERLIB)
+SHL1TARGET=	$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1IMPLIB=	i$(TARGET)
 
-SHL1DEPN=       makefile.mk
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 
-DEF1NAME=       $(SHL1TARGET)
-DEF1EXPORTFILE= exports.dxp
+SHL1STDLIBS=	\
+    $(VCLLIB) 			\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
 
 # --- Targets ------------------------------------------------------
 
