@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:33:49 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,4 +185,4 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-#endif // _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#endif /* _BGFX_MATRIX_B2DHOMMATRIX_HXX */

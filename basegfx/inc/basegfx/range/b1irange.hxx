@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1irange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2004-01-16 14:30:01 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,4 +160,4 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif //   _BGFX_RANGE_B1IRANGE_HXX
+#endif /* _BGFX_RANGE_B1IRANGE_HXX */

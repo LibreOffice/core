@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2003-12-08 16:55:59 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,4 +231,4 @@ namespace basegfx
                                         double                      angleBound );
 
 }
-#endif // _BGFX_CURVE_B2DBEZIERTOOLS_HXX2
+#endif /* _BGFX_CURVE_B2DBEZIERTOOLS_HXX */

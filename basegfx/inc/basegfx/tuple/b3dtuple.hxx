@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:12 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,4 +458,4 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-#endif // _BGFX_TUPLE_B3DTUPLE_HXX
+#endif /* _BGFX_TUPLE_B3DTUPLE_HXX */

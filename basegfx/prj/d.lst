@@ -67,3 +67,6 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\tuple
 ..\inc\basegfx\tuple\b3ituple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b3ituple.hxx
 ..\inc\basegfx\tuple\b2i64tuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b2i64tuple.hxx
 ..\inc\basegfx\tuple\b3i64tuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b3i64tuple.hxx
+
+mkdir: %_DEST%\inc%_EXT%\basegfx\tools
+..\inc\basegfx\tools\canvastools.hxx %_DEST%\inc%_EXT%\basegfx\tools\canvastools.hxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2isize.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 20:02:36 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,4 +75,4 @@ namespace basegfx
     typedef B2IVector B2ISize;
 }
 
-#endif // _BGFX_VECTOR_B2ISIZE_HXX
+#endif /* _BGFX_VECTOR_B2ISIZE_HXX */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bezierclip.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:41 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,4 +124,4 @@ template <typename NumType> bool tolEqual( NumType n1, NumType n2 ) { return tol
 template <typename NumType> bool tolLessEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1<n2; }
 template <typename NumType> bool tolGreaterEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1>n2; }
 
-#endif // BASEGFX_BEZIERCLIP_HXX
+#endif /* BASEGFX_BEZIERCLIP_HXX */

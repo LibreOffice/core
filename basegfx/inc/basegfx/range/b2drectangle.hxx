@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drectangle.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 19:56:27 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,4 +75,4 @@ namespace basegfx
     typedef B2DRange B2DRectangle;
 }
 
-#endif // _BGFX_RANGE_B2DRECTANGLE_HXX
+#endif /* _BGFX_RANGE_B2DRECTANGLE_HXX */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-12 17:11:41 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,4 +119,4 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif //   _BGFX_CURVE_B2DCUBICBEZIER_HXX
+#endif /* _BGFX_CURVE_B2DCUBICBEZIER_HXX */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2004-01-16 14:30:04 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,4 +299,5 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif //  _BGFX_RANGE_B3DRANGE_HXX
+
+#endif /* _BGFX_RANGE_B3DRANGE_HXX */

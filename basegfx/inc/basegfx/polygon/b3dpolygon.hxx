@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:03 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,4 +145,5 @@ namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //   _BGFX_POLYGON_B3DPOLYGON_HXX
+
+#endif /* _BGFX_POLYGON_B3DPOLYGON_HXX */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:26 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,4 +648,4 @@ namespace basegfx
     } // namespace internal
 } // namespace basegfx
 
-#endif // _HOMMATRIX_TEMPLATE_HXX
+#endif /* _HOMMATRIX_TEMPLATE_HXX */

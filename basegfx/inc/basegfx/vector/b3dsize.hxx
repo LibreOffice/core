@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dsize.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 20:01:57 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,4 +75,4 @@ namespace basegfx
     typedef B3DVector B3DSize;
 }
 
-#endif // _BGFX_VECTOR_B3DSIZE_HXX
+#endif /* _BGFX_VECTOR_B3DSIZE_HXX */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2ipoint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-03 18:18:15 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,4 +160,4 @@ namespace basegfx
     };
 } // end of namespace basegfx
 
-#endif //  _BGFX_POINT_B2IPOINT_HXX
+#endif /* _BGFX_POINT_B2IPOINT_HXX */

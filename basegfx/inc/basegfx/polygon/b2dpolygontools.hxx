@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-03 18:18:18 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,4 +220,4 @@ namespace basegfx
     } // end of namespace tools
 } // end of namespace basegfx
 
-#endif //   _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#endif /* _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX */

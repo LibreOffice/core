@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3i64tuple.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-15 19:59:23 $
+ *  last change: $Author: thb $ $Date: 2004-02-16 17:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,4 +391,4 @@ namespace basegfx
     }
 } // end of namespace basegfx
 
-#endif // _BGFX_TUPLE_B3I64TUPLE_HXX
+#endif /* _BGFX_TUPLE_B3I64TUPLE_HXX */
