@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2393,14 +2393,18 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     if (pFSPA)
     {
         /*
-        #74188#
+        #74188# #i15718# #i19008#
         Strangely in this case the FSPA value seems to be considered before
         the newer escher nXRelTo record.
         */
-        if ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
+        if (
+            ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
+            && ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
+            )
+        {
             pRecord->nXRelTo = pFSPA->nbx;
-        if ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
             pRecord->nYRelTo = pFSPA->nby;
+        }
     }
 
     UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
@@ -3008,12 +3012,9 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
-        SwFmtFrmSize adsfgdfSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
-        adsfgdfSize.SetWidthSizeType(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE);
-        rFlySet.Put(adsfgdfSize);
-        //rFlySet.Put(SwFmtFrmSize(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
-          //  pF->nYaBottom - pF->nYaTop));
-
+        SwFmtFrmSize aFrmSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop);
+        aFrmSize.SetWidthSizeType(pRecord->bAutoWidth ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+        rFlySet.Put(aFrmSize);
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eShapeType, aInnerDist );
