@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 16:57:48 $
+ *  last change: $Author: sb $ $Date: 2002-07-11 11:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
 #define _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
 
-
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -78,9 +77,15 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
+#include "drafts/com/sun/star/awt/XExtendedToolkit.hpp"
+#endif
 
-#ifndef _CPPUHELPER_COMPBASE4_HXX_
-#include <cppuhelper/compbase4.hxx>
+#ifndef _CPPUHELPER_COMPBASE5_HXX_
+#include <cppuhelper/compbase5.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include "cppuhelper/interfacecontainer.hxx"
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -102,7 +107,6 @@ namespace awt {
     class XDataTransfer;
 } } } }
 
-
 extern "C" {
     typedef Window* (SAL_CALL *FN_SvtCreateWindow)( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, sal_uInt32 nWinBits );
 };
@@ -118,12 +122,22 @@ protected:
     ::osl::Mutex    maMutex;
 };
 
+// FIXME  Remove these dummies:
+namespace vcl {
+    struct TopWindowEvent {};
+    struct KeyEvent {};
+    struct FocusEvent {};
+}
+
 class VCLXToolkit : public VCLXToolkit_Impl,
-                    public cppu::WeakComponentImplHelper4<
+                    public cppu::WeakComponentImplHelper5<
                     ::com::sun::star::awt::XToolkit,
                     ::com::sun::star::lang::XServiceInfo,
                     ::com::sun::star::awt::XSystemChildFactory,
-                    ::com::sun::star::awt::XDataTransferProviderAccess >
+                    ::com::sun::star::awt::XDataTransferProviderAccess,
+                    ::drafts::com::sun::star::awt::XExtendedToolkit >
+// FIXME  Needs to be derived from Application/VCL TopWindowListener,
+// KeyHandler, and FocusListener
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
@@ -131,6 +145,36 @@ class VCLXToolkit : public VCLXToolkit_Impl,
     oslModule           hSvToolsLib;
     FN_SvtCreateWindow  fnSvtCreateWindow;
 
+    ::cppu::OInterfaceContainerHelper m_aTopWindowListeners;
+    ::cppu::OInterfaceContainerHelper m_aKeyHandlers;
+    ::cppu::OInterfaceContainerHelper m_aFocusListeners;
+    bool m_bTopWindowListener;
+    bool m_bKeyHandler;
+    bool m_bFocusListener;
+
+    // FIXME  Adopt the following skeleton methods if necessary:
+
+    virtual void windowOpened(::vcl::TopWindowEvent const & rEvent);
+
+    virtual void windowClosing(::vcl::TopWindowEvent const & rEvent);
+
+    virtual void windowClosed(::vcl::TopWindowEvent const & rEvent);
+
+    virtual void windowMinimized(::vcl::TopWindowEvent const & rEvent);
+
+    virtual void windowNormalized(::vcl::TopWindowEvent const & rEvent);
+
+    virtual void windowActivated(::vcl::TopWindowEvent const & rEvent);
+
+    virtual void windowDeactivated(::vcl::TopWindowEvent const & rEvent);
+
+    virtual bool keyPressed(::vcl::KeyEvent const & rEvent);
+
+    virtual bool keyReleased(::vcl::KeyEvent const & rEvent);
+
+    virtual void focusGained(::vcl::FocusEvent const & rEvent);
+
+    virtual void focusLost(::vcl::FocusEvent const & rEvent);
 
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
@@ -165,10 +209,51 @@ public:
     ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::drafts::com::sun::star::awt::XExtendedToolkit:
+
+    virtual ::sal_Int32 SAL_CALL getTopWindowCount()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >
+    SAL_CALL getTopWindow(::sal_Int32 nIndex)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >
+    SAL_CALL getActiveTopWindow()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addTopWindowListener(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::awt::XTopWindowListener > const & rListener)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeTopWindowListener(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::awt::XTopWindowListener > const & rListener)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addKeyHandler(
+        ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::awt::XKeyHandler > const & rHandler)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeKeyHandler(
+        ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::awt::XKeyHandler > const & rHandler)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addFocusListener(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::awt::XFocusListener > const & rListener)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeFocusListener(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::awt::XFocusListener > const & rListener)
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
-
-
-
 #endif // _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
-

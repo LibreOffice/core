@@ -1,10 +1,10 @@
- /*************************************************************************
+/*************************************************************************
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-01 14:11:13 $
+ *  last change: $Author: sb $ $Date: 2002-07-11 11:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef _SVWIN_HXX
 #include <tools/svwin.h>
 #endif
@@ -78,6 +79,12 @@
 #ifndef _COM_SUN_STAR_LANG_SYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
 #endif
+#include "com/sun/star/awt/FocusEvent.hpp"
+#include "com/sun/star/awt/KeyEvent.hpp"
+#include "com/sun/star/lang/EventObject.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/XInterface.hpp"
 
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
@@ -139,6 +146,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
+namespace css = ::com::sun::star;
+namespace dcss = ::drafts::com::sun::star;
 
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
@@ -441,9 +451,18 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 
 // contructor, which might initialize VCL
-VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
-    : cppu::WeakComponentImplHelper4< ::com::sun::star::awt::XToolkit, ::com::sun::star::lang::XServiceInfo,
-                                        ::com::sun::star::awt::XSystemChildFactory, ::com::sun::star::awt::XDataTransferProviderAccess >( GetMutex() )
+VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
+    cppu::WeakComponentImplHelper5<
+    ::com::sun::star::awt::XToolkit, ::com::sun::star::lang::XServiceInfo,
+    ::com::sun::star::awt::XSystemChildFactory,
+    ::com::sun::star::awt::XDataTransferProviderAccess,
+    ::drafts::com::sun::star::awt::XExtendedToolkit >( GetMutex() ),
+    m_aTopWindowListeners(rBHelper.rMutex),
+    m_aKeyHandlers(rBHelper.rMutex),
+    m_aFocusListeners(rBHelper.rMutex),
+    m_bTopWindowListener(false),
+    m_bKeyHandler(false),
+    m_bFocusListener(false)
 {
     hSvToolsLib = NULL;
     fnSvtCreateWindow = NULL;
@@ -481,16 +500,39 @@ void SAL_CALL VCLXToolkit::disposing()
         fnSvtCreateWindow = NULL;
     }
 
-    osl::Guard< osl::Mutex > aGuard( getInitMutex() );
-    if( --nVCLToolkitInstanceCount == 0 )
     {
-        if( bInitedByVCLToolkit )
+        osl::Guard< osl::Mutex > aGuard( getInitMutex() );
+        if( --nVCLToolkitInstanceCount == 0 )
         {
-            Application::Quit();
-            JoinMainLoopThread();
-            bInitedByVCLToolkit = sal_False;
+            if( bInitedByVCLToolkit )
+            {
+                Application::Quit();
+                JoinMainLoopThread();
+                bInitedByVCLToolkit = sal_False;
+            }
         }
     }
+
+    if (m_bTopWindowListener)
+    {
+        // FIXME  Remove this as TopWindowListener from Application/VCL
+        m_bTopWindowListener = false;
+    }
+    if (m_bKeyHandler)
+    {
+        // FIXME  Remove this as KeyHandler from Application/VCL
+        m_bKeyHandler = false;
+    }
+    if (m_bFocusListener)
+    {
+        // FIXME  Remove this as FocusListener from Application/VCL
+        m_bFocusListener = false;
+    }
+    ::css::lang::EventObject aEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    m_aTopWindowListeners.disposeAndClear(aEvent);
+    m_aKeyHandlers.disposeAndClear(aEvent);
+    m_aFocusListeners.disposeAndClear(aEvent);
 
 /*
     osl::Guard< osl::Mutex > aGuard( getInitMutex() );
@@ -1118,4 +1160,291 @@ sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) thr
 {
     ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName2_Toolkit ) );
     return ::com::sun::star::uno::Sequence< ::rtl::OUString >( &aServiceName, 1);
+}
+
+// dcss::awt::XExtendedToolkit:
+
+// virtual
+::sal_Int32 SAL_CALL VCLXToolkit::getTopWindowCount()
+    throw (::css::uno::RuntimeException)
+{
+    return 0; // FIXME
+}
+
+// virtual
+::css::uno::Reference< ::css::awt::XTopWindow > SAL_CALL
+VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
+    throw (::css::uno::RuntimeException)
+{
+    return 0; // FIXME
+}
+
+// virtual
+::css::uno::Reference< ::css::awt::XTopWindow > SAL_CALL
+VCLXToolkit::getActiveTopWindow() throw (::css::uno::RuntimeException)
+{
+    return 0; // FIXME
+}
+
+// virtual
+void SAL_CALL VCLXToolkit::addTopWindowListener(
+    ::css::uno::Reference< ::css::awt::XTopWindowListener > const & rListener)
+    throw (::css::uno::RuntimeException)
+{
+    OSL_ENSURE(rListener.is(), "Null rListener");
+    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        aGuard.clear();
+        rListener->disposing(
+            ::css::lang::EventObject(
+                static_cast< ::cppu::OWeakObject * >(this)));
+    }
+    else if (m_aTopWindowListeners.addInterface(rListener) == 1
+             && !m_bTopWindowListener)
+    {
+        m_bTopWindowListener = true;
+        // FIXME  Add this as TopWindowListener to Application/VCL
+    }
+}
+
+// virtual
+void SAL_CALL VCLXToolkit::removeTopWindowListener(
+    ::css::uno::Reference< ::css::awt::XTopWindowListener > const & rListener)
+    throw (::css::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(rBHelper.rMutex);
+    if (!(rBHelper.bDisposed || rBHelper.bInDispose)
+        && m_aTopWindowListeners.removeInterface(rListener) == 0
+        && m_bTopWindowListener)
+    {
+        // FIXME  Remove this as TopWindowListener from Application/VCL
+        m_bTopWindowListener = false;
+    }
+}
+
+// virtual
+void SAL_CALL VCLXToolkit::addKeyHandler(
+    ::css::uno::Reference< ::dcss::awt::XKeyHandler > const & rHandler)
+    throw (::css::uno::RuntimeException)
+{
+    OSL_ENSURE(rHandler.is(), "Null rHandler");
+    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        aGuard.clear();
+        rHandler->disposing(
+            ::css::lang::EventObject(
+                static_cast< ::cppu::OWeakObject * >(this)));
+    }
+    else if (m_aKeyHandlers.addInterface(rHandler) == 1 && !m_bKeyHandler)
+    {
+        m_bKeyHandler = true;
+        // FIXME  Add this as KeyHandler to Application/VCL
+    }
+}
+
+// virtual
+void SAL_CALL VCLXToolkit::removeKeyHandler(
+    ::css::uno::Reference< ::dcss::awt::XKeyHandler > const & rHandler)
+    throw (::css::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(rBHelper.rMutex);
+    if (!(rBHelper.bDisposed || rBHelper.bInDispose)
+        && m_aKeyHandlers.removeInterface(rHandler) == 0 && m_bKeyHandler)
+    {
+        // FIXME  Remove this as KeyHandler from Application/VCL
+        m_bKeyHandler = false;
+    }
+}
+
+// virtual
+void SAL_CALL VCLXToolkit::addFocusListener(
+    ::css::uno::Reference< ::css::awt::XFocusListener > const & rListener)
+    throw (::css::uno::RuntimeException)
+{
+    OSL_ENSURE(rListener.is(), "Null rListener");
+    ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        aGuard.clear();
+        rListener->disposing(
+            ::css::lang::EventObject(
+                static_cast< ::cppu::OWeakObject * >(this)));
+    }
+    else if (m_aFocusListeners.addInterface(rListener) == 1
+             && !m_bFocusListener)
+    {
+        m_bFocusListener = true;
+        // FIXME  Add this as FocusListener to Application/VCL
+    }
+}
+
+// virtual
+void SAL_CALL VCLXToolkit::removeFocusListener(
+    ::css::uno::Reference< ::css::awt::XFocusListener > const & rListener)
+    throw (::css::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard(rBHelper.rMutex);
+    if (!(rBHelper.bDisposed || rBHelper.bInDispose)
+        && m_aFocusListeners.removeInterface(rListener) == 0
+        && m_bFocusListener)
+    {
+        m_bFocusListener = false;
+        // FIXME  Remove this as FocusListener from Application/VCL
+    }
+}
+
+// FIXME  Adopt the following skeleton methods if necessary:
+
+// virtual
+void VCLXToolkit::windowOpened(::vcl::TopWindowEvent const & rEvent)
+{
+    ::css::lang::EventObject aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->windowOpened(aAwtEvent);
+}
+
+// virtual
+void VCLXToolkit::windowClosing(::vcl::TopWindowEvent const & rEvent)
+{
+    ::css::lang::EventObject aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->windowClosing(aAwtEvent);
+}
+
+// virtual
+void VCLXToolkit::windowClosed(::vcl::TopWindowEvent const & rEvent)
+{
+    ::css::lang::EventObject aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->windowClosed(aAwtEvent);
+}
+
+// virtual
+void VCLXToolkit::windowMinimized(::vcl::TopWindowEvent const & rEvent)
+{
+    ::css::lang::EventObject aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->windowMinimized(aAwtEvent);
+}
+
+// virtual
+void VCLXToolkit::windowNormalized(::vcl::TopWindowEvent const & rEvent)
+{
+    ::css::lang::EventObject aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->
+            windowNormalized(aAwtEvent);
+}
+
+// virtual
+void VCLXToolkit::windowActivated(::vcl::TopWindowEvent const & rEvent)
+{
+    ::css::lang::EventObject aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->windowActivated(aAwtEvent);
+}
+
+// virtual
+void VCLXToolkit::windowDeactivated(::vcl::TopWindowEvent const & rEvent)
+{
+    ::css::lang::EventObject aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this));
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aTopWindowListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XTopWindowListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->
+            windowDeactivated(aAwtEvent);
+}
+
+// virtual
+bool VCLXToolkit::keyPressed(::vcl::KeyEvent const & rEvent)
+{
+    ::css::awt::KeyEvent aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this),
+        0, // FIXME Modifiers
+        0, // FIXME KeyCode
+        0, // FIXME KeyChar
+        0); // FIXME KeyFunc
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aHandlers(m_aKeyHandlers.getElements());
+    for (sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
+        if (!::css::uno::Reference< ::dcss::awt::XKeyHandler >(
+                aHandlers[i], ::css::uno::UNO_QUERY)->keyPressed(aAwtEvent))
+            return false;
+    return true;
+}
+
+// virtual
+bool VCLXToolkit::keyReleased(::vcl::KeyEvent const & rEvent)
+{
+    ::css::awt::KeyEvent aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this),
+        0, // FIXME Modifiers
+        0, // FIXME KeyCode
+        0, // FIXME KeyChar
+        0); // FIXME KeyFunc
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aHandlers(m_aKeyHandlers.getElements());
+    for (sal_Int32 i = 0; i < aHandlers.getLength(); ++i)
+        if (!::css::uno::Reference< ::dcss::awt::XKeyHandler >(
+                aHandlers[i], ::css::uno::UNO_QUERY)->keyReleased(aAwtEvent))
+            return false;
+    return true;
+}
+
+// virtual
+void VCLXToolkit::focusGained(::vcl::FocusEvent const & rEvent)
+{
+    ::css::awt::FocusEvent aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this),
+        0, // FIXME FocusFlags
+        0, // FIXME NextFocus
+        false); // FIXME Temporary
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aFocusListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XFocusListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->focusGained(aAwtEvent);
+}
+
+// virtual
+void VCLXToolkit::focusLost(::vcl::FocusEvent const & rEvent)
+{
+    ::css::awt::FocusEvent aAwtEvent(
+        static_cast< ::cppu::OWeakObject * >(this),
+        0, // FIXME FocusFlags
+        0, // FIXME NextFocus
+        false); // FIXME Temporary
+    ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
+              aListeners(m_aFocusListeners.getElements());
+    for (sal_Int32 i = 0; i < aListeners.getLength(); ++i)
+        ::css::uno::Reference< ::css::awt::XFocusListener >(
+            aListeners[i], ::css::uno::UNO_QUERY)->focusLost(aAwtEvent);
 }
