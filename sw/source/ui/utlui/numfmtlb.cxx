@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:56:34 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,9 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         else
         {
             SwView *pView = GetView();
+            DBG_ASSERT(pView, "no view found")
+            if(!pView)
+                return;
             SwWrtShell &rSh = pView->GetWrtShell();
             pFormatter = rSh.GetNumberFormatter();
         }
@@ -314,7 +317,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
         USHORT nPos, i = 0;
         ULONG  nFormat;
         Color* pCol;
-        double fVal = GetDefValue( pFormatter, nFormatType );
+        double fVal = GetDefValue( nFormatType );
         String sValue;
 
         ULONG nSysNumFmt = pFormatter->GetFormatIndex(
@@ -385,6 +388,9 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     else
     {
         SwView *pView = GetView();
+        DBG_ASSERT(pView, "no view found")
+        if(!pView)
+            return;
         SwWrtShell &rSh = pView->GetWrtShell();
         pFormatter = rSh.GetNumberFormatter();
     }
@@ -407,7 +413,7 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
     }
 
     // Kein Eintrag gefunden:
-    double fValue = GetDefValue(pFormatter, nType);
+    double fValue = GetDefValue(nType);
     String sValue;
     Color* pCol = 0;
 
@@ -492,7 +498,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             SID_ATTR_NUMBERFORMAT_ADD_AUTO, SID_ATTR_NUMBERFORMAT_ADD_AUTO,
             0 );
 
-        double fValue = GetDefValue( pFormatter, nCurrFormatType);
+        double fValue = GetDefValue( nCurrFormatType);
 
         ULONG nFormat = pFormatter->GetStandardFormat( nCurrFormatType, eCurLanguage);
         aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormat ));
@@ -549,7 +555,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-double NumFormatListBox::GetDefValue(SvNumberFormatter* pFormatter, const short nFormatType) const
+double NumFormatListBox::GetDefValue(const short nFormatType) const
 {
     double fDefValue = 0.0;
 
