@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:11:53 $
+#   last change: $Author: hr $ $Date: 2004-03-09 10:14:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,10 +76,12 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES= \
         module_xsltfilter.par     \
-        file_xsltfilter.par
+        file_xsltfilter.par  \
+        starregistryitem_xsltfilter.par
 
 LNGFILES= \
         module_xsltfilter.lng
+
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
