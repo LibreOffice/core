@@ -1,6 +1,5 @@
-<!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by Sascha Ballach (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.25 2001-03-01 15:17:04 sab Exp $
+	$Id: table.mod,v 1.26 2001-03-01 15:33:58 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
