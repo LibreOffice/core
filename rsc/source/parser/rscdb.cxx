@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:04 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,6 +844,8 @@ void RscTypCont :: WriteSrc( FILE * fOutput, ULONG nFileKey,
     RscFile     *   pFName;
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
 
+    char aUTF8BOM[3] = { 0xef, 0xbb, 0xbf };
+    fwrite( aUTF8BOM, sizeof(char), sizeof(aUTF8BOM)/sizeof(aUTF8BOM[0]), fOutput );
     if( bName )
     {
         WriteInc( fOutput, nFileKey );
