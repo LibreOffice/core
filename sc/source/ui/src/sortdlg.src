@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 20:10:43 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 09:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "°Ο°μ§t¦³ XX ΌΠΕÒ(~H)";
         Text[ arabic ] = "ΡΓΣΗπXX ΚΚΦγδ ΗαγδΨήΙ";
         Text[ greek ] = "Η περιοχή περιέχει  XX κεφαλίδες";
-        Text[ korean ] = "Ήόΐ§Ώ΅΄Β  XX ~ ΈΣΈ®±ΫΐΜ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ήόΐ§Ώ΅΄Β  XX ~ ΈΣΈ®±Ϋ ΖχΗΤ.";
         Text[ turkish ] = "Bφlόm  XXbaώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -441,7 +441,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "°Ο°μ§t¦³ΔζΌΠΓD(~H)";
         Text[ arabic ] = "ΚΚΦγδ ΗαγδΨήΙ ΡΔζΣ ΓΪγΟΙ";
         Text[ greek ] = "Η περιοχή περιέχει κεφαλίδες στηλών";
-        Text[ korean ] = "Ήόΐ§Ώ΅΄Β Ώ­ ΈΣΈ®±ΫΐΜ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.(~H)";
+        Text[ korean ] = "Ήόΐ§Ώ΅΄Β Ώ­ ΈΣΈ®±Ϋ ΖχΗΤ.(~H)";
         Text[ turkish ] = "Bφlόm ~sόtun baώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -468,7 +468,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "°Ο°μ§t¦³¦CΌΠΓD(~R)";
         Text[ arabic ] = "ΚΚΦγδ ΗαγδΨήΙ ΡΔζΣ Υέζέ";
         Text[ greek ] = "Η περιοχή περιέχει κεφαλίδες γραμμών";
-        Text[ korean ] = "Ήόΐ§Ώ΅΄Β Ηΰ ΈΣΈ®±ΫΐΜ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.(~R)";
+        Text[ korean ] = "Ήόΐ§Ώ΅΄Β Ηΰ ΈΣΈ®±Ϋ ΖχΗΤ.(~R)";
         Text[ turkish ] = "Bφlόm sa~tύr baώlύklarύ iηeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -527,7 +527,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text[ chinese_traditional ] = "½Ζ»s±Ζ§Ηµ²ªG¨μ(~C)";
         Text[ arabic ] = "δΣΞ δΚνΜΙ ΗαέΡÒ Εαμ";
         Text[ greek ] = "Αντιγραφή αποτελεσμάτων ταξινόμησης στο";
-        Text[ korean ] = "Α¤·Δ °α°ϊΈ¦ ...Ώ΅ ΊΉ»η :(~C)";
+        Text[ korean ] = "Α¤·Δ °α°ϊΈ¦ ...Ώ΅(·Ξ)  Γβ·Β :(~C)";
         Text[ turkish ] = "Sύralama sonuηlarύnύn kopyalanacaπύ ~yer";
         Text[ language_user1 ] = " ";
     };
