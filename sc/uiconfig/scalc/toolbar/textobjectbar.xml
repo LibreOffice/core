@@ -9,16 +9,15 @@
  <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:helpid="helpid:10008" toolbar:text="" toolbar:style="auto" />
  <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:helpid="helpid:10014" toolbar:text="" toolbar:style="auto" />
  <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:helpid="helpid:26648" toolbar:text="" toolbar:style="auto" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="helpid:10017" toolbar:text="" />
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:helpid="helpid:10034" toolbar:text="" toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:helpid="helpid:10035" toolbar:text="" toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:helpid="helpid:10036" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:helpid="helpid:10028" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:helpid="helpid:10030" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:helpid="helpid:10029" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:helpid="helpid:10031" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:helpid="helpid:10034" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:helpid="helpid:10035" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:helpid="helpid:10036" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="helpid:10950" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="helpid:10951" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
@@ -31,4 +30,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:helpid="helpid:10296" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:helpid="helpid:10297" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="helpid:10017" toolbar:text="" />
 </toolbar:toolbar>
