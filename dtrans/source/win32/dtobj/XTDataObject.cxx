@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 08:41:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,12 @@ void SAL_CALL CXTDataObject::renderDataAndSetupStgMedium(
     if ( nInitStgSize > 0 )
         stgTransfHelper.init( nInitStgSize, GHND );
 
-#ifndef _DEBUG
-    stgTransfHelper.write( lpStorage, nBytesToTransfer );
-#else
+#if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nBytesWritten = 0;
     stgTransfHelper.write( lpStorage, nBytesToTransfer, &nBytesWritten );
     OSL_ASSERT( nBytesWritten == nBytesToTransfer );
+#else
+    stgTransfHelper.write( lpStorage, nBytesToTransfer );
 #endif
 
     setupStgMedium( fetc, stgTransfHelper, stgmedium );
