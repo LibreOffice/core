@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
+ *  last change: $Author: os $ $Date: 2002-11-15 15:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ protected:
                                     const String& rPar1,
                                     const String& rPar2,
                                     ULONG nFormatId,
-                                    sal_Unicode cDelim = ' ');
+                                    sal_Unicode cDelim = ' ',
+                                    BOOL bIsAutomaticLanguage = TRUE);
 
 public:
                         SwFldPage(  Window *pParent,
