@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-16 08:37:28 $
+ *  last change: $Author: dvo $ $Date: 2001-05-31 09:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,14 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
 {
     // RES_LR_SPACE
     M_E( "ParaLeftMargin",          FO, margin_left,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN ),
-    M_E( "ParaLeftMarginRelative",  FO, margin_left,        XML_TYPE_PERCENT, CTF_PARALEFTMARGIN_REL ),
+    M_E( "ParaLeftMarginRelative",  FO, margin_left,        XML_TYPE_PERCENT16, CTF_PARALEFTMARGIN_REL ),
     M_E( "ParaRightMargin",         FO, margin_right,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN ),
-    M_E( "ParaRightMarginRelative", FO, margin_right,       XML_TYPE_PERCENT, CTF_PARARIGHTMARGIN_REL ),
+    M_E( "ParaRightMarginRelative", FO, margin_right,       XML_TYPE_PERCENT16, CTF_PARARIGHTMARGIN_REL ),
     // RES_UL_SPACE
     M_E( "ParaTopMargin",           FO, margin_top,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN ),
-    M_E( "ParaTopMarginRelative",   FO, margin_top,         XML_TYPE_PERCENT, CTF_PARATOPMARGIN_REL ),
+    M_E( "ParaTopMarginRelative",   FO, margin_top,         XML_TYPE_PERCENT16, CTF_PARATOPMARGIN_REL ),
     M_E( "ParaBottomMargin",        FO, margin_bottom,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
-    M_E( "ParaBottomMarginRelative",FO, margin_bottom,      XML_TYPE_PERCENT, CTF_PARABOTTOMMARGIN_REL ),
+    M_E( "ParaBottomMarginRelative",FO, margin_bottom,      XML_TYPE_PERCENT16, CTF_PARABOTTOMMARGIN_REL ),
     // RES_CHRATR_CASEMAP
     M_E( "CharCaseMap",     FO,     font_variant,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
     M_E( "CharCaseMap",     FO,     text_transform,     XML_TYPE_TEXT_CASEMAP,  0 ),
