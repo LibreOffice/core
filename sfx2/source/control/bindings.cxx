@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 08:13:43 $
+ *  last change: $Author: mba $ $Date: 2002-05-21 07:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ class SfxBindings_Impl
 
 {
 public:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchRecorder > xRecorder;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv;
     SfxUnoControllerArr_Impl*
                             pUnoCtrlArr;
@@ -2812,3 +2813,14 @@ SfxConfigManager* SfxBindings::GetConfigManager( USHORT nType ) const
     else
         return SFX_APP()->GetConfigManager_Impl();
 }
+
+com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxBindings::GetRecorder() const
+{
+    return pImp->xRecorder;
+}
+
+void SfxBindings::SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >& rRecorder )
+{
+    pImp->xRecorder = rRecorder;
+}
+
