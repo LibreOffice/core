@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhommatrix.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:55 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,10 @@ namespace basegfx
             mpM->set(nRow, nColumn, fValue);
         }
 
-        bool B3DHomMatrix::isIdentity() const
+        sal_Bool B3DHomMatrix::isIdentity() const
         {
             if(mpM == &get3DIdentityMatrix())
-                return true;
+                return sal_True;
 
             return mpM->isIdentity();
         }
@@ -157,12 +157,12 @@ namespace basegfx
             mpM->incRefCount();
         }
 
-        bool B3DHomMatrix::isInvertible() const
+        sal_Bool B3DHomMatrix::isInvertible() const
         {
             return mpM->isInvertible();
         }
 
-        bool B3DHomMatrix::invert()
+        sal_Bool B3DHomMatrix::invert()
         {
             Impl3DHomMatrix aWork(*mpM);
             sal_uInt16* pIndex = new sal_uInt16[mpM->getEdgeLength()];
@@ -174,14 +174,14 @@ namespace basegfx
                 mpM->doInvert(aWork, pIndex);
                 delete pIndex;
 
-                return true;
+                return sal_True;
             }
 
             delete pIndex;
-            return false;
+            return sal_False;
         }
 
-        bool B3DHomMatrix::isNormalized() const
+        sal_Bool B3DHomMatrix::isNormalized() const
         {
             return mpM->isNormalized();
         }
@@ -264,18 +264,18 @@ namespace basegfx
             return *this;
         }
 
-        bool B3DHomMatrix::operator==(const B3DHomMatrix& rMat) const
+        sal_Bool B3DHomMatrix::operator==(const B3DHomMatrix& rMat) const
         {
             if(mpM == rMat.mpM)
-                return true;
+                return sal_True;
 
             return mpM->isEqual(*rMat.mpM);
         }
 
-        bool B3DHomMatrix::operator!=(const B3DHomMatrix& rMat) const
+        sal_Bool B3DHomMatrix::operator!=(const B3DHomMatrix& rMat) const
         {
             if(mpM == rMat.mpM)
-                return false;
+                return sal_False;
 
             return !mpM->isEqual(*rMat.mpM);
         }
@@ -497,15 +497,15 @@ namespace basegfx
             mpM = new Impl3DHomMatrix(aOrthoMat);
         }
 
-        bool B3DHomMatrix::decompose(tuple::B3DTuple& rScale, tuple::B3DTuple& rTranslate, tuple::B3DTuple& rRotate, tuple::B3DTuple& rShear) const
+        sal_Bool B3DHomMatrix::decompose(tuple::B3DTuple& rScale, tuple::B3DTuple& rTranslate, tuple::B3DTuple& rRotate, tuple::B3DTuple& rShear) const
         {
             // when perspective is used, decompose is not made here
             if(!mpM->isLastLineDefault())
-                return false;
+                return sal_False;
 
             // If determinant is zero, decomposition is not possible
             if(0.0 == mpM->doDeterminant())
-                return false;
+                return sal_False;
 
             // isolate translation
             rTranslate.setX(mpM->get(0, 3));
@@ -631,7 +631,7 @@ namespace basegfx
             // corrcet rotate values
             rRotate.correctValues();
 
-            return true;
+            return sal_True;
         }
     } // end of namespace matrix
 } // end of namespace basegfx

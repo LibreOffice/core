@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:14:00 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ namespace basegfx
             return *this;
         }
 
-        bool B2DVector::isNormalized() const
+        sal_Bool B2DVector::isNormalized() const
         {
             const double fOne(1.0);
             const double fScalar(scalar(*this));
@@ -161,27 +161,27 @@ namespace basegfx
             return (::basegfx::numeric::fTools::equal(fOne, fScalar));
         }
 
-        bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
+        sal_Bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
         {
             double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecA.getX());
             return ::basegfx::numeric::fTools::equalZero(fVal);
         }
 
-        B2DVector::B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
+        B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
         {
             double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecA.getX());
 
             if(fVal > 0.0)
             {
-                return B2DVector::POSITIVE;
+                return ORIENTATION_POSITIVE;
             }
 
             if(fVal < 0.0)
             {
-                return B2DVector::NEGATIVE;
+                return ORIENTATION_NEGATIVE;
             }
 
-            return B2DVector::NEUTRAL;
+            return ORIENTATION_NEUTRAL;
         }
 
         B2DVector getPerpendicular( const B2DVector& rNormalizedVec )

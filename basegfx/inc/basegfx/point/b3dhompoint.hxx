@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhompoint.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:12:49 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@ namespace basegfx
 
             /** Test if this homogen point does have a homogenous part
 
-                @return Returns true if this point has no homogenous part
+                @return Returns sal_True if this point has no homogenous part
             */
-            bool implIsHomogenized() const
+            sal_Bool implIsHomogenized() const
             {
                 const double fOne(1.0);
                 return ::basegfx::numeric::fTools::equal(mfW, fOne);
@@ -322,13 +322,13 @@ namespace basegfx
                 return *this;
             }
 
-            bool operator==( const B3DHomPoint& rPnt ) const
+            sal_Bool operator==( const B3DHomPoint& rPnt ) const
             {
                 implTestAndHomogenize();
                 return (maTuple == rPnt.maTuple);
             }
 
-            bool operator!=( const B3DHomPoint& rPnt ) const
+            sal_Bool operator!=( const B3DHomPoint& rPnt ) const
             {
                 implTestAndHomogenize();
                 return (maTuple != rPnt.maTuple);

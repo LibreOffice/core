@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convexhull.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2003-03-06 18:57:49 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ template <class PointType> double theta( const PointType& p1, const PointType& p
 /* Model of LessThanComparable for theta sort.
  * Uses the theta function from Sedgewick: Algorithms in XXX, chapter 24
  */
-template <class PointType> class ThetaCompare : public ::std::binary_function< const PointType&, const PointType&, bool >
+template <class PointType> class ThetaCompare : public ::std::binary_function< const PointType&, const PointType&, sal_Bool >
 {
 public:
     ThetaCompare( const PointType& rRefPoint ) : maRefPoint( rRefPoint ) {}
 
-    bool operator() ( const PointType& p1, const PointType& p2 )
+    sal_Bool operator() ( const PointType& p1, const PointType& p2 )
     {
-        // return true, if p1 precedes p2 in the angle relative to maRefPoint
+        // return sal_True, if p1 precedes p2 in the angle relative to maRefPoint
         return theta(maRefPoint, p1) < theta(maRefPoint, p2);
     }
 

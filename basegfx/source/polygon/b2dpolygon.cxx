@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:58 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,12 @@ public:
         return (maVector == rCandidate.maVector);
     }
 
-    const basegfx::vector::B2DVector& getCoordinate(sal_uInt32 nIndex) const
+    const basegfx::point::B2DPoint& getCoordinate(sal_uInt32 nIndex) const
     {
         return maVector[nIndex].getCoordinate();
     }
 
-    void setCoordinate(sal_uInt32 nIndex, const basegfx::vector::B2DVector& rValue)
+    void setCoordinate(sal_uInt32 nIndex, const basegfx::point::B2DPoint& rValue)
     {
         maVector[nIndex].setCoordinate(rValue);
     }
@@ -189,6 +189,37 @@ public:
                 ::std::swap(*aStart, *aEnd);
                 aStart++;
                 aEnd--;
+            }
+        }
+    }
+
+    void removeDoublePointsAtBeginEnd()
+    {
+        // remove from end as long as there are at least two points
+        // and begin/end are equal
+        while((maVector.size() > 1L) && (maVector[0] == maVector[maVector.size() - 1L]))
+        {
+            maVector.pop_back();
+        }
+    }
+
+    void removeDoublePointsWholeTrack()
+    {
+        sal_uInt32 nIndex(0L);
+
+        // test as long as there are at least two points and as long as the index
+        // is smaller or equal second last point
+        while((maVector.size() > 1L) && (nIndex <= maVector.size() - 2L))
+        {
+            if(maVector[nIndex] == maVector[nIndex + 1L])
+            {
+                // if next is same as index, delete next
+                maVector.erase(maVector.begin() + (nIndex + 1L));
+            }
+            else
+            {
+                // if different, step forward
+                nIndex++;
             }
         }
     }
@@ -765,6 +796,124 @@ public:
             }
         }
     }
+
+    sal_Bool hasDoublePoints() const
+    {
+        if(mbIsClosed)
+        {
+            // check for same start and end point
+            const sal_uInt32 nIndex(maPoints.count() - 1L);
+
+            if(maPoints.getCoordinate(0L) == maPoints.getCoordinate(nIndex))
+            {
+                if(mpControlVector)
+                {
+                    if(mpControlVector->getVectorA(nIndex).equalZero()
+                        && mpControlVector->getVectorB(nIndex).equalZero())
+                    {
+                        return sal_True;
+                    }
+                }
+                else
+                {
+                    return sal_True;
+                }
+            }
+        }
+
+        // test for range
+        for(sal_uInt32 a(0L); a < maPoints.count() - 1L; a++)
+        {
+            if(maPoints.getCoordinate(a) == maPoints.getCoordinate(a + 1L))
+            {
+                if(mpControlVector)
+                {
+                    if(mpControlVector->getVectorA(a).equalZero()
+                        && mpControlVector->getVectorB(a).equalZero())
+                    {
+                        return sal_True;
+                    }
+                }
+                else
+                {
+                    return sal_True;
+                }
+            }
+        }
+
+        return sal_False;
+    }
+
+    void removeDoublePointsAtBeginEnd()
+    {
+        // Only remove DoublePoints at Begin and End when poly is closed
+        if(mbIsClosed)
+        {
+            if(mpControlVector)
+            {
+                sal_Bool bRemove;
+
+                do
+                {
+                    bRemove = sal_False;
+
+                    if(maPoints.count() > 1L)
+                    {
+                        const sal_uInt32 nIndex(maPoints.count() - 1L);
+
+                        if(maPoints.getCoordinate(0L) == maPoints.getCoordinate(nIndex))
+                        {
+                            if(mpControlVector->getVectorA(nIndex).equalZero()
+                                && mpControlVector->getVectorB(nIndex).equalZero())
+                            {
+                                bRemove = sal_True;
+                            }
+                        }
+                    }
+
+                    if(bRemove)
+                    {
+                        const sal_uInt32 nIndex(maPoints.count() - 1L);
+                        remove(nIndex, 1L);
+                    }
+                } while(bRemove);
+            }
+            else
+            {
+                maPoints.removeDoublePointsAtBeginEnd();
+            }
+        }
+    }
+
+    void removeDoublePointsWholeTrack()
+    {
+        if(mpControlVector)
+        {
+            sal_uInt32 nIndex(0L);
+
+            // test as long as there are at least two points and as long as the index
+            // is smaller or equal second last point
+            while((maPoints.count() > 1L) && (nIndex <= maPoints.count() - 2L))
+            {
+                if(maPoints.getCoordinate(nIndex) == maPoints.getCoordinate(nIndex + 1L)
+                    && mpControlVector->getVectorA(nIndex).equalZero()
+                    && mpControlVector->getVectorB(nIndex).equalZero())
+                {
+                    // if next is same as index and the control vectors are unused, delete index
+                    remove(nIndex, 1L);
+                }
+                else
+                {
+                    // if different, step forward
+                    nIndex++;
+                }
+            }
+        }
+        else
+        {
+            maPoints.removeDoublePointsWholeTrack();
+        }
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -836,7 +985,7 @@ namespace basegfx
         {
             if(mpPolygon == rPolygon.mpPolygon)
             {
-                return true;
+                return sal_True;
             }
 
             return mpPolygon->isEqual(*(rPolygon.mpPolygon));
@@ -846,7 +995,7 @@ namespace basegfx
         {
             if(mpPolygon == rPolygon.mpPolygon)
             {
-                return false;
+                return sal_False;
             }
 
             return !mpPolygon->isEqual(*(rPolygon.mpPolygon));
@@ -1032,6 +1181,21 @@ namespace basegfx
             {
                 implForceUniqueCopy();
                 mpPolygon->flip();
+            }
+        }
+
+        sal_Bool B2DPolygon::hasDoublePoints() const
+        {
+            return mpPolygon->hasDoublePoints();
+        }
+
+        void B2DPolygon::removeDoublePoints()
+        {
+            if(mpPolygon->count() > 1)
+            {
+                implForceUniqueCopy();
+                mpPolygon->removeDoublePointsAtBeginEnd();
+                mpPolygon->removeDoublePointsWholeTrack();
             }
         }
     } // end of namespace polygon

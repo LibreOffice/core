@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:58 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -106,21 +110,21 @@ public:
     void incRefCount() { mnRefCount++; }
     void decRefCount() { mnRefCount--; }
 
-    bool isEqual(const ImplB2DPolyPolygon& rPolygonList) const
+    sal_Bool isEqual(const ImplB2DPolyPolygon& rPolygonList) const
     {
         // same polygon count?
         if(maPolygons.size() != rPolygonList.maPolygons.size())
-            return false;
+            return sal_False;
 
         // if zero polygons the polys are equal
         if(!maPolygons.size())
-            return true;
+            return sal_True;
 
         // compare polygon content
         if(maPolygons != rPolygonList.maPolygons)
-            return false;
+            return sal_False;
 
-        return true;
+        return sal_True;
     }
 
     const basegfx::polygon::B2DPolygon& getPolygon(sal_uInt32 nIndex) const
@@ -179,6 +183,30 @@ public:
     sal_uInt32 count() const
     {
         return maPolygons.size();
+    }
+
+    void setClosed(sal_Bool bNew)
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].setClosed(bNew);
+        }
+    }
+
+    void flip()
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].flip();
+        }
+    }
+
+    void removeDoublePoints()
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].removeDoublePoints();
+        }
     }
 };
 
@@ -241,21 +269,21 @@ namespace basegfx
             return *this;
         }
 
-        bool B2DPolyPolygon::operator==(const B2DPolyPolygon& rPolyPolygon) const
+        sal_Bool B2DPolyPolygon::operator==(const B2DPolyPolygon& rPolyPolygon) const
         {
             if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
             {
-                return true;
+                return sal_True;
             }
 
             return mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
         }
 
-        bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
+        sal_Bool B2DPolyPolygon::operator!=(const B2DPolyPolygon& rPolyPolygon) const
         {
             if(mpPolyPolygon == rPolyPolygon.mpPolyPolygon)
             {
-                return false;
+                return sal_False;
             }
 
             return !mpPolyPolygon->isEqual(*(rPolyPolygon.mpPolyPolygon));
@@ -348,6 +376,68 @@ namespace basegfx
 
             mpPolyPolygon = &maStaticDefaultPolyPolygon;
             mpPolyPolygon->incRefCount();
+        }
+
+        sal_Bool B2DPolyPolygon::isClosed() const
+        {
+            sal_Bool bRetval(sal_True);
+
+            // PolyPOlygon is closed when all contained Polygons are closed or
+            // no Polygon exists.
+            for(sal_uInt32 a(0L); bRetval && a < mpPolyPolygon->count(); a++)
+            {
+                if(!(mpPolyPolygon->getPolygon(a)).isClosed())
+                {
+                    bRetval = sal_False;
+                }
+            }
+
+            return bRetval;
+        }
+
+        void B2DPolyPolygon::setClosed(sal_Bool bNew)
+        {
+            if(bNew != isClosed())
+            {
+                implForceUniqueCopy();
+                mpPolyPolygon->setClosed(bNew);
+            }
+        }
+
+        ::basegfx::vector::B2DVectorOrientation B2DPolyPolygon::checkOrientations()
+        {
+            implForceUniqueCopy();
+            return ::basegfx::polygon::tools::checkOrientations(*this);
+        }
+
+        void B2DPolyPolygon::flip()
+        {
+            implForceUniqueCopy();
+            mpPolyPolygon->flip();
+        }
+
+        sal_Bool B2DPolyPolygon::hasDoublePoints() const
+        {
+            sal_Bool bRetval(sal_False);
+
+            for(sal_uInt32 a(0L); !bRetval && a < mpPolyPolygon->count(); a++)
+            {
+                if((mpPolyPolygon->getPolygon(a)).hasDoublePoints())
+                {
+                    bRetval = sal_True;
+                }
+            }
+
+            return bRetval;
+        }
+
+        void B2DPolyPolygon::removeDoublePoints()
+        {
+            if(hasDoublePoints())
+            {
+                implForceUniqueCopy();
+                mpPolyPolygon->removeDoublePoints();
+            }
         }
     } // end of namespace polygon
 } // end of namespace basegfx

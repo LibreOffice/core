@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:06:00 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,11 @@ namespace basegfx
     {
         class B2DPolygon;
     } // end of namespace polygon
+
+    namespace vector
+    {
+        enum B2DVectorOrientation;
+    } // end of namespace vector
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -101,8 +106,8 @@ namespace basegfx
             B2DPolyPolygon& operator=(const B2DPolyPolygon& rPolyPolygon);
 
             // compare operators
-            bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
-            bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
+            sal_Bool operator==(const B2DPolyPolygon& rPolyPolygon) const;
+            sal_Bool operator!=(const B2DPolyPolygon& rPolyPolygon) const;
 
             // polygon interface
             sal_uInt32 count() const;
@@ -123,6 +128,22 @@ namespace basegfx
 
             // reset to empty state
             void clear();
+
+            // closed state
+            sal_Bool isClosed() const;
+            void setClosed(sal_Bool bNew);
+
+            // Check and evtl. correct orientations of contained Polygons
+            ::basegfx::vector::B2DVectorOrientation checkOrientations();
+
+            // flip polygon direction
+            void flip();
+
+            // test if PolyPolygon has double points
+            sal_Bool hasDoublePoints() const;
+
+            // remove double points, at the begin/end and follow-ups, too
+            void removeDoublePoints();
         };
     } // end of namespace polygon
 } // end of namespace basegfx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:05:58 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,6 @@ namespace basegfx
     {
         class B2DPoint;
     } // end of namespace point
-
-    namespace vector
-    {
-        class B2DVector;
-    } // end of namespace vector
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -149,8 +144,18 @@ namespace basegfx
             sal_Bool isClosed() const;
             void setClosed(sal_Bool bNew);
 
-            // flip polygon
+            // flip polygon direction
             void flip();
+
+            // test if Polygon has double points
+            sal_Bool hasDoublePoints() const;
+
+            // remove double points, at the begin/end and follow-ups, too
+            void removeDoublePoints();
+
+            // isInside tests for B2dPoint and other B2dPolygon. On border is not inside.
+            sal_Bool isInside(const point::B2DPoint& rPoint);
+            sal_Bool isInside(const B2DPolygon& rPolygon);
         };
     } // end of namespace polygon
 } // end of namespace basegfx

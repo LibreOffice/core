@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:06:25 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,13 +192,13 @@ namespace basegfx
             // comparators with tolerance
             //////////////////////////////////////////////////////////////////////
 
-            bool EqualZero() const
+            sal_Bool EqualZero() const
             {
                 return (this == &maEmptyTuple ||
                     (::basegfx::numeric::fTools::equalZero(mfX) && ::basegfx::numeric::fTools::equalZero(mfY) && ::basegfx::numeric::fTools::equalZero(mfZ)));
             }
 
-            bool EqualZero(const double& rfSmallValue) const
+            sal_Bool EqualZero(const double& rfSmallValue) const
             {
                 return (this == &maEmptyTuple ||
                     (::basegfx::numeric::fTools::equalZero(mfX, rfSmallValue)
@@ -206,7 +206,7 @@ namespace basegfx
                     && ::basegfx::numeric::fTools::equalZero(mfZ, rfSmallValue)));
             }
 
-            bool Equal(const B3DTuple& rTup) const
+            sal_Bool Equal(const B3DTuple& rTup) const
             {
                 return (
                     ::basegfx::numeric::fTools::equal(mfX, rTup.mfX) &&
@@ -214,7 +214,7 @@ namespace basegfx
                     ::basegfx::numeric::fTools::equal(mfZ, rTup.mfZ));
             }
 
-            bool Equal(const B3DTuple& rTup, const double& rfSmallValue) const
+            sal_Bool Equal(const B3DTuple& rTup, const double& rfSmallValue) const
             {
                 return (
                     ::basegfx::numeric::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
@@ -279,12 +279,12 @@ namespace basegfx
                 return B3DTuple(-mfX, -mfY, -mfZ);
             }
 
-            bool operator==( const B3DTuple& rTup ) const
+            sal_Bool operator==( const B3DTuple& rTup ) const
             {
                 return Equal(rTup);
             }
 
-            bool operator!=( const B3DTuple& rTup ) const
+            sal_Bool operator!=( const B3DTuple& rTup ) const
             {
                 return !Equal(rTup);
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3drange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:09 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace basegfx
             {
             }
 
-            bool isEmpty() const
+            sal_Bool isEmpty() const
             {
                 return (
                     maRangeX.isEmpty()
@@ -149,7 +149,7 @@ namespace basegfx
                     );
             }
 
-            bool isInside(const tuple::B3DTuple& rTuple) const
+            sal_Bool isInside(const tuple::B3DTuple& rTuple) const
             {
                 return (
                     maRangeX.isInside(rTuple.getX())
@@ -158,7 +158,7 @@ namespace basegfx
                     );
             }
 
-            bool isInside(const B3DRange& rRange) const
+            sal_Bool isInside(const B3DRange& rRange) const
             {
                 return (
                     maRangeX.isInside(rRange.maRangeX)

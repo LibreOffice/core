@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bezierclip.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2003-03-06 18:57:48 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,9 @@ Polygon2D convexHull( const Polygon2D& rPoly );
 #define DBL_EPSILON 1.0e-100
 
 /* little approximate comparions */
-template <typename NumType> bool tolZero( NumType n ) { return fabs(n) < DBL_EPSILON; }
-template <typename NumType> bool tolEqual( NumType n1, NumType n2 ) { return tolZero(n1-n2); }
-template <typename NumType> bool tolLessEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1<n2; }
-template <typename NumType> bool tolGreaterEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1>n2; }
+template <typename NumType> sal_Bool tolZero( NumType n ) { return fabs(n) < DBL_EPSILON; }
+template <typename NumType> sal_Bool tolEqual( NumType n1, NumType n2 ) { return tolZero(n1-n2); }
+template <typename NumType> sal_Bool tolLessEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1<n2; }
+template <typename NumType> sal_Bool tolGreaterEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1>n2; }
 
 #endif // BASEGFX_BEZIERCLIP_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gauss.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2003-03-06 18:57:49 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,12 @@
 
     @param minPivot
     If the pivot element gets lesser than minPivot, this method fails,
-    otherwise, elimination succeeds and true is returned.
+    otherwise, elimination succeeds and sal_True is returned.
 
-    @return true, if elimination succeeded.
+    @return sal_True, if elimination succeeded.
  */
 template <class Matrix, typename BaseType>
-bool eliminate(     Matrix&         matrix,
+sal_Bool eliminate(     Matrix&         matrix,
                     int             rows,
                     int             cols,
                     const BaseType& minPivot    )
@@ -100,7 +100,7 @@ bool eliminate(     Matrix&         matrix,
 
         /* check pivot value */
         if( fabs(matrix[ max*cols + i ]) < minPivot )
-            return false;   /* pivot too small! */
+            return sal_False;   /* pivot too small! */
 
         /* interchange rows 'max' and 'i' */
         for(k=0; k<cols; ++k)
@@ -118,7 +118,7 @@ bool eliminate(     Matrix&         matrix,
     }
 
     /* everything went well */
-    return true;
+    return sal_True;
 }
 
 
@@ -139,11 +139,11 @@ bool eliminate(     Matrix&         matrix,
     @param result
     Result vector. Given matrix must have space for one column (rows entries).
 
-    @return true, if back substitution was possible (i.e. no division
+    @return sal_True, if back substitution was possible (i.e. no division
     by zero occured).
  */
 template <class Matrix, class Vector, typename BaseType>
-bool substitute(    const Matrix&   matrix,
+sal_Bool substitute(    const Matrix&   matrix,
                     int             rows,
                     int             cols,
                     Vector&         result  )
@@ -159,13 +159,13 @@ bool substitute(    const Matrix&   matrix,
             temp += matrix[ j*cols + k ] * result[k];
 
         if( matrix[ j*cols + j ] == 0.0 )
-            return false;   /* imminent division by zero! */
+            return sal_False;   /* imminent division by zero! */
 
         result[j] = (matrix[ j*cols + cols-1 ] - temp) / matrix[ j*cols + j ];
     }
 
     /* everything went well */
-    return true;
+    return sal_True;
 }
 
 
@@ -188,12 +188,12 @@ bool substitute(    const Matrix&   matrix,
 
     @param minPivot
     If the pivot element gets lesser than minPivot, this method fails,
-    otherwise, elimination succeeds and true is returned.
+    otherwise, elimination succeeds and sal_True is returned.
 
-    @return true, if elimination succeeded.
+    @return sal_True, if elimination succeeded.
  */
 template <class Matrix, class Vector, typename BaseType>
-bool solve( Matrix&     matrix,
+sal_Bool solve( Matrix&     matrix,
             int         rows,
             int         cols,
             Vector&     result,
@@ -202,5 +202,5 @@ bool solve( Matrix&     matrix,
     if( eliminate<Matrix,BaseType>(matrix, rows, cols, minPivot) )
         return substitute<Matrix,Vector,BaseType>(matrix, rows, cols, result);
 
-    return false;
+    return sal_False;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:05:59 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,11 @@ namespace basegfx
         class B2DPolygon;
     } // end of namespace polygon
 
+    namespace range
+    {
+        class B2DRange;
+    } // end of namespace range
+
     namespace polygon
     {
         namespace tools
@@ -99,27 +104,55 @@ namespace basegfx
             */
             void checkClosed(polygon::B2DPolygon& rCandidate);
 
-            // Checks if one of the control vectors is used
-            bool isEdgeBezier(const polygon::B2DPolygon& rPolygon, sal_uInt32 nEdgeIndex);
+            // Get index of outmost point (e.g. biggest X and biggest Y)
+            sal_uInt32 getIndexOfOutmostPoint(const polygon::B2DPolygon& rCandidate);
 
-            // Checks if usage of the control vectors is only for trivial cubic bezier.
-            bool isEdgeTrivialBezier(const polygon::B2DPolygon& rPolygon, sal_uInt32 nEdgeIndex);
+            // Get successor and predecessor indices. Returning the same index means there
+            // is none. Same for successor.
+            sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const polygon::B2DPolygon& rCandidate);
+            sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const polygon::B2DPolygon& rCandidate);
+
+            // Get index of first different predecessor. Returning the same index means there
+            // is none. Same for successor.
+            sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const polygon::B2DPolygon& rCandidate);
+            sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const polygon::B2DPolygon& rCandidate);
+
+            // Get orientation of Polygon
+            ::basegfx::vector::B2DVectorOrientation getOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate);
+
+            // isInside tests for B2dPoint and other B2dPolygon. On border is not inside.
+            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint);
+            sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::polygon::B2DPolygon& rPolygon);
+
+            // get size of polygon
+            ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolygon& rCandidate);
+
+            // get area of polygon
+            double getArea(const ::basegfx::polygon::B2DPolygon& rCandidate);
+
+            // get length of polygon edge from point nIndex to nIndex + 1
+            double getEdgeLength(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+            // get length of polygon
+            double getLength(const ::basegfx::polygon::B2DPolygon& rCandidate);
+
+            // get position on polygon for absolute given distance. If
+            // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
+            // using getLength(...)
+            ::basegfx::point::B2DPoint getPositionAbsolute(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
+
+            // get position on polygon for relative given distance in range [0.0 .. 1.0]. If
+            // length is given, it is assumed the correct polygon length, if 0.0 it is calculated
+            // using getLength(...)
+            ::basegfx::point::B2DPoint getPositionRelative(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
+
+            // get orientation at given polygon point
+            ::basegfx::vector::B2DVectorOrientation getPointOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
             /* Still missing:
-            BOOL isClockwise(const Vector3D &rNormal) const;
-            void removeDoublePoints();
             void transform(const Matrix4D& rTfMatrix);
-            BOOL isInside(const Vector3D& rPnt, BOOL bWithBorder=FALSE) const;
-            BOOL isInside(const Polygon3D& rPoly, BOOL bWithBorder=TRUE) const;
-            Volume3D getPolySize() const;
-            double getPolyArea() const;
-            double getLength() const;
-            BOOL getPointOrientation(UINT16 nIndex) const;
-            Vector3D getPosition(double fPos) const;
             Polygon3D getExpandedPolygon(sal_uInt32 nNum);
             */
-
-
 
 
         } // end of namespace tools

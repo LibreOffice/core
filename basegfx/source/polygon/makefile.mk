@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2003-10-28 11:23:55 $
+#   last change: $Author: aw $ $Date: 2003-11-05 12:25:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,9 +75,10 @@ TARGET=polygon
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/b2dpolygon.obj		\
-        $(SLO)$/b2dpolygontools.obj	\
-        $(SLO)$/b2dpolypolygon.obj
+        $(SLO)$/b2dpolygon.obj			\
+        $(SLO)$/b2dpolygontools.obj		\
+        $(SLO)$/b2dpolypolygon.obj		\
+        $(SLO)$/b2dpolypolygontools.obj
             
 # --- Targets ----------------------------------
 

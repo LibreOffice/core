@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:12:08 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,11 @@ namespace basegfx
             B2DCubicBezier& operator=(const B2DCubicBezier& rBezier);
 
             // compare operators
-            bool operator==(const B2DCubicBezier& rBezier) const;
-            bool operator!=(const B2DCubicBezier& rBezier) const;
+            sal_Bool operator==(const B2DCubicBezier& rBezier) const;
+            sal_Bool operator!=(const B2DCubicBezier& rBezier) const;
 
             // test if vectors are used
-            bool isBezier() const;
+            sal_Bool isBezier() const;
 
             // test if contained bezier is trivial and reset vectors accordingly
             void testAndSolveTrivialBezier();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhompoint.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:12:48 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@ namespace basegfx
 
             /** Test if this homogen point does have a homogenous part
 
-                @return Returns true if this point has no homogenous part
+                @return Returns sal_True if this point has no homogenous part
             */
-            bool implIsHomogenized() const;
+            sal_Bool implIsHomogenized() const;
 
             /** Remove homogenous part of this Point
 
@@ -235,9 +235,9 @@ namespace basegfx
 
             B2DHomPoint& operator-(void);
 
-            bool operator==( const B2DHomPoint& rPnt ) const;
+            sal_Bool operator==( const B2DHomPoint& rPnt ) const;
 
-            bool operator!=( const B2DHomPoint& rPnt ) const;
+            sal_Bool operator!=( const B2DHomPoint& rPnt ) const;
 
             B2DHomPoint& operator=( const B2DHomPoint& rPnt );
         };

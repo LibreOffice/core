@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:08 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace basegfx
             {
             }
 
-            bool isEmpty() const
+            sal_Bool isEmpty() const
             {
                 return maRange.isEmpty();
             }
@@ -119,12 +119,12 @@ namespace basegfx
                 return maRange.getRange();
             }
 
-            bool isInside(double fValue) const
+            sal_Bool isInside(double fValue) const
             {
                 return maRange.isInside(fValue);
             }
 
-            bool isInside(const B1DRange& rRange) const
+            sal_Bool isInside(const B1DRange& rRange) const
             {
                 return maRange.isInside(rRange.maRange);
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:25 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,20 @@ namespace basegfx
 
     namespace vector
     {
+        /** Descriptor for the mathematical orientations of two 2D Vectors
+        */
+        enum B2DVectorOrientation
+        {
+            /// mathematically positive oriented
+            ORIENTATION_POSITIVE = 0,
+
+            /// mathematically negative oriented
+            ORIENTATION_NEGATIVE,
+
+            /// mathematically neutral, thus parallel
+            ORIENTATION_NEUTRAL
+        };
+
         /** Base Point class with two double values
 
             This class derives all operators and common handling for
@@ -87,20 +101,6 @@ namespace basegfx
         class B2DVector : public tuple::B2DTuple
         {
         public:
-            /** Descriptor for the mathematical orientations of two 2D Vectors
-            */
-            enum B2DVectorOrientation
-            {
-                /// mathematically positive oriented
-                POSITIVE = 0,
-
-                /// mathematically negative oriented
-                NEGATIVE,
-
-                /// mathematically neutral, thus parallel
-                NEUTRAL
-            };
-
             /** Create a 2D Vector
 
                 @param fVal
@@ -171,10 +171,10 @@ namespace basegfx
             /** Test if this 2D Vector is normalized
 
                 @return
-                true if lenth of vector is equal to 1.0
-                false else
+                sal_True if lenth of vector is equal to 1.0
+                sal_False else
             */
-            bool isNormalized() const;
+            sal_Bool isNormalized() const;
 
             /** Calculate the Scalar with another 2D Vector
 
@@ -210,7 +210,7 @@ namespace basegfx
             @return
             The mathematical Orientation of the two involved 2D Vectors
         */
-        B2DVector::B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB );
+        B2DVectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB );
 
         /** Calculate a perpendicular 2D Vector to the given one
 
@@ -233,10 +233,10 @@ namespace basegfx
             The second 2D Vector
 
             @return
-            bool if the two values are parallel. Also true if
+            sal_Bool if the two values are parallel. Also sal_True if
             one of the vectors is empty.
         */
-        bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB );
+        sal_Bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB );
 
         /** Transform vector by given transformation matrix.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygontemplate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2003-08-20 16:56:48 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public:
         maPoint = rValue;
     }
 
-    bool operator==(const ImplSimplePointEntry& rEntry) const
+    sal_Bool operator==(const ImplSimplePointEntry& rEntry) const
     {
         return (maPoint == rEntry.maPoint);
     }
@@ -137,14 +137,14 @@ public:
         maForward = rValue;
     }
 
-    bool isBezierNeeded()
+    sal_Bool isBezierNeeded()
     {
         if(!maBackward.equalZero() || !maForward.equalZero())
-            return true;
-        return false;
+            return sal_True;
+        return sal_False;
     }
 
-    bool operator==(const ImplSimpleBezierEntry& rEntry) const
+    sal_Bool operator==(const ImplSimpleBezierEntry& rEntry) const
     {
         return ((maBackward == rEntry.maBackward) && (maForward == rEntry.maForward));
     }
@@ -181,17 +181,17 @@ template < class Point, class Vector > class ImplPolygonTemplate
     }
 
 public:
-    bool isBezier() const
+    sal_Bool isBezier() const
     {
-        return bool(mnBezierCount);
+        return sal_Bool(mnBezierCount);
     }
 
-    bool isClosed() const
+    sal_Bool isClosed() const
     {
-        return bool(mbIsClosed);
+        return sal_Bool(mbIsClosed);
     }
 
-    void setClosed(bool bNew)
+    void setClosed(sal_Bool bNew)
     {
         mbIsClosed = bNew;
     }
@@ -204,7 +204,7 @@ public:
     ImplPolygonTemplate()
     :   mnBezierCount(0L),
         mpVectors(0L),
-        mbIsClosed(false)
+        mbIsClosed(sal_False)
     {
         // complete initialization with defaults
     }
@@ -276,27 +276,27 @@ public:
         }
     }
 
-    bool isEqual(const ImplPolygonTemplate& rPointList) const
+    sal_Bool isEqual(const ImplPolygonTemplate& rPointList) const
     {
         // same point count?
         if(maPoints.size() != rPointList.maPoints.size())
-            return false;
+            return sal_False;
 
         // if zero points the polys are equal
         if(!maPoints.size())
-            return true;
+            return sal_True;
 
         // if bezier count used it needs to be equal
         if(mnBezierCount != rPointList.mnBezierCount)
-            return false;
+            return sal_False;
 
         // compare point content
         if(maPoints != rPointList.maPoints)
-            return false;
+            return sal_False;
 
         // beziercounts are equal: if it's zero, we are done
         if(!mnBezierCount)
-            return true;
+            return sal_True;
 
         // beziercounts are equal and not zero; compare them
         DBG_ASSERT(0L != mpVectors, "Error: Bezier list needs to exist here(!)");
@@ -328,9 +328,9 @@ public:
         if(mpVectors)
         {
             LocalImplSimpleBezierEntry& rDest = (*mpVectors)[nIndex];
-            bool bBezierNeededBefore(rDest.isBezierNeeded());
+            sal_Bool bBezierNeededBefore(rDest.isBezierNeeded());
             ((*mpVectors)[nIndex]).setBackwardVector(rValue);
-            bool bBezierNeededAfter(rDest.isBezierNeeded());
+            sal_Bool bBezierNeededAfter(rDest.isBezierNeeded());
 
             if(bBezierNeededBefore != bBezierNeededAfter)
             {
@@ -342,7 +342,7 @@ public:
         }
         else
         {
-            bool bEmptyVector(rValue.equalZero());
+            sal_Bool bEmptyVector(rValue.equalZero());
 
             if(bEmptyVector)
                 return;
@@ -366,9 +366,9 @@ public:
         if(mpVectors)
         {
             LocalImplSimpleBezierEntry& rDest = (*mpVectors)[nIndex];
-            bool bBezierNeededBefore(rDest.isBezierNeeded());
+            sal_Bool bBezierNeededBefore(rDest.isBezierNeeded());
             ((*mpVectors)[nIndex]).setForwardVector(rValue);
-            bool bBezierNeededAfter(rDest.isBezierNeeded());
+            sal_Bool bBezierNeededAfter(rDest.isBezierNeeded());
 
             if(bBezierNeededBefore != bBezierNeededAfter)
             {
@@ -380,7 +380,7 @@ public:
         }
         else
         {
-            bool bEmptyVector(rValue.equalZero());
+            sal_Bool bEmptyVector(rValue.equalZero());
 
             if(bEmptyVector)
                 return;

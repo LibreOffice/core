@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bezierclip.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2003-03-06 18:57:47 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ void Impl_calcBounds( Point2D&          leftTop,
     rightBottom.y = ::std::max( c1.p0.y, ::std::max( c1.p1.y, ::std::max( c1.p2.y, c1.p3.y ) ) );
 }
 
-bool Impl_doBBoxIntersect( const Bezier& c1,
+sal_Bool Impl_doBBoxIntersect( const Bezier& c1,
                            const Bezier& c2 )
 {
     // calc rectangular boxes from c1 and c2
@@ -198,11 +198,11 @@ bool Impl_doBBoxIntersect( const Bezier& c1,
     if( ::std::min(rb1.x, rb2.x) < ::std::max(lt1.x, lt2.x) ||
         ::std::min(rb1.y, rb2.y) < ::std::max(lt1.y, lt2.y) )
     {
-        return false;
+        return sal_False;
     }
     else
     {
-        return true;
+        return sal_True;
     }
 }
 
@@ -211,7 +211,7 @@ bool Impl_doBBoxIntersect( const Bezier& c1,
  * the left, the second is the intersection of the max value line with
  * the convex hull from the right.
  */
-bool Impl_calcSafeParams( double&           t1,
+sal_Bool Impl_calcSafeParams( double&           t1,
                           double&           t2,
                           const Polygon2D&  rPoly,
                           double            lowerYBound,
@@ -229,13 +229,13 @@ bool Impl_calcSafeParams( double&           t1,
     double currHigherT( 0.0 );
 
     if( convHull.size() <= 1 )
-        return false; // only one point? Then we're done with clipping
+        return sal_False; // only one point? Then we're done with clipping
 
     /* now, clip against lower and higher bounds */
     Point2D p0;
     Point2D p1;
 
-    bool bIntersection( false );
+    sal_Bool bIntersection( sal_False );
 
     for( Polygon2D::size_type i=0; i<convHull.size(); ++i )
     {
@@ -298,7 +298,7 @@ bool Impl_calcSafeParams( double&           t1,
 
             // set flag that at least one segment is contained or
             // intersects given horizontal band.
-            bIntersection = true;
+            bIntersection = sal_True;
         }
     }
 
@@ -320,7 +320,7 @@ bool Impl_calcSafeParams( double&           t1,
  * The polynomial coefficients c0 to c3 given to this method
  * must correspond to t values of 0, 1/3, 2/3 and 1, respectively.
  */
-bool Impl_calcSafeParams_clip( double&          t1,
+sal_Bool Impl_calcSafeParams_clip( double&          t1,
                                double&          t2,
                                const FatLine&   bounds,
                                double           c0,
@@ -340,7 +340,7 @@ bool Impl_calcSafeParams_clip( double&          t1,
     return Impl_calcSafeParams( t1, t2, poly, bounds.dMin, bounds.dMax );
 
 #else
-    bool bRet( Impl_calcSafeParams( t1, t2, poly, bounds.dMin, bounds.dMax ) );
+    sal_Bool bRet( Impl_calcSafeParams( t1, t2, poly, bounds.dMin, bounds.dMax ) );
 
     Polygon2D convHull( convexHull( poly ) );
 
@@ -592,7 +592,7 @@ void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
 // -----------------------------------------------------------------------------
 
 /** determine parameter ranges [0,t1) and (t2,1] on c1, where c1 is guaranteed to lie outside c2.
-      Returns false, if the two curves don't even intersect.
+      Returns sal_False, if the two curves don't even intersect.
 
     @param t1
     Range [0,t1) on c1 is guaranteed to lie outside c2
@@ -612,7 +612,7 @@ void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
     @param c2_part
     Subdivided current part of c2
  */
-bool Impl_calcClipRange( double&        t1,
+sal_Bool Impl_calcClipRange( double&        t1,
                          double&        t2,
                          const Bezier&  c1_orig,
                          const Bezier&  c1_part,
@@ -661,12 +661,12 @@ bool Impl_calcClipRange( double&        t1,
             //printCurvesWithSafeRange(c1_orig, c2_orig, t1, t2, c2_part, bounds_c2);
 
             // they do intersect
-            return true;
+            return sal_True;
         }
     }
 
     // they don't intersect: nothing to do
-    return false;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -804,7 +804,7 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
 
 // -----------------------------------------------------------------------------
 
-bool Impl_calcSafeParams_focus( double&         t1,
+sal_Bool Impl_calcSafeParams_focus( double&         t1,
                                 double&         t2,
                                 const Bezier&   curve,
                                 const Bezier&   focus )
@@ -913,7 +913,7 @@ bool Impl_calcSafeParams_focus( double&         t1,
     return Impl_calcSafeParams( t1, t2, controlPolygon, 0.0, 0.0 );
 
 #else
-    bool bRet( Impl_calcSafeParams( t1, t2, controlPolygon, 0.0, 0.0 ) );
+    sal_Bool bRet( Impl_calcSafeParams( t1, t2, controlPolygon, 0.0, 0.0 ) );
 
     Polygon2D convHull( convexHull( controlPolygon ) );
 
@@ -957,12 +957,12 @@ bool Impl_calcSafeParams_focus( double&         t1,
     don't intersect, nothing is added.
 
     @param delta
-    Maximal allowed distance to true critical point (measured in the
+    Maximal allowed distance to sal_True critical point (measured in the
     original curve's coordinate system)
 
     @param safeRangeFunctor
     Functor object, that must provide the following operator():
-    bool safeRangeFunctor( double& t1,
+    sal_Bool safeRangeFunctor( double& t1,
                            double& t2,
                            const Bezier& c1_orig,
                            const Bezier& c1_part,
@@ -970,7 +970,7 @@ bool Impl_calcSafeParams_focus( double&         t1,
                            const Bezier& c2_part );
     This functor must calculate the safe ranges [0,t1] and [t2,1] on
     c1_orig, where c1_orig is 'safe' from c2_part. If the whole
-    c1_orig is safe, false must be returned, true otherwise.
+    c1_orig is safe, sal_False must be returned, sal_True otherwise.
  */
 template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_iterator< ::std::vector< ::std::pair<double, double> > >&    result,
                                                         double                                                                          delta,
@@ -1026,7 +1026,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
 
     // Note: we first perform the clipping and only test for precision
     // sufficiency afterwards, since we want to exploit the fact that
-    // Impl_calcClipRange returns false if the curves don't
+    // Impl_calcClipRange returns sal_False if the curves don't
     // intersect. We would have to check that separately for the end
     // condition, otherwise.
 
@@ -1097,7 +1097,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
                 // 20%, subdivide longest curve, and clip shortest against
                 // both parts of longest
 //                if( (last_t2_c1 - last_t1_c1 - t2_c1 + t1_c1) / (last_t2_c1 - last_t1_c1) < 0.2 )
-                if( false )
+                if( sal_False )
                 {
                     // subdivide and descend
                     // =====================
@@ -1189,7 +1189,7 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
 
 struct ClipBezierFunctor
 {
-    bool operator()( double& t1_c1,
+    sal_Bool operator()( double& t1_c1,
                      double& t2_c1,
                      const Bezier& c1_orig,
                      const Bezier& c1_part,
@@ -1204,7 +1204,7 @@ struct ClipBezierFunctor
 
 struct BezierTangencyFunctor
 {
-    bool operator()( double& t1_c1,
+    sal_Bool operator()( double& t1_c1,
                      double& t2_c1,
                      const Bezier& c1_orig,
                      const Bezier& c1_part,
@@ -1218,7 +1218,7 @@ struct BezierTangencyFunctor
                                         // used for focus calculation
 
         // determine safe range on c1_orig
-        bool bRet( Impl_calcSafeParams_focus( t1_c1, t2_c1,
+        sal_Bool bRet( Impl_calcSafeParams_focus( t1_c1, t2_c1,
                                               c1_orig, // use orig curve here, need t's on original curve
                                               focus ) );
 
@@ -1237,7 +1237,7 @@ struct BezierTangencyFunctor
     iterator will remain empty, if there are no intersections.
 
     @param delta
-    Maximal allowed distance to true intersection (measured in the
+    Maximal allowed distance to sal_True intersection (measured in the
     original curve's coordinate system)
  */
 void clipBezier( ::std::back_insert_iterator< ::std::vector< ::std::pair<double, double> > >&   result,
@@ -1646,7 +1646,7 @@ int main(int argc, const char *argv[])
 
         double t1, t2;
 
-        bool bRet( Impl_calcSafeParams( t1, t2, poly, 0, 1 ) );
+        sal_Bool bRet( Impl_calcSafeParams( t1, t2, poly, 0, 1 ) );
 
         Polygon2D convHull( convexHull( poly ) );
 
@@ -1872,7 +1872,7 @@ int main(int argc, const char *argv[])
             focus = c2;
 #endif
             // determine safe range on c1
-            bool bRet( Impl_calcSafeParams_focus( t1, t2,
+            sal_Bool bRet( Impl_calcSafeParams_focus( t1, t2,
                                                   c1, focus ) );
 
             cerr << "t1: " << t1 << ", t2: " << t2 << endl;

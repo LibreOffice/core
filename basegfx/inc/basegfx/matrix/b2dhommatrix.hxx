@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:12:30 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,15 +95,15 @@ namespace basegfx
             void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
 
             // Auf Einheitsmatrix zuruecksetzen
-            bool isIdentity() const;
+            sal_Bool isIdentity() const;
             void identity();
 
             // Invertierung
-            bool isInvertible() const;
-            bool invert();
+            sal_Bool isInvertible() const;
+            sal_Bool invert();
 
             // Normalisierung
-            bool isNormalized() const;
+            sal_Bool isNormalized() const;
             void normalize();
 
             // Determinante
@@ -133,8 +133,8 @@ namespace basegfx
             B2DHomMatrix& operator-=(const B2DHomMatrix& rMat);
 
             // Vergleichsoperatoren
-            bool operator==(const B2DHomMatrix& rMat) const;
-            bool operator!=(const B2DHomMatrix& rMat) const;
+            sal_Bool operator==(const B2DHomMatrix& rMat) const;
+            sal_Bool operator!=(const B2DHomMatrix& rMat) const;
 
             // Multiplikation, Division mit Konstante
             B2DHomMatrix& operator*=(double fValue);
@@ -149,7 +149,7 @@ namespace basegfx
             // Help routine to decompose given homogen 3x3 matrix to components. A correction of
             // the components is done to avoid inaccuracies.
             // Zerlegung
-            bool decompose(tuple::B2DTuple& rScale, tuple::B2DTuple& rTranslate, double& rRotate, double& rShearX) const;
+            sal_Bool decompose(tuple::B2DTuple& rScale, tuple::B2DTuple& rTranslate, double& rRotate, double& rShearX) const;
         };
 
         // Addition, Subtraktion

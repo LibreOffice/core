@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhommatrix.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:12:30 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,15 +94,15 @@ namespace basegfx
             double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
             void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
 
-            bool isIdentity() const;
+            sal_Bool isIdentity() const;
             /// Reset to the identity matrix
             void identity();
 
-            bool isInvertible() const;
+            sal_Bool isInvertible() const;
             /// Invert the matrix (if possible)
-            bool invert();
+            sal_Bool invert();
 
-            bool isNormalized() const;
+            sal_Bool isNormalized() const;
             /// Normalize (i.e. force w=1) the matrix
             void normalize();
 
@@ -144,8 +144,8 @@ namespace basegfx
             B3DHomMatrix& operator-=(const B3DHomMatrix& rMat);
 
             // comparison
-            bool operator==(const B3DHomMatrix& rMat) const;
-            bool operator!=(const B3DHomMatrix& rMat) const;
+            sal_Bool operator==(const B3DHomMatrix& rMat) const;
+            sal_Bool operator!=(const B3DHomMatrix& rMat) const;
 
             // multiplication, division by constant value
             B3DHomMatrix& operator*=(double fValue);
@@ -158,7 +158,7 @@ namespace basegfx
             B3DHomMatrix& operator=(const B3DHomMatrix& rMat);
 
             // decomposition
-            bool decompose(tuple::B3DTuple& rScale, tuple::B3DTuple& rTranslate, tuple::B3DTuple& rRotate, tuple::B3DTuple& rShear) const;
+            sal_Bool decompose(tuple::B3DTuple& rScale, tuple::B3DTuple& rTranslate, tuple::B3DTuple& rRotate, tuple::B3DTuple& rShear) const;
         };
 
         // addition, subtraction

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:05:31 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,64 +83,64 @@ namespace basegfx
             static void setSmallValue(const double& rfNew) { mfSmallValue = rfNew; }
 
 
-            static bool equalZero(const double& rfVal)
+            static sal_Bool equalZero(const double& rfVal)
             {
                 return (fabs(rfVal) <= getSmallValue());
             }
 
-            static bool equalZero(const double& rfVal, const double& rfSmallValue)
+            static sal_Bool equalZero(const double& rfVal, const double& rfSmallValue)
             {
                 return (fabs(rfVal) <= rfSmallValue);
             }
 
 
-            static bool equal(const double& rfValA, const double& rfValB)
+            static sal_Bool equal(const double& rfValA, const double& rfValB)
             {
                 return (fabs(rfValB - rfValA) <= getSmallValue());
             }
 
-            static bool less(const double& rfValA, const double& rfValB)
+            static sal_Bool less(const double& rfValA, const double& rfValB)
             {
                 return (rfValA < rfValB && !equal(rfValA, rfValB));
             }
 
-            static bool lessOrEqual(const double& rfValA, const double& rfValB)
+            static sal_Bool lessOrEqual(const double& rfValA, const double& rfValB)
             {
                 return (rfValA < rfValB || equal(rfValA, rfValB));
             }
 
-            static bool more(const double& rfValA, const double& rfValB)
+            static sal_Bool more(const double& rfValA, const double& rfValB)
             {
                 return (rfValA > rfValB && !equal(rfValA, rfValB));
             }
 
-            static bool moreOrEqual(const double& rfValA, const double& rfValB)
+            static sal_Bool moreOrEqual(const double& rfValA, const double& rfValB)
             {
                 return (rfValA > rfValB || equal(rfValA, rfValB));
             }
 
 
-            static bool equal(const double& rfValA, const double& rfValB, const double& rfSmallValue)
+            static sal_Bool equal(const double& rfValA, const double& rfValB, const double& rfSmallValue)
             {
                 return (fabs(rfValB - rfValA) <= rfSmallValue);
             }
 
-            static bool less(const double& rfValA, const double& rfValB, const double& rfSmallValue)
+            static sal_Bool less(const double& rfValA, const double& rfValB, const double& rfSmallValue)
             {
                 return (rfValA < rfValB && !equal(rfValA, rfValB, rfSmallValue));
             }
 
-            static bool lessOrEqual(const double& rfValA, const double& rfValB, const double& rfSmallValue)
+            static sal_Bool lessOrEqual(const double& rfValA, const double& rfValB, const double& rfSmallValue)
             {
                 return (rfValA < rfValB || equal(rfValA, rfValB, rfSmallValue));
             }
 
-            static bool more(const double& rfValA, const double& rfValB, const double& rfSmallValue)
+            static sal_Bool more(const double& rfValA, const double& rfValB, const double& rfSmallValue)
             {
                 return (rfValA > rfValB && !equal(rfValA, rfValB, rfSmallValue));
             }
 
-            static bool moreOrEqual(const double& rfValA, const double& rfValB, const double& rfSmallValue)
+            static sal_Bool moreOrEqual(const double& rfValA, const double& rfValB, const double& rfSmallValue)
             {
                 return (rfValA > rfValB || equal(rfValA, rfValB, rfSmallValue));
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dquadraticbezier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:54 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace basegfx
         }
 
         // compare operators
-        bool B2DQuadraticBezier::operator==(const B2DQuadraticBezier& rBezier) const
+        sal_Bool B2DQuadraticBezier::operator==(const B2DQuadraticBezier& rBezier) const
         {
             return (
                 maStartPoint == rBezier.maStartPoint
@@ -125,7 +125,7 @@ namespace basegfx
             );
         }
 
-        bool B2DQuadraticBezier::operator!=(const B2DQuadraticBezier& rBezier) const
+        sal_Bool B2DQuadraticBezier::operator!=(const B2DQuadraticBezier& rBezier) const
         {
             return (
                 maStartPoint != rBezier.maStartPoint
@@ -135,13 +135,13 @@ namespace basegfx
         }
 
         // test if control vector is used
-        bool B2DQuadraticBezier::isBezier() const
+        sal_Bool B2DQuadraticBezier::isBezier() const
         {
             // if control vector is empty, bezier is not used
             if(maControlPoint == maStartPoint || maControlPoint == maEndPoint)
-                return false;
+                return sal_False;
 
-            return true;
+            return sal_True;
         }
     } // end of namespace curve
 } // end of namespace basegfx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:06:24 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,13 +176,13 @@ namespace basegfx
             // comparators with tolerance
             //////////////////////////////////////////////////////////////////////
 
-            bool equalZero() const;
+            sal_Bool equalZero() const;
 
-            bool equalZero(const double& rfSmallValue) const;
+            sal_Bool equalZero(const double& rfSmallValue) const;
 
-            bool equal(const B2DTuple& rTup) const;
+            sal_Bool equal(const B2DTuple& rTup) const;
 
-            bool equal(const B2DTuple& rTup, const double& rfSmallValue) const;
+            sal_Bool equal(const B2DTuple& rTup, const double& rfSmallValue) const;
 
             // operators
             //////////////////////////////////////////////////////////////////////
@@ -235,12 +235,12 @@ namespace basegfx
                 return B2DTuple(-mfX, -mfY);
             }
 
-            bool operator==( const B2DTuple& rTup ) const
+            sal_Bool operator==( const B2DTuple& rTup ) const
             {
                 return equal(rTup);
             }
 
-            bool operator!=( const B2DTuple& rTup ) const
+            sal_Bool operator!=( const B2DTuple& rTup ) const
             {
                 return !equal(rTup);
             }

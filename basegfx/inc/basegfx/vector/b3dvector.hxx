@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dvector.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:26 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,10 +222,10 @@ namespace basegfx
             /** Test if this 3D Vector is normalized
 
                 @return
-                true if lenth of vector is equal to 1.0
-                false else
+                sal_True if lenth of vector is equal to 1.0
+                sal_False else
             */
-            bool isNormalized() const
+            sal_Bool isNormalized() const
             {
                 const double fOne(1.0);
                 const double fScalar(scalar(*this));

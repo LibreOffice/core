@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhompoint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:56 $
+ *  last change: $Author: aw $ $Date: 2003-11-05 12:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ namespace basegfx
 {
     namespace point
     {
-        bool B2DHomPoint::implIsHomogenized() const
+        sal_Bool B2DHomPoint::implIsHomogenized() const
         {
             const double fOne(1.0);
             return ::basegfx::numeric::fTools::equal(fOne, mfW);
@@ -183,13 +183,13 @@ namespace basegfx
             return *this;
         }
 
-        bool B2DHomPoint::operator==( const B2DHomPoint& rPnt ) const
+        sal_Bool B2DHomPoint::operator==( const B2DHomPoint& rPnt ) const
         {
             implTestAndHomogenize();
             return (maTuple == rPnt.maTuple);
         }
 
-        bool B2DHomPoint::operator!=( const B2DHomPoint& rPnt ) const
+        sal_Bool B2DHomPoint::operator!=( const B2DHomPoint& rPnt ) const
         {
             implTestAndHomogenize();
             return (maTuple != rPnt.maTuple);
