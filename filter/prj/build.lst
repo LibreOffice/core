@@ -1,4 +1,4 @@
-fl	filter	:	goodies xmloff NULL
+fl	filter	:	goodies xmloff svx NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\source\jars				nmake	-	all	fl_javafilter_binaries	NULL
