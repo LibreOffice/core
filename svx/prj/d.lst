@@ -546,6 +546,7 @@ hedabu: ..\inc\sdasaitm.hxx %_DEST%\inc%_EXT%\svx\sdasaitm.hxx
 hedabu: ..\inc\unofill.hxx %_DEST%\inc%_EXT%\svx\unofill.hxx
 hedabu: ..\source\dialog\grfpage.hxx %_DEST%\inc%_EXT%\svx\grfpage.hxx
 hedabu: ..\inc\grfcrop.hxx %_DEST%\inc%_EXT%\svx\grfcrop.hxx
+hedabu: ..\inc\grfflt.hxx %_DEST%\inc%_EXT%\svx\grfflt.hxx
 hedabu: ..\inc\unonrule.hxx %_DEST%\inc%_EXT%\svx\unonrule.hxx
 hedabu: ..\inc\svx3ditems.hxx %_DEST%\inc%_EXT%\svx\svx3ditems.hxx
 hedabu: ..\inc\msocximex.hxx %_DEST%\inc%_EXT%\svx\msocximex.hxx
