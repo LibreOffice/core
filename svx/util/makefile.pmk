@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:29 $
+#   last change: $Author: kz $ $Date: 2005-01-21 17:03:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,4 +60,18 @@
 #
 #*************************************************************************
 
+# define SVX_DLLIMPLEMENTATION (see @ svxdllapi.h)
+CDEFS += -DSVX_DLLIMPLEMENTATION
 
+# set default symbol visibility / scope to hidden
+.IF "$(COMNAME)" == "gcc3"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGS += -fvisibility=hidden
+.ENDIF # HAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # gcc3
+
+.IF "$(COMNAME)" == "sunpro5"
+.IF "$(CCNUMVER)" >= "00050005"
+CFLAGS += -xldscope=hidden
+.ENDIF # 5.5
+.ENDIF # sunpro5
