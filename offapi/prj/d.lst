@@ -11,6 +11,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\document
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\drawing
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\form
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\form\component
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\form\control
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\formula
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\frame
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\i18n
@@ -59,6 +60,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
 ..\com\sun\star\drawing\*.idl %_DEST%\idl%_EXT%\com\sun\star\drawing\*.idl
 ..\com\sun\star\form\*.idl %_DEST%\idl%_EXT%\com\sun\star\form\*.idl
 ..\com\sun\star\form\component\*.idl %_DEST%\idl%_EXT%\com\sun\star\form\component\*.idl
+..\com\sun\star\form\control\*.idl %_DEST%\idl%_EXT%\com\sun\star\form\control\*.idl
 ..\com\sun\star\formula\*.idl %_DEST%\idl%_EXT%\com\sun\star\formula\*.idl
 ..\com\sun\star\frame\*.idl %_DEST%\idl%_EXT%\com\sun\star\frame\*.idl
 ..\com\sun\star\i18n\*.idl %_DEST%\idl%_EXT%\com\sun\star\i18n\*.idl
