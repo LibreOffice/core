@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-17 18:55:41 $
+ *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ public:
         WM_PROTOCOLS,
         WM_DELETE_WINDOW,
         WM_SAVE_YOURSELF,
+        WM_CLIENT_LEADER,
         WM_COMMAND,
 
         // special atoms

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 16:15:48 $
+ *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include <unistd.h>
+#include <sys/poll.h>
 #include <stdio.h>
 
 #include <vos/process.hxx>
@@ -73,15 +74,15 @@
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
-#ifndef _SV_CONFIG_HXX
-#include <config.hxx>
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
 #endif
 
-//#define USE_SM_EXTENSION
+#define USE_SM_EXTENSION
 
 BOOL ICEConnectionObserver::bIsWatching = FALSE;
 SmcConn SessionManagerClient::aSmcConnection = NULL;
-char* SessionManagerClient::pClientID = NULL;
+ByteString SessionManagerClient::aClientID;
 
 static SmProp*  pSmProps = NULL;
 static SmProp** ppSmProps = NULL;
@@ -91,43 +92,47 @@ static void BuildSmPropertyList()
 {
     if( ! pSmProps )
     {
-        ByteString aExec( SessionManagerClient::getExecName(), gsl_getSystemTextEncoding() );
+        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
 
         nSmProps = 4;
         pSmProps = new SmProp[ nSmProps ];
 
-        pSmProps[ 0 ].name      = "SmCloneCommand";
-        pSmProps[ 0 ].type      = "SmLISTofARRAY8";
+        pSmProps[ 0 ].name      = SmCloneCommand;
+        pSmProps[ 0 ].type      = SmLISTofARRAY8;
         pSmProps[ 0 ].num_vals  = 1;
         pSmProps[ 0 ].vals      = new SmPropValue;
-        pSmProps[ 0 ].vals->length  = aExec.Len();
+        pSmProps[ 0 ].vals->length  = aExec.Len()+1;
         pSmProps[ 0 ].vals->value   = strdup( aExec.GetBuffer() );
 
-        pSmProps[ 1 ].name      = "SmProgram";
-        pSmProps[ 1 ].type      = "SmARRAY8";
+        pSmProps[ 1 ].name      = SmProgram;
+        pSmProps[ 1 ].type      = SmARRAY8;
         pSmProps[ 1 ].num_vals  = 1;
         pSmProps[ 1 ].vals      = new SmPropValue;
-        pSmProps[ 1 ].vals->length  = aExec.Len();
+        pSmProps[ 1 ].vals->length  = aExec.Len()+1;
         pSmProps[ 1 ].vals->value   = strdup( aExec.GetBuffer() );
 
-        pSmProps[ 2 ].name      = "SmRestartCommand";
-        pSmProps[ 2 ].type      = "SmLISTofARRAY8";
-        pSmProps[ 2 ].num_vals  = 1;
-        pSmProps[ 2 ].vals      = new SmPropValue;
-        pSmProps[ 2 ].vals->length  = aExec.Len();
-        pSmProps[ 2 ].vals->value   = strdup( aExec.GetBuffer() );
+        pSmProps[ 2 ].name      = SmRestartCommand;
+        pSmProps[ 2 ].type      = SmLISTofARRAY8;
+        pSmProps[ 2 ].num_vals  = 2;
+        pSmProps[ 2 ].vals      = new SmPropValue[2];
+        pSmProps[ 2 ].vals[0].length    = aExec.Len()+1;
+        pSmProps[ 2 ].vals[0].value     = strdup( aExec.GetBuffer() );
+        ByteString aRestartOption( "-session=" );
+        aRestartOption.Append( SessionManagerClient::getSessionID() );
+        pSmProps[ 2 ].vals[1].length    = aRestartOption.Len()+1;
+        pSmProps[ 2 ].vals[1].value     = strdup( aRestartOption.GetBuffer() );
 
         NAMESPACE_VOS(OSecurity) aSecurity;
         ::rtl::OUString aUserName;
         aSecurity.getUserName( aUserName );
-        ::rtl::OString aUser( ::rtl::OUStringToOString( aUserName, gsl_getSystemTextEncoding() ) );
+        ::rtl::OString aUser( ::rtl::OUStringToOString( aUserName, osl_getThreadTextEncoding() ) );
 
-        pSmProps[ 3 ].name      = "SmUserID";
-        pSmProps[ 3 ].type      = "SmARRAY8";
+        pSmProps[ 3 ].name      = SmUserID;
+        pSmProps[ 3 ].type      = SmARRAY8;
         pSmProps[ 3 ].num_vals  = 1;
         pSmProps[ 3 ].vals      = new SmPropValue;
         pSmProps[ 3 ].vals->value   = strdup( aUser.getStr() );
-        pSmProps[ 3 ].vals->length  = strlen( (char *)pSmProps[ 3 ].vals->value );
+        pSmProps[ 3 ].vals->length  = strlen( (char *)pSmProps[ 3 ].vals->value )+1;
 
         ppSmProps = new SmProp*[ nSmProps ];
         for( int i = 0; i < nSmProps; i++ )
@@ -145,6 +150,18 @@ void SessionManagerClient::SaveYourselfProc(
     Bool fast
     )
 {
+#ifdef DEBUG
+    fprintf( stderr, "Session: save yourself, save_type = %s, shutdown = %s, interact_style = %s, fast = %s\n",
+             save_type == SmSaveLocal ? "SmcSaveLocal" :
+             ( save_type == SmSaveGlobal ? "SmcSaveGlobal" :
+               ( save_type == SmSaveBoth ? "SmcSaveBoth" : "<unknown>" ) ),
+             shutdown ? "true" : "false",
+             interact_style == SmInteractStyleNone ? "SmInteractStyleNone" :
+             ( interact_style == SmInteractStyleErrors ? "SmInteractStyleErrors" :
+               ( interact_style == SmInteractStyleAny ? "SmInteractStyleAny" : "<unknown>" ) ),
+             false ? "true" : "false"
+             );
+#endif
     BuildSmPropertyList();
 #ifdef USE_SM_EXTENSION
     SmcSetProperties( aSmcConnection, nSmProps, ppSmProps );
@@ -157,11 +174,16 @@ void SessionManagerClient::DieProc(
     SmPointer client_data
     )
 {
+#ifdef DEBUG
+    fprintf( stderr, "Session: die\n" );
+#endif
 #ifdef USE_SM_EXTENSION
     SmcCloseConnection( connection, 0, NULL );
 #endif
     if( connection == aSmcConnection )
         aSmcConnection = NULL;
+    if( GetSalData()->pFirstFrame_ )
+        GetSalData()->pFirstFrame_->maFrameData.ShutDown();
 }
 
 void SessionManagerClient::SaveCompleteProc(
@@ -169,12 +191,18 @@ void SessionManagerClient::SaveCompleteProc(
     SmPointer client_data
     )
 {
+#ifdef DEBUG
+    fprintf( stderr, "Session: save complete\n" );
+#endif
 }
 
 void SessionManagerClient::ShutdownCanceledProc(
     SmcConn connection,
     SmPointer client_data )
 {
+#ifdef DEBUG
+    fprintf( stderr, "Session: shutdown canceled\n" );
+#endif
 }
 
 void SessionManagerClient::open()
@@ -188,10 +216,9 @@ void SessionManagerClient::open()
     if( ! aSmcConnection && getenv( "SESSION_MANAGER" ) )
     {
         char aErrBuf[1024];
-        String aFilename( getenv( "HOME" ) );
-        aFilename += "/.so_lastSessionID";
-
         ICEConnectionObserver::activate();
+        char* pClientID = NULL;
+        const ByteString& rPrevId( getPreviousSessionID() );
 
         aCallbacks.save_yourself.callback           = SaveYourselfProc;
         aCallbacks.save_yourself.client_data        = NULL;
@@ -210,16 +237,26 @@ void SessionManagerClient::open()
                                             SmcSaveCompleteProcMask         |
                                             SmcShutdownCancelledProcMask    ,
                                             &aCallbacks,
-                                            getPreviousSessionID(),
+                                            rPrevId.Len() ? rPrevId.GetBuffer() : NULL,
                                             &pClientID,
                                             sizeof( aErrBuf ),
                                             aErrBuf );
 #if defined DEBUG || defined DBG_UTIL
         if( ! aSmcConnection )
             fprintf( stderr, "SmcOpenConnection failed: %s\n", aErrBuf );
+#ifdef DEBUG
+        else
+            fprintf( stderr, "SmcOpenConnection succeeded, client ID is \"%s\"\n", pClientID );
 #endif
-        setPreviousSessionID( pClientID );
+#endif
+        aClientID = ByteString( pClientID );
+        free( pClientID );
+        pClientID = NULL;
     }
+#ifdef DEBUG
+    else
+        fprintf( stderr, "no SESSION_MANAGER\n" );
+#endif
 #endif
 }
 
@@ -229,6 +266,9 @@ void SessionManagerClient::close()
     {
 #ifdef USE_SM_EXTENSION
         SmcCloseConnection( aSmcConnection, 0, NULL );
+#ifdef DEBUG
+        fprintf( stderr, "SmcConnection closed\n" );
+#endif
 #endif
         aSmcConnection = NULL;
         ICEConnectionObserver::deactivate();
@@ -240,50 +280,36 @@ String SessionManagerClient::getExecName()
 {
     static NAMESPACE_VOS( OStartupInfo ) aStartupInfo;
 
-    ::rtl::OUString aExec;
+    ::rtl::OUString aExec, aSysExec;
     aStartupInfo.getExecutableFile( aExec );
+    osl_getSystemPathFromFileURL( aExec.pData, &aSysExec.pData );
 
-    int nPos = aExec.indexOf( ::rtl::OUString::createFromAscii( ".bin" ) );
+    int nPos = aSysExec.indexOf( ::rtl::OUString::createFromAscii( ".bin" ) );
     if( nPos != -1 )
-        aExec = aExec.copy( 0, nPos );
-    return aExec;
+        aSysExec = aSysExec.copy( 0, nPos );
+    return aSysExec;
 }
 
 
-char* SessionManagerClient::getPreviousSessionID()
+const ByteString& SessionManagerClient::getPreviousSessionID()
 {
-    static char aID[1024];
+    static ByteString aPrevId;
 
-    String aFilename( getenv( "HOME" ), gsl_getSystemTextEncoding() );
-    aFilename.AppendAscii( "/.sosessions" );
-
-    ByteString aExec( getExecName(), gsl_getSystemTextEncoding() );
-    aExec = aExec.GetToken( aExec.GetTokenCount( '/' )-1, '/' );
-
-    Config aConfig( aFilename );
-    aConfig.SetGroup( "Sessions" );
-    ByteString aSessionID = aConfig.ReadKey( aExec );
-    if( aSessionID.Len() )
+    int nCommands = osl_getCommandArgCount();
+    for( int i = 0; i < nCommands; i++ )
     {
-        strncpy( aID, aSessionID.GetBuffer(), sizeof( aID ) );
-        return aID;
+        ::rtl::OUString aArg;
+        osl_getCommandArg( i, &aArg.pData );
+        if( aArg.compareToAscii( "-session=", 9 ) == 0 )
+        {
+            aPrevId = ByteString( ::rtl::OUStringToOString( aArg.copy( 9 ), osl_getThreadTextEncoding() ) );
+            break;
+        }
     }
-    return NULL;
-}
-
-void SessionManagerClient::setPreviousSessionID( const ByteString& rID )
-{
-    static char aID[1024];
-
-    String aFilename( getenv( "HOME" ), gsl_getSystemTextEncoding() );
-    aFilename.AppendAscii( "/.sosessions" );
-
-    ByteString aExec( getExecName(), gsl_getSystemTextEncoding() );
-    aExec = aExec.GetToken( aExec.GetTokenCount( '/' )-1, '/' );
-
-    Config aConfig( aFilename );
-    aConfig.SetGroup( "Sessions" );
-    aConfig.WriteKey( aExec, rID );
+#ifdef DEBUG
+    fprintf( stderr, "previous ID = \"%s\"\n", aPrevId.GetBuffer() );
+#endif
+    return aPrevId;
 }
 
 void ICEConnectionObserver::activate()
@@ -324,22 +350,33 @@ void ICEConnectionObserver::ICEWatchProc(
                                         (YieldFunc)HandleEvents );
     else
         GetSalData()->GetLib()->Remove( IceConnectionNumber( connection ) );
+#ifdef DEBUG
+    fprintf( stderr, "ICE connection on %d %s\n",
+             IceConnectionNumber( connection ),
+             opening ? "inserted" : "removed" );
+#endif
 #endif
 }
 
 int ICEConnectionObserver::Pending( int fd, void* data )
 {
-    return 1;
+    struct pollfd aPoll;
+    aPoll.fd = fd;
+    aPoll.events = POLLIN;
+    return ( poll( &aPoll, 1, 0 ) > 0 && aPoll.revents ) ? 1 : 0;
 }
 
 int ICEConnectionObserver::Queued( int fd, void* data )
 {
-    return 1;
+    return Pending( fd, data );
 }
 
 int ICEConnectionObserver::HandleEvents( int fd, void* data )
 {
 #ifdef USE_SM_EXTENSION
+#ifdef DEBUG
+    fprintf( stderr, "IceProcessMessages\n" );
+#endif
     IceProcessMessages( (IceConn)data, NULL, NULL );
 #endif
     return 0;

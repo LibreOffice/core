@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ public:
 
 class SessionManagerClient
 {
-    static SmcConn  aSmcConnection;
-    static char*    pClientID;
+    static SmcConn      aSmcConnection;
+    static ByteString   aClientID;
 
     static void SaveYourselfProc(       SmcConn connection,
                                         SmPointer client_data,
@@ -99,14 +99,13 @@ class SessionManagerClient
     static void ShutdownCanceledProc(   SmcConn connection,
                                         SmPointer client_data );
 
-    static char* getPreviousSessionID();
-    static void  setPreviousSessionID( const ByteString& );
+    static const ByteString& getPreviousSessionID();
 public:
     static void open();
     static void close();
 
     static String getExecName();
-    static char*  getSessionID() { return pClientID; }
+    static const ByteString&  getSessionID() { return aClientID; }
 };
 
 #endif

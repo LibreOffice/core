@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-17 18:55:42 $
+ *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "WM_DELETE_WINDOW", WMAdaptor::WM_DELETE_WINDOW },
     { "WM_SAVE_YOURSELF", WMAdaptor::WM_SAVE_YOURSELF },
     { "WM_COMMAND", WMAdaptor::WM_COMMAND },
+    { "WM_CLIENT_LEADER", WMAdaptor::WM_CLIENT_LEADER },
     { "SAL_QUITEVENT", WMAdaptor::SAL_QUITEVENT },
     { "SAL_USEREVENT", WMAdaptor::SAL_USEREVENT },
     { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT },

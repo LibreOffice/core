@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cp $ $Date: 2001-09-21 15:31:55 $
+ *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,21 +311,6 @@ static const char* const VisualClassName[] = {
     "PseudoColor",
     "TrueColor",
     "DirectColor"
-};
-
-static const char* const AtomStrings[] =
-{
-    "WM_PROTOCOLS",         // window manager
-    "WM_STATE",
-    "WM_DELETE_WINDOW",
-    "WM_SAVE_YOURSELF",
-    "WM_COMMAND",
-
-    "SAL_QUITEVENT",        // client message events
-    "SAL_USEREVENT",
-    #if !defined(__synchronous_extinput__)
-    "SAL_EXTTEXTEVENT",
-    #endif
 };
 
 static const char* const EventNames[] =
@@ -948,10 +933,10 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                                          &aXWAttributes );
 
         // set client leader and session id
-        char* pSessionID = SessionManagerClient::getSessionID();
+        const ByteString& rSessionID( SessionManagerClient::getSessionID() );
         if( hRefWindow_ )
         {
-            if( pSessionID )
+            if( rSessionID.Len() )
             {
                 XChangeProperty( pDisp_,
                                  hRefWindow_,
@@ -959,8 +944,8 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
                                  XA_STRING,
                                  8,
                                  PropModeReplace,
-                                 (unsigned char*)pSessionID,
-                                 strlen( pSessionID )
+                                 (unsigned char*)rSessionID.GetBuffer(),
+                                 rSessionID.Len()
                                  );
             }
             // client leader must have WM_CLIENT_LEADER pointing to itself

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-18 09:27:00 $
+ *  last change: $Author: pl $ $Date: 2001-10-19 13:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,6 +545,18 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
 
         XSetWMProtocols( GetXDisplay(), XtWindow( hShell_ ), a, n );
+
+        // set client leader
+        XLIB_Window aLeader = GetDisplay()->GetDrawable();
+        XChangeProperty( GetXDisplay(),
+                         GetShellWindow(),
+                         pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_CLIENT_LEADER),
+                         XA_WINDOW,
+                         32,
+                         PropModeReplace,
+                         (unsigned char*)&aLeader,
+                         1
+                         );
     }
 
     XSync( GetXDisplay(), False );
@@ -2871,7 +2883,9 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
     {
         if( pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
         {
-            stderr0( "SalFrameData::Dispatch DeleteWindow\n" );
+#ifdef DEBUG
+            fprintf( stderr, "DeleteWindow request\n" );
+#endif
             Close();
             return 1;
         }
@@ -2886,6 +2900,9 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
                 char* argv[2];
                 argv[0] = "/bin/sh";
                 argv[1] = const_cast<char*>(aExec.GetBuffer());
+#ifdef DEBUG
+                fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
+#endif
                 XSetCommand( GetXDisplay(), XtWindow( hShell_ ), argv, 2 );
             }
             else
