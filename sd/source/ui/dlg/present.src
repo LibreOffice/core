@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: rt $ $Date: 2001-06-29 02:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,20 +404,20 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ italian ] = "Duration of pause";
         QuickHelpText[ danish ] = "Pausetid";
         QuickHelpText[ swedish ] = "Pausens l‰ngd";
-        QuickHelpText[ polish ] = "D≥ugo?Ê przerwy!";
+        QuickHelpText[ polish ] = "D≥ugo?Ê przerwy";
         QuickHelpText[ portuguese_brazilian ] = "Duration of pause";
-        QuickHelpText[ japanese ] = "ãxé~éûä‘!";
+        QuickHelpText[ japanese ] = "ãxé~éûä‘";
         QuickHelpText[ chinese_simplified ] = "º‰∏Ù ±º‰";
         QuickHelpText[ chinese_traditional ] = "∂°πjÆ…∂°";
         QuickHelpText[ arabic ] = "„œ… «·≈Ìﬁ«› «·„ƒﬁ ";
         QuickHelpText[ greek ] = "ƒÈ‹ÒÍÂÈ· ÒÔÛ˘ÒÈÌﬁÚ ‰È·ÍÔﬁÚ";
-        QuickHelpText[ korean ] = "¿œΩ√¡ﬂ¡ˆ°°±‚∞£!";
+        QuickHelpText[ korean ] = "¿œΩ√¡ﬂ¡ˆ°°±‚∞£";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Pausendauer";
         QuickHelpText[ catalan ] = "DuraciÛn de pausa";
-        QuickHelpText[ finnish ] = "Tauon kesto!";
+        QuickHelpText[ finnish ] = "Tauon kesto";
     };
     CheckBox CBX_AUTOLOGO
     {
@@ -693,5 +693,6 @@ ModalDialog DLG_START_PRESENTATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Iniciar presentaciÛn";
 };
+
 
 
