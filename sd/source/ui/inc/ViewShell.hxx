@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:55:22 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 14:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,7 @@ protected:
         This is usually the one of the document.  Only the outline
         view has its own (the one of its Outliner object.)
     */
+    void CreateBorder();
     SfxUndoManager* ImpGetUndoManager (void) const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
@@ -440,6 +441,10 @@ protected:
     // Bereich aller Fenster, wenn Splitter aktiv sind
     Rectangle   aAllWindowRect;
 
+    /// The sub-controller.  Returned by GetSubController.  Owned by
+    /// this base class once it has been created.
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
+        mxSubController;
     /// The controller.  Returned by GetController().
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
         mxController;
