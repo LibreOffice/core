@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2001-04-18 07:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,41 +78,15 @@ SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
-    mbNotesMode(FALSE)
+:   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
 {
-    if(GetSdImport().IsImpress())
+    // now delete all up-to-now contained shapes from this notes page
+    uno::Reference< drawing::XShape > xShape;
+    while(rShapes->getCount())
     {
-        // get notes page
-        uno::Reference< presentation::XPresentationPage > xPresPage(rShapes, uno::UNO_QUERY);
-        if(xPresPage.is())
-        {
-            uno::Reference< drawing::XDrawPage > xNotesDrawPage(xPresPage->getNotesPage(), uno::UNO_QUERY);
-            if(xNotesDrawPage.is())
-            {
-                uno::Reference< drawing::XShapes > xNewShapes(xNotesDrawPage, uno::UNO_QUERY);
-                if(xNewShapes.is())
-                {
-                    // now delete all up-to-now contained shapes from this notes page
-                    while(xNewShapes->getCount())
-                    {
-                        uno::Reference< drawing::XShape > xShape;
-                        uno::Any aAny(xNewShapes->getByIndex(0L));
-
-                        aAny >>= xShape;
-
-                        if(xShape.is())
-                        {
-                            xNewShapes->remove(xShape);
-                        }
-                    }
-
-                    // set new local shapes context to notes page
-                    SetLocalShapesContext(xNewShapes);
-                    mbNotesMode = TRUE;
-                }
-            }
-        }
+        rShapes->getByIndex(0L) >>= xShape;
+        if(xShape.is())
+            rShapes->remove(xShape);
     }
 }
 
@@ -128,13 +102,11 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( USHORT nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
-    if(mbNotesMode)
-    {
-        // OK, notes page is set on base class, objects can be imported on notes page
-        SvXMLImportContext *pContext = 0L;
+    // OK, notes page is set on base class, objects can be imported on notes page
+    SvXMLImportContext *pContext = 0L;
 
-        // some special objects inside presentation:notes context
-        // ...
+    // some special objects inside presentation:notes context
+    // ...
 
 
 
@@ -142,17 +114,11 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( USHORT nPrefix,
 
 
 
-        // call parent when no own context was created
-        if(!pContext)
-            pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
+    // call parent when no own context was created
+    if(!pContext)
+        pContext = SdXMLGenericPageContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
-        return pContext;
-    }
-    else
-    {
-        // do not import this content, the notes page could not be accessed
-        return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
-    }
+    return pContext;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -161,5 +127,3 @@ void SdXMLNotesContext::EndElement()
 {
     SdXMLGenericPageContext::EndElement();
 }
-
-

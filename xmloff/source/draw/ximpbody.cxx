@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-17 15:58:33 $
+ *  last change: $Author: cl $ $Date: 2001-04-18 07:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
+#include <com/sun/star/presentation/XPresentationPage.hpp>
 #endif
 
 #ifndef _XIMPSTYLE_HXX
@@ -269,7 +273,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         {
             sal_Bool bDone(FALSE);
 
-            for(sal_uInt32 a(0); !bDone && a < xMasterPages->getCount(); a++)
+            for(sal_Int32 a = 0; !bDone && a < xMasterPages->getCount(); a++)
             {
                 uno::Any aAny(xMasterPages->getByIndex(a));
                 aAny >>= xMasterPage;
@@ -371,10 +375,24 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
     {
         case XML_TOK_DRAWPAGE_NOTES:
         {
-            // presentation:notes inside draw:page context
-            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList,
-                GetLocalShapesContext());
-            break;
+            if( GetSdImport().IsImpress() )
+            {
+                // get notes page
+                uno::Reference< presentation::XPresentationPage > xPresPage(GetLocalShapesContext(), uno::UNO_QUERY);
+                if(xPresPage.is())
+                {
+                    uno::Reference< drawing::XDrawPage > xNotesDrawPage(xPresPage->getNotesPage(), uno::UNO_QUERY);
+                    if(xNotesDrawPage.is())
+                    {
+                        uno::Reference< drawing::XShapes > xNewShapes(xNotesDrawPage, uno::UNO_QUERY);
+                        if(xNewShapes.is())
+                        {
+                            // presentation:notes inside draw:page context
+                            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNewShapes);
+                        }
+                    }
+                }
+            }
         }
     }
 

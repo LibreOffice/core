@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-23 09:21:31 $
+ *  last change: $Author: cl $ $Date: 2001-04-18 07:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_PRESENTATION_XPRESENTATIONPAGE_HPP_
+#include <com/sun/star/presentation/XPresentationPage.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
@@ -997,10 +1001,24 @@ SvXMLImportContext* SdXMLMasterPageContext::CreateChildContext(
         }
         case XML_TOK_MASTERPAGE_NOTES:
         {
-            // presentation:notes inside master-page context
-            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList,
-                GetLocalShapesContext());
-            break;
+            if( GetSdImport().IsImpress() )
+            {
+                // get notes page
+                uno::Reference< presentation::XPresentationPage > xPresPage(GetLocalShapesContext(), uno::UNO_QUERY);
+                if(xPresPage.is())
+                {
+                    uno::Reference< drawing::XDrawPage > xNotesDrawPage(xPresPage->getNotesPage(), uno::UNO_QUERY);
+                    if(xNotesDrawPage.is())
+                    {
+                        uno::Reference< drawing::XShapes > xNewShapes(xNotesDrawPage, uno::UNO_QUERY);
+                        if(xNewShapes.is())
+                        {
+                            // presentation:notes inside master-page context
+                            pContext = new SdXMLNotesContext( GetSdImport(), nPrefix, rLocalName, xAttrList, xNewShapes);
+                        }
+                    }
+                }
+            }
         }
     }
 
