@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:55:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4282,7 +4282,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 //------------------------------------------------------------------------------
 void ODatabaseForm::implInserted(const InterfaceRef& _rxObject)
 {
-    OFormComponents::implInserted(_rxObject);
+    OFormComponents::implInserted( _rxObject );
 
     Reference<XSQLErrorBroadcaster>  xBroadcaster(_rxObject, UNO_QUERY);
     Reference<XForm>  xForm(_rxObject, UNO_QUERY);
@@ -4295,7 +4295,7 @@ void ODatabaseForm::implInserted(const InterfaceRef& _rxObject)
 //------------------------------------------------------------------------------
 void ODatabaseForm::implRemoved(const InterfaceRef& _rxObject)
 {
-    OFormComponents::implInserted(_rxObject);
+    OFormComponents::implRemoved( _rxObject );
 
     Reference<XSQLErrorBroadcaster>  xBroadcaster(_rxObject, UNO_QUERY);
     Reference<XForm>  xForm(_rxObject, UNO_QUERY);
