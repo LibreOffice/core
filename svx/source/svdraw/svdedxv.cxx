@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-22 10:11:21 $
+ *  last change: $Author: cl $ $Date: 2002-05-31 09:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
+#endif
 
 #include "svdedxv.hxx"
 #include <svtools/solar.hrc>
@@ -703,6 +707,11 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
         pTextEditOutliner=pGivenOutliner;
         if (pTextEditOutliner==NULL)
             pTextEditOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pTextEditObj->GetModel() );
+
+        {
+            SvtAccessibilityOptions aOptions;
+            pTextEditOutliner->ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
+        }
 
         BOOL bEmpty=pTextEditObj->GetOutlinerParaObject()==NULL;
 
