@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OServiceManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-04 09:28:23 $
+ *  last change:$Date: 2003-05-27 13:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ public class OServiceManager extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.comp.stoc.OServiceManager" );
         } catch( com.sun.star.uno.Exception e ) {
