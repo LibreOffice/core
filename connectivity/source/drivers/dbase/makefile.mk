@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: oj $ $Date: 2001-07-16 09:58:39 $
+#   last change: $Author: fs $ $Date: 2002-02-21 08:14:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/DIndexColumns.obj		\
     $(SLO)$/DIndex.obj				\
     $(SLO)$/DIndexes.obj			\
-    $(SLO)$/DTable.obj				\
     $(SLO)$/DTables.obj				\
     $(SLO)$/DConnection.obj			\
     $(SLO)$/Dservices.obj			\
@@ -157,8 +156,11 @@ DEF1EXPORTFILE=	exports.dxp
 
 # [kh] ppc linux gcc compiler problem
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
-NOOPTFILES= \
+EXCEPTIONSNOOPTFILES= \
     $(SLO)$/DTable.obj
+.ELSE
+EXCEPTIONSFILES +=\
+            $(SLO)$/DTable.obj
 .ENDIF
 
 
