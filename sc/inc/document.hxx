@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:48:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1089,6 +1089,7 @@ public:
 
     ULONG           AddCondFormat( const ScConditionalFormat& rNew );
     void            FindConditionalFormat( ULONG nKey, ScRangeList& rRanges );
+    void            FindConditionalFormat( ULONG nKey, ScRangeList& rRanges, USHORT nTab );
     void            ConditionalChanged( ULONG nKey );
     void            SetConditionalUsed( ULONG nKey );       // beim Speichern
 
