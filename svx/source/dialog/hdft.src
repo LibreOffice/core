@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:33:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@
     Text[ thai ] = "ปรับระยะขอบด้าน~ซ้าย :";  \
     Text[ czech ] = "Levý okraj";  \
     Text[ hebrew ] = "~Linker Rand";    \
-    Text[ hindi ] = "~Left margin";
+    Text[ hindi ] = "~Left margin"; \
+    Text[ slovak ] = "Ľ~avý okraj";
 
 #define _TEXT_FT_RMARGIN \
         Text = "~Rechter Rand" ;                                            \
@@ -122,7 +123,8 @@
     Text[ thai ] = "ปรับระยะขอบด้าน~ขวา";   \
     Text[ czech ] = "Pravý okraj"; \
     Text[ hebrew ] = "~Rechter Rand";   \
-    Text[ hindi ] = "R~ight margin";
+    Text[ hindi ] = "R~ight margin";    \
+    Text[ slovak ] = "P~ravý okraj";
 
 
  // RID_SVXPAGE_HEADER ----------------------------------------------------
@@ -176,6 +178,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Záhlaví zapnuto";
         Text[ hebrew ] = "~Kopfzeile einschalten";
         Text[ hindi ] = "पृष्ठ के ~ऊपर की टीका शुरु";
+        Text[ slovak ] = "~Záhlavie zapnuté";
     };
     CheckBox CB_SHARED
     {
@@ -209,6 +212,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Stejný obsah vlevo/vpravo";
         Text[ hebrew ] = "~Inhalt links/rechts gleich";
         Text[ hindi ] = "समान ~विषय बायाँ/दाहिना";
+        Text[ slovak ] = "Rovnaký ~obsah vľavo/vpravo";
     };
     FixedText FT_LMARGIN
     {
@@ -286,6 +290,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Mezery";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
+        Text[ slovak ] = "~Rozostupy";
     };
     MetricField ED_DIST
     {
@@ -321,7 +326,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ swedish ] = "Anv�nd d~ynamiskt avst�nd";
         Text[ polish ] = "Use d~ynamic spacing";
         Text[ portuguese_brazilian ] = "Use d~ynamic spacing";
-        Text[ japanese ] = "自動最適文字間隔を使用する";
+        Text[ japanese ] = "間隔自動調整(~Y)";
         Text[ korean ] = "동적 문자 간격 사용";
         Text[ chinese_simplified ] = "使用自动最佳调整的间隔";
         Text[ chinese_traditional ] = "使用自動最適調整的間隔";
@@ -332,6 +337,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Použít dynamické mezery";
         Text[ hebrew ] = "D~ynamischen Abstand verwenden";
         Text[ hindi ] = "Use d~ynamic spacing";
+        Text[ slovak ] = "~Použiť premenlivú šírku";
     };
     FixedText FT_HEIGHT
     {
@@ -364,6 +370,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField ED_HEIGHT
     {
@@ -413,6 +420,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Automatická úprava výšky";
         Text[ hebrew ] = "Höhe ~dynamisch anpassen";
         Text[ hindi ] = "~योग्य ऊँचाई";
+        Text[ slovak ] = "~Automatická úprava výšky";
     };
     FixedLine FL_FRAME
     {
@@ -446,6 +454,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Záhlaví";
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
+        Text[ slovak ] = "Záhlavie";
     };
     Window WN_BSP
     {
@@ -484,6 +493,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ czech ] = "Více...";
         Text[ hebrew ] = "Zus~ätze...";
         Text[ hindi ] = "~अधिक...";
+        Text[ slovak ] = "~Viac...";
     };
     Text[ chinese_simplified ] = "页眉";
     Text[ russian ] = "������� ����������";
@@ -500,6 +510,7 @@ TabPage RID_SVXPAGE_HEADER
     Text[ czech ] = "Záhlaví";
     Text[ hebrew ] = "‮כותרת עליונה‬";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
+    Text[ slovak ] = "Záhlavie";
 };
  // RID_SVXPAGE_FOOTER ----------------------------------------------------
 TabPage RID_SVXPAGE_FOOTER
@@ -552,6 +563,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Zápatí zapnuto";
         Text[ hebrew ] = "~Fußzeile einschalten";
         Text[ hindi ] = "~पृष्ठ के अधोभाग की टीका शुरु";
+        Text[ slovak ] = "Zápä~tie zapnutá";
     };
     CheckBox CB_SHARED
     {
@@ -585,6 +597,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Stejný obsah vlevo/vpravo";
         Text[ hebrew ] = "~Inhalt links/rechts gleich";
         Text[ hindi ] = "समान ~विषय बायाँ/दाहिना";
+        Text[ slovak ] = "Rovnaký ~obsah vľavo/vpravo";
     };
     FixedText FT_LMARGIN
     {
@@ -661,6 +674,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Mezery";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
+        Text[ slovak ] = "~Rozostupy";
     };
     MetricField ED_DIST
     {
@@ -696,7 +710,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ swedish ] = "Anv�nd d~ynamiskt avst�nd";
         Text[ polish ] = "Use d~ynamic spacing";
         Text[ portuguese_brazilian ] = "Use d~ynamic spacing";
-        Text[ japanese ] = "自動最適文字間隔を使用する";
+        Text[ japanese ] = "間隔自動調整(~Y)";
         Text[ korean ] = "동적 문자 간격 사용";
         Text[ chinese_simplified ] = "使用自动最佳调整的间隔";
         Text[ chinese_traditional ] = "使用自動最適調整的間隔";
@@ -707,6 +721,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Použít dynamické mezery";
         Text[ hebrew ] = "D~ynamischen Abstand verwenden";
         Text[ hindi ] = "Use d~ynamic spacing";
+        Text[ slovak ] = "~Použiť premenlivú šírku";
     };
     FixedText FT_HEIGHT
     {
@@ -740,6 +755,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField ED_HEIGHT
     {
@@ -790,6 +806,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Automatická úprava výšky";
         Text[ hebrew ] = "Höhe ~dynamisch anpassen";
         Text[ hindi ] = "~योग्य ऊँचाई";
+        Text[ slovak ] = "~Automatická úprava výšky";
     };
 
     FixedLine FL_FRAME
@@ -824,6 +841,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Zápatí";
         Text[ hebrew ] = "‮כותרת תחתונה‬";
         Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
+        Text[ slovak ] = "Zápätie";
     };
     Window WN_BSP
     {
@@ -862,6 +880,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ czech ] = "Více...";
         Text[ hebrew ] = "Zus~ätze...";
         Text[ hindi ] = "~अधिक...";
+        Text[ slovak ] = "~Viac...";
     };
     Text[ chinese_simplified ] = "页脚";
     Text[ russian ] = "������ ����������";
@@ -878,6 +897,7 @@ TabPage RID_SVXPAGE_FOOTER
     Text[ czech ] = "Zápatí";
     Text[ hebrew ] = "‮כותרת תחתונה‬";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
+    Text[ slovak ] = "Päta";
 };
 QueryBox RID_SVXQBX_DELETE_HEADFOOT
 {
@@ -911,9 +931,12 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message[ czech ] = "Odstraněním záhlaví nebo zápatí smažete obsah.\nOpravdu chcete smazat tento text?";
     Message[ hebrew ] = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Inhalt.\nMöchten Sie den Inhalt löschen?";
     Message[ hindi ] = "पृष्ठ के ऊपर और अधोभाग की टीका हटाने से विषय मिट सकता है ।\nआप इस टेक्स्ट् को मिटाना चाहते है?";
+    Message[ slovak ] = "Odstránením záhlavia alebo päty zmažete obsah.\nNaozaj chcete zmazať tento text?";
 };
 
  // ********************************************************************** EOF
+
+
 
 
 
