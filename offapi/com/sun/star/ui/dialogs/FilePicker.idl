@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-16 14:05:49 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 08:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,11 @@ interface XFilterGroupManager;
 
 service FilePicker
 {
+    //-------------------------------------------------------------------------
+    /** allows to associate a help URL with the file picker instance.
+    */
+    [optional, property] string HelpURL;
+
     //-------------------------------------------------------------------------
     /** Provides access to the basic FilePicker functionality.
 
