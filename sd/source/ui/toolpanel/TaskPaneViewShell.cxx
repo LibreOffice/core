@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:54:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,10 @@ SdPage* TaskPaneViewShell::GetActualPage (void)
     return NULL;
 }
 
+SdPage* TaskPaneViewShell::getCurrentPage(void) const
+{
+    return NULL;
+}
 
 
 
