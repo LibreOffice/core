@@ -4,4 +4,3 @@
 "SwXTableRows";"com::sun::star::container::XElementAccess";"hasElements()"
 "SwXTableRows";"com::sun::star::table::XTableRows";"insertByIndex()"
 "SwXTableRows";"com::sun::star::table::XTableRows";"removeByIndex()"
-"SwXTableRows";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
