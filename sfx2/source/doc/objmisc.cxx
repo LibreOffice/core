@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:01:21 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 
+#include <drafts/com/sun/star/script/provider/XScript.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -125,10 +129,13 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <svtools/securityoptions.hxx>
 
+#include <comphelper/processfactory.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
+using namespace ::drafts::com::sun::star::script;
 
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
@@ -1228,6 +1235,84 @@ ErrCode SfxObjectShell::Call( const String & rCode, sal_Bool bIsBasicReturn, Sbx
     return nErr;
 }
 
+// perhaps rename to CallScript once we get rid of the existing CallScript
+// and Call, CallBasic, CallStarBasic methods
+ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
+            aParams,
+        ::com::sun::star::uno::Any& aRet,
+        ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
+            aOutParam)
+{
+    OSL_TRACE( "in CallXScript" );
+    ErrCode nErr = ERRCODE_NONE;
+
+    // security check if it's not an application script?
+    // or if it's a document script??
+    if( rScriptURL.Search( UniString::CreateFromAscii( "location=document" ) )
+            > 0 )
+    {
+        AdjustMacroMode( String() );
+        if( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE ) {
+            return ERRCODE_IO_ACCESSDENIED;
+        }
+    }
+
+    try
+    {
+        Reference< provider::XScriptProviderSupplier > xSPS =
+            Reference< provider::XScriptProviderSupplier >
+                ( GetModel(), UNO_QUERY_THROW );
+
+        Reference< provider::XScriptProvider > xScriptProvider =
+            xSPS->getScriptProvider();
+
+        if( !xScriptProvider.is() )
+        {
+            OSL_TRACE( "CallXScript: no ScriptProvider" );
+            throw RuntimeException(::rtl::OUString(), Reference< XInterface >());
+        }
+
+        ::rtl::OUString oScriptURL( rScriptURL.GetBuffer() );
+        Reference< provider::XScript > xScript =
+            xScriptProvider->getScript( oScriptURL );
+
+        if( !xScript.is() )
+        {
+            OSL_TRACE( "CallXScript: no Script" );
+            throw RuntimeException(::rtl::OUString(), Reference< XInterface >());
+        }
+        OSL_TRACE( "CallXScript, got Script, about to invoke");
+        OSL_TRACE( "CallXScript, number of params is: %d", aParams.getLength() );
+        aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
+        OSL_TRACE( "CallXScript, invoke is finished");
+    }
+    // Use the errors from basic for the time being
+    catch ( ::com::sun::star::uno::RuntimeException )
+    {
+        OSL_TRACE( "CallXScript: exception rte" );
+        nErr = ERRCODE_BASIC_INTERNAL_ERROR;
+    }
+    catch ( ::com::sun::star::lang::IllegalArgumentException )
+    {
+        OSL_TRACE( "CallXScript: exception iae" );
+        nErr = ERRCODE_BASIC_BAD_ARGUMENT;
+    }
+    catch ( ::com::sun::star::script::CannotConvertException )
+    {
+        OSL_TRACE( "CallXScript: exception cce" );
+        nErr = ERRCODE_BASIC_CONVERSION;
+    }
+    catch ( ::com::sun::star::reflection::InvocationTargetException )
+    {
+        OSL_TRACE( "CallXScript: exception ite" );
+        nErr = ERRCODE_BASIC_INTERNAL_ERROR;
+    }
+    OSL_TRACE( "leaving CallXScript" );
+    return nErr;
+}
+
 extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 
 //-------------------------------------------------------------------------
@@ -1272,6 +1357,7 @@ namespace {
 ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const String& _rLocation,
     void* _pArguments, void* _pReturn )
 {
+    OSL_TRACE("in CallSBS");
     ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
 
     // the arguments for the call
@@ -1713,6 +1799,11 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
             pImp->nMacroMode = bSecure ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
         }
     }
+}
+
+sal_Int16 SfxObjectShell::GetMacroMode()
+{
+    return pImp->nMacroMode;
 }
 
 Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
