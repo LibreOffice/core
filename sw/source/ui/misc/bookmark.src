@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:46:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ String STR_REMOVE_WARNING
     Text[ catalan ] = "Los siguientes caracteres han sido eliminados porque no se permiten:  ";
     Text[ finnish ] = "Seuraavat merkit eivät ole kelvollisia ja ne poistettiin: ";
 };
+
 
 
 
