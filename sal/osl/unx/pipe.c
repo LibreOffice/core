@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-28 17:00:03 $
+ *  last change: $Author: jbu $ $Date: 2001-05-29 07:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,10 @@ oslPipe __osl_createPipeImpl()
     pPipeImpl = (oslPipe)calloc(1, sizeof(struct oslPipeImpl));
     pPipeImpl->m_nRefCount =1;
     pPipeImpl->m_bClosed = sal_False;
-
+#if defined(LINUX)
+    pPipeImpl->m_bIsInShutdown = sal_False;
+    pPipeImpl->m_bIsAccepting = sal_False;
+#endif
     return pPipeImpl;
 }
 
@@ -346,16 +349,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
         if( ! pPipe->m_bClosed )
             osl_closePipe( pPipe );
 
-        /* REMOVE THIS HACK AS SOON AS osl_closePipe MUST change has been applied ! */
-#ifdef LINUX
-        if ( pPipe->m_bIsAccepting == sal_False )
-        {
-#endif
-            /* free memory */
-            __osl_destroyPipeImpl(pPipe);
-#ifdef LINUX
-        }
-#endif
+        __osl_destroyPipeImpl( pPipe );
     }
 }
 
@@ -380,8 +374,13 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
     }
 
     ConnFD = pPipe->m_Socket;
+
+    /*
+      Thread does not return from accept on linux, so
+      connect to the accepting pipe
+     */
 #if defined(LINUX)
-    if ( pPipe->m_bIsAccepting == sal_True )
+    if ( pPipe->m_bIsAccepting )
     {
         pPipe->m_bIsInShutdown = sal_True;
         pPipe->m_Socket = -1;
@@ -422,6 +421,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
     {
         unlink(pPipe->m_Name);
     }
+    pPipe->m_bClosed = sal_True;
 
 /*      OSL_TRACE("Out osl_destroyPipe");     */
 }
@@ -460,10 +460,8 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     }
 
 #if defined(LINUX)
-    if ( pPipe->m_bIsInShutdown == sal_True )
+    if ( pPipe->m_bIsInShutdown  )
     {
-        __osl_destroyPipeImpl(pPipe);
-
         close(s);
         return NULL;
     }
