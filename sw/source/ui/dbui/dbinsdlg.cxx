@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 12:56:41 $
+ *  last change: $Author: os $ $Date: 2001-06-20 14:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,7 +1168,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
     Reference< sdbc::XRow > xRow(xResultSet, UNO_QUERY);
 
-    BOOL bScrollable;
+    BOOL bScrollable = TRUE;
     //with the drag and drop interface no result set is initially available
     Reference< sdbc::XStatement > xStatement;
     if(!xRow.is())
@@ -1328,8 +1328,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 Reference <XNameAccess> xCols = xColsSupp->getColumns();
                 Any aCol = xCols->getByName(pEntry->sColumn);
                 Reference< XPropertySet > xColumnProps;
-                if(aCol.hasValue())
-                    xColumnProps = *(Reference< XPropertySet >*)aCol.getValue();
+                aCol >>= xColumnProps;
                 Reference< XColumn > xColumn(xColumnProps, UNO_QUERY);
                 try
                 {

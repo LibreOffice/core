@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:33 $
+ *  last change: $Author: os $ $Date: 2001-06-20 14:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,9 +311,13 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
                     aDBData );
             if( RET_OK == pDlg->Execute() )
             {
-                Sequence<Any> aSelection(pString->GetTokenCount(DB_DD_DELIM) - 4 );
+                sal_Int32 nTokenCount = pString->GetTokenCount(DB_DD_DELIM);
+                if(!pString->GetToken(nTokenCount -1 , DB_DD_DELIM).Len())
+                    --nTokenCount;
+                sal_Int32 nSelectionCount = nTokenCount - 4;
+                Sequence<Any> aSelection(nSelectionCount);
                 Any* pSelection = aSelection.getArray();
-                for(sal_Int32 nPos = 0; nPos < aSelection.getLength(); nPos++)
+                for(sal_Int32 nPos = 0; nPos < nSelectionCount; nPos++)
                 {
                     pSelection[nPos] <<= pString->GetToken( 0, DB_DD_DELIM, nTokenPos ).ToInt32();
                 }
