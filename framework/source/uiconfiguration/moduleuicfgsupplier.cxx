@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuicfgsupplier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:49:41 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
 /*
         // Default root storage (READ-ACCESS)
         aArgs[0] <<= m_aDefaultConfigURL + aConfigSubFolder;
-        aArgs[1] <<= ElementModes::ELEMENT_READ;
+        aArgs[1] <<= ElementModes::READ;
         m_xDefaultCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY_THROW );
 */
         Reference < XOutputStream > xTempOut( m_xServiceManager->createInstance (
@@ -256,12 +256,12 @@ void ModuleUIConfigurationManagerSupplier::impl_initStorages()
         // Default root storage (READ-ACCESS)
         xTempSeek->seek( 0 );
         aArgs[0] <<= xTempIn;
-        aArgs[1] <<= ElementModes::ELEMENT_READ;
+        aArgs[1] <<= ElementModes::READ;
         m_xDefaultCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY_THROW );
 
         // Customizable root storage (READWRITE-ACCESS)
         aArgs[0] <<= m_aUserConfigURL + aConfigSubFolder;
-        aArgs[1] <<= ElementModes::ELEMENT_READWRITE;
+        aArgs[1] <<= ElementModes::READWRITE;
         m_xUserCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY );
 
         // Create wrapper object for module user interface configuration managers, so they are able to call commit/revert on
@@ -402,21 +402,21 @@ throw ( NoSuchElementException, RuntimeException)
         try
         {
             xDefaultConfigModuleStorage = Reference< XStorage >( m_xDefaultCfgRootStorage->openStorageElement(
-                                                                    sShort, ElementModes::ELEMENT_READ ), UNO_QUERY_THROW );
+                                                                    sShort, ElementModes::READ ), UNO_QUERY_THROW );
 
             if ( m_xUserCfgRootStorage.is() )
             {
                 try
                 {
                     xUserConfigModuleStorage = Reference< XStorage >( m_xUserCfgRootStorage->openStorageElement(
-                                                                        sShort, ElementModes::ELEMENT_READWRITE ), UNO_QUERY );
+                                                                        sShort, ElementModes::READWRITE ), UNO_QUERY );
                 }
                 catch( ::com::sun::star::io::IOException& )
                 {
                     try
                     {
                         xUserConfigModuleStorage = Reference< XStorage >( m_xUserCfgRootStorage->openStorageElement(
-                                                                            sShort, ElementModes::ELEMENT_READ ), UNO_QUERY );
+                                                                            sShort, ElementModes::READ ), UNO_QUERY );
                     }
                     catch( com::sun::star::uno::Exception& )
                     {
