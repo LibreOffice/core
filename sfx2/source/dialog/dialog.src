@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:46:08 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ String STR_APPLY
     Text[ polish ] = "Zastosuj";
     Text[ portuguese_brazilian ] = "Apply";
     Text[ japanese ] = "“K—p";
-    Text[ korean ] = "Apply";
+    Text[ korean ] = "ΐϋΏλ";
     Text[ chinese_simplified ] = "ΜΧΣΓ";
     Text[ chinese_traditional ] = "®M¥Ξ";
     Text[ turkish ] = "Apply";
@@ -584,7 +584,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE[ chinese_traditional ] = "³o­Σ¦WΊΩ¬O¤@­ΣΌΠ·ΗΌΛ¦΅ªΊ¦WΊΩ΅C\n½Π±z±Δ¥Ξ¨δ¥L¤@­Σ¦WΊΩ΅C";
     MESSAGE[ arabic ] = "εΠΗ ΗαΗΣγ γζΜζΟ γΣΘήΗπ ίΗΣγ δγΨ ΗέΚΡΗΦν.\nΗαΡΜΗΑ ΗΞΚνΗΡ ΗΣγ ΒΞΡ.";
     MESSAGE[ greek ] = "Το όνομα αυτό υπάρχει ήδη ως όνομα προτύπου προεπιλογής.\nΠαρακαλώ επιλέξτε άλλο όνομα.";
-    MESSAGE[ korean ] = "ΐΜ ΐΜΈ§ΐΊ ΐΜΉΜ ±βΊ»Ό­½ΔΖΔΐΟΐΗ ΐΜΈ§ΐΤ΄Ο΄Ω.\n΄ΩΈ¥ ΐΜΈ§ΐ» Α¤ΗΟ½Κ½ΓΏΐ.";
+    MESSAGE[ korean ] = "ΐΜ ΐΜΈ§ΐΊ ΐΜΉΜ ±βΊ»Ό­½ΔΖΔΐΟΐΗ ΐΜΈ§ΐΤ΄Ο΄Ω.\n΄ΩΈ¥ ΐΜΈ§ΐ» Ό±ΕΓΗΟ½Κ½ΓΏΐ.";
     MESSAGE[ turkish ] = "Bu ad bir standart ώablon adύ olarak kullanύlύyor.\nBaώka bir ad seηin.";
     MESSAGE[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
@@ -636,7 +636,7 @@ String STR_DELETE_STYLE
     Text[ chinese_traditional ] = "±z―uªΊ­n§R°£ΌΛ¦΅ $1 ΅S";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗαδγΨ $1Ώ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγράψετε το πρότυπο $1?";
-    Text[ korean ] = "Ό­½ΔΖΔΐΟ$1ΐ» Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "Ό­½ΔΖΔΐΟ$1ΐ» (Έ¦) Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "$1 ώablonlarύnύ gerηekten silmek istiyor musunuz?";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
@@ -660,7 +660,7 @@ String STR_DELETE_STYLE_USED
     Text[ chinese_traditional ] = "±z­n§R°£ªΊ¬O¤@­Σ¨Ο¥ΞªΊΌΛ¦΅΅T\n";
     Text[ arabic ] = "ΓδΚ ΗαΒδ ΘΥΟΟ ΝΠέ δγΨ ήνΟ ΗαΗΣΚΞΟΗγ!\n";
     Text[ greek ] = "Διαγράφετε ένα πρότυπο που εφαρμόστηκε!\n";
-    Text[ korean ] = "ΐϋΏλµΘ Ό­½ΔΖΔΐΟΐ» »θΑ¦ΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!\n";
+    Text[ korean ] = "»ηΏλΐΪ΄Β ΐϋΏλµΘ Ό­½ΔΖΔΐΟΐ» »θΑ¦ΗΟ°ν ΐΦ½ΐ΄Ο΄Ω!\n";
     Text[ turkish ] = "Kullanύlan bir ώablonu siliyorsunuz!\n";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
