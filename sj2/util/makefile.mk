@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2001-05-16 11:12:35 $
+#   last change: $Author: obo $ $Date: 2001-09-18 10:34:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,19 +64,13 @@ PRJ=..
 
 PRJNAME=sj2
 TARGET=sj
-USE_LDUMP2=TRUE
+TARGETTYPE=GUI
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-LDUMP2=LDUMP4
 
 # ------------------------------------------------------------------
-
-.IF "$(header)" == ""
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=  \
@@ -108,7 +102,6 @@ DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =$(TARGET)
 DEF1DES     =JavaCPP
 DEF1CEXP    =Java
-.ENDIF
 
 JARTARGET=classes.jar
 JARCLASSDIRS=stardiv
