@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 12:28:29 $
+ *  last change: $Author: dvo $ $Date: 2001-02-12 12:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,8 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
     xPropSet( rPropSet )
 {
     OUString sD, sPoints, sViewBox;
-    sal_Int32 nWidth, nHeight;
+    sal_Int32 nWidth = 0;
+    sal_Int32 nHeight = 0;
 
     const SvXMLTokenMap& rTokenMap =
         bPath ? GetImport().GetShapeImport()->GetPathShapeAttrTokenMap()
@@ -234,14 +235,14 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             case XML_TOK_PATHSHAPE_D:
                 sD = rValue;
                 break;
-            case XML_TOK_PATHSHAPE_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
-                                                                    rValue);
-                break;
-            case XML_TOK_PATHSHAPE_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-                                                                    rValue);
-                break;
+//          case XML_TOK_PATHSHAPE_WIDTH:
+//              GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+//                                                                  rValue);
+//              break;
+//          case XML_TOK_PATHSHAPE_HEIGHT:
+//              GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+//                                                                  rValue);
+//              break;
             }
         }
         else
@@ -254,14 +255,14 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
             case XML_TOK_POLYGONSHAPE_POINTS:
                 sPoints = rValue;
                 break;
-            case XML_TOK_POLYGONSHAPE_WIDTH:
-                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
-                                                                    rValue);
-                break;
-            case XML_TOK_POLYGONSHAPE_HEIGHT:
-                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
-                                                                    rValue);
-                break;
+//          case XML_TOK_POLYGONSHAPE_WIDTH:
+//              GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+//                                                                  rValue);
+//              break;
+//          case XML_TOK_POLYGONSHAPE_HEIGHT:
+//              GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+//                                                                  rValue);
+//              break;
             }
         }
     }
