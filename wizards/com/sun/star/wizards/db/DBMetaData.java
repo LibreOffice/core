@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 14:20:03 $
+*  last change: $Author: vg $ $Date: 2005-03-08 15:35:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -114,7 +114,6 @@ import com.sun.star.sdbcx.XTablesSupplier;
 public class DBMetaData {
 
     public XNameAccess xTableNames;
-
     public XNameAccess xQueryNames;
     private XInteractionHandler oInteractionHandler;
     private XNameAccess xNameAccess;
@@ -159,6 +158,7 @@ public class DBMetaData {
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;
 
+
     public DBMetaData(XMultiServiceFactory xMSF) {
         getInterfaces(xMSF);
         InitializeWidthList();
@@ -170,6 +170,8 @@ public class DBMetaData {
         getInterfaces(xMSF);
         InitializeWidthList();
     }
+
+
 
 
     public NumberFormatter getNumberFormatter(){
@@ -198,6 +200,7 @@ public class DBMetaData {
     }
 
 
+
     void getInterfaces(XMultiServiceFactory xMSF) {
         try {
             this.xMSF = xMSF;
@@ -210,6 +213,7 @@ public class DBMetaData {
             exception.printStackTrace(System.out);
         }
     }
+
 
 
     public void setCommandTypes() {
@@ -233,7 +237,6 @@ public class DBMetaData {
             }
         }
     }
-
 
     public boolean hasTableByName(String _stablename){
         getTableNames();
@@ -272,7 +275,6 @@ public class DBMetaData {
         CommandObject oQueryObject = new CommandObject(_QueryName, com.sun.star.sdb.CommandType.QUERY);
         this.CommandObjects.addElement(oQueryObject);
     }
-
 
     public class CommandObject {
         public XNameAccess xColumns;
@@ -336,7 +338,6 @@ public class DBMetaData {
         WidthList[13][0] = DataType.DATE; // ==  91;
         WidthList[14][0] = DataType.TIME; // ==  92;
         WidthList[15][0] = DataType.TIMESTAMP; // ==  93;
-        WidthList[16][0] = DataType.BOOLEAN; // ==  16;
         // NumericTypes are all types where aggregate functions can be performed on.
         // Similarly to a major competitor date/time/timmestamp fields are not included
         NumericTypes = new int[9];
@@ -485,7 +486,6 @@ public class DBMetaData {
             {
                 bdisposeConnection = true;
                 com.sun.star.container.XChild child = (com.sun.star.container.XChild)UnoRuntime.queryInterface(com.sun.star.container.XChild.class, xConnection);
-
                 xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, child.getParent());
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xDataSource);
                 if ( xPSet != null )
@@ -817,7 +817,6 @@ public class DBMetaData {
             return null;
         }
     }
-
 
     public boolean storeDatabaseDocumentToTempPath(XComponent _xcomponent, String _storename){
     try {
