@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:10:49 $
+#   last change: $Author: rt $ $Date: 2004-05-07 16:31:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,7 @@ IDLFILES=\
     NavigationToolBar.idl\
     ScrollBar.idl\
     SpinButton.idl\
+    RichTextControl.idl\
 
 # ------------------------------------------------------------------
 
