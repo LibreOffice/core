@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Date: 2003-11-18 16:13:44 $
+ *  last change: $Date: 2003-12-11 11:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ public abstract class ComplexTestCase implements ComplexTest {
                                         subEntry.entryName,null);
                  MethodThread th = new MethodThread(testMethod, this,
                                                     (java.io.PrintWriter)log);
+                 log.println("Starting " + testMethod.getName());
                  th.start();
                  try {
                      int sleepingStep = 1000;
@@ -177,11 +178,9 @@ public abstract class ComplexTestCase implements ComplexTest {
                     subEntry.ErrorMsg = subEntry.State;
                     continue;
                  } else {
-                     System.out.println("Finished " + testMethod.getName());
+                     log.println("Finished " + testMethod.getName());
                      if (th.hasErrorMessage()) {
-                        subEntry.State="Test did sleep for " +
-                                            (mThreadTimeOut / 1000) +
-                                            " seconds and has been killed!";
+                        subEntry.State=th.getErrorMessage();
                         subEntry.hasErrorMsg = true;
                         subEntry.ErrorMsg = subEntry.State;
                         continue;
@@ -300,7 +299,7 @@ public abstract class ComplexTestCase implements ComplexTest {
             message += msg + "\r\n";
             log.println(msg);
             if (!cont) {
-                throw new RuntimeException(msg);
+                throw new AssureException(msg);
             }
         }
     }
@@ -327,6 +326,14 @@ public abstract class ComplexTestCase implements ComplexTest {
         this.state &= state;
         this.message += msg + "\r\n";
         log.println(msg);
+    }
+
+
+    public class AssureException extends RuntimeException {
+        public AssureException(String msg) {
+            super(msg);
+        }
+
     }
 }
 
