@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 10:09:00 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             {
                 < "Autom·tico" ; SFXSTYLEBIT_AUTO ; > ;
                 < "Todos los estilos" ; SFXSTYLEBIT_ALL ; > ;
-                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
                 < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
                 < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
                 < "Estilos de capÌtulos" ; SWSTYLEBIT_CHAPTER ; > ;
@@ -623,7 +623,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Automatycznie" ; SFXSTYLEBIT_AUTO ; > ;
             < "Wszystkie style" ; SFXSTYLEBIT_ALL ; > ;
             < "Uøyte style" ; SFXSTYLEBIT_USED ; > ;
-            < "Style uøytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Style indywidualne" ; SFXSTYLEBIT_USERDEF ; > ;
             < "Style tekstu" ; SWSTYLEBIT_TEXT ; > ;
             < "Style rozdzia≥u" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Style listy" ; SWSTYLEBIT_LIST ; > ;
@@ -726,7 +726,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             < "¿⁄µø" ; SFXSTYLEBIT_AUTO ; > ;
             < "∏µÁ ¿Ø«¸" ; SFXSTYLEBIT_ALL ; > ;
-            < "ªÁøÎµ»°°¿Ø«¸." ; SFXSTYLEBIT_USED ; > ;
+            < "ªÁøÎµ» ¿Ø«¸." ; SFXSTYLEBIT_USED ; > ;
             < "ªÁøÎ¿⁄ ¡§¿« ¿Ø«¸" ; SFXSTYLEBIT_USERDEF ; > ;
             < "≈ÿΩ∫∆Æ ¿Ø«¸" ; SWSTYLEBIT_TEXT ; > ;
             < "¿Â ¿Ø«¸" ; SWSTYLEBIT_CHAPTER ; > ;
@@ -835,7 +835,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             filterlist [ spanish ] =
             {
                 < "Todos" ; SFXSTYLEBIT_ALL ; > ;
-                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
                 < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
             };
             filterlist [ french ] =
@@ -901,7 +901,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
             < "Uøyte style" ; SFXSTYLEBIT_USED ; > ;
-            < "Style uøytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Style indywidualne" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ japanese ] =
         {
@@ -948,7 +948,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "¿¸∫Œ" ; SFXSTYLEBIT_ALL ; > ;
-            < "ªÁøÎµ»°°¿Ø«¸" ; SFXSTYLEBIT_USED ; > ;
+            < "ªÁøÎµ» ¿Ø«¸" ; SFXSTYLEBIT_USED ; > ;
             < "ªÁøÎ¿⁄ ¡§¿« ¿Ø«¸" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Karakter biÁimi";
@@ -1026,7 +1026,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             filterlist [ spanish ] =
             {
                 < "Todos" ; SFXSTYLEBIT_ALL ; > ;
-                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
                 < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
             };
             filterlist [ french ] =
@@ -1092,7 +1092,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
             < "Uøyte style" ; SFXSTYLEBIT_USED ; > ;
-            < "Style uøytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Style indywidualne" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ japanese ] =
         {
@@ -1139,7 +1139,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         FilterList [ korean ] =
         {
             < "¿¸∫Œ" ; SFXSTYLEBIT_ALL ; > ;
-            < "ªÁøÎµ»°°¿Ø«¸" ; SFXSTYLEBIT_USED ; > ;
+            < "ªÁøÎµ» ¿Ø«¸" ; SFXSTYLEBIT_USED ; > ;
             < "ªÁøÎ¿⁄ ¡§¿« ¿Ø«¸" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "«erÁeve biÁimi";
@@ -1217,7 +1217,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             filterlist [ spanish ] =
             {
                 < "Todos" ; SFXSTYLEBIT_ALL ; > ;
-                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
                 < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
             };
             filterlist [ french ] =
@@ -1278,7 +1278,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
             < "Uøyte style" ; SFXSTYLEBIT_USED ; > ;
-            < "Style uøytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Style indywidualne" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ japanese ] =
         {
@@ -1397,7 +1397,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             filterlist [ spanish ] =
             {
                 < "Todos" ; SFXSTYLEBIT_ALL ; > ;
-                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
                 < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
             };
             filterlist [ french ] =
@@ -1472,7 +1472,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         {
             < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
             < "Uøyte style" ; SFXSTYLEBIT_USED ; > ;
-            < "Style uøytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Style indywidualne" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         FilterList [ japanese ] =
         {
@@ -1518,8 +1518,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ korean ] =
         {
-            < "∏µŒ" ; SFXSTYLEBIT_ALL ; > ;
-            < "ªÁøÎµ»°°¿Ø«¸" ; SFXSTYLEBIT_USED ; > ;
+            < "¿¸√º" ; SFXSTYLEBIT_ALL ; > ;
+            < "ªÁøÎµ» ¿Ø«¸" ; SFXSTYLEBIT_USED ; > ;
             < "ªÁøÎ¿⁄ ¡§¿« ¿Ø«¸" ; SFXSTYLEBIT_USERDEF ; > ;
         };
         Text[ turkish ] = "Numaralama biÁimi";
@@ -1748,13 +1748,14 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument tekstowy";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text";
     Text[ japanese ] = "%PRODUCTNAME 6.0 ï∂èëƒﬁ∑≠“›ƒ";
-    Text[ korean ] = "%PRODUCTNAME 5.0°°Text ";
+    Text[ korean ] = "%PRODUCTNAME 6.0 ≈ÿΩ∫∆Æ πÆº≠";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 Œƒ±æŒƒµµ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 §Â¶r§Â•Û";
     Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ arabic ] = "„” ‰œ ‰’ „‰ %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Texto";
     Text[ finnish ] = "Text (%PRODUCTNAME 5.0)";
+    Text[ language_user1 ] = " ";
 };
 
 
@@ -2197,7 +2198,7 @@ String STR_STATSTR_W4WWRITE
     Text[ russian ] = "›ÍÒÔÓÚ ‰ÓÍÛÏÂÌÚ‡...";
     Text[ polish ] = "Eksportowanie dokumentu...";
     Text[ japanese ] = "ï∂èëÇÃ¥∏ΩŒﬂ∞ƒ...";
-    Text[ chinese_traditional ] = "øÈ•X§Â•Û...";
+    Text[ chinese_traditional ] = "∂◊•X§Â•Û...";
     Text[ arabic ] = "Ã«—Ì  ’œÌ— «·„” ‰œ...";
     Text[ dutch ] = "Document wordt geÎxporteerd...";
     Text[ chinese_simplified ] = " ‰≥ˆŒƒµµ...";
@@ -3000,6 +3001,26 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     DEFBUTTON = WB_DEF_NO ;
     MESSAGE = "Die Quelltextansicht kann nur angezeigt werden, wenn das Dokument im HTML-Format gespeichert wurde.\nMˆchten Sie das Dokument jetzt im HTML-Format speichern?" ;
     MESSAGE [ English ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?" ;
+    MESSAGE[ english_us ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ portuguese ] = "SÛ È possÌvel ver o texto-fonte se o documento for guardado em formato HTML.\nGuardar o documento em formato HTML?";
+    MESSAGE[ russian ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ greek ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ dutch ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ french ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ spanish ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ finnish ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ italian ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ danish ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ swedish ] = "K‰lltextvyn gÂr inte att visa n‰r dokumentet har sparats i HTML-format.\nVill du spara dokumentet i HTML-format nu?";
+    MESSAGE[ polish ] = "Widok tekstu ürÛd≥owego wyúwietlony zostanie dopiero po zapisaniu dokumentu w formacie HTML.\nZapisaÊ dokument w formacie HTML?";
+    MESSAGE[ portuguese_brazilian ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ japanese ] = "HTML ø∞ΩÇÕƒﬁ∑≠“›ƒÇ™ HTML å`éÆÇ≈ï€ë∂Ç≥ÇÍÇƒÇ¢ÇÈÇ∆Ç´ÇµÇ©ï\\é¶Ç≥ÇÍÇ‹ÇπÇÒÅB\nƒﬁ∑≠“›ƒÇ HTML å`éÆÇ≈ï€ë∂ÇµÇ‹Ç∑Ç©ÅB";
+    MESSAGE[ korean ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ chinese_simplified ] = "÷ª”–µ±Œƒµµ¥Ê≈Ã≥… HTML ∏Ò Ω ±£¨≤≈ƒ‹πª≤Èø¥ HTML µƒ‘¥Œƒº˛°£\nŒƒµµ“™¥Ê≈Ã≥… HTML ∏Ò Ω?";
+    MESSAGE[ chinese_traditional ] = "•u¶≥∑Ì¿…Æ◊¿x¶sHTMLÆÊ¶°Æ…°A§~Ø‡¿Àµ¯HTML≠Ï©l¿…°C\n≠n¿x¶s¶®HTMLÆÊ¶°?";
+    MESSAGE[ turkish ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ arabic ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+    MESSAGE[ catalan ] = "The HTML source can only be shown if the document is saved in HTML format.\nWould you like to save the document as HTML?";
 };
 String STR_ABSTRACT_TITLE
 {
@@ -3068,7 +3089,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text [ swedish ] = "Aktuell formatmall:  " ;
     Text [ danish ] = "Aktuel skabelon: " ;
     Text [ italian ] = "Modello corrente: " ;
-    Text [ spanish ] = "Plantilla actual:  " ;
+    Text [ spanish ] = "Estilo actual: " ;
     Text [ french ] = "ModËle actif : " ;
     Text [ dutch ] = "Actuele sjabloon  " ;
     Text [ portuguese ] = "Modelo actual: " ;
@@ -3163,7 +3184,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ polish ] = "nieznany";
     Text[ portuguese_brazilian ] = "unknown";
     Text[ japanese ] = "ïsñæ";
-    Text[ korean ] = "æÀ∑¡¡Æ ¿÷¡ˆ  æ ¿Ω";
+    Text[ korean ] = "æÀ∑¡¡Æ ¿÷¡ˆ æ ¿Ω";
     Text[ chinese_simplified ] = "≤ª√˜";
     Text[ chinese_traditional ] = "§£©˙";
     Text[ turkish ] = "unknown";
@@ -3171,6 +3192,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
