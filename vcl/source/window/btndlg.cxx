@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btndlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:32:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_BTNDLG_CXX
 #include <tools/ref.hxx>
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -76,7 +75,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 
