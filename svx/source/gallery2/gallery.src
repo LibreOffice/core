@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:14:35 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2085,7 +2085,7 @@ String RID_SVXSTR_GALLERY_ICONVIEW
     Text[ finnish ] = "Symbol view";
     Text[ italian ] = "Vista simboli";
     Text[ danish ] = "Symbol view";
-    Text[ swedish ] = "Symbol view";
+    Text[ swedish ] = "Symbolvy";
     Text[ polish ] = "Symbol view";
     Text[ portuguese_brazilian ] = "Symbol view";
     Text[ japanese ] = "ｱｲｺﾝ表示";
@@ -2110,7 +2110,7 @@ String RID_SVXSTR_GALLERY_LISTVIEW
     Text[ finnish ] = "Detail view";
     Text[ italian ] = "Vista dettagli";
     Text[ danish ] = "Detail view";
-    Text[ swedish ] = "Detail view";
+    Text[ swedish ] = "Detaljvy";
     Text[ polish ] = "Detail view";
     Text[ portuguese_brazilian ] = "Detail view";
     Text[ japanese ] = "詳細表示";
@@ -2701,6 +2701,7 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
 
 
 
