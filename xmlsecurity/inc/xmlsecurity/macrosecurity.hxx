@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-23 09:58:20 $
+ *  last change: $Author: mt $ $Date: 2004-07-26 06:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ private:
 
     DECL_LINK(          OkBtnHdl, void* );
 public:
-    MacroSecurity( Window* pParent, cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
+    MacroSecurity( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
     virtual             ~MacroSecurity();
 
     inline void     EnableReset( bool _bEnable = true );
