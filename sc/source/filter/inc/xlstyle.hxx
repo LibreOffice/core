@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:20:56 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLSTYLE_HXX
 #define SC_XLSTYLE_HXX
 
@@ -318,7 +317,7 @@ public:
                             { return Color( GetDefColorData( nXclIndex ) ); }
 
 private:
-    const ColorData*    mpColorTable;       /// The table with RGB values.
+    const ColorData*    mpnColorTable;      /// The table with RGB values.
     ColorData           mnWindowText;       /// System window text color.
     ColorData           mnWindowBack;       /// System window background color.
     ColorData           mnFaceColor;        /// System button background color.
