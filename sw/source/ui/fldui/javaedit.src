@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:56:28 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ english_us ] = "Script type" ;
         Text [ portuguese_brazilian ] = "Tipo de script" ;
         Text [ swedish ] = "Skriptt~yp" ;
-        Text [ danish ] = "Script-type" ;
+        Text [ danish ] = "Scripttype" ;
         Text [ italian ] = "Tipo di script" ;
         Text [ spanish ] = "Tipo de script" ;
         Text [ french ] = "T~ype de script" ;
@@ -105,6 +105,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ hebrew ] = "Script-T~yp";
         Text[ hindi ] = "स्क्रिप्ट वर्ग";
         Text[ slovak ] = "Druh skriptu";
+        Text[ hungarian ] = "Parancsfájl típusa";
+        Text[ slovenian ] = "Vrsta skripta";
     };
     Edit ED_TYPE
     {
@@ -148,6 +150,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ hebrew ] = "~URL";
         Text[ hindi ] = "URL";
         Text[ slovak ] = "URL";
+        Text[ hungarian ] = "URL";
+        Text[ slovenian ] = "URL";
     };
     Edit ED_URL
     {
@@ -174,7 +178,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ portuguese_brazilian ] = "~Texto" ;
         Text [ portuguese ] = "~Texto" ;
         Text [ finnish ] = "~Teksti" ;
-        Text [ danish ] = "Tekst" ;
+        Text [ danish ] = "~Tekst" ;
         Text [ french ] = "Texte" ;
         Text [ swedish ] = "~Text" ;
         Text [ dutch ] = "~Tekst" ;
@@ -198,6 +202,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
         Text[ slovak ] = "~Text";
+        Text[ hungarian ] = "~Forráskód";
+        Text[ slovenian ] = "~Besedilo";
     };
     MultiLineEdit ED_EDIT
     {
@@ -243,6 +249,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषय";
         Text[ slovak ] = "Obsah";
+        Text[ hungarian ] = "Tartalom";
+        Text[ slovenian ] = "Vsebina";
     };
     OKButton BTN_POST_OK
     {
@@ -303,6 +311,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ hebrew ] = "Script bearbeiten";
         Text[ hindi ] = "स्क्रिप्ट् संपादन";
         Text[ slovak ] = "Upraviť skript";
+        Text[ hungarian ] = "Parancsfájl szerkesztése";
+        Text[ slovenian ] = "Uredi skript";
     };
     String STR_JAVA_INSERT
     {
@@ -335,6 +345,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ hebrew ] = "‮הוספת קוד לביצוע‬";
         Text[ hindi ] = "स्क्रिप्ट् जोड़ो";
         Text[ slovak ] = "Vložiť skript";
+        Text[ hungarian ] = "Parancsfájl beszúrása";
+        Text[ slovenian ] = "Vstavi skript";
     };
     Text [ english_us ] = "Edit Script" ;
     Text [ portuguese_brazilian ] = "Editar Script" ;
@@ -362,8 +374,11 @@ ModalDialog DLG_JAVAEDIT
     Text[ hebrew ] = "Script bearbeiten";
     Text[ hindi ] = "स्क्रिप्ट् संपादन";
     Text[ slovak ] = "Upraviť skript";
+    Text[ hungarian ] = "Parancsfájl szerkesztése";
+    Text[ slovenian ] = "Uredi skript";
 };
  // ********************************************************************** EOF
+
 
 
 
