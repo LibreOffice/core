@@ -12,11 +12,15 @@ public class LetterWizardDialogResources extends Resource {
     final static int RID_LETTERWIZARDSALUTATION_START = 3090;
     final static int RID_LETTERWIZARDROADMAP_START = 3100;
     final static int RID_LETTERWIZARDLANGUAGE_START = 3110;
+    final static int RID_RID_COMMON_START = 500;
 
     protected String[] RoadmapLabels = new String[7];
     protected String[] SalutationLabels = new String[3];
     protected String[] GreetingLabels = new String[3];
     protected String[] LanguageLabels = new String[2];
+
+    String resOverwriteWarning;
+    String resTemplateDescription;
 
     String resLetterWizardDialog_title;
     String resLabel9_value;
@@ -142,6 +146,12 @@ public class LetterWizardDialogResources extends Resource {
         loadSalutationResources();
         loadGreetingResources();
         loadLanguageResources();
+        loadCommonResources();
+    }
+
+    private void loadCommonResources() {
+        resOverwriteWarning = getResText(RID_RID_COMMON_START + 19);
+        resTemplateDescription = getResText(RID_RID_COMMON_START + 20);
     }
 
     private void loadRoadmapResources() {
@@ -149,11 +159,13 @@ public class LetterWizardDialogResources extends Resource {
             RoadmapLabels[i] = getResText(RID_LETTERWIZARDROADMAP_START + i);
         }
     }
+
     private void loadSalutationResources() {
         for (int i = 1; i < 4; i++) {
             SalutationLabels[i-1] = getResText(RID_LETTERWIZARDSALUTATION_START + i);
         }
     }
+
     private void loadGreetingResources() {
         for (int i = 1; i < 4; i++) {
             GreetingLabels[i-1] = getResText(RID_LETTERWIZARDGREETING_START + i);
