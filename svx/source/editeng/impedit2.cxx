@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-06 15:54:49 $
+ *  last change: $Author: mt $ $Date: 2001-03-07 10:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,7 +729,11 @@ EditSelection ImpEditEngine::Paste( EditView* pView, BOOL bUseSpecial )
         uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
         uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
         if ( xClipboard.is() )
+        {
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             xDataObj = xClipboard->getContents();
+            Application::AcquireSolarMutex( nRef );
+        }
 
         if ( xDataObj.is() )
         {
@@ -2939,7 +2943,9 @@ BOOL ImpEditEngine::HasData( ExchangeType eExchange )
         uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
         if ( xClipboard.is() )
         {
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+            Application::AcquireSolarMutex( nRef );
             if ( xDataObj.is() )
             {
                 datatransfer::DataFlavor aFlavor;
@@ -3028,7 +3034,11 @@ EditSelection ImpEditEngine::PasteData( EditPaM aPaM, ExchangeType eExchange, BO
         uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
         uno::Reference< datatransfer::clipboard::XClipboard > xClipboard( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
         if ( xClipboard.is() )
+        {
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             xDataObj = xClipboard->getContents();
+            Application::AcquireSolarMutex( nRef );
+        }
 
         if ( xDataObj.is() )
         {
