@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:53:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,29 @@
 using namespace ::com::sun::star;
 
 //----------------------------------------------
+void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
+{
+#ifdef WNT
+    if ( m_pOleComponent )
+    {
+        try
+        {
+            m_pOleComponent->RunObject();
+        }
+        catch( embed::WrongStateException& )
+        {
+            GetRidOfComponent();
+            throw;
+        }
+    }
+    else
+#endif
+    {
+        throw embed::WrongStateException();
+    }
+}
+
+//----------------------------------------------
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
                                                         const uno::Sequence< embed::VerbDescriptor >& aVerbList )
 {
@@ -148,55 +171,78 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         return;
 
 #ifdef WNT
-    // TODO: additional verbs can be a problem, since nobody knows how the object
-    //       will behave after activation
-
-    if ( nNewState == embed::EmbedStates::LOADED )
+    if ( m_pOleComponent )
     {
-        // This means just closing of the current object
-        // If component can not be closed the object stays in loaded state
-        // and it holds reference to "incomplete" component
-        // If the object is switched to running state later
-        // the component will become "complete"
-        GetRidOfComponent();
-    }
-    else if ( nNewState == embed::EmbedStates::RUNNING || nNewState == embed::EmbedStates::ACTIVE )
-    {
-        if ( m_nObjectState == embed::EmbedStates::LOADED )
-        {
-            // if the target object is in loaded state and a different state is specified
-            // as a new one the object first must be switched to running state.
+        // TODO: additional verbs can be a problem, since nobody knows how the object
+        //       will behave after activation
 
-            // the component can exist already in nonrunning state
-            // it can be created during loading to detect type of object
-            CreateOleComponentAndLoad_Impl( m_pOleComponent );
+        sal_Int32 nOldState = m_nObjectState;
+        StateChangeNotification_Impl( sal_True, nOldState, nNewState );
 
-            m_pOleComponent->RunObject();
-            m_nObjectState = embed::EmbedStates::RUNNING;
-            if ( m_nObjectState == nNewState )
-                return;
-        }
+        try
+        {
+            if ( nNewState == embed::EmbedStates::LOADED )
+            {
+                // This means just closing of the current object
+                // If component can not be closed the object stays in loaded state
+                // and it holds reference to "incomplete" component
+                // If the object is switched to running state later
+                // the component will become "complete"
+                GetRidOfComponent();
+                m_nObjectState = nNewState;
+                StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+            }
+            else if ( nNewState == embed::EmbedStates::RUNNING || nNewState == embed::EmbedStates::ACTIVE )
+            {
+                if ( m_nObjectState == embed::EmbedStates::LOADED )
+                {
+                    // if the target object is in loaded state and a different state is specified
+                    // as a new one the object first must be switched to running state.
 
-        // so now the object is either switched from Active to Running state or vise versa
-        if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
-        {
-            // execute OPEN verb, if object does not reach active state it is an object's problem
-            m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
+                    // the component can exist already in nonrunning state
+                    // it can be created during loading to detect type of object
+                    CreateOleComponentAndLoad_Impl( m_pOleComponent );
+
+                    SwitchComponentToRunningState_Impl();
+                    m_nObjectState = embed::EmbedStates::RUNNING;
+                    StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+                    if ( m_nObjectState == nNewState )
+                        return;
+                }
+
+                // so now the object is either switched from Active to Running state or vise versa
+                // the notification about object state change will be done asynchronously
+                if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
+                {
+                    // execute OPEN verb, if object does not reach active state it is an object's problem
+                    m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
+                    m_nObjectState = nNewState;
+                }
+                else if ( m_nObjectState == embed::EmbedStates::ACTIVE && nNewState == embed::EmbedStates::RUNNING )
+                {
+                    m_pOleComponent->CloseObject();
+                    m_pOleComponent->RunObject(); // Should not fail, the object already was active
+                    m_nObjectState = nNewState;
+                }
+                else
+                {
+                    throw embed::UnreachableStateException();
+                }
+            }
+            else
+                throw embed::UnreachableStateException();
         }
-        else if ( m_nObjectState == embed::EmbedStates::ACTIVE && nNewState == embed::EmbedStates::RUNNING )
+        catch( uno::Exception& )
         {
-            m_pOleComponent->CloseObject();
-            m_pOleComponent->RunObject();
-        }
-        else
-        {
-            throw embed::UnreachableStateException();
+            StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+            throw;
         }
     }
     else
 #endif
+    {
         throw embed::UnreachableStateException();
-
+    }
 }
 
 //----------------------------------------------
@@ -213,21 +259,23 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
-    if ( m_nObjectState == embed::EmbedStates::LOADED )
+    if ( m_pOleComponent )
     {
-        // the list of supported verbs can be retrieved only when object is in running state
-        throw embed::NeedsRunningStateException(); // TODO:
+        if ( m_nObjectState == embed::EmbedStates::LOADED )
+        {
+            // the list of supported verbs can be retrieved only when object is in running state
+            throw embed::NeedsRunningStateException(); // TODO:
+        }
+
+        // the list of states can only be guessed based on standard verbs,
+        // since there is no way to detect what additional verbs do
+        return GetReachableStatesList_Impl( m_pOleComponent->GetVerbList() );
     }
-
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
-
-    // the list of states can only be guessed based on standard verbs,
-    // since there is no way to detect what additional verbs do
-    return GetReachableStatesList_Impl( m_pOleComponent->GetVerbList() );
-#else
-    return uno::Sequence< sal_Int32 >();
+    else
 #endif
+    {
+        return uno::Sequence< sal_Int32 >();
+    }
 }
 
 //----------------------------------------------
@@ -264,25 +312,44 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
-    if ( m_nObjectState == embed::EmbedStates::LOADED )
+    if ( m_pOleComponent )
     {
-        // if the target object is in loaded state
-        // it must be switched to running state to execute verb
+        sal_Int32 nOldState = m_nObjectState;
 
-        // the component can exist already in noncomplete state
-        // it can be created during loading
-        CreateOleComponentAndLoad_Impl( m_pOleComponent );
-        m_pOleComponent->RunObject();
-        m_nObjectState = embed::EmbedStates::RUNNING;
+        // TODO/LATER detect target state here and do a notification
+        // StateChangeNotification_Impl( sal_True, nOldState, nNewState );
+        if ( m_nObjectState == embed::EmbedStates::LOADED )
+        {
+            // if the target object is in loaded state
+            // it must be switched to running state to execute verb
+
+            // the component can exist already in noncomplete state
+            // it can be created during loading
+            CreateOleComponentAndLoad_Impl( m_pOleComponent );
+            SwitchComponentToRunningState_Impl();
+            m_nObjectState = embed::EmbedStates::RUNNING;
+        }
+
+        try {
+            if ( !m_pOleComponent )
+                throw uno::RuntimeException();
+
+            m_pOleComponent->ExecuteVerb( nVerbID );
+        }
+        catch( uno::Exception& )
+        {
+            StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+            throw;
+        }
+
+        // the following notification will be done asynchronously
+        // StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
     }
-
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
-
-    m_pOleComponent->ExecuteVerb( nVerbID );
-#else
-    throw embed::UnreachableStateException();
+    else
 #endif
+    {
+        throw embed::UnreachableStateException();
+    }
 }
 
 //----------------------------------------------
@@ -298,19 +365,21 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 #ifdef WNT
-    if ( m_nObjectState == embed::EmbedStates::LOADED )
+    if ( m_pOleComponent )
     {
-        // the list of supported verbs can be retrieved only when object is in running state
-        throw embed::NeedsRunningStateException(); // TODO:
+        if ( m_nObjectState == embed::EmbedStates::LOADED )
+        {
+            // the list of supported verbs can be retrieved only when object is in running state
+            throw embed::NeedsRunningStateException(); // TODO:
+        }
+
+        return m_pOleComponent->GetVerbList();
     }
-
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
-
-    return m_pOleComponent->GetVerbList();
-#else
-    return uno::Sequence< embed::VerbDescriptor >();
+    else
 #endif
+    {
+        return uno::Sequence< embed::VerbDescriptor >();
+    }
 }
 
 //----------------------------------------------
@@ -399,19 +468,27 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
+    if ( m_nObjectState == -1 )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object must be in running state!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
-    if ( !m_pOleComponent )
-        throw uno::RuntimeException();
+    if ( m_pOleComponent )
+    {
+        // TODO: probably a temporary solution before a helper is implemented
+        if ( m_nObjectState == embed::EmbedStates::LOADED )
+            changeState( m_nObjectState == embed::EmbedStates::RUNNING );
 
-    return m_pOleComponent->GetMiscStatus( nAspect );
-#else
-    throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+        return m_pOleComponent->GetMiscStatus( nAspect );
+    }
+    else
 #endif
+    {
+        return 0;
+        // TODO/LATER: not sure that returning of a default value is better
+        // throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+        //                          uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    }
 }
 
 //----------------------------------------------
