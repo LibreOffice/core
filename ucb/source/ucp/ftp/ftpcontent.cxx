@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-29 12:43:13 $
+ *  last change: $Author: kso $ $Date: 2002-11-12 11:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
  **************************************************************************
 
  *************************************************************************/
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HDL_
+#include <com/sun/star/beans/PropertyAttribute.hdl>
+#endif
 
 #include "ftpdynresultset.hxx"
 #include "ftpresultsetfactory.hxx"
