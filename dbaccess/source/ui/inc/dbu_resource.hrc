@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 18:05:29 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@
 
 #define STR_COULDNOTCREATE_DRIVERMANAGER    256
 #define STR_NOREGISTEREDDRIVER              257
-#define STR_INVALIDREGISTEREDDRIVER         258
 #define STR_COULDNOTCONNECT                 259
 #define STR_COULDNOTCONNECT_PLEASECHECK     260
 #define STR_NOTABLEINFO                     261
@@ -175,6 +174,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2000/10/26 18:05:29  fs
+ *  DLG_PARAMETERS
+ *
  *  Revision 1.7  2000/10/26 14:52:48  oj
  *  new strings
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:17:01 $
+ *  last change: $Author: fs $ $Date: 2000-10-30 15:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,30 +189,6 @@ String STR_NOREGISTEREDDRIVER
     Text[ arabic ] = "áÇ íæÌÏ ÈÑäÇãÌ ÊÔÛíá ãÓÌá ááÜ URL #connurl#!";
 };
 
-String STR_INVALIDREGISTEREDDRIVER
-{
-    Text = "Der registrierte Treiber für die URL #connurl# unterstuetzt ein notwendiges Interface (com.sun.star.sdbc.XDataDefinitionSupplier) nicht.";
-    Text [ english ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text [ english_us ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ portuguese ] = "O controlador registado para o URL #connurl# não suporta uma das interfaces exigidas (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ russian ] = "Çàğåãèñòğèğîâàííûé äğàéâåğ äëÿ URL #connurl# íå ïîääåğæèâàåò íåîáõîäèìîãî èíòåğôåéñà (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ greek ] = "Ôï ğñüãñáììá ïäŞãçóçò ğïõ İ÷åé äçëùèåß ãéá ôï URL #connurl# äåí õğïóôçñßæåé ìéá áğáéôïıìåíç äéáóıíäåóç (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ dutch ] = "De geregistreerde driver voor URL #connurl# ondersteunt geen noodzakelijk interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ french ] = "Le pilote inscrit pour l'URL #connurl# ne supporte pas une des interfaces requises (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ spanish ] = "El controlador registrado para la URL #connurl# no apoya una interfaz necesaria (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ italian ] = "Il driver registrato per l'URL #connurl# non supporta un'interfaccia necessaria (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ danish ] = "Den registrerede driver for URL'en #connurl# understøtter ikke et krævet interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ swedish ] = "Den registrerade drivrutinen för URL:en #connurl# understöder inte ett nödvändigt gränssnitt (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ polish ] = "Sterownik zarajestrowny dla URL #connurl# nie ob³uguje wymaganego interfejsu (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ portuguese_brazilian ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ japanese ] = "URL #connurl# —p‚É“o˜^‚³‚ê‚½ÄŞ×²ÊŞ‚Í—v‹‚³‚ê‚é²İÀ°Ìª²½(com.sun.star.sdbc.XDataDefinitionSupplier)‚ğx‰‡‚µ‚Ü‚¹‚ñB";
-    Text[ korean ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ chinese_simplified ] = "Îª URL#connurl# µÇ¼ÇµÄÇı¶¯³ÌĞò²»Ö§³Ö±ØĞèÒªµÄ½éÃæ(com.sun.star.sdbc.XDataDefinitionSupplier)¡£";
-    Text[ chinese_traditional ] = "¬° URL #connurl# µn°OªºÅX°Êµ{¦¡¤£¤ä´©¥²¤£¥i¤Öªº¤¶­±(com.sun.star.sdbc.XDataDefinitionSupplier)¡C";
-    Text[ turkish ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
-    Text[ arabic ] = "ÈÑäÇãÌ ÇáÊÔÛíá ÇáãÓÌá ááÜ URL #connurl# áÇ íÏÚã æÇÌåÉ ãØáæÈÉ (com.sun.star.sdbc.XDataDefinitionSupplier) .";
-};
-
 String STR_COULDNOTCONNECT
 {
     Text = "Es konnte keine Verbindung für die URL #connurl# aufgebaut werden.";
@@ -286,6 +262,9 @@ String STR_NOTABLEINFO
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/27 15:17:01  kz
+ *  Merge SRC610: 27.10.00 - 17:16:44 (NoBranch)
+ *
  *  Revision 1.2  2000/10/09 12:37:02  fs
  *  STR_COULDNOTCONNECT
  *
