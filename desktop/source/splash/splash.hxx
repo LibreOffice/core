@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:52:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ private:
     // don't allow anybody but ourselves to create instances of this class
     SplashScreen(const SplashScreen&);
     SplashScreen(void);
-    operator =(const SplashScreen&);
+    SplashScreen operator =(const SplashScreen&);
 
     SplashScreen(const Reference< XMultiServiceFactory >& xFactory);
 
