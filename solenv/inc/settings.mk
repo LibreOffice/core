@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.159 $
+#   $Revision: 1.160 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-16 12:57:51 $
+#   last change: $Author: kz $ $Date: 2005-01-14 11:34:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1084,16 +1084,7 @@ RSCDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
 .ENDIF
 
 RSCDEFIMG*=default_images
-.IF "$(rscres)"!=""
-RSCRES=$(rscres)
-.ENDIF
-.IF "$(RSCRES)"!=""
-RSCGLOINC=$(RSCRES)
-.ELSE
-RSCGLOINC=$(SOLARSRC)$/$(RSCDEFIMG)$/res
-.ENDIF
 
-RSCLOCINC=$(PRJ)$/res
 RSCEXTINC=.
 
 .IF "$(DEBUG)" != ""
