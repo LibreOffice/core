@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: sb $ $Date: 2001-06-05 15:21:49 $
+#   last change: $Author: dbo $ $Date: 2001-10-26 12:49:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,13 +101,11 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
 
-.IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(COMNAME)"=="msci"
 SHL1VERSIONMAP=msci.map
-.ELIF "$(OS)$(CPU)"=="SOLARISS"
+.ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=sols.map
-.ELIF "$(OS)$(CPU)"=="SOLARISI"
-SHL1VERSIONMAP=soli.map
-.ELIF "$(OS)$(CPU)"=="LINUXI"
+.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc2"
 SHL1VERSIONMAP=lngi.map
 .ENDIF
 

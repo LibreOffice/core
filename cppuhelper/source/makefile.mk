@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: dbo $ $Date: 2001-10-11 14:40:43 $
+#   last change: $Author: dbo $ $Date: 2001-10-26 12:45:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,7 +146,7 @@ SLOFILES= \
         $(SLO)$/tdmgr.obj		\
         $(SLO)$/implementationentry.obj
 
-SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COM)
+SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
@@ -165,14 +165,11 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 
-.IF "$(OS)$(CPU)$(COM)"=="WNTIMSC"
+.IF "$(COMNAME)"=="msci"
 SHL1VERSIONMAP=msvc_win32_intel.map
-.ELIF "$(OS)$(CPU)$(COM)"=="SOLARISSC52"
+.ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
-.ELIF "$(OS)$(CPU)$(COM)"=="SOLARISIC52"
-# use same map for cc solaris
-SHL1VERSIONMAP=cc5_solaris_sparc.map
-.ELIF "$(OS)$(CPU)$(COM)"=="LINUXIGCC"
+.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc2"
 SHL1VERSIONMAP=gcc2_linux_intel.map
 .ENDIF
 
