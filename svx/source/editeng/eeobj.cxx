@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eeobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-09 16:50:46 $
+ *  last change: $Author: mt $ $Date: 2001-03-07 14:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 
         delete pEditEngine;
         delete pTmpPool;
+    }
+    else
+    {
+        throw( datatransfer::UnsupportedFlavorException() );
     }
 
     return aAny;
