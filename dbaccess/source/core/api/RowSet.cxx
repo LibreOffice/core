@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 10:49:38 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,11 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_MAXROWS,              PROPERTY_ID_MAXROWS,                0,                              &m_nMaxRows,            ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)) );
     registerProperty(PROPERTY_USER,                 PROPERTY_ID_USER,                   PropertyAttribute::TRANSIENT,   &m_aUser,               ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_PASSWORD,             PROPERTY_ID_PASSWORD,               PropertyAttribute::TRANSIENT,   &m_aPassword,           ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+
+    registerProperty(PROPERTY_UPDATE_CATALOGNAME,   PROPERTY_ID_UPDATE_CATALOGNAME,     PropertyAttribute::BOUND,       &m_aUpdateCatalogName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_UPDATE_SCHEMANAME,    PROPERTY_ID_UPDATE_SCHEMANAME,      PropertyAttribute::BOUND,       &m_aUpdateSchemaName,   ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+    registerProperty(PROPERTY_UPDATE_TABLENAME,     PROPERTY_ID_UPDATE_TABLENAME,       PropertyAttribute::BOUND,       &m_aUpdateTableName,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
+
 }
 // -------------------------------------------------------------------------
 //  typedef ::comphelper::OPropertyArrayUsageHelper<ORowSet> ORowSet_Prop;
@@ -1716,13 +1721,14 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
             m_xStatement = m_xActiveConnection->prepareStatement(
                                         aSql = getComposedQuery(m_aActiveCommand, bUseEscapeProcessing,xTables));
 
-            Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
-            xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
-            xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
-            if(m_nFetchDirection != FetchDirection::FORWARD)
-                xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
-
+            if(m_xStatement.is())
             {
+                Reference<XPropertySet> xProp(m_xStatement,UNO_QUERY);
+                xProp->setPropertyValue(PROPERTY_RESULTSETTYPE,makeAny(m_nResultSetType));
+                xProp->setPropertyValue(PROPERTY_RESULTSETCONCURRENCY,makeAny(m_nResultSetConcurrency));
+                if(m_nFetchDirection != FetchDirection::FORWARD)
+                    xProp->setPropertyValue(PROPERTY_FETCHDIRECTION,makeAny((sal_Int32)m_nFetchDirection));
+
                 {
                     Reference<XParameters> xParam(m_xStatement,UNO_QUERY);
                     sal_Int32 i = 1;
@@ -1776,40 +1782,88 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         }
                     }
                     Reference< XResultSet> xRs = m_xStatement->executeQuery();
-                    m_pCache = new ORowSetCache(xRs,m_xComposer,m_aUpdateTableName,m_bModified,m_bNew);
+                    // create the composed table name
+                    ::rtl::OUString aComposedTableName;
+                    if(m_aUpdateTableName.getLength())
+                        composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False);
+
+                    m_pCache = new ORowSetCache(xRs,m_xComposer,aComposedTableName,m_bModified,m_bNew);
                     m_aCurrentRow = m_pCache->getEnd();
+
+                    // get the locale
+                    ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
+                    Locale aLocale;
+                    pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
+
+                    // get the numberformatTypes
+                    OSL_ENSHURE(m_xActiveConnection.is(),"No ActiveConnection");
+                    Reference< XNumberFormatTypes> xNumberFormatTypes;
+                    Reference< XChild> xChild(m_xActiveConnection,UNO_QUERY);
+                    if(xChild.is())
+                    {
+                        Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+                        if(xProp.is())
+                        {
+                            Reference< XNumberFormatsSupplier> xNumberFormat;
+                            xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER) >>= xNumberFormat;
+                            if(xNumberFormat.is())
+                                m_xNumberFormatTypes = Reference< XNumberFormatTypes>(xNumberFormat->getNumberFormats(),UNO_QUERY);
+                        }
+                    }
+
+                    ORowSetDataColumns_COLLECTION aColumns;
+                    ::std::vector< ::rtl::OUString> aNames;
+                    ::rtl::OUString aDescription;
+                    sal_Int32 nFormatKey = 0;
 
                     if(!m_xColumns.is())
                     {
-                        OSL_ENSHURE(0,"HELLO!");
+                        // use the meta data
+                        Reference<XResultSetMetaDataSupplier> xMetaSup(m_xStatement,UNO_QUERY);
+                        Reference<XResultSetMetaData> xMetaData = xMetaSup->getMetaData();
+
+                        try
+                        {
+                            for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
+                            {
+                                // retrieve the name of the column
+                                ::rtl::OUString aName = xMetaData->getColumnName(i + 1);
+
+                                ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
+                                                                                    this,
+                                                                                    this,
+                                                                                    i+1,
+                                                                                    aDescription,
+                                                                                    m_aCurrentRow,
+                                                                                    m_pCache->getEnd());
+                                aColumns.push_back(pColumn);
+                                pColumn->setName(aName);
+                                aNames.push_back(aName);
+
+                                try
+                                {
+                                    nFormatKey = assginFormatByType(xMetaData->isCurrency(i+1),
+                                                                    xMetaData->getColumnType(i+1),
+                                                                    aLocale);
+
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int16)0));
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,::cppu::bool2any(sal_False));
+                                }
+                                catch(Exception&)
+                                {
+                                }
+                            }
+                        }
+                        catch (SQLException&)
+                        {
+                        }
                     }
                     else
                     {
-                        ORowSetDataColumns_COLLECTION aColumns;
-                        ::std::vector< ::rtl::OUString> aNames;
-
-                        ::rtl::OUString aDescription;
-
-                        // set the numberformatTypes
-                        ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
-                        Locale aLocale;
-                        pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
-
-                        OSL_ENSHURE(m_xActiveConnection.is(),"No ActiveConnection");
-                        Reference< XNumberFormatTypes> xNumberFormatTypes;
-                        Reference< XChild> xChild(m_xActiveConnection,UNO_QUERY);
-                        if(xChild.is())
-                        {
-                            Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-                            if(xProp.is())
-                            {
-                                Reference< XNumberFormatsSupplier> xNumberFormat;
-                                xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER) >>= xNumberFormat;
-                                if(xNumberFormat.is())
-                                    m_xNumberFormatTypes = Reference< XNumberFormatTypes>(xNumberFormat->getNumberFormats(),UNO_QUERY);
-                            }
-                        }
-
+                        // create the rowset columns
                         Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
                         const ::rtl::OUString* pBegin   = aSeq.getConstArray();
                         const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
@@ -1834,7 +1888,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                             try
                             {
                                 pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
-                                sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
+                                nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
                                 if(!nFormatKey)
                                     nFormatKey = assginFormatByType(::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY)),
                                                                     ::comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_TYPE)),
@@ -1849,11 +1903,11 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                             catch(Exception&)
                             {
                             }
-
                         }
-                        m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
-                                                            aColumns,*this,m_aColumnsMutex,aNames);
                     }
+                    // now create the columns we need
+                    m_pColumns = new ORowSetDataColumns(m_xActiveConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
+                                                        aColumns,*this,m_aColumnsMutex,aNames);
                 }
             }
         }
