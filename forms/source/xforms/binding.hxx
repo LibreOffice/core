@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binding.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:48:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 // includes for parent classes
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase8.hxx>
 #include <propertysetbase.hxx>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
@@ -94,6 +94,7 @@ namespace com { namespace sun { namespace star {
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 
 // includes for member variables
 #include "pathexpression.hxx"
@@ -117,7 +118,8 @@ namespace xforms
  *
  * See http://www.w3.org/TR/xforms/ for more information.
  */
-typedef cppu::ImplInheritanceHelper7<
+
+typedef cppu::ImplInheritanceHelper8<
     PropertySetBase,
     com::sun::star::form::binding::XValueBinding,
     com::sun::star::form::binding::XListEntrySource,
@@ -125,7 +127,8 @@ typedef cppu::ImplInheritanceHelper7<
     com::sun::star::util::XModifyBroadcaster,
     com::sun::star::container::XNamed,
     com::sun::star::xml::dom::events::XEventListener,
-    com::sun::star::lang::XUnoTunnel
+    com::sun::star::lang::XUnoTunnel,
+    com::sun::star::util::XCloneable
 > Binding_t;
 
 class Binding : public Binding_t
@@ -141,6 +144,7 @@ public:
     typedef com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> XNameContainer_t;
     typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> XNode_t;
     typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNodeList> XNodeList_t;
+    typedef com::sun::star::uno::Reference<com::sun::star::util::XCloneable> XCloneable_t;
     typedef com::sun::star::uno::Sequence<sal_Int8> IntSequence_t;
     typedef com::sun::star::uno::Sequence<rtl::OUString> StringSequence_t;
     typedef std::vector<MIP> MIPs_t;
@@ -177,6 +181,9 @@ private:
     /// an XPath-expression to calculate values
     ComputedExpression maCalculate;
 
+    /// the XML namespaces used for XML names/XPath-expressions in this binding
+    XNameContainer_t mxNamespaces;
+
     /// a type name
     rtl::OUString msTypeName;
 
@@ -205,7 +212,8 @@ private:
     bool mbBindingModified; /// if true, bindingModified needs to be called
 
 
-    static comphelper::PropertySetInfo* _getPropertySetInfo();
+    void initializePropertySet();
+
 
 public:
     Binding();
@@ -244,19 +252,26 @@ public:
     rtl::OUString getCalculateExpression() const;        /// get calculate MIP
     void setCalculateExpression( const rtl::OUString& ); /// set calculate MIP
 
-    rtl::OUString getTypeName() const;         /// get type name MIP (static)
-    void setTypeName( const rtl::OUString& );  /// set type name MIP (static)
+    rtl::OUString getType() const;         /// get type name MIP (static)
+    void setType( const rtl::OUString& );  /// set type name MIP (static)
 
     // a binding expression can only be interpreted with respect to
-    // suitable namespace declarations. We collect those in a this
-    // attribute
+    // suitable namespace declarations. We collect those in the model and in a binding.
+
+    // access to a binding's namespace
+    // (set-method only changes local namespaces (but may add to model))
     XNameContainer_t getBindingNamespaces() const;  /// set binding namespaces
     void setBindingNamespaces( const XNameContainer_t& ); /// get binding nmsp.
+
+    // access to the model's namespaces
+    // (set-method changes model's namespaces (unless a local one is present))
+    XNameContainer_t getModelNamespaces() const;  /// set model namespaces
+    void setModelNamespaces( const XNameContainer_t& ); /// get model nmsp.
 
 
     // read-only properties that map MIPs to control data source properties
     bool getReadOnly() const;   // MIP readonly
-    bool getEnabled() const;    // MIP relevant
+    bool getRelevant() const;   // MIP relevant
 
 
     // missing binding properties:
@@ -294,6 +309,10 @@ public:
     /// is this binding valid? (are constraint, type and required MIPs ok?)
     bool isValid();
 
+    /// determine whether this binding currently performs a useful
+    /// function, r whether is may be discarded
+    bool isUseful();
+
     /// explain why binding is invalid
     rtl::OUString explainInvalid();
 
@@ -327,6 +346,7 @@ public:
     typedef com::sun::star::lang::WrappedTargetException WrappedTargetException_t;
     typedef com::sun::star::uno::RuntimeException RuntimeException_t;
     typedef com::sun::star::form::binding::IncompatibleTypesException IncompatibleTypesException_t;
+    typedef com::sun::star::form::binding::InvalidBindingStateException InvalidBindingStateException_t;
     typedef com::sun::star::lang::NullPointerException NullPointerException_t;
     typedef com::sun::star::lang::IndexOutOfBoundsException IndexOutOfBoundsException_t;
 
@@ -383,6 +403,18 @@ private:
     /// 'clear' this binding - remove all listeners, etc.
     void clear();
 
+    /// distribute MIPs from current node recursively to childs
+    void distributeMIP( const XNode_t &rxNode );
+
+    /// implement get*Namespaces()
+    XNameContainer_t _getNamespaces() const;
+
+    /// implement set*Namespaces()
+    void _setNamespaces( const XNameContainer_t&, bool bBinding );
+
+    /// set a useful default binding ID (if none is set)
+    void _checkBindingID();
+
 public:
     /// for debugging purposes only: get the MIPs defined by this binding
     const MIP* _getMIP();
@@ -409,6 +441,7 @@ public:
 
     virtual void SAL_CALL setValue( const Any_t& aValue )
         throw( IncompatibleTypesException_t,
+               InvalidBindingStateException_t,
                NoSupportException_t,
                RuntimeException_t );
 
@@ -461,30 +494,6 @@ public:
                RuntimeException_t );
 
 
-
-    //
-    // XPropertySet & friends:
-    //   implement abstract methods from PropertySetHelper
-    //
-
-protected:
-
-    virtual void _setPropertyValues(
-        const comphelper::PropertyMapEntry** ppEntries,
-        const Any_t* pValues )
-        throw( UnknownPropertyException_t,
-               PropertyVetoException_t,
-               IllegalArgumentException_t,
-               WrappedTargetException_t );
-
-    virtual void _getPropertyValues(
-        const comphelper::PropertyMapEntry** ppEntries,
-        Any_t* pValue )
-        throw( UnknownPropertyException_t,
-               WrappedTargetException_t );
-
-
-
     //
     // XModifyBroadcaster & friends:
     //   inform listeners about changes in our values
@@ -534,6 +543,14 @@ public:
     //
 
     virtual sal_Int64 SAL_CALL getSomething( const IntSequence_t& )
+        throw( RuntimeException_t );
+
+
+    //
+    // XCloneable
+    //
+
+    virtual XCloneable_t SAL_CALL createClone()
         throw( RuntimeException_t );
 };
 
