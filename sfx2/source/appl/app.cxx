@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:01:42 $
+ *  last change: $Author: hro $ $Date: 2001-05-14 09:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,11 @@ String GetURL_Impl( const String& rName )
     ::rtl::OUString aProgName, aTmp;
     ::vos::OStartupInfo aInfo;
     aInfo.getExecutableFile( aProgName );
+#ifdef TF_FILEURL
+    aTmp = aProgName;
+#else
     ::osl::FileBase::getFileURLFromNormalizedPath( aProgName, aTmp );
+#endif
     INetURLObject aObj( aTmp );
     bool bWasAbsolute;
     INetURLObject aURL = aObj.smartRel2Abs( rName, bWasAbsolute );
