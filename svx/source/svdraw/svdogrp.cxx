@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:42:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #endif
 
@@ -102,10 +102,6 @@
 #include "svdoedge.hxx"  // #32383# Die Verbinder nach Move nochmal anbroadcasten
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-
-#ifndef _PERSIST_HXX //autogen
-#include <so3/persist.hxx>
-#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include "svxids.hrc"
@@ -147,12 +143,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpSdrObjGroupLink: public so3::SvBaseLink
+class ImpSdrObjGroupLink: public sfx2::SvBaseLink
 {
     SdrObject* pSdrObj;
 public:
     ImpSdrObjGroupLink( SdrObject* pObj1 )
-        : ::so3::SvBaseLink( so3::LINKUPDATE_ONCALL, FORMAT_FILE ),
+        : ::sfx2::SvBaseLink( sfx2::LINKUPDATE_ONCALL, FORMAT_FILE ),
         pSdrObj( pObj1 )
     {}
     virtual ~ImpSdrObjGroupLink();
@@ -602,7 +598,7 @@ void SdrObjGroup::ImpLinkAnmeldung()
          pModel->GetPersist() )
     {
         // Nicht 2x Anmelden
-        INetURLObject aURLObj( ::URIHelper::SmartRelToAbs( pModel->GetPersist()->GetFileName(), FALSE,
+        INetURLObject aURLObj( ::URIHelper::SmartRelToAbs( String() /*pModel->GetPersist()->GetFileName()*/, FALSE,
                                                            INetURLObject::WAS_ENCODED,
                                                            INetURLObject::DECODE_UNAMBIGUOUS ) );
         INetURLObject aLinkURLObj( ::URIHelper::SmartRelToAbs( pData->aFileName, FALSE,
