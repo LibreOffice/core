@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 15:31:18 $
+ *  last change: $Author: os $ $Date: 2001-01-23 09:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg(Window* pWin, uno::Reference< container::XN
     sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
 
     String sTmp(GetText());
+    aNewNameED.SetText(xNamed->getName());
     sTmp += String(xNamed->getName());
     SetText(sTmp);
 
