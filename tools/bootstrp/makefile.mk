@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2000-12-11 12:58:44 $
+#   last change: $Author: hjs $ $Date: 2000-12-12 18:34:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,12 +100,6 @@ OBJFILES=                       \
     $(OBJ)$/minormk.obj 	\
     $(OBJ)$/fattr.obj
 
-.IF "$(UPD)" < "590"
-OBJFILES += 			\
-    $(OBJ)$/geninfo.obj 	\
-    $(OBJ)$/parser.obj
-.ENDIF
-
 SLOFILES=                   \
     $(SLO)$/sstring.obj     \
     $(SLO)$/appdef.obj      \
@@ -122,12 +116,6 @@ SLOFILES=                   \
     $(SLO)$/shellprp.obj 	\
     $(SLO)$/minormk.obj 	\
     $(SLO)$/fattr.obj
-
-.IF "$(UPD)" < "590"
-SLOFILES += 			\
-    $(SLO)$/geninfo.obj 	\
-    $(SLO)$/parser.obj
-.ENDIF
 
 LIB1TARGET= $(LB)$/btstrp.lib
 LIB1ARCHIV= $(LB)$/libbtstrp.a
