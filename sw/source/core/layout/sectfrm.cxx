@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 15:03:18 $
+ *  last change: $Author: ama $ $Date: 2001-12-04 14:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1362,6 +1362,9 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             SwFrm* pOwn = ContainsAny();
             if( pOwn )
                 pOwn->_InvalidatePos();
+            if( Lower() && !Lower()->GetNext() && Lower()->IsColumnFrm() &&
+                Lower()->Frm().Height() != aFrm.Height() - nUpper )
+                Lower()->_InvalidateSize();
         }
         aPrt.Height( aFrm.Height() - nUpper );
 #endif
