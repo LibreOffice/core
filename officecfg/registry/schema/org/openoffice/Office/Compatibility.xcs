@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:33:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
                 <info><desc>Use OpenOffice.org 1.1 text wrapping</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean"><info><desc xml:lang="en-US">Consider wrapping style when positioning objects</desc></info>
+            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean"><info><desc>Consider wrapping style when positioning objects</desc></info>
                 <value>false</value>
             </prop>
         </group>
@@ -124,7 +124,7 @@
 		<group oor:name="WriterCompatibilityVersion">
 			<info>
 				<author>PB</author>
-				<desc xml:lang="en-US">Used by the writer compatibility flag as the last OOo version.</desc>
+				<desc>Used by the writer compatibility flag as the last OOo version.</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="OOo11" oor:type="xs:string">
@@ -132,8 +132,8 @@
 				<!--The value should only be written by the setup.-->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">OOo version 1.1.</desc>
-                    <label xml:lang="en-US">OOo version 1.1.</label>
+					<desc>OOo version 1.1.</desc>
+                    <label>OOo version 1.1.</label>
 				</info>
                 <value/>
 			</prop>
