@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:18:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ chinese_traditional ] = "Äæ®æ¦¡(~F)...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
             Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
-            Text[ korean ] = "¿­ Æ÷¸ËÆÃ...";
+            Text[ korean ] = "¿­ Æ÷¸ËÆÃ(~F)...";
             Text[ turkish ] = "Sütun formatı...";
             Text[ catalan ] = "Formateado de ~columnas...";
         };
@@ -146,10 +146,10 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ swedish ] = "Kopiera kolumnb~eskrivning";
             Text[ polish ] = "~Kopiuj opis kolumny";
             Text[ portuguese_brazilian ] = "Copy column d~escription";
-            Text[ japanese ] = "—ñ‚ÌŒ©o‚µ‚ğºËß°";
-            Text[ korean ] = "¿­ ¼³¸í º¹»ç";
-            Text[ chinese_simplified ] = "¸´ÖÆÁĞ±êÌâ";
-            Text[ chinese_traditional ] = "½Æ»s¦C¼ĞÃD";
+            Text[ japanese ] = "—ñ‚ÌŒ©o‚µ‚ğºËß°(~E)";
+            Text[ korean ] = "¿­ ¼³¸í º¹»ç(~E)";
+            Text[ chinese_simplified ] = "¸´ÖÆÁĞ±êÌâ(~E)";
+            Text[ chinese_traditional ] = "½Æ»s¦C¼ĞÃD(~E)";
             Text[ turkish ] = "Copy column d~escription";
             Text[ arabic ] = "äÓÎ æÕİ ÇáÚãæÏ";
             Text[ catalan ] = "Copy column d~escription";
@@ -355,6 +355,7 @@ String STR_VIEW_TITLE
     Text[ catalan ] = "View #";
     Text[ finnish ] = "Ansicht #";
 };
+
 
 
 
