@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-28 12:02:08 $
+ *  last change: $Author: aw $ $Date: 2001-10-22 17:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@
 ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
     : SwDrawBase( pWrtShell, pEditWin, pSwView ),
-    bMarquee(FALSE)
+    bMarquee(FALSE),
+    // #93382#
+    mbVertical(sal_False)
 {
 }
 
@@ -211,6 +213,21 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     pObj->SetItemSetAndBroadcast(aItemSet);
                 }
             }
+            else if(mbVertical && pObj && pObj->ISA(SdrTextObj))
+            {
+                // #93382#
+                SdrTextObj* pText = (SdrTextObj*)pObj;
+                SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
+
+                pText->SetVerticalWriting(TRUE);
+
+                aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
+                aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
+                aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+                pText->SetItemSet(aSet);
+            }
             if( pObj )
             {
                 SdrPageView* pPV = pSdrView->GetPageViewPvNum(0);
@@ -244,6 +261,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 void ConstRectangle::Activate(const USHORT nSlotId)
 {
     bMarquee = bCapVertical = FALSE;
+    mbVertical = sal_False;
 
     switch (nSlotId)
     {
@@ -261,9 +279,16 @@ void ConstRectangle::Activate(const USHORT nSlotId)
 
     case SID_DRAW_TEXT_MARQUEE:
         bMarquee = TRUE;
-        // no break
-    case SID_DRAW_TEXT:
+        pWin->SetDrawMode(OBJ_TEXT);
+        break;
+
     case SID_DRAW_TEXT_VERTICAL:
+        // #93382#
+        mbVertical = sal_True;
+        pWin->SetDrawMode(OBJ_TEXT);
+        break;
+
+    case SID_DRAW_TEXT:
         pWin->SetDrawMode(OBJ_TEXT);
         break;
 
@@ -287,6 +312,9 @@ void ConstRectangle::Activate(const USHORT nSlotId)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/09/28 12:02:08  jp
+      Task #92540#: set vertical at the outlineparagraph object
+
       Revision 1.3  2001/03/16 14:46:39  jp
       new: vertical support for textboxes
 
