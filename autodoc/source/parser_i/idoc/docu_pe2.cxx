@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:28:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,18 +83,6 @@ namespace csi
 {
 namespace dsapi
 {
-
-// Special handling for OOo1.1 release:
-//
-// Currently this is a one time solution to set all
-//   @since tags to value "OpenOffice.org 1.1"
-//   This has to be changed for the next version!
-//   There has to be a commandline flag and a replacement for StarOffice.
-//
-//  // KORR in future (before next release)
-//
-int G_nDO_Special_Since_OOo11 = 0;  // 0 = normal, 1 = OpenOffice 1.1, 2 = StarOffice 6.1, 3 = StarSuite 6.1
-String G_sDocuVersionString;            // Text to be used, if G_nDO_Special_Since_OOo11 ==1 or == 2 or == 3.
 
 
 const char *        AtTagTitle(
@@ -429,37 +417,39 @@ SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::info::DocuToken & let_drNewToken 
 {
     csv_assert(pCurAtTag);
 
-    // BEGIN Special handling for OOo1.1 release
-
-    // Standard case:
-    if (G_nDO_Special_Since_OOo11 == 0)
+    DT_TextToken * pToken = dynamic_cast< DT_TextToken* >(&let_drNewToken);
+    if (pToken == 0)
     {
-           pCurAtTag->AddToken(let_drNewToken);
-        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
+        delete &let_drNewToken;
         return;
     }
 
-    // Special cases:
-    if (G_nDO_Special_Since_OOo11 == 1)
-    {   // Case OpenOffice 1.1:
-//      static const String sOOo11_("OpenOffice.org 1.1");
-        pCurAtTag->AddToken(*new DT_TextToken(G_sDocuVersionString));
-    }
-    else if (G_nDO_Special_Since_OOo11 == 2)
-    {   // Case StarOffice 6.1:
-//      static const String sSO61_("StarOffice 6.1");
-        pCurAtTag->AddToken(*new DT_TextToken(G_sDocuVersionString));
-    }
-    else if (G_nDO_Special_Since_OOo11 == 3)
-    {   // Case StarSuite 6.1:
-//      static const String sSO61_("StarOffice 6.1");
-        pCurAtTag->AddToken(*new DT_TextToken(G_sDocuVersionString));
+    char cFirst = *pToken->GetText();
+    const char cCiphersend = '9' + 1;
+    if ( NOT csv::in_range('0', cFirst, cCiphersend) )
+    {
+        delete &let_drNewToken;
+        return;
     }
 
-    delete &let_drNewToken;
-    fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2Void;
+    pCurAtTag->AddToken(let_drNewToken);
+    fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2SinceAtTag;
+}
 
-    // END Special handling for OOo1.1 release
+void
+SapiDocu_PE::AddDocuToken2SinceAtTag( DYN ary::info::DocuToken & let_drNewToken )
+{
+    csv_assert(pCurAtTag);
+
+    DT_TextToken * pToken = dynamic_cast< DT_TextToken* >(&let_drNewToken);
+    if (pToken != 0)
+    {
+        String & sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
+        StreamLock sHelp(100);
+        sValue = sHelp() << sValue << pToken->GetText() << c_str;
+    }
+
+      delete &let_drNewToken;
 }
 
 const char *
