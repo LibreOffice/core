@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 14:02:12 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ namespace dbaui
     {
         DBG_CTOR(ODataView,NULL);
         OSL_ENSURE(m_pController,"Controller must be not NULL!");
+        m_pController->acquire();
     }
 
     // -------------------------------------------------------------------------
@@ -150,6 +151,7 @@ namespace dbaui
         setToolBox(NULL);
 
         enableSeparator( sal_False );
+        m_pController->release();
 
         DBG_DTOR(ODataView,NULL);
     }
@@ -251,9 +253,7 @@ namespace dbaui
     void ODataView::Resize()
     {
         Window::Resize();
-        Size aSize = GetSizePixel();
-        if(aSize.Width() > 0 && aSize.Height() > 0)
-            resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
+        resizeAll( Rectangle( Point( 0, 0), GetSizePixel() ) );
     }
     // -----------------------------------------------------------------------------
     long ODataView::PreNotify( NotifyEvent& rNEvt )
