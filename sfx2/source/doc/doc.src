@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: nf $ $Date: 2002-02-06 12:46:08 $
+ *  last change: $Author: rt $ $Date: 2002-02-21 21:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1922,7 +1922,7 @@ String STR_DOCTYPENAME_SI
     Text[ polish ] = "Prezentacja";
     Text[ portuguese_brazilian ] = "Presentation";
     Text[ japanese ] = "プレゼンテーション";
-    Text[ korean ] = "프리젠테이션";
+    Text[ korean ] = "프레젠테이션";
     Text[ chinese_simplified ] = "演示文稿";
     Text[ chinese_traditional ] = "簡報文件";
     Text[ turkish ] = "Sunu";
