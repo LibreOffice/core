@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:14:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,9 @@ namespace dbaui
         Size                        CalcOptimalSize( const Size& _rAvailable );
 
         // can the current content be cut
+        sal_Bool                    isPasteAllowed();
         sal_Bool                    isCutAllowed();
+        sal_Bool                    isCopyAllowed();
         void                        cut();
         void                        paste();
         void                        copy();
