@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:04:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         {
             // #90356# get SdOptions
             SdOptions* pOptions = SD_MOD()->GetSdOptions(pDocument->GetDocumentType());
-            sal_Bool bShowDialog(pOptions->IsShowUndoDeleteWarning());
+            //            sal_Bool bShowDialog(pOptions->IsShowUndoDeleteWarning());
+            sal_Bool bShowDialog(sal_False);
 
             // #95981# If only name is changed do not show
             // ImpUndoDeleteWarning dialog
