@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:10:06 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sheet {
@@ -331,6 +335,9 @@ service SheetCellRange
     //-------------------------------------------------------------------------
 
     /** provides functionality to import data from external data sources.
+
+        @see com::sun::star::sheet::DatabaseImportDescriptor
+
      */
     interface com::sun::star::util::XImportable;
 
@@ -364,6 +371,15 @@ service SheetCellRange
         it possible to learn about changes in the cell values.
      */
     interface com::sun::star::chart::XChartDataArray;
+
+    //=========================================================================
+
+    /**
+
+    @since #i19365#
+
+    */
+    [optional] interface com::sun::star::util::XModifyBroadcaster;
 
     //=========================================================================
 
