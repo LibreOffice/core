@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:58:07 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1496,7 +1496,7 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 *pcPrintable = '+';
                 break;
             case XK_KP_Separator:
-                nKey = KEY_COMMA; // ???
+                nKey = KEY_DECIMAL;
                 *pcPrintable = ',';
                 break;
             case XK_KP_Subtract:
@@ -1504,7 +1504,7 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
                 *pcPrintable = '-';
                 break;
             case XK_KP_Decimal:
-                nKey = KEY_POINT;
+                nKey = KEY_DECIMAL;
                 *pcPrintable = '.';
                 break;
             case XK_KP_Divide:
