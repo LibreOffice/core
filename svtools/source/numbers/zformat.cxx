@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: er $ $Date: 2002-09-06 13:41:53 $
+ *  last change: $Author: er $ $Date: 2002-09-17 16:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3426,23 +3426,25 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
 }
 
 BOOL SvNumberformat::ImpNumberFillWithThousands(
-                                String& sStr,             // Zahlstring
-                                double& rNumber,
-                                xub_StrLen k,               // Zeiger darin
-                                USHORT j,                   // Symbolzeiger
-                                USHORT nIx,                 // Teilformatstring
-                                USHORT nDigCnt)             // Anz Dig. im For.
+                                String& sStr,       // number string
+                                double& rNumber,    // number
+                                xub_StrLen k,       // position within string
+                                USHORT j,           // position of format code string
+                                USHORT nIx,         // subformat index
+                                USHORT nDigCnt)     // count of digits in format
 {
     BOOL bRes = FALSE;
-    BOOL bLeading = FALSE;                              // fuehrende 0
-    xub_StrLen nAnzLeadingChars = 0;        // Anzahl fuehrende Nullen oder Blanks
-    USHORT nThousandCnt = 0;            // Anzahl Ziffern vor letztem .
-    xub_StrLen nLeadingStringChars = 0;     // inserted StringChars vor Zahl
-    USHORT nDigitCount = 0;             // Zaehlt Vorkommaziffern
+    BOOL bLeading = FALSE;              // leading characters
+    xub_StrLen nAnzLeadingChars = 0;    // count of leading zeros or blanks
+    USHORT nThousandCnt = 0;            // count of digits before leftmost separator
+    xub_StrLen nLeadingStringChars = 0; // inserted StringChars before number
+    USHORT nDigitCount = 0;             // count of integer digits
     BOOL bStop = FALSE;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    // no normal thousands separators if number divided by thousands
+    BOOL bDoThousands = (rInfo.nThousand == 0);
     const String& rThousandSep = GetFormatter().GetNumThousandSep();
-    while (!bStop)                                      // rueckwaerts
+    while (!bStop)                                      // backwards
     {
         if (j == 0)
             bStop = TRUE;
@@ -3468,7 +3470,12 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                 break;
             case SYMBOLTYPE_THSEP:
             {
-                if (k > 0 && rInfo.nThousand == 0)
+                // #i7284# #102685# Insert separator also if number is divided
+                // by thousands and the separator is specified somewhere in
+                // between and not only at the end.
+                if ( !bDoThousands && j < NumFor[nIx].GetnAnz()-1 )
+                    bDoThousands = (rInfo.nTypeArray[j+1] != SYMBOLTYPE_THSEP);
+                if ( bDoThousands && k > 0 )
                 {
                     sStr.Insert(rInfo.sStrArray[j],k);
                     nThousandCnt = 0;
@@ -3515,16 +3522,16 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                         }
                     }
                     if (nDigitCount == nDigCnt && k > 0)
-                    {   // mehr Zahlen als Stellen
+                    {   // more digits than specified
                         ImpDigitFill(sStr, 0, k, nIx, nThousandCnt);
                     }
                 }
             }
             break;
-            case NF_KEY_CCC:                        // CCC-Waehrung
+            case NF_KEY_CCC:                        // CCC currency
                 sStr.Insert(rScan.GetCurAbbrev(), k);
             break;
-            case NF_KEY_GENERAL:                    // Standard im String
+            case NF_KEY_GENERAL:                    // "General" in string
             {
                 String sNum;
                 ImpGetOutputStandard(rNumber, sNum);
@@ -3536,7 +3543,7 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
             default:
             break;
         } // switch
-        j--;        // naechster String
+        j--;        // next format code string
     } // while
     k += nLeadingStringChars + nAnzLeadingChars;
     if (k > nLeadingStringChars)
@@ -3545,18 +3552,18 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
 }
 
 void SvNumberformat::ImpDigitFill(
-        String& sStr,                   // Zahlstring
-        xub_StrLen nStart,                  // Start der Ziffern
-        xub_StrLen& k,                  // Zeiger darin
-        USHORT nIx,                     // Index Teilstring
-        USHORT nThousandCnt )           // Anzahl seit .
+        String& sStr,                   // number string
+        xub_StrLen nStart,              // start of digits
+        xub_StrLen& k,                  // position within string
+        USHORT nIx,                     // subformat index
+        USHORT nThousandCnt )           // count of digits before leftmost separator
 {
     if (NumFor[nIx].Info().bThousand)                       // noch Ziffern da
     {                                                       // Aufuellen mit .
         const String& rThousandSep = GetFormatter().GetNumThousandSep();
         while (k > nStart)
         {
-            if (nThousandCnt > 2)
+            if (nThousandCnt == 3)
             {                                       // hier muss . dazwischen
                 sStr.Insert( rThousandSep, k );
                 nThousandCnt = 1;
