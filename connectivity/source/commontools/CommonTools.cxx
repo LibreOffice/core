@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:16:24 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 09:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,9 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
             aNewName = aNewName.replace(*pStr,'_');
             pStr = aNewName.getStr() + i;
         }
+
+    if ( !bValid )
+        aNewName = ::rtl::OUString();
 
     return aNewName;
 }
