@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 13:16:25 $
+ *  last change: $Author: fs $ $Date: 2002-12-20 08:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ namespace xmloff
 
         // initialize our style map
         m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
+        ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(getControlStylePropertyMap(), m_xPropertyHandlerFactory.getBodyPtr());
         m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr(), _rImporter);
 
         // 'initialize'
@@ -616,6 +616,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2002/10/25 13:16:25  fs
+ *  #104402# importing grid column styles now
+ *
  *  Revision 1.14  2001/09/21 16:27:53  dvo
  *  #92176# include PrinterPaperTray property
  *  SvXMLImportProperty now 'knows' the SvXMLImport in order to
