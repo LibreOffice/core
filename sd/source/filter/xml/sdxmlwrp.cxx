@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-06 07:56:18 $
+ *  last change: $Author: cl $ $Date: 2001-08-20 11:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HDL_
+#include <com/sun/star/xml/sax/SAXParseException.hdl>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -144,12 +147,18 @@
 #include <svtools/sfxecode.hxx>
 #endif
 
+#include "sderror.hxx"
 #include "sdresid.hxx"
 #include "glob.hrc"
 
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::document;
 using namespace rtl;
 using namespace comphelper;
+
+#define SD_XML_READERROR 1234
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -210,6 +219,180 @@ SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Boo
 {
 }
 
+sal_Int32 ReadThroughComponent(
+    Reference<io::XInputStream> xInputStream,
+    Reference<XComponent> xModelComponent,
+    const String& rStreamName,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pFilterName,
+    Sequence<Any> rFilterArguments,
+    const OUString& rName,
+    sal_Bool bMustBeSuccessfull,
+    sal_Bool bEncrypted )
+{
+    DBG_ASSERT(xInputStream.is(), "input stream missing");
+    DBG_ASSERT(xModelComponent.is(), "document missing");
+    DBG_ASSERT(rFactory.is(), "factory missing");
+    DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
+
+    RTL_LOGFILE_CONTEXT( aLog, "ReadThroughComponent" );
+
+    // prepare ParserInputSrouce
+    xml::sax::InputSource aParserInput;
+    aParserInput.sSystemId = rName;
+    aParserInput.aInputStream = xInputStream;
+
+    // get parser
+    Reference< xml::sax::XParser > xParser(
+        rFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        UNO_QUERY );
+    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    if( !xParser.is() )
+        return SD_XML_READERROR;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
+
+    // get filter
+    Reference< xml::sax::XDocumentHandler > xFilter(
+        rFactory->createInstanceWithArguments(
+            OUString::createFromAscii(pFilterName), rFilterArguments),
+        UNO_QUERY );
+    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    if( !xFilter.is() )
+        return SD_XML_READERROR;
+    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );
+
+    // connect parser and filter
+    xParser->setDocumentHandler( xFilter );
+
+    // connect model and filter
+    Reference < XImporter > xImporter( xFilter, UNO_QUERY );
+    xImporter->setTargetDocument( xModelComponent );
+    // finally, parser the stream
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parsing stream" );
+    try
+    {
+        xParser->parseStream( aParserInput );
+    }
+    catch( xml::sax::SAXParseException& r )
+    {
+        if( bEncrypted )
+            return ERRCODE_SFX_WRONGPASSWORD;
+
+#ifdef DEBUG
+        ByteString aError( "SAX parse exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+
+        String sErr( String::CreateFromInt32( r.LineNumber ));
+        sErr += ',';
+        sErr += String::CreateFromInt32( r.ColumnNumber );
+
+        if( rStreamName.Len() )
+        {
+            return *new TwoStringErrorInfo(
+                            (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
+                                                    : WARN_FORMAT_FILE_ROWCOL),
+                            rStreamName, sErr,
+                            ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        }
+        else
+        {
+            DBG_ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+            return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+                             ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        }
+    }
+    catch( xml::sax::SAXException& r )
+    {
+        if( bEncrypted )
+            return ERRCODE_SFX_WRONGPASSWORD;
+
+#ifdef DEBUG
+        ByteString aError( "SAX exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return SD_XML_READERROR;
+    }
+    catch( io::IOException& r )
+    {
+#ifdef DEBUG
+        ByteString aError( "IO exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return SD_XML_READERROR;
+    }
+    catch( uno::Exception& r )
+    {
+#ifdef DEBUG
+        ByteString aError( "uno exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return SD_XML_READERROR;
+    }
+
+    // success!
+    return 0;
+}
+
+sal_Int32 ReadThroughComponent(
+    SvStorage* pStorage,
+    Reference<XComponent> xModelComponent,
+    const sal_Char* pStreamName,
+    const sal_Char* pCompatibilityStreamName,
+    Reference<lang::XMultiServiceFactory> & rFactory,
+    const sal_Char* pFilterName,
+    Sequence<Any> rFilterArguments,
+    const OUString& rName,
+    sal_Bool bMustBeSuccessfull )
+{
+    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+
+    // open stream (and set parser input)
+    OUString sStreamName = OUString::createFromAscii(pStreamName);
+    if (! pStorage->IsStream(sStreamName))
+    {
+        // stream name not found! Then try the compatibility name.
+        // if no stream can be opened, return immediatly with OK signal
+
+        // do we even have an alternative name?
+        if ( NULL == pCompatibilityStreamName )
+            return 0;
+
+        // if so, does the stream exist?
+        sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
+        if (! pStorage->IsStream(sStreamName) )
+            return 0;
+    }
+
+    // get input stream
+    SvStorageStreamRef xEventsStream;
+    xEventsStream = pStorage->OpenStream( sStreamName,
+                                          STREAM_READ | STREAM_NOCREATE );
+    xEventsStream->SetBufferSize( 16*1024 );
+
+    Any aAny;
+    sal_Bool bEncrypted =
+        xEventsStream->GetProperty(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
+        aAny.getValueType() == ::getBooleanCppuType() &&
+        *(sal_Bool *)aAny.getValue();
+
+    Reference<io::XInputStream> xInputStream =
+        new utl::OInputStreamWrapper( *xEventsStream );
+
+    // read from the stream
+    return ReadThroughComponent(
+        xInputStream, xModelComponent, sStreamName, rFactory,
+        pFilterName, rFilterArguments,
+        rName, bMustBeSuccessfull, bEncrypted );
+}
+
 // -----------------------------------------------------------------------------
 
 sal_Bool SdXMLFilter::Import()
@@ -220,37 +403,55 @@ sal_Bool SdXMLFilter::Import()
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing %s", aFile.GetBuffer() );
 #endif
 
-    if( !mxModel.is() )
-    {
-        DBG_ERROR("Got NO Model in XMLImport");
-        return FALSE;
-    }
+    sal_uInt32  nRet = 0;
 
-    uno::Reference<lang::XServiceInfo> xServiceInfo(mxModel, uno::UNO_QUERY);
-
-    if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
-    {
-        DBG_ERROR( "Model is no DrawingDocument in XMLImport" );
-        return FALSE;
-    }
-
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
-
+    // Get service factory
+    Reference< lang::XMultiServiceFactory > xServiceFactory =
+            comphelper::getProcessServiceFactory();
+    DBG_ASSERT( xServiceFactory.is(),
+            "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
-    {
-        DBG_ERROR( "XMLReader::Read: got no service manager" );
-        return FALSE;
-    }
+        return sal_False;
 
-    uno::Reference< uno::XInterface> xXMLParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ) );
+/*
 
-    if( !xXMLParser.is() )
+    do
     {
-        DBG_ERROR( "com.sun.star.xml.sax.Parser service missing" );
-        return FALSE;
-    }
+
+        SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
+        SvXMLGraphicHelper*         pGraphicHelper = NULL;
+        UINT16                      nStyleFamilyMask = 0;
+        sal_Bool                    bLoadDoc = TRUE;
+
+        sal_Bool bEncrypted = sal_False;
+
+        try
+        {
+            uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+            uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
+
+            pObjectHelper = NULL;
+            pGraphicHelper = NULL;
+
+            if( pStorage )
+            {
+                SvPersist *pPersist = pDoc->GetPersist();
+                if( pPersist )
+                {
+                    pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
+                    xObjectResolver = pObjectHelper;
+                }
+
+                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
+                xGrfResolver = pGraphicHelper;
+            }
+
+*/
+    // -------------------------------------
 
     mxModel->lockControllers();
+
+    // -------------------------------------
 
     /** property map for export info set */
     PropertyMapEntry aImportInfoMap[] =
@@ -265,6 +466,25 @@ sal_Bool SdXMLFilter::Import()
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
+
+    // -------------------------------------
+
+    SdDrawDocument* pDoc = mrDocShell.GetDoc();
+    pDoc->CreateFirstPages();
+    pDoc->StopWorkStartupDelay();
+
+    // -------------------------------------
+
+    Reference< io::XActiveDataSource > xSource;
+    Reference< XInterface > xPipe;
+    Reference< document::XGraphicObjectResolver > xGraphicResolver;
+    SvXMLGraphicHelper *pGraphicHelper = 0;
+    Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+    SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+
+    Reference< lang::XComponent > xModelComp( mxModel, uno::UNO_QUERY );
+
+    // -------------------------------------
 
     // #80365# try to get an XStatusIndicator from the Medium
     if( mbShowProgress )
@@ -299,225 +519,194 @@ sal_Bool SdXMLFilter::Import()
         }
     }
 
-    sal_Bool    bRet = sal_False;
+    // -------------------------------------
+    // get the input stream (storage or stream)
+    // -------------------------------------
 
-    SvStorage* pStorage = mrMedium.GetStorage();
-
-    do
+    SvStorageStreamRef xDocStream;
+    Reference<io::XInputStream> xInputStream;
+    SvStorage *pStorage = 0;
+//  if( pMedium )
+        pStorage = mrMedium.GetStorage();
+/*
+    else
+        pStorage = pStg;
+*/
+    if( !pStorage )
     {
-        SdDrawDocument* pDoc = mrDocShell.GetDoc();
-        pDoc->CreateFirstPages();
-        pDoc->StopWorkStartupDelay();
-
-        SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
-        SvXMLGraphicHelper*         pGraphicHelper = NULL;
-        UINT16                      nStyleFamilyMask = 0;
-        sal_Bool                    bLoadDoc = TRUE;
-
-        sal_Bool bEncrypted = sal_False;
-
-        try
+//      if( pMedium )
         {
-            uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-            uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
-
-            pObjectHelper = NULL;
-            pGraphicHelper = NULL;
-
-            if( pStorage )
+            // if there is a medium and if this medium has a load environment,
+            // we get an active data source from the medium.
+            mrMedium.GetInStream()->Seek( 0 );
+            xSource = mrMedium.GetDataSource();
+            DBG_ASSERT( xSource.is(), "XMLReader:: got no data source from medium" );
+            if( !xSource.is() )
             {
-                SvPersist *pPersist = pDoc->GetPersist();
-                if( pPersist )
-                {
-                    pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
-                    xObjectResolver = pObjectHelper;
-                }
-
-                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
-                xGrfResolver = pGraphicHelper;
+                nRet = SD_XML_READERROR;
             }
-
-            uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
-
-            XML_SERVICEMAP aServices[5];
-            {
-                int i = 0;
-                // old format?
-                if( pStorage->IsStream( String( RTL_CONSTASCII_STRINGPARAM( sXML_oldContentStreamName ) ) ) )
-                {
-                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_service : sXML_import_impress_service;
-                    aServices[i++].mpStream  = sXML_oldContentStreamName;
-                }
-                else
-                {
-                    if( (mrDocShell.GetCreateMode() != SFX_CREATE_MODE_EMBEDDED) && (meFilterMode != SDXMLMODE_Organizer) )
-                    {
-                        aServices[i  ].mpService = IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service;
-                        aServices[i++].mpStream  = sXML_metaStreamName;
-                    }
-
-                    aServices[i  ].mpService = IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service;
-                    aServices[i++].mpStream  = sXML_styleStreamName;
-
-                    if( meFilterMode != SDXMLMODE_Organizer )
-                    {
-                        aServices[i  ].mpService = IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service;
-                        aServices[i++].mpStream  = sXML_contentStreamName;
-                    }
-
-                    if( meFilterMode != SDXMLMODE_Organizer )
-                    {
-                        aServices[i  ].mpService = IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service;
-                        aServices[i++].mpStream  = sXML_settingsStreamName;
-                    }
-                }
-
-                aServices[i].mpService = NULL;
-                aServices[i].mpStream  = NULL;
-            }
-
-            XML_SERVICEMAP* pServices;
-
-            for( pServices = aServices; pServices->mpService; pServices++ )
-            {
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing substream %s", pServices->mpStream );
-
-                xml::sax::InputSource                   aParserInput;
-                SvStorageStreamRef                      xIStm;
-                uno::Reference< io::XActiveDataSource > xSource;
-
-                aParserInput.sSystemId = mrMedium.GetName();
-
-                if( pStorage )
-                {
-                    String aStreamName( OUString::createFromAscii( pServices->mpStream ) );
-
-                    if( !pStorage->IsStream( aStreamName ) )
-                        continue;
-
-                    xIStm = pStorage->OpenStream( aStreamName, STREAM_READ | STREAM_NOCREATE );
-
-                    // try for old content stream name with capital 'C'
-                    if( !xIStm.Is() && pServices->mpStream == sXML_contentStreamName )
-                        xIStm = pStorage->OpenStream( OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_oldContentStreamName ) ), STREAM_READ | STREAM_NOCREATE );
-
-                    if( xIStm.Is() )
-                    {
-                        xIStm->SetVersion( pStorage->GetVersion() );
-//                      xIStm->SetKey( pStorage->GetKey() );
-                        xIStm->SetBufferSize( 16 * 1024 );
-                        aParserInput.aInputStream = new utl::OInputStreamWrapper( *xIStm );
-                    }
-                    else
-                    {
-                        DBG_ERROR( "could not open Content stream" );
-                        break;
-                    }
-
-                    uno::Any aAny;
-                    bEncrypted = xIStm->GetProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) && aAny.getValueType() == ::getBooleanCppuType() && *(sal_Bool *)aAny.getValue();
-
-                }
-                else
-                {
-                    uno::Reference< uno::XInterface > xPipe;
-
-                    mrMedium.GetInStream()->Seek( 0 );
-
-                    xSource = mrMedium.GetDataSource();
-                    DBG_ASSERT( xSource.is(), "got no data source from medium" );
-
-                    if( !xSource.is() )
-                        break;
-
-                    xPipe = xServiceFactory->createInstance( OUString::createFromAscii( "com.sun.star.io.Pipe" ) );
-                    DBG_ASSERT( xPipe.is(), "com.sun.star.io.Pipe service missing" );
-
-                    if( !xPipe.is() )
-                        break;
-
-                    xSource->setOutputStream( uno::Reference< io::XOutputStream >( xPipe, uno::UNO_QUERY ) );
-                    aParserInput.aInputStream = uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
-
-                    bEncrypted = sal_False;
-                }
-
-                if( aParserInput.aInputStream.is() )
-                {
-                    uno::Reference< xml::sax::XParser > xParser( xXMLParser, uno::UNO_QUERY );
-
-                    uno::Sequence< uno::Any > aArgs( 1 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGrfResolver.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
-                    uno::Any* pArgs = aArgs.getArray();
-                    if( xGrfResolver.is() )
-                        *pArgs++ <<= xGrfResolver;
-
-                    if( xObjectResolver.is() )
-                        *pArgs++ <<= xObjectResolver;
-
-                    if( mxStatusIndicator.is() )
-                        *pArgs++ <<= mxStatusIndicator;
-
-                    *pArgs <<= xInfoSet;
-
-                    uno::Reference< xml::sax::XDocumentHandler> xDocHandler( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pServices->mpService ), aArgs), uno::UNO_QUERY );
-
-                    if( xDocHandler.is() )
-                    {
-                        uno::Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY );
-                        if( xImporter.is() )
-                        {
-                            xImporter->setTargetDocument( xComponent );
-                            xParser->setDocumentHandler( xDocHandler );
-
-                            if( !pStorage )
-                                uno::Reference< io::XActiveDataControl >( xSource, uno::UNO_QUERY )->start();
-
-                            xParser->parseStream( aParserInput );
-                            bRet = sal_True;
-                        }
-                    }
-                }
-            }
-        }
-        catch( uno::Exception e )
-        {
-            if ( bEncrypted )
-            {
-                //  any format or parse error in an encrypted document
-                //  is treated as a wrong password.
-
-                if ( pStorage )
-                    pStorage->SetError( ERRCODE_SFX_WRONGPASSWORD );
-            }
-#ifdef DEBUG
             else
             {
-                ByteString aError( "uno Exception caught while importing:\n" );
-                aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aError.GetBuffer() );
+                // get a pipe for connecting the data source to the parser
+                xPipe = xServiceFactory->createInstance(
+                        OUString::createFromAscii("com.sun.star.io.Pipe") );
+                DBG_ASSERT( xPipe.is(),
+                        "XMLReader::Read: com.sun.star.io.Pipe service missing" );
+                if( !xPipe.is() )
+                {
+                    nRet = SD_XML_READERROR;
+                }
+                else
+                {
+                    // connect pipe's output stream to the data source
+                    Reference< io::XOutputStream > xPipeOutput( xPipe, UNO_QUERY );
+                    xSource->setOutputStream( xPipeOutput );
+
+                    xInputStream = Reference< io::XInputStream >( xPipe, UNO_QUERY );
+                }
             }
-#endif
         }
-
-
-        if( pGraphicHelper )
-            SvXMLGraphicHelper::Destroy( pGraphicHelper );
-
-        if( pObjectHelper )
-            SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     }
-    while( 0 );
-
-    // #80365# hide progress bar when load is completed
-    if(mbShowProgress)
+    else
     {
-        if(mxStatusIndicator.is())
-            mxStatusIndicator->end();
+        SvStream* pStrm = mrMedium.GetInStream();
+        pStrm->SetBufferSize( 16*1024 );
+        xInputStream = new utl::OInputStreamWrapper( *pStrm );
     }
 
-    mxModel->unlockControllers();
+    if( 0 == nRet )
+    {
+        if( pStorage )
+        {
+            pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+                                                         GRAPHICHELPER_MODE_READ,
+                                                         sal_False );
+        }
+        else
+        {
+            pGraphicHelper = SvXMLGraphicHelper::Create( GRAPHICHELPER_MODE_READ );
+        }
+        xGraphicResolver = pGraphicHelper;
+        SvPersist *pPersist = pDoc->GetPersist();;
+        if( pPersist )
+        {
+            if( pStorage )
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                            *pStorage, *pPersist,
+                                            EMBEDDEDOBJECTHELPER_MODE_READ,
+                                            sal_False );
+            else
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                            *pPersist,
+                                            EMBEDDEDOBJECTHELPER_MODE_READ );
 
-    return bRet;
+            xObjectResolver = pObjectHelper;
+        }
+    }
+
+    // -------------------------------------
+
+    if( 0 == nRet )
+    {
+
+        // prepare filter arguments
+        Sequence<Any> aFilterArgs( 5 );
+        Any *pArgs = aFilterArgs.getArray();
+        *pArgs++ <<= xGraphicResolver;
+        *pArgs++ <<= xObjectResolver;
+        *pArgs++ <<= mxStatusIndicator;
+        *pArgs++ <<= xInfoSet;
+
+        Sequence<Any> aEmptyArgs( 3 );
+        pArgs = aEmptyArgs.getArray();
+        *pArgs++ <<= mxStatusIndicator;
+        *pArgs++ <<= xInfoSet;
+
+        const OUString aName( mrMedium.GetName() );
+
+        if ( NULL != pStorage )
+        {
+            sal_uInt32 nWarn = 0;
+            sal_uInt32 nWarn2 = 0;
+            // read storage streams
+            if( meFilterMode != SDXMLMODE_Organizer )
+            {
+                nWarn = ReadThroughComponent(
+                    pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+                    IsDraw() ? sXML_import_draw_meta_service : sXML_import_impress_meta_service,
+                    aEmptyArgs, aName, sal_False );
+
+                nWarn2 = ReadThroughComponent(
+                    pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+                    IsDraw() ? sXML_import_draw_settings_service : sXML_import_impress_settings_service,
+                    aFilterArgs, aName, sal_False );
+            }
+
+            nRet = ReadThroughComponent(
+                pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+                IsDraw() ? sXML_import_draw_styles_service : sXML_import_impress_styles_service,
+                aFilterArgs, aName, sal_True );
+
+            if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
+                nRet = ReadThroughComponent(
+                   pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+                   IsDraw() ? sXML_import_draw_content_service : sXML_import_impress_content_service,
+                   aFilterArgs, aName, sal_True );
+
+            if( !nRet )
+            {
+                if( nWarn )
+                    nRet = nWarn;
+                else if( nWarn2 )
+                    nRet = nWarn2;
+            }
+        }
+        else
+        {
+            // read plain file
+            const OUString aEmptyStr;
+
+            // parse
+            if( xSource.is() )
+            {
+                Reference< io::XActiveDataControl > xSourceControl( xSource, UNO_QUERY );
+                xSourceControl->start();
+            }
+
+            nRet = ReadThroughComponent(
+                xInputStream, xModelComp, aEmptyStr, xServiceFactory,
+                IsDraw() ? sXML_import_draw_service : sXML_import_impress_service,
+                aFilterArgs, aName, sal_True, sal_False );
+        }
+    }
+
+    // -------------------------------------
+    if( pGraphicHelper )
+        SvXMLGraphicHelper::Destroy( pGraphicHelper );
+    xGraphicResolver = 0;
+    if( pObjectHelper )
+        SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
+    xObjectResolver = 0;
+
+    if( mxStatusIndicator.is() )
+        mxStatusIndicator->end();
+
+    if( mxModel.is() )
+        mxModel->unlockControllers();
+
+    switch( nRet )
+    {
+    case 0: break;
+//  case ERRCODE_SFX_WRONGPASSWORD: break;
+    case SD_XML_READERROR: break;
+    default:
+        {
+            ErrorHandler::HandleError( nRet );
+            if( IsWarning( nRet ) )
+                nRet = 0;
+        }
+    }
+    return nRet == 0;
 }
 
 // -----------------------------------------------------------------------------
