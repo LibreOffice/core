@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shdwdhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2001-07-09 20:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ sal_Bool XMLShadowedPropHdl::importXML( const OUString& rStrImpValue, Any& rValu
 {
     sal_Bool bRet = sal_False;
 
-    sal_Bool bValue = IsXMLToken( rStrImpValue, XML_NONE );
+    sal_Bool bValue = ! IsXMLToken( rStrImpValue, XML_NONE );
     rValue <<= sal_Bool(bValue);
     bRet = sal_True;
 
