@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:56:16 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,6 @@
 #endif
 
 using namespace ::com::sun::star::i18n;
-extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
-                       const SwScriptInfo* pSI );
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
 
@@ -757,7 +755,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             const BYTE nCurrScript = pFnt->GetActual(); // pScriptInfo->ScriptType( rInf.GetIdx() );
             const BYTE nNextScript = nTmp >= rInf.GetTxt().Len() ?
                                      SW_CJK :
-                                     WhichFont( nTmp, 0, pScriptInfo );
+                                     SwScriptInfo::WhichFont( nTmp, 0, pScriptInfo );
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line
