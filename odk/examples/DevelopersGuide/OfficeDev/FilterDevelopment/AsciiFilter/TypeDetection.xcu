@@ -13,7 +13,7 @@
  <node oor:name="Filters">
   <node oor:name="Ascii_Replace" oor:op="replace">
    <prop oor:name="Data" oor:type="xs:string">
-    <value>0,ascii,com.sun.star.text.TextDocument,OfficeDev.samples.Filter.AsciiReplaceFilter,268959747,,0,,</value>
+    <value>0,ascii,com.sun.star.text.TextDocument,com.sun.star.comp.ansifilter.AsciiReplaceFilter,268959747,,0,,</value>
    </prop>
    <prop oor:name="Installed" oor:type="xs:boolean">
     <value>true</value>
