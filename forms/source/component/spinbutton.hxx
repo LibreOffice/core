@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ *  $RCSfile: spinbutton.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:31:00 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
+#define FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
+
+#ifndef _FORMS_FORMCOMPONENT_HXX_
+#include "FormComponent.hxx"
+#endif
+
+#ifndef FORMS_MODULE_HXX
+#include "formsmodule.hxx"
+#endif
+
+//........................................................................
+namespace frm
+{
+//........................................................................
+
+    //====================================================================
+    //= OSpinButtonModel
+    //====================================================================
+    class OSpinButtonModel   :public OBoundControlModel
+                            ,public ::comphelper::OAggregationArrayUsageHelper< OSpinButtonModel >
+    {
+    private:
+        // <properties>
+        sal_Int32   m_nDefaultSpinValue;
+        // </properties>
+
+    protected:
+        DECLARE_DEFAULT_LEAF_XTOR( OSpinButtonModel );
+
+        // XServiceInfo
+        DECLARE_SERVICE_REGISTRATION( OSpinButtonModel );
+
+        // XPersistObject
+        DECLARE_XPERSISTOBJECT();
+
+        // XCloneable
+        DECLARE_XCLONEABLE();
+
+        // XPropertyState
+        virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
+
+        // XPropertySet and related helpers
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
+        ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+        virtual void fillProperties(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+        ) const;
+
+        // OPropertySetHelper
+        virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
+            throw ( ::com::sun::star::uno::Exception );
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
+            throw ( ::com::sun::star::lang::IllegalArgumentException );
+
+        // OBoundControlModel
+        virtual ::com::sun::star::uno::Any
+                                translateDbColumnToControlValue( );
+        virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+        virtual ::com::sun::star::uno::Any
+                                getDefaultForReset() const;
+
+        virtual ::com::sun::star::uno::Any
+                                translateExternalValueToControlValue( );
+        virtual ::com::sun::star::uno::Any
+                                translateControlValueToExternalValue( );
+        virtual sal_Bool        approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
+
+        // XCoponent and related helpers
+        virtual void SAL_CALL disposing();
+
+        IMPLEMENT_INFO_SERVICE()
+    };
+//........................................................................
+} // namespacefrm
+//........................................................................
+
+#endif // FORMS_SOURCE_COMPONENT_SPINBUTTON_HXX
