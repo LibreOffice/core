@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:26:05 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,19 @@
 #include "svx3ditems.hxx"
 #endif
 
+#ifndef _SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
+#include <svx/sdr/properties/e3dlatheproperties.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* E3dLatheObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::E3dLatheProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 TYPEINIT1(E3dLatheObj, E3dCompoundObject);
 
 /*************************************************************************
@@ -138,7 +151,8 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const PolyPolygon& rPol
     sal_uInt32 nSegCnt((sal_uInt32)rPoly3D.GetPointCount());
     if(nSegCnt && !rPoly3D.IsClosed())
         nSegCnt -= 1;
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
+
+    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -166,7 +180,8 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolyPolygon& rXP
     sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
     if(nSegCnt && !rPoly.IsClosed())
         nSegCnt -= 1;
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
+
+    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -190,7 +205,8 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const XPolygon& rXPoly)
     sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
     if(nSegCnt && !rPoly.IsClosed())
         nSegCnt -= 1;
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
+
+    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -217,7 +233,8 @@ E3dLatheObj::E3dLatheObj (E3dDefaultAttributes& rDefault, const PolyPolygon3D rP
     sal_uInt32 nSegCnt((sal_uInt32)rPoly.GetPointCount());
     if(nSegCnt && !rPoly.IsClosed())
         nSegCnt -= 1;
-    mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nSegCnt));
+
+    GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -239,17 +256,13 @@ E3dLatheObj::E3dLatheObj()
 
 void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
-    // Defaults setzen
-    ImpForceItemSet();
-
     fLatheScale = rDefault.GetDefaultLatheScale();
 
-    // #107245#
-    mpObjectItemSet->Put(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
-    mpObjectItemSet->Put(Svx3DSmoothLidsItem(rDefault.GetDefaultLatheSmoothFrontBack()));
-    mpObjectItemSet->Put(Svx3DCharacterModeItem(rDefault.GetDefaultLatheCharacterMode()));
-    mpObjectItemSet->Put(Svx3DCloseFrontItem(rDefault.GetDefaultLatheCloseFront()));
-    mpObjectItemSet->Put(Svx3DCloseBackItem(rDefault.GetDefaultLatheCloseBack()));
+    GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultLatheSmoothed()));
+    GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultLatheSmoothFrontBack()));
+    GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(rDefault.GetDefaultLatheCharacterMode()));
+    GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(rDefault.GetDefaultLatheCloseFront()));
+    GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(rDefault.GetDefaultLatheCloseBack()));
 }
 
 /*************************************************************************
@@ -312,7 +325,7 @@ void E3dLatheObj::CreateGeometry()
     if(bSinglePoly)
     {
         // nur ein Polygon erzeugen
-        mpObjectItemSet->Put(Svx3DDoubleSidedItem(TRUE));
+        GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
 
         // Fuer evtl. selbst erzeugte Normalen
         PolyPolygon3D aNormalsFront;
@@ -328,7 +341,9 @@ void E3dLatheObj::CreateGeometry()
     {
         // Eventuell doppelseitig erzeugen?
         if(!aLathePoly3D.IsClosed())
-            mpObjectItemSet->Put(Svx3DDoubleSidedItem(TRUE));
+        {
+            GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
+        }
 
         // Seiten genenrieren?
         BOOL bCreateSides = ((GetEndAngle() < 3600 && !GetDoubleSided())
@@ -454,7 +469,8 @@ PolyPolygon3D E3dLatheObj::CreateLathePolyPoly(PolyPolygon3D& rPolyPoly3D, long 
         {
             // Erstes Polygon anpassen
             aLathePolyPolygon3D[0] = CreateLathePoly(aLathePolyPolygon3D[0], nVSegs);
-            mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nVSegs));
+
+            GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nVSegs));
 
             // andere Polygone im richtigen Verhaeltnis anpassen,
             // aber nur, wenn Wert fuer erstes angepasst werden musste
@@ -736,13 +752,13 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             bPolyWasRead = sal_True;
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nTmp));
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DEndAngleItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DEndAngleItem(nTmp));
 
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
 
             rIn >> fLatheScale;
         }
@@ -792,7 +808,7 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             if(!aPolyPoly3D[0].IsClosed())
                 nTmp -= 1;
 
-            mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nTmp));
         }
 
         if (aCompat.GetBytesLeft())
@@ -806,35 +822,34 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             rIn >> aPolyPoly3D;
 
             rIn >> fTmp;
-            mpObjectItemSet->Put(Svx3DBackscaleItem((sal_uInt16)(fTmp * 100.0)));
+            GetProperties().SetObjectItemDirect(Svx3DBackscaleItem((sal_uInt16)(fTmp * 100.0)));
 
             rIn >> fTmp;
-            mpObjectItemSet->Put(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
+            GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
 
             rIn >> bTmp; // #107245# bLatheSmoothed = bTmp;
-            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(bTmp));
 
             rIn >> bTmp; // #107245# bLatheSmoothFrontBack = bTmp;
-            mpObjectItemSet->Put(Svx3DSmoothLidsItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(bTmp));
 
             rIn >> bTmp; // #107245# bLatheCharacterMode = bTmp;
-            mpObjectItemSet->Put(Svx3DCharacterModeItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(bTmp));
         }
         else
         {
             // Geometrie aus erzeugten PolyObj's rekonstruieren
-            mpObjectItemSet->Put(Svx3DBackscaleItem(100));
-
-            mpObjectItemSet->Put(Svx3DPercentDiagonalItem(10));
+            GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(100));
+            GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(10));
 
             // #107245# bLatheSmoothed = TRUE;
-            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(sal_True));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(sal_True));
 
             // #107245# bLatheSmoothFrontBack = FALSE;
-            mpObjectItemSet->Put(Svx3DSmoothLidsItem(sal_False));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(sal_False));
 
             // #107245# bLatheCharacterMode = FALSE;
-            mpObjectItemSet->Put(Svx3DCharacterModeItem(sal_False));
+            GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(sal_False));
         }
 
         if (aCompat.GetBytesLeft())
@@ -849,7 +864,7 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             sal_uInt16 nTmp;
 
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DDoubleSidedItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(bTmp));
 
             rIn >> bTmp; bCreateNormals = bTmp;
             rIn >> bTmp; bCreateTexture = bTmp;
@@ -862,7 +877,7 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 nTmp = 1;
             else
                 nTmp = 2;
-            mpObjectItemSet->Put(Svx3DNormalsKindItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DNormalsKindItem(nTmp));
 
             rIn >> bTmp;
             rIn >> bTmp2;
@@ -872,7 +887,7 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 nTmp = 1;
             else
                 nTmp = 2;
-            mpObjectItemSet->Put(Svx3DTextureProjectionXItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(nTmp));
 
             rIn >> bTmp;
             rIn >> bTmp2;
@@ -882,10 +897,10 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 nTmp = 1;
             else
                 nTmp = 2;
-            mpObjectItemSet->Put(Svx3DTextureProjectionYItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(nTmp));
 
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DShadow3DItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DShadow3DItem(bTmp));
 
             Color aCol;
 
@@ -897,24 +912,24 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // SetItem(XFillColorItem(String(), aCol));
 
             rIn >> aCol;
-            mpObjectItemSet->Put(Svx3DMaterialSpecularItem(aCol));
+            GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularItem(aCol));
 
             rIn >> aCol;
-            mpObjectItemSet->Put(Svx3DMaterialEmissionItem(aCol));
+            GetProperties().SetObjectItemDirect(Svx3DMaterialEmissionItem(aCol));
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DMaterialSpecularIntensityItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DMaterialSpecularIntensityItem(nTmp));
 
             aBackMaterial.ReadData(rIn);
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DTextureKindItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureKindItem(nTmp));
 
             rIn >> nTmp;
-            mpObjectItemSet->Put(Svx3DTextureModeItem(nTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureModeItem(nTmp));
 
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DNormalsInvertItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DNormalsInvertItem(bTmp));
         }
 
         if (aCompat.GetBytesLeft())
@@ -924,18 +939,18 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             BOOL bTmp;
 
             rIn >> bTmp; // #107245# bLatheCloseFront = bTmp;
-            mpObjectItemSet->Put(Svx3DCloseFrontItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(bTmp));
 
             rIn >> bTmp; // #107245# bLatheCloseBack = bTmp;
-            mpObjectItemSet->Put(Svx3DCloseBackItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(bTmp));
         }
         else
         {
             // #107245# bLatheCloseFront = TRUE;
-            mpObjectItemSet->Put(Svx3DCloseFrontItem(sal_True));
+            GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(sal_True));
 
             // #107245# bLatheCloseBack = TRUE;
-            mpObjectItemSet->Put(Svx3DCloseBackItem(sal_True));
+            GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(sal_True));
         }
 
         // neu ab 534: (hat noch gefehlt)
@@ -943,7 +958,7 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         {
             BOOL bTmp;
             rIn >> bTmp;
-            mpObjectItemSet->Put(Svx3DTextureFilterItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DTextureFilterItem(bTmp));
         }
     }
 
@@ -998,9 +1013,8 @@ void E3dLatheObj::ReSegment(long nHSegs, long nVSegs)
     if ((nHSegs != GetHorizontalSegments() || nVSegs != GetVerticalSegments()) &&
         (nHSegs != 0 || nVSegs != 0))
     {
-        mpObjectItemSet->Put(Svx3DHorizontalSegmentsItem(nHSegs));
-
-        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nVSegs));
+        GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nHSegs));
+        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nVSegs));
 
         bGeometryValid = FALSE;
     }
@@ -1022,8 +1036,8 @@ void E3dLatheObj::SetPolyPoly3D(const PolyPolygon3D& rNew)
         sal_Int32 nNumVSegs = aPolyPoly3D[0].GetPointCount();
         if(!aPolyPoly3D[0].IsClosed())
             nNumVSegs -= 1;
-        ImpForceItemSet();
-        mpObjectItemSet->Put(Svx3DVerticalSegmentsItem(nNumVSegs));
+
+        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nNumVSegs));
 
         bGeometryValid = FALSE;
     }
@@ -1035,94 +1049,6 @@ void E3dLatheObj::SetLatheScale(double fNew)
     {
         fLatheScale = fNew;
         bGeometryValid = FALSE;
-    }
-}
-
-// #107245#
-// void E3dLatheObj::SetLatheSmoothed(BOOL bNew)
-// {
-//  if(bLatheSmoothed != bNew)
-//  {
-//      bLatheSmoothed = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dLatheObj::SetLatheSmoothFrontBack(BOOL bNew)
-// {
-//  if(bLatheSmoothFrontBack != bNew)
-//  {
-//      bLatheSmoothFrontBack = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dLatheObj::SetLatheCharacterMode(BOOL bNew)
-// {
-//  if(bLatheCharacterMode != bNew)
-//  {
-//      bLatheCharacterMode = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dLatheObj::SetLatheCloseFront(BOOL bNew)
-// {
-//  if(bLatheCloseFront != bNew)
-//  {
-//      bLatheCloseFront = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dLatheObj::SetLatheCloseBack(BOOL bNew)
-// {
-//  if(bLatheCloseBack != bNew)
-//  {
-//      bLatheCloseBack = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-//////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-
-void E3dLatheObj::PostItemChange(const sal_uInt16 nWhich)
-{
-    // call parent
-    E3dCompoundObject::PostItemChange(nWhich);
-
-    switch(nWhich)
-    {
-        case SDRATTR_3DOBJ_HORZ_SEGS:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_VERT_SEGS:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_PERCENT_DIAGONAL:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_BACKSCALE:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_END_ANGLE:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
     }
 }
 
@@ -1190,12 +1116,12 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
             pPathObj->ToggleClosed(0);
 
         // Attribute setzen
-        SfxItemSet aSet(GetItemSet());
+        SfxItemSet aSet(GetObjectItemSet());
 
         // Linien aktivieren, um Objekt garantiert sichtbar zu machen
         aSet.Put(XLineStyleItem (XLINE_SOLID));
 
-        pPathObj->SetItemSet(aSet);
+        pPathObj->SetMergedItemSet(aSet);
     }
 
     return pPathObj;
