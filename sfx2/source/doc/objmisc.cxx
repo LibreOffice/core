@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 13:05:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,10 +968,13 @@ void SfxObjectShell::SetProgress_Impl
 void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 {
     SfxApplication* pSfxApp = SFX_APP();
-    if ( !pSfxApp->IsDowning() && !IsLoading() )
+    if ( !pSfxApp->IsDowning() && !IsLoading() && (!pFrame || !pFrame->GetFrame()->IsClosing_Impl() ) )
     {
-        if (pImp->nEventId)
+        sal_uInt16 nId = pImp->nEventId;
+        pImp->nEventId = 0;
+        if ( nId && !pImp->bHidden )
         {
+<<<<<<< objmisc.cxx
         /*TODO_AS
             if ( pFrame && !pFrame->GetFrame()->GetWindow().IsReallyShown() && !pImp->bHidden )
                 // not event before the document has become visible!
@@ -982,14 +985,12 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
             pImp->nEventId = 0;
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
             if ( !pSalvageItem )
+=======
+            // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+            // if ( !pSalvageItem )
+>>>>>>> 1.58.14.1
                 pSfxApp->NotifyEvent(SfxEventHint( nId, this ), sal_False);
         }
-
-        if ( pFrame && pFrame->ClearEventFlag_Impl() )
-            pSfxApp->NotifyEvent(SfxEventHint(SFX_EVENT_VIEWCREATED, this), sal_False);
-
-        if ( GetFrame() )
-            pSfxApp->NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, this), sal_False);
     }
 }
 
@@ -1177,27 +1178,20 @@ sal_Bool SfxObjectShell::IsLoadingFinished() const
 void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 {
     sal_Bool bSetModifiedTRUE = sal_False;
-    if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) &&
-        !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
+    if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
     {
         ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())->SetAttributes();
         pImp->bImportDone = sal_True;
-        //const SfxFilter* pFilter = GetMedium()->GetFilter();
         if( !IsAbortingImport() )
-        {
-//            if( pFilter && !pFilter->UsesStorage() && !(GetMedium()->GetOpenMode() & STREAM_WRITE ) )
-//                GetMedium()->Close();
             PositionView_Impl();
-        }
+
         // Salvage
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem,
-                         SfxStringItem, SID_DOC_SALVAGE, sal_False );
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
         if ( pSalvageItem )
             bSetModifiedTRUE = sal_True;
     }
 
-    if( ( nFlags & SFX_LOADED_IMAGES ) &&
-        !(pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
+    if( ( nFlags & SFX_LOADED_IMAGES ) && !(pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
     {
         SfxDocumentInfo& rInfo = GetDocInfo();
         SetAutoLoad( INetURLObject(rInfo.GetReloadURL()),
@@ -1209,8 +1203,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
     pImp->nLoadedFlags |= nFlags;
 
-    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem,
-                     SfxBoolItem, SID_HIDDEN, sal_False );
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
     pImp->bHidden = sal_False;
     if ( pHiddenItem )
         pImp->bHidden = pHiddenItem->GetValue();
@@ -1220,8 +1213,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
     else
         SetModified( sal_False );
 
-    if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
-      && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
+    if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
     {
         CheckMacrosOnLoading_Impl();
 
@@ -1232,19 +1224,10 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
             pMedium->CloseInStream();
     }
 
+    pImp->bInitialized = sal_True;
+    SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
     if ( pImp->nEventId )
-    {
-        // Falls noch kein OnLoad ausgel"ost wurde, weil beim Erzeugen der ::com::sun::star::sdbcx::View der Frame nicht aktiv war,
-        // mu\s das jetzt nachgeholt werden, indem der Frame benachrichtigt wird.
-        Broadcast( SfxEventHint( SFX_EVENT_LOADFINISHED, this ) );
-
-        if ( pImp->bHidden )
-        {
-            sal_uInt16 nId = pImp->nEventId;
-            pImp->nEventId = 0;
-            SFX_APP()->NotifyEvent(SfxEventHint( nId, this ), sal_False);
-        }
-    }
+        PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
 }
 
 //-------------------------------------------------------------------------
