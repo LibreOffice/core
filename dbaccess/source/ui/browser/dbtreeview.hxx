@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:41:11 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 07:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <vcl/window.hxx>
 #endif
 
+class SvTreeListBox;
 namespace dbaui
 {
     class DBTreeListBox;
@@ -86,9 +87,19 @@ namespace dbaui
         DBTreeView( Window* pParent, WinBits nBits );
         ~DBTreeView();
 
-        DBTreeListModel*    getModel();
+        /** sets a handler which is called when an list box entry is to be expanded.
+            <p>When calling the link, the parameter is an SvLBoxEntry marking the entry to be expanded.
+            </p>
+        */
+        void    SetPreExpandHandler(const Link& _rHdl);
+        /// gets the currently set NodeExpansionHandler
+        Link    GetPreExpandHandler() const;
+
+        DBTreeListModel*    getModel() const;
         void                setModel(DBTreeListModel* _pTreeModel);
         void                setSelectHdl(const Link& _rHdl);
+
+        SvTreeListBox*      getListBox() const;
     };
 }
 

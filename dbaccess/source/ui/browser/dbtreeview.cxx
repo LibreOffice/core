@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:44:28 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 07:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,17 +104,30 @@ DBTreeView::~DBTreeView()
 }
 
 // -----------------------------------------------------------------------------
+void DBTreeView::SetPreExpandHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->SetPreExpandHandler(_rHdl);
+}
 
+// -----------------------------------------------------------------------------
+Link DBTreeView::GetPreExpandHandler() const
+{
+    return m_pTreeListBox->GetPreExpandHandler();
+}
+
+// -----------------------------------------------------------------------------
 void DBTreeView::Resize()
 {
     Window::Resize();
     m_pTreeListBox->SetPosSizePixel(Point(0,0),GetOutputSizePixel());
 }
+
 // -------------------------------------------------------------------------
-DBTreeListModel* DBTreeView::getModel()
+DBTreeListModel* DBTreeView::getModel() const
 {
     return (DBTreeListModel*)m_pTreeListBox->GetModel();
 }
+
 // -------------------------------------------------------------------------
 void DBTreeView::setModel(DBTreeListModel* _pTreeModel)
 {
@@ -122,10 +135,18 @@ void DBTreeView::setModel(DBTreeListModel* _pTreeModel)
         _pTreeModel->InsertView(m_pTreeListBox);
     m_pTreeListBox->SetModel(_pTreeModel);
 }
+
+// -------------------------------------------------------------------------
+SvTreeListBox* DBTreeView::getListBox() const
+{
+    return m_pTreeListBox;
+}
+
 // -------------------------------------------------------------------------
 void DBTreeView::setSelectHdl(const Link& _rHdl)
 {
     m_pTreeListBox->SetSelectHdl(_rHdl);
 }
+
 // -------------------------------------------------------------------------
 
