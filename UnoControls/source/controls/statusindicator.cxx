@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 13:42:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,8 +602,8 @@ void StatusIndicator::impl_recalcLayout ( const WindowEvent& aEvent )
 //  debug methods
 //____________________________________________________________________________________________________________
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
-#endif  // #ifdef DEBUG
+#endif  // #if OSL_DEBUG_LEVEL > 1
 
 }   // namespace unocontrols
