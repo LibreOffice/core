@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:08:55 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 #include <cppuhelper/implbase2.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -153,7 +157,6 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-
 class SwOLELRUCache : private SvPtrarr, private utl::ConfigItem
 {
     sal_uInt16 nLRU_InitSize;
@@ -182,7 +185,60 @@ public:
     }
 };
 
-SwOLELRUCache* SwOLEObj::pOLELRU_Cache = 0;
+SwOLELRUCache* pOLELRU_Cache = 0;
+
+class SwOLEListener_Impl : public ::cppu::WeakImplHelper1< embed::XStateChangeListener >
+{
+    SwOLEObj* mpObj;
+public:
+    SwOLEListener_Impl( SwOLEObj* pObj );
+    void Release();
+    virtual void SAL_CALL changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+};
+
+SwOLEListener_Impl::SwOLEListener_Impl( SwOLEObj* pObj )
+: mpObj( pObj )
+{
+    if ( mpObj->IsOleRef() && mpObj->GetOleRef()->getCurrentState() == embed::EmbedStates::RUNNING )
+    {
+        pOLELRU_Cache->Insert( *mpObj );
+    }
+}
+
+void SAL_CALL SwOLEListener_Impl::changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL SwOLEListener_Impl::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( mpObj && nOldState == embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
+    {
+        if( !pOLELRU_Cache )
+            pOLELRU_Cache = new SwOLELRUCache;
+        pOLELRU_Cache->Insert( *mpObj );
+    }
+    else if ( mpObj && nNewState == embed::EmbedStates::LOADED && nOldState == embed::EmbedStates::RUNNING )
+    {
+        if ( pOLELRU_Cache )
+            pOLELRU_Cache->Remove( *mpObj );
+    }
+}
+
+void SwOLEListener_Impl::Release()
+{
+    if ( mpObj && pOLELRU_Cache )
+        pOLELRU_Cache->Remove( *mpObj );
+    mpObj=0;
+    release();
+}
+
+void SAL_CALL SwOLEListener_Impl::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( mpObj && pOLELRU_Cache )
+        pOLELRU_Cache->Remove( *mpObj );
+}
 
 // --------------------
 // SwOLENode
@@ -260,15 +316,10 @@ BOOL SwOLENode::RestorePersistentData()
         else
         {
             aOLEObj.aName = aObjName;
-            // TODO/LATER: allow to work in loaded state
-            svt::EmbeddedObjectRef::TryRunningState( aOLEObj.xOLERef.GetObject() );
             aOLEObj.xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aObjName );
         }
     }
 
-// muss das sein????
-//  if( pOLELRU_Cache )
-//      pOLELRU_Cache->RemovePtr( &aOLEObj );
     return TRUE;
 }
 
@@ -293,9 +344,6 @@ BOOL SwOLENode::SavePersistentData()
         }
     }
 
-    if( SwOLEObj::pOLELRU_Cache )
-        SwOLEObj::pOLELRU_Cache->RemovePtr( &aOLEObj );
-
     return TRUE;
 }
 
@@ -309,27 +357,6 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, xObj, pGrfColl, pAutoAttr );
-
-#if 0
-JP 02.10.97 - OLE Objecte stehen immer alleine im Rahmen, also hat es
-                keinen Sinn, nach einem vorherigen/nachfolgenden
-                ContentNode zu suchen!
-
-    SwCntntNode *pCntntNd;
-    SwIndex aIdx( rWhere, -1 );
-    if ( (pCntntNd=(*this)[ rWhere ]->GetCntntNode()) != 0 )
-        pCntntNd->MakeFrms( rWhere, aIdx );
-    else
-    {
-        aIdx--;
-        if ( (pCntntNd=(*this)[aIdx]->GetCntntNode()) != 0 )
-        {
-            SwIndex aTmp( aIdx );
-            aIdx++;
-            pCntntNd->MakeFrms( aTmp, aIdx );
-        }
-    }
-#endif
     return pNode;
 }
 
@@ -341,35 +368,16 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 
     SwOLENode *pNode =
         new SwOLENode( rWhere, rName, pGrfColl, pAutoAttr );
-
-#if 0
-JP 02.10.97 - OLE Objecte stehen immer alleine im Rahmen, also hat es
-                keinen Sinn, nach einem vorherigen/nachfolgenden
-                ContentNode zu suchen!
-    SwCntntNode *pCntntNd;
-    SwIndex aIdx( rWhere, -1 );
-    if ( (pCntntNd=(*this)[ rWhere ]->GetCntntNode()) != 0 )
-        pCntntNd->MakeFrms( rWhere, aIdx );
-    else
-    {
-        aIdx--;
-        if ( (pCntntNd=(*this)[aIdx]->GetCntntNode()) != 0 )
-        {
-            SwIndex aTmp( aIdx );
-            aIdx++;
-            pCntntNd->MakeFrms( aTmp, aIdx );
-        }
-    }
-#endif
     return pNode;
 }
-
 
 Size SwOLENode::GetTwipSize() const
 {
     uno::Reference < embed::XEmbeddedObject > xObj = ((SwOLENode*)this)->aOLEObj.GetOleRef();
-    uno::Reference < embed::XVisualObject > xVis( xObj, uno::UNO_QUERY );
-    awt::Size aSize = xVis->getVisualAreaSize( nViewAspect );
+
+    // TODO/LEAN: getMapUnit still needs running state
+    svt::EmbeddedObjectRef::TryRunningState( xObj );
+    awt::Size aSize = xObj->getVisualAreaSize( nViewAspect );
     Size aSz( aSize.Width, aSize.Height );
     const MapMode aDest( MAP_TWIP );
     const MapMode aSrc ( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );
@@ -411,7 +419,6 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     return pOLENd;
 }
 
-
 BOOL SwOLENode::IsInGlobalDocSection() const
 {
     // suche den "Body Anchor"
@@ -446,7 +453,6 @@ BOOL SwOLENode::IsInGlobalDocSection() const
             pSectNd->GetIndex() > nEndExtraIdx;
 }
 
-
 BOOL SwOLENode::IsOLEObjectDeleted() const
 {
     BOOL bRet = FALSE;
@@ -464,18 +470,25 @@ BOOL SwOLENode::IsOLEObjectDeleted() const
     return bRet;
 }
 
-
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
     xOLERef( xObj ),
-    pOLENd( 0 )
+    pOLENd( 0 ),
+    pListener( 0 )
 {
     xOLERef.Lock( TRUE );
+    if ( xObj.is() )
+    {
+        pListener = new SwOLEListener_Impl( this );
+        pListener->acquire();
+        xObj->addStateChangeListener( pListener );
+    }
 }
 
 
 SwOLEObj::SwOLEObj( const String &rString ) :
     pOLENd( 0 ),
-    aName( rString )
+    aName( rString ),
+    pListener( 0 )
 {
     xOLERef.Lock( TRUE );
 }
@@ -483,32 +496,38 @@ SwOLEObj::SwOLEObj( const String &rString ) :
 
 SwOLEObj::~SwOLEObj()
 {
-    xOLERef.Clear();
-
-    // Object aus dem Storage removen!!
-    if( pOLENd && !pOLENd->GetDoc()->IsInDtor() )   //NIcht notwendig im DTor (MM)
+    if( pListener )
     {
+        if ( xOLERef.is() )
+            xOLERef->removeStateChangeListener( pListener );
+        pListener->Release();
+    }
+
+    if( pOLENd && !pOLENd->GetDoc()->IsInDtor() )
+    {
+        // if the model is not currently in destruction it means that this object should be removed from the model
         SfxObjectShell* p = pOLENd->GetDoc()->GetPersist();
         DBG_ASSERT( p, "No document!" );
-        if( p )     // muss er existieren ?
+        if( p )
         {
             comphelper::EmbeddedObjectContainer& rCnt = p->GetEmbeddedObjectContainer();
             if ( rCnt.HasEmbeddedObject( aName ) )
             {
                 // not already removed by deleting the object
                 xOLERef.AssignToContainer( 0, aName );
+
+                // unlock object so that object can be closed in RemoveEmbeddedObject
+                // successful closing of the object will automatically clear the reference then
+                xOLERef.Lock(FALSE);
                 rCnt.RemoveEmbeddedObject( aName );
             }
         }
     }
 
-    if( pOLELRU_Cache )
-    {
-        pOLELRU_Cache->RemovePtr( this );
-        if( !pOLELRU_Cache->Count() )
-            // der letzte macht die Tuer zu
-            delete pOLELRU_Cache, pOLELRU_Cache = 0;
-    }
+    if ( xOLERef.is() )
+        // in case the object wasn't closed: release it
+        // in case the object was not in the container: it's still locked, try to close
+        xOLERef.Clear();
 }
 
 
@@ -595,16 +614,18 @@ uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         {
             xOLERef.Assign( xObj, xOLERef.GetViewAspect() );
             xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aName );
+            pListener = new SwOLEListener_Impl( this );
+            pListener->acquire();
+            xObj->addStateChangeListener( pListener );
         }
     }
-
-    // TODO/LATER: allow loaded state
-    svt::EmbeddedObjectRef::TryRunningState( xOLERef.GetObject() );
-
-    if( !pOLELRU_Cache )
-        pOLELRU_Cache = new SwOLELRUCache;
-
-    pOLELRU_Cache->Insert( *this );
+    else if ( xOLERef->getCurrentState() == embed::EmbedStates::RUNNING )
+    {
+        // move object to first position in cache
+        if( !pOLELRU_Cache )
+            pOLELRU_Cache = new SwOLELRUCache;
+        pOLELRU_Cache->Insert( *this );
+    }
 
     return xOLERef.GetObject();
 }
@@ -615,13 +636,7 @@ svt::EmbeddedObjectRef& SwOLEObj::GetObject()
     return xOLERef;
 }
 
-// void SwOLEObj::Unload()
-// {
-//     if( pOLELRU_Cache )
-//      pOLELRU_Cache->Remove( *this );
-// }
-
-BOOL SwOLEObj::RemovedFromLRU()
+BOOL SwOLEObj::UnloadObject()
 {
     BOOL bRet = TRUE;
     //Nicht notwendig im Doc DTor (MM)
@@ -630,58 +645,49 @@ BOOL SwOLEObj::RemovedFromLRU()
     const SwDoc* pDoc;
 
     sal_Int32 nState = xOLERef.is() ? xOLERef->getCurrentState() : embed::EmbedStates::LOADED;
+    DBG_ASSERT( nState != embed::EmbedStates::LOADED, "Strange state of cached object!" );
     BOOL bIsActive = ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING );
-    if( xOLERef.is() && pOLENd &&
-        !( pDoc = pOLENd->GetDoc())->IsInDtor() &&
-        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != xOLERef->getStatus( pOLENd->GetAspect() ) &&
-        //1 < (*pOLERef)->GetRefCount() &&
-        !bIsActive )
-        //!(*pOLERef)->GetProtocol().IsConnect() &&
-        //!(*pOLERef)->GetProtocol().IsInPlaceActive() )
+    if( pOLENd && nState != embed::EmbedStates::LOADED &&
+        !( pDoc = pOLENd->GetDoc())->IsInDtor() && !bIsActive &&
+        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != xOLERef->getStatus( pOLENd->GetAspect() ) )
     {
         SfxObjectShell* p = pDoc->GetPersist();
         if( p )
         {
             if( pDoc->IsPurgeOLE() )
             {
-                if ( xOLERef->getCurrentState() != embed::EmbedStates::LOADED )
+                try
                 {
-                    pOLELRU_Cache->SetInUnload( TRUE );
-
-                    try
+                    uno::Reference < util::XModifiable > xMod( xOLERef->getComponent(), uno::UNO_QUERY );
+                    if( xMod.is() && xMod->isModified() )
                     {
-                        uno::Reference < util::XModifiable > xMod( xOLERef->getComponent(), uno::UNO_QUERY );
-                        if( xMod.is() && xMod->isModified() )
-                        {
-                            uno::Reference < embed::XEmbedPersist > xPers( xOLERef.GetObject(), uno::UNO_QUERY );
-                            if ( xPers.is() )
-                                xPers->storeOwn();
-                            else
-                                DBG_ERROR("Modified object without persistance in cache!");
-                        }
+                        uno::Reference < embed::XEmbedPersist > xPers( xOLERef.GetObject(), uno::UNO_QUERY );
+                        if ( xPers.is() )
+                            xPers->storeOwn();
+                        else
+                            DBG_ERROR("Modified object without persistance in cache!");
+                    }
 
-                        xOLERef->changeState( embed::EmbedStates::LOADED );
-                    }
-                    catch ( uno::Exception& )
-                    {
-                    }
+                    // setting object to loaded state will remove it from cache
+                    xOLERef->changeState( embed::EmbedStates::LOADED );
                 }
-
-                pOLELRU_Cache->SetInUnload( FALSE );
+                catch ( uno::Exception& )
+                {
+                    bRet = FALSE;
+                }
             }
             else
                 bRet = FALSE;
         }
     }
+
     return bRet;
 }
-
 
 String SwOLEObj::GetDescription()
 {
     String aResult;
     uno::Reference< embed::XEmbeddedObject > xEmbObj = GetOleRef();
-
     if ( xEmbObj.is() )
     {
         SvGlobalName aClassID( xEmbObj->getClassID() );
@@ -714,8 +720,7 @@ com::sun::star::uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
     return aNames;
 }
 
-void SwOLELRUCache::Notify( const com::sun::star::uno::Sequence<
-                                rtl::OUString>& rPropertyNames )
+void SwOLELRUCache::Notify( const com::sun::star::uno::Sequence< rtl::OUString>& rPropertyNames )
 {
     Load();
 }
@@ -730,70 +735,65 @@ void SwOLELRUCache::Load()
     Sequence< Any > aValues = GetProperties( aNames );
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" )
-    if( aValues.getLength() == aNames.getLength() &&
-        pValues->hasValue() )
+    if( aValues.getLength() == aNames.getLength() && pValues->hasValue() )
     {
         sal_Int32 nVal;
         *pValues >>= nVal;
-        if( 20 > nVal )
-            nVal = 20;
+        //if( 20 > nVal )
+        //    nVal = 20;
 
-        if( !bInUnload )
         {
-            USHORT nPos = SvPtrarr::Count();
-            if( nVal < nLRU_InitSize && nPos > nVal )
+            if( nVal < nLRU_InitSize )
             {
-                // remove the last entries
-                while( nPos > nVal )
+                // size of cache has been changed
+                USHORT nCount = SvPtrarr::Count();
+                USHORT nPos = nCount;
+
+                // try to remove the last entries until new maximum size is reached
+                while( nCount > nVal )
                 {
                     SwOLEObj* pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
-                    if( pObj->RemovedFromLRU() )
-                        SvPtrarr::Remove( nPos );
+                    if ( pObj->UnloadObject() )
+                        nCount--;
+                    if ( !nPos )
+                        break;
                 }
             }
         }
+
         nLRU_InitSize = (USHORT)nVal;
     }
 }
 
 void SwOLELRUCache::Insert( SwOLEObj& rObj )
 {
-    if( !bInUnload )
+    SwOLEObj* pObj = &rObj;
+    USHORT nPos = SvPtrarr::GetPos( pObj );
+    if( nPos )
     {
-        SwOLEObj* pObj = &rObj;
-        USHORT nPos = SvPtrarr::GetPos( pObj );
-        if( nPos )  // der auf der 0. Pos muss nicht verschoben werden!
+        // object is currently not the first in cache
+        if( USHRT_MAX != nPos )
+            SvPtrarr::Remove( nPos );
+
+        SvPtrarr::Insert( pObj, 0 );
+
+        // try to remove objects if necessary (of course not the freshly inserted one at nPos=0)
+        USHORT nCount = SvPtrarr::Count();
+        nPos = nCount-1;
+        while( nPos && nCount > nLRU_InitSize )
         {
-            if( USHRT_MAX != nPos )
-                SvPtrarr::Remove( nPos );
-
-            SvPtrarr::Insert( pObj, 0 );
-
-            nPos = SvPtrarr::Count();
-            while( nPos > nLRU_InitSize )
-            {
-                pObj = (SwOLEObj*) SvPtrarr::GetObject( --nPos );
-                if( pObj->RemovedFromLRU() )
-                    SvPtrarr::Remove( nPos );
-            }
+            pObj = (SwOLEObj*) SvPtrarr::GetObject( nPos-- );
+            if ( pObj->UnloadObject() )
+                nCount--;
         }
     }
-#ifndef PRODUCT
-    else
-    {
-        SwOLEObj* pObj = &rObj;
-        USHORT nPos = SvPtrarr::GetPos( pObj );
-        ASSERT( USHRT_MAX != nPos, "Insert a new OLE object into a looked cache" );
-    }
-#endif
 }
 
 void SwOLELRUCache::Remove( SwOLEObj& rObj )
 {
-    if( !bInUnload )
-    {
-        USHORT nPos = SvPtrarr::GetPos( &rObj );
-        if( USHRT_MAX != nPos && rObj.RemovedFromLRU() )
-            SvPtrarr::Remove( nPos );
-    }
+    USHORT nPos = SvPtrarr::GetPos( &rObj );
+    if ( nPos != 0xFFFF )
+        SvPtrarr::Remove( nPos );
+    if( !Count() )
+        DELETEZ( pOLELRU_Cache );
 }
