@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:34:57 $
+ *  last change: $Author: fme $ $Date: 2002-04-19 13:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,7 +759,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     // device, we have to correct this
     if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
          TEXT_LAYOUT_COMPLEX_DISABLED == nMode )
-        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
 
     // be sure to have the same value at the printer
     if ( pPrinter )
@@ -962,7 +962,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 const SwScriptInfo* pSI = rInf.GetScriptInfo();
                 const BYTE nActual = rInf.GetFont()->GetActual();
 
-                // apply kana compression if necessary
+                // apply Kana Compression if necessary
                 if ( SW_CJK == nActual && rInf.GetKanaComp() &&
                      pSI && pSI->CountCompChg() )
                 {
@@ -972,18 +972,33 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     bSpecialJust = sal_True;
                 }
 
-                // apply kashida justification
+                // apply Thai Justification
+                if ( SW_CTL == nActual && nSpaceAdd )
+//                        &&
+//                    LANGUAGE_THAI == rInf.GetFont()->GetLanguage( SW_CTL ) )
+                {
+                    SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, 0,
+                                               rInf.GetIdx(), rInf.GetLen(),
+                                               nSpaceAdd );
+
+                    // adding space to blanks is already done
+                    bSpecialJust = sal_True;
+                    nSpaceAdd = 0;
+                }
+
+                // apply Kashida Justification
                 if ( SW_CTL == nActual && nSpaceAdd &&
                     LANGUAGE_HEBREW != rInf.GetFont()->GetLanguage( SW_CTL ) )
                 {
                     if ( pSI && pSI->CountKashida() )
                         pSI->KashidaJustify( pKernArray, 0, rInf.GetIdx(),
-                                            rInf.GetLen(), nSpaceAdd );
+                                             rInf.GetLen(), nSpaceAdd );
+
                     bSpecialJust = sal_True;
                     nSpaceAdd = 0;
                 }
 
-                // apply Asian justification
+                // apply Asian Justification
                 if ( SW_CJK == nActual && nSpaceAdd &&
                     LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
                 {
@@ -1137,7 +1152,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             const BYTE nActual = rInf.GetFont()->GetActual();
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
-            // apply kana compression
+            // apply Kana Compression
             if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
             {
                 Point aTmpPos( aPos );
@@ -1149,7 +1164,19 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                (USHORT)aFont.GetSize().Height(), &aPos );
             }
 
-            // apply kashida justification
+            // apply Thai Justification
+            if ( SW_CTL == nActual && nSpaceAdd )
+//                    &&
+//                LANGUAGE_THAI == rInf.GetFont()->GetLanguage( SW_CTL ) )
+            {
+                SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, pScrArray,
+                                           rInf.GetIdx(), rInf.GetLen(), nSpaceAdd );
+
+                // adding space to blanks is already done
+                nSpaceAdd = 0;
+            }
+
+            // apply Kashida Justification
             if ( SW_CTL == nActual && nSpaceAdd &&
                  LANGUAGE_HEBREW != rInf.GetFont()->GetLanguage( SW_CTL ) )
             {
@@ -1159,7 +1186,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 nSpaceAdd = 0;
             }
 
-            // apply Asian justification
+            // apply Asian Justification
             if ( SW_CJK == nActual && nSpaceAdd &&
                  LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
             {
@@ -1404,9 +1431,9 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                                 ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL :
                                 WAVE_FLAT );
                             Color aCol( rInf.GetOut().GetLineColor() );
-                            BOOL bColSave = aCol != *pSpellCol;
+                            BOOL bColSave = aCol != SwViewOption::GetSpellColor();
                             if ( bColSave )
-                                rInf.GetOut().SetLineColor( *pSpellCol );
+                                rInf.GetOut().SetLineColor( SwViewOption::GetSpellColor() );
 
                             do
                             {
@@ -1773,7 +1800,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 const SwScriptInfo* pSI = rInf.GetScriptInfo();
                 const BYTE nActual = rInf.GetFont()->GetActual();
 
-                // apply kana compression if necessary
+                // apply Kana Compression if necessary
                 if ( SW_CJK == nActual && rInf.GetKanaComp() &&
                      pSI && pSI->CountCompChg() )
                 {
@@ -1783,7 +1810,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     bSpecialJust = sal_True;
                 }
 
-                // apply Asian justification
+                // apply Asian Justification
                 if ( SW_CJK == nActual && nSpaceAdd &&
                     LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
                 {
@@ -1916,20 +1943,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         long *pKernArray = new long[ rInf.GetLen() ];
         CheckScrFont( rInf.GetShell(), rInf.GetpOut() );
         long nScrPos;
-        xub_Unicode cCh = rInf.GetText().GetChar( rInf.GetIdx() );
-        rInf.GetOut().GetCharWidth( cCh, cCh, &nScrPos );
-        USHORT nType;
-        if( bCompress && ( SwScriptInfo::NONE !=
-            ( nType = rInf.GetScriptInfo()->CompType( rInf.GetIdx() ) ) )
-            && SwScriptInfo::SPECIAL_LEFT != nType )
-        {
-            long nTmp = nScrPos;
-            nTmp *= rInf.GetKanaComp();
-            if( SwScriptInfo::KANA != nType )
-                nTmp *= 5;
-            nTmp /= 100000;
-            nScrPos -= nTmp;
-        }
+
+        // get screen array
+        long* pScrArray = new long[ rInf.GetLen() ];
+        rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
+                                    rInf.GetIdx(), rInf.GetLen() );
 
         if ( pPrinter )
         {
@@ -1957,9 +1975,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 rInf.GetOut().SetMapMode( aOld );
         }
         if( bCompress )
+        {
+            Point aTmpPos( aPos );
+            rInf.GetScriptInfo()->Compress( pScrArray, rInf.GetIdx(),
+                                    rInf.GetLen(), rInf.GetKanaComp(),
+                                    (USHORT) aFont.GetSize().Height(), &aTmpPos );
             rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(),
                                     rInf.GetLen(), rInf.GetKanaComp(),
                                     (USHORT) aFont.GetSize().Height(), &aPos );
+        }
+
+        nScrPos = pScrArray[0];
 
         if( bBullet )
         {
@@ -2002,21 +2028,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
             USHORT nMul = 3;
-            long *pScrArray = NULL;
 
             if ( pPrtFont->GetKerning() )
-            {
                 nMul = 1;
-                if( KERNING_ASIAN == pPrtFont->GetKerning() )
-                {
-                    pScrArray = new long[ rInf.GetLen() ];
-                    rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
-                                        rInf.GetIdx(), rInf.GetLen() );
-                    nScrPos = pScrArray[0];
-                }
-            }
 
             const USHORT nDiv = nMul+1;
+
             // In nSpaceSum wird der durch Blocksatz auf die Spaces verteilte
             // Zwischenraum aufsummiert.
             // Die Spaces selbst werden im Normalfall in der Mitte des
@@ -2034,32 +2051,16 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             for ( xub_StrLen i=1; i<nCnt; ++i,nKernSum += rInf.GetKern() )
             {
                 nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
+
+                ASSERT( pScrArray, "Where is the screen array?" )
                 long nScr;
-                if( pScrArray )
-                    nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
-                else
-                    rInf.GetOut().GetCharWidth( nCh, nCh, &nScr );
-                if( bCompress && ( SwScriptInfo::NONE != ( nType =
-                    rInf.GetScriptInfo()->CompType( rInf.GetIdx() + i ) ) ) )
-                {
-                    if( SwScriptInfo::SPECIAL_LEFT != nType )
-                    {
-                        long nTmp = nScr;
-                        nTmp *= rInf.GetKanaComp();
-                        if( SwScriptInfo::KANA != nType )
-                            nTmp *= 5;
-                        nTmp /= 100000;
-                        nScr -= nTmp;
-                    }
-                    nScrPos = pKernArray[i-1] + nScr;
-                    if ( cChPrev == CH_BLANK )
-                        nSpaceSum += nOtherHalf;
-                }
+                nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
+
                 // Wenn vor uns ein (Ex-)SPACE ist, positionieren wir uns optimal,
                 // d.h. unseren rechten Rand auf die 100% Druckerposition,
                 // sind wir sogar selbst ein Ex-SPACE, so positionieren wir uns
                 // linksbuendig zur Druckerposition.
-                else if ( nCh == CH_BLANK )
+                if ( nCh == CH_BLANK )
                 {
 #ifdef FONT_TEST_DEBUG
                     lcl_Pos( 3, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
@@ -2111,6 +2112,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 cChPrev = nCh;
                 pKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
             }
+
+            // the layout engine requires the total width of the output
+            pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
+
             if( rInf.GetGreyWave() )
             {
                 if( rInf.GetLen() )
@@ -2311,8 +2316,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
                                     nTmpIdx + nOffs , nLen - nOffs );
             }
-            delete[] pScrArray;
         }
+        delete[] pScrArray;
         delete[] pKernArray;
     }
 }
@@ -2349,7 +2354,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     // device, we have to correct this
     if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
          TEXT_LAYOUT_COMPLEX_DISABLED == rInf.GetpOut()->GetLayoutMode() )
-        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
 
     // be sure to have the same value at the printer
     if ( pPrinter )
@@ -2422,15 +2427,10 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             nScrPos = pKernArray[ nLn - 1 ];
         else
         {
-#ifdef BIDI
             long* pScrArray = new long[ rInf.GetLen() ];
             rInf.GetpOut()->GetTextArray( rInf.GetText(), pScrArray,
                                           rInf.GetIdx(), rInf.GetLen() );
             nScrPos = pScrArray[ 0 ];
-#else
-            xub_Unicode cCh = rInf.GetText().GetChar( rInf.GetIdx() );
-            rInf.GetpOut()->GetCharWidth( cCh, cCh, &nScrPos );
-#endif
             xub_StrLen nCnt = rInf.GetText().Len();
             if ( nCnt < rInf.GetIdx() )
                 nCnt=0;
@@ -2450,11 +2450,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             {
                 nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
                 long nScr;
-#ifdef BIDI
                 nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
-#else
-                rInf.GetpOut()->GetCharWidth( nCh, nCh, &nScr );
-#endif
                 if ( nCh == CH_BLANK )
                     nScrPos = pKernArray[i-1]+nScr;
                 else
@@ -2470,9 +2466,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                 nChPrev = nCh;
                 pKernArray[i-1] = nScrPos - nScr;
             }
-#ifdef BIDI
             delete[] pScrArray;
-#endif
         }
 
         delete[] pKernArray;
@@ -2523,9 +2517,18 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     }
     long *pKernArray = new long[ rInf.GetLen() ];
 
+    // If font is CTL font and complex text layout is disabled at the output
+    // device, we have to correct this
+    if ( rInf.GetFont() && SW_CTL == rInf.GetFont()->GetActual() &&
+         TEXT_LAYOUT_COMPLEX_DISABLED == rInf.GetpOut()->GetLayoutMode() )
+        rInf.GetpOut()->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+
     if ( pPrinter )
+    {
+        pPrinter->SetLayoutMode( rInf.GetpOut()->GetLayoutMode() );
         pPrinter->GetTextArray( rInf.GetText(), pKernArray,
                                 rInf.GetIdx(), rInf.GetLen() );
+    }
     else
         rInf.GetpOut()->GetTextArray( rInf.GetText(), pKernArray,
                             rInf.GetIdx(), rInf.GetLen() );
@@ -2535,7 +2538,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         const BYTE nActual = rInf.GetFont()->GetActual();
         const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
-        // if this is true, we have to check for kana compression
+        // apply Kana Compression
         if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
         {
             pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
@@ -2543,7 +2546,20 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
                            (USHORT) aFont.GetSize().Height() );
         }
 
-        // if this is true, we have to check for kashida justification
+        // apply Thai Justification
+        if ( SW_CTL == nActual && nSpaceAdd )
+//                    &&
+//                LANGUAGE_THAI == rInf.GetFont()->GetLanguage( SW_CTL ) )
+        {
+            SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, 0,
+                                       rInf.GetIdx(), rInf.GetLen(),
+                                       rInf.GetSpace() );
+
+            // adding space to blanks is already done
+            nSpaceAdd = 0;
+        }
+
+        // apply Kashida Justification
         if ( SW_CTL == nActual && rInf.GetSpace() )
         {
             if ( pSI && pSI->CountKashida() )
@@ -2552,7 +2568,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             nSpaceAdd = 0;
         }
 
-        // Asian justification: Each character gets some extra space
+        // apply Asian Justification
         if ( SW_CJK == rInf.GetFont()->GetActual() &&
              LANGUAGE_KOREAN != rInf.GetFont()->GetLanguage( SW_CJK ) )
         {
