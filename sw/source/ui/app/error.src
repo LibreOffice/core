@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:47:02 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,7 +908,7 @@ Resource RID_SW_ERRHDL
         TEXT[ russian ] = "Íåèçâåñòíàÿ îøèáêà â ôèëüòğå W4W";
         TEXT[ polish ] = "Nieznany b³¹d w filtrze W4W";
         TEXT[ japanese ] = "W4WÌ¨ÙÀ‚É‚ ‚é•s–¾‚Ì´×°";
-        TEXT[ chinese_traditional ] = "W4W ¹LÂo¾¹µo¥Í¤£©ú¿ù»~¡C";
+        TEXT[ chinese_traditional ] = "W4W Âà´«¾¹µo¥Í¤£©ú¿ù»~¡C";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
         TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
         TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ¿À·ù";
@@ -931,11 +931,11 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Onbekende fout in W4W-filter" ;
         TEXT [ spanish ] = "Error desconocido en el filtro W4W" ;
         TEXT [ english_us ] = "Unknown error in W4W filter" ;
-        TEXT[ chinese_simplified ] = "W4W ¹ıÂËÆ÷·¢Éú²»Ã÷´íÎó¡£";
+        TEXT[ chinese_simplified ] = "W4W ¹ıÂËÆ÷·¢Éú²»Ã÷µÄ´íÎó¡£";
         TEXT[ russian ] = "Íåèçâåñòíàÿ îøèáêà â ôèëüòğå W4W";
         TEXT[ polish ] = "Nieznany b³¹d w filtrze W4W";
         TEXT[ japanese ] = "W4WÌ¨ÙÀ‚É‚ ‚é•s–¾‚Ì´×°";
-        TEXT[ chinese_traditional ] = "W4W ¹LÂo¾¹µo¥Í¤£©ú¿ù»~¡C";
+        TEXT[ chinese_traditional ] = "W4W Âà´«¾¹µo¥Í¤£©ú¿ù»~¡C";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
         TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
         TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ¿À·ù";
@@ -1438,7 +1438,7 @@ Resource RID_SW_ERRHDL
         TEXT[ italian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ danish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ swedish ] = "Följande tecken gick inte att visa i den valda teckenuppsättningen: $(ARG1)";
-        TEXT[ polish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ polish ] = "Nie powiod³o siê wyœwietlenie nastêpuj¹cych znaków w wybranym zbiorze znaków: $(ARG1)";
         TEXT[ portuguese_brazilian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
         TEXT[ japanese ] = "ˆÈ‰º‚Ì•¶š‚Í‘I‘ğ‚³‚ê‚½•¶š¾¯Ä‚Å‚Í•\\¦‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½: $(ARG1)";
         TEXT[ korean ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
@@ -1449,6 +1449,7 @@ Resource RID_SW_ERRHDL
         TEXT[ catalan ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
     };
 };
+
 
 
 
