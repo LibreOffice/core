@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 08:53:50 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,20 +325,19 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
         // Sichtbarkeit laden: ist als ein char codiert
         rInfo.bVisible = (aWinData.Copy(0,1) == 0x0056); // 'V' = 56h
         aWinData.Erase(0,1);
-        nPos = aWinData.Search( cToken, 2 );
+        nPos = aWinData.Search( cToken );
         if (nPos != STRING_NOTFOUND)
         {
-            // es gibt noch Extra-Information
-            rInfo.nFlags = (sal_uInt16)aWinData.Copy( 2 , nPos-2 ).ToInt32();
-            aWinData.Erase(2,nPos-2);
-            rInfo.aExtraString = aWinData.Copy( 3 );
-            aWinData.Erase(3);
-        }
-        else
-        {
-            // Zeile ist nach Flags zu Ende
-            rInfo.nFlags = (sal_uInt16)aWinData.Copy( 2 ).ToInt32();
-            aWinData.Erase(2);
+            USHORT nNextPos = aWinData.Search( cToken, 2 );
+            if ( nNextPos != STRING_NOTFOUND )
+            {
+                // es gibt noch Extra-Information
+                rInfo.nFlags = (sal_uInt16)aWinData.Copy( nPos+1, nNextPos - nPos - 1 ).ToInt32();
+                aWinData.Erase( nPos, nNextPos-nPos+1 );
+                rInfo.aExtraString = aWinData;
+            }
+            else
+                rInfo.nFlags = (sal_uInt16)aWinData.Copy( nPos+1 ).ToInt32();
         }
     }
 }
