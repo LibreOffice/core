@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.114 $
+#   $Revision: 1.115 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-18 16:53:55 $
+#   last change: $Author: hjs $ $Date: 2002-06-25 13:16:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -647,16 +647,6 @@ SCP9 ?= TNR!:=9
 .IF "$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)"!="$(ZIP1LIST:s/LANGDIR//)$(ZIP2LIST:s/LANGDIR//)$(ZIP3LIST:s/LANGDIR//)$(ZIP4LIST:s/LANGDIR//)$(ZIP5LIST:s/LANGDIR//)$(ZIP6LIST:s/LANGDIR//)$(ZIP7LIST:s/LANGDIR//)$(ZIP8LIST:s/LANGDIR//)$(ZIP9LIST:s/LANGDIR//)"
 
 ZIPALL=ZIPALLTARGET
-ZIPLANGDIR*=.
-
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-#ziplangdirs:=$(shell +find . -type d ! -name CVS ! -name "." | sed "s/\.\///" )
-#ziplangdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIPLANGDIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
-.ELSE			# "$(GUI)"=="UNX"
-#ziplangdirs:=$(subst,CVS, $(shell +-dir /ba:d ))
-#ziplangdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIPLANGDIR))} /ba:d ))
-.ENDIF			# "$(GUI)"=="UNX"
-#zipalllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(ziplangdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
 
 .ENDIF			#
 
