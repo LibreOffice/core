@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:09:52 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 21:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,16 +682,16 @@ ModalDialog DLG_GLOSSARY
                 HelpID = HID_MD_GLOS_REPLACE;
                 Text = "E~rsetzen (nur Text)" ;
                 Text [ ENGLISH ] = "Replace (text only)" ;
-                Text [ english_us ] = "Replace (text only)" ;
+                Text [ english_us ] = "Rep~lace (text only)" ;
                 Text [ portuguese_brazilian ] = "Substituir (nur Text)" ;
                 Text [ swedish ] = "E~rsätt (bara text)" ;
                 Text [ danish ] = "Erstat (kun tekst)" ;
                 Text [ italian ] = "Sostituisci (solo testo)" ;
-                Text [ spanish ] = "Reemplazar (solo texto)" ;
-                Text [ french ] = "Remplacer (texte seulement)" ;
+                Text [ spanish ] = "Reemplazar (sólo texto)" ;
+                Text [ french ] = "~Remplacer (texte seulement)" ;
                 Text [ dutch ] = "Vervangen (alleen tekst)" ;
                 Text [ portuguese ] = "Substituir(só texto)" ;
-                Text[ chinese_simplified ] = "¸üÌæ(Ö»ÊÇÎÄ±¾)(T)";
+                Text[ chinese_simplified ] = "¸üÌæ(½öÎÄ×Ö)";
                 Text[ russian ] = "Çàìåíèòü (òîëüêî òåêñò)";
                 Text[ polish ] = "Zamieñ (tylko tekst)";
                 Text[ japanese ] = "’uŠ·(Ã·½Ä‚Ì‚Ý)";
