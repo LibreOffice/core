@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bordrhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: mib $ $Date: 2001-12-07 13:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,8 +413,9 @@ sal_Bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         }
     }
 
-    // if there is no line and no style and no with, there will never be a line
-    if( !(bHasStyle && bHasWidth) )
+    // if there is no style or a different style than none but no width,
+       // then the declaration is not valid.
+    if( !bHasStyle || (SVX_XML_BORDER_STYLE_NONE != nStyle && !bHasWidth) )
         return sal_False;
 
     table::BorderLine aBorderLine;
@@ -481,18 +482,23 @@ sal_Bool XMLBorderHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     }
 
     if( nWidth == 0 )
-        return sal_False;
+    {
+        aOut.append( GetXMLToken( XML_NONE ) );
+    }
+    else
+    {
+        rUnitConverter.convertMeasure( aOut, nWidth );
 
-    rUnitConverter.convertMeasure( aOut, nWidth );
+        aOut.append( sal_Unicode( ' ' ) );
 
-    aOut.append( sal_Unicode( ' ' ) );
+        aOut.append( GetXMLToken((0 == nDistance) ? XML_SOLID : XML_DOUBLE) );
 
-    aOut.append( GetXMLToken((0 == nDistance) ? XML_SOLID : XML_DOUBLE) );
+        aOut.append( sal_Unicode( ' ' ) );
 
-    aOut.append( sal_Unicode( ' ' ) );
-
-    rUnitConverter.convertColor( aOut, aBorderLine.Color );
+        rUnitConverter.convertColor( aOut, aBorderLine.Color );
+    }
 
     rStrExpValue = aOut.makeStringAndClear();
+
     return sal_True;
 }
