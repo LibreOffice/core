@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:35:17 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@ private:
     CheckBox                aBtnDetectCat;
     CheckBox                aBtnTotalCol;
     CheckBox                aBtnTotalRow;
+    CheckBox                aBtnFilter;
+    CheckBox                aBtnDrillDown;
 
     OKButton                aBtnOk;
     CancelButton            aBtnCancel;
