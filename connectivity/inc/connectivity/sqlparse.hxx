@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:30:58 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 14:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,9 @@ namespace connectivity
             ERROR_INVALID_INT_COMPARE,      // "The field can not be compared with a number!"
             ERROR_INVALID_STRING_COMPARE,   // "The field can not be compared with a string!"
             ERROR_INVALID_DATE_COMPARE,     // "The field can not be compared with a date!"
-            ERROR_INVALID_REAL_COMPARE      // "The field can not be compared with a floating point number!"
+            ERROR_INVALID_REAL_COMPARE,     // "The field can not be compared with a floating point number!"
+            ERROR_INVALID_TABLE,            // "The table \"#\" is unknown in the database!"
+            ERROR_INVALID_COLUMN            // "The column \"#\" is unknown in the table \"#\"!"
         };
 
         enum    InternationalKeyCode
