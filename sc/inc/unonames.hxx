@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:54:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,13 +262,21 @@
 #define SC_UNONAME_FUNCTION         "Function"
 #define SC_UNONAME_SELPAGE          "SelectedPage"
 #define SC_UNONAME_USESELPAGE       "UseSelectedPage"
+#define SC_UNONAME_HASREFERENCE     "HasReference"
 #define SC_UNONAME_REFERENCE        "Reference"
+#define SC_UNONAME_HASAUTOSHOW      "HasAutoShowInfo"
 #define SC_UNONAME_AUTOSHOW         "AutoShowInfo"
+#define SC_UNONAME_HASSORTINFO      "HasSortInfo"
 #define SC_UNONAME_SORTINFO         "SortInfo"
+#define SC_UNONAME_HASLAYOUTINFO    "HasLayoutInfo"
 #define SC_UNONAME_LAYOUTINFO       "LayoutInfo"
+#define SC_UNONAME_ISGROUP          "IsGroupField"
+#define SC_UNONAME_GROUPINFO        "GroupInfo"
+#define SC_UNONAME_SHOWEMPTY        "ShowEmpty"
 
 //  data pilot item
 #define SC_UNONAME_SHOWDETAIL       "ShowDetail"
+#define SC_UNONAME_ISHIDDEN         "IsHidden"
 
 //  database options
 #define SC_UNONAME_CASE             "CaseSensitive"
