@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.62 $
+*  $Revision: 1.63 $
 *
-*  last change: $Author: obo $ $Date: 2005-01-05 12:12:28 $
+*  last change: $Author: rt $ $Date: 2005-01-07 10:18:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1332,18 +1332,18 @@ File gid_File_Oo_Office_Ui_Factories_Xcu
     Name = "/registry/data/org/openoffice/Office/UI/Factories.xcu";
 End
 
-File gid_File_Registry_Spool_Oo_Office_Embedding_Base_Xcu
+File gid_File_Oo_Office_Embedding_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/embedding_base.xcu";
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+	Name = "/registry/data/org/openoffice/Office/Embedding.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Chart_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name = "/registry/spool/embedding_chart.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
+    Name = "/registry/spool/org/openoffice/Office/Embedding-chart.xcu";
 End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcs
@@ -1793,42 +1793,42 @@ End
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_base_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_base_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Others_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_base_others.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Types_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_chart_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Filters_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_chart_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Others_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_chart_others.xcu";
 End
 
@@ -1849,56 +1849,56 @@ End
 File gid_File_Registry_Spool_Langpack_Lang
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Setup;
     FILE_ALL_LANG_LETTER(/registry/spool/Langpack-,xcu);
 End
 
 File gid_File_Registry_Spool_Oo_Common_System_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
 #ifdef WNT
-    Name = "/registry/spool/org.openoffice.Office.Common-wnt.xcu";
+    Name = "/registry/spool/org/openoffice/Office/Common-wnt.xcu";
 #else
-    Name = "/registry/spool/org.openoffice.Office.Common-unx.xcu";
+    Name = "/registry/spool/org/openoffice/Office/Common-unx.xcu";
 #endif
 End
 
 File gid_File_Registry_Spool_Oo_Common_Cjk_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name (ja) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
-    Name (ko) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name (ja) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
+    Name (ko) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
+    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
+    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Common-cjk.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name (th) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
-    Name (hi-IN) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
-    Name (ar) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
-    Name (he) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name (th) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (hi-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (ar) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (he) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name (ja) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
-    Name (ko) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
-    Name (zh-CN) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
-    Name (zh-TW) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Writer;
+    Name (ja) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
+    Name (ko) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
+    Name (zh-CN) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
+    Name (zh-TW) = "/registry/spool/org/openoffice/Office/Writer-cjk.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Spool;
-    Name (ko) = "/registry/spool/org.openoffice.Office.Common-korea.xcu";
+    Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
+    Name (ko) = "/registry/spool/org/openoffice/Office/Common-korea.xcu";
 End
 
 #ifdef UNX
