@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-15 17:14:01 $
+ *  last change: $Author: cl $ $Date: 2001-11-26 15:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,7 +1376,8 @@ SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ),
+    mnRadius(0)
 {
 }
 
