@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-11 09:51:18 $
+ *  last change: $Author: sj $ $Date: 2001-09-21 16:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,13 +456,13 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 }
                 char* pChar = new char[ ( nOriginalTextLen + 1 ) &~ 1 ];
                 pWMF->Read( pChar, ( nOriginalTextLen + 1 ) &~ 1 );
-                String aText( pChar, nOriginalTextLen, pOut->GetCharSet() );    // after this conversion the text may contain
-                nNewTextLen = aText.Len();                                      // less character (japanese version), so the
-                delete pChar;                                                   // dxAry will not fit
+                String aText( pChar, (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
+                nNewTextLen = aText.Len();                                              // less character (japanese version), so the
+                delete pChar;                                                           // dxAry will not fit
 
                 if ( nNewTextLen )
                 {
-                    sal_Int32   nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
+                    sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
                     sal_Int32   nDxArySize =  nMaxStreamPos - pWMF->Tell();
                     sal_Int32   nDxAryEntries = nDxArySize >> 1;
                     sal_Bool    bUseDXAry = FALSE;
@@ -544,9 +544,10 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                     *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
                                         // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
 
-                Size        aDestSize( ReadYXExt() );
+                Size aDestSize( ReadYXExt() );
+                if ( !bWinExtSet )              // sj, this is also possible: a wmf consisting of
+                    aDestSize = Size( 1, 1 );   // only one STRETCHDIB action (92115)
                 Rectangle   aDestRect( ReadYX(), aDestSize );
-
                 if ( nWinROP != PATCOPY )
                     aBmp.Read( *pWMF, FALSE );
                 aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP ), LIST_APPEND );
@@ -806,11 +807,13 @@ BOOL WMFReader::ReadHeader()
     pWMF->SeekRel( 4 ); // MaxRecord (Groesse des groessten Records in Words)
     pWMF->SeekRel( 2 ); // NoParameters (Unused
 
-    pOut->SetWinOrg( aPlaceableBound.TopLeft() );
+    if ( !aPlaceableBound.IsEmpty() )
+    {
+        pOut->SetWinOrg( aPlaceableBound.TopLeft() );
 
-    Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
-    ImplSetWMFSize( aWMFSize );
-
+        Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
+        ImplSetWMFSize( aWMFSize );
+    }
     return TRUE;
 }
 
