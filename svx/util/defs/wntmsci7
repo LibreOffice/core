@@ -19732,3 +19732,11 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ??1?$Reference@VIDataAccessCharSet@simple@connectivity@@@rtl@@QAE@XZ
 ?FillFromDbTextEncodingMap@SvxTextEncodingBox@@QAEXKK@Z
 ?DisableControls@SvxCharNamePage@@QAEXG@Z
+?SetBeginMovingParagraphsHdl@EditEngine@@QAEXABVLink@@@Z
+?SetEndMovingParagraphsHdl@EditEngine@@QAEXABVLink@@@Z
+?MoveParagraphs@EditView@@QAEXJ@Z
+?IsEqual@ESelection@@QAEEABU1@@Z
+?BeginMovingParagraphsHdl@Outliner@@AAEJPAUMoveParagraphsInfo@@@Z
+?EndMovingParagraphsHdl@Outliner@@AAEJPAUMoveParagraphsInfo@@@Z
+?LinkStubBeginMovingParagraphsHdl@Outliner@@CAJPAX0@Z
+?LinkStubEndMovingParagraphsHdl@Outliner@@CAJPAX0@Z
