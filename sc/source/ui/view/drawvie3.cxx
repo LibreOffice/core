@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:35:13 $
+ *  last change: $Author: nn $ $Date: 2001-07-06 12:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,144 +65,6 @@
 
 #pragma hdrstop
 
-//------------------------------------------------------------------
-
-//sfxitems.hxx
-//#define _SFXINTITEM_HXX
-//#define _SFXENUMITEM_HXX
-#define _SFXFLAGITEM_HXX
-//#define _SFXSTRITEM_HXX
-#define _SFXPTITEM_HXX
-#define _SFXRECTITEM_HXX
-#define _AEITEM_HXX
-#define _SFXRNGITEM_HXX
-#define _SFXSLSTITM_HXX
-
-//sfx.hxx
-//#define _SFX_HXX ***
-#define _SFXAPPWIN_HXX
-#define _SFX_SAVEOPT_HXX
-//#define _SFX_CHILDWIN_HXX ***
-#define _SFXCTRLITEM_HXX
-#define _SFX_PRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXFILEDLG_HXX
-#define _PASSW_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXSTBMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
-//sfxdlg.hxx
-//#define _SFXDLG_HXX ***
-//#define _SFXTABDLG_HXX ***
-#define _BASEDLGS_HXX
-#define _DINFDLG_HXX
-#define _SFXDINFEDT_HXX
-#define _SFX_MGETEMPL_HXX
-#define _SFX_TPLPITEM_HXX
-#define _SFX_STYLEDLG_HXX
-#define _NEWSTYLE_HXX
-#define _SFXDOCTEMPL_HXX
-#define _SFXDOCTDLG_HXX
-//#define _SFXDOCKWIN_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXNEW_HXX
-#define _SFXDOCMAN_HXX
-
-//sfxsh.hxx
-//#define _SFXSH_HXX
-//#define _SFX_SHELL_HXX
-//#define _SFXAPP_HXX
-#define _SFXDISPATCH_HXX
-#define _SFXMSG_HXX
-#define _SFXOBJFACE_HXX
-#define _SFXREQUEST_HXX
-#define _SFXMACRO_HXX
-
-//sfxdoc.hxx
-//#define _SFXDOC_HXX ***
-//#define _SFX_OBJSH_HXX ***
-//#define _SFX_CLIENTSH_HXX ***
-#define _SFX_DOCFILT_HACK_HXX
-#define _SFX_FCONTNR_HXX
-#define _SFXDOCFILE_HXX
-//#define _SFXFRAME_HXX ***
-//#define _SFXVIEWFRM_HXX ***
-//#define _SFXVIEWSH_HXX ***
-#define _MDIFRM_HXX
-#define _SFX_IPFRM_HXX
-#define _SFX_INTERNO_HXX
-#define _FSETOBJSH_HXX
-
-//si.hxx
-//#define _SI_HXX ***
-#define _SIDLL_HXX
-#define _VCATTR_HXX
-#define _VCONT_HXX
-//#define _VCSBX_HXX ???
-//#define _SI_NOVCSBXFORM ***
-#define SI_NOOTHERFORMS
-#define _SI_NOVCSBXBUTTON
-#define _SI_NOVCSBXCHECKBOX
-#define _SI_NOVCSBXRADIOBUTTON
-#define _SI_NOVCSBXPUSHBUTTON
-#define _SI_NOVCSBXSPINBUTTON
-#define _SI_NOVCSBXFIXEDTEXT
-#define _SI_NOVCSBXGROUPBOX
-#define _SI_NOVCSBXLISTBOX
-#define _SI_NOVCSBXCOMBOBOX
-#define _SI_NOVCSBXEDIT
-//#define _SI_NOVCSBXSCROLLBAR ***
-#define _SI_NOVCSBXHSCROLLBAR
-#define _SI_BOVCSBXVSCROLLBAR
-#define _SI_NOVCSBXPREVIEW
-#define _SI_NOVCSBXURLBUTTON
-#define _VCTRLS_HXX
-//#define _VCDRWOBJ_HXX ***
-//#define _SI_NOVCDRAWMODEL
-#define _SI_NOVCDRAWPAGE
-//#define _SI_NOVCDRAWVIEW ***
-#define _VCBRW_HXX
-#define _VCFORM_HXX
-
-//svdrwobt.hxx
-//#define _SVDOATTR_HXX
-//#define _SVDOTEXT_HXX
-#define _SVDRAW_HXX
-
-//svdraw.hxx
-#define _SVDRAW_HXX
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-#define _SDR_NOOBJECTS
-#define _SDR_NOVIEWS
-#define _SDR_NOVIEWMARKER
-#define _SDR_NODRAGMETHODS
-#define _SDR_NOUNDO
-#define _SDR_NOXOUTDEV
-
-//svdrwobx.hxx
-//#define _SVDRWOBX_HXX ***
-#define _SVDOUKWN_HXX
-//#define _SVDORECT_HXX ***
-#define _SVDCAPT_HXX
-#define _SVDOCIRC_HXX
-//#define _SVDOEDGE_HXX
-//#define _SVDOGRAF_HXX
-#define _SVDOGRP_HXX
-#define _SVDOMEAS_HXX
-//#define _SVDOOLE2_HXX ***
-#define _SVDOPAGE_HXX
-#define _SVDOPATH_HXX
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svdograf.hxx>
@@ -217,6 +79,7 @@
 #include "document.hxx"
 #include "userdat.hxx"
 #include "tabvwsh.hxx"
+#include "docsh.hxx"
 
 void ScIMapDlgSet( const Graphic& rGraphic, const ImageMap* pImageMap,
                     const TargetList* pTargetList, void* pEditingObj );     // imapwrap
@@ -266,6 +129,9 @@ void ScDrawView::SetAnchor( ScAnchorType eType )
             pObj = pMark->GetMark(i)->GetObj();
             ScDrawLayer::SetAnchor( pObj, eType );
         }
+
+        if ( pViewData )
+            pViewData->GetDocShell()->SetDrawModified();
     }
 }
 
