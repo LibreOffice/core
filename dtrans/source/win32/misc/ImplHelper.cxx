@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:14:29 $
+ *  last change: $Author: tra $ $Date: 2001-04-11 07:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,9 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 //  petcSrc       pointer to source FORMATETC
 //
 // Return Value:
-//    returns TRUE is copy is successful; retuns FALSE if not successful
+//  returns TRUE if copy was successful;
+//  retuns FALSE if not successful, e.g. one or both of the pointers
+//  were invalid or the pointers were equal
 //-------------------------------------------------------------------------
 
 sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
@@ -340,6 +342,9 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 
     __try
     {
+        if ( petcDest == petcSrc )
+            __leave;
+
         petcDest->cfFormat = petcSrc->cfFormat;
 
         petcDest->ptd      = NULL;
@@ -370,12 +375,15 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 
 sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC* pFetcRhs )
 {
-    sal_Int32 nMatch = FORMATETC_NO_MATCH;
+    sal_Int32 nMatch = FORMATETC_EXACT_MATCH;
 
     __try
     {
+        if ( pFetcLhs == pFetcRhs )
+            __leave;
+
         if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
-             ( pFetcLhs->lindex    != pFetcRhs->lindex ) ||
+             ( pFetcLhs->lindex   != pFetcRhs->lindex ) ||
              !CompareTargetDevice( pFetcLhs->ptd, pFetcRhs->ptd ) )
         {
             nMatch = FORMATETC_NO_MATCH;
@@ -428,12 +436,6 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
 
     __try
     {
-        if ( ( ptdRight == NULL ) || ( ptdLeft == NULL ) )
-        {
-            bRet = sal_False;
-            __leave;
-        }
-
         if ( ptdLeft == ptdRight )
         {
             // same address of td; must be same (handles NULL case)
@@ -441,13 +443,12 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
             __leave;
         }
 
+        // one ot the two is NULL
+        if ( ( NULL == ptdRight ) || ( NULL == ptdLeft ) )
+            __leave;
 
         if ( ptdLeft->tdSize != ptdRight->tdSize )
-        {
-            // different sizes, not equal
-            bRet = sal_False;
             __leave;
-        }
 
         if ( rtl_compareMemory( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )
             bRet = sal_True;
