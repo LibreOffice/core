@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:41:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #define SD_VIEW_SHELL_BASE_HXX
 
@@ -75,9 +74,6 @@
 #ifndef _VIEWFAC_HXX
 #include <sfx2/viewfac.hxx>
 #endif
-#ifndef SD_PRINT_MANAGER_HXX
-#include "PrintManager.hxx"
-#endif
 #include <memory>
 
 class SdDrawDocument;
@@ -92,6 +88,7 @@ namespace sd {
 class DrawDocShell;
 class FormShellManager;
 class PaneManager;
+class PrintManager;
 class ViewShell;
 class ViewShellManager;
 
@@ -311,7 +308,7 @@ private:
     SdDrawDocument* mpDocument;
 
     /// The print manager is responsible for printing documents.
-    PrintManager maPrintManager;
+    ::std::auto_ptr<PrintManager> mpPrintManager;
 
     ::std::auto_ptr<FormShellManager> mpFormShellManager;
 
