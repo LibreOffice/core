@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,18 @@ USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
     return nRet;
 }
 
+//GetFirstLineOffset should problem never appear unadorned apart from
+//here in the ww export filter
+sal_uInt16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
+{
+    sal_uInt16 nFirstLineOffset;
+    if (rFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
+        nFirstLineOffset = -rFmt.GetCharTextDistance();
+    else
+        nFirstLineOffset = rFmt.GetFirstLineOffset();
+    return nFirstLineOffset;
+}
+
 void SwWW8Writer::OutListTab()
 {
     if( !pUsedNumTbl )
@@ -222,7 +234,7 @@ void SwWW8Writer::OutListTab()
     for( n = 0; n < nCount; ++n )
     {
         const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
-        BYTE nLvl, nFlags;
+        BYTE nLvl, nFlags, nAlign;
         BYTE nLevels = rRule.IsContinusNum() ?
             WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel;
         for( nLvl = 0; nLvl < nLevels; ++nLvl )
@@ -236,11 +248,17 @@ void SwWW8Writer::OutListTab()
 
             switch( rFmt.GetNumAdjust() )
             {
-            case SVX_ADJUST_CENTER: nFlags = 1; break;
-            case SVX_ADJUST_RIGHT:  nFlags = 2; break;
-            default:                nFlags = 0; break;
+            case SVX_ADJUST_CENTER:
+                nAlign = 1;
+                break;
+            case SVX_ADJUST_RIGHT:
+                nAlign = 2;
+                break;
+            default:
+                nAlign = 0;
+                break;
             }
-            *pTableStrm << nFlags;
+            *pTableStrm << nAlign;
 
             // Build the NumString for this Level
             String sNumStr;
@@ -360,13 +378,17 @@ void SwWW8Writer::OutListTab()
             // reserved
             SwWW8Writer::WriteShort( *pTableStrm, 0 );
 
+            sal_uInt16 nAbsLSpace = rFmt.GetAbsLSpace();
+            sal_uInt16 nFirstLineOffset = GetWordFirstLineOffset(rFmt);
+
             // write Papx
             BYTE* pData = aPapSprms + 2;
-            Set_UInt16( pData, rFmt.GetAbsLSpace() );
+            Set_UInt16( pData, nAbsLSpace );
             pData += 2;
-            Set_UInt16( pData, rFmt.GetFirstLineOffset() );
+            Set_UInt16( pData, nFirstLineOffset );
             pData += 5;
-            Set_UInt16( pData, rFmt.GetAbsLSpace() );
+            Set_UInt16( pData, nAbsLSpace );
+
             pTableStrm->Write( aPapSprms, sizeof( aPapSprms ));
             // write Chpx
             if( aCharAtrs.Count() )
@@ -497,7 +519,7 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
             break;
     }
 
-    if (rFmt.GetFirstLineOffset() < 0)
+    if (GetWordFirstLineOffset(rFmt) < 0)
         nb |= 0x8;          // number will be displayed using a hanging indent
     ByteToSVBT8(nb, rAnlv.aBits1);
 
@@ -548,7 +570,7 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
         ShortToSVBT16(nFontId, rAnlv.ftc);
         ByteToSVBT8( 1, rAnlv.cbTextBefore );
     }
-    ShortToSVBT16( -rFmt.GetFirstLineOffset(), rAnlv.dxaIndent );
+    ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
     ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
 }
 
@@ -643,7 +665,7 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
     if( bInclUpper )
         nb |= 0x4;          // include previous levels
 
-    if( rFmt.GetFirstLineOffset() < 0 )
+    if( GetWordFirstLineOffset(rFmt) < 0 )
         nb |= 0x8;          // number will be displayed using a hanging indent
     ByteToSVBT8( nb, rAnlv.aBits1 );
 
@@ -673,7 +695,7 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
     }
 
     ShortToSVBT16( rFmt.GetStart(), rAnlv.iStartAt );
-    ShortToSVBT16( -rFmt.GetFirstLineOffset(), rAnlv.dxaIndent );
+    ShortToSVBT16( -GetWordFirstLineOffset(rFmt), rAnlv.dxaIndent );
     ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
 }
 
