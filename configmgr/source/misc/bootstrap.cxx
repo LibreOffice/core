@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:35:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ namespace configmgr
 BootstrapContext::Context BootstrapContext::createWrapper(Context const & _xContext, Overrides const & _aOverrides)
 {
     std::vector< cppu::ContextEntry_Init > aContextEntries;
-    aContextEntries.reserve(_aOverrides.getLength() + 6);
+    aContextEntries.reserve(_aOverrides.getLength() + 5);
 
     // marker + bootstrap context
     aContextEntries.push_back( cppu::ContextEntry_Init(NAME(CONTEXT_ITEM_IS_WRAPPER_CONTEXT), uno::makeAny(sal_True)) );
@@ -237,7 +237,6 @@ BootstrapContext::Context BootstrapContext::createWrapper(Context const & _xCont
     {
         aContextEntries.push_back( makeSingleton(getDefaultProviderSingletonInfo()) );
         aContextEntries.push_back( makeSingleton(backend::getDefaultBackendSingletonInfo()) );
-        aContextEntries.push_back( makeSingleton(backend::getDefaultSingleBackendSingletonInfo()) );
     }
 
     for (sal_Int32 i = 0; i<_aOverrides.getLength(); ++i)
@@ -477,56 +476,6 @@ uno::Any BootstrapContext::makeDefaultBackend()
         catch (uno::Exception & )
         {
             throw uno::RuntimeException(NAME("BootstrapContext:Exception occurred while instantiating DefaultBackend"),*this);
-        }
-    }
-}
-// ---------------------------------------------------------------------------
-
-uno::Any BootstrapContext::makeDefaultSingleBackend()
-{
-    {
-        osl::MutexGuard lock(mutex());
-        if (m_xDefaultSingleBackend.is())
-            return uno::makeAny(m_xDefaultSingleBackend);
-    }
-
-    if (isPassthrough())
-    {
-        Context xDelegate = basecontext();
-        if (!xDelegate.is())
-            throw lang::DisposedException(NAME("BootstrapContext: No base context"),*this);
-
-        uno::Any aResult = xDelegate->getValueByName( SINGLETON(K_DefaultSingleBackendSingletonName) );
-
-        osl::MutexGuard relock(mutex());
-        if (!m_xDefaultSingleBackend.is())
-        {
-            aResult >>= m_xDefaultSingleBackend;
-            return aResult;
-        }
-        else
-            return uno::makeAny(m_xDefaultSingleBackend);
-    }
-    else
-    {
-        ServiceManager xMgr = this->getServiceManager();
-        if (!xMgr.is())
-            throw lang::DisposedException(NAME("BootstrapContext: No service factory"),*this);
-
-        try
-        {
-            uno::Reference<uno::XInterface> xDefaultSingleBackend = xMgr->createInstanceWithContext(NAME(K_DefaultSingleBackendServiceAndImplName),this);
-
-            osl::MutexGuard relock(mutex());
-            if (!m_xDefaultSingleBackend.is())
-                m_xDefaultSingleBackend = xDefaultSingleBackend;
-
-            return uno::makeAny(m_xDefaultSingleBackend);
-        }
-        catch (uno::RuntimeException &) { throw; }
-        catch (uno::Exception & )
-        {
-            throw uno::RuntimeException(NAME("BootstrapContext:Exception occurred while instantiating DefaultSingleBackend"),*this);
         }
     }
 }
