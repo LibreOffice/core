@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSpreadsheets.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:06:28 $
+ *  last change:$Date: 2003-12-11 11:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,12 @@
  *
  *
  ************************************************************************/
-
 package ifc.sheet;
+
+import com.sun.star.sheet.XSpreadsheets;
 
 import lib.MultiMethodTest;
 
-import com.sun.star.sheet.XSpreadsheets;
 
 /**
 * Testing <code>com.sun.star.sheet.XSpreadsheets</code>
@@ -77,16 +77,15 @@ import com.sun.star.sheet.XSpreadsheets;
 * @see com.sun.star.sheet.XSpreadsheets
 */
 public class _XSpreadsheets extends MultiMethodTest {
-
-    public XSpreadsheets oObj = null;
     protected static int uniqCount = 0;
+    public XSpreadsheets oObj = null;
     protected int uniqNumber = 0;
 
     /**
     * Sets the unique number for the current test.
     */
     protected synchronized void before() {
-        uniqNumber = uniqCount ++ ;
+        uniqNumber = uniqCount++;
     }
 
     /**
@@ -99,15 +98,18 @@ public class _XSpreadsheets extends MultiMethodTest {
     */
     public void _copyByName() {
         boolean result = true;
+
         //first insert one that should be copied
         String iS = newName("copyFrom");
-        log.println("Inserting sheet '" + iS + "'") ;
-        oObj.insertNewByName(iS, (short)0);
+        log.println("Inserting sheet '" + iS + "'");
+        oObj.insertNewByName(iS, (short) 0);
+
         String[] eNames = oObj.getElementNames();
         String NewSheet = newName("copyTo");
-        log.println( "Try to copy "+eNames[0]+" to "+NewSheet);
-        oObj.copyByName(eNames[0], NewSheet, (short)0);
+        log.println("Try to copy " + eNames[0] + " to " + NewSheet);
+        oObj.copyByName(eNames[0], NewSheet, (short) 0);
         result = oObj.hasByName(NewSheet);
+
         //remove all inserted sheets
         try {
             oObj.removeByName(NewSheet);
@@ -137,10 +139,11 @@ public class _XSpreadsheets extends MultiMethodTest {
         //first insert one that should be moved
         String iS = newName("move");
         oObj.insertNewByName(iS, (short) 0);
+
         String[] eNames = oObj.getElementNames();
         String sheetToMove = eNames[0];
-        log.println( "Try to move "+ sheetToMove);
-        oObj.moveByName(sheetToMove,(short) 2);
+        log.println("Try to move " + sheetToMove);
+        oObj.moveByName(sheetToMove, (short) 2);
         eNames = oObj.getElementNames();
         tRes.tested("moveByName()", sheetToMove.equals(eNames[1]));
     } // finished _moveByName
@@ -154,15 +157,15 @@ public class _XSpreadsheets extends MultiMethodTest {
     * after first method call and if exception occured during the second call. <p>
     */
     public void _insertNewByName() {
-
         boolean result = false;
 
         String NewSheet = newName("insert");
-        log.println( "Try to insert " + NewSheet);
+        log.println("Try to insert " + NewSheet);
         oObj.insertNewByName(NewSheet, (short) 0);
-        result = oObj.hasByName( NewSheet );
+        result = oObj.hasByName(NewSheet);
+
         try {
-            oObj.removeByName( NewSheet );
+            oObj.removeByName(NewSheet);
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.print("Can't remove sheet '" + NewSheet + "':");
             e.printStackTrace(log);
@@ -175,15 +178,15 @@ public class _XSpreadsheets extends MultiMethodTest {
 
         try {
             NewSheet = badName();
-            log.println( "Try to insert " + NewSheet);
+            log.println("Try to insert " + NewSheet);
             oObj.insertNewByName(NewSheet, (short) 0);
             log.println(
-                "No Exception thrown while inserting sheet with invalid name");
+                    "No Exception thrown while inserting sheet with invalid name");
             result &= false;
-            oObj.removeByName( NewSheet );
+            oObj.removeByName(NewSheet);
         } catch (com.sun.star.uno.RuntimeException e) {
             log.println(
-                "Expected exception occured during testing 'insertNewByName'");
+                    "Expected exception occured during testing 'insertNewByName'");
             result &= true;
         } catch (com.sun.star.lang.WrappedTargetException e) {
             log.print("Can't remove sheet '" + NewSheet + "':");
@@ -195,7 +198,7 @@ public class _XSpreadsheets extends MultiMethodTest {
             result = false;
         }
 
-         tRes.tested("insertNewByName()", result);
+        tRes.tested("insertNewByName()", result);
     } // finished _insertByName
 
     /**
@@ -203,16 +206,13 @@ public class _XSpreadsheets extends MultiMethodTest {
     * of the current test.
     */
     public String newName(String prefix) {
-        return prefix + uniqNumber ;
+        return prefix + uniqNumber;
     } // finished newName
 
     /**
     * Method return bad name for a sheet using the name of the current thread.
     */
     public String badName() {
-          return Thread.currentThread().getName();
+        return "$%#/?\\";
     } // finished badName
-
-
 } //finish class _XSpreadsheets
-
