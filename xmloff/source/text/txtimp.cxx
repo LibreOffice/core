@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 14:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1517,7 +1517,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_FORMS:
-        pContext = new XMLFormsContext(rImport, nPrefix, rLocalName);
+        pContext = rImport.GetFormImport()->createOfficeFormsContext(rImport, nPrefix, rLocalName);
         bContent = sal_False;
         break;
 
