@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 20:55:11 $
+#   last change: $Author: rt $ $Date: 2004-11-09 15:37:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ SLOFILES =	\
         $(SLO)$/doctdlg.obj \
         $(SLO)$/sfxbasemodel.obj \
         $(SLO)$/commitlistener.obj \
+        $(SLO)$/stormodifylistener.obj \
         $(SLO)$/xmlversion.obj \
         $(SLO)$/guisaveas.obj\
         $(SLO)$/objembed.obj\
