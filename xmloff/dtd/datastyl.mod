@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.4 2000-11-01 19:47:17 nn Exp $
+   $Id: datastyl.mod,v 1.5 2000-11-30 10:15:16 nn Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -75,7 +75,7 @@
 <!ENTITY % percentage-style-content "( (number:text,%number-and-text;?) | %number-and-text; )">
 <!ELEMENT number:percentage-style ( style:properties?, %percentage-style-content;, style:map* )>
 
-<!ENTITY % any-date "( number:day | number:month | number:year | number:day-of-week | number:week-of-year | number:quarter| number:hours | number:am-pm | number:minutes | number:seconds )">
+<!ENTITY % any-date "( number:day | number:month | number:year | number:era | number:day-of-week | number:week-of-year | number:quarter| number:hours | number:am-pm | number:minutes | number:seconds )">
 <!ENTITY % date-style-content "( (number:text,(%any-date;,number:text?)+) | (%any-date;,number:text?)+ )">
 <!ELEMENT number:date-style ( style:properties?, %date-style-content;, style:map* )>
 <!ELEMENT number:day EMPTY>
@@ -85,6 +85,8 @@
 <!ATTLIST number:month number:style (short|long) "short">
 <!ELEMENT number:year EMPTY>
 <!ATTLIST number:year number:style (short|long) "short">
+<!ELEMENT number:era EMPTY>
+<!ATTLIST number:era number:style (short|long) "short">
 <!ELEMENT number:day-of-week EMPTY>
 <!ATTLIST number:day-of-week number:style (short|long) "short">
 <!ELEMENT number:week-of-year EMPTY>
