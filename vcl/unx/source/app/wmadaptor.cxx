@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 13:22:43 $
+ *  last change: $Author: hr $ $Date: 2001-08-30 09:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 #ifdef SOLARIS
 #include <alloca.h>
@@ -412,25 +413,39 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     else
     {
         // check for dtwm running
-        if( m_aWMAtoms[ DTWM_IS_RUNNING ]
-            && XGetWindowProperty( m_pDisplay,
-                    m_pSalDisplay->GetRootWindow(),
-                    m_aWMAtoms[ DTWM_IS_RUNNING ],
-                    0, 1,
-                    False,
-                    XA_INTEGER,
-                    &aRealType,
-                    &nFormat,
-                    &nItems,
-                    &nBytesLeft,
-                    &pProperty) == 0
-            && nItems )
+        if( m_aWMAtoms[ DTWM_IS_RUNNING ] )
         {
-            if (*(XLIB_Boolean*)pProperty)
+            if (   (XGetWindowProperty( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        m_aWMAtoms[ DTWM_IS_RUNNING ],
+                        0, 1,
+                        False,
+                        XA_INTEGER,
+                        &aRealType,
+                        &nFormat,
+                        &nItems,
+                        &nBytesLeft,
+                        &pProperty) == 0
+                    && nItems)
+                || (XGetWindowProperty( m_pDisplay,
+                        m_pSalDisplay->GetRootWindow(),
+                        m_aWMAtoms[ DTWM_IS_RUNNING ],
+                        0, 1,
+                        False,
+                        m_aWMAtoms[ DTWM_IS_RUNNING ],
+                        &aRealType,
+                        &nFormat,
+                        &nItems,
+                        &nBytesLeft,
+                        &pProperty) == 0
+                    && nItems))
             {
-                m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
+                if (*(XLIB_Boolean*)pProperty)
+                {
+                    m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
+                }
+                XFree (pProperty);
             }
-            XFree (pProperty);
         }
     }
 
