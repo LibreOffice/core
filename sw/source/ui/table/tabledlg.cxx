@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:56:32 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 10:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1575,7 +1575,8 @@ DEBUG_TBLDLG_TCOLUMN(pTColumns, nAllCols);
         TColumn*    pOldTColumns = new TColumn[nAllCols + 1];
         SwTwips nStart = 0,
                 nEnd;
-        for(USHORT i = 0; i < nAllCols - 1; i++)
+        USHORT i;
+        for(i = 0; i < nAllCols - 1; i++)
         {
             nEnd  = rTabCols[i] - rTabCols.GetLeft();
             pOldTColumns[i].nWidth = nEnd - nStart;
@@ -1669,10 +1670,11 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     aSplitCB        (this, SW_RES(CB_SPLIT          )),
     aSplitRowCB     (this, SW_RES(CB_SPLIT_ROW      )),
     aHeadLineCB     (this, SW_RES(CB_HEADLINE       )),
+    aTextDirectionFT(this, SW_RES(FT_TEXTDIRECTION  )),
+    aTextDirectionLB(this, SW_RES(LB_TEXTDIRECTION  )),
     aVertOrientFL   (this, SW_RES(FL_VERT_ORIENT    )),
-    aTopRB          (this, SW_RES(RB_VERT_TOP       )),
-    aCenterRB       (this, SW_RES(RB_VERT_CENTER    )),
-    aBottomRB       (this, SW_RES(RB_VERT_BOTTOM    )),
+    aVertOrientFT(this,  SW_RES(FT_VERTORIENT       )),
+    aVertOrientLB(this,  SW_RES(LB_VERTORIENT       )),
     pShell(0),
     bPageBreak(TRUE),
     bHtmlMode(FALSE)
@@ -1813,15 +1815,26 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    USHORT nOrient = USHRT_MAX;
-    if(aTopRB.IsChecked() &&  !aTopRB.GetSavedValue())
-        nOrient = VERT_NONE;
-    else if( aCenterRB.IsChecked() && !aCenterRB.GetSavedValue() )
-        nOrient = VERT_CENTER;
-    else if( aBottomRB.IsChecked() && !aBottomRB.GetSavedValue() )
-        nOrient = VERT_BOTTOM;
-    if(nOrient != USHRT_MAX)
-        bModified |= 0 != rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
+    if(aTextDirectionLB.GetSelectEntryPos() != aTextDirectionLB.GetSavedValue())
+    {
+          bModified |= 0 != rSet.Put(
+                    SvxFrameDirectionItem(
+                        (SvxFrameDirection)(ULONG)aTextDirectionLB.GetEntryData(aTextDirectionLB.GetSelectEntryPos())
+                        , FN_TABLE_BOX_TEXTDIRECTION));
+    }
+
+    if(aVertOrientLB.GetSelectEntryPos() != aVertOrientLB.GetSavedValue())
+    {
+        USHORT nOrient = USHRT_MAX;
+        switch(aVertOrientLB.GetSelectEntryPos())
+        {
+            case 0 : nOrient = VERT_NONE; break;
+            case 1 : nOrient = VERT_CENTER; break;
+            case 2 : nOrient = VERT_BOTTOM; break;
+        }
+        if(nOrient != USHRT_MAX)
+            bModified |= 0 != rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
+    }
 
     return bModified;
 
@@ -1977,15 +1990,23 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         aHeadLineCB.Check( ((const SfxBoolItem*)pItem)->GetValue() );
         aHeadLineCB.SaveValue();
     }
+    if ( rSet.GetItemState(FN_TABLE_BOX_TEXTDIRECTION) > SFX_ITEM_AVAILABLE )
+    {
+        ULONG nDirection = ((const SvxFrameDirectionItem&)rSet.Get(FN_TABLE_BOX_TEXTDIRECTION)).GetValue();
+        aTextDirectionLB.SelectEntryPos(aTextDirectionLB.GetEntryPos( (const void*)nDirection ));
+    }
+
     if ( rSet.GetItemState(FN_TABLE_SET_VERT_ALIGN) > SFX_ITEM_AVAILABLE )
     {
         USHORT nVert = ((const SfxUInt16Item&)rSet.Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
+        USHORT nPos = 0;
         switch(nVert)
         {
-            case VERT_NONE:     aTopRB.Check();     break;
-            case VERT_CENTER:   aCenterRB.Check();  break;
-            case VERT_BOTTOM:   aBottomRB.Check();  break;
+            case VERT_NONE:     nPos = 0;   break;
+            case VERT_CENTER:   nPos = 1;   break;
+            case VERT_BOTTOM:   nPos = 2;   break;
         }
+        aVertOrientLB.SelectEntryPos(nPos);
     }
 
     aPageCollCB.SaveValue();
@@ -1996,9 +2017,8 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     aPgBrkBeforeRB.SaveValue();
     aPgBrkAfterRB.SaveValue();
     aPageNoNF.SaveValue();
-    aTopRB.SaveValue();
-    aCenterRB.SaveValue();
-    aBottomRB.SaveValue();
+    aTextDirectionLB.SaveValue();
+    aVertOrientLB.SaveValue();
 }
 /*-----------------16.04.98 14:48-------------------
 
