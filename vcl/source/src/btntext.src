@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:50:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,345 +67,84 @@
 
 String SV_BUTTONTEXT_OK
 {
-    Text = "OK";
-    Text [ English ] = "OK";
-    TEXT[ italian ] = "OK";
-    TEXT[ portuguese_brazilian ] = "OK";
-    TEXT[ portuguese ] = "OK";
-    TEXT[ danish ] = "OK";
-    TEXT[ french ] = "OK";
-    TEXT[ swedish ] = "OK";
-    TEXT[ dutch ] = "OK";
-    TEXT[ spanish ] = "Aceptar";
-    TEXT[ english_us ] = "OK";
-    TEXT[ russian ] = "Äà";
-    TEXT[ polish ] = "OK";
-    TEXT[ japanese ] = "OK";
-    TEXT[ chinese_simplified ] = "ç¡®å®š";
-    TEXT[ chinese_traditional ] = "ç¢ºå®š";
-    TEXT[ arabic ] = "ÍÓäÇğ";
-    TEXT[ dutch ] = "OK";
-    TEXT[ chinese_simplified ] = "ç¡®å®š";
-    TEXT[ greek ] = "OK";
-    TEXT[ korean ] = "í™•ì¸";
-    TEXT[ turkish ] = "Tamam";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "D'acord";
-    TEXT[ finnish ] = "OK";
-    TEXT[ thai ] = "à¸•à¸à¸¥à¸‡";
-    TEXT[ czech ] = "OK";
-    TEXT[ hebrew ] = "â€®××™×©×•×¨â€¬";
-    TEXT[ hindi ] = "à¤ à¥€à¤•";
-    TEXT[ slovak ] = "OK";
-    TEXT[ hungarian ] = "OK";
-    TEXT[ slovenian ] = "V redu";
+    Text [ de ] = "OK";
+    Text [ en-US ] = "OK";
+    Text [ x-comment ] = " ";
 };
 
 String SV_BUTTONTEXT_CANCEL
 {
-    Text = "Abbrechen" ;
-    Text [ English ] = "Cancel" ;
-    TEXT[ italian ] = "Annulla";
-    TEXT[ portuguese_brazilian ] = "Cancelar";
-    TEXT[ portuguese ] = "Cancelar";
-    TEXT[ danish ] = "Annuller";
-    TEXT[ french ] = "Annuler";
-    TEXT[ swedish ] = "Avbryt";
-    TEXT[ dutch ] = "Annuleren";
-    TEXT[ spanish ] = "Cancelar";
-    TEXT[ english_us ] = "Cancel";
-    TEXT[ russian ] = "Îòìåíèòü";
-    TEXT[ polish ] = "Anuluj";
-    TEXT[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«";
-    TEXT[ chinese_simplified ] = "å–æ¶ˆ";
-    TEXT[ chinese_traditional ] = "å–æ¶ˆ";
-    TEXT[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
-    TEXT[ dutch ] = "Annuleren";
-    TEXT[ chinese_simplified ] = "å–æ¶ˆ";
-    TEXT[ greek ] = "¢êõñï";
-    TEXT[ korean ] = "ì·¨ì†Œ";
-    TEXT[ turkish ] = "İptal";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Cancel.la";
-    TEXT[ finnish ] = "Peruuta";
-    TEXT[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸";
-    TEXT[ czech ] = "~ZruÅ¡it";
-    TEXT[ hebrew ] = "â€®×‘×™×˜×•×œâ€¬";
-    TEXT[ hindi ] = "à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
-    TEXT[ slovak ] = "ZruÅ¡iÅ¥";
-    TEXT[ hungarian ] = "MÃ©gsem";
-    TEXT[ slovenian ] = "PrekliÄi";
+    Text [ de ] = "Abbrechen" ;
+    Text [ en-US ] = "Cancel";
+    Text [ x-comment ] = " ";
 };
 
 String SV_BUTTONTEXT_YES
 {
-    Text = "~Ja";
-    Text [ English ] = "~Yes";
-    TEXT[ italian ] = "Sì";
-    TEXT[ portuguese_brazilian ] = "~Sim";
-    TEXT[ portuguese ] = "~Sim";
-    TEXT[ danish ] = "~Ja";
-    TEXT[ french ] = "~Oui";
-    TEXT[ swedish ] = "~Ja";
-    TEXT[ dutch ] = "~Ja";
-    TEXT[ spanish ] = "~Sí";
-    TEXT[ english_us ] = "~Yes";
-    TEXT[ russian ] = "Äà";
-    TEXT[ polish ] = "~Tak";
-    TEXT[ japanese ] = "ã¯ã„(~Y)";
-    TEXT[ chinese_simplified ] = "æ˜¯(~Y)";
-    TEXT[ chinese_traditional ] = "æ˜¯(~Y)";
-    TEXT[ arabic ] = "äÚã";
-    TEXT[ dutch ] = "~Ja";
-    TEXT[ chinese_simplified ] = "æ˜¯(~Y)";
-    TEXT[ greek ] = "Íáé";
-    TEXT[ korean ] = "ì˜ˆ(~Y)";
-    TEXT[ turkish ] = "~Evet";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Sí";
-    TEXT[ finnish ] = "~Kyllä";
-    TEXT[ thai ] = "à¹ƒ~à¸Šà¹ˆ";
-    TEXT[ czech ] = "~Ano";
-    TEXT[ hebrew ] = "â€®×›×Ÿâ€¬";
-    TEXT[ hindi ] = "~à¤¹à¤¾à¤";
-    TEXT[ slovak ] = "~Ãno";
-    TEXT[ hungarian ] = "~Igen";
-    TEXT[ slovenian ] = "~Da";
+    Text [ de ] = "~Ja";
+    Text [ en-US ] = "~Yes";
+    Text [ x-comment ] = " ";
 };
 
 String SV_BUTTONTEXT_NO
 {
-    Text = "~Nein";
-    Text [ English ] = "~No";
-    TEXT[ italian ] = "No";
-    TEXT[ portuguese_brazilian ] = "~Não";
-    TEXT[ portuguese ] = "~Não";
-    TEXT[ danish ] = "~Nej";
-    TEXT[ french ] = "~Non";
-    TEXT[ swedish ] = "~Nej";
-    TEXT[ dutch ] = "~Nee";
-    TEXT[ spanish ] = "~No";
-    TEXT[ english_us ] = "~No";
-    TEXT[ russian ] = "Íåò";
-    TEXT[ polish ] = "~Nie";
-    TEXT[ japanese ] = "ã„ã„ãˆ(~N)";
-    TEXT[ chinese_simplified ] = "å¦(~N)";
-    TEXT[ chinese_traditional ] = "å¦(~N)";
-    TEXT[ arabic ] = "áÇ";
-    TEXT[ dutch ] = "~Nee";
-    TEXT[ chinese_simplified ] = "å¦(~N)";
-    TEXT[ greek ] = "¼÷é";
-    TEXT[ korean ] = "ì•„ë‹ˆì˜¤(~N)";
-    TEXT[ turkish ] = "~Hayır";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~No";
-    TEXT[ finnish ] = "~Ei";
-    TEXT[ thai ] = "à¹„~à¸¡à¹ˆà¹ƒà¸Šà¹ˆ";
-    TEXT[ czech ] = "~Ne";
-    TEXT[ hebrew ] = "â€®×œ×â€¬";
-    TEXT[ hindi ] = "~à¤¨à¤¹à¥€à¤‚";
-    TEXT[ slovak ] = "~Nie";
-    TEXT[ hungarian ] = "~Nem";
-    TEXT[ slovenian ] = "~Ne";
+    Text [ de ] = "~Nein";
+    Text [ en-US ] = "~No";
+    Text [ x-comment ] = " ";
 };
 
 String SV_BUTTONTEXT_RETRY
 {
-    Text = "~Wiederholen";
-    Text [ English ] = "~Retry";
-    TEXT[ italian ] = "Riprova";
-    TEXT[ portuguese_brazilian ] = "~Repetir";
-    TEXT[ portuguese ] = "~Repetir";
-    TEXT[ danish ] = "~Prøv igen";
-    TEXT[ french ] = "~Réessayer";
-    TEXT[ swedish ] = "~Upprepa";
-    TEXT[ dutch ] = "H~erhalen";
-    TEXT[ spanish ] = "~Repetir";
-    TEXT[ english_us ] = "~Retry";
-    TEXT[ russian ] = "Ïîâòîğèòü";
-    TEXT[ polish ] = "~Powtórz próbê";
-    TEXT[ japanese ] = "ã‚„ã‚Šç›´ã—(~R)";
-    TEXT[ chinese_simplified ] = "é‡è¯•(~R)";
-    TEXT[ chinese_traditional ] = "é‡è©¦(~R)";
-    TEXT[ arabic ] = "ÅÚÇÏÉ ÇáãÍÇæáÉ";
-    TEXT[ dutch ] = "H~erhalen";
-    TEXT[ chinese_simplified ] = "é‡è¯•(~R)";
-    TEXT[ greek ] = "ÅğáíÜëçøç";
-    TEXT[ korean ] = "ë‹¤ì‹œ ì‹œë„(~R)";
-    TEXT[ turkish ] = "~Tekrarla";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Reintenta";
-    TEXT[ finnish ] = "~Yritä uudelleen";
-    TEXT[ thai ] = "~à¸¥à¸­à¸‡à¹ƒà¸«à¸¡à¹ˆ";
-    TEXT[ czech ] = "Zkusit znovu";
-    TEXT[ hebrew ] = "â€®×œ× ×¡×•×ª ×©×•×‘â€¬";
-    TEXT[ hindi ] = "~à¤«à¤¼à¤¿à¤° à¤¸à¥‡ à¤ªà¥à¤°à¤¯à¤¤à¥à¤¨ à¤•à¤°à¤¨à¤¾";
-    TEXT[ slovak ] = "~SkÃºsiÅ¥ znovu";
-    TEXT[ hungarian ] = "Ãšj~ra";
-    TEXT[ slovenian ] = "~Poskusi znova";
+    Text [ de ] = "~Wiederholen";
+    Text [ en-US ] = "~Retry";
+    Text [ x-comment ] = " ";
 };
 
 String SV_BUTTONTEXT_HELP
 {
-    Text = "~Hilfe";
-    Text [ English ] = "~Help";
-    TEXT[ italian ] = "~?";
-    TEXT[ portuguese_brazilian ] = "Aj~uda";
-    TEXT[ portuguese ] = "Aj~uda";
-    TEXT[ danish ] = "~Hjælp";
-    TEXT[ french ] = "Aide";
-    TEXT[ swedish ] = "~Hjälp";
-    TEXT[ dutch ] = "~Help";
-    TEXT[ spanish ] = "Ay~uda";
-    TEXT[ english_us ] = "~Help";
-    TEXT[ russian ] = "Ñï~ğàâêà";
-    TEXT[ polish ] = "Po~moc";
-    TEXT[ japanese ] = "ãƒ˜ãƒ«ãƒ—(~H)";
-    TEXT[ chinese_simplified ] = "å¸®åŠ©(~H)";
-    TEXT[ chinese_traditional ] = "èªªæ˜(~H)";
-    TEXT[ arabic ] = "ãÓÇÚÏÉ";
-    TEXT[ dutch ] = "~Help";
-    TEXT[ chinese_simplified ] = "å¸®åŠ©(~H)";
-    TEXT[ greek ] = "ÂïŞèåéá";
-    TEXT[ korean ] = "ë„ì›€ë§(~H)";
-    TEXT[ turkish ] = "~Yardım";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Ajuda";
-    TEXT[ finnish ] = "~Ohje";
-    TEXT[ thai ] = "~à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
-    TEXT[ czech ] = "~NÃ¡povÄ›da";
-    TEXT[ hebrew ] = "â€®×¢×–×¨×”â€¬";
-    TEXT[ hindi ] = "~à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾";
-    TEXT[ slovak ] = "~PomocnÃ­k";
-    TEXT[ hungarian ] = "~SÃºgÃ³";
-    TEXT[ slovenian ] = "~PomoÄ";
+    Text [ de ] = "~Hilfe";
+    Text [ en-US ] = "~Help";
+    Text [ x-comment ] = " ";
 };
 
 String SV_BUTTONTEXT_MORE
 {
-    Text = "~Zusätze";
-    Text [ English ] = "~More";
-    TEXT[ italian ] = "E~xtra";
-    TEXT[ portuguese_brazilian ] = "~Mais";
-    TEXT[ portuguese ] = "~Opções";
-    TEXT[ danish ] = "~Flere";
-    TEXT[ french ] = "O~ptions";
-    TEXT[ swedish ] = "~Fler";
-    TEXT[ dutch ] = "~Overige";
-    TEXT[ spanish ] = "~Opciones";
-    TEXT[ english_us ] = "~More";
-    TEXT[ russian ] = "Äåòàëè";
-    TEXT[ polish ] = "~Wiêcej";
-    TEXT[ japanese ] = "è©³ç´°(~M)";
-    TEXT[ chinese_simplified ] = "å…¶ä»–(~M)";
-    TEXT[ chinese_traditional ] = "å…¶ä»–(~M)";
-    TEXT[ arabic ] = "ÅÖÇİÇÊ";
-    TEXT[ dutch ] = "~Overige";
-    TEXT[ chinese_simplified ] = "å…¶ä»–(~M)";
-    TEXT[ greek ] = "Ğñüóèåôá";
-    TEXT[ korean ] = "ì˜µì…˜(~M)";
-    TEXT[ turkish ] = "~Fazla";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Més";
-    TEXT[ finnish ] = "~Lisää";
-    TEXT[ thai ] = "~à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”";
-    TEXT[ czech ] = "VÃ­ce";
-    TEXT[ hebrew ] = "â€®×¢×•×“â€¬";
-    TEXT[ hindi ] = "~à¤…à¤§à¤¿à¤•";
-    TEXT[ slovak ] = "~Viac";
-    TEXT[ hungarian ] = "~RÃ©szletek";
-    TEXT[ slovenian ] = "~Dodatno";
+    Text [ de ] = "~Zusätze";
+    Text [ en-US ] = "~More";
+    Text [ x-comment ] = " ";
 };
 
 String SV_BUTTONTEXT_IGNORE
 {
-    Text = "~Ignorieren";
-    Text [ English ] = "~Ignore";
-    Text[ english_us ] = "~Ignore";
-    Text[ portuguese ] = "~Ignorar";
-    Text[ russian ] = "Ïğîïóñòèòü";
-    Text[ greek ] = "ĞáñÜâëåøç";
-    Text[ dutch ] = "~Negeren";
-    Text[ french ] = "Ignorer";
-    Text[ spanish ] = "~Ignorar";
-    Text[ finnish ] = "~Ohita";
-    Text[ italian ] = "~Ignora";
-    Text[ danish ] = "~Ignorer";
-    Text[ swedish ] = "~Ignorera";
-    Text[ polish ] = "Ignoruj";
-    Text[ portuguese_brazilian ] = "~Ignorar";
-    Text[ japanese ] = "ç„¡è¦–ã™ã‚‹(~I)";
-    Text[ korean ] = "ë¬´ì‹œ(~I)";
-    Text[ chinese_simplified ] = "å¿½ç•¥(~I)";
-    Text[ chinese_traditional ] = "å¿½ç•¥(~I)";
-    Text[ turkish ] = "~Yoksay";
-    Text[ arabic ] = "ÊÌÇåá";
-    Text[ catalan ] = "~Ignora";
-    Text[ thai ] = "à¹€~à¸à¸´à¸à¹€à¸‰à¸¢";
-    Text[ czech ] = "~Ignorovat";
-    Text[ hebrew ] = "â€®×œ×”×ª×¢×œ×â€¬";
-    Text[ hindi ] = "~à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";
-    Text[ slovak ] = "~IgnorovaÅ¥";
-    Text[ hungarian ] = "~MellÅ‘zÃ©s";
-    Text[ slovenian ] = "Prezr~i";
+    Text [ de ] = "~Ignorieren";
+    Text [ en-US ] = "~Ignore";
 };
 
 String SV_BUTTONTEXT_ABORT
 {
-    Text = "~Abbrechen";
-    Text [ English ] = "~Abort";
-    Text[ english_us ] = "~Abort";
-    Text[ portuguese ] = "~Cancelar";
-    Text[ russian ] = "Îòìåíà";
-    Text[ greek ] = "~Áêıñùóç";
-    Text[ dutch ] = "~Stoppen";
-    Text[ french ] = "~Interrompre";
-    Text[ spanish ] = "~Cancelar";
-    Text[ finnish ] = "~Peruuta";
-    Text[ italian ] = "~Interrompi";
-    Text[ danish ] = "~Afbryd";
-    Text[ swedish ] = "~Avbryt";
-    Text[ polish ] = "Anuluj";
-    Text[ portuguese_brazilian ] = "~Abortar";
-    Text[ japanese ] = "ä¸­æ­¢(~A)";
-    Text[ korean ] = "ì¤‘ë‹¨(~A)";
-    Text[ chinese_simplified ] = "å–æ¶ˆ(~A)";
-    Text[ chinese_traditional ] = "ä¸­æ­¢(~A)";
-    Text[ turkish ] = "~Vazgeç";
-    Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
-    Text[ catalan ] = "~Cancel·la";
-    Text[ thai ] = "~à¸¢à¸à¹€à¸¥à¸´à¸";
-    Text[ czech ] = "PÅ™eruÅ¡it";
-    Text[ hebrew ] = "~Abbrechen";
-    Text[ hindi ] = "~à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "Pr~eruÅ¡iÅ¥";
-    Text[ hungarian ] = "~MegszakÃ­tÃ¡s";
-    Text[ slovenian ] = "P~rekini";
+    Text [ de ] = "~Abbrechen";
+    Text [ en-US ] = "~Abort";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
 SV_BUTTONHELPTEXT_OK
 {
     Text = "Schließt dieses Dialogfeld und speichert alle vorgenommenen Änderungen." ;
-    Text [ English ] = "Closes this dialog box and save any changes you have made." ;
 };
 
 SV_BUTTONHELPTEXT_CANCEL
 {
     Text = "Schließt dieses Dialogfeld, ohne Ihre Änderungen zu speichern." ;
-    Text [ English ] = "Closes this dialog box without saving any changes you have made." ;
 };
 
 SV_BUTTONHELPTEXT_HELP
 {
     Text = "Zeigt Hilfe zu diesem Fenster an." ;
-    Text [ English ] = "Shows help for the current window." ;
 };
 
 SV_BUTTONHELPTEXT_MORE
 {
     Text = "Zeigt weitere EinstellmÖglichkeiten an oder versteckt diese wieder." ;
-    Text [ English ] = "Shows more Options or hide these options again." ;
 };
 
 Finnische-Texte:
