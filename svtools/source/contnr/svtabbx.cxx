@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:59:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,8 @@ sal_Int32 SvHeaderTabListBox::GetCurrRow() const
 // -----------------------------------------------------------------------
 sal_uInt16 SvHeaderTabListBox::GetCurrColumn() const
 {
-    return -1;
+    sal_uInt16 nPos = GetCurrentTabPos() - 1;
+    return nPos;
 }
 // -----------------------------------------------------------------------
 ::rtl::OUString SvHeaderTabListBox::GetRowDescription( sal_Int32 _nRow ) const
