@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:32:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,6 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFAACCFG_HXX //autogen
-#include <offmgr/ofaaccfg.hxx>
-#endif
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
 #endif
@@ -143,6 +137,8 @@
 #ifndef _SFXSMPLHINT_HXX
 #include <svtools/smplhint.hxx>
 #endif
+
+#include <svx/acorrcfg.hxx>
 
 #include <memory>
 
@@ -585,7 +581,7 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
             pOnlyTxt = &sOnlyTxt;
         }
 
-        const OfaAutoCorrCfg* pCfg = OFF_APP()->GetAutoCorrConfig();
+        const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
 
         SwDoc* pGDoc = pGlosGroup->GetDoc();
 
