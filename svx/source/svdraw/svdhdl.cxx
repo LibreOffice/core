@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-23 13:55:25 $
+ *  last change: $Author: aw $ $Date: 2002-08-15 11:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,11 @@ SdrHdlBitmapSet::~SdrHdlBitmapSet()
 
 void SdrHdlBitmapSet::FillBitmapsFromResource(UINT16 nResId)
 {
-    Color aColWhite(COL_WHITE);
+    // #101928# change color used for transparent parts to 0x00ff00ff (ImageList standard)
+    Color aColTransparent(0x00ff00ff);
     OutputDevice* pOut = Application::GetDefaultDevice();
     Bitmap aBitmap(ResId(nResId, ImpGetResMgr()));
-    BitmapEx aMarkersBitmap(aBitmap, aColWhite);
+    BitmapEx aMarkersBitmap(aBitmap, aColTransparent);
 
     for(UINT16 a=0;a<5;a++)
     {
@@ -273,6 +274,9 @@ BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nI
 SdrHdlBitmapSet* SdrHdl::pSimpleSet = NULL;
 SdrHdlBitmapSet* SdrHdl::pModernSet = NULL;
 
+// #101928#
+SdrHdlBitmapSet* SdrHdl::pHighContrastSet = NULL;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrHdl::SdrHdl():
@@ -296,6 +300,11 @@ SdrHdl::SdrHdl():
     if(!pModernSet)
         pModernSet = new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS);
     DBG_ASSERT(pModernSet, "Could not construct SdrHdlBitmapSet()!");
+
+    // #101928#
+    if(!pHighContrastSet)
+        pHighContrastSet = new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS);
+    DBG_ASSERT(pHighContrastSet, "Could not construct SdrHdlBitmapSet()!");
 }
 
 SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
@@ -320,6 +329,11 @@ SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
     if(!pModernSet)
         pModernSet = new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS);
     DBG_ASSERT(pModernSet, "Could not construct SdrHdlBitmapSet()!");
+
+    // #101928#
+    if(!pHighContrastSet)
+        pHighContrastSet = new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS);
+    DBG_ASSERT(pHighContrastSet, "Could not construct SdrHdlBitmapSet()!");
 }
 
 SdrHdl::~SdrHdl()
@@ -599,13 +613,36 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
     return eRetval;
 }
 
+// #101928#
+BitmapEx& SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast)
+{
+    if(bIsHighContrast)
+    {
+        return pHighContrastSet->GetBitmapEx(eKindOfMarker, nInd);
+    }
+    else
+    {
+        if(bFine)
+        {
+            return pModernSet->GetBitmapEx(eKindOfMarker, nInd);
+        }
+        else
+        {
+            return pSimpleSet->GetBitmapEx(eKindOfMarker, nInd);
+        }
+    }
+}
+
 B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker)
 {
     B2dIAObject* pRetval = 0L;
-    BOOL bIsFineHdl(pHdlList->IsFineHdl());
+    sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
 
     // support bigger sizes
-    if(pHdlList->GetHdlSize() > 3)
+    // #101928# ...for high contrast, too.
+    if(pHdlList->GetHdlSize() > 3 || bIsHighContrast)
     {
         eKindOfMarker = GetNextBigger(eKindOfMarker);
     }
@@ -645,12 +682,9 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
         }
 
         // create animated hdl
-        BitmapEx& rBmpEx1 = bIsFineHdl
-            ? pModernSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex)
-            : pSimpleSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex);
-        BitmapEx& rBmpEx2 = bIsFineHdl
-            ? pModernSet->GetBitmapEx(eNextBigger, (UINT16)eColIndex)
-            : pSimpleSet->GetBitmapEx(eNextBigger, (UINT16)eColIndex);
+        // #101928# use ImpGetBitmapEx(...) now
+        BitmapEx& rBmpEx1 = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
+        BitmapEx& rBmpEx2 = ImpGetBitmapEx(eNextBigger, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
         // #98388# when anchor is used take upper left as reference point inside the handle
         if(eKindOfMarker != Anchor && eKindOfMarker != AnchorPressed)
@@ -665,9 +699,8 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
     else
     {
         // create normal handle
-        BitmapEx& rBmpEx = bIsFineHdl
-            ? pModernSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex)
-            : pSimpleSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex);
+        // #101928# use ImpGetBitmapEx(...) now
+        BitmapEx& rBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
         // #98388# upper left as reference point inside the handle for AnchorPressed, too
         if(eKindOfMarker != Anchor && eKindOfMarker != AnchorPressed)
