@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: tra $ $Date: 2001-04-27 09:35:11 $
+#   last change: $Author: tra $ $Date: 2001-04-27 09:33:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,74 +60,25 @@
 #
 #*************************************************************************
 
-PRJ=..
-PRJPCH=
+PRJ=..$/..$/..$/..
 
-PRJNAME=offapi
-TARGET=offapi_db
+PRJNAME=api
 
+TARGET=csssystem
+PACKAGE=com$/sun$/star$/system
 
 # --- Settings -----------------------------------------------------
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.INCLUDE :  makefile.pmk
+# ------------------------------------------------------------------------
+
+IDLFILES=\
+    SystemShellExecute.idl\
+    SystemShellExecuteException.idl\
+    SystemShellExecuteFlags.idl\
+    XSystemShellExecute.idl
 
 # ------------------------------------------------------------------
-
-#regcheck .PHONY: 
-#	$(COMSPEC) /c checkrdb.btm o:\comptest\swt614.rdb $(PRJ)$/$(OUTPATH)$/bin$/$(PRJNAME).rdb 
-
-# ------------------------------------------------------------------
-
-UNOIDLDBREGS= \
-    $(SOLARBINDIR)$/udkapi.rdb
-
-UNOIDLDBFILES= \
-    $(UCR)$/cssawt.db \
-    $(UCR)$/csschart.db \
-    $(UCR)$/cssconfiguration.db \
-    $(UCR)$/cssdatatransfer.db \
-    $(UCR)$/cssdclipboard.db \
-    $(UCR)$/cssddnd.db \
-    $(UCR)$/cssdocument.db \
-    $(UCR)$/cssdrawing.db \
-    $(UCR)$/cssfcomp.db \
-    $(UCR)$/cssform.db \
-    $(UCR)$/cssformula.db \
-    $(UCR)$/cssframe.db \
-    $(UCR)$/cssinstallation.db \
-    $(UCR)$/cssi18n.db \
-    $(UCR)$/csslinguistic2.db \
-    $(UCR)$/cssmozilla.db \
-    $(UCR)$/csspackages.db \
-    $(UCR)$/cssmanifest.db \
-    $(UCR)$/csspgp.db \
-    $(UCR)$/cssplugin.db \
-    $(UCR)$/csspresentation.db \
-    $(UCR)$/cssresource.db \
-    $(UCR)$/csssax.db \
-    $(UCR)$/cssscanner.db \
-    $(UCR)$/csssdb.db \
-    $(UCR)$/csssdbc.db \
-    $(UCR)$/csssdbcx.db \
-    $(UCR)$/csssheet.db \
-    $(UCR)$/cssstyle.db \
-    $(UCR)$/csssystem.db\
-    $(UCR)$/csstable.db \
-    $(UCR)$/csstask.db \
-    $(UCR)$/csstext.db \
-    $(UCR)$/csstextfield.db \
-    $(UCR)$/cssfieldmaster.db \
-    $(UCR)$/cssucb.db \
-    $(UCR)$/cssutil.db \
-    $(UCR)$/cssview.db \
-    $(UCR)$/csssvg.db \
-    $(UCR)$/csssync.db \
-    $(UCR)$/cssxml.db \
-    $(UCR)$/csssetup.db \
-    $(UCR)$/cssui.db \
-    $(UCR)$/cssimage.db
-
-# --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
+.INCLUDE :  $(PRJ)$/util$/target.pmk
