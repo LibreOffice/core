@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-20 14:07:19 $
+ *  last change: $Author: mba $ $Date: 2001-06-21 15:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,8 +634,8 @@ sal_Bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::DoSave()
-// DoSave wird nur noch ueber OLE aufgerufen. Sichern eigener Dokument
-// laeuft uber SaveAs, um das Anlegen von Backups zu ermoeglichen.
+// DoSave wird nur noch ueber OLE aufgerufen. Sichern eigener Dokumente im SFX
+// laeuft uber DoSave_Impl, um das Anlegen von Backups zu ermoeglichen.
 // Save in eigenes Format jetzt auch wieder Hierueber
 {
     sal_Bool bOk = sal_False ;
@@ -689,89 +689,95 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 */
 
 {
-    sal_Bool bOk = sal_False;
     SfxForceLinkTimer_Impl aFLT( this );
     EnableSetModified( FALSE );
+
     const SfxFilter *pFilter = rMedium.GetFilter();
     if ( !pFilter )
     {
+        // if no filter was set, use the default filter
+        // this should be changed in the feature, it should be an error!
         pFilter = GetFactory().GetFilter(0);
         rMedium.SetFilter(pFilter);
     }
-    sal_Bool bStorage = pFilter->UsesStorage();
-    if( bStorage )
+
+    if( pFilter->UsesStorage() )
+        // create an output storage in the correct format
         rMedium.GetOutputStorage( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() );
     else
         rMedium.GetOutStream();
+
     if( rMedium.GetErrorCode() )
         return sal_False;
-
-#ifdef DBG_UTILx
-    SvStorageRef xRef;
-    if( bStorage )
-    {
-        xRef = rMedium.GetStorage();
-        if( xRef.Is() )
-            xRef->EnableRootCommit( sal_False );
-    }
-#endif
 
     sal_Bool bOldStat = pImp->bForbidReload;
     pImp->bForbidReload = sal_True;
 
+    // lock user interface while saving the document
     Lock_Impl( this, TRUE );
-    if(IsOwnStorageFormat_Impl(rMedium))
+
+    sal_Bool bOk = sal_False;
+    if( IsOwnStorageFormat_Impl(rMedium) )
     {
         SvStorageRef aMedRef = rMedium.GetStorage();
         if ( !aMedRef.Is() )
         {
+            // no saving without storage, unlock UI and return
             Lock_Impl( this, FALSE );
             return sal_False;
         }
 
+        // transfer password from the parameters to the storage
         String aPasswd;
         if ( GetPasswd_Impl( rMedium.GetItemSet(), aPasswd ) )
             aMedRef->SetKey( S2BS( aPasswd ) ); //!!! (pb) needs new implementation
 
-        // Speichern
         const SfxFilter* pFilter = rMedium.GetFilter();
         if(  ((SvStorage *)aMedRef) == ((SvStorage *)GetStorage() ) )
         {
+            // target storage and object storage are identical, should never happen here
+            DBG_ERROR( "Saving storage without copy!");
             aMedRef->SetVersion( pFilter->GetVersion() );
             bOk = Save();
         }
         else
+            // save to target
             bOk = SaveAsOwnFormat( rMedium );
 
-        // Soll als Version gespeichert werden ?
-
+        // look for a "version" parameter
         const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
             SfxRequest::GetItem( pSet, SID_VERSION, sal_False, TYPE(SfxStringItem) ) : NULL;
 
-        const SfxStringItem *pAuthorItem = pSet ? (const SfxStringItem*)
-            SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, sal_False, TYPE(SfxStringItem) ) : NULL;
-
         if ( pVersionItem )
         {
-            // Versionskommentar und Author der Version
+            // store a version also
+            const SfxStringItem *pAuthorItem = pSet ? (const SfxStringItem*)
+                SfxRequest::GetItem( pSet, SID_DOCINFO_AUTHOR, sal_False, TYPE(SfxStringItem) ) : NULL;
+
+            // version comment
             SfxVersionInfo aInfo;
             aInfo.aComment = pVersionItem->GetValue();
+
+            // version author
             String aAuthor;
             if ( pAuthorItem )
                 aAuthor = pAuthorItem->GetValue();
             else
+                // if not transferred as a parameter, get it from user settings
                 aAuthor = SvtUserOptions().GetFullName();
 
+            // time stamp for version
             aInfo.aCreateStamp.SetName( aAuthor );
 
+            // desired format for version information
             sal_Bool bUseXML = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion();
 
-            // Den Storage f"ur die Versionen "offnen
+            // get storage for version streams
             SvStorageRef xVersion = bUseXML ?
                     aMedRef->OpenUCBStorage( DEFINE_CONST_UNICODE( "Versions" ) ) :
                     aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
 
-            // Ggf. alle schon vorhandenen Versionen kopieren
+            // all preliminary saved versions must be copied from the object storage to the the target storage
             SvStorageRef xOldVersions = GetStorage()->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ), SFX_STREAM_READONLY | STREAM_NOCREATE);
             if ( xOldVersions.Is() && xOldVersions->GetError() == SVSTREAM_OK )
             {
@@ -787,42 +793,33 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 }
             }
 
-            // Version in die Liste aufnehmen; diese mu\s vorher schon vom
-            // "alten" Medium "ubertragen worden sein
+            // add new version information into the versionlist and save the versionlist
+            // the version list must have been transferred from the "old" medium before
             rMedium.AddVersion_Impl( aInfo );
             rMedium.SaveVersionList_Impl( bUseXML );
-
-            // Einen Stream aufmachen, auf den dann der Storage gesetzt wird,
-            // in den gespeichert wird
-//            SvMemoryStream aTmp;
 
             ::utl::TempFile aTmpFile;
             aTmpFile.EnableKillingFile( TRUE );
             SvStorageRef xTmp = new SvStorage( ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ), aTmpFile.GetURL() );
-            rMedium.SetStorage_Impl( xTmp );
 
-            // Version speichern
+            // save the new version to the storage, perhaps also with password if the root storage is password protected
             if ( aPasswd.Len() )
                 xTmp->SetKey( S2BS( aPasswd ) ); //!!! (pb) needs new implementation
-            if( ((SvStorage*) xTmp ) == ((SvStorage*) GetStorage()) )
-            {
-                xTmp->SetVersion( pFilter->GetVersion() );
-                bOk = Save();
-            }
-            else
-                bOk = SaveAsOwnFormat( rMedium );
 
+            // save again, now as a version, use the target medium as a transport medium
+            // this should be changed in the future, using a different medium seems to be better
+            rMedium.SetStorage_Impl( xTmp );
+            bOk = SaveAsOwnFormat( rMedium );
             xTmp->Commit();
 
-            // Medium wieder auf den alten Storage setzen
+            // reconnect medium to "old" storage
             rMedium.SetStorage_Impl( aMedRef );
 
-            // storage freigeben, um ihn als stream zu öffnen
+            // close storage, it must be reopened as stream
             xTmp.Clear();
 
-            // Den Stream mit dem Storage komprimiert abspeichern
+            // compress stream and store it into the root storage
             SvStorageStreamRef xStrm = xVersion->OpenStream( aInfo.aName );
-
             if ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() )
             {
                 *xStrm << *aTmpFile.GetStream( STREAM_READ );
@@ -835,17 +832,22 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 aCodec.EndCompression();
             }
 
-            // Versionen-Storage committen
+            // commit the version storage
             xVersion->Commit();
         }
         else if ( pImp->bIsSaving )
         {
+            // it's a "Save", not a "SaveAs"
+            // so all preliminary saved versions must be copied from the object storage to the the target storage
             sal_Bool bUseXML = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion();
 
+            // save the version list
+            // the version list must have been transferred from the "old" medium before
             rMedium.SaveVersionList_Impl( bUseXML );
             const SfxVersionTableDtor *pList = rMedium.GetVersionList();
             if ( pList && pList->Count() )
             {
+                // copy the version streams
                 SvStorageRef xVersion = bUseXML ?
                     aMedRef->OpenUCBStorage( DEFINE_CONST_UNICODE( "Versions" ) ) :
                     aMedRef->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ) );
@@ -863,48 +865,41 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     }
                 }
 
+                // commit the version storage
                 xVersion->Commit();
             }
         }
     }
     else
     {
+        // it's a "SaveAs" in an alien format
         if ( rMedium.GetFilter() && ( rMedium.GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
             bOk = ExportTo( rMedium, *pSet );
         else
             bOk = ConvertTo( rMedium );
 
+        // after saving the document, the temporary object storage must be updated
+        // if the old object storage was not a temporary one, it will be updated also, because it will be used
+        // as a source for copying the objects into the new temporary storage that will be created below
+        // updating means: all child objects must be stored into it
+        // ( same as on loading, where these objects are copied to the temporary storage )
+        // but don't commit these changes, because in the case when the old object storage is not a temporary one,
+        // all changes will be written into the original file !
         if( bOk )
             bOk = SaveChilds() && SaveCompletedChilds( NULL );
     }
 
-#ifdef DBG_UTILx
-    if( bStorage )
-    {
-        if( xRef.Is() )
-            xRef->EnableRootCommit( sal_True );
-    }
-#endif
-
+    // SetModified must be enabled when SaveCompleted is called, otherwise the modified flag of child objects will not be cleared
     EnableSetModified( TRUE );
 
-    if(bOk)
+    if( bOk )
     {
-        sal_Bool bNeedsStorage = sal_False;
+        // remember new object storage, if it is a temporary one, because we will need it for a "SaveCompleted" later
         SvStorageRef xNewTempRef;
         if ( bOk && bPrepareForDirectAccess )
         {
-            /*  When the new medium ( rMedium ) has the same name as the
-                current one, we need to call DoHandsOff() so Commit() can
-                overwrite the old version. This is a good time to check
-                wether we want a backup copy, too.
-                (dv) We have to call DoHandsOff wether or not the names
-                are the same
-            */
-
             sal_Bool bCopyTo = sal_False;
             SfxItemSet *pSet = rMedium.GetItemSet();
-
             if( pSet )
             {
                 SFX_ITEMSET_ARG( pSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
@@ -912,66 +907,74 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                             pSaveToItem && pSaveToItem->GetValue();
             }
 
-            // Falls jetzt in ein Fremdformat gespeichert wird, darf nicht der
-            // Objektstorage weiterverwendet werden, wenn das alte Format das
-            // eigene war. Daher wird hier eine temporaerer erzeugt.
-            // Damit DoHandsOff gerufen werden kann, merken wir uns den
-            // Storage und rufen anschliessend von Hand SaveCompleted
-
-            bNeedsStorage = !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) &&
-                            !IsOwnStorageFormat_Impl(rMedium);
-
-            if ( bNeedsStorage && pMedium->GetName().Len() )
+            // if the target medium is an alien format and the "old" medium was an own format, the object storage
+            // must be exchanged, because now we need a new temporary storage as object storage
+            BOOL bNeedsStorage = !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) && !IsOwnStorageFormat_Impl(rMedium);
+            if ( bNeedsStorage )
             {
-                if( !ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
-                    bOk = sal_False;
+                if( !pMedium->GetName().Len() )
+                    // if the old object storage was a temporary one too, we can continue with it
+                    xNewTempRef = GetStorage();
+                else
+                {
+                    // copy storage of old medium to new temporary storage and take this over
+                    if( ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
+                        xNewTempRef = GetStorage();
+                    else
+                        bOk = sal_False;
+                }
             }
 
-            if( bNeedsStorage || !pMedium->GetName().Len() )
-                xNewTempRef = GetStorage();
-
-            if ( bOk && !bCopyTo )
+            // When the new medium ( rMedium ) has the same name as the current one,
+            // we need to call DoHandsOff() so Commit() can overwrite the old version
+            if ( bOk && pMedium && ( rMedium.GetName() == pMedium->GetName() ) )
                 DoHandsOff();
         }
 
         if ( bOk )
         {
-            EnableSetModified( FALSE );
             if ( pMedium && ( rMedium.GetName() == pMedium->GetName() ) )
             {
+                // before we overwrite the original file, we will make a backup if there is a demand for that
                 const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
                 if ( bDoBackup )
                     pMedium->DoBackup_Impl();
             }
 
+            // transfer data to its destinated location
+            EnableSetModified( FALSE );
             RegisterTransfer( rMedium );
-            bOk=rMedium.Commit();
-
+            bOk = rMedium.Commit();
             EnableSetModified( TRUE );
 
-            if ( bNeedsStorage )
+            // watch: if the document was successfully saved into an own format, no "SaveCompleted" was called,
+            // this must be done by the caller ( because they want to do different calls )
+            if ( xNewTempRef.Is() )
+                // if the new object storage is a temporary one, because the target format is an alien format
                 SaveCompleted( xNewTempRef );
-            else if ( bPrepareForDirectAccess && !bOk )
+            else if ( !bOk && IsHandsOff() )
+                // critical case: avoid "HandsOff" states
+                // usually the caller doesn't know that this method has set the document into the "HandsOff" state
                 DoSaveCompleted( &rMedium );
         }
     }
-    else
-    {
-        Lock_Impl( this, FALSE );
-        return sal_False;
-    }
 
+    // unlock user interface
     Lock_Impl( this, FALSE );
     pImp->bForbidReload = bOldStat;
 
-    if( bOk && pFilter )
-        if( pFilter->IsAlienFormat() )
-            pImp->bDidDangerousSave=sal_True;
-        else
-            pImp->bDidDangerousSave=sal_False;
-
     if ( bOk )
+    {
+        DBG_ASSERT( pFilter, "No filter after successful save?!" );
+        if( pFilter )
+            if( pFilter->IsAlienFormat() )
+                // set flag, that the user will be warned for possible data loss on closing this document
+                pImp->bDidDangerousSave=sal_True;
+            else
+                pImp->bDidDangerousSave=sal_False;
+
         SetEAs_Impl(rMedium);
+    }
 
     return bOk;
 }
@@ -1011,6 +1014,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( SvStorage* pStg)
 
 sal_Bool SfxObjectShell::DoSaveAs( SvStorage * pNewStor )
 {
+// DoSaveAs wird nur noch ueber OLE aufgerufen
     sal_Bool bOk;
     {
         SfxForceLinkTimer_Impl aFLT( this );
@@ -1384,93 +1388,85 @@ void SfxObjectShell::SetEAs_Impl( SfxMedium &rMedium )
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
-
-//Hier jetzt mal eine Einordnung der einzelnen Save Funktionen
-//
-//DoSave / DoSaveAs: Werden ausschliesslich ueber OLE gerufen
-//DoSave_Impl      : Einfaches Speichern mit allem OLE Protokoll SchnickSchnack
-//Save_Impl        : Bearbeitungsfunktion fuer SAVEDOC
-
 {
-    sal_Bool bSaved = sal_False;
     SfxMedium *pMedium = GetMedium();
+    const SfxFilter* pFilter = pMedium->GetFilter();
 
-// Save jetzt in jedem Fall ueber SaveAs in temporaeres Medium
-// Ausser, wenn kein Backup gewuensch ist und wir ins eigene
-// Storageformat schreiben und wir nicht in SaveAs sind.
+    // copy the original itemset, but remove the "version" item, because pMediumTmp
+    // is a new medium "from scratch", so no version should be stored into it
+    SfxItemSet* pSet = pMedium->GetItemSet() ? new SfxAllItemSet(*pMedium->GetItemSet()): 0;
+    pSet->ClearItem( SID_VERSION );
 
-    //  Backup will be created in _Impl()
-    const sal_Bool bIsOwn=IsOwnStorageFormat_Impl(*pMedium);
+    // create a medium as a copy; this medium is only for writingm, because it uses the same name as the original one
+    // writing is done through a copy, that will be transferred to the target ( of course after calling HandsOff )
+    SfxMedium* pMediumTmp = new SfxMedium( pMedium->GetName(), pMedium->GetOpenMode(), pMedium->IsDirect(), pFilter, pSet );
+    pMediumTmp->SetLongName( pMedium->GetLongName() );
+    pMediumTmp->CreateTempFileNoCopy();
 
-// Zur Zeit wirder immer ueber temporaere Datei, um Storages schrumpfen
-// zu lassen.
-//
-    {
-        const StreamMode nFlags = pMedium->GetOpenMode();
-        const sal_Bool bDirect = pMedium->IsDirect();
-        const String aLongName(pMedium->GetLongName());
-
-        SfxItemSet  *pSet =
-            pMedium->GetItemSet()?
-                new SfxAllItemSet(*pMedium->GetItemSet()): 0;
-
-        const SfxFilter* pFilter = GetMedium()->GetFilter();
-        SfxMedium* pMediumTmp = new SfxMedium( pMedium->GetName(), nFlags, bDirect, pFilter, pSet );
-        pMediumTmp->CreateTempFileNoCopy();
-        pMediumTmp->SetLongName( aLongName );
-
-        // Nat"urlich keine Version in einem neuen Medium!
-        pMediumTmp->GetItemSet()->ClearItem( SID_VERSION );
-        pMediumTmp->GetItemSet()->Put( SfxStringItem( SID_DOCTEMPLATE, pMedium->GetURLObject().GetBase()) );
-
-        const String aOldURL( INetURLObject::GetBaseURL() );
-        if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-            if ( ShallSetBaseURL_Impl(*pMedium) )
-                INetURLObject::SetBaseURL( pMedium->GetName() );
-            else
-                INetURLObject::SetBaseURL( String() );
-
-        pMediumTmp->TransferVersionList_Impl( *pMedium );
-
-        if ( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
-            SetError( GetMedium()->Unpack_Impl( pMedium->GetPhysicalName() ) );
-
-        if( !GetError() && SaveTo_Impl( *pMediumTmp, pArgs, TRUE ) )
-        {
-            INetURLObject::SetBaseURL( aOldURL );
-            ByteString aKey;
-            if ( IsOwnStorageFormat_Impl( *pMediumTmp ) )
-                aKey = pMediumTmp->GetStorage()->GetKey();
-
-            DoHandsOff();
-            SfxItemSet *pSet = pMediumTmp->GetItemSet();
-            if(pSet)
-                pMedium->GetItemSet()->Put(*pSet);
-
-            pMedium->TransferVersionList_Impl( *pMediumTmp );
-            SetError(pMediumTmp->GetErrorCode());
-            pMediumTmp->Close();
-            bSaved=sal_True;
-            delete pMediumTmp;
-
-            sal_Bool bOpen = DoSaveCompleted(pMedium);
-            if (  bOpen && aKey.Len() )
-                pMedium->GetStorage()->SetKey( aKey );
-            DBG_ASSERT(bOpen,"Fehlerbehandlung fuer DoSaveCompleted nicht implementiert");
-        }
+    // some awful base URL stuff
+    const String aOldURL( INetURLObject::GetBaseURL() );
+    if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+        if ( ShallSetBaseURL_Impl(*pMedium) )
+            INetURLObject::SetBaseURL( pMedium->GetName() );
         else
-        {
-            INetURLObject::SetBaseURL( aOldURL );
-            SetError( pMediumTmp->GetError() );
-            String aTmp;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pMediumTmp->GetPhysicalName(), aTmp );
-            delete pMediumTmp;
-            SfxContentHelper::Kill( aTmp );
-            DoSaveCompleted( (SvStorage*)0 );
-        }
+            INetURLObject::SetBaseURL( String() );
+
+    // copy version list from "old" medium to target medium, so it can be used on saving
+    pMediumTmp->TransferVersionList_Impl( *pMedium );
+
+    if ( pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
+        SetError( GetMedium()->Unpack_Impl( pMedium->GetPhysicalName() ) );
+
+    sal_Bool bSaved = sal_False;
+    if( !GetError() && SaveTo_Impl( *pMediumTmp, pArgs, TRUE ) )
+    {
+        bSaved = sal_True;
+
+        // restore BaseURL
+        INetURLObject::SetBaseURL( aOldURL );
+
+        ByteString aKey;
+        if ( IsOwnStorageFormat_Impl( *pMediumTmp ) )
+            aKey = pMediumTmp->GetStorage()->GetKey();
+
+        // retransfer parameters to original itemset
+        if( pSet )
+            pSet->Put( *pMediumTmp->GetItemSet() );
+
+        // copy back version list to "old" medium, because the "old" medium will stay the objectshells' medium,
+        // the temporary medium was only used in between
+        pMedium->TransferVersionList_Impl( *pMediumTmp );
+        SetError(pMediumTmp->GetErrorCode());
+
+        // remove temporary medium and reconnect to original one
+        pMediumTmp->Close();
+        delete pMediumTmp;
+
+        DoHandsOff();
+        sal_Bool bOpen = DoSaveCompleted(pMedium);
+        if (  bOpen && aKey.Len() )
+            pMedium->GetStorage()->SetKey( aKey );
+        DBG_ASSERT(bOpen,"Fehlerbehandlung fuer DoSaveCompleted nicht implementiert");
+    }
+    else
+    {
+        // restore BaseURL
+        INetURLObject::SetBaseURL( aOldURL );
+
+        // transfer error code from medium to objectshell
+        SetError( pMediumTmp->GetError() );
+
+        // kill temporary file and medium
+        String aTmp;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pMediumTmp->GetPhysicalName(), aTmp );
+        delete pMediumTmp;
+        SfxContentHelper::Kill( aTmp );
+
+        // reconnect to object storage
+        DoSaveCompleted( (SvStorage*)0 );
     }
 
-    SetModified(!bSaved);
+    SetModified( !bSaved );
     return bSaved;
 }
 
@@ -1875,44 +1871,56 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     SfxItemSet*     pParams
 )
 {
-    if ( pParams )
-        pParams->Put(
-            SfxStringItem(
-                SID_DOCTEMPLATE, INetURLObject( rFileName ).GetBase()) );
-    SfxAllItemSet* pMergedParams = new SfxAllItemSet(
-        *pMedium->GetItemSet() );
+    // copy all items stored in the itemset of the current medium
+    SfxAllItemSet* pMergedParams = new SfxAllItemSet( *pMedium->GetItemSet() );
+
+    // in "SaveAs" title and password will be cleared ( maybe the new itemset contains new values, otherwise they will be empty )
     pMergedParams->ClearItem( SID_PASSWORD );
     pMergedParams->ClearItem( SID_DOCINFO_TITLE );
 
+    // "SaveAs" will never store any version information - it's a complete new file !
+    pMergedParams->ClearItem( SID_VERSION );
+
+    // merge the new parameters into the copy
+    // all values present in both itemsets will be overwritten by the new parameters
     if( pParams )
         pMergedParams->Put( *pParams );
     delete pParams;
+
+    // should be unneccessary - too hot to handle!
     pMergedParams->ClearItem( SID_DOC_SALVAGE );
+
+#ifdef DBG_UTIL
+    if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_AVAILABLE )
+        DBG_ERROR("Salvage item present in Itemset, check the parameters!");
+#endif
+
+    // take over the new merged itemset
     pParams = pMergedParams;
 
-//  SfxItemSet  *pSet = pParams ? new SfxAllItemSet(*pParams) : 0;
+    // create a medium for the target URL
+    SfxMedium *pNewFile = new SfxMedium( rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, 0, pParams );
 
-    SfxMedium *pNewFile = new SfxMedium(
-        rFileName, STREAM_READWRITE | STREAM_SHARE_DENYWRITE, sal_False, 0, pParams );
+    // check if a "SaveTo" is wanted, no "SaveAs"
+    SFX_ITEMSET_ARG( pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+    sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || pSaveToItem && pSaveToItem->GetValue();
 
-    SFX_ITEMSET_ARG(
-        pParams, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-
-    sal_Bool bCopyTo =
-        GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-        pSaveToItem && pSaveToItem->GetValue();
-
+    // because saving a document modified its DocumentInfo, the current DocumentInfo must be saved on "SaveTo", because
+    // it must be restored after saving
     SfxDocumentInfo aSavedInfo;
     if ( bCopyTo )
         aSavedInfo = GetDocInfo();
 
-    pNewFile->SetFilter( GetFactory(), aFilterName);
+    // set filter; if no filter is given, take the default filter of the factory
+    if ( aFilterName.Len() )
+        pNewFile->SetFilter( GetFactory(), aFilterName );
+    else
+        pNewFile->SetFilter( GetFactory().GetFilterContainer()->GetFilter(0) );
+
+    // saving is alway done using a temporary file
     pNewFile->CreateTempFileNoCopy();
 
-    sal_Bool bOk;
-
-    SfxMedium *pMediumTmp;
-
+    // some base URL stuff ( awful, but not avoidable ... )
     const String aOldURL( INetURLObject::GetBaseURL() );
     if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         if ( ShallSetBaseURL_Impl(*pNewFile) )
@@ -1920,68 +1928,65 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         else
             INetURLObject::SetBaseURL( String() );
 
-    pMediumTmp = pNewFile;
-
-    // Nat"urlich keine Version in einem neuen Medium!
-    pMediumTmp->GetItemSet()->ClearItem( SID_VERSION );
-
-    if ( aFilterName.Len() )
-        pMediumTmp->SetFilter( GetFactory(), aFilterName );
-    else
-        pMediumTmp->SetFilter( GetFactory().GetFilterContainer()->GetFilter(0) );
-
+    // distinguish between "Save" and "SaveAs"
     pImp-> bIsSaving = sal_False;
-    bOk = sal_False;
 
     if ( IsOwnStorageFormat_Impl(*pNewFile) )
     {
-        long nFormat = pMediumTmp->GetFilter()->GetFormat();
+        // If the filter is a "cross export" filter ( f.e. a filter for exporting an impress document from
+        // a draw document ), the ClassId of the destination storage is different from the ClassId of this
+        // document. It can be retrieved from the default filter for the desired target format
+        long nFormat = pNewFile->GetFilter()->GetFormat();
         SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
         const SfxFilter *pFilt = rMatcher.GetFilter4ClipBoardId( nFormat );
         if ( pFilt )
         {
-            if ( pFilt->GetFilterContainer() != pMediumTmp->GetFilter()->GetFilterContainer() )
-                pMediumTmp->GetStorage()->SetClass( SvFactory::GetServerName( nFormat ), nFormat, pFilt->GetTypeName() );
+            if ( pFilt->GetFilterContainer() != pNewFile->GetFilter()->GetFilterContainer() )
+                pNewFile->GetStorage()->SetClass( SvFactory::GetServerName( nFormat ), nFormat, pFilt->GetTypeName() );
         }
     }
 
     if ( GetMedium()->GetFilter() && ( GetMedium()->GetFilter()->GetFilterFlags() & SFX_FILTER_PACKED ) )
     {
         SfxMedium *pMed = bCopyTo ? pMedium : pNewFile;
-        pMediumTmp->SetError( GetMedium()->Unpack_Impl( pMed->GetPhysicalName() ) );
+        pNewFile->SetError( GetMedium()->Unpack_Impl( pMed->GetPhysicalName() ) );
     }
 
-    if ( !pMediumTmp->GetErrorCode() && SaveTo_Impl( *pMediumTmp, NULL, TRUE ) )
+    // Save the document ( first as temporary file, then transfer to the target URL by committing the medium )
+    sal_Bool bOk = sal_False;
+    if ( !pNewFile->GetErrorCode() && SaveTo_Impl( *pNewFile, NULL, TRUE ) )
     {
         bOk = sal_True;
+
+        // restore old BaseURL
         INetURLObject::SetBaseURL( aOldURL );
 
-        SetError( pMediumTmp->GetErrorCode() );
+        // transfer a possible error from the medium to the document
+        SetError( pNewFile->GetErrorCode() );
 
+        // notify the document that saving was done successfully
         if ( bCopyTo )
             bOk = DoSaveCompleted( pMedium );
         else
             bOk = DoSaveCompleted( pNewFile );
 
-        //! Vorsich. Muss nicht immer klappen.
-        DBG_ASSERT( bOk, "DoSaveCompleted nicht geklappt und keine Fehlerbehandlung");
         if( bOk )
         {
             if( !bCopyTo )
-            {
-                SetModified(sal_False);
-                bOk=sal_True;
-            }
+                SetModified( sal_False );
         }
         else
         {
+            DBG_ASSERT( !bCopyTo, "Error while reconnecting to medium, can't be handled!");
             SetError( pNewFile->GetErrorCode() );
-/*
-            if ( !pMedium->GetName().Len() )
-                SaveCompleted( xNewTempRef );
-            else
- */
-            DoSaveCompleted( pMedium );
+
+            if ( !bCopyTo )
+            {
+                // reconnect to the old medium
+                BOOL bRet = DoSaveCompleted( pMedium );
+                DBG_ASSERT( bRet, "Error in DoSaveCompleted, can't be handled!");
+            }
+
             DELETEZ( pNewFile );
         }
 
@@ -1992,17 +1997,21 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     else
     {
         INetURLObject::SetBaseURL( aOldURL );
-        SetError(pMediumTmp->GetErrorCode());
+        SetError( pNewFile->GetErrorCode() );
+
+        // reconnect to the old storage
         DoSaveCompleted( (SvStorage*)0 );
     }
 
-    if(!bOk)
-        SetModified(sal_True);
+    if( !bOk )
+        SetModified( sal_True );
 
     if ( bCopyTo )
     {
+        // restore DocumentInfo if only a copy was created
         SfxDocumentInfo &rDocInfo = GetDocInfo();
         rDocInfo = aSavedInfo;
+        DELETEZ( pNewFile );
     }
 
     return bOk;
