@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:23:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,13 @@ protected:
     SwHTMLTableLayout *pHTMLLayout;
 
 //SOLL das fuer jede Tabelle einstellbar sein?
-    TblChgMode   eTblChgMode;
+    TblChgMode  eTblChgMode;
 
-    USHORT       nGrfsThatResize;   // Anzahl der Grfs, die beim HTML-Import
+    USHORT      nGrfsThatResize;    // Anzahl der Grfs, die beim HTML-Import
                                     // noch ein Resize der Tbl. anstossen
+    USHORT      nRowsToRepeat;      // number of rows to repeat on every page
 
-    BOOL         bModifyLocked  :1;
-    BOOL         bHeadlineRepeat:1;
+    BOOL        bModifyLocked   :1;
 
     BOOL IsModifyLocked(){ return bModifyLocked;}
 
@@ -164,8 +164,11 @@ public:
     void LockModify()   { bModifyLocked = TRUE; }   //Muessen _immer_ paarig
     void UnlockModify() { bModifyLocked = FALSE;}   //benutzt werden!
 
-    BOOL IsHeadlineRepeat() const { return bHeadlineRepeat; }
-    void SetHeadlineRepeat( BOOL bSet ) { bHeadlineRepeat = bSet; }
+    USHORT GetRowsToRepeat() const { return Min( GetTabLines().Count(), nRowsToRepeat ); }
+    USHORT _GetRowsToRepeat() const { return nRowsToRepeat; }
+    void SetRowsToRepeat( USHORT nNumOfRows ) { nRowsToRepeat = nNumOfRows; }
+
+    bool IsHeadline( const SwTableLine& rLine ) const;
 
           SwTableLines &GetTabLines() { return aLines; }
     const SwTableLines &GetTabLines() const { return aLines; }
