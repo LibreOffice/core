@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_servi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:41:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,10 @@ PE_Service::Process_MetaType( const TokMetaType &   i_rToken )
                     else
                         On_Default();
                     break;
+        default:
+            // KORR:
+            // Should throw syntax error warning.
+                    ;
     }   // end switch
 }
 
