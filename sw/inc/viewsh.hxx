@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:24:11 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,10 @@ public:
     // proportional line spacing or not
     sal_Bool IsFormerLineSpacing() const;
     void SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing );
+
+    // OD 2004-03-12 #i11860# - former object positioning
+    sal_Bool IsFormerObjectPositioning() const;
+    void SetUseFormerObjectPositioning( const sal_Bool _bUseFormerObjPos );
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
