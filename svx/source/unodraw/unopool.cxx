@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 22:50:23 $
+ *  last change: $Author: cl $ $Date: 2001-03-05 12:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HDL_
-#include <com/sun/star/beans/PropertyState.hdl>
+#include <com/sun/star/beans/PropertyState.hpp>
 #endif
 
 #include <unotools/propertysetinfo.hxx>
@@ -260,8 +260,8 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pE
                     eMode = (drawing::BitmapMode)nMode;
                 }
 
-                pPool->Put( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ), XATTR_FILLBMP_STRETCH );
-                pPool->Put( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ), XATTR_FILLBMP_TILE );
+                pPool->SetPoolDefaultItem( XFillBmpStretchItem( eMode == drawing::BitmapMode_STRETCH ) );
+                pPool->SetPoolDefaultItem( XFillBmpTileItem( eMode == drawing::BitmapMode_REPEAT ) );
                 return;
             }
             while(0);
@@ -272,7 +272,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const utl::PropertyMapEntry* pE
         if( !pNewItem->PutValue( aValue, pEntry->mnMemberId ) )
             throw IllegalArgumentException();
 
-        pPool->Put( *pNewItem, nWhich );
+        pPool->SetPoolDefaultItem( *pNewItem );
     }
 }
 
@@ -344,8 +344,6 @@ void SvxUnoDrawPool::_getPropertyStates( const utl::PropertyMapEntry** ppEntries
                     *pStates = PropertyState_DIRECT_VALUE;
                 }
             }
-
-            *pStates = PropertyState_DIRECT_VALUE;
 
             pStates++;
             ppEntries++;
