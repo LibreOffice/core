@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 16:51:40 $
+#   last change: $Author: kz $ $Date: 2004-05-18 14:06:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,16 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
+        undo.src
+
 SLOFILES =	\
+        $(SLO)$/SwRewriter.obj \
+        $(SLO)$/SwUndoField.obj \
+        $(SLO)$/SwUndoPageDesc.obj \
         $(SLO)$/SwUndoTempAutoCorr.obj \
+        $(SLO)$/SwUndoTOXChange.obj \
         $(SLO)$/docundo.obj \
         $(SLO)$/rolbck.obj \
         $(SLO)$/unattr.obj \
