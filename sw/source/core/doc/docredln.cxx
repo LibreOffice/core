@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:55:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:17:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1347,13 +1347,6 @@ BOOL SwDoc::DeleteRedline( const SwStartNode& rNode, BOOL bSaveInUndo,
 {
     SwPaM aTemp(*rNode.EndOfSectionNode(), rNode);
     return DeleteRedline(aTemp, bSaveInUndo, nDelType);
-}
-
-void SwDoc::DeleteRedline( USHORT nPos )
-{
-    SwRedline* pTmp = (*pRedlineTbl)[ nPos ];
-    pTmp->InvalidateRange();
-    pRedlineTbl->DeleteAndDestroy( nPos );
 }
 
 USHORT SwDoc::GetRedlinePos( const SwNode& rNd, USHORT nType ) const
@@ -2905,15 +2898,6 @@ SwRedline::SwRedline( SwRedlineType eTyp, const SwPaM& rPam )
     bIsVisible = TRUE;
     if( !rPam.HasMark() )
         DeleteMark();
-}
-
-SwRedline::SwRedline( SwRedlineType eTyp, const SwPosition& rPos )
-    : SwPaM( rPos ),
-    pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) ),
-    pCntntSect( 0 )
-{
-    bDelLastPara = bIsLastParaDelete = FALSE;
-    bIsVisible = TRUE;
 }
 
 SwRedline::SwRedline( const SwRedlineData& rData, const SwPaM& rPam )
