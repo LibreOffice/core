@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+#   last change: $Author: jbu $ $Date: 2002-01-15 17:25:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,8 @@ PRJ=..
 PRJNAME=SVTOOLS
 TARGET=svdem
 LIBTARGET=NO
+TARGETTYPE=GUI
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -75,106 +77,33 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 OBJFILES=	$(OBJ)$/svdem.obj
-# removed, because these files aren't ported to Unicode
-#			 $(OBJ)$/browser.obj  \
-#			 $(OBJ)$/stest.obj	  \
-#			 $(OBJ)$/grptest.obj
 
 APP1TARGET= 	$(TARGET)
-.IF "$(GUI)" != "MAC"
 APP1STDLIBS=	$(SVTOOLLIB)	\
                 $(SVLIB)		\
-                $(TOOLSLIB) 	\
+                $(COMPHELPERLIB) 	\
+                $(TOOLSLIB) 		\
                 $(SALLIB)		\
                 $(VOSLIB)		\
+                $(CPPUHELPERLIB) 	\
                 $(CPPULIB)
-.ELSE
-APP1STDLIBS=	$(SOLARBINDIR)$/TL$(UPD)$(DLLPOSTFIX).DLL \
-                $(SOLARBINDIR)$/VCL$(UPD)$(DLLPOSTFIX).DLL \
-                $(SOLARBINDIR)$/SVT$(UPD)$(DLLPOSTFIX).DLL
-APP1LIBS=		$(SOLARLIBDIR)$/SALMAIN.MAC.LIB \
-                $(SOLARLIBDIR)$/NOSHAREDMAIN.LIB
-.ENDIF
-.IF "$(GUI)" != "MAC"
-APP1DEPN=		$(L)$/itools.lib $(SVLIBDEPEND) $(LB)$/_svt.lib
-.ENDIF
+
+APP1DEPN=		$(L)$/itools.lib $(SVLIBDEPEND) 
 APP1OBJS=		$(OBJ)$/svdem.obj
-APP1STACK=		32768
 
-# removed, because these files aren't ported to Unicode
-#APP2TARGET= browser
-.IF "$(GUI)" != "MAC"
-#APP2STDLIBS=	 $(SVTOOLLIB)	 \
-#				 $(SVLIB)		 \
-#				 $(SALLIB)		 \
-#				 $(TOOLSLIB)	 \
-#				 $(VOSLIB)		 \
-#				 $(CPPULIB)
-.ELSE
-#APP2STDLIBS=	 $(SOLARBINDIR)$/TL$(UPD)$(DLLPOSTFIX).DLL \
-#				 $(SOLARBINDIR)$/VCL$(UPD)$(DLLPOSTFIX).DLL \
-#				 $(SOLARBINDIR)$/SVT$(UPD)$(DLLPOSTFIX).DLL
-#APP2LIBS=		 $(SOLARLIBDIR)$/SALMAIN.MAC.LIB \
-#				 $(SOLARLIBDIR)$/NOSHAREDMAIN.LIB
-.ENDIF
-.IF "$(GUI)" != "MAC"
-#APP2DEPN=		 $(LB)$/_svt.lib $(L)$/itools.lib $(SVLIBDEPEND)
-.ENDIF
-#APP2OBJS=		 $(OBJ)$/browser.obj
-#APP2STACK= 	 32768
-
-# removed, because these files aren't ported to Unicode
-#APP3TARGET=	 stest
-.IF "$(GUI)" != "MAC"
-#APP3STDLIBS=	 $(SVMEMLIB)	 \
-#				 $(SVTOOLLIB)	 \
-#				 $(SVLIB)		 \
-#				 $(SALLIB)		 \
-#				 $(TOOLSLIB)	 \
-#				 $(VOSLIB)		 \
-#				 $(SVLLIB)		 \
-#				 $(CPPULIB)
-.ELSE
-#APP3STDLIBS=	 $(SOLARBINDIR)$/TL$(UPD)$(DLLPOSTFIX).DLL \
-#				 $(SOLARBINDIR)$/VCL$(UPD)$(DLLPOSTFIX).DLL \
-#				 $(SOLARBINDIR)$/SVT$(UPD)$(DLLPOSTFIX).DLL
-#APP3LIBS=		 $(SOLARLIBDIR)$/SALMAIN.MAC.LIB \
-#				 $(SOLARLIBDIR)$/NOSHAREDMAIN.LIB
-.ENDIF
-.IF "$(GUI)" != "MAC"
-#APP3DEPN=		 $(L)$/itools.lib $(SVLIBDEPEND) $(LB)$/svmem.lib $(LB)$/_svt.lib
-.ENDIF
-#APP3OBJS=		 $(OBJ)$/stest.obj
-#APP3STACK= 	 32768
-
-# removed, because these files aren't ported to Unicode
-#APP4TARGET=	 grptest
-.IF "$(GUI)" != "MAC"
-#APP4STDLIBS=	 $(SVMEMLIB)	 \
-#				 $(SVTOOLLIB)	 \
-#				 $(SVLIB)		 \
-#				 $(SALLIB)		 \
-#				 $(TOOLSLIB)	 \
-#				 $(VOSLIB)		 \
-#				 $(CPPULIB)
-.ELSE
-#APP4STDLIBS=	 $(SOLARBINDIR)$/TL$(UPD)$(DLLPOSTFIX).DLL \
-#				 $(SOLARBINDIR)$/VCL$(UPD)$(DLLPOSTFIX).DLL \
-#				 $(SOLARBINDIR)$/SVT$(UPD)$(DLLPOSTFIX).DLL
-#APP4LIBS=		 $(SOLARLIBDIR)$/SALMAIN.MAC.LIB \
-#				 $(SOLARLIBDIR)$/NOSHAREDMAIN.LIB
-.ENDIF
-.IF "$(GUI)" != "MAC"
-#APP4DEPN=		 $(L)$/itools.lib $(SVLIBDEPEND) $(LB)$/svmem.lib $(LB)$/_svt.lib
-.ENDIF
-#APP4OBJS=		 $(OBJ)$/grptest.obj
-#APP4STACK= 	 32768
-
-
-.IF "$(GUI)" == "MAC"
-MACRES = $(SV_RES)SV.R $(SV_RES)SV_DEMO.R $(SV_RES)SV_POWER.R
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 
+ALL : \
+    ALLTAR \
+    $(BIN)$/applicat.rdb 
+
 .INCLUDE :	target.mk
+
+$(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/applicat.rdb
+    rm -f $@
+    $(GNUCOPY) $(SOLARBINDIR)$/applicat.rdb $@
+     +cd $(BIN) && \
+         regcomp -register -r applicat.rdb \
+             -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
+             -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST) 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-16 16:23:32 $
+ *  last change: $Author: jbu $ $Date: 2002-01-15 17:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+#include <stdio.h>
+#include <cppuhelper/servicefactory.hxx>
+#include <comphelper/processfactory.hxx>
+
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -255,19 +259,33 @@ public:
 
 void MyApp::Main()
 {
-    Help aHelp;
-    SetHelp( &aHelp );
-    Help::EnableContextHelp();
-    Help::EnableExtHelp();
-    Help::EnableBalloonHelp();
-    Help::EnableQuickHelp();
+    try
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+              xMSF = cppu::createRegistryServiceFactory(
+                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
-    MyWin aMainWin( NULL, WinBits( WB_APP | WB_STDWORK | WB_CLIPCHILDREN ) );
-    aMainWin.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "SVTOOLS - Workbench" ) ) );
-    aMainWin.GrabFocus();
-    aMainWin.Show();
+        ::comphelper::setProcessServiceFactory( xMSF );
 
-    Execute();
+        Help aHelp;
+        SetHelp( &aHelp );
+        Help::EnableContextHelp();
+        Help::EnableExtHelp();
+        Help::EnableBalloonHelp();
+        Help::EnableQuickHelp();
+
+        MyWin aMainWin( NULL, WinBits( WB_APP | WB_STDWORK | WB_CLIPCHILDREN ) );
+        aMainWin.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "SVTOOLS - Workbench" ) ) );
+        aMainWin.GrabFocus();
+        aMainWin.Show();
+
+        Execute();
+    }
+    catch ( com::sun::star::uno::Exception & e )
+    {
+        fprintf( stderr, "Error during bootstrapping servicemanager: %s\n" ,
+                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    }
 }
 
 // -----------------------------------------------------------------------
