@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-30 14:34:38 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,6 +733,26 @@ Menu RID_POPUP_PIVOT
             Text = "~Filter..." ;
             Text [ ENGLISH ] = "~Filter..." ;
             Text [ english_us ] = "~Filter..." ;
+            Text[ portuguese ] = "~Filter...";
+            Text[ russian ] = "~Filter...";
+            Text[ greek ] = "~Filter...";
+            Text[ dutch ] = "~Filter...";
+            Text[ french ] = "~Filtre...";
+            Text[ spanish ] = "~Filtro...";
+            Text[ finnish ] = "~Filter...";
+            Text[ italian ] = "~Filtro...";
+            Text[ danish ] = "~Filter...";
+            Text[ swedish ] = "~Filter...";
+            Text[ polish ] = "~Filter...";
+            Text[ portuguese_brazilian ] = "~Filter...";
+            Text[ japanese ] = "フィルタ(F)...";
+            Text[ korean ] = "필터(F)...";
+            Text[ chinese_simplified ] = "筛选(~F)...";
+            Text[ chinese_traditional ] = "篩選(~F)...";
+            Text[ turkish ] = "~Filter...";
+            Text[ arabic ] = "~Filter...";
+            Text[ catalan ] = "~Filter...";
+            Text[ thai ] = "~Filter...";
         };
         MenuItem
         {
