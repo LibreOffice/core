@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:52:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,26 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
             if ( aTempMedDescr[nInd].Name.equalsAscii( "FilterName" ) )
                 aTempMedDescr[nInd].Value >>= aFilterName;
+
+        if ( !aFilterName.getLength() && aTypeName.getLength() )
+        {
+            uno::Reference<container::XNameAccess> xNameAccess( xTypeDetection, uno::UNO_QUERY );
+            if ( xNameAccess.is() && xNameAccess->hasByName( aTypeName ) )
+            {
+                uno::Sequence<beans::PropertyValue> aTypes;
+                xNameAccess->getByName(aTypeName) >>= aTypes;
+                for( sal_Int32 nInd = 0; nInd < aTypes.getLength(); nInd++ )
+                    if ( aTypes[nInd].Name.equalsAscii( "PreferredFilter" ) )
+                    {
+                        aTypes[nInd].Value >>= aFilterName;
+                        sal_Int32 nLen = aTempMedDescr.getLength();
+                        aTempMedDescr.realloc(nLen+1);
+                        aTempMedDescr[nLen].Value = aTypes[nInd].Value;
+                        aTempMedDescr[nLen].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                        break;
+                    }
+            }
+        }
     }
 
     uno::Reference< uno::XInterface > xResult;
