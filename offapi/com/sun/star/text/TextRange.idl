@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextRange.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@
 #ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
 #endif
+#ifndef __com_sun_star_style_ParagraphPropertiesAsian_idl__
+#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
+#endif
+#ifndef __com_sun_star_style_ParagraphPropertiesComplex_idl__
+#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
+#endif
 #ifndef __com_sun_star_style_CharacterPropertiesAsian_idl__
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
 #endif
@@ -128,13 +134,13 @@ service TextRange
 
     service com::sun::star::style::ParagraphProperties;
 
+    [optional] service com::sun::star::style::ParagraphPropertiesAsian;
+
+    [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-=============================================================================*/
 #endif
