@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:07:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ QueryBox RID_SVXQB_CONTINUE
     MESSAGE[ russian ] = "Οπξδξλζθςό οπξβεπκσ β νΰχΰλε δξκσμενςΰ?";
     MESSAGE[ polish ] = "Kontuynuowaζ sprawdzanie na poczΉtku dokumentu?";
     MESSAGE[ japanese ] = "Δή·­ÒέΔ‚Μn‚ί‚Ι–ί‚Α‚ΔΑª―Έ‚π‘±s‚µ‚ά‚·‚©H";
-    MESSAGE[ chinese_traditional ] = "±q¤ε¥σ°_©l¦μΈmΔ~Δς΄M§δ΅H";
+    MESSAGE[ chinese_traditional ] = "±q¤ε¥σ°_©l¦μΈmΔ~Δς·j΄M΅H";
     MESSAGE[ arabic ] = "εα ΚΡνΟ γΚΗΘΪΙ ΗαΚΟήνή ΪδΟ ΘΟΗνΙ ΗαγΣΚδΟΏ";
     MESSAGE[ greek ] = "Να συνεχιστεί ο έλεγχος από την αρχή του εγγράφου;";
     MESSAGE[ korean ] = "Ή®Ό­ Γ³ΐ½Ώ΅Ό­ °Λ»ηΈ¦ °θΌΣΗÒ±ξΏδ?";
@@ -143,7 +143,7 @@ QueryBox RID_SVXQB_BW_CONTINUE
     Message[ russian ] = "Οπξδξλζθςό οπξβεπκσ β κξνφε δξκσμενςΰ?";
     Message[ polish ] = "Kontynuowaζ sprawdzanie na koρcu dokumentu?";
     Message[ japanese ] = "Δή·­ÒέΔ––‚Ι–ί‚Α‚ΔΑª―Έ‚π‘±s‚µ‚ά‚·‚©H";
-    Message[ chinese_traditional ] = "±q¤ε¥σ§ΐΊέΔ~Δς΄M§δ΅H";
+    Message[ chinese_traditional ] = "±q¤ε¥σ§ΐΊέΔ~Δς·j΄M΅H";
     Message[ arabic ] = "εα ΚΡνΟ γΚΗΘΪΙ ΗαΚΟήνή ΪδΟ δεΗνΙ ΗαγΣΚδΟΏ";
     Message[ greek ] = "Να συνεχιστεί ο έλεγχος από το τέλος του εγγράφου;";
     Message[ korean ] = "Ή®Ό­ ³΅Ώ΅Ό­ °Λ»ηΈ¦ °θΌΣΗÒ±ξΏδ?";
@@ -234,7 +234,7 @@ QueryBox RID_SVXQB_SPECIAL_FORCED
     MESSAGE[ russian ] = "Οπξβεπκΰ ροεφθΰλόνϋυ ξαλΰρςει ξςκλώχενΰ. Βρε πΰβνξ οπξβεπθςό?";
     MESSAGE[ polish ] = "Sprawdzanie obszarσw specjalnych jest wy³Ήczone. Mimo to sprawdzaζ?";
     MESSAGE[ japanese ] = "“Α•Κ”ΝΝ‚ΜΑª―Έ‚ªµΜ‚Ι‚Θ‚Α‚Δ‚Ά‚ά‚·B‚»‚κ‚Ε‚ΰΑª―Έ‚µ‚ά‚·‚©B";
-    MESSAGE[ chinese_traditional ] = "¤wΈg¥Ά¬΅ΐΛ¬d―S®ν°Ο°μ΅M±zΑΩ¬O­n°υ¦ζΐΛ¬d΅H";
+    MESSAGE[ chinese_traditional ] = "¤wΈgΓφ³¬ΐΛ¬d―S®ν°Ο°μ΅M±zΑΩ¬O­n°υ¦ζΐΛ¬d΅H";
     MESSAGE[ arabic ] = "ΚΟήνή ΗαγδΗΨή ΗαΞΗΥΙ ΫνΡ δΤΨ. εα ΚΡνΟ ΗαΚΟήνή ΘΗαΡΫγ γδ ΠαίΏ";
     MESSAGE[ greek ] = "Ο έλεγχος ειδικών περιοχών είναι απενεργοποιημένος. Θέλετε να γίνει ο έλεγχος παρ΄όλα αυτά;";
     MESSAGE[ korean ] = "Ζ―ΌφΏµΏª °Λ»η°΅ ΊρΘ°ΌΊ»σΕΒΐΤ΄Ο΄Ω. ±Χ·΅µµ °Λ»ηΗÒ±ξΏδ?";
